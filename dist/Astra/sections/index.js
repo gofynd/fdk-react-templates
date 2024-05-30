@@ -1,0 +1,1 @@
+!function webpackUniversalModuleDefinition(e,o){"object"==typeof exports&&"object"==typeof module?module.exports=o():"function"==typeof define&&define.amd?define("firestone",[],o):"object"==typeof exports?exports.firestone=o():e.firestone=o()}("undefined"!=typeof self?self:this,(()=>({})));

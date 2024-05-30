@@ -1,0 +1,115 @@
+.categories-filter__singleFilterContainer___c8zjK {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 1rem 0.5rem;
+  cursor: pointer;
+  max-height: 400px;
+  overflow: scroll;
+}
+.categories-filter__singleFilterContainer___c8zjK::-webkit-scrollbar {
+  display: none;
+}
+.categories-filter__singleFilterContainer___c8zjK .categories-filter__filterInformationContainer___r2Wzn {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.categories-filter__singleFilterContainer___c8zjK .categories-filter__filterInformationContainer___r2Wzn .categories-filter__filterHeading___PXsdg {
+  color: var(--textHeading);
+  font-size: 16px;
+  line-height: 18px;
+  letter-spacing: 0.02em;
+  font-weight: 500;
+}
+.categories-filter__singleFilterContainer___c8zjK .categories-filter__filterInformationContainer___r2Wzn .categories-filter__filterSvg___JYaDt {
+  height: 24px;
+  width: 24px;
+  fill: var(--textHeading);
+  transition: all 0.25s ease;
+}
+.categories-filter__singleFilterContainer___c8zjK .categories-filter__filterValueContainer___Kl1sJ {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0rem;
+  stroke: none;
+}
+.categories-filter__singleFilterContainer___c8zjK .categories-filter__filterValueContainer___Kl1sJ .categories-filter__svgStrokeContainer___wuT3j {
+  width: 26px;
+  height: 26px;
+}
+.categories-filter__singleFilterContainer___c8zjK .categories-filter__filterValueContainer___Kl1sJ .categories-filter__svgStrokeContainer___wuT3j:hover.categories-filter__notSelected___hfT0f {
+  stroke: var(--buttonPrimary);
+}
+.categories-filter__singleFilterContainer___c8zjK .categories-filter__filterValueContainer___Kl1sJ .categories-filter__notSelected___hfT0f {
+  stroke: var(--dividerStokes);
+}
+.categories-filter__singleFilterContainer___c8zjK .categories-filter__filterValueContainer___Kl1sJ .categories-filter__filterValueName___OErbn {
+  color: var(--textBody);
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  font-weight: 500;
+}
+.categories-filter__singleFilterContainer___c8zjK .categories-filter__filterValueContainer___Kl1sJ .categories-filter__filterValueCount___bqE0d {
+  color: var(--textSecondary);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  font-weight: 400;
+}
+.categories-filter__singleFilterContainer___c8zjK .categories-filter__rangeContainer___Fhwwq {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+.categories-filter__singleFilterContainer___c8zjK .categories-filter__rangeContainer___Fhwwq .categories-filter__rangeTitleContainer___v7Dkn {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+.categories-filter__singleFilterContainer___c8zjK .categories-filter__rangeContainer___Fhwwq .categories-filter__rangeTitleContainer___v7Dkn div {
+  flex-basis: 35%;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  font-size: 14px;
+  line-height: 14px;
+  margin-bottom: 8px;
+  color: var(--textBody);
+  font-weight: 500;
+}
+.categories-filter__singleFilterContainer___c8zjK .categories-filter__rangeContainer___Fhwwq .categories-filter__rangeInputContainer___zZxYv {
+  display: flex;
+  justify-content: space-between;
+}
+.categories-filter__singleFilterContainer___c8zjK .categories-filter__rangeContainer___Fhwwq .categories-filter__rangeInputContainer___zZxYv div {
+  flex-basis: 35%;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  font-size: 14px;
+  line-height: 14px;
+  margin-bottom: 8px;
+  color: var(--textBody);
+  font-weight: 500;
+  gap: 0.5rem;
+}
+.categories-filter__singleFilterContainer___c8zjK .categories-filter__rangeContainer___Fhwwq .categories-filter__rangeInputContainer___zZxYv div .categories-filter__currencySymbol___qJdBI {
+  font-size: 14px;
+  color: var(--textSecondary);
+  line-height: 14px;
+  font-weight: 500;
+}
+.categories-filter__singleFilterContainer___c8zjK .categories-filter__rangeContainer___Fhwwq .categories-filter__rangeInputContainer___zZxYv div input {
+  min-width: 76px;
+  max-width: 100px;
+  padding: 6px 0px;
+  border: 1px solid var(--dividerStokes);
+  color: var(--textBody);
+  text-align: center;
+  background: transparent;
+}
+

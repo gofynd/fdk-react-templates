@@ -1,0 +1,46 @@
+{
+  "name": "fdk-react-templates",
+  "version": "1.0.0",
+  "description": "A react component library build for skyfire.",
+  "main": "./dist",
+  "scripts": {
+    "test": "test",
+    "build": "webpack"
+  },
+  "keywords": [
+    "skyfire"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.24.5",
+    "@babel/preset-env": "^7.24.5",
+    "@babel/preset-react": "^7.24.1",
+    "@babel/preset-typescript": "^7.24.6",
+    "@svgr/webpack": "^8.1.0",
+    "@types/react": "^18.3.2",
+    "@types/react-router-dom": "^5.3.3",
+    "babel-loader": "^9.1.3",
+    "clean-webpack-plugin": "^4.0.0",
+    "css-loader": "^7.1.1",
+    "file-loader": "^6.2.0",
+    "glob": "^10.3.15",
+    "less": "^4.1.3",
+    "less-loader": "^11.1.0",
+    "mini-css-extract-plugin": "^2.9.0",
+    "style-loader": "^4.0.0",
+    "terser-webpack-plugin": "^5.3.10",
+    "ts-loader": "^9.5.1",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "peerDependencies": {
+    "awesome-snackbar": "*",
+    "react": "*",
+    "react-outside-click-handler": "*",
+    "react-router-dom": "*"
+  },
+  "files": [
+    "dist"
+  ],
+  "author": "Prashant Pandey<prashantpandey@gofynd.com>",
+  "license": "MIT"
+}
