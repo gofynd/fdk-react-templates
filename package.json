@@ -41,6 +41,9 @@
   "files": [
     "dist"
   ],
+  "exports": {
+    "./*": "./dist/*"
+  },
   "author": "Prashant Pandey<prashantpandey@gofynd.com>",
   "license": "MIT"
 }
