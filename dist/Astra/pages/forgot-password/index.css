@@ -1,0 +1,784 @@
+.auth-container__loginWrapper____ssvo {
+  min-height: 100vh;
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+}
+.auth-container__loginCard___P7ouj {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.auth-container__loginCard--reverse___TSBYJ {
+  flex-direction: row-reverse;
+}
+.auth-container__loginBannerWrapper___xyNPJ {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  justify-content: center;
+  align-items: center;
+  border-right: 1px dashed #cecece;
+}
+.auth-container__loginBannerWrapper--hide___QAAsy {
+  display: none;
+}
+.auth-container__loginBannerWrapper___xyNPJ .auth-container__desktop-img___WS2GU {
+  width: 100%;
+  display: inline-block;
+}
+.auth-container__loginContent___buYlN {
+  width: 50%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+}
+
+.forget-password-page__slide-fade-enter-active___H8nZg,
+.forget-password-page__slide-fade-leave-active___tB294 {
+  transition: all 0.5s;
+}
+.forget-password-page__slide-fade-enter___XQlYT,
+.forget-password-page__slide-fade-leave-to___ri41M {
+  opacity: 0;
+  transform: translateY(10px);
+}
+.forget-password-page__fade-enter-active___y_YNE,
+.forget-password-page__fade-leave-active___wgu3H {
+  transition: all 0.5s;
+}
+.forget-password-page__fade-enter___AZePk,
+.forget-password-page__fade-leave-to___yWESD {
+  opacity: 0;
+}
+.forget-password-page__slide-leave-active___fwiK9,
+.forget-password-page__slide-enter-active___v0hPe {
+  transition: 0.5s;
+}
+.forget-password-page__slide-enter___o1KtD,
+.forget-password-page__slide-leave-to___vTE4g {
+  transform: translate(-100%, 0%);
+}
+.forget-password-page__slide-left-enter-active___B1jXW,
+.forget-password-page__slide-left-leave-active___QhgnB {
+  transition: all 0.5s;
+}
+.forget-password-page__slide-left-enter___Ftvv4,
+.forget-password-page__slide-left-leave-to___E2qcz {
+  transform: translate(200%, 0%);
+}
+.forget-password-page__slide-down-enter-active___tI4fS,
+.forget-password-page__slide-down-leave-active___iYjxG {
+  transition: all 0.5s;
+}
+.forget-password-page__slide-down-enter___d_699,
+.forget-password-page__slide-down-leave-to___telrZ {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+.forget-password-page__slide-up-enter-active___XjQV_,
+.forget-password-page__slide-up-leave-active___z5N49 {
+  transition: all 0.5s ease-in-out;
+}
+.forget-password-page__slide-up-enter___x3NvF,
+.forget-password-page__slide-up-leave-to___OwaaL {
+  opacity: 0;
+  transform: translateY(100vh);
+}
+.forget-password-page__animation-fade-up___BtmWL {
+  transition: transform 0.5s ease-in var(--delay, 0ms), opacity 0.5s ease-in var(--delay, 0ms) !important;
+  opacity: 0 !important;
+  transform: translateY(10px) !important;
+}
+.forget-password-page__animation-fade-up___BtmWL.forget-password-page__animate___lECrG {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+.forget-password-page__animation-fade___NIF1Y {
+  transition: opacity 0.4s ease-in var(--delay, 0ms) !important;
+  opacity: 0 !important;
+}
+.forget-password-page__animation-fade___NIF1Y.forget-password-page__animate___lECrG {
+  opacity: 1 !important;
+}
+.forget-password-page__full-width-section___PJXET {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+.forget-password-page__section-main-container___QEODk {
+  max-width: 1440px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  padding: 60px 0 0 0;
+}
+@media only screen and (max-width: 768px) {
+  .forget-password-page__section-main-container___QEODk {
+    padding: 48px 15px 0 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .forget-password-page__section-main-container___QEODk {
+    padding: 24px 8px 0 8px;
+  }
+}
+/**color by character**/
+/** Font family **/
+/** Font weight **/
+a {
+  color: inherit;
+  text-decoration: none;
+}
+.forget-password-page__ct-header-wrapper___LSPrE,
+.forget-password-page__ctHeaderWrapper___UHTBE {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+body {
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+@media only screen and (min-width: 769px) {
+  body {
+    min-height: calc(100vh - 404px);
+  }
+}
+.forget-password-page__active-app___Owyr9,
+.forget-password-page__activeApp___LtAq_ {
+  background-color: var(--pageBackground, #f8f8f8);
+}
+.forget-password-page__card-item___U4GA2 .forget-password-page__card-desc___D2y0x .forget-password-page__price___jV4k1 .forget-password-page__effective-price___TqdrV {
+  font-size: 0.875rem;
+}
+.forget-password-page__login-modal___OCEEn .forget-password-page__tingle-modal-box___RuRrL {
+  background: #f5f5f5;
+}
+.forget-password-page__content___o1pnL {
+  font-size: 0.875rem;
+  margin: 0 auto;
+  max-width: unset !important;
+  min-height: 75vh;
+}
+.forget-password-page__modal___KvcRr {
+  overflow-x: hidden;
+  font-size: 0.875rem;
+}
+.forget-password-page__product-details-page___uaQwz,
+.forget-password-page__productDetailsPage___D9qOA {
+  max-width: 1440px;
+}
+.forget-password-page__display-block___nYXE4 {
+  display: block;
+}
+.forget-password-page__inline-block___utG79,
+.forget-password-page__inlineBlock___APr9G {
+  display: inline-block;
+}
+.forget-password-page__flex-row___NtPFK {
+  display: flex;
+}
+.forget-password-page__flex-column___n6SgU,
+.forget-password-page__flexColumn___XeUyI {
+  display: flex;
+  flex-direction: column;
+}
+.forget-password-page__flex-align-center___AFnjy,
+.forget-password-page__flexAlignCenter___QjGee {
+  display: flex;
+  align-items: center;
+}
+.forget-password-page__flex-justify-center___Cyg7i,
+.forget-password-page__flexJustifyCenter___N_dWm {
+  display: flex;
+  justify-content: center;
+}
+.forget-password-page__flex-center___B8BfX,
+.forget-password-page__flexCenter___gF_Vh {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.forget-password-page__justify-start___wE2ng,
+.forget-password-page__justifyStart___SPUEd {
+  justify-content: flex-start;
+}
+.forget-password-page__justify-end___ZZiQE,
+.forget-password-page__justifyEnd___L7wgl {
+  justify-content: flex-end;
+}
+.forget-password-page__justify-between___OyyTA,
+.forget-password-page__justifyBetween___niBlB {
+  justify-content: space-between;
+}
+.forget-password-page__justify-around___bYra1,
+.forget-password-page__justifyAround___j2zbN {
+  justify-content: space-around;
+}
+.forget-password-page__justify-evenly___UUOus,
+.forget-password-page__justifyEvenly___WhFXc {
+  justify-content: space-evenly;
+}
+h1,
+.forget-password-page__h1___wMZdg {
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 42px;
+  letter-spacing: -0.03em;
+  color: var(--textHeading, #26201a);
+}
+@media only screen and (min-width: 769px) {
+  h1,
+  .forget-password-page__h1___wMZdg {
+    font-size: 36px;
+    line-height: 48px;
+  }
+}
+h2,
+.forget-password-page__h2___iENwP {
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 36px;
+  letter-spacing: -0.03em;
+  color: var(--textHeading, #26201a);
+  font-family: var(--font-header);
+}
+@media only screen and (min-width: 769px) {
+  h2,
+  .forget-password-page__h2___iENwP {
+    font-size: 32px;
+    line-height: 42px;
+  }
+}
+h3,
+.forget-password-page__h3___alaeD {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--textHeading, #26201a);
+  font-size: 24px;
+  line-height: 32px;
+}
+@media only screen and (min-width: 769px) {
+  h3,
+  .forget-password-page__h3___alaeD {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--textHeading, #26201a);
+    font-size: 28px;
+    line-height: 36px;
+  }
+}
+h4,
+.forget-password-page__h4___tdg3E {
+  font-family: var(--font-body);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--textHeading, #26201a);
+  font-size: 16px;
+  line-height: 18px;
+}
+@media only screen and (min-width: 769px) {
+  h4,
+  .forget-password-page__h4___tdg3E {
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--textHeading, #26201a);
+    font-size: 20px;
+    line-height: 24px;
+  }
+}
+h5,
+.forget-password-page__h5___yXPaq {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: -0.02em;
+  color: var(--textHeading, #26201a);
+  font-family: var(--font-body);
+}
+@media only screen and (min-width: 769px) {
+  h5,
+  .forget-password-page__h5___yXPaq {
+    font-size: 16px;
+    line-height: 18px;
+  }
+}
+.forget-password-page__b1___JYfdB {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  letter-spacing: -0.02em;
+  color: var(--textBody, #3c3131);
+}
+@media only screen and (min-width: 769px) {
+  .forget-password-page__b1___JYfdB {
+    font-size: 16px;
+    line-height: 20px;
+  }
+}
+.forget-password-page__b-small___m_M3u,
+.forget-password-page__bSmall___skvKe,
+.forget-password-page__b2____ku_r {
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--textBody, #3c3131);
+  font-size: 12px;
+  line-height: 16px;
+}
+@media only screen and (min-width: 769px) {
+  .forget-password-page__b-small___m_M3u,
+  .forget-password-page__bSmall___skvKe,
+  .forget-password-page__b2____ku_r {
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--textBody, #3c3131);
+    font-size: 14px;
+    line-height: 18px;
+  }
+}
+.forget-password-page__d1___uIfa9 {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 48px;
+  letter-spacing: -0.02em;
+}
+@media only screen and (min-width: 769px) {
+  .forget-password-page__d1___uIfa9 {
+    font-size: 64px;
+    line-height: 85px;
+    letter-spacing: -0.03em;
+  }
+}
+.forget-password-page__caption-normal___wdw6E,
+.forget-password-page__captionNormal___UJmKu {
+  font-size: 12px;
+  line-height: 14px;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+}
+.forget-password-page__caption-medium___Wnpme,
+.forget-password-page__captionMedium___TMWD_ {
+  font-size: 12px;
+  line-height: 14px;
+  letter-spacing: -0.02em;
+  font-weight: 500;
+}
+.forget-password-page__caption-semi-bold___CQOws,
+.forget-password-page__captionSemiBold___aiaUZ {
+  font-size: 12px;
+  line-height: 14px;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+.forget-password-page__btn-secondary___rxkmT,
+.forget-password-page__btnSecondary___Q3KLq {
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  font-size: 12px;
+  line-height: 14px;
+  border-radius: var(--buttonRadius, 0px);
+  cursor: pointer;
+  border: 1px solid var(--buttonPrimary, #4e3f09);
+  background-color: var(--buttonSecondary, #fff);
+  color: var(--buttonPrimary, #4e3f09);
+}
+@media only screen and (min-width: 769px) {
+  .forget-password-page__btn-secondary___rxkmT,
+  .forget-password-page__btnSecondary___Q3KLq {
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    font-size: 14px;
+    line-height: 16px;
+  }
+}
+@media only screen and (min-width: 769px) {
+  .forget-password-page__btn-secondary___rxkmT:hover,
+  .forget-password-page__btnSecondary___Q3KLq:hover {
+    background-color: var(--buttonPrimary, #4e3f09);
+    color: var(--buttonSecondary, #fff);
+  }
+}
+.forget-password-page__btn-secondary___rxkmT:active,
+.forget-password-page__btnSecondary___Q3KLq:active,
+.forget-password-page__btn-secondary___rxkmT:focus-visible,
+.forget-password-page__btnSecondary___Q3KLq:focus-visible,
+.forget-password-page__btn-secondary___rxkmT:focusvisible,
+.forget-password-page__btnSecondary___Q3KLq:focusvisible {
+  box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--buttonPrimary, #4e3f09);
+}
+.forget-password-page__btn-primary___cK7WK,
+.forget-password-page__btnPrimary___R68u2 {
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  font-size: 12px;
+  line-height: 14px;
+  border-radius: var(--buttonRadius, 0px);
+  cursor: pointer;
+  border: 1px solid var(--buttonPrimary, #4e3f09);
+  color: var(--buttonSecondary, #fff);
+  background-color: var(--buttonPrimary, #4e3f09);
+}
+@media only screen and (min-width: 769px) {
+  .forget-password-page__btn-primary___cK7WK,
+  .forget-password-page__btnPrimary___R68u2 {
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    font-size: 14px;
+    line-height: 16px;
+  }
+}
+@media only screen and (min-width: 769px) {
+  .forget-password-page__btn-primary___cK7WK:hover,
+  .forget-password-page__btnPrimary___R68u2:hover {
+    border-color: var(--buttonPrimaryL1, #71653a);
+    background-color: var(--buttonPrimaryL1, #71653a);
+  }
+  .forget-password-page__btn-primary___cK7WK:disabled,
+  .forget-password-page__btnPrimary___R68u2:disabled {
+    border-color: var(--buttonPrimaryL3, #b8b29d);
+    background-color: var(--buttonPrimaryL3, #b8b29d);
+  }
+}
+.forget-password-page__btn-primary___cK7WK:active,
+.forget-password-page__btnPrimary___R68u2:active,
+.forget-password-page__btn-primary___cK7WK:focus-visible,
+.forget-password-page__btnPrimary___R68u2:focus-visible {
+  box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--buttonSecondary, #fff);
+}
+.forget-password-page__btn-link___fWye_,
+.forget-password-page__btnLink___GwNYa {
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  font-size: 12px;
+  line-height: 14px;
+  border-radius: var(--buttonRadius, 0px);
+  cursor: pointer;
+  color: var(--buttonLink, #b1655b);
+  text-decoration: underline;
+  background: none;
+  border: none;
+}
+@media only screen and (min-width: 769px) {
+  .forget-password-page__btn-link___fWye_,
+  .forget-password-page__btnLink___GwNYa {
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    font-size: 14px;
+    line-height: 16px;
+  }
+}
+.forget-password-page__btn-link___fWye_:hover,
+.forget-password-page__btnLink___GwNYa:hover {
+  color: var(--buttonLinkL1, #c1847c);
+}
+.forget-password-page__btn-link___fWye_:disabled,
+.forget-password-page__btnLink___GwNYa:disabled {
+  color: var(--buttonLinkL2, #d0a39d);
+}
+.forget-password-page__btn-link___fWye_:active,
+.forget-password-page__btnLink___GwNYa:active {
+  opacity: 0.8;
+}
+.forget-password-page__user-select-none___9Xg1u,
+.forget-password-page__userSelectNone___ABofz {
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+.forget-password-page__margin-0-auto___yUOf4,
+.forget-password-page__margin0auto___S4Xzd {
+  margin: 0 auto;
+}
+button {
+  cursor: pointer;
+}
+.forget-password-page__base-page-container___Y2dwo,
+.forget-password-page__basePageContainer___qoSSH {
+  max-width: 1440px !important;
+}
+.forget-password-page__remove-scroll___mbpWU,
+.forget-password-page__removeScroll___P4oXL {
+  overflow-y: hidden !important;
+}
+.forget-password-page__orders___eHSxB .forget-password-page__order-status___K5BS0 .forget-password-page__inline-svg___ZaZpr {
+  height: 63px;
+}
+.forget-password-page__order-item___QiezA .forget-password-page__oder-header___E9GpH .forget-password-page__filter-arrow-up___w8QYJ {
+  margin-right: none !important;
+}
+.forget-password-page__buttons___iFGMz {
+  display: block !important;
+  margin-bottom: 8px;
+}
+.forget-password-page__checkout___FURKN {
+  width: calc(100% - 20px) !important;
+}
+.forget-password-page__guest-checkout___FGiOW {
+  text-decoration: underline;
+  padding-top: 15px;
+}
+::selection {
+  background-color: #e8a76c;
+  color: #000;
+}
+img::selection {
+  background-color: transparent;
+}
+.forget-password-page__home-page____kDFL,
+.forget-password-page__homePage___v_knq {
+  max-width: 1440px;
+}
+.forget-password-page__mr-5___eQRfQ,
+.forget-password-page__mr5___fT9nl {
+  margin-right: 30px !important;
+}
+.forget-password-page__mr-2___Cdg23,
+.forget-password-page__mr2___fZMoq {
+  margin-right: 5px !important;
+}
+.forget-password-page__py-5___qSbTe,
+.forget-password-page__py5___nxB7z {
+  padding-top: 1.875rem !important;
+  padding-bottom: 1.875rem !important;
+}
+.forget-password-page__view-all-text___rivOr,
+.forget-password-page__viewAllText___CnYrv {
+  font-size: 20px;
+  font-weight: 400;
+  text-transform: lowercase;
+  text-decoration: underline;
+}
+.forget-password-page__view-all-mobile___gWuRw,
+.forget-password-page__viewAllMobile___Ojhco {
+  display: none;
+}
+@media only screen and (max-width: 768px) {
+  .forget-password-page__view-all-mobile___gWuRw,
+  .forget-password-page__viewAllMobile___Ojhco {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 40px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .forget-password-page__view-all-mobile___gWuRw,
+  .forget-password-page__viewAllMobile___Ojhco {
+    margin-top: 24px;
+  }
+}
+.forget-password-page__accent-btn___BmIal,
+.forget-password-page__accentBtn___jIFBd {
+  background-color: var(--accentColor);
+  color: #fff;
+}
+.forget-password-page__glide-cont___oxug6,
+.forget-password-page__glideCont___Go1Uu {
+  position: relative;
+}
+.forget-password-page__no-scroll___JGMWQ,
+.forget-password-page__noScroll___DTgkc {
+  overflow-y: hidden;
+}
+.forget-password-page__hide-overflow___be48t,
+.forget-password-page__hideOverflow___GPUiJ {
+  overflow: hidden;
+}
+.forget-password-page__markdown-body___lFMuP h6 {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+@media only screen and (max-width: 480px) {
+  .forget-password-page__markdown-body___lFMuP {
+    font-size: 12px !important;
+    padding: 5px !important;
+  }
+}
+.forget-password-page__blog-wrapper___Rj9az .forget-password-page__title___IrlkO {
+  color: var(--textHeading, #26201a);
+}
+.forget-password-page__blog-wrapper___Rj9az .forget-password-page__author___iOr75,
+.forget-password-page__blog-wrapper___Rj9az .forget-password-page__created-on___MAjnz {
+  color: var(--textLabel, #7d7676) !important;
+}
+.forget-password-page__blog-wrapper___Rj9az #forget-password-page__custom-page-container___HcVxK * {
+  color: var(--textBody, #3c3131);
+}
+.forget-password-page__view3d-canvas___cbDFC {
+  width: 100%;
+  height: 100%;
+}
+.forget-password-page__fontBody___k8tNE {
+  font-family: var(--font-body);
+}
+.forget-password-page__fontHeader___QZFeA {
+  font-family: var(--font-header);
+}
+.forget-password-page__forgotPasswordTitle____LQrV {
+  margin-bottom: 32px;
+  color: var(--textHeading, #26201a);
+  text-align: center;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 44.8px;
+}
+@media only screen and (max-width: 768px) {
+  .forget-password-page__forgotPasswordTitle____LQrV {
+    font-size: 24px;
+    line-height: 33.6px;
+  }
+}
+.forget-password-page__forgotPasswordTitle--mb-8___jFiha {
+  margin-bottom: 8px;
+}
+.forget-password-page__forgotPasswordWrapper___VMlX8 {
+  width: 400px;
+  padding: 24px;
+}
+.forget-password-page__forgotPasswordWrapper___VMlX8 .forget-password-page__forgotPasswordAlert___uQ0Pc {
+  height: 48px;
+  padding: 0 7px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  background-color: var(--errorBackground, #e6d5d5);
+  border: 1px dashed var(--errorText, #b24141);
+  color: var(--errorText, #b24141);
+}
+.forget-password-page__forgotPasswordWrapper___VMlX8 .forget-password-page__forgotPasswordAlert___uQ0Pc.forget-password-page__alert-success___jKigA {
+  background-color: #eefefa;
+  border: 1px dashed var(--textHeading, #26201a);
+  color: var(--textHeading, #26201a);
+}
+.forget-password-page__forgotPasswordWrapper___VMlX8 .forget-password-page__forgotPasswordAlert___uQ0Pc .forget-password-page__alertMessage___Q_Mow {
+  display: inline-block;
+  margin-right: 8px;
+  font-size: 13px;
+}
+.forget-password-page__forgotPasswordWrapper___VMlX8 .forget-password-page__forgotPasswordAlert___uQ0Pc .forget-password-page__alert-link___V76w9 {
+  color: var(--errorText, #b24141);
+  font-size: 9px;
+  cursor: pointer;
+}
+.forget-password-page__forgotPasswordWrapper___VMlX8 .forget-password-page__forgotPasswordInputGroup___rspQu {
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+}
+.forget-password-page__forgotPasswordWrapper___VMlX8 .forget-password-page__forgotPasswordInputGroup___rspQu .forget-password-page__loginInputTitle___WBM7d {
+  position: absolute;
+  padding: 0 4px;
+  margin: 0 12px;
+  z-index: 1;
+  transform: translateY(-50%);
+  color: var(--textLabel);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16.8px;
+  background: var(--pageBackground, #f8f8f8);
+}
+.forget-password-page__forgotPasswordWrapper___VMlX8 .forget-password-page__forgotPasswordInputGroup___rspQu input {
+  width: 100%;
+  border: 1px solid var(--dividerStokes, #d4d1d1);
+  padding: 16px;
+  border-radius: 4px;
+  height: 48px;
+  font-size: 16px;
+  box-sizing: border-box;
+  background: var(--pageBackground, #f8f8f8);
+}
+.forget-password-page__forgotPasswordWrapper___VMlX8 .forget-password-page__forgotPasswordInputGroup___rspQu input:focus-visible {
+  outline: none;
+}
+.forget-password-page__forgotPasswordWrapper___VMlX8 .forget-password-page__forgotPasswordInputGroup___rspQu input::placeholder {
+  color: var(--dividerStokes, #d4d1d1);
+  opacity: 0.3;
+}
+.forget-password-page__forgotPasswordWrapper___VMlX8 .forget-password-page__forgotPasswordInputGroup___rspQu .forget-password-page__emailErrorMessage___gKz5X {
+  color: var(--errorText, #b24141);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16.8px;
+  margin-top: 16px;
+}
+.forget-password-page__forgotPasswordWrapper___VMlX8 .forget-password-page__forgotPasswordSubmitBtn___viDQD {
+  border: none;
+  margin-bottom: 24px;
+  height: 48px;
+  border-radius: 4px;
+  background: var(--buttonPrimary, #4e3f09);
+  color: var(--buttonSecondary, #fff);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 22.4px;
+  text-transform: uppercase;
+  width: 100%;
+}
+.forget-password-page__forgotPasswordWrapper___VMlX8 .forget-password-page__forgotPasswordSubmitBtn___viDQD[disabled] {
+  cursor: default;
+}
+.forget-password-page__forgotPasswordWrapper___VMlX8 .forget-password-page__loginLink___voVIH {
+  text-align: center;
+  width: fit-content;
+  display: block;
+  cursor: pointer;
+  margin: 0 auto;
+  color: var(--textSecondary, #9c9c9c);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 19.6px;
+  text-transform: uppercase;
+  border: none;
+  background: none;
+}
+.forget-password-page__forgotPasswordWrapper___VMlX8 .forget-password-page__loginLink___voVIH:focus-visible {
+  outline: none;
+}
+.forget-password-page__submitWrapper___hLK32 .forget-password-page__submitSuccessMsg___ad7IQ {
+  color: var(--textBody, #3c3131);
+  text-align: center;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 19.6px;
+}
+.forget-password-page__submitWrapper___hLK32 .forget-password-page__resendBtn___H1Jum {
+  color: var(--buttonLink, #b1655b);
+  text-decoration: underline;
+  display: block;
+  text-align: center;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  letter-spacing: -0.28px;
+  width: fit-content;
+  margin: 0 auto;
+  cursor: pointer;
+  margin-top: 32px;
+  border: none;
+  background: none;
+}
+.forget-password-page__submitWrapper___hLK32 .forget-password-page__resendBtn___H1Jum:focus-visible {
+  outline: none;
+}
+.forget-password-page__loading___Zi95y div {
+  width: 100%;
+  height: 100%;
+}
+

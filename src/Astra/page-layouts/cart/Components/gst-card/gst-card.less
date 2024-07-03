@@ -1,0 +1,87 @@
+@import "../../../../styles/main.less";
+
+.gstContainer {
+  display: flex;
+  flex-direction: column;
+  // margin-top: 16px;
+  padding: 24px;
+  border: 1px solid @DividerStokes;
+  border-radius: 8px;
+  line-height: 140%;
+  background: @PageBackground;
+  @media @tablet {
+    border-radius: 0 !important;
+  }
+  @media @mobile {
+    // margin-top: 12px;
+    padding: 16px;
+  }
+  .gstCheckboxContainer {
+    .gstTitle {
+      font-size: 12px;
+      font-weight: 600;
+      color: @TextHeading;
+      display: flex;
+      align-items: center;
+    }
+    input[type="checkbox"] {
+      accent-color: @TextHeading;
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      padding: 0;
+      margin: 0;
+      background-color: @PageBackground;
+      margin-right: 12px;
+    }
+  }
+  .gstValidationBox {
+    display: flex;
+    flex-direction: column;
+    margin-top: 8px;
+    font-size: 12px;
+    font-weight: 400;
+  }
+  .inputBox {
+    display: flex;
+    align-items: center;
+    margin-top: 16px;
+    box-sizing: border-box;
+    position: relative;
+    border: 1px dashed @DividerStokes;
+    border-radius: 8px;
+    input {
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 400;
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      background-position: 12px;
+      background-repeat: no-repeat;
+      line-height: 140%;
+      color: @TextHeading;
+      &:focus-visible {
+        outline: none;
+      }
+    }
+    .errorBox {
+      border: @ErrorText;
+    }
+    .crossBtn {
+      position: absolute;
+      right: 12px;
+      cursor: pointer;
+    }
+  }
+}
+.colorErrorNormal {
+  color: @ErrorText;
+}
+.colorSuccessNormal {
+  color: @SuccessText;
+}
+.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
