@@ -1,0 +1,728 @@
+.auth-container__loginWrapper____ssvo {
+  min-height: 100vh;
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+}
+.auth-container__loginCard___P7ouj {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.auth-container__loginCard--reverse___TSBYJ {
+  flex-direction: row-reverse;
+}
+.auth-container__loginBannerWrapper___xyNPJ {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  justify-content: center;
+  align-items: center;
+  border-right: 1px dashed #cecece;
+}
+.auth-container__loginBannerWrapper--hide___QAAsy {
+  display: none;
+}
+.auth-container__loginBannerWrapper___xyNPJ .auth-container__desktop-img___WS2GU {
+  width: 100%;
+  display: inline-block;
+}
+.auth-container__loginContent___buYlN {
+  width: 50%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+}
+
+.set-password-page__slide-fade-enter-active___GaKTx,
+.set-password-page__slide-fade-leave-active___hn1dP {
+  transition: all 0.5s;
+}
+.set-password-page__slide-fade-enter___Y4pdG,
+.set-password-page__slide-fade-leave-to___KVmlG {
+  opacity: 0;
+  transform: translateY(10px);
+}
+.set-password-page__fade-enter-active___CBx2_,
+.set-password-page__fade-leave-active___xhwyv {
+  transition: all 0.5s;
+}
+.set-password-page__fade-enter___pg4iB,
+.set-password-page__fade-leave-to___baVkT {
+  opacity: 0;
+}
+.set-password-page__slide-leave-active____dJkb,
+.set-password-page__slide-enter-active___sbaME {
+  transition: 0.5s;
+}
+.set-password-page__slide-enter___C9eNN,
+.set-password-page__slide-leave-to___ZS6t7 {
+  transform: translate(-100%, 0%);
+}
+.set-password-page__slide-left-enter-active___DMXKV,
+.set-password-page__slide-left-leave-active___d9rt4 {
+  transition: all 0.5s;
+}
+.set-password-page__slide-left-enter___sj4mf,
+.set-password-page__slide-left-leave-to___Qh3o0 {
+  transform: translate(200%, 0%);
+}
+.set-password-page__slide-down-enter-active___co9fq,
+.set-password-page__slide-down-leave-active___qri0K {
+  transition: all 0.5s;
+}
+.set-password-page__slide-down-enter___rs4vk,
+.set-password-page__slide-down-leave-to___MOeQU {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+.set-password-page__slide-up-enter-active___GF8qI,
+.set-password-page__slide-up-leave-active___bg9RQ {
+  transition: all 0.5s ease-in-out;
+}
+.set-password-page__slide-up-enter___Wby7S,
+.set-password-page__slide-up-leave-to___ZLgbb {
+  opacity: 0;
+  transform: translateY(100vh);
+}
+.set-password-page__animation-fade-up___h4HpZ {
+  transition: transform 0.5s ease-in var(--delay, 0ms), opacity 0.5s ease-in var(--delay, 0ms) !important;
+  opacity: 0 !important;
+  transform: translateY(10px) !important;
+}
+.set-password-page__animation-fade-up___h4HpZ.set-password-page__animate___q5qo9 {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+.set-password-page__animation-fade___M1MeN {
+  transition: opacity 0.4s ease-in var(--delay, 0ms) !important;
+  opacity: 0 !important;
+}
+.set-password-page__animation-fade___M1MeN.set-password-page__animate___q5qo9 {
+  opacity: 1 !important;
+}
+.set-password-page__full-width-section___KVg2c {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+.set-password-page__section-main-container____OoCw {
+  max-width: 1440px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  padding: 60px 0 0 0;
+}
+@media only screen and (max-width: 768px) {
+  .set-password-page__section-main-container____OoCw {
+    padding: 48px 15px 0 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .set-password-page__section-main-container____OoCw {
+    padding: 24px 8px 0 8px;
+  }
+}
+/**color by character**/
+/** Font family **/
+/** Font weight **/
+a {
+  color: inherit;
+  text-decoration: none;
+}
+.set-password-page__ct-header-wrapper___Aow1C,
+.set-password-page__ctHeaderWrapper___Fh4P_ {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+body {
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+@media only screen and (min-width: 769px) {
+  body {
+    min-height: calc(100vh - 404px);
+  }
+}
+.set-password-page__active-app___fnnp0,
+.set-password-page__activeApp___imimB {
+  background-color: var(--pageBackground, #f8f8f8);
+}
+.set-password-page__card-item___c8ivB .set-password-page__card-desc___fD9S_ .set-password-page__price___nOXs8 .set-password-page__effective-price___GKhA_ {
+  font-size: 0.875rem;
+}
+.set-password-page__login-modal___cCkls .set-password-page__tingle-modal-box___XJAT0 {
+  background: #f5f5f5;
+}
+.set-password-page__content___j6VsL {
+  font-size: 0.875rem;
+  margin: 0 auto;
+  max-width: unset !important;
+  min-height: 75vh;
+}
+.set-password-page__modal___v8pUr {
+  overflow-x: hidden;
+  font-size: 0.875rem;
+}
+.set-password-page__product-details-page___dG0Wm,
+.set-password-page__productDetailsPage___yXRE7 {
+  max-width: 1440px;
+}
+.set-password-page__display-block___btg0p {
+  display: block;
+}
+.set-password-page__inline-block___MR34f,
+.set-password-page__inlineBlock___v5Fdo {
+  display: inline-block;
+}
+.set-password-page__flex-row___JoQZq {
+  display: flex;
+}
+.set-password-page__flex-column___Zue4y,
+.set-password-page__flexColumn___rC4bv {
+  display: flex;
+  flex-direction: column;
+}
+.set-password-page__flex-align-center___d3aSs,
+.set-password-page__flexAlignCenter___qP8o1 {
+  display: flex;
+  align-items: center;
+}
+.set-password-page__flex-justify-center___aZkWh,
+.set-password-page__flexJustifyCenter___DbE4o {
+  display: flex;
+  justify-content: center;
+}
+.set-password-page__flex-center____MfTs,
+.set-password-page__flexCenter___kXuKx {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.set-password-page__justify-start___X9Pbh,
+.set-password-page__justifyStart___OCrr9 {
+  justify-content: flex-start;
+}
+.set-password-page__justify-end___k3ieg,
+.set-password-page__justifyEnd___CbAgO {
+  justify-content: flex-end;
+}
+.set-password-page__justify-between___IREtC,
+.set-password-page__justifyBetween___wWTz0 {
+  justify-content: space-between;
+}
+.set-password-page__justify-around___Aciv4,
+.set-password-page__justifyAround___ejT1t {
+  justify-content: space-around;
+}
+.set-password-page__justify-evenly___NYzQp,
+.set-password-page__justifyEvenly___e1SDL {
+  justify-content: space-evenly;
+}
+h1,
+.set-password-page__h1___bVSgB {
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 42px;
+  letter-spacing: -0.03em;
+  color: var(--textHeading, #26201a);
+}
+@media only screen and (min-width: 769px) {
+  h1,
+  .set-password-page__h1___bVSgB {
+    font-size: 36px;
+    line-height: 48px;
+  }
+}
+h2,
+.set-password-page__h2___Ul9BQ {
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 36px;
+  letter-spacing: -0.03em;
+  color: var(--textHeading, #26201a);
+  font-family: var(--font-header);
+}
+@media only screen and (min-width: 769px) {
+  h2,
+  .set-password-page__h2___Ul9BQ {
+    font-size: 32px;
+    line-height: 42px;
+  }
+}
+h3,
+.set-password-page__h3___S7hto {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--textHeading, #26201a);
+  font-size: 24px;
+  line-height: 32px;
+}
+@media only screen and (min-width: 769px) {
+  h3,
+  .set-password-page__h3___S7hto {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--textHeading, #26201a);
+    font-size: 28px;
+    line-height: 36px;
+  }
+}
+h4,
+.set-password-page__h4___uLkhF {
+  font-family: var(--font-body);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--textHeading, #26201a);
+  font-size: 16px;
+  line-height: 18px;
+}
+@media only screen and (min-width: 769px) {
+  h4,
+  .set-password-page__h4___uLkhF {
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--textHeading, #26201a);
+    font-size: 20px;
+    line-height: 24px;
+  }
+}
+h5,
+.set-password-page__h5___aWiq3 {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: -0.02em;
+  color: var(--textHeading, #26201a);
+  font-family: var(--font-body);
+}
+@media only screen and (min-width: 769px) {
+  h5,
+  .set-password-page__h5___aWiq3 {
+    font-size: 16px;
+    line-height: 18px;
+  }
+}
+.set-password-page__b1___Yz19w {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  letter-spacing: -0.02em;
+  color: var(--textBody, #3c3131);
+}
+@media only screen and (min-width: 769px) {
+  .set-password-page__b1___Yz19w {
+    font-size: 16px;
+    line-height: 20px;
+  }
+}
+.set-password-page__b-small___ICUS6,
+.set-password-page__bSmall___TfaiW,
+.set-password-page__b2___ZX4YE {
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--textBody, #3c3131);
+  font-size: 12px;
+  line-height: 16px;
+}
+@media only screen and (min-width: 769px) {
+  .set-password-page__b-small___ICUS6,
+  .set-password-page__bSmall___TfaiW,
+  .set-password-page__b2___ZX4YE {
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--textBody, #3c3131);
+    font-size: 14px;
+    line-height: 18px;
+  }
+}
+.set-password-page__d1___LQK7u {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 48px;
+  letter-spacing: -0.02em;
+}
+@media only screen and (min-width: 769px) {
+  .set-password-page__d1___LQK7u {
+    font-size: 64px;
+    line-height: 85px;
+    letter-spacing: -0.03em;
+  }
+}
+.set-password-page__caption-normal___dpNeB,
+.set-password-page__captionNormal___eolVQ {
+  font-size: 12px;
+  line-height: 14px;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+}
+.set-password-page__caption-medium___Xu7aI,
+.set-password-page__captionMedium___PBxts {
+  font-size: 12px;
+  line-height: 14px;
+  letter-spacing: -0.02em;
+  font-weight: 500;
+}
+.set-password-page__caption-semi-bold___kgU45,
+.set-password-page__captionSemiBold___nDx1P {
+  font-size: 12px;
+  line-height: 14px;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+.set-password-page__btn-secondary___Cq08O,
+.set-password-page__btnSecondary___JW0CM {
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  font-size: 12px;
+  line-height: 14px;
+  border-radius: var(--buttonRadius, 0px);
+  cursor: pointer;
+  border: 1px solid var(--buttonPrimary, #4e3f09);
+  background-color: var(--buttonSecondary, #fff);
+  color: var(--buttonPrimary, #4e3f09);
+}
+@media only screen and (min-width: 769px) {
+  .set-password-page__btn-secondary___Cq08O,
+  .set-password-page__btnSecondary___JW0CM {
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    font-size: 14px;
+    line-height: 16px;
+  }
+}
+@media only screen and (min-width: 769px) {
+  .set-password-page__btn-secondary___Cq08O:hover,
+  .set-password-page__btnSecondary___JW0CM:hover {
+    background-color: var(--buttonPrimary, #4e3f09);
+    color: var(--buttonSecondary, #fff);
+  }
+}
+.set-password-page__btn-secondary___Cq08O:active,
+.set-password-page__btnSecondary___JW0CM:active,
+.set-password-page__btn-secondary___Cq08O:focus-visible,
+.set-password-page__btnSecondary___JW0CM:focus-visible,
+.set-password-page__btn-secondary___Cq08O:focusvisible,
+.set-password-page__btnSecondary___JW0CM:focusvisible {
+  box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--buttonPrimary, #4e3f09);
+}
+.set-password-page__btn-primary___xUxeR,
+.set-password-page__btnPrimary___ye6FN {
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  font-size: 12px;
+  line-height: 14px;
+  border-radius: var(--buttonRadius, 0px);
+  cursor: pointer;
+  border: 1px solid var(--buttonPrimary, #4e3f09);
+  color: var(--buttonSecondary, #fff);
+  background-color: var(--buttonPrimary, #4e3f09);
+}
+@media only screen and (min-width: 769px) {
+  .set-password-page__btn-primary___xUxeR,
+  .set-password-page__btnPrimary___ye6FN {
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    font-size: 14px;
+    line-height: 16px;
+  }
+}
+@media only screen and (min-width: 769px) {
+  .set-password-page__btn-primary___xUxeR:hover,
+  .set-password-page__btnPrimary___ye6FN:hover {
+    border-color: var(--buttonPrimaryL1, #71653a);
+    background-color: var(--buttonPrimaryL1, #71653a);
+  }
+  .set-password-page__btn-primary___xUxeR:disabled,
+  .set-password-page__btnPrimary___ye6FN:disabled {
+    border-color: var(--buttonPrimaryL3, #b8b29d);
+    background-color: var(--buttonPrimaryL3, #b8b29d);
+  }
+}
+.set-password-page__btn-primary___xUxeR:active,
+.set-password-page__btnPrimary___ye6FN:active,
+.set-password-page__btn-primary___xUxeR:focus-visible,
+.set-password-page__btnPrimary___ye6FN:focus-visible {
+  box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--buttonSecondary, #fff);
+}
+.set-password-page__btn-link___NRBcs,
+.set-password-page__btnLink___JLBXz {
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  font-size: 12px;
+  line-height: 14px;
+  border-radius: var(--buttonRadius, 0px);
+  cursor: pointer;
+  color: var(--buttonLink, #b1655b);
+  text-decoration: underline;
+  background: none;
+  border: none;
+}
+@media only screen and (min-width: 769px) {
+  .set-password-page__btn-link___NRBcs,
+  .set-password-page__btnLink___JLBXz {
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    font-size: 14px;
+    line-height: 16px;
+  }
+}
+.set-password-page__btn-link___NRBcs:hover,
+.set-password-page__btnLink___JLBXz:hover {
+  color: var(--buttonLinkL1, #c1847c);
+}
+.set-password-page__btn-link___NRBcs:disabled,
+.set-password-page__btnLink___JLBXz:disabled {
+  color: var(--buttonLinkL2, #d0a39d);
+}
+.set-password-page__btn-link___NRBcs:active,
+.set-password-page__btnLink___JLBXz:active {
+  opacity: 0.8;
+}
+.set-password-page__user-select-none___rm9sD,
+.set-password-page__userSelectNone___7nejl {
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+.set-password-page__margin-0-auto___wIt5d,
+.set-password-page__margin0auto___Lec15 {
+  margin: 0 auto;
+}
+button {
+  cursor: pointer;
+}
+.set-password-page__base-page-container___foTET,
+.set-password-page__basePageContainer___Dfd1N {
+  max-width: 1440px !important;
+}
+.set-password-page__remove-scroll___FTkKb,
+.set-password-page__removeScroll___yE_g4 {
+  overflow-y: hidden !important;
+}
+.set-password-page__orders___EfcXy .set-password-page__order-status___f_bFq .set-password-page__inline-svg___aN5uT {
+  height: 63px;
+}
+.set-password-page__order-item___BG7uN .set-password-page__oder-header___zjg6L .set-password-page__filter-arrow-up___Lhmds {
+  margin-right: none !important;
+}
+.set-password-page__buttons___I0EUu {
+  display: block !important;
+  margin-bottom: 8px;
+}
+.set-password-page__checkout___jm4mU {
+  width: calc(100% - 20px) !important;
+}
+.set-password-page__guest-checkout___D3dWt {
+  text-decoration: underline;
+  padding-top: 15px;
+}
+::selection {
+  background-color: #e8a76c;
+  color: #000;
+}
+img::selection {
+  background-color: transparent;
+}
+.set-password-page__home-page___iUO_Y,
+.set-password-page__homePage___mFUND {
+  max-width: 1440px;
+}
+.set-password-page__mr-5___fxP0l,
+.set-password-page__mr5___RA5kK {
+  margin-right: 30px !important;
+}
+.set-password-page__mr-2___zn8wI,
+.set-password-page__mr2___oqG7W {
+  margin-right: 5px !important;
+}
+.set-password-page__py-5___KhH5c,
+.set-password-page__py5___PUExS {
+  padding-top: 1.875rem !important;
+  padding-bottom: 1.875rem !important;
+}
+.set-password-page__view-all-text___VuyDl,
+.set-password-page__viewAllText___VPF3D {
+  font-size: 20px;
+  font-weight: 400;
+  text-transform: lowercase;
+  text-decoration: underline;
+}
+.set-password-page__view-all-mobile___niwvK,
+.set-password-page__viewAllMobile___NGcEj {
+  display: none;
+}
+@media only screen and (max-width: 768px) {
+  .set-password-page__view-all-mobile___niwvK,
+  .set-password-page__viewAllMobile___NGcEj {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 40px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .set-password-page__view-all-mobile___niwvK,
+  .set-password-page__viewAllMobile___NGcEj {
+    margin-top: 24px;
+  }
+}
+.set-password-page__accent-btn___Zt1R3,
+.set-password-page__accentBtn___zzq_N {
+  background-color: var(--accentColor);
+  color: #fff;
+}
+.set-password-page__glide-cont___JCXlI,
+.set-password-page__glideCont___XOcc2 {
+  position: relative;
+}
+.set-password-page__no-scroll___rDmhS,
+.set-password-page__noScroll___uKPFj {
+  overflow-y: hidden;
+}
+.set-password-page__hide-overflow___KN3LB,
+.set-password-page__hideOverflow___obC2R {
+  overflow: hidden;
+}
+.set-password-page__markdown-body___lgLUW h6 {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+@media only screen and (max-width: 480px) {
+  .set-password-page__markdown-body___lgLUW {
+    font-size: 12px !important;
+    padding: 5px !important;
+  }
+}
+.set-password-page__blog-wrapper___uK3ni .set-password-page__title___FmFsu {
+  color: var(--textHeading, #26201a);
+}
+.set-password-page__blog-wrapper___uK3ni .set-password-page__author___lGmw6,
+.set-password-page__blog-wrapper___uK3ni .set-password-page__created-on___ul5YP {
+  color: var(--textLabel, #7d7676) !important;
+}
+.set-password-page__blog-wrapper___uK3ni #set-password-page__custom-page-container___bYENN * {
+  color: var(--textBody, #3c3131);
+}
+.set-password-page__view3d-canvas___e62eF {
+  width: 100%;
+  height: 100%;
+}
+.set-password-page__fontBody___gSSte {
+  font-family: var(--font-body);
+}
+.set-password-page__fontHeader___Fn5YA {
+  font-family: var(--font-header);
+}
+.set-password-page__setWrapper___lFE06 {
+  width: 400px;
+  padding: 24px;
+}
+.set-password-page__setWrapper___lFE06 .set-password-page__setContentTitle___y1k5V {
+  color: var(--textHeading, #26201a);
+  text-align: center;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 44.8px;
+  margin-bottom: 32px;
+}
+@media only screen and (max-width: 768px) {
+  .set-password-page__setWrapper___lFE06 .set-password-page__setContentTitle___y1k5V {
+    font-size: 24px;
+    line-height: 33.6px;
+  }
+}
+.set-password-page__setWrapper___lFE06 .set-password-page__setInputGroup___vbU19 {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+.set-password-page__setWrapper___lFE06 .set-password-page__setInputGroup___vbU19 input {
+  height: 48px;
+  border: 1px solid var(--dividerStokes, #d4d1d1);
+  padding: 16px;
+  border-radius: 4px;
+  background-color: #fff;
+  box-sizing: border-box;
+  color: var(--textBody, #3c3131);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px;
+}
+.set-password-page__setWrapper___lFE06 .set-password-page__setInputGroup___vbU19 input:focus-visible {
+  outline: none;
+}
+.set-password-page__setWrapper___lFE06 .set-password-page__setInputTitle___PTTh4 {
+  position: absolute;
+  background-color: white;
+  padding: 0 4px;
+  margin: 0 12px;
+  z-index: 1;
+  transform: translateY(-50%);
+  color: var(--textLabel, #7d7676);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16.8px;
+}
+.set-password-page__setWrapper___lFE06 .set-password-page__setSubmitBtn___fL39e {
+  border: none;
+  width: 100%;
+  height: 48px;
+  border-radius: 4px;
+  background: var(--buttonPrimary, #4e3f09);
+  color: var(--buttonSecondary, #fff);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 22.4px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.set-password-page__setWrapper___lFE06 .set-password-page__setSubmitBtn___fL39e[disabled] {
+  background: #dde7e8 !important;
+  color: #b8b29d !important;
+  cursor: default;
+}
+.set-password-page__setWrapper___lFE06 .set-password-page__errorText___a_Qex {
+  display: none;
+}
+.set-password-page__setWrapper___lFE06 .set-password-page__errorInput___AsrKH input {
+  border: 1px solid var(--errorText, #b24141);
+}
+.set-password-page__setWrapper___lFE06 .set-password-page__errorInput___AsrKH .set-password-page__errorText___a_Qex {
+  display: block;
+  color: var(--errorText, #b24141);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16.8px;
+  margin-top: 8px;
+}
+.set-password-page__setWrapper___lFE06 .set-password-page__errorInput___AsrKH label {
+  color: var(--errorText, #b24141);
+}
+.set-password-page__setWrapper___lFE06 .set-password-page__loginAlert___aSEw3 {
+  height: 48px;
+  padding: 0 7px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  background-color: var(--errorBackground, #e6d5d5);
+  border: 1px dashed var(--errorText, #b24141);
+  color: var(--errorText, #b24141);
+}
+
