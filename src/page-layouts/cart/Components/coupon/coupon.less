@@ -1,0 +1,197 @@
+@import "../../../../styles/main.less";
+
+.couponBoxContainer {
+	padding: 24px;
+	border-radius: 8px;
+	border: 1px solid @DividerStokes;
+	@media @mobile {
+		padding: 16px;
+		border-radius: 0;
+	}
+	.couponBoxTitle {
+		font-weight: 500;
+		font-size: 12px;
+		line-height: 140%;
+		color: @TextHeading;
+	}
+	.couponApplyBox {
+		display: flex;
+		align-items: center;
+		flex-direction: row;
+		margin-top: 16px;
+		padding: 12px;
+		cursor: pointer;
+		background: @SuccessBackground;
+		border-radius: 8px;
+		gap: 16px;
+		cursor: pointer;
+		.removeIcon,
+		.arrowIcon {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			margin-left: auto;
+			background: none;
+			border: none;
+			width: 2rem;
+			height: 2rem;
+		}
+	}
+	.couponApplyTitle {
+		min-width: 0;
+		.applyTxt {
+			line-height: 140%;
+			color: @TextHeading;
+			font-weight: 600;
+			font-size: 14px;
+		}
+		.couponMetaDesc {
+			color: @TextBody;
+			line-height: 140%;
+			font-size: 12px;
+			font-weight: 500;
+			margin-top: 4px;
+		}
+	}
+}
+
+.modalContent {
+	.modalHeader {
+		padding: 24px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		position: sticky;
+		top: 0;
+		width: 100%;
+		box-sizing: border-box;
+		border-bottom: 1px solid @DividerStokes;
+		background: @DialogBackground;
+		z-index: 1;
+
+		// z-index: 4;
+		font-size: 16px;
+		font-weight: 600;
+		color: @TextHeading;
+		line-height: 140%;
+		.crossIcon {
+			cursor: pointer;
+		}
+	}
+	.modalBody {
+		display: flex;
+		flex-direction: column;
+		padding: 24px;
+		.couponInputBox {
+			border-radius: 12px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 24px;
+			gap: 16px;
+			input {
+				width: 100%;
+				border: 1px solid @DividerStokes;
+				border-radius: 4px;
+				background: @DialogBackground;
+				color: @TextLabel;
+				font-size: 12px;
+				font-weight: 400;
+				padding: 14px;
+			}
+			.checkBtn {
+				border: 1px solid @ButtonPrimary;
+				border-radius: 4px;
+				color: @ButtonPrimary;
+				background: @ButtonSecondary;
+				height: 100%;
+				text-transform: uppercase;
+				font-size: 14px;
+				font-weight: 600;
+				padding: 14px 24px;
+				cursor: pointer;
+			}
+		}
+		.couponListTitle {
+			color: @TextLabel;
+			line-height: 140%;
+			margin-top: 24px;
+			margin-bottom: 16px;
+			font-size: 12px;
+			font-weight: 500;
+		}
+		.couponList {
+			display: flex;
+			flex-direction: column;
+			gap: 24px;
+		}
+		.couponItem {
+			border: 1px solid @DividerStokes;
+			border-radius: 12px;
+			padding: 24px;
+			display: flex;
+			&.opacity02 {
+				opacity: 0.2;
+			}
+			.couponCode {
+				background-color: @SuccessBackground;
+				border: 1px solid @SuccessText;
+				line-height: 140%;
+				color: @SuccessText;
+				position: relative;
+				padding: 10px 15px;
+				display: inline-block;
+				font-size: 12px;
+				font-weight: 600;
+				&:before,
+				&:after {
+					content: "";
+					position: absolute;
+					top: 50%;
+					left: 0;
+					transform: translate(-50%, -50%) rotate(45deg);
+					width: 16px;
+					aspect-ratio: 1;
+					background: @DialogBackground;
+					border: 1px solid @SuccessText;
+					border-radius: 50%;
+					border-color: @SuccessText @SuccessText transparent transparent;
+				}
+				&:after {
+					right: 0;
+					left: auto;
+					transform: translate(50%, -50%) rotate(-135deg);
+				}
+			}
+			.couponTitle {
+				line-height: 140%;
+				color: @TextHeading;
+				font-size: 14px;
+				font-weight: 600;
+				margin-top: 16px;
+			}
+			.couponMessage,
+			.couponExpire {
+				line-height: 140%;
+				color: @TextBody;
+				font-size: 12px;
+				font-weight: 400;
+				margin-top: 4px;
+			}
+			.couponApplyBtn {
+				border: 1px solid @ButtonPrimary;
+				border-radius: 4px;
+				color: @ButtonPrimary;
+				height: 100%;
+				text-transform: uppercase;
+				background: @ButtonSecondary;
+				display: inline-block;
+				padding: 12px 16px;
+				font-size: 14px;
+				font-weight: 600;
+				cursor: pointer;
+				margin-left: auto;
+			}
+		}
+	}
+}
