@@ -1,0 +1,177 @@
+@import "../../../styles/main.less";
+
+.mobileInputWrapper {
+	display: flex;
+	flex-direction: column;
+	input {
+		height: 48px;
+		border: none;
+		padding: 0 !important;
+		width: 100%;
+		box-sizing: border-box;
+		color: @TextBody;
+		font-size: 14px;
+		font-style: normal;
+		font-weight: 400;
+		line-height: 19.6px;
+		background: none;
+		&:focus-visible {
+			outline: none;
+		}
+
+		&::placeholder {
+			color: @TextLabel;
+			opacity: 0.3;
+		}
+	}
+	.inputTitle {
+		position: absolute;
+		background-color: @PageBackground;
+		padding: 0 4px;
+		margin: 0 12px;
+		z-index: 1;
+		transform: translateY(-50%);
+		color: var(--textLabel);
+		font-size: 12px;
+		font-style: normal;
+		font-weight: 400;
+		line-height: 16.8px;
+	}
+	.errorText {
+		color: @ErrorText;
+		font-size: 12px;
+		font-style: normal;
+		font-weight: 400;
+		line-height: 16.8px;
+		margin-top: 8px;
+	}
+	&.errorInput {
+		label {
+			color: @ErrorText;
+			font-size: 12px;
+			font-style: normal;
+			font-weight: 400;
+			line-height: 16.8px;
+		}
+
+		// :global(.intl-tel-input) {
+		// 	border: 1px solid @ErrorText;
+		// }
+		.telInput {
+			border: 1px solid @ErrorText;
+		}
+	}
+}
+.telInput {
+	display: flex;
+	border: 1px solid var(--dividerStokes);
+	border-radius: 4px;
+	.dialCode {
+		padding: 0 16px;
+		display: flex;
+		align-items: center;
+	}
+}
+// :global {
+// 	.intl-tel-input {
+// 		display: flex;
+// 		border: 1px solid @DividerStokes;
+// 		border-radius: 4px;
+
+// 		.flag-container {
+// 			position: unset;
+// 			padding: 0;
+// 		}
+
+// 		.country-list {
+// 			width: 100%;
+// 			scrollbar-gutter: stable;
+// 			overflow-x: hidden;
+// 			border-radius: 4px;
+// 			border: 1px solid @DividerStokes;
+// 			background: @DialogBackground;
+// 			box-shadow: 0px 8px 12px 0px rgba(149, 149, 149, 0.16);
+// 			top: calc(100% + 8px);
+
+// 			@supports not (scrollbar-gutter: stable) {
+// 				padding-right: 12px;
+// 			}
+
+// 			&::-webkit-scrollbar {
+// 				width: 12px;
+// 			}
+
+// 			&::-webkit-scrollbar-thumb {
+// 				background: @DividerStokes;
+// 				border: 4px solid @DialogBackground;
+// 				border-radius: 100vw;
+// 			}
+
+// 			.country {
+// 				padding: 8px 24px;
+// 			}
+
+// 			.flag-box {
+// 				margin-right: 12px;
+// 			}
+
+// 			.country-name {
+// 				color: @TextBody;
+// 				font-size: 14px;
+// 				font-style: normal;
+// 				font-weight: 400;
+// 				line-height: 19.6px;
+// 			}
+
+// 			.dial-code {
+// 				color: @TextLabel;
+// 				font-size: 14px;
+// 				font-style: normal;
+// 				font-weight: 400;
+// 				line-height: 19.6px;
+// 			}
+// 		}
+
+// 		.selected-flag {
+// 			background-color: unset !important;
+// 			padding: 0 10px 0 16px;
+// 		}
+// 	}
+// }
+
+// :global {
+// 	.flag-container {
+// 		.selected-flag {
+// 			.iti-flag {
+// 				display: none;
+// 			}
+// 			.selected-dial-code {
+// 				margin-left: 0;
+// 				color: @TextBody;
+// 				font-size: 14px;
+// 				font-style: normal;
+// 				font-weight: 400;
+// 				line-height: 19.6px;
+// 			}
+// 			.iti-arrow {
+// 				border-left: 4px solid transparent;
+// 				border-right: 4px solid transparent;
+// 				border-top: 5px solid #555;
+// 			}
+
+// 			.iti-arrow.up {
+// 				border-top: none;
+// 				border-bottom: 5px solid #555;
+// 			}
+// 		}
+// 		.iti-flag {
+// 			background-image: url('../../../assets/images/flags.png');
+// 		}
+
+// 		&:hover {
+// 			.selected-flag {
+// 				background-color: unset !important;
+// 			}
+// 		}
+// 	}
+// }
