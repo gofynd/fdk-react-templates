@@ -1,0 +1,81 @@
+@import "../../styles/main.less";
+
+.priceSummaryContainer {
+  border-radius: 8px;
+  border: 1px solid @DividerStokes;
+  line-height: 140%;
+  padding: 24px 0;
+  display: flex;
+  flex-direction: column;
+  @media @mobile {
+    padding: 16px 0;
+    border-radius: 0;
+  }
+  .priceSummaryHeading {
+    font-size: 12px;
+    font-weight: 500;
+    color: @TextHeading;
+    padding: 0 24px;
+    @media @mobile {
+      padding: 0 16px;
+    }
+  }
+  .priceSummaryItem {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 24px;
+    margin-top: 16px;
+    font-size: 12px;
+    font-weight: 500;
+    color: @TextBody;
+    @media @mobile {
+      margin-top: 12px;
+      padding: 0 16px;
+    }
+  }
+  .priceSummaryItemTotal {
+    color: @TextHeading;
+    border-top: 1px solid @DividerStokes;
+    margin-top: 24px;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 24px 24px 0;
+    @media @mobile {
+      padding-right: 16px;
+      padding-left: 16px;
+    }
+  }
+  .discountPreviewContiner {
+    background-color: #fff9dc;
+    border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px 0;
+    margin-top: 12px;
+    font-size: 16px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .svgContainer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .discountPreviewMessage {
+      margin-left: 4px;
+      font-weight: 400;
+    }
+    .discountPreviewAmount {
+      margin-left: 4px;
+      font-weight: 600;
+    }
+  }
+}
+.discount {
+  color: @SuccessText;
+}
