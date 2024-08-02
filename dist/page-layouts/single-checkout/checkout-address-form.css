@@ -1,0 +1,284 @@
+.checkout-address-form__mapWrap___uaqsR {
+  padding: 12px 24px;
+}
+.checkout-address-form__formContainer___zrFkK {
+  display: flex;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  width: 100%;
+  justify-content: space-between;
+  padding: 24px;
+  margin-top: 8px;
+}
+.checkout-address-form__formContainer___zrFkK .checkout-address-form__formItemDiv___oHP45 {
+  position: relative;
+  width: 47%;
+  margin-bottom: 24px;
+}
+.checkout-address-form__formContainer___zrFkK .checkout-address-form__formItemDiv___oHP45:first-child::before {
+  content: "Delivery Information";
+  position: absolute;
+  top: -35px;
+  font-size: 12px;
+}
+.checkout-address-form__formContainer___zrFkK .checkout-address-form__formItemDiv___oHP45:nth-child(8) {
+  width: 100%;
+  margin-top: 20px;
+}
+.checkout-address-form__formContainer___zrFkK .checkout-address-form__formItemDiv___oHP45:nth-child(8)::before {
+  content: "Contact Information";
+  position: absolute;
+  top: -35px;
+  font-size: 12px;
+}
+@media only screen and (max-width: 1470px) {
+  .checkout-address-form__formContainer___zrFkK .checkout-address-form__formItemDiv___oHP45 {
+    width: 100%;
+  }
+}
+.checkout-address-form__formContainer___zrFkK .checkout-address-form__formItemDiv___oHP45 .checkout-address-form__formInputBox___e_A0y {
+  font-size: 0.8rem;
+  outline: none;
+  border: 1px solid var(--dividerStokes);
+  border-radius: 5px;
+  padding: 0 0.7rem;
+  height: 48px;
+  color: var(--textHeading);
+  transition: 0.1s ease-out;
+  box-sizing: border-box;
+  width: 100%;
+  background-color: transparent;
+}
+.checkout-address-form__formContainer___zrFkK .checkout-address-form__formItemDiv___oHP45 .checkout-address-form__formCheckBox___mfe_M {
+  font-size: 0.8rem;
+  outline: none;
+  border: 1px solid var(--dividerStokes);
+  border-radius: 5px;
+  padding: 0 0.7rem;
+  height: 15px;
+  width: 15px;
+  color: var(--buttonPrimary);
+  transition: 0.1s ease-out;
+  box-sizing: border-box;
+  margin-right: 10px;
+}
+.checkout-address-form__formContainer___zrFkK .checkout-address-form__formItemDiv___oHP45 .checkout-address-form__formCheckboxLabel___WvPLg {
+  font-size: 0.8rem;
+  position: absolute;
+  left: 11px;
+  top: 0px;
+  color: var(--textLabel);
+  padding: 0 0.3rem;
+  margin: 0 0.5rem;
+}
+.checkout-address-form__formContainer___zrFkK .checkout-address-form__formItemDiv___oHP45 .checkout-address-form__formInputBox___e_A0y:focus {
+  border-color: var(--buttonPrimary);
+}
+.checkout-address-form__formContainer___zrFkK .checkout-address-form__formItemDiv___oHP45 .checkout-address-form__formLabel___zhBDs {
+  position: absolute;
+  font-size: 0.8rem;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #fff;
+  color: var(--textLabel);
+  padding: 0 0.3rem;
+  margin: 0 0.5rem;
+  transition: 0.1s ease-out;
+  transform-origin: left top;
+  pointer-events: none;
+  top: 0;
+  transform: translateY(-50%) scale(0.9);
+}
+.checkout-address-form__formContainer___zrFkK .checkout-address-form__formItemDiv___oHP45 .checkout-address-form__formLabel___zhBDs .checkout-address-form__formReq___vfbcA {
+  color: red;
+}
+.checkout-address-form__formContainer___zrFkK .checkout-address-form__formItemDiv___oHP45 .checkout-address-form__formInputBox___e_A0y:focus + .checkout-address-form__formLabel___zhBDs {
+  color: var(--buttonPrimary);
+}
+.checkout-address-form__formContainer___zrFkK .checkout-address-form__formError___Slida {
+  padding: 5px 0 7px;
+  margin-bottom: 7px;
+  visibility: hidden;
+  color: var(--errorText);
+  width: max-content;
+  font-size: 10px;
+}
+.checkout-address-form__formContainer___zrFkK .checkout-address-form__visible___yBkHM {
+  visibility: visible;
+}
+.checkout-address-form__formContainer___zrFkK .checkout-address-form__formItemDiv___oHP45:nth-child(odd) {
+  margin-right: 24px;
+}
+@media only screen and (max-width: 1470px) {
+  .checkout-address-form__formContainer___zrFkK .checkout-address-form__formItemDiv___oHP45:nth-child(odd) {
+    margin-right: 0px;
+  }
+}
+.checkout-address-form__formContainer___zrFkK .checkout-address-form__addressTypeContainer___oWT9O {
+  width: 100%;
+}
+.checkout-address-form__formContainer___zrFkK .checkout-address-form__addressTypeContainer___oWT9O .checkout-address-form__typeWrap___z6cXq {
+  display: flex;
+  margin-bottom: 16px;
+}
+.checkout-address-form__formContainer___zrFkK .checkout-address-form__addressTypeContainer___oWT9O .checkout-address-form__typeIcon___yNYsQ {
+  width: 20px;
+  height: 20px;
+  margin-right: 6px;
+}
+.checkout-address-form__formContainer___zrFkK .checkout-address-form__addressTypeContainer___oWT9O .checkout-address-form__typeBtn___guC14 {
+  display: flex;
+  background: transparent;
+  align-items: center;
+  padding: 8px;
+  white-space: nowrap;
+  border-radius: 6px;
+  margin-right: 16px;
+}
+.checkout-address-form__formContainer___zrFkK .checkout-address-form__addressTypeContainer___oWT9O .checkout-address-form__addressTypeHeader___jBJHL {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  display: block;
+}
+.checkout-address-form__formContainer___zrFkK .checkout-address-form__addressTypeContainer___oWT9O .checkout-address-form__addressType___VKO9s {
+  margin-top: 20px;
+  position: relative;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+.checkout-address-form__formContainer___zrFkK .checkout-address-form__addressTypeContainer___oWT9O .checkout-address-form__addressType___VKO9s .checkout-address-form__addressTypes___oLNWH {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 4px 12px;
+  gap: 10px;
+  height: 40px;
+  border: 1px solid #e2e2e2;
+  border-radius: 4px;
+}
+.checkout-address-form__formContainer___zrFkK .checkout-address-form__addressTypeContainer___oWT9O .checkout-address-form__addressType___VKO9s .checkout-address-form__selectedDiv___mUW6L {
+  border: 1px solid var(--buttonPrimary);
+}
+.checkout-address-form__formContainer___zrFkK .checkout-address-form__addressTypeContainer___oWT9O .checkout-address-form__addressType___VKO9s input[type="radio"] {
+  margin-left: 0;
+  margin-right: 10px;
+}
+.checkout-address-form__formContainer___zrFkK .checkout-address-form__addressTypeContainer___oWT9O .checkout-address-form__addressType___VKO9s label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 5px;
+}
+.checkout-address-form__formContainer___zrFkK .checkout-address-form__addressTypeContainer___oWT9O .checkout-address-form__addressType___VKO9s label:hover {
+  font-weight: 400;
+}
+.checkout-address-form__formContainer2____61r3 {
+  display: flex;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  width: 100%;
+  justify-content: space-between;
+  padding: 0;
+}
+.checkout-address-form__defaultAddress___oIz86 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.checkout-address-form__defaultAddress___oIz86 input {
+  accent-color: var(--buttonPrimary);
+}
+.checkout-address-form__deliverBtnDivEdit___Q2fjl {
+  width: 100%;
+}
+.checkout-address-form__deliverBtn___oma1m {
+  padding: 14px;
+  border-radius: 5px;
+  background-color: var(--buttonPrimary);
+  border: none;
+  margin-top: 24px;
+  width: 100%;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+.checkout-address-form__contactInfo___EjWA7 {
+  width: 100%;
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+}
+.checkout-address-form__deliveryInfo___CJOnM {
+  margin-left: 24px;
+  font-weight: 600;
+  font-size: 12px;
+  margin-top: 24px;
+}
+
+.google-map__mapAddress___lLOgh {
+  position: relative;
+}
+.google-map__autoCompleteWrap___aXAcB {
+  width: 80%;
+  position: absolute;
+  z-index: 1;
+  top: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 1px solid var(--dividerStokes);
+  border-radius: 12px;
+  box-shadow: 1px 1px 1px 2px rgba(100, 100, 100, 0.2);
+}
+.google-map__searchAutoIcon___pczP8 {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 10px;
+  left: 8px;
+}
+.google-map__mapCompWrap___kgcWp {
+  position: relative;
+}
+.google-map__mapCompWrap___kgcWp > div {
+  border-radius: 12px;
+}
+.google-map__locateIconBtn___DmBgQ {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  right: 25px;
+  transform: translateY(-50%);
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+  width: 40px;
+  height: 40px;
+  background: #fff;
+  right: 10px;
+  border: none;
+}
+.google-map__locateIcon___O8k2g {
+  width: 20px;
+  height: 20px;
+}
+.google-map__addressSelect___rga6h {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--dividerStokes);
+}
+.google-map__addressSelect___rga6h p {
+  margin-right: 16px;
+  font-size: 12px;
+  color: var(--textPrimary);
+}
+.google-map__addressSelect___rga6h button {
+  background: transparent;
+  border: none;
+}
+
