@@ -1,0 +1,61 @@
+.google-map__mapAddress___lLOgh {
+  position: relative;
+}
+.google-map__autoCompleteWrap___aXAcB {
+  width: 80%;
+  position: absolute;
+  z-index: 1;
+  top: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 1px solid var(--dividerStokes);
+  border-radius: 12px;
+  box-shadow: 1px 1px 1px 2px rgba(100, 100, 100, 0.2);
+}
+.google-map__searchAutoIcon___pczP8 {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 10px;
+  left: 8px;
+}
+.google-map__mapCompWrap___kgcWp {
+  position: relative;
+}
+.google-map__mapCompWrap___kgcWp > div {
+  border-radius: 12px;
+}
+.google-map__locateIconBtn___DmBgQ {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  right: 25px;
+  transform: translateY(-50%);
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+  width: 40px;
+  height: 40px;
+  background: #fff;
+  right: 10px;
+  border: none;
+}
+.google-map__locateIcon___O8k2g {
+  width: 20px;
+  height: 20px;
+}
+.google-map__addressSelect___rga6h {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--dividerStokes);
+}
+.google-map__addressSelect___rga6h p {
+  margin-right: 16px;
+  font-size: 12px;
+  color: var(--textPrimary);
+}
+.google-map__addressSelect___rga6h button {
+  background: transparent;
+  border: none;
+}
+
