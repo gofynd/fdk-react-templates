@@ -1,0 +1,54 @@
+@import "../../../styles/main.less";
+
+.paymentContainer {
+  margin-top: 20px;
+
+  .reviewHeaderUnselect {
+    padding: 24px;
+    display: flex;
+    border: 1px solid var(--dividerStokes);
+    border-radius: 8px;
+    opacity: 0.5;
+    @media @mobile {
+      padding: 6px;
+      max-height: 60px;
+    }
+    .icon {
+      /* Styles for .icon class */
+    }
+
+    .heading {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      padding-left: 15px;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 140%;
+    }
+  }
+  .paymentHeaderSelect {
+    display: flex;
+    padding: 24px;
+    border-radius: 8px 8px 0 0;
+    border: 1px solid var(--dividerStokes);
+    @media @mobile {
+      padding: 6px;
+    }
+    .contentData {
+      padding-left: 15px;
+      .head {
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 140%;
+        color: var(--textHeading);
+      }
+      .desc {
+        font-size: 12px;
+        color: var(--textBody);
+        font-weight: 400;
+        line-height: 140%;
+      }
+    }
+  }
+}
