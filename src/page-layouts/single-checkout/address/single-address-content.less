@@ -1,0 +1,125 @@
+@import "../../../styles/main.less";
+
+.addressContentConitainer {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  border-radius: 0 0 8px 8px;
+  border: 1px solid var(--dividerStokes);
+  border-top: none;
+  @media @mobile {
+    padding: 4px;
+  }
+  .heading {
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--textBody);
+    margin: 12px 0px;
+    line-height: 140%;
+  }
+
+  .addressContent {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    gap: 4px;
+    border: 1px solid var(--dividerStokes);
+    @media @mobile {
+      padding: 4px;
+    }
+    .addressContentTop {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .addressContentTopLeft {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        .addressName {
+          color: var(--textHeading);
+          font-style: normal;
+          font-weight: 600;
+          font-size: 14px;
+          margin-right: 8px;
+          align-self: center;
+          line-height: 140%;
+          @media @mobile {
+            font-size: 12px;
+            margin-right: 4px;
+            margin-left: 4px;
+          }
+        }
+
+        .addressType {
+          border: 1px solid var(--buttonPrimary);
+          padding: 6px 8px;
+          border-radius: 4px;
+          font-size: 12px;
+          font-weight: 500;
+          color: var(--buttonPrimary);
+          @media @mobile {
+            font-size: 10px;
+            padding: 4px;
+          }
+        }
+      }
+
+      .addressContentTopRight {
+        display: flex;
+        gap: 5px;
+
+        .edit,
+        .remove {
+          border: none;
+          color: var(--buttonLink);
+          font-style: normal;
+          font-weight: 600;
+          font-size: 12px;
+          text-align: center;
+          text-transform: uppercase;
+          line-height: 140%;
+          background: var(--pageBackground);
+          cursor: pointer;
+        }
+      }
+    }
+
+    .addressMid {
+      font-weight: 400;
+      font-size: 12px;
+      margin-top: 8px;
+      line-height: 140%;
+      color: var(--textBody);
+    }
+    .addressMid,
+    .phEnd {
+      margin-left: 25px;
+      margin-top: 5px;
+    }
+    .phEnd {
+      font-style: normal;
+      font-weight: 500;
+      font-size: 12px;
+      margin-top: 5px;
+      line-height: 140%;
+      color: var(--textLabel);
+    }
+
+    .deliverToThis {
+      padding: 10px;
+      border-radius: 5px;
+      background-color: var(--buttonPrimary);
+      border: none;
+      width: 100%;
+      font-weight: 600;
+      font-size: 14px;
+      text-transform: uppercase;
+      text-align: center;
+      color: var(--buttonSecondary);
+      cursor: pointer;
+      margin-top: 10px;
+    }
+  }
+}
