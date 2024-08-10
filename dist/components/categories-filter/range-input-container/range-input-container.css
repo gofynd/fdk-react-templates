@@ -1,0 +1,115 @@
+.categories-filter__singleFilterContainer___Av75g {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 1rem 0.5rem;
+  cursor: pointer;
+  max-height: 400px;
+  overflow: scroll;
+}
+.categories-filter__singleFilterContainer___Av75g::-webkit-scrollbar {
+  display: none;
+}
+.categories-filter__singleFilterContainer___Av75g .categories-filter__filterInformationContainer___NTwqM {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.categories-filter__singleFilterContainer___Av75g .categories-filter__filterInformationContainer___NTwqM .categories-filter__filterHeading___rbGDN {
+  color: var(--textHeading);
+  font-size: 16px;
+  line-height: 18px;
+  letter-spacing: 0.02em;
+  font-weight: 500;
+}
+.categories-filter__singleFilterContainer___Av75g .categories-filter__filterInformationContainer___NTwqM .categories-filter__filterSvg___sc_ZY {
+  height: 24px;
+  width: 24px;
+  fill: var(--textHeading);
+  transition: all 0.25s ease;
+}
+.categories-filter__singleFilterContainer___Av75g .categories-filter__filterValueContainer___oLAzy {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0rem;
+  stroke: none;
+}
+.categories-filter__singleFilterContainer___Av75g .categories-filter__filterValueContainer___oLAzy .categories-filter__svgStrokeContainer___ynV79 {
+  width: 26px;
+  height: 26px;
+}
+.categories-filter__singleFilterContainer___Av75g .categories-filter__filterValueContainer___oLAzy .categories-filter__svgStrokeContainer___ynV79:hover.categories-filter__notSelected___MfkGF {
+  stroke: var(--buttonPrimary);
+}
+.categories-filter__singleFilterContainer___Av75g .categories-filter__filterValueContainer___oLAzy .categories-filter__notSelected___MfkGF {
+  stroke: var(--dividerStokes);
+}
+.categories-filter__singleFilterContainer___Av75g .categories-filter__filterValueContainer___oLAzy .categories-filter__filterValueName___eTsQt {
+  color: var(--textBody);
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  font-weight: 500;
+}
+.categories-filter__singleFilterContainer___Av75g .categories-filter__filterValueContainer___oLAzy .categories-filter__filterValueCount___qpeJl {
+  color: var(--textSecondary);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  font-weight: 400;
+}
+.categories-filter__singleFilterContainer___Av75g .categories-filter__rangeContainer___xQU5c {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+.categories-filter__singleFilterContainer___Av75g .categories-filter__rangeContainer___xQU5c .categories-filter__rangeTitleContainer___ixLGp {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+.categories-filter__singleFilterContainer___Av75g .categories-filter__rangeContainer___xQU5c .categories-filter__rangeTitleContainer___ixLGp div {
+  flex-basis: 35%;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  font-size: 14px;
+  line-height: 14px;
+  margin-bottom: 8px;
+  color: var(--textBody);
+  font-weight: 500;
+}
+.categories-filter__singleFilterContainer___Av75g .categories-filter__rangeContainer___xQU5c .categories-filter__rangeInputContainer___q9N1Q {
+  display: flex;
+  justify-content: space-between;
+}
+.categories-filter__singleFilterContainer___Av75g .categories-filter__rangeContainer___xQU5c .categories-filter__rangeInputContainer___q9N1Q div {
+  flex-basis: 35%;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  font-size: 14px;
+  line-height: 14px;
+  margin-bottom: 8px;
+  color: var(--textBody);
+  font-weight: 500;
+  gap: 0.5rem;
+}
+.categories-filter__singleFilterContainer___Av75g .categories-filter__rangeContainer___xQU5c .categories-filter__rangeInputContainer___q9N1Q div .categories-filter__currencySymbol___ikELI {
+  font-size: 14px;
+  color: var(--textSecondary);
+  line-height: 14px;
+  font-weight: 500;
+}
+.categories-filter__singleFilterContainer___Av75g .categories-filter__rangeContainer___xQU5c .categories-filter__rangeInputContainer___q9N1Q div input {
+  min-width: 76px;
+  max-width: 100px;
+  padding: 6px 0px;
+  border: 1px solid var(--dividerStokes);
+  color: var(--textBody);
+  text-align: center;
+  background: transparent;
+}
+
