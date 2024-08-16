@@ -1,0 +1,106 @@
+@import "../../../styles/main.less";
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: @header;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: opacity 0.25s ease;
+  .flex-center();
+  @media @tablet {
+    align-items: flex-end;
+  }
+  &:before {
+    content: "";
+    background-color: @Overlay;
+    opacity: 0.6;
+    inset: 0;
+    position: fixed;
+    z-index: -1;
+  }
+}
+
+.modalContainer {
+  min-width: 300px;
+  background-color: @White;
+  border-radius: @border-radius;
+  min-height: 100px;
+  max-width: 720px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+
+  @media @tablet {
+    width: 100%;
+    max-width: unset;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  box-sizing: border-box;
+  border-bottom: 1px solid @DividerStokes;
+  background: @DialogBackground;
+  z-index: 4;
+  padding: 8px;
+
+  .crossIcon {
+    cursor: pointer;
+  }
+}
+
+.modalBody {
+  flex: 1;
+}
+
+.rightModal {
+  justify-content: flex-end;
+  .modalContainer {
+    height: 100%;
+    width: 40%;
+    border-radius: 0;
+
+    .modalHeader {
+      padding: 24px;
+
+      .modalTitle {
+        font-size: 16px;
+      }
+    }
+
+    @media @tablet {
+      width: 100%;
+      border-radius: 0;
+    }
+  }
+}
+.centerModal {
+  @media @tablet {
+    align-items: center;
+  }
+  .modalContainer {
+    @media @tablet {
+      width: unset;
+      max-width: 720px;
+    }
+  }
+}
+
+.modalTitle {
+  font-weight: 600;
+  text-align: center;
+  color: @TextHeading;
+  line-height: 140%;
+}
