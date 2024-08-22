@@ -1,0 +1,97 @@
+@import "../../styles/main.less";
+
+.CustomRangeSlider {
+  height: 45px;
+  padding-top: 7px;
+  @media @tablet-strict {
+    height: 31px;
+    padding-top: 5px;
+  }
+  .inputFields {
+    display: flex;
+    align-items: center;
+    .fieldItem {
+      padding: 0px 8px;
+      // background-color: @Grey100;
+    }
+  }
+  .price-Container--title {
+    // color: @Grey400;
+    // .MontserratRegular;
+    font-size: small;
+    margin: 0px 0px 12px 0px;
+    display: none;
+    @media @mobile {
+      display: block;
+      margin-bottom: 20px;
+    }
+  }
+  .doneButton {
+    background-color: #5b215f;
+    border: none;
+    padding: 10px;
+    // color: @color-white;
+    height: 44px;
+    width: 90px;
+  }
+  .disableButton {
+    opacity: 0.7;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  .inputContainer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    gap: 10px;
+    @media @tablet-strict {
+      display: none;
+    }
+  }
+  .errorMessage {
+    // .MontserratRegular;
+    font-size: 10px;
+    font-weight: 500;
+    // color: @LivelyRed;
+    margin-top: 4px;
+  }
+  .rangeSlider {
+    height: 4px;
+    background: transparent;
+    :global(.range-slider__thumb) {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background-color: #fff;
+      box-shadow: 0.5px 0.5px 2px 1px rgba(0, 0, 0, 0.32);
+      border: 1px solid @ButtonPrimary;
+
+      &:after {
+        content: attr(aria-valuetext) "";
+        padding: 0;
+        border: none;
+        background-color: transparent;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 18px;
+        letter-spacing: -0.02em;
+        color: @TextHeading;
+        position: absolute;
+        bottom: -12px;
+        transform: translateY(100%);
+        @media @tablet-strict {
+          bottom: -9px;
+        }
+      }
+      &[data-lower="true"]::after {
+        left: 0;
+      }
+      &[data-upper="true"]::after {
+        right: 0;
+      }
+    }
+    :global(.range-slider__range) {
+      background: @ButtonPrimary;
+    }
+  }
+}
