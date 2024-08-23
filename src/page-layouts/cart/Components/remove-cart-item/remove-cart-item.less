@@ -1,0 +1,95 @@
+@import "../../../../styles/main.less";
+
+.removeModalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid @DividerStokes;
+  padding: 16px 24px;
+  gap: 16px;
+
+  .headerTitle {
+    color: @TextHeading;
+    line-height: 140%;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .headerSubTitle {
+    color: @TextBody;
+    line-height: 140%;
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 8px;
+  }
+  .headerCloseIcon {
+    cursor: pointer;
+  }
+}
+.removeModalBody {
+  padding: 24px;
+  line-height: 140%;
+  .itemDetails {
+    display: flex;
+    gap: 16px;
+    .itemImg {
+      border-radius: 4px;
+      flex: 0 0 18%;
+      width: 18%;
+      @media @mobile {
+        flex: 0 0 25%;
+        width: 25%;
+      }
+      img {
+        width: 100%;
+        height: auto;
+      }
+    }
+    .itemName {
+      font-size: 14;
+      font-weight: 400;
+      color: @TextHeading;
+    }
+    // .item-name-margin {
+    //     margin-left: 16px;
+    // }
+  }
+}
+.removeModalFooter {
+  display: flex;
+  padding: 24px;
+
+  @media @tablet {
+    padding: 16px;
+  }
+  .removeBtn {
+    padding-top: 14px;
+    padding-bottom: 14px;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 4px;
+    text-transform: capitalize;
+    color: @ButtonPrimary;
+    width: 50%;
+    background-color: @ButtonSecondary;
+    border: 1px solid @TextHeading;
+    @media @tablet {
+      width: 100%;
+    }
+  }
+  .wishlistBtn {
+    padding-top: 14px;
+    padding-bottom: 14px;
+    margin-left: 12px;
+    text-align: center;
+    cursor: pointer;
+    color: @ButtonSecondary;
+    border-radius: 4px;
+    width: 50%;
+    text-transform: capitalize;
+    color: #fff;
+    background-color: @TextHeading;
+    @media @tablet {
+      width: 100%;
+    }
+  }
+}
