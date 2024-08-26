@@ -1,0 +1,76 @@
+@import "../../styles/main.less";
+
+.CustomRangeSlider {
+  padding-top: 7px;
+  margin-top: 30px;
+  @media @tablet-strict {
+    padding-top: 5px;
+  }
+
+  .price-Container--title {
+    font-size: small;
+    margin: 0px 0px 12px 0px;
+    display: none;
+    @media @mobile {
+      display: block;
+      margin-bottom: 20px;
+    }
+  }
+
+  .inputContainer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    padding-top: 8px;
+    gap: 10px;
+
+    .fieldItem {
+      width: 76px;
+      padding: 6px 0;
+      color: @TextBody;
+      text-align: center;
+      height: auto;
+    }
+  }
+  .errorMessage {
+    font-size: 10px;
+    font-weight: 500;
+    margin-top: 4px;
+    color: @ErrorText;
+  }
+  .rangeSlider {
+    height: 4px;
+    background: @ButtonPrimaryL3;
+    :global(.range-slider__thumb) {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background-color: #fff;
+      box-shadow: 0.5px 0.5px 2px 1px rgba(0, 0, 0, 0.32);
+      border: 1px solid @ButtonPrimary;
+
+      &:before {
+        content: attr(aria-valuetext) "";
+        padding: 0;
+        border: none;
+        background-color: transparent;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 18px;
+        letter-spacing: -0.02em;
+        color: @TextHeading;
+        position: absolute;
+        top: -22px;
+      }
+      &[data-lower="true"]::before {
+        left: 0;
+      }
+      &[data-upper="true"]::before {
+        right: 0;
+      }
+    }
+    :global(.range-slider__range) {
+      background: @ButtonPrimary;
+    }
+  }
+}
