@@ -1,0 +1,68 @@
+@import "../../styles/main.less";
+
+.quantityCtrlContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid @DividerStokes;
+  border-radius: 4px;
+  overflow: hidden;
+  height: 32px;
+  @media @mobile {
+    height: 24px;
+  }
+  .decreaseCount,
+  .increaseCount {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    width: 42px;
+    padding: 0;
+    height: 100%;
+    color: @TextHeading;
+    @media @mobile {
+      width: 28px;
+    }
+
+    .svgContainer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+  // .decreaseCount {
+  //   border-radius: 4px 0 0 4px;
+  // }
+  // .increaseCount {
+  //   border-radius: 0 4px 4px 0;
+  // }
+  .count {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 100%;
+    border-left: 1px solid @DividerStokes;
+    border-right: 1px solid @DividerStokes;
+    font-size: 12px;
+    line-height: normal;
+    color: @TextBody;
+    @media @mobile {
+      width: 30px;
+    }
+    // & > span {
+
+    //   border: none;
+    //   width: 100%;
+    //   height: 100%;
+    //   box-sizing: border-box;
+    //   vertical-align: middle;
+    //   text-align: center;
+
+    //   display: flex;
+    //   align-items: center;
+    //   justify-content: center;
+    // }
+  }
+}
