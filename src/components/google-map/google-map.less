@@ -1,0 +1,63 @@
+.mapAddress {
+  position: relative;
+}
+.autoCompleteWrap {
+  width: 80%;
+  position: absolute;
+  z-index: 1;
+  top: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 1px solid var(--dividerStokes);
+  border-radius: 12px;
+  box-shadow: 1px 1px 1px 2px rgba(100, 100, 100, 0.2);
+}
+.searchAutoIcon {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 10px;
+  left: 8px;
+}
+.mapCompWrap {
+  position: relative;
+  > div {
+    border-radius: 12px;
+  }
+}
+.locateIconBtn {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  right: 25px;
+  transform: translateY(-50%);
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+  width: 40px;
+  height: 40px;
+  background: #fff;
+  right: 10px;
+  border: none;
+}
+.locateIcon {
+  width: 20px;
+  height: 20px;
+}
+.addressSelect {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--dividerStokes);
+  p {
+    margin-right: 16px;
+    font-size: 12px;
+    color: var(--textPrimary);
+  }
+  button {
+    background: transparent;
+    white-space: nowrap;
+    border: 1px solid var(--buttonPrimary);
+    padding: 4px;
+    font-size: 11px;
+  }
+}
