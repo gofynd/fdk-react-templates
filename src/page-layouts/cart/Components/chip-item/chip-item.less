@@ -1,0 +1,372 @@
+@import "../../../../styles/main.less";
+
+.cartItemsListContainer {
+  padding: 24px;
+  border: 1px solid @DividerStokes;
+  border-top: 0 solid @DividerStokes;
+  @media @mobile {
+    padding: 16px;
+  }
+  &:nth-last-child(2) {
+    border-radius: 0 0 8px 8px;
+    @media @mobile {
+      border-radius: 0;
+    }
+  }
+
+  .eachItemContainer {
+    display: flex;
+    .itemImageContainer {
+      flex: 0 0 18%;
+      box-sizing: border-box;
+      display: flex;
+      @media @tablet {
+        flex: 0 0 25%;
+      }
+      a {
+        img {
+          width: 100%;
+          border-radius: 4px;
+        }
+      }
+    }
+    .eachItemDetailsContainer {
+      position: relative;
+      line-height: 140%;
+      box-sizing: border-box;
+      margin-left: 24px;
+      width: 100%;
+      .removeItemSvgContainer {
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
+      .itemBrand {
+        color: var(--textHeading);
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .itemName {
+        color: @TextBody;
+        margin-top: 4px;
+        font-size: 14px;
+      }
+      .itemSellerName {
+        color: @TextLabel;
+        padding-right: 90px;
+        margin-top: 4px;
+        font-size: 12px;
+        @media @mobile {
+          padding-right: 30px;
+        }
+      }
+      .itemSizeQuantityContainer {
+        display: flex;
+        align-items: center;
+        margin-top: 16px;
+        position: relative;
+        flex-wrap: wrap;
+        column-gap: 12px;
+        .itemSizeQuantitySubContainer {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          .sizeContainer {
+            display: flex;
+            justify-content: space-between;
+            cursor: pointer;
+            align-items: center;
+            padding: 0 16px;
+            min-width: 80px;
+            max-width: 160px;
+            height: 32px;
+            border: 1px solid @DividerStokes;
+            border-radius: 4px;
+            line-height: 140%;
+            @media @mobile {
+              padding: 0 12px;
+              width: 90px;
+              height: 24px;
+            }
+            .sizeName {
+              font-size: 12px;
+              font-weight: 600;
+              color: @TextBody;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              max-width: 90%;
+              margin-right: 3px;
+            }
+            .itemSvg {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              cursor: pointer;
+            }
+          }
+        }
+        .limitedQtyBox {
+          font-size: 10px;
+          font-weight: 500;
+          padding: 4px 12px;
+          border-radius: 4px;
+          line-height: 140%;
+          color: @ErrorText;
+          @media @mobile {
+            margin-top: 12px;
+          }
+        }
+      }
+      .itemTotalContainer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 16px;
+        @media @tablet {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .itemPrice {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          .effectivePrice {
+            color: @TextHeading;
+            font-size: 16px;
+            font-weight: 600;
+            margin-right: 12px;
+          }
+          .markedPrice {
+            font-size: 12px;
+            text-decoration: line-through;
+            color: @TextLabel;
+            margin-right: 12px;
+          }
+          .discount {
+            font-size: 12px;
+            font-weight: 500;
+            margin-right: 12px;
+            color: @SuccessText;
+          }
+        }
+        .deliveryDateWrapper {
+          display: flex;
+          height: 20px;
+          align-self: center;
+          @media @mobile {
+            align-self: flex-start;
+            margin-top: 12px;
+          }
+          .shippingLogo {
+            color: @TextHeading;
+            @media @mobile {
+              display: none;
+            }
+          }
+          .deliveryDate {
+            font-weight: 600;
+            font-size: 12px;
+            text-align: right;
+            color: @ButtonPrimary;
+            align-self: center;
+            margin-left: 8px;
+            line-height: 140%;
+            @media @mobile {
+              margin-left: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.appliedCouponRibbon {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 4px 12px;
+  color: @SuccessText;
+  line-height: 140%;
+  background: @SuccessBackground;
+  border-radius: 4px;
+  width: fit-content;
+  .couponText {
+    margin-left: 6px;
+    font-weight: 600;
+    font-size: 10px;
+  }
+}
+.out-of-stock-chip {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 16px 8px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  background: var(--errorBackground);
+  border-radius: 4px;
+  line-height: 140%;
+  height: 32px;
+  margin-bottom: 8px;
+  @media @mobile {
+    font-size: 10px;
+    height: 24px;
+  }
+  .removeAction {
+    font-size: 12px;
+    font-weight: 600;
+    color: @ButtonLink;
+    cursor: pointer;
+  }
+}
+.new-cart-red-color {
+  color: @ErrorText;
+}
+
+.outOfStock {
+  opacity: 0.4;
+  pointer-events: none;
+}
+.sizeModalContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1001;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: rgba(0, 0, 0, 0.5019607843137255);
+  font-size: 0.875rem;
+  display: none;
+  transition: all 0.25s ease-in-out;
+  @media @mobile {
+    align-items: flex-end;
+  }
+  .modalContainer {
+    background-color: #fff;
+    min-width: 400px;
+    min-height: 100px;
+    max-width: 400px;
+    max-height: 720px;
+    overflow: auto;
+    border: 1px solid #f0f0f0;
+    border-radius: 8px;
+    .sizeModalHeader {
+      background-color: #f8f8f8;
+      border-bottom: 1px solid #f0f0f0;
+      position: relative;
+      padding: 0 24px;
+      padding-bottom: 16px;
+      padding-top: 16px;
+      display: flex;
+      align-items: center;
+      .sizeModalDiv {
+        display: flex;
+        .sizeModalImage {
+          width: 18%;
+          img {
+            width: 100%;
+            border-radius: 4px;
+          }
+        }
+        .sizeModalContent {
+          color: #1f1f1f;
+          line-height: 140%;
+          margin-left: 16px;
+          display: flex;
+          flex-direction: column;
+          div {
+            .sizeModalBrand {
+              margin-right: 20px;
+              margin-bottom: 8px;
+              font-size: 16px;
+              font-weight: 600;
+            }
+            .sizeModalName {
+              margin-right: 20px;
+              font-size: 16px;
+              font-weight: 400;
+            }
+          }
+          .sizeDiscount {
+            margin-top: 16px;
+            font-size: 14px;
+            font-weight: 600;
+          }
+        }
+      }
+      .modalCloseIcon {
+        position: absolute;
+        top: 24px;
+        right: 24px;
+        cursor: pointer;
+        span {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+    }
+    .sizeModalBody {
+      padding: 24px 0 24px 24px;
+      .sizeSelectHeading {
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .sizeHorizontalList {
+        display: flex;
+        flex-wrap: wrap;
+        .singleSize {
+          margin-right: 24px;
+          margin-top: 12px;
+          .singleSizeDetails {
+            color: var(--buttonPrimary);
+            border-color: var(--buttonPrimary);
+            background: #fff;
+            border: 1px solid #e2e2e2;
+            border-radius: 4px;
+            padding: 0px 20px;
+            padding-bottom: 14px;
+            padding-top: 14px;
+            display: inline-block;
+            cursor: pointer;
+          }
+          .singleSizeSelected {
+            color: var(--buttonPrimary);
+            border-color: var(--buttonPrimary);
+          }
+        }
+      }
+    }
+    .sizeModalFooter {
+      border-top: 1px solid #f0f0f0;
+      padding: 24px;
+      width: 100%;
+      .updateSizeButton {
+        border-radius: 4px;
+        text-transform: capitalize;
+        color: #fff;
+        background-color: var(--buttonPrimary);
+        padding: 14px 0;
+        text-align: center;
+      }
+    }
+    .disableBtn {
+      opacity: 0.5;
+    }
+  }
+}
+.selected {
+  display: flex;
+}
+.itemRemoveIcon,
+.itemRemoveIcon path {
+  color: var(--textHeading);
+  fill: var(--textHeading);
+}
