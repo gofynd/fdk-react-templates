@@ -1,0 +1,21 @@
+.loaderContainer {
+  display: flex;
+  justify-content: center;
+  height: 35px;
+}
+.loaderIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: rotate 1s linear infinite;
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@keyframes rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
