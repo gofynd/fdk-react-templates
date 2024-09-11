@@ -1,0 +1,97 @@
+@import "../../../styles/main.less";
+
+.addressContentConitainer {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  border-radius: 0 0 8px 8px;
+  border: 1px solid var(--dividerStokes);
+  border-top: none;
+  @media @mobile {
+    padding: 4px;
+  }
+  .heading {
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--textBody);
+    margin: 12px 0px;
+    line-height: 140%;
+  }
+
+  .contentTopRight {
+    display: flex;
+    gap: 5px;
+
+    .edit,
+    .remove {
+      border: none;
+      color: var(--buttonLink);
+      font-style: normal;
+      font-weight: 600;
+      font-size: 12px;
+      text-align: center;
+      text-transform: uppercase;
+      line-height: 140%;
+      background: var(--pageBackground);
+      cursor: pointer;
+    }
+  }
+
+  .deliverToThis {
+    padding: 10px;
+    border-radius: 5px;
+    background-color: var(--buttonPrimary);
+    border: none;
+    width: 100%;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--buttonSecondary);
+    cursor: pointer;
+    margin-top: 10px;
+  }
+}
+
+.invalidAddError {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  gap: 4px;
+  isolation: isolate;
+  background: @ButtonSecondary;
+  border-radius: 8px;
+  .invalidAddErrorLeft {
+    display: flex;
+    gap: 14px;
+    .invalidAddErrorData {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      .invalidAddErrorMsg {
+        font-weight: 600;
+        font-size: 12px;
+        line-height: 140%;
+        color: @ErrorText;
+      }
+      .invalidAddErrorSuggestion {
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 140%;
+        color: @TextHeading;
+      }
+    }
+  }
+  .invalidEditCart {
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 140%;
+    text-align: center;
+    text-transform: uppercase;
+    color: @ErrorText;
+    cursor: pointer;
+  }
+}
