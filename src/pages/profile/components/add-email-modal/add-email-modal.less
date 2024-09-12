@@ -1,0 +1,54 @@
+@import "../../../../styles/main.less";
+
+.modalContainer {
+  padding: 15px 25px 5px;
+  background-color: #fff;
+  min-width: 200px;
+  min-height: 100px;
+  max-width: 350px;
+  overflow-wrap: break-word;
+  border-radius: 3px;
+  -webkit-font-smoothing: antialiased;
+
+  .closeCross {
+    display: flex;
+    justify-content: flex-end;
+
+    .crossIcon {
+      cursor: pointer;
+    }
+  }
+
+  .header {
+    font-weight: 400;
+    font-size: 16px;
+    margin: 20px;
+    color: @TextHeading;
+
+    .flex-center();
+  }
+
+  .body {
+    line-height: 20px;
+
+    .formInputContainer {
+      margin: 25px 0 35px;
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .btnContainer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      margin-bottom: 3px;
+      border-top: 1px solid @DividerStokes;
+
+      .yesBtn {
+        margin-top: 6px;
+      }
+    }
+  }
+}

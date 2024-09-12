@@ -1,0 +1,51 @@
+@import "../../../../styles/main.less";
+
+@lg-min: 1024px;
+.pagination {
+  display: flex;
+  align-items: center;
+  a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .arrowIcon {
+    width: 40px;
+    height: 40px;
+    padding: 7px;
+    fill: @TextBody;
+
+    &.leftArrow {
+      transform: rotate(90deg);
+    }
+    &.rightArrow {
+      transform: rotate(-90deg);
+    }
+  }
+  .pageContainer {
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+    .pageBtn {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: @TextBody;
+      border: 1px solid @DividerStokes;
+      border-radius: 50%;
+      .b1();
+      &.active {
+        border-color: @ButtonPrimary;
+        pointer-events: none;
+      }
+    }
+  }
+}
+.disable {
+  pointer-events: none;
+  .arrowIcon {
+    fill: @TextSecondary;
+  }
+}
