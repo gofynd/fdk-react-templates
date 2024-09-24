@@ -1,0 +1,191 @@
+@import "../../../../styles/main.less";
+
+.commentOuterBox {
+  border: 1px solid @DividerStokes;
+  border-radius: 8px;
+  box-sizing: border-box;
+  line-height: 17px;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  @media @tablet {
+    border-radius: 0;
+  }
+  @media @mobile {
+    padding: 16px;
+  }
+  .addCommentHeader {
+    line-height: 140%;
+    color: @TextHeading;
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    padding-bottom: 4px;
+    @media @tablet {
+      display: none;
+    }
+  }
+  .commentBoxMobile {
+    display: flex;
+    gap: 14px;
+    @media @desktop {
+      display: none;
+    }
+    .commentIconMobile {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      flex: 0 0 16px;
+    }
+    .commentText {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      margin-right: 8px;
+      max-height: 38px;
+      width: calc(100% - 40px);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+    .addCommentLabel {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      color: @TextLabel;
+      font-size: 12px;
+      font-weight: 400;
+      .addCommentTitle {
+        font-weight: 600;
+      }
+    }
+    .addBtn {
+      margin-left: auto;
+      color: @ButtonPrimary;
+      text-align: right;
+      width: 40px;
+      display: flex;
+      justify-content: flex-end;
+      font-weight: 600;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+  }
+  .inputBox {
+    margin-top: 16px;
+    display: flex;
+    border: 1px dashed @DividerStokes;
+    border-radius: 8px;
+    flex-direction: column;
+    background-color: @PageBackground;
+    @media @tablet {
+      display: none;
+    }
+    .commentBox {
+      display: flex;
+      align-items: center;
+      position: relative;
+      .commentNoteIcon {
+        position: absolute;
+        top: 50%;
+        left: 10px;
+        transform: translateY(-50%);
+      }
+      input {
+        flex: 1;
+        background: transparent;
+        padding: 12px 12px 12px 40px;
+        font-size: 12px;
+        font-weight: 400;
+        width: 100%;
+        border-radius: 8px 0 0 8px;
+        border: none;
+        line-height: 140%;
+        color: @TextLabel;
+        &:focus-visible {
+          outline: none;
+        }
+      }
+      .commentLength {
+        border-radius: 0 8px 8px 0;
+        padding: 12px;
+        color: @TextLabel;
+        font-weight: 400;
+        font-size: 10px;
+      }
+    }
+  }
+}
+
+.modelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid @DividerStokes;
+  background: @DialogBackground;
+  padding: 16px 24px;
+  color: var(--textHeading);
+  line-height: 140%;
+  font-size: 16px;
+  font-weight: 600;
+}
+.modalContent {
+  padding: 24px 16px;
+  .modalTextarea {
+    padding: 12px;
+    font-size: 12px;
+    font-weight: 400;
+    width: 100%;
+    height: 100px;
+    border: 1px solid var(--dividerStokes);
+    border-radius: 4px;
+    line-height: 140%;
+    color: var(--textLabel);
+    box-sizing: border-box;
+    resize: none;
+    &:focus-visible {
+      outline: none;
+    }
+  }
+  .modalErrorWrapper {
+    display: flex;
+  }
+  .modalCommentError {
+    font-weight: 400;
+    font-size: 10px;
+    color: var(--errorText);
+    padding: 12px 12px 0;
+  }
+  .modalCommentLength {
+    border-radius: 8px;
+    padding: 12px;
+    color: var(--textLabel);
+    font-weight: 400;
+    font-size: 10px;
+    width: max-content;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: auto;
+  }
+  .modalActionBtn {
+    background: var(--buttonPrimary);
+    border-radius: 4px;
+    text-transform: uppercase;
+    color: var(--buttonSecondary);
+    width: 100%;
+    border: none;
+    height: 48px;
+    line-height: 140%;
+    margin-top: 24px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+}
