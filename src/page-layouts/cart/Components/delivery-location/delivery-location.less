@@ -1,0 +1,270 @@
+@import "../../../../styles/main.less";
+
+.cartPincodeContainer {
+  border-radius: 8px;
+  border: 1px solid @DividerStokes;
+  line-height: 140%;
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  @media @mobile {
+    border-radius: 0;
+    padding: 16px;
+    margin-top: 18px;
+  }
+  .pinCodeDetailsContainer {
+    .pincodeHeading {
+      font-size: 14px;
+      font-weight: 400;
+      color: @TextBody;
+      @media @tablet {
+        font-size: 12px;
+      }
+    }
+    .pinCode {
+      font-size: 14px;
+      font-weight: 600;
+      color: @TextHeading;
+      @media @tablet {
+        font-size: 12px;
+      }
+    }
+  }
+  .changePinCodeButton {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 12px 16px;
+    cursor: pointer;
+    border: 1px solid @ButtonPrimary;
+    border-radius: 4px;
+    background: @ButtonSecondary;
+    color: @ButtonPrimary;
+    height: 100%;
+    text-transform: uppercase;
+    line-height: 140%;
+    @media @mobile {
+      padding: 9px;
+    }
+  }
+}
+
+.pincodeModal {
+  max-width: 398px;
+  @media @tablet {
+    max-width: unset;
+  }
+
+  .modalHeader {
+    border-bottom: 1px solid @DividerStokes;
+    position: relative;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+
+    .modalHeading {
+      color: @TextHeading;
+      line-height: 140%;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .modalCloseIcon {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      cursor: pointer;
+      span {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
+  .modalBody {
+    padding: 24px;
+    .modalPincodeContainer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+
+      .errorText {
+        flex-basis: 100%;
+        color: @ErrorText;
+        line-height: 140%;
+        font-size: 12px;
+        font-weight: 400;
+        margin-top: 8px;
+      }
+
+      .modalPincodeInput {
+        flex: 1;
+        input {
+          box-sizing: border-box;
+          border: 1px solid var(--dividerStokes);
+          border-radius: 4px;
+          color: var(--textLabel);
+          padding: 16px;
+          font-size: 14px;
+          font-weight: 400;
+          width: 100%;
+          &:focus-visible {
+            outline: none;
+          }
+        }
+      }
+      .modalChangePinCodeButton {
+        font-size: 14px;
+        font-weight: 600;
+        padding: 14px 24px;
+        margin-left: 16px;
+        background: @ButtonPrimary;
+        border-radius: 4px;
+        color: @ButtonSecondary;
+        height: 100%;
+        text-transform: uppercase;
+        cursor: pointer;
+        text-align: center;
+        @media @tablet {
+          order: 2;
+          margin-top: 24px;
+          width: 100%;
+          margin-left: 0;
+          box-sizing: border-box;
+        }
+      }
+    }
+  }
+}
+
+.addressModal {
+  .modalHeader {
+    border-bottom: 1px solid @DividerStokes;
+    position: relative;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+
+    .modalHeading {
+      color: @TextHeading;
+      line-height: 140%;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .modalCloseIcon {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      cursor: pointer;
+      span {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
+  .modalBody {
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    background: @DialogBackground;
+
+    @media @mobile {
+      padding: 0px;
+    }
+
+    input[type="radio"] {
+      display: none;
+      &:checked {
+        color: @SuccessText;
+      }
+    }
+
+    .pincodeBox {
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      border-radius: 12px;
+      background-color: @PageBackground;
+      .errorText {
+        color: @ErrorText;
+        line-height: 140%;
+        font-size: 12px;
+        font-weight: 400;
+        margin-top: 8px;
+        flex-basis: 100%;
+      }
+      .modalPincodeInput {
+        flex: 1;
+        input {
+          box-sizing: border-box;
+          border: 1px solid var(--dividerStokes);
+          border-radius: 4px;
+          color: var(--textLabel);
+          padding: 16px;
+          font-size: 14px;
+          font-weight: 400;
+          width: 100%;
+          &:focus-visible {
+            outline: none;
+          }
+        }
+      }
+      .modalChangePinCodeButton {
+        font-size: 14px;
+        font-weight: 600;
+        padding: 14px 24px;
+        margin-left: 16px;
+        background: @ButtonPrimary;
+        border-radius: 4px;
+        color: @ButtonSecondary;
+        height: 100%;
+        text-transform: uppercase;
+        text-align: center;
+        box-sizing: border-box;
+      }
+    }
+  }
+  .addressFormWrapper {
+    @media @mobile {
+      padding: 12px;
+    }
+  }
+}
+
+@media @mobile {
+  .addressContentConitainer {
+    padding: 0 16px;
+  }
+}
+
+.addCta {
+  .btnSecondary();
+  margin-top: 17px;
+  padding: 14px;
+  width: 100%;
+  text-transform: uppercase;
+}
+.selectCta {
+  .btnPrimary();
+  margin-top: 17px;
+  padding: 14px;
+  width: 100%;
+  text-transform: uppercase;
+}
+.heading {
+  margin: 32px 0 12px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 140%;
+}
+.addrErrText {
+  margin-left: 25px;
+  margin-top: 8px;
+  color: @ErrorText;
+  font-weight: 400;
+  font-size: 12px;
+  margin-top: 8px;
+  line-height: 140%;
+}
