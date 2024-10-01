@@ -1,0 +1,66 @@
+@import "../../styles/main.less";
+
+.CustomRangeSlider {
+  .price-Container--title {
+    font-size: small;
+    margin: 0px 0px 12px 0px;
+    display: none;
+    @media @mobile {
+      display: block;
+      margin-bottom: 20px;
+    }
+  }
+
+  .inputContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+
+    .label {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 14px;
+      display: block;
+      color: @TextBody;
+      margin-bottom: 8px;
+    }
+
+    .currency {
+      font-size: 12px;
+      line-height: 14px;
+      color: @TextSecondary;
+      margin-right: 8px;
+    }
+
+    .fieldItem {
+      width: 76px;
+      padding: 6px 0;
+      color: @TextBody;
+      text-align: center;
+      height: auto;
+    }
+  }
+  .errorMessage {
+    font-size: 10px;
+    font-weight: 500;
+    margin-top: 4px;
+    color: @ErrorText;
+  }
+  .rangeSlider {
+    height: 4px;
+    background: @ButtonPrimaryL3;
+    :global(.range-slider__thumb) {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background-color: #fff;
+      box-shadow: 0.5px 0.5px 2px 1px rgba(0, 0, 0, 0.32);
+      border: 1px solid @ButtonPrimary;
+    }
+    :global(.range-slider__range) {
+      background: @ButtonPrimary;
+    }
+  }
+}
