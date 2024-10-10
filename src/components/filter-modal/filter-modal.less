@@ -1,0 +1,58 @@
+@import "../../styles/main.less";
+
+.contentWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.modalContent {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+
+  .leftPane {
+    flex: 0 0 122px;
+    overflow-y: auto;
+    border-right: 1px solid @DividerStokes;
+
+    .filterNameItem {
+      padding: 14px 16px;
+      border-bottom: 1px solid @DividerStokes;
+
+      &.active {
+        border-right: 2px solid @ButtonPrimary;
+      }
+    }
+  }
+
+  .rightPane {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 8px;
+  }
+}
+
+.modalFooter {
+  padding: 14px 16px;
+  display: flex;
+  column-gap: 16px;
+
+  .resetBtn {
+    .btnSecondary();
+    &:disabled {
+      cursor: default;
+    }
+  }
+  .applyBtn {
+    .btnPrimary();
+  }
+  .resetBtn,
+  .applyBtn {
+    flex: 1;
+    padding: 15px 28px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 14px;
+  }
+}
