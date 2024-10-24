@@ -1,0 +1,118 @@
+@import "../../../styles/main.less";
+
+.phoneInputContainer {
+  width: 350px !important;
+
+  @media @mobile {
+    width: unset !important;
+    flex: 1;
+  }
+}
+
+.phoneInputText {
+  height: 40px !important;
+  color: @TextHeading;
+
+  &:focus {
+    outline: 0 none;
+    box-shadow: none;
+  }
+}
+
+.main {
+  color: @Mako;
+  display: flex;
+  justify-content: center;
+
+  .formContainer {
+    background-color: @White;
+    padding: 25px 5px 10px 30px;
+    margin: 25px auto auto;
+    display: flex;
+    flex-direction: column;
+    @media @mobile {
+      padding: 25px 0px 10px 3px;
+      width: 100%;
+    }
+    .customInput {
+      display: flex;
+      .form-item {
+        display: flex;
+        justify-content: center;
+        width: 50%;
+      }
+    }
+    .btn {
+      min-width: 250px;
+      width: 65%;
+    }
+    .submitBtn {
+      margin-top: 20px;
+    }
+    .formItem {
+      margin-right: 25px;
+
+      @media @mobile {
+        margin-right: 5px;
+      }
+
+      .formInput {
+        margin: 7px 0px 0px;
+        display: flex;
+        align-items: center;
+
+        @media @mobile {
+          gap: 4px;
+        }
+      }
+    }
+
+    .submitBtnContainer {
+      display: flex;
+      justify-content: center;
+      margin-top: 16px;
+    }
+
+    .actionContainer {
+      display: flex;
+      align-items: center;
+      flex-wrap: nowrap;
+
+      @media @mobile {
+        justify-content: center;
+      }
+
+      .verified {
+        padding: 12px;
+        border-radius: 2px;
+        margin: 0px 5px;
+        height: auto;
+        cursor: unset;
+      }
+
+      .primary {
+        padding: 12px;
+        border-radius: 2px;
+        margin: 0px 5px;
+        height: auto;
+      }
+
+      .verifyBtn {
+        padding: 10px;
+        margin-right: 10px;
+        margin-left: 5px;
+        white-space: nowrap;
+        height: auto;
+      }
+
+      .removeBtn {
+        display: inline-block;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        height: auto;
+      }
+    }
+  }
+}
