@@ -1,0 +1,81 @@
+@import "../../../../styles/main.less";
+
+.phoneInputText {
+  height: 40px !important;
+  color: @TextHeading !important;
+}
+
+.errorText {
+  color: @ErrorText;
+  display: inline-block;
+  font-size: 12px;
+  margin-top: 3px;
+  @media @tablet {
+    font-size: 11px;
+  }
+}
+
+.loginInputGroup {
+  margin-top: 18px;
+  -webkit-font-smoothing: antialiased;
+
+  .loginInputTitle {
+    margin-bottom: 3px;
+    font-size: 13px;
+    line-height: 13px;
+    color: @TextLabel;
+    display: block;
+  }
+
+  .resendOtp {
+    margin-top: 3px;
+    cursor: not-allowed;
+    pointer-events: none;
+
+    &.showResendButton {
+      cursor: pointer;
+      pointer-events: unset;
+    }
+  }
+
+  .addMobileOtp {
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+    }
+
+    &:focus,
+    &:focus-visible {
+      outline: none;
+    }
+  }
+}
+
+.modalContainer {
+  padding: 15px 25px 5px;
+  background-color: @White;
+  min-width: 350px;
+  max-width: 400px;
+  min-height: 100px;
+  overflow-wrap: break-word;
+  border-radius: 3px;
+  -webkit-font-smoothing: antialiased;
+
+  .body {
+    margin: 25px 0 30px 0;
+    line-height: 20px;
+  }
+
+  .btnContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 3px;
+    border-top: 1px solid @DividerStokes;
+
+    .yesBtn {
+      margin-top: 6px;
+    }
+  }
+}
