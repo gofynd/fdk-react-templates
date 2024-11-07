@@ -1,0 +1,66 @@
+@import "../../styles/main.less";
+
+.profileDetailsContainer {
+  flex: 1;
+
+  .formContainer {
+    position: relative;
+    background-color: @White;
+    padding: 25px 5px 10px 30px;
+    margin-top: 25px;
+    font-weight: 300;
+    font-size: 13px;
+
+    .form {
+      .inputContainer,
+      .radioInputContainer {
+        margin-bottom: 11px;
+        margin-right: 25px;
+      }
+
+      .radioInputContainer {
+        margin-bottom: 11px;
+        margin-right: 25px;
+
+        .radioContent {
+          margin: 7px 0 0;
+
+          .radioInput {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px;
+            cursor: pointer;
+
+            .formRadioInput {
+              accent-color: @ButtonPrimary;
+              height: 15px;
+              aspect-ratio: 1;
+              cursor: pointer;
+            }
+
+            .radioLabel {
+              margin-left: 10px;
+              font-weight: 300;
+              font-size: 14px;
+              color: @Mako;
+              cursor: pointer;
+            }
+          }
+        }
+      }
+
+      .inputContainer {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .actionContainer {
+        .submitBtn {
+          margin-top: 20px;
+          width: 94%;
+          margin-bottom: 15px;
+        }
+      }
+    }
+  }
+}
