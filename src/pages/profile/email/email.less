@@ -1,0 +1,113 @@
+@import "../../../styles/main.less";
+
+.main {
+  color: @Mako;
+  display: flex;
+  justify-content: center;
+
+  .formContainer {
+    background-color: @White;
+    padding: 25px 5px 10px 30px;
+    margin: 25px auto auto;
+    display: flex;
+    flex-direction: column;
+    @media @mobile {
+      padding: 25px 0px 10px 3px;
+      width: 100%;
+    }
+
+    .btn {
+      border-radius: @ButtonRadius;
+      min-width: 250px;
+      width: 65%;
+    }
+
+    .submitBtn {
+      margin-top: 20px;
+    }
+
+    .formItem {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+
+      @media @mobile {
+        padding: 12px;
+      }
+
+      .formInput {
+        margin: 7px 0px 0px;
+        display: flex;
+        align-items: center;
+        height: 38px;
+
+        .emailInputContainer {
+          height: 100%;
+          @media @mobile {
+            flex: 1;
+          }
+        }
+
+        .actionContainer {
+          display: flex;
+          align-items: center;
+          flex-wrap: nowrap;
+
+          @media @mobile {
+            justify-content: center;
+          }
+
+          .verified {
+            padding: 12px;
+            border-radius: 2px;
+            margin: 0px 5px;
+            height: 100%;
+            cursor: unset;
+          }
+
+          .primary {
+            padding: 12px;
+            border-radius: 2px;
+            margin: 0px 5px;
+            height: 100%;
+          }
+
+          .verifyButton {
+            padding: 11px;
+            margin-right: 10px;
+            margin-left: 5px;
+            white-space: nowrap;
+            height: 100%;
+          }
+
+          .removeBtn {
+            display: inline-block;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            height: 100%;
+          }
+        }
+
+        .emailInput {
+          padding: 5px;
+          height: 100%;
+        }
+
+        .emailBox {
+          width: 270px;
+          @media @mobile {
+            width: 100%;
+          }
+        }
+      }
+    }
+
+    .submitBtnContainer {
+      display: flex;
+      justify-content: center;
+      margin-top: 16px;
+    }
+  }
+}
