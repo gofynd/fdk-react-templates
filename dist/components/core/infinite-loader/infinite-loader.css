@@ -1,0 +1,21 @@
+.infinite-loader__loaderContainer___GVUYJ {
+  display: flex;
+  justify-content: center;
+  height: 35px;
+}
+.infinite-loader__loaderIcon___BUISp {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: infinite-loader__rotate___bIhag 1s linear infinite;
+}
+.infinite-loader__loaderIcon___BUISp svg {
+  width: 100%;
+  height: 100%;
+}
+@keyframes infinite-loader__rotate___bIhag {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
