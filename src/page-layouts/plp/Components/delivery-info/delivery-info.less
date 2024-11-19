@@ -1,0 +1,138 @@
+@import "../../../../styles/main.less";
+
+.delivery {
+  display: flex;
+  border-radius: @ButtonRadius;
+  background-color: @ThemeAccentL4;
+  align-items: center;
+
+  .deliveryAction {
+    border-bottom: 1px solid @ButtonPrimary;
+    margin-right: 12px;
+    height: auto;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: -0.28px;
+    text-transform: uppercase;
+    height: fit-content;
+    padding: 0;
+    border-radius: 0;
+
+    @media @tablet {
+      margin-right: 16px;
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: none;
+    }
+  }
+}
+.deliveryInfo {
+  margin-top: 24px;
+
+  @media @tablet {
+    margin-top: 16px;
+  }
+
+  .deliveryLabel {
+    margin-bottom: 8px;
+    color: @TextHeading;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 18px;
+    letter-spacing: -0.28px;
+
+    @media @tablet {
+      font-size: 12px;
+    }
+  }
+  .uktLinks {
+    .user-select-none();
+    font-size: 15px;
+  }
+}
+.deliveryDate {
+  color: @SuccessText;
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.24px;
+  margin-top: 8px;
+
+  .deliveryIcon {
+    width: 14px;
+    height: 11px;
+
+    /deep/ svg {
+      path {
+        fill: @SuccessText;
+      }
+    }
+  }
+  p {
+    margin-left: 4px;
+  }
+}
+.error {
+  color: @ErrorText;
+}
+.button {
+  border: none;
+  padding: 0 1rem;
+  cursor: pointer;
+  text-transform: uppercase;
+
+  .deliveryIcon {
+    display: block;
+    width: 14px;
+    height: 12px;
+    margin-left: 0.5rem;
+
+    @media @tablet {
+      display: none;
+    }
+  }
+}
+
+.pincodeInputContainer {
+  flex: 1;
+  .pincodeInput {
+    height: 48px;
+    width: 100%;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 18px;
+    letter-spacing: -0.28px;
+    padding-left: 16px;
+
+    @media @tablet {
+      font-size: 12px;
+    }
+
+    &::placeholder {
+      color: @TextLabel;
+    }
+
+    &:disabled {
+      color: @TextHeading;
+    }
+  }
+}
+
+.error {
+  color: @ErrorText;
+}
+.emptyPincode {
+  margin-top: 8px;
+  color: @ErrorText;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.24px;
+}
