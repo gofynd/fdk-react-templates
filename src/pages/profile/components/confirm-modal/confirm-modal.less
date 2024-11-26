@@ -1,0 +1,50 @@
+@import "../../../../styles/main.less";
+
+.modalContainer {
+  padding: 15px 25px 5px;
+  background-color: @White;
+  min-width: 200px;
+  min-height: 100px;
+  max-width: 350px;
+  overflow-wrap: break-word;
+  border-radius: 3px;
+  -webkit-font-smoothing: antialiased;
+
+  .header {
+    .flex-center();
+    margin: 20px;
+    color: @TextHeading;
+    font-size: 16px;
+    font-weight: 400;
+  }
+
+  .body {
+    margin: 25px 0 35px 0;
+    line-height: 20px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 300;
+  }
+
+  .btnContainer {
+    border-top: 1px solid @DividerStokes;
+    width: 100%;
+    display: flex;
+    margin-bottom: 3px;
+
+    .separator {
+      color: @Mako;
+      opacity: 0.2;
+      margin-top: 7px;
+      font-weight: 300;
+      font-size: 28px;
+    }
+
+    .yesButton,
+    .noButton {
+      flex: 1;
+      margin-top: 5px;
+      font-weight: 700;
+    }
+  }
+}
