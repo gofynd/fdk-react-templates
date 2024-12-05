@@ -1,0 +1,31 @@
+@import "../../styles/main.less";
+
+.descriptionWrapper {
+  background: @ThemeAccentL2;
+  border: 1px solid @DividerStokes;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 24px;
+
+  @media @desktop {
+    margin-top: 36px;
+  }
+
+  .descriptionContent {
+    .captionNormal();
+    color: @TextBody;
+  }
+
+  .actionBtn {
+    .btnSecondary();
+    padding: 12px;
+    background: transparent;
+    margin-top: 16px;
+
+    @media @desktop {
+      &:hover {
+        background-color: @ButtonPrimary;
+      }
+    }
+  }
+}

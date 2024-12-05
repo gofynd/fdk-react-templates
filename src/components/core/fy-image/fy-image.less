@@ -1,0 +1,45 @@
+@import "../../../styles/main.less";
+
+.imageWrapper {
+  overflow: hidden;
+  position: relative;
+
+  picture {
+    display: flex;
+    align-items: center;
+    background-color: var(--bg-color, transparent);
+  }
+
+  .overlay {
+    position: absolute;
+    background-color: var(--overlay-bgcolor);
+    z-index: 1;
+    opacity: 0.4;
+    height: 100%;
+    width: 100%;
+  }
+
+  .fyImg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  &.fill {
+    .fyImg {
+      object-fit: cover;
+    }
+  }
+  &.fixedAspRatio {
+    picture {
+      aspect-ratio: var(--aspect-ratio-mobile);
+      @media @desktop {
+        aspect-ratio: var(--aspect-ratio-desktop);
+      }
+    }
+  }
+}
+
+.pdpImage {
+  background-image: @ContainerBGImage;
+  border-radius: @ImageRadius;
+}
