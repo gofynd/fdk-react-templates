@@ -1,0 +1,135 @@
+@import "../../styles/main.less";
+
+.sharedCartContainer {
+  .subTitle {
+    font-size: 14px;
+    margin: 10px 10px 10px 5px;
+    color: #979797;
+    font-weight: 500;
+  }
+  .title {
+    font-size: 20px;
+    color: #41434c;
+    font-weight: 700;
+    margin: 10px 10px 10px 20px;
+  }
+
+  .shareBtnContainer {
+    display: flex;
+    border-top: 1px solid #eee;
+    padding: 10px;
+    @media @tablet {
+      flex-direction: column;
+    }
+    .shareBtn {
+      display: inline-block;
+      padding: 5px 13px;
+      border: none;
+      border-radius: 3px;
+      flex: 1;
+      margin: 0 5px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 16px;
+      text-align: center;
+      color: #fff;
+      background-color: @ButtonPrimary;
+      @media @mobile {
+        flex: inherit;
+      }
+      @media @tablet {
+        + .shareBtn {
+          margin-top: 10px;
+        }
+      }
+    }
+  }
+  .sharedCart {
+    position: relative;
+    display: flex;
+    width: 100%;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    @media @tablet {
+      flex-direction: column;
+    }
+    .itemContainer {
+      padding-top: 20px;
+      position: relative;
+      border-right: 1px solid #eee;
+      flex: 1;
+    }
+    .breakUpContainer {
+      padding-top: 20px;
+      padding-right: 0;
+      flex: 0 0 360px;
+      border-left: 1px solid #eee;
+
+      .couponContainer {
+        pointer-events: none;
+      }
+    }
+  }
+}
+
+.list {
+  display: flex;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-bottom: 1px solid #eee;
+  .icons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+  }
+  .offer {
+    display: block;
+    width: 100%;
+    color: #41434c;
+    padding: 10px;
+    .desc {
+      text-transform: uppercase;
+      font-weight: 700;
+      font-size: 16px;
+    }
+    .subDesc {
+      margin-top: 5px;
+      font-weight: 400;
+      font-size: 12px;
+    }
+    .couponApplied {
+      color: #20ce81;
+    }
+  }
+}
+
+.breakupWrapper {
+  .title,
+  .subTitle {
+    display: flex;
+    width: calc(100% - 40px);
+    padding: 10px;
+    align-items: center;
+    .value {
+      margin-left: auto;
+      right: 0px;
+      position: relative;
+    }
+  }
+
+  .subTitle {
+    font-size: 14px;
+    margin: 10px 10px 10px 5px;
+    color: #979797;
+    padding: 5px 10px;
+    font-weight: 400;
+  }
+  .title {
+    font-size: 20px;
+    color: #41434c;
+    font-weight: 700;
+    margin: 10px 10px 10px 20px;
+    border-top: 1px solid #eee;
+  }
+}
