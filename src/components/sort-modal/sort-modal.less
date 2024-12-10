@@ -1,0 +1,57 @@
+@import "../../styles/main.less";
+
+.contentWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.modalContent {
+  flex: 1;
+  padding: 8px;
+  overflow-y: auto;
+
+  .sortList {
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+    .sortItem {
+      display: flex;
+      align-items: center;
+      column-gap: 8px;
+      font-size: 12px;
+      line-height: 14px;
+      color: @TextHeading;
+
+      .radioIcon {
+        width: 28px;
+        height: 28px;
+        padding: 4px;
+        &.selected {
+          color: @ButtonPrimary;
+        }
+      }
+    }
+  }
+}
+
+.modalFooter {
+  padding: 14px 16px;
+  display: flex;
+  column-gap: 16px;
+
+  .resetBtn {
+    .btnSecondary();
+  }
+  .applyBtn {
+    .btnPrimary();
+  }
+  .resetBtn,
+  .applyBtn {
+    flex: 1;
+    padding: 15px 28px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 14px;
+  }
+}
