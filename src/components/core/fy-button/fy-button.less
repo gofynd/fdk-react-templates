@@ -1,0 +1,206 @@
+@import "../../../styles/main.less";
+
+.button {
+  font-family: inherit;
+  border: none;
+  border-radius: @ButtonRadius;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 6px;
+  transition: background-color 0.3s ease;
+
+  span {
+    display: inline-flex;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow:
+      rgba(0, 0, 0, 0.19) 0px 10px 20px,
+      rgba(0, 0, 0, 0.23) 0px 6px 6px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  .loaderContainer {
+    position: unset;
+    background: transparent;
+    height: auto;
+    z-index: 0;
+  }
+
+  .loader {
+    height: 14px;
+    width: unset;
+    aspect-ratio: 1;
+    border: 2px solid @ButtonPrimaryL3;
+    border-top: 2px solid @ButtonPrimary;
+    padding: 0;
+
+    &.error {
+      border: 2px solid @White;
+      border-top: 2px solid @ErrorText;
+    }
+
+    &.success {
+      border: 2px solid @White;
+      border-top: 2px solid @SuccessText;
+    }
+
+    &.secondary {
+      border: 2px solid @White;
+      border-top: 2px solid @ButtonPrimary;
+    }
+
+    &.medium {
+      height: 30px;
+      border-width: 4px;
+    }
+
+    &.large {
+      height: 40px;
+      border-width: 4px;
+    }
+
+    &.contained {
+      &.primary {
+        border-top: 2px solid @White;
+      }
+    }
+
+    &.text,
+    &.outlined {
+      &.secondary {
+        border: 2px solid @ButtonPrimaryL3;
+        border-top: 2px solid @ButtonPrimary;
+      }
+
+      &.error {
+        border: 2px solid @ErrorBackground;
+        border-top: 2px solid @ErrorText;
+      }
+
+      &.success {
+        border: 2px solid @SuccessBackground;
+        border-top: 2px solid @SuccessText;
+      }
+    }
+  }
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.text {
+  background-color: transparent;
+  color: @ButtonPrimary;
+
+  &.secondary {
+    color: @ButtonPrimary;
+  }
+
+  &.error {
+    color: @ErrorText;
+  }
+
+  &.success {
+    color: @SuccessText;
+  }
+}
+
+.contained {
+  background-color: @ButtonPrimary;
+  color: @White;
+
+  &.primary {
+    &:hover {
+      background-color: @ButtonPrimaryL1;
+      color: @White;
+    }
+  }
+
+  &.secondary {
+    background-color: @ButtonSecondary;
+    color: @ButtonPrimary;
+
+    &:hover {
+      background-color: @ButtonPrimaryL1;
+      color: @White;
+    }
+  }
+
+  &.error {
+    background-color: @ErrorBackground;
+    color: @ErrorText;
+  }
+
+  &.success {
+    background-color: @SuccessBackground;
+    color: @SuccessText;
+  }
+}
+
+.outlined {
+  background-color: transparent;
+  border: 1px solid @ButtonPrimary;
+  color: @ButtonPrimary;
+
+  &.primary {
+    &:hover {
+      background-color: @ButtonPrimary;
+      color: @White;
+    }
+  }
+
+  &.secondary {
+    border: 1px solid @ButtonSecondary;
+    color: @ButtonPrimary;
+
+    &:hover {
+      background-color: @ButtonPrimary;
+      color: @White;
+    }
+  }
+
+  &.error {
+    border: 1px solid @ErrorBackground;
+    color: @ErrorText;
+  }
+
+  &.success {
+    border: 1px solid @SuccessBackground;
+    color: @SuccessText;
+  }
+}
+
+.info {
+  background-color: @InformationBackground;
+  color: @InformationText;
+  cursor: unset;
+}
+
+.small {
+  padding: 5px 10px;
+  font-size: 12px;
+}
+
+.medium {
+  height: 48px;
+  padding: 12px 28px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.28px;
+}
+
+.large {
+  padding: 15px 20px;
+  font-size: 16px;
+}
