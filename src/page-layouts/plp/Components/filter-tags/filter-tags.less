@@ -1,0 +1,89 @@
+@import "../../../../styles/main.less";
+
+.filterTagsContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+
+  @media @desktop {
+    flex-direction: column;
+    align-items: unset;
+  }
+
+  .filterTags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+
+    @media @tablet {
+      flex-wrap: unset;
+      max-width: 100%;
+      overflow-x: auto;
+    }
+
+    .filterTagItem {
+      max-width: 100%;
+      display: flex;
+      padding: 8px;
+      align-items: center;
+      gap: 8px;
+      border-radius: @ButtonRadius;
+      border: 1px solid @DividerStokes;
+
+      @media @tablet {
+        padding: 4px 8px;
+      }
+
+      .tagTitle {
+        color: @TextHeading;
+        font-size: 16px;
+        font-weight: 400;
+        letter-spacing: -0.32px;
+        line-height: 20px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+
+        @media @tablet {
+          font-size: 14px;
+          line-height: 18px;
+        }
+      }
+
+      .removeTag {
+        height: 20px;
+        width: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .actionButton {
+    color: var(--Buttons-Primary, #4e3f09);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: normal;
+    text-decoration-line: underline;
+    text-transform: uppercase;
+    white-space: nowrap;
+    cursor: pointer;
+    display: none;
+
+    &.clearAll {
+      @media @tablet {
+        display: flex;
+      }
+    }
+
+    &.viewAll {
+      @media @desktop {
+        display: flex;
+      }
+    }
+  }
+}
