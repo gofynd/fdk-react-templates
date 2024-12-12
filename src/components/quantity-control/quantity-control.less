@@ -1,0 +1,47 @@
+@import "../../styles/main.less";
+
+.quantityCtrlContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid @DividerStokes;
+  border-radius: 4px;
+  overflow: hidden;
+  height: 36px;
+  .decreaseCount,
+  .increaseCount {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    width: 42px;
+    padding: 0;
+    height: 100%;
+    color: @TextHeading;
+    @media @mobile {
+      width: 28px;
+    }
+
+    .svgContainer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  .count {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 100%;
+    border-left: 1px solid @DividerStokes;
+    border-right: 1px solid @DividerStokes;
+    font-size: 12px;
+    line-height: normal;
+    color: @TextBody;
+    @media @mobile {
+      width: 30px;
+    }
+  }
+}
