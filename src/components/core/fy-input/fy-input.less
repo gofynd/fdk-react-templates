@@ -1,0 +1,103 @@
+@import "../../../styles/main.less";
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  .error {
+    color: @ErrorText;
+    padding-top: 5px;
+    font-weight: 400;
+    font-size: 12px;
+  }
+}
+
+.label {
+  color: @TextLabel;
+  font-size: 12px;
+  line-height: 21px;
+}
+
+.floating {
+  position: absolute;
+  transform: translateY(-50%) scale(0.9);
+  background: @White;
+  padding: 0 0.3rem;
+  margin: 0 0.5rem;
+  font-size: 0.8rem;
+  pointer-events: none;
+  line-height: unset;
+}
+
+.fyInput {
+  font-size: 0.8rem;
+  outline: none;
+  border: none;
+  color: @TextHeading;
+  transition: 0.1s ease-out;
+  box-sizing: border-box;
+  width: 100%;
+  background-color: transparent;
+
+  &::placeholder {
+    color: @TextLabel;
+    opacity: 0.3;
+  }
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+
+  &:focus,
+  &:focus-visible {
+    outline: none;
+  }
+
+  &:disabled {
+    color: @TextDisabled;
+    border: 1px solid @Gray;
+  }
+
+  &:focus {
+    border-color: @ButtonPrimary;
+  }
+}
+
+.inputError {
+  border-color: @ErrorText !important;
+}
+
+.no-border {
+  border: none;
+
+  &:disabled {
+    border: none;
+  }
+}
+
+.outlined {
+  border: 1px solid @DividerStokes;
+  border-radius: 5px;
+  padding: 0 0.7rem;
+  height: 48px;
+
+  &.medium {
+    height: 40px;
+    padding: 0 12px;
+    color: @TextBody;
+    font-size: 14px;
+    border-radius: 3px;
+
+    &.fyTextArea {
+      height: auto;
+      padding-top: 6px;
+    }
+  }
+}
+
+.underline {
+  padding: 0.2rem 0.4rem;
+  border-bottom: 1px solid @DividerStokes;
+}
