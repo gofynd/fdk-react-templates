@@ -1,0 +1,70 @@
+@import "../../../../styles/main.less";
+
+.header {
+  padding: 24px;
+}
+.removeModalBody {
+  padding: 24px;
+  line-height: 140%;
+  .itemDetails {
+    display: flex;
+    gap: 16px;
+    .itemImg {
+      border-radius: 4px;
+      flex: 0 0 18%;
+      width: 18%;
+      @media @mobile {
+        flex: 0 0 25%;
+        width: 25%;
+      }
+      img {
+        width: 100%;
+        height: auto;
+      }
+    }
+    .itemName {
+      font-size: 14;
+      font-weight: 400;
+      color: @TextHeading;
+    }
+  }
+}
+.removeModalFooter {
+  display: flex;
+  padding: 24px;
+
+  @media @tablet {
+    padding: 16px;
+  }
+  .removeBtn {
+    padding-top: 14px;
+    padding-bottom: 14px;
+    cursor: pointer;
+    text-align: center;
+    border-radius: @ButtonRadius;
+    text-transform: capitalize;
+    color: @ButtonPrimary;
+    width: 50%;
+    background-color: @ButtonSecondary;
+    border: 1px solid @TextHeading;
+    @media @tablet {
+      width: 100%;
+    }
+  }
+  .wishlistBtn {
+    padding-top: 14px;
+    padding-bottom: 14px;
+    margin-left: 12px;
+    text-align: center;
+    cursor: pointer;
+    color: @ButtonSecondary;
+    border-radius: @ButtonRadius;
+    width: 50%;
+    text-transform: capitalize;
+    color: #fff;
+    background-color: @ButtonPrimary;
+    @media @tablet {
+      width: 100%;
+    }
+  }
+}
