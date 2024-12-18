@@ -1,0 +1,42 @@
+@import "../../../../styles/main.less";
+
+.filter {
+  &:not(:last-child) {
+    border-bottom: 1px solid @DividerStokes;
+    margin-bottom: 16px;
+  }
+
+  &__title {
+    margin-bottom: 16px;
+    cursor: pointer;
+    line-height: 14px;
+    .name {
+      color: @TextHeading;
+      line-height: inherit;
+    }
+    .arrow-icon {
+      width: 24px;
+      height: 24px;
+      fill: @TextHeading;
+      transition: all 0.25s ease;
+      &.isOpen {
+        transform: scale(1, -1);
+      }
+    }
+  }
+  &__list {
+    transition: 300ms all cubic-bezier(0, 0, 0.2, 1);
+    max-height: 500px;
+    overflow: auto;
+    margin-bottom: 22px;
+    opacity: 1;
+    visibility: visible;
+    &.collapse {
+      max-height: 0;
+      margin-bottom: 0;
+      opacity: 0;
+      visibility: hidden;
+      overflow: hidden;
+    }
+  }
+}
