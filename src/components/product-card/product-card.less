@@ -105,6 +105,11 @@
     gap: 12px;
     flex: 1;
 
+    @media @mobile {
+      flex-direction: column;
+      gap: 8px;
+    }
+
     .productDesc {
       .productBrand {
         margin-bottom: 4px;
@@ -203,10 +208,6 @@
   }
   @media @mobile {
     &.mob-grid-1-card {
-      .addToCart {
-        width: 104px;
-      }
-
       .imageContainer {
         .wishlistBtn {
           top: 16px;
@@ -228,9 +229,6 @@
     }
     &.mob-grid-2-card {
       .productDescContainer {
-        flex-direction: column;
-        gap: 8px;
-
         .productDesc {
           .productBrand {
             margin-bottom: 0px;

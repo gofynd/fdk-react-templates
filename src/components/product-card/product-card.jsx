@@ -34,7 +34,7 @@
 
 import React, { useMemo } from "react";
 import { currencyFormat } from "../../helper/utils";
-import { useMobile, useViewport } from "../../helper/hooks";
+import { useMobile } from "../../helper/hooks";
 import FyImage from "../core/fy-image/fy-image";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
 import * as styles from "./product-card.less";
@@ -242,18 +242,6 @@ const ProductCard = ({
             </span>
           </div>
         ) : null}
-        {/* {getReviewRatingInfo().avg_ratings && (
-          <div className="review caption-semi-bold">
-            <span>{getReviewRatingInfo().avg_ratings}</span>
-            <SvgWrapper svgSrc={"star"} className="rating-icon" />
-          </div>
-        )} */}
-        {/* <div className="extension">
-          <fdk-extension
-            templates={getTemplates("bottom_left_corner")}
-            v-if={getTemplates("bottom_left_corner").length}
-          />
-        </div> */}
       </div>
       <div className={styles.productDescContainer}>
         <div className={styles.productDesc}>
