@@ -19,7 +19,7 @@ jobs:
       - uses: jaywcjlove/github-action-package@main
         with:
           version: ${{ github.ref_name }}
-          rename: "@gofynd/fdk-store-gql"
+          rename: "@gofynd/theme-template"
       - run: npm ci
       - run: npm publish --access public
         env:
