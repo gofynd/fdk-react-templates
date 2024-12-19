@@ -57,16 +57,14 @@ function ShipmentUpdateItem({ selectedBagId, item }) {
     }
   };
 
-  const getUpdatedBags = () => {
-    return currQuantity > 0 ? item?.bag_ids?.slice(0, currQuantity) : [];
-  };
-
   return (
     <>
       {item?.bag_ids?.includes(selectedBagId) && (
         <div className={`${styles.updateItem}`}>
           <div className={`${styles.bagImg}`}>
-            <img src={item?.item?.image[0]} alt={item?.item?.name} />
+            {item?.item?.image[0] && (
+              <img src={item?.item?.image[0]} alt={item?.item?.name} />
+            )}
           </div>
           <div className={`${styles.bagInfo}`}>
             <div>
