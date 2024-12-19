@@ -65,6 +65,31 @@
 .login-mode-button__animation-fade___zETzf.login-mode-button__animate___y3Jow {
   opacity: 1 !important;
 }
+.login-mode-button__full-width-section___Yp0Mz {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+.login-mode-button__section-main-container___LSbkg {
+  max-width: 1440px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  padding: 60px 0 0 0;
+}
+@media only screen and (max-width: 768px) {
+  .login-mode-button__section-main-container___LSbkg {
+    padding: 48px 15px 0 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .login-mode-button__section-main-container___LSbkg {
+    padding: 24px 8px 0 8px;
+  }
+}
 /**color by character**/
 /** Font family **/
 /** Font weight **/

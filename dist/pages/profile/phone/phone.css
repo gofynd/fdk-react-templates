@@ -65,6 +65,31 @@
 .phone__animation-fade___v11CF.phone__animate___epF4V {
   opacity: 1 !important;
 }
+.phone__full-width-section___R4n7O {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+.phone__section-main-container___TELFk {
+  max-width: 1440px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  padding: 60px 0 0 0;
+}
+@media only screen and (max-width: 768px) {
+  .phone__section-main-container___TELFk {
+    padding: 48px 15px 0 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .phone__section-main-container___TELFk {
+    padding: 24px 8px 0 8px;
+  }
+}
 /**color by character**/
 /** Font family **/
 /** Font weight **/
@@ -469,11 +494,12 @@ img::selection {
 }
 .phone__loader___XkM1L {
   position: relative;
+  height: 81.8vh;
   width: 100%;
 }
 .phone__loader___XkM1L .phone__loaderContainer___wi00L {
   position: absolute;
-  height: 75vh;
+  height: 100%;
   background: transparent;
 }
 .phone__loader___XkM1L .phone__loaderContainer___wi00L .phone__customLoader___cm9io {
@@ -502,6 +528,7 @@ img::selection {
   justify-content: center;
 }
 .phone__main___1a6F8 .phone__formContainer___WhQxn {
+  height: 79.5vh;
   background-color: #ffffff;
   padding: 25px 5px 10px 30px;
   margin: 25px auto auto;
@@ -658,6 +685,31 @@ img::selection {
 }
 .confirm-modal__animation-fade___oTJ5I.confirm-modal__animate___Qinli {
   opacity: 1 !important;
+}
+.confirm-modal__full-width-section___hPG9U {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+.confirm-modal__section-main-container___DcKbQ {
+  max-width: 1440px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  padding: 60px 0 0 0;
+}
+@media only screen and (max-width: 768px) {
+  .confirm-modal__section-main-container___DcKbQ {
+    padding: 48px 15px 0 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .confirm-modal__section-main-container___DcKbQ {
+    padding: 24px 8px 0 8px;
+  }
 }
 /**color by character**/
 /** Font family **/
@@ -1173,6 +1225,31 @@ img::selection {
 }
 .modal__animation-fade___GCTZ0.modal__animate___DtfuY {
   opacity: 1 !important;
+}
+.modal__full-width-section___m_u6S {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+.modal__section-main-container___jsNGW {
+  max-width: 1440px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  padding: 60px 0 0 0;
+}
+@media only screen and (max-width: 768px) {
+  .modal__section-main-container___jsNGW {
+    padding: 48px 15px 0 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .modal__section-main-container___jsNGW {
+    padding: 24px 8px 0 8px;
+  }
 }
 /**color by character**/
 /** Font family **/
@@ -1779,6 +1856,31 @@ img::selection {
 .fy-button__animation-fade___KWXGj.fy-button__animate___gYWOV {
   opacity: 1 !important;
 }
+.fy-button__full-width-section___y1S8G {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+.fy-button__section-main-container___j_WAJ {
+  max-width: 1440px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  padding: 60px 0 0 0;
+}
+@media only screen and (max-width: 768px) {
+  .fy-button__section-main-container___j_WAJ {
+    padding: 48px 15px 0 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .fy-button__section-main-container___j_WAJ {
+    padding: 24px 8px 0 8px;
+  }
+}
 /**color by character**/
 /** Font family **/
 /** Font weight **/
@@ -2349,7 +2451,7 @@ img::selection {
   z-index: 2000;
   height: 2em;
   width: 2em;
-  overflow: visible;
+  overflow: show;
   margin: auto;
   top: 0;
   left: 0;
@@ -2562,6 +2664,31 @@ img::selection {
 }
 .mobile-number__animation-fade___Gqph6.mobile-number__animate___spmX6 {
   opacity: 1 !important;
+}
+.mobile-number__full-width-section___mvequ {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+.mobile-number__section-main-container___HrVFs {
+  max-width: 1440px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  padding: 60px 0 0 0;
+}
+@media only screen and (max-width: 768px) {
+  .mobile-number__section-main-container___HrVFs {
+    padding: 48px 15px 0 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .mobile-number__section-main-container___HrVFs {
+    padding: 24px 8px 0 8px;
+  }
 }
 /**color by character**/
 /** Font family **/
@@ -3095,6 +3222,31 @@ img::selection {
 }
 .add-phone-modal__animation-fade___UCvXt.add-phone-modal__animate___dQDe3 {
   opacity: 1 !important;
+}
+.add-phone-modal__full-width-section___ShlZw {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+.add-phone-modal__section-main-container___etdhZ {
+  max-width: 1440px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  padding: 60px 0 0 0;
+}
+@media only screen and (max-width: 768px) {
+  .add-phone-modal__section-main-container___etdhZ {
+    padding: 48px 15px 0 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .add-phone-modal__section-main-container___etdhZ {
+    padding: 24px 8px 0 8px;
+  }
 }
 /**color by character**/
 /** Font family **/
@@ -3640,6 +3792,31 @@ img::selection {
 .fy-input__animation-fade___EdIUl.fy-input__animate___OQCWI {
   opacity: 1 !important;
 }
+.fy-input__full-width-section___uVG7y {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+.fy-input__section-main-container___Bl4ui {
+  max-width: 1440px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  padding: 60px 0 0 0;
+}
+@media only screen and (max-width: 768px) {
+  .fy-input__section-main-container___Bl4ui {
+    padding: 48px 15px 0 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .fy-input__section-main-container___Bl4ui {
+    padding: 24px 8px 0 8px;
+  }
+}
 /**color by character**/
 /** Font family **/
 /** Font weight **/
@@ -4078,11 +4255,6 @@ img::selection {
   width: 100%;
   background-color: transparent;
 }
-@media only screen and (max-width: 480px) {
-  .fy-input__fyInput___S4Mtu {
-    font-size: 1rem;
-  }
-}
 .fy-input__fyInput___S4Mtu::placeholder {
   color: var(--textLabel, #7d7676);
   opacity: 0.3;
@@ -4123,11 +4295,6 @@ img::selection {
   color: var(--textBody, #3c3131);
   font-size: 14px;
   border-radius: 3px;
-}
-@media only screen and (max-width: 480px) {
-  .fy-input__outlined___CEaKm.fy-input__medium___L3QsD {
-    font-size: 16px;
-  }
 }
 .fy-input__outlined___CEaKm.fy-input__medium___L3QsD.fy-input__fyTextArea___uikbN {
   height: auto;

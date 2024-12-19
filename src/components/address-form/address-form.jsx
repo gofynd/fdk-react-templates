@@ -48,8 +48,6 @@ import { useForm } from "react-hook-form";
 import * as styles from "./address-form.less";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
 import GoogleMapAddress from "../google-map/google-map";
-import FormInputSelector from "./form-input-selector";
-import FyDropdown from "../core/fy-dropdown/fy-dropdown";
 
 const defaultFormSchema = [
   {
@@ -57,8 +55,8 @@ const defaultFormSchema = [
     groupLabel: "Address Information", // Label for the group
     fields: [
       {
-        key: "address",
-        display: "Flat No/House No",
+        name: "address",
+        label: "Flat No/House No*",
         type: "text",
         required: true,
         maxLength: 80,
@@ -77,8 +75,8 @@ const defaultFormSchema = [
         },
       },
       {
-        key: "area",
-        display: "Building Name/ Street",
+        name: "area",
+        label: "Building Name/ Street *",
         type: "text",
         required: true,
         maxLength: 80,
@@ -97,8 +95,8 @@ const defaultFormSchema = [
         },
       },
       {
-        key: "landmark",
-        display: "Locality/ Landmark",
+        name: "landmark",
+        label: "Locality/ Landmark",
         type: "text",
         required: false,
         fullWidth: false,
@@ -116,8 +114,8 @@ const defaultFormSchema = [
         },
       },
       {
-        key: "area_code",
-        display: "Pincode",
+        name: "area_code",
+        label: "Pincode*",
         type: "text",
         required: true,
         maxLength: 6,
@@ -135,8 +133,8 @@ const defaultFormSchema = [
         },
       },
       {
-        key: "city",
-        display: "City",
+        name: "city",
+        label: "City*",
         type: "text",
         required: true,
         fullWidth: false,
@@ -153,8 +151,8 @@ const defaultFormSchema = [
         },
       },
       {
-        key: "state",
-        display: "State",
+        name: "state",
+        label: "State*",
         type: "text",
         required: true,
         fullWidth: false,
@@ -170,7 +168,7 @@ const defaultFormSchema = [
           },
         },
       },
-      { key: "country", display: "", type: "hidden", required: false },
+      { name: "country", label: "", type: "hidden", required: false },
     ],
   },
 
@@ -179,8 +177,8 @@ const defaultFormSchema = [
     groupLabel: "Contact Information", // Label for the group
     fields: [
       {
-        key: "name",
-        display: "Full Name",
+        name: "name",
+        label: "Full Name*",
         type: "text",
         required: true,
         fullWidth: true,
@@ -197,8 +195,8 @@ const defaultFormSchema = [
         },
       },
       {
-        key: "phone",
-        display: "Mobile Number",
+        name: "phone",
+        label: "Mobile Number*",
         type: "text",
         required: true,
         fullWidth: false,
@@ -211,8 +209,8 @@ const defaultFormSchema = [
         },
       },
       {
-        key: "email",
-        display: "Email",
+        name: "email",
+        label: "Email (optional)",
         type: "email",
         fullWidth: false,
         validation: {
@@ -225,6 +223,12 @@ const defaultFormSchema = [
             message: "Email cannot exceed 50 characters",
           },
         },
+      },
+      {
+        name: "is_default_address",
+        label: "Make this my default address",
+        type: "checkbox",
+        fullWidth: true,
       },
     ],
   },
@@ -255,7 +259,6 @@ const addressTypes = [
 ];
 
 const AddressForm = ({
-  internationalShipping,
   formSchema = defaultFormSchema,
   addressItem,
   mapApiKey = "",
@@ -273,17 +276,8 @@ const AddressForm = ({
       {addressItem ? "Update Address" : "Add Address"}
     </button>
   ),
-  setI18nDetails,
-  handleCountrySearch,
-  getFilteredCountries,
-  selectedCountry,
-  countryDetails,
 }) => {
-  const isOtherAddressType = !["Home", "Work", "Friends & Family"].includes(
-    addressItem?.address_type
-  );
   const {
-    control,
     register,
     handleSubmit,
     setValue,
@@ -294,34 +288,22 @@ const AddressForm = ({
   } = useForm({
     defaultValues: {
       ...addressItem,
-      geo_location: { latitude: "", longitude: "" },
-      country: selectedCountry || "India",
-      // area_code: addressItem?.area_code || defaultPincode || "",
+      country: addressItem?.country || "India",
+      area_code: addressItem?.addressItem || defaultPincode || "",
     } || { address_type: "Home" },
   });
   const formContainerRef = useRef(null);
   const [currBgColor, setCurrBgColor] = useState("#fff");
   const [isCityStateDisabled, setCityStateDisabled] = useState(true);
-  const [showOtherText, setShowOtherText] = useState(false);
-  const [addressLoadStatus, setAddressLoadStatus] = useState(false);
   const address_type = watch("address_type");
   const pin = watch("area_code");
-  const sector = watch("sector");
 
   useEffect(() => {
     if (addressItem) {
       reset(addressItem);
       setValue(
         "address_type",
-        addressItem
-          ? isOtherAddressType
-            ? "Other"
-            : addressItem?.address_type
-          : "Home"
-      );
-      setValue(
-        "otherAddressType",
-        addressItem && isOtherAddressType ? addressItem?.address_type : ""
+        addressItem ? addressItem?.address_type : "Home"
       );
     } else {
       setValue("is_default_address", true);
@@ -330,20 +312,15 @@ const AddressForm = ({
   }, [addressItem, reset]);
 
   useEffect(() => {
-    setShowOtherText(address_type === "Other");
-  }, [address_type]);
-
-  useEffect(() => {
     if (pin && pin.length === 6) {
-      onGetLocality("pincode", pin).then((data) => {
-        getLatLngFromPostalCode(pin);
+      onGetLocality(pin)?.then((data) => {
         setValue("city", "");
         setValue("state", "");
+        setError("area_code", {
+          type: "manual",
+          message: data?.errorMsg,
+        });
         if (data?.showError) {
-          setError("area_code", {
-            type: "manual",
-            message: data?.errorMsg,
-          });
         } else {
           const { city = "", state = "" } = data;
           setValue("city", city);
@@ -352,34 +329,6 @@ const AddressForm = ({
       });
     }
   }, [pin, setValue]);
-
-  const getLatLngFromPostalCode = async (postalCode) => {
-    try {
-      const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?address=${postalCode}&key=${mapApiKey}`
-      );
-      const data = await response.json();
-      if (data?.results?.length > 0) {
-        const location = data.results[0]?.geometry?.location;
-        setValue("geo_location", {
-          latitude: location?.lat,
-          longitude: location?.lng,
-        });
-      }
-    } catch (error) {
-      console.error("Error fetching coordinates from postal code:", error);
-    }
-  };
-
-  useEffect(() => {
-    setValue("country", selectedCountry);
-  }, [selectedCountry]);
-
-  useEffect(() => {
-    if (sector && sector.length > 0) {
-      onGetLocality("sector", sector);
-    }
-  }, [sector]);
 
   useEffect(() => {
     if (formContainerRef?.current) {
@@ -426,52 +375,57 @@ const AddressForm = ({
     reset(data);
   };
 
-  const onLoadMap = (map) => {
-    if (map) {
-      setAddressLoadStatus(true);
-    }
-  };
   return (
-    <div
-      className={styles.addressFormWrapper}
-      style={{ display: addressLoadStatus ? "block" : "none" }}
-    >
+    <div className={styles.addressFormWrapper}>
       {showGoogleMap && mapApiKey && (
         <div className={styles.mapWrap}>
           <GoogleMapAddress
             mapApiKey={mapApiKey}
             onAddressSelect={selectAddress}
-            countryDetails={countryDetails}
-            addressItem={addressItem}
-            onLoad={onLoadMap}
           />
         </div>
       )}
       <form onSubmit={handleSubmit(onSubmit)}>
-        {internationalShipping && (
-          <div className={`${styles.formGroup} ${styles.formContainer}`}>
-            <FyDropdown
-              value={selectedCountry}
-              onChange={setI18nDetails}
-              onSearch={handleCountrySearch}
-              options={getFilteredCountries()}
-              optionValue="display_name"
-              optionLabel="display_name"
-              showDropdownIcon
-              label="Country"
-              containerClassName={styles.customClass}
-            />
-          </div>
-        )}
         {formSchema.map((group, index) => (
           <div key={index} className={styles.formGroup}>
+            {group.groupLabel && (
+              <h3 className={styles.groupLabel}>{group.groupLabel}</h3>
+            )}
             <div ref={formContainerRef} className={styles.formContainer}>
               {group.fields.map((field) => (
-                <FormInputSelector
-                  key={field.key}
-                  formData={field}
-                  control={control}
-                />
+                <div
+                  key={field.name}
+                  className={`${styles.formItemDiv} ${field.fullWidth ? styles.fullInput : styles.halfInput}`}
+                >
+                  <label
+                    className={
+                      field.type === "checkbox"
+                        ? styles.formCheckboxLabel
+                        : styles.formLabel
+                    }
+                    style={{ backgroundColor: currBgColor }}
+                  >
+                    {field.label}
+                  </label>
+                  <input
+                    {...register(field.name, field.validation)}
+                    type={field.type}
+                    maxLength={field.maxLength || 60}
+                    className={
+                      field.type === "checkbox"
+                        ? styles.formCheckBox
+                        : styles.formInputBox
+                    }
+                    disabled={field.disabled && isCityStateDisabled}
+                  />
+                  <span
+                    className={`${styles.formError} ${errors[field.name] ? styles.visible : ""}`}
+                  >
+                    {errors[field.name] && (
+                      <span>{errors[field.name]?.message}</span>
+                    )}
+                  </span>
+                </div>
               ))}
             </div>
           </div>
@@ -507,25 +461,6 @@ const AddressForm = ({
             {errors.address_type && <span>This field is required</span>}
           </span>
         </div>
-        {showOtherText && (
-          <div className={styles.formItemDiv}>
-            <label
-              className={styles.formLabel}
-              style={{ backgroundColor: currBgColor }}
-            >
-              Other Address Type*
-            </label>
-            <input
-              {...register("otherAddressType", { required: true })}
-              className={`${styles.formInputBox} ${styles.otherInput}`}
-            />
-            <span
-              className={`${styles.formError} ${errors.otherAddressType ? styles.visible : ""}`}
-            >
-              {errors.otherAddressType && <span>This field is required</span>}
-            </span>
-          </div>
-        )}
         <div>{customFooter}</div>
       </form>
     </div>

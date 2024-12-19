@@ -30,16 +30,10 @@ const autoCompleteStyles = {
   border: "none",
 };
 
-const GoogleMapAddress = ({
-  mapApiKey,
-  onAddressSelect,
-  countryDetails,
-  addressItem,
-  onLoad = () => {},
-}) => {
+const GoogleMapAddress = ({ mapApiKey, onAddressSelect }) => {
   const [selectedPlace, setSelectedPlace] = useState({
-    lat: countryDetails?.latitude,
-    lng: countryDetails?.longitude,
+    lat: 19.115707,
+    lng: 72.90481,
   });
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
@@ -51,23 +45,6 @@ const GoogleMapAddress = ({
   const inputRef = useRef(null);
   const mapRef = useRef(null);
   const defaultPincode = localStorage?.getItem("pincode") || "400076";
-  useEffect(() => {
-    if (addressItem?.geo_location) {
-      const location = {
-        lat: Number(addressItem?.geo_location?.latitude),
-        lng: Number(addressItem?.geo_location?.longitude),
-      };
-      setSelectedPlace(location);
-      mapRef?.current?.panTo(location);
-    } else {
-      const location = {
-        lat: Number(countryDetails?.latitude),
-        lng: Number(countryDetails?.longitude),
-      };
-      setSelectedPlace(location);
-      mapRef?.current?.panTo(location);
-    }
-  }, [countryDetails, addressItem]);
 
   useEffect(() => {
     getLatLngFromPostalCode(defaultPincode);
@@ -89,10 +66,6 @@ const GoogleMapAddress = ({
       area: locality,
       address: premise,
       country: country,
-      geo_location: {
-        latitude: selectedPlace?.lat,
-        longitude: selectedPlace?.lng,
-      },
     });
   }
 
@@ -108,6 +81,7 @@ const GoogleMapAddress = ({
       );
       setPremise(prem?.long_name || "");
       // Get city and state from the location
+      // getCityAndState(place);
       getCityAndState(lat, lng);
     } else {
       console.error("No geometry available for selected place");
@@ -122,6 +96,7 @@ const GoogleMapAddress = ({
       const data = await response.json();
       const addressComponents = data.results[0].address_components;
       stateReset();
+      // const addressComponents = place?.address_components;
       let subLocalities = [];
       addressComponents.forEach((component) => {
         if (component.types.includes("premise")) {
@@ -165,12 +140,6 @@ const GoogleMapAddress = ({
         const place = data.results[0];
         setAddress(place.formatted_address);
 
-        if (place?.geometry) {
-          const location = place?.geometry?.location;
-          const lat = location.lat();
-          const lng = location.lng();
-          setSelectedPlace({ lat, lng });
-        }
         // Extract city, state, and pincode from the place
         place.address_components.forEach((component) => {
           if (component.types.includes("premise")) {
@@ -245,6 +214,7 @@ const GoogleMapAddress = ({
         `https://maps.googleapis.com/maps/api/geocode/json?address=${postalCode}&key=${mapApiKey}`
       );
       const data = await response.json();
+      console.log(data);
       if (data?.results?.length > 0) {
         const location = data.results[0]?.geometry?.location;
         const lat = location?.lat;
@@ -272,7 +242,7 @@ const GoogleMapAddress = ({
             onPlaceSelected={handlePlaceSelect}
             options={{
               types: ["geocode", "establishment"],
-              componentRestrictions: { country: countryDetails?.iso2 },
+              componentRestrictions: {},
             }}
             onClick={(e) => {
               e.stopPropagation();
@@ -289,10 +259,7 @@ const GoogleMapAddress = ({
               mapTypeControl: false,
               streetViewControl: false,
             }}
-            onLoad={(map) => {
-              mapRef.current = map;
-              onLoad(map);
-            }}
+            onLoad={(map) => (mapRef.current = map)}
           >
             {selectedPlace && (
               <Marker

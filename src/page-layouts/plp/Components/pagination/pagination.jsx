@@ -11,10 +11,35 @@ const Pagination = ({
   prevPageLink = "",
   nextPageLink = "",
 }) => {
+  // const getPageUrl = (pageNo) => {
+  //   const searchParams = new URLSearchParams(location.search);
+  //   searchParams.set("page_no", pageNo);
+  //   return `${location.pathname}?${searchParams.toString()}`;
+  // };
+
+  // const getStartPage = () => {
+  //   let startingPage = 1;
+  //   const maxStartingPage = total - PAGES_TO_SHOW + PAGE_OFFSET + 1;
+
+  //   if (current >= maxStartingPage) {
+  //     startingPage =
+  //       maxStartingPage - PAGE_OFFSET > 0 ? maxStartingPage - PAGE_OFFSET : 1;
+  //   } else if (current > PAGE_OFFSET) {
+  //     startingPage = current - PAGE_OFFSET;
+  //   }
+  //   return startingPage;
+  // };
+
+  // function getPagesButton() {
+  //   if (total && current) {
+  //     return total > PAGES_TO_SHOW ? PAGES_TO_SHOW : total;
+  //   }
+  // }
+
   const scrollToTop = useCallback(() => {
     if (window) {
       setTimeout(() => {
-        window.scrollTo({
+        window?.scrollTo({
           top: 0,
           behavior: "auto",
         });

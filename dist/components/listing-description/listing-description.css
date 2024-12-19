@@ -65,6 +65,31 @@
 .listing-description__animation-fade___WIrFk.listing-description__animate___Zadkr {
   opacity: 1 !important;
 }
+.listing-description__full-width-section___s8oVg {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+.listing-description__section-main-container___Tbuqd {
+  max-width: 1440px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  padding: 60px 0 0 0;
+}
+@media only screen and (max-width: 768px) {
+  .listing-description__section-main-container___Tbuqd {
+    padding: 48px 15px 0 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .listing-description__section-main-container___Tbuqd {
+    padding: 24px 8px 0 8px;
+  }
+}
 /**color by character**/
 /** Font family **/
 /** Font weight **/

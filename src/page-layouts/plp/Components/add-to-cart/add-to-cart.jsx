@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import * as styles from "./add-to-cart.less";
 import ImageGallery from "../image-gallery/image-gallery";
 import ProductVariants from "../product-variants/product-variants";
@@ -12,7 +12,7 @@ const AddToCart = ({
   isLoading = false,
   productData = {},
   globalConfig = {},
-  pageConfig = {},
+  pdpPageConfig = {},
   slug = "",
   selectedSize = "",
   showSizeDropdown = false,
@@ -30,15 +30,23 @@ const AddToCart = ({
 
   const { button_options, disable_cart, show_price } = globalConfig;
 
-  const { media, name, short_description, variants, sizes, brand } = product;
+  const { media, name, short_description, variants, sizes, uid, moq, brand } =
+    product;
 
   const isMto = product?.custom_order?.is_custom_order || false;
-  const { price_per_piece } = productPrice;
+  const {
+    seller,
+    price_per_piece,
+    delivery_promise,
+    store,
+    article_id,
+    article_assignment,
+  } = productPrice;
 
-  const isSizeSelectionBlock = pageConfig?.size_selection_style === "block";
+  const isSizeSelectionBlock = pdpPageConfig?.size_selection_style === "block";
   const isSingleSize = sizes?.sizes?.length === 1;
-  const isSizeCollapsed = pageConfig?.hide_single_size && isSingleSize;
-  const preSelectFirstOfMany = pageConfig?.preselect_size;
+  const isSizeCollapsed = pdpPageConfig?.hide_single_size && isSingleSize;
+  const preSelectFirstOfMany = pdpPageConfig?.preselect_size;
 
   const images = [
     {
@@ -117,9 +125,9 @@ const AddToCart = ({
                   </div>
                 )}
                 {/* ---------- Product Tax Label ---------- */}
-                {pageConfig?.tax_label && (
+                {pdpPageConfig?.tax_label && (
                   <div className={styles.taxLabel}>
-                    ({pageConfig?.tax_label})
+                    ({pdpPageConfig?.tax_label})
                   </div>
                 )}
 
@@ -154,7 +162,7 @@ const AddToCart = ({
                           {Boolean(selectedSize) && `Size (${selectedSize})`}
                         </span>
                       </p>
-                      {pageConfig?.show_size_guide &&
+                      {pdpPageConfig?.show_size_guide &&
                         isSizeGuideAvailable() &&
                         sizes?.sellable && (
                           <FyButton
@@ -267,7 +275,7 @@ const AddToCart = ({
                         </OutsideClickHandler>
                       </div>
                     }
-                    {pageConfig?.show_size_guide &&
+                    {pdpPageConfig?.show_size_guide &&
                       isSizeGuideAvailable() &&
                       sizes?.sellable && (
                         <FyButton

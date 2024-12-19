@@ -51,6 +51,8 @@ function MobileSlider({
 
   const [showReplayButton, setShowReplayButton] = useState(false);
   const [isMute, setIsMute] = useState(true);
+  const [loadedVideos, setLoadedVideos] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const videoRef = createRef();
 
   function play() {
@@ -77,6 +79,20 @@ function MobileSlider({
 
   function toggleMute() {
     setIsMute(!isMute);
+  }
+
+  function videoLoaded(i) {
+    const videoNodeList = document.querySelectorAll(
+      `#mobile-video-player-${i}`
+    );
+    // console.log(videoNodeList);
+    videoNodeList.forEach((video) => {
+      /* eslint no-param-reassign: "error" */
+      video.muted = true;
+    });
+    const newLoadedVideos = JSON.parse(JSON.stringify(loadedVideos));
+    newLoadedVideos[i] = true;
+    setLoadedVideos(newLoadedVideos);
   }
 
   function restartVideo(i) {
@@ -140,6 +156,7 @@ function MobileSlider({
                         muted={isMute}
                         onClick={pauseVideo}
                         onEnded={onVideoEnd}
+                        // onLoadedData={videoLoaded(i)}
                       >
                         <source src={media?.url} type="video/mp4" />
                       </video>

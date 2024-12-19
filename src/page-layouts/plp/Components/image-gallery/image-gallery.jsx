@@ -58,12 +58,13 @@ function ImageGallery({
   };
 
   const getImageURL = (srcUrl) =>
+    /* eslint-disable no-unsafe-optional-chaining */
     `http://img.youtube.com/vi/${srcUrl?.substr(srcUrl?.lastIndexOf("/") + 1)}/0.jpg`;
 
   const prevSlide = () => {
     if (currentImageIndex === 0) {
       return;
-    }
+    } // cannot move backward
     if (!hiddenDots) {
       itemWrapperRef.current.scrollLeft -= 75;
     }
@@ -76,7 +77,7 @@ function ImageGallery({
   const nextSlide = () => {
     if (currentImageIndex === images.length - 1) {
       return;
-    }
+    } // cannot move forward
     if (!hiddenDots) {
       itemWrapperRef.current.scrollLeft += 75;
     }

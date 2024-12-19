@@ -65,6 +65,31 @@
 .single-address-header__animation-fade___LjcP4.single-address-header__animate___Yklq6 {
   opacity: 1 !important;
 }
+.single-address-header__full-width-section___lG4S_ {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+.single-address-header__section-main-container___W8xee {
+  max-width: 1440px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  padding: 60px 0 0 0;
+}
+@media only screen and (max-width: 768px) {
+  .single-address-header__section-main-container___W8xee {
+    padding: 48px 15px 0 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .single-address-header__section-main-container___W8xee {
+    padding: 24px 8px 0 8px;
+  }
+}
 /**color by character**/
 /** Font family **/
 /** Font weight **/

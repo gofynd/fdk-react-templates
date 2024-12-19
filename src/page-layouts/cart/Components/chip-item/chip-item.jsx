@@ -255,24 +255,16 @@ export default function ChipItem({
                   }`}
                 >
                   {currencyFormat(
-                    numberWithCommas(
-                      singleItemDetails?.price?.converted?.effective ??
-                        singleItemDetails?.price?.base?.effective
-                    ),
-                    singleItemDetails?.price?.converted?.currency_symbol ??
-                      singleItemDetails?.price?.base?.currency_symbol
+                    numberWithCommas(singleItemDetails?.price?.base?.effective),
+                    singleItemDetails?.price?.base?.currency_symbol
                   )}
                 </span>
-                {singleItemDetails?.price?.converted?.effective <
-                  singleItemDetails?.price?.converted?.marked && (
+                {singleItemDetails?.price?.base?.effective <
+                  singleItemDetails?.price?.base?.marked && (
                   <span className={styles.markedPrice}>
                     {currencyFormat(
-                      numberWithCommas(
-                        singleItemDetails?.price?.converted?.marked ??
-                          singleItemDetails?.price?.base?.marked
-                      ),
-                      singleItemDetails?.price?.converted?.currency_symbol ??
-                        singleItemDetails?.price?.base?.currency_symbol
+                      numberWithCommas(singleItemDetails?.price?.base?.marked),
+                      singleItemDetails?.price?.base?.currency_symbol
                     )}
                   </span>
                 )}

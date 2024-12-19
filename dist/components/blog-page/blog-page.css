@@ -65,6 +65,31 @@
 .blog-page__animation-fade___x9HWL.blog-page__animate___RI0y3 {
   opacity: 1 !important;
 }
+.blog-page__full-width-section___rz60R {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+.blog-page__section-main-container___FRVDU {
+  max-width: 1440px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  padding: 60px 0 0 0;
+}
+@media only screen and (max-width: 768px) {
+  .blog-page__section-main-container___FRVDU {
+    padding: 48px 15px 0 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .blog-page__section-main-container___FRVDU {
+    padding: 24px 8px 0 8px;
+  }
+}
 /**color by character**/
 /** Font family **/
 /** Font weight **/
@@ -698,7 +723,7 @@ img::selection {
   z-index: 2000;
   height: 2em;
   width: 2em;
-  overflow: visible;
+  overflow: show;
   margin: auto;
   top: 0;
   left: 0;
@@ -911,6 +936,31 @@ img::selection {
 }
 .fy-image__animation-fade___ZmwHA.fy-image__animate___qBa1D {
   opacity: 1 !important;
+}
+.fy-image__full-width-section___cmdmm {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+.fy-image__section-main-container___GRg1q {
+  max-width: 1440px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  padding: 60px 0 0 0;
+}
+@media only screen and (max-width: 768px) {
+  .fy-image__section-main-container___GRg1q {
+    padding: 48px 15px 0 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .fy-image__section-main-container___GRg1q {
+    padding: 24px 8px 0 8px;
+  }
 }
 /**color by character**/
 /** Font family **/
@@ -1419,6 +1469,31 @@ img::selection {
 .skeletons__animation-fade___ay8n2.skeletons__animate___olGhG {
   opacity: 1 !important;
 }
+.skeletons__full-width-section___JInws {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+.skeletons__section-main-container___apOD4 {
+  max-width: 1440px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  padding: 60px 0 0 0;
+}
+@media only screen and (max-width: 768px) {
+  .skeletons__section-main-container___apOD4 {
+    padding: 48px 15px 0 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .skeletons__section-main-container___apOD4 {
+    padding: 24px 8px 0 8px;
+  }
+}
 /**color by character**/
 /** Font family **/
 /** Font weight **/
@@ -1922,6 +1997,31 @@ img::selection {
 }
 .blog-tabs__animation-fade___VRv7k.blog-tabs__animate___CGUWO {
   opacity: 1 !important;
+}
+.blog-tabs__full-width-section___XdtCO {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+.blog-tabs__section-main-container___GfylC {
+  max-width: 1440px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  padding: 60px 0 0 0;
+}
+@media only screen and (max-width: 768px) {
+  .blog-tabs__section-main-container___GfylC {
+    padding: 48px 15px 0 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .blog-tabs__section-main-container___GfylC {
+    padding: 24px 8px 0 8px;
+  }
 }
 /**color by character**/
 /** Font family **/
@@ -2474,6 +2574,31 @@ img::selection {
 }
 .blog-footer__animation-fade___bVKAv.blog-footer__animate___GfEox {
   opacity: 1 !important;
+}
+.blog-footer__full-width-section___zfnWa {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+.blog-footer__section-main-container___zFQaf {
+  max-width: 1440px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  padding: 60px 0 0 0;
+}
+@media only screen and (max-width: 768px) {
+  .blog-footer__section-main-container___zFQaf {
+    padding: 48px 15px 0 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .blog-footer__section-main-container___zFQaf {
+    padding: 24px 8px 0 8px;
+  }
 }
 /**color by character**/
 /** Font family **/

@@ -1,8 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as styles from "./checkout-payment-content.less";
+// import PaymentSDK from "./payment-sdk";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
+import { useSearchParams } from "react-router-dom";
 import IMask from "imask";
 import cardValidator from "card-validator";
+import RbiSecureGuideline from "../../../components/rbi-guideline/rbi-guideline";
 
 export const CREDIT_CARD_MASK = [
   {
@@ -71,6 +74,7 @@ function CheckoutPaymentContent({ payment, loader }) {
     isLoading,
   } = payment;
 
+  //card
   const [addNewCard, setAddNewCard] = useState(false);
   const [selectedCardCVV, setSelectedCardCVV] = useState("");
   const [cvvNumber, setCvvNumber] = useState("");
@@ -81,11 +85,15 @@ function CheckoutPaymentContent({ payment, loader }) {
   const [cardNameError, setCardNameError] = useState(false);
   const [isCardSecure, setIsCardSecure] = useState(true);
   const [isSavedCardSecure, setIsSavedCardSecure] = useState(null);
+  const [searchParams] = useSearchParams();
+  const cart_id = searchParams.get("id");
+  const address_id = searchParams.get("address_id");
   const nameRef = useRef(null);
   const cardNumberRef = useRef(null);
   const expirationDateRef = useRef(null);
 
   const [selectedCard, setSelectedCard] = useState(null);
+  // const [selectedCardData, setSelectedCardData] = useState(null);
   const [selectedWallet, setSelectedWallet] = useState({});
 
   const [vpa, setvpa] = useState("");
@@ -100,6 +108,7 @@ function CheckoutPaymentContent({ payment, loader }) {
 
   const [selectedPaymentPayload, setSelectedPaymentPayload] = useState({
     selectedCard: selectedCard,
+    // selectedCardData: selectedCardData,
     isCardSecure: isCardSecure,
     selectedCardless: selectedCardless,
     selectedPayLater: selectedPayLater,
@@ -113,6 +122,7 @@ function CheckoutPaymentContent({ payment, loader }) {
   useEffect(() => {
     setSelectedPaymentPayload({
       selectedCard: selectedCard,
+      // selectedCardData: selectedCardData,
       isCardSecure: isCardSecure,
       selectedCardless: selectedCardless,
       selectedPayLater: selectedPayLater,
@@ -124,6 +134,7 @@ function CheckoutPaymentContent({ payment, loader }) {
     });
   }, [
     selectedCard,
+    // selectedCardData,
     selectedCardless,
     selectedPayLater,
     selectedWallet,
@@ -314,6 +325,7 @@ function CheckoutPaymentContent({ payment, loader }) {
       exp_month: expirationdate_mask.value.split("/")[0],
       exp_year: expirationdate_mask.value.split("/")[1],
     };
+    // setSelectedCardData(obj);
     return obj;
   };
 
@@ -329,6 +341,8 @@ function CheckoutPaymentContent({ payment, loader }) {
       console.error("Card Verification Failed");
     }
   };
+
+  //
 
   function getWalletdBorder(wlt) {
     if (selectedWallet?.code === wlt?.code) {
@@ -430,7 +444,7 @@ function CheckoutPaymentContent({ payment, loader }) {
               <div className={styles.cardList}>
                 {selectedTabData &&
                   selectedTabData.list &&
-                  selectedTabData.list?.map((card) => (
+                  selectedTabData.list?.map((card, index) => (
                     <label
                       key={card.card_id}
                       onClick={() => setSelectedCard(card)}
@@ -717,7 +731,7 @@ function CheckoutPaymentContent({ payment, loader }) {
           <div>
             <div className={styles.nbHeader}>Select a Bank</div>
             <div className={styles.nbOption}>
-              {topFiveBank?.map((nb) => (
+              {topFiveBank?.map((nb, index) => (
                 <label key={nb.display_name} onClick={() => setSelectedNB(nb)}>
                   <div className={`${styles.nbItem} ${getNBBorder(nb)}`}>
                     <div className={styles.nbLeft}>
@@ -753,7 +767,7 @@ function CheckoutPaymentContent({ payment, loader }) {
               )}
               {selectedNB === "otherNB" && (
                 <select className={styles.otherSelect} onChange={selectBank}>
-                  {restBanks?.map((nb) => (
+                  {restBanks?.map((nb, index) => (
                     <option key={nb.display_name} value={JSON.stringify(nb)}>
                       {nb.display_name}
                     </option>
@@ -801,7 +815,7 @@ function CheckoutPaymentContent({ payment, loader }) {
           <div>
             <div className={styles.payLaterHeader}>Choose An Option</div>
             <div className={styles.payLaterOption}>
-              {getNormalisedList(selectedTabData)?.map((payLater) => (
+              {getNormalisedList(selectedTabData)?.map((payLater, index) => (
                 <>
                   {!payLater.isDisabled && (
                     <label
@@ -854,7 +868,7 @@ function CheckoutPaymentContent({ payment, loader }) {
           <div>
             <div className={styles.cardlessHeader}>Choose An Option</div>
             <div className={styles.cardlessOption}>
-              {selectedTabData.list?.map((emi) => (
+              {selectedTabData.list?.map((emi, index) => (
                 <label
                   key={emi.display_name}
                   onClick={() => setSelectedCardless(emi)}
@@ -902,7 +916,7 @@ function CheckoutPaymentContent({ payment, loader }) {
           <div>
             <div className={styles.otherHeader}>Choose An Option</div>
             <div className={styles.otherOption}>
-              {selectedTabData?.list?.map((op) => (
+              {selectedTabData?.list?.map((op, index) => (
                 <label
                   key={op.display_name}
                   onClick={() => setSelectedOtherPayment(op)}
@@ -951,7 +965,7 @@ function CheckoutPaymentContent({ payment, loader }) {
           {true ? (
             <>
               <div className={styles.navigationLink}>
-                {PaymentOptionsList()?.map((opt) => (
+                {PaymentOptionsList()?.map((opt, index) => (
                   <div
                     className={styles.linkWrapper}
                     key={opt.display_name}

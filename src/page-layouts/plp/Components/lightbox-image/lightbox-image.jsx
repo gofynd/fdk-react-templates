@@ -10,12 +10,22 @@ import Viewer3D from "../viewer-3d/viewer-3d";
 
 function LightboxImage({
   images,
+  disableScroll = true,
   showLightBox = false,
   startAt = 0,
   nThumbs = 5,
   showThumbs = true,
+  autoPlay = false,
+  autoPlayTime = 3000,
+  siteLoading = null,
+  showCaption = false,
+  lengthToLoadMore = 0,
   closeText = "Close (Esc)",
+  previousText = "Previous",
   nextText = "Next",
+  previousThumbText = "Previous",
+  nextThumbText = "Next",
+  iconColor = "",
   globalConfig = {},
   toggleResumeVideo,
   currentIndex,
@@ -23,9 +33,11 @@ function LightboxImage({
 }) {
   const [select, setSelect] = useState(startAt);
   const [lightBoxOn, setLightBoxOn] = useState(showLightBox);
+  const [timer, setTimer] = useState(null);
   const [selectLoading, setSelectLoading] = useState(false);
   const [isMute, setIsMute] = useState(true);
   const [showReplayButton, setShowReplayButton] = useState(false);
+  const [isAutoRotate, setIsAutoRotate] = useState(false);
   const videoRef = useRef(null);
 
   let thumbIndex;
@@ -56,6 +68,12 @@ function LightboxImage({
       end: images.length - 1,
     };
   }
+
+  const imagesThumb = images.map((img, index) => ({
+    src: img.url.replace("resize-w:540", "original"),
+    type: img?.type,
+    alt: img.alt,
+  }));
 
   const toggleMute = () => {
     setIsMute(!isMute);
@@ -121,6 +139,27 @@ function LightboxImage({
       if (document.getElementById("videoPlayer")) handleVideoPlayback();
     }
     closeGallery();
+  };
+
+  const addKeyEvent = (event) => {
+    if (event.keyCode === 37) previousImage(); // left arrow
+    if (event.keyCode === 39) nextImage(); // right arrow
+    if (event.keyCode === 27) closeLightBox(); // esc
+  };
+
+  const onToggleLightBox = (value) => {
+    if (isRunningOnClient()) {
+      if (disableScroll) {
+        document.querySelector("html").classList.toggle("no-scroll", value);
+      }
+      document.querySelector("body").classList.toggle("hide-overflow", value);
+
+      if (value) {
+        document.addEventListener("keydown", addKeyEvent);
+      } else {
+        document.removeEventListener("keydown", addKeyEvent);
+      }
+    }
   };
 
   const getImageURL = (src) =>
@@ -272,7 +311,10 @@ function LightboxImage({
                 </button>
               )}
 
-              <div className={styles.lbThumbnailWrapper}>
+              <div
+                className={styles.lbThumbnailWrapper}
+                // style={`--icon-color: ${iconColor}`}
+              >
                 {showThumbs && (
                   <div className={styles.lbThumbnail}>
                     {images?.map((image, index) => (

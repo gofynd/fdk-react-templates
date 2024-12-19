@@ -65,6 +65,31 @@
 .contact-us__animation-fade___kbIn4.contact-us__animate___lS4oW {
   opacity: 1 !important;
 }
+.contact-us__full-width-section___vAC3g {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+.contact-us__section-main-container___It33x {
+  max-width: 1440px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  padding: 60px 0 0 0;
+}
+@media only screen and (max-width: 768px) {
+  .contact-us__section-main-container___It33x {
+    padding: 48px 15px 0 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .contact-us__section-main-container___It33x {
+    padding: 24px 8px 0 8px;
+  }
+}
 /**color by character**/
 /** Font family **/
 /** Font weight **/
@@ -653,6 +678,31 @@ img::selection {
 .fy-input__animation-fade___EdIUl.fy-input__animate___OQCWI {
   opacity: 1 !important;
 }
+.fy-input__full-width-section___uVG7y {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+.fy-input__section-main-container___Bl4ui {
+  max-width: 1440px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  padding: 60px 0 0 0;
+}
+@media only screen and (max-width: 768px) {
+  .fy-input__section-main-container___Bl4ui {
+    padding: 48px 15px 0 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .fy-input__section-main-container___Bl4ui {
+    padding: 24px 8px 0 8px;
+  }
+}
 /**color by character**/
 /** Font family **/
 /** Font weight **/
@@ -1091,11 +1141,6 @@ img::selection {
   width: 100%;
   background-color: transparent;
 }
-@media only screen and (max-width: 480px) {
-  .fy-input__fyInput___S4Mtu {
-    font-size: 1rem;
-  }
-}
 .fy-input__fyInput___S4Mtu::placeholder {
   color: var(--textLabel, #7d7676);
   opacity: 0.3;
@@ -1136,11 +1181,6 @@ img::selection {
   color: var(--textBody, #3c3131);
   font-size: 14px;
   border-radius: 3px;
-}
-@media only screen and (max-width: 480px) {
-  .fy-input__outlined___CEaKm.fy-input__medium___L3QsD {
-    font-size: 16px;
-  }
 }
 .fy-input__outlined___CEaKm.fy-input__medium___L3QsD.fy-input__fyTextArea___uikbN {
   height: auto;
@@ -1217,6 +1257,31 @@ img::selection {
 }
 .fy-button__animation-fade___KWXGj.fy-button__animate___gYWOV {
   opacity: 1 !important;
+}
+.fy-button__full-width-section___y1S8G {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+.fy-button__section-main-container___j_WAJ {
+  max-width: 1440px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  padding: 60px 0 0 0;
+}
+@media only screen and (max-width: 768px) {
+  .fy-button__section-main-container___j_WAJ {
+    padding: 48px 15px 0 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .fy-button__section-main-container___j_WAJ {
+    padding: 24px 8px 0 8px;
+  }
 }
 /**color by character**/
 /** Font family **/
@@ -1788,7 +1853,7 @@ img::selection {
   z-index: 2000;
   height: 2em;
   width: 2em;
-  overflow: visible;
+  overflow: show;
   margin: auto;
   top: 0;
   left: 0;
@@ -2001,6 +2066,31 @@ img::selection {
 }
 .fy-image__animation-fade___ZmwHA.fy-image__animate___qBa1D {
   opacity: 1 !important;
+}
+.fy-image__full-width-section___cmdmm {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+.fy-image__section-main-container___GRg1q {
+  max-width: 1440px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  padding: 60px 0 0 0;
+}
+@media only screen and (max-width: 768px) {
+  .fy-image__section-main-container___GRg1q {
+    padding: 48px 15px 0 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .fy-image__section-main-container___GRg1q {
+    padding: 24px 8px 0 8px;
+  }
 }
 /**color by character**/
 /** Font family **/
@@ -2508,6 +2598,31 @@ img::selection {
 }
 .skeletons__animation-fade___ay8n2.skeletons__animate___olGhG {
   opacity: 1 !important;
+}
+.skeletons__full-width-section___JInws {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+.skeletons__section-main-container___apOD4 {
+  max-width: 1440px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  padding: 60px 0 0 0;
+}
+@media only screen and (max-width: 768px) {
+  .skeletons__section-main-container___apOD4 {
+    padding: 48px 15px 0 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .skeletons__section-main-container___apOD4 {
+    padding: 24px 8px 0 8px;
+  }
 }
 /**color by character**/
 /** Font family **/

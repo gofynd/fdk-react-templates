@@ -16,6 +16,14 @@ function Sort({ sortList = [], onSortUpdate = () => {} }) {
     return sortList?.[0]?.name;
   }, [sortList]);
 
+  // function checkMobile() {
+  //   if (isRunningOnClient()) {
+  //     return window.innerWidth > 480;
+  //   } else {
+  //     return false;
+  //   }
+  // }
+
   function updateSortOption(e, sortValue) {
     e.stopPropagation();
     e.preventDefault();
@@ -23,8 +31,10 @@ function Sort({ sortList = [], onSortUpdate = () => {} }) {
     closeSortOption(e);
   }
 
-  function closeSortOption() {
+  function closeSortOption(event) {
+    // if (event && event.target.id !== "sortopt") {
     setSortOpen(false);
+    // }
   }
 
   useEffect(() => {
@@ -32,7 +42,7 @@ function Sort({ sortList = [], onSortUpdate = () => {} }) {
   }, [location?.search]);
 
   return (
-    <OutsideClickHandler onOutsideClick={closeSortOption}>
+    <OutsideClickHandler onOutsideClick={(e) => closeSortOption(e)}>
       <div className={styles.dropdown}>
         <span className={styles.sortLabel}>Sort by: </span>
         <div

@@ -1,8 +1,17 @@
 import ArrowDown from "../assets/images/arrow-down.svg";
 import SearchIcon from "../assets/images/search.svg";
+import AccountIcon from "../assets/images/account.svg";
 import CartIcon from "../assets/images/cart.svg";
+import WishlistIcon from "../assets/images/wishlist.svg";
 import ArrowRight from "../assets/images/arrow-right.svg";
+import TwitterIcon from "../assets/images/twitter.svg";
+import FooterTwitter from "../assets/images/footer-twitter.svg";
+import FooterFacebook from "../assets/images/footer-facebook.svg";
+import FooterGoogle from "../assets/images/footer-google+.svg";
+import FooterInstagram from "../assets/images/footer-instagram.svg";
+import FooterYoutube from "../assets/images/footer-youtube.svg";
 import ArrowLeft from "../assets/images/arrow-left.svg";
+import SelectedCheckBox from "../assets/images/selected-checkbox.svg";
 import FilterIcon from "../assets/images/filter.svg";
 import SortIcon from "../assets/images/sort.svg";
 import TwoGridIcon from "../assets/images/grid-two.svg";
@@ -11,6 +20,8 @@ import TwoGridMobIcon from "../assets/images/grid-two-mob.svg";
 import OneGridMobIcon from "../assets/images/grid-one-mob.svg";
 import wishlistPlp from "../assets/images/wishlist-plp.svg";
 import scrollTop from "../assets/images/scroll-top.svg";
+import CarouselRightSvg from "../assets/images/carouselright.svg";
+import PlainScaleSvg from "../assets/images/plain-scale.svg";
 import TruckSvg from "../assets/images/truck.svg";
 import ItemCloseSvg from "../assets/images/item-close.svg";
 import close from "../assets/images/close.svg";
@@ -30,6 +41,11 @@ import crossbold from "../assets/images/cross-bold.svg";
 import truecheck from "../assets/images/true-check.svg";
 import check from "../assets/images/check.svg";
 import back from "../assets/images/back.svg";
+import singleRowWishlist from "../assets/images/single-row-wishlist.svg";
+import singleRowCart from "../assets/images/single-row-cart.svg";
+import singleRowUser from "../assets/images/single-row-user.svg";
+import singleRowSearch from "../assets/images/single-row-search.svg";
+import hamburger from "../assets/images/hamburger.svg";
 import replay from "../assets/images/replay.svg";
 import mute from "../assets/images/mute.svg";
 import unmute from "../assets/images/unmute.svg";
@@ -59,6 +75,18 @@ import cartArrowRight from "../assets/images/cart-arrow-right.svg";
 import commentNoteMobile from "../assets/images/comment-note-mobile.svg";
 import commentNote from "../assets/images/comment-note.svg";
 import compareArrow from "../assets/images/compare-arrow.svg";
+import wishListPDP from "../assets/images/wishlist-pdp.svg";
+import wishListPDPActive from "../assets/images/wishlist-pdp-active.svg";
+import youtube from "../assets/images/nav-youtube.svg";
+import linkedIn from "../assets/images/nav-linked_in.svg";
+import vimeo from "../assets/images/nav-vimeo.svg";
+import googlePlus from "../assets/images/nav-google_plus.svg";
+import twitter from "../assets/images/nav-twitter.svg";
+import blogLink from "../assets/images/nav-blog_link.svg";
+import instagram from "../assets/images/nav-instagram.svg";
+import pinterest from "../assets/images/nav-pinterest.svg";
+import facebook from "../assets/images/nav-facebook.svg";
+import ArrowLeftLong from "../assets/images/arrow-left-long.svg";
 import shareCart from "../assets/images/share-cart.svg";
 import shareCopy from "../assets/images/share-copy.svg";
 import shareFacebook from "../assets/images/share-facebook.svg";
@@ -89,6 +117,15 @@ import callSupport from "../assets/images/call-support.svg";
 import minusCircle from "../assets/images/minus-circle.svg";
 import plusCircle from "../assets/images/plus-circle.svg";
 import breadcrumbAngle from "../assets/images/breadcrumb-angle.svg";
+import SocailTwitter from "../assets/images/socail-twitter.svg";
+import SocailFacebook from "../assets/images/socail-facebook.svg";
+import SocailGoogle from "../assets/images/socail-google+.svg";
+import SocailVimeo from "../assets/images/socail-vimeo.svg";
+import SocailBlog from "../assets/images/socail-blog.svg";
+import SocailInstagram from "../assets/images/socail-instagram.svg";
+import SocailLinkedin from "../assets/images/socail-linkedin.svg";
+import SocailYoutube from "../assets/images/socail-youtube.svg";
+import SocailPinterest from "../assets/images/socail-pinterest.svg";
 import VideoPlay from "../assets/images/video-play.svg";
 import Delivery from "../assets/images/delivery.svg";
 
@@ -100,9 +137,18 @@ export const svgTitleComponentsMappings = {
   "three-number": threeNumber,
   "arrow-left": ArrowLeft,
   search: SearchIcon,
+  account: AccountIcon,
   cart: CartIcon,
+  wishlist: WishlistIcon,
+  twitter: TwitterIcon,
+  "footer-twitter": FooterTwitter,
   "true-check": truecheck,
   check,
+  "footer-facebook": FooterFacebook,
+  "footer-google": FooterGoogle,
+  "footer-instagram": FooterInstagram,
+  "footer-youtube": FooterYoutube,
+  "selected-checkbox": SelectedCheckBox,
   filter: FilterIcon,
   sort: SortIcon,
   "grid-four": FourGridIcon,
@@ -111,6 +157,8 @@ export const svgTitleComponentsMappings = {
   "grid-one-mob": OneGridMobIcon,
   "wishlist-plp": wishlistPlp,
   "scroll-top": scrollTop,
+  carouselright: CarouselRightSvg,
+  "plain-scale": PlainScaleSvg,
   truck: TruckSvg,
   "item-close": ItemCloseSvg,
   increase: IncreaseSvg,
@@ -124,6 +172,11 @@ export const svgTitleComponentsMappings = {
   "shipping-logo": shippinglogo,
   "cross-bold": crossbold,
   back,
+  "single-row-wishlist": singleRowWishlist,
+  "single-row-cart": singleRowCart,
+  "single-row-user": singleRowUser,
+  "single-row-search": singleRowSearch,
+  hamburger,
   close,
   replay,
   mute,
@@ -154,6 +207,18 @@ export const svgTitleComponentsMappings = {
   "comment-note-mobile": commentNoteMobile,
   "comment-note": commentNote,
   "compare-arrow": compareArrow,
+  "wishlist-pdp": wishListPDP,
+  "wishlist-pdp-active": wishListPDPActive,
+  "nav-youtube": youtube,
+  "nav-blog_link": blogLink,
+  "nav-google_plus": googlePlus,
+  "nav-instagram": instagram,
+  "nav-linked_in": linkedIn,
+  "nav-pinterest": pinterest,
+  "nav-twitter": twitter,
+  "nav-vimeo": vimeo,
+  "nav-facebook": facebook,
+  "arrow-left-long": ArrowLeftLong,
   "share-cart": shareCart,
   "share-copy": shareCopy,
   "share-facebook": shareFacebook,
@@ -182,6 +247,15 @@ export const svgTitleComponentsMappings = {
   contactEmail,
   callSupport,
   "breadcrumb-angle": breadcrumbAngle,
+  "socail-twitter": SocailTwitter,
+  "socail-facebook": SocailFacebook,
+  "socail-pinterest": SocailPinterest,
+  "socail-google+": SocailGoogle,
+  "socail-blog": SocailBlog,
+  "socail-instagram": SocailInstagram,
+  "socail-youtube": SocailYoutube,
+  "socail-vimeo": SocailVimeo,
+  "socail-linkedin": SocailLinkedin,
   "plus-circle": plusCircle,
   "minus-circle": minusCircle,
   "video-play": VideoPlay,

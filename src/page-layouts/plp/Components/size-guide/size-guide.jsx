@@ -54,6 +54,7 @@ function SizeGuide({ isOpen, productMeta, onCloseDialog }) {
 
     if (previewSelectedMetric === "in") {
       let finalVal = "";
+      value = val.split("-");
       for (let i = 0; i < val.length; i += 1) {
         if (i !== 0 && i < val.length) {
           finalVal += "-";

@@ -49,7 +49,7 @@ const FyDropdown = ({
 
   useEffect(() => {
     setSelectedValue(options?.find(({ key }) => key === value));
-  }, [value, options]);
+  }, [value]);
 
   const customLabelClassName = useMemo(
     () => `${styles.label} ${labelClassName ?? ""}`,
@@ -154,10 +154,10 @@ const FyDropdown = ({
           ref={dropdownList}
           style={dropdownStyles}
         >
-          {options?.map((option, index) => (
+          {options?.map((option) => (
             <li
               className={styles.dropdownOption}
-              key={`${option.key}-${index}`}
+              key={option.key}
               onClick={() => handleChange(option)}
             >
               {option.display}

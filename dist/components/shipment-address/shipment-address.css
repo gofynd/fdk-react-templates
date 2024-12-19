@@ -65,6 +65,31 @@
 .shipment-address__animation-fade___VgEBm.shipment-address__animate___GPXd5 {
   opacity: 1 !important;
 }
+.shipment-address__full-width-section___E037W {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+.shipment-address__section-main-container___PrpMz {
+  max-width: 1440px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  padding: 60px 0 0 0;
+}
+@media only screen and (max-width: 768px) {
+  .shipment-address__section-main-container___PrpMz {
+    padding: 48px 15px 0 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .shipment-address__section-main-container___PrpMz {
+    padding: 24px 8px 0 8px;
+  }
+}
 /**color by character**/
 /** Font family **/
 /** Font weight **/

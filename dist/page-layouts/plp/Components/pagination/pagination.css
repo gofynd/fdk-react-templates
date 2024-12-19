@@ -65,6 +65,31 @@
 .pagination__animation-fade___MlHh3.pagination__animate___fliMG {
   opacity: 1 !important;
 }
+.pagination__full-width-section___MYBQi {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+.pagination__section-main-container___RYsEW {
+  max-width: 1440px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  padding: 60px 0 0 0;
+}
+@media only screen and (max-width: 1023px) {
+  .pagination__section-main-container___RYsEW {
+    padding: 48px 15px 0 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .pagination__section-main-container___RYsEW {
+    padding: 24px 8px 0 8px;
+  }
+}
 /**color by character**/
 /** Font family **/
 /** Font weight **/

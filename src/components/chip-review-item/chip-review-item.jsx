@@ -9,7 +9,7 @@
  * @returns {JSX.Element} A JSX element representing the review item.
  */
 
-import React, { useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./chip-review-item.less";
 import { currencyFormat, numberWithCommas } from "../../helper/utils";

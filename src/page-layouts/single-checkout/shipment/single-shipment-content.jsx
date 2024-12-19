@@ -82,7 +82,11 @@ function SingleShipmentContent({ shipments, showPaymentOptions, loader }) {
                         <div className={styles.shipmentNumber}>
                           Shipment {index + 1}/{shipments.length}
                         </div>
-                        <div className={styles.itemCount}>1 Items</div>
+                        <div className={styles.itemCount}>
+                          {/* ({item.items.length}{" "} */}
+                          {/* {item.items.length === 1 ? "Item" : "Items"}) */}1
+                          Items
+                        </div>
                       </div>
                       {item?.promise && (
                         <div className={styles.deliveryDateWrapper}>

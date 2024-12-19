@@ -67,7 +67,11 @@ function ShipmentTracking({
     return shipmentInfo?.can_return ? "RETURN" : "CANCEL";
   };
   const update = (item) => {
-    if (["CANCEL", "RETURN"].includes(item?.text)) {
+    if (
+      ["CANCEL", "RETURN"].includes(item?.text)
+      //    &&
+      //    this.$route.meta.available_page_slug === "shipment-details"
+    ) {
       changeinit({
         ...item,
         link: `/profile/orders/shipment/update/${shipmentInfo?.shipment_id}/${updateType()?.toLowerCase()}`,

@@ -65,6 +65,31 @@
 .location-modal__animation-fade___hgYND.location-modal__animate___cEyWF {
   opacity: 1 !important;
 }
+.location-modal__full-width-section___kHT4G {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+.location-modal__section-main-container___pismz {
+  max-width: 1440px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  padding: 60px 0 0 0;
+}
+@media only screen and (max-width: 768px) {
+  .location-modal__section-main-container___pismz {
+    padding: 48px 15px 0 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .location-modal__section-main-container___pismz {
+    padding: 24px 8px 0 8px;
+  }
+}
 /**color by character**/
 /** Font family **/
 /** Font weight **/
@@ -521,13 +546,8 @@ img::selection {
   display: flex;
   gap: 16px;
 }
-.location-modal__locationModalContainer___ZUzWs .location-modal__pincodeInputWrapper___xxMUZ {
+.location-modal__locationModalContainer___ZUzWs .location-modal__pincodeInput___oThuj {
   flex: 1;
-}
-@media only screen and (max-width: 480px) {
-  .location-modal__locationModalContainer___ZUzWs .location-modal__pincodeInputWrapper___xxMUZ .location-modal__pincodeInput___oThuj {
-    font-size: 16px;
-  }
 }
 .location-modal__locationModalContainer___ZUzWs .location-modal__currentLocation___HxHp4 {
   margin-top: 12px;
@@ -606,6 +626,31 @@ img::selection {
 }
 .modal__animation-fade___GCTZ0.modal__animate___DtfuY {
   opacity: 1 !important;
+}
+.modal__full-width-section___m_u6S {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+.modal__section-main-container___jsNGW {
+  max-width: 1440px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  padding: 60px 0 0 0;
+}
+@media only screen and (max-width: 768px) {
+  .modal__section-main-container___jsNGW {
+    padding: 48px 15px 0 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .modal__section-main-container___jsNGW {
+    padding: 24px 8px 0 8px;
+  }
 }
 /**color by character**/
 /** Font family **/
@@ -1212,6 +1257,31 @@ img::selection {
 .fy-input__animation-fade___EdIUl.fy-input__animate___OQCWI {
   opacity: 1 !important;
 }
+.fy-input__full-width-section___uVG7y {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+.fy-input__section-main-container___Bl4ui {
+  max-width: 1440px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  padding: 60px 0 0 0;
+}
+@media only screen and (max-width: 768px) {
+  .fy-input__section-main-container___Bl4ui {
+    padding: 48px 15px 0 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .fy-input__section-main-container___Bl4ui {
+    padding: 24px 8px 0 8px;
+  }
+}
 /**color by character**/
 /** Font family **/
 /** Font weight **/
@@ -1650,11 +1720,6 @@ img::selection {
   width: 100%;
   background-color: transparent;
 }
-@media only screen and (max-width: 480px) {
-  .fy-input__fyInput___S4Mtu {
-    font-size: 1rem;
-  }
-}
 .fy-input__fyInput___S4Mtu::placeholder {
   color: var(--textLabel, #7d7676);
   opacity: 0.3;
@@ -1695,11 +1760,6 @@ img::selection {
   color: var(--textBody, #3c3131);
   font-size: 14px;
   border-radius: 3px;
-}
-@media only screen and (max-width: 480px) {
-  .fy-input__outlined___CEaKm.fy-input__medium___L3QsD {
-    font-size: 16px;
-  }
 }
 .fy-input__outlined___CEaKm.fy-input__medium___L3QsD.fy-input__fyTextArea___uikbN {
   height: auto;
@@ -1776,6 +1836,31 @@ img::selection {
 }
 .fy-button__animation-fade___KWXGj.fy-button__animate___gYWOV {
   opacity: 1 !important;
+}
+.fy-button__full-width-section___y1S8G {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+.fy-button__section-main-container___j_WAJ {
+  max-width: 1440px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  padding: 60px 0 0 0;
+}
+@media only screen and (max-width: 768px) {
+  .fy-button__section-main-container___j_WAJ {
+    padding: 48px 15px 0 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .fy-button__section-main-container___j_WAJ {
+    padding: 24px 8px 0 8px;
+  }
 }
 /**color by character**/
 /** Font family **/
@@ -2347,7 +2432,7 @@ img::selection {
   z-index: 2000;
   height: 2em;
   width: 2em;
-  overflow: visible;
+  overflow: show;
   margin: auto;
   top: 0;
   left: 0;

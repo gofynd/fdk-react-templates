@@ -75,6 +75,7 @@ const StickyColumn = ({ children }) => {
 
   const getStickyHeaderOffset = () => {
     return parseInt(
+      //@ts-ignore
       getComputedStyle(elementRef?.current).getPropertyValue(
         "--headerHeight"
       ) || 0
@@ -83,6 +84,7 @@ const StickyColumn = ({ children }) => {
 
   return (
     <>
+      {/* @ts-ignore */}
       <div style={colStyle} ref={elementRef}>
         {children}
       </div>

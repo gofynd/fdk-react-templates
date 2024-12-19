@@ -19,6 +19,7 @@ function OrderStatus({
   success,
   orderData,
   orderFailImg = "",
+  OrderSuccessImg = "",
   onOrderFailure,
   showPolling = false,
   pollingComp = null,
@@ -98,7 +99,7 @@ function OrderStatus({
     );
   }
 
-  function ProductItem({ product: product }) {
+  function ProductItem({ product: product }, index) {
     return (
       <>
         <div className={styles.shipmentProdItem}>

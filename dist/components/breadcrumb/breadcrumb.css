@@ -65,6 +65,31 @@
 .breadcrumb__animation-fade___caBg5.breadcrumb__animate___swYA9 {
   opacity: 1 !important;
 }
+.breadcrumb__full-width-section___c7Utt {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+.breadcrumb__section-main-container___H17Vl {
+  max-width: 1440px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  padding: 60px 0 0 0;
+}
+@media only screen and (max-width: 768px) {
+  .breadcrumb__section-main-container___H17Vl {
+    padding: 48px 15px 0 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .breadcrumb__section-main-container___H17Vl {
+    padding: 24px 8px 0 8px;
+  }
+}
 /**color by character**/
 /** Font family **/
 /** Font weight **/

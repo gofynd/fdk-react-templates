@@ -65,6 +65,31 @@
 .faq__animation-fade___NHkfa.faq__animate___Pzdf0 {
   opacity: 1 !important;
 }
+.faq__full-width-section___kZ_it {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+.faq__section-main-container___d0oGb {
+  max-width: 1440px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  padding: 60px 0 0 0;
+}
+@media only screen and (max-width: 768px) {
+  .faq__section-main-container___d0oGb {
+    padding: 48px 15px 0 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .faq__section-main-container___d0oGb {
+    padding: 24px 8px 0 8px;
+  }
+}
 /**color by character**/
 /** Font family **/
 /** Font weight **/

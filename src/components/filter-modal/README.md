@@ -25,7 +25,7 @@ The `FilterModal` component displays a modal dialog that allows users to filter 
 ```jsx
 import React, { useState } from "react";
 import FilterModal from "fdk-react-templates/components/filter-modal/filter-modal";
-import "fdk-react-templates/components/filter-modal/filter-modal.css";
+import "fdk-react-templates/components/filter-modal/filter-modal.css"; // CSS import
 
 const App = () => {
   const [filters, setFilters] = useState([

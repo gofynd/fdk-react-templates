@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import * as styles from "./remove-cart-item.less";
 import Modal from "../../../../components/core/modal/modal";
+import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 
 function RemoveCartItem({
   isOpen = false,
@@ -17,6 +18,12 @@ function RemoveCartItem({
       return cartItem.product.images[0].url.replace("original", "resize-w:150");
     }
   }, [cartItem]);
+
+  const handleWishlistClick = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    onWishlistButtonClick(cartItem);
+  };
 
   return (
     <Modal

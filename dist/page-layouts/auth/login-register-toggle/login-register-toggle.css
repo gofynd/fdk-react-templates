@@ -65,6 +65,31 @@
 .login-register-toggle__animation-fade___tcbux.login-register-toggle__animate___fRJXg {
   opacity: 1 !important;
 }
+.login-register-toggle__full-width-section___TQiFY {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+.login-register-toggle__section-main-container___krRcM {
+  max-width: 1440px;
+  background-color: transparent;
+  position: relative;
+  margin: 0 auto;
+  padding: 60px 0 0 0;
+}
+@media only screen and (max-width: 768px) {
+  .login-register-toggle__section-main-container___krRcM {
+    padding: 48px 15px 0 15px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .login-register-toggle__section-main-container___krRcM {
+    padding: 24px 8px 0 8px;
+  }
+}
 /**color by character**/
 /** Font family **/
 /** Font weight **/
