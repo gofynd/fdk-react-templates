@@ -65,31 +65,6 @@
 .address-item__animation-fade___w1gRp.address-item__animate___pPlPf {
   opacity: 1 !important;
 }
-.address-item__full-width-section____psnh {
-  width: 100%;
-  max-width: 100%;
-  background-color: transparent;
-  margin: 0 auto;
-  padding: 0;
-  position: relative;
-}
-.address-item__section-main-container___MLKzt {
-  max-width: 1440px;
-  background-color: transparent;
-  position: relative;
-  margin: 0 auto;
-  padding: 60px 0 0 0;
-}
-@media only screen and (max-width: 768px) {
-  .address-item__section-main-container___MLKzt {
-    padding: 48px 15px 0 15px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .address-item__section-main-container___MLKzt {
-    padding: 24px 8px 0 8px;
-  }
-}
 /**color by character**/
 /** Font family **/
 /** Font weight **/
@@ -633,31 +608,6 @@ img::selection {
 .single-address-content__animation-fade___Ydm8S.single-address-content__animate___ti4nw {
   opacity: 1 !important;
 }
-.single-address-content__full-width-section___DHyYW {
-  width: 100%;
-  max-width: 100%;
-  background-color: transparent;
-  margin: 0 auto;
-  padding: 0;
-  position: relative;
-}
-.single-address-content__section-main-container___mrwLo {
-  max-width: 1440px;
-  background-color: transparent;
-  position: relative;
-  margin: 0 auto;
-  padding: 60px 0 0 0;
-}
-@media only screen and (max-width: 768px) {
-  .single-address-content__section-main-container___mrwLo {
-    padding: 48px 15px 0 15px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .single-address-content__section-main-container___mrwLo {
-    padding: 24px 8px 0 8px;
-  }
-}
 /**color by character**/
 /** Font family **/
 /** Font weight **/
@@ -1067,6 +1017,14 @@ img::selection {
   border-radius: 0 0 4px 4px;
   border: 1px solid var(--dividerStokes);
   border-top: none;
+}
+.single-address-content__addressContentConitainer___CupPn.single-address-content__fontSize___V2JXy {
+  font-size: 14px;
+}
+@media only screen and (max-width: 768px) {
+  .single-address-content__addressContentConitainer___CupPn.single-address-content__fontSize___V2JXy {
+    font-size: 12px;
+  }
 }
 @media only screen and (max-width: 480px) {
   .single-address-content__addressContentConitainer___CupPn {
