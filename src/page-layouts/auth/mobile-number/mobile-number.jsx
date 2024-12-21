@@ -67,7 +67,7 @@ function MobileNumber({
 
   return (
     <div
-      className={`${styles.mobileInputWrapper} ${error ? styles.errorInput : ""} ${containerClassName || ""}`}
+      className={`${styles.mobileInputWrapper} ${error && mobile?.length > 0 ? styles.errorInput : ""} ${containerClassName || ""}`}
     >
       {isShowLabel && (
         <label
@@ -89,7 +89,7 @@ function MobileNumber({
           "--react-international-phone-height": height,
           "--react-international-phone-text-color": textColor,
           "--react-international-phone-border-radius": "4px",
-          "--react-international-phone-border-color": `${error ? "var(--errorText, #b24141)" : "var(--dividerStokes, #d4d1d1)"}`,
+          "--react-international-phone-border-color": `${error && mobile?.length > 0 ? "var(--errorText, #b24141)" : "var(--dividerStokes, #d4d1d1)"}`,
           "--react-international-phone-background-color": backgroundColor,
           "--react-international-phone-dropdown-top": `calc(${height} + 4px)`,
         }}
@@ -113,8 +113,11 @@ function MobileNumber({
           id: inputId,
         }}
         placeholder={placeholder}
+        hideDropdown={!allowDropdown}
       />
-      {error && <span className={styles.errorText}>{error.message}</span>}
+      {error && mobile?.length > 0 && (
+        <span className={styles.errorText}>{error.message}</span>
+      )}
     </div>
   );
 }

@@ -238,6 +238,9 @@
   overflow: visible;
 }
 .couponSuccessModalContent {
+  @media @desktop {
+    min-width: 400px;
+  }
   background-color: @DialogBackground;
   min-width: 300px;
   border: 1px solid @DividerStokes;
@@ -255,12 +258,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    & > span {
-      position: fixed;
-    }
+    // & > span {
+    //   position: fixed;
+    // }
   }
   .modalBody {
-    padding-top: 56px;
+    // padding-top: 56px;
     padding-bottom: 20px;
     text-align: center;
     .couponHeading {
