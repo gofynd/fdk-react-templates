@@ -29,8 +29,6 @@ function CustomRangeSlider({
   heading = null,
   selectedMin,
   selectedMax,
-  prefix = null,
-  postfix = null,
   count,
   currencySymbol = "",
   onSliderUpdate = () => {},
@@ -47,19 +45,7 @@ function CustomRangeSlider({
     setEndValue(selectedMax);
   }, [selectedMax]);
 
-  const setValue = (event) => {
-    // if (
-    //   selectedMin !== startValue &&
-    //   startValue >= min &&
-    //   startValue <= endValue
-    // ) {
-    //   // setSelectedMin(startValue);
-    //   setSelectedMin(startValue, endValue);
-    // }
-    // if (endValue !== selectedMax && endValue >= startValue && endValue <= max) {
-    //   // setSelectedMax(endValue);
-    //   setSelectedMax(startValue, endValue);
-    // }
+  const setValue = () => {
     onSliderUpdate({ minValue: startValue, maxValue: endValue });
   };
 
@@ -174,19 +160,6 @@ function CustomRangeSlider({
       {count && (
         <div className={styles.entityCount}>{count} Products Found</div>
       )}
-
-      {/* <div className={styles.extremeValues}>
-        <div>
-          {prefix}
-          {min}
-          {postfix}
-        </div>
-        <div>
-          {prefix}
-          {max}
-          {postfix}
-        </div>
-      </div> */}
 
       {rangeMessage && <p className={styles.errorMessage}>{rangeMessage}</p>}
     </div>

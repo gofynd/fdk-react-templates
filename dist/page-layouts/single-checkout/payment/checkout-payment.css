@@ -65,31 +65,6 @@
 .checkout-payment-content__animation-fade___hJ3v7.checkout-payment-content__animate____7a4M {
   opacity: 1 !important;
 }
-.checkout-payment-content__full-width-section___Ho7fd {
-  width: 100%;
-  max-width: 100%;
-  background-color: transparent;
-  margin: 0 auto;
-  padding: 0;
-  position: relative;
-}
-.checkout-payment-content__section-main-container___vntlQ {
-  max-width: 1440px;
-  background-color: transparent;
-  position: relative;
-  margin: 0 auto;
-  padding: 60px 0 0 0;
-}
-@media only screen and (max-width: 768px) {
-  .checkout-payment-content__section-main-container___vntlQ {
-    padding: 48px 15px 0 15px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .checkout-payment-content__section-main-container___vntlQ {
-    padding: 24px 8px 0 8px;
-  }
-}
 /**color by character**/
 /** Font family **/
 /** Font weight **/
@@ -1107,95 +1082,6 @@ img::selection {
   -webkit-font-smoothing: antialiased;
 }
 
-.rbi-guideline__secure-card-guideline___Ly0gt {
-  max-width: 530px;
-  height: auto;
-}
-.rbi-guideline__card-description___PVeiO {
-  display: flex;
-  justify-content: center;
-  font-family: inherit;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 20px;
-  color: #41434c;
-  margin: 32px 0px 24px 0px;
-}
-.rbi-guideline__secure-details___zijm4 {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-}
-.rbi-guideline__secure-payment___GUhCQ {
-  width: 235px;
-  height: 142px;
-  border: 1px solid #f3f4f6;
-  border-radius: 4px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-left: 13px;
-}
-.rbi-guideline__secure-payment-text___AxYUy {
-  font-family: inherit;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 20px;
-  text-align: center;
-  color: #41434c;
-}
-.rbi-guideline__guideline-detail___l9Sjf {
-  display: flex;
-  justify-content: center;
-  margin-top: 24px;
-  font-family: inherit;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 20px;
-  color: #666666;
-}
-.rbi-guideline__secure-my-card___9Y7Am {
-  margin-top: 32px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-@media only screen and (max-width: 480px) {
-  .rbi-guideline__secure-my-card___9Y7Am {
-    margin-top: 250px;
-  }
-}
-.rbi-guideline__button-text___dIiZW {
-  border: 2px solid var(--PrimaryColor);
-  font-family: inherit;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 140%;
-  text-align: center;
-  color: #ffffff;
-  background: var(--PrimaryColor);
-  border-radius: 6px;
-  width: 245px;
-  height: 48px;
-  cursor: pointer;
-}
-.rbi-guideline__may-be-later___BTLC0 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: inherit;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 140%;
-  text-align: center;
-  color: #666666;
-  margin-top: 13.5px;
-  margin-bottom: 34.5px;
-  cursor: pointer;
-}
-
 .checkout-payment__slide-fade-enter-active___beIuo,
 .checkout-payment__slide-fade-leave-active___EdxR8 {
   transition: all 0.5s;
@@ -1262,31 +1148,6 @@ img::selection {
 }
 .checkout-payment__animation-fade___CUsO0.checkout-payment__animate___vNIn3 {
   opacity: 1 !important;
-}
-.checkout-payment__full-width-section___icGDr {
-  width: 100%;
-  max-width: 100%;
-  background-color: transparent;
-  margin: 0 auto;
-  padding: 0;
-  position: relative;
-}
-.checkout-payment__section-main-container___QgHid {
-  max-width: 1440px;
-  background-color: transparent;
-  position: relative;
-  margin: 0 auto;
-  padding: 60px 0 0 0;
-}
-@media only screen and (max-width: 768px) {
-  .checkout-payment__section-main-container___QgHid {
-    padding: 48px 15px 0 15px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .checkout-payment__section-main-container___QgHid {
-    padding: 24px 8px 0 8px;
-  }
 }
 /**color by character**/
 /** Font family **/

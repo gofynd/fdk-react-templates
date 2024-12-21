@@ -6,6 +6,7 @@
  * @param {Object} props - The properties object.
  * @param {boolean} [props.isOpen=true] - Determines if the modal is open or closed.
  * @param {string} [props.pincode=""] - The default pincode value to be displayed in the input field.
+ * @param {object} [props.error=null] - Error object containing information about any validation or submission errors.
  * @param {Function} [props.onClose=() => {}] - Callback function to be called when the modal is closed.
  * @param {Function} [props.onSubmit=() => {}] - Callback function to be called when the form is submitted.
  * @param {Function} [props.onCurrentLocationClick=() => {}] - Callback function to be called when the current location button is clicked.
@@ -23,6 +24,7 @@ import FyButton from "../core/fy-button/fy-button";
 function LocationModal({
   isOpen = true,
   pincode = "",
+  error = null,
   onClose = () => {},
   onSubmit = () => {},
   onCurrentLocationClick = () => {},
@@ -32,8 +34,9 @@ function LocationModal({
     handleSubmit,
     formState: { errors, isValid },
     reset,
+    setError,
+    clearErrors,
   } = useForm({
-    mode: "onChange",
     defaultValues: {
       pincode: pincode,
     },
@@ -42,6 +45,20 @@ function LocationModal({
   useEffect(() => {
     reset({ pincode });
   }, [pincode, reset]);
+
+  useEffect(() => {
+    if (error) {
+      setError("root", error);
+    } else {
+      clearErrors("root");
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (!isOpen && !pincode) {
+      clearErrors();
+    }
+  }, [isOpen, pincode]);
 
   return (
     <Modal
@@ -54,9 +71,6 @@ function LocationModal({
         <h3 className={styles.modalTitle}>
           Enter pincode to check availability
         </h3>
-        {/* <button onClick={onClose}>
-          <SvgWrapper svgSrc="cross-black" />
-        </button> */}
       </div>
       <p className={styles.locationSubtext}>
         Choose your address location to see product availability and delivery
@@ -65,14 +79,20 @@ function LocationModal({
       <form className={styles.locationInput} onSubmit={handleSubmit(onSubmit)}>
         <FyInput
           autoComplete="off"
-          placeholder="Please enter pincode"
-          containerClassName={styles.pincodeInput}
-          inputClassName="b2"
+          placeholder="Enter Pincode"
+          containerClassName={styles.pincodeInputWrapper}
+          inputClassName={`${styles.pincodeInput} b2`}
           type="text"
           maxLength="6"
-          {...register("pincode", { required: true, pattern: /^\d{6}$/ })}
-          error={!!errors.pincode}
-          errorMessage="Please enter a valid 6-digit pincode"
+          {...register("pincode", {
+            required: "Please enter a valid 6-digit pincode",
+            pattern: {
+              value: /^\d{6}$/,
+              message: "Pincode must be exactly 6 digits long",
+            },
+          })}
+          error={!!errors.pincode || !!errors.root}
+          errorMessage={errors.pincode?.message || errors.root?.message}
         />
         <FyButton type="submit" disabled={!isValid}>
           APPLY
