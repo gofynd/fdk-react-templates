@@ -5,6 +5,7 @@ import * as styles from "./mobile-number.less";
 import { PhoneNumberUtil } from "google-libphonenumber";
 
 function MobileNumber({
+  name = "",
   mobile = "",
   countryCode = "91",
   disable = false,
@@ -80,11 +81,13 @@ function MobileNumber({
       )}
 
       <PhoneInput
+        name={name}
         defaultCountry="in"
         value={phone}
         onChange={handleChange}
         forceDialCode
         ref={phoneInputRef}
+        required={isRequired}
         style={{
           "--react-international-phone-height": height,
           "--react-international-phone-text-color": textColor,
@@ -113,6 +116,7 @@ function MobileNumber({
           id: inputId,
         }}
         placeholder={placeholder}
+        hideDropdown={!allowDropdown}
       />
       {error && <span className={styles.errorText}>{error.message}</span>}
     </div>

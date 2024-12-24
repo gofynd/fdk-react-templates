@@ -20,7 +20,7 @@ Displays a product's information, pricing details, and availability. It provides
 ```jsx
 import React from "react";
 import ChipReviewItem from "fdk-react-templates/components/chip-review-item/chip-review-item";
-import "fdk-react-templates/components/chip-review-item/chip-review-item.css"; // CSS path
+import "fdk-react-templates/components/chip-review-item/chip-review-item.css";
 
 const App = () => {
   const item = {

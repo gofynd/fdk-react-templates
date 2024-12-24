@@ -37,6 +37,13 @@ function SingleAddress({
     addressItem,
     showAddNewAddressModal,
     getLocality,
+    isInternationalShippingEnabled,
+    defaultFormSchema,
+    setI18nDetails,
+    handleCountrySearch,
+    getFilteredCountries,
+    selectedCountry,
+    countryDetails,
   } = address;
 
   function backToEdit() {
@@ -64,6 +71,8 @@ function SingleAddress({
         >
           <div className={styles.addressWrapper}>
             <AddressForm
+              internationalShipping={isInternationalShippingEnabled}
+              formSchema={defaultFormSchema}
               isNewAddress={isNewAddress}
               addressItem={addressItem}
               onUpdateAddress={updateAddress}
@@ -72,6 +81,11 @@ function SingleAddress({
               showGoogleMap={showGoogleMap}
               openModal={openModal}
               onGetLocality={getLocality}
+              setI18nDetails={setI18nDetails}
+              handleCountrySearch={handleCountrySearch}
+              getFilteredCountries={getFilteredCountries}
+              selectedCountry={selectedCountry?.display_name ?? ""}
+              countryDetails={countryDetails}
             ></AddressForm>
           </div>
         </Modal>
