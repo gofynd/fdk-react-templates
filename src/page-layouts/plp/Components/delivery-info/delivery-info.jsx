@@ -7,7 +7,6 @@ import FyInput from "../../../../components/core/fy-input/fy-input";
 
 function DeliveryInfo({
   selectPincodeError,
-  storeInfo,
   tat,
   pincode,
   pincodeErrorMessage,
@@ -35,7 +34,6 @@ function DeliveryInfo({
     const value = event?.target?.value;
     if (numberRegex.test(Number(value))) {
       setPostCode(value);
-      setCurrentPincode(value);
       setTatMessage("");
       setPincodeErrorMessage("");
       setPincodeChecked(false);
@@ -68,8 +66,6 @@ function DeliveryInfo({
   const handleDeliveryAction = async () => {
     if (pincodeChecked) {
       setPincodeChecked(false);
-      console.log({ pincodeInputRef });
-      setCurrentPincode("");
       setPostCode("");
       setTatMessage("");
       setPincodeErrorMessage("");
@@ -86,58 +82,62 @@ function DeliveryInfo({
   }, [pincodeChecked]);
 
   return (
-    <div className={styles.deliveryInfo}>
-      <h4 className={`${styles.deliveryLabel} b2`}>Select delivery location</h4>
-      <div className={styles.delivery}>
-        <FyInput
-          ref={pincodeInputRef}
-          autoComplete="off"
-          value={postCode}
-          placeholder="Please enter pincode"
-          inputClassName={styles.pincodeInput}
-          containerClassName={styles.pincodeInputContainer}
-          maxLength="6"
-          onChange={changePostCode}
-          inputVariant="no-border"
-          disabled={pincodeChecked}
-          type="text"
-        />
-        <FyButton
-          variant="text"
-          className={styles.deliveryAction}
-          onClick={handleDeliveryAction}
-          disabled={!pincodeChecked && postCode?.length !== 6}
-          endIcon={
-            <SvgWrapper svgSrc="delivery" className={styles.deliveryIcon} />
-          }
-        >
-          {pincodeChecked ? "CHANGE" : "CHECK"}
-        </FyButton>
+    !pincode && (
+      <div className={styles.deliveryInfo}>
+        <h4 className={`${styles.deliveryLabel} b2`}>
+          Select delivery location
+        </h4>
+        <div className={styles.delivery}>
+          <FyInput
+            ref={pincodeInputRef}
+            autoComplete="off"
+            value={postCode}
+            placeholder="Check delivery time"
+            inputClassName={styles.pincodeInput}
+            containerClassName={styles.pincodeInputContainer}
+            maxLength="6"
+            onChange={changePostCode}
+            inputVariant="no-border"
+            disabled={pincodeChecked}
+            type="text"
+          />
+          <FyButton
+            variant="text"
+            className={styles.deliveryAction}
+            onClick={handleDeliveryAction}
+            disabled={!pincodeChecked && postCode?.length !== 6}
+            endIcon={
+              <SvgWrapper svgSrc="delivery" className={styles.deliveryIcon} />
+            }
+          >
+            {pincodeChecked ? "CHANGE" : "CHECK"}
+          </FyButton>
+        </div>
+        {selectPincodeError && !pincodeErrorMessage?.length && (
+          <div className={`${styles.captionNormal} ${styles.emptyPincode}`}>
+            Please enter valid pincode before Add to cart/ Buy now
+          </div>
+        )}
+        {!pincodeErrorMessage && !selectPincodeError && (
+          <div className={`${styles.deliveryDate} ${styles.dateInfoContainer}`}>
+            {postCode?.length === 6 && tatMessage?.length > 0 && (
+              <>
+                <SvgWrapper
+                  svgSrc="delivery"
+                  className={`${styles.deliveryIcon}`}
+                />
+                <p className={`${styles.captionNormal}`}>{tatMessage}</p>
+              </>
+            )}
+          </div>
+        )}
+        {pincodeErrorMessage && (
+          <div className={`${styles.captionNormal} ${styles.error}`}>
+            {pincodeErrorMessage}
+          </div>
+        )}
       </div>
-      {selectPincodeError && !pincodeErrorMessage?.length && (
-        <div className={`${styles.captionNormal} ${styles.emptyPincode}`}>
-          Please enter valid pincode before Add to cart/ Buy now
-        </div>
-      )}
-      {!pincodeErrorMessage && !selectPincodeError && (
-        <div className={styles.deliveryDate}>
-          {postCode?.length === 6 && tatMessage?.length > 0 && (
-            <>
-              <SvgWrapper
-                svgSrc="delivery"
-                className={`${styles.deliveryIcon}`}
-              />
-              <p className={`${styles.captionNormal}`}>{tatMessage}</p>
-            </>
-          )}
-        </div>
-      )}
-      {pincodeErrorMessage && (
-        <div className={`${styles.captionNormal} ${styles.error}`}>
-          {pincodeErrorMessage}
-        </div>
-      )}
-    </div>
+    )
   );
 }
 

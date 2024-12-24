@@ -65,31 +65,6 @@
 .share-cart__animation-fade___eTGOR.share-cart__animate___tEovg {
   opacity: 1 !important;
 }
-.share-cart__full-width-section___kB4Lt {
-  width: 100%;
-  max-width: 100%;
-  background-color: transparent;
-  margin: 0 auto;
-  padding: 0;
-  position: relative;
-}
-.share-cart__section-main-container___DK78Y {
-  max-width: 1440px;
-  background-color: transparent;
-  position: relative;
-  margin: 0 auto;
-  padding: 60px 0 0 0;
-}
-@media only screen and (max-width: 768px) {
-  .share-cart__section-main-container___DK78Y {
-    padding: 48px 15px 0 15px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .share-cart__section-main-container___DK78Y {
-    padding: 24px 8px 0 8px;
-  }
-}
 /**color by character**/
 /** Font family **/
 /** Font weight **/
@@ -608,31 +583,6 @@ img::selection {
 .share-cart-modal__animation-fade___VDe8T.share-cart-modal__animate___Y57DB {
   opacity: 1 !important;
 }
-.share-cart-modal__full-width-section___kDp8T {
-  width: 100%;
-  max-width: 100%;
-  background-color: transparent;
-  margin: 0 auto;
-  padding: 0;
-  position: relative;
-}
-.share-cart-modal__section-main-container___l_9da {
-  max-width: 1440px;
-  background-color: transparent;
-  position: relative;
-  margin: 0 auto;
-  padding: 60px 0 0 0;
-}
-@media only screen and (max-width: 768px) {
-  .share-cart-modal__section-main-container___l_9da {
-    padding: 48px 15px 0 15px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .share-cart-modal__section-main-container___l_9da {
-    padding: 24px 8px 0 8px;
-  }
-}
 /**color by character**/
 /** Font family **/
 /** Font weight **/
@@ -1128,7 +1078,7 @@ img::selection {
   z-index: 2000;
   height: 2em;
   width: 2em;
-  overflow: show;
+  overflow: visible;
   margin: auto;
   top: 0;
   left: 0;
