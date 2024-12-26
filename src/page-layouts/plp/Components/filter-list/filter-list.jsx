@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import * as styles from "./filter-list.less";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
@@ -117,7 +117,6 @@ function FilterList({
         .replace("{}", maxValue),
     };
     onFilterUpdate({ filter, item });
-    // rangeClick(value, filter.key.name, minValue, maxValue);
   };
 
   const isFilterSelected = (filterItem) =>
@@ -233,14 +232,10 @@ function FilterList({
                 max={value.max}
                 selectedMin={value?.selected_min}
                 selectedMax={value?.selected_max}
-                // prefix={value?.currency_symbol || ""}
                 onSliderUpdate={(e) =>
                   handleSliderUpdate({ ...e, value, filter })
                 }
                 currencySymbol={value?.currency_symbol || ""}
-                // value={value}
-                // prefix={extractPrefix(value.display_format)}
-                // postfix={extractSuffix(value.display_format)}
               />
             ))}
           </div>
@@ -334,7 +329,6 @@ function FilterList({
                     key={`${alphabet}${filterItem.value}`}
                     className={styles.filter}
                   >
-                    {/* @ts-ignore */}
                     <fdk-link link={filterItem.url}>
                       <div
                         className={`${styles["filter__item"]} ${styles.flexAlignCenter} ${styles["caption-normal"]}`}
@@ -365,7 +359,6 @@ function FilterList({
                           ({filterItem.count || 0})
                         </div>
                       </div>
-                      {/* @ts-ignore */}
                     </fdk-link>
                   </li>
                 ))}
