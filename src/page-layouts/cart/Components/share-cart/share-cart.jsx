@@ -6,7 +6,7 @@ import ShareCartModal from "../share-cart-modal/share-cart-modal";
 function ShareCart({
   showCard = false,
   qrCode = "",
-  isShareLoading = true,
+  isShareLoading = false,
   onCopyToClipboardClick = () => {},
   onFacebookShareClick = () => {},
   onTwitterShareClick = () => {},

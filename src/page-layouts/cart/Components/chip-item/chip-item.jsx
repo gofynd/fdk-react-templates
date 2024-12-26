@@ -12,6 +12,7 @@ export default function ChipItem({
   singleItemDetails,
   onUpdateCartItems,
   currentSize,
+  isDeliveryPromise = true,
   productImage,
   itemIndex,
   sizeModalItemValue,
@@ -54,6 +55,12 @@ export default function ChipItem({
     isSizeUpdate = false
   ) => {
     let totalQuantity = (itemDetails?.quantity || 0) + quantity;
+
+    if (operation === "edit_item") {
+      totalQuantity = quantity;
+      operation = "update_item";
+    }
+
     if (!itemDetails?.custom_order?.is_custom_order && !isSizeUpdate) {
       if (totalQuantity > maxCartQuantity) {
         totalQuantity = maxCartQuantity;
@@ -221,6 +228,18 @@ export default function ChipItem({
                         "update_item"
                       )
                     }
+                    onQtyChange={(evt, currentNum) =>
+                      cartUpdateHandler(
+                        evt,
+                        singleItemDetails,
+                        currentSize,
+                        currentNum,
+                        itemIndex,
+                        "edit_item"
+                      )
+                    }
+                    maxCartQuantity={maxCartQuantity}
+                    minCartQuantity={minCartQuantity}
                   />
                 )}
                 {isOutOfStock && (
@@ -255,16 +274,24 @@ export default function ChipItem({
                   }`}
                 >
                   {currencyFormat(
-                    numberWithCommas(singleItemDetails?.price?.base?.effective),
-                    singleItemDetails?.price?.base?.currency_symbol
+                    numberWithCommas(
+                      singleItemDetails?.price?.converted?.effective ??
+                        singleItemDetails?.price?.base?.effective
+                    ),
+                    singleItemDetails?.price?.converted?.currency_symbol ??
+                      singleItemDetails?.price?.base?.currency_symbol
                   )}
                 </span>
-                {singleItemDetails?.price?.base?.effective <
-                  singleItemDetails?.price?.base?.marked && (
+                {singleItemDetails?.price?.converted?.effective <
+                  singleItemDetails?.price?.converted?.marked && (
                   <span className={styles.markedPrice}>
                     {currencyFormat(
-                      numberWithCommas(singleItemDetails?.price?.base?.marked),
-                      singleItemDetails?.price?.base?.currency_symbol
+                      numberWithCommas(
+                        singleItemDetails?.price?.converted?.marked ??
+                          singleItemDetails?.price?.base?.marked
+                      ),
+                      singleItemDetails?.price?.converted?.currency_symbol ??
+                        singleItemDetails?.price?.base?.currency_symbol
                     )}
                   </span>
                 )}
@@ -272,7 +299,8 @@ export default function ChipItem({
                   {singleItemDetails?.discount}
                 </span>
               </div>
-              {!isOutOfStock &&
+              {isDeliveryPromise &&
+                !isOutOfStock &&
                 isServiceable &&
                 singleItemDetails?.delivery_promise?.formatted?.max && (
                   <div className={styles.deliveryDateWrapper}>
