@@ -1,5 +1,5 @@
 import React, { useState, useId, useEffect } from "react";
-import { useForm, Controller, useWatch } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { checkIfNumber } from "../../../../helper/utils";
 import * as styles from "./login-password.less";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
@@ -57,28 +57,12 @@ function loginPassword({
       clearErrors("root");
     }
   }, [error]);
-  // const onNumberInput = (data) => {
-  //   setUsername(data.mobile);
-  //   setCountryCode(data.countryCode);
-  //   if (!checkIfNumber(username)) {
-  //     setShowInputNumber(false);
-  //   }
-  // };
-  // const [username, phone] = useWatch({
-  //   control,
-  //   name: ["username", "phone"],
-  // });
-  // console.log({ phone, username });
-  useEffect(() => {
-    // console.log("useEffect", { phone, username });
 
+  useEffect(() => {
     if (checkIfNumber(watch("username"))) {
       setValue("phone.mobile", watch("username"));
       setShowInputNumber(true);
     }
-    // if (!phone.mobile) {
-    //   setShowInputNumber(false);
-    // }
   }, [watch("username")]);
 
   const handleFormSubmit = ({ username, phone, password }) => {
@@ -182,8 +166,6 @@ function loginPassword({
       {errors?.root && (
         <div className={styles.loginAlert}>{errors?.root?.message}</div>
       )}
-
-      {/* Extension slot: above_login_button */}
 
       <button className={styles.loginButton} type="submit" disabled={!isValid}>
         {loginButtonText}

@@ -18,7 +18,7 @@ import {
   convertUTCDateToLocalDate,
 } from "../../helper/utils";
 
-function MemoizedSlide({ blog, index, sliderProps }) {
+function MemoizedSlide({ blog, index, sliderProps, getBlogTitle }) {
   const getFormattedDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
     return isRunningOnClient()
@@ -48,7 +48,12 @@ function MemoizedSlide({ blog, index, sliderProps }) {
             {getFormattedDate(blog?.publish_date)}
           </span>
         </div>
-        <h1 className={`${styles.blogItem__title}`}>{blog?.title}</h1>
+        <h1 className={`${styles.blogItem__title} ${styles.titleMobile}`}>
+          {getBlogTitle(blog?.title)}
+        </h1>
+        <h1 className={`${styles.blogItem__title} ${styles.titleDesktop}`}>
+          {blog?.title}
+        </h1>
         {blog?.summary && (
           <p className={`${styles.blogItem__content}`}>{blog?.summary}</p>
         )}
@@ -103,6 +108,7 @@ function BlogList({
     autoplay: false,
     pauseOnHover: true,
     cssEase: "linear",
+    centerPadding: "75px",
     arrows: false,
     nextArrow: <SvgWrapper svgSrc="arrow-right" />,
     prevArrow: <SvgWrapper svgSrc="arrow-left" />,
@@ -232,7 +238,7 @@ function BlogList({
   const escapeRegExp = (str) => str.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
   const getBlogTitle = (title) => {
     const blogTitle =
-      title?.length > 50 ? `${title.slice(0, 50).trim()}...` : title;
+      title?.length > 45 ? `${title.slice(0, 45).trim()}...` : title;
     const pattern = new RegExp(`(${escapeRegExp(searchText)})`, "i");
 
     if (searchText) {
@@ -257,7 +263,6 @@ function BlogList({
           tagObj[tagKey] = {
             key: tagKey,
             display: tag,
-            // isSelected: false,
             pretext: "tag",
           };
         }
@@ -357,6 +362,7 @@ function BlogList({
                   key={index}
                   blog={blog}
                   index={index}
+                  getBlogTitle={getBlogTitle}
                   sliderProps={sliderProps}
                 />
               ))}
@@ -419,7 +425,7 @@ function BlogList({
                 <div>Filtering by:</div>
               )}
               {sliderProps?.show_filters &&
-                [...blogFilter].map((filter, index) => (
+                [...blogFilter].map((filter) => (
                   <div className={`${styles.filterItem}`} key={filter?.key}>
                     <span>{`${filter?.pretext}: ${filter?.display}`}</span>
                     <SvgWrapper

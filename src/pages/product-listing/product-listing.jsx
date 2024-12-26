@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "../../styles/product-listing.less";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
@@ -81,8 +81,27 @@ const ProductListing = ({
     handleCloseSizeGuide,
     ...restAddToModalProps
   } = addToCartModalProps;
+
+  const [topPosition, setTopPosition] = useState(null);
+  const plpWrapperRef = useRef(null);
+
+  useEffect(() => {
+    const rect = plpWrapperRef.current.getBoundingClientRect();
+    const top = rect.top + window.scrollY;
+    setTopPosition(top);
+  }, []);
+
+  const wrapperStyle = useMemo(() => {
+    if (!topPosition) {
+      return {};
+    }
+    return {
+      "--topPosition": `${topPosition}px`,
+    };
+  }, [topPosition]);
+
   return (
-    <div className={styles.plpWrapper}>
+    <div className={styles.plpWrapper} ref={plpWrapperRef} style={wrapperStyle}>
       {isRunningOnClient() && isPageLoading ? (
         <div className={styles.loader}>
           <Loader
@@ -365,10 +384,10 @@ const ProductListing = ({
           {isScrollTop && <ScrollTop />}
           {showAddToCart && (
             <>
-              {" "}
               <Modal
                 isOpen={isAddToCartOpen}
                 hideHeader={!isTablet}
+                bodyClassName={styles.addToCartBody}
                 title={
                   isTablet
                     ? restAddToModalProps?.productData?.product?.name
@@ -428,14 +447,13 @@ function ProductGrid({
       }}
     >
       {productList?.length > 0 &&
-        productList.map((product, index) => (
+        productList.map((product) => (
           <FDKLink
             className={styles["product-wrapper"]}
             to={`/product/${product?.slug}`}
             key={product?.uid}
             target={isProductOpenInNewTab ? "_blank" : "_self"}
             style={{
-              "--delay": `${(index % 12) * 150}ms`,
               display: "block",
             }}
           >
