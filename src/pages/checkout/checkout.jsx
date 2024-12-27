@@ -18,6 +18,8 @@ function Checkout({
   setShowPayment,
   mapApiKey,
   showGoogleMap,
+  isHyperlocal = false,
+  convertHyperlocalTat = () => {},
   loader,
 }) {
   return (
@@ -40,6 +42,8 @@ function Checkout({
           showPayment={showPayment}
           setShowShipment={setShowShipment}
           setShowPayment={setShowPayment}
+          isHyperlocal={isHyperlocal}
+          convertHyperlocalTat={convertHyperlocalTat}
           loader={loader}
         ></SinglePageShipment>
         <CheckoutPayment

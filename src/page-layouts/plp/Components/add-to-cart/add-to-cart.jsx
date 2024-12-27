@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import * as styles from "./add-to-cart.less";
 import ImageGallery from "../image-gallery/image-gallery";
 import ProductVariants from "../product-variants/product-variants";
@@ -12,12 +12,13 @@ const AddToCart = ({
   isLoading = false,
   productData = {},
   globalConfig = {},
-  pdpPageConfig = {},
+  pageConfig = {},
   slug = "",
   selectedSize = "",
   showSizeDropdown = false,
   deliverInfoProps = {},
   sizeError = false,
+  isHyperlocal = false,
   handleSlugChange = (updatedSlug) => {},
   onSizeSelection = () => {},
   handleShowSizeGuide = () => {},
@@ -30,23 +31,15 @@ const AddToCart = ({
 
   const { button_options, disable_cart, show_price } = globalConfig;
 
-  const { media, name, short_description, variants, sizes, uid, moq, brand } =
-    product;
+  const { media, name, short_description, variants, sizes, brand } = product;
 
   const isMto = product?.custom_order?.is_custom_order || false;
-  const {
-    seller,
-    price_per_piece,
-    delivery_promise,
-    store,
-    article_id,
-    article_assignment,
-  } = productPrice;
+  const { price_per_piece } = productPrice;
 
-  const isSizeSelectionBlock = pdpPageConfig?.size_selection_style === "block";
+  const isSizeSelectionBlock = pageConfig?.size_selection_style === "block";
   const isSingleSize = sizes?.sizes?.length === 1;
-  const isSizeCollapsed = pdpPageConfig?.hide_single_size && isSingleSize;
-  const preSelectFirstOfMany = pdpPageConfig?.preselect_size;
+  const isSizeCollapsed = pageConfig?.hide_single_size && isSingleSize;
+  const preSelectFirstOfMany = pageConfig?.preselect_size;
 
   const images = [
     {
@@ -125,9 +118,9 @@ const AddToCart = ({
                   </div>
                 )}
                 {/* ---------- Product Tax Label ---------- */}
-                {pdpPageConfig?.tax_label && (
+                {pageConfig?.tax_label && (
                   <div className={styles.taxLabel}>
-                    ({pdpPageConfig?.tax_label})
+                    ({pageConfig?.tax_label})
                   </div>
                 )}
 
@@ -154,15 +147,7 @@ const AddToCart = ({
                 {isSizeSelectionBlock && !isSizeCollapsed && (
                   <div className={styles.sizeSelection}>
                     <div className={styles.sizeHeaderContainer}>
-                      <p
-                        className={`${styles.b2} ${styles.sizeSelection__label}`}
-                      >
-                        <span>
-                          Style:{" "}
-                          {Boolean(selectedSize) && `Size (${selectedSize})`}
-                        </span>
-                      </p>
-                      {pdpPageConfig?.show_size_guide &&
+                      {pageConfig?.show_size_guide &&
                         isSizeGuideAvailable() &&
                         sizes?.sellable && (
                           <FyButton
@@ -275,7 +260,7 @@ const AddToCart = ({
                         </OutsideClickHandler>
                       </div>
                     }
-                    {pdpPageConfig?.show_size_guide &&
+                    {pageConfig?.show_size_guide &&
                       isSizeGuideAvailable() &&
                       sizes?.sellable && (
                         <FyButton
@@ -299,7 +284,7 @@ const AddToCart = ({
                     Please select size to continue
                   </div>
                 )}
-                {sizes?.sellable && selectedSize && (
+                {!isHyperlocal && sizes?.sellable && selectedSize && (
                   <DeliveryInfo {...deliverInfoProps} />
                 )}
 
