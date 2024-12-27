@@ -11,7 +11,6 @@ This document provides an overview of all the components available in the projec
 * **[BlogPage](/src/components/blog-page/README.md)**: A template for displaying blog content with proper formatting.
 * **[BlogTabs](/src/components/blog-tabs/README.md)**: Tab navigation specific to blog sections.
 * **[Breadcrumb](/src/components/breadcrumb/README.md)**: A breadcrumb navigation component for enhancing user experience.
-* **[CategoriesFilter](/src/components/categories-filter/README.md)**: A filter component to help users select and view categories.
 * **[ChipReviewItem](/src/components/chip-review-item/README.md)**: Displays individual review items in a chip format.
 * **[FyButton](/src/components/core/fy-button/README.md)**: A customizable button component for various user interactions.
 * **[FyDropdown](/src/components/core/fy-dropdown/README.md)**: A dropdown menu component for selection options.
@@ -33,7 +32,6 @@ This document provides an overview of all the components available in the projec
 * **[Loader](/src/components/loader/README.md)**: A simple loading spinner for indicating background processes.
 * **[OrderHeader](/src/components/order-header/README.md)**: Displays order header at the top of an order page.
 * **[OrderShipment](/src/components/order-shipment/README.md)**: Shows shipment details for orders.
-* **[PageNotFound](/src/components/page-not-found/README.md)**: A 404 page component to display when a page is not found.
 * **[PaymentDetailCard](/src/components/payment-detail-card/README.md)**: Displays detailed payment information in a card format.
 * **[PriceBreakup](/src/components/price-breakup/README.md)**: Presents a breakdown of pricing elements.
 * **[ProductCard](/src/components/product-card/README.md)**: A card component to showcase product details.
@@ -49,3 +47,6 @@ This document provides an overview of all the components available in the projec
 * **[ShipmentTracking](/src/components/shipment-tracking/README.md)**: A component for tracking shipment progress.
 * **[ShipmentsUpdateItem](/src/components/shipments-update-item/README.md)**: An update item component for tracking shipment changes.
 * **[SortModal](/src/components/sort-modal/README.md)**: A modal for sorting options in listings.
+* **[LocationModal](/src/components/location-modal/README.md)**: A modal for selecting location.
+* **[RbiSecureGuideline](/src/components/rbi-guideline/README.md)**: It provides a guideline for securing a credit card through tokenization, explaining its benefits and allowing users to opt-in for card tokenization.
+* **[ShipmentUpdateItem](/src/components/shipments-update-item/README.md)**: It manages the quantity of an item in a shipment.

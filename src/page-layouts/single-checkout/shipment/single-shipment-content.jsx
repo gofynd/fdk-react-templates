@@ -5,7 +5,13 @@ import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./single-shipment-content.less";
 import { FDKLink } from "fdk-core/components";
 
-function SingleShipmentContent({ shipments, showPaymentOptions, loader }) {
+function SingleShipmentContent({
+  shipments,
+  showPaymentOptions,
+  isHyperlocal = false,
+  convertHyperlocalTat = () => {},
+  loader,
+}) {
   const getShipmentItems = (shipment) => {
     let grpBySameSellerAndProduct = shipment?.items?.reduce((result, item) => {
       result[
@@ -82,11 +88,7 @@ function SingleShipmentContent({ shipments, showPaymentOptions, loader }) {
                         <div className={styles.shipmentNumber}>
                           Shipment {index + 1}/{shipments.length}
                         </div>
-                        <div className={styles.itemCount}>
-                          {/* ({item.items.length}{" "} */}
-                          {/* {item.items.length === 1 ? "Item" : "Items"}) */}1
-                          Items
-                        </div>
+                        <div className={styles.itemCount}>1 Items</div>
                       </div>
                       {item?.promise && (
                         <div className={styles.deliveryDateWrapper}>
@@ -95,7 +97,9 @@ function SingleShipmentContent({ shipments, showPaymentOptions, loader }) {
                           </div>
 
                           <div className={styles.deliveryDate}>
-                            Delivery by {item?.promise?.formatted?.max}
+                            {isHyperlocal
+                              ? convertHyperlocalTat(item?.promise?.iso?.max)
+                              : `Delivery by ${item?.promise?.formatted?.max}`}
                           </div>
                         </div>
                       )}

@@ -32,20 +32,6 @@ export const ALL_PROFILE_MENU = [
     link: "/profile/address",
     disabled_cart: false,
   },
-  // {
-  //   key: "card",
-  //   icon: "card",
-  //   display: "My Cards",
-  //   link: "/profile/my-cards",
-  //   disabled_cart: false,
-  // },
-  // {
-  //   key: "reward_points",
-  //   icon: "refernearn",
-  //   display: "Refer and Earn",
-  //   link: "/profile/refer-earn",
-  //   disabled_cart: false,
-  // },
 ];
 
 export const GENDER_OPTIONS = [
