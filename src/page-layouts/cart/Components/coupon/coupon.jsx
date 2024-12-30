@@ -4,7 +4,6 @@ import { currencyFormat, numberWithCommas } from "../../../../helper/utils";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./coupon.less";
 import Modal from "../../../../components/core/modal/modal";
-// import couponSuccessGif from "../../../../assets/images/coupon-success.gif";
 
 function Coupon({
   title = "COUPONS",
@@ -132,9 +131,11 @@ function Coupon({
               </button>
             </form>
             <div>
-              <div className={styles.couponListTitle}>
-                Select from Applicable Coupons
-              </div>
+              {availableCouponList?.length > 0 && (
+                <div className={styles.couponListTitle}>
+                  Select from Applicable Coupons
+                </div>
+              )}
               <div className={styles.couponList}>
                 {availableCouponList?.map((coupon) => (
                   <CouponItem
@@ -212,11 +213,11 @@ function CouponSuccessModal({
           src={couponSuccessGif}
           alt="coupon-success"
         />
-        <span className={styles.couponSuccessIcon}>
+        <div className={styles.couponSuccessIcon}>
           <span>
             <SvgWrapper svgSrc="coupon-success" />
           </span>
-        </span>
+        </div>
         {coupon?.code && coupon?.is_applied && (
           <div className={styles.modalBody}>
             <div>

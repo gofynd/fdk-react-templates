@@ -8,13 +8,11 @@
  * @returns {JSX.Element} A JSX element that renders the shipment breakup details.
  */
 
-import React, { useState } from "react";
+import React from "react";
 import * as styles from "./shipment-breakup.less";
 import { priceFormatCurrencySymbol } from "../../helper/utils";
 
-function ShipmentBreakup({ breakup, shipmentInfo }) {
-  const [type, setType] = useState("my-orders");
-
+function ShipmentBreakup({ breakup }) {
   const getPriceFormat = (symbol, price) => {
     return priceFormatCurrencySymbol(symbol, price);
   };
@@ -60,26 +58,6 @@ function ShipmentBreakup({ breakup, shipmentInfo }) {
             )}
           </div>
         ))}
-        {/* {isLoggedIn && type !== "tracking" && (
-          <div className={`${styles.paymentDetails}`}>
-            {shipmentInfo?.payment && (
-              <div className={`${styles.paymentLogo} `}>
-                <img
-                  src={shipmentInfo.payment.logo}
-                  alt={shipmentInfo.payment.display_name}
-                />
-              </div>
-            )}
-            {shipmentInfo?.payment?.display_name && (
-              <div>{shipmentInfo?.payment?.display_name}</div>
-            )}
-            {shipmentInfo?.payment?.status && (
-              <div className={`${styles.rightAlign} `}>
-                {shipmentInfo?.payment?.status}
-              </div>
-            )}
-          </div>
-        )} */}
       </>
     </div>
   );
