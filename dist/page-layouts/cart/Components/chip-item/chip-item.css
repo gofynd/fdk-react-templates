@@ -65,31 +65,6 @@
 .chip-item__animation-fade___Litu7.chip-item__animate___XhDVM {
   opacity: 1 !important;
 }
-.chip-item__full-width-section___QivPW {
-  width: 100%;
-  max-width: 100%;
-  background-color: transparent;
-  margin: 0 auto;
-  padding: 0;
-  position: relative;
-}
-.chip-item__section-main-container___cnCaf {
-  max-width: 1440px;
-  background-color: transparent;
-  position: relative;
-  margin: 0 auto;
-  padding: 60px 0 0 0;
-}
-@media only screen and (max-width: 768px) {
-  .chip-item__section-main-container___cnCaf {
-    padding: 48px 15px 0 15px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .chip-item__section-main-container___cnCaf {
-    padding: 24px 8px 0 8px;
-  }
-}
 /**color by character**/
 /** Font family **/
 /** Font weight **/
@@ -974,6 +949,9 @@ img::selection {
   border-radius: 4px;
   max-width: 350px;
 }
+.chip-item__chipModal___mGKto {
+  transform: none !important;
+}
 
 .quantity-control__slide-fade-enter-active___ITjLF,
 .quantity-control__slide-fade-leave-active___r6rze {
@@ -1041,31 +1019,6 @@ img::selection {
 }
 .quantity-control__animation-fade___G0Trn.quantity-control__animate___EHnUt {
   opacity: 1 !important;
-}
-.quantity-control__full-width-section___OYoec {
-  width: 100%;
-  max-width: 100%;
-  background-color: transparent;
-  margin: 0 auto;
-  padding: 0;
-  position: relative;
-}
-.quantity-control__section-main-container___ttfDj {
-  max-width: 1440px;
-  background-color: transparent;
-  position: relative;
-  margin: 0 auto;
-  padding: 60px 0 0 0;
-}
-@media only screen and (max-width: 768px) {
-  .quantity-control__section-main-container___ttfDj {
-    padding: 48px 15px 0 15px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .quantity-control__section-main-container___ttfDj {
-    padding: 24px 8px 0 8px;
-  }
 }
 /**color by character**/
 /** Font family **/
@@ -1518,6 +1471,16 @@ img::selection {
     width: 30px;
   }
 }
+.quantity-control__quantityCtrlContainer___RPVmM .quantity-control__count___JvxLy .quantity-control__qtyInput___PHHcG {
+  border: none;
+  background: none;
+  color: inherit;
+  width: 100%;
+  text-align: center;
+}
+.quantity-control__quantityCtrlContainer___RPVmM .quantity-control__count___JvxLy .quantity-control__qtyInput___PHHcG:focus {
+  outline: none;
+}
 
 .modal__slide-fade-enter-active___l7432,
 .modal__slide-fade-leave-active___M0PHr {
@@ -1585,31 +1548,6 @@ img::selection {
 }
 .modal__animation-fade___GCTZ0.modal__animate___DtfuY {
   opacity: 1 !important;
-}
-.modal__full-width-section___m_u6S {
-  width: 100%;
-  max-width: 100%;
-  background-color: transparent;
-  margin: 0 auto;
-  padding: 0;
-  position: relative;
-}
-.modal__section-main-container___jsNGW {
-  max-width: 1440px;
-  background-color: transparent;
-  position: relative;
-  margin: 0 auto;
-  padding: 60px 0 0 0;
-}
-@media only screen and (max-width: 768px) {
-  .modal__section-main-container___jsNGW {
-    padding: 48px 15px 0 15px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .modal__section-main-container___jsNGW {
-    padding: 24px 8px 0 8px;
-  }
 }
 /**color by character**/
 /** Font family **/
