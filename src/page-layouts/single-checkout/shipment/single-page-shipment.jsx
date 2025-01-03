@@ -11,6 +11,8 @@ function SinglePageShipment({
   showPaymentOptions,
   showShipment,
   showPayment,
+  isHyperlocal = false,
+  convertHyperlocalTat = () => {},
   loader,
 }) {
   const navigate = useNavigate();
@@ -55,6 +57,8 @@ function SinglePageShipment({
           <SingleShipmentContent
             shipments={shipments}
             showPaymentOptions={showPaymentOptions}
+            isHyperlocal={isHyperlocal}
+            convertHyperlocalTat={convertHyperlocalTat}
             loader={loader}
           ></SingleShipmentContent>
         </>
