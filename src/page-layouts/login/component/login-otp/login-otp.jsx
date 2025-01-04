@@ -37,8 +37,12 @@ function LoginOtp({
             name="phone"
             control={control}
             rules={{
-              validate: (value) =>
-                value.isValidNumber || "Please enter valid phone number",
+              validate: (value) => {
+                if (value?.mobile && !value.isValidNumber) {
+                  return "Please enter valid phone number";
+                }
+                return true;
+              },
             }}
             render={({ field, fieldState: { error } }) => (
               <MobileNumber
@@ -129,11 +133,11 @@ function OtpForm({
         <input
           id={otpInputId}
           type="text"
-          inputMode="numeric" // Tells the browser to show a numeric keyboard on mobile
-          pattern="\d*" // Allows digits only
-          maxLength={4} // Limit the input to 4 characters
+          inputMode="numeric"
+          pattern="\d*"
+          maxLength={4}
           onInput={(e) => {
-            e.target.value = e.target.value.replace(/[^0-9]/g, "").slice(0, 4); // Only digits, max length 4
+            e.target.value = e.target.value.replace(/[^0-9]/g, "").slice(0, 4);
           }}
           className={styles.otpInput}
           {...register("mobileOtp", {

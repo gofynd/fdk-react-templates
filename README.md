@@ -35,7 +35,7 @@ FDK React Templates is a React component library designed specifically for Fynd 
     ````
 2. Use in your Component 
     ```jsx
-    import ProductListing from "fdk-react-templates/Astra/pages/product-listing/product-listing.js";
+    import ProductListing from "fdk-react-templates/pages/product-listing/product-listing";
     ````
 
 ### Installation Steps For development 
@@ -133,12 +133,23 @@ Various loaders are configured to handle different types of files:
 Certain libraries are treated as external dependencies to reduce the bundle size So make sure to add them in your package.json:
 ```javascript
 externals: {
-    react: "react",
-    "react-router-dom": "react-router-dom",
+    'react': 'react',
+    'react-router-dom': 'react-router-dom',
     'fdk-core/components': 'fdk-core/components',
     'fdk-core/utils': 'fdk-core/utils',
     'awesome-snackbar': 'awesome-snackbar',
-    'react-outside-click-handler': 'react-outside-click-handler'
+    'react-outside-click-handler': 'react-outside-click-handler',
+    'react-hook-form': 'react-hook-form',
+    'react-range-slider-input': 'react-range-slider-input',
+    'imask': 'imask',
+    'card-validator': 'card-validator',
+    '@react-google-maps/api': '@react-google-maps/api',
+    'react-google-autocomplete': 'react-google-autocomplete',
+    'framer-motion': 'framer-motion',
+    'html-react-parser': 'html-react-parser',
+    'google-libphonenumber': 'google-libphonenumber',
+    'react-international-phone': 'react-international-phone',
+    '@emotion/is-prop-valid': '@emotion/is-prop-valid'
 }
 ```
 
@@ -170,80 +181,6 @@ The **[Pages](src/pages/README.md)** includes a variety of pre-built page templa
 ## Components
 
 The **[Components](src/components/README.md)** offers a collection of reusable UI components that can be integrated into any React application. These components are designed to be flexible and easy to use, promoting consistency across your project.
-
-## Global Configuration
-
-The following table provides a detailed overview of all **Global Configurations** available for this component. These configurations allow for customization of typography, header, footer, product cards, and other storefront design elements. The settings are grouped into categories for easy reference and can be modified via the Fynd Platform. 
-
-| **Configuration**        | **Type**         | **Default Value**          | **Category**                 | **Description**                                                                                       |
-|---------------------------|------------------|----------------------------|------------------------------|-------------------------------------------------------------------------------------------------------|
-| `font_header`            | `font`          | `false`                    | Typography                  | Defines the font styling for header elements across the site.                                         |
-| `font_body`              | `font`          | `false`                    | Typography                  | Defines the font styling for body text content.                                                       |
-| `header_layout`          | `select`        | `"single"`                 | Header                      | Configures the layout of the header. Options include: **Single Row Navigation** and **Double Row Navigation**. |
-| `logo_menu_alignment`    | `select`        | `"layout_1"`               | Header                      | Determines the alignment of the logo and menu on desktop. Options include: logo left/menu center, menu left, or menu right. |
-| `header_mega_menu`       | `checkbox`      | `false`                    | Header                      | Enables the mega menu layout for navigation. This option is applicable only when the header layout is set to **Double Row Navigation**. |
-| `extension`              | `extension`     | `{}`                       | Header                      | Allows you to add and manage extensions in specific positions within the header, such as before or after header icons. |
-| `is_hyperlocal`          | `checkbox`      | `false`                    | Header                      | Activates hyperlocal functionality to personalize content based on the user's location.               |
-| `is_delivery_minutes`    | `checkbox`      | `false`                    | Header                      | Displays the delivery promise in terms of minutes on applicable pages.                                |
-| `max_delivery_min`       | `text`          | `"60"`                     | Header                      | Specifies the threshold value (in minutes) for displaying the delivery promise.                       |
-| `is_delivery_hours`      | `checkbox`      | `false`                    | Header                      | Displays the delivery promise in terms of hours on applicable pages.                                  |
-| `max_delivery_hours`     | `text`          | `"2"`                      | Header                      | Specifies the threshold value (in hours) for displaying the delivery promise.                         |
-| `is_delivery_day`        | `checkbox`      | `false`                    | Header                      | Shows delivery promise as a simple **Today/Tomorrow** format.                                         |
-| `is_delivery_date`       | `checkbox`      | `false`                    | Header                      | Displays delivery promise as a date range. Useful for deliveries expected over multiple days.         |
-| `logo`                   | `image_picker`  | `""`                       | Footer                      | Allows uploading a custom logo for display in the footer.                                             |
-| `footer_description`     | `text`          | `""`                       | Footer                      | Adds a text description in the footer area, typically used for branding or additional information.    |
-| `payments_logo`          | `image_picker`  | `""`                       | Footer                      | Allows adding an image in the footer to showcase payment options or any relevant footer image.        |
-| `footer_image`           | `checkbox`      | `false`                    | Footer                      | Enables an image to be displayed within the footer section.                                           |
-| `footer_image_desktop`   | `image_picker`  | `""`                       | Footer                      | Specifies an image to display in the footer for desktop devices.                                      |
-| `footer_image_mobile`    | `image_picker`  | `""`                       | Footer                      | Specifies an image to display in the footer for mobile and tablet devices.                            |
-| `disable_cart`           | `checkbox`      | `false`                    | Cart & Button Configuration | Disables the shopping cart and checkout functionality across the site.                                |
-| `show_price`             | `checkbox`      | `true`                     | Cart & Button Configuration | Toggles the visibility of product prices on Product Cards, Product Details Pages (PDP), and Featured Product sections. |
-| `button_options`         | `select`        | `"addtocart_buynow"`       | Cart & Button Configuration | Configures the available options for product action buttons. Options include combinations of Add to Cart, Buy Now, or custom buttons. |
-| `custom_button_text`     | `text`          | `"Enquire now"`            | Cart & Button Configuration | Specifies the text to display on a custom button for specific product actions.                        |
-| `custom_button_link`     | `url`           | `""`                       | Cart & Button Configuration | Adds a URL that the custom button will redirect to when clicked.                                      |
-| `custom_button_icon`     | `image_picker`  | `""`                       | Cart & Button Configuration | Allows uploading an icon for the custom button, applicable to Product Details Pages (PDP) and Featured Product sections. |
-| `product_img_width`      | `text`          | `""`                       | Product Card Configuration   | Configures the width of product card images. Applicable to product listing, detail, and featured sections. |
-| `product_img_height`     | `text`          | `""`                       | Product Card Configuration   | Configures the height of product card images, maintaining their aspect ratio.                         |
-| `show_sale_badge`        | `checkbox`      | `true`                     | Product Card Configuration   | Displays a **Sale** badge on discounted products.                                                     |
-| `image_border_radius`    | `range`         | `24`                       | Product Card Configuration   | Sets the corner radius for product images, enhancing the visual style.                                |
-| `img_fill`               | `checkbox`      | `false`                    | Product Card Configuration   | Ensures the image fully fits its container by clipping parts of the image if necessary.               |
-| `img_container_bg`       | `color`         | `""`                       | Product Card Configuration   | Specifies the background color of image containers for products, collections, and categories.         |
-| `show_image_on_hover`    | `checkbox`      | `false`                    | Product Card Configuration   | Displays an additional image of the product when hovering over the product card.                      |
-| `img_hd`                 | `checkbox`      | `false`                    | Other Page Configuration     | Enhances image quality by upscaling, which may affect page performance. Applicable on the homepage.   |
-| `section_margin_bottom`  | `range`         | `16`                       | Other Page Configuration     | Sets the bottom margin for page sections, useful for spacing adjustments.                             |
-| `button_border_radius`   | `range`         | `4`                        | Other Page Configuration     | Defines the corner radius for buttons, improving their visual style and user experience.                                               |
-
-### Steps to Modify Global Configuration via Fynd Platform
-
-1. **Log in to the Fynd Platform:**
-   - Go to [Fynd Platform](https://platform.fynd.com) and log in with your credentials.
-
-2. **Navigate to Your Company:**
-   - Once logged in, select your compay from the list.
-
-3. **Select the Theme**
-   - In the sidebar, under **Sales Channel**, select your sales channel.
-   - Then, under **Appearance**, click on **Themes**.
-   - In the current theme, click on **Edit**. Here, you can preview and configure the theme.  
-     Here's a sample [theme](https://platform.fynd.com/company/5178/application/668765e1c984016d78222a21/themes/668768e7e21c099a562b5d56/edit).
-
-4. **Locate Global Configuration Section:**
-   - Within the Theme, find the **Settings** section under **Configuration**. This is where the configurations described are accessible.
-
-5. **Modify Configurations:**
-   - Select and update the configurations based on your requirements, such as:
-     - Fonts under **Typography**.
-     - Header layouts under **Header**.
-     - Button styles under **Cart & Button Configuration**.
-
-6. **Preview Changes:**
-   - Preview the updates made to the page in real time to ensure they look and function as expected.
-
-7. **Save and Publish:**
-   - After confirming your changes, click on **Save**. This will publish the updated configurations.
-
-8. **Test Your Storefront:**
-   - Visit your store's live URL to confirm the updates are functioning as expected.
 
 ## Contributing
 
