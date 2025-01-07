@@ -24,6 +24,8 @@ import React, {
   useEffect,
   useMemo,
   useRef,
+  useLayoutEffect,
+  useId,
 } from "react";
 import * as styles from "./fy-dropdown.less";
 import SvgWrapper from "../svgWrapper/SvgWrapper";
@@ -37,9 +39,18 @@ const FyDropdown = ({
   showAsterik = true,
   labelClassName,
   containerClassName,
+  dropdownListClassName,
+  dropdownOptionClassName,
   value,
+  valuePrefix = "",
+  dataKey = "key",
+  valueClassName = "",
+  disabledOptionClassName = "",
+  disabled = false,
+  disabledOptions = [],
   onChange = (value) => {},
 }) => {
+  const id = useId();
   const [selectedValue, setSelectedValue] = useState();
   const [isOpen, setIsOpen] = useState(false);
   const dropdown = useRef(null);
@@ -48,8 +59,8 @@ const FyDropdown = ({
   const [dropdownStyles, setDropdownStyles] = useState({});
 
   useEffect(() => {
-    setSelectedValue(options?.find(({ key }) => key === value));
-  }, [value]);
+    setSelectedValue(options?.find((option) => option?.[dataKey] === value));
+  }, [value, options]);
 
   const customLabelClassName = useMemo(
     () => `${styles.label} ${labelClassName ?? ""}`,
@@ -97,7 +108,7 @@ const FyDropdown = ({
   const handleChange = useCallback(
     (option) => {
       setSelectedValue(option);
-      onChange?.(option?.key);
+      onChange?.(option?.[dataKey]);
       toggleDropdown();
     },
     [toggleDropdown]
@@ -116,12 +127,64 @@ const FyDropdown = ({
       adjustDropdownMenuPosition();
     } else {
       clearEventListeners();
+      setDropdownStyles({});
     }
 
     return () => {
       clearEventListeners();
+      setDropdownStyles({});
     };
   }, [isOpen]);
+
+  useLayoutEffect(() => {
+    let listElement = document?.getElementById?.(id);
+
+    if (!listElement) {
+      listElement = document?.createElement("ul");
+      listElement.id = id;
+      dropdownList.current = listElement;
+      document?.body?.appendChild(listElement);
+    }
+
+    listElement.innerHTML = "";
+
+    options.forEach((option) => {
+      const listItem = document.createElement("li");
+      const disabled = disabledOptions?.includes(option?.[dataKey]);
+      const className = `${styles.dropdownOption} ${option?.[dataKey] === selectedValue?.[dataKey] ? styles.selected : ""} ${disabled ? `${styles.disabled} ${disabledOptionClassName}` : ""} ${dropdownOptionClassName}`;
+      listItem.className = className;
+      listItem.innerHTML = option.display;
+      if (!disabled) {
+        listItem.addEventListener("click", (event) => {
+          event?.stopPropagation();
+          handleChange?.(option);
+        });
+      }
+      listElement.appendChild(listItem);
+    });
+
+    listElement.className = `${styles.dropdownList}  ${isOpen ? styles.open : ""} ${dropdownListClassName}`;
+    Object.keys(dropdownStyles).forEach((key) => {
+      listElement.style[key] = dropdownStyles[key];
+    });
+
+    return () => {
+      if (dropdownList?.current) {
+        document?.body?.removeChild(dropdownList?.current);
+        dropdownList.current = null;
+      }
+    };
+  }, [
+    options,
+    handleChange,
+    dropdownStyles,
+    isOpen,
+    selectedValue,
+    dropdownOptionClassName,
+    dropdownListClassName,
+    disabledOptionClassName,
+    disabledOptions,
+  ]);
 
   return (
     <div className={customContainerClassName}>
@@ -132,7 +195,7 @@ const FyDropdown = ({
         </label>
       )}
       <div
-        className={`${styles.dropdown} ${error ? styles.dropDownError : ""}`}
+        className={`${styles.dropdown} ${error ? styles.dropDownError : ""} ${disabled ? styles.disabled : ""}`}
         ref={dropdown}
       >
         <div
@@ -140,30 +203,16 @@ const FyDropdown = ({
           onClick={toggleDropdown}
           ref={dropdownButton}
         >
-          <span className={styles.selectedValue}>
-            {selectedValue?.display || placeholder}
+          <span className={`${styles.selectedValue} ${valueClassName}`}>
+            {selectedValue?.display
+              ? `${valuePrefix} ${selectedValue?.display}`
+              : placeholder}
           </span>
           <SvgWrapper
             svgSrc="arrow-down"
             className={`${styles.dropdownIcon} ${isOpen ? styles.open : ""}`}
           />
         </div>
-
-        <ul
-          className={`${styles.dropdownList}  ${isOpen ? styles.open : ""}`}
-          ref={dropdownList}
-          style={dropdownStyles}
-        >
-          {options?.map((option) => (
-            <li
-              className={styles.dropdownOption}
-              key={option.key}
-              onClick={() => handleChange(option)}
-            >
-              {option.display}
-            </li>
-          ))}
-        </ul>
       </div>
       {isOpen && (
         <div className={styles.emptyDiv} onClickCapture={toggleDropdown}></div>
