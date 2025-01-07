@@ -65,31 +65,6 @@
 .set-password__animation-fade___PYJdM.set-password__animate___mTsKf {
   opacity: 1 !important;
 }
-.set-password__full-width-section___exPCm {
-  width: 100%;
-  max-width: 100%;
-  background-color: transparent;
-  margin: 0 auto;
-  padding: 0;
-  position: relative;
-}
-.set-password__section-main-container___h01Mg {
-  max-width: 1440px;
-  background-color: transparent;
-  position: relative;
-  margin: 0 auto;
-  padding: 60px 0 0 0;
-}
-@media only screen and (max-width: 768px) {
-  .set-password__section-main-container___h01Mg {
-    padding: 48px 15px 0 15px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .set-password__section-main-container___h01Mg {
-    padding: 24px 8px 0 8px;
-  }
-}
 /**color by character**/
 /** Font family **/
 /** Font weight **/
@@ -495,6 +470,24 @@ img::selection {
 .set-password__setWrapper___fVVhH {
   width: 400px;
   padding: 24px;
+}
+.set-password__setWrapper___fVVhH .set-password__flexItem___yfpnD {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.set-password__setWrapper___fVVhH .set-password__flexItem___yfpnD input {
+  width: 100%;
+  padding-right: 48px;
+}
+.set-password__setWrapper___fVVhH .set-password__flexItem___yfpnD span {
+  position: absolute;
+  right: 16px;
+  width: 20px;
+  height: 20px;
+}
+.set-password__setWrapper___fVVhH .set-password__flexItem___yfpnD span svg > path {
+  fill: var(--textLabel, #7d7676);
 }
 .set-password__setWrapper___fVVhH .set-password__setContentTitle___q1OO9 {
   color: var(--textHeading, #26201a);

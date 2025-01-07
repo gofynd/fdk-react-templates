@@ -65,31 +65,6 @@
 .fy-input__animation-fade___EdIUl.fy-input__animate___OQCWI {
   opacity: 1 !important;
 }
-.fy-input__full-width-section___uVG7y {
-  width: 100%;
-  max-width: 100%;
-  background-color: transparent;
-  margin: 0 auto;
-  padding: 0;
-  position: relative;
-}
-.fy-input__section-main-container___Bl4ui {
-  max-width: 1440px;
-  background-color: transparent;
-  position: relative;
-  margin: 0 auto;
-  padding: 60px 0 0 0;
-}
-@media only screen and (max-width: 768px) {
-  .fy-input__section-main-container___Bl4ui {
-    padding: 48px 15px 0 15px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .fy-input__section-main-container___Bl4ui {
-    padding: 24px 8px 0 8px;
-  }
-}
 /**color by character**/
 /** Font family **/
 /** Font weight **/
@@ -528,6 +503,11 @@ img::selection {
   width: 100%;
   background-color: transparent;
 }
+@media only screen and (max-width: 480px) {
+  .fy-input__fyInput___S4Mtu {
+    font-size: 1rem;
+  }
+}
 .fy-input__fyInput___S4Mtu::placeholder {
   color: var(--textLabel, #7d7676);
   opacity: 0.3;
@@ -568,6 +548,11 @@ img::selection {
   color: var(--textBody, #3c3131);
   font-size: 14px;
   border-radius: 3px;
+}
+@media only screen and (max-width: 480px) {
+  .fy-input__outlined___CEaKm.fy-input__medium___L3QsD {
+    font-size: 16px;
+  }
 }
 .fy-input__outlined___CEaKm.fy-input__medium___L3QsD.fy-input__fyTextArea___uikbN {
   height: auto;
