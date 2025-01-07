@@ -17,14 +17,7 @@
   overflow-y: auto;
   overflow-x: hidden;
   background-color: #00000080;
-  /* transition: transform 0.1s ease-in-out; 
-  transform: translateY(100%); */
 }
-
-/* .modal.slide-in-modal{
-  transform: translateY(0); /* Final state - fully visible */
-/* opacity: 1;
-} */
 
 .modalContainerCss {
   background-color: var(--dialogBackground);
@@ -37,13 +30,15 @@
   bottom: 0;
   right: 0;
   opacity: 0;
-  transition: transform 0.5s ease-in-out; /* Added transition property for animation */
-  transform: translateX(100%); /* Initial state - hidden off the right side */
+  transition: right 0.5s ease-in-out; /* Added transition property for animation */
+  right: -40%; /* Initial state - hidden off the right side */
   @media @tablet {
     width: 60%;
+    right: -60%; /* Initial state - hidden off the right side */
   }
   @media @mobile {
     width: 100%;
+    right: -100%; /* Initial state - hidden off the right side */
   }
   &::-webkit-scrollbar {
     width: 5px;
@@ -98,7 +93,7 @@
 }
 
 .modalContainerCss.slideIn {
-  transform: translateX(0); /* Final state - fully visible */
+  right: 0; /* Final state - fully visible */
   opacity: 1;
 }
 
