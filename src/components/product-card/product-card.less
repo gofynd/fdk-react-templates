@@ -105,7 +105,17 @@
     gap: 12px;
     flex: 1;
 
+    @media @mobile {
+      flex-direction: column;
+      gap: 8px;
+    }
+
     .productDesc {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
       .productBrand {
         margin-bottom: 4px;
         .text-line-clamp();
@@ -116,7 +126,7 @@
       }
       .productName {
         margin-bottom: 4px;
-        .text-line-clamp();
+        .text-line-clamp(3);
         color: @TextHeading;
 
         &.centerAlign {
@@ -203,10 +213,6 @@
   }
   @media @mobile {
     &.mob-grid-1-card {
-      .addToCart {
-        width: 104px;
-      }
-
       .imageContainer {
         .wishlistBtn {
           top: 16px;
@@ -228,9 +234,6 @@
     }
     &.mob-grid-2-card {
       .productDescContainer {
-        flex-direction: column;
-        gap: 8px;
-
         .productDesc {
           .productBrand {
             margin-bottom: 0px;
@@ -389,21 +392,4 @@
     }
   }
   .captionNormal();
-}
-
-.animate {
-  animation: 0.5s ease-in var(--delay, 0ms) fadeSlide;
-  animation-fill-mode: both;
-}
-
-@keyframes fadeSlide {
-  0% {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }

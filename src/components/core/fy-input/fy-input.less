@@ -39,7 +39,9 @@
   box-sizing: border-box;
   width: 100%;
   background-color: transparent;
-
+  @media @mobile {
+    font-size: 1rem;
+  }
   &::placeholder {
     color: @TextLabel;
     opacity: 0.3;
@@ -89,6 +91,9 @@
     color: @TextBody;
     font-size: 14px;
     border-radius: 3px;
+    @media @mobile {
+      font-size: 16px;
+    }
 
     &.fyTextArea {
       height: auto;

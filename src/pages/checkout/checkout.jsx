@@ -4,6 +4,8 @@ import SingleAddress from "../../page-layouts/single-checkout/address/single-add
 import * as styles from "./checkout.less";
 import CheckoutPayment from "../../page-layouts/single-checkout/payment/checkout-payment";
 import PriceBreakup from "../../components/price-breakup/price-breakup";
+import Coupon from "../../page-layouts/cart/Components/coupon/coupon";
+import Comment from "../../page-layouts/cart/Components/comment/comment";
 
 function Checkout({
   breakupValues,
@@ -18,7 +20,11 @@ function Checkout({
   setShowPayment,
   mapApiKey,
   showGoogleMap,
+  isHyperlocal = false,
+  convertHyperlocalTat = () => {},
   loader,
+  cartCouponProps,
+  cartCommentProps,
 }) {
   return (
     <div className={`${styles.mainContainer} fontBody`}>
@@ -40,6 +46,8 @@ function Checkout({
           showPayment={showPayment}
           setShowShipment={setShowShipment}
           setShowPayment={setShowPayment}
+          isHyperlocal={isHyperlocal}
+          convertHyperlocalTat={convertHyperlocalTat}
           loader={loader}
         ></SinglePageShipment>
         <CheckoutPayment
@@ -49,6 +57,8 @@ function Checkout({
         ></CheckoutPayment>
       </div>
       <div className={styles.rightContainer}>
+        <Coupon {...cartCouponProps} />
+        <Comment {...cartCommentProps} />
         <PriceBreakup
           breakUpValues={breakupValues}
           cartItemCount={cartItemsCount}
