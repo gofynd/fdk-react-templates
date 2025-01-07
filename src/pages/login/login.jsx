@@ -1,4 +1,3 @@
-// import FPIClient from 'fdk-store';
 import React from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./login.less";

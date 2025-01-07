@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import * as styles from "./cart.less";
 import { useNavigate } from "react-router-dom";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
@@ -20,7 +20,6 @@ const Cart = ({
   cartItems,
   cartItemsWithActualIndex,
   breakUpValues,
-  cartItemCount,
   isAnonymous,
   isValid,
   isNotServicable,

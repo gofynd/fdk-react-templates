@@ -25,6 +25,9 @@
   }
 
   .formInputBox {
+    &.otherInput {
+      width: 45%;
+    }
     font-size: 0.8rem;
     outline: none;
     border: 1px solid var(--dividerStokes);
@@ -99,9 +102,12 @@
     display: flex;
     flex-wrap: wrap;
     box-sizing: border-box;
-    width: 100%;
+    width: 90%;
     justify-content: space-between;
 
+    @media @mobile {
+      width: 100%;
+    }
     .formError {
       padding: 5px 0 7px;
       margin-bottom: 7px;
@@ -121,6 +127,13 @@
         margin-right: 0;
       }
     }
+  }
+
+  .customClass {
+    display: flex;
+    flex: 0 0 45%;
+    flex-direction: column;
+    position: relative;
   }
 
   .addressTypeContainer {
@@ -243,4 +256,86 @@
   font-weight: 600;
   font-size: 12px;
   margin-top: 24px;
+}
+
+.container {
+  position: relative;
+
+  .trigger {
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 12px;
+    font-weight: 400;
+  }
+
+  .dropdown {
+    margin: 5px 0;
+    width: 100%;
+    padding: 3px;
+  }
+
+  .saveButton {
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+    width: 100%;
+  }
+  .dropdownInput {
+    position: relative;
+  }
+  .customDropdown {
+    position: relative;
+  }
+
+  .dropdownTrigger {
+    width: 100%;
+    border-bottom: 1px solid #dcdcdc;
+  }
+  .dropdownIcon {
+    margin-top: 10px;
+    position: absolute;
+    right: 2px;
+    top: 0;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #333;
+    margin-left: 5px;
+    transition: transform 0.2s ease;
+  }
+
+  .dropdownIcon.open {
+    transform: rotate(180deg);
+  }
+
+  .dropdownOptions {
+    z-index: 2;
+    width: 100%;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 5px;
+    list-style: none;
+    padding: 0;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    overflow-y: auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .dropdownOptions li {
+    font-size: 12px;
+    font-weight: 400;
+    padding: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .dropdownOptions li:hover {
+    background-color: #f0f0f0;
+  }
 }
