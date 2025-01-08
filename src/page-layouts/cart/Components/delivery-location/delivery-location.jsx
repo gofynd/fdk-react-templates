@@ -25,6 +25,13 @@ function DeliveryLocation({
   onCloseModalClick = () => {},
   setSelectedAddressId = () => {},
   addAddress = () => {},
+  isInternationalShippingEnabled = false,
+  defaultFormSchema,
+  setI18nDetails = () => {},
+  handleCountrySearch = () => {},
+  getFilteredCountries = () => {},
+  selectedCountry,
+  countryDetails,
 }) {
   const {
     handleSubmit,
@@ -204,12 +211,19 @@ function DeliveryLocation({
         <div className={styles.addressModal}>
           <div className={`${styles.modalBody} ${styles.addressFormWrapper}`}>
             <AddressForm
+              internationalShipping={isInternationalShippingEnabled}
+              formSchema={defaultFormSchema}
               isNewAddress={true}
               onAddAddress={addAddress}
               mapApiKey={mapApiKey}
               showGoogleMap={showGoogleMap}
               onGetLocality={getLocality}
               defaultPincode={pincode}
+              setI18nDetails={setI18nDetails}
+              handleCountrySearch={handleCountrySearch}
+              getFilteredCountries={getFilteredCountries}
+              selectedCountry={selectedCountry?.display_name ?? ""}
+              countryDetails={countryDetails}
             ></AddressForm>
           </div>
         </div>
