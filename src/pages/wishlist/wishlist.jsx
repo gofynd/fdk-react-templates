@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React from "react";
 import * as styles from "./wishlist.less";
 import { FDKLink } from "fdk-core/components";
 import InfiniteLoader from "../../components/core/infinite-loader/infinite-loader";
@@ -28,8 +28,7 @@ const Wishlist = ({
   onWishlistClick = () => {},
   imagePlaceholder = "",
 }) => {
-  const countLabel =
-    totalCount > 1 ? `${totalCount} items` : `${totalCount} item`;
+  const countLabel = totalCount > 1 ? `${totalCount} items` : "";
 
   const followedIdList = productList.map((m) => m.uid);
   return (
@@ -39,7 +38,9 @@ const Wishlist = ({
       </div>
       <div className={styles.titleWrapper}>
         <h1 className={styles.title}>{title}</h1>
-        <span className={styles.wishlistCount}>{countLabel}</span>
+        {countLabel && (
+          <span className={styles.wishlistCount}>{countLabel}</span>
+        )}
       </div>
       {productList.length === 0 ? (
         <EmptyStateComponent />

@@ -12,6 +12,7 @@ export default function ChipItem({
   singleItemDetails,
   onUpdateCartItems,
   currentSize,
+  isDeliveryPromise = true,
   productImage,
   itemIndex,
   sizeModalItemValue,
@@ -255,16 +256,24 @@ export default function ChipItem({
                   }`}
                 >
                   {currencyFormat(
-                    numberWithCommas(singleItemDetails?.price?.base?.effective),
-                    singleItemDetails?.price?.base?.currency_symbol
+                    numberWithCommas(
+                      singleItemDetails?.price?.converted?.effective ??
+                        singleItemDetails?.price?.base?.effective
+                    ),
+                    singleItemDetails?.price?.converted?.currency_symbol ??
+                      singleItemDetails?.price?.base?.currency_symbol
                   )}
                 </span>
-                {singleItemDetails?.price?.base?.effective <
-                  singleItemDetails?.price?.base?.marked && (
+                {singleItemDetails?.price?.converted?.effective <
+                  singleItemDetails?.price?.converted?.marked && (
                   <span className={styles.markedPrice}>
                     {currencyFormat(
-                      numberWithCommas(singleItemDetails?.price?.base?.marked),
-                      singleItemDetails?.price?.base?.currency_symbol
+                      numberWithCommas(
+                        singleItemDetails?.price?.converted?.marked ??
+                          singleItemDetails?.price?.base?.marked
+                      ),
+                      singleItemDetails?.price?.converted?.currency_symbol ??
+                        singleItemDetails?.price?.base?.currency_symbol
                     )}
                   </span>
                 )}
@@ -272,7 +281,8 @@ export default function ChipItem({
                   {singleItemDetails?.discount}
                 </span>
               </div>
-              {!isOutOfStock &&
+              {isDeliveryPromise &&
+                !isOutOfStock &&
                 isServiceable &&
                 singleItemDetails?.delivery_promise?.formatted?.max && (
                   <div className={styles.deliveryDateWrapper}>
@@ -311,6 +321,7 @@ export default function ChipItem({
             modalType={isMobile ? "right-modal" : "center-modal"}
             title={`${promoTitle} Applied`}
             isCancellable={false}
+            containerClassName={styles.chipModal}
           >
             <div className={`${styles.promoBody}`}>
               {singleItemDetails?.promotions_applied?.map(
