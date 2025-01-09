@@ -65,31 +65,6 @@
 .form-builder__animation-fade___EWEvD.form-builder__animate___9prmm {
   opacity: 1 !important;
 }
-.form-builder__full-width-section___bsJ03 {
-  width: 100%;
-  max-width: 100%;
-  background-color: transparent;
-  margin: 0 auto;
-  padding: 0;
-  position: relative;
-}
-.form-builder__section-main-container___nbbQw {
-  max-width: 1440px;
-  background-color: transparent;
-  position: relative;
-  margin: 0 auto;
-  padding: 60px 0 0 0;
-}
-@media only screen and (max-width: 768px) {
-  .form-builder__section-main-container___nbbQw {
-    padding: 48px 15px 0 15px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .form-builder__section-main-container___nbbQw {
-    padding: 24px 8px 0 8px;
-  }
-}
 /**color by character**/
 /** Font family **/
 /** Font weight **/
@@ -641,31 +616,6 @@ img::selection {
 .fy-input__animation-fade___EdIUl.fy-input__animate___OQCWI {
   opacity: 1 !important;
 }
-.fy-input__full-width-section___uVG7y {
-  width: 100%;
-  max-width: 100%;
-  background-color: transparent;
-  margin: 0 auto;
-  padding: 0;
-  position: relative;
-}
-.fy-input__section-main-container___Bl4ui {
-  max-width: 1440px;
-  background-color: transparent;
-  position: relative;
-  margin: 0 auto;
-  padding: 60px 0 0 0;
-}
-@media only screen and (max-width: 768px) {
-  .fy-input__section-main-container___Bl4ui {
-    padding: 48px 15px 0 15px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .fy-input__section-main-container___Bl4ui {
-    padding: 24px 8px 0 8px;
-  }
-}
 /**color by character**/
 /** Font family **/
 /** Font weight **/
@@ -1104,6 +1054,11 @@ img::selection {
   width: 100%;
   background-color: transparent;
 }
+@media only screen and (max-width: 480px) {
+  .fy-input__fyInput___S4Mtu {
+    font-size: 1rem;
+  }
+}
 .fy-input__fyInput___S4Mtu::placeholder {
   color: var(--textLabel, #7d7676);
   opacity: 0.3;
@@ -1144,6 +1099,11 @@ img::selection {
   color: var(--textBody, #3c3131);
   font-size: 14px;
   border-radius: 3px;
+}
+@media only screen and (max-width: 480px) {
+  .fy-input__outlined___CEaKm.fy-input__medium___L3QsD {
+    font-size: 16px;
+  }
 }
 .fy-input__outlined___CEaKm.fy-input__medium___L3QsD.fy-input__fyTextArea___uikbN {
   height: auto;
@@ -1220,31 +1180,6 @@ img::selection {
 }
 .fy-input-group__animation-fade___BLPGN.fy-input-group__animate___CKDxv {
   opacity: 1 !important;
-}
-.fy-input-group__full-width-section___GplRD {
-  width: 100%;
-  max-width: 100%;
-  background-color: transparent;
-  margin: 0 auto;
-  padding: 0;
-  position: relative;
-}
-.fy-input-group__section-main-container___IQPZ5 {
-  max-width: 1440px;
-  background-color: transparent;
-  position: relative;
-  margin: 0 auto;
-  padding: 60px 0 0 0;
-}
-@media only screen and (max-width: 768px) {
-  .fy-input-group__section-main-container___IQPZ5 {
-    padding: 48px 15px 0 15px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .fy-input-group__section-main-container___IQPZ5 {
-    padding: 24px 8px 0 8px;
-  }
 }
 /**color by character**/
 /** Font family **/
@@ -1754,31 +1689,6 @@ img::selection {
 .fy-dropdown__animation-fade___Zu3pQ.fy-dropdown__animate___DsUZY {
   opacity: 1 !important;
 }
-.fy-dropdown__full-width-section___kc6mn {
-  width: 100%;
-  max-width: 100%;
-  background-color: transparent;
-  margin: 0 auto;
-  padding: 0;
-  position: relative;
-}
-.fy-dropdown__section-main-container____wK5T {
-  max-width: 1440px;
-  background-color: transparent;
-  position: relative;
-  margin: 0 auto;
-  padding: 60px 0 0 0;
-}
-@media only screen and (max-width: 768px) {
-  .fy-dropdown__section-main-container____wK5T {
-    padding: 48px 15px 0 15px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .fy-dropdown__section-main-container____wK5T {
-    padding: 24px 8px 0 8px;
-  }
-}
 /**color by character**/
 /** Font family **/
 /** Font weight **/
@@ -2192,15 +2102,6 @@ img::selection {
   font-size: 12px;
   padding-top: 5px;
 }
-.fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__emptyDiv___xXGGn {
-  position: fixed;
-  background: transparent;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: -1;
-}
 .fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__dropdown___N1atH {
   box-sizing: border-box;
   border: 1px solid var(--dividerStokes, #d4d1d1);
@@ -2208,6 +2109,13 @@ img::selection {
   position: relative;
   display: flex;
   flex-direction: column;
+}
+.fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__dropdown___N1atH.fy-dropdown__disabled___2o83b {
+  color: var(--textSecondary) !important;
+  user-select: none;
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 .fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__dropdown___N1atH.fy-dropdown__dropDownError___IqJV1 {
   border-color: var(--errorText, #b24141);
@@ -2235,11 +2143,16 @@ img::selection {
   line-height: 22px;
   color: var(--textHeading, #26201a);
 }
-.fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__dropdown___N1atH .fy-dropdown__dropdownList___M0x2r {
+.fy-dropdown__label___RKOjm {
+  color: var(--textLabel, #7d7676);
+  font-size: 12px;
+  line-height: 21px;
+}
+.fy-dropdown__dropdownList___M0x2r {
   max-height: 200px;
   overflow-y: auto;
   border-radius: 3px;
-  z-index: 2;
+  z-index: 999;
   box-shadow: 0 4px 8px 0 hsla(0, 0%, 90%, 0.2), 0 6px 20px 0 hsla(0, 0%, 90%, 0.19);
   border: 1px solid var(--dividerStokes, #d4d1d1);
   display: none;
@@ -2248,12 +2161,12 @@ img::selection {
   transition: opacity 0.5s;
   background-color: #ffffff;
 }
-.fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__dropdown___N1atH .fy-dropdown__dropdownList___M0x2r.fy-dropdown__open___Si_ce {
+.fy-dropdown__dropdownList___M0x2r.fy-dropdown__open___Si_ce {
   display: block;
   opacity: 1;
   pointer-events: all;
 }
-.fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__dropdown___N1atH .fy-dropdown__dropdownList___M0x2r .fy-dropdown__dropdownOption___YEIck {
+.fy-dropdown__dropdownList___M0x2r .fy-dropdown__dropdownOption___YEIck {
   position: relative;
   font-size: 14px;
   color: var(--textBody, #3c3131);
@@ -2263,13 +2176,15 @@ img::selection {
   transition: all 0.3s;
   padding: 9px 14px;
 }
-.fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__dropdown___N1atH .fy-dropdown__dropdownList___M0x2r .fy-dropdown__dropdownOption___YEIck:hover {
-  background: #cccccc;
+.fy-dropdown__dropdownList___M0x2r .fy-dropdown__dropdownOption___YEIck.fy-dropdown__disabled___2o83b {
+  user-select: none;
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
 }
-.fy-dropdown__label___RKOjm {
-  color: var(--textLabel, #7d7676);
-  font-size: 12px;
-  line-height: 21px;
+.fy-dropdown__dropdownList___M0x2r .fy-dropdown__dropdownOption___YEIck.fy-dropdown__selected___lb64Q,
+.fy-dropdown__dropdownList___M0x2r .fy-dropdown__dropdownOption___YEIck:hover {
+  background: #cccccc;
 }
 
 .mobile-number__slide-fade-enter-active___cTAIw,
@@ -2338,31 +2253,6 @@ img::selection {
 }
 .mobile-number__animation-fade___Gqph6.mobile-number__animate___spmX6 {
   opacity: 1 !important;
-}
-.mobile-number__full-width-section___mvequ {
-  width: 100%;
-  max-width: 100%;
-  background-color: transparent;
-  margin: 0 auto;
-  padding: 0;
-  position: relative;
-}
-.mobile-number__section-main-container___HrVFs {
-  max-width: 1440px;
-  background-color: transparent;
-  position: relative;
-  margin: 0 auto;
-  padding: 60px 0 0 0;
-}
-@media only screen and (max-width: 768px) {
-  .mobile-number__section-main-container___HrVFs {
-    padding: 48px 15px 0 15px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .mobile-number__section-main-container___HrVFs {
-    padding: 24px 8px 0 8px;
-  }
 }
 /**color by character**/
 /** Font family **/
@@ -2896,31 +2786,6 @@ img::selection {
 }
 .fy-button__animation-fade___KWXGj.fy-button__animate___gYWOV {
   opacity: 1 !important;
-}
-.fy-button__full-width-section___y1S8G {
-  width: 100%;
-  max-width: 100%;
-  background-color: transparent;
-  margin: 0 auto;
-  padding: 0;
-  position: relative;
-}
-.fy-button__section-main-container___j_WAJ {
-  max-width: 1440px;
-  background-color: transparent;
-  position: relative;
-  margin: 0 auto;
-  padding: 60px 0 0 0;
-}
-@media only screen and (max-width: 768px) {
-  .fy-button__section-main-container___j_WAJ {
-    padding: 48px 15px 0 15px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .fy-button__section-main-container___j_WAJ {
-    padding: 24px 8px 0 8px;
-  }
 }
 /**color by character**/
 /** Font family **/
@@ -3492,7 +3357,7 @@ img::selection {
   z-index: 2000;
   height: 2em;
   width: 2em;
-  overflow: show;
+  overflow: visible;
   margin: auto;
   top: 0;
   left: 0;
@@ -3705,31 +3570,6 @@ img::selection {
 }
 .fy-image__animation-fade___ZmwHA.fy-image__animate___qBa1D {
   opacity: 1 !important;
-}
-.fy-image__full-width-section___cmdmm {
-  width: 100%;
-  max-width: 100%;
-  background-color: transparent;
-  margin: 0 auto;
-  padding: 0;
-  position: relative;
-}
-.fy-image__section-main-container___GRg1q {
-  max-width: 1440px;
-  background-color: transparent;
-  position: relative;
-  margin: 0 auto;
-  padding: 60px 0 0 0;
-}
-@media only screen and (max-width: 768px) {
-  .fy-image__section-main-container___GRg1q {
-    padding: 48px 15px 0 15px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .fy-image__section-main-container___GRg1q {
-    padding: 24px 8px 0 8px;
-  }
 }
 /**color by character**/
 /** Font family **/
@@ -4237,31 +4077,6 @@ img::selection {
 }
 .skeletons__animation-fade___ay8n2.skeletons__animate___olGhG {
   opacity: 1 !important;
-}
-.skeletons__full-width-section___JInws {
-  width: 100%;
-  max-width: 100%;
-  background-color: transparent;
-  margin: 0 auto;
-  padding: 0;
-  position: relative;
-}
-.skeletons__section-main-container___apOD4 {
-  max-width: 1440px;
-  background-color: transparent;
-  position: relative;
-  margin: 0 auto;
-  padding: 60px 0 0 0;
-}
-@media only screen and (max-width: 768px) {
-  .skeletons__section-main-container___apOD4 {
-    padding: 48px 15px 0 15px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .skeletons__section-main-container___apOD4 {
-    padding: 24px 8px 0 8px;
-  }
 }
 /**color by character**/
 /** Font family **/
