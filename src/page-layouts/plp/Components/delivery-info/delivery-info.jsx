@@ -7,7 +7,6 @@ import FyInput from "../../../../components/core/fy-input/fy-input";
 
 function DeliveryInfo({
   selectPincodeError,
-  storeInfo,
   tat,
   pincode,
   pincodeErrorMessage,
@@ -35,7 +34,6 @@ function DeliveryInfo({
     const value = event?.target?.value;
     if (numberRegex.test(Number(value))) {
       setPostCode(value);
-      setCurrentPincode(value);
       setTatMessage("");
       setPincodeErrorMessage("");
       setPincodeChecked(false);
@@ -68,8 +66,6 @@ function DeliveryInfo({
   const handleDeliveryAction = async () => {
     if (pincodeChecked) {
       setPincodeChecked(false);
-      console.log({ pincodeInputRef });
-      setCurrentPincode("");
       setPostCode("");
       setTatMessage("");
       setPincodeErrorMessage("");
@@ -93,7 +89,7 @@ function DeliveryInfo({
           ref={pincodeInputRef}
           autoComplete="off"
           value={postCode}
-          placeholder="Please enter pincode"
+          placeholder="Check delivery time"
           inputClassName={styles.pincodeInput}
           containerClassName={styles.pincodeInputContainer}
           maxLength="6"
@@ -120,7 +116,7 @@ function DeliveryInfo({
         </div>
       )}
       {!pincodeErrorMessage && !selectPincodeError && (
-        <div className={styles.deliveryDate}>
+        <div className={`${styles.deliveryDate} ${styles.dateInfoContainer}`}>
           {postCode?.length === 6 && tatMessage?.length > 0 && (
             <>
               <SvgWrapper
