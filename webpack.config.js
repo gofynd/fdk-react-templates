@@ -7,7 +7,7 @@ const TerserPlugin = require("terser-webpack-plugin");
 module.exports = {
   entry: () => {
     // Get all entry files using glob
-    const entryFiles = glob.sync("./src/**/*.jsx");
+    const entryFiles = glob.sync("./src/**/*.jsx", { ignore: ["**/README.*"] });
     // Create entry object dynamically
     const entry = {};
     entryFiles.forEach((file) => {

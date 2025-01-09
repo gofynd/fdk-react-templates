@@ -112,6 +112,7 @@
           border-radius: 4px;
           line-height: 140%;
           color: @ErrorText;
+          background-color: @ErrorBackground;
           @media @mobile {
             margin-top: 12px;
           }
@@ -216,6 +217,67 @@
   }
   .ml6 {
     margin-left: 6px;
+  }
+}
+.freeArticleContainer {
+  display: flex;
+  padding: 12px 16px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  gap: 12px;
+  border-radius: 12px;
+  background: @HighlightColor;
+  margin-top: 16px;
+
+  .freeArticleTitle {
+    color: @TextHeading;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 140%;
+  }
+
+  .freeGiftItem {
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 8px;
+    background-color: #fff;
+  }
+
+  .freeGiftItemImage {
+    flex: 0 0 36px;
+    border-radius: 4px;
+    height: auto;
+    min-width: 0;
+  }
+
+  .freeGiftItemName {
+    color: @TextBody;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 140%;
+  }
+
+  .freeGiftItemPrice {
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    line-height: 140%;
+    font-weight: 400;
+    color: @TextLabel;
+  }
+
+  .freeGiftItemFreeLabel {
+    color: @SuccessText;
+    font-weight: 600;
+  }
+
+  .freeGiftItemFreeEffective {
+    text-decoration-line: line-through;
   }
 }
 .out-of-stock-chip {
@@ -467,4 +529,7 @@
     border-radius: 4px;
     max-width: 350px;
   }
+}
+.chipModal {
+  transform: none !important;
 }

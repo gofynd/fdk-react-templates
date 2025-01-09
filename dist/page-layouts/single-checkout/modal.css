@@ -65,31 +65,6 @@
 .modal__animation-fade___oxwoJ.modal__animate___ioMve {
   opacity: 1 !important;
 }
-.modal__full-width-section___hHxJ6 {
-  width: 100%;
-  max-width: 100%;
-  background-color: transparent;
-  margin: 0 auto;
-  padding: 0;
-  position: relative;
-}
-.modal__section-main-container___sSxO7 {
-  max-width: 1440px;
-  background-color: transparent;
-  position: relative;
-  margin: 0 auto;
-  padding: 60px 0 0 0;
-}
-@media only screen and (max-width: 768px) {
-  .modal__section-main-container___sSxO7 {
-    padding: 48px 15px 0 15px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .modal__section-main-container___sSxO7 {
-    padding: 24px 8px 0 8px;
-  }
-}
 /**color by character**/
 /** Font family **/
 /** Font weight **/
@@ -508,13 +483,7 @@ img::selection {
   overflow-y: auto;
   overflow-x: hidden;
   background-color: #00000080;
-  /* transition: transform 0.1s ease-in-out; 
-  transform: translateY(100%); */
 }
-/* .modal.slide-in-modal{
-  transform: translateY(0); /* Final state - fully visible */
-/* opacity: 1;
-} */
 .modal__modalContainerCss___ZR5ho {
   background-color: var(--dialogBackground);
   box-sizing: border-box;
@@ -526,9 +495,9 @@ img::selection {
   bottom: 0;
   right: 0;
   opacity: 0;
-  transition: transform 0.5s ease-in-out;
+  transition: right 0.5s ease-in-out;
   /* Added transition property for animation */
-  transform: translateX(100%);
+  right: -40%;
   /* Initial state - hidden off the right side */
   /* Track */
   /* Handle */
@@ -536,11 +505,15 @@ img::selection {
 @media only screen and (max-width: 768px) {
   .modal__modalContainerCss___ZR5ho {
     width: 60%;
+    right: -60%;
+    /* Initial state - hidden off the right side */
   }
 }
 @media only screen and (max-width: 480px) {
   .modal__modalContainerCss___ZR5ho {
     width: 100%;
+    right: -100%;
+    /* Initial state - hidden off the right side */
   }
 }
 .modal__modalContainerCss___ZR5ho::-webkit-scrollbar {
@@ -589,7 +562,7 @@ img::selection {
   line-height: 140%;
 }
 .modal__modalContainerCss___ZR5ho.modal__slideIn____gLvj {
-  transform: translateX(0);
+  right: 0;
   /* Final state - fully visible */
   opacity: 1;
 }
