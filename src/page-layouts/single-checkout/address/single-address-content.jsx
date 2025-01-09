@@ -178,7 +178,7 @@ function SingleAddressContent({
             loader
           ) : (
             <div
-              className={styles.addressContentConitainer}
+              className={`${styles.addressContentConitainer} ${styles.fontSize}`}
               style={{ textAlign: "center", color: "var(--textLabel)" }}
             >
               {" "}

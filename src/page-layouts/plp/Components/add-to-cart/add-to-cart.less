@@ -60,8 +60,12 @@
     .productInfo {
       .product {
         padding: 24px 24px 0px 24px;
+        @media @desktop {
+          max-height: calc(90vh - 80px);
+        }
         @media @tablet {
           padding: 16px;
+          max-height: 60vh;
         }
 
         &__title {
@@ -413,15 +417,15 @@
 
   &__block {
     border-radius: @ButtonRadius;
-    border: 1px solid @DividerStokes;
+    border: 1px solid @ThemeAccent;
     padding: 6px 12px;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
     position: relative;
-
+    color: @ThemeAccent;
     &--selected {
-      background-color: @ThemeAccent;
+      background-color: @ThemeAccentL4;
     }
 
     &--selectable {
