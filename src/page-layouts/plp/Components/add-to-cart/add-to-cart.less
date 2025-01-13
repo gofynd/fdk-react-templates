@@ -59,9 +59,15 @@
 
     .productInfo {
       .product {
-        padding: 24px 24px 0px 24px;
+        margin: 24px 24px 0px 24px;
+        overflow: auto;
+
+        @media @desktop {
+          max-height: calc(90vh - 80px);
+        }
         @media @tablet {
-          padding: 16px;
+          margin: 16px;
+          max-height: 60vh;
         }
 
         &__title {
@@ -254,6 +260,7 @@
         padding: 16px 24px;
         z-index: 9;
         background-color: @DialogBackground;
+        height: 100%;
 
         @media @tablet {
           padding: 16px;
@@ -271,6 +278,28 @@
             padding: 12px 16px;
             font-size: 12px;
           }
+        }
+
+        .qtyContainer {
+          height: 48px;
+          justify-content: space-between;
+          border-radius: @ButtonRadius;
+          padding: 0 12px;
+          background-color: @ButtonPrimary;
+          flex: 1;
+
+          @media @tablet {
+            height: 40px;
+          }
+
+          svg path {
+            fill: @ButtonSecondary;
+          }
+        }
+
+        .inputContainer {
+          border: none;
+          color: @ButtonSecondary;
         }
       }
     }
@@ -419,9 +448,12 @@
     text-overflow: ellipsis;
     overflow: hidden;
     position: relative;
-
+    color: @TextBody;
+    background-color: @PageBackground;
     &--selected {
-      background-color: @ThemeAccent;
+      background-color: @ButtonPrimary;
+      color: @ButtonSecondary;
+      border: none;
     }
 
     &--selectable {
@@ -446,4 +478,28 @@
       }
     }
   }
+}
+
+.dropdownContainer > div,
+.dropdown {
+  border-radius: @ButtonRadius !important;
+}
+
+.dropdown {
+  background-color: @DialogBackground !important;
+}
+
+.sizeValue {
+  font-weight: 500;
+  .text-line-clamp();
+
+  @media @tablet {
+    font-size: 12px;
+    line-height: 14px;
+  }
+}
+
+.disabledOption {
+  text-decoration-line: line-through;
+  color: @TextDisabled;
 }

@@ -5,7 +5,13 @@ import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./single-shipment-content.less";
 import { FDKLink } from "fdk-core/components";
 
-function SingleShipmentContent({ shipments, showPaymentOptions, loader }) {
+function SingleShipmentContent({
+  shipments,
+  showPaymentOptions,
+  isHyperlocal = false,
+  convertHyperlocalTat = () => {},
+  loader,
+}) {
   const getShipmentItems = (shipment) => {
     let grpBySameSellerAndProduct = shipment?.items?.reduce((result, item) => {
       result[
@@ -73,120 +79,123 @@ function SingleShipmentContent({ shipments, showPaymentOptions, loader }) {
       ) : (
         <div className={styles.parent}>
           {shipments?.length > 0 &&
-            shipments.map((item, index) => (
-              <React.Fragment key={index + 2000}>
-                <div className={styles.reviewContentContainer}>
-                  <div className={styles.shipmentWrapper}>
-                    <div className={styles.shipmentHeading}>
-                      <div className={styles.headerLeft}>
-                        <div className={styles.shipmentNumber}>
-                          Shipment {index + 1}/{shipments.length}
-                        </div>
-                        <div className={styles.itemCount}>
-                          {/* ({item.items.length}{" "} */}
-                          {/* {item.items.length === 1 ? "Item" : "Items"}) */}1
-                          Items
-                        </div>
-                      </div>
-                      {item?.promise && (
-                        <div className={styles.deliveryDateWrapper}>
-                          <div className={styles.shippingLogo}>
-                            <SvgWrapper svgSrc={"shipping-logo"}></SvgWrapper>
+            shipments.map((item, index) => {
+              const shipmentItems = getShipmentItems(item);
+              return (
+                <React.Fragment key={index + 2000}>
+                  <div className={styles.reviewContentContainer}>
+                    <div className={styles.shipmentWrapper}>
+                      <div className={styles.shipmentHeading}>
+                        <div className={styles.headerLeft}>
+                          <div className={styles.shipmentNumber}>
+                            Shipment {index + 1}/{shipments.length}
                           </div>
+                          <div className={styles.itemCount}>
+                            {`${shipmentItems.length} ${shipmentItems.length > 1 ? "Items" : "Item"}`}
+                          </div>
+                        </div>
+                        {item?.promise && (
+                          <div className={styles.deliveryDateWrapper}>
+                            <div className={styles.shippingLogo}>
+                              <SvgWrapper svgSrc={"shipping-logo"}></SvgWrapper>
+                            </div>
 
-                          <div className={styles.deliveryDate}>
-                            Delivery by {item?.promise?.formatted?.max}
+                            <div className={styles.deliveryDate}>
+                              {isHyperlocal
+                                ? convertHyperlocalTat(item?.promise?.iso?.max)
+                                : `Delivery by ${item?.promise?.formatted?.max}`}
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </div>
-                    <div>
-                      {getShipmentItems(item).map((product, index) => (
-                        <div
-                          className={styles.item}
-                          key={product?.item?.product?.name}
-                        >
-                          {product?.item?.coupon_message.length > 0 && (
-                            <div className={styles.couponRibbon}>
-                              <SvgWrapper
-                                svgSrc={"applied-coupon-small"}
-                              ></SvgWrapper>
-                              <span className={styles.ribbonMsg}>
-                                {product?.item?.coupon_message}
-                              </span>
-                            </div>
-                          )}
-                          <div className={styles.itemWrapper}>
-                            <div className={styles.leftImg}>
-                              <FDKLink to={getProductPath(product?.item)}>
-                                <img
-                                  src={getProductImage(product?.item)}
-                                  alt={product?.item?.product?.name}
-                                />
-                              </FDKLink>
-                            </div>
-                            <div className={styles.rightDetails}>
-                              <div className={styles.productDetails}>
-                                <div>
-                                  <div className={styles.brandName}>
-                                    {product?.item?.product?.brand?.name}
-                                  </div>
-                                  <div className={styles.productName}>
-                                    {product?.item?.product?.name}
-                                  </div>
-                                </div>
-                                <div className={styles.sizeInfo}>
-                                  {product?.articles.map((article, index) => (
-                                    <div
-                                      className={styles.sizeQuantity}
-                                      key={article?.article?.size + index}
-                                    >
-                                      <div className={styles.size}>
-                                        Size: {article?.article.size}
-                                      </div>
-                                      <div className={styles.qty}>
-                                        Qty: {article?.quantity}
-                                      </div>
-                                    </div>
-                                  ))}
-                                </div>
+                        )}
+                      </div>
+                      <div>
+                        {shipmentItems.map((product, index) => (
+                          <div
+                            className={styles.item}
+                            key={product?.item?.product?.name}
+                          >
+                            {product?.item?.coupon_message.length > 0 && (
+                              <div className={styles.couponRibbon}>
+                                <SvgWrapper
+                                  svgSrc={"applied-coupon-small"}
+                                ></SvgWrapper>
+                                <span className={styles.ribbonMsg}>
+                                  {product?.item?.coupon_message}
+                                </span>
                               </div>
-                              <div className={styles.paymentInfo}>
-                                <div className={styles.priceWrapper}>
-                                  <div className={styles.effectivePrice}>
-                                    {getCurrencySymbol() +
-                                      getEffectivePrice(product?.articles)}
+                            )}
+                            <div className={styles.itemWrapper}>
+                              <div className={styles.leftImg}>
+                                <FDKLink to={getProductPath(product?.item)}>
+                                  <img
+                                    src={getProductImage(product?.item)}
+                                    alt={product?.item?.product?.name}
+                                  />
+                                </FDKLink>
+                              </div>
+                              <div className={styles.rightDetails}>
+                                <div className={styles.productDetails}>
+                                  <div>
+                                    <div className={styles.brandName}>
+                                      {product?.item?.product?.brand?.name}
+                                    </div>
+                                    <div className={styles.productName}>
+                                      {product?.item?.product?.name}
+                                    </div>
                                   </div>
-                                  {!product.item.is_set &&
-                                    getMarkedPrice(product?.articles) !==
-                                      null && (
-                                      <div className={styles.markedPrice}>
-                                        {getCurrencySymbol() +
-                                          getMarkedPrice(product?.articles)}
+                                  <div className={styles.sizeInfo}>
+                                    {product?.articles.map((article, index) => (
+                                      <div
+                                        className={styles.sizeQuantity}
+                                        key={article?.article?.size + index}
+                                      >
+                                        <div className={styles.size}>
+                                          Size: {article?.article.size}
+                                        </div>
+                                        <div className={styles.qty}>
+                                          Qty: {article?.quantity}
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                                <div className={styles.paymentInfo}>
+                                  <div className={styles.priceWrapper}>
+                                    <div className={styles.effectivePrice}>
+                                      {getCurrencySymbol() +
+                                        getEffectivePrice(product?.articles)}
+                                    </div>
+                                    {!product.item.is_set &&
+                                      getMarkedPrice(product?.articles) !==
+                                        null && (
+                                        <div className={styles.markedPrice}>
+                                          {getCurrencySymbol() +
+                                            getMarkedPrice(product?.articles)}
+                                        </div>
+                                      )}
+                                    <div className={styles.discount}>
+                                      {product?.articles?.[0].discount}
+                                    </div>
+                                  </div>
+                                  <div className={styles.offersWarning}>
+                                    {product?.item?.article?.quantity < 11 && (
+                                      <div className={styles.limitedQnty}>
+                                        Hurry! Only{" "}
+                                        {product?.item?.article?.quantity} Left
                                       </div>
                                     )}
-                                  <div className={styles.discount}>
-                                    {product?.articles?.[0].discount}
                                   </div>
-                                </div>
-                                <div className={styles.offersWarning}>
-                                  {product?.item?.article?.quantity < 11 && (
-                                    <div className={styles.limitedQnty}>
-                                      Hurry! Only{" "}
-                                      {product?.item?.article?.quantity} Left
-                                    </div>
-                                  )}
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </React.Fragment>
-            ))}
+                </React.Fragment>
+              );
+            })}
           <div className={styles.proceedBtnWrapper}>
             <button className={styles.proceedBtn} onClick={showPaymentOptions}>
               Proceed To Pay
