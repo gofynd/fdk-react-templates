@@ -5,6 +5,10 @@
 .addToCartContainer {
   @media @desktop {
     max-width: unset !important;
+
+    .addToCartBody {
+      overflow-y: hidden;
+    }
   }
 }
 .productListingPage {
@@ -363,7 +367,7 @@
   padding: 13px 16px;
   box-shadow: 0px 4px 8px 0px #a6a3a524;
   margin-bottom: 24px;
-  background-color: #fff;
+  background-color: @PageBackground;
   z-index: 1;
   top: 0;
   left: 0;
