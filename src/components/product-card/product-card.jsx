@@ -34,7 +34,7 @@
 
 import React, { useMemo } from "react";
 import { currencyFormat } from "../../helper/utils";
-import { useMobile, useViewport } from "../../helper/hooks";
+import { useMobile } from "../../helper/hooks";
 import FyImage from "../core/fy-image/fy-image";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
 import * as styles from "./product-card.less";
@@ -64,6 +64,8 @@ const ProductCard = ({
   onRemoveClick = () => {},
   centerAlign = false,
   showAddToCart = false,
+  showBadge = true,
+  isSlider = false,
 }) => {
   const isMobile = useMobile();
 
@@ -178,7 +180,7 @@ const ProductCard = ({
         !product.sellable ? styles.disableCursor : ""
       } ${styles[customClass[0]]} ${styles[customClass[1]]} ${
         styles[customClass[2]]
-      } ${styles.animate} ${gridClass}`}
+      } ${styles.animate} ${gridClass} ${isSlider ? styles.sliderCard : ""}`}
     >
       <div className={styles.imageContainer}>
         {!isMobile && showImageOnHover && hoverImageUrl && (
@@ -229,31 +231,19 @@ const ProductCard = ({
               Out of stock
             </span>
           </div>
-        ) : product.teaser_tag ? (
+        ) : product.teaser_tag && showBadge ? (
           <div className={styles.badge}>
             <span className={`${styles.text} ${styles.captionNormal}`}>
               {product?.teaser_tag?.substring(0, 14)}
             </span>
           </div>
-        ) : isSaleBadge && product.discount && product.sellable ? (
+        ) : isSaleBadge && showBadge && product.discount && product.sellable ? (
           <div className={`${styles.badge} ${styles.sale}`}>
             <span className={`${styles.text} ${styles.captionNormal}`}>
               Sale
             </span>
           </div>
         ) : null}
-        {/* {getReviewRatingInfo().avg_ratings && (
-          <div className="review caption-semi-bold">
-            <span>{getReviewRatingInfo().avg_ratings}</span>
-            <SvgWrapper svgSrc={"star"} className="rating-icon" />
-          </div>
-        )} */}
-        {/* <div className="extension">
-          <fdk-extension
-            templates={getTemplates("bottom_left_corner")}
-            v-if={getTemplates("bottom_left_corner").length}
-          />
-        </div> */}
       </div>
       <div className={styles.productDescContainer}>
         <div className={styles.productDesc}>

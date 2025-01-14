@@ -5,6 +5,7 @@ import * as styles from "./order-status.less";
 import PriceBreakup from "../../components/price-breakup/price-breakup";
 import CartGiftItem from "./components/cart-gift-item/cart-gift-item";
 import FyButton from "../../components/core/fy-button/fy-button";
+import { FDKLink } from "fdk-core/components";
 
 const orderFailurePageInfo = {
   link: "",
@@ -19,7 +20,6 @@ function OrderStatus({
   success,
   orderData,
   orderFailImg = "",
-  OrderSuccessImg = "",
   onOrderFailure,
   showPolling = false,
   pollingComp = null,
@@ -99,75 +99,77 @@ function OrderStatus({
     );
   }
 
-  function ProductItem({ product: product }, index) {
+  function ProductItem({ product: product }) {
     return (
       <>
-        <div className={styles.shipmentProdItem}>
-          <div className={styles.prodImg}>
-            <img src={product.item.image[0]} alt={product?.item?.name} />
-          </div>
-          <div className={styles.prodItemData}>
-            <div className={styles.productDetails}>
-              <div className={styles.brandName}>
-                {product?.item?.brand?.name}
-              </div>
-              <div className={styles.productName}>{product?.item?.name}</div>
-              <div className={styles.sizeInfo}>
-                <div className={styles.sizeQuantity}>
-                  <div className={styles.size}>
-                    Size: &nbsp;
-                    {product?.item?.size}
-                  </div>
+        <FDKLink to={getOrderLink()}>
+          <div className={styles.shipmentProdItem}>
+            <div className={styles.prodImg}>
+              <img src={product.item.image[0]} alt={product?.item?.name} />
+            </div>
+            <div className={styles.prodItemData}>
+              <div className={styles.productDetails}>
+                <div className={styles.brandName}>
+                  {product?.item?.brand?.name}
+                </div>
+                <div className={styles.productName}>{product?.item?.name}</div>
+                <div className={styles.sizeInfo}>
                   <div className={styles.sizeQuantity}>
-                    Qty:&nbsp;
-                    {product?.quantity}
+                    <div className={styles.size}>
+                      Size: &nbsp;
+                      {product?.item?.size}
+                    </div>
+                    <div className={styles.sizeQuantity}>
+                      Qty:&nbsp;
+                      {product?.quantity}
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className={styles.paymentInfo}>
-                {effectivePriceCheck(product) > 0 && (
-                  <div className={styles.effectivePrice}>
-                    {`${product?.prices?.currency_symbol} ${getEffectivePrice(
-                      product
-                    )}`}
-                  </div>
-                )}
-                {markedPriceCheck(product) > 0 &&
-                  effectivePriceCheck(product) !==
-                    markedPriceCheck(product) && (
-                    <div className={styles.markedPrice}>
-                      {getMarkedPrice(product)}
+                <div className={styles.paymentInfo}>
+                  {effectivePriceCheck(product) > 0 && (
+                    <div className={styles.effectivePrice}>
+                      {`${product?.prices?.currency_symbol} ${getEffectivePrice(
+                        product
+                      )}`}
                     </div>
                   )}
-              </div>
+                  {markedPriceCheck(product) > 0 &&
+                    effectivePriceCheck(product) !==
+                      markedPriceCheck(product) && (
+                      <div className={styles.markedPrice}>
+                        {getMarkedPrice(product)}
+                      </div>
+                    )}
+                </div>
 
-              {/* Gift Wrap Display UI */}
-              {product?.meta?.gift_card?.is_gift_applied && (
-                <div className={styles["gift-wrap"]}>
-                  <input
-                    type="checkbox"
-                    id={product.id}
-                    disabled={product}
-                    checked={product?.meta?.gift_card?.is_gift_applied}
-                  />
-                  <label htmlFor={product?.id}>Gift wrap Added</label>
-                </div>
-              )}
-              {/* Show Free Gifts  Desktop */}
-              {getItem(product)?.promotions_applied?.length > 0 && (
-                <div className={styles["desktop-free-gift"]}>
-                  <CartGiftItem bagItem={getItem(product)}></CartGiftItem>
-                </div>
-              )}
+                {/* Gift Wrap Display UI */}
+                {product?.meta?.gift_card?.is_gift_applied && (
+                  <div className={styles["gift-wrap"]}>
+                    <input
+                      type="checkbox"
+                      id={product.id}
+                      disabled={product}
+                      checked={product?.meta?.gift_card?.is_gift_applied}
+                    />
+                    <label htmlFor={product?.id}>Gift wrap Added</label>
+                  </div>
+                )}
+                {/* Show Free Gifts  Desktop */}
+                {getItem(product)?.promotions_applied?.length > 0 && (
+                  <div className={styles["desktop-free-gift"]}>
+                    <CartGiftItem bagItem={getItem(product)}></CartGiftItem>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-        {/* Show Free Gifts  Mobile */}
-        {getItem(product)?.promotions_applied?.length > 0 && (
-          <div className={styles["mobile-free-gift"]}>
-            <CartGiftItem bagItem={getItem(product)}></CartGiftItem>
-          </div>
-        )}
+          {/* Show Free Gifts  Mobile */}
+          {getItem(product)?.promotions_applied?.length > 0 && (
+            <div className={styles["mobile-free-gift"]}>
+              <CartGiftItem bagItem={getItem(product)}></CartGiftItem>
+            </div>
+          )}
+        </FDKLink>
       </>
     );
   }

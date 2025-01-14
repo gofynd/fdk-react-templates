@@ -1,11 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as styles from "./checkout-payment-content.less";
-// import PaymentSDK from "./payment-sdk";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
-import { useSearchParams } from "react-router-dom";
 import IMask from "imask";
 import cardValidator from "card-validator";
-import RbiSecureGuideline from "../../../components/rbi-guideline/rbi-guideline";
 
 export const CREDIT_CARD_MASK = [
   {
@@ -74,7 +71,6 @@ function CheckoutPaymentContent({ payment, loader }) {
     isLoading,
   } = payment;
 
-  //card
   const [addNewCard, setAddNewCard] = useState(false);
   const [selectedCardCVV, setSelectedCardCVV] = useState("");
   const [cvvNumber, setCvvNumber] = useState("");
@@ -85,15 +81,11 @@ function CheckoutPaymentContent({ payment, loader }) {
   const [cardNameError, setCardNameError] = useState(false);
   const [isCardSecure, setIsCardSecure] = useState(true);
   const [isSavedCardSecure, setIsSavedCardSecure] = useState(null);
-  const [searchParams] = useSearchParams();
-  const cart_id = searchParams.get("id");
-  const address_id = searchParams.get("address_id");
   const nameRef = useRef(null);
   const cardNumberRef = useRef(null);
   const expirationDateRef = useRef(null);
 
   const [selectedCard, setSelectedCard] = useState(null);
-  // const [selectedCardData, setSelectedCardData] = useState(null);
   const [selectedWallet, setSelectedWallet] = useState({});
 
   const [vpa, setvpa] = useState("");
@@ -108,7 +100,6 @@ function CheckoutPaymentContent({ payment, loader }) {
 
   const [selectedPaymentPayload, setSelectedPaymentPayload] = useState({
     selectedCard: selectedCard,
-    // selectedCardData: selectedCardData,
     isCardSecure: isCardSecure,
     selectedCardless: selectedCardless,
     selectedPayLater: selectedPayLater,
@@ -122,7 +113,6 @@ function CheckoutPaymentContent({ payment, loader }) {
   useEffect(() => {
     setSelectedPaymentPayload({
       selectedCard: selectedCard,
-      // selectedCardData: selectedCardData,
       isCardSecure: isCardSecure,
       selectedCardless: selectedCardless,
       selectedPayLater: selectedPayLater,
@@ -134,7 +124,6 @@ function CheckoutPaymentContent({ payment, loader }) {
     });
   }, [
     selectedCard,
-    // selectedCardData,
     selectedCardless,
     selectedPayLater,
     selectedWallet,
@@ -325,7 +314,6 @@ function CheckoutPaymentContent({ payment, loader }) {
       exp_month: expirationdate_mask.value.split("/")[0],
       exp_year: expirationdate_mask.value.split("/")[1],
     };
-    // setSelectedCardData(obj);
     return obj;
   };
 
@@ -341,8 +329,6 @@ function CheckoutPaymentContent({ payment, loader }) {
       console.error("Card Verification Failed");
     }
   };
-
-  //
 
   function getWalletdBorder(wlt) {
     if (selectedWallet?.code === wlt?.code) {
@@ -378,31 +364,35 @@ function CheckoutPaymentContent({ payment, loader }) {
   const getNormalisedList = (selectedTabData) => {
     let tabData = selectedTabData?.list;
     return tabData.reduce((acc, tab) => {
-      if (tab.aggregator_name == "Potlee") {
-        let temp = { ...tab };
-        temp.isDisabled = true;
-        temp.id =
-          tab.aggregator_name + tab.code + selectedTabData.payment_mode_id;
-        acc.push(temp);
-        return acc;
-      } else if (tab.aggregator_name == "Simpl") {
-        let temp = tab;
-        temp.isDisabled = { ...tab };
-        temp.id =
-          tab.aggregator_name + tab.code + selectedTabData.payment_mode_id;
-        acc.push(temp);
-        return acc;
-      } else if (tab.aggregator_name == "Rupifi") {
-        let temp = tab;
-        temp.isDisabled = { ...tab };
-        temp.id =
-          tab.aggregator_name + tab.code + selectedTabData.payment_mode_id;
-        acc.push(temp);
-        return acc;
-      } else {
-        acc.push(tab);
-        return acc;
-      }
+      // if (tab.aggregator_name == "Potlee") {
+      //   let temp = { ...tab };
+      //   temp.isDisabled = true;
+      //   temp.id =
+      //     tab.aggregator_name + tab.code + selectedTabData.payment_mode_id;
+      //   acc.push(temp);
+      //   return acc;
+      // } else if (tab.aggregator_name == "Simpl") {
+      //   let temp = { ...tab };
+      //   temp.isDisabled = { ...tab };
+      //   temp.id =
+      //     tab.aggregator_name + tab.code + selectedTabData.payment_mode_id;
+      //   acc.push(temp);
+      //   return acc;
+      // } else if (tab.aggregator_name == "Rupifi") {
+      //   let temp = { ...tab };
+      //   temp.isDisabled = { ...tab };
+      //   temp.id =
+      //     tab.aggregator_name + tab.code + selectedTabData.payment_mode_id;
+      //   acc.push(temp);
+      //   return acc;
+      // } else {
+      //   acc.push(tab);
+      //   return acc;
+      // }
+      let temp = { ...tab };
+      temp.id = tab.aggregator_name + tab.code;
+      acc.push(temp);
+      return acc;
     }, []);
   };
 
@@ -444,7 +434,7 @@ function CheckoutPaymentContent({ payment, loader }) {
               <div className={styles.cardList}>
                 {selectedTabData &&
                   selectedTabData.list &&
-                  selectedTabData.list?.map((card, index) => (
+                  selectedTabData.list?.map((card) => (
                     <label
                       key={card.card_id}
                       onClick={() => setSelectedCard(card)}
@@ -731,7 +721,7 @@ function CheckoutPaymentContent({ payment, loader }) {
           <div>
             <div className={styles.nbHeader}>Select a Bank</div>
             <div className={styles.nbOption}>
-              {topFiveBank?.map((nb, index) => (
+              {topFiveBank?.map((nb) => (
                 <label key={nb.display_name} onClick={() => setSelectedNB(nb)}>
                   <div className={`${styles.nbItem} ${getNBBorder(nb)}`}>
                     <div className={styles.nbLeft}>
@@ -767,7 +757,7 @@ function CheckoutPaymentContent({ payment, loader }) {
               )}
               {selectedNB === "otherNB" && (
                 <select className={styles.otherSelect} onChange={selectBank}>
-                  {restBanks?.map((nb, index) => (
+                  {restBanks?.map((nb) => (
                     <option key={nb.display_name} value={JSON.stringify(nb)}>
                       {nb.display_name}
                     </option>
@@ -815,40 +805,36 @@ function CheckoutPaymentContent({ payment, loader }) {
           <div>
             <div className={styles.payLaterHeader}>Choose An Option</div>
             <div className={styles.payLaterOption}>
-              {getNormalisedList(selectedTabData)?.map((payLater, index) => (
-                <>
-                  {!payLater.isDisabled && (
-                    <label
-                      key={payLater.id}
-                      id={payLater.id}
-                      onClick={() => setSelectedPayLater(payLater)}
-                    >
-                      <div
-                        className={`${
-                          styles.payLaterItem
-                        } ${getPayLaterBorder(payLater)}`}
-                      >
-                        <div className={styles.payLaterLeft}>
-                          {!selectedPayLater ||
-                          selectedPayLater.code !== payLater.code ? (
-                            <SvgWrapper svgSrc={"radio"}></SvgWrapper>
-                          ) : (
-                            <SvgWrapper svgSrc={"radio-selected"}></SvgWrapper>
-                          )}
-                        </div>
-                        <div className={styles.payLaterMiddle}>
-                          <img
-                            src={payLater.logo_url.small}
-                            alt={payLater.display_name}
-                          />
-                        </div>
-                        <div className={styles.payLaterRight}>
-                          {payLater.display_name}
-                        </div>
-                      </div>
-                    </label>
-                  )}
-                </>
+              {getNormalisedList(selectedTabData)?.map((payLater) => (
+                <label
+                  key={payLater.id}
+                  id={payLater.id}
+                  onClick={() => setSelectedPayLater(payLater)}
+                >
+                  <div
+                    className={`${
+                      styles.payLaterItem
+                    } ${getPayLaterBorder(payLater)}`}
+                  >
+                    <div className={styles.payLaterLeft}>
+                      {!selectedPayLater ||
+                      selectedPayLater.code !== payLater.code ? (
+                        <SvgWrapper svgSrc={"radio"}></SvgWrapper>
+                      ) : (
+                        <SvgWrapper svgSrc={"radio-selected"}></SvgWrapper>
+                      )}
+                    </div>
+                    <div className={styles.payLaterMiddle}>
+                      <img
+                        src={payLater.logo_url.small}
+                        alt={payLater.display_name}
+                      />
+                    </div>
+                    <div className={styles.payLaterRight}>
+                      {payLater.display_name}
+                    </div>
+                  </div>
+                </label>
               ))}
             </div>
             <div className={styles.payLaterPay}>
@@ -868,7 +854,7 @@ function CheckoutPaymentContent({ payment, loader }) {
           <div>
             <div className={styles.cardlessHeader}>Choose An Option</div>
             <div className={styles.cardlessOption}>
-              {selectedTabData.list?.map((emi, index) => (
+              {selectedTabData.list?.map((emi) => (
                 <label
                   key={emi.display_name}
                   onClick={() => setSelectedCardless(emi)}
@@ -916,7 +902,7 @@ function CheckoutPaymentContent({ payment, loader }) {
           <div>
             <div className={styles.otherHeader}>Choose An Option</div>
             <div className={styles.otherOption}>
-              {selectedTabData?.list?.map((op, index) => (
+              {selectedTabData?.list?.map((op) => (
                 <label
                   key={op.display_name}
                   onClick={() => setSelectedOtherPayment(op)}
@@ -965,7 +951,7 @@ function CheckoutPaymentContent({ payment, loader }) {
           {true ? (
             <>
               <div className={styles.navigationLink}>
-                {PaymentOptionsList()?.map((opt, index) => (
+                {PaymentOptionsList()?.map((opt) => (
                   <div
                     className={styles.linkWrapper}
                     key={opt.display_name}
