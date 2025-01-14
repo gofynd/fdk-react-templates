@@ -12,6 +12,7 @@ export default function ChipItem({
   singleItemDetails,
   onUpdateCartItems,
   currentSize,
+  isDeliveryPromise = true,
   productImage,
   itemIndex,
   sizeModalItemValue,
@@ -255,16 +256,24 @@ export default function ChipItem({
                   }`}
                 >
                   {currencyFormat(
-                    numberWithCommas(singleItemDetails?.price?.base?.effective),
-                    singleItemDetails?.price?.base?.currency_symbol
+                    numberWithCommas(
+                      singleItemDetails?.price?.converted?.effective ??
+                        singleItemDetails?.price?.base?.effective
+                    ),
+                    singleItemDetails?.price?.converted?.currency_symbol ??
+                      singleItemDetails?.price?.base?.currency_symbol
                   )}
                 </span>
-                {singleItemDetails?.price?.base?.effective <
-                  singleItemDetails?.price?.base?.marked && (
+                {singleItemDetails?.price?.converted?.effective <
+                  singleItemDetails?.price?.converted?.marked && (
                   <span className={styles.markedPrice}>
                     {currencyFormat(
-                      numberWithCommas(singleItemDetails?.price?.base?.marked),
-                      singleItemDetails?.price?.base?.currency_symbol
+                      numberWithCommas(
+                        singleItemDetails?.price?.converted?.marked ??
+                          singleItemDetails?.price?.base?.marked
+                      ),
+                      singleItemDetails?.price?.converted?.currency_symbol ??
+                        singleItemDetails?.price?.base?.currency_symbol
                     )}
                   </span>
                 )}
@@ -272,7 +281,8 @@ export default function ChipItem({
                   {singleItemDetails?.discount}
                 </span>
               </div>
-              {!isOutOfStock &&
+              {isDeliveryPromise &&
+                !isOutOfStock &&
                 isServiceable &&
                 singleItemDetails?.delivery_promise?.formatted?.max && (
                   <div className={styles.deliveryDateWrapper}>
@@ -295,14 +305,31 @@ export default function ChipItem({
                     onOpenPromoModal();
                   }}
                 >
-                  <span>
-                    {promoTitle}
-                    Applied
-                  </span>
+                  <span>{`${promoTitle} Applied`}</span>
                   <SvgWrapper svgSrc="applied-promo" className={styles.ml6} />
                 </div>
               )}
           </div>
+          {singleItemDetails?.promotions_applied?.map(
+            (promotion) =>
+              promotion?.promotion_type === "free_gift_items" && (
+                <div className={styles.freeArticleContainer}>
+                  <h6
+                    className={styles.freeArticleTitle}
+                  >{`${promotion?.applied_free_articles?.length} free gift added`}</h6>
+                  {promotion?.applied_free_articles.map((item, itemIndex) => (
+                    <FreeGiftItem
+                      key={item?.article_id + itemIndex}
+                      item={item?.free_gift_item_details}
+                      currencySymbol={
+                        singleItemDetails?.price?.converted?.currency_symbol ??
+                        singleItemDetails?.price?.base?.currency_symbol
+                      }
+                    />
+                  ))}
+                </div>
+              )
+          )}
         </div>
         {isPromoModalOpen && (
           <Modal
@@ -311,6 +338,7 @@ export default function ChipItem({
             modalType={isMobile ? "right-modal" : "center-modal"}
             title={`${promoTitle} Applied`}
             isCancellable={false}
+            containerClassName={styles.chipModal}
           >
             <div className={`${styles.promoBody}`}>
               {singleItemDetails?.promotions_applied?.map(
@@ -502,3 +530,34 @@ export default function ChipItem({
     </>
   );
 }
+
+const FreeGiftItem = ({ item, currencySymbol = "₹" }) => {
+  const { item_images_url, item_name, item_price_details } = item;
+  const freeGiftImage =
+    item_images_url?.[0]?.replace("original", "resize-w:50") || "";
+  return (
+    <div className={styles.freeGiftItem}>
+      {freeGiftImage && (
+        <img
+          className={styles.freeGiftItemImage}
+          src={freeGiftImage}
+          alt={item_name}
+        />
+      )}
+      <div className={styles.freeGiftItemDetails}>
+        <div className={styles.freeGiftItemName}>{item_name}</div>
+        <div className={styles.freeGiftItemPrice}>
+          <span className={styles.freeGiftItemFreeLabel}>FREE</span>
+          {item_price_details?.effective?.max && (
+            <span className={styles.freeGiftItemFreeEffective}>
+              {currencyFormat(
+                numberWithCommas(item_price_details?.effective?.max),
+                currencySymbol
+              )}
+            </span>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
