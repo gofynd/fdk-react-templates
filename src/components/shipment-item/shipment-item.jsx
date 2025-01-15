@@ -14,7 +14,7 @@
  *
  */
 
-import React, { useState } from "react";
+import React from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./shipment-item.less";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
@@ -23,15 +23,7 @@ import {
   priceFormatCurrencySymbol,
 } from "../../helper/utils";
 
-function ShipmentItem({
-  bag,
-  initial,
-  shipment,
-  deliveryAddress,
-  selectId,
-  onChangeValue,
-  type,
-}) {
+function ShipmentItem({ bag, initial, selectId, onChangeValue, type }) {
   const getPriceValue = (item) => {
     return numberWithCommas(item);
   };
@@ -98,20 +90,6 @@ function ShipmentItem({
                 </span>
               </div>
             )}
-
-            {/* {type === "tracking" && (
-              <FDKLink to={shipment.track_url} className={`${styles.total}`}>
-                {shipment.tracking_no}
-              </FDKLink>
-            )}
-            {type === "tracking" && (
-              <div className={`${styles.total} ${styles.regularxs}`}>
-                <span className={`${styles.boldxs}`}>Delivery At :</span>
-                <span className={`${styles.deliveryAt}`}>
-                  {deliveryAddress?.city} -{deliveryAddress?.pincode}
-                </span>
-              </div>
-            )} */}
           </div>
         </div>
       </div>

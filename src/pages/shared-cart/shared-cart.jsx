@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useMemo } from "react";
 import * as styles from "./shared-cart.less";
 import { currencyFormat, numberWithCommas } from "../../helper/utils";
 import ChipReviewItem from "../../components/chip-review-item/chip-review-item";
