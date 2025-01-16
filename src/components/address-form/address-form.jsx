@@ -122,6 +122,7 @@ const defaultFormSchema = [
         required: true,
         maxLength: 6,
         fullWidth: false,
+        disabled: true,
         validation: {
           required: "Pincode is required",
           pattern: {
@@ -140,6 +141,7 @@ const defaultFormSchema = [
         type: "text",
         required: true,
         fullWidth: false,
+        disabled: true,
         validation: {
           required: "City is required",
           pattern: {
@@ -158,6 +160,7 @@ const defaultFormSchema = [
         type: "text",
         required: true,
         fullWidth: false,
+        disabled: true,
         validation: {
           required: "State is required",
           pattern: {
@@ -290,7 +293,6 @@ const AddressForm = ({
     setError,
     watch,
     reset,
-    trigger,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -304,6 +306,7 @@ const AddressForm = ({
   const [currBgColor, setCurrBgColor] = useState("#fff");
   const [isCityStateDisabled, setCityStateDisabled] = useState(true);
   const [showOtherText, setShowOtherText] = useState(false);
+  const [isAddressForm, setIsAddressForm] = useState(!!addressItem);
   const [addressLoadStatus, setAddressLoadStatus] = useState(false);
   const [resetStatus, setResetStatus] = useState(true);
   const address_type = watch("address_type");
@@ -335,33 +338,25 @@ const AddressForm = ({
     setShowOtherText(address_type === "Other");
   }, [address_type]);
 
-  const validatePin = async () => {
-    const isPinValid = await trigger("area_code");
-    if (!isPinValid) {
-      return;
-    }
-    onGetLocality("pincode", pin).then((data) => {
-      if (resetStatus) {
-        getLatLngFromPostalCode(pin);
-      }
-      setValue("city", "");
-      setValue("state", "");
-      if (data?.showError) {
-        setError("area_code", {
-          type: "manual",
-          message: data?.errorMsg,
-        });
-      } else {
-        const { city = "", state = "" } = data;
-        setValue("city", city);
-        setValue("state", state);
-      }
-    });
-  };
-
   useEffect(() => {
-    if (pin) {
-      validatePin();
+    if (pin && pin.length === 6) {
+      onGetLocality("pincode", pin).then((data) => {
+        if (resetStatus) {
+          getLatLngFromPostalCode(pin);
+        }
+        setValue("city", "");
+        setValue("state", "");
+        if (data?.showError) {
+          setError("area_code", {
+            type: "manual",
+            message: data?.errorMsg,
+          });
+        } else {
+          const { city = "", state = "" } = data;
+          setValue("city", city);
+          setValue("state", state);
+        }
+      });
     }
   }, [pin, setValue]);
 
@@ -384,13 +379,6 @@ const AddressForm = ({
   };
 
   useEffect(() => {
-    if (!showGoogleMap) {
-      setAddressLoadStatus(true);
-    }
-  }, [showGoogleMap]);
-
-  useEffect(() => {
-    reset();
     setValue("country", selectedCountry);
   }, [selectedCountry]);
 
@@ -443,6 +431,7 @@ const AddressForm = ({
 
   const selectAddress = (data) => {
     setResetStatus(false);
+    setIsAddressForm(true);
     reset(data);
   };
 
@@ -463,92 +452,94 @@ const AddressForm = ({
             onAddressSelect={selectAddress}
             countryDetails={countryDetails}
             addressItem={addressItem}
+            isMapLarge={!isAddressForm}
             onLoad={onLoadMap}
           />
         </div>
       )}
-      <form onSubmit={handleSubmit(onSubmit)}>
-        {internationalShipping && (
-          <div className={`${styles.formGroup} ${styles.formContainer}`}>
-            <FyDropdown
-              value={selectedCountry}
-              onChange={setI18nDetails}
-              onSearch={handleCountrySearch}
-              options={getFilteredCountries()}
-              optionValue="display_name"
-              optionLabel="display_name"
-              showDropdownIcon
-              label="Country"
-              containerClassName={styles.customClass}
-            />
-          </div>
-        )}
-        {formSchema.map((group, index) => (
-          <div key={index} className={styles.formGroup}>
-            <div ref={formContainerRef} className={styles.formContainer}>
-              {group.fields.map((field) => (
-                <FormInputSelector
-                  key={field.key}
-                  formData={field}
-                  control={control}
-                  allowDropdown={internationalShipping}
-                />
+      {isAddressForm && (
+        <form onSubmit={handleSubmit(onSubmit)}>
+          {internationalShipping && (
+            <div className={`${styles.formGroup} ${styles.formContainer}`}>
+              <FyDropdown
+                value={selectedCountry}
+                onChange={setI18nDetails}
+                onSearch={handleCountrySearch}
+                options={getFilteredCountries()}
+                optionValue="display_name"
+                optionLabel="display_name"
+                showDropdownIcon
+                label="Country"
+                containerClassName={styles.customClass}
+              />
+            </div>
+          )}
+          {formSchema.map((group, index) => (
+            <div key={index} className={styles.formGroup}>
+              <div ref={formContainerRef} className={styles.formContainer}>
+                {group.fields.map((field) => (
+                  <FormInputSelector
+                    key={field.key}
+                    formData={field}
+                    control={control}
+                  />
+                ))}
+              </div>
+            </div>
+          ))}
+          <div className={styles.addressTypeContainer}>
+            <label className={styles.addressTypeHeader}>SAVE AS </label>
+            <div className={styles.typeWrap}>
+              {addressTypes.map((type) => (
+                <button
+                  type="button"
+                  key={type.value}
+                  onClick={() => setValue("address_type", type.value)}
+                  className={styles.typeBtn}
+                  style={{
+                    border:
+                      watch("address_type") === type.value
+                        ? "2px solid var(--buttonPrimary)"
+                        : "1px solid var(--dividerStokes)",
+                  }}
+                >
+                  {type.icon}
+                  <span>{type.label}</span>
+                </button>
               ))}
             </div>
-          </div>
-        ))}
-        <div className={styles.addressTypeContainer}>
-          <label className={styles.addressTypeHeader}>SAVE AS </label>
-          <div className={styles.typeWrap}>
-            {addressTypes.map((type) => (
-              <button
-                type="button"
-                key={type.value}
-                onClick={() => setValue("address_type", type.value)}
-                className={styles.typeBtn}
-                style={{
-                  border:
-                    watch("address_type") === type.value
-                      ? "2px solid var(--buttonPrimary)"
-                      : "1px solid var(--dividerStokes)",
-                }}
-              >
-                {type.icon}
-                <span>{type.label}</span>
-              </button>
-            ))}
-          </div>
-          <input
-            type="hidden"
-            {...register("address_type", { required: true })}
-          />
-          <span
-            className={`${styles.formError} ${errors.address_type ? styles.visible : ""}`}
-          >
-            {errors.address_type && <span>This field is required</span>}
-          </span>
-        </div>
-        {showOtherText && (
-          <div className={styles.formItemDiv}>
-            <label
-              className={styles.formLabel}
-              style={{ backgroundColor: currBgColor }}
-            >
-              Other Address Type*
-            </label>
             <input
-              {...register("otherAddressType", { required: true })}
-              className={`${styles.formInputBox} ${styles.otherInput}`}
+              type="hidden"
+              {...register("address_type", { required: true })}
             />
             <span
-              className={`${styles.formError} ${errors.otherAddressType ? styles.visible : ""}`}
+              className={`${styles.formError} ${errors.address_type ? styles.visible : ""}`}
             >
-              {errors.otherAddressType && <span>This field is required</span>}
+              {errors.address_type && <span>This field is required</span>}
             </span>
           </div>
-        )}
-        <div>{customFooter}</div>
-      </form>
+          {showOtherText && (
+            <div className={styles.formItemDiv}>
+              <label
+                className={styles.formLabel}
+                style={{ backgroundColor: currBgColor }}
+              >
+                Other Address Type*
+              </label>
+              <input
+                {...register("otherAddressType", { required: true })}
+                className={`${styles.formInputBox} ${styles.otherInput}`}
+              />
+              <span
+                className={`${styles.formError} ${errors.otherAddressType ? styles.visible : ""}`}
+              >
+                {errors.otherAddressType && <span>This field is required</span>}
+              </span>
+            </div>
+          )}
+          <div>{customFooter}</div>
+        </form>
+      )}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { currencyFormat, numberWithCommas } from "../../../../helper/utils";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
@@ -46,8 +46,6 @@ function Coupon({
     formState: { errors },
     setError,
     clearErrors,
-    watch,
-    reset,
   } = useForm({
     defaultValues: {
       couponInput: "",
@@ -103,10 +101,7 @@ function Coupon({
       </div>
       <Modal
         isOpen={isCouponListModalOpen}
-        closeDialog={(e) => {
-          onCouponListCloseModalClick(e);
-          reset();
-        }}
+        closeDialog={onCouponListCloseModalClick}
         modalType="right-modal"
         headerClassName={styles.modalHeader}
         title="Apply Coupon"
@@ -131,32 +126,26 @@ function Coupon({
                 placeholder="Enter Coupon Code"
                 {...register("couponInput")}
               />
-              <button
-                disabled={!watch("couponInput")}
-                className={styles.checkBtn}
-                type="submit"
-              >
-                APPLY
+              <button className={styles.checkBtn} type="submit">
+                CHECK
               </button>
             </form>
-            {availableCouponList?.length > 0 ? (
-              <div>
+            <div>
+              {availableCouponList?.length > 0 && (
                 <div className={styles.couponListTitle}>
                   Select from Applicable Coupons
                 </div>
-                <div className={styles.couponList}>
-                  {availableCouponList?.map((coupon) => (
-                    <CouponItem
-                      {...coupon}
-                      applyCoupon={onApplyCouponClick}
-                      key={coupon?.coupon_code}
-                    />
-                  ))}
-                </div>
+              )}
+              <div className={styles.couponList}>
+                {availableCouponList?.map((coupon) => (
+                  <CouponItem
+                    {...coupon}
+                    applyCoupon={onApplyCouponClick}
+                    key={coupon?.coupon_code}
+                  />
+                ))}
               </div>
-            ) : (
-              <NoCouponsAvailable />
-            )}
+            </div>
           </div>
         </div>
       </Modal>
@@ -249,22 +238,6 @@ function CouponSuccessModal({
         )}
       </div>
     </Modal>
-  );
-}
-
-function NoCouponsAvailable() {
-  return (
-    <div className={styles.noCouponsAvailable}>
-      <div className={styles.iconContainer}>
-        <SvgWrapper svgSrc="NoCoupons" />
-      </div>
-      <div className={styles.textContainer}>
-        <h3 className={styles.fontHeader}>No coupons available</h3>
-        <p className={styles.fontBody}>
-          If you have a coupon code try typing it in the coupon code box above
-        </p>
-      </div>
-    </div>
   );
 }
 

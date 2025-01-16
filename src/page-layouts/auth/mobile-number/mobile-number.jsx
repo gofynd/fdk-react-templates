@@ -5,7 +5,6 @@ import * as styles from "./mobile-number.less";
 import { PhoneNumberUtil } from "google-libphonenumber";
 
 function MobileNumber({
-  name = "",
   mobile = "",
   countryCode = "91",
   disable = false,
@@ -31,10 +30,10 @@ function MobileNumber({
 
   const phoneUtil = PhoneNumberUtil.getInstance();
 
-  const isPhoneValid = (phoneNumber, countryIso2) => {
+  const isPhoneValid = (phoneNumber) => {
     try {
       return phoneUtil.isValidNumber(
-        phoneUtil.parseAndKeepRawInput(phoneNumber, countryIso2)
+        phoneUtil.parseAndKeepRawInput(phoneNumber)
       );
     } catch (error) {
       return false;
@@ -68,7 +67,7 @@ function MobileNumber({
 
   return (
     <div
-      className={`${styles.mobileInputWrapper} ${error ? styles.errorInput : ""} ${containerClassName || ""}`}
+      className={`${styles.mobileInputWrapper} ${error && mobile?.length > 0 ? styles.errorInput : ""} ${containerClassName || ""}`}
     >
       {isShowLabel && (
         <label
@@ -81,18 +80,16 @@ function MobileNumber({
       )}
 
       <PhoneInput
-        name={name}
         defaultCountry="in"
         value={phone}
         onChange={handleChange}
         forceDialCode
         ref={phoneInputRef}
-        required={isRequired}
         style={{
           "--react-international-phone-height": height,
           "--react-international-phone-text-color": textColor,
           "--react-international-phone-border-radius": "4px",
-          "--react-international-phone-border-color": `${error ? "var(--errorText, #b24141)" : "var(--dividerStokes, #d4d1d1)"}`,
+          "--react-international-phone-border-color": `${error && mobile?.length > 0 ? "var(--errorText, #b24141)" : "var(--dividerStokes, #d4d1d1)"}`,
           "--react-international-phone-background-color": backgroundColor,
           "--react-international-phone-dropdown-top": `calc(${height} + 4px)`,
         }}
@@ -118,7 +115,9 @@ function MobileNumber({
         placeholder={placeholder}
         hideDropdown={!allowDropdown}
       />
-      {error && <span className={styles.errorText}>{error.message}</span>}
+      {error && mobile?.length > 0 && (
+        <span className={styles.errorText}>{error.message}</span>
+      )}
     </div>
   );
 }

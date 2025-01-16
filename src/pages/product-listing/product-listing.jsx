@@ -447,14 +447,13 @@ function ProductGrid({
       }}
     >
       {productList?.length > 0 &&
-        productList.map((product, index) => (
+        productList.map((product) => (
           <FDKLink
             className={styles["product-wrapper"]}
             to={`/product/${product?.slug}`}
             key={product?.uid}
             target={isProductOpenInNewTab ? "_blank" : "_self"}
             style={{
-              "--delay": `${(index % 12) * 150}ms`,
               display: "block",
             }}
           >

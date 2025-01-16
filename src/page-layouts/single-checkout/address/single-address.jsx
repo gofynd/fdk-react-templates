@@ -1,6 +1,6 @@
 import React from "react";
 import AddressForm from "../../../components/address-form/address-form";
-import Modal from "../../../components/core/modal/modal";
+import Modal from "../modal";
 import SingleAddressContent from "./single-address-content";
 import SinglesAddressHeader from "./single-address-header";
 import * as styles from "./single-address-header.less";
@@ -37,13 +37,6 @@ function SingleAddress({
     addressItem,
     showAddNewAddressModal,
     getLocality,
-    isInternationalShippingEnabled,
-    defaultFormSchema,
-    setI18nDetails,
-    handleCountrySearch,
-    getFilteredCountries,
-    selectedCountry,
-    countryDetails,
   } = address;
 
   function backToEdit() {
@@ -60,32 +53,29 @@ function SingleAddress({
         showShipment={showShipment}
         backToEdit={backToEdit}
       ></SinglesAddressHeader>
-      <Modal
-        title={modalTitle}
-        isOpen={openModal}
-        closeDialog={resetAddressState}
-        modalType="right-modal"
-      >
-        <div className={styles.addressWrapper}>
-          <AddressForm
-            internationalShipping={isInternationalShippingEnabled}
-            formSchema={defaultFormSchema}
-            isNewAddress={isNewAddress}
-            addressItem={addressItem}
-            onUpdateAddress={updateAddress}
-            onAddAddress={addAddress}
-            mapApiKey={mapApiKey}
-            showGoogleMap={showGoogleMap}
-            openModal={openModal}
-            onGetLocality={getLocality}
-            setI18nDetails={setI18nDetails}
-            handleCountrySearch={handleCountrySearch}
-            getFilteredCountries={getFilteredCountries}
-            selectedCountry={selectedCountry?.display_name ?? ""}
-            countryDetails={countryDetails}
-          ></AddressForm>
-        </div>
-      </Modal>
+      <>
+        <Modal
+          title={modalTitle}
+          isOpen={openModal}
+          onCloseDialog={() => {
+            resetAddressState();
+            setOpenModal(false);
+          }}
+        >
+          <div className={styles.addressWrapper}>
+            <AddressForm
+              isNewAddress={isNewAddress}
+              addressItem={addressItem}
+              onUpdateAddress={updateAddress}
+              onAddAddress={addAddress}
+              mapApiKey={mapApiKey}
+              showGoogleMap={showGoogleMap}
+              openModal={openModal}
+              onGetLocality={getLocality}
+            ></AddressForm>
+          </div>
+        </Modal>
+      </>
       {showShipment || showPayment ? null : (
         <SingleAddressContent
           allAddresses={allAddresses}

@@ -91,7 +91,6 @@ import plusCircle from "../assets/images/plus-circle.svg";
 import breadcrumbAngle from "../assets/images/breadcrumb-angle.svg";
 import VideoPlay from "../assets/images/video-play.svg";
 import Delivery from "../assets/images/delivery.svg";
-import NoCoupons from "../assets/images/no-coupon.svg";
 
 export const svgTitleComponentsMappings = {
   "arrow-down": ArrowDown,
@@ -187,5 +186,4 @@ export const svgTitleComponentsMappings = {
   "minus-circle": minusCircle,
   "video-play": VideoPlay,
   delivery: Delivery,
-  NoCoupons,
 };

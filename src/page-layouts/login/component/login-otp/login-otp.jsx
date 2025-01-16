@@ -37,12 +37,8 @@ function LoginOtp({
             name="phone"
             control={control}
             rules={{
-              validate: (value) => {
-                if (value?.mobile && !value.isValidNumber) {
-                  return "Please enter valid phone number";
-                }
-                return true;
-              },
+              validate: (value) =>
+                value.isValidNumber || "Please enter valid phone number",
             }}
             render={({ field, fieldState: { error } }) => (
               <MobileNumber

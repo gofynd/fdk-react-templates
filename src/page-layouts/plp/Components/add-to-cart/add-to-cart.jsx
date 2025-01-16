@@ -1,13 +1,12 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect } from "react";
 import * as styles from "./add-to-cart.less";
 import ImageGallery from "../image-gallery/image-gallery";
 import ProductVariants from "../product-variants/product-variants";
+import OutsideClickHandler from "react-outside-click-handler";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import FyButton from "../../../../components/core/fy-button/fy-button";
 import DeliveryInfo from "../delivery-info/delivery-info";
 import Loader from "../../../../components/loader/loader";
-import QuantityControl from "../../../../components/quantity-control/quantity-control";
-import FyDropdown from "../../../../components/core/fy-dropdown/fy-dropdown";
 
 const AddToCart = ({
   isLoading = false,
@@ -16,26 +15,21 @@ const AddToCart = ({
   pageConfig = {},
   slug = "",
   selectedSize = "",
+  showSizeDropdown = false,
   deliverInfoProps = {},
   sizeError = false,
+  isHyperlocal = false,
   handleSlugChange = (updatedSlug) => {},
   onSizeSelection = () => {},
   handleShowSizeGuide = () => {},
+  setShowSizeDropdown = () => {},
   addProductForCheckout = () => {},
   handleViewMore = () => {},
   handleClose = () => {},
-  selectedItemDetails = {},
-  isCartUpdating = false,
-  isHyperlocal = false,
-  cartUpdateHandler = () => {},
-  minCartQuantity,
-  maxCartQuantity,
-  incrementDecrementUnit,
 }) => {
   const { product = {}, productPrice = {} } = productData;
 
-  const { button_options, disable_cart, show_price, show_quantity_control } =
-    globalConfig;
+  const { button_options, disable_cart, show_price } = globalConfig;
 
   const { media, name, short_description, variants, sizes, brand } = product;
 
@@ -66,15 +60,9 @@ const AddToCart = ({
 
   useEffect(() => {
     if (isSizeCollapsed || (preSelectFirstOfMany && sizes !== undefined)) {
-      onSizeSelection(sizes?.sizes?.[0]?.value);
+      onSizeSelection(sizes?.sizes?.[0]);
     }
   }, [isSizeCollapsed, preSelectFirstOfMany, sizes?.sizes]);
-
-  const disabledSizeOptions = useMemo(() => {
-    return sizes?.sizes
-      ?.filter((size) => size?.quantity === 0 && !isMto)
-      ?.map((size) => size?.value);
-  }, [sizes?.sizes]);
 
   return (
     <div className={styles.productDescContainer}>
@@ -159,14 +147,6 @@ const AddToCart = ({
                 {isSizeSelectionBlock && !isSizeCollapsed && (
                   <div className={styles.sizeSelection}>
                     <div className={styles.sizeHeaderContainer}>
-                      <p
-                        className={`${styles.b2} ${styles.sizeSelection__label}`}
-                      >
-                        <span>
-                          Style:{" "}
-                          {Boolean(selectedSize) && `Size (${selectedSize})`}
-                        </span>
-                      </p>
                       {pageConfig?.show_size_guide &&
                         isSizeGuideAvailable() &&
                         sizes?.sellable && (
@@ -203,7 +183,7 @@ const AddToCart = ({
                             styles["sizeSelection__block--selected"]
                           } `}
                           title={size?.value}
-                          onClick={() => onSizeSelection(size?.value)}
+                          onClick={() => onSizeSelection(size)}
                         >
                           {size?.display}
                           {size?.quantity === 0 && !isMto && (
@@ -219,19 +199,67 @@ const AddToCart = ({
                 {/* ---------- Size Dropdown And Action Buttons ---------- */}
                 {!isSizeSelectionBlock && !isSizeCollapsed && (
                   <div className={styles.sizeCartContainer}>
-                    <FyDropdown
-                      options={sizes?.sizes || []}
-                      value={selectedSize}
-                      onChange={onSizeSelection}
-                      placeholder="SELECT SIZE"
-                      valuePrefix="Size :"
-                      dataKey="value"
-                      containerClassName={styles.dropdownContainer}
-                      dropdownListClassName={styles.dropdown}
-                      valueClassName={styles.sizeValue}
-                      disabledOptions={disabledSizeOptions}
-                      disabledOptionClassName={styles.disabledOption}
-                    />
+                    {
+                      <div className={styles.sizeWrapper}>
+                        <div
+                          className={` ${styles.sizeButton} ${
+                            styles.flexAlignCenter
+                          } ${styles.justifyBetween} ${styles.fontBody} ${
+                            sizes?.sizes?.length && styles.disabledButton
+                          }`}
+                          onClick={() => setShowSizeDropdown(!showSizeDropdown)}
+                          disabled={!sizes?.sizes?.length}
+                        >
+                          <p
+                            className={`${styles.buttonFont} ${styles.selectedSize}`}
+                            title={
+                              selectedSize
+                                ? `Size : ${selectedSize}`
+                                : "SELECT SIZE"
+                            }
+                          >
+                            {selectedSize
+                              ? `Size : ${selectedSize}`
+                              : "SELECT SIZE"}
+                          </p>
+                          <SvgWrapper
+                            svgSrc="arrow-down"
+                            className={`${styles.dropdownArrow} ${
+                              showSizeDropdown && styles.rotateArrow
+                            }`}
+                          />
+                        </div>
+                        <OutsideClickHandler
+                          onOutsideClick={() => {
+                            setShowSizeDropdown(false);
+                          }}
+                        >
+                          <ul
+                            className={styles.sizeDropdown}
+                            style={{
+                              display: showSizeDropdown ? "block" : "none",
+                            }}
+                          >
+                            {sizes?.sizes?.map((size) => (
+                              <li
+                                onClick={() => onSizeSelection(size)}
+                                key={size?.value}
+                                className={`${
+                                  selectedSize === size.display &&
+                                  styles.selected_size
+                                } ${
+                                  size.quantity === 0 && !isMto
+                                    ? styles.disabled_size
+                                    : styles.selectable_size
+                                }`}
+                              >
+                                {size.display}
+                              </li>
+                            ))}
+                          </ul>
+                        </OutsideClickHandler>
+                      </div>
+                    }
                     {pageConfig?.show_size_guide &&
                       isSizeGuideAvailable() &&
                       sizes?.sellable && (
@@ -281,46 +309,15 @@ const AddToCart = ({
                       </FyButton>
                     )}
                     {button_options?.includes("addtocart") && (
-                      <>
-                        {selectedItemDetails?.quantity &&
-                        show_quantity_control ? (
-                          <QuantityControl
-                            isCartUpdating={isCartUpdating}
-                            count={selectedItemDetails?.quantity || 0}
-                            onDecrementClick={(e) =>
-                              cartUpdateHandler(
-                                e,
-                                -incrementDecrementUnit,
-                                "update_item"
-                              )
-                            }
-                            onIncrementClick={(e) =>
-                              cartUpdateHandler(
-                                e,
-                                incrementDecrementUnit,
-                                "update_item"
-                              )
-                            }
-                            onQtyChange={(e, currentNum) =>
-                              cartUpdateHandler(e, currentNum, "edit_item")
-                            }
-                            maxCartQuantity={maxCartQuantity}
-                            minCartQuantity={minCartQuantity}
-                            containerClassName={styles.qtyContainer}
-                            inputClassName={styles.inputContainer}
-                          />
-                        ) : (
-                          <FyButton
-                            variant="contained"
-                            size="medium"
-                            onClick={(event) =>
-                              addProductForCheckout(event, selectedSize, false)
-                            }
-                          >
-                            ADD TO CART
-                          </FyButton>
-                        )}
-                      </>
+                      <FyButton
+                        variant="contained"
+                        size="medium"
+                        onClick={(event) =>
+                          addProductForCheckout(event, selectedSize, false)
+                        }
+                      >
+                        ADD TO CART
+                      </FyButton>
                     )}
                   </>
                 )}

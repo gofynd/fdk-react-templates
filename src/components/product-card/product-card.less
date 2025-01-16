@@ -4,16 +4,6 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-
-  &.sliderCard {
-    .productDescContainer {
-      flex-direction: column !important;
-
-      .addToCart {
-        width: 100% !important;
-      }
-    }
-  }
   .imageContainer {
     position: relative;
     margin-bottom: 12px;
@@ -73,12 +63,11 @@
       text-align: center;
       background-color: @SaleBadgeBackground;
       color: @SaleBadgeText;
+      white-space: nowrap;
       overflow: hidden;
-      max-width: 60%;
-
       .text {
         display: -webkit-box;
-        -webkit-line-clamp: 2;
+        -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
         overflow: hidden;
       }
@@ -87,8 +76,8 @@
         color: @ThemeAccentL5;
       }
       &.sale {
-        background-color: @SaleBadgeBackground;
-        color: @SaleBadgeText;
+        background-color: @SaleDiscountText;
+        color: @ThemeAccentL5;
       }
     }
     .review {
@@ -122,6 +111,11 @@
     }
 
     .productDesc {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
       .productBrand {
         margin-bottom: 4px;
         .text-line-clamp();
@@ -132,7 +126,7 @@
       }
       .productName {
         margin-bottom: 4px;
-        .text-line-clamp();
+        .text-line-clamp(3);
         color: @TextHeading;
 
         &.centerAlign {
@@ -398,21 +392,4 @@
     }
   }
   .captionNormal();
-}
-
-.animate {
-  animation: 0.5s ease-in var(--delay, 0ms) fadeSlide;
-  animation-fill-mode: both;
-}
-
-@keyframes fadeSlide {
-  0% {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }

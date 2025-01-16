@@ -18,7 +18,7 @@ import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 function ReasonItem({ reason, selectedReason, change, otherReason }) {
   const [reasonOtherText, setReasonOtherText] = useState("");
   return (
-    <div className={`${styles.reasonItem}`} onClick={() => change(reason)}>
+    <div className={`${styles.reasonItem}`}>
       <div>
         <div className={`${styles.reasonContent}`}>
           {selectedReason?.id !== reason?.id && (

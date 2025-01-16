@@ -178,14 +178,12 @@ function SingleShipmentContent({
                                     </div>
                                   </div>
                                   <div className={styles.offersWarning}>
-                                    {product?.item?.article?.quantity < 11 &&
-                                      product?.item?.article?.quantity > 0 && (
-                                        <div className={styles.limitedQnty}>
-                                          Hurry! Only{" "}
-                                          {product?.item?.article?.quantity}{" "}
-                                          Left
-                                        </div>
-                                      )}
+                                    {product?.item?.article?.quantity < 11 && (
+                                      <div className={styles.limitedQnty}>
+                                        Hurry! Only{" "}
+                                        {product?.item?.article?.quantity} Left
+                                      </div>
+                                    )}
                                   </div>
                                 </div>
                               </div>

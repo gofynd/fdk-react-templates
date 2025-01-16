@@ -12,6 +12,16 @@
     padding-top: 5px;
   }
 
+  .emptyDiv {
+    position: fixed;
+    background: transparent;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: -1;
+  }
+
   .dropdown {
     box-sizing: border-box;
     border: 1px solid @DividerStokes;
@@ -19,14 +29,6 @@
     position: relative;
     display: flex;
     flex-direction: column;
-
-    &.disabled {
-      color: @TextDisabled !important;
-      user-select: none;
-      pointer-events: none;
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
 
     &.dropDownError {
       border-color: @ErrorText;
@@ -58,6 +60,44 @@
         color: @TextHeading;
       }
     }
+
+    .dropdownList {
+      max-height: 200px;
+      overflow-y: auto;
+      border-radius: 3px;
+      z-index: 2;
+      box-shadow:
+        0 4px 8px 0 hsla(0, 0%, 90%, 0.2),
+        0 6px 20px 0 hsla(0, 0%, 90%, 0.19);
+      border: 1px solid @DividerStokes;
+      display: none;
+      opacity: 0;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.5s;
+      background-color: @White;
+
+      &.open {
+        display: block;
+        opacity: 1;
+        pointer-events: all;
+      }
+
+      .dropdownOption {
+        position: relative;
+        font-size: 14px;
+        color: @TextBody;
+        line-height: 22px;
+        padding: 10px 14px;
+        cursor: pointer;
+        transition: all 0.3s;
+        padding: 9px 14px;
+
+        &:hover {
+          background: @Gray;
+        }
+      }
+    }
   }
 }
 
@@ -65,50 +105,4 @@
   color: @TextLabel;
   font-size: 12px;
   line-height: 21px;
-}
-
-.dropdownList {
-  max-height: 200px;
-  overflow-y: auto;
-  border-radius: 3px;
-  z-index: 999;
-  box-shadow:
-    0 4px 8px 0 hsla(0, 0%, 90%, 0.2),
-    0 6px 20px 0 hsla(0, 0%, 90%, 0.19);
-  border: 1px solid @DividerStokes;
-  display: none;
-  opacity: 0;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.5s;
-  background-color: @White;
-
-  &.open {
-    display: block;
-    opacity: 1;
-    pointer-events: all;
-  }
-
-  .dropdownOption {
-    position: relative;
-    font-size: 14px;
-    color: @TextBody;
-    line-height: 22px;
-    padding: 10px 14px;
-    cursor: pointer;
-    transition: all 0.3s;
-    padding: 9px 14px;
-
-    &.disabled {
-      user-select: none;
-      opacity: 0.5;
-      pointer-events: none;
-      cursor: not-allowed;
-    }
-
-    &.selected,
-    &:hover {
-      background: @Gray;
-    }
-  }
 }

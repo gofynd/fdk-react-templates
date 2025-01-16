@@ -364,35 +364,31 @@ function CheckoutPaymentContent({ payment, loader }) {
   const getNormalisedList = (selectedTabData) => {
     let tabData = selectedTabData?.list;
     return tabData.reduce((acc, tab) => {
-      // if (tab.aggregator_name == "Potlee") {
-      //   let temp = { ...tab };
-      //   temp.isDisabled = true;
-      //   temp.id =
-      //     tab.aggregator_name + tab.code + selectedTabData.payment_mode_id;
-      //   acc.push(temp);
-      //   return acc;
-      // } else if (tab.aggregator_name == "Simpl") {
-      //   let temp = { ...tab };
-      //   temp.isDisabled = { ...tab };
-      //   temp.id =
-      //     tab.aggregator_name + tab.code + selectedTabData.payment_mode_id;
-      //   acc.push(temp);
-      //   return acc;
-      // } else if (tab.aggregator_name == "Rupifi") {
-      //   let temp = { ...tab };
-      //   temp.isDisabled = { ...tab };
-      //   temp.id =
-      //     tab.aggregator_name + tab.code + selectedTabData.payment_mode_id;
-      //   acc.push(temp);
-      //   return acc;
-      // } else {
-      //   acc.push(tab);
-      //   return acc;
-      // }
-      let temp = { ...tab };
-      temp.id = tab.aggregator_name + tab.code;
-      acc.push(temp);
-      return acc;
+      if (tab.aggregator_name == "Potlee") {
+        let temp = { ...tab };
+        temp.isDisabled = true;
+        temp.id =
+          tab.aggregator_name + tab.code + selectedTabData.payment_mode_id;
+        acc.push(temp);
+        return acc;
+      } else if (tab.aggregator_name == "Simpl") {
+        let temp = tab;
+        temp.isDisabled = { ...tab };
+        temp.id =
+          tab.aggregator_name + tab.code + selectedTabData.payment_mode_id;
+        acc.push(temp);
+        return acc;
+      } else if (tab.aggregator_name == "Rupifi") {
+        let temp = tab;
+        temp.isDisabled = { ...tab };
+        temp.id =
+          tab.aggregator_name + tab.code + selectedTabData.payment_mode_id;
+        acc.push(temp);
+        return acc;
+      } else {
+        acc.push(tab);
+        return acc;
+      }
     }, []);
   };
 
@@ -806,35 +802,39 @@ function CheckoutPaymentContent({ payment, loader }) {
             <div className={styles.payLaterHeader}>Choose An Option</div>
             <div className={styles.payLaterOption}>
               {getNormalisedList(selectedTabData)?.map((payLater) => (
-                <label
-                  key={payLater.id}
-                  id={payLater.id}
-                  onClick={() => setSelectedPayLater(payLater)}
-                >
-                  <div
-                    className={`${
-                      styles.payLaterItem
-                    } ${getPayLaterBorder(payLater)}`}
-                  >
-                    <div className={styles.payLaterLeft}>
-                      {!selectedPayLater ||
-                      selectedPayLater.code !== payLater.code ? (
-                        <SvgWrapper svgSrc={"radio"}></SvgWrapper>
-                      ) : (
-                        <SvgWrapper svgSrc={"radio-selected"}></SvgWrapper>
-                      )}
-                    </div>
-                    <div className={styles.payLaterMiddle}>
-                      <img
-                        src={payLater.logo_url.small}
-                        alt={payLater.display_name}
-                      />
-                    </div>
-                    <div className={styles.payLaterRight}>
-                      {payLater.display_name}
-                    </div>
-                  </div>
-                </label>
+                <>
+                  {!payLater.isDisabled && (
+                    <label
+                      key={payLater.id}
+                      id={payLater.id}
+                      onClick={() => setSelectedPayLater(payLater)}
+                    >
+                      <div
+                        className={`${
+                          styles.payLaterItem
+                        } ${getPayLaterBorder(payLater)}`}
+                      >
+                        <div className={styles.payLaterLeft}>
+                          {!selectedPayLater ||
+                          selectedPayLater.code !== payLater.code ? (
+                            <SvgWrapper svgSrc={"radio"}></SvgWrapper>
+                          ) : (
+                            <SvgWrapper svgSrc={"radio-selected"}></SvgWrapper>
+                          )}
+                        </div>
+                        <div className={styles.payLaterMiddle}>
+                          <img
+                            src={payLater.logo_url.small}
+                            alt={payLater.display_name}
+                          />
+                        </div>
+                        <div className={styles.payLaterRight}>
+                          {payLater.display_name}
+                        </div>
+                      </div>
+                    </label>
+                  )}
+                </>
               ))}
             </div>
             <div className={styles.payLaterPay}>

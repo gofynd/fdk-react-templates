@@ -17,10 +17,6 @@ import Autocomplete from "react-google-autocomplete";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
 
 const libraries = ["places"];
-const mapContainerStyle = {
-  width: "100%",
-  height: "300px",
-};
 
 const autoCompleteStyles = {
   width: "100%",
@@ -35,6 +31,7 @@ const GoogleMapAddress = ({
   onAddressSelect,
   countryDetails,
   addressItem,
+  isMapLarge = true,
   onLoad = () => {},
 }) => {
   const [selectedPlace, setSelectedPlace] = useState({
@@ -281,9 +278,13 @@ const GoogleMapAddress = ({
         </div>
         <div className={styles.mapCompWrap}>
           <GoogleMap
-            mapContainerStyle={mapContainerStyle}
+            mapContainerStyle={{
+              transition: "height 0.5s ease-in-out",
+              width: "100%",
+              height: isMapLarge ? "500px" : "400px",
+            }}
             center={selectedPlace}
-            zoom={selectedPlace ? 15 : 10}
+            zoom={selectedPlace ? 19 : 10}
             options={{
               fullscreenControl: false,
               mapTypeControl: false,

@@ -1165,9 +1165,6 @@ img::selection {
   text-align: center;
   height: auto;
 }
-.range-slider__CustomRangeSlider___Uo_rw .range-slider__sliderWrapper___mpdbX {
-  min-height: 12px;
-}
 .range-slider__CustomRangeSlider___Uo_rw .range-slider__errorMessage___rABCa {
   font-size: 10px;
   font-weight: 500;
@@ -2250,13 +2247,13 @@ img::selection {
   transition: 300ms all cubic-bezier(0, 0, 0.2, 1);
   max-height: 500px;
   overflow: auto;
-  margin-bottom: 22px;
+  padding-bottom: 22px;
   opacity: 1;
   visibility: visible;
 }
 .filter-item__filter__list___m7myN.filter-item__collapse___QiNwW {
   max-height: 0;
-  margin-bottom: 0;
+  padding-bottom: 0;
   opacity: 0;
   visibility: hidden;
   overflow: hidden;

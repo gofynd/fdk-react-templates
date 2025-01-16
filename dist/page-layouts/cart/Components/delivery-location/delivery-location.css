@@ -2561,7 +2561,6 @@ img::selection {
   font-size: 13px;
   font-weight: 600;
   margin-bottom: 16px;
-  margin-top: 16px;
   display: block;
 }
 .address-form__addressFormWrapper___M0Ler .address-form__addressTypeContainer___JzuQf .address-form__addressType___YuGec {
@@ -4333,6 +4332,15 @@ img::selection {
   font-size: 12px;
   padding-top: 5px;
 }
+.fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__emptyDiv___xXGGn {
+  position: fixed;
+  background: transparent;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: -1;
+}
 .fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__dropdown___N1atH {
   box-sizing: border-box;
   border: 1px solid var(--dividerStokes, #d4d1d1);
@@ -4340,13 +4348,6 @@ img::selection {
   position: relative;
   display: flex;
   flex-direction: column;
-}
-.fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__dropdown___N1atH.fy-dropdown__disabled___2o83b {
-  color: var(--textSecondary) !important;
-  user-select: none;
-  pointer-events: none;
-  opacity: 0.5;
-  cursor: not-allowed;
 }
 .fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__dropdown___N1atH.fy-dropdown__dropDownError___IqJV1 {
   border-color: var(--errorText, #b24141);
@@ -4374,16 +4375,11 @@ img::selection {
   line-height: 22px;
   color: var(--textHeading, #26201a);
 }
-.fy-dropdown__label___RKOjm {
-  color: var(--textLabel, #7d7676);
-  font-size: 12px;
-  line-height: 21px;
-}
-.fy-dropdown__dropdownList___M0x2r {
+.fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__dropdown___N1atH .fy-dropdown__dropdownList___M0x2r {
   max-height: 200px;
   overflow-y: auto;
   border-radius: 3px;
-  z-index: 999;
+  z-index: 2;
   box-shadow: 0 4px 8px 0 hsla(0, 0%, 90%, 0.2), 0 6px 20px 0 hsla(0, 0%, 90%, 0.19);
   border: 1px solid var(--dividerStokes, #d4d1d1);
   display: none;
@@ -4392,12 +4388,12 @@ img::selection {
   transition: opacity 0.5s;
   background-color: #ffffff;
 }
-.fy-dropdown__dropdownList___M0x2r.fy-dropdown__open___Si_ce {
+.fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__dropdown___N1atH .fy-dropdown__dropdownList___M0x2r.fy-dropdown__open___Si_ce {
   display: block;
   opacity: 1;
   pointer-events: all;
 }
-.fy-dropdown__dropdownList___M0x2r .fy-dropdown__dropdownOption___YEIck {
+.fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__dropdown___N1atH .fy-dropdown__dropdownList___M0x2r .fy-dropdown__dropdownOption___YEIck {
   position: relative;
   font-size: 14px;
   color: var(--textBody, #3c3131);
@@ -4407,15 +4403,13 @@ img::selection {
   transition: all 0.3s;
   padding: 9px 14px;
 }
-.fy-dropdown__dropdownList___M0x2r .fy-dropdown__dropdownOption___YEIck.fy-dropdown__disabled___2o83b {
-  user-select: none;
-  opacity: 0.5;
-  pointer-events: none;
-  cursor: not-allowed;
-}
-.fy-dropdown__dropdownList___M0x2r .fy-dropdown__dropdownOption___YEIck.fy-dropdown__selected___lb64Q,
-.fy-dropdown__dropdownList___M0x2r .fy-dropdown__dropdownOption___YEIck:hover {
+.fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__dropdown___N1atH .fy-dropdown__dropdownList___M0x2r .fy-dropdown__dropdownOption___YEIck:hover {
   background: #cccccc;
+}
+.fy-dropdown__label___RKOjm {
+  color: var(--textLabel, #7d7676);
+  font-size: 12px;
+  line-height: 21px;
 }
 
 .mobile-number__slide-fade-enter-active___cTAIw,

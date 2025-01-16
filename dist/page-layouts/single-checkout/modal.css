@@ -495,9 +495,9 @@ img::selection {
   bottom: 0;
   right: 0;
   opacity: 0;
-  transition: right 0.5s ease-in-out;
+  transition: transform 0.5s ease-in-out;
   /* Added transition property for animation */
-  right: -40%;
+  transform: translateX(100%);
   /* Initial state - hidden off the right side */
   /* Track */
   /* Handle */
@@ -505,15 +505,11 @@ img::selection {
 @media only screen and (max-width: 768px) {
   .modal__modalContainerCss___ZR5ho {
     width: 60%;
-    right: -60%;
-    /* Initial state - hidden off the right side */
   }
 }
 @media only screen and (max-width: 480px) {
   .modal__modalContainerCss___ZR5ho {
     width: 100%;
-    right: -100%;
-    /* Initial state - hidden off the right side */
   }
 }
 .modal__modalContainerCss___ZR5ho::-webkit-scrollbar {
@@ -562,7 +558,7 @@ img::selection {
   line-height: 140%;
 }
 .modal__modalContainerCss___ZR5ho.modal__slideIn____gLvj {
-  right: 0;
+  transform: translateX(0);
   /* Final state - fully visible */
   opacity: 1;
 }

@@ -148,22 +148,20 @@ function CustomRangeSlider({
           </div>
         </div>
       </div>
-      <div className={styles.sliderWrapper}>
-        <RangeSlider
-          className={styles.rangeSlider}
-          min={min}
-          max={max}
-          value={[startValue, endValue]}
-          onInput={onSliderInput}
-          onThumbDragEnd={setValue}
-        />
+      <RangeSlider
+        className={styles.rangeSlider}
+        min={min}
+        max={max}
+        value={[startValue, endValue]}
+        onInput={onSliderInput}
+        onThumbDragEnd={setValue}
+      />
 
-        {count && (
-          <div className={styles.entityCount}>{count} Products Found</div>
-        )}
+      {count && (
+        <div className={styles.entityCount}>{count} Products Found</div>
+      )}
 
-        {rangeMessage && <p className={styles.errorMessage}>{rangeMessage}</p>}
-      </div>
+      {rangeMessage && <p className={styles.errorMessage}>{rangeMessage}</p>}
     </div>
   );
 }

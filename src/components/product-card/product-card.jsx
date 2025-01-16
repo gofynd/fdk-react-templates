@@ -64,8 +64,6 @@ const ProductCard = ({
   onRemoveClick = () => {},
   centerAlign = false,
   showAddToCart = false,
-  showBadge = true,
-  isSlider = false,
 }) => {
   const isMobile = useMobile();
 
@@ -180,7 +178,7 @@ const ProductCard = ({
         !product.sellable ? styles.disableCursor : ""
       } ${styles[customClass[0]]} ${styles[customClass[1]]} ${
         styles[customClass[2]]
-      } ${styles.animate} ${gridClass} ${isSlider ? styles.sliderCard : ""}`}
+      } ${gridClass}`}
     >
       <div className={styles.imageContainer}>
         {!isMobile && showImageOnHover && hoverImageUrl && (
@@ -231,13 +229,13 @@ const ProductCard = ({
               Out of stock
             </span>
           </div>
-        ) : product.teaser_tag && showBadge ? (
+        ) : product.teaser_tag ? (
           <div className={styles.badge}>
             <span className={`${styles.text} ${styles.captionNormal}`}>
               {product?.teaser_tag?.substring(0, 14)}
             </span>
           </div>
-        ) : isSaleBadge && showBadge && product.discount && product.sellable ? (
+        ) : isSaleBadge && product.discount && product.sellable ? (
           <div className={`${styles.badge} ${styles.sale}`}>
             <span className={`${styles.text} ${styles.captionNormal}`}>
               Sale
@@ -247,15 +245,17 @@ const ProductCard = ({
       </div>
       <div className={styles.productDescContainer}>
         <div className={styles.productDesc}>
-          {isBrand && product.brand && (
-            <h3 className={styles.productBrand}>{product.brand.name}</h3>
-          )}
-          <h5
-            className={`${styles.productName} ${styles.b2} ${centerAlign ? styles.centerAlign : ""}`}
-            title={product.name}
-          >
-            {product.name}
-          </h5>
+          <div>
+            {isBrand && product.brand && (
+              <h3 className={styles.productBrand}>{product.brand.name}</h3>
+            )}
+            <h5
+              className={`${styles.productName} ${styles.b2} ${centerAlign ? styles.centerAlign : ""}`}
+              title={product.name}
+            >
+              {product.name}
+            </h5>
+          </div>
           {isPrice && (
             <div
               className={`${styles.productPrice} ${centerAlign ? styles.center : ""}`}

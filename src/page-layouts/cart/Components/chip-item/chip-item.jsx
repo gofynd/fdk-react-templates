@@ -55,12 +55,6 @@ export default function ChipItem({
     isSizeUpdate = false
   ) => {
     let totalQuantity = (itemDetails?.quantity || 0) + quantity;
-
-    if (operation === "edit_item") {
-      totalQuantity = quantity;
-      operation = "update_item";
-    }
-
     if (!itemDetails?.custom_order?.is_custom_order && !isSizeUpdate) {
       if (totalQuantity > maxCartQuantity) {
         totalQuantity = maxCartQuantity;
@@ -228,18 +222,6 @@ export default function ChipItem({
                         "update_item"
                       )
                     }
-                    onQtyChange={(evt, currentNum) =>
-                      cartUpdateHandler(
-                        evt,
-                        singleItemDetails,
-                        currentSize,
-                        currentNum,
-                        itemIndex,
-                        "edit_item"
-                      )
-                    }
-                    maxCartQuantity={maxCartQuantity}
-                    minCartQuantity={minCartQuantity}
                   />
                 )}
                 {isOutOfStock && (
@@ -331,7 +313,9 @@ export default function ChipItem({
           {singleItemDetails?.promotions_applied?.map(
             (promotion) =>
               promotion?.promotion_type === "free_gift_items" && (
-                <div className={styles.freeArticleContainer}>
+                <div
+                  className={`${styles.freeArticleContainer} ${promotion?.applied_free_articles.length === 1 ? styles.singleCol : ""}`}
+                >
                   <h6
                     className={styles.freeArticleTitle}
                   >{`${promotion?.applied_free_articles?.length} free gift added`}</h6>

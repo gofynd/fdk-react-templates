@@ -599,7 +599,6 @@ img::selection {
   border-radius: 4px;
   line-height: 140%;
   color: var(--errorText, #b24141);
-  background-color: var(--errorBackground, #e6d5d5);
 }
 @media only screen and (max-width: 480px) {
   .chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemSizeQuantityContainer___WpCw4 .chip-item__limitedQtyBox___eERNF {
@@ -718,9 +717,12 @@ img::selection {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
-  border-radius: 12px;
+  border-radius: 8px;
   background: var(--highlightColor, #a7a7f8);
   margin-top: 16px;
+}
+.chip-item__freeArticleContainer____dv3p.chip-item__singleCol___CXeiC {
+  grid-template-columns: 1fr;
 }
 .chip-item__freeArticleContainer____dv3p .chip-item__freeArticleTitle___GytAD {
   grid-column: 1/-1;
@@ -734,7 +736,7 @@ img::selection {
   display: flex;
   align-items: center;
   gap: 8px;
-  border-radius: 8px;
+  border-radius: 12px;
   background-color: #fff;
   min-width: 0;
 }
@@ -1538,16 +1540,6 @@ img::selection {
   .quantity-control__quantityCtrlContainer___RPVmM .quantity-control__count___JvxLy {
     width: 30px;
   }
-}
-.quantity-control__quantityCtrlContainer___RPVmM .quantity-control__count___JvxLy .quantity-control__qtyInput___PHHcG {
-  border: none;
-  background: none;
-  color: inherit;
-  width: 100%;
-  text-align: center;
-}
-.quantity-control__quantityCtrlContainer___RPVmM .quantity-control__count___JvxLy .quantity-control__qtyInput___PHHcG:focus {
-  outline: none;
 }
 
 .modal__slide-fade-enter-active___l7432,

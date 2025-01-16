@@ -6,7 +6,7 @@ import FyDropdown from "../core/fy-dropdown/fy-dropdown";
 import MobileNumber from "../../page-layouts/auth/mobile-number/mobile-number";
 import * as styles from "./form-input-selector.less";
 
-const FormInputSelector = ({ formData, control, allowDropdown }) => {
+const FormInputSelector = ({ formData, control }) => {
   const {
     display = "",
     enum: options = [],
@@ -18,6 +18,7 @@ const FormInputSelector = ({ formData, control, allowDropdown }) => {
     type = "",
     error_message = "",
     countryCode,
+    disabled = false,
   } = formData;
   const getInput = ({ error, field }) => {
     switch (type) {
@@ -54,7 +55,6 @@ const FormInputSelector = ({ formData, control, allowDropdown }) => {
       case "mobile": {
         return (
           <MobileNumber
-            name={key}
             mobile={field?.value?.mobile}
             label={`${display}${required ? " *" : ""}`}
             error={error}
@@ -66,7 +66,6 @@ const FormInputSelector = ({ formData, control, allowDropdown }) => {
             inputClassName={styles.mobileInput}
             labelClassName={styles.mobileLabel}
             telInputClassName={styles.telInput}
-            allowDropdown={allowDropdown}
           />
         );
       }
@@ -87,6 +86,7 @@ const FormInputSelector = ({ formData, control, allowDropdown }) => {
             onChange={(event) => {
               field?.onChange(event?.target?.value);
             }}
+            disabled={disabled}
           />
         );
       }
