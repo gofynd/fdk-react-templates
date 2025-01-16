@@ -331,7 +331,9 @@ export default function ChipItem({
           {singleItemDetails?.promotions_applied?.map(
             (promotion) =>
               promotion?.promotion_type === "free_gift_items" && (
-                <div className={styles.freeArticleContainer}>
+                <div
+                  className={`${styles.freeArticleContainer} ${promotion?.applied_free_articles.length === 1 ? styles.singleCol : ""}`}
+                >
                   <h6
                     className={styles.freeArticleTitle}
                   >{`${promotion?.applied_free_articles?.length} free gift added`}</h6>
