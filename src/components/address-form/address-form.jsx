@@ -479,6 +479,7 @@ const AddressForm = ({
               optionLabel="display_name"
               showDropdownIcon
               label="Country"
+              placeholder="Select country"
               containerClassName={styles.customClass}
             />
           </div>
