@@ -64,9 +64,14 @@ function PriceBreakup({
     return totalDis;
   }, [breakUpValues]);
 
-  const breakUpValuesList = includeZeroValues
-    ? breakUpValues
-    : breakUpValues.filter((f) => f?.value !== 0);
+  const breakUpValuesList = useMemo(() => {
+    if (!breakUpValues) return [];
+    const totalVal = breakUpValues.filter((f) => f?.key === "total");
+    const restVal = breakUpValues.filter(
+      (f) => f?.key !== "total" && (includeZeroValues || f?.value !== 0)
+    );
+    return [...restVal, ...totalVal];
+  }, [includeZeroValues, breakUpValues]);
 
   return (
     <div

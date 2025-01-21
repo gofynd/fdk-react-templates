@@ -522,6 +522,9 @@ img::selection {
   grid-template-columns: repeat(2, 1fr);
   grid-auto-rows: auto;
 }
+.wishlist__productGrid___vDf31 > * {
+  min-width: 0;
+}
 @media only screen and (min-width: 481px) {
   .wishlist__productGrid___vDf31 {
     gap: 24px 16px;

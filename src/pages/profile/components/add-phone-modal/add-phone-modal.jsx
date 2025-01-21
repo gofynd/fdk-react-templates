@@ -166,10 +166,10 @@ function AddPhoneModal({
             >
               <FyInput
                 id="otp"
-                label="Otp"
+                label="OTP"
                 type="number"
                 name="otp"
-                placeholder="Enter Otp"
+                placeholder="Enter OTP"
                 inputClassName={styles.addMobileOtp}
                 {...otpRegister("otp")}
                 onChange={handleOtpChange}

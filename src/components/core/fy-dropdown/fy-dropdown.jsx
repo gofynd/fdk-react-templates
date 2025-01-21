@@ -49,6 +49,7 @@ const FyDropdown = ({
   disabled = false,
   disabledOptions = [],
   onChange = (value) => {},
+  disableSearch = false,
 }) => {
   const id = useId();
   const [selectedValue, setSelectedValue] = useState();
@@ -56,11 +57,21 @@ const FyDropdown = ({
   const dropdown = useRef(null);
   const dropdownButton = useRef(null);
   const dropdownList = useRef(null);
+  const inputRef = useRef(null);
   const [dropdownStyles, setDropdownStyles] = useState({});
+  const [query, setQuery] = useState(value || "");
+  const [filteredOptions, setFilteredOptions] = useState([]);
+  const [isKeyPressed, setIskeyPressed] = useState(0);
 
   useEffect(() => {
-    setSelectedValue(options?.find((option) => option?.[dataKey] === value));
-  }, [value, options]);
+    setFilteredOptions(options);
+  }, [options]);
+
+  useEffect(() => {
+    setSelectedValue(
+      filteredOptions?.find((option) => option?.[dataKey] === value)
+    );
+  }, [value, filteredOptions]);
 
   const customLabelClassName = useMemo(
     () => `${styles.label} ${labelClassName ?? ""}`,
@@ -107,6 +118,7 @@ const FyDropdown = ({
 
   const handleChange = useCallback(
     (option) => {
+      setQuery(option.display);
       setSelectedValue(option);
       onChange?.(option?.[dataKey]);
       toggleDropdown();
@@ -148,7 +160,7 @@ const FyDropdown = ({
 
     listElement.innerHTML = "";
 
-    options.forEach((option) => {
+    filteredOptions.forEach((option) => {
       const listItem = document.createElement("li");
       const disabled = disabledOptions?.includes(option?.[dataKey]);
       const className = `${styles.dropdownOption} ${option?.[dataKey] === selectedValue?.[dataKey] ? styles.selected : ""} ${disabled ? `${styles.disabled} ${disabledOptionClassName}` : ""} ${dropdownOptionClassName}`;
@@ -175,7 +187,7 @@ const FyDropdown = ({
       }
     };
   }, [
-    options,
+    filteredOptions,
     handleChange,
     dropdownStyles,
     isOpen,
@@ -185,6 +197,21 @@ const FyDropdown = ({
     disabledOptionClassName,
     disabledOptions,
   ]);
+
+  const handleInputChange = (e) => {
+    const value = e.target?.value;
+    setQuery(value);
+    if (value) {
+      setFilteredOptions(
+        options.filter((option) =>
+          (option.display || "").toLowerCase().includes(value.toLowerCase())
+        )
+      );
+      setIsOpen(true);
+    } else {
+      setIsOpen(false);
+    }
+  };
 
   return (
     <div className={customContainerClassName}>
@@ -198,21 +225,49 @@ const FyDropdown = ({
         className={`${styles.dropdown} ${error ? styles.dropDownError : ""} ${disabled ? styles.disabled : ""}`}
         ref={dropdown}
       >
-        <div
-          className={styles.dropdownButton}
-          onClick={toggleDropdown}
-          ref={dropdownButton}
-        >
-          <span className={`${styles.selectedValue} ${valueClassName}`}>
-            {selectedValue?.display
-              ? `${valuePrefix} ${selectedValue?.display}`
-              : placeholder}
-          </span>
-          <SvgWrapper
-            svgSrc="arrow-down"
-            className={`${styles.dropdownIcon} ${isOpen ? styles.open : ""}`}
-          />
-        </div>
+        {disableSearch ? (
+          <div
+            className={styles.dropdownButton}
+            onClick={toggleDropdown}
+            ref={dropdownButton}
+          >
+            <span className={`${styles.selectedValue} ${valueClassName}`}>
+              {selectedValue?.display
+                ? `${valuePrefix} ${selectedValue?.display}`
+                : placeholder}
+            </span>
+            <SvgWrapper
+              svgSrc="arrow-down"
+              className={`${styles.dropdownIcon} ${isOpen ? styles.open : ""}`}
+            />
+          </div>
+        ) : (
+          <div
+            className={styles.dropdownButton}
+            onClick={toggleDropdown}
+            ref={dropdownButton}
+            tabIndex={!disableSearch ? 0 : null}
+            onKeyDown={(e) => {
+              setIskeyPressed((prev) => prev + 1);
+              isKeyPressed === 0 && setQuery("");
+              inputRef.current.focus();
+            }}
+          >
+            <input
+              id="input-query"
+              className={`${styles.text_field} ${styles.selectedValue} ${valueClassName}`}
+              type="text"
+              value={query}
+              onChange={handleInputChange}
+              placeholder={placeholder}
+              ref={inputRef}
+            />
+            <SvgWrapper
+              svgSrc="arrow-down"
+              className={`${styles.dropdownIcon} ${isOpen ? styles.open : ""}`}
+            />
+          </div>
+        )}
       </div>
       {isOpen && (
         <div className={styles.emptyDiv} onClickCapture={toggleDropdown}></div>
