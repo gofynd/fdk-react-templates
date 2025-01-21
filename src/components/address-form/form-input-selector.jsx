@@ -6,7 +6,12 @@ import FyDropdown from "../core/fy-dropdown/fy-dropdown";
 import MobileNumber from "../../page-layouts/auth/mobile-number/mobile-number";
 import * as styles from "./form-input-selector.less";
 
-const FormInputSelector = ({ formData, control, allowDropdown }) => {
+const FormInputSelector = ({
+  formData,
+  control,
+  allowDropdown,
+  isSingleField = false,
+}) => {
   const {
     display = "",
     enum: options = [],
@@ -18,6 +23,8 @@ const FormInputSelector = ({ formData, control, allowDropdown }) => {
     type = "",
     error_message = "",
     countryCode,
+    disabled = false,
+    onChange = () => {},
   } = formData;
   const getInput = ({ error, field }) => {
     switch (type) {
@@ -32,7 +39,10 @@ const FormInputSelector = ({ formData, control, allowDropdown }) => {
             required={required}
             error={error}
             value={field?.value}
-            onChange={field?.onChange}
+            onChange={(value) => {
+              field?.onChange(value);
+              onChange(value);
+            }}
           />
         );
       }
@@ -42,12 +52,16 @@ const FormInputSelector = ({ formData, control, allowDropdown }) => {
             name={key}
             error={error}
             options={options}
-            onChange={field?.onChange}
             value={field?.value}
             required={required}
             label={display}
             placeholder={placeholder}
-            containerClassName={styles.customClass}
+            containerClassName={`${styles.customClass} ${isSingleField ? styles.singleField : ""}`}
+            disabled={disabled}
+            onChange={(value) => {
+              field?.onChange(value);
+              onChange(value);
+            }}
           />
         );
       }
@@ -59,14 +73,20 @@ const FormInputSelector = ({ formData, control, allowDropdown }) => {
             label={`${display}${required ? " *" : ""}`}
             error={error}
             isRequired={required}
-            onChange={field?.onChange}
             placeholder={placeholder}
             countryCode={countryCode}
-            containerClassName={styles.customClass}
+            containerClassName={`${styles.customClass} ${isSingleField ? styles.singleField : ""}`}
             inputClassName={styles.mobileInput}
             labelClassName={styles.mobileLabel}
             telInputClassName={styles.telInput}
             allowDropdown={allowDropdown}
+            backgroundColor="transparent"
+            height="40px"
+            disabled={disabled}
+            onChange={(value) => {
+              field?.onChange(value);
+              onChange(value);
+            }}
           />
         );
       }
@@ -83,9 +103,11 @@ const FormInputSelector = ({ formData, control, allowDropdown }) => {
             errorMessage={error?.message}
             value={field.value}
             inputSize="medium"
-            containerClassName={styles.customClass}
+            containerClassName={`${styles.customClass} ${isSingleField ? styles.singleField : ""}`}
+            disabled={disabled}
             onChange={(event) => {
               field?.onChange(event?.target?.value);
+              onChange(event?.target?.value);
             }}
           />
         );

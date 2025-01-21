@@ -8,7 +8,7 @@
  * @returns {JSX.Element} A JSX element that renders the shipment breakup details.
  */
 
-import React from "react";
+import React, { useMemo } from "react";
 import * as styles from "./shipment-breakup.less";
 import { priceFormatCurrencySymbol } from "../../helper/utils";
 
@@ -16,18 +16,20 @@ function ShipmentBreakup({ breakup }) {
   const getPriceFormat = (symbol, price) => {
     return priceFormatCurrencySymbol(symbol, price);
   };
-  const breakupValues = () => {
+
+  const breakupValues = useMemo(() => {
     const totalVal = breakup?.filter((item) => item.name === "total") || [];
     const restVal =
       breakup?.filter((item) => item.name !== "total" && item.value !== 0) ||
       [];
-    return totalVal.concat(restVal);
-  };
+    return restVal.concat(totalVal);
+  }, [breakup]);
+
   return (
     <div className={`${styles.billing} ${styles.lightsm}`}>
       <div className={`${styles.title} ${styles.boldsm}`}>BILLING</div>
       <>
-        {breakupValues()?.map((item, index) => (
+        {breakupValues?.map((item, index) => (
           <div key={index} className={`${styles.breakupItem}`}>
             {((index !== breakup.length - 1 && item.value !== "0") ||
               (index === breakup.length - 1 && item.value !== "0")) && (

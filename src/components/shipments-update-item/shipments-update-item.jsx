@@ -103,8 +103,8 @@ function ShipmentUpdateItem({ selectedBagId, item }) {
                 )}
               </span>
               <span className={`${styles.lightxxs}`}>
-                ({item?.quantity}
-                {item?.quantity === 1 ? "Piece" : "Pieces"})
+                {" "}
+                ({item?.quantity} {item?.quantity === 1 ? "Piece" : "Pieces"})
               </span>
             </div>
           </div>
