@@ -26,7 +26,8 @@ function DeliveryLocation({
   setSelectedAddressId = () => {},
   addAddress = () => {},
   isInternationalShippingEnabled = false,
-  defaultFormSchema,
+  addressFormSchema,
+  addressItem,
   setI18nDetails = () => {},
   handleCountrySearch = () => {},
   getFilteredCountries = () => {},
@@ -212,7 +213,8 @@ function DeliveryLocation({
           <div className={`${styles.modalBody} ${styles.addressFormWrapper}`}>
             <AddressForm
               internationalShipping={isInternationalShippingEnabled}
-              formSchema={defaultFormSchema}
+              addressItem={addressItem}
+              formSchema={addressFormSchema}
               isNewAddress={true}
               onAddAddress={addAddress}
               mapApiKey={mapApiKey}

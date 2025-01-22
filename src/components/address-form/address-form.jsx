@@ -302,7 +302,6 @@ const AddressForm = ({
   });
   const formContainerRef = useRef(null);
   const [currBgColor, setCurrBgColor] = useState("#fff");
-  const [isCityStateDisabled, setCityStateDisabled] = useState(true);
   const [showOtherText, setShowOtherText] = useState(false);
   const [addressLoadStatus, setAddressLoadStatus] = useState(false);
   const [resetStatus, setResetStatus] = useState(true);
@@ -479,6 +478,7 @@ const AddressForm = ({
               optionLabel="display_name"
               showDropdownIcon
               label="Country"
+              placeholder="Select country"
               containerClassName={styles.customClass}
             />
           </div>
@@ -488,6 +488,7 @@ const AddressForm = ({
             <div ref={formContainerRef} className={styles.formContainer}>
               {group.fields.map((field) => (
                 <FormInputSelector
+                  isSingleField={group?.fields?.length === 1}
                   key={field.key}
                   formData={field}
                   control={control}

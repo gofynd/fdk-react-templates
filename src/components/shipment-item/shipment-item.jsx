@@ -76,8 +76,7 @@ function ShipmentItem({ bag, initial, selectId, onChangeValue, type }) {
               <span className={`${styles.boldxxs}`}>{bag?.item?.size}</span>
               <span>{` | `}</span>
               <span className={`${styles.lightxxs}`}>
-                {bag?.quantity}
-                {bag?.quantity === 1 ? "Piece" : "Pieces"}
+                {bag?.quantity} {bag?.quantity === 1 ? "Piece" : "Pieces"}
               </span>
             </div>
             {bag?.prices?.currency_symbol && bag?.prices?.price_effective && (
