@@ -72,7 +72,6 @@ function loginPassword({
         : username,
       password,
     };
-    console.log({ username, phone, password, data });
     onLoginFormSubmit(data);
   };
 

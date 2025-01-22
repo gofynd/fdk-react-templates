@@ -472,6 +472,8 @@ img::selection {
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .breadcrumb__breadcrumbs___lMY9E span {
   color: var(--textSecondary, #9c9c9c);
