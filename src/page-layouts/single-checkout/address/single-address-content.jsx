@@ -56,7 +56,7 @@ function InvalidAddress({ errorMessage }) {
         <div className={styles.invalidAddErrorData}>
           <div className={styles.invalidAddErrorMsg}>{errorMessage}</div>
           <div className={styles.invalidAddErrorSuggestion}>
-            Try changing the pincode or remove the non deliverable items
+            Please add more items to your cart to meet the minimum order value
           </div>
         </div>
       </div>
