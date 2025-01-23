@@ -14,6 +14,7 @@ function SetPassword({ error = null, onSetPasswordSubmit = () => {} }) {
     clearErrors,
     watch,
   } = useForm({
+    mode: "onChange",
     defaultValues: {
       newPassword: "",
       confirmNewPassword: "",
