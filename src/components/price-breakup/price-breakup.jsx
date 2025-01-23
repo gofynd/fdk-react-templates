@@ -34,7 +34,7 @@
  */
 
 import React, { useMemo } from "react";
-import { numberWithCommas } from "../../helper/utils";
+import { priceFormatCurrencySymbol } from "../../helper/utils";
 import * as styles from "./price-breakup.less";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
 
@@ -64,9 +64,14 @@ function PriceBreakup({
     return totalDis;
   }, [breakUpValues]);
 
-  const breakUpValuesList = includeZeroValues
-    ? breakUpValues
-    : breakUpValues.filter((f) => f?.value !== 0);
+  const breakUpValuesList = useMemo(() => {
+    if (!breakUpValues) return [];
+    const totalVal = breakUpValues.filter((f) => f?.key === "total");
+    const restVal = breakUpValues.filter(
+      (f) => f?.key !== "total" && (includeZeroValues || f?.value !== 0)
+    );
+    return [...restVal, ...totalVal];
+  }, [includeZeroValues, breakUpValues]);
 
   return (
     <div
@@ -95,16 +100,14 @@ function PriceBreakup({
             <>
               <div>{item?.display}</div>
               <div className={Number(item.value) < 0 ? styles.discount : ""}>
-                {item?.currency_symbol}
-                {numberWithCommas(item?.value)}
+                {priceFormatCurrencySymbol(item?.currency_symbol, item?.value)}
               </div>
             </>
           ) : (
             <>
               <div>{item?.display}</div>
               <div>
-                {item?.currency_symbol}
-                {numberWithCommas(item?.value)}
+                {priceFormatCurrencySymbol(item?.currency_symbol, item?.value)}
               </div>
             </>
           )}
@@ -117,7 +120,7 @@ function PriceBreakup({
             {discountGreetingMessage}
           </span>
           <span className={styles.discountPreviewAmount}>
-            {`${currencySymbol} ${numberWithCommas(totalDiscount)}`}
+            {priceFormatCurrencySymbol(currencySymbol, totalDiscount)}
           </span>
         </div>
       )}

@@ -915,6 +915,7 @@ img::selection {
   display: flex;
   align-items: baseline;
   column-gap: 4px;
+  max-width: 100%;
 }
 @media only screen and (min-width: 1024px) {
   .product-listing__rightHeader___DQkjd .product-listing__headerLeft___mYXmW {
@@ -923,7 +924,7 @@ img::selection {
 }
 .product-listing__rightHeader___DQkjd .product-listing__headerLeft___mYXmW .product-listing__title___wSoBr {
   display: -webkit-box;
-  -webkit-line-clamp: 1;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1512,6 +1513,8 @@ img::selection {
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .breadcrumb__breadcrumbs___lMY9E span {
   color: var(--textSecondary, #9c9c9c);
@@ -8552,6 +8555,11 @@ img::selection {
   letter-spacing: -0.02em;
   font-weight: 400;
   color: var(--textBody, #3c3131);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .listing-description__descriptionWrapper___tzE5e .listing-description__actionBtn___Xw4a9 {
   font-weight: 500;
@@ -17512,6 +17520,10 @@ img::selection {
 }
 .fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__dropdown___N1atH .fy-dropdown__dropdownButton___SqCaQ .fy-dropdown__dropdownIcon___ngubn.fy-dropdown__open___Si_ce {
   transform: rotate(180deg);
+}
+.fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__dropdown___N1atH .fy-dropdown__dropdownButton___SqCaQ .fy-dropdown__text_field___tlM0X {
+  width: 100%;
+  border: none;
 }
 .fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__dropdown___N1atH .fy-dropdown__dropdownButton___SqCaQ .fy-dropdown__selectedValue___d2Cjo {
   font-size: 14px;

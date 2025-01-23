@@ -32,6 +32,7 @@ export default function ChipItem({
   const [showQuantityError, setShowQuantityError] = useState(false);
   const [sizeModalErr, setSizeModalErr] = useState(null);
   const [activePromoIndex, setActivePromoIndex] = useState(null);
+  const [clickedPromoIndex, setClickedPromoIndex] = useState(null);
   const isOutOfStock = singleItemDetails?.availability?.out_of_stock || false;
   const isServiceable = singleItemDetails?.availability?.deliverable;
   const isCustomOrder =
@@ -321,6 +322,7 @@ export default function ChipItem({
                   onClick={(e) => {
                     e.stopPropagation();
                     onOpenPromoModal();
+                    setClickedPromoIndex(itemIndex);
                   }}
                 >
                   <span>{`${promoTitle} Applied`}</span>
@@ -331,7 +333,10 @@ export default function ChipItem({
           {singleItemDetails?.promotions_applied?.map(
             (promotion) =>
               promotion?.promotion_type === "free_gift_items" && (
-                <div className={styles.freeArticleContainer}>
+                <div
+                  className={`${styles.freeArticleContainer} ${promotion?.applied_free_articles.length === 1 ? styles.singleCol : ""}`}
+                  key={promotion.promo_id}
+                >
                   <h6
                     className={styles.freeArticleTitle}
                   >{`${promotion?.applied_free_articles?.length} free gift added`}</h6>
@@ -349,7 +354,7 @@ export default function ChipItem({
               )
           )}
         </div>
-        {isPromoModalOpen && (
+        {isPromoModalOpen && clickedPromoIndex === itemIndex && (
           <Modal
             isOpen={isPromoModalOpen}
             closeDialog={onClosePromoModal}

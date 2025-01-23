@@ -119,21 +119,22 @@ function ContactSupport({
           <div className={`${styles.flex_item}`}>
             <h3 className={styles.fontHeader}>Contact Us</h3>
             <div className={styles.listItems}>
-              {pageConfig?.show_address && (
-                <div className={`${styles.item} fontBody b1`}>
-                  <div>
-                    <SvgWrapper svgSrc="location" />
+              {pageConfig?.show_address &&
+                contactInfo?.address?.address_line[0].length > 0 && (
+                  <div className={`${styles.item} fontBody b1`}>
+                    <div>
+                      <SvgWrapper svgSrc="location" />
+                    </div>
+                    <div>
+                      {contactInfo?.address?.address_line?.map((el, i) => (
+                        <span key={i}>{el}</span>
+                      ))}
+                      <span>{` ${contactInfo?.address?.city}`}</span>
+                      <span>,{` ${contactInfo?.address?.pincode}`}</span>
+                    </div>
                   </div>
-                  <div>
-                    {contactInfo?.address?.address_line?.map((el, i) => (
-                      <span key={i}>{el}</span>
-                    ))}
-                    <span>{` ${contactInfo?.address?.city}`}</span>
-                    <span>,{` ${contactInfo?.address?.pincode}`}</span>
-                  </div>
-                </div>
-              )}
-              {pageConfig?.show_phone && (
+                )}
+              {pageConfig?.show_phone && contact?.number && (
                 <div className={`${styles.item} fontBody b1`}>
                   <SvgWrapper svgSrc="callSupport" />
                   <FDKLink to={`tel:${contact?.number}`}>
@@ -141,19 +142,20 @@ function ContactSupport({
                   </FDKLink>
                 </div>
               )}
-              {pageConfig?.show_email && (
+              {pageConfig?.show_email && email?.length && (
                 <div className={`${styles.item} fontBody b1`}>
                   <SvgWrapper svgSrc="contactEmail" />
                   <FDKLink to={`mailto:${email}`}>{email}</FDKLink>
                 </div>
               )}
-              {pageConfig?.show_working_hours && (
-                <div className={`${styles.item} fontBody b1`}>
-                  <SvgWrapper svgSrc="timer" />
-                  {contactInfo?.support?.timing}
-                </div>
-              )}
-              {pageConfig?.show_icons && (
+              {pageConfig?.show_working_hours &&
+                contactInfo?.support?.timing && (
+                  <div className={`${styles.item} fontBody b1`}>
+                    <SvgWrapper svgSrc="timer" />
+                    {contactInfo?.support?.timing}
+                  </div>
+                )}
+              {pageConfig?.show_icons && contactInfo?.social_links && (
                 <SocailMedia social_links={contactInfo?.social_links} />
               )}
             </div>
