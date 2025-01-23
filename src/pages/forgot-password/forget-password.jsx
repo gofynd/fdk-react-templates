@@ -19,7 +19,7 @@ function ForgetPassword({
     getValues,
     setError,
     clearErrors,
-  } = useForm();
+  } = useForm({ mode: "onChange" });
 
   useEffect(() => {
     if (error) {
