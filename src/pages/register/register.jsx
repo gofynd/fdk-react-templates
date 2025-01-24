@@ -123,9 +123,14 @@ function Register({
             <input
               id={firstnameId}
               type="text"
+              maxLength="60"
               {...register("firstName", {
                 validate: (value) =>
-                  validateName(value) || "Please enter valid first name",
+                  validateName(value) || "Please enter a valid first name",
+                maxLength: {
+                  value: 60,
+                  message: "Maximum 60 characters allowed",
+                },
               })}
             />
             {errors.firstName && (
@@ -141,9 +146,14 @@ function Register({
             <input
               id={lastnameId}
               type="text"
+              maxLength="60"
               {...register("lastName", {
                 validate: (value) =>
-                  validateName(value) || "Please enter valid last name",
+                  validateName(value) || "Please enter a valid last name",
+                maxLength: {
+                  value: 60,
+                  message: "Maximum 60 characters allowed",
+                },
               })}
             />
             {errors.lastName && (

@@ -85,10 +85,19 @@ function ProfileDetails({ userData, handleSave }) {
               showAsterik
               inputVariant="underline"
               type="text"
+              maxLength={60} // Ensures maxLength is passed to FyInput
               error={errors?.firstName && errors.firstName.type === "required"}
-              errorMessage="Required"
+              errorMessage={
+                errors?.firstName?.type === "maxLength"
+                  ? "Maximum 60 characters allowed"
+                  : "Required"
+              }
               {...register("firstName", {
                 required: true,
+                maxLength: {
+                  value: 60,
+                  message: "Maximum 60 characters allowed",
+                },
               })}
               required
             />
@@ -98,12 +107,21 @@ function ProfileDetails({ userData, handleSave }) {
               id="lastName"
               label="Last Name"
               showAsterik
-              type="text"
               inputVariant="underline"
+              type="text"
+              maxLength={60} // Ensures maxLength is passed to FyInput
               error={errors?.lastName && errors.lastName.type === "required"}
-              errorMessage="Required"
+              errorMessage={
+                errors?.lastName?.type === "maxLength"
+                  ? "Maximum 60 characters allowed"
+                  : "Required"
+              }
               {...register("lastName", {
                 required: true,
+                maxLength: {
+                  value: 60,
+                  message: "Maximum 60 characters allowed",
+                },
               })}
               required
             />

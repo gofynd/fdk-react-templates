@@ -10,6 +10,7 @@ import Comment from "../../page-layouts/cart/Components/comment/comment";
 function Checkout({
   breakupValues,
   cartItemsCount,
+  currencySymbol,
   address,
   showShipment,
   showPayment,
@@ -57,11 +58,12 @@ function Checkout({
         ></CheckoutPayment>
       </div>
       <div className={styles.rightContainer}>
-        <Coupon {...cartCouponProps} />
+        <Coupon {...cartCouponProps} currencySymbol={currencySymbol} />
         <Comment {...cartCommentProps} />
         <PriceBreakup
           breakUpValues={breakupValues}
           cartItemCount={cartItemsCount}
+          currencySymbol={currencySymbol}
         />
       </div>
     </div>
