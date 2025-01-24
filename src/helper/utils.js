@@ -325,10 +325,12 @@ export function deepEqual(obj1, obj2) {
 
 export function priceFormatCurrencySymbol(symbol, price) {
   const hasAlphabeticCurrency = /^[A-Za-z]+$/.test(symbol);
+  let sanitizedPrice =
+    typeof price === "string" ? price : numberWithCommas(price);
 
   const formattedValue = hasAlphabeticCurrency
-    ? `${symbol} ${price}`
-    : `${symbol}${price}`;
+    ? `${symbol} ${sanitizedPrice}`
+    : `${symbol}${sanitizedPrice}`;
 
   return formattedValue;
 }

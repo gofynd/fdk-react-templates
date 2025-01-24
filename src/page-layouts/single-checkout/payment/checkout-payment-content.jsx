@@ -3,6 +3,7 @@ import * as styles from "./checkout-payment-content.less";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import IMask from "imask";
 import cardValidator from "card-validator";
+import { priceFormatCurrencySymbol } from "../../../helper/utils";
 
 export const CREDIT_CARD_MASK = [
   {
@@ -533,7 +534,7 @@ function CheckoutPaymentContent({ payment, loader }) {
                                     proceedToPay("CARD", selectedPaymentPayload)
                                   }
                                 >
-                                  PAY {getCurrencySymbol + getTotalValue()}
+                                  {`PAY ${priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue())}`}
                                 </button>
                               </div>
                             </div>
@@ -644,7 +645,7 @@ function CheckoutPaymentContent({ payment, loader }) {
                   className={styles.saveNewCard}
                   onClick={() => proceedToPayCard()}
                 >
-                  PAY {getCurrencySymbol + getTotalValue()}
+                  {`PAY ${priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue())}`}
                 </button>
               </div>
             </div>
@@ -683,7 +684,7 @@ function CheckoutPaymentContent({ payment, loader }) {
                   className={styles.payBtn}
                   onClick={() => proceedToPay("WL", selectedPaymentPayload)}
                 >
-                  PAY {getCurrencySymbol + getTotalValue()}
+                  {`PAY ${priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue())}`}
                 </button>
               )}
             </div>
@@ -710,7 +711,7 @@ function CheckoutPaymentContent({ payment, loader }) {
                   className={`${styles.commonBtn} ${styles.payBtn}`}
                   onClick={() => proceedToPay("UPI", selectedPaymentPayload)}
                 >
-                  PAY {getCurrencySymbol + getTotalValue()}
+                  {`PAY ${priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue())}`}
                 </button>
               )}
             </div>
@@ -771,7 +772,7 @@ function CheckoutPaymentContent({ payment, loader }) {
                   className={`${styles.commonBtn} ${styles.payBtn}`}
                   onClick={() => proceedToPay("NB", selectedPaymentPayload)}
                 >
-                  PAY {getCurrencySymbol + getTotalValue()}
+                  {`PAY ${priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue())}`}
                 </button>
               </div>
             )}
@@ -795,7 +796,7 @@ function CheckoutPaymentContent({ payment, loader }) {
                 className={`${styles.commonBtn} ${styles.payBtn}`}
                 onClick={() => proceedToPay("COD", selectedPaymentPayload)}
               >
-                PAY {getCurrencySymbol + getTotalValue()}
+                {`PAY ${priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue())}`}
               </button>
             </div>
           </div>
@@ -843,7 +844,7 @@ function CheckoutPaymentContent({ payment, loader }) {
                   className={`${styles.commonBtn} ${styles.payBtn}`}
                   onClick={() => proceedToPay("PL", selectedPaymentPayload)}
                 >
-                  PAY {getCurrencySymbol + getTotalValue()}
+                  {`PAY ${priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue())}`}
                 </button>
               )}
             </div>
@@ -891,7 +892,7 @@ function CheckoutPaymentContent({ payment, loader }) {
                     proceedToPay("CARDLESS_EMI", selectedPaymentPayload)
                   }
                 >
-                  PAY {getCurrencySymbol + getTotalValue()}
+                  {`PAY ${priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue())}`}
                 </button>
               )}
             </div>
@@ -932,7 +933,7 @@ function CheckoutPaymentContent({ payment, loader }) {
                   className={`${styles.commonBtn} ${styles.payBtn}`}
                   onClick={() => proceedToPay("Other", selectedPaymentPayload)}
                 >
-                  PAY {getCurrencySymbol + getTotalValue()}
+                  {`PAY ${priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue())}`}
                 </button>
               )}
             </div>

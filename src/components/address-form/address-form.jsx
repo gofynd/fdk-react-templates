@@ -302,9 +302,8 @@ const AddressForm = ({
   });
   const formContainerRef = useRef(null);
   const [currBgColor, setCurrBgColor] = useState("#fff");
-  const [isCityStateDisabled, setCityStateDisabled] = useState(true);
   const [showOtherText, setShowOtherText] = useState(false);
-  const [addressLoadStatus, setAddressLoadStatus] = useState(false);
+  const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [resetStatus, setResetStatus] = useState(true);
   const address_type = watch("address_type");
   const pin = watch("area_code");
@@ -315,7 +314,7 @@ const AddressForm = ({
       reset(addressItem);
       setValue(
         "address_type",
-        addressItem
+        addressItem?.address_type
           ? isOtherAddressType
             ? "Other"
             : addressItem?.address_type
@@ -384,12 +383,6 @@ const AddressForm = ({
   };
 
   useEffect(() => {
-    if (!showGoogleMap) {
-      setAddressLoadStatus(true);
-    }
-  }, [showGoogleMap]);
-
-  useEffect(() => {
     reset();
     setValue("country", selectedCountry);
   }, [selectedCountry]);
@@ -448,13 +441,16 @@ const AddressForm = ({
 
   const onLoadMap = (map) => {
     if (map) {
-      setAddressLoadStatus(true);
+      setIsMapLoaded(true);
     }
   };
+
+  const isAddressForm = !showGoogleMap || !mapApiKey || isMapLoaded;
+
   return (
     <div
       className={styles.addressFormWrapper}
-      style={{ display: addressLoadStatus ? "block" : "none" }}
+      style={{ display: isAddressForm ? "block" : "none" }}
     >
       {showGoogleMap && mapApiKey && (
         <div className={styles.mapWrap}>
@@ -479,15 +475,17 @@ const AddressForm = ({
               optionLabel="display_name"
               showDropdownIcon
               label="Country"
+              placeholder="Select country"
               containerClassName={styles.customClass}
             />
           </div>
         )}
-        {formSchema.map((group, index) => (
+        {formSchema?.map((group, index) => (
           <div key={index} className={styles.formGroup}>
             <div ref={formContainerRef} className={styles.formContainer}>
               {group.fields.map((field) => (
                 <FormInputSelector
+                  isSingleField={group?.fields?.length === 1}
                   key={field.key}
                   formData={field}
                   control={control}
@@ -500,7 +498,7 @@ const AddressForm = ({
         <div className={styles.addressTypeContainer}>
           <label className={styles.addressTypeHeader}>SAVE AS </label>
           <div className={styles.typeWrap}>
-            {addressTypes.map((type) => (
+            {addressTypes?.map((type) => (
               <button
                 type="button"
                 key={type.value}
@@ -522,11 +520,9 @@ const AddressForm = ({
             type="hidden"
             {...register("address_type", { required: true })}
           />
-          <span
-            className={`${styles.formError} ${errors.address_type ? styles.visible : ""}`}
-          >
-            {errors.address_type && <span>This field is required</span>}
-          </span>
+          {errors.address_type && (
+            <span className={`${styles.formError}`}>Field is required</span>
+          )}
         </div>
         {showOtherText && (
           <div className={styles.formItemDiv}>
@@ -540,11 +536,9 @@ const AddressForm = ({
               {...register("otherAddressType", { required: true })}
               className={`${styles.formInputBox} ${styles.otherInput}`}
             />
-            <span
-              className={`${styles.formError} ${errors.otherAddressType ? styles.visible : ""}`}
-            >
-              {errors.otherAddressType && <span>This field is required</span>}
-            </span>
+            {errors.otherAddressType && (
+              <div className={`${styles.formError}`}>Field is required</div>
+            )}
           </div>
         )}
         <div>{customFooter}</div>
