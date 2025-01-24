@@ -14,6 +14,7 @@ function Phone({
   sendOtpMobile,
   verifyMobileOtp,
   resendOtp,
+  countryCode = "91",
 }) {
   const [showAddModal, setShowAddModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -73,12 +74,18 @@ function Phone({
       <div className={styles.main}>
         <div className={styles.formContainer}>
           <div className={styles.formItem}>
-            {phoneNumbers?.map(({ __typename, ...phoneDetails }) => {
-              const { phone, verified, primary } = phoneDetails;
+            {phoneNumbers?.map((phoneDetails) => {
+              const {
+                phone,
+                verified,
+                primary,
+                countryCode: phoneCountryCode,
+              } = phoneDetails;
               return (
                 <div className={styles.formInput} key={`phone-${phone}`}>
                   <MobileNumber
                     mobile={phone}
+                    countryCode={phoneCountryCode}
                     height="40px"
                     textColor="var(--textHeading, #26201a)"
                     containerClassName={styles.phoneInputContainer}
@@ -157,6 +164,7 @@ function Phone({
           resendOtp={resendOtp}
           verifyMobileOtp={verifyMobileOtp}
           isOpen={showAddModal}
+          countryCode={countryCode}
           onClose={() => handleShowAddModal(false)}
         />
       )}
