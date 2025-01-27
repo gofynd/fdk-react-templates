@@ -5,6 +5,9 @@
 }
 
 .formGroup {
+  &:not(:first-child) {
+    margin-top: 12px;
+  }
   .groupLabel {
     font-size: 12px;
     margin-bottom: 8px;
@@ -102,24 +105,8 @@
     display: flex;
     flex-wrap: wrap;
     box-sizing: border-box;
-    width: 90%;
+    width: 100%;
     justify-content: space-between;
-
-    @media @mobile {
-      width: 100%;
-    }
-    .formError {
-      padding: 5px 0 7px;
-      margin-bottom: 7px;
-      visibility: hidden;
-      color: var(--errorText);
-      width: max-content;
-      font-size: 10px;
-    }
-
-    .visible {
-      visibility: visible;
-    }
 
     .formItemDiv:nth-child(odd) {
       margin-right: 8px;
@@ -129,9 +116,18 @@
     }
   }
 
+  .formError {
+    color: @ErrorText;
+    width: max-content;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16.8px;
+    margin-top: 5px;
+  }
+
   .customClass {
     display: flex;
-    flex: 0 0 45%;
+    flex: 1;
     flex-direction: column;
     position: relative;
   }

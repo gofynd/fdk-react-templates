@@ -51,11 +51,16 @@
           transform: rotate(180deg);
         }
       }
+      .text_field {
+        width: 100%;
+        border: none;
+      }
 
       .selectedValue {
         font-size: 14px;
         line-height: 22px;
         color: @TextHeading;
+        background: transparent;
       }
     }
   }
@@ -81,7 +86,7 @@
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.5s;
-  background-color: @White;
+  background-color: @PageBackground;
 
   &.open {
     display: block;
@@ -108,7 +113,7 @@
 
     &.selected,
     &:hover {
-      background: @Gray;
+      background: @HighlightColor;
     }
   }
 }

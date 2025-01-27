@@ -12,6 +12,7 @@ function AddPhoneModal({
   resendOtp,
   isOpen,
   onClose,
+  countryCode,
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isOtpLoading, setIsOtpLoading] = useState(false);
@@ -22,10 +23,18 @@ function AddPhoneModal({
   const [otpTime, setOtpTime] = useState(0);
   const [otpData, setOtpData] = useState({});
 
-  const { handleSubmit: handleNumberSubmit, control: numberControl } = useForm({
+  const {
+    handleSubmit: handleNumberSubmit,
+    control: numberControl,
+    formState: { isValid: isNumberValid },
+  } = useForm({
     mode: "onChange",
     defaultValues: {
-      phone: "",
+      phone: {
+        mobile: "",
+        countryCode,
+        isValidNumber: false,
+      },
     },
   });
 
@@ -33,6 +42,7 @@ function AddPhoneModal({
     handleSubmit: handleOtpSubmit,
     register: otpRegister,
     setValue: setOtpValue,
+    watch: watchOtp,
   } = useForm({
     mode: "onChange",
     defaultValues: {
@@ -166,10 +176,10 @@ function AddPhoneModal({
             >
               <FyInput
                 id="otp"
-                label="Otp"
+                label="OTP"
                 type="number"
                 name="otp"
-                placeholder="Enter Otp"
+                placeholder="Enter OTP"
                 inputClassName={styles.addMobileOtp}
                 {...otpRegister("otp")}
                 onChange={handleOtpChange}
@@ -198,6 +208,7 @@ function AddPhoneModal({
               isLoading={isLoading}
               className={styles.yesBtn}
               form="numberForm"
+              disabled={!isNumberValid}
             >
               Send OTP
             </FyButton>
@@ -209,6 +220,7 @@ function AddPhoneModal({
               isLoading={isOtpLoading}
               className={styles.yesBtn}
               form="otpForm"
+              disabled={watchOtp("otp")?.length !== 4}
             >
               Verify
             </FyButton>

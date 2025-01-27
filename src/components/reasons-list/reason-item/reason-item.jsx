@@ -20,10 +20,11 @@ function ReasonItem({ reason, selectedReason, change, otherReason }) {
   return (
     <div className={`${styles.reasonItem}`} onClick={() => change(reason)}>
       <div>
-        <div className={`${styles.reasonContent}`}>
-          {selectedReason?.id !== reason?.id && (
-            <SvgWrapper onClick={() => change(reason)} svgSrc="regular" />
-          )}
+        <div
+          className={`${styles.reasonContent}`}
+          onClick={() => change(reason)}
+        >
+          {selectedReason?.id !== reason?.id && <SvgWrapper svgSrc="regular" />}
           {selectedReason?.id === reason?.id && (
             <SvgWrapper svgSrc="radio-selected" />
           )}

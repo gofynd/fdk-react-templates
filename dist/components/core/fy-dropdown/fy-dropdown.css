@@ -514,10 +514,15 @@ img::selection {
 .fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__dropdown___N1atH .fy-dropdown__dropdownButton___SqCaQ .fy-dropdown__dropdownIcon___ngubn.fy-dropdown__open___Si_ce {
   transform: rotate(180deg);
 }
+.fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__dropdown___N1atH .fy-dropdown__dropdownButton___SqCaQ .fy-dropdown__text_field___tlM0X {
+  width: 100%;
+  border: none;
+}
 .fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__dropdown___N1atH .fy-dropdown__dropdownButton___SqCaQ .fy-dropdown__selectedValue___d2Cjo {
   font-size: 14px;
   line-height: 22px;
   color: var(--textHeading, #26201a);
+  background: transparent;
 }
 .fy-dropdown__label___RKOjm {
   color: var(--textLabel, #7d7676);
@@ -535,7 +540,7 @@ img::selection {
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.5s;
-  background-color: #ffffff;
+  background-color: var(--pageBackground, #f8f8f8);
 }
 .fy-dropdown__dropdownList___M0x2r.fy-dropdown__open___Si_ce {
   display: block;
@@ -560,6 +565,6 @@ img::selection {
 }
 .fy-dropdown__dropdownList___M0x2r .fy-dropdown__dropdownOption___YEIck.fy-dropdown__selected___lb64Q,
 .fy-dropdown__dropdownList___M0x2r .fy-dropdown__dropdownOption___YEIck:hover {
-  background: #cccccc;
+  background: var(--highlightColor, #a7a7f8);
 }
 

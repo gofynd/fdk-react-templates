@@ -231,6 +231,7 @@ const AddToCart = ({
                       valueClassName={styles.sizeValue}
                       disabledOptions={disabledSizeOptions}
                       disabledOptionClassName={styles.disabledOption}
+                      disableSearch={true}
                     />
                     {pageConfig?.show_size_guide &&
                       isSizeGuideAvailable() &&

@@ -37,12 +37,13 @@ function BeneficiaryItem({ beneficiary, selectedBeneficiary, change }) {
   return (
     <div className={`${styles.beneficiaryItem}`}>
       <div>
-        <div className={`${styles.beneficiaryContent}`}>
+        <div
+          className={`${styles.beneficiaryContent}`}
+          onClick={() => change(beneficiary)}
+        >
           {(!selectedBeneficiary ||
             selectedBeneficiary.beneficiary_id !==
-              beneficiary.beneficiary_id) && (
-            <SvgWrapper onClick={() => change(beneficiary)} svgSrc="regular" />
-          )}
+              beneficiary.beneficiary_id) && <SvgWrapper svgSrc="regular" />}
           {selectedBeneficiary &&
             selectedBeneficiary.beneficiary_id ===
               beneficiary.beneficiary_id && (

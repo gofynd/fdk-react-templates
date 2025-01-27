@@ -50,7 +50,7 @@ const GoogleMapAddress = ({
   const [country, setCountry] = useState("India");
   const inputRef = useRef(null);
   const mapRef = useRef(null);
-  const defaultPincode = localStorage?.getItem("pincode") || "400076";
+
   useEffect(() => {
     if (addressItem?.geo_location) {
       const location = {
@@ -68,10 +68,6 @@ const GoogleMapAddress = ({
       mapRef?.current?.panTo(location);
     }
   }, [countryDetails, addressItem]);
-
-  useEffect(() => {
-    getLatLngFromPostalCode(defaultPincode);
-  }, []);
 
   function stateReset() {
     setPincode("");
@@ -237,24 +233,6 @@ const GoogleMapAddress = ({
         ? "Error: The Geolocation service failed."
         : "Error: Your browser doesn't support geolocation."
     );
-  };
-
-  const getLatLngFromPostalCode = async (postalCode) => {
-    try {
-      const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?address=${postalCode}&key=${mapApiKey}`
-      );
-      const data = await response.json();
-      if (data?.results?.length > 0) {
-        const location = data.results[0]?.geometry?.location;
-        const lat = location?.lat;
-        const lng = location?.lng;
-        setSelectedPlace({ lat, lng });
-        mapRef?.current?.panTo({ lat, lng });
-      }
-    } catch (error) {
-      console.error("Error fetching coordinates from postal code:", error);
-    }
   };
 
   return (
