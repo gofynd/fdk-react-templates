@@ -76,6 +76,9 @@ function OrderStatus({
   };
 
   function shipmentItem(shipment, index, shipmentLength) {
+    const isShipmentCancelled =
+      shipment?.shipment_status?.value === "cancelled";
+
     return (
       <div className={styles.shipmentItem} key={index}>
         <div className={styles.shipmentItemHead}>
@@ -85,10 +88,28 @@ function OrderStatus({
             } / ${shipmentLength}`}</p>
             <h5 style={{ marginTop: "8px" }}>{shipment?.shipment_id}</h5>
           </div>
-          <div className={styles.statusWrapper}>
-            Status: <span>PLACED</span>
+          <div
+            className={styles.statusWrapper}
+            style={{
+              ...(isShipmentCancelled && {
+                background: shipment?.shipment_status?.hex_code,
+                color: "#fff",
+              }),
+            }}
+          >
+            Status: <span>{shipment?.shipment_status?.title}</span>
           </div>
-          <div className={styles.statusWrapperMobile}>PLACED</div>
+          <div
+            className={styles.statusWrapperMobile}
+            style={{
+              ...(isShipmentCancelled && {
+                background: shipment?.shipment_status?.hex_code,
+                color: "#fff",
+              }),
+            }}
+          >
+            {shipment?.shipment_status?.title}
+          </div>
         </div>
         <div className={styles.shipmentItemItemsData}>
           {getBags(shipment?.bags)?.map((item, index) => (

@@ -522,6 +522,9 @@ img::selection {
   grid-template-columns: repeat(2, 1fr);
   grid-auto-rows: auto;
 }
+.wishlist__productGrid___vDf31 > * {
+  min-width: 0;
+}
 @media only screen and (min-width: 481px) {
   .wishlist__productGrid___vDf31 {
     gap: 24px 16px;
@@ -1029,6 +1032,8 @@ img::selection {
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .breadcrumb__breadcrumbs___lMY9E span {
   color: var(--textSecondary, #9c9c9c);

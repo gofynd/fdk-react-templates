@@ -507,6 +507,9 @@ img::selection {
   font-weight: 700;
   color: var(--textHeading, #26201a);
   line-height: 36px;
+  white-space: pre-wrap;
+  width: 25ch;
+  overflow-wrap: break-word;
 }
 .profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__navContainer___pxEcU .profile-navigation__userData___PSyo0 .profile-navigation__nameContainer___G2PUc .profile-navigation__editLink___ECwEQ {
   font-size: 14px;
