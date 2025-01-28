@@ -106,6 +106,13 @@ export default function ChipItem({
     else return "";
   }, [singleItemDetails]);
 
+  const sellerStoreName = useMemo(() => {
+    const sellerName = singleItemDetails?.article?.seller?.name;
+    const storeName = singleItemDetails?.article?.store?.name;
+
+    return [sellerName, storeName].filter(Boolean).join(", ") || "";
+  }, [singleItemDetails]);
+
   const toggleActivePromo = (e, index) => {
     e.stopPropagation();
     if (activePromoIndex === index) setActivePromoIndex(null);
@@ -183,7 +190,7 @@ export default function ChipItem({
             </div>
             {!isOutOfStock && (
               <div className={styles.itemSellerName}>
-                {`Sold by: ${singleItemDetails?.article?.seller?.name}`}
+                {`Sold by: ${sellerStoreName}`}
               </div>
             )}
             <div className={styles.itemSizeQuantityContainer}>
