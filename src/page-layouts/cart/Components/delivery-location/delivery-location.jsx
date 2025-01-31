@@ -6,6 +6,7 @@ import Modal from "../../../../components/core/modal/modal";
 import AddressItem from "../../../../components/address-item/address-item";
 import AddressForm from "../../../../components/address-form/address-form";
 function DeliveryLocation({
+  deliveryLocation,
   pincode = "",
   error = null,
   isPincodeModalOpen = false,
@@ -67,15 +68,15 @@ function DeliveryLocation({
     <div className={styles.cartPincodeContainer}>
       <div className={styles.pinCodeDetailsContainer}>
         <span className={styles.pincodeHeading}>
-          {pincode ? "Deliver To:" : "Check delivery time & services"}
+          {deliveryLocation ? "Deliver To:" : "Check delivery time & services"}
         </span>
         <span className={styles.pinCode}>
           &nbsp;
-          {pincode}
+          {deliveryLocation}
         </span>
       </div>
       <div className={styles.changePinCodeButton} onClick={onChangeButtonClick}>
-        {pincode ? "Change" : "Enter PIN Code"}
+        Change
       </div>
       <Modal
         isOpen={isPincodeModalOpen}
