@@ -49,9 +49,10 @@
  *
  */
 
-import React from "react";
+import React, { useMemo } from "react";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
 import * as styles from "./address-item.less";
+import { getAddressStr } from "../../helper/utils";
 
 const AddressType = {
   area: "",
@@ -77,13 +78,10 @@ function AddressItem({
   containerClassName = "",
   ...restProps
 }) {
-  function getAddress() {
-    return `${addressItem.address}, ${
-      addressItem.area
-    } ${addressItem.landmark ? "," + addressItem.landmark : ""} ${
-      addressItem.city ? "," + addressItem.city : ""
-    } - ${addressItem.area_code}`;
-  }
+  const getAddress = useMemo(
+    () => getAddressStr(addressItem, false),
+    [addressItem]
+  );
 
   return (
     <div
@@ -121,7 +119,7 @@ function AddressItem({
         className={styles.addressMid}
         style={{ marginLeft: showAddressSelectionCheckbox ? "25px" : 0 }}
       >
-        {getAddress()}
+        {getAddress}
       </div>
       <div
         className={styles.phEnd}
