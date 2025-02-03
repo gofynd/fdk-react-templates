@@ -533,11 +533,23 @@ const AddressForm = ({
               Other Address Type*
             </label>
             <input
-              {...register("otherAddressType", { required: true })}
+              {...register("otherAddressType", {
+                validate: (value) => {
+                  if (!value) {
+                    return "Field is required";
+                  }
+                  if (value.length < 1 || value.length > 30) {
+                    return "Length must be between 1 and 30";
+                  }
+                  return true;
+                },
+              })}
               className={`${styles.formInputBox} ${styles.otherInput}`}
             />
             {errors.otherAddressType && (
-              <div className={`${styles.formError}`}>Field is required</div>
+              <div className={`${styles.formError}`}>
+                {errors.otherAddressType.message}
+              </div>
             )}
           </div>
         )}

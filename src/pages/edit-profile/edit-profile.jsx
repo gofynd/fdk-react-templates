@@ -104,13 +104,13 @@ function EditProfile({
               <input
                 id={fNameInputId}
                 type="text"
-                maxLength="60"
+                maxLength="30"
                 {...register("firstName", {
                   validate: (value) =>
                     validateName(value) || "Please enter a valid first name",
                   maxLength: {
-                    value: 60,
-                    message: "Maximum 60 characters allowed",
+                    value: 30,
+                    message: "Maximum 30 characters allowed",
                   },
                 })}
               />
@@ -129,13 +129,13 @@ function EditProfile({
               <input
                 id={lNameInputId}
                 type="text"
-                maxLength="60"
+                maxLength="30"
                 {...register("lastName", {
                   validate: (value) =>
                     validateName(value) || "Please enter a valid last name",
                   maxLength: {
-                    value: 60,
-                    message: "Maximum 60 characters allowed",
+                    value: 30,
+                    message: "Maximum 30 characters allowed",
                   },
                 })}
               />
