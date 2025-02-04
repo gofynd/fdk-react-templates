@@ -358,3 +358,34 @@ export function isFreeNavigation(e) {
 
   return false;
 }
+
+export const getAddressStr = (item, isAddressTypeAvailable) => {
+  if (!item || typeof item !== "object") {
+    return "";
+  }
+  try {
+    const parts = [
+      item.address || "",
+      item.area || "",
+      item.landmark?.length > 0 ? item.landmark : "",
+      item.sector || "",
+      item.city || "",
+      item.state || "",
+    ].filter(Boolean);
+
+    if (isAddressTypeAvailable && item.address_type) {
+      parts.unshift(item.address_type);
+    }
+    let addressStr = parts.join(", ");
+    if (item.area_code) {
+      addressStr += ` ${item.area_code}`;
+    }
+    if (item.country) {
+      addressStr += `, ${item.country}`;
+    }
+    return addressStr;
+  } catch (error) {
+    console.error("Error constructing address string:", error);
+    return "";
+  }
+};

@@ -1167,11 +1167,11 @@ img::selection {
   }
 }
 .delivery-location__pincodeModal___KAYH1 {
-  max-width: 398px;
+  width: 400px;
 }
 @media only screen and (max-width: 768px) {
   .delivery-location__pincodeModal___KAYH1 {
-    max-width: unset;
+    width: unset;
   }
 }
 .delivery-location__pincodeModal___KAYH1 .delivery-location__modalHeader____OOl3 {
@@ -8671,6 +8671,26 @@ img::selection {
     padding-left: 16px;
   }
 }
+.price-breakup__priceSummaryContainer___BlEI5 .price-breakup__internationalTaxLabel___k40QY {
+  margin: 16px 24px 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--dividerStokes, #d4d1d1);
+  color: var(--textBody, #3c3131);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 140%;
+  display: flex;
+  gap: 12px;
+}
+@media only screen and (max-width: 480px) {
+  .price-breakup__priceSummaryContainer___BlEI5 .price-breakup__internationalTaxLabel___k40QY {
+    margin-right: 16px;
+    margin-left: 16px;
+  }
+}
+.price-breakup__priceSummaryContainer___BlEI5 .price-breakup__internationalTaxLabel___k40QY .price-breakup__infoIcon___LGmNI {
+  flex: 0 0 20px;
+}
 .price-breakup__priceSummaryContainer___BlEI5 .price-breakup__discountPreviewContiner___ghC_C {
   background-color: #fff9dc;
   border-radius: 8px;
@@ -10237,6 +10257,10 @@ img::selection {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.quantity-control__quantityCtrlContainer___RPVmM .quantity-control__increaseCount___Xwog1:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 .quantity-control__quantityCtrlContainer___RPVmM .quantity-control__count___JvxLy {
   display: flex;
@@ -38451,7 +38475,7 @@ img::selection {
 .single-address-content__addressContentConitainer___CupPn .single-address-content__contentTopRight___tZSyf {
   display: flex;
   gap: 5px;
-  align-items: flex-end;
+  align-items: center;
 }
 .single-address-content__addressContentConitainer___CupPn .single-address-content__contentTopRight___tZSyf .single-address-content__edit___kTek7,
 .single-address-content__addressContentConitainer___CupPn .single-address-content__contentTopRight___tZSyf .single-address-content__remove___zYAVQ {
@@ -38495,6 +38519,7 @@ img::selection {
 .single-address-content__invalidAddError___WDHnv .single-address-content__invalidAddErrorLeft___AUwWL {
   display: flex;
   gap: 14px;
+  align-items: center;
 }
 .single-address-content__invalidAddError___WDHnv .single-address-content__invalidAddErrorLeft___AUwWL .single-address-content__invalidAddErrorData___ardbO {
   display: flex;
@@ -47115,6 +47140,9 @@ img::selection {
   height: 180px;
   transition: 300ms transform ease;
   overflow: hidden;
+}
+.blog__blog__image___qDBdj picture {
+  height: 100%;
 }
 .blog__blog__image___qDBdj:hover {
   transform: scale(1.1);
