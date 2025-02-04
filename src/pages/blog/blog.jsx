@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import { FDKLink } from "fdk-core/components";
@@ -98,6 +98,12 @@ function BlogList({
   const [blogCount, setBlogCount] = useState(
     totalBlogsList?.page?.item_total || 0
   );
+  const {
+    show_top_blog,
+    topViewedBlogs = [],
+    show_recent_blog,
+    recentBlogs = [],
+  } = sliderProps;
   const [windowWidth, setWindowWidth] = useState(0);
   const [config, setConfig] = useState({
     dots: false,
@@ -288,9 +294,12 @@ function BlogList({
     });
   };
 
-  const isSidebarDisplayed = () => {
-    return sliderProps?.show_recent_blog || sliderProps?.show_top_blog;
-  };
+  const isSidebarDisplayed = useMemo(
+    () =>
+      (show_top_blog && topViewedBlogs?.length) ||
+      (show_recent_blog && recentBlogs?.length),
+    [show_top_blog, topViewedBlogs, show_recent_blog, recentBlogs]
+  );
 
   const renderBlogs = () => {
     return (
@@ -310,6 +319,7 @@ function BlogList({
                 placeholder={sliderProps?.fallback_image}
                 customClass={styles.blog__image}
                 isImageFill
+                isFixedAspectRatio={false}
               />
               <div className={`${styles.blog__info}`}>
                 <div className={`${styles.blog__meta}`}>
@@ -417,7 +427,7 @@ function BlogList({
           </div>
         </div>
         <div
-          className={`${styles.blog__content} ${!isSidebarDisplayed() ? `${styles.blog__contentFull}` : ""}`}
+          className={`${styles.blog__content} ${!isSidebarDisplayed ? `${styles.blog__contentFull}` : ""}`}
         >
           <div className={`${styles.blog__contentLeft}`}>
             <div className={`${styles.filterList}`}>
@@ -459,11 +469,10 @@ function BlogList({
               </div>
             )}
           </div>
-          {isSidebarDisplayed() && (
-            <div className={`${styles.blog__contentRight}`}>
-              <BlogTabs {...sliderProps}></BlogTabs>
-            </div>
-          )}
+          <BlogTabs
+            className={styles.blog__contentRight}
+            {...sliderProps}
+          ></BlogTabs>
         </div>
       </div>
       <BlogFooter {...footerProps}></BlogFooter>
