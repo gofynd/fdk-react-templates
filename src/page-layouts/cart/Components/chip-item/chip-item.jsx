@@ -63,11 +63,10 @@ export default function ChipItem({
     }
 
     if (!itemDetails?.custom_order?.is_custom_order && !isSizeUpdate) {
-      if (totalQuantity > maxCartQuantity) {
+      if (totalQuantity === maxCartQuantity) {
         totalQuantity = maxCartQuantity;
-        if (itemDetails?.quantity === maxCartQuantity) {
+        if (itemDetails?.quantity === maxCartQuantity - 1) {
           setShowQuantityError(true);
-          return;
         }
       }
       if (totalQuantity < minCartQuantity) {
@@ -78,7 +77,9 @@ export default function ChipItem({
         }
       }
     }
-    setShowQuantityError(false);
+    if (itemDetails?.quantity !== maxCartQuantity - 1) {
+      setShowQuantityError(false);
+    }
     const cartUpdateResponse = await onUpdateCartItems(
       event,
       itemDetails,
@@ -104,6 +105,13 @@ export default function ChipItem({
     if (totalPromo === 1) return "1 Offer";
     else if (totalPromo > 1) return `${totalPromo} Offers`;
     else return "";
+  }, [singleItemDetails]);
+
+  const sellerStoreName = useMemo(() => {
+    const sellerName = singleItemDetails?.article?.seller?.name;
+    const storeName = singleItemDetails?.article?.store?.name;
+
+    return [sellerName, storeName].filter(Boolean).join(", ") || "";
   }, [singleItemDetails]);
 
   const toggleActivePromo = (e, index) => {
@@ -183,7 +191,7 @@ export default function ChipItem({
             </div>
             {!isOutOfStock && (
               <div className={styles.itemSellerName}>
-                {`Sold by: ${singleItemDetails?.article?.seller?.name}`}
+                {`Sold by: ${sellerStoreName}`}
               </div>
             )}
             <div className={styles.itemSizeQuantityContainer}>

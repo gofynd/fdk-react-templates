@@ -4826,7 +4826,7 @@ img::selection {
 }
 .form-input-selector__customClass___hEqXl {
   display: flex;
-  flex: 0 0 45%;
+  flex: 0 0 48%;
   flex-direction: column;
   position: relative;
 }
@@ -6497,7 +6497,7 @@ img::selection {
 .single-address-content__addressContentConitainer___CupPn .single-address-content__contentTopRight___tZSyf {
   display: flex;
   gap: 5px;
-  align-items: flex-end;
+  align-items: center;
 }
 .single-address-content__addressContentConitainer___CupPn .single-address-content__contentTopRight___tZSyf .single-address-content__edit___kTek7,
 .single-address-content__addressContentConitainer___CupPn .single-address-content__contentTopRight___tZSyf .single-address-content__remove___zYAVQ {
@@ -6541,6 +6541,7 @@ img::selection {
 .single-address-content__invalidAddError___WDHnv .single-address-content__invalidAddErrorLeft___AUwWL {
   display: flex;
   gap: 14px;
+  align-items: center;
 }
 .single-address-content__invalidAddError___WDHnv .single-address-content__invalidAddErrorLeft___AUwWL .single-address-content__invalidAddErrorData___ardbO {
   display: flex;
@@ -9838,6 +9839,26 @@ img::selection {
     padding-right: 16px;
     padding-left: 16px;
   }
+}
+.price-breakup__priceSummaryContainer___BlEI5 .price-breakup__internationalTaxLabel___k40QY {
+  margin: 16px 24px 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--dividerStokes, #d4d1d1);
+  color: var(--textBody, #3c3131);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 140%;
+  display: flex;
+  gap: 12px;
+}
+@media only screen and (max-width: 480px) {
+  .price-breakup__priceSummaryContainer___BlEI5 .price-breakup__internationalTaxLabel___k40QY {
+    margin-right: 16px;
+    margin-left: 16px;
+  }
+}
+.price-breakup__priceSummaryContainer___BlEI5 .price-breakup__internationalTaxLabel___k40QY .price-breakup__infoIcon___LGmNI {
+  flex: 0 0 20px;
 }
 .price-breakup__priceSummaryContainer___BlEI5 .price-breakup__discountPreviewContiner___ghC_C {
   background-color: #fff9dc;
