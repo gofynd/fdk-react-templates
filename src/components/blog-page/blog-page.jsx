@@ -61,9 +61,20 @@ function BlogPage({
     return convertUTCDateToLocalDate(dateString, options);
   };
 
-  const isSidebarDisplayed = () => {
-    return sliderProps?.show_recent_blog || sliderProps?.show_top_blog;
-  };
+  const {
+    show_top_blog,
+    topViewedBlogs = [],
+    show_recent_blog,
+    recentBlogs = [],
+  } = sliderProps;
+
+  const isSidebarDisplayed = useMemo(
+    () =>
+      (show_top_blog && topViewedBlogs?.length) ||
+      (show_recent_blog && recentBlogs?.length),
+    [show_top_blog, topViewedBlogs, show_recent_blog, recentBlogs]
+  );
+
   const blogTag = () => {
     if (
       blogDetails?.tags?.[0] &&
@@ -88,7 +99,7 @@ function BlogPage({
   return (
     <>
       <div
-        className={`${styles.blogContainer} ${!isSidebarDisplayed() ? `${styles.blog__contentFull}` : ""}`}
+        className={`${styles.blogContainer} ${!isSidebarDisplayed ? `${styles.blog__contentFull}` : ""}`}
       >
         <div className={`${styles.leftCol} ${styles.blogPost}`}>
           <div className={`${styles.blogPost__header}`}>
@@ -161,10 +172,10 @@ function BlogPage({
               customClass={`${styles.blogPost__image}`}
               src={
                 blogDetails?.feature_image?.secure_url ||
-                sliderProps?.fallbackImg
+                sliderProps?.fallback_image
               }
               alt={blogDetails?.title}
-              placeholder={sliderProps?.fallbackImg}
+              placeholder={sliderProps?.fallback_image}
               isFixedAspectRatio={false}
             />
           </div>
@@ -178,11 +189,7 @@ function BlogPage({
             )}
           </div>
         </div>
-        {isSidebarDisplayed() && (
-          <div className={`${styles.rightCol}`}>
-            <BlogTabs {...sliderProps}></BlogTabs>
-          </div>
-        )}
+        <BlogTabs className={`${styles.rightCol}`} {...sliderProps}></BlogTabs>
       </div>
       <BlogFooter {...footerProps}></BlogFooter>
     </>
