@@ -295,10 +295,17 @@ const AddressForm = ({
   } = useForm({
     defaultValues: {
       ...addressItem,
+      address_type: addressItem?.address_type
+        ? isOtherAddressType
+          ? "Other"
+          : addressItem?.address_type
+        : "Home",
+      otherAddressType:
+        addressItem && isOtherAddressType ? addressItem?.address_type : "",
       geo_location: { latitude: "", longitude: "" },
       country: selectedCountry || "India",
       // area_code: addressItem?.area_code || defaultPincode || "",
-    } || { address_type: "Home" },
+    },
   });
   const formContainerRef = useRef(null);
   const [currBgColor, setCurrBgColor] = useState("#fff");
@@ -311,19 +318,16 @@ const AddressForm = ({
 
   useEffect(() => {
     if (addressItem) {
-      reset(addressItem);
-      setValue(
-        "address_type",
-        addressItem?.address_type
+      reset({
+        ...addressItem,
+        address_type: addressItem?.address_type
           ? isOtherAddressType
             ? "Other"
             : addressItem?.address_type
-          : "Home"
-      );
-      setValue(
-        "otherAddressType",
-        addressItem && isOtherAddressType ? addressItem?.address_type : ""
-      );
+          : "Home",
+        otherAddressType:
+          addressItem && isOtherAddressType ? addressItem?.address_type : "",
+      });
     } else {
       setValue("is_default_address", true);
       setValue("address_type", "Home");
@@ -425,8 +429,8 @@ const AddressForm = ({
     let payload = { ...data };
     if (payload.address_type === "Other") {
       payload.address_type = payload?.otherAddressType || "Other";
-      delete payload?.otherAddressType;
     }
+    delete payload?.otherAddressType;
     if (isNewAddress) {
       onAddAddress(removeNullValues(payload));
     } else {
@@ -464,7 +468,7 @@ const AddressForm = ({
         </div>
       )}
       <form onSubmit={handleSubmit(onSubmit)}>
-        {internationalShipping && (
+        {internationalShipping && isNewAddress && (
           <div className={`${styles.formGroup} ${styles.formContainer}`}>
             <FyDropdown
               value={selectedCountry}
@@ -489,7 +493,7 @@ const AddressForm = ({
                   key={field.key}
                   formData={field}
                   control={control}
-                  allowDropdown={internationalShipping}
+                  allowDropdown={internationalShipping && isNewAddress}
                 />
               ))}
             </div>
@@ -533,11 +537,23 @@ const AddressForm = ({
               Other Address Type*
             </label>
             <input
-              {...register("otherAddressType", { required: true })}
+              {...register("otherAddressType", {
+                validate: (value) => {
+                  if (!value) {
+                    return "Field is required";
+                  }
+                  if (value.length < 1 || value.length > 30) {
+                    return "Length must be between 1 and 30";
+                  }
+                  return true;
+                },
+              })}
               className={`${styles.formInputBox} ${styles.otherInput}`}
             />
             {errors.otherAddressType && (
-              <div className={`${styles.formError}`}>Field is required</div>
+              <div className={`${styles.formError}`}>
+                {errors.otherAddressType.message}
+              </div>
             )}
           </div>
         )}
