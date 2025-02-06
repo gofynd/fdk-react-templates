@@ -5,6 +5,7 @@ import * as styles from "./order-status.less";
 import PriceBreakup from "../../components/price-breakup/price-breakup";
 import CartGiftItem from "./components/cart-gift-item/cart-gift-item";
 import FyButton from "../../components/core/fy-button/fy-button";
+import Modal from "../../components/core/modal/modal";
 import { FDKLink } from "fdk-core/components";
 
 const orderFailurePageInfo = {
@@ -293,7 +294,15 @@ function OrderStatus({
       ) : showPolling ? (
         pollingComp
       ) : (
-        loader
+        <div>
+          <Modal isOpen={true} hideHeader={true}>
+            <div className={styles.orderStatusModal}>
+              <div className={styles.loader}></div>
+              <p className={styles.title}>Fetching Order Details</p>
+              <p className={styles.message}>Please do not press back button</p>
+            </div>
+          </Modal>
+        </div>
       )}
     </div>
   ) : (

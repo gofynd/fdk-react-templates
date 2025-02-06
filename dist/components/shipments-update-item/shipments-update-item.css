@@ -467,6 +467,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .shipments-update-item__view-mobile-up___Mmsza {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .shipments-update-item__view-mobile___YK2hh {
+    display: none !important;
+  }
+}
 .shipments-update-item__updateItem___SC6gf {
   display: flex;
   align-items: center;
@@ -1066,6 +1076,16 @@ img::selection {
 .quantity-ctrl__view3d-canvas___GWAb8 {
   width: 100%;
   height: 100%;
+}
+@media only screen and (max-width: 480px) {
+  .quantity-ctrl__view-mobile-up___cl6UD {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .quantity-ctrl__view-mobile___wY9TG {
+    display: none !important;
+  }
 }
 .quantity-ctrl__qtyControl___LvP42 {
   display: flex;

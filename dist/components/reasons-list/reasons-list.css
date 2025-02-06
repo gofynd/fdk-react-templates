@@ -467,6 +467,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .reasons-list__view-mobile-up___BTbWX {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .reasons-list__view-mobile___yXKN7 {
+    display: none !important;
+  }
+}
 .reasons-list__reasonItem___KEF5V input {
   display: none;
 }
@@ -961,6 +971,16 @@ img::selection {
 .reason-item__view3d-canvas___Iu4W7 {
   width: 100%;
   height: 100%;
+}
+@media only screen and (max-width: 480px) {
+  .reason-item__view-mobile-up___Tzb1z {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .reason-item__view-mobile___W7YKu {
+    display: none !important;
+  }
 }
 .reason-item__reasonItem___X1uR_ input {
   display: none;

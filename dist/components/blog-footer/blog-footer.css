@@ -467,6 +467,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .blog-footer__view-mobile-up___e3yW3 {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .blog-footer__view-mobile___t6caB {
+    display: none !important;
+  }
+}
 .blog-footer__footer___DJC7o {
   background-color: var(--themeAccentL4, #f9f6f0);
   padding-left: 3%;

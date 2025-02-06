@@ -467,6 +467,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .shipment-item__view-mobile-up___pS0kz {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .shipment-item__view-mobile___Fqp8M {
+    display: none !important;
+  }
+}
 .shipment-item__bagItem___YVBW1 {
   display: flex;
   border-bottom: 1px solid #eeeeee;

@@ -4,6 +4,7 @@ import SingleAddress from "../../page-layouts/single-checkout/address/single-add
 import * as styles from "./checkout.less";
 import CheckoutPayment from "../../page-layouts/single-checkout/payment/checkout-payment";
 import PriceBreakup from "../../components/price-breakup/price-breakup";
+import Stepper from "../../components/stepper/stepper";
 import Coupon from "../../page-layouts/cart/Components/coupon/coupon";
 import Comment from "../../page-layouts/cart/Components/comment/comment";
 
@@ -24,11 +25,16 @@ function Checkout({
   isHyperlocal = false,
   convertHyperlocalTat = () => {},
   loader,
+  stepperProps,
+  onPriceDetailsClick,
   cartCouponProps,
   cartCommentProps,
 }) {
   return (
     <div className={`${styles.mainContainer} fontBody`}>
+      <div className={styles["view-mobile"]}>
+        <Stepper {...stepperProps} />
+      </div>
       <div className={styles.leftContainer}>
         <SingleAddress
           address={address}
@@ -55,6 +61,9 @@ function Checkout({
           payment={payment}
           showPayment={showPayment}
           loader={loader}
+          onPriceDetailsClick={onPriceDetailsClick}
+          breakUpValues={breakupValues}
+          showPaymentOptions={showPaymentOptions}
         ></CheckoutPayment>
       </div>
       <div className={styles.rightContainer}>
