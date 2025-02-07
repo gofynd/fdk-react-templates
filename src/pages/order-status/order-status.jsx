@@ -1,6 +1,10 @@
 import React from "react";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
-import { convertDate, numberWithCommas } from "../../helper/utils";
+import {
+  convertDate,
+  getAddressStr,
+  numberWithCommas,
+} from "../../helper/utils";
 import * as styles from "./order-status.less";
 import PriceBreakup from "../../components/price-breakup/price-breakup";
 import CartGiftItem from "./components/cart-gift-item/cart-gift-item";
@@ -56,9 +60,7 @@ function OrderStatus({
 
   function getFullAddress(addr) {
     if (addr) {
-      return `${addr.address}, ${addr.area}, ${addr.landmark}, ${
-        addr.sector ? `${addr.sector}, ` : ""
-      }${addr.city} - ${addr.pincode}`;
+      return getAddressStr(addr, false);
     }
   }
 

@@ -6,6 +6,7 @@ import Modal from "../../../../components/core/modal/modal";
 import AddressItem from "../../../../components/address-item/address-item";
 import AddressForm from "../../../../components/address-form/address-form";
 function DeliveryLocation({
+  deliveryLocation,
   pincode = "",
   error = null,
   isPincodeModalOpen = false,
@@ -67,51 +68,47 @@ function DeliveryLocation({
     <div className={styles.cartPincodeContainer}>
       <div className={styles.pinCodeDetailsContainer}>
         <span className={styles.pincodeHeading}>
-          {pincode ? "Deliver To:" : "Check delivery time & services"}
+          {deliveryLocation ? "Deliver To:" : "Check delivery time & services"}
         </span>
         <span className={styles.pinCode}>
           &nbsp;
-          {pincode}
+          {deliveryLocation}
         </span>
       </div>
       <div className={styles.changePinCodeButton} onClick={onChangeButtonClick}>
-        {pincode ? "Change" : "Enter PIN Code"}
+        Change
       </div>
       <Modal
         isOpen={isPincodeModalOpen}
         closeDialog={onCloseModalClick}
         title="Delivery PIN Code"
+        containerClassName={styles.pincodeModal}
+        bodyClassName={styles.modalBody}
       >
-        <div className={styles.pincodeModal}>
-          <div className={styles.modalBody}>
-            <form
-              className={styles.modalPincodeContainer}
-              onSubmit={handleSubmit(onPincodeSubmit)}
-            >
-              <div className={styles.modalPincodeInput}>
-                <input
-                  type="text"
-                  placeholder="Enter Pincode"
-                  {...register("pincode", {
-                    validate: (value) =>
-                      isValidPincode(value) || "Please enter valid pincode",
-                  })}
-                />
-              </div>
-              <button className={styles.modalChangePinCodeButton} type="submit">
-                CHECK
-              </button>
-              {errors.pincode && (
-                <div className={styles.errorText}>
-                  {errors?.pincode?.message}
-                </div>
-              )}
-              {errors.root && (
-                <div className={styles.errorText}>{errors?.root?.message}</div>
-              )}
-            </form>
+        <form
+          className={styles.modalPincodeContainer}
+          onSubmit={handleSubmit(onPincodeSubmit)}
+        >
+          <div className={styles.modalPincodeInput}>
+            <input
+              type="text"
+              placeholder="Enter Pincode"
+              {...register("pincode", {
+                validate: (value) =>
+                  isValidPincode(value) || "Please enter valid pincode",
+              })}
+            />
           </div>
-        </div>
+          <button className={styles.modalChangePinCodeButton} type="submit">
+            CHECK
+          </button>
+          {errors.pincode && (
+            <div className={styles.errorText}>{errors?.pincode?.message}</div>
+          )}
+          {errors.root && (
+            <div className={styles.errorText}>{errors?.root?.message}</div>
+          )}
+        </form>
       </Modal>
       <Modal
         isOpen={isAddressModalOpen}
