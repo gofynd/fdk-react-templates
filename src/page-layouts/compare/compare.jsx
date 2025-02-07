@@ -80,7 +80,11 @@ function Compare({
                       </div>
 
                       <FDKLink to={`/product/${item.slug}`}>
-                        <ProductCard product={item} {...cardProps} imagePlaceholder={imagePlaceholder}/>
+                        <ProductCard
+                          product={item}
+                          {...cardProps}
+                          imagePlaceholder={imagePlaceholder}
+                        />
                       </FDKLink>
                     </div>
                   ))}
@@ -90,7 +94,13 @@ function Compare({
                 {products.length > 0 && (
                   <div className={styles.attribute}>
                     {attributes?.map((attributesMetadata, id) => (
-                      <div key={id}>
+                      <div
+                        key={id}
+                        style={{ "--cell-width": products?.length + 1 }}
+                      >
+                        <div className={styles.compareTitle}>
+                          <div> {attributes[id].title}</div>
+                        </div>
                         {attributesMetadata.details.map((attribute, aid) => (
                           <div
                             key={`cl${id}${aid}`}

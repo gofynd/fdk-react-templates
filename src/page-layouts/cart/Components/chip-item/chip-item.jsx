@@ -6,6 +6,7 @@ import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import QuantityControl from "../../../../components/quantity-control/quantity-control";
 import Modal from "../../../../components/core/modal/modal";
 import { useMobile } from "../../../../helper/hooks";
+import FreeGiftItem from "../free-gift-item/free-gift-item";
 
 export default function ChipItem({
   isCartUpdating,
@@ -63,11 +64,10 @@ export default function ChipItem({
     }
 
     if (!itemDetails?.custom_order?.is_custom_order && !isSizeUpdate) {
-      if (totalQuantity > maxCartQuantity) {
+      if (totalQuantity === maxCartQuantity) {
         totalQuantity = maxCartQuantity;
-        if (itemDetails?.quantity === maxCartQuantity) {
+        if (itemDetails?.quantity === maxCartQuantity - 1) {
           setShowQuantityError(true);
-          return;
         }
       }
       if (totalQuantity < minCartQuantity) {
@@ -78,7 +78,9 @@ export default function ChipItem({
         }
       }
     }
-    setShowQuantityError(false);
+    if (itemDetails?.quantity !== maxCartQuantity - 1) {
+      setShowQuantityError(false);
+    }
     const cartUpdateResponse = await onUpdateCartItems(
       event,
       itemDetails,
@@ -104,6 +106,13 @@ export default function ChipItem({
     if (totalPromo === 1) return "1 Offer";
     else if (totalPromo > 1) return `${totalPromo} Offers`;
     else return "";
+  }, [singleItemDetails]);
+
+  const sellerStoreName = useMemo(() => {
+    const sellerName = singleItemDetails?.article?.seller?.name;
+    const storeName = singleItemDetails?.article?.store?.name;
+
+    return [sellerName, storeName].filter(Boolean).join(", ") || "";
   }, [singleItemDetails]);
 
   const toggleActivePromo = (e, index) => {
@@ -183,7 +192,7 @@ export default function ChipItem({
             </div>
             {!isOutOfStock && (
               <div className={styles.itemSellerName}>
-                {`Sold by: ${singleItemDetails?.article?.seller?.name}`}
+                {`Sold by: ${sellerStoreName}`}
               </div>
             )}
             <div className={styles.itemSizeQuantityContainer}>
@@ -330,29 +339,14 @@ export default function ChipItem({
                 </div>
               )}
           </div>
-          {singleItemDetails?.promotions_applied?.map(
-            (promotion) =>
-              promotion?.promotion_type === "free_gift_items" && (
-                <div
-                  className={`${styles.freeArticleContainer} ${promotion?.applied_free_articles.length === 1 ? styles.singleCol : ""}`}
-                  key={promotion.promo_id}
-                >
-                  <h6
-                    className={styles.freeArticleTitle}
-                  >{`${promotion?.applied_free_articles?.length} free gift added`}</h6>
-                  {promotion?.applied_free_articles.map((item, itemIndex) => (
-                    <FreeGiftItem
-                      key={item?.article_id + itemIndex}
-                      item={item?.free_gift_item_details}
-                      currencySymbol={
-                        singleItemDetails?.price?.converted?.currency_symbol ??
-                        singleItemDetails?.price?.base?.currency_symbol
-                      }
-                    />
-                  ))}
-                </div>
-              )
-          )}
+
+          <FreeGiftItem
+            item={singleItemDetails}
+            currencySymbol={
+              singleItemDetails?.price?.converted?.currency_symbol ??
+              singleItemDetails?.price?.base?.currency_symbol
+            }
+          />
         </div>
         {isPromoModalOpen && clickedPromoIndex === itemIndex && (
           <Modal
@@ -553,34 +547,3 @@ export default function ChipItem({
     </>
   );
 }
-
-const FreeGiftItem = ({ item, currencySymbol = "₹" }) => {
-  const { item_images_url, item_name, item_price_details } = item;
-  const freeGiftImage =
-    item_images_url?.[0]?.replace("original", "resize-w:50") || "";
-  return (
-    <div className={styles.freeGiftItem}>
-      {freeGiftImage && (
-        <img
-          className={styles.freeGiftItemImage}
-          src={freeGiftImage}
-          alt={item_name}
-        />
-      )}
-      <div className={styles.freeGiftItemDetails}>
-        <div className={styles.freeGiftItemName}>{item_name}</div>
-        <div className={styles.freeGiftItemPrice}>
-          <span className={styles.freeGiftItemFreeLabel}>FREE</span>
-          {item_price_details?.effective?.max && (
-            <span className={styles.freeGiftItemFreeEffective}>
-              {currencyFormat(
-                numberWithCommas(item_price_details?.effective?.max),
-                currencySymbol
-              )}
-            </span>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-};
