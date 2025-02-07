@@ -15,6 +15,7 @@
  * @param {string} discountGreetingMessage - Discount Greeting Message shown at bottom of Card.
  * @param {component} greetingIcon - React component to show Greeting icon like celebration.
  * @param {string} cardBorderRadius - String value in `px` for card border radius.
+ * @param {boolean} isInternationalTaxLabel - To display tax label for international orders.
  *
  * Default Props:
  * title = "PRICE SUMMARY",
@@ -27,6 +28,7 @@
  * discountGreetingMessage = "Yayy!!! You've saved",
  * greetingIcon = <SvgWrapper svgSrc="celebration" className={styles.svgIcon} />,
  * cardBorderRadius = "8px",
+ * isInternationalTaxLabel = false,
  *
  * Example usage:
  * <PriceBreakup breakUpValues={orderData?.breakup_values} cartItemCount={getItemCount()} currencySymbol={orderData?.breakup_values?.[0]?.currency_symbol}/>
@@ -49,6 +51,7 @@ function PriceBreakup({
   discountGreetingMessage = "Yayy!!! You've saved",
   greetingIcon = <SvgWrapper svgSrc="celebration" className={styles.svgIcon} />,
   cardBorderRadius = "8px",
+  isInternationalTaxLabel = false,
 }) {
   const cssVar = {
     "--card-border-radius": `${cardBorderRadius}`,
@@ -66,9 +69,13 @@ function PriceBreakup({
 
   const breakUpValuesList = useMemo(() => {
     if (!breakUpValues) return [];
-    const totalVal = breakUpValues.filter((f) => f?.key === "total");
+    const totalVal = breakUpValues.filter(
+      (f) => f?.key === "total" || f?.name === "total"
+    );
     const restVal = breakUpValues.filter(
-      (f) => f?.key !== "total" && (includeZeroValues || f?.value !== 0)
+      (f) =>
+        (f?.key !== "total" || f?.name !== "total") &&
+        (includeZeroValues || f?.value !== 0)
     );
     return [...restVal, ...totalVal];
   }, [includeZeroValues, breakUpValues]);
@@ -113,6 +120,14 @@ function PriceBreakup({
           )}
         </div>
       ))}
+      {isInternationalTaxLabel && (
+        <div className={styles.internationalTaxLabel}>
+          <SvgWrapper className={styles.infoIcon} svgSrc="infoIcon" />
+          <span>
+            Local taxes, duties or custom clearance fees may apply on delivery
+          </span>
+        </div>
+      )}
       {showTotalDiscount && totalDiscount > 0 && (
         <div className={styles.discountPreviewContiner}>
           <span>{greetingIcon}</span>

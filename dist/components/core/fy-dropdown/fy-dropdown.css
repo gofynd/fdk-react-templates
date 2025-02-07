@@ -467,6 +467,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .fy-dropdown__view-mobile-up___wsQo9 {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .fy-dropdown__view-mobile___pGZag {
+    display: none !important;
+  }
+}
 .fy-dropdown__dropdownContainer___fhUVa {
   display: flex;
   flex-direction: column;
