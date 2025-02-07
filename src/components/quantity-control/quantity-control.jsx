@@ -67,28 +67,18 @@ function QuantityControl({
   };
 
   const handleKeyDown = (event) => {
-    /** Submit if the Enter key (keyCode 13) is pressed */
-    if (event?.keyCode === 13) {
+    /** Submit if the Enter key is pressed */
+    if (event?.key === "Enter") {
       event.target?.blur?.();
       return;
     }
 
-    /** Prevent non-numeric keys */
-    const allowedKeyCodes = [
-      8, // Backspace
-      37, // Left Arrow
-      39, // Right Arrow
-      46, // Delete
-    ];
+    /** Allow specific keys */
+    const allowedKeys = ["Backspace", "ArrowLeft", "ArrowRight", "Delete"];
 
-    const isNumber = event.keyCode >= 48 && event.keyCode <= 57; // Regular number keys
-    const isNumpadNumber = event.keyCode >= 96 && event.keyCode <= 105; // Numpad keys
+    const isNumber = /^[0-9]$/.test(event.key); // Allow numeric keys
 
-    if (
-      !isNumber &&
-      !isNumpadNumber &&
-      !allowedKeyCodes.includes(event.keyCode)
-    ) {
+    if (!isNumber && !allowedKeys.includes(event.key)) {
       event.preventDefault(); // Block invalid input
     }
   };
@@ -115,7 +105,7 @@ function QuantityControl({
         />
       </div>
       <button
-        disabled={isCartUpdating}
+        disabled={isCartUpdating || quantity === maxCartQuantity}
         className={styles.increaseCount}
         onClick={handleIncrement}
       >
