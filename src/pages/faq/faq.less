@@ -37,6 +37,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      min-width: 0;
     }
     & .contact-us {
       @media @mobile {
@@ -60,6 +61,7 @@
 
   .content {
     flex: 1;
+    word-break: break-all;
   }
 
   .content h4 {
@@ -172,6 +174,9 @@
 
     @media @mobile {
       display: block;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
     }
   }
 
