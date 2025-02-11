@@ -467,6 +467,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .faq__view-mobile-up___S0lTq {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .faq__view-mobile___dMa4J {
+    display: none !important;
+  }
+}
 .faq__faq___h_KWA {
   min-height: 50vh;
   padding: 16px 16px 80px;
@@ -506,6 +516,7 @@ img::selection {
   display: flex;
   align-items: center;
   gap: 8px;
+  min-width: 0;
 }
 .faq__faq___h_KWA .faq__heading___otonu .faq__back-head___GOLul svg {
   display: none;
@@ -537,6 +548,7 @@ img::selection {
 }
 .faq__faq___h_KWA .faq__content___NmT6m {
   flex: 1;
+  word-break: break-all;
 }
 .faq__faq___h_KWA .faq__content___NmT6m h4 {
   margin-top: 0;
@@ -645,6 +657,9 @@ img::selection {
 @media only screen and (max-width: 480px) {
   .faq__faq___h_KWA .faq__show-on-mobile___HQNw6 {
     display: block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 }
 .faq__faq___h_KWA li:hover {

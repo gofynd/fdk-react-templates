@@ -199,18 +199,16 @@ const FyDropdown = ({
   ]);
 
   const handleInputChange = (e) => {
-    const value = e.target?.value;
+    const value = e.target?.value || "";
     setQuery(value);
-    if (value) {
-      setFilteredOptions(
-        options.filter((option) =>
-          (option.display || "").toLowerCase().includes(value.toLowerCase())
-        )
-      );
-      setIsOpen(true);
-    } else {
-      setIsOpen(false);
-    }
+
+    setFilteredOptions(
+      options.filter((option) =>
+        (option.display || "").toLowerCase().includes(value.toLowerCase())
+      )
+    );
+
+    setIsOpen(Boolean(value));
   };
 
   return (

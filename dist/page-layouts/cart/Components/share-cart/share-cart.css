@@ -467,6 +467,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .share-cart__view-mobile-up___ThOau {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .share-cart__view-mobile___QFu62 {
+    display: none !important;
+  }
+}
 .share-cart__cartSharePopup___ISttH {
   position: relative;
 }
@@ -984,6 +994,16 @@ img::selection {
 .share-cart-modal__view3d-canvas___VQvRp {
   width: 100%;
   height: 100%;
+}
+@media only screen and (max-width: 480px) {
+  .share-cart-modal__view-mobile-up___BXhCa {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .share-cart-modal__view-mobile___t7Y4U {
+    display: none !important;
+  }
 }
 .share-cart-modal__sharePopup___mHeWh {
   position: absolute;

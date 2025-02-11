@@ -467,6 +467,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .delivery-info__view-mobile-up___DOEtw {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .delivery-info__view-mobile___klYdq {
+    display: none !important;
+  }
+}
 .delivery-info__delivery___cpAyb {
   display: flex;
   border-radius: var(--buttonRadius, 0px);
@@ -1075,6 +1085,16 @@ img::selection {
 .fy-button__view3d-canvas___E1pOb {
   width: 100%;
   height: 100%;
+}
+@media only screen and (max-width: 480px) {
+  .fy-button__view-mobile-up___sto08 {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .fy-button__view-mobile___yMsQF {
+    display: none !important;
+  }
 }
 .fy-button__button___UES8C {
   font-family: inherit;
@@ -1860,6 +1880,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .fy-input__view-mobile-up___z4OJg {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .fy-input__view-mobile___iTGo9 {
+    display: none !important;
+  }
+}
 .fy-input__inputContainer___Du9V3 {
   display: flex;
   flex-direction: column;
@@ -1954,5 +1984,26 @@ img::selection {
 .fy-input__underline___fCh8Z {
   padding: 0.2rem 0.4rem;
   border-bottom: 1px solid var(--dividerStokes, #d4d1d1);
+}
+.fy-input__adornmentContainer___MtgI6 {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.fy-input__adornmentContainer___MtgI6 .fy-input__startAdornment___SVGGG,
+.fy-input__adornmentContainer___MtgI6 .fy-input__endAdornment___ce3Ta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.5rem;
+}
+.fy-input__adornmentContainer___MtgI6 .fy-input__startAdornment___SVGGG {
+  margin-right: 0.5rem;
+}
+.fy-input__adornmentContainer___MtgI6 .fy-input__endAdornment___ce3Ta {
+  margin-left: 0.5rem;
+}
+.fy-input__adornmentContainer___MtgI6 input {
+  flex: 1;
 }
 

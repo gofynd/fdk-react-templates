@@ -467,6 +467,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .size-guide__view-mobile-up___xj8LF {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .size-guide__view-mobile___OKkw5 {
+    display: none !important;
+  }
+}
 .size-guide__sidebarHeader___uDotT {
   background-color: var(--themeAccent, #e7dbc2);
 }
@@ -1126,6 +1136,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .fy-image__view-mobile-up___Io0gR {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .fy-image__view-mobile___FQHbN {
+    display: none !important;
+  }
+}
 .fy-image__imageWrapper___wKmP2 {
   overflow: hidden;
   position: relative;
@@ -1633,6 +1653,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .skeletons__view-mobile-up___uh4wh {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .skeletons__view-mobile___K1JIq {
+    display: none !important;
+  }
+}
 .skeletons__card___njYyO {
   z-index: unset;
   position: relative;
@@ -2137,6 +2167,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .modal__view-mobile-up___gXGqs {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .modal__view-mobile___nGCzH {
+    display: none !important;
+  }
+}
 .modal__modal___xT3RX {
   position: fixed;
   inset: 0;
@@ -2212,6 +2252,8 @@ img::selection {
   padding: 8px;
 }
 .modal__modalHeader___xKo1g .modal__crossIcon___ieJau {
+  width: 21px;
+  height: 21px;
   cursor: pointer;
 }
 .modal__modalBody___peHlJ {

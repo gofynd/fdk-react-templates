@@ -223,6 +223,46 @@
     }
   }
 }
+.orderStatusModal {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .loader {
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid var(--primaryColor);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  }
+
+  .title {
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 33.6px;
+    margin: 16px 0 8px 0;
+    color: var(--primaryColor);
+  }
+
+  .message {
+    font-size: 14px;
+    font-weight: 500;
+    color: @TextBody;
+    line-height: 19.6px;
+    text-align: center;
+  }
+
+}
 .orderFail {
   margin: auto;
   text-align: center;

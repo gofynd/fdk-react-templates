@@ -1,0 +1,32 @@
+@import "../../../styles/main.less";
+.paymentFailedContainer {
+    padding: 12px 8px;
+    display: flex;
+    width: 100%;
+    background-color: @ErrorBackground;
+    justify-content: space-between;
+    border-radius: 0px 8px 8px 0px;
+    .wrapper {
+        display: flex;
+
+        .header {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+
+            .paymentErrHeading {
+                font-size: 14px;
+                font-weight: 600;
+                line-height: 140%;
+                color: @ErrorText;
+                margin-bottom: 4px;
+            }
+            .paymentErrMsg {
+                font-size: 12px;
+                color: @TextBody;
+                font-weight: 400;
+                line-height: 140%;
+            }
+        }
+    }
+}

@@ -32,7 +32,7 @@ function SinglePageShipment({
         <>
           <div className={styles.reviewHeaderSelect}>
             <div className={styles.left}>
-              <div>
+              <div className={styles.icon}>
                 <SvgWrapper svgSrc={"two-number"}></SvgWrapper>
               </div>
               <div className={styles.headerContainer}>

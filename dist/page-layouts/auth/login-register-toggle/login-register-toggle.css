@@ -467,6 +467,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .login-register-toggle__view-mobile-up___ZpWbr {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .login-register-toggle__view-mobile____d1uE {
+    display: none !important;
+  }
+}
 .login-register-toggle__loginRegisterToggle___JgREz {
   display: flex;
   align-items: center;

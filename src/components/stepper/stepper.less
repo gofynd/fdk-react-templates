@@ -1,0 +1,78 @@
+@import "../../styles/main.less";
+.stepper {
+  width: 100%;
+  max-width: 100vw;
+  padding: 0 32px 18px;
+  margin: 12px 0px 14px;
+}
+
+.stepperContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stepItem {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  &:last-child {
+    flex: none;
+  }
+  .stepContent {
+    position: relative;
+    display: flex;
+    justify-content: center;
+
+    .stepIndicator {
+      height: 24px;
+      width: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .stepIndicator.completed {
+      background-color: @ButtonPrimary;
+      color: white;
+    }
+
+    .stepIndicator.current {
+      border: 1px solid @ButtonPrimary;
+      color: @ButtonPrimary;
+    }
+
+    .stepIndicator.upcoming {
+      border: 2px solid #d1d5db;
+      color: #9ca3af;
+    }
+
+    .checkIcon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .stepLabel {
+      position: absolute;
+      top: 26px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .stepLabel.upcoming {
+      color: #9ca3af;
+    }
+  }
+  .stepConnector {
+    flex-grow: 1;
+    height: 2px;
+    background-color: #d1d5db;
+  }
+
+  .stepConnector.completed {
+    background-color: @ButtonPrimary;
+  }
+}
