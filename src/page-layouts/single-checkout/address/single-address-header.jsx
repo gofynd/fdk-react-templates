@@ -1,8 +1,7 @@
-import React from "react";
-
+import React, { useMemo } from "react";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./single-address-header.less";
-
+import { getAddressStr } from "../../../helper/utils";
 import { useSearchParams } from "react-router-dom";
 
 function SinglesAddressHeader({
@@ -15,18 +14,13 @@ function SinglesAddressHeader({
   const [searchParams] = useSearchParams();
   const selectedAddId = searchParams.get("address_id");
 
-  const selectedAddress = (() => {
+  const selectedAddress = useMemo(() => {
     if (allAddresses?.length) {
       const item = allAddresses?.find((item) => item.id == selectedAddId);
-      return item
-        ? `${item.address}, ${item.area}${
-            item.landmark.length > 0 ? ", " + item.landmark : ""
-          }${item.sector ? ", " + item.sector : ""}${
-            item.city ? ", " + item.city : ""
-          }${item.area_code ? " - " + item.area_code : ""}`
-        : "";
+      return getAddressStr(item, false);
     }
-  })();
+  }, [allAddresses, selectedAddId]);
+
   return (
     <>
       {showShipment || showPayment ? (
