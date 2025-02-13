@@ -467,6 +467,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .empty-state__view-mobile-up___dp3B5 {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .empty-state__view-mobile___hJz1c {
+    display: none !important;
+  }
+}
 .empty-state__error____Qvjg {
   display: flex;
   flex-direction: column;

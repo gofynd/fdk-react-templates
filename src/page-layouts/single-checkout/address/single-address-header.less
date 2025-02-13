@@ -7,8 +7,8 @@
   border: 1px solid var(--dividerStokes);
   border-radius: 8px 8px 0 0;
   @media @mobile {
-    padding: 6px;
-    border-radius: 4px 4px 0 0;
+    padding: 12px 16px;
+    border-radius: 0px;
   }
   .selectedAddressSection {
     display: flex;
@@ -52,6 +52,9 @@
 
   .wrapper {
     display: flex;
+    @media @mobile {
+      display: none;
+    }
 
     .checkMark {
       align-self: center;
@@ -101,6 +104,7 @@
       @media @mobile {
         padding: 6px;
         font-size: 10px;
+        border: none;
       }
     }
 
@@ -118,19 +122,23 @@
   border-radius: 8px;
   align-items: flex-start;
   @media @mobile {
-    padding: 6px;
-    border-radius: 4px;
+    padding: 10px 16px;
+    border-radius: 0px;
   }
   .leftSelected {
     display: flex;
+    gap: 16px;
+    .icon {
+      @media @mobile {
+        display: none;
+      }
+    }
   }
 
   .deliverAdd {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    padding-left: 15px;
-
     .title {
       font-size: 14px;
       font-weight: 600;

@@ -51,7 +51,7 @@ const Wishlist = ({
           loadMore={onLoadMore}
         >
           <div className={styles.productGrid}>
-            {productList.map((product) => (
+            {productList.map((product, index) => (
               <FDKLink
                 className={styles.productWrapper}
                 to={`/product/${product?.slug}`}
@@ -68,7 +68,7 @@ const Wishlist = ({
                   isSaleBadge={isSaleBadge}
                   isWishlistIcon={true}
                   WishlistIconComponent={WishlistIconComponent}
-                  onWishlistClick={onWishlistClick}
+                  onWishlistClick={(event) => onWishlistClick(event, index)}
                   followedIdList={followedIdList}
                   isImageFill={isImageFill}
                   imageBackgroundColor={imageBackgroundColor}

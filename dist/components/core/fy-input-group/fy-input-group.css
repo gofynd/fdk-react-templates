@@ -467,6 +467,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .fy-input-group__view-mobile-up___N6DXM {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .fy-input-group__view-mobile___Iyssh {
+    display: none !important;
+  }
+}
 .fy-input-group__inputGroupContainer___DUhUi {
   display: flex;
   flex-direction: column;
