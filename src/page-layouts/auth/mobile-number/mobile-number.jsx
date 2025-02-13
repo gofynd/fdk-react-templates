@@ -21,6 +21,7 @@ function MobileNumber({
   containerClassName,
   labelClassName,
   inputContainerClassName,
+  inputProps,
   height = "48px",
   textColor = "var(--textBody, #3c3131)",
   backgroundColor = "var(--pageBackground, #f8f8f8)",
@@ -109,6 +110,7 @@ function MobileNumber({
         inputClassName={`${styles.mobileNumberInput} ${inputClassName || ""}`}
         inputProps={{
           id: inputId,
+          ...inputProps,
         }}
         placeholder={placeholder}
         hideDropdown={!allowDropdown}

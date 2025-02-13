@@ -46,6 +46,7 @@ function Modal({
   bodyClassName,
   containerClassName,
   ignoreClickOutsideForClass,
+  customClassName,
 }) {
   const modalRef = useRef(null);
   const modalContainerRef = useRef(null);
@@ -136,7 +137,7 @@ function Modal({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className={`${styles.modal} ${modalType === "right-modal" ? styles.rightModal : ""} ${modalType === "center-modal" ? styles.centerModal : ""}`}
+          className={`${styles.modal} ${modalType === "right-modal" ? styles.rightModal : ""} ${modalType === "center-modal" ? styles.centerModal : ""} ${customClassName ?? ""}`}
           ref={modalRef}
           tabIndex="0"
           onKeyDown={(e) =>
@@ -164,7 +165,7 @@ function Modal({
                   )}
                 </div>
                 <div className={styles.crossIcon} onClick={closeDialog}>
-                  <SvgWrapper svgSrc="cross-black" />
+                  <SvgWrapper svgSrc="closeBold" />
                 </div>
               </div>
             )}

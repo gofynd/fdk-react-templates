@@ -109,6 +109,22 @@
           display: flex;
         }
       }
+      .compareTitle {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+      }
+      .compareTitle > div {
+        grid-column: span var(--cell-width);
+        background-color: @ThemeAccentL2;
+        padding: 16px;
+        line-height: 20px;
+        font-weight: 700;
+        align-self: stretch;
+        @media @mobile {
+          flex: 0 0 149px;
+          min-width: calc(149px * var(--cell-width));
+        }
+      }
       .attrName {
         line-height: 20px;
         font-weight: 700;

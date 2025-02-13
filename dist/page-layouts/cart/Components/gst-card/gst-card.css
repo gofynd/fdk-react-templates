@@ -467,6 +467,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .gst-card__view-mobile-up___YuG_T {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .gst-card__view-mobile___l_MzV {
+    display: none !important;
+  }
+}
 .gst-card__gstContainer___LJVYg {
   display: flex;
   flex-direction: column;

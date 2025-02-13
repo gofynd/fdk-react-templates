@@ -50,14 +50,14 @@ function InvalidAddress({ errorMessage }) {
   return (
     <div className={styles.invalidAddError}>
       <div className={styles.invalidAddErrorLeft}>
-        <div>
-          <SvgWrapper svgSrc={"warning-address"} />
-        </div>
+        <SvgWrapper svgSrc={"warning-address"} />
+
         <div className={styles.invalidAddErrorData}>
           <div className={styles.invalidAddErrorMsg}>{errorMessage}</div>
-          <div className={styles.invalidAddErrorSuggestion}>
+          {/* NOTE: Removing for now as it is static and often misleading */}
+          {/* <div className={styles.invalidAddErrorSuggestion}>
             Please add more items to your cart to meet the minimum order value
-          </div>
+          </div> */}
         </div>
       </div>
       <button
@@ -100,6 +100,7 @@ function SingleAddressContent({
             ? getDefaultAddress.map((item, index) => {
                 return (
                   <AddressItem
+                    containerClassName={styles.customAddressItem}
                     key={`${item?.id}_#${index}`}
                     addressItem={item}
                     onAddressSelect={selectAdd}
@@ -139,6 +140,7 @@ function SingleAddressContent({
             ? getOtherAddress.map((item, index) => {
                 return (
                   <AddressItem
+                    containerClassName={styles.customAddressItem}
                     key={`${item?.id}_#${index}`}
                     addressItem={item}
                     onAddressSelect={selectAdd}
@@ -179,7 +181,11 @@ function SingleAddressContent({
           ) : (
             <div
               className={`${styles.addressContentConitainer} ${styles.fontSize}`}
-              style={{ textAlign: "center", color: "var(--textLabel)" }}
+              style={{
+                textAlign: "center",
+                color: "var(--textLabel)",
+                padding: "4px 16px",
+              }}
             >
               {" "}
               No Address Found, Please Add Address
