@@ -10,6 +10,8 @@ function Faq({
   setFaqs,
   updateSearchParams,
   hasCatQuery,
+  isLoading = false,
+  EmptyStateComponent = () => <></>,
 }) {
   const handleQuestionClick = (index) => {
     setFaqs((preVal) => {
@@ -23,10 +25,15 @@ function Faq({
   };
 
   const handleCategoryClick = (params) => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
     updateSearchParams(params);
   };
 
   const navigateToContactUsPage = () => {};
+
   return (
     <div
       className={`${styles.faq} ${styles.basePageContainer} ${styles.margin0auto} fontBody`}
@@ -63,65 +70,74 @@ function Faq({
         </div>
       </div>
       <div className={styles["faq-container"]}>
-        <div
-          className={`${styles.sidebar} ${styles[hasCatQuery && "hide-on-mobile"]}`}
-        >
-          <ul>
-            {faqCategories?.map((el, i) => (
-              <div
-                key={i}
-                onClick={() => handleCategoryClick({ value: el.slug })}
-                className={activeFaqCat?.slug === el.slug ? styles.active : ""}
-              >
-                <SvgWrapper className={styles.star} svgSrc="star" />
-                <li className="fontHeader">{el.title}</li>
-                <SvgWrapper
-                  className={styles.arrowRight}
-                  svgSrc="arrow-right"
-                />
-              </div>
-            ))}
-          </ul>
-        </div>
-        <div
-          className={`${styles.contentContainer} ${!hasCatQuery && styles["hide-on-mobile"]}`}
-        >
-          <div className={styles.content}>
-            <div
-              className={`${styles["top-queries"]} ${styles["hide-on-mobile"]}`}
-            >
-              <h4 className="fontHeader">{activeFaqCat?.title}</h4>
-            </div>
-            <div className={styles["faq-list"]}>
-              <ul>
-                {faqs?.map((item, index) => (
-                  <li
-                    className={styles["faq-item"]}
-                    key={index}
-                    onClick={() => handleQuestionClick(index)}
-                  >
-                    <div className={styles.quesContainer}>
-                      <div className={styles["qa-box"]}>
-                        {" "}
-                        <span className={`${styles.question} fontHeader`}>
-                          {item.question}
-                        </span>
-                        {item.open && (
-                          <div className={styles.answer}>{item.answer}</div>
-                        )}
-                      </div>
-                      {item.open ? (
-                        <SvgWrapper svgSrc="minus-circle" />
-                      ) : (
-                        <SvgWrapper svgSrc="plus-circle" />
-                      )}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
+        {faqCategories?.length > 0 && (
+          <div
+            className={`${styles.sidebar} ${styles[hasCatQuery && "hide-on-mobile"]}`}
+          >
+            <ul>
+              {faqCategories?.map((el, i) => (
+                <div
+                  key={i}
+                  onClick={() => handleCategoryClick({ value: el.slug })}
+                  className={
+                    activeFaqCat?.slug === el.slug ? styles.active : ""
+                  }
+                >
+                  <SvgWrapper className={styles.star} svgSrc="star" />
+                  <li className="fontHeader">{el.title}</li>
+                  <SvgWrapper
+                    className={styles.arrowRight}
+                    svgSrc="arrow-right"
+                  />
+                </div>
+              ))}
+            </ul>
           </div>
-        </div>
+        )}
+        {!isLoading &&
+          (faqs?.length > 0 ? (
+            <div
+              className={`${styles.contentContainer} ${!hasCatQuery && styles["hide-on-mobile"]}`}
+            >
+              <div className={styles.content}>
+                <div
+                  className={`${styles["top-queries"]} ${styles["hide-on-mobile"]}`}
+                >
+                  <h4 className="fontHeader">{activeFaqCat?.title}</h4>
+                </div>
+                <div className={styles["faq-list"]}>
+                  <ul>
+                    {faqs?.map((item, index) => (
+                      <li
+                        className={styles["faq-item"]}
+                        key={index}
+                        onClick={() => handleQuestionClick(index)}
+                      >
+                        <div className={styles.quesContainer}>
+                          <div className={styles["qa-box"]}>
+                            {" "}
+                            <span className={`${styles.question} fontHeader`}>
+                              {item.question}
+                            </span>
+                            {item.open && (
+                              <div className={styles.answer}>{item.answer}</div>
+                            )}
+                          </div>
+                          {item.open ? (
+                            <SvgWrapper svgSrc="minus-circle" />
+                          ) : (
+                            <SvgWrapper svgSrc="plus-circle" />
+                          )}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <EmptyStateComponent />
+          ))}
       </div>
     </div>
   );
