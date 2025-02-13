@@ -91,9 +91,26 @@
         }
       }
       .itemWrapper {
-        display: flex;
+        column-gap: 14px;
+        display: grid;
+        grid-template-areas:
+          "item_image item_details"
+          "item_image free_gift";
+        grid-template-columns: auto 1fr;
+        grid-template-rows: auto auto;
+
+        @media @mobile {
+          grid-template-areas:
+            "item_image item_details"
+            "free_gift free_gift";
+        }
+
         .leftImg {
           width: 100px;
+          grid-area: item_image;
+          box-sizing: border-box;
+          display: flex;
+
           img {
             max-width: 100px;
             max-height: 150px;
@@ -101,9 +118,8 @@
           }
         }
         .rightDetails {
-          display: flex;
-          flex-direction: column;
-          margin-left: 14px;
+          grid-area: item_details;
+
           .productDetails {
             display: flex;
             flex-direction: column;

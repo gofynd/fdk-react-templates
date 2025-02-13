@@ -4,6 +4,7 @@ import { numberWithCommas } from "../../../helper/utils";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./single-shipment-content.less";
 import { FDKLink } from "fdk-core/components";
+import FreeGiftItem from "../../cart/Components/free-gift-item/free-gift-item";
 
 function SingleShipmentContent({
   shipments,
@@ -189,6 +190,14 @@ function SingleShipmentContent({
                                   </div>
                                 </div>
                               </div>
+                              <FreeGiftItem
+                                item={product?.item}
+                                currencySymbol={
+                                  product?.item?.price?.converted
+                                    ?.currency_symbol ??
+                                  product?.item?.price?.base?.currency_symbol
+                                }
+                              />
                             </div>
                           </div>
                         ))}

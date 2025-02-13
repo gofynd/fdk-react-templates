@@ -499,6 +499,10 @@ img::selection {
   justify-content: center;
   align-items: center;
 }
+.quantity-control__quantityCtrlContainer___RPVmM .quantity-control__increaseCount___Xwog1:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 .quantity-control__quantityCtrlContainer___RPVmM .quantity-control__count___JvxLy {
   display: flex;
   align-items: center;
