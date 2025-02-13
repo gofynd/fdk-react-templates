@@ -30,7 +30,7 @@ function Coupon({
       return `${couponCode} APPLIED`;
     }
     return "Apply Coupons";
-  }, [hasCancel]);
+  }, [hasCancel, couponCode]);
 
   const handleRemoveCoupon = (e) => {
     e.stopPropagation();

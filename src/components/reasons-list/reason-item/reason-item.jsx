@@ -40,7 +40,9 @@ function ReasonItem({ reason, selectedReason, change, otherReason }) {
               className={`${styles.textarea}`}
               value={reasonOtherText}
               placeholder="Enter reason"
-              onChange={(e) => setReasonOtherText(e.target.value)}
+              onChange={(e) =>
+                setReasonOtherText(e.target.value?.slice(0, 1000))
+              }
               onBlur={() => otherReason(reasonOtherText)}
             ></textarea>
           </div>

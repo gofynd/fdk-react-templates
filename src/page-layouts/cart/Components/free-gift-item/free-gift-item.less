@@ -1,0 +1,73 @@
+@import "../../../../styles/main.less";
+
+.freeArticleContainer {
+  grid-area: free_gift;
+  padding: 12px 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  border-radius: 12px;
+  background: @HighlightColor;
+  margin-top: 16px;
+  &.singleCol {
+    grid-template-columns: 1fr;
+  }
+  @media @mobile {
+    grid-template-columns: 1fr;
+  }
+
+  .freeArticleTitle {
+    grid-column: ~"1/-1";
+    color: @TextHeading;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 140%;
+  }
+
+  .freeGiftItem {
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 8px;
+    background-color: #fff;
+    min-width: 0;
+  }
+
+  .freeGiftItemImage {
+    flex: 0 0 36px;
+    border-radius: 4px;
+    height: auto;
+    min-width: 0;
+  }
+  .freeGiftItemDetails {
+    min-width: 0;
+  }
+
+  .freeGiftItemName {
+    color: @TextBody;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 140%;
+  }
+
+  .freeGiftItemPrice {
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    line-height: 140%;
+    font-weight: 400;
+    color: @TextLabel;
+  }
+
+  .freeGiftItemFreeLabel {
+    color: @SuccessText;
+    font-weight: 600;
+  }
+
+  .freeGiftItemFreeEffective {
+    text-decoration-line: line-through;
+  }
+}

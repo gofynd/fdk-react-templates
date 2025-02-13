@@ -467,6 +467,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .fy-button__view-mobile-up___sto08 {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .fy-button__view-mobile___yMsQF {
+    display: none !important;
+  }
+}
 .fy-button__button___UES8C {
   font-family: inherit;
   border: none;
