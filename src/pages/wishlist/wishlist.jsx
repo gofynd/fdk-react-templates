@@ -31,6 +31,11 @@ const Wishlist = ({
   const countLabel = totalCount > 1 ? `${totalCount} items` : "";
 
   const followedIdList = productList.map((m) => m.uid);
+
+  if (!productList?.length) {
+    return <EmptyStateComponent />;
+  }
+
   return (
     <div>
       <div className={styles.breadcrumbWrapper}>
@@ -42,45 +47,42 @@ const Wishlist = ({
           <span className={styles.wishlistCount}>{countLabel}</span>
         )}
       </div>
-      {productList.length === 0 ? (
-        <EmptyStateComponent />
-      ) : (
-        <InfiniteLoader
-          hasNext={hasNext}
-          isLoading={isLoading}
-          loadMore={onLoadMore}
-        >
-          <div className={styles.productGrid}>
-            {productList.map((product) => (
-              <FDKLink
-                className={styles.productWrapper}
-                to={`/product/${product?.slug}`}
-                key={product?.uid}
-                target={isProductOpenInNewTab ? "_blank" : "_self"}
-              >
-                <ProductCard
-                  product={product}
-                  listingPrice={listingPrice}
-                  isHdimgUsed={isHdimgUsed}
-                  aspectRatio={aspectRatio}
-                  isBrand={isBrand}
-                  isPrice={isPrice}
-                  isSaleBadge={isSaleBadge}
-                  isWishlistIcon={true}
-                  WishlistIconComponent={WishlistIconComponent}
-                  onWishlistClick={onWishlistClick}
-                  followedIdList={followedIdList}
-                  isImageFill={isImageFill}
-                  imageBackgroundColor={imageBackgroundColor}
-                  showImageOnHover={showImageOnHover}
-                  imagePlaceholder={imagePlaceholder}
-                  columnCount={{ desktop: 4, tablet: 3, mobile: 2 }}
-                />
-              </FDKLink>
-            ))}
-          </div>
-        </InfiniteLoader>
-      )}
+
+      <InfiniteLoader
+        hasNext={hasNext}
+        isLoading={isLoading}
+        loadMore={onLoadMore}
+      >
+        <div className={styles.productGrid}>
+          {productList.map((product, index) => (
+            <FDKLink
+              className={styles.productWrapper}
+              to={`/product/${product?.slug}`}
+              key={product?.uid}
+              target={isProductOpenInNewTab ? "_blank" : "_self"}
+            >
+              <ProductCard
+                product={product}
+                listingPrice={listingPrice}
+                isHdimgUsed={isHdimgUsed}
+                aspectRatio={aspectRatio}
+                isBrand={isBrand}
+                isPrice={isPrice}
+                isSaleBadge={isSaleBadge}
+                isWishlistIcon={true}
+                WishlistIconComponent={WishlistIconComponent}
+                onWishlistClick={(event) => onWishlistClick(event, index)}
+                followedIdList={followedIdList}
+                isImageFill={isImageFill}
+                imageBackgroundColor={imageBackgroundColor}
+                showImageOnHover={showImageOnHover}
+                imagePlaceholder={imagePlaceholder}
+                columnCount={{ desktop: 4, tablet: 3, mobile: 2 }}
+              />
+            </FDKLink>
+          ))}
+        </div>
+      </InfiniteLoader>
     </div>
   );
 };

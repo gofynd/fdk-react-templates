@@ -19,7 +19,11 @@ import * as styles from "./shipments-update-item.less";
 import QuantityCtrl from "./quantity-ctrl/quantity-ctrl";
 import { numberWithCommas } from "../../helper/utils";
 
-function ShipmentUpdateItem({ selectedBagId, item }) {
+function ShipmentUpdateItem({
+  selectedBagId,
+  item,
+  updatedQuantity = () => {},
+}) {
   const [showQuantityError, setShowQuantityError] = useState(false);
   const [showQuantity, setshowQuantity] = useState(true);
   const [currQuantity, setcurrQuantity] = useState(item.quantity);
@@ -53,6 +57,7 @@ function ShipmentUpdateItem({ selectedBagId, item }) {
       setShowQuantityError(true);
     } else {
       setcurrQuantity(total);
+      updatedQuantity(total);
       setShowQuantityError(false);
     }
   };

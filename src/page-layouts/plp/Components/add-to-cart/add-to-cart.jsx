@@ -305,7 +305,10 @@ const AddToCart = ({
                             onQtyChange={(e, currentNum) =>
                               cartUpdateHandler(e, currentNum, "edit_item")
                             }
-                            maxCartQuantity={maxCartQuantity}
+                            maxCartQuantity={
+                              selectedItemDetails?.article?.quantity ??
+                              maxCartQuantity
+                            }
                             minCartQuantity={minCartQuantity}
                             containerClassName={styles.qtyContainer}
                             inputClassName={styles.inputContainer}

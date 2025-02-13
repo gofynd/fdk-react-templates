@@ -24,6 +24,7 @@ const FormInputSelector = ({
     error_message = "",
     countryCode,
     disabled = false,
+    readOnly = false,
     onChange = () => {},
   } = formData;
   const getInput = ({ error, field }) => {
@@ -83,6 +84,7 @@ const FormInputSelector = ({
             backgroundColor="transparent"
             height="40px"
             disabled={disabled}
+            inputProps={{ readOnly }}
             onChange={(value) => {
               field?.onChange(value);
               onChange(value);
@@ -105,6 +107,7 @@ const FormInputSelector = ({
             inputSize="medium"
             containerClassName={`${styles.customClass} ${isSingleField ? styles.singleField : ""}`}
             disabled={disabled}
+            readOnly={readOnly}
             onChange={(event) => {
               field?.onChange(event?.target?.value);
               onChange(event?.target?.value);
