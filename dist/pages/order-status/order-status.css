@@ -636,6 +636,7 @@ img::selection {
 }
 .order-status__orders___N_SnV .order-status__orderDetail___wNvPW .order-status__leftOrderDetails___BkJQP .order-status__shipmentList___nyy9y .order-status__shipmentItem___OtZTB .order-status__shipmentItemItemsData___YXKTD .order-status__shipmentProdItem___Spy9G .order-status__prodItemData___zBCLZ {
   margin-left: 14px;
+  min-width: 0;
 }
 .order-status__orders___N_SnV .order-status__orderDetail___wNvPW .order-status__leftOrderDetails___BkJQP .order-status__shipmentList___nyy9y .order-status__shipmentItem___OtZTB .order-status__shipmentItemItemsData___YXKTD .order-status__shipmentProdItem___Spy9G .order-status__prodItemData___zBCLZ .order-status__productDetails___LmK1W .order-status__brandName___EvXqa {
   font-weight: 600;
@@ -1374,6 +1375,26 @@ img::selection {
     padding-left: 16px;
   }
 }
+.price-breakup__priceSummaryContainer___BlEI5 .price-breakup__internationalTaxLabel___k40QY {
+  margin: 16px 24px 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--dividerStokes, #d4d1d1);
+  color: var(--textBody, #3c3131);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 140%;
+  display: flex;
+  gap: 12px;
+}
+@media only screen and (max-width: 480px) {
+  .price-breakup__priceSummaryContainer___BlEI5 .price-breakup__internationalTaxLabel___k40QY {
+    margin-right: 16px;
+    margin-left: 16px;
+  }
+}
+.price-breakup__priceSummaryContainer___BlEI5 .price-breakup__internationalTaxLabel___k40QY .price-breakup__infoIcon___LGmNI {
+  flex: 0 0 20px;
+}
 .price-breakup__priceSummaryContainer___BlEI5 .price-breakup__discountPreviewContiner___ghC_C {
   background-color: #fff9dc;
   border-radius: 8px;
@@ -1902,6 +1923,12 @@ img::selection {
 }
 .cart-gift-item__free-gift-scroll-items___XiF_c {
   display: flex;
+}
+.cart-gift-item__free-gift-scroll-items___XiF_c .cart-gift-item__free-gift-item-image___rDjsg {
+  border-radius: 4px;
+  flex: 0 0 46px;
+  height: auto;
+  min-width: 0;
 }
 .cart-gift-item__free-gift-box___LbfBC {
   border-radius: 8px;

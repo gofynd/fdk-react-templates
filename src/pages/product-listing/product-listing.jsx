@@ -109,7 +109,7 @@ const ProductListing = ({
             loaderClassName={styles.customLoader}
           />
         </div>
-      ) : productList?.length === 0 && !isProductLoading ? (
+      ) : productList?.length === 0 && !(isPageLoading || isPageLoading) ? (
         <div>{EmptyStateComponent}</div>
       ) : (
         <>
