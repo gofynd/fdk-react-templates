@@ -467,6 +467,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .email__view-mobile-up___n187M {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .email__view-mobile___a6zve {
+    display: none !important;
+  }
+}
 .email__loader___mYxpG {
   position: relative;
   width: 100%;
@@ -1054,6 +1064,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .add-email-modal__view-mobile-up___ZFwNk {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .add-email-modal__view-mobile___w0y7I {
+    display: none !important;
+  }
+}
 .add-email-modal__modalContainer___PrdUQ {
   padding: 15px 25px 5px;
   background-color: #fff;
@@ -1570,6 +1590,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .modal__view-mobile-up___gXGqs {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .modal__view-mobile___nGCzH {
+    display: none !important;
+  }
+}
 .modal__modal___xT3RX {
   position: fixed;
   inset: 0;
@@ -1645,6 +1675,8 @@ img::selection {
   padding: 8px;
 }
 .modal__modalHeader___xKo1g .modal__crossIcon___ieJau {
+  width: 21px;
+  height: 21px;
   cursor: pointer;
 }
 .modal__modalBody___peHlJ {
@@ -2175,6 +2207,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .fy-input__view-mobile-up___z4OJg {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .fy-input__view-mobile___iTGo9 {
+    display: none !important;
+  }
+}
 .fy-input__inputContainer___Du9V3 {
   display: flex;
   flex-direction: column;
@@ -2269,6 +2311,27 @@ img::selection {
 .fy-input__underline___fCh8Z {
   padding: 0.2rem 0.4rem;
   border-bottom: 1px solid var(--dividerStokes, #d4d1d1);
+}
+.fy-input__adornmentContainer___MtgI6 {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.fy-input__adornmentContainer___MtgI6 .fy-input__startAdornment___SVGGG,
+.fy-input__adornmentContainer___MtgI6 .fy-input__endAdornment___ce3Ta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.5rem;
+}
+.fy-input__adornmentContainer___MtgI6 .fy-input__startAdornment___SVGGG {
+  margin-right: 0.5rem;
+}
+.fy-input__adornmentContainer___MtgI6 .fy-input__endAdornment___ce3Ta {
+  margin-left: 0.5rem;
+}
+.fy-input__adornmentContainer___MtgI6 input {
+  flex: 1;
 }
 
 .fy-button__slide-fade-enter-active___aEo8d,
@@ -2739,6 +2802,16 @@ img::selection {
 .fy-button__view3d-canvas___E1pOb {
   width: 100%;
   height: 100%;
+}
+@media only screen and (max-width: 480px) {
+  .fy-button__view-mobile-up___sto08 {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .fy-button__view-mobile___yMsQF {
+    display: none !important;
+  }
 }
 .fy-button__button___UES8C {
   font-family: inherit;
@@ -3523,6 +3596,16 @@ img::selection {
 .confirm-modal__view3d-canvas___v3nZm {
   width: 100%;
   height: 100%;
+}
+@media only screen and (max-width: 480px) {
+  .confirm-modal__view-mobile-up___CzSYy {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .confirm-modal__view-mobile___HK2aM {
+    display: none !important;
+  }
 }
 .confirm-modal__modalContainer___YeVBK {
   padding: 15px 25px 5px;

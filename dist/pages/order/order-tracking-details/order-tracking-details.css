@@ -467,6 +467,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .order-tracking-details__view-mobile-up___jCUxj {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .order-tracking-details__view-mobile___jbJW3 {
+    display: none !important;
+  }
+}
 .order-tracking-details__error___CmJU4 {
   background-color: var(--pageBackground, #f8f8f8);
   display: flex;
@@ -1121,6 +1131,16 @@ img::selection {
 .empty-state__view3d-canvas___vsN2F {
   width: 100%;
   height: 100%;
+}
+@media only screen and (max-width: 480px) {
+  .empty-state__view-mobile-up___dp3B5 {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .empty-state__view-mobile___hJz1c {
+    display: none !important;
+  }
 }
 .empty-state__error____Qvjg {
   display: flex;
@@ -1801,6 +1821,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .order-shipment__view-mobile-up___URXeA {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .order-shipment__view-mobile___SXVnq {
+    display: none !important;
+  }
+}
 .order-shipment__selectedto___t6aFu {
   background-color: #eeeeee;
 }
@@ -1987,6 +2017,12 @@ img::selection {
   margin-right: 10px;
   position: relative;
   top: -2px;
+}
+.order-shipment__orderItem____zenT .order-shipment__showAccordionBody___KPdMs {
+  visibility: visible;
+}
+.order-shipment__orderItem____zenT .order-shipment__hideAccordionBody___IOXsZ {
+  visibility: hidden;
 }
 
 .shipment-item__slide-fade-enter-active___PZcYX,
@@ -2457,6 +2493,16 @@ img::selection {
 .shipment-item__view3d-canvas___FtGfa {
   width: 100%;
   height: 100%;
+}
+@media only screen and (max-width: 480px) {
+  .shipment-item__view-mobile-up___pS0kz {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .shipment-item__view-mobile___Fqp8M {
+    display: none !important;
+  }
 }
 .shipment-item__bagItem___YVBW1 {
   display: flex;
@@ -3030,6 +3076,16 @@ img::selection {
 .shipment-tracking__view3d-canvas___ww8kS {
   width: 100%;
   height: 100%;
+}
+@media only screen and (max-width: 480px) {
+  .shipment-tracking__view-mobile-up___kSlmd {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .shipment-tracking__view-mobile___eFHv2 {
+    display: none !important;
+  }
 }
 .shipment-tracking__title___BMsCR {
   font-weight: bold;
@@ -3648,6 +3704,16 @@ img::selection {
 .shipment-breakup__view3d-canvas___keMLD {
   width: 100%;
   height: 100%;
+}
+@media only screen and (max-width: 480px) {
+  .shipment-breakup__view-mobile-up___dUTJI {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .shipment-breakup__view-mobile___LsOrC {
+    display: none !important;
+  }
 }
 .shipment-breakup__title___MNnnU {
   color: #41434c;

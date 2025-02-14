@@ -467,6 +467,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .scroll-top__view-mobile-up___hZkAj {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .scroll-top__view-mobile___oaZkx {
+    display: none !important;
+  }
+}
 .scroll-top__scrollTop___xohSh {
   display: flex;
   align-items: center;

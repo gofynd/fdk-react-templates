@@ -467,6 +467,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .pagination__view-mobile-up___COpEf {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .pagination__view-mobile___HJAKE {
+    display: none !important;
+  }
+}
 .pagination__pagination___G0GGL {
   display: flex;
   align-items: center;

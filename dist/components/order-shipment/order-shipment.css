@@ -467,6 +467,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .order-shipment__view-mobile-up___URXeA {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .order-shipment__view-mobile___SXVnq {
+    display: none !important;
+  }
+}
 .order-shipment__selectedto___t6aFu {
   background-color: #eeeeee;
 }
@@ -653,5 +663,11 @@ img::selection {
   margin-right: 10px;
   position: relative;
   top: -2px;
+}
+.order-shipment__orderItem____zenT .order-shipment__showAccordionBody___KPdMs {
+  visibility: visible;
+}
+.order-shipment__orderItem____zenT .order-shipment__hideAccordionBody___IOXsZ {
+  visibility: hidden;
 }
 
