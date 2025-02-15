@@ -192,7 +192,6 @@ module.exports = {
     "react-outside-click-handler": "react-outside-click-handler",
     "react-hook-form": "react-hook-form",
     "react-range-slider-input": "react-range-slider-input",
-    imask: "imask",
     "card-validator": "card-validator",
     "@react-google-maps/api": "@react-google-maps/api",
     "react-google-autocomplete": "react-google-autocomplete",

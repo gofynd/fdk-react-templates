@@ -467,6 +467,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .phone__view-mobile-up___QpEaN {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .phone__view-mobile___djAO1 {
+    display: none !important;
+  }
+}
 .phone__loader___XkM1L {
   position: relative;
   width: 100%;
@@ -1061,6 +1071,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .confirm-modal__view-mobile-up___CzSYy {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .confirm-modal__view-mobile___HK2aM {
+    display: none !important;
+  }
+}
 .confirm-modal__modalContainer___YeVBK {
   padding: 15px 25px 5px;
   background-color: #ffffff;
@@ -1576,6 +1596,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .modal__view-mobile-up___gXGqs {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .modal__view-mobile___nGCzH {
+    display: none !important;
+  }
+}
 .modal__modal___xT3RX {
   position: fixed;
   inset: 0;
@@ -1651,6 +1681,8 @@ img::selection {
   padding: 8px;
 }
 .modal__modalHeader___xKo1g .modal__crossIcon___ieJau {
+  width: 21px;
+  height: 21px;
   cursor: pointer;
 }
 .modal__modalBody___peHlJ {
@@ -2180,6 +2212,16 @@ img::selection {
 .fy-button__view3d-canvas___E1pOb {
   width: 100%;
   height: 100%;
+}
+@media only screen and (max-width: 480px) {
+  .fy-button__view-mobile-up___sto08 {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .fy-button__view-mobile___yMsQF {
+    display: none !important;
+  }
 }
 .fy-button__button___UES8C {
   font-family: inherit;
@@ -2965,6 +3007,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .mobile-number__view-mobile-up___Sw1Cs {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .mobile-number__view-mobile___eoXeR {
+    display: none !important;
+  }
+}
 .mobile-number__mobileInputWrapper___Na12n {
   display: flex;
   flex-direction: column;
@@ -3497,6 +3549,16 @@ img::selection {
 .add-phone-modal__view3d-canvas___oG1s_ {
   width: 100%;
   height: 100%;
+}
+@media only screen and (max-width: 480px) {
+  .add-phone-modal__view-mobile-up___ngCpY {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .add-phone-modal__view-mobile___Vuk0E {
+    display: none !important;
+  }
 }
 .add-phone-modal__addPhoneContainer___VrCF7 {
   overflow: visible;
@@ -4045,6 +4107,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .fy-input__view-mobile-up___z4OJg {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .fy-input__view-mobile___iTGo9 {
+    display: none !important;
+  }
+}
 .fy-input__inputContainer___Du9V3 {
   display: flex;
   flex-direction: column;
@@ -4139,5 +4211,26 @@ img::selection {
 .fy-input__underline___fCh8Z {
   padding: 0.2rem 0.4rem;
   border-bottom: 1px solid var(--dividerStokes, #d4d1d1);
+}
+.fy-input__adornmentContainer___MtgI6 {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.fy-input__adornmentContainer___MtgI6 .fy-input__startAdornment___SVGGG,
+.fy-input__adornmentContainer___MtgI6 .fy-input__endAdornment___ce3Ta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.5rem;
+}
+.fy-input__adornmentContainer___MtgI6 .fy-input__startAdornment___SVGGG {
+  margin-right: 0.5rem;
+}
+.fy-input__adornmentContainer___MtgI6 .fy-input__endAdornment___ce3Ta {
+  margin-left: 0.5rem;
+}
+.fy-input__adornmentContainer___MtgI6 input {
+  flex: 1;
 }
 

@@ -467,6 +467,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .term-privacy__view-mobile-up___cu_BH {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .term-privacy__view-mobile___xiUxR {
+    display: none !important;
+  }
+}
 .term-privacy__midLinks___nJVYw {
   margin-top: 24px;
   color: var(--textSecondary, #9c9c9c);

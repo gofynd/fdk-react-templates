@@ -467,6 +467,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .shipment-address__view-mobile-up___OmAyU {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .shipment-address__view-mobile___dIVls {
+    display: none !important;
+  }
+}
 .shipment-address__title___ckIa0 {
   color: #41434c;
 }
@@ -504,5 +514,8 @@ img::selection {
 }
 .shipment-address__address___ymKT3 div {
   margin: 10px;
+}
+.shipment-address__address___ymKT3 .shipment-address__displayAddress___aqMC3 {
+  white-space: pre-wrap;
 }
 

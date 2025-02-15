@@ -467,6 +467,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .fy-input__view-mobile-up___z4OJg {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .fy-input__view-mobile___iTGo9 {
+    display: none !important;
+  }
+}
 .fy-input__inputContainer___Du9V3 {
   display: flex;
   flex-direction: column;
@@ -561,6 +571,27 @@ img::selection {
 .fy-input__underline___fCh8Z {
   padding: 0.2rem 0.4rem;
   border-bottom: 1px solid var(--dividerStokes, #d4d1d1);
+}
+.fy-input__adornmentContainer___MtgI6 {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.fy-input__adornmentContainer___MtgI6 .fy-input__startAdornment___SVGGG,
+.fy-input__adornmentContainer___MtgI6 .fy-input__endAdornment___ce3Ta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.5rem;
+}
+.fy-input__adornmentContainer___MtgI6 .fy-input__startAdornment___SVGGG {
+  margin-right: 0.5rem;
+}
+.fy-input__adornmentContainer___MtgI6 .fy-input__endAdornment___ce3Ta {
+  margin-left: 0.5rem;
+}
+.fy-input__adornmentContainer___MtgI6 input {
+  flex: 1;
 }
 
 .fy-input-group__slide-fade-enter-active___BuCN8,
@@ -1031,6 +1062,16 @@ img::selection {
 .fy-input-group__view3d-canvas___wbiVK {
   width: 100%;
   height: 100%;
+}
+@media only screen and (max-width: 480px) {
+  .fy-input-group__view-mobile-up___N6DXM {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .fy-input-group__view-mobile___Iyssh {
+    display: none !important;
+  }
 }
 .fy-input-group__inputGroupContainer___DUhUi {
   display: flex;
@@ -1539,6 +1580,16 @@ img::selection {
 .fy-dropdown__view3d-canvas___IqfLy {
   width: 100%;
   height: 100%;
+}
+@media only screen and (max-width: 480px) {
+  .fy-dropdown__view-mobile-up___wsQo9 {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .fy-dropdown__view-mobile___pGZag {
+    display: none !important;
+  }
 }
 .fy-dropdown__dropdownContainer___fhUVa {
   display: flex;
@@ -2110,6 +2161,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .mobile-number__view-mobile-up___Sw1Cs {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .mobile-number__view-mobile___eoXeR {
+    display: none !important;
+  }
+}
 .mobile-number__mobileInputWrapper___Na12n {
   display: flex;
   flex-direction: column;
@@ -2643,9 +2704,19 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .form-input-selector__view-mobile-up___WW1_Q {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .form-input-selector__view-mobile___nXvOb {
+    display: none !important;
+  }
+}
 .form-input-selector__customClass___hEqXl {
   display: flex;
-  flex: 0 0 45%;
+  flex: 0 0 48%;
   flex-direction: column;
   position: relative;
 }

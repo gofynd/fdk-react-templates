@@ -467,6 +467,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .sticky-footer__view-mobile-up___k5Lqs {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .sticky-footer__view-mobile___tLF74 {
+    display: none !important;
+  }
+}
 .sticky-footer__stickyFooter___vhgUO {
   display: none;
   position: sticky;

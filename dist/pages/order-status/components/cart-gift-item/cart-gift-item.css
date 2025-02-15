@@ -467,6 +467,16 @@ img::selection {
   width: 100%;
   height: 100%;
 }
+@media only screen and (max-width: 480px) {
+  .cart-gift-item__view-mobile-up___TfYTy {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .cart-gift-item__view-mobile___Pnsmd {
+    display: none !important;
+  }
+}
 .cart-gift-item__ncc-fw-600___P5Ika {
   font-weight: 600;
 }
@@ -491,6 +501,12 @@ img::selection {
 }
 .cart-gift-item__free-gift-scroll-items___XiF_c {
   display: flex;
+}
+.cart-gift-item__free-gift-scroll-items___XiF_c .cart-gift-item__free-gift-item-image___rDjsg {
+  border-radius: 4px;
+  flex: 0 0 46px;
+  height: auto;
+  min-width: 0;
 }
 .cart-gift-item__free-gift-box___LbfBC {
   border-radius: 8px;
