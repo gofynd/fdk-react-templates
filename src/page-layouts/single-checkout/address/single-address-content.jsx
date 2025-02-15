@@ -50,14 +50,14 @@ function InvalidAddress({ errorMessage }) {
   return (
     <div className={styles.invalidAddError}>
       <div className={styles.invalidAddErrorLeft}>
-        <div>
-          <SvgWrapper svgSrc={"warning-address"} />
-        </div>
+        <SvgWrapper svgSrc={"warning-address"} />
+
         <div className={styles.invalidAddErrorData}>
           <div className={styles.invalidAddErrorMsg}>{errorMessage}</div>
-          <div className={styles.invalidAddErrorSuggestion}>
+          {/* NOTE: Removing for now as it is static and often misleading */}
+          {/* <div className={styles.invalidAddErrorSuggestion}>
             Please add more items to your cart to meet the minimum order value
-          </div>
+          </div> */}
         </div>
       </div>
       <button

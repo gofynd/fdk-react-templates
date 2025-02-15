@@ -1094,6 +1094,7 @@ img::selection {
 .quantity-ctrl__qtyControl___LvP42 button:disabled {
   background-color: var(--pageBackground, #f8f8f8);
   cursor: default;
+  opacity: 0.3;
 }
 .quantity-ctrl__qtyControl___LvP42 .quantity-ctrl__qtyAmount___NVSUc {
   width: 38px;

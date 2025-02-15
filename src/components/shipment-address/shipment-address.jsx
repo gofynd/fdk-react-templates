@@ -14,23 +14,15 @@ import React from "react";
 import * as styles from "./shipment-address.less";
 
 function ShipmentAddress({ address }) {
-  const getOptionalFields = (item) => {
-    return `${item?.sector ? `${item?.sector}, ` : ""}${item?.city}, ${
-      item?.pincode ? `- ${item?.pincode}` : ""
-    }`;
-  };
-
   return (
     <div className={`${styles.address} ${styles.lightsm}`}>
       <div className={`${styles.title} ${styles.boldsm}`}>ADDRESS</div>
-      <div className={`${styles.lightsm}`}>
-        {address?.name} - {address?.phone}
+      <div className={styles.lightsm}>
+        {`${address?.name || ""} - ${address?.country_phone_code || ""}${address?.phone || ""}`}
       </div>
-      <div className={`${styles.lightsm}`}>{address?.address}</div>
-      <div className={`${styles.lightsm}`}>
-        {address?.area}, {address?.landmark}
+      <div className={`${styles.lightsm} ${styles.displayAddress}`}>
+        {address?.display_address || ""}
       </div>
-      <div className={`${styles.lightsm}`}>{getOptionalFields(address)}</div>
     </div>
   );
 }

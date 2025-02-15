@@ -89,91 +89,90 @@ function OrderShipment({
           {getTime(orderInfo?.order_created_ts)}
         </h4>
       </div>
-      {isOpen && (
-        <div>
-          {Object.keys(orderInfo)?.length !== 0 &&
-            orderInfo?.shipments?.length !== 0 &&
-            orderInfo?.shipments?.map((item, index) => {
-              return (
-                <div
-                  className={`${styles.shipmentData} ${selectedShipment === item.shipment_id ? styles.selectedto : ""}`}
-                  key={`${item.shipment_id}`}
-                >
-                  <div onClick={() => naivgateToShipment(item)}>
-                    <div className={`${styles.shipmentLeft}`}>
-                      <img
-                        className={`${isOpen ? styles.filterArrowUp : styles.filterArrowdown}`}
-                        src={item?.bags?.[0]?.item?.image?.[0]}
-                        alt={item?.shipment_images?.[0]}
-                      />
-                      {item?.bags?.length > 1 && (
-                        <div id="total-item">
-                          +{(item?.bags?.length || 0) - 1 || 0 + " "}
+
+      <div
+        className={isOpen ? styles.showAccordionBody : styles.hideAccordionBody}
+      >
+        {Object.keys(orderInfo)?.length !== 0 &&
+          orderInfo?.shipments?.length !== 0 &&
+          orderInfo?.shipments?.map((item, index) => {
+            return (
+              <div
+                className={`${styles.shipmentData} ${selectedShipment === item.shipment_id ? styles.selectedto : ""}`}
+                key={`${item.shipment_id}`}
+              >
+                <div onClick={() => naivgateToShipment(item)}>
+                  <div className={`${styles.shipmentLeft}`}>
+                    <img
+                      className={`${isOpen ? styles.filterArrowUp : styles.filterArrowdown}`}
+                      src={item?.bags?.[0]?.item?.image?.[0]}
+                      alt={item?.shipment_images?.[0]}
+                    />
+                    {item?.bags?.length > 1 && (
+                      <div id="total-item">
+                        +{item?.bags?.length - 1 + " "}
+                        more
+                      </div>
+                    )}
+                  </div>
+                  <div className={`${styles.shipmentRight}`}>
+                    <div className={`${styles.uktLinks}`}>
+                      {item?.bags?.length > 1 ? (
+                        <div>
+                          {getProductsName(item?.bags)?.[0]} +
+                          {item.bags.length - 1 + " "}
                           more
                         </div>
+                      ) : (
+                        <div>{getProductsName(item?.bags)?.[0]}</div>
                       )}
                     </div>
-                    <div className={`${styles.shipmentRight}`}>
-                      <div className={`${styles.uktLinks}`}>
-                        {item?.bags?.length > 1 ? (
-                          <div>
-                            {getProductsName(item?.bags)?.[0]} +
-                            {item.bags.length - 1 + " "}
-                            more
-                          </div>
-                        ) : (
-                          <div>{getProductsName(item?.bags)?.[0]}</div>
-                        )}
-                      </div>
-                      <div
-                        className={`${styles.shipmentId} ${styles.boldls} ${styles.uktLinks}`}
-                      >
-                        Shipment: {item?.shipment_id}
-                      </div>
-                      <div
-                        className={`${styles.shipmentStats} ${styles.light}`}
-                      >
-                        <span>{getTotalItems(item?.bags?.length)}</span>
-                        <span>{` | `}</span>
-                        <span>{getTotalPieces(item?.bags)}</span>
-                      </div>
-                      <div
-                        className={`${styles.status} ${styles.regular}`}
-                        style={{
-                          backgroundColor:
-                            item.shipment_status.hex_code || "green",
-                        }}
-                      >
-                        {item?.shipment_status?.title}
-                      </div>
-                      {isAdmin && (
-                        <div className={`${styles.shipmentBrands}`}>
-                          <span className={`${styles.bold}`}>Brand</span> :
-                          {item?.brand_name}
-                        </div>
-                      )}
+                    <div
+                      className={`${styles.shipmentId} ${styles.boldls} ${styles.uktLinks}`}
+                    >
+                      Shipment: {item?.shipment_id}
                     </div>
+                    <div className={`${styles.shipmentStats} ${styles.light}`}>
+                      <span>{getTotalItems(item?.bags?.length)}</span>
+                      <span>{` | `}</span>
+                      <span>{getTotalPieces(item?.bags)}</span>
+                    </div>
+                    <div
+                      className={`${styles.status} ${styles.regular}`}
+                      style={{
+                        backgroundColor:
+                          item.shipment_status.hex_code || "green",
+                      }}
+                    >
+                      {item?.shipment_status?.title}
+                    </div>
+                    {isAdmin && (
+                      <div className={`${styles.shipmentBrands}`}>
+                        <span className={`${styles.bold}`}>Brand</span> :
+                        {item?.brand_name}
+                      </div>
+                    )}
                   </div>
                 </div>
-              );
-            })}
-          {isBuyAgainEligible && (
-            <div className={`${styles.buttons}`}>
-              <button
-                type="button"
-                className={`${styles.ordercheckout}`}
-                onClick={() => onBuyAgainClick(orderInfo)}
-              >
-                <SvgWrapper
-                  className={`${styles.reorderIcon}`}
-                  svgSrc="re-order"
-                />
-                BUY AGAIN
-              </button>
-            </div>
-          )}
-        </div>
-      )}
+              </div>
+            );
+          })}
+        {isBuyAgainEligible && (
+          <div className={`${styles.buttons}`}>
+            <button
+              type="button"
+              className={`${styles.ordercheckout}`}
+              onClick={() => onBuyAgainClick(orderInfo)}
+            >
+              <SvgWrapper
+                className={`${styles.reorderIcon}`}
+                svgSrc="re-order"
+              />
+              BUY AGAIN
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

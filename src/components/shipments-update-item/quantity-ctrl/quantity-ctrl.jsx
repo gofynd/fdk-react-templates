@@ -19,6 +19,7 @@ function QuantityCtrl({ currquantity, incDecQuantity, changeQty }) {
   const [isdisabled, setIsdisabled] = useState(false);
   useEffect(() => {
     setQuantity(currquantity);
+    setIsdisabled(currquantity === 1);
   }, [currquantity]);
   const incrDecrQuantity = (value) => {
     incDecQuantity(value);
@@ -66,7 +67,6 @@ function QuantityCtrl({ currquantity, incDecQuantity, changeQty }) {
         aria-label="Inc Quantity"
         className={`${styles.operator}`}
         onClick={() => incrDecrQuantity(1)}
-        disabled={isdisabled}
       >
         <SvgWrapper svgSrc="increase" className={styles.operation} />
       </button>

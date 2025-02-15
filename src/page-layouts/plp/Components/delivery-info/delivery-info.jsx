@@ -6,11 +6,9 @@ import FyButton from "../../../../components/core/fy-button/fy-button";
 import FyInput from "../../../../components/core/fy-input/fy-input";
 
 function DeliveryInfo({
-  selectPincodeError,
   tat,
   pincode,
   pincodeErrorMessage,
-  setCurrentPincode,
   checkPincode,
   setPincodeErrorMessage,
 }) {
@@ -110,12 +108,7 @@ function DeliveryInfo({
           {pincodeChecked ? "CHANGE" : "CHECK"}
         </FyButton>
       </div>
-      {selectPincodeError && !pincodeErrorMessage?.length && (
-        <div className={`${styles.captionNormal} ${styles.emptyPincode}`}>
-          Please enter valid pincode before Add to cart/ Buy now
-        </div>
-      )}
-      {!pincodeErrorMessage && !selectPincodeError && (
+      {!pincodeErrorMessage && (
         <div className={`${styles.deliveryDate} ${styles.dateInfoContainer}`}>
           {postCode?.length === 6 && tatMessage?.length > 0 && (
             <>
@@ -129,7 +122,7 @@ function DeliveryInfo({
         </div>
       )}
       {pincodeErrorMessage && (
-        <div className={`${styles.captionNormal} ${styles.error}`}>
+        <div className={`${styles.captionNormal} ${styles.emptyPincode}`}>
           {pincodeErrorMessage}
         </div>
       )}
