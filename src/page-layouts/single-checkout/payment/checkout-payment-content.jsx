@@ -2760,6 +2760,7 @@ function CheckoutPaymentContent({
               setNameOnCard("");
               setCardExpiryDate("");
               setCvvNumber("");
+              hideNewCard();
             }
           }}
         >
