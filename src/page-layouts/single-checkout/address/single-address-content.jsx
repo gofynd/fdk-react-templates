@@ -100,7 +100,6 @@ function SingleAddressContent({
             ? getDefaultAddress.map((item, index) => {
                 return (
                   <AddressItem
-                    containerClassName={styles.customAddressItem}
                     key={`${item?.id}_#${index}`}
                     addressItem={item}
                     onAddressSelect={selectAdd}
@@ -140,7 +139,6 @@ function SingleAddressContent({
             ? getOtherAddress.map((item, index) => {
                 return (
                   <AddressItem
-                    containerClassName={styles.customAddressItem}
                     key={`${item?.id}_#${index}`}
                     addressItem={item}
                     onAddressSelect={selectAdd}
@@ -181,11 +179,7 @@ function SingleAddressContent({
           ) : (
             <div
               className={`${styles.addressContentConitainer} ${styles.fontSize}`}
-              style={{
-                textAlign: "center",
-                color: "var(--textLabel)",
-                padding: "4px 16px",
-              }}
+              style={{ textAlign: "center", color: "var(--textLabel)" }}
             >
               {" "}
               No Address Found, Please Add Address

@@ -8,7 +8,8 @@
   opacity: 0.5;
   margin-top: 20px;
   @media @mobile {
-    display: none;
+    padding: 6px;
+    border-radius: 4px;
   }
   .icon {
     /* Styles for .icon class */
@@ -33,7 +34,8 @@
   border: 1px solid var(--dividerStokes);
   border-radius: 8px;
   @media @mobile {
-    display: none;
+    padding: 6px;
+    border-radius: 4px;
   }
   .leftSelected {
     display: flex;
@@ -83,22 +85,16 @@
   margin-top: 20px;
 
   @media @mobile {
-    padding: 6px 16px;
+    padding: 6px;
     margin-top: 10px;
-    border-radius: 0;
-    border-left: none;
-    border-right: none;
+    border-radius: 4px 4px 0 0;
   }
-  .left {
-    display: flex;
-    @media @mobile {
-      .icon {
-        display: none;
-      }
-    }
-  }
+  .left,
   .right {
     display: flex;
+  }
+
+  .right {
     @media @mobile {
       display: none;
     }
@@ -109,9 +105,7 @@
     flex-direction: column;
     justify-content: space-around;
     padding-left: 15px;
-    @media @mobile {
-      padding-left: 0;
-    }
+
     .orderSummary {
       font-size: 14px;
       font-weight: 600;

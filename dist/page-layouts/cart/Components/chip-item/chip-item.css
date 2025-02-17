@@ -467,16 +467,6 @@ img::selection {
   width: 100%;
   height: 100%;
 }
-@media only screen and (max-width: 480px) {
-  .chip-item__view-mobile-up___zU20I {
-    display: none !important;
-  }
-}
-@media only screen and (min-width: 481px) {
-  .chip-item__view-mobile___uuoJC {
-    display: none !important;
-  }
-}
 .chip-item__cartItemsListContainer___ud9jU {
   padding: 24px;
   border: 1px solid var(--dividerStokes, #d4d1d1);
@@ -757,8 +747,8 @@ img::selection {
 }
 @media only screen and (min-width: 769px) {
   .chip-item__sModalContainer___ARs9G {
-    min-width: 400px;
-    max-width: 400px;
+    min-width: 500px !important;
+    max-width: 500px !important;
   }
 }
 .chip-item__sModalContainer___ARs9G .chip-item__sizeModalHeader___Aoh_h {
@@ -1442,16 +1432,6 @@ img::selection {
   width: 100%;
   height: 100%;
 }
-@media only screen and (max-width: 480px) {
-  .quantity-control__view-mobile-up___hMo9o {
-    display: none !important;
-  }
-}
-@media only screen and (min-width: 481px) {
-  .quantity-control__view-mobile___UUI6J {
-    display: none !important;
-  }
-}
 .quantity-control__quantityCtrlContainer___RPVmM {
   display: flex;
   align-items: center;
@@ -1985,16 +1965,6 @@ img::selection {
   width: 100%;
   height: 100%;
 }
-@media only screen and (max-width: 480px) {
-  .modal__view-mobile-up___gXGqs {
-    display: none !important;
-  }
-}
-@media only screen and (min-width: 481px) {
-  .modal__view-mobile___nGCzH {
-    display: none !important;
-  }
-}
 .modal__modal___xT3RX {
   position: fixed;
   inset: 0;
@@ -2070,8 +2040,6 @@ img::selection {
   padding: 8px;
 }
 .modal__modalHeader___xKo1g .modal__crossIcon___ieJau {
-  width: 21px;
-  height: 21px;
   cursor: pointer;
 }
 .modal__modalBody___peHlJ {
@@ -2601,16 +2569,6 @@ img::selection {
 .free-gift-item__view3d-canvas___yjlWD {
   width: 100%;
   height: 100%;
-}
-@media only screen and (max-width: 480px) {
-  .free-gift-item__view-mobile-up___bM5zm {
-    display: none !important;
-  }
-}
-@media only screen and (min-width: 481px) {
-  .free-gift-item__view-mobile___kVBzn {
-    display: none !important;
-  }
 }
 .free-gift-item__freeArticleContainer___wFbcr {
   grid-area: free_gift;

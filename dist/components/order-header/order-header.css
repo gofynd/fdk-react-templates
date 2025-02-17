@@ -467,16 +467,6 @@ img::selection {
   width: 100%;
   height: 100%;
 }
-@media only screen and (max-width: 480px) {
-  .order-header__view-mobile-up___V4Ppq {
-    display: none !important;
-  }
-}
-@media only screen and (min-width: 481px) {
-  .order-header__view-mobile___eS5sE {
-    display: none !important;
-  }
-}
 .order-header__orderHeader___rD3JP {
   background: var(--themeAccentL5, #fff);
   padding: 20px 0px;
@@ -1037,16 +1027,6 @@ img::selection {
 .dropdown__view3d-canvas___jd2Y_ {
   width: 100%;
   height: 100%;
-}
-@media only screen and (max-width: 480px) {
-  .dropdown__view-mobile-up___Lqa2r {
-    display: none !important;
-  }
-}
-@media only screen and (min-width: 481px) {
-  .dropdown__view-mobile___JCsNu {
-    display: none !important;
-  }
 }
 .dropdown__selected___rZEuQ {
   display: flex;
