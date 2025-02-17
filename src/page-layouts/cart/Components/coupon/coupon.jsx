@@ -24,7 +24,6 @@ function Coupon({
   onCouponSuccessCloseModalClick = () => {},
   onApplyCouponClick = () => {},
   onRemoveCouponClick = () => {},
-  handleRemoveQr = null,
 }) {
   const couponTitleText = useMemo(() => {
     if (hasCancel) {
@@ -54,10 +53,6 @@ function Coupon({
       couponInput: "",
     },
   });
-
-  useEffect(() => {
-    handleRemoveQr?.handleQr();
-  }, [successCoupon?.is_applied]);
 
   function handleCouponCodeSubmit({ couponInput }) {
     onApplyCouponClick(couponInput);
@@ -199,9 +194,7 @@ function CouponItem({
       {isApplicable && (
         <button
           className={styles.couponApplyBtn}
-          onClick={() => {
-            applyCoupon(couponCode);
-          }}
+          onClick={() => applyCoupon(couponCode)}
         >
           APPLY
         </button>

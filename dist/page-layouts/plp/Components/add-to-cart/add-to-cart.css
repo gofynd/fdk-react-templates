@@ -467,16 +467,6 @@ img::selection {
   width: 100%;
   height: 100%;
 }
-@media only screen and (max-width: 480px) {
-  .add-to-cart__view-mobile-up___pAxbt {
-    display: none !important;
-  }
-}
-@media only screen and (min-width: 481px) {
-  .add-to-cart__view-mobile___kmRJA {
-    display: none !important;
-  }
-}
 .add-to-cart__productDescContainer___w6xlt {
   display: flex;
   box-sizing: border-box;
@@ -1624,16 +1614,6 @@ img::selection {
   width: 100%;
   height: 100%;
 }
-@media only screen and (max-width: 480px) {
-  .fy-image__view-mobile-up___Io0gR {
-    display: none !important;
-  }
-}
-@media only screen and (min-width: 481px) {
-  .fy-image__view-mobile___FQHbN {
-    display: none !important;
-  }
-}
 .fy-image__imageWrapper___wKmP2 {
   overflow: hidden;
   position: relative;
@@ -2141,16 +2121,6 @@ img::selection {
   width: 100%;
   height: 100%;
 }
-@media only screen and (max-width: 480px) {
-  .skeletons__view-mobile-up___uh4wh {
-    display: none !important;
-  }
-}
-@media only screen and (min-width: 481px) {
-  .skeletons__view-mobile___K1JIq {
-    display: none !important;
-  }
-}
 .skeletons__card___njYyO {
   z-index: unset;
   position: relative;
@@ -2654,16 +2624,6 @@ img::selection {
 .pic-zoom__view3d-canvas___CxNn_ {
   width: 100%;
   height: 100%;
-}
-@media only screen and (max-width: 480px) {
-  .pic-zoom__view-mobile-up____12_7 {
-    display: none !important;
-  }
-}
-@media only screen and (min-width: 481px) {
-  .pic-zoom__view-mobile___T6CZz {
-    display: none !important;
-  }
 }
 .pic-zoom__loadImage___K20_h {
   cursor: zoom-in;
@@ -3235,16 +3195,6 @@ img::selection {
 .image-gallery__view3d-canvas___vxWar {
   width: 100%;
   height: 100%;
-}
-@media only screen and (max-width: 480px) {
-  .image-gallery__view-mobile-up___LaD8j {
-    display: none !important;
-  }
-}
-@media only screen and (min-width: 481px) {
-  .image-gallery__view-mobile___vBU7C {
-    display: none !important;
-  }
 }
 .image-gallery__productDetailsPage___e6a8x {
   max-width: 1440px;
@@ -3966,16 +3916,6 @@ img::selection {
 .lightbox-image__view3d-canvas___N5y1V {
   width: 100%;
   height: 100%;
-}
-@media only screen and (max-width: 480px) {
-  .lightbox-image__view-mobile-up___H0srU {
-    display: none !important;
-  }
-}
-@media only screen and (min-width: 481px) {
-  .lightbox-image__view-mobile___v6oaY {
-    display: none !important;
-  }
 }
 .lightbox-image__lbBox___LMeeI {
   width: 100%;
@@ -4906,16 +4846,6 @@ img::selection {
   width: 100%;
   height: 100%;
 }
-@media only screen and (max-width: 480px) {
-  .mobile-slider__view-mobile-up___abQ9y {
-    display: none !important;
-  }
-}
-@media only screen and (min-width: 481px) {
-  .mobile-slider__view-mobile___ihVlf {
-    display: none !important;
-  }
-}
 .mobile-slider__mobilePdpCarouselBox____wvpZ {
   width: 100%;
 }
@@ -5549,16 +5479,6 @@ img::selection {
   width: 100%;
   height: 100%;
 }
-@media only screen and (max-width: 480px) {
-  .product-variants__view-mobile-up___WfDT5 {
-    display: none !important;
-  }
-}
-@media only screen and (min-width: 481px) {
-  .product-variants__view-mobile___lDH8z {
-    display: none !important;
-  }
-}
 .product-variants__variantTitle___GlBrN {
   font-size: 12px;
   font-style: normal;
@@ -6168,16 +6088,6 @@ img::selection {
 .fy-button__view3d-canvas___E1pOb {
   width: 100%;
   height: 100%;
-}
-@media only screen and (max-width: 480px) {
-  .fy-button__view-mobile-up___sto08 {
-    display: none !important;
-  }
-}
-@media only screen and (min-width: 481px) {
-  .fy-button__view-mobile___yMsQF {
-    display: none !important;
-  }
 }
 .fy-button__button___UES8C {
   font-family: inherit;
@@ -6810,16 +6720,6 @@ img::selection {
   width: 100%;
   height: 100%;
 }
-@media only screen and (max-width: 480px) {
-  .delivery-info__view-mobile-up___DOEtw {
-    display: none !important;
-  }
-}
-@media only screen and (min-width: 481px) {
-  .delivery-info__view-mobile___klYdq {
-    display: none !important;
-  }
-}
 .delivery-info__delivery___cpAyb {
   display: flex;
   border-radius: var(--buttonRadius, 0px);
@@ -7429,16 +7329,6 @@ img::selection {
   width: 100%;
   height: 100%;
 }
-@media only screen and (max-width: 480px) {
-  .fy-input__view-mobile-up___z4OJg {
-    display: none !important;
-  }
-}
-@media only screen and (min-width: 481px) {
-  .fy-input__view-mobile___iTGo9 {
-    display: none !important;
-  }
-}
 .fy-input__inputContainer___Du9V3 {
   display: flex;
   flex-direction: column;
@@ -7458,6 +7348,7 @@ img::selection {
 .fy-input__floating___jgtoq {
   position: absolute;
   transform: translateY(-50%) scale(0.9);
+  z-index: 1;
   background: #ffffff;
   padding: 0 0.3rem;
   margin: 0 0.5rem;
@@ -7533,27 +7424,6 @@ img::selection {
 .fy-input__underline___fCh8Z {
   padding: 0.2rem 0.4rem;
   border-bottom: 1px solid var(--dividerStokes, #d4d1d1);
-}
-.fy-input__adornmentContainer___MtgI6 {
-  display: flex;
-  align-items: center;
-  position: relative;
-}
-.fy-input__adornmentContainer___MtgI6 .fy-input__startAdornment___SVGGG,
-.fy-input__adornmentContainer___MtgI6 .fy-input__endAdornment___ce3Ta {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 0.5rem;
-}
-.fy-input__adornmentContainer___MtgI6 .fy-input__startAdornment___SVGGG {
-  margin-right: 0.5rem;
-}
-.fy-input__adornmentContainer___MtgI6 .fy-input__endAdornment___ce3Ta {
-  margin-left: 0.5rem;
-}
-.fy-input__adornmentContainer___MtgI6 input {
-  flex: 1;
 }
 
 .quantity-control__slide-fade-enter-active___ITjLF,
@@ -8024,16 +7894,6 @@ img::selection {
 .quantity-control__view3d-canvas___NG5oN {
   width: 100%;
   height: 100%;
-}
-@media only screen and (max-width: 480px) {
-  .quantity-control__view-mobile-up___hMo9o {
-    display: none !important;
-  }
-}
-@media only screen and (min-width: 481px) {
-  .quantity-control__view-mobile___UUI6J {
-    display: none !important;
-  }
 }
 .quantity-control__quantityCtrlContainer___RPVmM {
   display: flex;
@@ -8567,16 +8427,6 @@ img::selection {
 .fy-dropdown__view3d-canvas___IqfLy {
   width: 100%;
   height: 100%;
-}
-@media only screen and (max-width: 480px) {
-  .fy-dropdown__view-mobile-up___wsQo9 {
-    display: none !important;
-  }
-}
-@media only screen and (min-width: 481px) {
-  .fy-dropdown__view-mobile___pGZag {
-    display: none !important;
-  }
 }
 .fy-dropdown__dropdownContainer___fhUVa {
   display: flex;

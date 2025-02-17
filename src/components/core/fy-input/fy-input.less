@@ -22,6 +22,7 @@
 .floating {
   position: absolute;
   transform: translateY(-50%) scale(0.9);
+  z-index: 1;
   background: @White;
   padding: 0 0.3rem;
   margin: 0 0.5rem;
@@ -105,30 +106,4 @@
 .underline {
   padding: 0.2rem 0.4rem;
   border-bottom: 1px solid @DividerStokes;
-}
-
-.adornmentContainer {
-  display: flex;
-  align-items: center;
-  position: relative;
-
-  .startAdornment,
-  .endAdornment {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 0.5rem;
-  }
-
-  .startAdornment {
-    margin-right: 0.5rem;
-  }
-
-  .endAdornment {
-    margin-left: 0.5rem;
-  }
-
-  input {
-    flex: 1;
-  }
 }

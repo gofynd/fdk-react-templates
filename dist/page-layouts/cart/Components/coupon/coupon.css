@@ -467,16 +467,6 @@ img::selection {
   width: 100%;
   height: 100%;
 }
-@media only screen and (max-width: 480px) {
-  .coupon__view-mobile-up___PDss4 {
-    display: none !important;
-  }
-}
-@media only screen and (min-width: 481px) {
-  .coupon__view-mobile___EmsVJ {
-    display: none !important;
-  }
-}
 .coupon__couponBoxContainer___yJTiZ {
   padding: 24px;
   border-radius: 8px;
@@ -1310,16 +1300,6 @@ img::selection {
   width: 100%;
   height: 100%;
 }
-@media only screen and (max-width: 480px) {
-  .modal__view-mobile-up___gXGqs {
-    display: none !important;
-  }
-}
-@media only screen and (min-width: 481px) {
-  .modal__view-mobile___nGCzH {
-    display: none !important;
-  }
-}
 .modal__modal___xT3RX {
   position: fixed;
   inset: 0;
@@ -1395,8 +1375,6 @@ img::selection {
   padding: 8px;
 }
 .modal__modalHeader___xKo1g .modal__crossIcon___ieJau {
-  width: 21px;
-  height: 21px;
   cursor: pointer;
 }
 .modal__modalBody___peHlJ {
