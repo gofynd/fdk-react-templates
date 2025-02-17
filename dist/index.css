@@ -6395,6 +6395,7 @@ img::selection {
 .fy-input__floating___jgtoq {
   position: absolute;
   transform: translateY(-50%) scale(0.9);
+  z-index: 1;
   background: #ffffff;
   padding: 0 0.3rem;
   margin: 0 0.5rem;
@@ -13714,8 +13715,8 @@ img::selection {
 }
 @media only screen and (min-width: 769px) {
   .chip-item__sModalContainer___ARs9G {
-    min-width: 400px;
-    max-width: 400px;
+    min-width: 500px !important;
+    max-width: 500px !important;
   }
 }
 .chip-item__sModalContainer___ARs9G .chip-item__sizeModalHeader___Aoh_h {
