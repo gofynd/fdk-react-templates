@@ -467,16 +467,6 @@ img::selection {
   width: 100%;
   height: 100%;
 }
-@media only screen and (max-width: 480px) {
-  .login-mode-button__view-mobile-up___z_oRl {
-    display: none !important;
-  }
-}
-@media only screen and (min-width: 481px) {
-  .login-mode-button__view-mobile___dmkkn {
-    display: none !important;
-  }
-}
 .login-mode-button__loginModeBtn___BqUzp {
   display: flex;
   align-items: center;

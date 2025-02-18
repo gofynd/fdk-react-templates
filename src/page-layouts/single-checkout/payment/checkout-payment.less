@@ -10,10 +10,15 @@
     border-radius: 8px;
     opacity: 0.5;
     @media @mobile {
-      display: none;
+      padding: 6px;
+      max-height: 60px;
+      border-radius: 4px;
+    }
+    .icon {
+      /* Styles for .icon class */
     }
 
-    .title {
+    .heading {
       display: flex;
       flex-direction: column;
       justify-content: space-around;
@@ -21,48 +26,31 @@
       font-size: 14px;
       font-weight: 600;
       line-height: 140%;
-      color: var(--textHeading);
     }
   }
   .paymentHeaderSelect {
     display: flex;
-    align-items: center;
     padding: 24px;
     border-radius: 8px 8px 0 0;
     border: 1px solid var(--dividerStokes);
     @media @mobile {
-      padding: 0px 16px 16px;
-      border: none;
-      border-bottom: 1px solid var(--dividerStokes);
+      padding: 6px;
+      border-radius: 4px 4px 0 0;
     }
-    .title {
-      font-size: 14px;
-      font-weight: 600;
-      line-height: 140%;
-      color: var(--textHeading);
-      @media @mobile-up {
-        padding-left: 15px;
+    .contentData {
+      padding-left: 15px;
+      .head {
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 140%;
+        color: var(--textHeading);
       }
-    }
-  }
-  .paymentFailedHeader {
-    padding: 24px;
-    border-width: 0 1px 1px 1px;
-    border-color: var(--dividerStokes);
-    border-style: solid;
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    padding: 24px;
-    flex-direction: row;
-    @media @mobile {
-      padding: 20px;
-    }
-
-    .redSplit {
-      width: 8px;
-      background: @ErrorText;
-      border-radius: 8px 0px 0px 8px;
+      .desc {
+        font-size: 12px;
+        color: var(--textBody);
+        font-weight: 400;
+        line-height: 140%;
+      }
     }
   }
 }

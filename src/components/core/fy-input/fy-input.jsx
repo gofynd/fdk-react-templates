@@ -17,8 +17,6 @@
  * @param {string} errorMessage - The message displayed below the input field when `error` is true.
  * @param {React.InputHTMLAttributes<HTMLInputElement>} props - Additional props that are passed to the underlying input element, such as `type`, `value`, `onChange`, etc.
  * @param {React.Ref<HTMLInputElement>} ref - The ref to the input element.
- * @param {Jsx.Element} startAdornment - The start adornment that are passed to input such as logo, svgs or simple text.
- * @param {Jsx.Element} endAdornment - The end adornment that are passed to input such as logo, svgs or simple text.
  *
  * @returns {JSX.Element} A customizable input field with label, error message, and various styling options.
  */
@@ -42,15 +40,13 @@ const FyInput = forwardRef(
       errorMessage = "Invalid input",
       multiline = false,
       required,
-      startAdornment,
-      endAdornment,
       ...props
     },
     ref
   ) => {
     const customInputClassName = useMemo(
       () =>
-        `${styles[inputSize]} ${multiline ? styles.fyTextArea : ""} ${styles[inputVariant]} ${error ? styles.inputError : ""} ${inputClassName ?? ""} `,
+        `${styles.fyInput} ${styles[inputSize]} ${multiline ? styles.fyTextArea : ""} ${styles[inputVariant]} ${error ? styles.inputError : ""} ${inputClassName ?? ""} `,
       [inputVariant, inputClassName, error, inputSize]
     );
     const customLabelClassName = useMemo(
@@ -75,21 +71,16 @@ const FyInput = forwardRef(
             rows={5}
             {...props}
             id={id}
-            className={`${customInputClassName} ${styles.fyInput} `}
+            className={customInputClassName}
             ref={ref}
           ></textarea>
         ) : (
-          <div
-            className={`${styles.adornmentContainer} ${customInputClassName}`}
-          >
-            {startAdornment && (
-              <div className={styles.startAdornment}>{startAdornment}</div>
-            )}
-            <input className={styles.fyInput} {...props} id={id} ref={ref} />
-            {endAdornment && (
-              <div className={styles.endAdornment}>{endAdornment}</div>
-            )}
-          </div>
+          <input
+            {...props}
+            id={id}
+            className={customInputClassName}
+            ref={ref}
+          />
         )}
         {error && <div className={styles.error}>{errorMessage}</div>}
       </div>

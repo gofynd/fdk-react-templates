@@ -17,8 +17,6 @@ The `FyInput` component is a versatile and customizable input for React applicat
 | `id`                  | string                                          | `undefined`          | The ID to be applied to the input element, useful for linking labels and inputs or for testing purposes.
 | `error`               | boolean                                         | `false`              | If true, the input field will display an error state.
 | `errorMessage`        | string                                          | `"Invalid input"`    | The message displayed below the input field when `error` is true.
-| `startAdornment`      | Jsx.Element                                     | `undefined`          | The displays in start of input.
-| `endAdornment`        | Jsx.Element                                     | `undefined`          | The displays in the end of input.
 | `...props`            | React.InputHTMLAttributes<HTMLInputElement>     | `undefined`           | Additional props that are passed to the underlying input element. These can include standard HTML input attributes such as `type`, `value`, `onChange`, `placeholder`, and more.
 
 ## Example Usage
@@ -26,8 +24,6 @@ The `FyInput` component is a versatile and customizable input for React applicat
 ```jsx
 import FyInput from "fdk-react-templates/components/core/fy-input/fy-input";
 import "fdk-react-templates/components/core/fy-input/fy-input.css";
-import SvgWrapper from "fdk-react-templates/components/core/svgWrapper/svgWrapper";
-import "fdk-react-templates/components/core/svgWrapper/svgWrapper.css";
 
 <FyInput
   label="Email"
@@ -38,7 +34,6 @@ import "fdk-react-templates/components/core/svgWrapper/svgWrapper.css";
   labelClassName="custom-label"
   showAsterik={false}
   id="email-input"
-  startAdornment= {<SvgWrapper svgSrc="address" /> }
 />
 ```
 

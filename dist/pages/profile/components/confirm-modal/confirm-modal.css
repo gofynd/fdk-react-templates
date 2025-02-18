@@ -467,16 +467,6 @@ img::selection {
   width: 100%;
   height: 100%;
 }
-@media only screen and (max-width: 480px) {
-  .confirm-modal__view-mobile-up___CzSYy {
-    display: none !important;
-  }
-}
-@media only screen and (min-width: 481px) {
-  .confirm-modal__view-mobile___HK2aM {
-    display: none !important;
-  }
-}
 .confirm-modal__modalContainer___YeVBK {
   padding: 15px 25px 5px;
   background-color: #ffffff;
@@ -992,16 +982,6 @@ img::selection {
   width: 100%;
   height: 100%;
 }
-@media only screen and (max-width: 480px) {
-  .modal__view-mobile-up___gXGqs {
-    display: none !important;
-  }
-}
-@media only screen and (min-width: 481px) {
-  .modal__view-mobile___nGCzH {
-    display: none !important;
-  }
-}
 .modal__modal___xT3RX {
   position: fixed;
   inset: 0;
@@ -1077,8 +1057,6 @@ img::selection {
   padding: 8px;
 }
 .modal__modalHeader___xKo1g .modal__crossIcon___ieJau {
-  width: 21px;
-  height: 21px;
   cursor: pointer;
 }
 .modal__modalBody___peHlJ {
@@ -1608,16 +1586,6 @@ img::selection {
 .fy-button__view3d-canvas___E1pOb {
   width: 100%;
   height: 100%;
-}
-@media only screen and (max-width: 480px) {
-  .fy-button__view-mobile-up___sto08 {
-    display: none !important;
-  }
-}
-@media only screen and (min-width: 481px) {
-  .fy-button__view-mobile___yMsQF {
-    display: none !important;
-  }
 }
 .fy-button__button___UES8C {
   font-family: inherit;
