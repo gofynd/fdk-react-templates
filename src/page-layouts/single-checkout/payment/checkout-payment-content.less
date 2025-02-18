@@ -25,11 +25,17 @@
     .linkWrapper:last-child {
       .linkWrapper-row1 {
         border-bottom: 1px solid var(--dividerStokes);
+        @media @mobile {
+          border-bottom: unset;
+        }
+      }
+      @media @mobile {
+        border-bottom: 1px solid var(--dividerStokes);
       }
       border-bottom: none;
       flex: 1;
       .indicator {
-        border-radius: 0px 0px 0px 4px;
+        border-radius: 0px 0px 0px 4px !important;
       }
     }
     .linkWrapper:first-child {
@@ -85,8 +91,9 @@
         padding: 24px 16px;
         overflow: hidden;
         word-break: break-word;
+        align-items: center;
         @media @mobile {
-          padding: 16px 4px 16px 0px;
+          padding: 24px 0px;
         }
         .modeName {
           align-self: center;
@@ -96,11 +103,11 @@
           font-weight: 500;
           line-height: 140%;
           @media @mobile {
-            margin-left: 4px;
+            margin-left: 8px;
           }
         }
         .selectedModeName {
-          font-weight: 500;
+          font-weight: 600;
           color: @ButtonPrimary;
         }
         .codCharge {
@@ -109,7 +116,9 @@
           color: @ErrorText;
           line-height: 140%;
           border-radius: 4px;
-          padding: 8px 0;
+          @media @mobile {
+            padding-top: 4px;
+          }
           text-align: center;
         }
       }
@@ -159,6 +168,9 @@
     }
   }
   .selectedBorder {
+    .modeItemName {
+      font-weight: 600 !important;
+    }
     @media @mobile-up {
       border: 1px solid var(--primaryColor);
     }
@@ -188,9 +200,6 @@
   }
 
   .cardTab {
-    @media @mobile {
-      padding-bottom: 24px;
-    }
     .savedCardWrapper {
       .savedCardHeaderWrapper {
         display: flex;
@@ -453,9 +462,6 @@
           display: flex;
           justify-content: space-between;
           gap: 16px;
-          @media @mobile {
-            gap: 24px;
-          }
           .cardInputWrapper {
             flex: 1;
             display: flex;
@@ -648,10 +654,13 @@
       border-radius: 8px;
       padding: 16px;
       @media @mobile {
-        padding: 16px 0px;
+        padding: 24px 0px;
         &:not(:last-child) {
           border-bottom: 1px solid @DividerStokes;
           border-radius: 0px;
+        }
+        &:first-child {
+          padding-top: 0;
         }
       }
       .modeItem {
@@ -664,20 +673,23 @@
         .modeItemLogo {
           display: flex;
           img {
-            height: 42px;
-            width: 42px;
+            height: 38px;
+            width: 38px;
           }
         }
         .modeItemName {
-          font-weight: 400;
+          font-weight: 500;
           font-size: 14px;
           color: @TextBody;
         }
         .moreModeName {
-          color: @TextHeading;
+          color: @TextLabel;
           font-size: 14px;
-          font-weight: 600;
+          font-weight: 400;
           line-height: 140%;
+          @media @mobile {
+            font-weight: 500;
+          }
         }
         .moreModeArrow {
           transform: rotate(270deg);
@@ -715,6 +727,9 @@
       .searchBox {
         height: 48px;
         padding: 12px;
+        @media @mobile {
+          padding: 16px;
+        }
         border: 1px solid @DividerStokes;
         border-radius: 8px;
         margin-top: 16px;
@@ -738,6 +753,13 @@
 
   .upiMop {
     padding-bottom: 24px;
+    @media @mobile {
+      .upiApp {
+        &:first-child {
+          padding-top: 0;
+        }
+      }
+    }
   }
 
   .upiApp {
@@ -1282,7 +1304,11 @@
   flex-direction: column;
   align-items: center;
   gap: 16px;
-
+  position: relative;
+  .closeCodModal {
+    position: absolute;
+    right: 24px;
+  }
   .message {
     font-size: 16px;
     font-weight: 600;
@@ -1350,19 +1376,21 @@
     border: none;
   }
 }
-.logoNameContainer {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.modeItemLogo {
   img {
     border: 1px solid @DividerStokes;
     padding: 8px 4px;
     border-radius: 50%;
-    object-fit: contain;
+    object-fit: cover;
+    @media @mobile {
+      margin-right: 8px;
+    }
+    margin-right: 12px;
   }
-  @media @desktop {
-    gap: 12px;
-  }
+}
+.logoNameContainer {
+  display: flex;
+  align-items: center;
 }
 .modalBody::-webkit-scrollbar-thumb {
   background-color: gray;
@@ -1372,4 +1400,55 @@
   color: @ErrorText;
   font-size: 12px;
   font-weight: 400;
+}
+.cardDetailsHeader {
+  margin-bottom: unset !important;
+}
+.moreOptionContainer {
+  @media @desktop {
+    width: 420px;
+    height: 606px;
+  }
+  @media @mobile {
+    height: 434px;
+  }
+}
+.bodyContainer {
+  min-width: unset !important;
+  min-height: unset !important;
+  margin-bottom: 16px;
+  max-height: unset !important;
+}
+.moreModeIcon {
+  transform: rotate(270deg);
+  display: flex;
+  align-items: center;
+  svg {
+    width: 20px;
+    height: 20px;
+    g > path {
+      fill: @TextLabel;
+    }
+  }
+}
+.otherBorder {
+  border: 1px solid @DividerStokes;
+  @media @mobile {
+    border: none;
+  }
+}
+.modeItemLogo {
+  @media @mobile {
+    span {
+      border: 1px solid @DividerStokes;
+      padding: 8px 4px;
+      border-radius: 50%;
+      object-fit: cover;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      justify-content: center;
+      align-items: anchor-center;
+    }
+  }
 }
