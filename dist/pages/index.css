@@ -3970,6 +3970,7 @@ img::selection {
 .fy-input__floating___jgtoq {
   position: absolute;
   transform: translateY(-50%) scale(0.9);
+  z-index: 1;
   background: #ffffff;
   padding: 0 0.3rem;
   margin: 0 0.5rem;
@@ -7664,6 +7665,12 @@ img::selection {
   font-weight: 400;
   font-size: 10px;
 }
+.comment__commentOuterBox___tyEJJ .comment__inputBox___hqxzy .comment__commentError___qZ8ZF {
+  font-weight: 400;
+  font-size: 10px;
+  color: var(--errorText, #b24141);
+  padding: 12px 12px 0px 12px;
+}
 .comment__modelHeader___zmsaH {
   display: flex;
   align-items: center;
@@ -9648,8 +9655,8 @@ img::selection {
 }
 @media only screen and (min-width: 769px) {
   .chip-item__sModalContainer___ARs9G {
-    min-width: 400px;
-    max-width: 400px;
+    min-width: 500px !important;
+    max-width: 500px !important;
   }
 }
 .chip-item__sModalContainer___ARs9G .chip-item__sizeModalHeader___Aoh_h {
@@ -15224,12 +15231,12 @@ img::selection {
   margin-left: 0;
 }
 .product-listing__plpWrapper___OTAQx .product-listing__contentWrapper___SRQHp {
-  padding: 67px 16px 0;
+  padding: 0 16px;
   isolation: isolate;
 }
 @media only screen and (min-width: 481px) and (max-width: 1023px) {
   .product-listing__plpWrapper___OTAQx .product-listing__contentWrapper___SRQHp {
-    padding: 67px 40px 0;
+    padding: 0 40px;
   }
 }
 @media only screen and (min-width: 1024px) {
@@ -15502,22 +15509,17 @@ img::selection {
     height: 14px;
   }
 }
-.product-listing__breadcrumbWrapperDesktop___LHJGj {
+.product-listing__breadcrumbWrapper___E1Np9 {
   padding: 16px 40px 24px;
 }
 @media only screen and (max-width: 1023px) {
-  .product-listing__breadcrumbWrapperDesktop___LHJGj {
-    display: none;
+  .product-listing__breadcrumbWrapper___E1Np9 {
+    padding: 67px 40px 24px;
   }
 }
-.product-listing__breadcrumbWrapperMobile___rAfJn {
-  text-align: center;
-  margin-top: 8px;
-  padding: 0 32px;
-}
-@media only screen and (min-width: 1024px) {
-  .product-listing__breadcrumbWrapperMobile___rAfJn {
-    display: none;
+@media only screen and (max-width: 480px) {
+  .product-listing__breadcrumbWrapper___E1Np9 {
+    padding: 67px 16px 24px;
   }
 }
 .product-listing__filterHeaderContainer___sQ_rk {

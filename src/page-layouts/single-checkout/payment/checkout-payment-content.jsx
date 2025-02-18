@@ -1246,16 +1246,7 @@ function CheckoutPaymentContent({
       });
     }
   };
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
   const acceptOrder = () => {
-    if (isMobile) {
-      scrollToTop();
-    }
     if (disbaleCheckout?.message) {
       handleShowFailedMessage({
         failed: true,
@@ -2760,6 +2751,7 @@ function CheckoutPaymentContent({
               setNameOnCard("");
               setCardExpiryDate("");
               setCvvNumber("");
+              hideNewCard();
             }
           }}
         >
