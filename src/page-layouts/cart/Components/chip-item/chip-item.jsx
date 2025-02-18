@@ -96,6 +96,7 @@ export default function ChipItem({
           setSizeModal(null);
           setSizeModalErr(null);
         } else {
+          setSizeModal(currentSizeModalSize);
           setSizeModalErr(
             cartUpdateResponse?.message || "Something went wrong"
           );

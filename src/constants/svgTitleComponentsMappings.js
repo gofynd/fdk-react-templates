@@ -1,4 +1,3 @@
-import AccordionArrow from "../assets/images/accordion-arrow.svg";
 import ArrowDown from "../assets/images/arrow-down.svg";
 import SearchIcon from "../assets/images/search.svg";
 import CartIcon from "../assets/images/cart.svg";
@@ -24,7 +23,6 @@ import threeNumber from "../assets/images/three-number.svg";
 import radioSelected from "../assets/images/radio-selected.svg";
 import radio from "../assets/images/radio.svg";
 import checkmark from "../assets/images/checkmark.svg";
-import checkmarkXs from "../assets/images/checkmark-xs.svg";
 import appliedcoupon from "../assets/images/applied-coupon-small.svg";
 import appliedPromo from "../assets/images/applied-promo.svg";
 import shippinglogo from "../assets/images/shipping-logo.svg";
@@ -48,7 +46,6 @@ import star from "../assets/images/star.svg";
 import scale from "../assets/images/scale.svg";
 import add from "../assets/images/add.svg";
 import minus from "../assets/images/minus.svg";
-import moreHorizontal from "../assets/images/more-horizontal.svg";
 import checkbox from "../assets/images/checkbox.svg";
 import searchFilter from "../assets/images/search-filter.svg";
 import checkboxSelected from "../assets/images/checkbox-selected.svg";
@@ -67,7 +64,6 @@ import shareCopy from "../assets/images/share-copy.svg";
 import shareFacebook from "../assets/images/share-facebook.svg";
 import shareTwitter from "../assets/images/share-twitter.svg";
 import errorInfoIcon from "../assets/images/error-info-icon.svg";
-import infoGrey from "../assets/images/info-grey.svg";
 import coupon from "../assets/images/coupon.svg";
 import locate from "../assets/images/locate.svg";
 import homeType from "../assets/images/home-type.svg";
@@ -77,9 +73,6 @@ import creditCard from "../assets/images/credit-card.svg";
 import address from "../assets/images/address.svg";
 import call from "../assets/images/call.svg";
 import card from "../assets/images/card.svg";
-import cardPayment from "../assets/images/card-payment.svg";
-import cod from "../assets/images/cod.svg";
-import emi from "../assets/images/emi.svg";
 import email from "../assets/images/email.svg";
 import orders from "../assets/images/orders.svg";
 import refernearn from "../assets/images/refernearn.svg";
@@ -94,45 +87,14 @@ import contactEmail from "../assets/images/at-the-rate.svg";
 import location from "../assets/images/location.svg";
 import callSupport from "../assets/images/call-support.svg";
 import minusCircle from "../assets/images/minus-circle.svg";
-import nb from "../assets/images/nb.svg";
-import payLater from "../assets/images/pay-later.svg";
 import plusCircle from "../assets/images/plus-circle.svg";
 import breadcrumbAngle from "../assets/images/breadcrumb-angle.svg";
-import SocailTwitter from "../assets/images/socail-twitter.svg";
-import SocailFacebook from "../assets/images/socail-facebook.svg";
-import SocailGoogle from "../assets/images/socail-google+.svg";
-import SocailVimeo from "../assets/images/socail-vimeo.svg";
-import SocailBlog from "../assets/images/socail-blog.svg";
-import SocailInstagram from "../assets/images/socail-instagram.svg";
-import SocailLinkedin from "../assets/images/socail-linkedin.svg";
-import SocailYoutube from "../assets/images/socail-youtube.svg";
-import SocailPinterest from "../assets/images/socail-pinterest.svg";
-import upi from "../assets/images/upi.svg";
 import VideoPlay from "../assets/images/video-play.svg";
-import wallet from "../assets/images/wallet.svg";
 import Delivery from "../assets/images/delivery.svg";
-import gpay from "../assets/images/gpay.svg";
-import phonepe from "../assets/images/phonepe.svg";
-import paytm from "../assets/images/paytm.svg";
-import moreUpiApps from "../assets/images/more-upi-apps.svg";
-import amazonPay from "../assets/images/amazon-pay.svg";
-import bhim from "../assets/images/bhim.svg";
-import qrCode from "../assets/images/qr-code.svg";
-import upiPopup from "../assets/images/upi-payment-popup.svg";
-import cvv from "../assets/images/cvv.svg";
-import amexCardCvv from "../assets/images/amex-card-cvv.svg";
-import nonAmexCardCvv from "../assets/images/non-amex-card-cvv.svg";
-import paymentOther from "../assets/images/payment-other.svg";
-import upiIcons from "../assets/images/upi-icons.svg";
-import codIcon from "../assets/images/cod-icon.svg";
-import moreWallets from "../assets/images/more-wallets.svg";
-import otherBanks from "../assets/images/other-banks.svg";
-import closeBold from "../assets/images/close-bold.svg";
 import NoCoupons from "../assets/images/no-coupon.svg";
 import infoIcon from "../assets/images/info.svg";
 
 export const svgTitleComponentsMappings = {
-  "accordion-arrow": AccordionArrow,
   "arrow-down": ArrowDown,
   "arrow-right": ArrowRight,
   "one-number": oneNumber,
@@ -143,7 +105,6 @@ export const svgTitleComponentsMappings = {
   cart: CartIcon,
   "true-check": truecheck,
   check,
-  "upi-payment-popup": upiPopup,
   filter: FilterIcon,
   sort: SortIcon,
   "grid-four": FourGridIcon,
@@ -160,7 +121,6 @@ export const svgTitleComponentsMappings = {
   "radio-selected": radioSelected,
   radio,
   checkmark,
-  "checkmark-xs": checkmarkXs,
   "applied-coupon-small": appliedcoupon,
   "applied-promo": appliedPromo,
   "shipping-logo": shippinglogo,
@@ -183,7 +143,6 @@ export const svgTitleComponentsMappings = {
   scale,
   add,
   minus,
-  "more-horizontal": moreHorizontal,
   checkbox,
   searchFilter,
   "checkbox-selected": checkboxSelected,
@@ -202,7 +161,6 @@ export const svgTitleComponentsMappings = {
   "share-facebook": shareFacebook,
   "share-twitter": shareTwitter,
   "error-info-icon": errorInfoIcon,
-  "info-grey": infoGrey,
   coupon,
   locate,
   homeType,
@@ -212,11 +170,8 @@ export const svgTitleComponentsMappings = {
   address,
   call,
   card,
-  "card-payment": cardPayment,
-  cod,
   orders,
   email,
-  emi,
   refernearn,
   "warning-address": warningAddress,
   "re-order": reOrder,
@@ -231,28 +186,8 @@ export const svgTitleComponentsMappings = {
   "breadcrumb-angle": breadcrumbAngle,
   "plus-circle": plusCircle,
   "minus-circle": minusCircle,
-  nb,
-  "pay-later": payLater,
-  upi,
   "video-play": VideoPlay,
-  wallet,
   delivery: Delivery,
-  gpay,
-  phonepe,
-  paytm,
-  "more-upi-apps": moreUpiApps,
-  "amazon-pay": amazonPay,
-  bhim,
-  "qr-code": qrCode,
-  cvv,
-  "amex-card-cvv": amexCardCvv,
-  "non-amex-card-cvv": nonAmexCardCvv,
-  "payment-other": paymentOther,
-  "upi-icons": upiIcons,
-  "cod-icon": codIcon,
-  "more-wallets": moreWallets,
-  "other-banks": otherBanks,
-  closeBold,
   NoCoupons,
   infoIcon,
 };

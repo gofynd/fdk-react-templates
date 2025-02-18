@@ -36,7 +36,7 @@ function SinglesAddressHeader({
               </div>
             </div>
             <div className={styles.rightSelected} onClick={backToEdit}>
-              Change
+              Edit
             </div>
           </div>
         </>

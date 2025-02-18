@@ -1,33 +1,25 @@
 @import "../../../styles/main.less";
 
 .container {
-  background: @PageBackground;
-  @media @mobile-up {
-    display: flex;
-    padding: 24px;
-    border: 1px solid var(--dividerStokes);
-    border-top: none;
-    border-radius: 0 0 8px 8px;
+  display: flex;
+  padding: 24px;
+  background: #fff;
+  border: 1px solid var(--dividerStokes);
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  @media @mobile {
+    padding: 6px;
+    border-radius: 0 0 4px 4px;
   }
   .navigationLink {
     width: 33.33%;
     display: flex;
     flex-direction: column;
-    border-width: 1px 0 1px 1px;
-    border-style: solid;
-    border-color: var(--dividerStokes);
+    border: 1px solid var(--dividerStokes);
     border-radius: 4px 0px 0px 4px;
-    @media @mobile {
-      width: 100%;
-      border: none;
-    }
 
     .linkWrapper:last-child {
-      .linkWrapper-row1 {
-        border-bottom: 1px solid var(--dividerStokes);
-      }
       border-bottom: none;
-      flex: 1;
       .indicator {
         border-radius: 0px 0px 0px 4px;
       }
@@ -37,43 +29,12 @@
         border-radius: 4px 0px 0px 0px;
       }
     }
+    .linkWrapper.removeBorder {
+    }
     .linkWrapper {
-      border-bottom: 1px solid var(--dividerStokes);
-      border-right: 1px solid var(--dividerStokes);
-      background-color: #f8f8f8;
-
-      @media @mobile {
-        background-color: @PageBackground;
-        border-right: none;
-        padding: 0 16px;
-      }
+      display: flex;
+      border-bottom: 1px solid #f0f0f0;
       cursor: pointer;
-      .linkWrapper-row1 {
-        display: flex;
-
-        .subMopIcons {
-          display: flex;
-          flex: 1;
-          align-items: center;
-          padding-left: 12px;
-
-          @media @mobile-up {
-            justify-content: flex-end;
-            flex: 1;
-            padding: 0 16px;
-          }
-
-          .subMopIcon {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            border: 1px solid var(--dividerStokes);
-            margin-left: -5.25px;
-            background-color: #fff;
-            object-fit: contain;
-          }
-        }
-      }
 
       .indicator {
         width: 4px;
@@ -86,66 +47,22 @@
         overflow: hidden;
         word-break: break-word;
         @media @mobile {
-          padding: 16px 4px 16px 0px;
+          padding: 16px 4px;
         }
         .modeName {
           align-self: center;
           margin-left: 16px;
-          color: var(--Text-Body, #4d4d4e);
-          font-size: 14px;
-          font-weight: 500;
-          line-height: 140%;
           @media @mobile {
             margin-left: 4px;
+            font-size: 12px;
           }
         }
-        .selectedModeName {
-          font-weight: 500;
-          color: @ButtonPrimary;
-        }
-        .codCharge {
-          font-weight: 400;
-          font-size: 12px;
-          color: @ErrorText;
-          line-height: 140%;
-          border-radius: 4px;
-          padding: 8px 0;
-          text-align: center;
-        }
       }
-      .payment-icons {
-        display: flex;
-        align-items: center;
-
-        @media @mobile-up {
-          justify-content: flex-end;
-          flex: 1;
-          padding: 0 12px;
-        }
+      .dropdownArrow {
       }
-      .arrowContainer {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        flex: 1;
-        .upsideDown {
-          transform: rotate(180deg);
-        }
+      .dropdownArrow.upsideDown {
       }
     }
-  }
-  .selectedNavigationTab {
-    border-right: none;
-    background-color: @PageBackground;
-  }
-  .selectedNavigationTab:last-child {
-    .linkWrapper-row1 {
-      border-bottom: none !important;
-    }
-  }
-  .linkWrapper.selectedNavigationTab {
-    border-right: none;
-    background-color: @PageBackground;
   }
   .navigationTab {
     width: 66.66%;
@@ -157,1219 +74,590 @@
     @media @mobile {
       padding: 6px;
     }
-  }
-  .selectedBorder {
-    @media @mobile-up {
+    .selectedBorder {
       border: 1px solid var(--primaryColor);
     }
-  }
-  .nonSelectedBorder {
-    @media @mobile-up {
+    .nonSelectedBorder {
       border: 1px solid var(--dividerStokes);
     }
-  }
-  .cardHeader,
-  .walletHeader,
-  .nbHeader,
-  .cardlessHeader,
-  .payLaterHeader,
-  .codHeader,
-  .addCardHeader,
-  .otherHeader {
-    font-weight: 600;
-    font-size: 14px;
-    color: var(--textHeading);
-    margin-bottom: 15px;
-    line-height: 140%;
-    @media @mobile {
-      margin-bottom: 6px;
-      line-height: 1;
+    .cardHeader,
+    .walletHeader,
+    .nbHeader,
+    .cardlessHeader,
+    .payLaterHeader,
+    .codHeader,
+    .addCardHeader,
+    .otherHeader {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--textHeading);
+      margin-bottom: 15px;
+      line-height: 140%;
+      @media @mobile {
+        margin-bottom: 6px;
+        line-height: 1;
+      }
     }
-  }
-
-  .cardTab {
-    @media @mobile {
-      padding-bottom: 24px;
-    }
-    .savedCardWrapper {
-      .savedCardHeaderWrapper {
-        display: flex;
-        align-items: baseline;
-        justify-content: space-between;
-      }
-      .number {
-        font-size: 12px;
-        font-weight: 400;
-        color: @TextBody;
-        line-height: 16.8px;
-        margin-top: 4px;
-        color: var(--primaryColor);
-      }
-      .cvvNotNeeded {
-        font-size: 12px;
-        font-weight: 400;
-        line-height: 19.6px;
-        color: var(--primaryColor);
-        margin-right: 8px;
-      }
-      .why {
-        font-size: 14px;
-        font-weight: 600;
-        line-height: 19.6px;
-        color: var(--primaryColor);
-      }
-      .savedCardCvvWrapper {
-        position: relative;
-
-        .cvv {
-          margin-top: 16px;
-          padding: 16px;
-          border: 1px solid var(--dividerStokes);
-          border-radius: 4px;
-        }
-
-        .cvvIcon {
-          position: absolute;
-          right: 16px;
-          top: 50%;
-          transform: translateY(-50%);
-        }
-      }
-      .cvvInfo {
-        padding: 24px 16px;
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-
-        .type {
-          .title {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--textHeading);
-          }
-
-          .desc {
-            margin: 8px 0 16px 0;
-            color: var(--textBody);
-          }
-        }
-      }
-      .cardList {
-        display: flex;
-        flex-direction: column;
-        .cardItem {
+    .cardTab {
+      .savedCardWrapper {
+        .cardList {
           display: flex;
           flex-direction: column;
-          padding: 16px;
-          border-radius: 8px;
-          margin-bottom: 15px;
-          @media @mobile {
-            padding: 0px;
-          }
-          .cardDetailsWrapper {
+          .cardItem {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            justify-content: space-between;
-            .cardDetailsRow1 {
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            .cardDetailsWrapper {
               display: flex;
-              .cardLeft {
-                margin-right: 10px;
-              }
-              .cardMiddle {
+              justify-content: space-between;
+              .leftWrapper {
                 display: flex;
-                flex-direction: column;
-                .numberLogo {
-                  display: flex;
-                  .number {
-                    font-size: 14px;
-                    font-weight: 400;
-                    margin-right: 8px;
-                    align-self: center;
-                    line-height: 140%;
-                    span {
-                      vertical-align: middle;
-                    }
-                  }
-                  .logo {
-                    img {
-                      height: 24px;
-                      vertical-align: bottom;
-                    }
-                  }
+                .cardLeft {
+                  margin-right: 10px;
                 }
-                .securedCard {
+                .cardMiddle {
                   display: flex;
-                  flex-direction: row;
-                  margin-top: 4px;
-                  .securedCardText {
-                    font-weight: 500;
-                    font-size: 12px;
-                    line-height: 16px;
-                    text-transform: capitalize;
-                    color: #27ae60;
-                    margin-left: 4px;
-                    line-height: 140%;
+                  flex-direction: column;
+                  .numberLogo {
+                    display: flex;
+                    .number {
+                      font-size: 14px;
+                      font-weight: 400;
+                      margin-right: 8px;
+                      align-self: center;
+                      line-height: 140%;
+                      span {
+                        vertical-align: middle;
+                      }
+                    }
+                    .logo {
+                      img {
+                        height: 24px;
+                        vertical-align: bottom;
+                      }
+                    }
+                  }
+                  .securedCard {
+                    display: flex;
+                    flex-direction: row;
+                    margin-top: 4px;
+                    .securedCardText {
+                      font-weight: 500;
+                      font-size: 12px;
+                      line-height: 16px;
+                      text-transform: capitalize;
+                      color: #27ae60;
+                      margin-left: 4px;
+                      line-height: 140%;
+                    }
                   }
                 }
               }
-            }
 
-            .cardDetailsRow2 {
+              .rightWrapper {
+                display: flex;
+                .cardRight {
+                  padding: 0px 20px;
+                  width: 90px;
+                  border: 1px solid var(--dividerStokes);
+                  border-radius: 4px;
+                }
+              }
+            }
+            .rbiGuidelines {
+              input:checked:before {
+                background-color: var(--buttonPrimary);
+              }
               display: flex;
-              padding-left: 32px;
-              height: 48px;
-
-              input {
-                padding: 0px 20px;
-                width: 120px;
-                border: 1px solid var(--dividerStokes);
-                border-radius: 4px;
+              margin-top: 24px;
+              .rbiGuidelinesText {
+                font-family: inherit;
+                font-weight: 400;
+                font-size: 12px;
+                color: #1f1f1f;
+                margin-left: 6px;
+                align-self: center;
+                margin-right: 6px;
+                line-height: 140%;
               }
             }
-            .cardDetailsRow2NotSelected {
-              display: none;
-            }
-          }
-          .rbiGuidelines {
-            input:checked:before {
+            .payBtn {
+              padding: 14px;
+              border-radius: @ButtonRadius;
               background-color: var(--buttonPrimary);
-            }
-
-            display: flex;
-            align-items: center;
-            margin-top: 16px;
-            .rbiGuidelinesText {
-              display: flex;
-              font-family: inherit;
-              font-weight: 400;
-              font-size: 12px;
-              color: #1f1f1f;
-              margin: 0 8px;
-              align-self: center;
+              color: var(--buttonSecondary);
+              border: none;
+              width: 100%;
+              margin-top: 24px;
+              font-weight: 600;
+              font-size: 14px;
+              text-transform: uppercase;
               line-height: 140%;
+              cursor: pointer;
+              @media @mobile {
+                padding: 6px;
+                font-size: 12px;
+              }
             }
-          }
-          .payBtn {
-            padding: 14px;
-            border-radius: @ButtonRadius;
-            background-color: var(--buttonPrimary);
-            color: var(--buttonSecondary);
-            border: none;
-            width: 100%;
-            margin-top: 24px;
-            font-weight: 600;
-            font-size: 14px;
-            text-transform: uppercase;
-            line-height: 140%;
-            cursor: pointer;
-            @media @mobile {
-              padding: 6px;
-              font-size: 12px;
-            }
-            &:hover {
-              background-color: @ButtonPrimaryL1;
-              color: @White;
-            }
-          }
-          .payBtn[disabled] {
-            font-weight: 600;
-            font-size: 14px;
-            padding: 14px;
-            border-radius: @ButtonRadius;
-            color: var(--buttonPrimary);
-            opacity: 0.2;
-            border: 1px solid var(--buttonPrimary);
-            text-transform: uppercase;
-            line-height: 140%;
-            cursor: unset;
-            @media @mobile {
-              padding: 6px;
-              font-size: 12px;
+            .payBtn[disabled] {
+              font-weight: 600;
+              font-size: 14px;
+              padding: 14px;
+              border-radius: @ButtonRadius;
+              color: var(--buttonPrimary);
+
+              border: 1px solid var(--buttonPrimary);
+              text-transform: uppercase;
+              line-height: 140%;
+              cursor: unset;
+              @media @mobile {
+                padding: 6px;
+                font-size: 12px;
+              }
             }
           }
         }
-      }
-      .addNewCard {
-        font-weight: 600;
-        font-size: 14px;
-        padding: 12px;
-        border-radius: 5px;
-        color: var(--primaryColor);
-        border: 1px solid var(--primaryColor);
-        text-transform: uppercase;
-        width: 100%;
-        line-height: 140%;
-        cursor: pointer;
-        @media @mobile {
-          padding: 6px;
-          font-size: 12px;
-        }
-      }
-    }
-    .newCardWrapper {
-      .addCardHeader {
-        display: flex;
-        margin-bottom: 0px;
-        button {
+        .addNewCard {
+          font-weight: 600;
+          font-size: 14px;
+          padding: 12px;
+          border-radius: 5px;
+          color: var(--primaryColor);
+          border: 1px solid var(--primaryColor);
+          text-transform: uppercase;
+          width: 100%;
+          line-height: 140%;
           cursor: pointer;
-          border: none;
-          background: none;
-          padding: 0px;
-          margin: 0px;
-        }
-        .newCardHeaderText {
-          align-self: center;
-          margin-left: 10px;
+          @media @mobile {
+            padding: 6px;
+            font-size: 12px;
+          }
         }
       }
-      .newCard {
-        display: flex;
-        flex-direction: column;
-        .cardInputWrapper {
+      .newCardWrapper {
+        .addCardHeader {
+          display: flex;
+          margin-bottom: 0px;
+          button {
+            cursor: pointer;
+            border: none;
+            background: none;
+            padding: 0px;
+            margin: 0px;
+          }
+          .newCardHeaderText {
+            align-self: center;
+            margin-left: 10px;
+          }
+        }
+        .newCard {
           display: flex;
           flex-direction: column;
-          margin-top: 16px;
-          position: relative;
-        }
-        .cardNetwork,
-        .cvv {
-          position: absolute;
-          right: 16px;
-          top: 50%;
-          transform: translateY(-50%);
-        }
-        .cardNetwork {
-          width: 33px;
-        }
-        .cardInputWrapper.expiryContainer,
-        .cardInputWrapper.cvvContainer {
-          width: 47%;
-          @media @mobile {
-            width: 100%;
-          }
-        }
-        .cardDateCvvWrapper {
-          display: flex;
-          justify-content: space-between;
-          gap: 16px;
-          @media @mobile {
-            gap: 24px;
-          }
           .cardInputWrapper {
-            flex: 1;
             display: flex;
             flex-direction: column;
-            input {
+            margin-top: 16px;
+          }
+          .cardInputWrapper.expiryContainer,
+          .cardInputWrapper.cvvContainer {
+            width: 47%;
+            @media @mobile {
               width: 100%;
             }
           }
-        }
-        .cardNumber,
-        .cardName,
-        .cardExpiry,
-        .cardCvv {
-          padding: 16px;
-          border: 1px solid var(--dividerStokes);
-          border-radius: 4px;
-          color: @TextBody;
-        }
-        .error {
-          border: 1px solid @ErrorText;
-        }
-        .inputName {
-          position: absolute;
-          top: -8px;
-          left: 16px;
-          font-size: 12px;
-          font-weight: 400;
-          background-color: @PageBackground;
-          line-height: 16.8px;
-          color: var(--primaryColor);
-          padding: 0 4px;
-
-          .required {
-            color: @ErrorText;
-          }
-        }
-        .errorInputName {
-          color: @ErrorText;
-        }
-        .rbiGuidelines {
-          input:checked:before {
-            background-color: var(--primaryColor);
-          }
-          display: flex;
-          align-items: center;
-          margin-top: 16px;
-          accent-color: var(--primaryColor);
-
-          .rbiGuidelinesText {
+          .cardDateCvvWrapper {
             display: flex;
-            font-family: inherit;
-            font-weight: 400;
-            font-size: 12px;
-            color: var(--textBody);
-            margin: 0 8px;
-            align-self: center;
-            line-height: 140%;
-          }
-          .rbiGuidelinesModal {
-            @media @mobile-up {
-              max-width: 450px;
-              padding: 8px;
+            justify-content: space-between;
+            @media @mobile {
+              display: block;
+            }
+            .cardInputWrapper {
+              display: flex;
+              flex-direction: column;
             }
           }
-          .rbiGuidelinesContent {
+          .cardNumber,
+          .cardName,
+          .cardExpiry,
+          .cardCvv {
             padding: 16px;
-            ul {
-              padding: 0 0 0 16px;
-              li {
-                list-style-type: disc;
-                &:not(:last-child) {
-                  margin-bottom: 16px;
-                }
-              }
+            border: 1px solid var(--dividerStokes);
+            border-radius: 4px;
+          }
+          .rbiGuidelines {
+            input:checked:before {
+              background-color: var(--primaryColor);
+            }
+            display: flex;
+            margin-top: 24px;
+            .rbiGuidelinesText {
+              font-family: inherit;
+              font-weight: 400;
+              font-size: 12px;
+              color: var(--textBody);
+              margin-left: 6px;
+              align-self: center;
+              margin-right: 6px;
+              line-height: 140%;
             }
           }
         }
-      }
-      .saveNewCard {
-        padding: 8px;
-        border-radius: 5px;
-        background-color: var(--primaryColor);
-        border: none;
-        width: 100%;
-        margin-top: 24px;
-        font-weight: 600;
-        font-size: 14px;
-        text-transform: uppercase;
-        color: white;
-        cursor: pointer;
-        line-height: 140%;
-      }
-      .saveNewCard[disabled] {
-        padding: 8px;
-        border-radius: 5px;
-        background-color: var(--primaryColor);
-        border: none;
-        width: 100%;
-        margin-top: 24px;
-        font-weight: 600;
-        font-size: 14px;
-        text-transform: uppercase;
-        color: white;
-        line-height: 140%;
-        opacity: 20%;
-        cursor: not-allowed;
-      }
-      .newCardModalContainer {
-        padding: 8px;
-      }
-      .newCardModalBody {
-        padding: 8px;
-      }
-      .cvvInfo {
-        padding: 24px 16px;
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-
-        .type {
-          .title {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--textHeading);
-          }
-
-          .desc {
-            margin: 8px 0 16px 0;
-            color: var(--textBody);
-          }
-        }
-      }
-    }
-    .addNewCardModal {
-      padding: 8px 16px 24px 16px;
-    }
-  }
-
-  .modePay,
-  .cardlessPay,
-  .codPay,
-  .otherPay {
-    .payBtn {
-      padding: 14px;
-      border-radius: @ButtonRadius;
-      background-color: var(--primaryColor);
-      border: none;
-      color: #fff;
-      width: 100%;
-      margin-top: 24px;
-      font-weight: 600;
-      font-size: 14px;
-      text-transform: uppercase;
-      cursor: pointer;
-      line-height: 140%;
-      &:hover {
-        background-color: @ButtonPrimaryL1;
-        color: @White;
-      }
-    }
-    .payBtn[disabled] {
-      padding: 14px;
-      border-radius: @ButtonRadius;
-      background-color: white;
-      color: var(--primaryColor);
-      border: 1px solid var(--primaryColor);
-      width: 100%;
-      margin-top: 24px;
-      font-weight: 600;
-      font-size: 14px;
-      text-transform: uppercase;
-      cursor: pointer;
-      line-height: 140%;
-      opacity: 0.2;
-    }
-  }
-
-  .modeOption {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    gap: 16px;
-    @media @mobile {
-      gap: 0px;
-    }
-    .modeItemWrapper {
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      border-radius: 8px;
-      padding: 16px;
-      @media @mobile {
-        padding: 16px 0px;
-        &:not(:last-child) {
-          border-bottom: 1px solid @DividerStokes;
-          border-radius: 0px;
-        }
-      }
-      .modeItem {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-        border-radius: 8px;
-        gap: 12px;
-        .modeItemLogo {
-          display: flex;
-          img {
-            height: 42px;
-            width: 42px;
-          }
-        }
-        .modeItemName {
-          font-weight: 400;
-          font-size: 14px;
-          color: @TextBody;
-        }
-        .moreModeName {
-          color: @TextHeading;
-          font-size: 14px;
+        .saveNewCard {
+          padding: 8px;
+          border-radius: 5px;
+          background-color: var(--primaryColor);
+          border: none;
+          width: 100%;
+          margin-top: 24px;
           font-weight: 600;
+          font-size: 14px;
+          text-transform: uppercase;
+          color: white;
+          cursor: pointer;
           line-height: 140%;
         }
-        .moreModeArrow {
-          transform: rotate(270deg);
-        }
-        .otherModeArrow {
-          transform: rotate(360deg);
-        }
-      }
-      .modePay {
-        .payBtn {
-          margin-top: 12px;
-        }
-        .payBtn[disabled] {
-          margin-top: 12px;
-          opacity: 0.2;
-        }
-      }
-    }
-    .modalHeader {
-      padding: 16px;
-    }
-    .modalBody {
-      padding: 0 16px;
-      max-height: 70vh;
-      min-height: 40vh;
-
-      @media @mobile-up {
-        max-height: 554px;
-        min-width: 420px;
-        & > div {
-          margin-bottom: 16px;
-        }
-      }
-
-      .searchBox {
-        height: 48px;
-        padding: 12px;
-        border: 1px solid @DividerStokes;
-        border-radius: 8px;
-        margin-top: 16px;
-        display: flex;
-        gap: 12px;
-        svg {
-          fill: @TextSecondary;
-        }
-        input {
+        .saveNewCard[disabled] {
+          padding: 8px;
+          border-radius: 5px;
+          color: var(--primaryColor);
+          border: 1px solid var(--primaryColor);
           width: 100%;
-          height: 100%;
-          border: none;
-          background: transparent;
+          margin-top: 24px;
+          font-weight: 600;
+          font-size: 14px;
+          text-transform: uppercase;
+          color: var(--primaryColor);
+          line-height: 140%;
         }
       }
     }
-  }
-
-  .upiBox {
-  }
-
-  .upiMop {
-    padding-bottom: 24px;
-  }
-
-  .upiApp {
-    display: flex;
-    align-items: center;
-    justify-content: left;
-    gap: 8px;
-    padding: 24px 0;
-    border-bottom: 1px solid var(--dividerStokes);
-
-    .logo {
+    .walletWrapper,
+    .otherWrapper {
+    }
+    .walletOption {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      border: 1px solid var(--dividerStokes);
-      border-radius: 100px;
+      flex-wrap: wrap;
+      justify-content: space-between;
+
+      .walletItem {
+        display: flex;
+        width: 204px;
+        height: 56px;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        padding: 5px;
+
+        .walletLeft {
+          align-self: center;
+          margin-right: 10px;
+          margin-left: 10px;
+        }
+        .walletMiddle {
+          align-self: center;
+          margin-right: 10px;
+          img {
+            width: 45px;
+          }
+        }
+        .walletRight {
+          align-self: center;
+          font-weight: 400;
+          font-size: 14px;
+          color: #1f1f1f;
+        }
+      }
+    }
+    .walletPay,
+    .nbPay,
+    .cardlessPay,
+    .payLaterPay,
+    .codPay,
+    .otherPay {
+      .payBtn {
+        padding: 14px;
+        border-radius: @ButtonRadius;
+        background-color: var(--primaryColor);
+        border: none;
+        color: #fff;
+        width: 100%;
+        margin-top: 24px;
+        font-weight: 600;
+        font-size: 14px;
+        text-transform: uppercase;
+        cursor: pointer;
+        line-height: 140%;
+      }
+      .payBtn[disabled] {
+        padding: 14px;
+        border-radius: @ButtonRadius;
+        background-color: white;
+        color: var(--primaryColor);
+        border: 1px solid var(--primaryColor);
+        width: 100%;
+        margin-top: 24px;
+        font-weight: 600;
+        font-size: 14px;
+        text-transform: uppercase;
+        cursor: pointer;
+        line-height: 140%;
+      }
     }
 
-    .displayName {
-      flex: 1;
-      font-weight: 600;
-      font-size: 14px;
-      color: var(--primaryColor);
-      line-height: 140%;
-    }
-  }
-
-  .moreApps {
-    display: flex;
-    align-items: center;
-    justify-content: left;
-    gap: 8px;
-    padding: 24px 0;
-
-    .logo {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border: 1px solid var(--dividerStokes);
-      border-radius: 100px;
+    .upiBox {
     }
 
-    .displayName {
-      flex: 1;
-      font-weight: 600;
-      font-size: 14px;
-      color: var(--primaryColor);
-    }
-
-    .rightArrow {
-      padding: 5px;
-      display: flex;
-    }
-  }
-
-  .upiSectionTitle {
-    font-weight: 600;
-    font-size: 14px;
-    color: var(--textHeading);
-    margin-bottom: 16px;
-  }
-  .upiQrCodeSection {
-    padding: 16px;
-    border: 1px solid var(--dividerStokes);
-    border-radius: 4px;
-    display: flex;
-    gap: 16px;
-    .upiQrCodeDescription {
+    .upiWrapper {
+      border: 1px solid var(--primaryColor);
+      border-radius: 8px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      gap: 16px;
-      .scanQrTitle {
-        font-weight: 600;
-        font-size: 16px;
-        color: var(--primaryColor);
-        line-height: 22.4px;
-        margin-bottom: 4px;
-      }
-      .scanQrDescripton {
-        font-weight: 400;
-        font-size: 12px;
-        color: var(--textHeading);
-        line-height: 16.8px;
-      }
-      .scanQrApps {
-        display: flex;
-        align-items: center;
-        gap: 4px;
 
-        .upiAppLogo {
-          border: 0.43px solid var(--dividerStokes);
-          border-radius: 50%;
-          display: flex;
-        }
-        .moreUpiApps {
-          font-weight: 500;
-          font-size: 10px;
-        }
-      }
-      .expiryText {
-        font-weight: 400;
-        font-size: 12px;
-        color: #1f1f1f;
-        .countDown {
-          background-color: #edfaf4;
-          border-radius: 40px;
-          border: 1px solid #169256;
-          padding: 2px 7px;
-          margin: 0 4px;
-          color: #169256;
-        }
-        .minutes {
-          font-weight: 600;
-        }
-      }
-      .cancel {
+      .upiHeader {
         font-weight: 600;
-        font-size: 12px;
-        color: var(--primaryColor);
+        font-size: 14px;
+        color: #41434c;
+        line-height: 140%;
       }
-    }
-    .upiQrCode {
-      border: 1px solid var(--dividerStokes);
-      padding: 13.31px;
-      border-radius: 4.25px;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      .qrCode {
-        width: 142px;
-        height: auto;
-      }
-      .blurred {
-        filter: blur(8px);
-      }
-      .showQrButton {
-        position: absolute;
-        padding: 11.5px 16px;
-        font-weight: 600;
-        font-size: 12px;
-        cursor: pointer;
-        background-color: var(--primaryColor);
-        color: #fff;
+
+      .upiInput {
+        margin-top: 24px;
+        padding: 16px;
+        background: #ffffff;
+        border: 1px solid #e2e2e2;
         border-radius: 4px;
+        width: 100%;
       }
-      .qrLoader {
-        position: absolute;
-        border: 6px solid #f3f3f3;
-        border-top: 6px solid var(--primaryColor);
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        animation: spin 1s linear infinite;
+    }
+
+    .upiPay {
+      .payBtn {
+        padding: 14px;
+        border-radius: @ButtonRadius;
+        background-color: var(--primaryColor);
+        border: none;
+        width: 100%;
+        margin-top: 24px;
+        color: #fff;
+        font-weight: 600;
+        font-size: 14px;
+        text-transform: uppercase;
+        cursor: pointer;
+        line-height: 140%;
       }
-      @keyframes spin {
-        0% {
-          transform: rotate(0deg);
+
+      .payBtn[disabled] {
+        padding: 14px;
+        border-radius: @ButtonRadius;
+        background-color: white;
+        color: var(--primaryColor);
+        border: 1px solid var(--primaryColor);
+        width: 100%;
+        margin-top: 24px;
+        font-weight: 600;
+        font-size: 14px;
+        text-transform: uppercase;
+        cursor: pointer;
+        line-height: 140%;
+      }
+    }
+
+    .netBankingWrapper {
+    }
+
+    .nbOption {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+
+      .nbItem {
+        display: flex;
+        width: 204px;
+        height: 56px;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        padding: 5px;
+
+        .nbLeft {
+          align-self: center;
+          margin-right: 10px;
+          margin-left: 10px;
         }
-        100% {
-          transform: rotate(360deg);
+
+        .nbMiddle {
+          align-self: center;
+          margin-right: 10px;
+
+          img {
+            width: 45px;
+          }
+        }
+
+        .nbRight {
+          align-self: center;
+          font-weight: 400;
+          font-size: 14px;
+          color: #1f1f1f;
+          line-height: 140%;
         }
       }
     }
-  }
 
-  .upiOrLine {
-    display: flex;
-    align-items: center;
-    text-align: center;
-    width: 100%;
-    margin: 24px 0;
-
-    &::before,
-    &::after {
-      content: "";
-      flex: 1;
-      border-bottom: 1px solid var(--dividerStokes);
-    }
-
-    .upiOrText {
-      font-weight: 400;
-      font-size: 12px;
-      padding: 12px 4px;
-      color: var(--primaryColor);
-    }
-  }
-
-  .upiIdWrapper {
-    position: relative;
-
-    .upiInput {
-      // margin: 24px 0;
+    .otherSelect {
+      -webkit-appearance: none;
+      user-select: none;
       padding: 16px;
-      border: 1px solid var(--dividerStokes);
+      // background: url(/public/assets/arrow-dropdown-black.svg) 96% 50% no-repeat
+      //   #ffffff;
+      border: 1px solid #e2e2e2;
       border-radius: 4px;
       width: 100%;
-      font-size: 16px;
-      touch-action: manipulation;
     }
 
-    .input {
-      border: 1px solid var(--primaryColor);
+    .cardlessWrapper {
     }
 
-    .error {
-      border: 1px solid @ErrorText;
-    }
-
-    .upiInput.input {
-      border: 1px solid var(--primaryColor);
-    }
-    .upiInput.error {
-      border: 1px solid @ErrorText;
-    }
-
-    .inputName {
-      position: absolute;
-      top: -8px;
-      left: 16px;
-      font-size: 12px;
-      font-weight: 400;
-      background-color: @PageBackground;
-      line-height: 16.8px;
-      color: var(--primaryColor);
-      padding: 0 4px;
-
-      .required {
-        color: @ErrorText;
-      }
-    }
-    .errorInputName {
-      color: @ErrorText;
-    }
-  }
-
-  .upiPay {
-    .payBtn {
-      padding: 14px;
-      border-radius: @ButtonRadius;
-      background-color: var(--primaryColor);
-      border: none;
-      width: 100%;
-      color: #fff;
-      font-weight: 600;
-      font-size: 14px;
-      text-transform: uppercase;
-      cursor: pointer;
-      line-height: 140%;
-      margin: 24px 0;
-      &:hover {
-        background-color: @ButtonPrimaryL1;
-        color: @White;
-      }
-    }
-
-    .payBtn[disabled] {
-      padding: 14px;
-      border-radius: @ButtonRadius;
-      width: 100%;
-      font-weight: 600;
-      font-size: 14px;
-      text-transform: uppercase;
-      margin: 24px 0;
-      background-color: var(--primaryColor);
-      border: none;
-      color: white;
-      line-height: 140%;
-      opacity: 20%;
-      cursor: not-allowed;
-    }
-  }
-
-  .otherSelect {
-    -webkit-appearance: none;
-    user-select: none;
-    padding: 16px;
-    // background: url(/public/assets/arrow-dropdown-black.svg) 96% 50% no-repeat
-    //   #ffffff;
-    border: 1px solid #e2e2e2;
-    border-radius: 4px;
-    width: 100%;
-  }
-
-  .codWrapper {
-    padding-bottom: 16px;
-  }
-
-  .codTitle {
-    font-size: 12px;
-    font-weight: 400;
-    margin-bottom: 16px;
-  }
-
-  .codInfo {
-    font-weight: 400;
-    font-size: 12px;
-    color: @ErrorText;
-    line-height: 140%;
-    background-color: #fbeaea;
-    border-radius: 4px;
-    padding: 8px 0;
-    text-align: center;
-  }
-
-  .otherOption {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-
-    .otherItem {
+    .cardlessOption {
       display: flex;
-      width: 204px;
-      height: unset;
-      min-height: 56px;
-      border-radius: 8px;
-      margin-bottom: 16px;
-      padding: 5px;
+      flex-wrap: wrap;
+      justify-content: space-between;
 
-      .otherLeft {
-        align-self: center;
-        margin-right: 10px;
-        margin-left: 10px;
-      }
+      .cardlessItem {
+        display: flex;
+        width: 204px;
+        height: 56px;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        padding: 5px;
 
-      .otherMiddle {
-        align-self: center;
-        margin-right: 10px;
+        .cardlessLeft {
+          align-self: center;
+          margin-right: 10px;
+          margin-left: 10px;
+        }
 
-        img {
-          width: 45px;
+        .cardlessMiddle {
+          align-self: center;
+          margin-right: 10px;
+
+          img {
+            width: 45px;
+          }
+        }
+
+        .cardlessRight {
+          align-self: center;
+          font-weight: 400;
+          font-size: 14px;
+          color: #1f1f1f;
         }
       }
+    }
 
-      .otherRight {
-        align-self: center;
-        font-weight: 400;
-        font-size: 14px;
-        color: #1f1f1f;
-        overflow: hidden;
-        word-wrap: break-word;
+    .payLaterWrapper {
+    }
+
+    .payLaterOption {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+
+      .payLaterItem {
+        display: flex;
+        width: 204px;
+        height: 56px;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        padding: 5px;
+
+        .payLaterLeft {
+          align-self: center;
+          margin-right: 10px;
+          margin-left: 10px;
+        }
+
+        .payLaterMiddle {
+          align-self: center;
+          margin-right: 10px;
+
+          img {
+            width: 45px;
+          }
+        }
+
+        .payLaterRight {
+          align-self: center;
+          font-weight: 400;
+          font-size: 14px;
+          color: #1f1f1f;
+          line-height: 140%;
+        }
+      }
+    }
+
+    .codWrapper {
+    }
+
+    .codInfo {
+      font-weight: 400;
+      font-size: 12px;
+      color: var(--textHeading);
+      line-height: 140%;
+    }
+
+    .otherOption {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+
+      .otherItem {
+        display: flex;
+        width: 204px;
+        height: unset;
+        min-height: 56px;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        padding: 5px;
+
+        .otherLeft {
+          align-self: center;
+          margin-right: 10px;
+          margin-left: 10px;
+        }
+
+        .otherMiddle {
+          align-self: center;
+          margin-right: 10px;
+
+          img {
+            width: 45px;
+          }
+        }
+
+        .otherRight {
+          align-self: center;
+          font-weight: 400;
+          font-size: 14px;
+          color: #1f1f1f;
+          overflow: hidden;
+          word-wrap: break-word;
+        }
+      }
+    }
+
+    input[type="radio"] {
+      display: none;
+
+      &:checked {
+        color: green;
       }
     }
   }
-  input[type="radio"] {
-    display: none;
-
-    &:checked {
-      color: green;
-    }
-  }
-
-  .formError {
-    color: @ErrorText;
-    font-size: 12px;
-    font-weight: 400;
-    margin-top: 8px;
-  }
-
   .lightXxxs {
     font-weight: 300;
     font-size: 10px;
     -webkit-font-smoothing: antialiased;
   }
-
-  .upiTabWrapper {
-  }
-  .upiHeader {
-    font-weight: 600;
-    font-size: 14px;
-    color: var(--textHeading);
-    line-height: 140%;
-    margin-bottom: 10px;
-  }
-
-  .savedUpi {
-    border: 1px solid #e2e2e2;
-    border-radius: 5px;
-    padding: 16px;
-
-    .upiIdListItem {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-
-      .vpa {
-        font-size: 12px;
-        font-weight: 600;
-        color: var(--primaryColor);
-        line-height: 16.8px;
-      }
-    }
-  }
-
-  .upiAutoCompleteWrapper {
-    border: 1px solid var(--dividerStokes);
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-top: 5px;
-    border-radius: 5px;
-    max-height: 150px;
-    height: auto;
-    scrollbar-width: auto; /* Enable scrollbar */
-    -ms-overflow-style: auto; /* For IE */
-    overflow-y: auto;
-  }
-  .upiAutoCompleteItem {
-    border-bottom: 1px solid var(--dividerStokes);
-    width: 100%;
-    padding: 15.5px 16px;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: 400;
-    color: @TextBody;
-    line-height: 18px;
-  }
-  .upiAutoCompleteItem:last-child {
-    border-bottom: none;
-  }
-
-  .upiAutoCompleteItem:hover {
-    background-color: #f8f8f8;
-  }
-
-  .upiChipsWrapper {
-    margin-top: 16px;
-    display: flex;
-    gap: 8px;
-
-    .upiChip {
-      padding: 4px 12px;
-      border: 1px solid var(--dividerStokes);
-      border-radius: 100px;
-      font-size: 12px;
-      font-weight: 400;
-      line-height: 16.8px;
-    }
-  }
-  .saveUpi {
-    display: flex;
-    align-items: center;
-    margin-top: 24px;
-
-    .saveForLater {
-      margin-right: 5px;
-      accent-color: var(--primaryColor);
-    }
-    .saveUpiTitle {
-      font-size: 12px;
-      font-weight: 400;
-    }
-    .disableSaveUpiTitle {
-      font-size: 12px;
-      font-weight: 400;
-      color: var(--primaryColor);
-      opacity: 0.5;
-    }
-  }
-}
-.upiRedirectionModal {
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  .loader {
-    border: 6px solid #f3f3f3;
-    border-top: 6px solid var(--primaryColor);
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
-    @keyframes spin {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-  }
-
-  .title {
-    font-weight: 700;
-    font-size: 24px;
-    line-height: 33.6px;
-    margin: 16px 0 8px 0;
-    color: var(--primaryColor);
-  }
-
-  .message {
-    font-size: 14px;
-    font-weight: 500;
-    color: @TextBody;
-    line-height: 19.6px;
-    text-align: center;
-    margin-bottom: 8px;
-  }
-}
-.couponValidity {
-  padding: 16px;
-
-  .message {
-    margin-bottom: 16px;
-    max-width: 450px;
-    color: @TextBody;
-  }
-  .select {
-    display: flex;
-    gap: 16px;
-  }
-  .commonBtn {
-    width: 100%;
-    padding: 8px;
-    border-radius: 20px;
-    text-align: center;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    text-align: center;
-    line-height: 140%;
-  }
-  .yesBtn {
-    background-color: var(--buttonSecondary);
-    border: 1px solid var(--buttonPrimary);
-    color: var(--primaryColor);
-  }
-  .noBtn {
-    background-color: var(--buttonPrimary);
-    color: #fff;
-  }
-}
-.couponValidityModal {
-  z-index: 99 !important;
-}
-.codModal {
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-
-  .message {
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 22.4px;
-    text-align: center;
-    color: var(--primaryColor);
-    margin-bottom: 8px;
-  }
-  .codCharges {
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 16.8px;
-    color: @ErrorText;
-    text-align: center;
-  }
-  .payBtn {
-    padding: 14px;
-    border-radius: @ButtonRadius;
-    background-color: var(--primaryColor);
-    border: none;
-    color: #fff;
-    width: 100%;
-    font-weight: 600;
-    font-size: 14px;
-    text-transform: uppercase;
-    cursor: pointer;
-    line-height: 140%;
-    &:hover {
-      background-color: @ButtonPrimaryL1;
-      color: @White;
-    }
-  }
-}
-.cvvNotNeededModal {
-  padding: 16px;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 19.6px;
-  max-width: 375px;
-}
-.cvImage {
-  display: flex;
-  justify-content: center;
-}
-.infoIcon {
-  cursor: pointer;
-}
-.modalBody {
-  overflow-y: auto;
-  scrollbar-width: thin !important;
-  .selectedBorder {
-    background-color: #f8f8f8;
-    border-radius: 8px;
-  }
-  .modeItemWrapper {
-    min-height: 66px;
-    padding: 12px 16px !important;
-    margin-bottom: unset !important;
-    border: none !important;
-  }
-  .searchBox {
-    margin-bottom: 12px !important;
-  }
-  .nonSelectedBorder {
-    border: none;
-  }
-}
-.logoNameContainer {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  img {
-    border: 1px solid @DividerStokes;
-    padding: 8px 4px;
-    border-radius: 50%;
-    object-fit: contain;
-  }
-  @media @desktop {
-    gap: 12px;
-  }
-}
-.modalBody::-webkit-scrollbar-thumb {
-  background-color: gray;
-  border-radius: 4px;
-}
-.upiError {
-  color: @ErrorText;
-  font-size: 12px;
-  font-weight: 400;
 }
