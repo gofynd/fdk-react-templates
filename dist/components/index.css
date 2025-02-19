@@ -1197,6 +1197,12 @@ img::selection {
   font-weight: 400;
   font-size: 10px;
 }
+.comment__commentOuterBox___tyEJJ .comment__inputBox___hqxzy .comment__commentError___qZ8ZF {
+  font-weight: 400;
+  font-size: 10px;
+  color: var(--errorText, #b24141);
+  padding: 12px 12px 0px 12px;
+}
 .comment__modelHeader___zmsaH {
   display: flex;
   align-items: center;
@@ -6395,6 +6401,7 @@ img::selection {
 .fy-input__floating___jgtoq {
   position: absolute;
   transform: translateY(-50%) scale(0.9);
+  z-index: 1;
   background: #ffffff;
   padding: 0 0.3rem;
   margin: 0 0.5rem;
