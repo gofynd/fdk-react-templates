@@ -511,8 +511,13 @@ img::selection {
 .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK:last-child .checkout-payment-content__linkWrapper-row1___NJqkx {
   border-bottom: 1px solid var(--dividerStokes);
 }
+@media only screen and (max-width: 480px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK:last-child .checkout-payment-content__linkWrapper-row1___NJqkx {
+    border-bottom: unset;
+  }
+}
 .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK:last-child .checkout-payment-content__indicator___tucmm {
-  border-radius: 0px 0px 0px 4px;
+  border-radius: 0px 0px 0px 4px !important;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK:first-child .checkout-payment-content__indicator___tucmm {
   border-radius: 4px 0px 0px 0px;
@@ -522,6 +527,12 @@ img::selection {
   border-right: 1px solid var(--dividerStokes);
   background-color: #f8f8f8;
   cursor: pointer;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__link___ZIR_i .checkout-payment-content__icon___Ty1m1 svg > path {
+  fill: var(--textHeading, #26201a);
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__activeIconColor___TWPaB svg > g > path {
+  fill: var(--textHeading, #26201a);
 }
 @media only screen and (max-width: 480px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK {
@@ -565,10 +576,11 @@ img::selection {
   padding: 24px 16px;
   overflow: hidden;
   word-break: break-word;
+  align-items: center;
 }
 @media only screen and (max-width: 480px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__link___ZIR_i {
-    padding: 16px 4px 16px 0px;
+    padding: 24px 0px;
   }
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__link___ZIR_i .checkout-payment-content__modeName___oABQ2 {
@@ -581,11 +593,11 @@ img::selection {
 }
 @media only screen and (max-width: 480px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__link___ZIR_i .checkout-payment-content__modeName___oABQ2 {
-    margin-left: 4px;
+    margin-left: 8px;
   }
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__link___ZIR_i .checkout-payment-content__selectedModeName___b23sW {
-  font-weight: 500;
+  font-weight: 600;
   color: var(--buttonPrimary, #4e3f09);
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__link___ZIR_i .checkout-payment-content__codCharge___o7TCE {
@@ -594,8 +606,12 @@ img::selection {
   color: var(--errorText, #b24141);
   line-height: 140%;
   border-radius: 4px;
-  padding: 8px 0;
   text-align: center;
+}
+@media only screen and (max-width: 480px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__link___ZIR_i .checkout-payment-content__codCharge___o7TCE {
+    padding-top: 4px;
+  }
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__payment-icons___Kaaz7 {
   display: flex;
@@ -621,6 +637,15 @@ img::selection {
   border-right: none;
   background-color: var(--pageBackground, #f8f8f8);
 }
+.checkout-payment-content__container___HusGh .checkout-payment-content__selectedNavigationTab___SZWiz .checkout-payment-content__link___ZIR_i .checkout-payment-content__icon___Ty1m1 svg > path {
+  fill: var(--buttonPrimary, #4e3f09) !important;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__headerHightlight___lhy4m .checkout-payment-content__link___ZIR_i .checkout-payment-content__icon___Ty1m1 svg > path {
+  fill: var(--buttonPrimary, #4e3f09) !important;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__headerHightlight___lhy4m .checkout-payment-content__activeIconColor___TWPaB svg > g > path {
+  fill: var(--buttonPrimary, #4e3f09);
+}
 .checkout-payment-content__container___HusGh .checkout-payment-content__selectedNavigationTab___SZWiz:last-child .checkout-payment-content__linkWrapper-row1___NJqkx {
   border-bottom: none !important;
 }
@@ -640,6 +665,9 @@ img::selection {
   .checkout-payment-content__container___HusGh .checkout-payment-content__navigationTab___Tfdjy {
     padding: 6px;
   }
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__selectedBorder___xIVt8 .checkout-payment-content__modeItemName___FvXEZ {
+  font-weight: 600 !important;
 }
 @media only screen and (min-width: 481px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__selectedBorder___xIVt8 {
@@ -674,19 +702,39 @@ img::selection {
   .checkout-payment-content__container___HusGh .checkout-payment-content__codHeader___qtIba,
   .checkout-payment-content__container___HusGh .checkout-payment-content__addCardHeader___KWnY5,
   .checkout-payment-content__container___HusGh .checkout-payment-content__otherHeader___Mizrt {
-    margin-bottom: 6px;
-    line-height: 1;
+    font-weight: 500;
   }
 }
 @media only screen and (max-width: 480px) {
-  .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv {
-    padding-bottom: 24px;
+  .checkout-payment-content__container___HusGh .checkout-payment-content__cardHeader___t2z6i,
+  .checkout-payment-content__container___HusGh .checkout-payment-content__walletHeader___XQ4tZ,
+  .checkout-payment-content__container___HusGh .checkout-payment-content__nbHeader___TAaVo,
+  .checkout-payment-content__container___HusGh .checkout-payment-content__cardlessHeader___NXIQQ,
+  .checkout-payment-content__container___HusGh .checkout-payment-content__payLaterHeader___v037e,
+  .checkout-payment-content__container___HusGh .checkout-payment-content__codHeader___qtIba,
+  .checkout-payment-content__container___HusGh .checkout-payment-content__addCardHeader___KWnY5,
+  .checkout-payment-content__container___HusGh .checkout-payment-content__otherHeader___Mizrt {
+    margin-bottom: 6px;
+    line-height: 1;
   }
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__savedCardWrapper___HlKIX .checkout-payment-content__savedCardHeaderWrapper___Mx_n_ {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+}
+@media only screen and (max-width: 480px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__savedCardWrapper___HlKIX .checkout-payment-content__savedCardHeaderWrapper___Mx_n_ {
+    margin-bottom: 16px;
+  }
+  .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__savedCardWrapper___HlKIX .checkout-payment-content__savedCardHeaderWrapper___Mx_n_ button {
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--buttonPrimary, #4e3f09);
+  }
+  .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__savedCardWrapper___HlKIX .checkout-payment-content__savedCardHeaderWrapper___Mx_n_ button span {
+    font-size: 16px;
+  }
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__savedCardWrapper___HlKIX .checkout-payment-content__number___QPYFK {
   font-size: 12px;
@@ -919,6 +967,11 @@ img::selection {
   margin-top: 16px;
   position: relative;
 }
+@media only screen and (max-width: 480px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardInputWrapper___YqlSP.checkout-payment-content__cardNumberBox___UUp9q {
+    margin-top: 0;
+  }
+}
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardNetwork___GK7gx,
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cvv___b1NMm {
   position: absolute;
@@ -945,8 +998,8 @@ img::selection {
   gap: 16px;
 }
 @media only screen and (max-width: 480px) {
-  .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardDateCvvWrapper___dLwSn {
-    gap: 24px;
+  .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardDateCvvWrapper___dLwSn.checkout-payment-content__marginBottom___qTP6J {
+    margin-bottom: 24px;
   }
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardDateCvvWrapper___dLwSn .checkout-payment-content__cardInputWrapper___YqlSP {
@@ -991,6 +1044,11 @@ img::selection {
   align-items: center;
   margin-top: 16px;
   accent-color: var(--primaryColor);
+}
+@media only screen and (max-width: 480px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__rbiGuidelines___jmtpW {
+    margin-bottom: 24px;
+  }
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__rbiGuidelines___jmtpW input:checked:before {
   background-color: var(--primaryColor);
@@ -1074,7 +1132,7 @@ img::selection {
   color: var(--textBody);
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__addNewCardModal___HuBPW {
-  padding: 8px 16px 24px 16px;
+  padding: 0px 16px 24px 16px;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__modePay___tBSpm .checkout-payment-content__payBtn___dgcAp,
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardlessPay___dcGhw .checkout-payment-content__payBtn___dgcAp,
@@ -1138,11 +1196,14 @@ img::selection {
 }
 @media only screen and (max-width: 480px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__modeOption___onKtJ .checkout-payment-content__modeItemWrapper___IlJf3 {
-    padding: 16px 0px;
+    padding: 24px 0px;
   }
   .checkout-payment-content__container___HusGh .checkout-payment-content__modeOption___onKtJ .checkout-payment-content__modeItemWrapper___IlJf3:not(:last-child) {
     border-bottom: 1px solid var(--dividerStokes, #d4d1d1);
     border-radius: 0px;
+  }
+  .checkout-payment-content__container___HusGh .checkout-payment-content__modeOption___onKtJ .checkout-payment-content__modeItemWrapper___IlJf3:first-child {
+    padding-top: 0;
   }
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__modeOption___onKtJ .checkout-payment-content__modeItemWrapper___IlJf3 .checkout-payment-content__modeItem___M6Obf {
@@ -1157,19 +1218,24 @@ img::selection {
   display: flex;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__modeOption___onKtJ .checkout-payment-content__modeItemWrapper___IlJf3 .checkout-payment-content__modeItem___M6Obf .checkout-payment-content__modeItemLogo___mixsN img {
-  height: 42px;
-  width: 42px;
+  height: 38px;
+  width: 38px;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__modeOption___onKtJ .checkout-payment-content__modeItemWrapper___IlJf3 .checkout-payment-content__modeItem___M6Obf .checkout-payment-content__modeItemName___FvXEZ {
-  font-weight: 400;
+  font-weight: 500;
   font-size: 14px;
   color: var(--textBody, #3c3131);
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__modeOption___onKtJ .checkout-payment-content__modeItemWrapper___IlJf3 .checkout-payment-content__modeItem___M6Obf .checkout-payment-content__moreModeName___F_lVI {
-  color: var(--textHeading, #26201a);
+  color: var(--textLabel, #7d7676);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 400;
   line-height: 140%;
+}
+@media only screen and (max-width: 480px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__modeOption___onKtJ .checkout-payment-content__modeItemWrapper___IlJf3 .checkout-payment-content__modeItem___M6Obf .checkout-payment-content__moreModeName___F_lVI {
+    font-weight: 500;
+  }
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__modeOption___onKtJ .checkout-payment-content__modeItemWrapper___IlJf3 .checkout-payment-content__modeItem___M6Obf .checkout-payment-content__moreModeArrow___yBQbk {
   transform: rotate(270deg);
@@ -1222,6 +1288,11 @@ img::selection {
 .checkout-payment-content__container___HusGh .checkout-payment-content__upiMop___LVvVY {
   padding-bottom: 24px;
 }
+@media only screen and (max-width: 480px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__upiMop___LVvVY .checkout-payment-content__upiApp___M2sjF:first-child {
+    padding-top: 0;
+  }
+}
 .checkout-payment-content__container___HusGh .checkout-payment-content__upiApp___M2sjF {
   display: flex;
   align-items: center;
@@ -1250,6 +1321,7 @@ img::selection {
   justify-content: left;
   gap: 8px;
   padding: 24px 0;
+  padding-bottom: 0;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__moreApps___zYveG .checkout-payment-content__logo___jNLmQ {
   display: flex;
@@ -1711,6 +1783,11 @@ img::selection {
   flex-direction: column;
   align-items: center;
   gap: 16px;
+  position: relative;
+}
+.checkout-payment-content__codModal___SSel2 .checkout-payment-content__closeCodModal___yySGE {
+  position: absolute;
+  right: 24px;
 }
 .checkout-payment-content__codModal___SSel2 .checkout-payment-content__message___r1UVA {
   font-size: 16px;
@@ -1778,21 +1855,21 @@ img::selection {
 .checkout-payment-content__modalBody___pTEbc .checkout-payment-content__nonSelectedBorder___zA4x7 {
   border: none;
 }
-.checkout-payment-content__logoNameContainer___cajWe {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.checkout-payment-content__logoNameContainer___cajWe img {
+.checkout-payment-content__modeItemLogo___mixsN img {
   border: 1px solid var(--dividerStokes, #d4d1d1);
   padding: 8px 4px;
   border-radius: 50%;
-  object-fit: contain;
+  object-fit: cover;
+  margin-right: 12px;
 }
-@media only screen and (min-width: 769px) {
-  .checkout-payment-content__logoNameContainer___cajWe {
-    gap: 12px;
+@media only screen and (max-width: 480px) {
+  .checkout-payment-content__modeItemLogo___mixsN img {
+    margin-right: 8px;
   }
+}
+.checkout-payment-content__logoNameContainer___cajWe {
+  display: flex;
+  align-items: center;
 }
 .checkout-payment-content__modalBody___pTEbc::-webkit-scrollbar-thumb {
   background-color: gray;
@@ -1802,6 +1879,80 @@ img::selection {
   color: var(--errorText, #b24141);
   font-size: 12px;
   font-weight: 400;
+}
+.checkout-payment-content__cardDetailsHeader___joBnn {
+  margin-bottom: unset !important;
+}
+@media only screen and (min-width: 769px) {
+  .checkout-payment-content__moreOptionContainer___lSVOn {
+    width: 420px;
+    height: 606px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .checkout-payment-content__moreOptionContainer___lSVOn {
+    height: 434px;
+  }
+}
+.checkout-payment-content__bodyContainer___HeZQG {
+  min-width: unset !important;
+  min-height: unset !important;
+  margin-bottom: 16px;
+  max-height: unset !important;
+}
+.checkout-payment-content__moreModeIcon___Hjipo {
+  transform: rotate(270deg);
+  display: flex;
+  align-items: center;
+}
+.checkout-payment-content__moreModeIcon___Hjipo svg {
+  width: 20px;
+  height: 20px;
+}
+.checkout-payment-content__moreModeIcon___Hjipo svg g > path {
+  fill: var(--textLabel, #7d7676);
+}
+.checkout-payment-content__otherBorder___ARrf8 {
+  border: 1px solid var(--dividerStokes, #d4d1d1);
+}
+@media only screen and (max-width: 480px) {
+  .checkout-payment-content__otherBorder___ARrf8 {
+    border: none;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .checkout-payment-content__modeItemLogo___mixsN span {
+    border: 1px solid var(--dividerStokes, #d4d1d1);
+    padding: 8px 4px;
+    border-radius: 50%;
+    object-fit: cover;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    justify-content: center;
+    align-items: anchor-center;
+  }
+}
+.checkout-payment-content__upiMargin___LomcN:last-child {
+  padding-bottom: 0 !important;
+}
+@media only screen and (max-width: 480px) {
+  .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardModalHeader___ixj3K {
+    padding: 16px !important;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .checkout-payment-content__newCardBodyModal___R9U49 .checkout-payment-content__rbiGuidelines___jmtpW {
+    margin-top: 24px !important;
+  }
+  .checkout-payment-content__newCardBodyModal___R9U49 .checkout-payment-content__saveNewCard___cPi2y {
+    margin-top: 0 !important;
+  }
+}
+@supports (-webkit-touch-callout: none) {
+  .checkout-payment-content__upiApp___M2sjF:last-child {
+    border-bottom: unset !important;
+  }
 }
 
 .rbi-guideline__secure-card-guideline___Ly0gt {

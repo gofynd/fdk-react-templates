@@ -113,7 +113,7 @@ const ProductListing = ({
         <div>{EmptyStateComponent}</div>
       ) : (
         <>
-          <div className={styles.breadcrumbWrapperDesktop}>
+          <div className={styles.breadcrumbWrapper}>
             <Breadcrumb breadcrumb={breadcrumb} />
           </div>
           <div className={styles.mobileHeader}>
@@ -369,9 +369,6 @@ const ProductListing = ({
                     </button>
                   </div>
                 )}
-              </div>
-              <div className={styles.breadcrumbWrapperMobile}>
-                <Breadcrumb breadcrumb={breadcrumb} />
               </div>
               <ListingDescription
                 key={description.length}

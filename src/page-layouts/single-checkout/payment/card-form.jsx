@@ -73,7 +73,7 @@ function CardForm({
   return (
     <>
       <div className={styles.newCard} id="card-validation">
-        <div className={styles.cardInputWrapper}>
+        <div className={`${styles.cardInputWrapper} ${styles.cardNumberBox}`}>
           <input
             placeholder="Card Number*"
             className={`${cardNumberError ? styles.error : ""} ${styles.cardNumber}`}
@@ -118,7 +118,9 @@ function CardForm({
             <div className={styles.formError}>{cardNameError}</div>
           )}
         </div>
-        <div className={styles.cardDateCvvWrapper}>
+        <div
+          className={`${styles.cardDateCvvWrapper} ${!loggedIn ? styles.marginBottom : ""}`}
+        >
           <div className={styles.cardInputWrapper}>
             <IMaskInput
               value={cardExpiryDate}

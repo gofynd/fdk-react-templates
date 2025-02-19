@@ -25,11 +25,17 @@
     .linkWrapper:last-child {
       .linkWrapper-row1 {
         border-bottom: 1px solid var(--dividerStokes);
+        @media @mobile {
+          border-bottom: unset;
+        }
       }
+      // @media @mobile {
+      //   border-bottom: 1px solid var(--dividerStokes);
+      // }
       border-bottom: none;
       flex: 1;
       .indicator {
-        border-radius: 0px 0px 0px 4px;
+        border-radius: 0px 0px 0px 4px !important;
       }
     }
     .linkWrapper:first-child {
@@ -41,7 +47,18 @@
       border-bottom: 1px solid var(--dividerStokes);
       border-right: 1px solid var(--dividerStokes);
       background-color: #f8f8f8;
-
+      .link {
+        .icon {
+          svg > path {
+            fill: @TextHeading;
+          }
+        }
+      }
+      .activeIconColor {
+        svg > g > path {
+          fill: @TextHeading;
+        }
+      }
       @media @mobile {
         background-color: @PageBackground;
         border-right: none;
@@ -85,8 +102,9 @@
         padding: 24px 16px;
         overflow: hidden;
         word-break: break-word;
+        align-items: center;
         @media @mobile {
-          padding: 16px 4px 16px 0px;
+          padding: 24px 0px;
         }
         .modeName {
           align-self: center;
@@ -96,11 +114,11 @@
           font-weight: 500;
           line-height: 140%;
           @media @mobile {
-            margin-left: 4px;
+            margin-left: 8px;
           }
         }
         .selectedModeName {
-          font-weight: 500;
+          font-weight: 600;
           color: @ButtonPrimary;
         }
         .codCharge {
@@ -109,7 +127,9 @@
           color: @ErrorText;
           line-height: 140%;
           border-radius: 4px;
-          padding: 8px 0;
+          @media @mobile {
+            padding-top: 4px;
+          }
           text-align: center;
         }
       }
@@ -135,8 +155,29 @@
     }
   }
   .selectedNavigationTab {
+    .link {
+      .icon {
+        svg > path {
+          fill: @ButtonPrimary !important;
+        }
+      }
+    }
     border-right: none;
     background-color: @PageBackground;
+  }
+  .headerHightlight {
+    .link {
+      .icon {
+        svg > path {
+          fill: @ButtonPrimary !important;
+        }
+      }
+    }
+    .activeIconColor {
+      svg > g > path {
+        fill: @ButtonPrimary;
+      }
+    }
   }
   .selectedNavigationTab:last-child {
     .linkWrapper-row1 {
@@ -159,6 +200,9 @@
     }
   }
   .selectedBorder {
+    .modeItemName {
+      font-weight: 600 !important;
+    }
     @media @mobile-up {
       border: 1px solid var(--primaryColor);
     }
@@ -177,6 +221,9 @@
   .addCardHeader,
   .otherHeader {
     font-weight: 600;
+    @media @mobile {
+      font-weight: 500;
+    }
     font-size: 14px;
     color: var(--textHeading);
     margin-bottom: 15px;
@@ -188,11 +235,19 @@
   }
 
   .cardTab {
-    @media @mobile {
-      padding-bottom: 24px;
-    }
     .savedCardWrapper {
       .savedCardHeaderWrapper {
+        @media @mobile {
+          margin-bottom: 16px;
+          button {
+            font-weight: 600;
+            text-transform: uppercase;
+            color: @ButtonPrimary;
+            span {
+              font-size: 16px;
+            }
+          }
+        }
         display: flex;
         align-items: baseline;
         justify-content: space-between;
@@ -427,6 +482,11 @@
         display: flex;
         flex-direction: column;
         .cardInputWrapper {
+          @media @mobile {
+            &.cardNumberBox {
+              margin-top: 0;
+            }
+          }
           display: flex;
           flex-direction: column;
           margin-top: 16px;
@@ -450,12 +510,14 @@
           }
         }
         .cardDateCvvWrapper {
+          &.marginBottom {
+            @media @mobile {
+              margin-bottom: 24px;
+            }
+          }
           display: flex;
           justify-content: space-between;
           gap: 16px;
-          @media @mobile {
-            gap: 24px;
-          }
           .cardInputWrapper {
             flex: 1;
             display: flex;
@@ -496,6 +558,9 @@
           color: @ErrorText;
         }
         .rbiGuidelines {
+          @media @mobile {
+            margin-bottom: 24px;
+          }
           input:checked:before {
             background-color: var(--primaryColor);
           }
@@ -590,7 +655,7 @@
       }
     }
     .addNewCardModal {
-      padding: 8px 16px 24px 16px;
+      padding: 0px 16px 24px 16px;
     }
   }
 
@@ -648,10 +713,13 @@
       border-radius: 8px;
       padding: 16px;
       @media @mobile {
-        padding: 16px 0px;
+        padding: 24px 0px;
         &:not(:last-child) {
           border-bottom: 1px solid @DividerStokes;
           border-radius: 0px;
+        }
+        &:first-child {
+          padding-top: 0;
         }
       }
       .modeItem {
@@ -664,20 +732,23 @@
         .modeItemLogo {
           display: flex;
           img {
-            height: 42px;
-            width: 42px;
+            height: 38px;
+            width: 38px;
           }
         }
         .modeItemName {
-          font-weight: 400;
+          font-weight: 500;
           font-size: 14px;
           color: @TextBody;
         }
         .moreModeName {
-          color: @TextHeading;
+          color: @TextLabel;
           font-size: 14px;
-          font-weight: 600;
+          font-weight: 400;
           line-height: 140%;
+          @media @mobile {
+            font-weight: 500;
+          }
         }
         .moreModeArrow {
           transform: rotate(270deg);
@@ -738,6 +809,13 @@
 
   .upiMop {
     padding-bottom: 24px;
+    @media @mobile {
+      .upiApp {
+        &:first-child {
+          padding-top: 0;
+        }
+      }
+    }
   }
 
   .upiApp {
@@ -771,6 +849,7 @@
     justify-content: left;
     gap: 8px;
     padding: 24px 0;
+    padding-bottom: 0;
 
     .logo {
       display: flex;
@@ -1282,7 +1361,11 @@
   flex-direction: column;
   align-items: center;
   gap: 16px;
-
+  position: relative;
+  .closeCodModal {
+    position: absolute;
+    right: 24px;
+  }
   .message {
     font-size: 16px;
     font-weight: 600;
@@ -1350,19 +1433,21 @@
     border: none;
   }
 }
-.logoNameContainer {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.modeItemLogo {
   img {
     border: 1px solid @DividerStokes;
     padding: 8px 4px;
     border-radius: 50%;
-    object-fit: contain;
+    object-fit: cover;
+    @media @mobile {
+      margin-right: 8px;
+    }
+    margin-right: 12px;
   }
-  @media @desktop {
-    gap: 12px;
-  }
+}
+.logoNameContainer {
+  display: flex;
+  align-items: center;
 }
 .modalBody::-webkit-scrollbar-thumb {
   background-color: gray;
@@ -1372,4 +1457,84 @@
   color: @ErrorText;
   font-size: 12px;
   font-weight: 400;
+}
+.cardDetailsHeader {
+  margin-bottom: unset !important;
+}
+.moreOptionContainer {
+  @media @desktop {
+    width: 420px;
+    height: 606px;
+  }
+  @media @mobile {
+    height: 434px;
+  }
+}
+.bodyContainer {
+  min-width: unset !important;
+  min-height: unset !important;
+  margin-bottom: 16px;
+  max-height: unset !important;
+}
+.moreModeIcon {
+  transform: rotate(270deg);
+  display: flex;
+  align-items: center;
+  svg {
+    width: 20px;
+    height: 20px;
+    g > path {
+      fill: @TextLabel;
+    }
+  }
+}
+.otherBorder {
+  border: 1px solid @DividerStokes;
+  @media @mobile {
+    border: none;
+  }
+}
+.modeItemLogo {
+  @media @mobile {
+    span {
+      border: 1px solid @DividerStokes;
+      padding: 8px 4px;
+      border-radius: 50%;
+      object-fit: cover;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      justify-content: center;
+      align-items: anchor-center;
+    }
+  }
+}
+.upiMargin {
+  &:last-child {
+    padding-bottom: 0 !important;
+  }
+}
+.cardTab {
+  .newCardModalHeader {
+    @media @mobile {
+      padding: 16px !important;
+    }
+  }
+}
+.newCardBodyModal {
+  @media @mobile {
+    .rbiGuidelines {
+      margin-top: 24px !important;
+    }
+    .saveNewCard {
+      margin-top: 0 !important;
+    }
+  }
+}
+@supports (-webkit-touch-callout: none) {
+  .upiApp {
+    &:last-child {
+      border-bottom: unset !important;
+    }
+  }
 }

@@ -14,6 +14,7 @@ function SinglePageShipment({
   isHyperlocal = false,
   convertHyperlocalTat = () => {},
   loader,
+  buybox = {},
 }) {
   const navigate = useNavigate();
   const getShipmentCount = shipments?.length || 0;
@@ -60,6 +61,7 @@ function SinglePageShipment({
             isHyperlocal={isHyperlocal}
             convertHyperlocalTat={convertHyperlocalTat}
             loader={loader}
+            buybox={buybox}
           ></SingleShipmentContent>
         </>
       ) : (
