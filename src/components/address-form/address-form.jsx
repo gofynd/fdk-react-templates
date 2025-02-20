@@ -421,7 +421,12 @@ const AddressForm = ({
 
   const removeNullValues = (obj) => {
     return Object.fromEntries(
-      Object.entries(obj).filter(([key, value]) => value !== null)
+      Object.entries(obj).filter(([key, value]) => {
+        if (key === "area_code") {
+          return value !== "";
+        }
+        return value !== null;
+      })
     );
   };
 
@@ -441,6 +446,13 @@ const AddressForm = ({
   const selectAddress = (data) => {
     setResetStatus(false);
     reset(data);
+    formSchema?.forEach((group) =>
+      group?.fields?.forEach(({ type, key }) => {
+        if (type === "list") {
+          setValue(key, "");
+        }
+      })
+    );
   };
 
   const onLoadMap = (map) => {
