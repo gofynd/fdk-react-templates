@@ -70,10 +70,56 @@ function CardForm({
     </>
   );
 
+  const CvvInfo = () => {
+    return (
+      <div className={styles.cvvInfoContainer}>
+        <div className={styles.cvvInfo}>
+          {!isMobile && isCvvInfo && (
+            <SvgWrapper
+              svgSrc="paymentTooltipArrow"
+              className={styles.upArrowMark}
+            />
+          )}
+          {cardDetailsData &&
+            (!cardDetailsData.card_brand ||
+              (cardDetailsData.card_brand &&
+                cardDetailsData.card_brand !== "American Express")) && (
+              <div className={styles.type}>
+                <p className={styles.title}>What is CVV Number?</p>
+                <p className={styles.desc}>
+                  It is a 3-digit code on the back of your card.
+                </p>
+                <div className={styles.cvImage}>
+                  <SvgWrapper svgSrc="non-amex-card-cvv" />
+                </div>
+              </div>
+            )}
+          {cardDetailsData &&
+            (!cardDetailsData.card_brand ||
+              (cardDetailsData.card_brand &&
+                cardDetailsData.card_brand === "American Express")) && (
+              <div className={styles.type}>
+                <p className={styles.title}>Have American Express Card?</p>
+                <p className={styles.desc}>
+                  It is a 4-digit number on the front, just above your credit
+                  card number.
+                </p>
+                <div className={styles.cvImage}>
+                  <SvgWrapper svgSrc="amex-card-cvv" />
+                </div>
+              </div>
+            )}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       <div className={styles.newCard} id="card-validation">
-        <div className={styles.cardInputWrapper}>
+        <div
+          className={`${styles.cardInputWrapper} ${!loggedIn ? styles.cardNumberBox : ""}`}
+        >
           <input
             placeholder="Card Number*"
             className={`${cardNumberError ? styles.error : ""} ${styles.cardNumber}`}
@@ -118,7 +164,9 @@ function CardForm({
             <div className={styles.formError}>{cardNameError}</div>
           )}
         </div>
-        <div className={styles.cardDateCvvWrapper}>
+        <div
+          className={`${styles.cardDateCvvWrapper} ${!loggedIn ? styles.marginBottom : ""}`}
+        >
           <div className={styles.cardInputWrapper}>
             <IMaskInput
               value={cardExpiryDate}
@@ -168,11 +216,18 @@ function CardForm({
               onChange={handleCvvNumberInput}
               onBlur={validateCvv}
             />
-            <SvgWrapper
-              svgSrc="cvv"
-              className={styles.cvv}
-              onClick={() => handleCvvInfo(true)}
-            />
+            <div
+              className={`${styles.cvvContainer} ${styles.cvv} ${cardCVVError ? styles.cvvError : ""}`}
+              onMouseEnter={() => handleCvvInfo(true)}
+              onMouseLeave={() => handleCvvInfo(false)}
+            >
+              <SvgWrapper
+                svgSrc="cvv"
+                className={`${styles.cvv}`}
+                onClick={() => handleCvvInfo(true)}
+              />
+              {!isMobile && isCvvInfo && <CvvInfo />}
+            </div>
             {(cvvNumber || cardCVVError) && (
               <span
                 className={`${styles.inputName} ${cardCVVError ? styles.errorInputName : ""}`}
@@ -261,39 +316,9 @@ function CardForm({
           </button>
         )}
       </div>
-      {isCvvInfo && (
+      {isCvvInfo && isMobile && (
         <Modal isOpen={isCvvInfo} closeDialog={() => handleCvvInfo(false)}>
-          <div className={styles.cvvInfo}>
-            {cardDetailsData &&
-              (!cardDetailsData.card_brand ||
-                (cardDetailsData.card_brand &&
-                  cardDetailsData.card_brand !== "American Express")) && (
-                <div className={styles.type}>
-                  <p className={styles.title}>What is CVV Number?</p>
-                  <p className={styles.desc}>
-                    It is a 3-digit code on the back of your card.
-                  </p>
-                  <div className={styles.cvImage}>
-                    <SvgWrapper svgSrc="non-amex-card-cvv" />
-                  </div>
-                </div>
-              )}
-            {cardDetailsData &&
-              (!cardDetailsData.card_brand ||
-                (cardDetailsData.card_brand &&
-                  cardDetailsData.card_brand === "American Express")) && (
-                <div className={styles.type}>
-                  <p className={styles.title}>Have American Express Card?</p>
-                  <p className={styles.desc}>
-                    It is a 4-digit number on the front, just above your credit
-                    card number.
-                  </p>
-                  <div className={styles.cvImage}>
-                    <SvgWrapper svgSrc="amex-card-cvv" />
-                  </div>
-                </div>
-              )}
-          </div>
+          <CvvInfo />
         </Modal>
       )}
     </>

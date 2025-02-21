@@ -1197,6 +1197,12 @@ img::selection {
   font-weight: 400;
   font-size: 10px;
 }
+.comment__commentOuterBox___tyEJJ .comment__inputBox___hqxzy .comment__commentError___qZ8ZF {
+  font-weight: 400;
+  font-size: 10px;
+  color: var(--errorText, #b24141);
+  padding: 12px 12px 0px 12px;
+}
 .comment__modelHeader___zmsaH {
   display: flex;
   align-items: center;
@@ -5832,6 +5838,14 @@ img::selection {
 .address-form__container___aYVEZ .address-form__dropdownOptions___nas3U li:hover {
   background-color: #f0f0f0;
 }
+.address-form__mobileNumberInput___KWnTP.react-international-phone-input {
+  border-left: none !important;
+  padding-left: 4px !important;
+}
+.address-form__dialCodePreview___cJQZN.react-international-phone-dial-code-preview {
+  border-inline: none;
+  padding-right: 4px;
+}
 
 .google-map__mapAddress___lLOgh {
   position: relative;
@@ -6395,6 +6409,7 @@ img::selection {
 .fy-input__floating___jgtoq {
   position: absolute;
   transform: translateY(-50%) scale(0.9);
+  z-index: 1;
   background: #ffffff;
   padding: 0 0.3rem;
   margin: 0 0.5rem;
@@ -8100,10 +8115,7 @@ img::selection {
   width: 100%;
   box-sizing: border-box;
   color: var(--textBody, #3c3131);
-  font-size: 14px;
-  font-style: normal;
   font-weight: 400;
-  line-height: 19.6px;
   display: flex;
   border: 1px solid var(--dividerStokes, #d4d1d1);
   border-radius: 4px;
@@ -8621,9 +8633,6 @@ img::selection {
 }
 .form-input-selector__customClass___hEqXl.form-input-selector__singleField___uKAb8 {
   flex: 0 0 100%;
-}
-.form-input-selector__mobileInput___GQEo4 {
-  height: 40px;
 }
 .form-input-selector__mobileLabel___slmSq {
   transform: none;

@@ -1057,6 +1057,7 @@ img::selection {
 .fy-input__floating___jgtoq {
   position: absolute;
   transform: translateY(-50%) scale(0.9);
+  z-index: 1;
   background: #ffffff;
   padding: 0 0.3rem;
   margin: 0 0.5rem;
@@ -2762,10 +2763,7 @@ img::selection {
   width: 100%;
   box-sizing: border-box;
   color: var(--textBody, #3c3131);
-  font-size: 14px;
-  font-style: normal;
   font-weight: 400;
-  line-height: 19.6px;
   display: flex;
   border: 1px solid var(--dividerStokes, #d4d1d1);
   border-radius: 4px;
