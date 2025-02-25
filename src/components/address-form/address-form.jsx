@@ -270,7 +270,7 @@ const AddressForm = ({
       className={`${styles.commonBtn} ${styles.deliverBtn}`}
       type="submit"
     >
-      {addressItem ? "Update Address" : "Add Address"}
+      {isNewAddress ? "Add Address" : "Update Address"}
     </button>
   ),
   setI18nDetails,
@@ -421,7 +421,12 @@ const AddressForm = ({
 
   const removeNullValues = (obj) => {
     return Object.fromEntries(
-      Object.entries(obj).filter(([key, value]) => value !== null)
+      Object.entries(obj).filter(([key, value]) => {
+        if (key === "area_code") {
+          return value !== "";
+        }
+        return value !== null;
+      })
     );
   };
 
@@ -441,6 +446,13 @@ const AddressForm = ({
   const selectAddress = (data) => {
     setResetStatus(false);
     reset(data);
+    formSchema?.forEach((group) =>
+      group?.fields?.forEach(({ type, key }) => {
+        if (type === "list") {
+          setValue(key, "");
+        }
+      })
+    );
   };
 
   const onLoadMap = (map) => {
@@ -493,7 +505,17 @@ const AddressForm = ({
                   key={field.key}
                   formData={field}
                   control={control}
+                  setValue={setValue}
                   allowDropdown={false}
+                  mobileNumberProps={{
+                    inputClassName: styles.mobileNumberInput,
+                    dialCodePreviewStyleProps: {
+                      className: styles.dialCodePreview,
+                    },
+                    disableDialCodePrefill: true,
+                    disableDialCodeAndPrefix: true,
+                    showDisabledDialCodeAndPrefix: true,
+                  }}
                 />
               ))}
             </div>

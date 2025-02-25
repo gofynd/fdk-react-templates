@@ -25,6 +25,7 @@ function MobileNumber({
   height = "48px",
   textColor = "var(--textBody, #3c3131)",
   backgroundColor = "var(--pageBackground, #f8f8f8)",
+  ...rest
 }) {
   const inputId = useId();
   const phoneInputRef = useRef(null);
@@ -91,6 +92,7 @@ function MobileNumber({
           "--react-international-phone-selected-dropdown-item-background-color":
             "var(--highlightColor)",
           "--react-international-phone-dropdown-top": `calc(${height} + 4px)`,
+          "--react-international-phone-font-size": "14px",
         }}
         countrySelectorStyleProps={{
           buttonContentWrapperStyle: {
@@ -110,10 +112,12 @@ function MobileNumber({
         inputClassName={`${styles.mobileNumberInput} ${inputClassName || ""}`}
         inputProps={{
           id: inputId,
+          autoComplete: "tel",
           ...inputProps,
         }}
         placeholder={placeholder}
         hideDropdown={!allowDropdown}
+        {...rest}
       />
       {error && <span className={styles.errorText}>{error.message}</span>}
     </div>
