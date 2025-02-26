@@ -22,6 +22,7 @@
 .floating {
   position: absolute;
   transform: translateY(-50%) scale(0.9);
+  z-index: 1;
   background: @White;
   padding: 0 0.3rem;
   margin: 0 0.5rem;
@@ -39,9 +40,6 @@
   box-sizing: border-box;
   width: 100%;
   background-color: transparent;
-  @media @mobile {
-    font-size: 1rem;
-  }
   &::placeholder {
     color: @TextLabel;
     opacity: 0.3;
@@ -59,7 +57,6 @@
 
   &:disabled {
     color: @TextDisabled;
-    border: 1px solid @Gray;
   }
 
   &:focus {
@@ -84,6 +81,12 @@
   border-radius: 5px;
   padding: 0 0.7rem;
   height: 48px;
+
+  &.inputDisable {
+    border: 1px solid @Gray;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
 
   &.medium {
     height: 40px;
