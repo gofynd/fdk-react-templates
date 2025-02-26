@@ -15,6 +15,7 @@ function SingleShipmentContent({
   isHyperlocal = false,
   convertHyperlocalTat = () => {},
   loader,
+  buybox = {},
 }) {
   const getShipmentItems = (shipment) => {
     let grpBySameSellerAndProduct = shipment?.items?.reduce((result, item) => {
@@ -187,7 +188,8 @@ function SingleShipmentContent({
                                   </div>
                                   <div className={styles.offersWarning}>
                                     {product?.item?.article?.quantity < 11 &&
-                                      product?.item?.article?.quantity > 0 && (
+                                      product?.item?.article?.quantity > 0 &&
+                                      !buybox?.is_seller_buybox_enabled && (
                                         <div className={styles.limitedQnty}>
                                           Hurry! Only{" "}
                                           {product?.item?.article?.quantity}{" "}
