@@ -29,6 +29,7 @@ function Checkout({
   onPriceDetailsClick,
   cartCouponProps,
   cartCommentProps,
+  buybox = {},
 }) {
   const [cancelQrPayment, setCancelQrPayment] = useState(null);
   return (
@@ -57,6 +58,7 @@ function Checkout({
           isHyperlocal={isHyperlocal}
           convertHyperlocalTat={convertHyperlocalTat}
           loader={loader}
+          buybox={buybox}
         ></SinglePageShipment>
         <CheckoutPayment
           payment={payment}
