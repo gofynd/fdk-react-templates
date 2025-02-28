@@ -3,6 +3,7 @@ import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import CheckoutPaymentContent from "./checkout-payment-content";
 import * as styles from "./checkout-payment.less";
 import CheckoutPaymentFailure from "./checkout-payment-failure";
+import { useMobile } from "../../../helper/hooks/useMobile";
 
 function CheckoutPayment({
   loader,
@@ -17,20 +18,38 @@ function CheckoutPayment({
   const [paymentErrHeading, setPaymentErrHeading] = useState("");
   const [paymentErrMsg, setPaymentErrMsg] = useState("");
   const [timerId, setTimerId] = useState(null);
+  const { errorMessage } = payment;
+  const isMobile = useMobile();
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get("failed") === "true") {
+    if (errorMessage?.length > 0) {
+      handleShowFailedMessage({
+        failed: true,
+        paymentErrHeading: "Please try again later",
+        paymentErrMsg: errorMessage,
+      });
+    } else if (urlParams.get("failed") === "true") {
       showPaymentOptions();
       handleShowFailedMessage({
         failed: true,
         paymentErrMsg: urlParams?.get("error"),
       });
     }
-  }, [window.location.search]);
+  }, [window.location.search, errorMessage]);
+
+  const scrollToTop = () => {
+    if (isMobile) {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
+  };
 
   const handleShowFailedMessage = (errObj) => {
     if (errObj?.failed) {
+      scrollToTop();
       setShowFailedMessage(true);
       setPaymentErrHeading(errObj?.paymentErrHeading || "");
       setPaymentErrMsg(errObj?.paymentErrMsg || "");
