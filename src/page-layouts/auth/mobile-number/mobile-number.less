@@ -24,34 +24,31 @@
       border: 1px solid @ErrorText;
     }
   }
-}
 
-.mobileInputContainer {
-  height: auto;
-}
+  .mobileInputContainer {
+    height: auto;
 
-.mobileNumberInput {
-  height: 48px;
-  width: 100%;
-  box-sizing: border-box;
-  color: @TextBody;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 19.6px;
-  display: flex;
-  border: 1px solid @DividerStokes;
-  border-radius: 4px;
-  background-color: @PageBackground;
-  padding-right: 4px;
+    .dialCodePreview {
+      border-inline: none;
+      padding-right: 4px;
+    }
 
-  &:focus-visible {
-    outline: none;
-  }
+    .mobileNumberInput {
+      width: 100%;
+      font-weight: 400;
+      display: flex;
+      border-left: none;
+      padding-left: 4px;
 
-  &::placeholder {
-    color: @TextLabel;
-    opacity: 0.3;
+      &:focus-visible {
+        outline: none;
+      }
+
+      &::placeholder {
+        color: @TextLabel;
+        opacity: 0.3;
+      }
+    }
   }
 }
 

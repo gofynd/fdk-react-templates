@@ -130,6 +130,7 @@ import otherBanks from "../assets/images/other-banks.svg";
 import closeBold from "../assets/images/close-bold.svg";
 import NoCoupons from "../assets/images/no-coupon.svg";
 import infoIcon from "../assets/images/info.svg";
+import paymentTooltipArrow from "../assets/images/payment-tooltip.svg";
 
 export const svgTitleComponentsMappings = {
   "accordion-arrow": AccordionArrow,
@@ -255,4 +256,5 @@ export const svgTitleComponentsMappings = {
   closeBold,
   NoCoupons,
   infoIcon,
+  paymentTooltipArrow,
 };
