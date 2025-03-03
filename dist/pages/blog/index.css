@@ -809,10 +809,11 @@ img::selection {
   .blog__sliderWrapper___VIimB .blog__blogItem__button___AJC2M {
     background: transparent;
     border: none;
+    color: var(--buttonLink, #b1655b);
   }
 }
 .blog__filterWrapper___dtFfJ {
-  padding-top: 40px;
+  padding-top: 12px;
 }
 @media only screen and (min-width: 481px) {
   .blog__filterWrapper___dtFfJ {
