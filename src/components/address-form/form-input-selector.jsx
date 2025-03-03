@@ -9,8 +9,10 @@ import * as styles from "./form-input-selector.less";
 const FormInputSelector = ({
   formData,
   control,
+  setValue = () => {},
   allowDropdown,
   isSingleField = false,
+  mobileNumberProps = {},
 }) => {
   const {
     display = "",
@@ -42,7 +44,7 @@ const FormInputSelector = ({
             value={field?.value}
             onChange={(value) => {
               field?.onChange(value);
-              onChange(value);
+              onChange(value, setValue);
             }}
           />
         );
@@ -61,7 +63,7 @@ const FormInputSelector = ({
             disabled={disabled}
             onChange={(value) => {
               field?.onChange(value);
-              onChange(value);
+              onChange(value, setValue);
             }}
           />
         );
@@ -77,9 +79,9 @@ const FormInputSelector = ({
             placeholder={placeholder}
             countryCode={countryCode}
             containerClassName={`${styles.customClass} ${isSingleField ? styles.singleField : ""}`}
-            inputClassName={styles.mobileInput}
             labelClassName={styles.mobileLabel}
             telInputClassName={styles.telInput}
+            {...mobileNumberProps}
             allowDropdown={allowDropdown}
             backgroundColor="transparent"
             height="40px"
@@ -87,7 +89,7 @@ const FormInputSelector = ({
             inputProps={{ readOnly }}
             onChange={(value) => {
               field?.onChange(value);
-              onChange(value);
+              onChange(value, setValue);
             }}
           />
         );
@@ -110,7 +112,7 @@ const FormInputSelector = ({
             readOnly={readOnly}
             onChange={(event) => {
               field?.onChange(event?.target?.value);
-              onChange(event?.target?.value);
+              onChange(event?.target?.value, setValue);
             }}
           />
         );
