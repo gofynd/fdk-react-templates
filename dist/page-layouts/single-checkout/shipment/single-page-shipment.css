@@ -611,8 +611,9 @@ img::selection {
   color: var(--buttonPrimary);
   border: 1px solid var(--buttonPrimary);
   text-transform: uppercase;
-  line-height: 140%;
   cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 .single-page-shipment__reviewHeaderSelect___bNgMy .single-page-shipment__proceedPay___lxpPS {
   font-weight: 600;
@@ -624,9 +625,9 @@ img::selection {
   color: var(--buttonSecondary);
   margin-left: 24px;
   text-transform: uppercase;
-  line-height: 140%;
-  display: flex;
   cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 
 .single-shipment-content__slide-fade-enter-active___NaOTE,
@@ -1890,6 +1891,21 @@ img::selection {
   font-size: 12px;
   font-weight: 500;
   line-height: 140%;
+}
+.free-gift-item__freeArticleContainer___wFbcr .free-gift-item__quantityColor___iaN9_ {
+  color: var(--textBody);
+  font-weight: 600;
+}
+.free-gift-item__freeArticleContainer___wFbcr .free-gift-item__quantityCount___zoOkQ {
+  margin-left: 8px;
+  color: var(--textBody);
+  font-weight: 400;
+}
+.free-gift-item__freeArticleContainer___wFbcr .free-gift-item__freeGiftQuantity___JBEWX {
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+  margin-top: 3px;
 }
 .free-gift-item__freeArticleContainer___wFbcr .free-gift-item__freeGiftItem___N40YK {
   padding: 12px;
