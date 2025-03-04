@@ -3376,6 +3376,11 @@ img::selection {
   padding: 24px;
   background-color: var(--themeAccentL4, #f9f6f0);
 }
+@media only screen and (max-width: 768px) {
+  .compare__compare___q_g43 .compare__addSearchContainer___boAKA .compare__searchBox___jDe57 .compare__searchBlock___M3hVq {
+    padding: 24px 16px;
+  }
+}
 .compare__compare___q_g43 .compare__addSearchContainer___boAKA .compare__searchBox___jDe57 .compare__searchBlock___M3hVq .compare__searchHeader___KAg5I {
   display: flex;
   justify-content: space-between;
@@ -3431,9 +3436,22 @@ img::selection {
   width: 40px;
   height: 20px;
 }
+.compare__compare___q_g43 .compare__addSearchContainer___boAKA .compare__searchBox___jDe57 .compare__searchBlock___M3hVq .compare__compareItems___Iqn3n {
+  padding: 8px 16px 16px;
+  background: #fff;
+  border-radius: 4px;
+  border: 1px solid #d4d1d1;
+  box-shadow: 0px 8px 24px -4px rgba(78, 63, 9, 0.08), 0px 4px 4px 0px rgba(78, 63, 9, 0.08);
+  margin-top: 10px;
+}
+@media only screen and (max-width: 768px) {
+  .compare__compare___q_g43 .compare__addSearchContainer___boAKA .compare__searchBox___jDe57 .compare__searchBlock___M3hVq .compare__compareItems___Iqn3n {
+    padding: 8px 8px 16px;
+  }
+}
 .compare__compare___q_g43 .compare__addSearchContainer___boAKA .compare__searchBox___jDe57 .compare__popularhdng___Lu52n {
   font-size: 20px;
-  padding: 16px 0;
+  padding: 10px 0;
   font-weight: 700;
   color: var(--textHeading, #26201a);
   font-weight: 600;
@@ -3441,18 +3459,15 @@ img::selection {
   letter-spacing: -0.4px;
   text-transform: capitalize;
 }
-.compare__compare___q_g43 .compare__addSearchContainer___boAKA .compare__searchBox___jDe57 .compare__landingBestsellerHandest___s2cSG {
-  padding: 20px 30px;
-  background: #fff;
-  border-radius: 4px;
-  border: 1px solid #d4d1d1;
-  box-shadow: 0px 8px 24px -4px rgba(78, 63, 9, 0.08), 0px 4px 4px 0px rgba(78, 63, 9, 0.08);
-  padding: 8px 8px 16px 8px;
+@media only screen and (max-width: 768px) {
+  .compare__compare___q_g43 .compare__addSearchContainer___boAKA .compare__searchBox___jDe57 .compare__popularhdng___Lu52n {
+    font-size: 14px;
+    letter-spacing: -0.28px;
+  }
 }
 .compare__compare___q_g43 .compare__addSearchContainer___boAKA .compare__searchBox___jDe57 .compare__landingBestsellerHandest___s2cSG .compare__whiteSmallRBox___G7Vjy {
   width: 100%;
   background: var(--themeAccentL4, #f9f6f0);
-  border-radius: 5px;
   cursor: pointer;
   margin: 0 auto;
   padding: 12px 0 12px 10px;
@@ -3500,31 +3515,23 @@ img::selection {
     max-height: 300px;
   }
 }
-.compare__compare___q_g43 .compare__addSearchContainer___boAKA .compare__searchBox___jDe57 .compare__notFoundBlock___n4Q3r {
-  padding: 8px 8px 16px 8px;
-  border-radius: 4px;
-  border: 1px solid #d4d1d1;
-  box-shadow: 0px 8px 24px -4px rgba(78, 63, 9, 0.08), 0px 4px 4px 0px rgba(78, 63, 9, 0.08);
-}
-@media only screen and (max-width: 768px) {
-  .compare__compare___q_g43 .compare__addSearchContainer___boAKA .compare__searchBox___jDe57 .compare__notFoundBlock___n4Q3r {
-    padding: 8px;
-  }
-}
 .compare__compare___q_g43 .compare__addSearchContainer___boAKA .compare__searchBox___jDe57 .compare__notFound___woUG0 {
   color: var(--textBody, #3c3131);
   line-height: normal;
   padding: 16px;
   background: var(--themeAccentL4, #f9f6f0);
+  margin-top: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.32px;
 }
 @media only screen and (max-width: 768px) {
   .compare__compare___q_g43 .compare__addSearchContainer___boAKA .compare__searchBox___jDe57 .compare__notFound___woUG0 {
-    padding: 12px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .compare__compare___q_g43 .compare__addSearchContainer___boAKA .compare__searchBox___jDe57 .compare__notFound___woUG0 {
-    padding: 12px 0px;
+    padding: 8px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: -0.24px;
   }
 }
 
