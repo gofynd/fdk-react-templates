@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .stepper__caption-medium___krneu,
+  .stepper__captionMedium___b8fjm {
+    font-size: 11px;
+  }
+}
 .stepper__caption-semi-bold___aBUJJ,
 .stepper__captionSemiBold___Nv7I9 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .stepper__caption-semi-bold___aBUJJ,
+  .stepper__captionSemiBold___Nv7I9 {
+    font-size: 11px;
+  }
 }
 .stepper__btn-link___h2ej2,
 .stepper__btnLink___kp6d3 {
