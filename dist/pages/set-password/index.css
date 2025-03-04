@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .set-password__caption-medium___Cj2gP,
+  .set-password__captionMedium___dlBa4 {
+    font-size: 11px;
+  }
+}
 .set-password__caption-semi-bold___Vwntz,
 .set-password__captionSemiBold___SzQtc {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .set-password__caption-semi-bold___Vwntz,
+  .set-password__captionSemiBold___SzQtc {
+    font-size: 11px;
+  }
 }
 .set-password__btn-link___a7J11,
 .set-password__btnLink___ckCIR {
