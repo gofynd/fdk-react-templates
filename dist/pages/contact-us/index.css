@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .contact-us__caption-medium___B_db2,
+  .contact-us__captionMedium___qRk8X {
+    font-size: 11px;
+  }
+}
 .contact-us__caption-semi-bold___fasRI,
 .contact-us__captionSemiBold___CSBLt {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .contact-us__caption-semi-bold___fasRI,
+  .contact-us__captionSemiBold___CSBLt {
+    font-size: 11px;
+  }
 }
 .contact-us__btn-link___FCrv_,
 .contact-us__btnLink___qvUKX {
@@ -894,12 +906,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .fy-input__caption-medium___ypzRG,
+  .fy-input__captionMedium___cFBcK {
+    font-size: 11px;
+  }
+}
 .fy-input__caption-semi-bold___WmtaG,
 .fy-input__captionSemiBold___UuNTY {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .fy-input__caption-semi-bold___WmtaG,
+  .fy-input__captionSemiBold___UuNTY {
+    font-size: 11px;
+  }
 }
 .fy-input__btn-link___kKnNG,
 .fy-input__btnLink___gGoDJ {
@@ -1094,6 +1118,7 @@ img::selection {
 .fy-input__floating___jgtoq {
   position: absolute;
   transform: translateY(-50%) scale(0.9);
+  z-index: 1;
   background: #ffffff;
   padding: 0 0.3rem;
   margin: 0 0.5rem;
@@ -1130,7 +1155,6 @@ img::selection {
 }
 .fy-input__fyInput___S4Mtu:disabled {
   color: var(--textSecondary);
-  border: 1px solid #cccccc;
 }
 .fy-input__fyInput___S4Mtu:focus {
   border-color: var(--buttonPrimary, #4e3f09);
@@ -1149,6 +1173,11 @@ img::selection {
   border-radius: 5px;
   padding: 0 0.7rem;
   height: 48px;
+}
+.fy-input__outlined___CEaKm.fy-input__inputDisable___M8Zn2 {
+  border: 1px solid #cccccc;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 .fy-input__outlined___CEaKm.fy-input__medium___L3QsD {
   height: 40px;
@@ -1490,12 +1519,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .fy-button__caption-medium___PSB4T,
+  .fy-button__captionMedium___iW0z_ {
+    font-size: 11px;
+  }
+}
 .fy-button__caption-semi-bold___FFG2N,
 .fy-button__captionSemiBold___czTMx {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .fy-button__caption-semi-bold___FFG2N,
+  .fy-button__captionSemiBold___czTMx {
+    font-size: 11px;
+  }
 }
 .fy-button__btn-link___bKkQ1,
 .fy-button__btnLink___jOAiL {
@@ -2284,12 +2325,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .fy-image__caption-medium___EGS8Z,
+  .fy-image__captionMedium___qaNIm {
+    font-size: 11px;
+  }
+}
 .fy-image__caption-semi-bold___k6m14,
 .fy-image__captionSemiBold___gqTxg {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .fy-image__caption-semi-bold___k6m14,
+  .fy-image__captionSemiBold___gqTxg {
+    font-size: 11px;
+  }
 }
 .fy-image__btn-link___pHMFk,
 .fy-image__btnLink___GOMHZ {
@@ -2801,12 +2854,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .skeletons__caption-medium___Fqp0a,
+  .skeletons__captionMedium___m7kLu {
+    font-size: 11px;
+  }
+}
 .skeletons__caption-semi-bold___rpF8T,
 .skeletons__captionSemiBold___hZxFt {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .skeletons__caption-semi-bold___rpF8T,
+  .skeletons__captionSemiBold___hZxFt {
+    font-size: 11px;
+  }
 }
 .skeletons__btn-link___jeA93,
 .skeletons__btnLink___peGYA {

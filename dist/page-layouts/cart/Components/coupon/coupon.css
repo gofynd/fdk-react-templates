@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .coupon__caption-medium___tqbfY,
+  .coupon__captionMedium___xDGA4 {
+    font-size: 11px;
+  }
+}
 .coupon__caption-semi-bold___K0l2r,
 .coupon__captionSemiBold___p62dj {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .coupon__caption-semi-bold___K0l2r,
+  .coupon__captionSemiBold___p62dj {
+    font-size: 11px;
+  }
 }
 .coupon__btn-link___W9DnQ,
 .coupon__btnLink___GfwxE {
@@ -1139,12 +1151,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .modal__caption-medium___GbhtF,
+  .modal__captionMedium___zCJpb {
+    font-size: 11px;
+  }
+}
 .modal__caption-semi-bold___feZV5,
 .modal__captionSemiBold___pxAn7 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .modal__caption-semi-bold___feZV5,
+  .modal__captionSemiBold___pxAn7 {
+    font-size: 11px;
+  }
 }
 .modal__btn-link___rkrNS,
 .modal__btnLink___yqJlb {

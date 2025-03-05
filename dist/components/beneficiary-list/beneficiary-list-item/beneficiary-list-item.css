@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .beneficiary-list-item__caption-medium___B2WHH,
+  .beneficiary-list-item__captionMedium___yLZfC {
+    font-size: 11px;
+  }
+}
 .beneficiary-list-item__caption-semi-bold___PIr5E,
 .beneficiary-list-item__captionSemiBold___dJJmc {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .beneficiary-list-item__caption-semi-bold___PIr5E,
+  .beneficiary-list-item__captionSemiBold___dJJmc {
+    font-size: 11px;
+  }
 }
 .beneficiary-list-item__btn-link___mLWLE,
 .beneficiary-list-item__btnLink___vSbcL {

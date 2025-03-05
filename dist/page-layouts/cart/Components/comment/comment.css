@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .comment__caption-medium___HIEb0,
+  .comment__captionMedium___NxnB1 {
+    font-size: 11px;
+  }
+}
 .comment__caption-semi-bold___VdA6Z,
 .comment__captionSemiBold___lxBFk {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .comment__caption-semi-bold___VdA6Z,
+  .comment__captionSemiBold___lxBFk {
+    font-size: 11px;
+  }
 }
 .comment__btn-link___oAVer,
 .comment__btnLink___vLTIP {
@@ -605,6 +617,12 @@ img::selection {
   color: var(--textLabel, #7d7676);
   font-weight: 400;
   font-size: 10px;
+}
+.comment__commentOuterBox___tyEJJ .comment__inputBox___hqxzy .comment__commentError___qZ8ZF {
+  font-weight: 400;
+  font-size: 10px;
+  color: var(--errorText, #b24141);
+  padding: 12px 12px 0px 12px;
 }
 .comment__modelHeader___zmsaH {
   display: flex;
@@ -974,12 +992,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .modal__caption-medium___GbhtF,
+  .modal__captionMedium___zCJpb {
+    font-size: 11px;
+  }
+}
 .modal__caption-semi-bold___feZV5,
 .modal__captionSemiBold___pxAn7 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .modal__caption-semi-bold___feZV5,
+  .modal__captionSemiBold___pxAn7 {
+    font-size: 11px;
+  }
 }
 .modal__btn-link___rkrNS,
 .modal__btnLink___yqJlb {

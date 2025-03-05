@@ -24,6 +24,7 @@ export default function ChipItem({
   cartItems,
   cartItemsWithActualIndex,
   singleItem,
+  buybox,
   isPromoModalOpen,
   onRemoveIconClick = () => {},
   onOpenPromoModal,
@@ -41,9 +42,38 @@ export default function ChipItem({
   const couponText = singleItemDetails?.coupon_message || "";
   const moq = singleItemDetails?.moq;
   const incrementDecrementUnit = moq?.increment_unit ?? 1;
+
+  const isSellerBuyBoxListing = useMemo(() => {
+    return (
+      buybox?.show_name &&
+      buybox?.enable_selection &&
+      buybox?.is_seller_buybox_enabled
+    );
+  }, [buybox]);
+
+  const isStoreBuyboxListing = useMemo(() => {
+    return (
+      buybox?.show_name &&
+      buybox?.enable_selection &&
+      !buybox?.is_seller_buybox_enabled
+    );
+  }, [buybox]);
+
+  const getMaxQuantity = (item) => {
+    let maxQuantity = item?.max_quantity?.item || 0;
+
+    if (isSellerBuyBoxListing) {
+      maxQuantity = item?.max_quantity?.item_seller || 0;
+    } else if (isStoreBuyboxListing) {
+      maxQuantity = item?.max_quantity?.item_store || 0;
+    }
+
+    return maxQuantity;
+  };
+
   const maxCartQuantity = Math.min(
     moq?.maximum || Number.POSITIVE_INFINITY,
-    singleItemDetails?.article?.quantity || 0
+    getMaxQuantity(singleItemDetails) || 0
   );
   const minCartQuantity = moq?.minimum || 1;
 
@@ -80,7 +110,10 @@ export default function ChipItem({
       }
     }
 
-    if (itemDetails?.quantity !== totalQuantity) {
+    if (
+      itemDetails?.quantity !== totalQuantity ||
+      operation === "remove_item"
+    ) {
       const cartUpdateResponse = await onUpdateCartItems(
         event,
         itemDetails,
@@ -96,9 +129,8 @@ export default function ChipItem({
           setSizeModal(null);
           setSizeModalErr(null);
         } else {
-          setSizeModalErr(
-            cartUpdateResponse?.message || "Something went wrong"
-          );
+          setSizeModal(currentSizeModalSize);
+          setSizeModalErr("Size is out of stock");
         }
       }
     }
@@ -264,18 +296,23 @@ export default function ChipItem({
                   </div>
                 )}
               </div>
-              {showQuantityError && !isOutOfStock && isServiceable && (
-                <div className={styles.limitedQtyBox}>
-                  {` Max Quantity: ${maxCartQuantity}`}
-                </div>
-              )}
+              {maxCartQuantity > 0 &&
+                showQuantityError &&
+                !isOutOfStock &&
+                isServiceable && (
+                  <div className={styles.limitedQtyBox}>
+                    {` Max Quantity: ${maxCartQuantity}`}
+                  </div>
+                )}
 
-              {singleItemDetails?.article?.quantity < 11 &&
+              {getMaxQuantity(singleItemDetails) > 0 &&
+                getMaxQuantity(singleItemDetails) < 11 &&
                 !isOutOfStock &&
                 isServiceable &&
-                !isCustomOrder && (
+                !isCustomOrder &&
+                !buybox?.is_seller_buybox_enabled && (
                   <div className={styles.limitedQtyBox}>
-                    {` Hurry! Only ${singleItemDetails?.article?.quantity} Left`}
+                    {` Hurry! Only ${getMaxQuantity(singleItemDetails)} Left`}
                   </div>
                 )}
             </div>
@@ -354,7 +391,10 @@ export default function ChipItem({
         {isPromoModalOpen && clickedPromoIndex === itemIndex && (
           <Modal
             isOpen={isPromoModalOpen}
-            closeDialog={onClosePromoModal}
+            closeDialog={() => {
+              onClosePromoModal();
+              setClickedPromoIndex(null);
+            }}
             modalType={isMobile ? "right-modal" : "center-modal"}
             title={`${promoTitle} Applied`}
             isCancellable={false}
@@ -370,9 +410,11 @@ export default function ChipItem({
                     <div className={styles.promoOffer}>
                       <SvgWrapper svgSrc="applied-promo" />
                       <div className={styles.labelTextWrapper}>
-                        <div className={styles.promoLabel}>
-                          {promoItem.offer_label}
-                        </div>
+                        {promoItem?.offer_label && (
+                          <div className={styles.promoLabel}>
+                            {promoItem.offer_label}
+                          </div>
+                        )}
                         <div className={styles.textToggleWrapper}>
                           <div className={styles.promoText}>
                             {promoItem.offer_text}
