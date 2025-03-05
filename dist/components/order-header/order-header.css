@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .order-header__caption-medium___eyiAZ,
+  .order-header__captionMedium___UH4Ap {
+    font-size: 11px;
+  }
+}
 .order-header__caption-semi-bold___lcMhe,
 .order-header__captionSemiBold___Z3MGQ {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .order-header__caption-semi-bold___lcMhe,
+  .order-header__captionSemiBold___Z3MGQ {
+    font-size: 11px;
+  }
 }
 .order-header__btn-link___cshXi,
 .order-header__btnLink___z6dPL {
@@ -867,12 +879,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .dropdown__caption-medium___OjyHY,
+  .dropdown__captionMedium___LM7MY {
+    font-size: 11px;
+  }
+}
 .dropdown__caption-semi-bold___UmDDQ,
 .dropdown__captionSemiBold___k3W8T {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .dropdown__caption-semi-bold___UmDDQ,
+  .dropdown__captionSemiBold___k3W8T {
+    font-size: 11px;
+  }
 }
 .dropdown__btn-link___NwF7a,
 .dropdown__btnLink___EM_A_ {
