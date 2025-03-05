@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .remove-cart-item__caption-medium___V8S1f,
+  .remove-cart-item__captionMedium___s34BJ {
+    font-size: 11px;
+  }
+}
 .remove-cart-item__caption-semi-bold___w3ddG,
 .remove-cart-item__captionSemiBold___j5Zkl {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .remove-cart-item__caption-semi-bold___w3ddG,
+  .remove-cart-item__captionSemiBold___j5Zkl {
+    font-size: 11px;
+  }
 }
 .remove-cart-item__btn-link___eo9Xf,
 .remove-cart-item__btnLink___V2t9E {
@@ -851,12 +863,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .modal__caption-medium___GbhtF,
+  .modal__captionMedium___zCJpb {
+    font-size: 11px;
+  }
+}
 .modal__caption-semi-bold___feZV5,
 .modal__captionSemiBold___pxAn7 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .modal__caption-semi-bold___feZV5,
+  .modal__captionSemiBold___pxAn7 {
+    font-size: 11px;
+  }
 }
 .modal__btn-link___rkrNS,
 .modal__btnLink___yqJlb {

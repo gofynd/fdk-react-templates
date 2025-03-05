@@ -12,11 +12,9 @@
       display: flex;
       justify-content: space-between;
       border: 1px solid var(--dividerStokes);
-      border-radius: 8px 8px 0px 0px;
+      border-radius: @ButtonRadius @ButtonRadius 0px 0px;
       padding: 16px 24px;
-      @media @mobile {
-        padding: 4px;
-      }
+
       .headerLeft {
         display: flex;
         padding: 4px 12px 4px 0px;
@@ -27,6 +25,7 @@
           color: var(--textHeading);
           margin-right: 8px;
           line-height: 140%;
+          white-space: nowrap;
           @media @mobile {
             font-size: 12px;
           }
@@ -37,6 +36,7 @@
           font-size: 14px;
           color: var(--textBody);
           line-height: 140%;
+          white-space: nowrap;
           @media @mobile {
             font-size: 12px;
           }
@@ -66,11 +66,8 @@
       border-style: solid;
       border-color: var(--dividerStokes);
       padding: 24px;
-      @media @mobile {
-        padding: 4px;
-      }
       &:last-child {
-        border-radius: 0px 0px 8px 8px;
+        border-radius: 0px 0px @ButtonRadius @ButtonRadius;
       }
       .couponRibbon {
         display: flex;
@@ -244,38 +241,44 @@
 .parent {
   border: 1px solid var(--dividerStokes);
   border-top: none;
-  border-radius: 0 0 8px 8px;
+  border-radius: 0 0 @ButtonRadius @ButtonRadius;
   padding: 24px;
   @media @mobile {
-    padding: 4px 16px;
     border-radius: 0px;
     border-left: none;
     border-right: none;
+    padding: 0;
+    margin-top: 12px;
   }
 }
 
-.proceedBtn {
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 14px;
-  padding: 14px;
-  border-radius: @ButtonRadius;
-  border: 1px solid var(--buttonPrimary);
-  background-color: var(--buttonPrimary);
-  color: var(--buttonSecondary);
-  border: none;
-  width: 100%;
-  text-transform: uppercase;
-  line-height: 140%;
-  display: flex;
-  justify-content: center;
-
-  span {
-    align-self: center;
-    margin-left: 3px;
-  }
-
+.proceedBtnWrapper {
   @media @mobile {
-    font-size: 12px;
+    padding: 0 24px 12px;
+  }
+  .proceedBtn {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 14px;
+    border-radius: @ButtonRadius;
+    border: 1px solid var(--buttonPrimary);
+    background-color: var(--buttonPrimary);
+    color: var(--buttonSecondary);
+    border: none;
+    width: 100%;
+    text-transform: uppercase;
+    line-height: 140%;
+    display: flex;
+    justify-content: center;
+
+    span {
+      align-self: center;
+      margin-left: 3px;
+    }
+
+    @media @mobile {
+      font-size: 12px;
+    }
   }
 }
