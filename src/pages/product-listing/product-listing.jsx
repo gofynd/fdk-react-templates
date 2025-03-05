@@ -15,7 +15,6 @@ import SortModal from "../../components/sort-modal/sort-modal";
 import FilterModal from "../../components/filter-modal/filter-modal";
 import ScrollTop from "../../components/scroll-top/scroll-top";
 import EmptyState from "../../components/empty-state/empty-state";
-import Loader from "../../components/loader/loader";
 import FyImage from "../../components/core/fy-image/fy-image";
 import { isRunningOnClient } from "../../helper/utils";
 import Modal from "../../components/core/modal/modal";
@@ -103,17 +102,12 @@ const ProductListing = ({
   return (
     <div className={styles.plpWrapper} ref={plpWrapperRef} style={wrapperStyle}>
       {isRunningOnClient() && isPageLoading ? (
-        <div className={styles.loader}>
-          <Loader
-            containerClassName={styles.loaderContainer}
-            loaderClassName={styles.customLoader}
-          />
-        </div>
+        <div className={styles.loader}></div>
       ) : productList?.length === 0 && !(isPageLoading || isPageLoading) ? (
         <div>{EmptyStateComponent}</div>
       ) : (
         <>
-          <div className={styles.breadcrumbWrapperDesktop}>
+          <div className={styles.breadcrumbWrapper}>
             <Breadcrumb breadcrumb={breadcrumb} />
           </div>
           <div className={styles.mobileHeader}>
@@ -370,9 +364,6 @@ const ProductListing = ({
                   </div>
                 )}
               </div>
-              <div className={styles.breadcrumbWrapperMobile}>
-                <Breadcrumb breadcrumb={breadcrumb} />
-              </div>
               <ListingDescription
                 key={description.length}
                 description={description}
@@ -450,7 +441,7 @@ function ProductGrid({
         productList.map((product, index) => (
           <FDKLink
             className={styles["product-wrapper"]}
-            to={`/product/${product?.slug}`}
+            action={product?.action}
             key={product?.uid}
             target={isProductOpenInNewTab ? "_blank" : "_self"}
             style={{
