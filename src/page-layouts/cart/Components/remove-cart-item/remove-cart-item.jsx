@@ -33,7 +33,12 @@ function RemoveCartItem({
               <img src={getProductImage} alt={cartItem?.product?.name} />
             </div>
           )}
-          <div className={styles.itemName}>{cartItem?.product?.name}</div>
+          <div>
+            <div className={styles.itemBrand}>
+              {cartItem?.product?.brand?.name}
+            </div>
+            <div className={styles.itemName}>{cartItem?.product?.name}</div>
+          </div>
         </div>
       </div>
       <div className={styles.removeModalFooter}>

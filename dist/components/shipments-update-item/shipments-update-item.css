@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .shipments-update-item__caption-medium___e2eH7,
+  .shipments-update-item__captionMedium___j4gnY {
+    font-size: 11px;
+  }
+}
 .shipments-update-item__caption-semi-bold___gc2RD,
 .shipments-update-item__captionSemiBold___fGkPk {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .shipments-update-item__caption-semi-bold___gc2RD,
+  .shipments-update-item__captionSemiBold___fGkPk {
+    font-size: 11px;
+  }
 }
 .shipments-update-item__btn-link___Q6kcV,
 .shipments-update-item__btnLink___TM4TP {
@@ -906,12 +918,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .quantity-ctrl__caption-medium___DIRyS,
+  .quantity-ctrl__captionMedium___dKA8v {
+    font-size: 11px;
+  }
+}
 .quantity-ctrl__caption-semi-bold___rirfZ,
 .quantity-ctrl__captionSemiBold___iIOPk {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .quantity-ctrl__caption-semi-bold___rirfZ,
+  .quantity-ctrl__captionSemiBold___iIOPk {
+    font-size: 11px;
+  }
 }
 .quantity-ctrl__btn-link___mJhFV,
 .quantity-ctrl__btnLink___1Jg_z {
@@ -1089,8 +1113,7 @@ img::selection {
 }
 .quantity-ctrl__qtyControl___LvP42 {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: space-around;
   border: 1px solid #eeeeee;
   border-radius: 3px;
 }
