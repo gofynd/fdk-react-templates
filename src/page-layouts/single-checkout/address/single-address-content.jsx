@@ -184,10 +184,8 @@ function SingleAddressContent({
               style={{
                 textAlign: "center",
                 color: "var(--textLabel)",
-                padding: "4px 16px",
               }}
             >
-              {" "}
               No Address Found, Please Add Address
             </div>
           )}

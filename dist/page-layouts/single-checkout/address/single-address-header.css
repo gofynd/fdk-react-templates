@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .single-address-header__caption-medium___E8x7Y,
+  .single-address-header__captionMedium___YAR0r {
+    font-size: 11px;
+  }
+}
 .single-address-header__caption-semi-bold___fTa7O,
 .single-address-header__captionSemiBold___PtROp {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .single-address-header__caption-semi-bold___fTa7O,
+  .single-address-header__captionSemiBold___PtROp {
+    font-size: 11px;
+  }
 }
 .single-address-header__btn-link___FpxWZ,
 .single-address-header__btnLink___N4cX1 {
@@ -482,12 +494,11 @@ img::selection {
   display: flex;
   justify-content: space-between;
   border: 1px solid var(--dividerStokes);
-  border-radius: 8px 8px 0 0;
 }
 @media only screen and (max-width: 480px) {
   .single-address-header__addressHeaderContainer___uHzhP {
     padding: 12px 16px;
-    border-radius: 0px;
+    border-width: 1px 0;
   }
 }
 .single-address-header__addressHeaderContainer___uHzhP .single-address-header__selectedAddressSection___CV_Su {
@@ -593,13 +604,12 @@ img::selection {
   display: flex;
   justify-content: space-between;
   border: 1px solid var(--dividerStokes);
-  border-radius: 8px;
   align-items: flex-start;
 }
 @media only screen and (max-width: 480px) {
   .single-address-header__addressSelectedHeaderContainer___iphxk {
     padding: 10px 16px;
-    border-radius: 0px;
+    border-width: 1px 0;
   }
 }
 .single-address-header__addressSelectedHeaderContainer___iphxk .single-address-header__leftSelected___NzGOG {
@@ -636,7 +646,8 @@ img::selection {
   border: 1px solid var(--buttonPrimary);
   text-transform: uppercase;
   text-align: center;
-  line-height: 140%;
+  display: flex;
+  align-items: center;
   cursor: pointer;
 }
 .single-address-header__addressWrapper___bxhH8 {

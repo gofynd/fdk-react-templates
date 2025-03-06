@@ -2,17 +2,15 @@
 
 .commentOuterBox {
   border: 1px solid @DividerStokes;
-  border-radius: 8px;
   box-sizing: border-box;
   line-height: 17px;
   display: flex;
   flex-direction: column;
   padding: 24px;
-  @media @tablet {
-    border-radius: 4px;
-  }
+
   @media @mobile {
     padding: 16px;
+    border-width: 1px 0;
   }
   .addCommentHeader {
     line-height: 140%;
@@ -116,6 +114,12 @@
         font-weight: 400;
         font-size: 10px;
       }
+    }
+    .commentError {
+      font-weight: 400;
+      font-size: 10px;
+      color: @ErrorText;
+      padding: 12px 12px 0px 12px;
     }
   }
 }

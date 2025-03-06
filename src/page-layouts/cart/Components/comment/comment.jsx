@@ -12,7 +12,9 @@ function Comment({ comment = "", onCommentChange = () => {} }) {
   };
 
   const closeCommentModal = () => {
-    setIsModalOpen(false);
+    if (comment) {
+      setIsModalOpen(false);
+    }
   };
 
   return (
@@ -61,7 +63,7 @@ function Comment({ comment = "", onCommentChange = () => {} }) {
       <Modal
         title="Add Comment"
         isOpen={isModalOpen}
-        closeDialog={closeCommentModal}
+        closeDialog={() => setIsModalOpen(false)}
         headerClassName={styles.modelHeader}
       >
         <div className={styles.modalContent}>
@@ -83,7 +85,11 @@ function Comment({ comment = "", onCommentChange = () => {} }) {
               >{`${comment.length}/500`}</div>
             </div>
           </div>
-          <button className={styles.modalActionBtn} onClick={closeCommentModal}>
+          <button
+            disabled={!comment}
+            className={styles.modalActionBtn}
+            onClick={closeCommentModal}
+          >
             Add Comment
           </button>
         </div>
