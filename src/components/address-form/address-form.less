@@ -213,14 +213,24 @@
   padding: 0;
 }
 
-.defaultAddress {
-  input {
-    accent-color: var(--buttonPrimary);
-  }
-
+.defaultAddressContainer {
   display: flex;
   align-items: center;
   gap: 8px;
+  margin: 20px 0 10px;
+  .checkbox {
+    accent-color: var(--buttonPrimary);
+    height: 13px;
+    width: 13px;
+    cursor: pointer;
+  }
+
+  .label {
+    color: @TextBody;
+    font-size: 14px;
+    line-height: 14px;
+    cursor: pointer;
+  }
 }
 
 .deliverBtnDivEdit {

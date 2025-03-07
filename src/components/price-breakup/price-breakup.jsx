@@ -60,7 +60,10 @@ function PriceBreakup({
   const totalDiscount = useMemo(() => {
     let totalDis = 0;
     breakUpValues?.forEach((element) => {
-      if (element.value < 0) {
+      if (
+        element.value < 0 &&
+        ["coupon", "discount", "promotion"].includes(element.key)
+      ) {
         totalDis -= element.value;
       }
     });
