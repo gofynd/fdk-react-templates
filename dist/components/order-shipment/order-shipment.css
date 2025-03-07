@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .order-shipment__caption-medium___iVsKd,
+  .order-shipment__captionMedium___heY5O {
+    font-size: 11px;
+  }
+}
 .order-shipment__caption-semi-bold___GDTDo,
 .order-shipment__captionSemiBold___QfcUW {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .order-shipment__caption-semi-bold___GDTDo,
+  .order-shipment__captionSemiBold___QfcUW {
+    font-size: 11px;
+  }
 }
 .order-shipment__btn-link___tRzON,
 .order-shipment__btnLink___tclr2 {
@@ -665,9 +677,9 @@ img::selection {
   top: -2px;
 }
 .order-shipment__orderItem____zenT .order-shipment__showAccordionBody___KPdMs {
-  visibility: visible;
+  display: block;
 }
 .order-shipment__orderItem____zenT .order-shipment__hideAccordionBody___IOXsZ {
-  visibility: hidden;
+  display: none;
 }
 
