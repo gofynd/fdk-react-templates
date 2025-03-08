@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .filter-list__caption-medium___yb4OC,
+  .filter-list__captionMedium___dxXdq {
+    font-size: 11px;
+  }
+}
 .filter-list__caption-semi-bold___SVRwg,
 .filter-list__captionSemiBold___fdrIO {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .filter-list__caption-semi-bold___SVRwg,
+  .filter-list__captionSemiBold___fdrIO {
+    font-size: 11px;
+  }
 }
 .filter-list__btn-link___FFvg4,
 .filter-list__btnLink___YnAU9 {
@@ -965,12 +977,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .range-slider__caption-medium___K86Ns,
+  .range-slider__captionMedium___CosnQ {
+    font-size: 11px;
+  }
+}
 .range-slider__caption-semi-bold___CrlLO,
 .range-slider__captionSemiBold___O7Ix4 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .range-slider__caption-semi-bold___CrlLO,
+  .range-slider__captionSemiBold___O7Ix4 {
+    font-size: 11px;
+  }
 }
 .range-slider__btn-link___eJuLp,
 .range-slider__btnLink___OEMSJ {
@@ -1180,7 +1204,7 @@ img::selection {
 }
 .range-slider__CustomRangeSlider___Uo_rw .range-slider__inputContainer___pyXpE .range-slider__fieldItem___iyVLX {
   width: 76px;
-  padding: 6px 0;
+  padding: 6px 8px;
   color: var(--textBody, #3c3131);
   text-align: center;
   height: auto;
@@ -1508,12 +1532,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .fy-input__caption-medium___ypzRG,
+  .fy-input__captionMedium___cFBcK {
+    font-size: 11px;
+  }
+}
 .fy-input__caption-semi-bold___WmtaG,
 .fy-input__captionSemiBold___UuNTY {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .fy-input__caption-semi-bold___WmtaG,
+  .fy-input__captionSemiBold___UuNTY {
+    font-size: 11px;
+  }
 }
 .fy-input__btn-link___kKnNG,
 .fy-input__btnLink___gGoDJ {
@@ -1705,9 +1741,13 @@ img::selection {
   font-size: 12px;
   line-height: 21px;
 }
+.fy-input__label___YQgmr span {
+  color: var(--errorText, #b24141);
+}
 .fy-input__floating___jgtoq {
   position: absolute;
   transform: translateY(-50%) scale(0.9);
+  z-index: 1;
   background: #ffffff;
   padding: 0 0.3rem;
   margin: 0 0.5rem;
@@ -1744,7 +1784,6 @@ img::selection {
 }
 .fy-input__fyInput___S4Mtu:disabled {
   color: var(--textSecondary);
-  border: 1px solid #cccccc;
 }
 .fy-input__fyInput___S4Mtu:focus {
   border-color: var(--buttonPrimary, #4e3f09);
@@ -1763,6 +1802,11 @@ img::selection {
   border-radius: 5px;
   padding: 0 0.7rem;
   height: 48px;
+}
+.fy-input__outlined___CEaKm.fy-input__inputDisable___M8Zn2 {
+  border: 1px solid #cccccc;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 .fy-input__outlined___CEaKm.fy-input__medium___L3QsD {
   height: 40px;
@@ -2104,12 +2148,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .filter-item__caption-medium___tjUIV,
+  .filter-item__captionMedium___LU7ic {
+    font-size: 11px;
+  }
+}
 .filter-item__caption-semi-bold___WRnej,
 .filter-item__captionSemiBold___xGlUV {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .filter-item__caption-semi-bold___WRnej,
+  .filter-item__captionSemiBold___xGlUV {
+    font-size: 11px;
+  }
 }
 .filter-item__btn-link___Gtd3k,
 .filter-item__btnLink___YMtV6 {

@@ -93,11 +93,10 @@ function SingleAddressContent({
     <>
       {allAddresses && allAddresses.length && !addressLoader ? (
         <div className={styles.addressContentConitainer}>
-          {getDefaultAddress.length ? (
-            <div className={styles.heading}>Default Address</div>
-          ) : null}
-          {getDefaultAddress?.length > 0
-            ? getDefaultAddress.map((item, index) => {
+          {getDefaultAddress.length > 0 ? (
+            <div className={styles.address}>
+              <div className={styles.heading}>Default Address</div>
+              {getDefaultAddress.map((item, index) => {
                 return (
                   <AddressItem
                     containerClassName={styles.customAddressItem}
@@ -131,13 +130,14 @@ function SingleAddressContent({
                     }
                   ></AddressItem>
                 );
-              })
-            : null}
-          {getOtherAddress.length ? (
-            <div className={styles.heading}>Other Address</div>
+              })}
+            </div>
           ) : null}
-          {getOtherAddress?.length > 0
-            ? getOtherAddress.map((item, index) => {
+
+          {getOtherAddress.length > 0 ? (
+            <div className={styles.address}>
+              <div className={styles.heading}>Other Address</div>
+              {getOtherAddress.map((item, index) => {
                 return (
                   <AddressItem
                     containerClassName={styles.customAddressItem}
@@ -171,8 +171,9 @@ function SingleAddressContent({
                     }
                   ></AddressItem>
                 );
-              })
-            : ""}
+              })}
+            </div>
+          ) : null}
         </div>
       ) : (
         <>
@@ -184,10 +185,8 @@ function SingleAddressContent({
               style={{
                 textAlign: "center",
                 color: "var(--textLabel)",
-                padding: "4px 16px",
               }}
             >
-              {" "}
               No Address Found, Please Add Address
             </div>
           )}

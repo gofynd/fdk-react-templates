@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .fy-input-group__caption-medium___ULDb6,
+  .fy-input-group__captionMedium___GIuhk {
+    font-size: 11px;
+  }
+}
 .fy-input-group__caption-semi-bold___B0YEk,
 .fy-input-group__captionSemiBold___aQt3D {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .fy-input-group__caption-semi-bold___B0YEk,
+  .fy-input-group__captionSemiBold___aQt3D {
+    font-size: 11px;
+  }
 }
 .fy-input-group__btn-link___gqxe4,
 .fy-input-group__btnLink___ltxo_ {

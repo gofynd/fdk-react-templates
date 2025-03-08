@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .checkout-payment-failure__caption-medium___iwrm3,
+  .checkout-payment-failure__captionMedium___Su0F1 {
+    font-size: 11px;
+  }
+}
 .checkout-payment-failure__caption-semi-bold___NT7Uc,
 .checkout-payment-failure__captionSemiBold___Crx0h {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .checkout-payment-failure__caption-semi-bold___NT7Uc,
+  .checkout-payment-failure__captionSemiBold___Crx0h {
+    font-size: 11px;
+  }
 }
 .checkout-payment-failure__btn-link___oTKdf,
 .checkout-payment-failure__btnLink___r_R2A {

@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .order-status__caption-medium___aHHeu,
+  .order-status__captionMedium___xDUPj {
+    font-size: 11px;
+  }
+}
 .order-status__caption-semi-bold___N5k2_,
 .order-status__captionSemiBold___c7anL {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .order-status__caption-semi-bold___N5k2_,
+  .order-status__captionSemiBold___c7anL {
+    font-size: 11px;
+  }
 }
 .order-status__btn-link___Qry8Y,
 .order-status__btnLink___ZYbo9 {
@@ -1193,12 +1205,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .price-breakup__caption-medium___wWsTp,
+  .price-breakup__captionMedium___mD2FZ {
+    font-size: 11px;
+  }
+}
 .price-breakup__caption-semi-bold___jb1u9,
 .price-breakup__captionSemiBold___OqTV0 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .price-breakup__caption-semi-bold___jb1u9,
+  .price-breakup__captionSemiBold___OqTV0 {
+    font-size: 11px;
+  }
 }
 .price-breakup__btn-link___karf3,
 .price-breakup__btnLink___FKWeX {
@@ -1375,7 +1399,6 @@ img::selection {
   }
 }
 .price-breakup__priceSummaryContainer___BlEI5 {
-  border-radius: 8px;
   border: 1px solid var(--dividerStokes, #d4d1d1);
   line-height: 140%;
   padding: 24px 0;
@@ -1385,8 +1408,7 @@ img::selection {
 @media only screen and (max-width: 480px) {
   .price-breakup__priceSummaryContainer___BlEI5 {
     padding: 16px 0;
-    border-radius: 0;
-    border-radius: 4px;
+    border-width: 1px 0;
   }
 }
 .price-breakup__priceSummaryContainer___BlEI5 .price-breakup__priceSummaryHeading___EXolN {
@@ -1418,7 +1440,7 @@ img::selection {
 .price-breakup__priceSummaryContainer___BlEI5 .price-breakup__priceSummaryItemTotal___Pyvj5 {
   color: var(--textHeading, #26201a);
   border-top: 1px solid var(--dividerStokes, #d4d1d1);
-  margin-top: 24px;
+  margin-top: 16px;
   display: flex;
   justify-content: space-between;
   font-size: 14px;
@@ -1432,47 +1454,53 @@ img::selection {
   }
 }
 .price-breakup__priceSummaryContainer___BlEI5 .price-breakup__internationalTaxLabel___k40QY {
-  margin: 16px 24px 0;
-  padding-top: 16px;
-  border-top: 1px solid var(--dividerStokes, #d4d1d1);
   color: var(--textBody, #3c3131);
   font-size: 14px;
   font-weight: 400;
   line-height: 140%;
   display: flex;
   gap: 12px;
+  padding: 16px 24px 0;
 }
 @media only screen and (max-width: 480px) {
   .price-breakup__priceSummaryContainer___BlEI5 .price-breakup__internationalTaxLabel___k40QY {
-    margin-right: 16px;
-    margin-left: 16px;
+    padding: 12px 16px 0;
+    font-size: 12px;
+    gap: 8px;
   }
 }
 .price-breakup__priceSummaryContainer___BlEI5 .price-breakup__internationalTaxLabel___k40QY .price-breakup__infoIcon___LGmNI {
   flex: 0 0 20px;
 }
 .price-breakup__priceSummaryContainer___BlEI5 .price-breakup__discountPreviewContiner___ghC_C {
-  background-color: #fff9dc;
+  background-color: var(--successBackground, #c2dbc9);
+  color: var(--successText, #1c958f);
   border-radius: 8px;
-  width: 100%;
   box-sizing: border-box;
   padding: 8px 0;
-  margin-top: 12px;
-  font-size: 16px;
+  margin: 16px 24px 0;
+  font-size: 14px;
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+@media only screen and (max-width: 480px) {
+  .price-breakup__priceSummaryContainer___BlEI5 .price-breakup__discountPreviewContiner___ghC_C {
+    margin: 12px 16px 0;
+  }
 }
 @media only screen and (max-width: 768px) {
   .price-breakup__priceSummaryContainer___BlEI5 .price-breakup__discountPreviewContiner___ghC_C {
     font-size: 12px;
   }
 }
-.price-breakup__priceSummaryContainer___BlEI5 .price-breakup__discountPreviewContiner___ghC_C .price-breakup__svgContainer___HA0kF {
+.price-breakup__priceSummaryContainer___BlEI5 .price-breakup__discountPreviewContiner___ghC_C .price-breakup__icon___sZMDu {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  width: 21px;
+  height: 20px;
 }
 .price-breakup__priceSummaryContainer___BlEI5 .price-breakup__discountPreviewContiner___ghC_C .price-breakup__discountPreviewMessage___YsIAZ {
   margin-left: 4px;
@@ -1784,12 +1812,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .cart-gift-item__caption-medium___VVmw0,
+  .cart-gift-item__captionMedium___naEN5 {
+    font-size: 11px;
+  }
+}
 .cart-gift-item__caption-semi-bold___xZwGj,
 .cart-gift-item__captionSemiBold___uxPG3 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .cart-gift-item__caption-semi-bold___xZwGj,
+  .cart-gift-item__captionSemiBold___uxPG3 {
+    font-size: 11px;
+  }
 }
 .cart-gift-item__btn-link___U4mVF,
 .cart-gift-item__btnLink___f4BxI {
@@ -2399,12 +2439,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .fy-button__caption-medium___PSB4T,
+  .fy-button__captionMedium___iW0z_ {
+    font-size: 11px;
+  }
+}
 .fy-button__caption-semi-bold___FFG2N,
 .fy-button__captionSemiBold___czTMx {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .fy-button__caption-semi-bold___FFG2N,
+  .fy-button__captionSemiBold___czTMx {
+    font-size: 11px;
+  }
 }
 .fy-button__btn-link___bKkQ1,
 .fy-button__btnLink___jOAiL {
@@ -3193,12 +3245,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .modal__caption-medium___GbhtF,
+  .modal__captionMedium___zCJpb {
+    font-size: 11px;
+  }
+}
 .modal__caption-semi-bold___feZV5,
 .modal__captionSemiBold___pxAn7 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .modal__caption-semi-bold___feZV5,
+  .modal__captionSemiBold___pxAn7 {
+    font-size: 11px;
+  }
 }
 .modal__btn-link___rkrNS,
 .modal__btnLink___yqJlb {

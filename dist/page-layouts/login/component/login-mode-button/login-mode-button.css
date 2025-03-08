@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .login-mode-button__caption-medium___sMaLa,
+  .login-mode-button__captionMedium___Bnrn4 {
+    font-size: 11px;
+  }
+}
 .login-mode-button__caption-semi-bold____qWoY,
 .login-mode-button__captionSemiBold___R3HRn {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .login-mode-button__caption-semi-bold____qWoY,
+  .login-mode-button__captionSemiBold___R3HRn {
+    font-size: 11px;
+  }
 }
 .login-mode-button__btn-link___PTaPz,
 .login-mode-button__btnLink___dovNG {

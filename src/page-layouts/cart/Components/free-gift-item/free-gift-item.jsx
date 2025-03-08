@@ -36,6 +36,14 @@ const FreeGiftItem = ({ item, currencySymbol = "₹" }) => {
                     )}
                     <div className={styles.freeGiftItemDetails}>
                       <div className={styles.freeGiftItemName}>{item_name}</div>
+                      {item?.quantity && (
+                        <div className={styles.freeGiftQuantity}>
+                          <span className={styles.quantityColor}>Quantity</span>
+                          <span className={styles.quantityCount}>
+                            {item?.quantity}
+                          </span>
+                        </div>
+                      )}
                       <div className={styles.freeGiftItemPrice}>
                         <span className={styles.freeGiftItemFreeLabel}>
                           FREE
