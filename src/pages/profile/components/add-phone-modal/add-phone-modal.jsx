@@ -43,6 +43,7 @@ function AddPhoneModal({
     register: otpRegister,
     setValue: setOtpValue,
     watch: watchOtp,
+    resetField,
   } = useForm({
     mode: "onChange",
     defaultValues: {
@@ -92,6 +93,8 @@ function AddPhoneModal({
   }, []);
 
   const handleResendOtp = useCallback(async () => {
+    resetField("otp");
+
     try {
       if (isShowResendOtp) {
         setIsLoading(true);

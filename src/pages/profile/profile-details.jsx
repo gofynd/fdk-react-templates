@@ -78,54 +78,54 @@ function ProfileDetails({ userData, handleSave }) {
     <div className={styles.profileDetailsContainer}>
       <div className={styles.formContainer}>
         <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-          <div className={styles.inputContainer}>
-            <FyInput
-              id="firstName"
-              label="First Name"
-              showAsterik
-              inputVariant="underline"
-              type="text"
-              maxLength={30} // Ensures maxLength is passed to FyInput
-              error={errors?.firstName && errors.firstName.type === "required"}
-              errorMessage={
-                errors?.firstName?.type === "maxLength"
-                  ? "Maximum 30 characters allowed"
-                  : "Required"
-              }
-              {...register("firstName", {
-                required: true,
-                maxLength: {
-                  value: 30,
-                  message: "Maximum 30 characters allowed",
-                },
-              })}
-              required
-            />
-          </div>
-          <div className={styles.inputContainer}>
-            <FyInput
-              id="lastName"
-              label="Last Name"
-              showAsterik
-              inputVariant="underline"
-              type="text"
-              maxLength={30} // Ensures maxLength is passed to FyInput
-              error={errors?.lastName && errors.lastName.type === "required"}
-              errorMessage={
-                errors?.lastName?.type === "maxLength"
-                  ? "Maximum 30 characters allowed"
-                  : "Required"
-              }
-              {...register("lastName", {
-                required: true,
-                maxLength: {
-                  value: 30,
-                  message: "Maximum 30 characters allowed",
-                },
-              })}
-              required
-            />
-          </div>
+          <FyInput
+            id="firstName"
+            label="First Name"
+            showAsterik
+            inputVariant="underline"
+            containerClassName={styles.inputContainer}
+            type="text"
+            maxLength={30} // Ensures maxLength is passed to FyInput
+            error={errors?.firstName && errors.firstName.type === "required"}
+            errorMessage={
+              errors?.firstName?.type === "maxLength"
+                ? "Maximum 30 characters allowed"
+                : "Required"
+            }
+            {...register("firstName", {
+              required: true,
+              maxLength: {
+                value: 30,
+                message: "Maximum 30 characters allowed",
+              },
+            })}
+            required
+          />
+
+          <FyInput
+            id="lastName"
+            label="Last Name"
+            showAsterik
+            inputVariant="underline"
+            containerClassName={styles.inputContainer}
+            type="text"
+            maxLength={30} // Ensures maxLength is passed to FyInput
+            error={errors?.lastName && errors.lastName.type === "required"}
+            errorMessage={
+              errors?.lastName?.type === "maxLength"
+                ? "Maximum 30 characters allowed"
+                : "Required"
+            }
+            {...register("lastName", {
+              required: true,
+              maxLength: {
+                value: 30,
+                message: "Maximum 30 characters allowed",
+              },
+            })}
+            required
+          />
+
           <div className={styles.radioInputContainer}>
             <div className={styles.formLabel}>
               Gender <span className={styles.required}>*</span>

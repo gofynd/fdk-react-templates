@@ -68,6 +68,7 @@ const FyDropdown = ({
   }, [options]);
 
   useEffect(() => {
+    setQuery(value);
     setSelectedValue(
       filteredOptions?.find((option) => option?.[dataKey] === value)
     );

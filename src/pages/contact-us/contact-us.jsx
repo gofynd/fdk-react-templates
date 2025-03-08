@@ -107,6 +107,22 @@ function ContactSupport({
     reset();
     setText("");
   };
+  const showAddress =
+    typeof pageConfig?.show_address === "boolean"
+      ? pageConfig.show_address
+      : true;
+
+  const showPhone =
+    typeof pageConfig?.show_phone === "boolean" ? pageConfig?.show_phone : true;
+
+  const showEmail =
+    typeof pageConfig?.show_email === "boolean" ? pageConfig?.show_email : true;
+  const showWorkingHours =
+    typeof pageConfig?.show_working_hours === "boolean"
+      ? pageConfig?.show_working_hours
+      : true;
+  const showIcons =
+    typeof pageConfig?.show_icons === "boolean" ? pageConfig?.show_icons : true;
 
   return (
     <div
@@ -119,7 +135,7 @@ function ContactSupport({
           <div className={`${styles.flex_item}`}>
             <h3 className={styles.fontHeader}>Contact Us</h3>
             <div className={styles.listItems}>
-              {pageConfig?.show_address &&
+              {showAddress &&
                 contactInfo?.address?.address_line[0].length > 0 && (
                   <div className={`${styles.item} fontBody b1`}>
                     <div>
@@ -134,7 +150,7 @@ function ContactSupport({
                     </div>
                   </div>
                 )}
-              {pageConfig?.show_phone && contact?.number && (
+              {showPhone && contact?.number && (
                 <div className={`${styles.item} fontBody b1`}>
                   <SvgWrapper svgSrc="callSupport" />
                   <FDKLink to={`tel:${contact?.number}`}>
@@ -142,20 +158,19 @@ function ContactSupport({
                   </FDKLink>
                 </div>
               )}
-              {pageConfig?.show_email && email?.length && (
+              {showEmail && email?.length && (
                 <div className={`${styles.item} fontBody b1`}>
                   <SvgWrapper svgSrc="contactEmail" />
                   <FDKLink to={`mailto:${email}`}>{email}</FDKLink>
                 </div>
               )}
-              {pageConfig?.show_working_hours &&
-                contactInfo?.support?.timing && (
-                  <div className={`${styles.item} fontBody b1`}>
-                    <SvgWrapper svgSrc="timer" />
-                    {contactInfo?.support?.timing}
-                  </div>
-                )}
-              {pageConfig?.show_icons && contactInfo?.social_links && (
+              {showWorkingHours && contactInfo?.support?.timing && (
+                <div className={`${styles.item} fontBody b1`}>
+                  <SvgWrapper svgSrc="timer" />
+                  {contactInfo?.support?.timing}
+                </div>
+              )}
+              {showIcons && contactInfo?.social_links && (
                 <SocailMedia social_links={contactInfo?.social_links} />
               )}
             </div>

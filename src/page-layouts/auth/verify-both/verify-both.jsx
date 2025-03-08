@@ -59,6 +59,7 @@ function VerifyMobile({
     formState: { errors, isValid },
     setError,
     clearErrors,
+    resetField,
   } = useForm({
     defaultValues: {
       otp: "",
@@ -75,6 +76,11 @@ function VerifyMobile({
       clearErrors("root");
     }
   }, [error]);
+
+  const resendOtp = () => {
+    resetField("otp");
+    onResendMobileOtpClick();
+  };
 
   return (
     <div className={styles.formWrapper}>
@@ -113,7 +119,7 @@ function VerifyMobile({
       <div className={styles.resendOtpWrapper}>
         <button
           className={styles.resendOtpBtn}
-          onClick={onResendMobileOtpClick}
+          onClick={resendOtp}
           disabled={isResendBtnDisabled}
         >
           {`Resend OTP${isResendBtnDisabled ? ` (${mobileOtpResendTime}S)` : ""}`}
@@ -136,6 +142,7 @@ function VerifyEmail({
     formState: { errors, isValid },
     setError,
     clearErrors,
+    resetField,
   } = useForm({
     defaultValues: {
       otp: "",
@@ -152,6 +159,11 @@ function VerifyEmail({
       clearErrors("root");
     }
   }, [error]);
+
+  const resendOtp = () => {
+    resetField("otp");
+    onResendEmailOtpClick();
+  };
 
   return (
     <div className={styles.formWrapper}>
@@ -190,7 +202,7 @@ function VerifyEmail({
       <div className={styles.resendOtpWrapper}>
         <button
           className={styles.resendOtpBtn}
-          onClick={onResendEmailOtpClick}
+          onClick={resendOtp}
           disabled={isResendBtnDisabled}
         >
           {`Resend OTP${isResendBtnDisabled ? ` (${emailOtpResendTime}S)` : ""}`}
