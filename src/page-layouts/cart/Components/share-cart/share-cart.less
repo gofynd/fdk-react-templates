@@ -8,19 +8,23 @@
       display: flex;
       align-items: center;
       .shareCartIconGreen {
-        color: #1b6163;
         display: flex;
         align-items: center;
+
+        svg {
+          path {
+            fill: @ButtonLink;
+          }
+        }
       }
       .shareBagBtn {
-        color: @ButtonPrimary;
+        color: @ButtonLink;
         font-size: 12px;
         font-weight: 600;
         margin-left: 8px;
       }
     }
     .shareCartBox {
-      border-radius: 8px;
       border: 1px solid @DividerStokes;
       line-height: 140%;
       text-transform: uppercase;
@@ -33,6 +37,11 @@
       font-size: 12px;
       font-weight: 600;
       background: @PageBackground;
+
+      @media @mobile {
+        border-width: 1px 0;
+      }
+
       .leftPart {
         color: @TextHeading;
         display: flex;

@@ -24,6 +24,7 @@ import HTMLContent from "../core/html-content/html-content";
 import BlogTabs from "../blog-tabs/blog-tabs";
 import BlogFooter from "../blog-footer/blog-footer";
 import { convertUTCDateToLocalDate } from "../../helper/utils";
+import { useLocation } from "react-router-dom";
 
 function BlogPage({
   contactInfo,
@@ -34,11 +35,15 @@ function BlogPage({
   isBlogDetailsLoading,
 }) {
   const params = useParams();
+  const location = useLocation();
   useEffect(() => {
     if (!blogDetails) {
-      getBlog(params?.slug);
+      const searchParams = new URLSearchParams(location.search);
+      const previewFlag = searchParams.get("__preview"); // Extract __preview if exists
+
+      getBlog(params?.slug, previewFlag ? true : false);
     }
-  }, [params?.slug]);
+  }, [params?.slug, location.search]);
 
   const containerRef = useRef(null);
 
