@@ -80,7 +80,7 @@ const FyInput = forwardRef(
           ></textarea>
         ) : (
           <div
-            className={`${styles.adornmentContainer} ${customInputClassName}`}
+            className={`${styles.adornmentContainer} ${props?.disabled ? styles.inputDisable : ""} ${customInputClassName}`}
           >
             {startAdornment && (
               <div className={styles.startAdornment}>{startAdornment}</div>
