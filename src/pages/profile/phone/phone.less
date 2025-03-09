@@ -36,17 +36,30 @@
 .main {
   color: @Mako;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+
+  .header {
+    padding: 24px;
+    background-color: #ffffff;
+    border-bottom: 1px solid @DividerStokes;
+    font-weight: 700;
+    font-size: 18px;
+
+    @media @mobile {
+      font-size: 12px;
+      padding: 16px;
+    }
+  }
 
   .formContainer {
     background-color: @White;
-    padding: 25px 5px 10px 30px;
-    margin: 25px auto auto;
     display: flex;
     flex-direction: column;
+    padding: 24px;
+
     @media @mobile {
-      padding: 25px 0px 10px 3px;
       width: 100%;
+      padding: 16px;
     }
     .customInput {
       display: flex;
@@ -65,20 +78,10 @@
       margin-top: 20px;
     }
     .formItem {
-      margin-right: 25px;
-
-      @media @mobile {
-        margin-right: 5px;
-      }
-
       .formInput {
-        margin: 7px 0px 0px;
         display: flex;
-        align-items: center;
-
-        @media @mobile {
-          gap: 4px;
-        }
+        align-items: stretch;
+        gap: 12px;
       }
     }
 
@@ -89,19 +92,10 @@
     }
 
     .actionContainer {
-      display: flex;
-      align-items: center;
-      flex-wrap: nowrap;
-
-      @media @mobile {
-        justify-content: center;
-      }
-
       .verified {
-        padding: 12px;
-        border-radius: 2px;
-        margin: 0px 5px;
-        height: auto;
+        padding: 0 12px;
+        border-radius: 4px;
+        height: 100%;
         cursor: unset;
       }
 
@@ -113,11 +107,10 @@
       }
 
       .verifyBtn {
-        padding: 10px;
-        margin-right: 10px;
-        margin-left: 5px;
+        padding: 0 12px;
+        border-radius: 4px;
+        height: 100%;
         white-space: nowrap;
-        height: auto;
       }
 
       .removeBtn {

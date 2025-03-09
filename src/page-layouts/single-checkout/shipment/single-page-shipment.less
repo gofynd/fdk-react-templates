@@ -69,7 +69,8 @@
     border: 1px solid var(--buttonPrimary);
     text-transform: uppercase;
     text-align: center;
-    line-height: 140%;
+    display: flex;
+    align-items: center;
     cursor: pointer;
   }
 }
@@ -79,15 +80,13 @@
   display: flex;
   justify-content: space-between;
   border: 1px solid var(--dividerStokes);
-  border-radius: 8px 8px 0 0;
   margin-top: 20px;
 
   @media @mobile {
     padding: 6px 16px;
     margin-top: 10px;
-    border-radius: 0;
-    border-left: none;
-    border-right: none;
+    display: none;
+    border-width: 1px 0;
   }
   .left {
     display: flex;
@@ -134,8 +133,9 @@
     color: var(--buttonPrimary);
     border: 1px solid var(--buttonPrimary);
     text-transform: uppercase;
-    line-height: 140%;
     cursor: pointer;
+    display: flex;
+    align-items: center;
   }
 
   .proceedPay {
@@ -148,8 +148,9 @@
     color: var(--buttonSecondary);
     margin-left: 24px;
     text-transform: uppercase;
-    line-height: 140%;
     display: flex;
     cursor: pointer;
+    display: flex;
+    align-items: center;
   }
 }
