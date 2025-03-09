@@ -244,7 +244,7 @@ const addressTypes = [
   {
     label: "Friends & Family",
     value: "Friends & Family",
-    icon: <SvgWrapper svgSrc="otherType" className={styles.typeIcon} />,
+    icon: <SvgWrapper svgSrc="friendsFamily" className={styles.typeIcon} />,
   },
   {
     label: "Other",
@@ -270,7 +270,7 @@ const AddressForm = ({
       className={`${styles.commonBtn} ${styles.deliverBtn}`}
       type="submit"
     >
-      {addressItem ? "Update Address" : "Add Address"}
+      {isNewAddress ? "Add Address" : "Update Address"}
     </button>
   ),
   setI18nDetails,
@@ -421,7 +421,12 @@ const AddressForm = ({
 
   const removeNullValues = (obj) => {
     return Object.fromEntries(
-      Object.entries(obj).filter(([key, value]) => value !== null)
+      Object.entries(obj).filter(([key, value]) => {
+        if (key === "area_code") {
+          return value !== "";
+        }
+        return value !== null;
+      })
     );
   };
 
@@ -441,6 +446,13 @@ const AddressForm = ({
   const selectAddress = (data) => {
     setResetStatus(false);
     reset(data);
+    formSchema?.forEach((group) =>
+      group?.fields?.forEach(({ type, key }) => {
+        if (type === "list") {
+          setValue(key, "");
+        }
+      })
+    );
   };
 
   const onLoadMap = (map) => {
@@ -487,12 +499,14 @@ const AddressForm = ({
         {formSchema?.map((group, index) => (
           <div key={index} className={styles.formGroup}>
             <div ref={formContainerRef} className={styles.formContainer}>
-              {group.fields.map((field) => (
+              {group?.fields?.map((field) => (
                 <FormInputSelector
+                  labelClassName={styles.labelClassName}
                   isSingleField={group?.fields?.length === 1}
                   key={field.key}
                   formData={field}
                   control={control}
+                  setValue={setValue}
                   allowDropdown={false}
                 />
               ))}
@@ -507,13 +521,7 @@ const AddressForm = ({
                 type="button"
                 key={type.value}
                 onClick={() => setValue("address_type", type.value)}
-                className={styles.typeBtn}
-                style={{
-                  border:
-                    watch("address_type") === type.value
-                      ? "2px solid var(--buttonPrimary)"
-                      : "1px solid var(--dividerStokes)",
-                }}
+                className={`${styles.typeBtn} ${watch("address_type") === type.value ? styles.selected : ""}`}
               >
                 {type.icon}
                 <span>{type.label}</span>
@@ -557,6 +565,17 @@ const AddressForm = ({
             )}
           </div>
         )}
+        <div className={styles.defaultAddressContainer}>
+          <input
+            id="is_default_address"
+            className={styles.checkbox}
+            type="checkbox"
+            {...register("is_default_address")}
+          />
+          <label className={styles.label} htmlFor="is_default_address">
+            Make this my default address
+          </label>
+        </div>
         <div>{customFooter}</div>
       </form>
     </div>
