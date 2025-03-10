@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .order-tracking-details__caption-medium___JCE5V,
+  .order-tracking-details__captionMedium___IG6Y0 {
+    font-size: 11px;
+  }
+}
 .order-tracking-details__caption-semi-bold___sIGNx,
 .order-tracking-details__captionSemiBold___pMQUZ {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .order-tracking-details__caption-semi-bold___sIGNx,
+  .order-tracking-details__captionSemiBold___pMQUZ {
+    font-size: 11px;
+  }
 }
 .order-tracking-details__btn-link___YrAFb,
 .order-tracking-details__btnLink___fAQyq {
@@ -961,12 +973,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .empty-state__caption-medium___Cj9cn,
+  .empty-state__captionMedium___e0w26 {
+    font-size: 11px;
+  }
+}
 .empty-state__caption-semi-bold___ftnL8,
 .empty-state__captionSemiBold___yK0OI {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .empty-state__caption-semi-bold___ftnL8,
+  .empty-state__captionSemiBold___yK0OI {
+    font-size: 11px;
+  }
 }
 .empty-state__btn-link___PNnk2,
 .empty-state__btnLink___FxbuH {
@@ -1650,12 +1674,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .order-shipment__caption-medium___iVsKd,
+  .order-shipment__captionMedium___heY5O {
+    font-size: 11px;
+  }
+}
 .order-shipment__caption-semi-bold___GDTDo,
 .order-shipment__captionSemiBold___QfcUW {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .order-shipment__caption-semi-bold___GDTDo,
+  .order-shipment__captionSemiBold___QfcUW {
+    font-size: 11px;
+  }
 }
 .order-shipment__btn-link___tRzON,
 .order-shipment__btnLink___tclr2 {
@@ -1836,24 +1872,22 @@ img::selection {
 }
 .order-shipment__orderItem____zenT {
   color: #41434c;
-  background-color: var(--pageBackground, #f8f8f8);
-  border-radius: 5px;
-  margin: 20px 0px;
-  padding: 10px;
+  background-color: var(--highlightColor, #a7a7f8);
+  margin-top: 16px;
+  padding: 16px;
+}
+@media only screen and (max-width: 480px) {
+  .order-shipment__orderItem____zenT {
+    margin-top: 12px;
+  }
 }
 .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E {
   cursor: pointer;
   position: relative;
 }
-.order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E h3 {
-  margin: 10px;
-}
-.order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E h4 {
-  margin: 10px;
-}
 .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__filter___lnsey {
   position: absolute;
-  right: 20px;
+  right: 0px;
 }
 .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__filterArrowUp___g46yt {
   margin-left: auto;
@@ -1862,38 +1896,25 @@ img::selection {
 .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__filterArrowDown___XfgoC {
   margin-left: auto;
 }
-.order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__bold___YKz_e {
+.order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__orderId___LUgiY {
+  color: var(--textHeading, #26201a);
+  font-weight: 600;
+  line-height: 140%;
   font-weight: 700;
-  font-size: 20px;
+  font-size: 16px;
 }
-@media only screen and (max-width: 768px) {
-  .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__bold___YKz_e {
-    font-size: 18px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__bold___YKz_e {
-    font-size: 16px;
-  }
-}
-.order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__light___ivdxe {
-  font-weight: 300;
-  font-size: 13px;
-}
-@media only screen and (max-width: 768px) {
-  .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__light___ivdxe {
-    font-size: 12px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__light___ivdxe {
-    font-size: 12px;
-  }
+.order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__orderTime___jI_e_ {
+  color: var(--textLabel, #7d7676);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 140%;
+  margin-top: 4px;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 {
   animation: order-shipment__fadeIn___MRLFM 0.5s ease;
   border-top: none;
-  padding: 10px;
+  margin: 16px 0;
+  padding: 0;
   cursor: pointer;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentLeft___o0Q0q {
@@ -1937,61 +1958,45 @@ img::selection {
     font-size: 14px;
   }
 }
-.order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__regular___mjZO2 {
-  font-weight: 400;
-  font-size: 14px;
-}
-@media only screen and (max-width: 768px) {
-  .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__regular___mjZO2 {
-    font-size: 13px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__regular___mjZO2 {
-    font-size: 13px;
-  }
-}
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq {
   display: table-cell;
   vertical-align: top;
   color: #41434c;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__shipmentId___Ussac {
-  margin: 10px 0px;
-  line-height: 20px;
+  margin: 4px 0px;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__boldls___Lwbt_ {
-  font-weight: 700;
-  font-size: 14px;
-}
-@media only screen and (max-width: 768px) {
-  .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__boldls___Lwbt_ {
-    font-size: 13px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__boldls___Lwbt_ {
-    font-size: 13px;
-  }
+  font-weight: 600;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__uktLinks___v7i7G {
-  color: var(--buttonLink, #b1655b);
-  font-weight: 700;
   cursor: pointer;
   text-decoration: none;
+  color: var(--textHeading, #26201a);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 140%;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__shipmentStats___i5laS {
-  margin: 10px 0px;
+  margin: 4px 0px;
+  color: var(--textLabel, #7d7676);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 140%;
+  /* 16.8px */
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__status___ws6ge {
-  text-align: center;
-  color: #ffffff;
-  padding: 10px;
-  display: inline-flex;
-  border-radius: 3px;
+  border-radius: 4px;
+  background: var(--successBackground, #c2dbc9);
+  padding: 4px;
+  color: var(--successText, #1c958f);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 140%;
+  width: fit-content;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__shipmentBrands___QyjCM {
-  margin: 10px 0px;
+  margin: 8px 0px;
 }
 .order-shipment__orderItem____zenT .order-shipment__buttons___vYAo_ {
   display: flex;
@@ -2019,10 +2024,10 @@ img::selection {
   top: -2px;
 }
 .order-shipment__orderItem____zenT .order-shipment__showAccordionBody___KPdMs {
-  visibility: visible;
+  display: block;
 }
 .order-shipment__orderItem____zenT .order-shipment__hideAccordionBody___IOXsZ {
-  visibility: hidden;
+  display: none;
 }
 
 .shipment-item__slide-fade-enter-active___PZcYX,
@@ -2323,12 +2328,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .shipment-item__caption-medium___MXqan,
+  .shipment-item__captionMedium___NjJG7 {
+    font-size: 11px;
+  }
+}
 .shipment-item__caption-semi-bold___UaKSI,
 .shipment-item__captionSemiBold___gV1Lp {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .shipment-item__caption-semi-bold___UaKSI,
+  .shipment-item__captionSemiBold___gV1Lp {
+    font-size: 11px;
+  }
 }
 .shipment-item__btn-link___ljHOl,
 .shipment-item__btnLink___b0uFd {
@@ -2906,12 +2923,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .shipment-tracking__caption-medium___pthjN,
+  .shipment-tracking__captionMedium___s9jz3 {
+    font-size: 11px;
+  }
+}
 .shipment-tracking__caption-semi-bold___H_RVN,
 .shipment-tracking__captionSemiBold___TTyHu {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .shipment-tracking__caption-semi-bold___H_RVN,
+  .shipment-tracking__captionSemiBold___TTyHu {
+    font-size: 11px;
+  }
 }
 .shipment-tracking__btn-link___P77hT,
 .shipment-tracking__btnLink___YL9mX {
@@ -3534,12 +3563,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .shipment-breakup__caption-medium___eJwty,
+  .shipment-breakup__captionMedium___ZXLI8 {
+    font-size: 11px;
+  }
+}
 .shipment-breakup__caption-semi-bold___gAeeK,
 .shipment-breakup__captionSemiBold___lFZ3J {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .shipment-breakup__caption-semi-bold___gAeeK,
+  .shipment-breakup__captionSemiBold___lFZ3J {
+    font-size: 11px;
+  }
 }
 .shipment-breakup__btn-link___SPzjH,
 .shipment-breakup__btnLink___KEJX3 {

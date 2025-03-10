@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .faq__caption-medium___Bvo0S,
+  .faq__captionMedium___js12T {
+    font-size: 11px;
+  }
+}
 .faq__caption-semi-bold___qWoeO,
 .faq__captionSemiBold___iHFwI {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .faq__caption-semi-bold___qWoeO,
+  .faq__captionSemiBold___iHFwI {
+    font-size: 11px;
+  }
 }
 .faq__btn-link___sN3QV,
 .faq__btnLink___oy6J5 {

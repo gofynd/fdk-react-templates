@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .order-tracking__caption-medium___tazF9,
+  .order-tracking__captionMedium___MdpIt {
+    font-size: 11px;
+  }
+}
 .order-tracking__caption-semi-bold___k2Wmw,
 .order-tracking__captionSemiBold___YjsHC {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .order-tracking__caption-semi-bold___k2Wmw,
+  .order-tracking__captionSemiBold___YjsHC {
+    font-size: 11px;
+  }
 }
 .order-tracking__btn-link___IsiPa,
 .order-tracking__btnLink___d6h_U {

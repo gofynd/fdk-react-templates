@@ -85,6 +85,7 @@ const FyImage = forwardRef(
       customClass,
       globalConfig,
       defer = true,
+      overlayCustomClass,
     },
     ref
   ) => {
@@ -240,7 +241,10 @@ const FyImage = forwardRef(
         ref={imgWrapperRef}
       >
         {showOverlay && (
-          <div className={styles.overlay} style={overlayStyles}></div>
+          <div
+            className={`${styles.overlay} ${overlayCustomClass}`}
+            style={overlayStyles}
+          ></div>
         )}
         <picture>
           {getSources().map((source, index) => (
