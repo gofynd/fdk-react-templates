@@ -15,6 +15,7 @@ function Register({
   isFormSubmitSuccess = false,
   isMobile = true,
   mobileLevel = "hard",
+  mobileInfo,
   isEmail = true,
   emailLevel = "hard",
   error = null,
@@ -57,9 +58,7 @@ function Register({
       gender: "male",
       email: "",
       phone: {
-        countryCode: "91",
-        mobile: "",
-        isValidNumber: false,
+        ...mobileInfo,
       },
       password: "",
       confirmPassword: "",
@@ -118,7 +117,7 @@ function Register({
             className={`${styles.registerNameInput} ${errors.firstName ? styles.errorInput : ""}`}
           >
             <label className={styles.inputTitle} htmlFor={firstnameId}>
-              First Name*
+              First Name<span className={styles.required}> *</span>
             </label>
             <input
               id={firstnameId}
@@ -141,7 +140,7 @@ function Register({
             className={`${styles.registerNameInput} ${errors.lastName ? styles.errorInput : ""}`}
           >
             <label className={styles.inputTitle} htmlFor={lastnameId}>
-              Last Name*
+              Last Name<span className={styles.required}> *</span>
             </label>
             <input
               id={lastnameId}
@@ -232,7 +231,7 @@ function Register({
             }`}
           >
             <label className={styles.inputTitle} htmlFor={passwordId}>
-              Password*
+              Password<span className={styles.required}> *</span>
             </label>
             <div className={styles.passwordInputWrapper}>
               <input
@@ -270,7 +269,7 @@ function Register({
             }`}
           >
             <label className={styles.inputTitle} htmlFor={confirmPasswordId}>
-              Confirm Password*
+              Confirm Password<span className={styles.required}> *</span>
             </label>
             <div className={styles.passwordInputWrapper}>
               <input

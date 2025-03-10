@@ -9,8 +9,11 @@ import * as styles from "./form-input-selector.less";
 const FormInputSelector = ({
   formData,
   control,
+  setValue = () => {},
   allowDropdown,
   isSingleField = false,
+  mobileNumberProps = {},
+  labelClassName = "",
 }) => {
   const {
     display = "",
@@ -42,7 +45,7 @@ const FormInputSelector = ({
             value={field?.value}
             onChange={(value) => {
               field?.onChange(value);
-              onChange(value);
+              onChange(value, setValue);
             }}
           />
         );
@@ -61,7 +64,7 @@ const FormInputSelector = ({
             disabled={disabled}
             onChange={(value) => {
               field?.onChange(value);
-              onChange(value);
+              onChange(value, setValue);
             }}
           />
         );
@@ -71,15 +74,15 @@ const FormInputSelector = ({
           <MobileNumber
             name={key}
             mobile={field?.value?.mobile}
-            label={`${display}${required ? " *" : ""}`}
+            label={display}
             error={error}
             isRequired={required}
             placeholder={placeholder}
             countryCode={countryCode}
             containerClassName={`${styles.customClass} ${isSingleField ? styles.singleField : ""}`}
-            inputClassName={styles.mobileInput}
-            labelClassName={styles.mobileLabel}
+            labelClassName={`${styles.mobileLabel} ${labelClassName}`}
             telInputClassName={styles.telInput}
+            {...mobileNumberProps}
             allowDropdown={allowDropdown}
             backgroundColor="transparent"
             height="40px"
@@ -87,7 +90,7 @@ const FormInputSelector = ({
             inputProps={{ readOnly }}
             onChange={(value) => {
               field?.onChange(value);
-              onChange(value);
+              onChange(value, setValue);
             }}
           />
         );
@@ -95,6 +98,7 @@ const FormInputSelector = ({
       default: {
         return (
           <FyInput
+            labelClassName={labelClassName}
             name={key}
             label={display}
             type={type}
@@ -110,7 +114,7 @@ const FormInputSelector = ({
             readOnly={readOnly}
             onChange={(event) => {
               field?.onChange(event?.target?.value);
-              onChange(event?.target?.value);
+              onChange(event?.target?.value, setValue);
             }}
           />
         );

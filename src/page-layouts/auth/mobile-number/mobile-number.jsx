@@ -25,6 +25,7 @@ function MobileNumber({
   height = "48px",
   textColor = "var(--textBody, #3c3131)",
   backgroundColor = "var(--pageBackground, #f8f8f8)",
+  ...rest
 }) {
   const inputId = useId();
   const phoneInputRef = useRef(null);
@@ -67,8 +68,12 @@ function MobileNumber({
           className={`${styles.inputTitle} ${labelClassName || ""}`}
           htmlFor={inputId}
         >
-          {label ||
-            `Mobile ${isRequired === "optional" ? " (optional)" : " *"}`}
+          {label || "Mobile "}
+          {isRequired === "optional" ? (
+            " (optional)"
+          ) : (
+            <span className={styles.required}> * </span>
+          )}
         </label>
       )}
 
@@ -79,7 +84,7 @@ function MobileNumber({
         onChange={handleChange}
         forceDialCode
         ref={phoneInputRef}
-        required={isRequired}
+        // required={isRequired}
         style={{
           "--react-international-phone-height": height,
           "--react-international-phone-text-color": textColor,
@@ -91,6 +96,9 @@ function MobileNumber({
           "--react-international-phone-selected-dropdown-item-background-color":
             "var(--highlightColor)",
           "--react-international-phone-dropdown-top": `calc(${height} + 4px)`,
+          "--react-international-phone-font-size": "14px",
+          "--react-international-phone-country-selector-border-color": `${error ? "var(--errorText, #b24141)" : "var(--dividerStokes, #d4d1d1)"}`,
+          direction: "ltr",
         }}
         countrySelectorStyleProps={{
           buttonContentWrapperStyle: {
@@ -110,10 +118,18 @@ function MobileNumber({
         inputClassName={`${styles.mobileNumberInput} ${inputClassName || ""}`}
         inputProps={{
           id: inputId,
+          autoComplete: "tel",
           ...inputProps,
         }}
         placeholder={placeholder}
         hideDropdown={!allowDropdown}
+        dialCodePreviewStyleProps={{
+          className: styles.dialCodePreview,
+        }}
+        disableDialCodePrefill={true}
+        disableDialCodeAndPrefix={true}
+        showDisabledDialCodeAndPrefix={true}
+        {...rest}
       />
       {error && <span className={styles.errorText}>{error.message}</span>}
     </div>

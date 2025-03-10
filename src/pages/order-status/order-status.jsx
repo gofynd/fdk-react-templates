@@ -244,23 +244,28 @@ function OrderStatus({
                 <div className={`${styles["payment-address"]} fontBody`}>
                   <div className={styles["payment-wrapper"]}>
                     <div className={styles["mode"]}>PAYMENT MODE</div>
-                    {orderData?.shipments?.[0]?.payment && (
-                      <div className={styles["mode-data"]}>
-                        <span>
-                          <img
-                            src={
-                              orderData?.shipments?.[0]?.payment?.logo ||
-                              "https://cdn.iconscout.com/icon/premium/png-512-thumb/debit-card-10-742447.png?f=webp&w=256"
-                            }
-                            alt={orderData?.shipments?.[0]?.payment?.mode}
-                          />
-                        </span>
-                        <span className={styles["mode-name"]}>
-                          {orderData?.shipments?.[0]?.payment?.display_name ||
-                            "COD"}
-                        </span>
-                      </div>
-                    )}
+                    {orderData?.shipments?.[0]?.payment_info?.length > 0 &&
+                      orderData?.shipments?.[0]?.payment_info?.map(
+                        (paymentInfo) => (
+                          <div
+                            key={paymentInfo?.display_name}
+                            className={styles["mode-data"]}
+                          >
+                            <span>
+                              <img
+                                src={
+                                  paymentInfo?.logo ||
+                                  "https://cdn.iconscout.com/icon/premium/png-512-thumb/debit-card-10-742447.png?f=webp&w=256"
+                                }
+                                alt={paymentInfo?.mode}
+                              />
+                            </span>
+                            <span className={styles["mode-name"]}>
+                              {paymentInfo?.display_name || "COD"}
+                            </span>
+                          </div>
+                        )
+                      )}
                   </div>
                   <div className={styles["delivery-wrapper"]}>
                     <div className={styles["delivery-header"]}>
