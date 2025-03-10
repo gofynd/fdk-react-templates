@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .reason-item__caption-medium___xZiVD,
+  .reason-item__captionMedium___qy6tX {
+    font-size: 11px;
+  }
+}
 .reason-item__caption-semi-bold___LEpl7,
 .reason-item__captionSemiBold___Jt9oT {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .reason-item__caption-semi-bold___LEpl7,
+  .reason-item__captionSemiBold___Jt9oT {
+    font-size: 11px;
+  }
 }
 .reason-item__btn-link___BmrQN,
 .reason-item__btnLink___sLtLt {

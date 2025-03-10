@@ -6,24 +6,36 @@
   .formContainer {
     position: relative;
     background-color: @White;
-    padding: 25px 5px 10px 30px;
-    margin-top: 25px;
+    padding: 16px;
+    margin-top: 16px;
     font-weight: 300;
-    font-size: 13px;
+    font-size: 12px;
+
+    @media @mobile {
+      padding: 16px;
+      margin-top: 12px;
+    }
+
+    @media @tablet-strict {
+      padding: 0;
+      margin-top: 0;
+    }
 
     .form {
-      .inputContainer,
-      .radioInputContainer {
-        margin-bottom: 11px;
-        margin-right: 25px;
-      }
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
 
       .radioInputContainer {
         margin-bottom: 11px;
         margin-right: 25px;
-
+        .formLabel {
+          .required {
+            color: @ErrorText;
+          }
+        }
         .radioContent {
-          margin: 7px 0 0;
+          margin: 4px 0 0;
 
           .radioInput {
             display: inline-flex;
@@ -52,14 +64,14 @@
       .inputContainer {
         display: flex;
         flex-direction: column;
+        gap: 4px;
       }
 
       .actionContainer {
         .submitBtn {
           border-radius: @ButtonRadius;
-          margin-top: 20px;
-          width: 94%;
-          margin-bottom: 15px;
+          margin-top: 4px;
+          width: 100%;
         }
       }
     }

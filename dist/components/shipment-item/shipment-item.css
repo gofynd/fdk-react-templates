@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .shipment-item__caption-medium___MXqan,
+  .shipment-item__captionMedium___NjJG7 {
+    font-size: 11px;
+  }
+}
 .shipment-item__caption-semi-bold___UaKSI,
 .shipment-item__captionSemiBold___gV1Lp {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .shipment-item__caption-semi-bold___UaKSI,
+  .shipment-item__captionSemiBold___gV1Lp {
+    font-size: 11px;
+  }
 }
 .shipment-item__btn-link___ljHOl,
 .shipment-item__btnLink___b0uFd {
