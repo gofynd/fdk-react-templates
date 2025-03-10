@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .sort-modal__caption-medium___ynqM6,
+  .sort-modal__captionMedium___hHjYm {
+    font-size: 11px;
+  }
+}
 .sort-modal__caption-semi-bold___heeCY,
 .sort-modal__captionSemiBold___aWTLB {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .sort-modal__caption-semi-bold___heeCY,
+  .sort-modal__captionSemiBold___aWTLB {
+    font-size: 11px;
+  }
 }
 .sort-modal__btn-link___movIT,
 .sort-modal__btnLink___LFdJk {
@@ -884,12 +896,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .modal__caption-medium___GbhtF,
+  .modal__captionMedium___zCJpb {
+    font-size: 11px;
+  }
+}
 .modal__caption-semi-bold___feZV5,
 .modal__captionSemiBold___pxAn7 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .modal__caption-semi-bold___feZV5,
+  .modal__captionSemiBold___pxAn7 {
+    font-size: 11px;
+  }
 }
 .modal__btn-link___rkrNS,
 .modal__btnLink___yqJlb {

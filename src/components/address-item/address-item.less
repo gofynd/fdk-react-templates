@@ -4,12 +4,13 @@
   display: flex;
   flex-direction: column;
   padding: 16px;
-  border-radius: 8px;
+
   margin-bottom: 15px;
   gap: 4px;
   border: 1px solid var(--dividerStokes);
   @media @mobile {
     padding: 4px;
+    border-width: 1px 0 !important;
   }
   .addressContentTop {
     display: flex;
@@ -55,6 +56,8 @@
     margin-top: 8px;
     line-height: 140%;
     color: var(--textBody);
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
   .addressMid,
   .phEnd {
