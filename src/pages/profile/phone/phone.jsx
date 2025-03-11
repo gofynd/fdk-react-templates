@@ -72,6 +72,7 @@ function Phone({
   return (
     <>
       <div className={styles.main}>
+        <div className={styles.header}>Phone Number</div>
         <div className={styles.formContainer}>
           <div className={styles.formItem}>
             {phoneNumbers?.map((phoneDetails) => {
@@ -82,47 +83,50 @@ function Phone({
                 countryCode: phoneCountryCode,
               } = phoneDetails;
               return (
-                <div className={styles.formInput} key={`phone-${phone}`}>
-                  <MobileNumber
-                    mobile={phone}
-                    countryCode={phoneCountryCode}
-                    height="40px"
-                    textColor="var(--textHeading, #26201a)"
-                    containerClassName={styles.phoneInputContainer}
-                    isShowLabel={false}
-                    disable
-                  />
-                  <div className={styles.actionContainer}>
-                    {verified && (
+                <>
+                  {primary ? (
+                    <div className={styles.formInput} key={`phone-${phone}`}>
+                      <MobileNumber
+                        mobile={phone}
+                        countryCode={phoneCountryCode}
+                        height="40px"
+                        textColor="var(--textHeading, #26201a)"
+                        containerClassName={styles.phoneInputContainer}
+                        isShowLabel={false}
+                        disable
+                      />
+                      <div className={styles.actionContainer}>
+                        {verified && (
+                          <FyButton
+                            color="success"
+                            size="small"
+                            className={styles.verified}
+                            disabled
+                          >
+                            Verified
+                          </FyButton>
+                        )}
+                        {/* {primary && (
                       <FyButton
-                        color="success"
+                        color="info"
                         size="small"
-                        className={styles.verified}
-                      >
-                        Verified
-                      </FyButton>
-                    )}
-                    {primary && (
-                      <FyButton
-                        color="success"
-                        size="small"
-                        variant="outlined"
+                        // variant="outlined"
                         className={styles.primary}
                       >
                         Primary
                       </FyButton>
-                    )}
-                    {!verified && (
-                      <FyButton
-                        variant="outlined"
-                        className={styles.verifyBtn}
-                        size="small"
-                        isLoading={isLoading}
-                      >
-                        Verify
-                      </FyButton>
-                    )}
-                    {!primary && verified && (
+                    )} */}
+                        {!verified && (
+                          <FyButton
+                            variant="outlined"
+                            className={styles.verifyBtn}
+                            size="small"
+                            isLoading={isLoading}
+                          >
+                            Verify
+                          </FyButton>
+                        )}
+                        {/* {!primary && verified && (
                       <FyButton
                         className={styles.verifyBtn}
                         variant="outlined"
@@ -142,23 +146,29 @@ function Phone({
                       >
                         <SvgWrapper svgSrc="cross-black" />
                       </FyButton>
-                    )}
-                  </div>
-                </div>
+                    )} */}
+                      </div>
+                    </div>
+                  ) : (
+                    <></>
+                  )}
+                </>
               );
             })}
           </div>
-          <div className={styles.submitBtnContainer}>
-            <FyButton
-              className={styles.btn}
-              onClick={() => handleShowAddModal(true)}
-            >
-              Add Number
-            </FyButton>
-          </div>
+          {/* {phoneNumbers?.length < 5 && (
+            <div className={styles.submitBtnContainer}>
+              <FyButton
+                className={styles.btn}
+                onClick={() => handleShowAddModal(true)}
+              >
+                Add Number
+              </FyButton>
+            </div>
+          )} */}
         </div>
       </div>
-      {showAddModal && (
+      {/* {showAddModal && (
         <AddPhoneModal
           sendOtpMobile={sendOtpMobile}
           resendOtp={resendOtp}
@@ -167,8 +177,8 @@ function Phone({
           countryCode={countryCode}
           onClose={() => handleShowAddModal(false)}
         />
-      )}
-      {showDeleteModal && (
+      )} */}
+      {/* {showDeleteModal && (
         <ConfirmModal
           text="Are you sure you want to remove the number?"
           isOpen={showDeleteModal}
@@ -176,7 +186,7 @@ function Phone({
           onConfirm={handleDelete}
           onCancel={handleCloseDeleteModal}
         />
-      )}
+      )} */}
     </>
   );
 }

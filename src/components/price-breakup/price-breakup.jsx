@@ -60,7 +60,10 @@ function PriceBreakup({
   const totalDiscount = useMemo(() => {
     let totalDis = 0;
     breakUpValues?.forEach((element) => {
-      if (element.value < 0) {
+      if (
+        element.value < 0 &&
+        ["coupon", "discount", "promotion"].includes(element.key)
+      ) {
         totalDis -= element.value;
       }
     });
@@ -133,7 +136,7 @@ function PriceBreakup({
       )}
       {showTotalDiscount && totalDiscount > 0 && (
         <div className={styles.discountPreviewContiner}>
-          <span>{greetingIcon}</span>
+          <span className={styles.icon}>{greetingIcon}</span>
           <span className={styles.discountPreviewMessage}>
             {discountGreetingMessage}
           </span>
