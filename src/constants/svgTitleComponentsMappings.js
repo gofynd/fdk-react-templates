@@ -130,6 +130,10 @@ import otherBanks from "../assets/images/other-banks.svg";
 import closeBold from "../assets/images/close-bold.svg";
 import NoCoupons from "../assets/images/no-coupon.svg";
 import infoIcon from "../assets/images/info.svg";
+import paymentTooltipArrow from "../assets/images/payment-tooltip.svg";
+import ArrowLeftLong from "../assets/images/arrow-left-long.svg";
+import friendsFamily from "../assets/images/friends-family.svg";
+import addAddress from "../assets/images/add-address.svg";
 
 export const svgTitleComponentsMappings = {
   "accordion-arrow": AccordionArrow,
@@ -139,6 +143,15 @@ export const svgTitleComponentsMappings = {
   "two-number": twoNumber,
   "three-number": threeNumber,
   "arrow-left": ArrowLeft,
+  "socail-facebook": SocailFacebook,
+  "socail-twitter": SocailTwitter,
+  "socail-google": SocailGoogle,
+  "socail-vimeo": SocailVimeo,
+  "socail-blog": SocailBlog,
+  "socail-instagram": SocailInstagram,
+  "socail-linkedin": SocailLinkedin,
+  "socail-youtube": SocailYoutube,
+  "socail-pinterest": SocailPinterest,
   search: SearchIcon,
   cart: CartIcon,
   "true-check": truecheck,
@@ -255,4 +268,8 @@ export const svgTitleComponentsMappings = {
   closeBold,
   NoCoupons,
   infoIcon,
+  paymentTooltipArrow,
+  ArrowLeftLong,
+  friendsFamily,
+  addAddress,
 };

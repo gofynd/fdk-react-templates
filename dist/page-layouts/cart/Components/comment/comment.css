@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .comment__caption-medium___HIEb0,
+  .comment__captionMedium___NxnB1 {
+    font-size: 11px;
+  }
+}
 .comment__caption-semi-bold___VdA6Z,
 .comment__captionSemiBold___lxBFk {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .comment__caption-semi-bold___VdA6Z,
+  .comment__captionSemiBold___lxBFk {
+    font-size: 11px;
+  }
 }
 .comment__btn-link___oAVer,
 .comment__btnLink___vLTIP {
@@ -479,21 +491,16 @@ img::selection {
 }
 .comment__commentOuterBox___tyEJJ {
   border: 1px solid var(--dividerStokes, #d4d1d1);
-  border-radius: 8px;
   box-sizing: border-box;
   line-height: 17px;
   display: flex;
   flex-direction: column;
   padding: 24px;
 }
-@media only screen and (max-width: 768px) {
-  .comment__commentOuterBox___tyEJJ {
-    border-radius: 4px;
-  }
-}
 @media only screen and (max-width: 480px) {
   .comment__commentOuterBox___tyEJJ {
     padding: 16px;
+    border-width: 1px 0;
   }
 }
 .comment__commentOuterBox___tyEJJ .comment__addCommentHeader___fP454 {
@@ -548,6 +555,10 @@ img::selection {
 }
 .comment__commentOuterBox___tyEJJ .comment__commentBoxMobile___hjowv .comment__addCommentLabel____MKGo .comment__addCommentTitle___RvbMe {
   font-weight: 600;
+  color: var(--textHeading, #26201a);
+}
+.comment__commentOuterBox___tyEJJ .comment__commentBoxMobile___hjowv .comment__addCommentLabel____MKGo .comment__body___sM494 {
+  color: var(--textBody, #3c3131);
 }
 .comment__commentOuterBox___tyEJJ .comment__commentBoxMobile___hjowv .comment__addBtn___ocbwH {
   margin-left: auto;
@@ -606,36 +617,58 @@ img::selection {
   font-weight: 400;
   font-size: 10px;
 }
+.comment__commentOuterBox___tyEJJ .comment__inputBox___hqxzy .comment__commentError___qZ8ZF {
+  font-weight: 400;
+  font-size: 10px;
+  color: var(--errorText, #b24141);
+  padding: 12px 12px 0px 12px;
+}
 .comment__modelHeader___zmsaH {
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid var(--dividerStokes, #d4d1d1);
   background: var(--dialogBackground, #fff);
-  padding: 16px 24px;
-  color: var(--textHeading);
+  padding: 16px;
+  color: var(--textHeading, #26201a);
   line-height: 140%;
   font-size: 16px;
   font-weight: 600;
+}
+@media only screen and (max-width: 768px) {
+  .comment__modelHeader___zmsaH {
+    font-size: 14px;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .comment__modalContainer___iL5Lo {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+  }
 }
 .comment__modalContent___YcBhL {
   padding: 24px 16px;
 }
 .comment__modalContent___YcBhL .comment__modalTextarea___OjB0E {
-  padding: 12px;
-  font-size: 12px;
+  padding: 16px;
+  font-size: 14px;
   font-weight: 400;
   width: 100%;
-  height: 100px;
-  border: 1px solid var(--dividerStokes);
+  min-height: 115px;
+  border: 1px solid var(--dividerStokes, #d4d1d1);
   border-radius: 4px;
   line-height: 140%;
-  color: var(--textLabel);
+  color: var(--textBody, #3c3131);
   box-sizing: border-box;
   resize: none;
+  background-color: var(--pageBackground, #f8f8f8);
+  vertical-align: middle;
 }
 .comment__modalContent___YcBhL .comment__modalTextarea___OjB0E:focus-visible {
   outline: none;
+}
+.comment__modalContent___YcBhL .comment__modalTextarea___OjB0E::placeholder {
+  color: var(--textLabel, #7d7676);
 }
 .comment__modalContent___YcBhL .comment__modalErrorWrapper___xXNPs {
   display: flex;
@@ -647,15 +680,14 @@ img::selection {
   padding: 12px 12px 0;
 }
 .comment__modalContent___YcBhL .comment__modalCommentLength___Q7CP1 {
-  border-radius: 8px;
-  padding: 12px;
-  color: var(--textLabel);
+  color: var(--textLabel, #7d7676);
   font-weight: 400;
-  font-size: 10px;
   width: max-content;
-  margin-top: 5px;
-  margin-bottom: 5px;
   margin-left: auto;
+  font-size: 12px;
+  line-height: 140%;
+  /* 16.8px */
+  margin-top: 8px;
 }
 .comment__modalContent___YcBhL .comment__modalActionBtn___TgLxV {
   background: var(--buttonPrimary);
@@ -974,12 +1006,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .modal__caption-medium___GbhtF,
+  .modal__captionMedium___zCJpb {
+    font-size: 11px;
+  }
+}
 .modal__caption-semi-bold___feZV5,
 .modal__captionSemiBold___pxAn7 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .modal__caption-semi-bold___feZV5,
+  .modal__captionSemiBold___pxAn7 {
+    font-size: 11px;
+  }
 }
 .modal__btn-link___rkrNS,
 .modal__btnLink___yqJlb {

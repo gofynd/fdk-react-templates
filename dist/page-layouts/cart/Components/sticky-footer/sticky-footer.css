@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .sticky-footer__caption-medium___lkF4Z,
+  .sticky-footer__captionMedium___i8LzW {
+    font-size: 11px;
+  }
+}
 .sticky-footer__caption-semi-bold___anYAZ,
 .sticky-footer__captionSemiBold___F2T2S {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .sticky-footer__caption-semi-bold___anYAZ,
+  .sticky-footer__captionSemiBold___F2T2S {
+    font-size: 11px;
+  }
 }
 .sticky-footer__btn-link___bo2eT,
 .sticky-footer__btnLink___XO4YJ {
@@ -585,13 +597,17 @@ img::selection {
 .sticky-footer__stickyFooter___vhgUO .sticky-footer__stickyBtnContainer___S3LCr {
   background-color: var(--pageBackground, #f8f8f8);
   border: 1px solid var(--dividerStokes, #d4d1d1);
-  box-shadow: 0px -1px 0px rgba(0, 0, 0, 0.12);
 }
 .sticky-footer__stickyFooter___vhgUO .sticky-footer__stickyBtnContainer1___irWcV {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 16px;
+}
+@media only screen and (max-width: 480px) {
+  .sticky-footer__stickyFooter___vhgUO .sticky-footer__stickyBtnContainer1___irWcV {
+    border-width: 1px 0;
+  }
 }
 .sticky-footer__stickyFooter___vhgUO .sticky-footer__cartCheckoutBtn3___zDfII {
   cursor: pointer;
@@ -609,7 +625,7 @@ img::selection {
 }
 .sticky-footer__stickyFooter___vhgUO .sticky-footer__secondaryCheckoutBtn___nTrMf {
   background: var(--buttonPrimary, #4e3f09);
-  border-radius: 4px;
+  border-radius: var(--buttonRadius, 0px);
   text-transform: uppercase;
   color: var(--buttonSecondary, #fff);
   width: 100%;

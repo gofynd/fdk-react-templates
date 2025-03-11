@@ -11,6 +11,7 @@ function Faq({
   updateSearchParams,
   hasCatQuery,
   isLoading = false,
+  defaultFaqCategory,
   EmptyStateComponent = () => <></>,
 }) {
   const handleQuestionClick = (index) => {
@@ -44,10 +45,11 @@ function Faq({
             <>
               <span
                 onClick={() => {
+                  defaultFaqCategory();
                   updateSearchParams({ action: "delete" });
                 }}
               >
-                <SvgWrapper svgSrc="arrow-left" />
+                <SvgWrapper svgSrc="ArrowLeftLong" />
               </span>
               <h3 className={`${styles["show-on-mobile"]} fontHeader`}>
                 {activeFaqCat?.title}
@@ -69,7 +71,9 @@ function Faq({
           </FDKLink>
         </div>
       </div>
-      <div className={styles["faq-container"]}>
+      <div
+        className={`${styles["faq-container"]} ${faqs?.length === 0 ? styles["emptyStateCentre"] : ""}`}
+      >
         {faqCategories?.length > 0 && (
           <div
             className={`${styles.sidebar} ${styles[hasCatQuery && "hide-on-mobile"]}`}
@@ -136,7 +140,7 @@ function Faq({
               </div>
             </div>
           ) : (
-            <EmptyStateComponent />
+            <EmptyStateComponent customClassName={styles.emptyState} />
           ))}
       </div>
     </div>
