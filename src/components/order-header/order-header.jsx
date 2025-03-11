@@ -44,10 +44,10 @@ function OrdersHeader({ title, subtitle, filters, flag }) {
     return DATE_FILTERS;
   };
   return (
-    <div className={`${styles.orderHeader}`}>
+    <div className={`${styles.orderHeader} ${styles.bottomLine}`}>
       <div
         className={`${styles.title} ${styles.boldmd}`}
-        style={{ marginLeft: flag ? 0 : "15px" }}
+        style={{ marginLeft: flag ? 0 : "16px" }}
       >
         {title}
         <span className={` ${styles.subTitle}`}>{subtitle}</span>
