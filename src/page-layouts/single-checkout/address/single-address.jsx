@@ -14,6 +14,7 @@ function SingleAddress({
   mapApiKey,
   showGoogleMap,
   loader,
+  isGuestUser = false,
 }) {
   const {
     allAddresses = [],
@@ -83,6 +84,7 @@ function SingleAddress({
             getFilteredCountries={getFilteredCountries}
             selectedCountry={selectedCountry?.display_name ?? ""}
             countryDetails={countryDetails}
+            isGuestUser={isGuestUser}
           ></AddressForm>
         </div>
       </Modal>

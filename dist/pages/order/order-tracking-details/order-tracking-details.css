@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .order-tracking-details__caption-medium___JCE5V,
+  .order-tracking-details__captionMedium___IG6Y0 {
+    font-size: 11px;
+  }
+}
 .order-tracking-details__caption-semi-bold___sIGNx,
 .order-tracking-details__captionSemiBold___pMQUZ {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .order-tracking-details__caption-semi-bold___sIGNx,
+  .order-tracking-details__captionSemiBold___pMQUZ {
+    font-size: 11px;
+  }
 }
 .order-tracking-details__btn-link___YrAFb,
 .order-tracking-details__btnLink___fAQyq {
@@ -536,17 +548,10 @@ img::selection {
 .order-tracking-details__shipmentBagItem___vn2Dj .order-tracking-details__bagItem___aCM7d {
   flex: 0 1 50%;
 }
-@media (max-width: 861px) {
+@media only screen and (max-width: 768px) {
   .order-tracking-details__shipmentBagItem___vn2Dj {
     width: 100%;
-    margin: 20px 0;
-    flex-direction: column;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .order-tracking-details__shipmentBagItem___vn2Dj {
-    width: 100%;
-    margin: 20px 0;
+    margin: 16px 0;
     flex-direction: column;
   }
 }
@@ -961,12 +966,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .empty-state__caption-medium___Cj9cn,
+  .empty-state__captionMedium___e0w26 {
+    font-size: 11px;
+  }
+}
 .empty-state__caption-semi-bold___ftnL8,
 .empty-state__captionSemiBold___yK0OI {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .empty-state__caption-semi-bold___ftnL8,
+  .empty-state__captionSemiBold___yK0OI {
+    font-size: 11px;
+  }
 }
 .empty-state__btn-link___PNnk2,
 .empty-state__btnLink___FxbuH {
@@ -1650,12 +1667,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .order-shipment__caption-medium___iVsKd,
+  .order-shipment__captionMedium___heY5O {
+    font-size: 11px;
+  }
+}
 .order-shipment__caption-semi-bold___GDTDo,
 .order-shipment__captionSemiBold___QfcUW {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .order-shipment__caption-semi-bold___GDTDo,
+  .order-shipment__captionSemiBold___QfcUW {
+    font-size: 11px;
+  }
 }
 .order-shipment__btn-link___tRzON,
 .order-shipment__btnLink___tclr2 {
@@ -1836,24 +1865,22 @@ img::selection {
 }
 .order-shipment__orderItem____zenT {
   color: #41434c;
-  background-color: var(--pageBackground, #f8f8f8);
-  border-radius: 5px;
-  margin: 20px 0px;
-  padding: 10px;
+  background-color: var(--highlightColor, #a7a7f8);
+  margin-top: 16px;
+  padding: 16px;
+}
+@media only screen and (max-width: 480px) {
+  .order-shipment__orderItem____zenT {
+    margin-top: 12px;
+  }
 }
 .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E {
   cursor: pointer;
   position: relative;
 }
-.order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E h3 {
-  margin: 10px;
-}
-.order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E h4 {
-  margin: 10px;
-}
 .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__filter___lnsey {
   position: absolute;
-  right: 20px;
+  right: 0px;
 }
 .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__filterArrowUp___g46yt {
   margin-left: auto;
@@ -1862,47 +1889,34 @@ img::selection {
 .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__filterArrowDown___XfgoC {
   margin-left: auto;
 }
-.order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__bold___YKz_e {
+.order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__orderId___LUgiY {
+  color: var(--textHeading, #26201a);
+  font-weight: 600;
+  line-height: 140%;
   font-weight: 700;
-  font-size: 20px;
+  font-size: 16px;
 }
-@media only screen and (max-width: 768px) {
-  .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__bold___YKz_e {
-    font-size: 18px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__bold___YKz_e {
-    font-size: 16px;
-  }
-}
-.order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__light___ivdxe {
-  font-weight: 300;
-  font-size: 13px;
-}
-@media only screen and (max-width: 768px) {
-  .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__light___ivdxe {
-    font-size: 12px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__light___ivdxe {
-    font-size: 12px;
-  }
+.order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__orderTime___jI_e_ {
+  color: var(--textLabel, #7d7676);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 140%;
+  margin-top: 4px;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 {
   animation: order-shipment__fadeIn___MRLFM 0.5s ease;
   border-top: none;
-  padding: 10px;
+  margin: 16px 0;
+  padding: 0;
   cursor: pointer;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentLeft___o0Q0q {
   display: table-cell;
-  width: 125px;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentLeft___o0Q0q img {
-  max-width: 110px;
-  max-height: 180px;
+  width: 80px;
+  height: 100px;
+  object-fit: cover;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentLeft___o0Q0q #order-shipment__total-item___SOgWJ {
   text-align: center;
@@ -1937,61 +1951,45 @@ img::selection {
     font-size: 14px;
   }
 }
-.order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__regular___mjZO2 {
-  font-weight: 400;
-  font-size: 14px;
-}
-@media only screen and (max-width: 768px) {
-  .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__regular___mjZO2 {
-    font-size: 13px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__regular___mjZO2 {
-    font-size: 13px;
-  }
-}
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq {
   display: table-cell;
   vertical-align: top;
-  color: #41434c;
+  padding-left: 16px;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__shipmentId___Ussac {
-  margin: 10px 0px;
-  line-height: 20px;
+  margin: 4px 0px;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__boldls___Lwbt_ {
-  font-weight: 700;
-  font-size: 14px;
-}
-@media only screen and (max-width: 768px) {
-  .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__boldls___Lwbt_ {
-    font-size: 13px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__boldls___Lwbt_ {
-    font-size: 13px;
-  }
+  font-weight: 600;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__uktLinks___v7i7G {
-  color: var(--buttonLink, #b1655b);
-  font-weight: 700;
   cursor: pointer;
   text-decoration: none;
+  color: var(--textHeading, #26201a);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 140%;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__shipmentStats___i5laS {
-  margin: 10px 0px;
+  margin: 4px 0px;
+  color: var(--textLabel, #7d7676);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 140%;
+  /* 16.8px */
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__status___ws6ge {
-  text-align: center;
-  color: #ffffff;
-  padding: 10px;
-  display: inline-flex;
-  border-radius: 3px;
+  border-radius: 4px;
+  background: var(--successBackground, #c2dbc9);
+  padding: 4px;
+  color: var(--successText, #1c958f);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 140%;
+  width: fit-content;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__shipmentBrands___QyjCM {
-  margin: 10px 0px;
+  margin: 8px 0px;
 }
 .order-shipment__orderItem____zenT .order-shipment__buttons___vYAo_ {
   display: flex;
@@ -2019,10 +2017,10 @@ img::selection {
   top: -2px;
 }
 .order-shipment__orderItem____zenT .order-shipment__showAccordionBody___KPdMs {
-  visibility: visible;
+  display: block;
 }
 .order-shipment__orderItem____zenT .order-shipment__hideAccordionBody___IOXsZ {
-  visibility: hidden;
+  display: none;
 }
 
 .shipment-item__slide-fade-enter-active___PZcYX,
@@ -2323,12 +2321,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .shipment-item__caption-medium___MXqan,
+  .shipment-item__captionMedium___NjJG7 {
+    font-size: 11px;
+  }
+}
 .shipment-item__caption-semi-bold___UaKSI,
 .shipment-item__captionSemiBold___gV1Lp {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .shipment-item__caption-semi-bold___UaKSI,
+  .shipment-item__captionSemiBold___gV1Lp {
+    font-size: 11px;
+  }
 }
 .shipment-item__btn-link___ljHOl,
 .shipment-item__btnLink___b0uFd {
@@ -2504,10 +2514,6 @@ img::selection {
     display: none !important;
   }
 }
-.shipment-item__bagItem___YVBW1 {
-  display: flex;
-  border-bottom: 1px solid #eeeeee;
-}
 .shipment-item__bagItem___YVBW1 input {
   display: none;
 }
@@ -2516,15 +2522,17 @@ img::selection {
   align-items: center;
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagImg___BQldP {
-  margin: 20px;
+  display: flex;
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagImg___BQldP img {
-  max-width: 54px;
-  max-height: 90px;
+  width: 80px;
+  object-fit: cover;
   cursor: pointer;
 }
-.shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G {
-  margin: 20px 0px;
+.shipment-item__bagItem___YVBW1 .shipment-item__label___SjeMm {
+  display: flex;
+  padding: 0 16px;
+  gap: 16px;
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__regularxxs___nZRqX {
   font-weight: 400;
@@ -2559,30 +2567,34 @@ img::selection {
   }
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__brand___wCMcA {
-  color: #41434c;
-}
-.shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__boldsm___YZvIi {
-  font-weight: 700;
+  color: var(--textHeading, #26201a);
   font-size: 16px;
-}
-@media only screen and (max-width: 768px) {
-  .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__boldsm___YZvIi {
-    font-size: 14px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__boldsm___YZvIi {
-    font-size: 14px;
-  }
+  font-weight: 600;
+  line-height: 140%;
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__company___bYINP,
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__seller___dX0qA {
   margin-bottom: 10px;
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__chip___KfRHJ {
-  border-radius: 3px;
   display: inline-block;
-  margin: 10px 0px;
+  margin: 4px 0px;
+}
+.shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__chip___KfRHJ .shipment-item__itemSize___Yajtb {
+  color: var(--textHeading, #26201a);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 140%;
+}
+.shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__chip___KfRHJ .shipment-item__itemSeparator___aU4Kv {
+  color: var(--dividerStokes, #d4d1d1);
+  font-size: 14px;
+}
+.shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__chip___KfRHJ .shipment-item__itemQty___u3nu1 {
+  color: var(--textLabel, #7d7676);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 140%;
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__margin___aoRFj {
   color: var(--errorText, #b24141);
@@ -2600,12 +2612,10 @@ img::selection {
   margin-left: 5px;
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__effectivePrice___Kqia8 {
-  font-weight: 500;
-  line-height: 20px;
-  font-size: 14px;
-}
-.shipment-item__bagItem___YVBW1 .shipment-item__label___SjeMm {
-  display: flex;
+  color: var(--textHeading, #26201a);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 140%;
 }
 
 .shipment-tracking__slide-fade-enter-active___ZePu9,
@@ -2906,12 +2916,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .shipment-tracking__caption-medium___pthjN,
+  .shipment-tracking__captionMedium___s9jz3 {
+    font-size: 11px;
+  }
+}
 .shipment-tracking__caption-semi-bold___H_RVN,
 .shipment-tracking__captionSemiBold___TTyHu {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .shipment-tracking__caption-semi-bold___H_RVN,
+  .shipment-tracking__captionSemiBold___TTyHu {
+    font-size: 11px;
+  }
 }
 .shipment-tracking__btn-link___P77hT,
 .shipment-tracking__btnLink___YL9mX {
@@ -3093,10 +3115,21 @@ img::selection {
   opacity: 1 !important;
 }
 .shipment-tracking__trackingContainer___tHFOQ {
-  padding: 20px;
+  padding: 0;
+}
+@media only screen and (max-width: 480px) {
+  .shipment-tracking__trackingContainer___tHFOQ {
+    padding: 16px;
+  }
 }
 .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr {
-  border: 1px solid #eeeeee;
+  border-radius: 4px;
+  padding: 16px;
+}
+@media only screen and (max-width: 480px) {
+  .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr {
+    border: 1px solid var(--dividerStokes, #d4d1d1);
+  }
 }
 .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__boldsm___aDLPp {
   font-weight: 700;
@@ -3131,8 +3164,8 @@ img::selection {
 }
 .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__status___B417y {
   display: flex;
-  padding: 10px;
-  border-bottom: 1px solid #eeeeee;
+  padding: 0 0 16px;
+  border-bottom: 1px solid var(--dividerStokes, #d4d1d1);
   position: relative;
   align-items: center;
 }
@@ -3150,7 +3183,7 @@ img::selection {
 }
 .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz {
   display: flex;
-  padding: 20px;
+  margin: 16px 0;
   opacity: 0.5;
 }
 .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__trackInfo___A5RXX {
@@ -3216,7 +3249,9 @@ img::selection {
 .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI {
   display: flex;
   justify-content: center;
-  color: var(--buttonLink, #b1655b);
+  color: var(--textHeading, #26201a);
+  border-top: 1px solid var(--dividerStokes, #d4d1d1);
+  padding-top: 16px;
 }
 .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI div,
 .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI a {
@@ -3224,12 +3259,17 @@ img::selection {
   justify-content: center;
   display: flex;
   cursor: pointer;
-  padding: 15px 10px;
-  border-top: 1px solid #eeeeee;
-  border-right: 1px solid #eeeeee;
   text-align: center;
   align-items: center;
-  font-size: 14px;
+  color: var(--textHeading, #26201a);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 140%;
+  border-right: 1px solid var(--dividerStokes, #d4d1d1);
+}
+.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI div:last-child,
+.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI a:last-child {
+  border-right: none;
 }
 .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI div:hover,
 .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI a:hover {
@@ -3534,12 +3574,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .shipment-breakup__caption-medium___eJwty,
+  .shipment-breakup__captionMedium___ZXLI8 {
+    font-size: 11px;
+  }
+}
 .shipment-breakup__caption-semi-bold___gAeeK,
 .shipment-breakup__captionSemiBold___lFZ3J {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .shipment-breakup__caption-semi-bold___gAeeK,
+  .shipment-breakup__captionSemiBold___lFZ3J {
+    font-size: 11px;
+  }
 }
 .shipment-breakup__btn-link___SPzjH,
 .shipment-breakup__btnLink___KEJX3 {
@@ -3747,16 +3799,28 @@ img::selection {
   }
 }
 .shipment-breakup__billing___FTdqB {
-  padding: 10px;
+  padding: 16px;
   position: relative;
 }
 .shipment-breakup__billing___FTdqB div {
-  margin: 15px;
+  margin-bottom: 8px;
+}
+.shipment-breakup__billing___FTdqB div:last-child {
+  margin-bottom: 0px;
+}
+.shipment-breakup__billing___FTdqB .shipment-breakup__label___SHy4X {
+  color: var(--textBody, #3c3131);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 140%;
 }
 .shipment-breakup__billing___FTdqB .shipment-breakup__values___Ji3lV {
   position: absolute;
-  right: 30px;
+  right: 16px;
+  color: var(--textBody, #3c3131);
+  font-size: 12px;
   font-weight: 400;
+  line-height: 140%;
 }
 .shipment-breakup__billing___FTdqB .shipment-breakup__total___X7nmQ {
   padding-top: 10px;

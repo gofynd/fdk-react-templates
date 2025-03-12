@@ -17,7 +17,7 @@
         object-fit: cover;
       }
       .overlay {
-        opacity: var(--overlay-opacity);
+        opacity: var(--overlay-opacity) !important;
       }
     }
   }
@@ -40,7 +40,7 @@
   padding: 80px 0px;
   gap: 80px;
   @media @tablet {
-    flex-direction: column;
+    flex-direction: column-reverse;
     width: 100%;
     padding: 32px 16px;
     gap: 48px;
@@ -68,6 +68,11 @@
       svg g > path {
         fill: @TextHeading;
       }
+      span {
+        display: inline-block;
+        word-break: break-word;
+        overflow-wrap: break-word;
+      }
     }
   }
   form {
@@ -87,10 +92,10 @@
     textarea {
       height: 118px;
     }
-    .inputPlaceholder::placeholder {
-      color: @TextLabel;
-      opacity: 1;
-    }
+    // .inputPlaceholder::placeholder {
+    //   color: @TextLabel;
+    //   opacity: 1;
+    // }
     .inputPlaceholder:focus::placeholder {
       color: @TextBody;
     }
@@ -98,6 +103,8 @@
 }
 
 .btn_submit {
+  background-color: @ButtonPrimary;
+  color: @ButtonSecondary;
   height: 48px;
   padding: 20px 24px !important;
   width: unset !important;
@@ -116,4 +123,9 @@
   font-weight: 400;
   line-height: normal;
   letter-spacing: -0.24px;
+}
+.iconSpacing {
+  @media @mobile {
+    gap: 12px;
+  }
 }
