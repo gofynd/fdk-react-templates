@@ -72,7 +72,7 @@ function FilterModal({
       isOpen={isOpen}
       modalType="right-modal"
       closeDialog={handleModalClose}
-      title="Filter"
+      title="Filters"
     >
       <div className={styles.contentWrapper}>
         <div className={styles.modalContent}>

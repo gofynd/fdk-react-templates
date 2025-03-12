@@ -34,19 +34,36 @@
 }
 
 .main {
-  color: @Mako;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  padding: 24px;
+  padding-left: 0;
+
+  @media @mobile {
+    padding: 16px;
+  }
+
+  .header {
+    padding: 0 0 24px;
+    border-bottom: 1px solid @DividerStokes;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 140%;
+
+    @media @mobile {
+      font-size: 16px;
+      padding: 0 0 16px;
+    }
+  }
 
   .formContainer {
-    background-color: @White;
-    padding: 25px 5px 10px 30px;
-    margin: 25px auto auto;
     display: flex;
     flex-direction: column;
+    padding-top: 24px;
+
     @media @mobile {
-      padding: 25px 0px 10px 3px;
       width: 100%;
+      padding-top: 16px;
     }
     .customInput {
       display: flex;
@@ -57,28 +74,22 @@
       }
     }
     .btn {
-      min-width: 250px;
       border-radius: @ButtonRadius;
-      width: 65%;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 140%;
+      text-transform: uppercase;
+      height: 40px;
+      padding: 20px 16px;
     }
     .submitBtn {
       margin-top: 20px;
     }
     .formItem {
-      margin-right: 25px;
-
-      @media @mobile {
-        margin-right: 5px;
-      }
-
       .formInput {
-        margin: 7px 0px 0px;
         display: flex;
-        align-items: center;
-
-        @media @mobile {
-          gap: 4px;
-        }
+        align-items: stretch;
+        gap: 12px;
       }
     }
 
@@ -89,19 +100,10 @@
     }
 
     .actionContainer {
-      display: flex;
-      align-items: center;
-      flex-wrap: nowrap;
-
-      @media @mobile {
-        justify-content: center;
-      }
-
       .verified {
-        padding: 12px;
-        border-radius: 2px;
-        margin: 0px 5px;
-        height: auto;
+        padding: 0 12px;
+        border-radius: 4px;
+        height: 100%;
         cursor: unset;
       }
 
@@ -113,11 +115,10 @@
       }
 
       .verifyBtn {
-        padding: 10px;
-        margin-right: 10px;
-        margin-left: 5px;
+        padding: 0 12px;
+        border-radius: 4px;
+        height: 100%;
         white-space: nowrap;
-        height: auto;
       }
 
       .removeBtn {
@@ -128,6 +129,23 @@
         padding: 0;
         height: auto;
       }
+    }
+  }
+
+  .emptyContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-height: 40vh;
+    padding-top: 24px;
+    align-items: center;
+    justify-content: center;
+
+    .emptyText {
+      color: @TextHeading;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 140%;
     }
   }
 }

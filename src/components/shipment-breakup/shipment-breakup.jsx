@@ -36,7 +36,7 @@ function ShipmentBreakup({ breakup }) {
               <>
                 {index !== breakup.length - 1 && (
                   <span>
-                    <span>{item.display}</span>
+                    <span className={styles.label}>{item.display}</span>
                     <span className={`${styles.values}`}>
                       {getPriceFormat(
                         item.currency_symbol,
@@ -47,7 +47,7 @@ function ShipmentBreakup({ breakup }) {
                 )}
                 {index === breakup.length - 1 && (
                   <span>
-                    <span>{item.display}</span>
+                    <span className={styles.label}>{item.display}</span>
                     <span className={`${styles.values}`}>
                       {getPriceFormat(
                         item.currency_symbol,
