@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import * as styles from "./delivery-location.less";
-import { isValidPincode } from "../../../../helper/utils";
 import Modal from "../../../../components/core/modal/modal";
 import AddressItem from "../../../../components/address-item/address-item";
 import AddressForm from "../../../../components/address-form/address-form";
 function DeliveryLocation({
-  deliveryLocation,
   pincode = "",
+  deliveryLocation,
+  pincodeInput,
   error = null,
   isPincodeModalOpen = false,
   isAddressModalOpen = false,
@@ -29,7 +29,7 @@ function DeliveryLocation({
   isInternationalShippingEnabled = false,
   addressFormSchema,
   addressItem,
-  setI18nDetails = () => {},
+  onCountryChange = () => {},
   handleCountrySearch = () => {},
   getFilteredCountries = () => {},
   selectedCountry,
@@ -47,6 +47,7 @@ function DeliveryLocation({
       pincode,
     },
   });
+  const { displayName, maxLength, validatePincode } = pincodeInput;
 
   useEffect(() => {
     if (error) {
@@ -81,9 +82,10 @@ function DeliveryLocation({
       <Modal
         isOpen={isPincodeModalOpen}
         closeDialog={onCloseModalClick}
-        title="Delivery PIN Code"
+        title={`Delivery ${displayName}`}
         containerClassName={styles.pincodeModal}
         bodyClassName={styles.modalBody}
+        headerClassName={styles.modalHeader}
       >
         <form
           className={styles.modalPincodeContainer}
@@ -92,11 +94,11 @@ function DeliveryLocation({
           <div className={styles.modalPincodeInput}>
             <input
               type="text"
-              placeholder="Enter Pincode"
+              placeholder={`Enter ${displayName}`}
               {...register("pincode", {
-                validate: (value) =>
-                  isValidPincode(value) || "Please enter valid pincode",
+                validate: validatePincode,
               })}
+              maxLength={maxLength}
             />
           </div>
           <button className={styles.modalChangePinCodeButton} type="submit">
@@ -125,11 +127,11 @@ function DeliveryLocation({
               <div className={styles.modalPincodeInput}>
                 <input
                   type="text"
-                  placeholder="Enter Pincode"
+                  placeholder={`Enter ${displayName}`}
                   {...register("pincode", {
-                    validate: (value) =>
-                      isValidPincode(value) || "Please enter valid pincode",
+                    validate: validatePincode,
                   })}
+                  maxLength={maxLength}
                 />
               </div>
               <button className={styles.modalChangePinCodeButton} type="submit">
@@ -218,7 +220,7 @@ function DeliveryLocation({
               showGoogleMap={showGoogleMap}
               onGetLocality={getLocality}
               defaultPincode={pincode}
-              setI18nDetails={setI18nDetails}
+              setI18nDetails={onCountryChange}
               handleCountrySearch={handleCountrySearch}
               getFilteredCountries={getFilteredCountries}
               selectedCountry={selectedCountry?.display_name ?? ""}

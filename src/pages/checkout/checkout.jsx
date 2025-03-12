@@ -29,8 +29,10 @@ function Checkout({
   onPriceDetailsClick,
   cartCouponProps,
   cartCommentProps,
+  buybox = {},
 }) {
   const [cancelQrPayment, setCancelQrPayment] = useState(null);
+  const { onFailedGetCartShipmentDetails } = address;
   return (
     <div className={`${styles.mainContainer} fontBody`}>
       <div className={styles["view-mobile"]}>
@@ -57,6 +59,7 @@ function Checkout({
           isHyperlocal={isHyperlocal}
           convertHyperlocalTat={convertHyperlocalTat}
           loader={loader}
+          buybox={buybox}
         ></SinglePageShipment>
         <CheckoutPayment
           payment={payment}
@@ -66,6 +69,7 @@ function Checkout({
           breakUpValues={breakupValues}
           showPaymentOptions={showPaymentOptions}
           setCancelQrPayment={setCancelQrPayment}
+          onFailedGetCartShipmentDetails={onFailedGetCartShipmentDetails}
         ></CheckoutPayment>
       </div>
       <div className={styles.rightContainer}>

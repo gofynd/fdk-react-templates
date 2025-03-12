@@ -68,13 +68,13 @@ function SortModal({
         </div>
         <div className={styles.modalFooter}>
           <button className={styles.resetBtn} onClick={onResetBtnClick}>
-            Reset
+            CANCEL
           </button>
           <button
             className={styles.applyBtn}
             onClick={() => onApplyBtnClick(selectedSort)}
           >
-            Apply
+            APPLY
           </button>
         </div>
       </div>

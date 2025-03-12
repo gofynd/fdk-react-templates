@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .listing-description__caption-medium___W4MXk,
+  .listing-description__captionMedium___SNge0 {
+    font-size: 11px;
+  }
+}
 .listing-description__caption-semi-bold___dfN2m,
 .listing-description__captionSemiBold___MiV23 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .listing-description__caption-semi-bold___dfN2m,
+  .listing-description__captionSemiBold___MiV23 {
+    font-size: 11px;
+  }
 }
 .listing-description__btn-link___Zae4w,
 .listing-description__btnLink___YOTpf {
@@ -505,6 +517,11 @@ img::selection {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+@media only screen and (max-width: 480px) {
+  .listing-description__descriptionWrapper___tzE5e .listing-description__descriptionContent___nGHJ_ {
+    font-size: 11px;
+  }
 }
 .listing-description__descriptionWrapper___tzE5e .listing-description__actionBtn___Xw4a9 {
   font-weight: 500;

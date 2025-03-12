@@ -96,6 +96,7 @@ function OtpForm({
     setError,
     watch,
     clearErrors,
+    resetField,
   } = useForm();
   const mobileOtp = watch("mobileOtp");
 
@@ -119,6 +120,11 @@ function OtpForm({
       clearErrors("root");
     }
   }, [error]);
+
+  const resendOtp = () => {
+    resetField("mobileOtp");
+    onResendOtpClick(mobileInfo);
+  };
 
   return (
     <>
@@ -157,7 +163,7 @@ function OtpForm({
       </form>
       <button
         className={styles.resendOtpBtn}
-        onClick={() => onResendOtpClick(mobileInfo)}
+        onClick={resendOtp}
         disabled={isResendBtnDisabled}
       >
         {`Resend OTP${isResendBtnDisabled ? ` (${otpResendTime}S)` : ""}`}

@@ -11,7 +11,7 @@ function Login({
   logo = {},
   title = "Login",
   subTitle = "Login to Shop",
-  isPassword = true,
+  isPassword = false,
   isOtp = true,
   showLoginToggleButton = true,
   isRegisterEnabled = true,
