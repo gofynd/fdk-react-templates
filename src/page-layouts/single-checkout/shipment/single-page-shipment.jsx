@@ -3,6 +3,7 @@ import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./single-page-shipment.less";
 import SingleShipmentContent from "./single-shipment-content";
 import { useNavigate } from "react-router-dom";
+import { useGlobalStore } from "fdk-core/utils";
 
 function SinglePageShipment({
   shipments,
@@ -14,6 +15,7 @@ function SinglePageShipment({
   isHyperlocal = false,
   convertHyperlocalTat = () => {},
   loader,
+  buybox = {},
 }) {
   const navigate = useNavigate();
   const getShipmentCount = shipments?.length || 0;
@@ -60,6 +62,7 @@ function SinglePageShipment({
             isHyperlocal={isHyperlocal}
             convertHyperlocalTat={convertHyperlocalTat}
             loader={loader}
+            buybox={buybox}
           ></SingleShipmentContent>
         </>
       ) : (

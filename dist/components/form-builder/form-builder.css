@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .form-builder__caption-medium___ciMT5,
+  .form-builder__captionMedium___zTy3t {
+    font-size: 11px;
+  }
+}
 .form-builder__caption-semi-bold___ws6Mk,
 .form-builder__captionSemiBold___rvL11 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .form-builder__caption-semi-bold___ws6Mk,
+  .form-builder__captionSemiBold___rvL11 {
+    font-size: 11px;
+  }
 }
 .form-builder__btn-link___xcjD3,
 .form-builder__btnLink___dtOVF {
@@ -857,12 +869,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .fy-input__caption-medium___ypzRG,
+  .fy-input__captionMedium___cFBcK {
+    font-size: 11px;
+  }
+}
 .fy-input__caption-semi-bold___WmtaG,
 .fy-input__captionSemiBold___UuNTY {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .fy-input__caption-semi-bold___WmtaG,
+  .fy-input__captionSemiBold___UuNTY {
+    font-size: 11px;
+  }
 }
 .fy-input__btn-link___kKnNG,
 .fy-input__btnLink___gGoDJ {
@@ -1054,9 +1078,16 @@ img::selection {
   font-size: 12px;
   line-height: 21px;
 }
+.fy-input__label___YQgmr span {
+  color: var(--errorText, #b24141);
+}
+.fy-input__required___MaAlL {
+  color: var(--errorText, #b24141);
+}
 .fy-input__floating___jgtoq {
   position: absolute;
   transform: translateY(-50%) scale(0.9);
+  z-index: 1;
   background: #ffffff;
   padding: 0 0.3rem;
   margin: 0 0.5rem;
@@ -1093,7 +1124,6 @@ img::selection {
 }
 .fy-input__fyInput___S4Mtu:disabled {
   color: var(--textSecondary);
-  border: 1px solid #cccccc;
 }
 .fy-input__fyInput___S4Mtu:focus {
   border-color: var(--buttonPrimary, #4e3f09);
@@ -1112,6 +1142,11 @@ img::selection {
   border-radius: 5px;
   padding: 0 0.7rem;
   height: 48px;
+}
+.fy-input__outlined___CEaKm.fy-input__inputDisable___M8Zn2 {
+  border: 1px solid #cccccc;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 .fy-input__outlined___CEaKm.fy-input__medium___L3QsD {
   height: 40px;
@@ -1453,12 +1488,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .fy-input-group__caption-medium___ULDb6,
+  .fy-input-group__captionMedium___GIuhk {
+    font-size: 11px;
+  }
+}
 .fy-input-group__caption-semi-bold___B0YEk,
 .fy-input-group__captionSemiBold___aQt3D {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .fy-input-group__caption-semi-bold___B0YEk,
+  .fy-input-group__captionSemiBold___aQt3D {
+    font-size: 11px;
+  }
 }
 .fy-input-group__btn-link___gqxe4,
 .fy-input-group__btnLink___ltxo_ {
@@ -1649,6 +1696,9 @@ img::selection {
   color: var(--textLabel, #7d7676);
   font-size: 12px;
   line-height: 21px;
+}
+.fy-input-group__required___A8_zF {
+  color: var(--errorText, #b24141);
 }
 .fy-input-group__fyInput___ufjFf {
   accent-color: var(--buttonPrimary, #4e3f09);
@@ -1971,12 +2021,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .fy-dropdown__caption-medium___HCy1Y,
+  .fy-dropdown__captionMedium___BdPX5 {
+    font-size: 11px;
+  }
+}
 .fy-dropdown__caption-semi-bold___RDalx,
 .fy-dropdown__captionSemiBold___t1x78 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .fy-dropdown__caption-semi-bold___RDalx,
+  .fy-dropdown__captionSemiBold___t1x78 {
+    font-size: 11px;
+  }
 }
 .fy-dropdown__btn-link___tRk4r,
 .fy-dropdown__btnLink___pjJ4Q {
@@ -2162,6 +2224,9 @@ img::selection {
   font-weight: 400;
   font-size: 12px;
   padding-top: 5px;
+}
+.fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__required___h4JQY {
+  color: var(--errorText, #b24141);
 }
 .fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__dropdown___N1atH {
   box-sizing: border-box;
@@ -2551,12 +2616,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .mobile-number__caption-medium___syZZb,
+  .mobile-number__captionMedium___iKNxh {
+    font-size: 11px;
+  }
+}
 .mobile-number__caption-semi-bold___Rbomr,
 .mobile-number__captionSemiBold___cKKg4 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .mobile-number__caption-semi-bold___Rbomr,
+  .mobile-number__captionSemiBold___cKKg4 {
+    font-size: 11px;
+  }
 }
 .mobile-number__btn-link___QbUx_,
 .mobile-number__btnLink___dTaco {
@@ -2754,30 +2831,29 @@ img::selection {
 .mobile-number__mobileInputWrapper___Na12n.mobile-number__errorInput___TKkzT .mobile-number__mobileNumberInput___iRnFG {
   border: 1px solid var(--errorText, #b24141);
 }
-.mobile-number__mobileInputContainer___deIgv {
+.mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv {
   height: auto;
 }
-.mobile-number__mobileNumberInput___iRnFG {
-  height: 48px;
-  width: 100%;
-  box-sizing: border-box;
-  color: var(--textBody, #3c3131);
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 19.6px;
-  display: flex;
-  border: 1px solid var(--dividerStokes, #d4d1d1);
-  border-radius: 4px;
-  background-color: var(--pageBackground, #f8f8f8);
+.mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__dialCodePreview___E0m4Z {
+  border-inline: none;
   padding-right: 4px;
 }
-.mobile-number__mobileNumberInput___iRnFG:focus-visible {
+.mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG {
+  width: 100%;
+  font-weight: 400;
+  display: flex;
+  border-left: none;
+  padding-left: 4px;
+}
+.mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG:focus-visible {
   outline: none;
 }
-.mobile-number__mobileNumberInput___iRnFG::placeholder {
+.mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG::placeholder {
   color: var(--textLabel, #7d7676);
   opacity: 0.3;
+}
+.mobile-number__required___yHCeh {
+  color: var(--errorText, #b24141);
 }
 .mobile-number__countryDropdown___GP6Fo {
   background-color: aquamarine;
@@ -3094,12 +3170,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .fy-button__caption-medium___PSB4T,
+  .fy-button__captionMedium___iW0z_ {
+    font-size: 11px;
+  }
+}
 .fy-button__caption-semi-bold___FFG2N,
 .fy-button__captionSemiBold___czTMx {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .fy-button__caption-semi-bold___FFG2N,
+  .fy-button__captionSemiBold___czTMx {
+    font-size: 11px;
+  }
 }
 .fy-button__btn-link___bKkQ1,
 .fy-button__btnLink___jOAiL {
@@ -3397,7 +3485,10 @@ img::selection {
 }
 .fy-button__outlined___WccQN.fy-button__primary___xKz1S:hover {
   background-color: var(--buttonPrimary, #4e3f09);
-  color: #ffffff;
+  color: var(--buttonSecondary, #fff);
+}
+.fy-button__outlined___WccQN.fy-button__primary___xKz1S:hover svg path {
+  fill: var(--buttonSecondary, #fff);
 }
 .fy-button__outlined___WccQN.fy-button__secondary___z_hBB {
   border: 1px solid var(--buttonSecondary, #fff);
@@ -3888,12 +3979,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .fy-image__caption-medium___EGS8Z,
+  .fy-image__captionMedium___qaNIm {
+    font-size: 11px;
+  }
+}
 .fy-image__caption-semi-bold___k6m14,
 .fy-image__captionSemiBold___gqTxg {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .fy-image__caption-semi-bold___k6m14,
+  .fy-image__captionSemiBold___gqTxg {
+    font-size: 11px;
+  }
 }
 .fy-image__btn-link___pHMFk,
 .fy-image__btnLink___GOMHZ {
@@ -4405,12 +4508,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .skeletons__caption-medium___Fqp0a,
+  .skeletons__captionMedium___m7kLu {
+    font-size: 11px;
+  }
+}
 .skeletons__caption-semi-bold___rpF8T,
 .skeletons__captionSemiBold___hZxFt {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .skeletons__caption-semi-bold___rpF8T,
+  .skeletons__captionSemiBold___hZxFt {
+    font-size: 11px;
+  }
 }
 .skeletons__btn-link___jeA93,
 .skeletons__btnLink___peGYA {

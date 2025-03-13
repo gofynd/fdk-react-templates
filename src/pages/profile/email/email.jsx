@@ -91,84 +91,95 @@ function Email({
   return (
     <>
       <div className={styles.main}>
-        <div className={styles.formContainer}>
-          <div className={styles.formItem}>
-            {emails?.map((emailDetails) => {
-              const { verified, primary, email } = emailDetails;
-              return (
-                <div className={styles.formInput} key={email}>
-                  <FyInput
-                    disabled
-                    value={email}
-                    inputClassName={`${styles.emailInput}  ${styles.emailBox}`}
-                    containerClassName={styles.emailInputContainer}
-                  />
-                  <div className={styles.actionContainer}>
-                    {verified && (
-                      <FyButton
-                        color="success"
-                        size="small"
-                        className={styles.verified}
-                      >
-                        Verified
-                      </FyButton>
-                    )}
-                    {primary && (
-                      <FyButton
-                        color="info"
-                        size="small"
-                        className={styles.primary}
-                      >
-                        Primary
-                      </FyButton>
-                    )}
+        <div className={styles.header}>Email Address</div>
+        {emails?.length > 0 && (
+          <div className={styles.formContainer}>
+            <div className={styles.formItem}>
+              {emails?.map((emailDetails) => {
+                const { verified, primary, email } = emailDetails;
+                return (
+                  <div className={styles.formInput} key={email}>
+                    <FyInput
+                      disabled
+                      value={email}
+                      inputClassName={styles.emailBox}
+                      className={styles.emailInput}
+                      containerClassName={styles.emailInputContainer}
+                    />
+                    <div className={styles.actionContainer}>
+                      {verified && (
+                        <FyButton
+                          color="success"
+                          size="small"
+                          className={styles.verified}
+                          disabled
+                        >
+                          Verified
+                        </FyButton>
+                      )}
+                      {/* {primary && (
+                          <FyButton
+                            color="info"
+                            size="small"
+                            className={styles.primary}
+                          >
+                            Primary
+                          </FyButton>
+                        )} */}
 
-                    {!verified && (
-                      <FyButton
-                        variant="outlined"
-                        className={styles.verifyButton}
-                        onClick={() => handleVerification(email)}
-                        size="small"
-                        isLoading={isLoading}
-                      >
-                        Verify
-                      </FyButton>
-                    )}
+                      {!verified && (
+                        <FyButton
+                          variant="outlined"
+                          className={styles.verifyButton}
+                          onClick={() => handleVerification(email)}
+                          size="small"
+                          isLoading={isLoading}
+                        >
+                          Verify
+                        </FyButton>
+                      )}
 
-                    {!primary && verified && (
-                      <FyButton
-                        className={styles.verifyButton}
-                        variant="outlined"
-                        size="small"
-                        onClick={() => handleSetPrimary(email)}
-                        isLoading={isLoading}
-                      >
-                        Set Primary
-                      </FyButton>
-                    )}
-                    {!primary && (
-                      <FyButton
-                        className={styles.removeBtn}
-                        onClick={() => handleShowDeleteModal(emailDetails)}
-                      >
-                        <SvgWrapper svgSrc="cross-black" />
-                      </FyButton>
-                    )}
+                      {/* {!primary && verified && (
+                          <FyButton
+                            className={styles.verifyButton}
+                            variant="outlined"
+                            size="small"
+                            onClick={() => handleSetPrimary(email)}
+                            isLoading={isLoading}
+                          >
+                            Set Primary
+                          </FyButton>
+                        )} */}
+                      {/* {!primary && (
+                        <FyButton
+                          className={styles.removeBtn}
+                          onClick={() => handleShowDeleteModal(emailDetails)}
+                        >
+                          <SvgWrapper svgSrc="cross-black" />
+                        </FyButton>
+                      )} */}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-
+                );
+              })}
+            </div>
+          </div>
+        )}
+        {!emails?.length && (
+          <div className={styles.emptyContainer}>
+            <div className={styles.emptyText}>No Email Address Added</div>
             <div className={styles.submitBtnContainer}>
               <FyButton
                 className={styles.btn}
+                startIcon={<SvgWrapper svgSrc="addAddress" />}
                 onClick={() => handleShowAddModal(true)}
+                variant="outlined"
               >
-                Add Email
+                Add Email Address
               </FyButton>
             </div>
           </div>
-        </div>
+        )}
       </div>
 
       {showAddModal && (
@@ -178,7 +189,7 @@ function Email({
           onAdd={handleAddEmail}
         />
       )}
-      {showDeleteModal && (
+      {/* {showDeleteModal && (
         <ConfirmModal
           text="Are you sure you want to remove the email?"
           isOpen={showDeleteModal}
@@ -188,7 +199,7 @@ function Email({
           }}
           onCancel={handleCloseDeleteModal}
         />
-      )}
+      )} */}
     </>
   );
 }

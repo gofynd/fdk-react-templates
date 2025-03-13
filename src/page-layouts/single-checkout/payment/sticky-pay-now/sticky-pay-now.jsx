@@ -30,7 +30,6 @@ const StickyPayNow = ({
           </div>
           <button
             className={`${styles.cartCheckoutBtn} ${styles.checkoutButton}`}
-            disabled={disabled}
             onClick={proceedToPay}
           >
             PAY NOW

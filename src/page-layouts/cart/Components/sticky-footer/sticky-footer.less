@@ -2,11 +2,11 @@
 
 .stickyFooter {
   display: none;
-  position: sticky;
-  position: -webkit-sticky;
-  position: -moz-sticky;
-  position: -ms-sticky;
-  position: -o-sticky;
+  position: fixed;
+  position: -webkit-fixed;
+  position: -moz-fixed;
+  position: -ms-fixed;
+  position: -o-fixed;
   width: 100%;
   line-height: 140%;
   z-index: 1;
@@ -105,13 +105,16 @@
   .stickyBtnContainer {
     background-color: @PageBackground;
     border: 1px solid @DividerStokes;
-    box-shadow: 0px -1px 0px rgba(0, 0, 0, 0.12);
   }
   .stickyBtnContainer1 {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 16px;
+
+    @media @mobile {
+      border-width: 1px 0;
+    }
   }
   .cartCheckoutBtn3 {
     cursor: pointer;
@@ -127,7 +130,7 @@
   }
   .secondaryCheckoutBtn {
     background: @ButtonPrimary;
-    border-radius: 4px;
+    border-radius: @ButtonRadius;
     line-height: 140%;
     text-transform: uppercase;
     color: @ButtonSecondary;

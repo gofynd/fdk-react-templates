@@ -39,10 +39,10 @@
   }
 
   .contentWrapper {
-    padding: 67px 16px 0;
+    padding: 0 16px;
     isolation: isolate;
     @media @tablet-strict {
-      padding: 67px 40px 0;
+      padding: 0 40px;
     }
 
     @media @desktop {
@@ -325,18 +325,13 @@
   }
 }
 
-.breadcrumbWrapperDesktop {
+.breadcrumbWrapper {
   padding: 16px 40px 24px;
   @media @tablet {
-    display: none;
+    padding: 67px 40px 24px;
   }
-}
-.breadcrumbWrapperMobile {
-  text-align: center;
-  margin-top: 8px;
-  padding: 0 32px;
-  @media @desktop {
-    display: none;
+  @media @mobile {
+    padding: 67px 16px 24px;
   }
 }
 
