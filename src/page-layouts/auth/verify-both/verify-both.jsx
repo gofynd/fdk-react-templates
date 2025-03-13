@@ -59,6 +59,7 @@ function VerifyMobile({
     formState: { errors, isValid },
     setError,
     clearErrors,
+    resetField,
   } = useForm({
     defaultValues: {
       otp: "",
@@ -75,6 +76,11 @@ function VerifyMobile({
       clearErrors("root");
     }
   }, [error]);
+
+  const resendOtp = () => {
+    resetField("otp");
+    onResendMobileOtpClick();
+  };
 
   return (
     <div className={styles.formWrapper}>
@@ -93,8 +99,15 @@ function VerifyMobile({
             </label>
             <input
               id={mobileOtpId}
-              type="number"
+              type="text"
+              inputMode="numeric"
+              pattern="\d*"
               maxLength={4}
+              onInput={(e) => {
+                e.target.value = e.target.value
+                  .replace(/[^0-9]/g, "")
+                  .slice(0, 4);
+              }}
               {...register("otp", {
                 validate: (value) => /^[0-9]{4}$/.test(value),
               })}
@@ -113,7 +126,7 @@ function VerifyMobile({
       <div className={styles.resendOtpWrapper}>
         <button
           className={styles.resendOtpBtn}
-          onClick={onResendMobileOtpClick}
+          onClick={resendOtp}
           disabled={isResendBtnDisabled}
         >
           {`Resend OTP${isResendBtnDisabled ? ` (${mobileOtpResendTime}S)` : ""}`}
@@ -136,6 +149,7 @@ function VerifyEmail({
     formState: { errors, isValid },
     setError,
     clearErrors,
+    resetField,
   } = useForm({
     defaultValues: {
       otp: "",
@@ -152,6 +166,11 @@ function VerifyEmail({
       clearErrors("root");
     }
   }, [error]);
+
+  const resendOtp = () => {
+    resetField("otp");
+    onResendEmailOtpClick();
+  };
 
   return (
     <div className={styles.formWrapper}>
@@ -170,8 +189,15 @@ function VerifyEmail({
             </label>
             <input
               id={emailOtpId}
-              type="number"
+              type="text"
+              inputMode="numeric"
+              pattern="\d*"
               maxLength={4}
+              onInput={(e) => {
+                e.target.value = e.target.value
+                  .replace(/[^0-9]/g, "")
+                  .slice(0, 4);
+              }}
               {...register("otp", {
                 validate: (value) => /^[0-9]{4}$/.test(value),
               })}
@@ -190,7 +216,7 @@ function VerifyEmail({
       <div className={styles.resendOtpWrapper}>
         <button
           className={styles.resendOtpBtn}
-          onClick={onResendEmailOtpClick}
+          onClick={resendOtp}
           disabled={isResendBtnDisabled}
         >
           {`Resend OTP${isResendBtnDisabled ? ` (${emailOtpResendTime}S)` : ""}`}

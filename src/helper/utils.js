@@ -325,14 +325,35 @@ export function deepEqual(obj1, obj2) {
 
 export function priceFormatCurrencySymbol(symbol, price) {
   const hasAlphabeticCurrency = /^[A-Za-z]+$/.test(symbol);
-  let sanitizedPrice =
-    typeof price === "string" ? price : numberWithCommas(price);
+  let sanitizedPrice = price;
+  if (typeof price !== "string") {
+    let num = price;
 
-  const formattedValue = hasAlphabeticCurrency
-    ? `${symbol} ${sanitizedPrice}`
-    : `${symbol}${sanitizedPrice}`;
+    if (!isNaN(price)) num = roundToDecimals(price);
+    if (num?.toString()[0] === "-") {
+      num = num.toString().substring(1);
+    }
 
-  return formattedValue;
+    if (num) {
+      sanitizedPrice =
+        num.toString().split(".")[0].length > 3
+          ? `${num
+              .toString()
+              .substring(0, num.toString().split(".")[0].length - 3)
+              .replace(/\B(?=(\d{2})+(?!\d))/g, ",")},${num
+              .toString()
+              .substring(num.toString().split(".")[0].length - 3)}`
+          : num.toString();
+    } else {
+      sanitizedPrice = 0;
+    }
+  }
+
+  return `${price.toString()[0] === "-" ? "-" : ""}${
+    hasAlphabeticCurrency
+      ? `${symbol} ${sanitizedPrice}`
+      : `${symbol}${sanitizedPrice}`
+  }`;
 }
 
 export function isNumberKey(e) {
