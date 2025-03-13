@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .add-email-modal__caption-medium___UFH3U,
+  .add-email-modal__captionMedium___anbKE {
+    font-size: 11px;
+  }
+}
 .add-email-modal__caption-semi-bold___HG66X,
 .add-email-modal__captionSemiBold___njmuE {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .add-email-modal__caption-semi-bold___HG66X,
+  .add-email-modal__captionSemiBold___njmuE {
+    font-size: 11px;
+  }
 }
 .add-email-modal__btn-link___gNoXt,
 .add-email-modal__btnLink___xfYJq {
@@ -477,15 +489,33 @@ img::selection {
     display: none !important;
   }
 }
+.add-email-modal__modalHeader___cQUst {
+  padding: 24px !important;
+  border-radius: 8px 8px 0 0 !important;
+}
+.add-email-modal__modalHeader___cQUst .add-email-modal__modalTitle___D6Hy1 {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 140%;
+}
+@media only screen and (max-width: 480px) {
+  .add-email-modal__modalHeader___cQUst .add-email-modal__modalTitle___D6Hy1 {
+    font-size: 14px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .add-email-modal__modalHeader___cQUst {
+    padding: 16px !important;
+  }
+}
 .add-email-modal__modalContainer___PrdUQ {
-  padding: 15px 25px 5px;
-  background-color: #fff;
-  min-width: 200px;
-  min-height: 100px;
-  max-width: 350px;
+  width: 350px;
   overflow-wrap: break-word;
-  border-radius: 3px;
-  -webkit-font-smoothing: antialiased;
+}
+@media only screen and (max-width: 768px) {
+  .add-email-modal__modalContainer___PrdUQ {
+    width: 100%;
+  }
 }
 .add-email-modal__modalContainer___PrdUQ .add-email-modal__closeCross___gCrOs {
   display: flex;
@@ -503,25 +533,40 @@ img::selection {
   justify-content: center;
   align-items: center;
 }
-.add-email-modal__modalContainer___PrdUQ .add-email-modal__body___eVTZn {
-  line-height: 20px;
-}
-.add-email-modal__modalContainer___PrdUQ .add-email-modal__body___eVTZn .add-email-modal__formInputContainer___LKRUM {
-  margin: 25px 0 35px;
-  width: 300px;
+.add-email-modal__modalContainer___PrdUQ .add-email-modal__body___eVTZn .add-email-modal__form___A1iPd {
   display: flex;
   flex-direction: column;
+  gap: 16px;
+  padding: 24px;
 }
-.add-email-modal__modalContainer___PrdUQ .add-email-modal__body___eVTZn .add-email-modal__btnContainer___KtkoV {
+@media only screen and (max-width: 480px) {
+  .add-email-modal__modalContainer___PrdUQ .add-email-modal__body___eVTZn .add-email-modal__form___A1iPd {
+    padding: 0;
+    gap: 0;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .add-email-modal__modalContainer___PrdUQ .add-email-modal__body___eVTZn .add-email-modal__form___A1iPd .add-email-modal__formInputContainer___LKRUM {
+    padding: 16px;
+  }
+}
+.add-email-modal__modalContainer___PrdUQ .add-email-modal__body___eVTZn .add-email-modal__form___A1iPd .add-email-modal__formInputContainer___LKRUM .add-email-modal__emailInput___X6rx3 {
+  font-size: 12px;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+.add-email-modal__modalContainer___PrdUQ .add-email-modal__body___eVTZn .add-email-modal__form___A1iPd .add-email-modal__btnContainer___KtkoV {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  margin-bottom: 3px;
-  border-top: 1px solid var(--dividerStokes, #d4d1d1);
 }
-.add-email-modal__modalContainer___PrdUQ .add-email-modal__body___eVTZn .add-email-modal__btnContainer___KtkoV .add-email-modal__yesBtn___cEM6_ {
-  margin-top: 6px;
+@media only screen and (max-width: 480px) {
+  .add-email-modal__modalContainer___PrdUQ .add-email-modal__body___eVTZn .add-email-modal__form___A1iPd .add-email-modal__btnContainer___KtkoV {
+    border-top: 1px solid var(--dividerStokes, #d4d1d1);
+    padding: 16px;
+  }
 }
 
 .modal__slide-fade-enter-active___l7432,
@@ -822,12 +867,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .modal__caption-medium___GbhtF,
+  .modal__captionMedium___zCJpb {
+    font-size: 11px;
+  }
+}
 .modal__caption-semi-bold___feZV5,
 .modal__captionSemiBold___pxAn7 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .modal__caption-semi-bold___feZV5,
+  .modal__captionSemiBold___pxAn7 {
+    font-size: 11px;
+  }
 }
 .modal__btn-link___rkrNS,
 .modal__btnLink___yqJlb {
@@ -1118,11 +1175,17 @@ img::selection {
     align-items: center;
   }
 }
+.modal__centerModal___CkbLu .modal__modalContainer___BoKU8 {
+  border-radius: 8px;
+}
 @media only screen and (max-width: 768px) {
   .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 {
     width: unset;
     max-width: 720px;
   }
+}
+.modal__centerModal___CkbLu .modal__modalContainer___BoKU8 .modal__modalHeader___xKo1g {
+  border-radius: 8px 8px 0px 0px;
 }
 .modal__modalTitle___yvZQo {
   font-weight: 600;
@@ -1439,12 +1502,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .fy-input__caption-medium___ypzRG,
+  .fy-input__captionMedium___cFBcK {
+    font-size: 11px;
+  }
+}
 .fy-input__caption-semi-bold___WmtaG,
 .fy-input__captionSemiBold___UuNTY {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .fy-input__caption-semi-bold___WmtaG,
+  .fy-input__captionSemiBold___UuNTY {
+    font-size: 11px;
+  }
 }
 .fy-input__btn-link___kKnNG,
 .fy-input__btnLink___gGoDJ {
@@ -1636,9 +1711,16 @@ img::selection {
   font-size: 12px;
   line-height: 21px;
 }
+.fy-input__label___YQgmr span {
+  color: var(--errorText, #b24141);
+}
+.fy-input__required___MaAlL {
+  color: var(--errorText, #b24141);
+}
 .fy-input__floating___jgtoq {
   position: absolute;
   transform: translateY(-50%) scale(0.9);
+  z-index: 1;
   background: #ffffff;
   padding: 0 0.3rem;
   margin: 0 0.5rem;
@@ -1675,7 +1757,6 @@ img::selection {
 }
 .fy-input__fyInput___S4Mtu:disabled {
   color: var(--textSecondary);
-  border: 1px solid #cccccc;
 }
 .fy-input__fyInput___S4Mtu:focus {
   border-color: var(--buttonPrimary, #4e3f09);
@@ -1694,6 +1775,11 @@ img::selection {
   border-radius: 5px;
   padding: 0 0.7rem;
   height: 48px;
+}
+.fy-input__outlined___CEaKm.fy-input__inputDisable___M8Zn2 {
+  border: 1px solid #cccccc;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 .fy-input__outlined___CEaKm.fy-input__medium___L3QsD {
   height: 40px;
@@ -2035,12 +2121,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .fy-button__caption-medium___PSB4T,
+  .fy-button__captionMedium___iW0z_ {
+    font-size: 11px;
+  }
+}
 .fy-button__caption-semi-bold___FFG2N,
 .fy-button__captionSemiBold___czTMx {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .fy-button__caption-semi-bold___FFG2N,
+  .fy-button__captionSemiBold___czTMx {
+    font-size: 11px;
+  }
 }
 .fy-button__btn-link___bKkQ1,
 .fy-button__btnLink___jOAiL {
@@ -2338,7 +2436,10 @@ img::selection {
 }
 .fy-button__outlined___WccQN.fy-button__primary___xKz1S:hover {
   background-color: var(--buttonPrimary, #4e3f09);
-  color: #ffffff;
+  color: var(--buttonSecondary, #fff);
+}
+.fy-button__outlined___WccQN.fy-button__primary___xKz1S:hover svg path {
+  fill: var(--buttonSecondary, #fff);
 }
 .fy-button__outlined___WccQN.fy-button__secondary___z_hBB {
   border: 1px solid var(--buttonSecondary, #fff);

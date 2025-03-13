@@ -68,6 +68,7 @@ const FyDropdown = ({
   }, [options]);
 
   useEffect(() => {
+    setQuery(value);
     setSelectedValue(
       filteredOptions?.find((option) => option?.[dataKey] === value)
     );
@@ -216,7 +217,9 @@ const FyDropdown = ({
       {label && (
         <label className={customLabelClassName}>
           {label}
-          {required && showAsterik && <span> *</span>}
+          {required && showAsterik && (
+            <span className={styles.required}> *</span>
+          )}
         </label>
       )}
       <div

@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .add-phone-modal__caption-medium___pKMg3,
+  .add-phone-modal__captionMedium___VwMvs {
+    font-size: 11px;
+  }
+}
 .add-phone-modal__caption-semi-bold___MHqjr,
 .add-phone-modal__captionSemiBold___zFgGL {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .add-phone-modal__caption-semi-bold___MHqjr,
+  .add-phone-modal__captionSemiBold___zFgGL {
+    font-size: 11px;
+  }
 }
 .add-phone-modal__btn-link___cZaoE,
 .add-phone-modal__btnLink___omt58 {
@@ -480,6 +492,28 @@ img::selection {
 .add-phone-modal__addPhoneContainer___VrCF7 {
   overflow: visible;
 }
+.add-phone-modal__addPhoneContainer___VrCF7 .add-phone-modal__header___R5jh9 {
+  padding: 24px;
+  border-radius: 8px 8px 0 0;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 140%;
+}
+.add-phone-modal__addPhoneContainer___VrCF7 .add-phone-modal__header___R5jh9 .add-phone-modal__modalTitle___eltiu {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 140%;
+}
+@media only screen and (max-width: 480px) {
+  .add-phone-modal__addPhoneContainer___VrCF7 .add-phone-modal__header___R5jh9 .add-phone-modal__modalTitle___eltiu {
+    font-size: 14px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .add-phone-modal__addPhoneContainer___VrCF7 .add-phone-modal__header___R5jh9 {
+    padding: 16px;
+  }
+}
 .add-phone-modal__addPhoneContainer___VrCF7 .add-phone-modal__addPhoneBody___yfYlr {
   overflow: inherit;
 }
@@ -499,15 +533,7 @@ img::selection {
   }
 }
 .add-phone-modal__loginInputGroup___zdvyN {
-  margin-top: 18px;
-  -webkit-font-smoothing: antialiased;
-}
-.add-phone-modal__loginInputGroup___zdvyN .add-phone-modal__loginInputTitle___utus5 {
-  margin-bottom: 3px;
-  font-size: 13px;
-  line-height: 13px;
-  color: var(--textLabel, #7d7676);
-  display: block;
+  margin-top: 16px;
 }
 .add-phone-modal__loginInputGroup___zdvyN .add-phone-modal__resendOtp___sqfGZ {
   margin-top: 3px;
@@ -521,6 +547,12 @@ img::selection {
   cursor: pointer;
   pointer-events: unset;
 }
+.add-phone-modal__loginInputGroup___zdvyN .add-phone-modal__addMobileOtp___TyOZf {
+  font-size: 12px;
+  outline: none;
+  border: none;
+  background: transparent;
+}
 .add-phone-modal__loginInputGroup___zdvyN .add-phone-modal__addMobileOtp___TyOZf::-webkit-outer-spin-button,
 .add-phone-modal__loginInputGroup___zdvyN .add-phone-modal__addMobileOtp___TyOZf::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -530,29 +562,46 @@ img::selection {
   outline: none;
 }
 .add-phone-modal__modalContainer___DCtPy {
-  padding: 15px 25px 5px;
-  background-color: #ffffff;
   min-width: 350px;
-  max-width: 400px;
-  min-height: 100px;
-  overflow-wrap: break-word;
-  border-radius: 3px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   -webkit-font-smoothing: antialiased;
 }
-.add-phone-modal__modalContainer___DCtPy .add-phone-modal__body___mAvzN {
-  margin: 25px 0 30px 0;
-  line-height: 20px;
+@media only screen and (max-width: 480px) {
+  .add-phone-modal__modalContainer___DCtPy {
+    padding: 0;
+    width: 100%;
+    min-width: unset;
+    gap: 0;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .add-phone-modal__modalContainer___DCtPy .add-phone-modal__body___mAvzN {
+    padding: 16px;
+    width: 100%;
+  }
 }
 .add-phone-modal__modalContainer___DCtPy .add-phone-modal__btnContainer___u4xao {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  margin-bottom: 3px;
-  border-top: 1px solid var(--dividerStokes, #d4d1d1);
+}
+@media only screen and (max-width: 480px) {
+  .add-phone-modal__modalContainer___DCtPy .add-phone-modal__btnContainer___u4xao {
+    border-top: 1px solid var(--dividerStokes, #d4d1d1);
+    padding: 16px;
+  }
 }
 .add-phone-modal__modalContainer___DCtPy .add-phone-modal__btnContainer___u4xao .add-phone-modal__yesBtn___e00g_ {
-  margin-top: 6px;
+  height: 48px;
+  padding: 20px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 140%;
+  text-transform: uppercase;
 }
 
 .modal__slide-fade-enter-active___l7432,
@@ -853,12 +902,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .modal__caption-medium___GbhtF,
+  .modal__captionMedium___zCJpb {
+    font-size: 11px;
+  }
+}
 .modal__caption-semi-bold___feZV5,
 .modal__captionSemiBold___pxAn7 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .modal__caption-semi-bold___feZV5,
+  .modal__captionSemiBold___pxAn7 {
+    font-size: 11px;
+  }
 }
 .modal__btn-link___rkrNS,
 .modal__btnLink___yqJlb {
@@ -1149,11 +1210,17 @@ img::selection {
     align-items: center;
   }
 }
+.modal__centerModal___CkbLu .modal__modalContainer___BoKU8 {
+  border-radius: 8px;
+}
 @media only screen and (max-width: 768px) {
   .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 {
     width: unset;
     max-width: 720px;
   }
+}
+.modal__centerModal___CkbLu .modal__modalContainer___BoKU8 .modal__modalHeader___xKo1g {
+  border-radius: 8px 8px 0px 0px;
 }
 .modal__modalTitle___yvZQo {
   font-weight: 600;
@@ -1470,12 +1537,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .fy-button__caption-medium___PSB4T,
+  .fy-button__captionMedium___iW0z_ {
+    font-size: 11px;
+  }
+}
 .fy-button__caption-semi-bold___FFG2N,
 .fy-button__captionSemiBold___czTMx {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .fy-button__caption-semi-bold___FFG2N,
+  .fy-button__captionSemiBold___czTMx {
+    font-size: 11px;
+  }
 }
 .fy-button__btn-link___bKkQ1,
 .fy-button__btnLink___jOAiL {
@@ -1773,7 +1852,10 @@ img::selection {
 }
 .fy-button__outlined___WccQN.fy-button__primary___xKz1S:hover {
   background-color: var(--buttonPrimary, #4e3f09);
-  color: #ffffff;
+  color: var(--buttonSecondary, #fff);
+}
+.fy-button__outlined___WccQN.fy-button__primary___xKz1S:hover svg path {
+  fill: var(--buttonSecondary, #fff);
 }
 .fy-button__outlined___WccQN.fy-button__secondary___z_hBB {
   border: 1px solid var(--buttonSecondary, #fff);
@@ -2264,12 +2346,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .fy-input__caption-medium___ypzRG,
+  .fy-input__captionMedium___cFBcK {
+    font-size: 11px;
+  }
+}
 .fy-input__caption-semi-bold___WmtaG,
 .fy-input__captionSemiBold___UuNTY {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .fy-input__caption-semi-bold___WmtaG,
+  .fy-input__captionSemiBold___UuNTY {
+    font-size: 11px;
+  }
 }
 .fy-input__btn-link___kKnNG,
 .fy-input__btnLink___gGoDJ {
@@ -2461,9 +2555,16 @@ img::selection {
   font-size: 12px;
   line-height: 21px;
 }
+.fy-input__label___YQgmr span {
+  color: var(--errorText, #b24141);
+}
+.fy-input__required___MaAlL {
+  color: var(--errorText, #b24141);
+}
 .fy-input__floating___jgtoq {
   position: absolute;
   transform: translateY(-50%) scale(0.9);
+  z-index: 1;
   background: #ffffff;
   padding: 0 0.3rem;
   margin: 0 0.5rem;
@@ -2500,7 +2601,6 @@ img::selection {
 }
 .fy-input__fyInput___S4Mtu:disabled {
   color: var(--textSecondary);
-  border: 1px solid #cccccc;
 }
 .fy-input__fyInput___S4Mtu:focus {
   border-color: var(--buttonPrimary, #4e3f09);
@@ -2519,6 +2619,11 @@ img::selection {
   border-radius: 5px;
   padding: 0 0.7rem;
   height: 48px;
+}
+.fy-input__outlined___CEaKm.fy-input__inputDisable___M8Zn2 {
+  border: 1px solid #cccccc;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 .fy-input__outlined___CEaKm.fy-input__medium___L3QsD {
   height: 40px;
@@ -2860,12 +2965,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .mobile-number__caption-medium___syZZb,
+  .mobile-number__captionMedium___iKNxh {
+    font-size: 11px;
+  }
+}
 .mobile-number__caption-semi-bold___Rbomr,
 .mobile-number__captionSemiBold___cKKg4 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .mobile-number__caption-semi-bold___Rbomr,
+  .mobile-number__captionSemiBold___cKKg4 {
+    font-size: 11px;
+  }
 }
 .mobile-number__btn-link___QbUx_,
 .mobile-number__btnLink___dTaco {
@@ -3063,30 +3180,29 @@ img::selection {
 .mobile-number__mobileInputWrapper___Na12n.mobile-number__errorInput___TKkzT .mobile-number__mobileNumberInput___iRnFG {
   border: 1px solid var(--errorText, #b24141);
 }
-.mobile-number__mobileInputContainer___deIgv {
+.mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv {
   height: auto;
 }
-.mobile-number__mobileNumberInput___iRnFG {
-  height: 48px;
-  width: 100%;
-  box-sizing: border-box;
-  color: var(--textBody, #3c3131);
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 19.6px;
-  display: flex;
-  border: 1px solid var(--dividerStokes, #d4d1d1);
-  border-radius: 4px;
-  background-color: var(--pageBackground, #f8f8f8);
+.mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__dialCodePreview___E0m4Z {
+  border-inline: none;
   padding-right: 4px;
 }
-.mobile-number__mobileNumberInput___iRnFG:focus-visible {
+.mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG {
+  width: 100%;
+  font-weight: 400;
+  display: flex;
+  border-left: none;
+  padding-left: 4px;
+}
+.mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG:focus-visible {
   outline: none;
 }
-.mobile-number__mobileNumberInput___iRnFG::placeholder {
+.mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG::placeholder {
   color: var(--textLabel, #7d7676);
   opacity: 0.3;
+}
+.mobile-number__required___yHCeh {
+  color: var(--errorText, #b24141);
 }
 .mobile-number__countryDropdown___GP6Fo {
   background-color: aquamarine;
