@@ -155,7 +155,13 @@
   &.primary {
     &:hover {
       background-color: @ButtonPrimary;
-      color: @White;
+      color: @ButtonSecondary;
+
+      svg {
+        path {
+          fill: @ButtonSecondary;
+        }
+      }
     }
   }
 
