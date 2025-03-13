@@ -84,8 +84,8 @@ function OrderShipment({
             svgSrc="arrowDropdownBlack"
           />
         </span>
-        <h3 className={`${styles.bold}`}>{orderInfo?.order_id}</h3>
-        <h4 className={`${styles.light}`}>
+        <h3 className={`${styles.orderId}`}>{orderInfo?.order_id}</h3>
+        <h4 className={`${styles.orderTime}`}>
           {getTime(orderInfo?.order_created_ts)}
         </h4>
       </div>
@@ -128,7 +128,7 @@ function OrderShipment({
                       )}
                     </div>
                     <div
-                      className={`${styles.shipmentId} ${styles.boldls} ${styles.uktLinks}`}
+                      className={`${styles.shipmentId} ${styles.uktLinks} ${styles.boldls}`}
                     >
                       Shipment: {item?.shipment_id}
                     </div>
@@ -137,17 +137,13 @@ function OrderShipment({
                       <span>{` | `}</span>
                       <span>{getTotalPieces(item?.bags)}</span>
                     </div>
-                    <div
-                      className={`${styles.status} ${styles.regular}`}
-                      style={{
-                        backgroundColor:
-                          item.shipment_status.hex_code || "green",
-                      }}
-                    >
+                    <div className={styles.status}>
                       {item?.shipment_status?.title}
                     </div>
                     {isAdmin && (
-                      <div className={`${styles.shipmentBrands}`}>
+                      <div
+                        className={`${styles.shipmentBrands} ${styles.uktLinks}`}
+                      >
                         <span className={`${styles.bold}`}>Brand</span> :
                         {item?.brand_name}
                       </div>

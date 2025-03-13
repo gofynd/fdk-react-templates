@@ -11,7 +11,7 @@ function Login({
   logo = {},
   title = "Login",
   subTitle = "Login to Shop",
-  isPassword = true,
+  isPassword = false,
   isOtp = true,
   showLoginToggleButton = true,
   isRegisterEnabled = true,
@@ -81,6 +81,7 @@ function Login({
             }}
           />
         )}
+        <TermPrivacy />
         <div className={styles.loginBtnGroup}>
           {showLoginToggleButton && (
             <LoginModeButton {...{ onLoginToggleClick, isOtp }} />
@@ -92,7 +93,6 @@ function Login({
             />
           )}
         </div>
-        <TermPrivacy />
       </div>
     </div>
   );
