@@ -88,6 +88,7 @@ function ShipmentUpdateItem({
                     currquantity={currQuantity}
                     incDecQuantity={incrDecrQuantity}
                     changeQty={changeQuantity}
+                    customClassName={`${styles.hideQuantity} ${styles.modifyQtyController}`}
                   />
                   {showQuantityError && (
                     <div className={`${styles.maxAvail} ${styles.regularxxxs}`}>

@@ -8,6 +8,7 @@
   &.sliderCard {
     .productDescContainer {
       flex-direction: column !important;
+      justify-content: flex-start;
 
       .addToCart {
         width: 100% !important;
@@ -119,6 +120,7 @@
     @media @mobile {
       flex-direction: column;
       gap: 8px;
+      justify-content: flex-start;
     }
 
     .productDesc {
@@ -365,6 +367,7 @@
     &.desktop-grid-4-card {
       .productDescContainer {
         flex-direction: column;
+        justify-content: flex-start;
 
         .addToCart {
           width: 100%;
@@ -400,19 +403,19 @@
   .captionNormal();
 }
 
-.animate {
-  animation: 0.5s ease-in var(--delay, 0ms) fadeSlide;
-  animation-fill-mode: both;
-}
+// .animate {
+//   animation: 0.5s ease-in var(--delay, 0ms) fadeSlide;
+//   animation-fill-mode: both;
+// }
 
-@keyframes fadeSlide {
-  0% {
-    opacity: 0;
-    transform: translateY(10px);
-  }
+// @keyframes fadeSlide {
+//   0% {
+//     opacity: 0;
+//     transform: translateY(10px);
+//   }
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+//   to {
+//     opacity: 1;
+//     transform: translateY(0);
+//   }
+// }

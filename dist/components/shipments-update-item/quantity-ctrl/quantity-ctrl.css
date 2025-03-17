@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .quantity-ctrl__caption-medium___DIRyS,
+  .quantity-ctrl__captionMedium___dKA8v {
+    font-size: 11px;
+  }
+}
 .quantity-ctrl__caption-semi-bold___rirfZ,
 .quantity-ctrl__captionSemiBold___iIOPk {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .quantity-ctrl__caption-semi-bold___rirfZ,
+  .quantity-ctrl__captionSemiBold___iIOPk {
+    font-size: 11px;
+  }
 }
 .quantity-ctrl__btn-link___mJhFV,
 .quantity-ctrl__btnLink___1Jg_z {
@@ -479,8 +491,7 @@ img::selection {
 }
 .quantity-ctrl__qtyControl___LvP42 {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: space-around;
   border: 1px solid #eeeeee;
   border-radius: 3px;
 }
@@ -490,6 +501,7 @@ img::selection {
   justify-content: center;
   align-items: center;
   border: none;
+  width: 32px;
   cursor: pointer;
   padding: 2px;
 }
@@ -507,7 +519,7 @@ img::selection {
   opacity: 0.3;
 }
 .quantity-ctrl__qtyControl___LvP42 .quantity-ctrl__qtyAmount___NVSUc {
-  width: 38px;
+  width: 32px;
   height: 25px;
   border-radius: 3px;
   border-left: 1px solid #eeeeee;
@@ -521,7 +533,7 @@ img::selection {
   vertical-align: middle;
   text-align: center;
   background-color: var(--pageBackground, #f8f8f8);
-  color: #00abaa;
+  color: var(--textHeading, #26201a);
   padding: 2px 0px;
 }
 .quantity-ctrl__qtyControl___LvP42 .quantity-ctrl__qtyAmount___NVSUc input:focus {

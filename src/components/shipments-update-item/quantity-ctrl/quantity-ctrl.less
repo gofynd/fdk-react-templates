@@ -1,14 +1,15 @@
 @import "../../../styles/main.less";
 
 .qtyControl {
-  .flex-center();
+  display: flex;
+  justify-content: space-around;
   border: 1px solid @LightGray;
   border-radius: 3px;
   .operator {
     background: @White;
     .flex-center();
     border: none;
-
+    width: 32px;
     cursor: pointer;
     padding: 2px;
     .operation {
@@ -26,7 +27,7 @@
     }
   }
   .qtyAmount {
-    width: 38px;
+    width: 32px;
     height: 25px;
     border-radius: 3px;
     border-left: 1px solid @LightGray;
@@ -40,7 +41,7 @@
       vertical-align: middle;
       text-align: center;
       background-color: @PageBackground;
-      color: #00abaa;
+      color: @TextHeading;
       padding: 2px 0px;
       &:focus {
         outline: none;
