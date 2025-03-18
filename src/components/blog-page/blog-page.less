@@ -120,6 +120,17 @@
     }
   }
   &__content {
+    @media @tablet {
+      blockquote {
+        max-width: 100% !important;
+        width: 100% !important;
+        min-width: unset !important;
+        div {
+          max-width: 100% !important;
+          width: 100% !important;
+        }
+      }
+    }
     color: @TextBody;
     font-family: var(--fontBody);
 

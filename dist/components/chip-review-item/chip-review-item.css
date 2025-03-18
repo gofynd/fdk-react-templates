@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .chip-review-item__caption-medium___TahcP,
+  .chip-review-item__captionMedium___TqlGQ {
+    font-size: 11px;
+  }
+}
 .chip-review-item__caption-semi-bold___AG3ci,
 .chip-review-item__captionSemiBold___azy1h {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .chip-review-item__caption-semi-bold___AG3ci,
+  .chip-review-item__captionSemiBold___azy1h {
+    font-size: 11px;
+  }
 }
 .chip-review-item__btn-link___Iclpz,
 .chip-review-item__btnLink___srPw_ {
