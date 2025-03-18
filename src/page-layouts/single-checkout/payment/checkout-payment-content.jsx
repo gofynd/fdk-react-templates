@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useRef, useState } from "react";
+import React, { memo, useEffect, useRef, useState, useMemo } from "react";
 import * as styles from "./checkout-payment-content.less";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import { useSearchParams, useNavigate } from "react-router-dom";
@@ -11,6 +11,7 @@ import UktModal from "./ukt-modal";
 import StickyPayNow from "./sticky-pay-now/sticky-pay-now";
 import { priceFormatCurrencySymbol } from "../../../helper/utils";
 import { useGlobalStore } from "fdk-core/utils";
+import Spinner from "../../../components/spinner/spinner";
 
 const upiDisplayWrapperStyle = {
   padding: "24px",
@@ -173,7 +174,7 @@ function CheckoutPaymentContent({
   let paymentOptions = PaymentOptionsList();
   let codOption = paymentOptions?.filter((opt) => opt.name === "COD")[0];
   paymentOptions = paymentOptions?.filter((opt) => opt.name !== "COD");
-  let otherPaymentOptions = otherOptions();
+  const otherPaymentOptions = useMemo(() => otherOptions(), []);
 
   let upiSuggestions = paymentOption?.payment_option?.find?.(
     (ele) => ele.name === "UPI"
@@ -276,6 +277,8 @@ function CheckoutPaymentContent({
   const [userOrderId, setUserOrderId] = useState(null);
 
   const disbaleCheckout = useGlobalStore(fpi?.getters?.SHIPMENTS);
+  const isCouponAppliedSuccess =
+    useGlobalStore(fpi?.getters?.CUSTOM_VALUE) ?? {};
 
   const toggleMop = (mop) => {
     setActiveMop((prev) => (prev === mop ? null : mop));
@@ -734,6 +737,33 @@ function CheckoutPaymentContent({
     }
   };
 
+  useEffect(() => {
+    if (!isCouponAppliedSuccess["isCouponApplied"]) {
+      if (
+        selectedTab === "Other" &&
+        !selectedTabData &&
+        paymentOptions.length === 0
+      ) {
+        selectMop(
+          "Other",
+          otherPaymentOptions[0]?.name,
+          otherPaymentOptions[0]?.list?.[0]?.code
+        );
+      }
+      if (
+        selectedTabData?.name !== "CARD" &&
+        selectedTabData?.name !== "UPI" &&
+        paymentOptions[0]?.name === selectedTabData?.name
+      ) {
+        selectMop(
+          selectedTabData?.name,
+          selectedTabData?.name,
+          selectedTabData?.list[0]?.code
+        );
+      }
+    }
+  }, [selectedTabData?.list[0]?.code, otherPaymentOptions, selectedTab]);
+
   async function showQrCode() {
     try {
       const res = await proceedToPay("QR");
@@ -1126,7 +1156,10 @@ function CheckoutPaymentContent({
         });
       }
     } else {
-      console.error("Card Verification Failed");
+      handleShowFailedMessage({
+        failed: true,
+        paymentErrHeading: "Please enter the correct card details",
+      });
     }
   };
 
@@ -1246,16 +1279,7 @@ function CheckoutPaymentContent({
       });
     }
   };
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
   const acceptOrder = () => {
-    if (isMobile) {
-      scrollToTop();
-    }
     if (disbaleCheckout?.message) {
       handleShowFailedMessage({
         failed: true,
@@ -1279,6 +1303,9 @@ function CheckoutPaymentContent({
       console.log("Payment cancellation failed");
     }
   };
+  const codCharges = breakUpValues?.filter(
+    (value) => value.key === "cod_charge"
+  )[0]?.value;
 
   const navigationTab = () => {
     switch (selectedTab) {
@@ -1291,7 +1318,10 @@ function CheckoutPaymentContent({
                   <>
                     <div className={styles.savedCardHeaderWrapper}>
                       <div className={styles.cardHeader}>Saved Cards</div>
-                      <button onClick={addNewCardShow}>+ New Card</button>
+                      <button onClick={addNewCardShow}>
+                        {" "}
+                        <span>+</span> New Card
+                      </button>
                     </div>
                     <div className={styles.modeOption}>
                       {savedCards?.map((card, index) => (
@@ -1329,18 +1359,41 @@ function CheckoutPaymentContent({
                                     </div>
                                     {selectedCard?.card_id ===
                                       card?.card_id && (
-                                      <div>
+                                      <div className={styles.whyCvvContainer}>
                                         <span className={styles.cvvNotNeeded}>
                                           CVV not needed
                                         </span>
                                         <span
                                           className={styles.why}
+                                          onMouseEnter={() =>
+                                            setIsCvvNotNeededModal(true)
+                                          }
+                                          onMouseLeave={() =>
+                                            setIsCvvNotNeededModal(false)
+                                          }
                                           onClick={() =>
                                             setIsCvvNotNeededModal(true)
                                           }
                                         >
                                           WHY?
                                         </span>
+                                        {isCvvNotNeededModal && !isMobile && (
+                                          <div>
+                                            <p
+                                              className={
+                                                styles.cvvNotNeededModal
+                                              }
+                                            >
+                                              <SvgWrapper
+                                                svgSrc="paymentTooltipArrow"
+                                                className={styles.upArrowMark}
+                                              />
+                                              You card is saved as per new RBI
+                                              guidelines and does not require a
+                                              CVV for making this payment
+                                            </p>
+                                          </div>
+                                        )}
                                       </div>
                                     )}
                                     {selectedCard?.card_id &&
@@ -1434,17 +1487,23 @@ function CheckoutPaymentContent({
                             </div>
                           </div>
                           {isCvvInfo && (
-                            <Modal
-                              isOpen={isCvvInfo}
-                              closeDialog={() => setIsCvvInfo(false)}
-                            >
+                            <Modal isOpen={isCvvInfo} hideHeader={true}>
+                              <span
+                                className={styles.crossMobile}
+                                onClick={() => setIsCvvInfo(false)}
+                              >
+                                {" "}
+                                <SvgWrapper svgSrc="closeBold" />{" "}
+                              </span>
                               <div className={styles.cvvInfo}>
                                 {card?.card_brand &&
                                   card.card_brand !== "American Express" && (
                                     <div className={styles.type}>
-                                      <p className={styles.title}>
-                                        What is CVV Number?
-                                      </p>
+                                      <div className={styles.closeWrapper}>
+                                        <p className={styles.title}>
+                                          What is CVV Number?
+                                        </p>
+                                      </div>
                                       <p className={styles.desc}>
                                         It is a 3-digit code on the back of your
                                         card.
@@ -1480,7 +1539,7 @@ function CheckoutPaymentContent({
                 ) : (
                   <div className={styles.newCardWrapper}>
                     <div
-                      className={`${styles.walletHeader} ${styles["view-mobile-up"]}`}
+                      className={`${styles.walletHeader} ${styles["view-mobile-up"]} ${styles.cardDetailsHeader}`}
                     >
                       Enter card details
                     </div>
@@ -1587,6 +1646,8 @@ function CheckoutPaymentContent({
                 isOpen={addNewCard}
                 closeDialog={hideNewCard}
                 title="Add New Card"
+                headerClassName={styles.newCardModalHeader}
+                customClassName={styles.newCardBodyModal}
               >
                 <div
                   className={`${styles.newCardWrapper} ${styles.addNewCardModal}`}
@@ -1736,7 +1797,7 @@ function CheckoutPaymentContent({
               ))}
               {restWallets.length > 0 && (
                 <div
-                  className={`${styles.modeItemWrapper} ${getWalletdBorder({})}`}
+                  className={`${styles.modeItemWrapper} ${styles.otherBorder}`}
                   onClick={() => {
                     removeDialogueError();
                     setOpenMoreWalletModal(true);
@@ -1751,23 +1812,26 @@ function CheckoutPaymentContent({
                       }}
                     >
                       <div className={styles.modeItemLogo}>
-                        <SvgWrapper svgSrc="more-wallets" />
+                        <span className={styles.moreWlIcon}>
+                          <SvgWrapper
+                            className={styles.svgColor}
+                            svgSrc="more-wallets"
+                          />
+                        </span>
                       </div>
                       <div className={styles.moreModeName}>Other Wallets</div>
                     </div>
-                    <SvgWrapper
-                      className={
-                        isMobile ? styles.moreModeArrow : styles.otherModeArrow
-                      }
-                      svgSrc="accordion-arrow"
-                    />
+                    <span className={styles.moreModeIcon}>
+                      <SvgWrapper svgSrc="accordion-arrow" />
+                    </span>
                   </div>
                 </div>
               )}
               <Modal
+                containerClassName={styles.moreOptionContainer}
                 isOpen={openMoreWalletModal}
                 headerClassName={styles.modalHeader}
-                bodyClassName={styles.modalBody}
+                bodyClassName={`${styles.modalBody} ${styles.bodyContainer}`}
                 closeDialog={() => {
                   setOpenMoreWalletModal(false);
                   setWalletSearchText("");
@@ -1817,7 +1881,7 @@ function CheckoutPaymentContent({
                           setUPIError(false);
                           cancelQrPayment();
                         }}
-                        className={styles.upiApp}
+                        className={`${styles.upiApp} ${!upiApps?.includes("any") ? styles.notBorderBottom : ""} ${selectedUpiIntentApp === app ? styles.selectedUpiApp : ""}`}
                       >
                         <div className={styles.logo}>
                           <SvgWrapper svgSrc={app} />
@@ -1848,6 +1912,7 @@ function CheckoutPaymentContent({
                     selectedUpiRef.current = "any";
                     selectMop("UPI", "UPI", "UPI");
                     removeDialogueError();
+                    setShowUpiRedirectionModal(true);
                   }}
                   className={styles.moreApps}
                 >
@@ -1960,7 +2025,7 @@ function CheckoutPaymentContent({
                     <div className={styles.modeOption}>
                       {savedUpi?.map((item) => (
                         <div
-                          className={`${styles.modeItemWrapper} ${getSavedUpiBorder(item.vpa)}`}
+                          className={`${styles.modeItemWrapper} ${getSavedUpiBorder(item.vpa)} ${styles.upiMargin}`}
                         >
                           <div
                             className={styles.modeItem}
@@ -2035,7 +2100,7 @@ function CheckoutPaymentContent({
                 </div>
               </div>
             )}
-            <div>
+            <div style={{ position: "relative" }}>
               {!isMobile && (
                 <p className={styles.upiSectionTitle}>UPI ID / Number</p>
               )}
@@ -2067,7 +2132,7 @@ function CheckoutPaymentContent({
               {!isMobile &&
                 showUPIAutoComplete &&
                 filteredUPISuggestions.length > 0 && (
-                  <div>
+                  <div className={styles.upiSuggestionsDesktop}>
                     <ul className={styles.upiAutoCompleteWrapper}>
                       {filteredUPISuggestions.map((suffix) => (
                         <li
@@ -2281,7 +2346,7 @@ function CheckoutPaymentContent({
 
               {selectedTabData?.list?.length > initialVisibleBankCount && (
                 <div
-                  className={`${styles.modeItemWrapper} ${getNBBorder({})}`}
+                  className={`${styles.modeItemWrapper} ${styles.otherBorder}`}
                   onClick={() => {
                     removeDialogueError();
                     setOpenMoreNbModal(true);
@@ -2296,24 +2361,27 @@ function CheckoutPaymentContent({
                       }}
                     >
                       <div className={styles.modeItemLogo}>
-                        <SvgWrapper svgSrc="other-banks" />
+                        <span>
+                          <SvgWrapper
+                            svgSrc="other-banks"
+                            className={styles.svgColor}
+                          />
+                        </span>
                       </div>
                       <div className={styles.moreModeName}>Other Banks</div>
                     </div>
-                    <SvgWrapper
-                      className={
-                        isMobile ? styles.moreModeArrow : styles.otherModeArrow
-                      }
-                      svgSrc="accordion-arrow"
-                    />
+                    <span className={styles.moreModeIcon}>
+                      <SvgWrapper svgSrc="accordion-arrow" />
+                    </span>
                   </div>
                 </div>
               )}
 
               <Modal
+                containerClassName={styles.moreOptionContainer}
                 isOpen={openMoreNbModal}
                 headerClassName={styles.modalHeader}
-                bodyClassName={styles.modalBody}
+                bodyClassName={`${styles.modalBody} ${styles.bodyContainer}`}
                 closeDialog={() => {
                   setOpenMoreNbModal(false);
                   setNbSearchText("");
@@ -2347,7 +2415,7 @@ function CheckoutPaymentContent({
       case "COD":
         return (
           <div>
-            {!isMobile && (
+            {!isMobile && codCharges ? (
               <div>
                 <div
                   className={`${styles.codHeader} ${styles["view-mobile-up"]}`}
@@ -2357,15 +2425,9 @@ function CheckoutPaymentContent({
                 <p className={styles.codTitle}>
                   Pay in cash or using UPI at the time of delivery
                 </p>
-                {breakUpValues?.filter((value) => value.key === "cod_charge")[0]
-                  ?.value > 0 && (
+                {codCharges > 0 && (
                   <div className={styles.codInfo}>
-                    +₹
-                    {
-                      breakUpValues?.filter(
-                        (value) => value.key === "cod_charge"
-                      )[0]?.value
-                    }{" "}
+                    +{priceFormatCurrencySymbol(getCurrencySymbol, codCharges)}{" "}
                     will be charged extra for Cash on delivery option.
                   </div>
                 )}
@@ -2378,6 +2440,8 @@ function CheckoutPaymentContent({
                   </button>
                 </div>
               </div>
+            ) : (
+              <Spinner />
             )}
           </div>
         );
@@ -2742,7 +2806,7 @@ function CheckoutPaymentContent({
   const navigationTitle = (opt, index) => {
     return (
       <div
-        className={`${styles.linkWrapper} ${selectedTab === opt.name && !isMobile ? styles.selectedNavigationTab : styles.linkWrapper}`}
+        className={`${styles.linkWrapper} ${selectedTab === opt.name && !isMobile ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === opt.name && isMobile ? styles.headerHightlight : ""}`}
         key={opt.display_name}
         id={`nav-title-${index}`}
       >
@@ -2751,15 +2815,21 @@ function CheckoutPaymentContent({
           onClick={() => {
             if (isMobile) {
               handleScrollToTop(index);
+              setSelectedTab((prev) => (prev === opt.name ? "" : opt.name));
+            } else {
+              setSelectedTab(opt.name);
             }
             removeDialogueError();
             setTab(opt.name);
-            setSelectedTab(opt.name);
             toggleMop(opt.name);
             if (selectedTab !== opt.name) {
+              if (isMobile) {
+                setSelectedPaymentPayload({});
+              }
               setNameOnCard("");
               setCardExpiryDate("");
               setCvvNumber("");
+              hideNewCard();
             }
           }}
         >
@@ -2796,7 +2866,9 @@ function CheckoutPaymentContent({
                 )}
             </div>
           )}
-          <div className={`${styles.arrowContainer} ${styles["view-mobile"]}`}>
+          <div
+            className={`${styles.arrowContainer} ${styles.activeIconColor} ${styles["view-mobile"]}`}
+          >
             <SvgWrapper
               className={
                 selectedTab === opt.name && activeMop === opt.name
@@ -2916,23 +2988,37 @@ function CheckoutPaymentContent({
       {isCodModalOpen && isMobile && (
         <Modal
           isOpen={isCodModalOpen}
-          closeDialog={() => setIsCodModalOpen(false)}
+          hideHeader={true}
+          closeDialog={() => {
+            setIsCodModalOpen(false);
+            setTab("");
+            setSelectedTab("");
+          }}
         >
           <div className={styles.codModal}>
-            <SvgWrapper svgSrc="cod-icon"></SvgWrapper>
+            <div className={styles.codIconsContainer}>
+              <SvgWrapper svgSrc="cod-icon"></SvgWrapper>
+              <span
+                className={styles.closeCodModal}
+                onClick={() => {
+                  setIsCodModalOpen(false);
+                  setTab("");
+                  setSelectedTab("");
+                }}
+              >
+                <SvgWrapper svgSrc="closeBold"></SvgWrapper>
+              </span>
+            </div>
             <div>
               <p className={styles.message}>
                 Are you sure you want to proceed with Cash on delivery?
               </p>
-              <p className={styles.codCharges}>
-                +₹
-                {
-                  breakUpValues?.filter(
-                    (value) => value.key === "cod_charge"
-                  )[0]?.value
-                }{" "}
-                extra charges
-              </p>
+              {codCharges > 0 && (
+                <p className={styles.codCharges}>
+                  +{priceFormatCurrencySymbol(getCurrencySymbol, codCharges)}{" "}
+                  extra charges
+                </p>
+              )}
             </div>
             <button
               className={`${styles.commonBtn} ${styles.payBtn}`}
@@ -2944,7 +3030,7 @@ function CheckoutPaymentContent({
           </div>
         </Modal>
       )}
-      {isCvvNotNeededModal && (
+      {isCvvNotNeededModal && isMobile && (
         <Modal
           isOpen={isCvvNotNeededModal}
           closeDialog={() => setIsCvvNotNeededModal(false)}
@@ -2968,7 +3054,7 @@ function CheckoutPaymentContent({
                 )}
                 {otherPaymentOptions?.length > 0 && (
                   <div
-                    className={`${styles.linkWrapper} ${selectedTab === "Other" && !isMobile ? styles.selectedNavigationTab : styles.linkWrapper}`}
+                    className={`${styles.linkWrapper} ${selectedTab === "Other" && !isMobile ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === "Other" && isMobile ? styles.headerHightlight : ""}`}
                   >
                     <div
                       className={styles["linkWrapper-row1"]}
@@ -2988,16 +3074,17 @@ function CheckoutPaymentContent({
                           {/* <img src={opt.svg} alt="" /> */}
                           <SvgWrapper svgSrc="payment-other"></SvgWrapper>
                         </div>
-                        <div className={styles.modeName}>
+                        <div
+                          className={`${styles.modeName} ${selectedTab === "Other" ? styles.selectedModeName : ""}`}
+                        >
                           {paymentOptions?.length > 0 &&
                           otherPaymentOptions?.length > 0
-                            ? "More "
-                            : ""}
-                          Payment Options
+                            ? "More Payment Options"
+                            : "Pay Online"}
                         </div>
                       </div>
                       <div
-                        className={`${styles.arrowContainer} ${styles["view-mobile"]}`}
+                        className={`${styles.arrowContainer} ${styles["view-mobile"]} ${styles.activeIconColor}`}
                       >
                         <SvgWrapper
                           className={
@@ -3019,7 +3106,7 @@ function CheckoutPaymentContent({
                 {codOption && (
                   <div style={{ display: "flex", flex: "1" }}>
                     <div
-                      className={`${styles.linkWrapper} ${selectedTab === codOption.name && !isMobile ? styles.selectedNavigationTab : styles.linkWrapper}`}
+                      className={`${styles.linkWrapper} ${selectedTab === codOption.name && !isMobile ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === codOption.name && isMobile ? styles.headerHightlight : ""}`}
                       key={codOption.display_name}
                       onClick={() => {
                         selectMop(
@@ -3045,20 +3132,16 @@ function CheckoutPaymentContent({
                             >
                               {codOption.display_name}
                             </div>
-                            {isMobile &&
-                              breakUpValues?.filter(
-                                (value) => value.key === "cod_charge"
-                              )[0]?.value > 0 && (
-                                <div className={styles.codCharge}>
-                                  +₹
-                                  {
-                                    breakUpValues?.filter(
-                                      (value) => value.key === "cod_charge"
-                                    )[0]?.value
-                                  }{" "}
-                                  extra charges
-                                </div>
-                              )}
+                            {isMobile && codCharges > 0 && (
+                              <div className={styles.codCharge}>
+                                +
+                                {priceFormatCurrencySymbol(
+                                  getCurrencySymbol,
+                                  codCharges
+                                )}{" "}
+                                extra charges
+                              </div>
+                            )}
                           </div>
                         </div>
                         {codOption?.image_src && (
@@ -3070,9 +3153,9 @@ function CheckoutPaymentContent({
                           </div>
                         )}
                         <div
-                          className={`${styles.arrowContainer} ${styles["view-mobile"]}`}
+                          className={`${styles.arrowContainer} ${styles["view-mobile"]} ${styles.activeIconColor} ${styles.codIconContainer}`}
                         >
-                          <SvgWrapper svgSrc="arrow-right" />
+                          <SvgWrapper svgSrc="accordion-arrow" />
                         </div>
                       </div>
                       {isMobile && (

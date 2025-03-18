@@ -20,7 +20,15 @@ const AccountLocked = ({ email, openHomePage }) => {
         </a>
       )}
       <div className={styles.deleteAccountBtn}>
-        <FyButton fullWidth variant="text" type="submit" onClick={openHomePage}>
+        <FyButton
+          className={styles.btnPrimary}
+          variant="outlined"
+          size="large"
+          color="primary"
+          fullWidth={true}
+          type="submit"
+          onClick={openHomePage}
+        >
           Continue
         </FyButton>
       </div>

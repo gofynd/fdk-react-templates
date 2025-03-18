@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .forget-password__caption-medium___SDp77,
+  .forget-password__captionMedium___sYpg4 {
+    font-size: 11px;
+  }
+}
 .forget-password__caption-semi-bold___GaUta,
 .forget-password__captionSemiBold___wcMXG {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .forget-password__caption-semi-bold___GaUta,
+  .forget-password__captionSemiBold___wcMXG {
+    font-size: 11px;
+  }
 }
 .forget-password__btn-link___nPa2p,
 .forget-password__btnLink___yvKbQ {
@@ -477,6 +489,11 @@ img::selection {
     display: none !important;
   }
 }
+.forget-password__forgetPasswordWrapper___FG2RX {
+  max-width: 400px;
+  width: 100%;
+  padding: 24px;
+}
 .forget-password__forgotPasswordTitle___v04xK {
   margin-bottom: 32px;
   color: var(--textHeading, #26201a);
@@ -494,10 +511,6 @@ img::selection {
 }
 .forget-password__forgotPasswordTitle--mb-8___WjY7c {
   margin-bottom: 8px;
-}
-.forget-password__forgotPasswordWrapper___dytr2 {
-  width: 400px;
-  padding: 24px;
 }
 .forget-password__forgotPasswordWrapper___dytr2 .forget-password__forgotPasswordAlert___tAU9Y {
   height: 48px;
@@ -566,6 +579,12 @@ img::selection {
   font-weight: 400;
   line-height: 16.8px;
   margin-top: 16px;
+}
+.forget-password__forgotPasswordWrapper___dytr2 .forget-password__errorInput___LgeyJ label {
+  color: var(--errorText, #b24141) !important;
+}
+.forget-password__forgotPasswordWrapper___dytr2 .forget-password__errorInput___LgeyJ input {
+  border: 1px solid var(--errorText, #b24141) !important;
 }
 .forget-password__forgotPasswordWrapper___dytr2 .forget-password__forgotPasswordSubmitBtn___TjR_i {
   border: none;

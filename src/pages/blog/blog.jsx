@@ -104,6 +104,15 @@ function BlogList({
     show_recent_blog,
     recentBlogs = [],
   } = sliderProps;
+
+  const showRecentBlog =
+    typeof show_recent_blog === "boolean" || show_recent_blog === ""
+      ? show_recent_blog
+      : true;
+  const showTopBlogs =
+    typeof show_top_blog === "boolean" || show_top_blog === ""
+      ? show_top_blog
+      : true;
   const [windowWidth, setWindowWidth] = useState(0);
   const [config, setConfig] = useState({
     dots: false,
@@ -260,8 +269,12 @@ function BlogList({
     }
     return blogTitle;
   };
+  const showTags =
+    typeof sliderProps?.show_tags === "boolean" || sliderProps?.show_tags === ""
+      ? sliderProps?.show_tags
+      : true;
   const tagsList = () => {
-    if (sliderProps?.show_tags) {
+    if (showTags) {
       return (blogs?.filters?.tags || [])?.reduce((tagObj, tag) => {
         tag = tag?.trim();
         if (tag) {
@@ -296,9 +309,9 @@ function BlogList({
 
   const isSidebarDisplayed = useMemo(
     () =>
-      (show_top_blog && topViewedBlogs?.length) ||
-      (show_recent_blog && recentBlogs?.length),
-    [show_top_blog, topViewedBlogs, show_recent_blog, recentBlogs]
+      (showTopBlogs && topViewedBlogs?.length) ||
+      (showRecentBlog && recentBlogs?.length),
+    [showTopBlogs, topViewedBlogs, showRecentBlog, recentBlogs]
   );
 
   const renderBlogs = () => {
@@ -351,14 +364,28 @@ function BlogList({
       </div>
     );
   }
-
+  const showBlogSlideShow =
+    typeof sliderProps?.show_blog_slide_show === "boolean" ||
+    sliderProps?.show_blog_slide_show === ""
+      ? sliderProps?.show_blog_slide_show
+      : true;
+  const showSearch =
+    typeof sliderProps?.show_search === "boolean" ||
+    sliderProps?.show_search === ""
+      ? sliderProps?.show_search
+      : true;
+  const showFilters =
+    typeof sliderProps?.show_filters === "boolean" ||
+    sliderProps?.show_filters === ""
+      ? sliderProps?.show_filters
+      : true;
   return (
     <div>
       <div className={styles.blogContainer}>
         {blogFilter?.length === 0 && blogs?.page?.item_total === 0 && (
           <EmptyState title="No blogs found"></EmptyState>
         )}
-        {sliderProps?.show_blog_slide_show && (
+        {showBlogSlideShow && (
           <div className={styles.sliderWrapper}>
             <Slider
               {...config}
@@ -412,7 +439,7 @@ function BlogList({
                   </button>
                 ))}
             </div>
-            {sliderProps?.show_search && (
+            {showSearch && (
               <div className={`${styles.blogSearch}`}>
                 <input
                   type="text"
@@ -431,10 +458,10 @@ function BlogList({
         >
           <div className={`${styles.blog__contentLeft}`}>
             <div className={`${styles.filterList}`}>
-              {sliderProps?.show_filters && blogFilter?.length > 0 && (
+              {showFilters && blogFilter?.length > 0 && (
                 <div>Filtering by:</div>
               )}
-              {sliderProps?.show_filters &&
+              {showFilters &&
                 [...blogFilter].map((filter) => (
                   <div className={`${styles.filterItem}`} key={filter?.key}>
                     <span>{`${filter?.pretext}: ${filter?.display}`}</span>
@@ -448,7 +475,10 @@ function BlogList({
             </div>
 
             {blogFilter?.length > 0 && blogs?.page?.item_total === 0 && (
-              <EmptyState title="No blogs found"></EmptyState>
+              <EmptyState
+                title="No blogs found"
+                customClassName={styles.emptyBlog}
+              ></EmptyState>
             )}
             <div className={`${styles.blogContainer__grid}`}>
               {sliderProps?.loadingOption === "infinite" ? (
@@ -463,11 +493,12 @@ function BlogList({
                 renderBlogs()
               )}
             </div>
-            {sliderProps?.loadingOption === "pagination" && (
-              <div className={styles.paginationWrapper}>
-                <Pagination {...paginationProps} />
-              </div>
-            )}
+            {sliderProps?.loadingOption === "pagination" &&
+              blogs?.page?.item_total !== 0 && (
+                <div className={styles.paginationWrapper}>
+                  <Pagination {...paginationProps} />
+                </div>
+              )}
           </div>
           <BlogTabs
             className={styles.blog__contentRight}

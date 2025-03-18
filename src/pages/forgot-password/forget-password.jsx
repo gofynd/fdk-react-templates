@@ -30,12 +30,14 @@ function ForgetPassword({
   }, [error]);
 
   return (
-    <div>
+    <div className={styles.forgetPasswordWrapper}>
       <h1 className={styles.forgotPasswordTitle}>Reset Your Password</h1>
       {!isFormSubmitSuccess ? (
         <div className={styles.forgotPasswordWrapper}>
           <form onSubmit={handleSubmit(onForgotPasswordSubmit)}>
-            <div className={styles.forgotPasswordInputGroup}>
+            <div
+              className={`${styles.forgotPasswordInputGroup} ${errors.email ? styles.errorInput : ""}`}
+            >
               <label className={styles.loginInputTitle} htmlFor={emailInputId}>
                 Email
               </label>
