@@ -37,6 +37,7 @@ const GoogleMapAddress = ({
   addressItem,
   onLoad = () => {},
 }) => {
+  const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [selectedPlace, setSelectedPlace] = useState({
     lat: countryDetails?.latitude,
     lng: countryDetails?.longitude,
@@ -235,67 +236,84 @@ const GoogleMapAddress = ({
     );
   };
 
+  const onMapLoad = (map) => {
+    mapRef.current = map;
+    setIsMapLoaded(true);
+    onLoad(map);
+  };
+
   return (
     <div className={styles.mapAddress}>
-      <LoadScript googleMapsApiKey={mapApiKey} libraries={libraries}>
-        <div ref={inputRef} className={styles.autoCompleteWrap}>
-          <SvgWrapper
-            className={styles.searchAutoIcon}
-            svgSrc="search"
-          ></SvgWrapper>
-          <Autocomplete
-            placeholder="Search Google Maps"
-            apiKey={mapApiKey}
-            style={autoCompleteStyles}
-            onPlaceSelected={handlePlaceSelect}
-            options={{
-              types: ["geocode", "establishment"],
-              componentRestrictions: { country: countryDetails?.iso2 },
-            }}
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-          />
-        </div>
-        <div className={styles.mapCompWrap}>
-          <GoogleMap
-            mapContainerStyle={mapContainerStyle}
-            center={selectedPlace}
-            zoom={selectedPlace ? 15 : 10}
-            options={{
-              fullscreenControl: false,
-              mapTypeControl: false,
-              streetViewControl: false,
-            }}
-            onLoad={(map) => {
-              mapRef.current = map;
-              onLoad(map);
-            }}
-          >
-            {selectedPlace && (
-              <Marker
-                position={selectedPlace}
-                draggable={true}
-                onDragEnd={handleMarkerDragEnd}
-              />
-            )}
-          </GoogleMap>
-          <button
-            title="Detect My Location"
-            onClick={locateUser}
-            className={styles.locateIconBtn}
+      <div className={styles.mapWrapper} style={mapContainerStyle}>
+        <LoadScript googleMapsApiKey={mapApiKey} libraries={libraries}>
+          <div
+            ref={inputRef}
+            className={styles.autoCompleteWrap}
+            style={{ display: !isMapLoaded && "none" }}
           >
             <SvgWrapper
-              className={styles.locateIcon}
-              svgSrc="locate"
+              className={styles.searchAutoIcon}
+              svgSrc="search"
             ></SvgWrapper>
-          </button>
-        </div>
-      </LoadScript>
+            <Autocomplete
+              placeholder="Search Google Maps"
+              apiKey={mapApiKey}
+              style={autoCompleteStyles}
+              onPlaceSelected={handlePlaceSelect}
+              options={{
+                types: ["geocode", "establishment"],
+                componentRestrictions: { country: countryDetails?.iso2 },
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            />
+          </div>
+          <div
+            className={styles.mapCompWrap}
+            style={{ display: !isMapLoaded && "none" }}
+          >
+            <GoogleMap
+              mapContainerStyle={mapContainerStyle}
+              center={selectedPlace}
+              zoom={selectedPlace ? 15 : 10}
+              options={{
+                fullscreenControl: false,
+                mapTypeControl: false,
+                streetViewControl: false,
+              }}
+              onLoad={onMapLoad}
+            >
+              {selectedPlace && (
+                <Marker
+                  position={selectedPlace}
+                  draggable={true}
+                  onDragEnd={handleMarkerDragEnd}
+                />
+              )}
+            </GoogleMap>
+            <button
+              title="Detect My Location"
+              onClick={locateUser}
+              className={styles.locateIconBtn}
+            >
+              <SvgWrapper
+                className={styles.locateIcon}
+                svgSrc="locate"
+              ></SvgWrapper>
+            </button>
+          </div>
+        </LoadScript>
+        {!isMapLoaded && (
+          <div className={styles.skeleton}>
+            <canvas />
+          </div>
+        )}
+      </div>
       {address && (
         <div className={styles.addressSelect}>
           <p>{address}</p>
-          <button onClick={selectAddress}> Use This</button>
+          <button onClick={selectAddress}>Use This</button>
         </div>
       )}
     </div>
