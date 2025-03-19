@@ -120,6 +120,18 @@
     }
   }
   &__content {
+    :global {
+      .warning-banner {
+        display: none;
+      }
+    }
+    @media @tablet {
+      iframe {
+        max-width: 100% !important;
+        width: 100% !important;
+        min-width: unset !important;
+      }
+    }
     color: @TextBody;
     font-family: var(--fontBody);
 
