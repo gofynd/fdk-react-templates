@@ -54,17 +54,14 @@
   flex-flow: wrap;
   flex-direction: row;
   position: relative;
+
   .bagItem {
     flex: 0 1 50%;
   }
-  @media (max-width: 861px) {
+
+  @media @tablet {
     width: 100%;
-    margin: 20px 0;
-    flex-direction: column;
-  }
-  @media @mobile {
-    width: 100%;
-    margin: 20px 0;
+    margin: 16px 0;
     flex-direction: column;
   }
 }

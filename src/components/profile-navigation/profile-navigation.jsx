@@ -57,7 +57,9 @@ function ProfileNavigation({ children, signOut, userProfilePicUrl, userName }) {
                 />
               </div>
               <div className={styles.nameContainer}>
-                <p className={styles.name}>{userName}</p>
+                <p title={userName} className={styles.name}>
+                  {userName}
+                </p>
                 <FDKLink
                   className={styles.flexAlignCenter}
                   to="/profile/details"

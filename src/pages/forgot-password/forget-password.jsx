@@ -19,29 +19,37 @@ function ForgetPassword({
     getValues,
     setError,
     clearErrors,
+    watch,
   } = useForm({ mode: "onChange" });
 
   useEffect(() => {
     if (error) {
-      setError("root", error);
+      setError("email", error);
     } else {
-      clearErrors("root");
+      clearErrors("email");
     }
   }, [error]);
 
   return (
-    <div>
-      <h1 className={styles.forgotPasswordTitle}>Reset Your Password</h1>
+    <div className={styles.forgetPasswordWrapper}>
+      <h1
+        className={`${styles.forgotPasswordTitle} ${isFormSubmitSuccess ? styles.formSubmitted : ""}`}
+      >
+        Reset Your Password
+      </h1>
       {!isFormSubmitSuccess ? (
         <div className={styles.forgotPasswordWrapper}>
           <form onSubmit={handleSubmit(onForgotPasswordSubmit)}>
-            <div className={styles.forgotPasswordInputGroup}>
+            <div
+              className={`${styles.forgotPasswordInputGroup} ${errors.email ? styles.errorInput : ""}`}
+            >
               <label className={styles.loginInputTitle} htmlFor={emailInputId}>
                 Email
               </label>
               <input
                 id={emailInputId}
                 type="text"
+                placeholder="example@gmail.com"
                 {...register("email", {
                   validate: (value) =>
                     validateEmailField(value) ||
@@ -54,31 +62,22 @@ function ForgetPassword({
                 </p>
               )}
             </div>
-            {errors.root && (
-              <div className={styles.forgotPasswordAlert}>
-                <span className={styles.alertMessage}>
-                  {errors.root?.details?.error ?? errors.root?.message}
-                </span>
-              </div>
-            )}
             {/* Extension slot: above_reset_button */}
-            <button
-              className={styles.forgotPasswordSubmitBtn}
-              disabled={!isValid}
-              type="submit"
-            >
+            <button className={styles.forgotPasswordSubmitBtn} type="submit">
               RESET PASSWORD
             </button>
           </form>
-          <button className={styles.loginLink} onClick={onBackToLoginClick}>
-            Back to login
-          </button>
+          <div className={styles.loginLink}>
+            <button className={styles.loginBtn} onClick={onBackToLoginClick}>
+              Back to login
+            </button>
+          </div>
           {/* Extension slot: below_reset_button */}
         </div>
       ) : (
         <div className={styles.submitWrapper}>
           <p className={styles.submitSuccessMsg}>
-            Reset Link has been sent to your primary email address.
+            Reset Link has been sent to {watch("email")} email address.
           </p>
           <button
             className={styles.resendBtn}

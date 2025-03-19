@@ -85,6 +85,7 @@ const FyImage = forwardRef(
       customClass,
       globalConfig,
       defer = true,
+      overlayCustomClass,
     },
     ref
   ) => {
@@ -179,6 +180,9 @@ const FyImage = forwardRef(
       });
 
     const getSources = () => {
+      if (!isImageResizable) {
+        return [];
+      }
       return getLazyLoadSources().map((source) => {
         source.srcset = getUrl(source.width, source.url);
         return source;
@@ -240,7 +244,10 @@ const FyImage = forwardRef(
         ref={imgWrapperRef}
       >
         {showOverlay && (
-          <div className={styles.overlay} style={overlayStyles}></div>
+          <div
+            className={`${styles.overlay} ${overlayCustomClass}`}
+            style={overlayStyles}
+          ></div>
         )}
         <picture>
           {getSources().map((source, index) => (

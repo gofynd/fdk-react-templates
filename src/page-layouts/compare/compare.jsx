@@ -46,7 +46,7 @@ function Compare({
         <span className={styles.active}>Compare Products</span>
       </div>
       <h1 className={`${styles.compare__title} fontHeader`}>
-        Compare Products
+        Add Products to Compare
       </h1>
       {isLoading ? (
         loader
@@ -173,46 +173,47 @@ function Compare({
                       placeholder="Search Product here"
                     />
                     <SvgWrapper
-                      svg_src="search-black"
+                      svgSrc="search-black"
                       className={styles.searchIcon}
                     />
                   </div>
-                </div>
-                <div className={styles.popularhdng}>Add to compare</div>
 
-                {filteredSuggestions?.length > 0 ? (
-                  <div
-                    className={`${styles.landingBestsellerHandest} ${styles.searchResults}`}
-                  >
-                    {filteredSuggestions.map((data, index) => (
-                      <div key={index} className={styles.whiteSmallRBox}>
-                        <div
-                          className={styles.media}
-                          onClick={() => {
-                            handleAdd(data.slug);
-                            setShowSearch(false);
-                          }}
-                        >
-                          <div className={styles.mediaLeft}>
-                            <FyImage
-                              className={styles.fill}
-                              src={data?.media?.[0]?.url}
-                              alt={data?.media?.[0]?.alt}
-                              sources={[{ width: 55 }]}
-                            />
+                  <div className={styles.compareItems}>
+                    <div className={styles.popularhdng}>Add to compare</div>
+
+                    {filteredSuggestions?.length > 0 ? (
+                      <div
+                        className={`${styles.landingBestsellerHandest} ${styles.searchResults}`}
+                      >
+                        {filteredSuggestions.map((data, index) => (
+                          <div key={index} className={styles.whiteSmallRBox}>
+                            <div
+                              className={styles.media}
+                              onClick={() => {
+                                handleAdd(data.slug);
+                                setShowSearch(false);
+                              }}
+                            >
+                              <div className={styles.mediaLeft}>
+                                <FyImage
+                                  className={styles.fill}
+                                  src={data?.media?.[0]?.url}
+                                  alt={data?.media?.[0]?.alt}
+                                  sources={[{ width: 55 }]}
+                                />
+                              </div>
+                              <div className={styles.mediaLeftName}>
+                                {data.name}
+                              </div>
+                            </div>
                           </div>
-                          <div className={styles.mediaLeftName}>
-                            {data.name}
-                          </div>
-                        </div>
+                        ))}
                       </div>
-                    ))}
+                    ) : (
+                      <div className={styles.notFound}>No Product Found</div>
+                    )}
                   </div>
-                ) : (
-                  <div className={styles.notFoundBlock}>
-                    <div className={styles.notFound}>No Product Found</div>
-                  </div>
-                )}
+                </div>
               </div>
             </div>
           )}
