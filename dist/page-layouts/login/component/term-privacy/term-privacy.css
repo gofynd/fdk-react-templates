@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .term-privacy__caption-medium___BBCs7,
+  .term-privacy__captionMedium___Fllq8 {
+    font-size: 11px;
+  }
+}
 .term-privacy__caption-semi-bold___qAFOD,
 .term-privacy__captionSemiBold___yh7S3 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .term-privacy__caption-semi-bold___qAFOD,
+  .term-privacy__captionSemiBold___yh7S3 {
+    font-size: 11px;
+  }
 }
 .term-privacy__btn-link___eSSEu,
 .term-privacy__btnLink___GcKXv {
@@ -488,6 +500,6 @@ img::selection {
 }
 .term-privacy__midLinks___nJVYw a {
   font-weight: 500;
-  color: var(--textHeading, #26201a);
+  color: var(--buttonLink, #b1655b);
 }
 

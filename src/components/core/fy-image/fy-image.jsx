@@ -15,7 +15,6 @@
  * @param {boolean} props.showOverlay - Determines if an overlay should be shown over the image.
  * @param {string} props.overlayColor - The color of the overlay.
  * @param {Array} props.sources - An array of objects defining responsive image sources with breakpoints and widths.
- * @param {boolean} props.isLazyLoaded - Determines if the image should be lazy-loaded.
  * @param {number} props.blurWidth - The width for the blurred version of the image.
  * @param {string} [props.customClass] - Custom CSS class for additional styling.
  * @param {Object} [props.globalConfig] - Global configuration object for additional settings.
@@ -80,36 +79,16 @@ const FyImage = forwardRef(
         { breakpoint: { min: 361 }, width: 900 },
         { breakpoint: { max: 360 }, width: 640 },
       ],
-      isLazyLoaded = true,
-      blurWidth = 50,
       customClass,
       globalConfig,
       defer = true,
+      overlayCustomClass,
     },
     ref
   ) => {
     const [isError, setIsError] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [isIntersecting, setIsIntersecting] = useState(false);
     const imgWrapperRef = useRef(null);
-
-    useEffect(() => {
-      const handleIntersection = (entries) => {
-        if (entries?.[0]?.isIntersecting) {
-          setIsIntersecting(true);
-        }
-      };
-
-      const observer = new IntersectionObserver(handleIntersection);
-
-      if (isLazyLoaded) {
-        observer.observe(imgWrapperRef.current);
-      }
-
-      return () => {
-        observer.disconnect();
-      };
-    }, [isLazyLoaded]);
 
     const dynamicStyles = {
       "--aspect-ratio-desktop": `${aspectRatio}`,
@@ -134,10 +113,6 @@ const FyImage = forwardRef(
 
       const key = searchStringInArray(src, IMAGE_SIZES);
 
-      if (isLazyLoaded && !isIntersecting) {
-        return transformImage(src, key, blurWidth);
-      }
-
       if (isError) {
         return placeholder;
       } else {
@@ -148,7 +123,7 @@ const FyImage = forwardRef(
     const fallbackSrcset = () => {
       let url = src;
 
-      if ((isLazyLoaded && !isIntersecting) || !isImageResizable) {
+      if (!isImageResizable) {
         return "";
       }
 
@@ -171,15 +146,12 @@ const FyImage = forwardRef(
         .join(", ");
     };
 
-    const getLazyLoadSources = () =>
-      sources?.map((source) => {
-        source.media = getMedia(source);
-        source.srcset = getUrl(source.blurWidth ?? blurWidth, source.url);
-        return source;
-      });
-
     const getSources = () => {
-      return getLazyLoadSources().map((source) => {
+      if (!isImageResizable) {
+        return [];
+      }
+      return sources?.map((source) => {
+        source.media = getMedia(source);
         source.srcset = getUrl(source.width, source.url);
         return source;
       });
@@ -221,9 +193,6 @@ const FyImage = forwardRef(
     };
 
     const onError = () => {
-      if (isLazyLoaded && !isIntersecting) {
-        return;
-      }
       setIsError(true);
       setIsLoading(false);
     };
@@ -240,7 +209,10 @@ const FyImage = forwardRef(
         ref={imgWrapperRef}
       >
         {showOverlay && (
-          <div className={styles.overlay} style={overlayStyles}></div>
+          <div
+            className={`${styles.overlay} ${overlayCustomClass}`}
+            style={overlayStyles}
+          ></div>
         )}
         <picture>
           {getSources().map((source, index) => (

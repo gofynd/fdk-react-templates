@@ -52,6 +52,20 @@
 }
 
 .loginInputGroup {
+  margin-bottom: 32px;
+
+  .otpTitle {
+    margin-bottom: 8px;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 140%;
+    text-align: center;
+
+    @media @mobile {
+      font-size: 24px;
+    }
+  }
+
   .otpSentMsg {
     margin-bottom: 32px;
     color: @TextBody;
@@ -60,6 +74,10 @@
     font-style: normal;
     font-weight: 400;
     line-height: 19.6px;
+  }
+
+  .loginInput {
+    margin-bottom: 24px;
   }
 
   .loginInputTitle {
@@ -74,6 +92,10 @@
     font-style: normal;
     font-weight: 400;
     line-height: 16.8px;
+
+    &.error {
+      color: @ErrorText;
+    }
   }
 
   input {
@@ -89,6 +111,10 @@
     font-weight: 400;
     line-height: 18px;
     letter-spacing: -0.28px;
+
+    &.error {
+      border-color: @ErrorText;
+    }
   }
 }
 .password-lable-wrapper {
@@ -98,14 +124,10 @@
 }
 
 .alertError {
-  height: 48px;
-  padding: 0 7px;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  font-size: 13px;
-  background-color: @ErrorBackground;
-  border: 1px dashed @ErrorText;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 140%;
+  margin-top: 8px;
   color: @ErrorText;
 }
 
@@ -117,7 +139,6 @@
 }
 
 .otpInput {
-  margin-bottom: 24px;
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {
     -webkit-appearance: none;

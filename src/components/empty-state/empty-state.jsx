@@ -24,6 +24,7 @@ const EmptyState = ({
   btnLink = "/",
   btnTitle = "RETURN TO HOMEPAGE",
   iconSrc,
+  customClassName,
 }) => {
   const [isMobile, setIsMobile] = useState(true);
 
@@ -32,7 +33,7 @@ const EmptyState = ({
   }, []);
 
   return (
-    <div className={`${styles.error} fontBody`}>
+    <div className={`${styles.error} ${customClassName} fontBody`}>
       {iconSrc && <img src={iconSrc} alt="" />}
       <h3 className={`${styles.heading} fontHeader`}>{title}</h3>
       {description && (

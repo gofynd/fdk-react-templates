@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .delivery-info__caption-medium___HT4YG,
+  .delivery-info__captionMedium___rzTzv {
+    font-size: 11px;
+  }
+}
 .delivery-info__caption-semi-bold___AmQ4R,
 .delivery-info__captionSemiBold___Vnuwe {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .delivery-info__caption-semi-bold___AmQ4R,
+  .delivery-info__captionSemiBold___Vnuwe {
+    font-size: 11px;
+  }
 }
 .delivery-info__btn-link___pPDF8,
 .delivery-info__btnLink___EhIAd {
@@ -915,12 +927,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .fy-button__caption-medium___PSB4T,
+  .fy-button__captionMedium___iW0z_ {
+    font-size: 11px;
+  }
+}
 .fy-button__caption-semi-bold___FFG2N,
 .fy-button__captionSemiBold___czTMx {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .fy-button__caption-semi-bold___FFG2N,
+  .fy-button__captionSemiBold___czTMx {
+    font-size: 11px;
+  }
 }
 .fy-button__btn-link___bKkQ1,
 .fy-button__btnLink___jOAiL {
@@ -1132,6 +1156,25 @@ img::selection {
   border: 2px solid var(--buttonPrimaryL3, #b8b29d);
   border-top: 2px solid var(--buttonPrimary, #4e3f09);
   padding: 0;
+  margin-left: 0;
+}
+.fy-button__button___UES8C .fy-button__loader___eJW6i.fy-button__contained___F5O7g.fy-button__primary___xKz1S {
+  border-top-color: #ffffff;
+}
+.fy-button__button___UES8C .fy-button__loader___eJW6i.fy-button__text___HwP6V.fy-button__secondary___z_hBB,
+.fy-button__button___UES8C .fy-button__loader___eJW6i.fy-button__outlined___WccQN.fy-button__secondary___z_hBB {
+  border: 2px solid var(--buttonPrimaryL3, #b8b29d);
+  border-top: 2px solid var(--buttonPrimary, #4e3f09);
+}
+.fy-button__button___UES8C .fy-button__loader___eJW6i.fy-button__text___HwP6V.fy-button__error___guhqH,
+.fy-button__button___UES8C .fy-button__loader___eJW6i.fy-button__outlined___WccQN.fy-button__error___guhqH {
+  border: 2px solid var(--errorBackground, #e6d5d5);
+  border-top: 2px solid var(--errorText, #b24141);
+}
+.fy-button__button___UES8C .fy-button__loader___eJW6i.fy-button__text___HwP6V.fy-button__success___M7fJl,
+.fy-button__button___UES8C .fy-button__loader___eJW6i.fy-button__outlined___WccQN.fy-button__success___M7fJl {
+  border: 2px solid var(--successBackground, #c2dbc9);
+  border-top: 2px solid var(--successText, #1c958f);
 }
 .fy-button__button___UES8C .fy-button__loader___eJW6i.fy-button__error___guhqH {
   border: 2px solid #ffffff;
@@ -1152,24 +1195,6 @@ img::selection {
 .fy-button__button___UES8C .fy-button__loader___eJW6i.fy-button__large___nv2sC {
   height: 40px;
   border-width: 4px;
-}
-.fy-button__button___UES8C .fy-button__loader___eJW6i.fy-button__contained___F5O7g.fy-button__primary___xKz1S {
-  border-top: 2px solid #ffffff;
-}
-.fy-button__button___UES8C .fy-button__loader___eJW6i.fy-button__text___HwP6V.fy-button__secondary___z_hBB,
-.fy-button__button___UES8C .fy-button__loader___eJW6i.fy-button__outlined___WccQN.fy-button__secondary___z_hBB {
-  border: 2px solid var(--buttonPrimaryL3, #b8b29d);
-  border-top: 2px solid var(--buttonPrimary, #4e3f09);
-}
-.fy-button__button___UES8C .fy-button__loader___eJW6i.fy-button__text___HwP6V.fy-button__error___guhqH,
-.fy-button__button___UES8C .fy-button__loader___eJW6i.fy-button__outlined___WccQN.fy-button__error___guhqH {
-  border: 2px solid var(--errorBackground, #e6d5d5);
-  border-top: 2px solid var(--errorText, #b24141);
-}
-.fy-button__button___UES8C .fy-button__loader___eJW6i.fy-button__text___HwP6V.fy-button__success___M7fJl,
-.fy-button__button___UES8C .fy-button__loader___eJW6i.fy-button__outlined___WccQN.fy-button__success___M7fJl {
-  border: 2px solid var(--successBackground, #c2dbc9);
-  border-top: 2px solid var(--successText, #1c958f);
 }
 .fy-button__fullWidth___FLrWt {
   width: 100%;
@@ -1218,7 +1243,10 @@ img::selection {
 }
 .fy-button__outlined___WccQN.fy-button__primary___xKz1S:hover {
   background-color: var(--buttonPrimary, #4e3f09);
-  color: #ffffff;
+  color: var(--buttonSecondary, #fff);
+}
+.fy-button__outlined___WccQN.fy-button__primary___xKz1S:hover svg path {
+  fill: var(--buttonSecondary, #fff);
 }
 .fy-button__outlined___WccQN.fy-button__secondary___z_hBB {
   border: 1px solid var(--buttonSecondary, #fff);
@@ -1709,12 +1737,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .fy-input__caption-medium___ypzRG,
+  .fy-input__captionMedium___cFBcK {
+    font-size: 11px;
+  }
+}
 .fy-input__caption-semi-bold___WmtaG,
 .fy-input__captionSemiBold___UuNTY {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .fy-input__caption-semi-bold___WmtaG,
+  .fy-input__captionSemiBold___UuNTY {
+    font-size: 11px;
+  }
 }
 .fy-input__btn-link___kKnNG,
 .fy-input__btnLink___gGoDJ {
@@ -1906,9 +1946,16 @@ img::selection {
   font-size: 12px;
   line-height: 21px;
 }
+.fy-input__label___YQgmr span {
+  color: var(--errorText, #b24141);
+}
+.fy-input__required___MaAlL {
+  color: var(--errorText, #b24141);
+}
 .fy-input__floating___jgtoq {
   position: absolute;
   transform: translateY(-50%) scale(0.9);
+  z-index: 1;
   background: #ffffff;
   padding: 0 0.3rem;
   margin: 0 0.5rem;
@@ -1945,7 +1992,6 @@ img::selection {
 }
 .fy-input__fyInput___S4Mtu:disabled {
   color: var(--textSecondary);
-  border: 1px solid #cccccc;
 }
 .fy-input__fyInput___S4Mtu:focus {
   border-color: var(--buttonPrimary, #4e3f09);
@@ -1964,6 +2010,11 @@ img::selection {
   border-radius: 5px;
   padding: 0 0.7rem;
   height: 48px;
+}
+.fy-input__outlined___CEaKm.fy-input__inputDisable___M8Zn2 {
+  border: 1px solid #cccccc;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 .fy-input__outlined___CEaKm.fy-input__medium___L3QsD {
   height: 40px;
