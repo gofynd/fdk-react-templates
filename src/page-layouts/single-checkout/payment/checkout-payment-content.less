@@ -25,11 +25,17 @@
     .linkWrapper:last-child {
       .linkWrapper-row1 {
         border-bottom: 1px solid var(--dividerStokes);
+        @media @mobile {
+          border-bottom: unset;
+        }
       }
+      // @media @mobile {
+      //   border-bottom: 1px solid var(--dividerStokes);
+      // }
       border-bottom: none;
       flex: 1;
       .indicator {
-        border-radius: 0px 0px 0px 4px;
+        border-radius: 0px 0px 0px 4px !important;
       }
     }
     .linkWrapper:first-child {
@@ -41,7 +47,21 @@
       border-bottom: 1px solid var(--dividerStokes);
       border-right: 1px solid var(--dividerStokes);
       background-color: #f8f8f8;
-
+      .link {
+        .icon {
+          svg > path {
+            @media @desktop {
+              fill: @TextLabel;
+            }
+            fill: @TextBody;
+          }
+        }
+      }
+      .activeIconColor {
+        svg > g > path {
+          fill: @TextHeading;
+        }
+      }
       @media @mobile {
         background-color: @PageBackground;
         border-right: none;
@@ -71,6 +91,15 @@
             margin-left: -5.25px;
             background-color: #fff;
             object-fit: contain;
+            &.upiIcon {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              & > svg {
+                width: 100%;
+                height: 100%;
+              }
+            }
           }
         }
       }
@@ -85,8 +114,9 @@
         padding: 24px 16px;
         overflow: hidden;
         word-break: break-word;
+        align-items: center;
         @media @mobile {
-          padding: 16px 4px 16px 0px;
+          padding: 24px 0px;
         }
         .modeName {
           align-self: center;
@@ -96,11 +126,12 @@
           font-weight: 500;
           line-height: 140%;
           @media @mobile {
-            margin-left: 4px;
+            color: @TextHeading;
+            margin-left: 8px;
           }
         }
         .selectedModeName {
-          font-weight: 500;
+          font-weight: 600;
           color: @ButtonPrimary;
         }
         .codCharge {
@@ -109,7 +140,9 @@
           color: @ErrorText;
           line-height: 140%;
           border-radius: 4px;
-          padding: 8px 0;
+          @media @mobile {
+            padding-top: 4px;
+          }
           text-align: center;
         }
       }
@@ -128,6 +161,11 @@
         align-items: center;
         justify-content: flex-end;
         flex: 1;
+        &.codIconContainer {
+          svg {
+            transform: rotate(270deg);
+          }
+        }
         .upsideDown {
           transform: rotate(180deg);
         }
@@ -135,8 +173,34 @@
     }
   }
   .selectedNavigationTab {
+    .link {
+      .icon {
+        svg > path {
+          fill: @ButtonPrimary !important;
+        }
+      }
+    }
     border-right: none;
     background-color: @PageBackground;
+  }
+  .headerHightlight {
+    .link {
+      .icon {
+        svg > path {
+          fill: @ButtonPrimary !important;
+        }
+      }
+    }
+    .activeIconColor {
+      svg > g > path {
+        fill: @ButtonPrimary !important;
+      }
+    }
+    .rightArrow {
+      svg > g > path {
+        fill: @TextHeading !important;
+      }
+    }
   }
   .selectedNavigationTab:last-child {
     .linkWrapper-row1 {
@@ -159,6 +223,9 @@
     }
   }
   .selectedBorder {
+    .modeItemName {
+      font-weight: 600 !important;
+    }
     @media @mobile-up {
       border: 1px solid var(--primaryColor);
     }
@@ -177,6 +244,9 @@
   .addCardHeader,
   .otherHeader {
     font-weight: 600;
+    @media @mobile {
+      font-weight: 500;
+    }
     font-size: 14px;
     color: var(--textHeading);
     margin-bottom: 15px;
@@ -188,11 +258,20 @@
   }
 
   .cardTab {
-    @media @mobile {
-      padding-bottom: 24px;
-    }
     .savedCardWrapper {
       .savedCardHeaderWrapper {
+        button {
+          font-weight: 600;
+          text-transform: uppercase;
+          color: @ButtonPrimary;
+          font-size: 14px;
+          span {
+            font-size: 16px;
+          }
+        }
+        @media @mobile {
+          margin-bottom: 16px;
+        }
         display: flex;
         align-items: baseline;
         justify-content: space-between;
@@ -222,6 +301,7 @@
         position: relative;
 
         .cvv {
+          cursor: pointer;
           margin-top: 16px;
           padding: 16px;
           border: 1px solid var(--dividerStokes);
@@ -240,7 +320,6 @@
         display: flex;
         flex-direction: column;
         gap: 16px;
-
         .type {
           .title {
             font-size: 16px;
@@ -251,6 +330,7 @@
           .desc {
             margin: 8px 0 16px 0;
             color: var(--textBody);
+            font-size: 12px;
           }
         }
       }
@@ -427,6 +507,11 @@
         display: flex;
         flex-direction: column;
         .cardInputWrapper {
+          @media @mobile {
+            &.cardNumberBox {
+              margin-top: 0;
+            }
+          }
           display: flex;
           flex-direction: column;
           margin-top: 16px;
@@ -434,10 +519,21 @@
         }
         .cardNetwork,
         .cvv {
+          cursor: pointer;
           position: absolute;
-          right: 16px;
+          right: 8px;
           top: 50%;
           transform: translateY(-50%);
+          &.cvvError {
+            top: 35%;
+          }
+          @media @desktop {
+            top: 38%;
+            transform: unset;
+            &.cvvError {
+              top: 25%;
+            }
+          }
         }
         .cardNetwork {
           width: 33px;
@@ -450,12 +546,28 @@
           }
         }
         .cardDateCvvWrapper {
+          .upArrowMark {
+            position: absolute;
+            left: 50%;
+            top: -6px;
+            path {
+              fill: @DividerStokes;
+            }
+          }
+          .cvvInfoContainer {
+            @media @desktop {
+              position: relative;
+              left: 5px;
+            }
+          }
+          &.marginBottom {
+            @media @mobile {
+              margin-bottom: 24px;
+            }
+          }
           display: flex;
           justify-content: space-between;
           gap: 16px;
-          @media @mobile {
-            gap: 24px;
-          }
           .cardInputWrapper {
             flex: 1;
             display: flex;
@@ -496,6 +608,9 @@
           color: @ErrorText;
         }
         .rbiGuidelines {
+          @media @mobile {
+            margin-bottom: 24px;
+          }
           input:checked:before {
             background-color: var(--primaryColor);
           }
@@ -573,11 +688,26 @@
         padding: 24px 16px;
         display: flex;
         flex-direction: column;
+        @media @desktop {
+          width: 295px;
+          padding: 8px 12px;
+          box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.08);
+          border-radius: 8px;
+          position: absolute;
+          z-index: 99;
+          right: -116px;
+          transform: unset;
+          background: @DialogBackground;
+          border: 1px solid @DividerStokes;
+          top: 29px;
+        }
         gap: 16px;
-
         .type {
           .title {
             font-size: 16px;
+            @media @desktop {
+              font-size: 14px;
+            }
             font-weight: 600;
             color: var(--textHeading);
           }
@@ -585,12 +715,15 @@
           .desc {
             margin: 8px 0 16px 0;
             color: var(--textBody);
+            @media @desktop {
+              font-size: 12px;
+            }
           }
         }
       }
     }
     .addNewCardModal {
-      padding: 8px 16px 24px 16px;
+      padding: 0px 16px 24px 16px;
     }
   }
 
@@ -645,13 +778,20 @@
       cursor: pointer;
       display: flex;
       flex-direction: column;
-      border-radius: 8px;
+      @media @desktop {
+        border-radius: 8px;
+      }
       padding: 16px;
+      label {
+        cursor: pointer;
+      }
       @media @mobile {
-        padding: 16px 0px;
+        padding: 24px 0px;
         &:not(:last-child) {
           border-bottom: 1px solid @DividerStokes;
-          border-radius: 0px;
+        }
+        &:first-child {
+          padding-top: 0;
         }
       }
       .modeItem {
@@ -664,20 +804,24 @@
         .modeItemLogo {
           display: flex;
           img {
-            height: 42px;
-            width: 42px;
+            height: 38px;
+            width: 38px;
           }
         }
         .modeItemName {
-          font-weight: 400;
+          font-weight: 500;
           font-size: 14px;
-          color: @TextBody;
+          color: @TextHeading;
         }
         .moreModeName {
-          color: @TextHeading;
+          color: @TextLabel;
           font-size: 14px;
-          font-weight: 600;
+          font-weight: 400;
           line-height: 140%;
+          @media @mobile {
+            color: @TextHeading;
+            font-weight: 500;
+          }
         }
         .moreModeArrow {
           transform: rotate(270deg);
@@ -738,6 +882,13 @@
 
   .upiMop {
     padding-bottom: 24px;
+    @media @mobile {
+      .upiApp {
+        &:first-child {
+          padding-top: 0;
+        }
+      }
+    }
   }
 
   .upiApp {
@@ -747,7 +898,17 @@
     gap: 8px;
     padding: 24px 0;
     border-bottom: 1px solid var(--dividerStokes);
-
+    &.selectedUpiApp {
+      .displayName {
+        font-weight: 600 !important;
+      }
+    }
+    &.notBorderBottom {
+      &:last-child {
+        border-bottom: unset !important;
+        padding-bottom: 0;
+      }
+    }
     .logo {
       display: flex;
       justify-content: center;
@@ -758,9 +919,9 @@
 
     .displayName {
       flex: 1;
-      font-weight: 600;
+      font-weight: 500;
       font-size: 14px;
-      color: var(--primaryColor);
+      color: @TextHeading;
       line-height: 140%;
     }
   }
@@ -771,6 +932,7 @@
     justify-content: left;
     gap: 8px;
     padding: 24px 0;
+    padding-bottom: 0;
 
     .logo {
       display: flex;
@@ -778,13 +940,18 @@
       align-items: center;
       border: 1px solid var(--dividerStokes);
       border-radius: 100px;
+      .svg {
+        path {
+          fill: @TextBody;
+        }
+      }
     }
 
     .displayName {
       flex: 1;
       font-weight: 600;
       font-size: 14px;
-      color: var(--primaryColor);
+      color: @TextHeading;
     }
 
     .rightArrow {
@@ -813,7 +980,7 @@
       .scanQrTitle {
         font-weight: 600;
         font-size: 16px;
-        color: var(--primaryColor);
+        color: @TextHeading;
         line-height: 22.4px;
         margin-bottom: 4px;
       }
@@ -829,9 +996,17 @@
         gap: 4px;
 
         .upiAppLogo {
+          width: 38px;
+          height: 38px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           border: 0.43px solid var(--dividerStokes);
           border-radius: 50%;
-          display: flex;
+          & > svg {
+            width: 100%;
+            height: 100%;
+          }
         }
         .moreUpiApps {
           font-weight: 500;
@@ -858,6 +1033,7 @@
         font-weight: 600;
         font-size: 12px;
         color: var(--primaryColor);
+        cursor: pointer;
       }
     }
     .upiQrCode {
@@ -923,7 +1099,7 @@
       font-weight: 400;
       font-size: 12px;
       padding: 12px 4px;
-      color: var(--primaryColor);
+      color: @TextHeading;
     }
   }
 
@@ -1282,7 +1458,11 @@
   flex-direction: column;
   align-items: center;
   gap: 16px;
-
+  position: relative;
+  .closeCodModal {
+    position: absolute;
+    right: 24px;
+  }
   .message {
     font-size: 16px;
     font-weight: 600;
@@ -1316,12 +1496,36 @@
     }
   }
 }
+.whyCvvContainer {
+  position: relative;
+  .upArrowMark {
+    position: absolute;
+    left: 50%;
+    top: -6px;
+    path {
+      fill: @DividerStokes;
+    }
+  }
+}
 .cvvNotNeededModal {
   padding: 16px;
   font-size: 14px;
   font-weight: 400;
   line-height: 19.6px;
   max-width: 375px;
+  @media @desktop {
+    width: 295px;
+    padding: 8px 12px;
+    box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+    position: absolute;
+    z-index: 99;
+    right: -116px;
+    transform: unset;
+    background: @DialogBackground;
+    border: 1px solid @DividerStokes;
+    top: 29px;
+  }
 }
 .cvImage {
   display: flex;
@@ -1342,6 +1546,7 @@
     padding: 12px 16px !important;
     margin-bottom: unset !important;
     border: none !important;
+    cursor: default !important;
   }
   .searchBox {
     margin-bottom: 12px !important;
@@ -1350,19 +1555,39 @@
     border: none;
   }
 }
-.logoNameContainer {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.modeItemLogo {
+  .svgColor {
+    @media @desktop {
+      g > path {
+        fill: @TextBody;
+      }
+      path {
+        fill: @TextBody;
+      }
+    }
+    @media @mobile {
+      g > path {
+        fill: @TextHeading;
+      }
+      path {
+        fill: @TextHeading;
+      }
+    }
+  }
   img {
     border: 1px solid @DividerStokes;
     padding: 8px 4px;
     border-radius: 50%;
-    object-fit: contain;
+    object-fit: cover;
+    @media @mobile {
+      margin-right: 8px;
+    }
+    margin-right: 12px;
   }
-  @media @desktop {
-    gap: 12px;
-  }
+}
+.logoNameContainer {
+  display: flex;
+  align-items: center;
 }
 .modalBody::-webkit-scrollbar-thumb {
   background-color: gray;
@@ -1372,4 +1597,112 @@
   color: @ErrorText;
   font-size: 12px;
   font-weight: 400;
+}
+.cardDetailsHeader {
+  margin-bottom: unset !important;
+}
+.moreOptionContainer {
+  @media @desktop {
+    width: 420px;
+    height: 606px;
+  }
+  @media @mobile {
+    height: 434px;
+  }
+}
+.bodyContainer {
+  min-width: unset !important;
+  min-height: unset !important;
+  margin-bottom: 16px;
+  max-height: unset !important;
+  @media @mobile {
+    .modeItemName {
+      color: @TextBody !important;
+      font-size: 12px;
+      font-weight: 400 !important;
+    }
+    .selectedBorder {
+      .modeItemName {
+        font-weight: 500 !important;
+      }
+    }
+  }
+}
+.moreModeIcon {
+  transform: rotate(270deg);
+  display: flex;
+  align-items: center;
+  svg {
+    width: 20px;
+    height: 20px;
+    g > path {
+      fill: @TextLabel;
+    }
+  }
+}
+.otherBorder {
+  border: 1px solid @DividerStokes;
+  @media @mobile {
+    border: none;
+  }
+}
+.modeItemLogo {
+  @media @desktop {
+    .moreWlIcon {
+      width: 24px;
+      height: 24px;
+    }
+  }
+  @media @mobile {
+    span {
+      border: 1px solid @DividerStokes;
+      padding: 8px 4px;
+      border-radius: 50%;
+      object-fit: cover;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      justify-content: center;
+      align-items: anchor-center;
+    }
+  }
+}
+.upiMargin {
+  @media @mobile {
+    &:last-child {
+      padding-bottom: 0 !important;
+    }
+  }
+}
+.cardTab {
+  .newCardModalHeader {
+    @media @mobile {
+      padding: 16px !important;
+    }
+  }
+}
+.newCardBodyModal {
+  @media @mobile {
+    .rbiGuidelines {
+      margin-top: 24px !important;
+    }
+    .saveNewCard {
+      margin-top: 0 !important;
+    }
+  }
+}
+.upiSuggestionsDesktop {
+  position: absolute;
+  width: 100%;
+  background: @PageBackground;
+  border-radius: 4px;
+  box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.08);
+}
+.closeWrapper {
+  display: flex;
+  justify-content: space-between;
+}
+.crossMobile {
+  position: absolute;
+  right: 16px;
 }
