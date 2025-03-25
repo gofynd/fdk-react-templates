@@ -61,7 +61,7 @@ function Dropdown({ type, selectedOption, dropdownData }) {
           <ul className={`${styles.menu}`}>
             {dropdownData.map((option, index) => (
               <li key={index} onClick={() => replaceQuery(option)}>
-                {!option.is_selected && <SvgWrapper svgSrc="regular" />}
+                {!option.is_selected && <SvgWrapper svgSrc="radio" />}
                 {option.is_selected && <SvgWrapper svgSrc="radio-selected" />}
                 <span>{option.display}</span>
               </li>

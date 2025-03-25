@@ -34,19 +34,35 @@
 }
 
 .main {
-  color: @Mako;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  padding: 24px 0;
+
+  @media @tablet {
+    padding: 0;
+  }
+
+  .header {
+    padding: 0 0 24px;
+    border-bottom: 1px solid @DividerStokes;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 140%;
+
+    @media @tablet {
+      font-size: 16px;
+      padding: 16px;
+    }
+  }
 
   .formContainer {
-    background-color: @White;
-    padding: 25px 5px 10px 30px;
-    margin: 25px auto auto;
     display: flex;
     flex-direction: column;
+    padding-top: 24px;
+
     @media @mobile {
-      padding: 25px 0px 10px 3px;
       width: 100%;
+      padding-top: 16px;
     }
     .customInput {
       display: flex;
@@ -56,29 +72,14 @@
         width: 50%;
       }
     }
-    .btn {
-      min-width: 250px;
-      border-radius: @ButtonRadius;
-      width: 65%;
-    }
     .submitBtn {
       margin-top: 20px;
     }
     .formItem {
-      margin-right: 25px;
-
-      @media @mobile {
-        margin-right: 5px;
-      }
-
       .formInput {
-        margin: 7px 0px 0px;
         display: flex;
-        align-items: center;
-
-        @media @mobile {
-          gap: 4px;
-        }
+        align-items: stretch;
+        gap: 12px;
       }
     }
 
@@ -89,19 +90,10 @@
     }
 
     .actionContainer {
-      display: flex;
-      align-items: center;
-      flex-wrap: nowrap;
-
-      @media @mobile {
-        justify-content: center;
-      }
-
       .verified {
-        padding: 12px;
-        border-radius: 2px;
-        margin: 0px 5px;
-        height: auto;
+        padding: 0 12px;
+        border-radius: 4px;
+        height: 100%;
         cursor: unset;
       }
 
@@ -113,11 +105,10 @@
       }
 
       .verifyBtn {
-        padding: 10px;
-        margin-right: 10px;
-        margin-left: 5px;
+        padding: 0 12px;
+        border-radius: 4px;
+        height: 100%;
         white-space: nowrap;
-        height: auto;
       }
 
       .removeBtn {

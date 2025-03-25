@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .scroll-top__caption-medium___vGhhh,
+  .scroll-top__captionMedium___Cq3UM {
+    font-size: 11px;
+  }
+}
 .scroll-top__caption-semi-bold___s0AWa,
 .scroll-top__captionSemiBold___kaoff {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .scroll-top__caption-semi-bold___s0AWa,
+  .scroll-top__captionSemiBold___kaoff {
+    font-size: 11px;
+  }
 }
 .scroll-top__btn-link___K63XL,
 .scroll-top__btnLink___G4JdX {
@@ -483,13 +495,13 @@ img::selection {
   gap: 8px;
   padding: 8px;
   color: var(--themeAccentD2, #8b8374);
-  box-shadow: 0px 8px 8px -4px rgba(0, 0, 0, 0.6), 0px 4px 6px -4px rgba(0, 0, 0, 0.12);
+  box-shadow: 0px 4px 6px -4px rgba(78, 63, 9, 0.12), 0px 8px 8px -4px rgba(78, 63, 9, 0.06);
   background-color: var(--dialogBackground, #fff);
   border-radius: 24px;
   transition: top 0.25s ease-in-out;
   border: none;
   position: fixed;
-  top: calc(var(--topPosition, var(--headerHeight)) + 69px);
+  top: calc(var(--headerHeight) + 69px);
   right: 50%;
   z-index: 1;
   transform: translateX(50%);
@@ -499,6 +511,11 @@ img::selection {
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 400;
+}
+@media only screen and (max-width: 480px) {
+  .scroll-top__scrollTop___xohSh .scroll-top__scrollTopText___lswQd {
+    font-size: 11px;
+  }
 }
 .scroll-top__scrollTop___xohSh:not(.scroll-top__isVisible___mJBSl) {
   display: none;
