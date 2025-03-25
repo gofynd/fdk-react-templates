@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import * as styles from "./filter-list.less";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
@@ -92,6 +92,13 @@ function FilterList({
   // const filteredValues = getFilteredItems(searchText);
   const groupedValues = getGroupedValues();
 
+  const isEmptyResult = useMemo(() => {
+    const filteredResult = Object.values(groupedValues).filter(
+      (values) => !!values.length
+    );
+    return !filteredResult.length;
+  }, [groupedValues]);
+
   function getFilteredValues() {
     let filteredItem = getFilteredItems(searchText);
     if (!showViewMore) {
@@ -150,55 +157,69 @@ function FilterList({
           )}
           <div className={styles["filter-items-container"]}>
             <ul className={`${styles["filter__list--items"]}`} id="scroll-bar">
-              {getFilteredValues().map((filterItem, index) => (
-                <li
-                  key={`filter-${index}`}
-                  className={styles["filter__list--item"]}
-                >
-                  <div
-                    className={`${styles["filter__item"]} ${styles.flexAlignCenter} ${styles["caption-normal"]}`}
-                    onClick={() => filterClicked(filterItem)}
+              {getFilteredValues()?.length ? (
+                getFilteredValues().map((filterItem, index) => (
+                  <li
+                    key={`filter-${index}`}
+                    className={styles["filter__list--item"]}
                   >
-                    <div>
-                      {isFilterSelected(filterItem) ? (
-                        <SvgWrapper
-                          className={`${styles.icon} ${styles["checkbox-icon"]} ${styles.selected}`}
-                          svgSrc="checkbox-selected"
-                        ></SvgWrapper>
-                      ) : (
-                        <SvgWrapper
-                          svgSrc="checkbox"
-                          className={`${styles.icon} ${styles["checkbox-icon"]}`}
-                        ></SvgWrapper>
-                      )}
-                    </div>
-                    {filter.key.name === "primary_color" && (
-                      <div
-                        className={`
+                    <div
+                      className={`${styles["filter__item"]} ${styles.flexAlignCenter} ${styles["caption-normal"]}`}
+                      onClick={() => filterClicked(filterItem)}
+                    >
+                      <div>
+                        {isFilterSelected(filterItem) ? (
+                          <SvgWrapper
+                            className={`${styles.icon} ${styles["checkbox-icon"]} ${styles.selected}`}
+                            svgSrc="checkbox-selected"
+                          ></SvgWrapper>
+                        ) : (
+                          <SvgWrapper
+                            svgSrc="checkbox"
+                            className={`${styles.icon} ${styles["checkbox-icon"]}`}
+                          ></SvgWrapper>
+                        )}
+                      </div>
+                      {filter.key.name === "primary_color" && (
+                        <div
+                          className={`
                   ${styles["filter__item--color"]} ${
                     filterItem.value.toLowerCase() === "none"
                       ? styles.multiIcon
                       : ""
                   }
                 `}
-                        style={{ backgroundColor: `#${filterItem.value}` }}
-                      ></div>
-                    )}
-                    <div
-                      className={`${styles["filter__item--value"]} ${
-                        styles["caption-normal"]
-                      } ${isFilterSelected(filterItem) ? styles.active : ""}`}
-                    >
-                      {filterItem.display}
+                          style={{ backgroundColor: `#${filterItem.value}` }}
+                        ></div>
+                      )}
+                      <div
+                        className={`${styles["filter__item--value"]} ${
+                          styles["caption-normal"]
+                        } ${isFilterSelected(filterItem) ? styles.active : ""}`}
+                      >
+                        {filterItem.display}
+                      </div>
+                      <div
+                        className={`${styles["filter__item--count"]} ${styles["caption-normal"]}`}
+                      >
+                        ({filterItem.count || 0})
+                      </div>
                     </div>
-                    <div
-                      className={`${styles["filter__item--count"]} ${styles["caption-normal"]}`}
-                    >
-                      ({filterItem.count || 0})
-                    </div>
+                  </li>
+                ))
+              ) : (
+                <li
+                  key={`filter-empty`}
+                  className={styles["filter__list--item"]}
+                >
+                  <div
+                    className={`${styles["filter__item"]} ${styles.flexCenter} ${styles["caption-normal"]}`}
+                  >
+                    No Result Found
                   </div>
                 </li>
-              ))}
+              )}
+              {}
             </ul>
           </div>
           {showViewMore && (
@@ -316,54 +337,60 @@ function FilterList({
               <SvgWrapper svgSrc="close" />
             </span>
           </div>
-          <ul className={styles["filter__popup--content"]}>
-            {Object.keys(groupedValues).map((alphabet) => (
-              <React.Fragment key={alphabet}>
-                {groupedValues[alphabet].length !== 0 && (
-                  <li id={alphabet} className={styles["alphabet-label"]}>
-                    <h4>{alphabet}</h4>
-                  </li>
-                )}
-                {groupedValues[alphabet].map((filterItem) => (
-                  <li
-                    key={`${alphabet}${filterItem.value}`}
-                    className={styles.filter}
-                  >
-                    <fdk-link link={filterItem.url}>
-                      <div
-                        className={`${styles["filter__item"]} ${styles.flexAlignCenter} ${styles["caption-normal"]}`}
-                        onClick={() => filterClicked(filterItem)}
-                      >
-                        <div>
-                          <SvgWrapper
-                            className={`${styles.icon} ${styles["checkbox-icon"]}`}
-                            svgSrc={
-                              isFilterSelected(filterItem)
-                                ? "checkbox-selected"
-                                : "checkbox"
-                            }
-                          />
-                        </div>
+          <ul
+            className={`${styles["filter__popup--content"]} ${isEmptyResult ? styles.emptyPopupContent : ""}`}
+          >
+            {!isEmptyResult ? (
+              Object.keys(groupedValues).map((alphabet) => (
+                <React.Fragment key={alphabet}>
+                  {groupedValues[alphabet].length !== 0 && (
+                    <li id={alphabet} className={styles["alphabet-label"]}>
+                      <h4>{alphabet}</h4>
+                    </li>
+                  )}
+                  {groupedValues[alphabet].map((filterItem) => (
+                    <li
+                      key={`${alphabet}${filterItem.value}`}
+                      className={styles.filter}
+                    >
+                      <fdk-link link={filterItem.url}>
                         <div
-                          className={`${styles["filter__item--value"]} ${
-                            styles["caption-normal"]
-                          } ${
-                            isFilterSelected(filterItem) ? styles.active : ""
-                          }`}
+                          className={`${styles["filter__item"]} ${styles.flexAlignCenter} ${styles["caption-normal"]}`}
+                          onClick={() => filterClicked(filterItem)}
                         >
-                          {filterItem.display}
+                          <div>
+                            <SvgWrapper
+                              className={`${styles.icon} ${styles["checkbox-icon"]}`}
+                              svgSrc={
+                                isFilterSelected(filterItem)
+                                  ? "checkbox-selected"
+                                  : "checkbox"
+                              }
+                            />
+                          </div>
+                          <div
+                            className={`${styles["filter__item--value"]} ${
+                              styles["caption-normal"]
+                            } ${
+                              isFilterSelected(filterItem) ? styles.active : ""
+                            }`}
+                          >
+                            {filterItem.display}
+                          </div>
+                          <div
+                            className={`${styles["filter__item--count"]} ${styles["caption-normal"]}`}
+                          >
+                            ({filterItem.count || 0})
+                          </div>
                         </div>
-                        <div
-                          className={`${styles["filter__item--count"]} ${styles["caption-normal"]}`}
-                        >
-                          ({filterItem.count || 0})
-                        </div>
-                      </div>
-                    </fdk-link>
-                  </li>
-                ))}
-              </React.Fragment>
-            ))}
+                      </fdk-link>
+                    </li>
+                  ))}
+                </React.Fragment>
+              ))
+            ) : (
+              <li className={styles.emptyMessage}>No Result Found</li>
+            )}
           </ul>
         </div>
       )}

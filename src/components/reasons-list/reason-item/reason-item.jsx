@@ -24,12 +24,17 @@ function ReasonItem({ reason, selectedReason, change, otherReason }) {
           className={`${styles.reasonContent}`}
           onClick={() => change(reason)}
         >
-          {selectedReason?.id !== reason?.id && <SvgWrapper svgSrc="regular" />}
+          {selectedReason?.id !== reason?.id && (
+            <SvgWrapper svgSrc="regular" className={styles.regularRadio} />
+          )}
           {selectedReason?.id === reason?.id && (
-            <SvgWrapper svgSrc="radio-selected" />
+            <SvgWrapper
+              svgSrc="returnRadioSelected"
+              className={styles.returnRadioSelected}
+            />
           )}
 
-          <span className={`${styles.text} ${styles.lightxs}`}>
+          <span className={`${styles.text} ${styles.lightxs} fontHeader`}>
             {reason.display_name}
           </span>
         </div>

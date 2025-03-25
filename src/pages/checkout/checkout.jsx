@@ -7,6 +7,7 @@ import PriceBreakup from "../../components/price-breakup/price-breakup";
 import Stepper from "../../components/stepper/stepper";
 import Coupon from "../../page-layouts/cart/Components/coupon/coupon";
 import Comment from "../../page-layouts/cart/Components/comment/comment";
+import { priceFormatCurrencySymbol } from "../../helper/utils";
 
 function Checkout({
   breakupValues,
@@ -29,8 +30,11 @@ function Checkout({
   onPriceDetailsClick,
   cartCouponProps,
   cartCommentProps,
+  buybox = {},
+  isGuestUser = false,
 }) {
   const [cancelQrPayment, setCancelQrPayment] = useState(null);
+  const { onFailedGetCartShipmentDetails } = address;
   return (
     <div className={`${styles.mainContainer} fontBody`}>
       <div className={styles["view-mobile"]}>
@@ -46,6 +50,7 @@ function Checkout({
           mapApiKey={mapApiKey}
           showGoogleMap={showGoogleMap}
           loader={loader}
+          isGuestUser={isGuestUser}
         ></SingleAddress>
         <SinglePageShipment
           shipments={shipments}
@@ -57,6 +62,12 @@ function Checkout({
           isHyperlocal={isHyperlocal}
           convertHyperlocalTat={convertHyperlocalTat}
           loader={loader}
+          buybox={buybox}
+          totalValue={priceFormatCurrencySymbol(
+            payment?.getCurrencySymbol,
+            payment?.getTotalValue()
+          )}
+          onPriceDetailsClick={onPriceDetailsClick}
         ></SinglePageShipment>
         <CheckoutPayment
           payment={payment}
@@ -66,6 +77,7 @@ function Checkout({
           breakUpValues={breakupValues}
           showPaymentOptions={showPaymentOptions}
           setCancelQrPayment={setCancelQrPayment}
+          onFailedGetCartShipmentDetails={onFailedGetCartShipmentDetails}
         ></CheckoutPayment>
       </div>
       <div className={styles.rightContainer}>

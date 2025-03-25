@@ -25,6 +25,7 @@ function LocationModal({
   isOpen = true,
   pincode = "",
   error = null,
+  isLocationButton = false,
   onClose = () => {},
   onSubmit = () => {},
   onCurrentLocationClick = () => {},
@@ -100,13 +101,15 @@ function LocationModal({
           APPLY
         </FyButton>
       </form>
-      <button
-        type="button"
-        className={styles.currentLocation}
-        onClick={onCurrentLocationClick}
-      >
-        use my current location
-      </button>
+      {isLocationButton && (
+        <button
+          type="button"
+          className={styles.currentLocation}
+          onClick={onCurrentLocationClick}
+        >
+          use my current location
+        </button>
+      )}
     </Modal>
   );
 }

@@ -48,6 +48,8 @@
       &--value {
         color: @TextBody;
         margin-right: 4px;
+        text-overflow: ellipsis;
+        overflow: hidden;
       }
       &--count {
         color: @TextDisabled;
@@ -134,6 +136,13 @@
       overflow-x: auto;
       scroll-behavior: smooth;
       scroll-margin-left: 24px;
+      &.emptyPopupContent {
+        justify-content: center;
+      }
+      .emptyMessage {
+        text-align: center;
+        color: @TextBody;
+      }
       .alphabet-label {
         padding-left: 12px;
         margin-bottom: 11px;
