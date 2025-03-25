@@ -42,19 +42,19 @@ function SortModal({
       isOpen={isOpen}
       modalType="right-modal"
       closeDialog={onCloseModalClick}
-      title="Sort by"
+      title="Sort"
     >
       <div className={styles.contentWrapper}>
         <div className={styles.modalContent}>
           <ul className={styles.sortList}>
             {sortList?.map((item) => (
               <li
-                className={styles.sortItem}
+                className={`${styles.sortItem} ${selectedSort?.value === item?.value ? styles.selected : ""}`}
                 key={item?.value}
                 onClick={() => handleItemClick(item)}
               >
                 <SvgWrapper
-                  className={`${styles.radioIcon} ${selectedSort?.value === item?.value ? styles.active : ""}`}
+                  className={styles.radioIcon}
                   svgSrc={
                     selectedSort?.value === item?.value
                       ? "radio-selected"
@@ -68,13 +68,13 @@ function SortModal({
         </div>
         <div className={styles.modalFooter}>
           <button className={styles.resetBtn} onClick={onResetBtnClick}>
-            Reset
+            CANCEL
           </button>
           <button
             className={styles.applyBtn}
             onClick={() => onApplyBtnClick(selectedSort)}
           >
-            Apply
+            APPLY
           </button>
         </div>
       </div>

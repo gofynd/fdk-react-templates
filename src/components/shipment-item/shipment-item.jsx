@@ -48,9 +48,18 @@ function ShipmentItem({ bag, initial, selectId, onChangeValue, type }) {
                 id={bag.id}
               />
               {selectId !== bag.id && (
-                <SvgWrapper svgSrc="regular" onClick={() => onChange(bag.id)} />
+                <SvgWrapper
+                  className={styles.regularRadio}
+                  svgSrc="regular"
+                  onClick={() => onChange(bag.id)}
+                />
               )}
-              {selectId === bag.id && <SvgWrapper svgSrc="radio-selected" />}
+              {selectId === bag.id && (
+                <SvgWrapper
+                  className={styles.returnRadioSelected}
+                  svgSrc="returnRadioSelected"
+                />
+              )}
             </div>
           )}
         {type === "tracking" && (
@@ -67,15 +76,13 @@ function ShipmentItem({ bag, initial, selectId, onChangeValue, type }) {
           </FDKLink>
         )}
         <div className={`${styles.bagInfo}`}>
-          <div className={`${styles.brand} ${styles.boldsm}`}>
-            {bag?.item?.brand.name}
-          </div>
+          <div className={`${styles.brand}`}>{bag?.item?.brand.name}</div>
 
           <div className={`${styles.bagDetails}`}>
             <div className={`${styles.chip} ${styles.regularxxs}`}>
-              <span className={`${styles.boldxxs}`}>{bag?.item?.size}</span>
-              <span>{` | `}</span>
-              <span className={`${styles.lightxxs}`}>
+              <span className={`${styles.itemSize}`}>{bag?.item?.size}</span>
+              <span className={styles.itemSeparator}>{` | `}</span>
+              <span className={`${styles.itemQty}`}>
                 {bag?.quantity} {bag?.quantity === 1 ? "Piece" : "Pieces"}
               </span>
             </div>
