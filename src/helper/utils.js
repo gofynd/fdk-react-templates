@@ -27,25 +27,25 @@ export function roundToDecimals(number, decimalPlaces = 2) {
   return Math.round(number * factor) / factor;
 }
 
-export const numberWithCommas = (number) => {
+export const numberWithCommas = (number = 0) => {
   let num = number;
   if (!isNaN(number)) num = roundToDecimals(number);
   if (num?.toString()[0] === "-") {
-    num = num.toString().substring(1);
+    num = num?.toString()?.substring(1);
   }
 
   if (num) {
     let no =
-      num.toString().split(".")[0].length > 3
+      num?.toString()?.split?.(".")?.[0]?.length > 3
         ? `${num
-            .toString()
-            .substring(0, num.toString().split(".")[0].length - 3)
-            .replace(/\B(?=(\d{2})+(?!\d))/g, ",")},${num
-            .toString()
-            .substring(num.toString().split(".")[0].length - 3)}`
-        : num.toString();
+            ?.toString()
+            ?.substring(0, num?.toString()?.split(".")[0].length - 3)
+            ?.replace(/\B(?=(\d{2})+(?!\d))/g, ",")},${num
+            ?.toString()
+            ?.substring(num?.toString()?.split?.(".")?.[0]?.length - 3)}`
+        : num?.toString();
 
-    if (number.toString()[0] === "-") {
+    if (number?.toString()[0] === "-") {
       no = `-${no}`;
     }
     return no;
@@ -323,16 +323,37 @@ export function deepEqual(obj1, obj2) {
   return true;
 }
 
-export function priceFormatCurrencySymbol(symbol, price) {
+export function priceFormatCurrencySymbol(symbol, price = 0) {
   const hasAlphabeticCurrency = /^[A-Za-z]+$/.test(symbol);
-  let sanitizedPrice =
-    typeof price === "string" ? price : numberWithCommas(price);
+  let sanitizedPrice = price;
+  if (typeof price !== "string") {
+    let num = price;
 
-  const formattedValue = hasAlphabeticCurrency
-    ? `${symbol} ${sanitizedPrice}`
-    : `${symbol}${sanitizedPrice}`;
+    if (!isNaN(price)) num = roundToDecimals(price);
+    if (num?.toString()[0] === "-") {
+      num = num?.toString()?.substring(1);
+    }
 
-  return formattedValue;
+    if (num) {
+      sanitizedPrice =
+        num?.toString()?.split(".")?.[0].length > 3
+          ? `${num
+              ?.toString()
+              ?.substring(0, num?.toString()?.split(".")?.[0]?.length - 3)
+              ?.replace(/\B(?=(\d{2})+(?!\d))/g, ",")},${num
+              ?.toString()
+              ?.substring(num?.toString()?.split?.(".")?.[0]?.length - 3)}`
+          : num?.toString();
+    } else {
+      sanitizedPrice = 0;
+    }
+  }
+
+  return `${price.toString()[0] === "-" ? "-" : ""}${
+    hasAlphabeticCurrency
+      ? `${symbol} ${sanitizedPrice}`
+      : `${symbol}${sanitizedPrice}`
+  }`;
 }
 
 export function isNumberKey(e) {
@@ -389,3 +410,11 @@ export const getAddressStr = (item, isAddressTypeAvailable) => {
     return "";
   }
 };
+
+export function isEmptyOrNull(obj) {
+  return (
+    obj === null ||
+    obj === undefined ||
+    (typeof obj === "object" && Object.keys(obj).length === 0)
+  );
+}

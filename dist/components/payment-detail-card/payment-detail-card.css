@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .payment-detail-card__caption-medium____kvyN,
+  .payment-detail-card__captionMedium___prw4Y {
+    font-size: 11px;
+  }
+}
 .payment-detail-card__caption-semi-bold___CW03U,
 .payment-detail-card__captionSemiBold___Q0zrG {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .payment-detail-card__caption-semi-bold___CW03U,
+  .payment-detail-card__captionSemiBold___Q0zrG {
+    font-size: 11px;
+  }
 }
 .payment-detail-card__btn-link___K3FiK,
 .payment-detail-card__btnLink____WVQ1 {
@@ -478,14 +490,11 @@ img::selection {
   }
 }
 .payment-detail-card__paymentMode___Q6ooB {
-  margin: 15px;
+  padding: 16px;
 }
 .payment-detail-card__paymentMode___Q6ooB .payment-detail-card__wrapperflex___LiHqy {
   display: flex;
   align-items: center;
-}
-.payment-detail-card__paymentMode___Q6ooB .payment-detail-card__header___UDwXd {
-  margin-left: 3px;
 }
 .payment-detail-card__paymentMode___Q6ooB .payment-detail-card__boldsm___LSYHw {
   font-weight: 700;
