@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .shipment-tracking__caption-medium___pthjN,
+  .shipment-tracking__captionMedium___s9jz3 {
+    font-size: 11px;
+  }
+}
 .shipment-tracking__caption-semi-bold___H_RVN,
 .shipment-tracking__captionSemiBold___TTyHu {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .shipment-tracking__caption-semi-bold___H_RVN,
+  .shipment-tracking__captionSemiBold___TTyHu {
+    font-size: 11px;
+  }
 }
 .shipment-tracking__btn-link___P77hT,
 .shipment-tracking__btnLink___YL9mX {
@@ -483,10 +495,16 @@ img::selection {
   opacity: 1 !important;
 }
 .shipment-tracking__trackingContainer___tHFOQ {
-  padding: 20px;
+  padding: 0;
 }
 .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr {
-  border: 1px solid #eeeeee;
+  border-radius: 4px;
+  padding: 16px;
+}
+@media only screen and (max-width: 480px) {
+  .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr {
+    border: 1px solid var(--dividerStokes, #d4d1d1);
+  }
 }
 .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__boldsm___aDLPp {
   font-weight: 700;
@@ -521,8 +539,8 @@ img::selection {
 }
 .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__status___B417y {
   display: flex;
-  padding: 10px;
-  border-bottom: 1px solid #eeeeee;
+  padding: 0 0 16px;
+  border-bottom: 1px solid var(--dividerStokes, #d4d1d1) !important;
   position: relative;
   align-items: center;
 }
@@ -540,7 +558,7 @@ img::selection {
 }
 .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz {
   display: flex;
-  padding: 20px;
+  margin: 16px 0;
   opacity: 0.5;
 }
 .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__trackInfo___A5RXX {
@@ -606,7 +624,9 @@ img::selection {
 .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI {
   display: flex;
   justify-content: center;
-  color: var(--buttonLink, #b1655b);
+  color: var(--textHeading, #26201a);
+  border-top: 1px solid var(--dividerStokes, #d4d1d1);
+  padding-top: 16px;
 }
 .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI div,
 .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI a {
@@ -614,15 +634,20 @@ img::selection {
   justify-content: center;
   display: flex;
   cursor: pointer;
-  padding: 15px 10px;
-  border-top: 1px solid #eeeeee;
-  border-right: 1px solid #eeeeee;
   text-align: center;
   align-items: center;
-  font-size: 14px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 140%;
+  border-right: 1px solid var(--dividerStokes, #d4d1d1);
+  color: var(--buttonLink, #b1655b);
+}
+.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI div:last-child,
+.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI a:last-child {
+  border-right: none;
 }
 .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI div:hover,
 .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI a:hover {
-  background-color: #eeeeee;
+  color: var(--buttonLinkL2, #d0a39d);
 }
 
