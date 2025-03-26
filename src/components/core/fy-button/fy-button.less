@@ -42,6 +42,31 @@
     border: 2px solid @ButtonPrimaryL3;
     border-top: 2px solid @ButtonPrimary;
     padding: 0;
+    margin-left: 0;
+
+    &.contained {
+      &.primary {
+        border-top-color: @White;
+      }
+    }
+
+    &.text,
+    &.outlined {
+      &.secondary {
+        border: 2px solid @ButtonPrimaryL3;
+        border-top: 2px solid @ButtonPrimary;
+      }
+
+      &.error {
+        border: 2px solid @ErrorBackground;
+        border-top: 2px solid @ErrorText;
+      }
+
+      &.success {
+        border: 2px solid @SuccessBackground;
+        border-top: 2px solid @SuccessText;
+      }
+    }
 
     &.error {
       border: 2px solid @White;
@@ -66,30 +91,6 @@
     &.large {
       height: 40px;
       border-width: 4px;
-    }
-
-    &.contained {
-      &.primary {
-        border-top: 2px solid @White;
-      }
-    }
-
-    &.text,
-    &.outlined {
-      &.secondary {
-        border: 2px solid @ButtonPrimaryL3;
-        border-top: 2px solid @ButtonPrimary;
-      }
-
-      &.error {
-        border: 2px solid @ErrorBackground;
-        border-top: 2px solid @ErrorText;
-      }
-
-      &.success {
-        border: 2px solid @SuccessBackground;
-        border-top: 2px solid @SuccessText;
-      }
     }
   }
 }
@@ -155,7 +156,13 @@
   &.primary {
     &:hover {
       background-color: @ButtonPrimary;
-      color: @White;
+      color: @ButtonSecondary;
+
+      svg {
+        path {
+          fill: @ButtonSecondary;
+        }
+      }
     }
   }
 

@@ -244,7 +244,7 @@ const addressTypes = [
   {
     label: "Friends & Family",
     value: "Friends & Family",
-    icon: <SvgWrapper svgSrc="otherType" className={styles.typeIcon} />,
+    icon: <SvgWrapper svgSrc="friendsFamily" className={styles.typeIcon} />,
   },
   {
     label: "Other",
@@ -265,12 +265,13 @@ const AddressForm = ({
   onAddAddress = () => {},
   onUpdateAddress = () => {},
   onGetLocality = () => {},
+  isGuestUser = false,
   customFooter = (
     <button
       className={`${styles.commonBtn} ${styles.deliverBtn}`}
       type="submit"
     >
-      {addressItem ? "Update Address" : "Add Address"}
+      {isNewAddress ? "Add Address" : "Update Address"}
     </button>
   ),
   setI18nDetails,
@@ -291,6 +292,7 @@ const AddressForm = ({
     watch,
     reset,
     trigger,
+    getValues,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -310,15 +312,18 @@ const AddressForm = ({
   const formContainerRef = useRef(null);
   const [currBgColor, setCurrBgColor] = useState("#fff");
   const [showOtherText, setShowOtherText] = useState(false);
-  const [isMapLoaded, setIsMapLoaded] = useState(false);
-  const [resetStatus, setResetStatus] = useState(true);
   const address_type = watch("address_type");
-  const pin = watch("area_code");
   const sector = watch("sector");
+
+  useEffect(() => {
+    reset();
+    setValue("country", selectedCountry);
+  }, [selectedCountry]);
 
   useEffect(() => {
     if (addressItem) {
       reset({
+        ...getValues(),
         ...addressItem,
         address_type: addressItem?.address_type
           ? isOtherAddressType
@@ -337,59 +342,6 @@ const AddressForm = ({
   useEffect(() => {
     setShowOtherText(address_type === "Other");
   }, [address_type]);
-
-  const validatePin = async () => {
-    const isPinValid = await trigger("area_code");
-    if (!isPinValid) {
-      return;
-    }
-    onGetLocality("pincode", pin).then((data) => {
-      if (resetStatus) {
-        getLatLngFromPostalCode(pin);
-      }
-      setValue("city", "");
-      setValue("state", "");
-      if (data?.showError) {
-        setError("area_code", {
-          type: "manual",
-          message: data?.errorMsg,
-        });
-      } else {
-        const { city = "", state = "" } = data;
-        setValue("city", city);
-        setValue("state", state);
-      }
-    });
-  };
-
-  useEffect(() => {
-    if (pin) {
-      validatePin();
-    }
-  }, [pin, setValue]);
-
-  const getLatLngFromPostalCode = async (postalCode) => {
-    try {
-      const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?address=${postalCode}&key=${mapApiKey}`
-      );
-      const data = await response.json();
-      if (data?.results?.length > 0) {
-        const location = data.results[0]?.geometry?.location;
-        setValue("geo_location", {
-          latitude: location?.lat,
-          longitude: location?.lng,
-        });
-      }
-    } catch (error) {
-      console.error("Error fetching coordinates from postal code:", error);
-    }
-  };
-
-  useEffect(() => {
-    reset();
-    setValue("country", selectedCountry);
-  }, [selectedCountry]);
 
   useEffect(() => {
     if (sector && sector.length > 0) {
@@ -421,7 +373,12 @@ const AddressForm = ({
 
   const removeNullValues = (obj) => {
     return Object.fromEntries(
-      Object.entries(obj).filter(([key, value]) => value !== null)
+      Object.entries(obj).filter(([key, value]) => {
+        if (key === "area_code") {
+          return value !== "";
+        }
+        return value !== null;
+      })
     );
   };
 
@@ -441,21 +398,17 @@ const AddressForm = ({
   const selectAddress = (data) => {
     setResetStatus(false);
     reset(data);
+    formSchema?.forEach((group) =>
+      group?.fields?.forEach(({ type, key }) => {
+        if (type === "list") {
+          setValue(key, "");
+        }
+      })
+    );
   };
-
-  const onLoadMap = (map) => {
-    if (map) {
-      setIsMapLoaded(true);
-    }
-  };
-
-  const isAddressForm = !showGoogleMap || !mapApiKey || isMapLoaded;
 
   return (
-    <div
-      className={styles.addressFormWrapper}
-      style={{ display: isAddressForm ? "block" : "none" }}
-    >
+    <div className={styles.addressFormWrapper}>
       {showGoogleMap && mapApiKey && (
         <div className={styles.mapWrap}>
           <GoogleMapAddress
@@ -463,7 +416,6 @@ const AddressForm = ({
             onAddressSelect={selectAddress}
             countryDetails={countryDetails}
             addressItem={addressItem}
-            onLoad={onLoadMap}
           />
         </div>
       )}
@@ -487,12 +439,14 @@ const AddressForm = ({
         {formSchema?.map((group, index) => (
           <div key={index} className={styles.formGroup}>
             <div ref={formContainerRef} className={styles.formContainer}>
-              {group.fields.map((field) => (
+              {group?.fields?.map((field) => (
                 <FormInputSelector
+                  labelClassName={styles.labelClassName}
                   isSingleField={group?.fields?.length === 1}
                   key={field.key}
                   formData={field}
                   control={control}
+                  formMethods={{ setValue, getValues, setError, trigger }}
                   allowDropdown={false}
                 />
               ))}
@@ -507,13 +461,7 @@ const AddressForm = ({
                 type="button"
                 key={type.value}
                 onClick={() => setValue("address_type", type.value)}
-                className={styles.typeBtn}
-                style={{
-                  border:
-                    watch("address_type") === type.value
-                      ? "2px solid var(--buttonPrimary)"
-                      : "1px solid var(--dividerStokes)",
-                }}
+                className={`${styles.typeBtn} ${watch("address_type") === type.value ? styles.selected : ""}`}
               >
                 {type.icon}
                 <span>{type.label}</span>
@@ -539,7 +487,7 @@ const AddressForm = ({
             <input
               {...register("otherAddressType", {
                 validate: (value) => {
-                  if (!value) {
+                  if (!value.trim()) {
                     return "Field is required";
                   }
                   if (value.length < 1 || value.length > 30) {
@@ -555,6 +503,19 @@ const AddressForm = ({
                 {errors.otherAddressType.message}
               </div>
             )}
+          </div>
+        )}
+        {!isGuestUser && (
+          <div className={styles.defaultAddressContainer}>
+            <input
+              id="is_default_address"
+              className={styles.checkbox}
+              type="checkbox"
+              {...register("is_default_address")}
+            />
+            <label className={styles.label} htmlFor="is_default_address">
+              Make this my default address
+            </label>
           </div>
         )}
         <div>{customFooter}</div>
