@@ -25,7 +25,6 @@
  */
 
 import React, { useEffect, useMemo, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import * as styles from "./modal.less";
 import SvgWrapper from "../svgWrapper/SvgWrapper";
 import { useMobile } from "../../../helper/hooks/useMobile";
@@ -76,14 +75,21 @@ function Modal({
   };
 
   useEffect(() => {
+    const openModals = document.querySelectorAll(`.${styles.modalContainer}`);
+
     if (isOpen) {
       document.body.style.overflow = "hidden";
-    } else {
+    } else if (openModals.length < 1) {
       document.body.style.overflow = "unset";
     }
 
     return () => {
-      document.body.style.overflow = "unset";
+      const remainingModals = document.querySelectorAll(
+        `.${styles.modalContainer}`
+      );
+      if (remainingModals.length < 1) {
+        document.body.style.overflow = "unset";
+      }
     };
   }, [isOpen]);
 
@@ -131,28 +137,28 @@ function Modal({
   );
 
   return (
-    <AnimatePresence mode="wait">
+    <>
       {isOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+        <div
+          // initial={{ opacity: 0 }}
+          // animate={{ opacity: 1 }}
+          // exit={{ opacity: 0 }}
           className={`${styles.modal} ${modalType === "right-modal" ? styles.rightModal : ""} ${modalType === "center-modal" ? styles.centerModal : ""} ${customClassName ?? ""}`}
           ref={modalRef}
-          tabIndex="0"
-          onKeyDown={(e) =>
-            e.key === "Escape" && isCancellable && closeDialog(e)
-          }
+          // tabIndex="0"
+          // onKeyDown={(e) =>
+          //   e.key === "Escape" && isCancellable && closeDialog(e)
+          // }
           onClick={handleClickOutside}
         >
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1, transition: { duration: 0.5 } }}
-            exit={{ opacity: 0, transition: { duration: 0.5 } }}
-            {...(modalType === "right-modal" && !isMobile && animationVariants)}
-            {...(isMobile &&
-              modalType !== "center-modal" &&
-              mobileAnimationVariants)}
+          <div
+            // initial={{ opacity: 0 }}
+            // animate={{ opacity: 1, transition: { duration: 0.5 } }}
+            // exit={{ opacity: 0, transition: { duration: 0.5 } }}
+            // {...(modalType === "right-modal" && !isMobile && animationVariants)}
+            // {...(isMobile &&
+            //   modalType !== "center-modal" &&
+            //   mobileAnimationVariants)}
             className={customContainerClass}
             ref={modalContainerRef}
           >
@@ -170,10 +176,10 @@ function Modal({
               </div>
             )}
             <div className={customBodyClass}>{children}</div>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       )}
-    </AnimatePresence>
+    </>
   );
 }
 
