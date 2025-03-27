@@ -1,7 +1,6 @@
 @import "../../styles/main.less";
 
 .priceSummaryContainer {
-  border-radius: 8px;
   border: 1px solid @DividerStokes;
   line-height: 140%;
   padding: 24px 0;
@@ -9,8 +8,7 @@
   flex-direction: column;
   @media @mobile {
     padding: 16px 0;
-    border-radius: 0;
-    border-radius: 4px;
+    border-width: 1px 0;
   }
   .priceSummaryHeading {
     font-size: 12px;
@@ -37,7 +35,7 @@
   .priceSummaryItemTotal {
     color: @TextHeading;
     border-top: 1px solid @DividerStokes;
-    margin-top: 24px;
+    margin-top: 16px;
     font-size: 14px;
     font-weight: 700;
     display: flex;
@@ -51,31 +49,36 @@
     }
   }
   .internationalTaxLabel {
-    margin: 16px 24px 0;
-    padding-top: 16px;
-    border-top: 1px solid @DividerStokes;
     color: @TextBody;
     font-size: 14px;
     font-weight: 400;
     line-height: 140%;
     display: flex;
     gap: 12px;
+    padding: 16px 24px 0;
+
     @media @mobile {
-      margin-right: 16px;
-      margin-left: 16px;
+      padding: 12px 16px 0;
+      font-size: 12px;
+      gap: 8px;
     }
+
     .infoIcon {
       flex: 0 0 20px;
     }
   }
   .discountPreviewContiner {
-    background-color: #fff9dc;
+    background-color: @SuccessBackground;
+    color: @SuccessText;
     border-radius: 8px;
-    width: 100%;
     box-sizing: border-box;
     padding: 8px 0;
-    margin-top: 12px;
-    font-size: 16px;
+    margin: 16px 24px 0;
+
+    @media @mobile {
+      margin: 12px 16px 0;
+    }
+    font-size: 14px;
     text-align: center;
     display: flex;
     justify-content: center;
@@ -83,11 +86,15 @@
     @media @tablet {
       font-size: 12px;
     }
-    .svgContainer {
+
+    .icon {
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
+      width: 21px;
+      height: 20px;
     }
+
     .discountPreviewMessage {
       margin-left: 4px;
       font-weight: 400;

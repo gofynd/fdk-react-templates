@@ -10,24 +10,28 @@ function LoginOtp({
     isValidNumber: false,
   },
   submittedMobile = "",
+  setSubmittedMobile = () => {},
   otpResendTime = 0,
   otpError = null,
   isFormSubmitSuccess = false,
+  setIsFormSubmitSuccess = () => {},
   onLoginFormSubmit = () => {},
   onOtpSubmit = () => {},
   onResendOtpClick = () => {},
 }) {
-  const {
-    handleSubmit,
-    control,
-    getValues,
-    formState: { isValid },
-  } = useForm({
+  const { handleSubmit, control, getValues, reset, setValue } = useForm({
     mode: "onChange",
     defaultValues: {
       phone: mobileInfo,
     },
+    reValidateMode: "onChange",
   });
+
+  const onChangeButton = () => {
+    reset();
+    setIsFormSubmitSuccess(false);
+    setSubmittedMobile("");
+  };
 
   return (
     <div className={styles.loginOtpWrapper}>
@@ -38,7 +42,7 @@ function LoginOtp({
             control={control}
             rules={{
               validate: (value) => {
-                if (value?.mobile && !value.isValidNumber) {
+                if (!value.isValidNumber) {
                   return "Please enter valid phone number";
                 }
                 return true;
@@ -46,20 +50,18 @@ function LoginOtp({
             }}
             render={({ field, fieldState: { error } }) => (
               <MobileNumber
+                name={field?.name}
                 mobile={field.value.mobile}
                 countryCode={field.value.countryCode}
                 error={error}
+                isFocused={error?.message}
                 onChange={(value) => {
-                  field.onChange(value);
+                  setValue("phone", value);
                 }}
               />
             )}
           />
-          <button
-            className={styles.sendOtpBtn}
-            type="submit"
-            disabled={!isValid}
-          >
+          <button className={styles.sendOtpBtn} type="submit">
             GET OTP
           </button>
         </form>
@@ -71,6 +73,7 @@ function LoginOtp({
           error={otpError}
           onOtpSubmit={onOtpSubmit}
           onResendOtpClick={onResendOtpClick}
+          onChangeButton={onChangeButton}
         />
       )}
     </div>
@@ -86,6 +89,7 @@ function OtpForm({
   error,
   onOtpSubmit = () => {},
   onResendOtpClick = () => {},
+  onChangeButton = () => {},
 }) {
   const otpInputId = useId();
 
@@ -96,6 +100,7 @@ function OtpForm({
     setError,
     watch,
     clearErrors,
+    resetField,
   } = useForm();
   const mobileOtp = watch("mobileOtp");
 
@@ -120,44 +125,67 @@ function OtpForm({
     }
   }, [error]);
 
+  const resendOtp = () => {
+    resetField("mobileOtp");
+    onResendOtpClick(mobileInfo);
+  };
+
   return (
     <>
       <form
         className={styles.loginInputGroup}
         onSubmit={handleSubmit(onOtpSubmit)}
       >
-        <p className={styles.otpSentMsg}>{`OTP sent to ${submittedMobile}`}</p>
-        <label className={styles.loginInputTitle} htmlFor={otpInputId}>
-          Enter OTP
-        </label>
-        <input
-          id={otpInputId}
-          type="text"
-          inputMode="numeric"
-          pattern="\d*"
-          maxLength={4}
-          onInput={(e) => {
-            e.target.value = e.target.value.replace(/[^0-9]/g, "").slice(0, 4);
-          }}
-          className={styles.otpInput}
-          {...register("mobileOtp", {
-            required: true,
-            maxLength: 4,
-          })}
-        />
+        <h3 className={styles.otpTitle}>Verify Account</h3>
+        <p className={styles.otpSentMsg}>
+          {`OTP sent to ${submittedMobile}`}
+          <button
+            type="button"
+            className={styles.changeBtn}
+            onClick={onChangeButton}
+          >
+            CHANGE
+          </button>
+        </p>
 
-        {errors.root && (
-          <div className={styles.alertError}>
-            <span>{errors.root.message}</span>
-          </div>
-        )}
+        <div className={styles.loginInput}>
+          <label
+            className={`${styles.loginInputTitle} ${errors?.root || errors?.mobileOtp ? styles.error : ""}`}
+            htmlFor={otpInputId}
+          >
+            Enter OTP
+          </label>
+          <input
+            id={otpInputId}
+            type="text"
+            inputMode="numeric"
+            pattern="\d*"
+            maxLength={4}
+            onInput={(e) => {
+              e.target.value = e.target.value
+                .replace(/[^0-9]/g, "")
+                .slice(0, 4);
+            }}
+            className={`${styles.otpInput} ${errors?.root || errors?.mobileOtp ? styles.error : ""}`}
+            {...register("mobileOtp", {
+              required: { message: "Please enter valid otp", value: true },
+              maxLength: 4,
+            })}
+          />
+
+          {(errors?.root || errors?.mobileOtp) && (
+            <div className={styles.alertError}>
+              <span>{errors?.root?.message || errors?.mobileOtp?.message}</span>
+            </div>
+          )}
+        </div>
         <button className={styles.verifyOtpBtn} type="submit">
           Continue
         </button>
       </form>
       <button
         className={styles.resendOtpBtn}
-        onClick={() => onResendOtpClick(mobileInfo)}
+        onClick={resendOtp}
         disabled={isResendBtnDisabled}
       >
         {`Resend OTP${isResendBtnDisabled ? ` (${otpResendTime}S)` : ""}`}
