@@ -17,7 +17,7 @@ function SinglesAddressHeader({
   const selectedAddress = useMemo(() => {
     if (allAddresses?.length) {
       const item = allAddresses?.find((item) => item.id == selectedAddId);
-      return getAddressStr(item, false);
+      return { name: item?.name, addressStr: getAddressStr(item, false) };
     }
   }, [allAddresses, selectedAddId]);
 
@@ -31,8 +31,12 @@ function SinglesAddressHeader({
                 <SvgWrapper svgSrc="checkmark"></SvgWrapper>
               </div>
               <div className={styles.deliverAdd}>
-                <div className={styles.title}>Delivery Address</div>
-                <div className={styles.address}>{selectedAddress}</div>
+                <div className={styles.title}>
+                  Deliver To: {selectedAddress?.name}
+                </div>
+                <div className={styles.address}>
+                  {selectedAddress?.addressStr}
+                </div>
               </div>
             </div>
             <div className={styles.rightSelected} onClick={backToEdit}>
@@ -56,7 +60,7 @@ function SinglesAddressHeader({
               className={`${styles.commonBtn} ${styles.addBtn}`}
               onClick={showAddNewAddressModal}
             >
-              + &nbsp; Add New Address
+              <SvgWrapper svgSrc="addAddress" /> <span>Add New Address</span>
             </button>
           </div>
         </div>
