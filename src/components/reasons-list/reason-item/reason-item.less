@@ -11,15 +11,27 @@
     cursor: pointer;
     width: fit-content;
 
+    .reasonRadio {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      flex: 0 0 24px;
+    }
+
     .text {
       margin-left: 10px;
+      @media @mobile {
+        margin-left: 8px;
+      }
     }
     .lightxs {
-      font-weight: 300;
+      color: @TextHeading;
       font-size: 14px;
-      @media @mobile {
-        font-size: 13px;
-      }
+      font-style: normal;
+      font-weight: 400;
+      line-height: 140%;
     }
   }
   .textarea {
@@ -33,5 +45,18 @@
       width: 98%;
       resize: none;
     }
+  }
+}
+.regularRadio {
+  g > circle {
+    stroke: @TextHeading;
+  }
+}
+.returnRadioSelected {
+  :first-child {
+    stroke: @ButtonPrimary;
+  }
+  :last-child {
+    fill: @ButtonPrimary;
   }
 }
