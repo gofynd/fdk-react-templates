@@ -9,6 +9,7 @@
 import React, { useState, useEffect } from "react";
 import * as styles from "./scroll-top.less";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
+import { isRunningOnClient } from "../../helper/utils";
 
 function ScrollTop() {
   const [isActive, setIsActive] = useState(false);
@@ -30,10 +31,13 @@ function ScrollTop() {
   };
 
   useEffect(() => {
-    window?.addEventListener("scroll", handleScroll);
-    return () => {
-      window?.removeEventListener("scroll", handleScroll);
-    };
+    if (isRunningOnClient()) {
+      handleScroll();
+      window?.addEventListener("scroll", handleScroll);
+      return () => {
+        window?.removeEventListener("scroll", handleScroll);
+      };
+    }
   }, []);
 
   return (
