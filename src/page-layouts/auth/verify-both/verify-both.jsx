@@ -59,6 +59,7 @@ function VerifyMobile({
     formState: { errors, isValid },
     setError,
     clearErrors,
+    resetField,
   } = useForm({
     defaultValues: {
       otp: "",
@@ -75,6 +76,11 @@ function VerifyMobile({
       clearErrors("root");
     }
   }, [error]);
+
+  const resendOtp = () => {
+    resetField("otp");
+    onResendMobileOtpClick();
+  };
 
   return (
     <div className={styles.formWrapper}>
@@ -93,8 +99,15 @@ function VerifyMobile({
             </label>
             <input
               id={mobileOtpId}
-              type="number"
+              type="text"
+              inputMode="numeric"
+              pattern="\d*"
               maxLength={4}
+              onInput={(e) => {
+                e.target.value = e.target.value
+                  .replace(/[^0-9]/g, "")
+                  .slice(0, 4);
+              }}
               {...register("otp", {
                 validate: (value) => /^[0-9]{4}$/.test(value),
               })}
@@ -113,7 +126,7 @@ function VerifyMobile({
       <div className={styles.resendOtpWrapper}>
         <button
           className={styles.resendOtpBtn}
-          onClick={onResendMobileOtpClick}
+          onClick={resendOtp}
           disabled={isResendBtnDisabled}
         >
           {`Resend OTP${isResendBtnDisabled ? ` (${mobileOtpResendTime}S)` : ""}`}
@@ -133,9 +146,10 @@ function VerifyEmail({
   const {
     handleSubmit,
     register,
-    formState: { errors, isValid },
+    formState: { errors },
     setError,
     clearErrors,
+    resetField,
   } = useForm({
     defaultValues: {
       otp: "",
@@ -147,11 +161,16 @@ function VerifyEmail({
 
   useEffect(() => {
     if (error) {
-      setError("root", error);
+      setError("otp", error);
     } else {
-      clearErrors("root");
+      clearErrors("otp");
     }
   }, [error]);
+
+  const resendOtp = () => {
+    resetField("otp");
+    onResendEmailOtpClick();
+  };
 
   return (
     <div className={styles.formWrapper}>
@@ -164,33 +183,41 @@ function VerifyEmail({
           <p
             className={styles.otpSentMessage}
           >{`OTP sent to ${submittedEmail}`}</p>
-          <div className={styles.inputGroup}>
+          <div
+            className={`${styles.inputGroup} ${errors?.root || errors?.otp ? styles.error : ""}`}
+          >
             <label className={styles.label} htmlFor={emailOtpId}>
               Enter OTP
             </label>
             <input
               id={emailOtpId}
-              type="number"
+              type="text"
+              inputMode="numeric"
+              pattern="\d*"
               maxLength={4}
+              onInput={(e) => {
+                e.target.value = e.target.value
+                  .replace(/[^0-9]/g, "")
+                  .slice(0, 4);
+              }}
               {...register("otp", {
-                validate: (value) => /^[0-9]{4}$/.test(value),
+                validate: (value) =>
+                  /^[0-9]{4}$/.test(value) || "Please enter a valid otp",
               })}
             />
+            {errors?.otp && (
+              <p className={styles.loginAlert}>{errors?.otp?.message}</p>
+            )}
           </div>
         </div>
-        {errors.root && (
-          <div className={styles.loginAlert}>
-            <span>{errors.root.message}</span>
-          </div>
-        )}
-        <button className={styles.submitBtn} type="submit" disabled={!isValid}>
+        <button className={styles.submitBtn} type="submit">
           <span>Submit</span>
         </button>
       </form>
       <div className={styles.resendOtpWrapper}>
         <button
           className={styles.resendOtpBtn}
-          onClick={onResendEmailOtpClick}
+          onClick={resendOtp}
           disabled={isResendBtnDisabled}
         >
           {`Resend OTP${isResendBtnDisabled ? ` (${emailOtpResendTime}S)` : ""}`}
