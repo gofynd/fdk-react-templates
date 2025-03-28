@@ -10,6 +10,9 @@
       overflow-y: hidden;
     }
   }
+  .addToCartTitle {
+    .text-line-clamp();
+  }
 }
 .productListingPage {
   margin-top: 16px;
@@ -39,10 +42,10 @@
   }
 
   .contentWrapper {
-    padding: 67px 16px 0;
+    padding: 0 16px;
     isolation: isolate;
     @media @tablet-strict {
-      padding: 67px 40px 0;
+      padding: 0 40px;
     }
 
     @media @desktop {
@@ -129,6 +132,7 @@
           .btnSecondary();
           background: transparent;
           padding: 12px 32px;
+          text-transform: uppercase;
 
           &:hover {
             background-color: @ButtonPrimary;
@@ -293,7 +297,7 @@
     transition: top 0.25s ease-in-out;
     border: none;
     position: fixed;
-    top: calc(var(--topPosition, var(--headerHeight)) + 69px);
+    top: calc(var(--headerHeight) + 69px);
     z-index: 1;
     right: 50%;
     z-index: 1;
@@ -325,18 +329,13 @@
   }
 }
 
-.breadcrumbWrapperDesktop {
+.breadcrumbWrapper {
   padding: 16px 40px 24px;
   @media @tablet {
-    display: none;
+    padding: 67px 40px 24px;
   }
-}
-.breadcrumbWrapperMobile {
-  text-align: center;
-  margin-top: 8px;
-  padding: 0 32px;
-  @media @desktop {
-    display: none;
+  @media @mobile {
+    padding: 67px 16px 24px;
   }
 }
 
@@ -373,14 +372,10 @@
   margin-bottom: 24px;
   background-color: @PageBackground;
   z-index: 1;
-  top: 0;
   left: 0;
   right: 0;
   position: fixed;
-  transition: top 0.4s ease-in-out;
-  top: var(--topPosition, var(--headerHeight));
-  &.active {
-  }
+  top: var(--headerHeight);
 
   @media @desktop {
     display: none;
@@ -484,6 +479,9 @@
 
   @media @desktop {
     --item-count: var(--desktop-col, 4);
+  }
+  & > * {
+    min-width: 0;
   }
 }
 
