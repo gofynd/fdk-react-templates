@@ -88,7 +88,9 @@ const FyInputGroup = ({
       {label && (
         <label className={customLabelClassName}>
           {label}
-          {required && showAsterik && <span> *</span>}
+          {required && showAsterik && (
+            <span className={styles.required}> *</span>
+          )}
         </label>
       )}
       <div className={styles.fyInputGroup}>
