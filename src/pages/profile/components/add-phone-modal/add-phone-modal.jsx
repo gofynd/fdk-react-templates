@@ -43,6 +43,7 @@ function AddPhoneModal({
     register: otpRegister,
     setValue: setOtpValue,
     watch: watchOtp,
+    resetField,
   } = useForm({
     mode: "onChange",
     defaultValues: {
@@ -92,6 +93,8 @@ function AddPhoneModal({
   }, []);
 
   const handleResendOtp = useCallback(async () => {
+    resetField("otp");
+
     try {
       if (isShowResendOtp) {
         setIsLoading(true);
@@ -133,9 +136,10 @@ function AddPhoneModal({
       isOpen={isOpen}
       closeDialog={onClose}
       title={!showOtp ? "Add Number" : "Verify Number"}
-      modalType="center-modal"
       containerClassName={styles.addPhoneContainer}
       bodyClassName={styles.addPhoneBody}
+      headerClassName={styles.header}
+      titleClassName={styles.modalTitle}
     >
       <div className={styles.modalContainer}>
         <div className={styles.body}>
@@ -156,11 +160,12 @@ function AddPhoneModal({
                   countryCode={field?.value?.countryCode}
                   height="40px"
                   textColor="var(--textHeading, #26201a)"
+                  fontSize="12px"
                   containerClassName={styles.phoneInputContainer}
                   error={error}
                   isRequired
                   isShowLabel={false}
-                  disable={showOtp}
+                  disable={showOtp && otpTime > 0 && !error}
                   onChange={(value) => {
                     field.onChange(value);
                   }}
@@ -177,17 +182,18 @@ function AddPhoneModal({
               <FyInput
                 id="otp"
                 label="OTP"
+                labelVariant="floating"
                 type="number"
                 name="otp"
                 placeholder="Enter OTP"
-                inputClassName={styles.addMobileOtp}
+                className={styles.addMobileOtp}
                 {...otpRegister("otp")}
                 onChange={handleOtpChange}
               />
               {showOtp && (
                 <FyButton
                   size="small"
-                  variant={isShowResendOtp ? "contained" : "text"}
+                  variant="text"
                   onClick={handleResendOtp}
                   isLoading={isLoading}
                   className={`${styles.resendOtp} ${isShowResendOtp ? styles.showResendButton : ""}`}
@@ -203,7 +209,6 @@ function AddPhoneModal({
           {!showOtp ? (
             <FyButton
               fullWidth
-              variant="text"
               type="submit"
               isLoading={isLoading}
               className={styles.yesBtn}
@@ -215,7 +220,6 @@ function AddPhoneModal({
           ) : (
             <FyButton
               fullWidth
-              variant="text"
               type="submit"
               isLoading={isOtpLoading}
               className={styles.yesBtn}
