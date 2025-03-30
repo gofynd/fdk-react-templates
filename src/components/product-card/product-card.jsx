@@ -278,7 +278,7 @@ const ProductCard = ({
                 <span
                   className={`${styles["productPrice--discount"]} ${styles.captionNormal} `}
                 >
-                  ({product.discount})
+                  ({product.discount?.toString().toLowerCase()})
                 </span>
               )}
             </div>
