@@ -1,14 +1,31 @@
 @import "../../../../styles/main.less";
 
+.modalHeader {
+  padding: 24px !important;
+  border-radius: 8px 8px 0 0 !important;
+
+  .modalTitle {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 140%;
+
+    @media @mobile {
+      font-size: 14px;
+    }
+  }
+
+  @media @mobile {
+    padding: 16px !important;
+  }
+}
+
 .modalContainer {
-  padding: 15px 25px 5px;
-  background-color: #fff;
-  min-width: 200px;
-  min-height: 100px;
-  max-width: 350px;
+  width: 350px;
   overflow-wrap: break-word;
-  border-radius: 3px;
-  -webkit-font-smoothing: antialiased;
+
+  @media @tablet {
+    width: 100%;
+  }
 
   .closeCross {
     display: flex;
@@ -29,25 +46,40 @@
   }
 
   .body {
-    line-height: 20px;
-
-    .formInputContainer {
-      margin: 25px 0 35px;
-      width: 300px;
+    .form {
       display: flex;
       flex-direction: column;
-    }
+      gap: 16px;
+      padding: 24px;
 
-    .btnContainer {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      margin-bottom: 3px;
-      border-top: 1px solid @DividerStokes;
+      @media @mobile {
+        padding: 0;
+        gap: 0;
+      }
 
-      .yesBtn {
-        margin-top: 6px;
+      .formInputContainer {
+        @media @mobile {
+          padding: 16px;
+        }
+
+        .emailInput {
+          font-size: 12px;
+          border: none;
+          outline: none;
+          background: transparent;
+        }
+      }
+
+      .btnContainer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+
+        @media @mobile {
+          border-top: 1px solid @DividerStokes;
+          padding: 16px;
+        }
       }
     }
   }

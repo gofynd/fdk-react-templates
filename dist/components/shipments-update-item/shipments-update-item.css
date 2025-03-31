@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .shipments-update-item__caption-medium___e2eH7,
+  .shipments-update-item__captionMedium___j4gnY {
+    font-size: 11px;
+  }
+}
 .shipments-update-item__caption-semi-bold___gc2RD,
 .shipments-update-item__captionSemiBold___fGkPk {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .shipments-update-item__caption-semi-bold___gc2RD,
+  .shipments-update-item__captionSemiBold___fGkPk {
+    font-size: 11px;
+  }
 }
 .shipments-update-item__btn-link___Q6kcV,
 .shipments-update-item__btnLink___TM4TP {
@@ -479,14 +491,25 @@ img::selection {
 }
 .shipments-update-item__updateItem___SC6gf {
   display: flex;
-  align-items: center;
+}
+@media only screen and (max-width: 768px) {
+  .shipments-update-item__updateItem___SC6gf {
+    padding: 0 16px;
+  }
 }
 .shipments-update-item__updateItem___SC6gf .shipments-update-item__bagImg___bn385 {
-  margin: 20px 20px 20px 0;
+  margin: 0px 20px 20px 0;
+}
+@media only screen and (max-width: 480px) {
+  .shipments-update-item__updateItem___SC6gf .shipments-update-item__bagImg___bn385 {
+    margin: 0px 16px 16px 0;
+  }
 }
 .shipments-update-item__updateItem___SC6gf .shipments-update-item__bagImg___bn385 img {
+  width: 80px;
+  height: 120px;
   max-width: 100px;
-  max-height: 100px;
+  max-height: 120px;
   cursor: pointer;
 }
 .shipments-update-item__updateItem___SC6gf .shipments-update-item__bagInfo___RyCGy {
@@ -505,7 +528,8 @@ img::selection {
 }
 .shipments-update-item__updateItem___SC6gf .shipments-update-item__bagInfo___RyCGy .shipments-update-item__boldxxxs___kNBJL {
   font-weight: 700;
-  font-size: 12px;
+  font-size: 16px;
+  color: var(--textHeading, #26201a);
 }
 @media only screen and (max-width: 480px) {
   .shipments-update-item__updateItem___SC6gf .shipments-update-item__bagInfo___RyCGy .shipments-update-item__boldxxxs___kNBJL {
@@ -515,6 +539,7 @@ img::selection {
 .shipments-update-item__updateItem___SC6gf .shipments-update-item__bagInfo___RyCGy .shipments-update-item__lightxxxs___gsnV_ {
   font-weight: 300;
   font-size: 12px;
+  color: var(--textBody, #3c3131);
 }
 @media only screen and (max-width: 480px) {
   .shipments-update-item__updateItem___SC6gf .shipments-update-item__bagInfo___RyCGy .shipments-update-item__lightxxxs___gsnV_ {
@@ -524,18 +549,20 @@ img::selection {
 .shipments-update-item__updateItem___SC6gf .shipments-update-item__bagInfo___RyCGy .shipments-update-item__sizeQuantityContainer___gDz7R {
   display: flex;
   width: 100%;
-  justify-content: space-between;
   background: var(--pageBackground, #f8f8f8);
   align-items: center;
-  padding: 10px;
+  padding: 5px 0;
   height: 50px;
   box-sizing: border-box;
-  margin-top: 20px;
 }
 .shipments-update-item__updateItem___SC6gf .shipments-update-item__bagInfo___RyCGy .shipments-update-item__sizeQuantityContainer___gDz7R .shipments-update-item__sizeContainer___wfP66 {
   background: white;
-  padding: 10px 20px 10px 10px;
-  border: 1px solid #e4e5e6;
+  padding: 8px;
+  border: 1px solid var(--dividerStokes, #d4d1d1);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--textHeading, #26201a);
+  white-space: nowrap;
 }
 .shipments-update-item__updateItem___SC6gf .shipments-update-item__bagInfo___RyCGy .shipments-update-item__sizeQuantityContainer___gDz7R .shipments-update-item__sizeContainer___wfP66 .shipments-update-item__regular-xxs___BJaPb {
   font-weight: 400;
@@ -556,8 +583,13 @@ img::selection {
   }
 }
 .shipments-update-item__updateItem___SC6gf .shipments-update-item__bagInfo___RyCGy .shipments-update-item__priceContainer___vgOcX {
-  margin-top: 20px;
   margin-bottom: 10px;
+  font-weight: 600;
+  color: var(--textHeading, #26201a);
+  font-size: 14px;
+}
+.shipments-update-item__updateItem___SC6gf .shipments-update-item__bagInfo___RyCGy .shipments-update-item__priceContainer___vgOcX.shipments-update-item__marginTopOnErrPrice___bluef {
+  margin-top: 5px;
 }
 .shipments-update-item__updateItem___SC6gf .shipments-update-item__bagInfo___RyCGy .shipments-update-item__darkLg___HKneB {
   font-weight: 500;
@@ -578,13 +610,8 @@ img::selection {
   }
 }
 .shipments-update-item__updateItem___SC6gf .shipments-update-item__qtyCtrl___qDcgF {
-  margin-left: auto;
+  margin-left: 5px;
   position: relative;
-}
-@media only screen and (max-width: 480px) {
-  .shipments-update-item__updateItem___SC6gf .shipments-update-item__qtyCtrl___qDcgF {
-    margin-left: 20px;
-  }
 }
 .shipments-update-item__updateItem___SC6gf .shipments-update-item__qtyCtrl___qDcgF .shipments-update-item__maxAvail___VZxqT {
   text-align: center;
@@ -606,6 +633,13 @@ img::selection {
 }
 .shipments-update-item__updateItem___SC6gf .shipments-update-item__qtyCtrl___qDcgF /deep/ .shipments-update-item__qty-control___KV5G_ .shipments-update-item__qty-amount___I3U7G input {
   padding: 2px 0px;
+}
+.shipments-update-item__modifyQtyController___Zvw1e {
+  height: 32px;
+  align-items: center;
+}
+.shipments-update-item__modifyQtyController___Zvw1e.shipments-update-item__marginTopOnErr___ie7ME {
+  margin-top: 14px;
 }
 
 .quantity-ctrl__slide-fade-enter-active___Yj_ef,
@@ -906,12 +940,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .quantity-ctrl__caption-medium___DIRyS,
+  .quantity-ctrl__captionMedium___dKA8v {
+    font-size: 11px;
+  }
+}
 .quantity-ctrl__caption-semi-bold___rirfZ,
 .quantity-ctrl__captionSemiBold___iIOPk {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .quantity-ctrl__caption-semi-bold___rirfZ,
+  .quantity-ctrl__captionSemiBold___iIOPk {
+    font-size: 11px;
+  }
 }
 .quantity-ctrl__btn-link___mJhFV,
 .quantity-ctrl__btnLink___1Jg_z {
@@ -1089,9 +1135,8 @@ img::selection {
 }
 .quantity-ctrl__qtyControl___LvP42 {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid #eeeeee;
+  justify-content: space-around;
+  border: 1px solid var(--dividerStokes, #d4d1d1);
   border-radius: 3px;
 }
 .quantity-ctrl__qtyControl___LvP42 .quantity-ctrl__operator___HaYJA {
@@ -1100,6 +1145,7 @@ img::selection {
   justify-content: center;
   align-items: center;
   border: none;
+  width: 32px;
   cursor: pointer;
   padding: 2px;
 }
@@ -1108,9 +1154,6 @@ img::selection {
   justify-content: center;
   align-items: center;
 }
-.quantity-ctrl__qtyControl___LvP42 button:hover {
-  background: #eeeeee;
-}
 .quantity-ctrl__qtyControl___LvP42 button:disabled {
   background-color: var(--pageBackground, #f8f8f8);
   cursor: default;
@@ -1118,12 +1161,13 @@ img::selection {
 }
 .quantity-ctrl__qtyControl___LvP42 .quantity-ctrl__qtyAmount___NVSUc {
   width: 38px;
-  height: 25px;
-  border-radius: 3px;
-  border-left: 1px solid #eeeeee;
-  border-right: 1px solid #eeeeee;
+  height: 100%;
+  border-left: 1px solid var(--dividerStokes, #d4d1d1);
+  border-right: 1px solid var(--dividerStokes, #d4d1d1);
   margin: 0px;
   background-color: var(--pageBackground, #f8f8f8);
+  display: flex;
+  align-items: center;
 }
 .quantity-ctrl__qtyControl___LvP42 .quantity-ctrl__qtyAmount___NVSUc input {
   border: none;
@@ -1131,8 +1175,7 @@ img::selection {
   vertical-align: middle;
   text-align: center;
   background-color: var(--pageBackground, #f8f8f8);
-  color: #00abaa;
-  padding: 2px 0px;
+  color: var(--textHeading, #26201a);
 }
 .quantity-ctrl__qtyControl___LvP42 .quantity-ctrl__qtyAmount___NVSUc input:focus {
   outline: none;

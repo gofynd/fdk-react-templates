@@ -14,7 +14,12 @@ import * as styles from "./quantity-ctrl.less";
 import SvgWrapper from "../../core/svgWrapper/SvgWrapper";
 import { isNumberKey, isFreeNavigation } from "../../../helper/utils";
 
-function QuantityCtrl({ currquantity, incDecQuantity, changeQty }) {
+function QuantityCtrl({
+  currquantity,
+  incDecQuantity,
+  changeQty,
+  customClassName,
+}) {
   const [quantity, setQuantity] = useState(currquantity);
   const [isdisabled, setIsdisabled] = useState(false);
   useEffect(() => {
@@ -39,7 +44,7 @@ function QuantityCtrl({ currquantity, incDecQuantity, changeQty }) {
   };
 
   return (
-    <div className={`${styles.qtyControl}`}>
+    <div className={`${styles.qtyControl} ${customClassName}`}>
       <button
         type="button"
         aria-label="Dec Quantity"
