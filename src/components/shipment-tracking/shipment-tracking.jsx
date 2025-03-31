@@ -92,7 +92,7 @@ function ShipmentTracking({
             )}
           </div>
         </div>
-        <div>
+        <div className={styles.trackingItemContainer}>
           {tracking?.map((item, index) => (
             <div
               key={index}

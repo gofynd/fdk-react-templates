@@ -8,7 +8,7 @@ function SetPassword({ error = null, onSetPasswordSubmit = () => {} }) {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
     getValues,
     setError,
     clearErrors,
@@ -32,6 +32,12 @@ function SetPassword({ error = null, onSetPasswordSubmit = () => {} }) {
     }
   }, [error]);
 
+  useEffect(() => {
+    if (error) {
+      clearErrors("root");
+    }
+  }, [watch("confirmNewPassword"), watch("newPassword")]);
+
   return (
     <form
       className={styles.setWrapper}
@@ -39,7 +45,7 @@ function SetPassword({ error = null, onSetPasswordSubmit = () => {} }) {
     >
       <div className={styles.setContentTitle}>Create New Password</div>
       <div
-        className={`${styles.setInputGroup} ${errors.newPassword ? `${styles.errorInput}` : ""}`}
+        className={`${styles.setInputGroup} ${errors?.newPassword || errors?.root ? `${styles.errorInput}` : ""}`}
       >
         <label className={styles.setInputTitle} htmlFor="newPassword">
           New Password
@@ -68,7 +74,9 @@ function SetPassword({ error = null, onSetPasswordSubmit = () => {} }) {
 
       <div
         className={`${styles.setInputGroup} ${
-          errors.confirmNewPassword ? `${styles.errorInput}` : ""
+          errors?.confirmNewPassword || errors?.root
+            ? `${styles.errorInput}`
+            : ""
         }`}
       >
         <label className={styles.setInputTitle} htmlFor="confirmNewPassword">
@@ -78,8 +86,13 @@ function SetPassword({ error = null, onSetPasswordSubmit = () => {} }) {
           <input
             type={showConfirmPassword ? "text" : "password"}
             {...register("confirmNewPassword", {
+              required: {
+                value: true,
+                message: "Please enter a valid password",
+              },
               validate: (value) =>
-                value === getValues("newPassword") || "Password does not match",
+                value === getValues("newPassword") ||
+                "Password didn’t match. Try again.",
             })}
           />
           {watch("confirmNewPassword") && (
@@ -92,19 +105,14 @@ function SetPassword({ error = null, onSetPasswordSubmit = () => {} }) {
             </span>
           )}
         </div>
-        {errors.confirmNewPassword && (
+        {(errors?.confirmNewPassword || errors?.root) && (
           <p className={styles.errorText}>
-            {errors.confirmNewPassword.message}
+            {errors?.confirmNewPassword?.message || errors?.root?.message}
           </p>
         )}
       </div>
-      {errors.root && (
-        <div className={styles.loginAlert}>
-          <span>{errors.root.message}</span>
-        </div>
-      )}
 
-      <button className={styles.setSubmitBtn} type="submit" disabled={!isValid}>
+      <button className={styles.setSubmitBtn} type="submit">
         Set Password
       </button>
     </form>

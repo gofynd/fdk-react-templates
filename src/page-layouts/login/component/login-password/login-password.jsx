@@ -1,6 +1,6 @@
 import React, { useState, useId, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { checkIfNumber } from "../../../../helper/utils";
+import { checkIfNumber, validatePasswordField } from "../../../../helper/utils";
 import * as styles from "./login-password.less";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import MobileNumber from "../../../auth/mobile-number/mobile-number";
@@ -37,6 +37,7 @@ function loginPassword({
     watch,
     setError,
     clearErrors,
+    reset,
     formState: { errors, isValid },
   } = useForm({
     defaultValues: {
@@ -48,10 +49,12 @@ function loginPassword({
       },
       password: "",
     },
+    reValidateMode: "onChange",
   });
 
   useEffect(() => {
     if (error) {
+      clearErrors();
       setError("root", error);
     } else {
       clearErrors("root");
@@ -64,6 +67,12 @@ function loginPassword({
       setShowInputNumber(true);
     }
   }, [watch("username")]);
+
+  useEffect(() => {
+    if (errors?.root) {
+      clearErrors("root");
+    }
+  }, [watch("password"), watch("username"), watch("phone")]);
 
   const handleFormSubmit = ({ username, phone, password }) => {
     const data = {
@@ -81,7 +90,9 @@ function loginPassword({
       onSubmit={handleSubmit(handleFormSubmit)}
     >
       <div className={styles.loginMobileInput}>
-        <div className={styles.loginInputGroup}>
+        <div
+          className={`${styles.loginInputGroup} ${errors?.username || errors?.phone || errors?.root ? styles.error : ""}`}
+        >
           <label className={styles.loginInputTitle} htmlFor={usernameInputId}>
             Email or Phone
           </label>
@@ -94,7 +105,7 @@ function loginPassword({
                   if (showInputNumber) {
                     return true;
                   }
-                  return !!value;
+                  return !!value || "Please enter valid username";
                 },
               })}
             />
@@ -126,30 +137,47 @@ function loginPassword({
               )}
             />
           )}
-        </div>
-        <div className={styles.loginInputGroup}>
-          <label className={styles.loginInputTitle} htmlFor={passwordInputId}>
-            Password
-          </label>
-          <input
-            id={passwordInputId}
-            type={isPasswordShow ? "text" : "password"}
-            {...register("password", {
-              required: true,
-            })}
-          />
-          {watch("password") && (
-            <button
-              className={styles.passwordToggle}
-              onClick={togglePasswordDisplay}
-              aria-label={!isPasswordShow ? "Show Password" : "Hide Password"}
-            >
-              <SvgWrapper
-                svgSrc={!isPasswordShow ? "show-password" : "hide-password"}
-              />
-            </button>
+          {(errors?.username || errors?.phone) && (
+            <p className={styles.loginAlert}>
+              {errors?.phone?.message || errors?.username?.message}
+            </p>
           )}
         </div>
+        <div
+          className={`${styles.loginInputGroup} ${errors?.password || errors?.root ? styles.error : ""}`}
+        >
+          <div style={{ position: "relative" }}>
+            <label className={styles.loginInputTitle} htmlFor={passwordInputId}>
+              Password
+            </label>
+            <input
+              id={passwordInputId}
+              type={isPasswordShow ? "text" : "password"}
+              {...register("password", {
+                validate: (value) =>
+                  validatePasswordField(value) ||
+                  "Password must be at least 8 characters and contain at least 1 letter, 1 number and 1 special character.",
+              })}
+            />
+            {watch("password") && (
+              <button
+                className={styles.passwordToggle}
+                onClick={togglePasswordDisplay}
+                aria-label={!isPasswordShow ? "Show Password" : "Hide Password"}
+              >
+                <SvgWrapper
+                  svgSrc={!isPasswordShow ? "show-password" : "hide-password"}
+                />
+              </button>
+            )}
+          </div>
+          {(errors?.password || errors?.root) && (
+            <p className={styles.loginAlert}>
+              {errors?.password?.message || errors?.root?.message}
+            </p>
+          )}
+        </div>
+
         {isForgotPassword && (
           <div className={styles.forgotBtnWrapper}>
             <button
@@ -162,11 +190,7 @@ function loginPassword({
         )}
       </div>
 
-      {errors?.root && (
-        <div className={styles.loginAlert}>{errors?.root?.message}</div>
-      )}
-
-      <button className={styles.loginButton} type="submit" disabled={!isValid}>
+      <button className={styles.loginButton} type="submit">
         {loginButtonText}
       </button>
     </form>

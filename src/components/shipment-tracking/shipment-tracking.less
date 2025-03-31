@@ -6,10 +6,20 @@
   opacity: 1 !important;
 }
 .trackingContainer {
-  padding: 20px;
+  padding: 0;
+
+  // @media @mobile {
+  //   padding: 16px;
+  // }
 
   .shipmentTracking {
-    border: 1px solid @LightGray;
+    border-radius: 4px;
+    padding: 16px 0;
+
+    @media @mobile {
+      border: 1px solid @DividerStokes;
+    }
+
     .boldsm {
       font-weight: 700;
       font-size: 16px;
@@ -35,13 +45,15 @@
     }
     .status {
       display: flex;
-      padding: 10px;
-      border-bottom: 1px solid @LightGray;
+      padding: 0 16px 16px;
+      border-bottom: 1px solid @DividerStokes !important;
       position: relative;
       align-items: center;
+
       .subTitle {
         margin-top: 10px;
       }
+
       .info {
         position: absolute;
         right: 20px;
@@ -52,10 +64,16 @@
         border-radius: 3px;
       }
     }
+
+    .trackingItemContainer {
+      padding: 0 16px;
+    }
+
     .trackItem {
       display: flex;
-      padding: 20px;
+      margin: 16px 0;
       opacity: 0.5;
+
       .trackInfo {
         margin-left: 20px;
         .boldsm {
@@ -118,21 +136,30 @@
     .links {
       display: flex;
       justify-content: center;
-      color: @ButtonLink;
+      color: @TextHeading;
+      border-top: 1px solid @DividerStokes;
+      padding-top: 16px;
+
       div,
       a {
         flex: 1;
         justify-content: center;
         display: flex;
         cursor: pointer;
-        padding: 15px 10px;
-        border-top: 1px solid @LightGray;
-        border-right: 1px solid @LightGray;
         text-align: center;
         align-items: center;
-        font-size: 14px;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 140%;
+        border-right: 1px solid @DividerStokes;
+        color: @ButtonLink;
+
+        &:last-child {
+          border-right: none;
+        }
+
         &:hover {
-          background-color: @LightGray;
+          color: @ButtonLinkL2;
         }
       }
     }
