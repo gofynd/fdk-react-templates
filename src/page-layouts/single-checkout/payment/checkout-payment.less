@@ -3,11 +3,15 @@
 .paymentContainer {
   margin-top: 20px;
 
+  @media @mobile {
+    margin-top: 12px;
+  }
+
   .reviewHeaderUnselect {
     padding: 24px;
     display: flex;
     border: 1px solid var(--dividerStokes);
-    border-radius: 8px;
+
     opacity: 0.5;
     @media @mobile {
       display: none;
@@ -30,10 +34,12 @@
     padding: 24px;
     border-radius: 8px 8px 0 0;
     border: 1px solid var(--dividerStokes);
+
     @media @mobile {
-      padding: 0px 16px 16px;
-      border: none;
-      border-bottom: 1px solid var(--dividerStokes);
+      padding: 16px;
+      border: 1px solid var(--dividerStokes);
+      border-width: 1px 0;
+      border-radius: 0;
     }
     .title {
       font-size: 14px;

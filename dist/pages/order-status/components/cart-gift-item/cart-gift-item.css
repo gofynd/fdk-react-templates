@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .cart-gift-item__caption-medium___VVmw0,
+  .cart-gift-item__captionMedium___naEN5 {
+    font-size: 11px;
+  }
+}
 .cart-gift-item__caption-semi-bold___xZwGj,
 .cart-gift-item__captionSemiBold___uxPG3 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .cart-gift-item__caption-semi-bold___xZwGj,
+  .cart-gift-item__captionSemiBold___uxPG3 {
+    font-size: 11px;
+  }
 }
 .cart-gift-item__btn-link___U4mVF,
 .cart-gift-item__btnLink___f4BxI {

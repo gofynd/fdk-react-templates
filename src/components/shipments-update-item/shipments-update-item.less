@@ -2,12 +2,21 @@
 
 .updateItem {
   display: flex;
-  align-items: center;
+
+  @media @tablet {
+    padding: 0 16px;
+  }
+
   .bagImg {
-    margin: 20px 20px 20px 0;
+    margin: 0px 20px 20px 0;
+    @media @mobile {
+      margin: 0px 16px 16px 0;
+    }
     img {
+      width: 80px;
+      height: 120px;
       max-width: 100px;
-      max-height: 100px;
+      max-height: 120px;
       cursor: pointer;
     }
   }
@@ -24,7 +33,8 @@
     }
     .boldxxxs {
       font-weight: 700;
-      font-size: 12px;
+      font-size: 16px;
+      color: @TextHeading;
       @media @mobile {
         font-size: 11px;
       }
@@ -32,6 +42,7 @@
     .lightxxxs {
       font-weight: 300;
       font-size: 12px;
+      color: @TextBody;
       @media @mobile {
         font-size: 11px;
       }
@@ -39,17 +50,22 @@
     .sizeQuantityContainer {
       display: flex;
       width: 100%;
-      justify-content: space-between;
+      // justify-content: space-between;
       background: @PageBackground;
       align-items: center;
-      padding: 10px;
+      padding: 5px 0;
       height: 50px;
       box-sizing: border-box;
-      margin-top: 20px;
+      // margin-top: 20px;
       .sizeContainer {
         background: white;
-        padding: 10px 20px 10px 10px;
-        border: 1px solid @Iron;
+        padding: 8px;
+        border: 1px solid @DividerStokes;
+        font-size: 12px;
+        font-weight: 600;
+        color: @TextHeading;
+        white-space: nowrap;
+
         .regular-xxs {
           font-weight: 400;
           font-size: 13px;
@@ -67,8 +83,14 @@
       }
     }
     .priceContainer {
-      margin-top: 20px;
+      // margin-top: 20px;
       margin-bottom: 10px;
+      font-weight: 600;
+      color: @TextHeading;
+      font-size: 14px;
+      &.marginTopOnErrPrice {
+        margin-top: 5px;
+      }
     }
     .darkLg {
       font-weight: 500;
@@ -86,11 +108,11 @@
     }
   }
   .qtyCtrl {
-    margin-left: auto;
+    margin-left: 5px;
     position: relative;
-    @media @mobile {
-      margin-left: 20px;
-    }
+    // @media @mobile {
+    //   margin-left: 16px;
+    // }
     .maxAvail {
       text-align: center;
       color: @ErrorText;
@@ -108,5 +130,12 @@
     /deep/.qty-control .qty-amount input {
       padding: 2px 0px;
     }
+  }
+}
+.modifyQtyController {
+  height: 32px;
+  align-items: center;
+  &.marginTopOnErr {
+    margin-top: 14px;
   }
 }
