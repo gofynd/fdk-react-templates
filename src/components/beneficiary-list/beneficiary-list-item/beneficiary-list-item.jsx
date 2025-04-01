@@ -41,14 +41,16 @@ function BeneficiaryItem({ beneficiary, selectedBeneficiary, change }) {
           className={`${styles.beneficiaryContent}`}
           onClick={() => change(beneficiary)}
         >
-          {(!selectedBeneficiary ||
-            selectedBeneficiary.beneficiary_id !==
-              beneficiary.beneficiary_id) && <SvgWrapper svgSrc="regular" />}
-          {selectedBeneficiary &&
-            selectedBeneficiary.beneficiary_id ===
-              beneficiary.beneficiary_id && (
-              <SvgWrapper svgSrc="radio-selected" />
-            )}
+          <span className={styles.beneficiaryRadio}>
+            {(!selectedBeneficiary ||
+              selectedBeneficiary.beneficiary_id !==
+                beneficiary.beneficiary_id) && <SvgWrapper svgSrc="regular" />}
+            {selectedBeneficiary &&
+              selectedBeneficiary.beneficiary_id ===
+                beneficiary.beneficiary_id && (
+                <SvgWrapper svgSrc="radio-selected" />
+              )}
+          </span>
           <div className={`${styles.text}`}>
             <div className={`${styles.beneficiaryTitle} ${styles.boldxs}`}>
               {getTitle()}

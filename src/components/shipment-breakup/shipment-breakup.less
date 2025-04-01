@@ -24,15 +24,29 @@
   }
 }
 .billing {
-  padding: 10px;
+  padding: 16px;
   position: relative;
+
   div {
-    margin: 15px;
+    margin-bottom: 8px;
+
+    &:last-child {
+      margin-bottom: 0px;
+    }
+  }
+  .label {
+    color: @TextBody;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 140%;
   }
   .values {
     position: absolute;
-    right: 30px;
+    right: 16px;
+    color: @TextBody;
+    font-size: 12px;
     font-weight: 400;
+    line-height: 140%;
   }
 
   .total {
@@ -56,5 +70,19 @@
     margin-left: auto;
     margin-right: 10px;
     right: 0px;
+  }
+}
+.billing {
+  :last-child {
+    .totalValContainer {
+      :last-child {
+        font-size: 14px;
+        font-weight: 600;
+      }
+      :nth-last-child(2) {
+        font-size: 14px;
+        font-weight: 600;
+      }
+    }
   }
 }
