@@ -12,7 +12,7 @@
  *
  */
 
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import { useNavigate } from "react-router-dom";
 import * as styles from "./shipment-tracking.less";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
@@ -92,7 +92,7 @@ function ShipmentTracking({
             )}
           </div>
         </div>
-        <div>
+        <div className={styles.trackingItemContainer}>
           {tracking?.map((item, index) => (
             <div
               key={index}
@@ -163,31 +163,25 @@ function ShipmentTracking({
         </div>
         <div className={`${styles.links}`}>
           {getLinks()?.map((item, index) => (
-            <>
-              <>
-                {item?.type === "internal" && (
-                  <div
-                    key={index}
-                    onClick={() => update(item)}
-                    className={`${styles.regularsm}`}
-                  >
-                    {" "}
-                    {item?.text}
-                  </div>
-                )}
-              </>
-              <>
-                {item?.type !== "internal" && (
-                  <a
-                    key={index}
-                    href={`${item?.link}`}
-                    className={`${styles.regularsm}`}
-                  >
-                    {item?.text}
-                  </a>
-                )}
-              </>
-            </>
+            <Fragment key={`${item?.text}_${index}`}>
+              {item?.type === "internal" ? (
+                <div
+                  key={index}
+                  onClick={() => update(item)}
+                  className={`${styles.regularsm}`}
+                >
+                  {item?.text}
+                </div>
+              ) : (
+                <a
+                  key={index}
+                  href={`${item?.link}`}
+                  className={`${styles.regularsm}`}
+                >
+                  {item?.text}
+                </a>
+              )}
+            </Fragment>
           ))}
         </div>
       </div>
