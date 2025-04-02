@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .shipment-breakup__caption-medium___eJwty,
+  .shipment-breakup__captionMedium___ZXLI8 {
+    font-size: 11px;
+  }
+}
 .shipment-breakup__caption-semi-bold___gAeeK,
 .shipment-breakup__captionSemiBold___lFZ3J {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .shipment-breakup__caption-semi-bold___gAeeK,
+  .shipment-breakup__captionSemiBold___lFZ3J {
+    font-size: 11px;
+  }
 }
 .shipment-breakup__btn-link___SPzjH,
 .shipment-breakup__btnLink___KEJX3 {
@@ -509,16 +521,28 @@ img::selection {
   }
 }
 .shipment-breakup__billing___FTdqB {
-  padding: 10px;
+  padding: 16px;
   position: relative;
 }
 .shipment-breakup__billing___FTdqB div {
-  margin: 15px;
+  margin-bottom: 8px;
+}
+.shipment-breakup__billing___FTdqB div:last-child {
+  margin-bottom: 0px;
+}
+.shipment-breakup__billing___FTdqB .shipment-breakup__label___SHy4X {
+  color: var(--textBody, #3c3131);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 140%;
 }
 .shipment-breakup__billing___FTdqB .shipment-breakup__values___Ji3lV {
   position: absolute;
-  right: 30px;
+  right: 16px;
+  color: var(--textBody, #3c3131);
+  font-size: 12px;
   font-weight: 400;
+  line-height: 140%;
 }
 .shipment-breakup__billing___FTdqB .shipment-breakup__total___X7nmQ {
   padding-top: 10px;
@@ -541,5 +565,13 @@ img::selection {
   margin-left: auto;
   margin-right: 10px;
   right: 0px;
+}
+.shipment-breakup__billing___FTdqB :last-child .shipment-breakup__totalValContainer___wFKSr :last-child {
+  font-size: 14px;
+  font-weight: 600;
+}
+.shipment-breakup__billing___FTdqB :last-child .shipment-breakup__totalValContainer___wFKSr :nth-last-child(2) {
+  font-size: 14px;
+  font-weight: 600;
 }
 

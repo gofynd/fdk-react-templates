@@ -88,6 +88,7 @@ function ShipmentUpdateItem({
                     currquantity={currQuantity}
                     incDecQuantity={incrDecrQuantity}
                     changeQty={changeQuantity}
+                    customClassName={`${styles.hideQuantity} ${styles.modifyQtyController} ${showQuantityError ? styles.marginTopOnErr : ""}`}
                   />
                   {showQuantityError && (
                     <div className={`${styles.maxAvail} ${styles.regularxxxs}`}>
@@ -100,7 +101,9 @@ function ShipmentUpdateItem({
                 </div>
               )}
             </div>
-            <div className={`${styles.priceContainer}`}>
+            <div
+              className={`${styles.priceContainer}  ${showQuantityError ? styles.marginTopOnErrPrice : ""}`}
+            >
               <span className={`${styles.darklg}`}>
                 {getPriceFormat(
                   getCurrencySymbol(item),
