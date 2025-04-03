@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import * as styles from "./delivery-location.less";
-import { isValidPincode } from "../../../../helper/utils";
 import Modal from "../../../../components/core/modal/modal";
 import AddressItem from "../../../../components/address-item/address-item";
 import AddressForm from "../../../../components/address-form/address-form";
 function DeliveryLocation({
-  deliveryLocation,
   pincode = "",
+  deliveryLocation,
+  pincodeInput,
   error = null,
   isPincodeModalOpen = false,
   isAddressModalOpen = false,
@@ -29,11 +29,12 @@ function DeliveryLocation({
   isInternationalShippingEnabled = false,
   addressFormSchema,
   addressItem,
-  setI18nDetails = () => {},
+  onCountryChange = () => {},
   handleCountrySearch = () => {},
   getFilteredCountries = () => {},
   selectedCountry,
   countryDetails,
+  isGuestUser = false,
 }) {
   const {
     handleSubmit,
@@ -47,6 +48,7 @@ function DeliveryLocation({
       pincode,
     },
   });
+  const { displayName, maxLength, validatePincode } = pincodeInput;
 
   useEffect(() => {
     if (error) {
@@ -81,9 +83,10 @@ function DeliveryLocation({
       <Modal
         isOpen={isPincodeModalOpen}
         closeDialog={onCloseModalClick}
-        title="Delivery PIN Code"
+        title={`Delivery ${displayName}`}
         containerClassName={styles.pincodeModal}
         bodyClassName={styles.modalBody}
+        headerClassName={styles.modalHeader}
       >
         <form
           className={styles.modalPincodeContainer}
@@ -92,11 +95,11 @@ function DeliveryLocation({
           <div className={styles.modalPincodeInput}>
             <input
               type="text"
-              placeholder="Enter Pincode"
+              placeholder={`Enter ${displayName}`}
               {...register("pincode", {
-                validate: (value) =>
-                  isValidPincode(value) || "Please enter valid pincode",
+                validate: validatePincode,
               })}
+              maxLength={maxLength}
             />
           </div>
           <button className={styles.modalChangePinCodeButton} type="submit">
@@ -125,11 +128,11 @@ function DeliveryLocation({
               <div className={styles.modalPincodeInput}>
                 <input
                   type="text"
-                  placeholder="Enter Pincode"
+                  placeholder={`Enter ${displayName}`}
                   {...register("pincode", {
-                    validate: (value) =>
-                      isValidPincode(value) || "Please enter valid pincode",
+                    validate: validatePincode,
                   })}
+                  maxLength={maxLength}
                 />
               </div>
               <button className={styles.modalChangePinCodeButton} type="submit">
@@ -146,12 +149,13 @@ function DeliveryLocation({
             </form>
             <div className={styles.addressContentConitainer}>
               {defaultAddress?.length > 0 && (
-                <>
+                <div className={styles.addressItemContainer}>
                   <div className={styles.heading}>Default Address</div>
                   {defaultAddress?.map((item, index) => {
                     return (
                       <AddressItem
                         key={`${item?.id}_#${index}`}
+                        containerClassName={styles.customAddressItem}
                         addressItem={item}
                         onAddressSelect={setSelectedAddressId}
                         showAddressSelectionCheckbox={true}
@@ -160,15 +164,16 @@ function DeliveryLocation({
                       ></AddressItem>
                     );
                   })}
-                </>
+                </div>
               )}
               {otherAddresses?.length > 0 && (
-                <>
+                <div className={styles.addressItemContainer}>
                   <div className={styles.heading}>Other Address</div>
                   {otherAddresses.map((item, index) => {
                     return (
                       <AddressItem
                         key={`${item?.id}_#${index}`}
+                        containerClassName={styles.customAddressItem}
                         addressItem={item}
                         onAddressSelect={setSelectedAddressId}
                         showAddressSelectionCheckbox={true}
@@ -177,26 +182,30 @@ function DeliveryLocation({
                       ></AddressItem>
                     );
                   })}
-                </>
+                </div>
               )}
-
-              <button
-                className={`${styles.commonBtn} ${styles.addCta}`}
-                onClick={onAddButtonClick}
-              >
-                + &nbsp; Add New Address
-              </button>
-              {selectedAddressId &&
-                (defaultAddress.length > 0 || otherAddresses?.length > 0) && (
-                  <button
-                    className={`${styles.commonBtn} ${styles.selectCta}`}
-                    onClick={selectAddress}
-                  >
-                    select this address
-                  </button>
-                )}
+              <div className={styles.addAddress}>
+                <button
+                  className={`${styles.commonBtn} ${styles.addCta}`}
+                  onClick={onAddButtonClick}
+                >
+                  + &nbsp; Add New Address
+                </button>
+              </div>
             </div>
           </div>
+
+          {selectedAddressId &&
+            (defaultAddress.length > 0 || otherAddresses?.length > 0) && (
+              <div className={styles.stickyContainer}>
+                <button
+                  className={`${styles.commonBtn} ${styles.selectCta}`}
+                  onClick={selectAddress}
+                >
+                  select this address
+                </button>
+              </div>
+            )}
         </div>
       </Modal>
       <Modal
@@ -218,11 +227,12 @@ function DeliveryLocation({
               showGoogleMap={showGoogleMap}
               onGetLocality={getLocality}
               defaultPincode={pincode}
-              setI18nDetails={setI18nDetails}
+              setI18nDetails={onCountryChange}
               handleCountrySearch={handleCountrySearch}
               getFilteredCountries={getFilteredCountries}
               selectedCountry={selectedCountry?.display_name ?? ""}
               countryDetails={countryDetails}
+              isGuestUser={isGuestUser}
             ></AddressForm>
           </div>
         </div>
