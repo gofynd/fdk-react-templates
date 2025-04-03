@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import AddressItem from "../../../components/address-item/address-item";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./single-address-content.less";
+import Shimmer from "../../../components/shimmer/shimmer";
 
 function AddressRight({
   selectedAddressId,
@@ -34,12 +35,14 @@ function DeliverBtn({ selectedAddressId, id, selectAddress }) {
   return (
     <>
       {selectedAddressId === id && (
-        <button
-          className={styles.deliverToThis}
-          onClick={() => selectAddress()}
-        >
-          DELIVER TO THIS ADDRESS
-        </button>
+        <div className={styles.actionContainer}>
+          <button
+            className={styles.deliverToThis}
+            onClick={() => selectAddress()}
+          >
+            DELIVER TO THIS ADDRESS
+          </button>
+        </div>
       )}
     </>
   );
@@ -50,7 +53,7 @@ function InvalidAddress({ errorMessage }) {
   return (
     <div className={styles.invalidAddError}>
       <div className={styles.invalidAddErrorLeft}>
-        <SvgWrapper svgSrc={"warning-address"} />
+        <SvgWrapper className={styles.warningIcon} svgSrc={"warning-address"} />
 
         <div className={styles.invalidAddErrorData}>
           <div className={styles.invalidAddErrorMsg}>{errorMessage}</div>
@@ -91,13 +94,14 @@ function SingleAddressContent({
   }
   return (
     <>
-      {allAddresses && allAddresses.length && !addressLoader ? (
+      {allAddresses &&
+      allAddresses.length &&
+      !(addressLoader || addressLoading) ? (
         <div className={styles.addressContentConitainer}>
-          {getDefaultAddress.length ? (
-            <div className={styles.heading}>Default Address</div>
-          ) : null}
-          {getDefaultAddress?.length > 0
-            ? getDefaultAddress.map((item, index) => {
+          {getDefaultAddress.length > 0 ? (
+            <div className={styles.address}>
+              <div className={styles.heading}>Default Address</div>
+              {getDefaultAddress.map((item, index) => {
                 return (
                   <AddressItem
                     containerClassName={styles.customAddressItem}
@@ -106,16 +110,16 @@ function SingleAddressContent({
                     onAddressSelect={selectAdd}
                     showAddressSelectionCheckbox={true}
                     selectedAddressId={selectedAddressId}
-                    headerRightSlot={
-                      <AddressRight
-                        selectedAddressId={selectedAddressId}
-                        addressItem={item}
-                        editAddress={editAddress}
-                        removeAddress={removeAddress}
-                      />
-                    }
                     belowAddressSlot={
                       <>
+                        <div className={styles.addressActions}>
+                          <AddressRight
+                            selectedAddressId={selectedAddressId}
+                            addressItem={item}
+                            editAddress={editAddress}
+                            removeAddress={removeAddress}
+                          />
+                        </div>
                         {invalidAddressError?.id === item?.id &&
                           selectedAddressId === item?.id && (
                             <InvalidAddress
@@ -131,13 +135,14 @@ function SingleAddressContent({
                     }
                   ></AddressItem>
                 );
-              })
-            : null}
-          {getOtherAddress.length ? (
-            <div className={styles.heading}>Other Address</div>
+              })}
+            </div>
           ) : null}
-          {getOtherAddress?.length > 0
-            ? getOtherAddress.map((item, index) => {
+
+          {getOtherAddress.length > 0 ? (
+            <div className={styles.address}>
+              <div className={styles.heading}>Other Address</div>
+              {getOtherAddress.map((item, index) => {
                 return (
                   <AddressItem
                     containerClassName={styles.customAddressItem}
@@ -146,16 +151,16 @@ function SingleAddressContent({
                     onAddressSelect={selectAdd}
                     showAddressSelectionCheckbox={true}
                     selectedAddressId={selectedAddressId}
-                    headerRightSlot={
-                      <AddressRight
-                        selectedAddressId={selectedAddressId}
-                        addressItem={item}
-                        editAddress={editAddress}
-                        removeAddress={removeAddress}
-                      />
-                    }
                     belowAddressSlot={
                       <>
+                        <div className={styles.addressActions}>
+                          <AddressRight
+                            selectedAddressId={selectedAddressId}
+                            addressItem={item}
+                            editAddress={editAddress}
+                            removeAddress={removeAddress}
+                          />
+                        </div>
                         {invalidAddressError?.id === item?.id &&
                           selectedAddressId === item?.id && (
                             <InvalidAddress
@@ -171,23 +176,24 @@ function SingleAddressContent({
                     }
                   ></AddressItem>
                 );
-              })
-            : ""}
+              })}
+            </div>
+          ) : null}
         </div>
       ) : (
         <>
           {addressLoading || addressLoader ? (
-            loader
+            <div className={styles.addressContentConitainer}>
+              {loader || <Shimmer className={styles.shimmer} />}
+            </div>
           ) : (
             <div
               className={`${styles.addressContentConitainer} ${styles.fontSize}`}
               style={{
                 textAlign: "center",
                 color: "var(--textLabel)",
-                padding: "4px 16px",
               }}
             >
-              {" "}
               No Address Found, Please Add Address
             </div>
           )}
