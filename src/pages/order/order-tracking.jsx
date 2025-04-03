@@ -20,7 +20,7 @@ function OrderTracking({ instMob }) {
     <div className="basePageContainer margin0auto">
       <div className={`${styles.trackOrderCntr}`}>
         <div className={`${styles.trackOrder}`}>
-          <div className={`${styles.orderTitle}`}>Where is my order?</div>
+          <h2 className={`${styles.orderTitle}`}>Where is my order?</h2>
           <div
             className={`${styles.error} ${styles.regularxxs} ${showError ? styles.visible : ""} `}
           >

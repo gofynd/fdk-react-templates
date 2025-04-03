@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .stepper__caption-medium___krneu,
+  .stepper__captionMedium___b8fjm {
+    font-size: 11px;
+  }
+}
 .stepper__caption-semi-bold___aBUJJ,
 .stepper__captionSemiBold___Nv7I9 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .stepper__caption-semi-bold___aBUJJ,
+  .stepper__captionSemiBold___Nv7I9 {
+    font-size: 11px;
+  }
 }
 .stepper__btn-link___h2ej2,
 .stepper__btnLink___kp6d3 {
@@ -483,6 +495,12 @@ img::selection {
   padding: 0 32px 18px;
   margin: 12px 0px 14px;
 }
+@media only screen and (max-width: 480px) {
+  .stepper__stepper___x5T81 {
+    padding-bottom: 30px;
+    border-bottom: 1px solid var(--dividerStokes, #d4d1d1);
+  }
+}
 .stepper__stepperContainer___fAW_U {
   display: flex;
   justify-content: space-between;
@@ -508,7 +526,6 @@ img::selection {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
   font-size: 14px;
 }
 .stepper__stepItem___ysVlh .stepper__stepContent___MuwVk .stepper__stepIndicator___cZlMb.stepper__completed___AYiMi {
@@ -518,6 +535,7 @@ img::selection {
 .stepper__stepItem___ysVlh .stepper__stepContent___MuwVk .stepper__stepIndicator___cZlMb.stepper__current___xx0pt {
   border: 1px solid var(--buttonPrimary, #4e3f09);
   color: var(--buttonPrimary, #4e3f09);
+  font-weight: bold;
 }
 .stepper__stepItem___ysVlh .stepper__stepContent___MuwVk .stepper__stepIndicator___cZlMb.stepper__upcoming___CuWG2 {
   border: 2px solid #d1d5db;
