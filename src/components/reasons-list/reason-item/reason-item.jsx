@@ -13,41 +13,40 @@
 
 import React, { useState } from "react";
 import * as styles from "./reason-item.less";
-import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
+import RadioIcon from "../../../assets/images/radio";
 
-function ReasonItem({ reason, selectedReason, change, otherReason }) {
+function ReasonItem({
+  reason,
+  selectedReason,
+  change = () => {},
+  otherReason,
+}) {
   const [reasonOtherText, setReasonOtherText] = useState("");
+  const isSelected = selectedReason?.id === reason?.id;
   return (
-    <div className={`${styles.reasonItem}`} onClick={() => change(reason)}>
-      <div>
-        <div
-          className={`${styles.reasonContent}`}
-          onClick={() => change(reason)}
+    <div className={`${styles.reasonItem}`}>
+      <div className={`${styles.reasonContent}`} onClick={() => change(reason)}>
+        <span
+          className={`${styles.regularRadio} ${isSelected ? styles.checked : ""}`}
         >
-          {selectedReason?.id !== reason?.id && <SvgWrapper svgSrc="regular" />}
-          {selectedReason?.id === reason?.id && (
-            <SvgWrapper svgSrc="radio-selected" />
-          )}
-
-          <span className={`${styles.text} ${styles.lightxs}`}>
-            {reason.display_name}
-          </span>
-        </div>
-
-        {selectedReason?.id === reason?.id && reason?.meta?.show_text_area && (
-          <div className={`${styles.textarea}`}>
-            <textarea
-              className={`${styles.textarea}`}
-              value={reasonOtherText}
-              placeholder="Enter reason"
-              onChange={(e) =>
-                setReasonOtherText(e.target.value?.slice(0, 1000))
-              }
-              onBlur={() => otherReason(reasonOtherText)}
-            ></textarea>
-          </div>
-        )}
+          <RadioIcon width={16} checked={isSelected} />
+        </span>
+        <span className={`${styles.text} ${styles.lightxs} fontHeader`}>
+          {reason.display_name}
+        </span>
       </div>
+
+      {isSelected && reason?.meta?.show_text_area && (
+        <div className={`${styles.textarea}`}>
+          <textarea
+            className={`${styles.textarea}`}
+            value={reasonOtherText}
+            placeholder="Enter reason"
+            onChange={(e) => setReasonOtherText(e.target.value?.slice(0, 1000))}
+            onBlur={() => otherReason(reasonOtherText)}
+          ></textarea>
+        </div>
+      )}
     </div>
   );
 }
