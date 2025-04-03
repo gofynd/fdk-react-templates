@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
+import { isRunningOnClient } from "../../../../helper/utils";
 
-const StickyColumn = ({ children }) => {
+const StickyColumn = ({ className, topOffset = 0, children }) => {
   const elementRef = useRef(null);
-  const [lastKnownY, setLastKnownY] = useState(0);
-  const [currentTop, setCurrentTop] = useState(0);
-  const [pendingRaf, setPendingRaf] = useState(false);
-  const [stickyHeaderOffset, setStickyHeaderOffset] = useState(0);
+  const lastKnownY = useRef(0);
+  const currentTop = useRef(0);
+  const pendingRaf = useRef(false);
 
   const colStyle = {
     position: "sticky",
@@ -14,79 +14,52 @@ const StickyColumn = ({ children }) => {
   };
 
   useEffect(() => {
-    const isBrowser = typeof window !== "undefined";
-    if (isBrowser) {
-      setupStickyScroll();
-      return () => destroyStickyScroll();
+    if (isRunningOnClient()) {
+      getInitialValues();
+      window?.addEventListener("scroll", checkPosition);
+      return () => {
+        window?.removeEventListener("scroll", checkPosition);
+      };
     }
   }, []);
 
-  const setupStickyScroll = () => {
-    getInitialValues();
-    window?.addEventListener("scroll", checkPosition);
-  };
-
-  const destroyStickyScroll = () => {
-    window?.removeEventListener("scroll", checkPosition);
-  };
-
   const getInitialValues = () => {
-    setLastKnownY(window?.scrollY || 0);
-    setCurrentTop(0);
-    setPendingRaf(false);
-    setStickyHeaderOffset(getStickyHeaderOffset());
+    lastKnownY.current = window?.scrollY || 0;
+    currentTop.current = 0;
+    pendingRaf.current = false;
   };
 
   const checkPosition = () => {
-    if (pendingRaf) return;
-    setPendingRaf(true);
+    if (pendingRaf.current) return;
+    pendingRaf.current = true;
     requestAnimationFrame(() => {
       if (elementRef?.current) {
         const { top } = elementRef?.current.getBoundingClientRect();
         const maxTop =
-          top +
-          window?.scrollY -
-          elementRef?.current.offsetTop +
-          getTopOffset();
+          top + window?.scrollY - elementRef?.current.offsetTop + topOffset;
         const minTop =
           elementRef?.current.clientHeight - window?.innerHeight + 30;
-
-        if (window?.scrollY < lastKnownY) {
-          setCurrentTop(currentTop - (lastKnownY - window?.scrollY));
+        if (window?.scrollY < lastKnownY.current) {
+          currentTop.current -= window?.scrollY - lastKnownY.current;
         } else {
-          setCurrentTop(currentTop + (window?.scrollY - lastKnownY));
+          currentTop.current += lastKnownY.current - window?.scrollY;
         }
-        setLastKnownY(window?.scrollY);
-        setCurrentTop(
-          Math.min(Math.max(currentTop, -minTop), maxTop, getTopOffset())
+        lastKnownY.current = window?.scrollY;
+        currentTop.current = Math.min(
+          Math.max(currentTop.current, -minTop),
+          maxTop,
+          topOffset
         );
-        elementRef.current.style.top = `${currentTop}px`;
-        setPendingRaf(false);
+        elementRef.current.style.top = `${currentTop.current}px`;
+        pendingRaf.current = false;
       }
     });
   };
 
-  const getTopOffset = () => {
-    if (!stickyHeaderOffset) {
-      setStickyHeaderOffset(getStickyHeaderOffset());
-    }
-    return stickyHeaderOffset + 30;
-  };
-
-  const getStickyHeaderOffset = () => {
-    return parseInt(
-      getComputedStyle(elementRef?.current).getPropertyValue(
-        "--headerHeight"
-      ) || 0
-    );
-  };
-
   return (
-    <>
-      <div style={colStyle} ref={elementRef}>
-        {children}
-      </div>
-    </>
+    <div className={className} style={colStyle} ref={elementRef}>
+      {children}
+    </div>
   );
 };
 
