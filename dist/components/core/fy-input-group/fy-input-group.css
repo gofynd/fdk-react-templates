@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .fy-input-group__caption-medium___ULDb6,
+  .fy-input-group__captionMedium___GIuhk {
+    font-size: 11px;
+  }
+}
 .fy-input-group__caption-semi-bold___B0YEk,
 .fy-input-group__captionSemiBold___aQt3D {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .fy-input-group__caption-semi-bold___B0YEk,
+  .fy-input-group__captionSemiBold___aQt3D {
+    font-size: 11px;
+  }
 }
 .fy-input-group__btn-link___gqxe4,
 .fy-input-group__btnLink___ltxo_ {
@@ -359,33 +371,12 @@ button {
 .fy-input-group__removeScroll___axbTm {
   overflow-y: hidden !important;
 }
-.fy-input-group__orders___Mi_y4 .fy-input-group__order-status___K71il .fy-input-group__inline-svg___zteM8 {
-  height: 63px;
-}
-.fy-input-group__order-item___FWNRa .fy-input-group__oder-header___Wz5Rg .fy-input-group__filter-arrow-up___eGoSf {
-  margin-right: none !important;
-}
-.fy-input-group__buttons___lvyoH {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.fy-input-group__checkout___b21U0 {
-  width: calc(100% - 20px) !important;
-}
-.fy-input-group__guest-checkout___OJkmL {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.fy-input-group__home-page___SFvTa,
-.fy-input-group__homePage___iN5VZ {
-  max-width: 1440px;
 }
 .fy-input-group__mr-5___eP9x0,
 .fy-input-group__mr5___MAQOI {
@@ -453,16 +444,6 @@ img::selection {
     padding: 5px !important;
   }
 }
-.fy-input-group__blog-wrapper___T0E7u .fy-input-group__title___HqOdP {
-  color: var(--textHeading, #26201a);
-}
-.fy-input-group__blog-wrapper___T0E7u .fy-input-group__author___KXUdQ,
-.fy-input-group__blog-wrapper___T0E7u .fy-input-group__created-on___DWS59 {
-  color: var(--textLabel, #7d7676) !important;
-}
-.fy-input-group__blog-wrapper___T0E7u #fy-input-group__custom-page-container___iwL0S * {
-  color: var(--textBody, #3c3131);
-}
 .fy-input-group__view3d-canvas___wbiVK {
   width: 100%;
   height: 100%;
@@ -492,6 +473,9 @@ img::selection {
   color: var(--textLabel, #7d7676);
   font-size: 12px;
   line-height: 21px;
+}
+.fy-input-group__required___A8_zF {
+  color: var(--errorText, #b24141);
 }
 .fy-input-group__fyInput___ufjFf {
   accent-color: var(--buttonPrimary, #4e3f09);

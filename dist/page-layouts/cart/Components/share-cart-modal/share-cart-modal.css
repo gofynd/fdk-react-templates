@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .share-cart-modal__caption-medium___MkEuf,
+  .share-cart-modal__captionMedium___xeQtq {
+    font-size: 11px;
+  }
+}
 .share-cart-modal__caption-semi-bold___eGTEC,
 .share-cart-modal__captionSemiBold___J4Fke {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .share-cart-modal__caption-semi-bold___eGTEC,
+  .share-cart-modal__captionSemiBold___J4Fke {
+    font-size: 11px;
+  }
 }
 .share-cart-modal__btn-link___icUmQ,
 .share-cart-modal__btnLink___pURNs {
@@ -359,33 +371,12 @@ button {
 .share-cart-modal__removeScroll___dDiEc {
   overflow-y: hidden !important;
 }
-.share-cart-modal__orders___VP1V_ .share-cart-modal__order-status___nmh1G .share-cart-modal__inline-svg___OOb2c {
-  height: 63px;
-}
-.share-cart-modal__order-item___dNS4o .share-cart-modal__oder-header___x2Amw .share-cart-modal__filter-arrow-up___W7YAL {
-  margin-right: none !important;
-}
-.share-cart-modal__buttons___pJK3u {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.share-cart-modal__checkout___hTsid {
-  width: calc(100% - 20px) !important;
-}
-.share-cart-modal__guest-checkout___vqMrC {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.share-cart-modal__home-page___xdrH9,
-.share-cart-modal__homePage___yKTcP {
-  max-width: 1440px;
 }
 .share-cart-modal__mr-5___E0U4p,
 .share-cart-modal__mr5___Hi621 {
@@ -452,16 +443,6 @@ img::selection {
     font-size: 12px !important;
     padding: 5px !important;
   }
-}
-.share-cart-modal__blog-wrapper___CESDL .share-cart-modal__title___d2VMS {
-  color: var(--textHeading, #26201a);
-}
-.share-cart-modal__blog-wrapper___CESDL .share-cart-modal__author___P9sj6,
-.share-cart-modal__blog-wrapper___CESDL .share-cart-modal__created-on___xhcQW {
-  color: var(--textLabel, #7d7676) !important;
-}
-.share-cart-modal__blog-wrapper___CESDL #share-cart-modal__custom-page-container___IkrG5 * {
-  color: var(--textBody, #3c3131);
 }
 .share-cart-modal__view3d-canvas___VQvRp {
   width: 100%;

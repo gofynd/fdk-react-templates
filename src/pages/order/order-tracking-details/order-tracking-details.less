@@ -54,17 +54,14 @@
   flex-flow: wrap;
   flex-direction: row;
   position: relative;
+  margin: 16px;
+
   .bagItem {
     flex: 0 1 50%;
   }
-  @media (max-width: 861px) {
+
+  @media @tablet {
     width: 100%;
-    margin: 20px 0;
-    flex-direction: column;
-  }
-  @media @mobile {
-    width: 100%;
-    margin: 20px 0;
     flex-direction: column;
   }
 }
@@ -76,14 +73,21 @@
 }
 .orderShipments {
   display: flex;
-  background-color: @White;
-  @media @mobile {
+  background-color: @PageBackground;
+
+  .orderShipmentsWrapper {
+    width: 100%;
+  }
+
+  @media @tablet {
     flex-direction: column;
   }
   .shipment {
-    border-radius: 3px;
-    background-color: @White;
-    margin: 20px 30px;
+    border-radius: 4px;
+    background-color: @PageBackground;
+    margin: 16px;
+    border: 1px solid @DividerStokes;
+
     @media @mobile {
       width: 100%;
       margin: 20px 0;
@@ -91,9 +95,12 @@
     }
   }
   .shipmentDetails {
-    width: 60%;
-    @media @mobile {
+    @media @tablet {
       width: 100%;
+    }
+
+    @media @desktop {
+      flex: 0 0 352px;
     }
   }
   /deep/.shipmentTracking {
@@ -119,13 +126,13 @@
 }
 .orderDetails {
   margin: 20px;
-  border: 1px solid @LightGray;
-  background-color: @White;
+  border: 1px solid @DividerStokes;
+  background-color: @PageBackground;
 }
 .orderData {
   padding: 20px;
   display: flex;
-  border: 1px solid @LightGray;
+  border: 1px solid @DividerStokes;
   .track {
     margin-left: 20px;
   }

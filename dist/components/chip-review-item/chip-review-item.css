@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .chip-review-item__caption-medium___TahcP,
+  .chip-review-item__captionMedium___TqlGQ {
+    font-size: 11px;
+  }
+}
 .chip-review-item__caption-semi-bold___AG3ci,
 .chip-review-item__captionSemiBold___azy1h {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .chip-review-item__caption-semi-bold___AG3ci,
+  .chip-review-item__captionSemiBold___azy1h {
+    font-size: 11px;
+  }
 }
 .chip-review-item__btn-link___Iclpz,
 .chip-review-item__btnLink___srPw_ {
@@ -359,33 +371,12 @@ button {
 .chip-review-item__removeScroll___bcWzo {
   overflow-y: hidden !important;
 }
-.chip-review-item__orders___So7tV .chip-review-item__order-status___kJ2C1 .chip-review-item__inline-svg___t4joF {
-  height: 63px;
-}
-.chip-review-item__order-item___NhT4F .chip-review-item__oder-header___QDXRu .chip-review-item__filter-arrow-up___xcFpy {
-  margin-right: none !important;
-}
-.chip-review-item__buttons___tgVED {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.chip-review-item__checkout___uZiQs {
-  width: calc(100% - 20px) !important;
-}
-.chip-review-item__guest-checkout___Oo8Gs {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.chip-review-item__home-page___y40X9,
-.chip-review-item__homePage___qQzO4 {
-  max-width: 1440px;
 }
 .chip-review-item__mr-5___giiGG,
 .chip-review-item__mr5___hfNxR {
@@ -452,16 +443,6 @@ img::selection {
     font-size: 12px !important;
     padding: 5px !important;
   }
-}
-.chip-review-item__blog-wrapper___bilgl .chip-review-item__title___TAXn7 {
-  color: var(--textHeading, #26201a);
-}
-.chip-review-item__blog-wrapper___bilgl .chip-review-item__author___CSxqR,
-.chip-review-item__blog-wrapper___bilgl .chip-review-item__created-on___s0ilj {
-  color: var(--textLabel, #7d7676) !important;
-}
-.chip-review-item__blog-wrapper___bilgl #chip-review-item__custom-page-container___jDUs5 * {
-  color: var(--textBody, #3c3131);
 }
 .chip-review-item__view3d-canvas___f0rWx {
   width: 100%;

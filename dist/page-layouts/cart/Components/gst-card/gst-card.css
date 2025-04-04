@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .gst-card__caption-medium___h8x5g,
+  .gst-card__captionMedium___1mSBU {
+    font-size: 11px;
+  }
+}
 .gst-card__caption-semi-bold___ltQND,
 .gst-card__captionSemiBold___bvqz0 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .gst-card__caption-semi-bold___ltQND,
+  .gst-card__captionSemiBold___bvqz0 {
+    font-size: 11px;
+  }
 }
 .gst-card__btn-link___fAuOT,
 .gst-card__btnLink___R8X5Y {
@@ -359,33 +371,12 @@ button {
 .gst-card__removeScroll___uQ8AM {
   overflow-y: hidden !important;
 }
-.gst-card__orders___Nbyjp .gst-card__order-status____UYI9 .gst-card__inline-svg___FDJSm {
-  height: 63px;
-}
-.gst-card__order-item____jP3z .gst-card__oder-header___LSIFp .gst-card__filter-arrow-up___uNkQh {
-  margin-right: none !important;
-}
-.gst-card__buttons___OjKAY {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.gst-card__checkout___fOsdB {
-  width: calc(100% - 20px) !important;
-}
-.gst-card__guest-checkout___jTmKE {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.gst-card__home-page___xAmId,
-.gst-card__homePage___UAVlu {
-  max-width: 1440px;
 }
 .gst-card__mr-5___SGx3p,
 .gst-card__mr5___cZ60B {
@@ -453,16 +444,6 @@ img::selection {
     padding: 5px !important;
   }
 }
-.gst-card__blog-wrapper___EujYg .gst-card__title___kDl92 {
-  color: var(--textHeading, #26201a);
-}
-.gst-card__blog-wrapper___EujYg .gst-card__author___A__et,
-.gst-card__blog-wrapper___EujYg .gst-card__created-on___o_oxW {
-  color: var(--textLabel, #7d7676) !important;
-}
-.gst-card__blog-wrapper___EujYg #gst-card__custom-page-container___wmqyj * {
-  color: var(--textBody, #3c3131);
-}
 .gst-card__view3d-canvas___NcnzP {
   width: 100%;
   height: 100%;
@@ -482,17 +463,12 @@ img::selection {
   flex-direction: column;
   padding: 24px;
   border: 1px solid var(--dividerStokes, #d4d1d1);
-  border-radius: 8px;
   line-height: 140%;
-}
-@media only screen and (max-width: 768px) {
-  .gst-card__gstContainer___LJVYg {
-    border-radius: 0 !important;
-  }
 }
 @media only screen and (max-width: 480px) {
   .gst-card__gstContainer___LJVYg {
     padding: 16px;
+    border-width: 1px 0;
   }
 }
 .gst-card__gstContainer___LJVYg .gst-card__gstCheckboxContainer___R07hX .gst-card__gstTitle___WlTUl {

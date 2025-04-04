@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .profile-navigation__caption-medium___zEr9A,
+  .profile-navigation__captionMedium___q4AMz {
+    font-size: 11px;
+  }
+}
 .profile-navigation__caption-semi-bold___Nu1mj,
 .profile-navigation__captionSemiBold___P_shD {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .profile-navigation__caption-semi-bold___Nu1mj,
+  .profile-navigation__captionSemiBold___P_shD {
+    font-size: 11px;
+  }
 }
 .profile-navigation__btn-link___V7LPB,
 .profile-navigation__btnLink___acZMh {
@@ -359,33 +371,12 @@ button {
 .profile-navigation__removeScroll___b_KJc {
   overflow-y: hidden !important;
 }
-.profile-navigation__orders___VNt0l .profile-navigation__order-status___Asxmx .profile-navigation__inline-svg___ndFTM {
-  height: 63px;
-}
-.profile-navigation__order-item___VsWes .profile-navigation__oder-header___KrRyJ .profile-navigation__filter-arrow-up___zHkP4 {
-  margin-right: none !important;
-}
-.profile-navigation__buttons___PLtRc {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.profile-navigation__checkout___IorFk {
-  width: calc(100% - 20px) !important;
-}
-.profile-navigation__guest-checkout___hLc53 {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.profile-navigation__home-page___K9G_H,
-.profile-navigation__homePage___dsv2H {
-  max-width: 1440px;
 }
 .profile-navigation__mr-5___MnMTz,
 .profile-navigation__mr5___MZFtF {
@@ -453,16 +444,6 @@ img::selection {
     padding: 5px !important;
   }
 }
-.profile-navigation__blog-wrapper___Jm4A7 .profile-navigation__title___wwNkh {
-  color: var(--textHeading, #26201a);
-}
-.profile-navigation__blog-wrapper___Jm4A7 .profile-navigation__author___TNiih,
-.profile-navigation__blog-wrapper___Jm4A7 .profile-navigation__created-on___PsLe3 {
-  color: var(--textLabel, #7d7676) !important;
-}
-.profile-navigation__blog-wrapper___Jm4A7 #profile-navigation__custom-page-container___peQn3 * {
-  color: var(--textBody, #3c3131);
-}
 .profile-navigation__view3d-canvas___iDsf8 {
   width: 100%;
   height: 100%;
@@ -487,22 +468,27 @@ img::selection {
 }
 .profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC {
   display: flex;
-  padding: 20px;
-  background-color: #ffffff;
+  background-color: var(--pageBackground, #f8f8f8);
+  gap: 24px;
+}
+@media only screen and (min-width: 769px) {
+  .profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC {
+    margin-top: 40px;
+  }
 }
 .profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__profileContent___EeXTJ {
   flex: 1;
+  min-width: 0;
 }
 .profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__navContainer___pxEcU {
   border-left: 1px solid var(--dividerStokes, #d4d1d1);
-  padding: 0 16px 16px 28px;
+  padding: 16px;
   width: 25%;
 }
 .profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__navContainer___pxEcU .profile-navigation__userData___PSyo0 {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin: 12px 0;
+  gap: 12px;
 }
 .profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__navContainer___pxEcU .profile-navigation__userData___PSyo0 .profile-navigation__defaultImage___LIVYS {
   height: 50px;
@@ -513,13 +499,22 @@ img::selection {
   height: 100%;
   aspect-ratio: 1;
 }
+.profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__navContainer___pxEcU .profile-navigation__userData___PSyo0 .profile-navigation__nameContainer___G2PUc {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
 .profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__navContainer___pxEcU .profile-navigation__userData___PSyo0 .profile-navigation__nameContainer___G2PUc .profile-navigation__name___sA_rM {
   font-weight: 700;
   color: var(--textHeading, #26201a);
-  line-height: 36px;
-  white-space: pre-wrap;
-  width: 25ch;
-  overflow-wrap: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 16px;
 }
 .profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__navContainer___pxEcU .profile-navigation__userData___PSyo0 .profile-navigation__nameContainer___G2PUc .profile-navigation__editLink___ECwEQ {
   font-size: 14px;
@@ -529,29 +524,29 @@ img::selection {
 }
 .profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__navContainer___pxEcU .profile-navigation__accountHeader___XCw9w {
   text-transform: uppercase;
-  margin: 25px 0 3px;
+  padding: 24px 0 8px;
   font-weight: 700;
 }
 .profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__navContainer___pxEcU .profile-navigation__nav___Muxd1 {
   display: flex;
-  padding: 10px 10px 10px 0;
+  padding: 16px 0;
   align-items: center;
   border-bottom: 1px solid var(--dividerStokes, #d4d1d1);
   cursor: pointer;
 }
+.profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__navContainer___pxEcU .profile-navigation__nav___Muxd1.profile-navigation__selected___wsc95,
 .profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__navContainer___pxEcU .profile-navigation__nav___Muxd1:hover {
-  color: var(--successText, #1c958f);
+  font-weight: 600;
+  color: var(--buttonPrimary, #4e3f09);
 }
-.profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__navContainer___pxEcU .profile-navigation__nav___Muxd1.profile-navigation__selected___wsc95 {
-  font-weight: 700;
-}
-.profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__navContainer___pxEcU .profile-navigation__nav___Muxd1.profile-navigation__selected___wsc95:hover {
-  color: unset;
+.profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__navContainer___pxEcU .profile-navigation__nav___Muxd1.profile-navigation__selected___wsc95 svg path,
+.profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__navContainer___pxEcU .profile-navigation__nav___Muxd1:hover svg path {
+  fill: var(--buttonPrimary, #4e3f09);
 }
 .profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__navContainer___pxEcU .profile-navigation__nav___Muxd1 .profile-navigation__menuIcon___VwDzj {
-  height: 24px;
+  height: 20px;
   aspect-ratio: 1;
-  margin-right: 10px;
+  margin-right: 12px;
 }
 .profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__navContainer___pxEcU .profile-navigation__versionContainer___gbdtn {
   display: flex;
@@ -559,7 +554,7 @@ img::selection {
   padding: 16px 0;
 }
 .profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__navContainer___pxEcU .profile-navigation__versionContainer___gbdtn .profile-navigation__signOut___BUQPE {
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
   color: var(--buttonLink, #b1655b);
 }
@@ -569,7 +564,6 @@ img::selection {
     border-left: 0;
   }
   .profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__navContainer___pxEcU .profile-navigation__userData___PSyo0 .profile-navigation__nameContainer___G2PUc .profile-navigation__name___sA_rM {
-    line-height: 32px;
     font-size: 14px;
   }
   .profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__accountHeader___XCw9w,
@@ -577,10 +571,11 @@ img::selection {
     font-size: 14px;
     line-height: 14px;
   }
-}
-@media only screen and (max-width: 480px) {
-  .profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC {
-    padding: 0;
+  .profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__accountHeader___XCw9w {
+    padding: 16px 0 4px;
+  }
+  .profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__nav___Muxd1 {
+    padding: 12px 0;
   }
 }
 

@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .breadcrumb__caption-medium___MxQAd,
+  .breadcrumb__captionMedium___MZtNV {
+    font-size: 11px;
+  }
+}
 .breadcrumb__caption-semi-bold___FE1Mr,
 .breadcrumb__captionSemiBold___LSXfW {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .breadcrumb__caption-semi-bold___FE1Mr,
+  .breadcrumb__captionSemiBold___LSXfW {
+    font-size: 11px;
+  }
 }
 .breadcrumb__btn-link___Odnr3,
 .breadcrumb__btnLink___G4bPc {
@@ -359,33 +371,12 @@ button {
 .breadcrumb__removeScroll___yP_Qb {
   overflow-y: hidden !important;
 }
-.breadcrumb__orders___xsNb8 .breadcrumb__order-status___Py8fa .breadcrumb__inline-svg___Ua5ou {
-  height: 63px;
-}
-.breadcrumb__order-item___A72vP .breadcrumb__oder-header___T2laR .breadcrumb__filter-arrow-up___Bsg9e {
-  margin-right: none !important;
-}
-.breadcrumb__buttons___rDJLd {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.breadcrumb__checkout___faxuM {
-  width: calc(100% - 20px) !important;
-}
-.breadcrumb__guest-checkout___frfQA {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.breadcrumb__home-page___tPs62,
-.breadcrumb__homePage___ftsn0 {
-  max-width: 1440px;
 }
 .breadcrumb__mr-5___MN4Mm,
 .breadcrumb__mr5___yoqTb {
@@ -453,16 +444,6 @@ img::selection {
     padding: 5px !important;
   }
 }
-.breadcrumb__blog-wrapper___FFbDf .breadcrumb__title___r4l1H {
-  color: var(--textHeading, #26201a);
-}
-.breadcrumb__blog-wrapper___FFbDf .breadcrumb__author___sd9Nq,
-.breadcrumb__blog-wrapper___FFbDf .breadcrumb__created-on___Ul7_B {
-  color: var(--textLabel, #7d7676) !important;
-}
-.breadcrumb__blog-wrapper___FFbDf #breadcrumb__custom-page-container___Dqk7G * {
-  color: var(--textBody, #3c3131);
-}
 .breadcrumb__view3d-canvas___Vr5DT {
   width: 100%;
   height: 100%;
@@ -484,6 +465,11 @@ img::selection {
   font-weight: 400;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+@media only screen and (max-width: 480px) {
+  .breadcrumb__breadcrumbs___lMY9E {
+    font-size: 11px;
+  }
 }
 .breadcrumb__breadcrumbs___lMY9E span {
   color: var(--textSecondary, #9c9c9c);

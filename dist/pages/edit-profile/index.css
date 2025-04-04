@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .edit-profile__caption-medium___D6wDI,
+  .edit-profile__captionMedium___MDrPq {
+    font-size: 11px;
+  }
+}
 .edit-profile__caption-semi-bold___Cx2fM,
 .edit-profile__captionSemiBold___UbwTg {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .edit-profile__caption-semi-bold___Cx2fM,
+  .edit-profile__captionSemiBold___UbwTg {
+    font-size: 11px;
+  }
 }
 .edit-profile__btn-link___VVllm,
 .edit-profile__btnLink___jpW5g {
@@ -359,33 +371,12 @@ button {
 .edit-profile__removeScroll___o6xN9 {
   overflow-y: hidden !important;
 }
-.edit-profile__orders___CH69h .edit-profile__order-status___XOBkQ .edit-profile__inline-svg___q1tVb {
-  height: 63px;
-}
-.edit-profile__order-item___uRQ3p .edit-profile__oder-header___QiiJ3 .edit-profile__filter-arrow-up___IBtkl {
-  margin-right: none !important;
-}
-.edit-profile__buttons___YS_GE {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.edit-profile__checkout___UT1w2 {
-  width: calc(100% - 20px) !important;
-}
-.edit-profile__guest-checkout___nshCq {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.edit-profile__home-page___g_W6i,
-.edit-profile__homePage___LQdE9 {
-  max-width: 1440px;
 }
 .edit-profile__mr-5___UQxgl,
 .edit-profile__mr5___SBvUV {
@@ -453,16 +444,6 @@ img::selection {
     padding: 5px !important;
   }
 }
-.edit-profile__blog-wrapper___J9Nhq .edit-profile__title___gHlPg {
-  color: var(--textHeading, #26201a);
-}
-.edit-profile__blog-wrapper___J9Nhq .edit-profile__author___avJpq,
-.edit-profile__blog-wrapper___J9Nhq .edit-profile__created-on___eZq0P {
-  color: var(--textLabel, #7d7676) !important;
-}
-.edit-profile__blog-wrapper___J9Nhq #edit-profile__custom-page-container___ClJ8C * {
-  color: var(--textBody, #3c3131);
-}
 .edit-profile__view3d-canvas___Qvjl_ {
   width: 100%;
   height: 100%;
@@ -524,6 +505,9 @@ img::selection {
   font-style: normal;
   font-weight: 400;
   line-height: 16.8px;
+}
+.edit-profile__required___rHXXW {
+  color: var(--errorText, #b24141);
 }
 .edit-profile__editProfileNameInput___GNfyk {
   display: flex;
@@ -954,12 +938,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .verify-both__caption-medium___QjOc_,
+  .verify-both__captionMedium___vIB7N {
+    font-size: 11px;
+  }
+}
 .verify-both__caption-semi-bold___hN2r2,
 .verify-both__captionSemiBold___ZGDKF {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .verify-both__caption-semi-bold___hN2r2,
+  .verify-both__captionSemiBold___ZGDKF {
+    font-size: 11px;
+  }
 }
 .verify-both__btn-link___RRoeT,
 .verify-both__btnLink___BZ7fx {
@@ -1017,33 +1013,12 @@ button {
 .verify-both__removeScroll___jPZs_ {
   overflow-y: hidden !important;
 }
-.verify-both__orders___MIslN .verify-both__order-status___bb5So .verify-both__inline-svg___FCOpw {
-  height: 63px;
-}
-.verify-both__order-item___KQSJu .verify-both__oder-header___XRWq1 .verify-both__filter-arrow-up___a3uo0 {
-  margin-right: none !important;
-}
-.verify-both__buttons___nyXhE {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.verify-both__checkout___vc7qm {
-  width: calc(100% - 20px) !important;
-}
-.verify-both__guest-checkout___s3Pln {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.verify-both__home-page___nyDmb,
-.verify-both__homePage___be1gP {
-  max-width: 1440px;
 }
 .verify-both__mr-5___IG86K,
 .verify-both__mr5___XKxD3 {
@@ -1111,16 +1086,6 @@ img::selection {
     padding: 5px !important;
   }
 }
-.verify-both__blog-wrapper___YLHbn .verify-both__title___ktQBD {
-  color: var(--textHeading, #26201a);
-}
-.verify-both__blog-wrapper___YLHbn .verify-both__author___ZqelH,
-.verify-both__blog-wrapper___YLHbn .verify-both__created-on___ZESqp {
-  color: var(--textLabel, #7d7676) !important;
-}
-.verify-both__blog-wrapper___YLHbn #verify-both__custom-page-container___DMIjR * {
-  color: var(--textBody, #3c3131);
-}
 .verify-both__view3d-canvas___KR_KE {
   width: 100%;
   height: 100%;
@@ -1157,9 +1122,7 @@ img::selection {
 .verify-both__formWrapper___i4gyS .verify-both__verifyOtpForm___l4iIY {
   margin-bottom: 32px;
   color: var(--textBody, #3c3131);
-  text-align: center;
   font-size: 14px;
-  font-style: normal;
   font-weight: 400;
   line-height: 19.6px;
 }
@@ -1173,7 +1136,12 @@ img::selection {
   font-weight: 400;
   line-height: 19.6px;
 }
-.verify-both__formWrapper___i4gyS .verify-both__verifyOtpForm___l4iIY .verify-both__label___m7Eae {
+.verify-both__formWrapper___i4gyS .verify-both__inputGroup___WBoRS {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 24px;
+}
+.verify-both__formWrapper___i4gyS .verify-both__inputGroup___WBoRS .verify-both__label___m7Eae {
   position: absolute;
   background-color: var(--pageBackground, #f8f8f8);
   padding: 0 4px;
@@ -1185,11 +1153,6 @@ img::selection {
   font-style: normal;
   font-weight: 400;
   line-height: 16.8px;
-}
-.verify-both__formWrapper___i4gyS .verify-both__inputGroup___WBoRS {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 24px;
 }
 .verify-both__formWrapper___i4gyS .verify-both__inputGroup___WBoRS input {
   width: 100%;
@@ -1210,6 +1173,12 @@ img::selection {
 }
 .verify-both__formWrapper___i4gyS .verify-both__inputGroup___WBoRS input:focus-visible {
   outline: none;
+}
+.verify-both__formWrapper___i4gyS .verify-both__inputGroup___WBoRS.verify-both__error___zKEjP .verify-both__label___m7Eae {
+  color: var(--errorText, #b24141);
+}
+.verify-both__formWrapper___i4gyS .verify-both__inputGroup___WBoRS.verify-both__error___zKEjP input {
+  border-color: var(--errorText, #b24141);
 }
 .verify-both__submitBtn___rVsbN {
   border: none;
@@ -1232,14 +1201,10 @@ img::selection {
   cursor: default;
 }
 .verify-both__loginAlert___HgFU5 {
-  min-height: 48px;
-  padding: 0 7px;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  font-size: 13px;
-  background-color: var(--errorBackground, #e6d5d5);
-  border: 1px dashed var(--errorText, #b24141);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 140%;
+  margin-top: 8px;
   color: var(--errorText, #b24141);
 }
 .verify-both__resendOtpWrapper___Mq8mf {
@@ -1564,12 +1529,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .mobile-number__caption-medium___syZZb,
+  .mobile-number__captionMedium___iKNxh {
+    font-size: 11px;
+  }
+}
 .mobile-number__caption-semi-bold___Rbomr,
 .mobile-number__captionSemiBold___cKKg4 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .mobile-number__caption-semi-bold___Rbomr,
+  .mobile-number__captionSemiBold___cKKg4 {
+    font-size: 11px;
+  }
 }
 .mobile-number__btn-link___QbUx_,
 .mobile-number__btnLink___dTaco {
@@ -1627,33 +1604,12 @@ button {
 .mobile-number__removeScroll___hiYOj {
   overflow-y: hidden !important;
 }
-.mobile-number__orders___reNZh .mobile-number__order-status___cyeoG .mobile-number__inline-svg___mRURW {
-  height: 63px;
-}
-.mobile-number__order-item___kK82S .mobile-number__oder-header___o5NAz .mobile-number__filter-arrow-up___hT2Bo {
-  margin-right: none !important;
-}
-.mobile-number__buttons___pPkid {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.mobile-number__checkout___tX2MA {
-  width: calc(100% - 20px) !important;
-}
-.mobile-number__guest-checkout___StlUo {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.mobile-number__home-page___ACbiT,
-.mobile-number__homePage___V9q6f {
-  max-width: 1440px;
 }
 .mobile-number__mr-5___gRl4u,
 .mobile-number__mr5___tOVbz {
@@ -1721,16 +1677,6 @@ img::selection {
     padding: 5px !important;
   }
 }
-.mobile-number__blog-wrapper___HHcg6 .mobile-number__title___itE30 {
-  color: var(--textHeading, #26201a);
-}
-.mobile-number__blog-wrapper___HHcg6 .mobile-number__author___T6yLD,
-.mobile-number__blog-wrapper___HHcg6 .mobile-number__created-on___cjKXD {
-  color: var(--textLabel, #7d7676) !important;
-}
-.mobile-number__blog-wrapper___HHcg6 #mobile-number__custom-page-container___cUETB * {
-  color: var(--textBody, #3c3131);
-}
 .mobile-number__view3d-canvas___XZ8Pk {
   width: 100%;
   height: 100%;
@@ -1767,30 +1713,29 @@ img::selection {
 .mobile-number__mobileInputWrapper___Na12n.mobile-number__errorInput___TKkzT .mobile-number__mobileNumberInput___iRnFG {
   border: 1px solid var(--errorText, #b24141);
 }
-.mobile-number__mobileInputContainer___deIgv {
+.mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv {
   height: auto;
 }
-.mobile-number__mobileNumberInput___iRnFG {
-  height: 48px;
-  width: 100%;
-  box-sizing: border-box;
-  color: var(--textBody, #3c3131);
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 19.6px;
-  display: flex;
-  border: 1px solid var(--dividerStokes, #d4d1d1);
-  border-radius: 4px;
-  background-color: var(--pageBackground, #f8f8f8);
+.mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__dialCodePreview___E0m4Z {
+  border-inline: none;
   padding-right: 4px;
 }
-.mobile-number__mobileNumberInput___iRnFG:focus-visible {
+.mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG {
+  width: 100%;
+  font-weight: 400;
+  display: flex;
+  border-left: none;
+  padding-left: 4px;
+}
+.mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG:focus-visible {
   outline: none;
 }
-.mobile-number__mobileNumberInput___iRnFG::placeholder {
+.mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG::placeholder {
   color: var(--textLabel, #7d7676);
   opacity: 0.3;
+}
+.mobile-number__required___yHCeh {
+  color: var(--errorText, #b24141);
 }
 .mobile-number__countryDropdown___GP6Fo {
   background-color: aquamarine;

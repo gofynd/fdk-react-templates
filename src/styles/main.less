@@ -194,6 +194,9 @@ h5,
 
 .caption() {
   font-size: 12px;
+  @media @mobile {
+    font-size: 11px;
+  }
   line-height: 14px;
   letter-spacing: -0.02em;
 }
@@ -304,28 +307,6 @@ button {
   overflow-y: hidden !important;
 }
 
-//order-placed
-.orders .order-status .inline-svg {
-  height: 63px;
-}
-.order-item .oder-header .filter-arrow-up {
-  margin-right: none !important;
-}
-
-// guest checkout
-.buttons {
-  display: block !important;
-  margin-bottom: 8px;
-}
-
-.checkout {
-  width: calc(100% - 20px) !important;
-}
-.guest-checkout {
-  text-decoration: underline;
-  padding-top: 15px;
-}
-
 ::selection {
   background-color: @primary-color;
   color: @color-black;
@@ -333,11 +314,6 @@ button {
 
 img::selection {
   background-color: transparent;
-}
-
-.home-page,
-.homePage {
-  max-width: @page-width;
 }
 
 .mr-5,
@@ -406,22 +382,6 @@ img::selection {
   @media @mobile {
     font-size: 12px !important;
     padding: 5px !important;
-  }
-}
-
-//Blog page colour mapping override
-.blog-wrapper {
-  .title {
-    color: @TextHeading;
-  }
-  .author,
-  .created-on {
-    color: @TextLabel !important;
-  }
-  #custom-page-container {
-    * {
-      color: @TextBody;
-    }
   }
 }
 

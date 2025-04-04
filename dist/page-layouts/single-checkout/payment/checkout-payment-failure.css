@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .checkout-payment-failure__caption-medium___iwrm3,
+  .checkout-payment-failure__captionMedium___Su0F1 {
+    font-size: 11px;
+  }
+}
 .checkout-payment-failure__caption-semi-bold___NT7Uc,
 .checkout-payment-failure__captionSemiBold___Crx0h {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .checkout-payment-failure__caption-semi-bold___NT7Uc,
+  .checkout-payment-failure__captionSemiBold___Crx0h {
+    font-size: 11px;
+  }
 }
 .checkout-payment-failure__btn-link___oTKdf,
 .checkout-payment-failure__btnLink___r_R2A {
@@ -359,33 +371,12 @@ button {
 .checkout-payment-failure__removeScroll___QdHBp {
   overflow-y: hidden !important;
 }
-.checkout-payment-failure__orders___t1FpS .checkout-payment-failure__order-status___Xk1Hg .checkout-payment-failure__inline-svg___uTk8a {
-  height: 63px;
-}
-.checkout-payment-failure__order-item___DrrYp .checkout-payment-failure__oder-header___KlwsK .checkout-payment-failure__filter-arrow-up___xa0Ii {
-  margin-right: none !important;
-}
-.checkout-payment-failure__buttons___ZI5ip {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.checkout-payment-failure__checkout___VsGLt {
-  width: calc(100% - 20px) !important;
-}
-.checkout-payment-failure__guest-checkout___ysM76 {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.checkout-payment-failure__home-page___hQCC5,
-.checkout-payment-failure__homePage___Ysxfw {
-  max-width: 1440px;
 }
 .checkout-payment-failure__mr-5___Cg1Ro,
 .checkout-payment-failure__mr5___JTHvr {
@@ -452,16 +443,6 @@ img::selection {
     font-size: 12px !important;
     padding: 5px !important;
   }
-}
-.checkout-payment-failure__blog-wrapper___voglx .checkout-payment-failure__title___tYHyq {
-  color: var(--textHeading, #26201a);
-}
-.checkout-payment-failure__blog-wrapper___voglx .checkout-payment-failure__author___pNWRN,
-.checkout-payment-failure__blog-wrapper___voglx .checkout-payment-failure__created-on___fwk5P {
-  color: var(--textLabel, #7d7676) !important;
-}
-.checkout-payment-failure__blog-wrapper___voglx #checkout-payment-failure__custom-page-container___QaBwR * {
-  color: var(--textBody, #3c3131);
 }
 .checkout-payment-failure__view3d-canvas___JCnS8 {
   width: 100%;

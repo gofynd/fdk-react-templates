@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .login-mode-button__caption-medium___sMaLa,
+  .login-mode-button__captionMedium___Bnrn4 {
+    font-size: 11px;
+  }
+}
 .login-mode-button__caption-semi-bold____qWoY,
 .login-mode-button__captionSemiBold___R3HRn {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .login-mode-button__caption-semi-bold____qWoY,
+  .login-mode-button__captionSemiBold___R3HRn {
+    font-size: 11px;
+  }
 }
 .login-mode-button__btn-link___PTaPz,
 .login-mode-button__btnLink___dovNG {
@@ -359,33 +371,12 @@ button {
 .login-mode-button__removeScroll___HncN9 {
   overflow-y: hidden !important;
 }
-.login-mode-button__orders___jrP7y .login-mode-button__order-status___R6ESB .login-mode-button__inline-svg___Rq3Zj {
-  height: 63px;
-}
-.login-mode-button__order-item____bvEb .login-mode-button__oder-header___q32Nz .login-mode-button__filter-arrow-up___m_Nqb {
-  margin-right: none !important;
-}
-.login-mode-button__buttons___U3lSn {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.login-mode-button__checkout___hMaUH {
-  width: calc(100% - 20px) !important;
-}
-.login-mode-button__guest-checkout___WsbH7 {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.login-mode-button__home-page___JDVWR,
-.login-mode-button__homePage___eUryO {
-  max-width: 1440px;
 }
 .login-mode-button__mr-5___f_aDn,
 .login-mode-button__mr5___UHJOX {
@@ -452,16 +443,6 @@ img::selection {
     font-size: 12px !important;
     padding: 5px !important;
   }
-}
-.login-mode-button__blog-wrapper___gOZTP .login-mode-button__title___rSvlP {
-  color: var(--textHeading, #26201a);
-}
-.login-mode-button__blog-wrapper___gOZTP .login-mode-button__author___oEpYk,
-.login-mode-button__blog-wrapper___gOZTP .login-mode-button__created-on___tbAYB {
-  color: var(--textLabel, #7d7676) !important;
-}
-.login-mode-button__blog-wrapper___gOZTP #login-mode-button__custom-page-container___tX0Od * {
-  color: var(--textBody, #3c3131);
 }
 .login-mode-button__view3d-canvas___faLHu {
   width: 100%;

@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .main__caption-medium____cg7Y,
+  .main__captionMedium___YQCmi {
+    font-size: 11px;
+  }
+}
 .main__caption-semi-bold___lddso,
 .main__captionSemiBold___oExTA {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .main__caption-semi-bold___lddso,
+  .main__captionSemiBold___oExTA {
+    font-size: 11px;
+  }
 }
 .main__btn-link___J1wSq,
 .main__btnLink___UCddP {
@@ -359,33 +371,12 @@ button {
 .main__removeScroll___C5PpJ {
   overflow-y: hidden !important;
 }
-.main__orders____lyiq .main__order-status___z3L78 .main__inline-svg___Vskvj {
-  height: 63px;
-}
-.main__order-item___Wdfx2 .main__oder-header___RGLXh .main__filter-arrow-up___sFZ7C {
-  margin-right: none !important;
-}
-.main__buttons___MOfjf {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.main__checkout___QW0s1 {
-  width: calc(100% - 20px) !important;
-}
-.main__guest-checkout___n07ii {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.main__home-page___Vmj23,
-.main__homePage___go5Yo {
-  max-width: 1440px;
 }
 .main__mr-5___h4CCN,
 .main__mr5___vv1B0 {
@@ -452,16 +443,6 @@ img::selection {
     font-size: 12px !important;
     padding: 5px !important;
   }
-}
-.main__blog-wrapper___zR12p .main__title____YuDl {
-  color: var(--textHeading, #26201a);
-}
-.main__blog-wrapper___zR12p .main__author___k3cIg,
-.main__blog-wrapper___zR12p .main__created-on___CcRmh {
-  color: var(--textLabel, #7d7676) !important;
-}
-.main__blog-wrapper___zR12p #main__custom-page-container___motSQ * {
-  color: var(--textBody, #3c3131);
 }
 .main__view3d-canvas___OynTp {
   width: 100%;

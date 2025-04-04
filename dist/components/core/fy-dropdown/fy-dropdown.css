@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .fy-dropdown__caption-medium___HCy1Y,
+  .fy-dropdown__captionMedium___BdPX5 {
+    font-size: 11px;
+  }
+}
 .fy-dropdown__caption-semi-bold___RDalx,
 .fy-dropdown__captionSemiBold___t1x78 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .fy-dropdown__caption-semi-bold___RDalx,
+  .fy-dropdown__captionSemiBold___t1x78 {
+    font-size: 11px;
+  }
 }
 .fy-dropdown__btn-link___tRk4r,
 .fy-dropdown__btnLink___pjJ4Q {
@@ -359,33 +371,12 @@ button {
 .fy-dropdown__removeScroll___YixrL {
   overflow-y: hidden !important;
 }
-.fy-dropdown__orders____MO0I .fy-dropdown__order-status___dGnAx .fy-dropdown__inline-svg___fLrBY {
-  height: 63px;
-}
-.fy-dropdown__order-item___z4ZTm .fy-dropdown__oder-header___SptDV .fy-dropdown__filter-arrow-up___au2bM {
-  margin-right: none !important;
-}
-.fy-dropdown__buttons___aNDNK {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.fy-dropdown__checkout___FFvo4 {
-  width: calc(100% - 20px) !important;
-}
-.fy-dropdown__guest-checkout___KkCG7 {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.fy-dropdown__home-page____NMKE,
-.fy-dropdown__homePage___rqccd {
-  max-width: 1440px;
 }
 .fy-dropdown__mr-5___ctv4d,
 .fy-dropdown__mr5___oPnFN {
@@ -453,16 +444,6 @@ img::selection {
     padding: 5px !important;
   }
 }
-.fy-dropdown__blog-wrapper___omIwr .fy-dropdown__title___c3lyz {
-  color: var(--textHeading, #26201a);
-}
-.fy-dropdown__blog-wrapper___omIwr .fy-dropdown__author___mCOr9,
-.fy-dropdown__blog-wrapper___omIwr .fy-dropdown__created-on___BlhfW {
-  color: var(--textLabel, #7d7676) !important;
-}
-.fy-dropdown__blog-wrapper___omIwr #fy-dropdown__custom-page-container___jQH49 * {
-  color: var(--textBody, #3c3131);
-}
 .fy-dropdown__view3d-canvas___IqfLy {
   width: 100%;
   height: 100%;
@@ -487,6 +468,9 @@ img::selection {
   font-weight: 400;
   font-size: 12px;
   padding-top: 5px;
+}
+.fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__required___h4JQY {
+  color: var(--errorText, #b24141);
 }
 .fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__dropdown___N1atH {
   box-sizing: border-box;

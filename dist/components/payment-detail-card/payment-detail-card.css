@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .payment-detail-card__caption-medium____kvyN,
+  .payment-detail-card__captionMedium___prw4Y {
+    font-size: 11px;
+  }
+}
 .payment-detail-card__caption-semi-bold___CW03U,
 .payment-detail-card__captionSemiBold___Q0zrG {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .payment-detail-card__caption-semi-bold___CW03U,
+  .payment-detail-card__captionSemiBold___Q0zrG {
+    font-size: 11px;
+  }
 }
 .payment-detail-card__btn-link___K3FiK,
 .payment-detail-card__btnLink____WVQ1 {
@@ -359,33 +371,12 @@ button {
 .payment-detail-card__removeScroll___U3v0f {
   overflow-y: hidden !important;
 }
-.payment-detail-card__orders___YzzT9 .payment-detail-card__order-status___W0XBT .payment-detail-card__inline-svg___PtSlk {
-  height: 63px;
-}
-.payment-detail-card__order-item___zgvGh .payment-detail-card__oder-header___F3jC4 .payment-detail-card__filter-arrow-up___EdxXu {
-  margin-right: none !important;
-}
-.payment-detail-card__buttons___xtuAR {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.payment-detail-card__checkout___U5ERe {
-  width: calc(100% - 20px) !important;
-}
-.payment-detail-card__guest-checkout___QC2Od {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.payment-detail-card__home-page___NR3tP,
-.payment-detail-card__homePage___cZHM3 {
-  max-width: 1440px;
 }
 .payment-detail-card__mr-5___EOnNk,
 .payment-detail-card__mr5___vIRmv {
@@ -453,16 +444,6 @@ img::selection {
     padding: 5px !important;
   }
 }
-.payment-detail-card__blog-wrapper___q25Fc .payment-detail-card__title___vkIX0 {
-  color: var(--textHeading, #26201a);
-}
-.payment-detail-card__blog-wrapper___q25Fc .payment-detail-card__author___mfUUG,
-.payment-detail-card__blog-wrapper___q25Fc .payment-detail-card__created-on___OSR1O {
-  color: var(--textLabel, #7d7676) !important;
-}
-.payment-detail-card__blog-wrapper___q25Fc #payment-detail-card__custom-page-container___IEFj5 * {
-  color: var(--textBody, #3c3131);
-}
 .payment-detail-card__view3d-canvas___qcHnT {
   width: 100%;
   height: 100%;
@@ -478,14 +459,11 @@ img::selection {
   }
 }
 .payment-detail-card__paymentMode___Q6ooB {
-  margin: 15px;
+  padding: 16px;
 }
 .payment-detail-card__paymentMode___Q6ooB .payment-detail-card__wrapperflex___LiHqy {
   display: flex;
   align-items: center;
-}
-.payment-detail-card__paymentMode___Q6ooB .payment-detail-card__header___UDwXd {
-  margin-left: 3px;
 }
 .payment-detail-card__paymentMode___Q6ooB .payment-detail-card__boldsm___LSYHw {
   font-weight: 700;

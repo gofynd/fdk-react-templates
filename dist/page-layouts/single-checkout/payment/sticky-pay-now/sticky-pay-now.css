@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .sticky-pay-now__caption-medium___gZCqf,
+  .sticky-pay-now__captionMedium___V6P3J {
+    font-size: 11px;
+  }
+}
 .sticky-pay-now__caption-semi-bold___QX3JZ,
 .sticky-pay-now__captionSemiBold___Fc8TZ {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .sticky-pay-now__caption-semi-bold___QX3JZ,
+  .sticky-pay-now__captionSemiBold___Fc8TZ {
+    font-size: 11px;
+  }
 }
 .sticky-pay-now__btn-link___zQJQL,
 .sticky-pay-now__btnLink___ge_XT {
@@ -359,33 +371,12 @@ button {
 .sticky-pay-now__removeScroll___kF3g4 {
   overflow-y: hidden !important;
 }
-.sticky-pay-now__orders___uP4cv .sticky-pay-now__order-status___rYyRr .sticky-pay-now__inline-svg___tt4LT {
-  height: 63px;
-}
-.sticky-pay-now__order-item___wzjNQ .sticky-pay-now__oder-header___QnaEt .sticky-pay-now__filter-arrow-up___y6SP9 {
-  margin-right: none !important;
-}
-.sticky-pay-now__buttons___mGE4w {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.sticky-pay-now__checkout___AMJS1 {
-  width: calc(100% - 20px) !important;
-}
-.sticky-pay-now__guest-checkout___pKYv0 {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.sticky-pay-now__home-page___JypfA,
-.sticky-pay-now__homePage___bcyep {
-  max-width: 1440px;
 }
 .sticky-pay-now__mr-5___oR6lr,
 .sticky-pay-now__mr5___HP_gl {
@@ -452,16 +443,6 @@ img::selection {
     font-size: 12px !important;
     padding: 5px !important;
   }
-}
-.sticky-pay-now__blog-wrapper___M4cHN .sticky-pay-now__title___Dzqgv {
-  color: var(--textHeading, #26201a);
-}
-.sticky-pay-now__blog-wrapper___M4cHN .sticky-pay-now__author___Oq5wy,
-.sticky-pay-now__blog-wrapper___M4cHN .sticky-pay-now__created-on___ZEFY0 {
-  color: var(--textLabel, #7d7676) !important;
-}
-.sticky-pay-now__blog-wrapper___M4cHN #sticky-pay-now__custom-page-container___elb3i * {
-  color: var(--textBody, #3c3131);
 }
 .sticky-pay-now__view3d-canvas___OKgzu {
   width: 100%;

@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .pagination__caption-medium___jtoVr,
+  .pagination__captionMedium___jNBGw {
+    font-size: 11px;
+  }
+}
 .pagination__caption-semi-bold___fVaBz,
 .pagination__captionSemiBold___pXxji {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .pagination__caption-semi-bold___fVaBz,
+  .pagination__captionSemiBold___pXxji {
+    font-size: 11px;
+  }
 }
 .pagination__btn-link___orr5r,
 .pagination__btnLink___F95Uy {
@@ -359,33 +371,12 @@ button {
 .pagination__removeScroll___CB_Kc {
   overflow-y: hidden !important;
 }
-.pagination__orders___x50ZM .pagination__order-status___emspB .pagination__inline-svg___ahFQR {
-  height: 63px;
-}
-.pagination__order-item___E1UHy .pagination__oder-header___VW2oq .pagination__filter-arrow-up___HXA2Y {
-  margin-right: none !important;
-}
-.pagination__buttons___TueNd {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.pagination__checkout___iUvm3 {
-  width: calc(100% - 20px) !important;
-}
-.pagination__guest-checkout___Dm8mG {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.pagination__home-page___DVeBI,
-.pagination__homePage___km7vQ {
-  max-width: 1440px;
 }
 .pagination__mr-5___oY4X5,
 .pagination__mr5___FEPwz {
@@ -452,16 +443,6 @@ img::selection {
     font-size: 12px !important;
     padding: 5px !important;
   }
-}
-.pagination__blog-wrapper___GyPGX .pagination__title___VWksk {
-  color: var(--textHeading, #26201a);
-}
-.pagination__blog-wrapper___GyPGX .pagination__author___SeF4t,
-.pagination__blog-wrapper___GyPGX .pagination__created-on___d6UnX {
-  color: var(--textLabel, #7d7676) !important;
-}
-.pagination__blog-wrapper___GyPGX #pagination__custom-page-container___lct7f * {
-  color: var(--textBody, #3c3131);
 }
 .pagination__view3d-canvas___g_ECL {
   width: 100%;

@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .cart-gift-item__caption-medium___VVmw0,
+  .cart-gift-item__captionMedium___naEN5 {
+    font-size: 11px;
+  }
+}
 .cart-gift-item__caption-semi-bold___xZwGj,
 .cart-gift-item__captionSemiBold___uxPG3 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .cart-gift-item__caption-semi-bold___xZwGj,
+  .cart-gift-item__captionSemiBold___uxPG3 {
+    font-size: 11px;
+  }
 }
 .cart-gift-item__btn-link___U4mVF,
 .cart-gift-item__btnLink___f4BxI {
@@ -359,33 +371,12 @@ button {
 .cart-gift-item__removeScroll___tU5T_ {
   overflow-y: hidden !important;
 }
-.cart-gift-item__orders___zHxoQ .cart-gift-item__order-status___Kexst .cart-gift-item__inline-svg___jB39a {
-  height: 63px;
-}
-.cart-gift-item__order-item___HbBg1 .cart-gift-item__oder-header___H0Ds5 .cart-gift-item__filter-arrow-up___cQd3V {
-  margin-right: none !important;
-}
-.cart-gift-item__buttons___ssrJi {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.cart-gift-item__checkout___JJFa1 {
-  width: calc(100% - 20px) !important;
-}
-.cart-gift-item__guest-checkout___SOEKp {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.cart-gift-item__home-page___IbhXL,
-.cart-gift-item__homePage___gyqlv {
-  max-width: 1440px;
 }
 .cart-gift-item__mr-5___mJPbt,
 .cart-gift-item__mr5___fFMzT {
@@ -452,16 +443,6 @@ img::selection {
     font-size: 12px !important;
     padding: 5px !important;
   }
-}
-.cart-gift-item__blog-wrapper___KSiRo .cart-gift-item__title___QQ5XN {
-  color: var(--textHeading, #26201a);
-}
-.cart-gift-item__blog-wrapper___KSiRo .cart-gift-item__author___H565m,
-.cart-gift-item__blog-wrapper___KSiRo .cart-gift-item__created-on___DeCzl {
-  color: var(--textLabel, #7d7676) !important;
-}
-.cart-gift-item__blog-wrapper___KSiRo #cart-gift-item__custom-page-container___JAvi1 * {
-  color: var(--textBody, #3c3131);
 }
 .cart-gift-item__view3d-canvas___kNg86 {
   width: 100%;

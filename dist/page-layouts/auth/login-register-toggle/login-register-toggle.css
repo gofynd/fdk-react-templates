@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .login-register-toggle__caption-medium___TPPc2,
+  .login-register-toggle__captionMedium___SG74Q {
+    font-size: 11px;
+  }
+}
 .login-register-toggle__caption-semi-bold___jC8wa,
 .login-register-toggle__captionSemiBold___ps_L5 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .login-register-toggle__caption-semi-bold___jC8wa,
+  .login-register-toggle__captionSemiBold___ps_L5 {
+    font-size: 11px;
+  }
 }
 .login-register-toggle__btn-link___hm7_F,
 .login-register-toggle__btnLink___Kszjb {
@@ -359,33 +371,12 @@ button {
 .login-register-toggle__removeScroll___eMSJj {
   overflow-y: hidden !important;
 }
-.login-register-toggle__orders___zk61g .login-register-toggle__order-status___ixixM .login-register-toggle__inline-svg___WVJ2G {
-  height: 63px;
-}
-.login-register-toggle__order-item___eXFaU .login-register-toggle__oder-header___E1s7e .login-register-toggle__filter-arrow-up___gMP5o {
-  margin-right: none !important;
-}
-.login-register-toggle__buttons___caLJf {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.login-register-toggle__checkout___y2aDy {
-  width: calc(100% - 20px) !important;
-}
-.login-register-toggle__guest-checkout___se7Eo {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.login-register-toggle__home-page___M6_wf,
-.login-register-toggle__homePage___qF904 {
-  max-width: 1440px;
 }
 .login-register-toggle__mr-5___v7zhF,
 .login-register-toggle__mr5___c7UOL {
@@ -452,16 +443,6 @@ img::selection {
     font-size: 12px !important;
     padding: 5px !important;
   }
-}
-.login-register-toggle__blog-wrapper___Lflfj .login-register-toggle__title___p9JJ5 {
-  color: var(--textHeading, #26201a);
-}
-.login-register-toggle__blog-wrapper___Lflfj .login-register-toggle__author___UYhrj,
-.login-register-toggle__blog-wrapper___Lflfj .login-register-toggle__created-on___JbkNu {
-  color: var(--textLabel, #7d7676) !important;
-}
-.login-register-toggle__blog-wrapper___Lflfj #login-register-toggle__custom-page-container___elzxb * {
-  color: var(--textBody, #3c3131);
 }
 .login-register-toggle__view3d-canvas___IObky {
   width: 100%;

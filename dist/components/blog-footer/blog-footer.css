@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .blog-footer__caption-medium___SxJ8X,
+  .blog-footer__captionMedium___J7Afj {
+    font-size: 11px;
+  }
+}
 .blog-footer__caption-semi-bold___iv7Ju,
 .blog-footer__captionSemiBold____6r0g {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .blog-footer__caption-semi-bold___iv7Ju,
+  .blog-footer__captionSemiBold____6r0g {
+    font-size: 11px;
+  }
 }
 .blog-footer__btn-link___Y3eMk,
 .blog-footer__btnLink___hbQuy {
@@ -359,33 +371,12 @@ button {
 .blog-footer__removeScroll___vomjT {
   overflow-y: hidden !important;
 }
-.blog-footer__orders___HLWhS .blog-footer__order-status___y9G3T .blog-footer__inline-svg___FSI61 {
-  height: 63px;
-}
-.blog-footer__order-item___F_tl_ .blog-footer__oder-header___IWhwN .blog-footer__filter-arrow-up___zdOWE {
-  margin-right: none !important;
-}
-.blog-footer__buttons___w23TT {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.blog-footer__checkout___RVF91 {
-  width: calc(100% - 20px) !important;
-}
-.blog-footer__guest-checkout___Y8Ubh {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.blog-footer__home-page___KnaPG,
-.blog-footer__homePage___JBUy_ {
-  max-width: 1440px;
 }
 .blog-footer__mr-5___tTaVp,
 .blog-footer__mr5___VmPIx {
@@ -452,16 +443,6 @@ img::selection {
     font-size: 12px !important;
     padding: 5px !important;
   }
-}
-.blog-footer__blog-wrapper___wc331 .blog-footer__title___snoy2 {
-  color: var(--textHeading, #26201a);
-}
-.blog-footer__blog-wrapper___wc331 .blog-footer__author___Uefoz,
-.blog-footer__blog-wrapper___wc331 .blog-footer__created-on___IG_v3 {
-  color: var(--textLabel, #7d7676) !important;
-}
-.blog-footer__blog-wrapper___wc331 #blog-footer__custom-page-container___WQrFN * {
-  color: var(--textBody, #3c3131);
 }
 .blog-footer__view3d-canvas___d51DU {
   width: 100%;

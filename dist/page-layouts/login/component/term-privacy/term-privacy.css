@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .term-privacy__caption-medium___BBCs7,
+  .term-privacy__captionMedium___Fllq8 {
+    font-size: 11px;
+  }
+}
 .term-privacy__caption-semi-bold___qAFOD,
 .term-privacy__captionSemiBold___yh7S3 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .term-privacy__caption-semi-bold___qAFOD,
+  .term-privacy__captionSemiBold___yh7S3 {
+    font-size: 11px;
+  }
 }
 .term-privacy__btn-link___eSSEu,
 .term-privacy__btnLink___GcKXv {
@@ -359,33 +371,12 @@ button {
 .term-privacy__removeScroll___RW5E2 {
   overflow-y: hidden !important;
 }
-.term-privacy__orders___yKMTk .term-privacy__order-status___PaBo8 .term-privacy__inline-svg___mlqWz {
-  height: 63px;
-}
-.term-privacy__order-item___n7lfs .term-privacy__oder-header___HNv5Y .term-privacy__filter-arrow-up___P9q2k {
-  margin-right: none !important;
-}
-.term-privacy__buttons___Xkcdw {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.term-privacy__checkout___BDdaf {
-  width: calc(100% - 20px) !important;
-}
-.term-privacy__guest-checkout___aUtsZ {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.term-privacy__home-page___TmEcz,
-.term-privacy__homePage___Hyxp2 {
-  max-width: 1440px;
 }
 .term-privacy__mr-5___u4G87,
 .term-privacy__mr5___FIRoA {
@@ -453,16 +444,6 @@ img::selection {
     padding: 5px !important;
   }
 }
-.term-privacy__blog-wrapper___ZTSZ8 .term-privacy__title___jZ9zb {
-  color: var(--textHeading, #26201a);
-}
-.term-privacy__blog-wrapper___ZTSZ8 .term-privacy__author___t_8sJ,
-.term-privacy__blog-wrapper___ZTSZ8 .term-privacy__created-on___ZnU00 {
-  color: var(--textLabel, #7d7676) !important;
-}
-.term-privacy__blog-wrapper___ZTSZ8 #term-privacy__custom-page-container___vJ74t * {
-  color: var(--textBody, #3c3131);
-}
 .term-privacy__view3d-canvas___KFXI7 {
   width: 100%;
   height: 100%;
@@ -488,6 +469,6 @@ img::selection {
 }
 .term-privacy__midLinks___nJVYw a {
   font-weight: 500;
-  color: var(--textHeading, #26201a);
+  color: var(--buttonLink, #b1655b);
 }
 

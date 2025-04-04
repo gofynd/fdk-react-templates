@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .filter-tags__caption-medium___SR5ZX,
+  .filter-tags__captionMedium___QlgM9 {
+    font-size: 11px;
+  }
+}
 .filter-tags__caption-semi-bold___unLXe,
 .filter-tags__captionSemiBold___fufAk {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .filter-tags__caption-semi-bold___unLXe,
+  .filter-tags__captionSemiBold___fufAk {
+    font-size: 11px;
+  }
 }
 .filter-tags__btn-link___qEoJK,
 .filter-tags__btnLink___d3oYo {
@@ -359,33 +371,12 @@ button {
 .filter-tags__removeScroll___sR3qX {
   overflow-y: hidden !important;
 }
-.filter-tags__orders___ilJDS .filter-tags__order-status___eiDC2 .filter-tags__inline-svg___LLosD {
-  height: 63px;
-}
-.filter-tags__order-item___ZhbPm .filter-tags__oder-header___JejWk .filter-tags__filter-arrow-up___h78hQ {
-  margin-right: none !important;
-}
-.filter-tags__buttons___u4F5q {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.filter-tags__checkout___xs7WW {
-  width: calc(100% - 20px) !important;
-}
-.filter-tags__guest-checkout___wlCQ7 {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.filter-tags__home-page___GBTtH,
-.filter-tags__homePage___NzCsw {
-  max-width: 1440px;
 }
 .filter-tags__mr-5___zefQj,
 .filter-tags__mr5___QP9M3 {
@@ -452,16 +443,6 @@ img::selection {
     font-size: 12px !important;
     padding: 5px !important;
   }
-}
-.filter-tags__blog-wrapper___Xybyb .filter-tags__title___eaFLo {
-  color: var(--textHeading, #26201a);
-}
-.filter-tags__blog-wrapper___Xybyb .filter-tags__author___cuhI4,
-.filter-tags__blog-wrapper___Xybyb .filter-tags__created-on___XdKKD {
-  color: var(--textLabel, #7d7676) !important;
-}
-.filter-tags__blog-wrapper___Xybyb #filter-tags__custom-page-container___y9NFp * {
-  color: var(--textBody, #3c3131);
 }
 .filter-tags__view3d-canvas___qQH_M {
   width: 100%;

@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .login-otp__caption-medium___LLVOc,
+  .login-otp__captionMedium___kPFGP {
+    font-size: 11px;
+  }
+}
 .login-otp__caption-semi-bold___ITiSo,
 .login-otp__captionSemiBold___HdiR4 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .login-otp__caption-semi-bold___ITiSo,
+  .login-otp__captionSemiBold___HdiR4 {
+    font-size: 11px;
+  }
 }
 .login-otp__btn-link___kn8AF,
 .login-otp__btnLink___rlox6 {
@@ -359,33 +371,12 @@ button {
 .login-otp__removeScroll___qXFNJ {
   overflow-y: hidden !important;
 }
-.login-otp__orders___l_5Wq .login-otp__order-status___ivSRz .login-otp__inline-svg___bHdb5 {
-  height: 63px;
-}
-.login-otp__order-item___rJjUe .login-otp__oder-header___LdV4s .login-otp__filter-arrow-up___DFLnp {
-  margin-right: none !important;
-}
-.login-otp__buttons___ykHHr {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.login-otp__checkout___X5pj4 {
-  width: calc(100% - 20px) !important;
-}
-.login-otp__guest-checkout___QEJCp {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.login-otp__home-page___VJZ3o,
-.login-otp__homePage___QHTC3 {
-  max-width: 1440px;
 }
 .login-otp__mr-5___Ojg9V,
 .login-otp__mr5___VXQm_ {
@@ -453,16 +444,6 @@ img::selection {
     padding: 5px !important;
   }
 }
-.login-otp__blog-wrapper___e7gZ_ .login-otp__title___bMeAy {
-  color: var(--textHeading, #26201a);
-}
-.login-otp__blog-wrapper___e7gZ_ .login-otp__author___GBo_C,
-.login-otp__blog-wrapper___e7gZ_ .login-otp__created-on___woI_n {
-  color: var(--textLabel, #7d7676) !important;
-}
-.login-otp__blog-wrapper___e7gZ_ #login-otp__custom-page-container___qTcMV * {
-  color: var(--textBody, #3c3131);
-}
 .login-otp__view3d-canvas___SN_Bs {
   width: 100%;
   height: 100%;
@@ -524,6 +505,24 @@ img::selection {
 .login-otp__loginOtpWrapper___IDiOX {
   margin-top: 32px;
 }
+.login-otp__formReq___I6wQg {
+  color: var(--errorText);
+}
+.login-otp__loginInputGroup____7Nbd {
+  margin-bottom: 32px;
+}
+.login-otp__loginInputGroup____7Nbd .login-otp__otpTitle___xsIPE {
+  margin-bottom: 8px;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 140%;
+  text-align: center;
+}
+@media only screen and (max-width: 480px) {
+  .login-otp__loginInputGroup____7Nbd .login-otp__otpTitle___xsIPE {
+    font-size: 24px;
+  }
+}
 .login-otp__loginInputGroup____7Nbd .login-otp__otpSentMsg___fJ8Ee {
   margin-bottom: 32px;
   color: var(--textBody, #3c3131);
@@ -532,6 +531,18 @@ img::selection {
   font-style: normal;
   font-weight: 400;
   line-height: 19.6px;
+}
+.login-otp__loginInputGroup____7Nbd .login-otp__changeBtn___yaRV5 {
+  color: var(--buttonPrimary, #4e3f09);
+  text-align: center;
+  margin-left: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 140%;
+  text-transform: uppercase;
+}
+.login-otp__loginInputGroup____7Nbd .login-otp__loginInput___EkjKI {
+  margin-bottom: 24px;
 }
 .login-otp__loginInputGroup____7Nbd .login-otp__loginInputTitle___oQ_Yc {
   position: absolute;
@@ -545,6 +556,9 @@ img::selection {
   font-style: normal;
   font-weight: 400;
   line-height: 16.8px;
+}
+.login-otp__loginInputGroup____7Nbd .login-otp__loginInputTitle___oQ_Yc.login-otp__error___gM8rr {
+  color: var(--errorText, #b24141);
 }
 .login-otp__loginInputGroup____7Nbd input {
   width: 100%;
@@ -560,28 +574,24 @@ img::selection {
   line-height: 18px;
   letter-spacing: -0.28px;
 }
+.login-otp__loginInputGroup____7Nbd input.login-otp__error___gM8rr {
+  border-color: var(--errorText, #b24141);
+}
 .login-otp__password-lable-wrapper___AmG_5 {
   display: flex;
   justify-content: space-between;
   margin-bottom: 3px;
 }
 .login-otp__alertError___FvgBm {
-  height: 48px;
-  padding: 0 7px;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  font-size: 13px;
-  background-color: var(--errorBackground, #e6d5d5);
-  border: 1px dashed var(--errorText, #b24141);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 140%;
+  margin-top: 8px;
   color: var(--errorText, #b24141);
 }
 .login-otp__loading___tFXPV div {
   width: 100%;
   height: 100%;
-}
-.login-otp__otpInput___XqbBx {
-  margin-bottom: 24px;
 }
 .login-otp__otpInput___XqbBx::-webkit-outer-spin-button,
 .login-otp__otpInput___XqbBx::-webkit-inner-spin-button {
@@ -886,12 +896,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .mobile-number__caption-medium___syZZb,
+  .mobile-number__captionMedium___iKNxh {
+    font-size: 11px;
+  }
+}
 .mobile-number__caption-semi-bold___Rbomr,
 .mobile-number__captionSemiBold___cKKg4 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .mobile-number__caption-semi-bold___Rbomr,
+  .mobile-number__captionSemiBold___cKKg4 {
+    font-size: 11px;
+  }
 }
 .mobile-number__btn-link___QbUx_,
 .mobile-number__btnLink___dTaco {
@@ -949,33 +971,12 @@ button {
 .mobile-number__removeScroll___hiYOj {
   overflow-y: hidden !important;
 }
-.mobile-number__orders___reNZh .mobile-number__order-status___cyeoG .mobile-number__inline-svg___mRURW {
-  height: 63px;
-}
-.mobile-number__order-item___kK82S .mobile-number__oder-header___o5NAz .mobile-number__filter-arrow-up___hT2Bo {
-  margin-right: none !important;
-}
-.mobile-number__buttons___pPkid {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.mobile-number__checkout___tX2MA {
-  width: calc(100% - 20px) !important;
-}
-.mobile-number__guest-checkout___StlUo {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.mobile-number__home-page___ACbiT,
-.mobile-number__homePage___V9q6f {
-  max-width: 1440px;
 }
 .mobile-number__mr-5___gRl4u,
 .mobile-number__mr5___tOVbz {
@@ -1043,16 +1044,6 @@ img::selection {
     padding: 5px !important;
   }
 }
-.mobile-number__blog-wrapper___HHcg6 .mobile-number__title___itE30 {
-  color: var(--textHeading, #26201a);
-}
-.mobile-number__blog-wrapper___HHcg6 .mobile-number__author___T6yLD,
-.mobile-number__blog-wrapper___HHcg6 .mobile-number__created-on___cjKXD {
-  color: var(--textLabel, #7d7676) !important;
-}
-.mobile-number__blog-wrapper___HHcg6 #mobile-number__custom-page-container___cUETB * {
-  color: var(--textBody, #3c3131);
-}
 .mobile-number__view3d-canvas___XZ8Pk {
   width: 100%;
   height: 100%;
@@ -1089,30 +1080,29 @@ img::selection {
 .mobile-number__mobileInputWrapper___Na12n.mobile-number__errorInput___TKkzT .mobile-number__mobileNumberInput___iRnFG {
   border: 1px solid var(--errorText, #b24141);
 }
-.mobile-number__mobileInputContainer___deIgv {
+.mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv {
   height: auto;
 }
-.mobile-number__mobileNumberInput___iRnFG {
-  height: 48px;
-  width: 100%;
-  box-sizing: border-box;
-  color: var(--textBody, #3c3131);
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 19.6px;
-  display: flex;
-  border: 1px solid var(--dividerStokes, #d4d1d1);
-  border-radius: 4px;
-  background-color: var(--pageBackground, #f8f8f8);
+.mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__dialCodePreview___E0m4Z {
+  border-inline: none;
   padding-right: 4px;
 }
-.mobile-number__mobileNumberInput___iRnFG:focus-visible {
+.mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG {
+  width: 100%;
+  font-weight: 400;
+  display: flex;
+  border-left: none;
+  padding-left: 4px;
+}
+.mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG:focus-visible {
   outline: none;
 }
-.mobile-number__mobileNumberInput___iRnFG::placeholder {
+.mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG::placeholder {
   color: var(--textLabel, #7d7676);
   opacity: 0.3;
+}
+.mobile-number__required___yHCeh {
+  color: var(--errorText, #b24141);
 }
 .mobile-number__countryDropdown___GP6Fo {
   background-color: aquamarine;

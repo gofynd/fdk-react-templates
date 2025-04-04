@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .quantity-control__caption-medium___hXqzw,
+  .quantity-control__captionMedium___aDZsC {
+    font-size: 11px;
+  }
+}
 .quantity-control__caption-semi-bold___Rxtpw,
 .quantity-control__captionSemiBold___JouZf {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .quantity-control__caption-semi-bold___Rxtpw,
+  .quantity-control__captionSemiBold___JouZf {
+    font-size: 11px;
+  }
 }
 .quantity-control__btn-link___RxSzj,
 .quantity-control__btnLink___i2I60 {
@@ -359,33 +371,12 @@ button {
 .quantity-control__removeScroll___OJlc8 {
   overflow-y: hidden !important;
 }
-.quantity-control__orders___Eix14 .quantity-control__order-status___BXUNa .quantity-control__inline-svg___EqYrn {
-  height: 63px;
-}
-.quantity-control__order-item___bVGEI .quantity-control__oder-header___T8gUa .quantity-control__filter-arrow-up___e92Ov {
-  margin-right: none !important;
-}
-.quantity-control__buttons___owRIc {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.quantity-control__checkout___A3YSg {
-  width: calc(100% - 20px) !important;
-}
-.quantity-control__guest-checkout___mTqHr {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.quantity-control__home-page___fNO1e,
-.quantity-control__homePage___Lkruz {
-  max-width: 1440px;
 }
 .quantity-control__mr-5___KrHWb,
 .quantity-control__mr5___HDUFR {
@@ -453,16 +444,6 @@ img::selection {
     padding: 5px !important;
   }
 }
-.quantity-control__blog-wrapper___ff3DZ .quantity-control__title___gm7GP {
-  color: var(--textHeading, #26201a);
-}
-.quantity-control__blog-wrapper___ff3DZ .quantity-control__author___uZtTF,
-.quantity-control__blog-wrapper___ff3DZ .quantity-control__created-on___SkYHw {
-  color: var(--textLabel, #7d7676) !important;
-}
-.quantity-control__blog-wrapper___ff3DZ #quantity-control__custom-page-container___xC_1B * {
-  color: var(--textBody, #3c3131);
-}
 .quantity-control__view3d-canvas___NG5oN {
   width: 100%;
   height: 100%;
@@ -511,7 +492,11 @@ img::selection {
 }
 .quantity-control__quantityCtrlContainer___RPVmM .quantity-control__increaseCount___Xwog1:disabled {
   opacity: 0.5;
-  cursor: not-allowed;
+  cursor: default;
+}
+.quantity-control__quantityCtrlContainer___RPVmM .quantity-control__decreaseCount___H6nUq:disabled {
+  opacity: 0.5;
+  cursor: default;
 }
 .quantity-control__quantityCtrlContainer___RPVmM .quantity-control__count___JvxLy {
   display: flex;

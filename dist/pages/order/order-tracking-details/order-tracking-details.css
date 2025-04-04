@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .order-tracking-details__caption-medium___JCE5V,
+  .order-tracking-details__captionMedium___IG6Y0 {
+    font-size: 11px;
+  }
+}
 .order-tracking-details__caption-semi-bold___sIGNx,
 .order-tracking-details__captionSemiBold___pMQUZ {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .order-tracking-details__caption-semi-bold___sIGNx,
+  .order-tracking-details__captionSemiBold___pMQUZ {
+    font-size: 11px;
+  }
 }
 .order-tracking-details__btn-link___YrAFb,
 .order-tracking-details__btnLink___fAQyq {
@@ -359,33 +371,12 @@ button {
 .order-tracking-details__removeScroll___hqwLf {
   overflow-y: hidden !important;
 }
-.order-tracking-details__orders___poGjM .order-tracking-details__order-status___i57Sb .order-tracking-details__inline-svg___ySSE_ {
-  height: 63px;
-}
-.order-tracking-details__order-item___hKV9N .order-tracking-details__oder-header___INCzu .order-tracking-details__filter-arrow-up___NnlBu {
-  margin-right: none !important;
-}
-.order-tracking-details__buttons___WTuem {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.order-tracking-details__checkout____lLSa {
-  width: calc(100% - 20px) !important;
-}
-.order-tracking-details__guest-checkout___DEQl9 {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.order-tracking-details__home-page___SJ5DV,
-.order-tracking-details__homePage___90hEZ {
-  max-width: 1440px;
 }
 .order-tracking-details__mr-5___FXhFB,
 .order-tracking-details__mr5___ESIVc {
@@ -452,16 +443,6 @@ img::selection {
     font-size: 12px !important;
     padding: 5px !important;
   }
-}
-.order-tracking-details__blog-wrapper___bRWvf .order-tracking-details__title___xlVaR {
-  color: var(--textHeading, #26201a);
-}
-.order-tracking-details__blog-wrapper___bRWvf .order-tracking-details__author___K47EC,
-.order-tracking-details__blog-wrapper___bRWvf .order-tracking-details__created-on___FEmMJ {
-  color: var(--textLabel, #7d7676) !important;
-}
-.order-tracking-details__blog-wrapper___bRWvf #order-tracking-details__custom-page-container___b3jqy * {
-  color: var(--textBody, #3c3131);
 }
 .order-tracking-details__view3d-canvas___zBZ8h {
   width: 100%;
@@ -532,21 +513,14 @@ img::selection {
   flex-flow: wrap;
   flex-direction: row;
   position: relative;
+  margin: 16px;
 }
 .order-tracking-details__shipmentBagItem___vn2Dj .order-tracking-details__bagItem___aCM7d {
   flex: 0 1 50%;
 }
-@media (max-width: 861px) {
+@media only screen and (max-width: 768px) {
   .order-tracking-details__shipmentBagItem___vn2Dj {
     width: 100%;
-    margin: 20px 0;
-    flex-direction: column;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .order-tracking-details__shipmentBagItem___vn2Dj {
-    width: 100%;
-    margin: 20px 0;
     flex-direction: column;
   }
 }
@@ -558,17 +532,21 @@ img::selection {
 }
 .order-tracking-details__orderShipments___N9p2M {
   display: flex;
-  background-color: #ffffff;
+  background-color: var(--pageBackground, #f8f8f8);
 }
-@media only screen and (max-width: 480px) {
+.order-tracking-details__orderShipments___N9p2M .order-tracking-details__orderShipmentsWrapper___Z1UPX {
+  width: 100%;
+}
+@media only screen and (max-width: 768px) {
   .order-tracking-details__orderShipments___N9p2M {
     flex-direction: column;
   }
 }
 .order-tracking-details__orderShipments___N9p2M .order-tracking-details__shipment___udMtq {
-  border-radius: 3px;
-  background-color: #ffffff;
-  margin: 20px 30px;
+  border-radius: 4px;
+  background-color: var(--pageBackground, #f8f8f8);
+  margin: 16px;
+  border: 1px solid var(--dividerStokes, #d4d1d1);
 }
 @media only screen and (max-width: 480px) {
   .order-tracking-details__orderShipments___N9p2M .order-tracking-details__shipment___udMtq {
@@ -577,12 +555,14 @@ img::selection {
     box-sizing: border-box;
   }
 }
-.order-tracking-details__orderShipments___N9p2M .order-tracking-details__shipmentDetails___iWSGH {
-  width: 60%;
-}
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .order-tracking-details__orderShipments___N9p2M .order-tracking-details__shipmentDetails___iWSGH {
     width: 100%;
+  }
+}
+@media only screen and (min-width: 769px) {
+  .order-tracking-details__orderShipments___N9p2M .order-tracking-details__shipmentDetails___iWSGH {
+    flex: 0 0 352px;
   }
 }
 @media only screen and (max-width: 480px) {
@@ -604,13 +584,13 @@ img::selection {
 }
 .order-tracking-details__orderDetails___CZmAI {
   margin: 20px;
-  border: 1px solid #eeeeee;
-  background-color: #ffffff;
+  border: 1px solid var(--dividerStokes, #d4d1d1);
+  background-color: var(--pageBackground, #f8f8f8);
 }
 .order-tracking-details__orderData___YWVrp {
   padding: 20px;
   display: flex;
-  border: 1px solid #eeeeee;
+  border: 1px solid var(--dividerStokes, #d4d1d1);
 }
 .order-tracking-details__orderData___YWVrp .order-tracking-details__track___tAq7W {
   margin-left: 20px;
@@ -961,12 +941,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .empty-state__caption-medium___Cj9cn,
+  .empty-state__captionMedium___e0w26 {
+    font-size: 11px;
+  }
+}
 .empty-state__caption-semi-bold___ftnL8,
 .empty-state__captionSemiBold___yK0OI {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .empty-state__caption-semi-bold___ftnL8,
+  .empty-state__captionSemiBold___yK0OI {
+    font-size: 11px;
+  }
 }
 .empty-state__btn-link___PNnk2,
 .empty-state__btnLink___FxbuH {
@@ -1024,33 +1016,12 @@ button {
 .empty-state__removeScroll___fAP1Z {
   overflow-y: hidden !important;
 }
-.empty-state__orders___kZRD1 .empty-state__order-status___YcrFy .empty-state__inline-svg____MBU2 {
-  height: 63px;
-}
-.empty-state__order-item___hbooi .empty-state__oder-header___XOD31 .empty-state__filter-arrow-up___rPPlQ {
-  margin-right: none !important;
-}
-.empty-state__buttons___Mllxg {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.empty-state__checkout___pvQfG {
-  width: calc(100% - 20px) !important;
-}
-.empty-state__guest-checkout___k2q0l {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.empty-state__home-page____7t25,
-.empty-state__homePage___vNwpV {
-  max-width: 1440px;
 }
 .empty-state__mr-5___t8B92,
 .empty-state__mr5___Fx2yp {
@@ -1117,16 +1088,6 @@ img::selection {
     font-size: 12px !important;
     padding: 5px !important;
   }
-}
-.empty-state__blog-wrapper___JQzML .empty-state__title___frwuE {
-  color: var(--textHeading, #26201a);
-}
-.empty-state__blog-wrapper___JQzML .empty-state__author___qxHM5,
-.empty-state__blog-wrapper___JQzML .empty-state__created-on___FCDHc {
-  color: var(--textLabel, #7d7676) !important;
-}
-.empty-state__blog-wrapper___JQzML #empty-state__custom-page-container___JC4YS * {
-  color: var(--textBody, #3c3131);
 }
 .empty-state__view3d-canvas___vsN2F {
   width: 100%;
@@ -1650,12 +1611,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .order-shipment__caption-medium___iVsKd,
+  .order-shipment__captionMedium___heY5O {
+    font-size: 11px;
+  }
+}
 .order-shipment__caption-semi-bold___GDTDo,
 .order-shipment__captionSemiBold___QfcUW {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .order-shipment__caption-semi-bold___GDTDo,
+  .order-shipment__captionSemiBold___QfcUW {
+    font-size: 11px;
+  }
 }
 .order-shipment__btn-link___tRzON,
 .order-shipment__btnLink___tclr2 {
@@ -1713,33 +1686,12 @@ button {
 .order-shipment__removeScroll___TPcns {
   overflow-y: hidden !important;
 }
-.order-shipment__orders___ftiix .order-shipment__order-status___bFEnR .order-shipment__inline-svg___LSVWw {
-  height: 63px;
-}
-.order-shipment__order-item___g0iIi .order-shipment__oder-header___VYM_B .order-shipment__filter-arrow-up___UAxk3 {
-  margin-right: none !important;
-}
-.order-shipment__buttons___vYAo_ {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.order-shipment__checkout____WXY_ {
-  width: calc(100% - 20px) !important;
-}
-.order-shipment__guest-checkout___A6_qW {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.order-shipment__home-page___ornGi,
-.order-shipment__homePage___t346d {
-  max-width: 1440px;
 }
 .order-shipment__mr-5___rzLTi,
 .order-shipment__mr5___lRqcq {
@@ -1807,16 +1759,6 @@ img::selection {
     padding: 5px !important;
   }
 }
-.order-shipment__blog-wrapper___Joqya .order-shipment__title___Aeu6R {
-  color: var(--textHeading, #26201a);
-}
-.order-shipment__blog-wrapper___Joqya .order-shipment__author___P7SId,
-.order-shipment__blog-wrapper___Joqya .order-shipment__created-on___vuXIf {
-  color: var(--textLabel, #7d7676) !important;
-}
-.order-shipment__blog-wrapper___Joqya #order-shipment__custom-page-container___rvB9P * {
-  color: var(--textBody, #3c3131);
-}
 .order-shipment__view3d-canvas___bRqXo {
   width: 100%;
   height: 100%;
@@ -1836,24 +1778,17 @@ img::selection {
 }
 .order-shipment__orderItem____zenT {
   color: #41434c;
-  background-color: var(--pageBackground, #f8f8f8);
-  border-radius: 5px;
-  margin: 20px 0px;
-  padding: 10px;
+  background-color: var(--highlightColor, #a7a7f8);
+  padding: 16px;
+  border-radius: 4px;
 }
 .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E {
   cursor: pointer;
   position: relative;
 }
-.order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E h3 {
-  margin: 10px;
-}
-.order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E h4 {
-  margin: 10px;
-}
 .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__filter___lnsey {
   position: absolute;
-  right: 20px;
+  right: 0px;
 }
 .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__filterArrowUp___g46yt {
   margin-left: auto;
@@ -1862,47 +1797,36 @@ img::selection {
 .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__filterArrowDown___XfgoC {
   margin-left: auto;
 }
-.order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__bold___YKz_e {
+.order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__orderId___LUgiY {
+  color: var(--textHeading, #26201a);
+  font-weight: 600;
+  line-height: 140%;
   font-weight: 700;
-  font-size: 20px;
+  font-size: 16px;
 }
-@media only screen and (max-width: 768px) {
-  .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__bold___YKz_e {
-    font-size: 18px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__bold___YKz_e {
-    font-size: 16px;
-  }
-}
-.order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__light___ivdxe {
-  font-weight: 300;
-  font-size: 13px;
-}
-@media only screen and (max-width: 768px) {
-  .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__light___ivdxe {
-    font-size: 12px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__light___ivdxe {
-    font-size: 12px;
-  }
+.order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__orderTime___jI_e_ {
+  color: var(--textLabel, #7d7676);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 140%;
+  margin-top: 4px;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 {
   animation: order-shipment__fadeIn___MRLFM 0.5s ease;
   border-top: none;
-  padding: 10px;
+  margin: 16px 0;
+  padding: 0;
   cursor: pointer;
+  display: flex;
+  gap: 16px;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentLeft___o0Q0q {
   display: table-cell;
-  width: 125px;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentLeft___o0Q0q img {
-  max-width: 110px;
-  max-height: 180px;
+  width: 80px;
+  height: 100px;
+  object-fit: cover;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentLeft___o0Q0q #order-shipment__total-item___SOgWJ {
   text-align: center;
@@ -1937,71 +1861,52 @@ img::selection {
     font-size: 14px;
   }
 }
-.order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__regular___mjZO2 {
-  font-weight: 400;
-  font-size: 14px;
-}
-@media only screen and (max-width: 768px) {
-  .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__regular___mjZO2 {
-    font-size: 13px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__regular___mjZO2 {
-    font-size: 13px;
-  }
-}
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq {
   display: table-cell;
   vertical-align: top;
-  color: #41434c;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__shipmentId___Ussac {
-  margin: 10px 0px;
-  line-height: 20px;
+  margin: 4px 0px;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__boldls___Lwbt_ {
-  font-weight: 700;
-  font-size: 14px;
-}
-@media only screen and (max-width: 768px) {
-  .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__boldls___Lwbt_ {
-    font-size: 13px;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__boldls___Lwbt_ {
-    font-size: 13px;
-  }
+  font-weight: 600;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__uktLinks___v7i7G {
-  color: var(--buttonLink, #b1655b);
-  font-weight: 700;
   cursor: pointer;
   text-decoration: none;
+  color: var(--textHeading, #26201a);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 140%;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__shipmentStats___i5laS {
-  margin: 10px 0px;
+  margin: 4px 0px;
+  color: var(--textLabel, #7d7676);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 140%;
+  /* 16.8px */
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__status___ws6ge {
-  text-align: center;
-  color: #ffffff;
-  padding: 10px;
-  display: inline-flex;
-  border-radius: 3px;
+  border-radius: 4px;
+  background: var(--successBackground, #c2dbc9);
+  padding: 4px;
+  color: var(--successText, #1c958f);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 140%;
+  width: fit-content;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__shipmentBrands___QyjCM {
-  margin: 10px 0px;
+  margin: 8px 0px;
 }
 .order-shipment__orderItem____zenT .order-shipment__buttons___vYAo_ {
   display: flex;
 }
 .order-shipment__orderItem____zenT .order-shipment__buttons___vYAo_ .order-shipment__ordercheckout___m3RkW {
-  width: calc(100% - 20px) !important;
+  width: 100%;
   height: 40px;
-  padding: 15px;
   border-radius: var(--buttonRadius, 0px);
-  margin: 10px;
   font-weight: 700;
   background-color: var(--textHeading, #26201a);
   border: none;
@@ -2019,10 +1924,10 @@ img::selection {
   top: -2px;
 }
 .order-shipment__orderItem____zenT .order-shipment__showAccordionBody___KPdMs {
-  visibility: visible;
+  display: block;
 }
 .order-shipment__orderItem____zenT .order-shipment__hideAccordionBody___IOXsZ {
-  visibility: hidden;
+  display: none;
 }
 
 .shipment-item__slide-fade-enter-active___PZcYX,
@@ -2323,12 +2228,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .shipment-item__caption-medium___MXqan,
+  .shipment-item__captionMedium___NjJG7 {
+    font-size: 11px;
+  }
+}
 .shipment-item__caption-semi-bold___UaKSI,
 .shipment-item__captionSemiBold___gV1Lp {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .shipment-item__caption-semi-bold___UaKSI,
+  .shipment-item__captionSemiBold___gV1Lp {
+    font-size: 11px;
+  }
 }
 .shipment-item__btn-link___ljHOl,
 .shipment-item__btnLink___b0uFd {
@@ -2386,33 +2303,12 @@ button {
 .shipment-item__removeScroll___sQWKM {
   overflow-y: hidden !important;
 }
-.shipment-item__orders___MdZeN .shipment-item__order-status___biHzZ .shipment-item__inline-svg___ANgRt {
-  height: 63px;
-}
-.shipment-item__order-item___Zi8cU .shipment-item__oder-header___XlTlI .shipment-item__filter-arrow-up___kWlD5 {
-  margin-right: none !important;
-}
-.shipment-item__buttons___ah83q {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.shipment-item__checkout___zjU40 {
-  width: calc(100% - 20px) !important;
-}
-.shipment-item__guest-checkout___R8qje {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.shipment-item__home-page___SiaLf,
-.shipment-item__homePage___wh7MT {
-  max-width: 1440px;
 }
 .shipment-item__mr-5___f1mzr,
 .shipment-item__mr5___I5hrj {
@@ -2480,16 +2376,6 @@ img::selection {
     padding: 5px !important;
   }
 }
-.shipment-item__blog-wrapper___lGoGU .shipment-item__title___vJAjw {
-  color: var(--textHeading, #26201a);
-}
-.shipment-item__blog-wrapper___lGoGU .shipment-item__author___UkvKw,
-.shipment-item__blog-wrapper___lGoGU .shipment-item__created-on___wiZbB {
-  color: var(--textLabel, #7d7676) !important;
-}
-.shipment-item__blog-wrapper___lGoGU #shipment-item__custom-page-container___ogbFG * {
-  color: var(--textBody, #3c3131);
-}
 .shipment-item__view3d-canvas___FtGfa {
   width: 100%;
   height: 100%;
@@ -2504,27 +2390,31 @@ img::selection {
     display: none !important;
   }
 }
-.shipment-item__bagItem___YVBW1 {
-  display: flex;
-  border-bottom: 1px solid #eeeeee;
-}
 .shipment-item__bagItem___YVBW1 input {
   display: none;
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__radiobtn___EoOPj {
   display: flex;
-  align-items: center;
+}
+.shipment-item__bagItem___YVBW1 .shipment-item__radiobtn___EoOPj svg {
+  width: 24px;
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagImg___BQldP {
-  margin: 20px;
+  display: flex;
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagImg___BQldP img {
-  max-width: 54px;
-  max-height: 90px;
+  width: 80px;
+  object-fit: cover;
   cursor: pointer;
 }
-.shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G {
-  margin: 20px 0px;
+@media only screen and (max-width: 480px) {
+  .shipment-item__bagItem___YVBW1 .shipment-item__bagImg___BQldP img {
+    height: 100px;
+  }
+}
+.shipment-item__bagItem___YVBW1 .shipment-item__label___SjeMm {
+  display: flex;
+  gap: 16px;
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__regularxxs___nZRqX {
   font-weight: 400;
@@ -2559,19 +2449,13 @@ img::selection {
   }
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__brand___wCMcA {
-  color: #41434c;
-}
-.shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__boldsm___YZvIi {
-  font-weight: 700;
+  color: var(--textHeading, #26201a);
   font-size: 16px;
-}
-@media only screen and (max-width: 768px) {
-  .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__boldsm___YZvIi {
-    font-size: 14px;
-  }
+  font-weight: 600;
+  line-height: 140%;
 }
 @media only screen and (max-width: 480px) {
-  .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__boldsm___YZvIi {
+  .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__brand___wCMcA {
     font-size: 14px;
   }
 }
@@ -2580,9 +2464,24 @@ img::selection {
   margin-bottom: 10px;
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__chip___KfRHJ {
-  border-radius: 3px;
   display: inline-block;
-  margin: 10px 0px;
+  margin: 4px 0px;
+}
+.shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__chip___KfRHJ .shipment-item__itemSize___Yajtb {
+  color: var(--textHeading, #26201a);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 140%;
+}
+.shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__chip___KfRHJ .shipment-item__itemSeparator___aU4Kv {
+  color: var(--dividerStokes, #d4d1d1);
+  font-size: 14px;
+}
+.shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__chip___KfRHJ .shipment-item__itemQty___u3nu1 {
+  color: var(--textLabel, #7d7676);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 140%;
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__margin___aoRFj {
   color: var(--errorText, #b24141);
@@ -2600,12 +2499,19 @@ img::selection {
   margin-left: 5px;
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__effectivePrice___Kqia8 {
-  font-weight: 500;
-  line-height: 20px;
+  color: var(--textHeading, #26201a);
   font-size: 14px;
+  font-weight: 600;
+  line-height: 140%;
 }
-.shipment-item__bagItem___YVBW1 .shipment-item__label___SjeMm {
-  display: flex;
+.shipment-item__regularRadio___OLxqz g > circle {
+  stroke: var(--textHeading, #26201a);
+}
+.shipment-item__returnRadioSelected___ZohIT :first-child {
+  stroke: var(--buttonPrimary, #4e3f09);
+}
+.shipment-item__returnRadioSelected___ZohIT :last-child {
+  fill: var(--buttonPrimary, #4e3f09);
 }
 
 .shipment-tracking__slide-fade-enter-active___ZePu9,
@@ -2906,12 +2812,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .shipment-tracking__caption-medium___pthjN,
+  .shipment-tracking__captionMedium___s9jz3 {
+    font-size: 11px;
+  }
+}
 .shipment-tracking__caption-semi-bold___H_RVN,
 .shipment-tracking__captionSemiBold___TTyHu {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .shipment-tracking__caption-semi-bold___H_RVN,
+  .shipment-tracking__captionSemiBold___TTyHu {
+    font-size: 11px;
+  }
 }
 .shipment-tracking__btn-link___P77hT,
 .shipment-tracking__btnLink___YL9mX {
@@ -2969,33 +2887,12 @@ button {
 .shipment-tracking__removeScroll___CCbdR {
   overflow-y: hidden !important;
 }
-.shipment-tracking__orders___JhdPK .shipment-tracking__order-status___uXMiX .shipment-tracking__inline-svg____uheg {
-  height: 63px;
-}
-.shipment-tracking__order-item___eHb07 .shipment-tracking__oder-header___Jz6ad .shipment-tracking__filter-arrow-up___Yh3A5 {
-  margin-right: none !important;
-}
-.shipment-tracking__buttons___yC_Od {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.shipment-tracking__checkout____PPRA {
-  width: calc(100% - 20px) !important;
-}
-.shipment-tracking__guest-checkout___hoQVf {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.shipment-tracking__home-page___v0UxD,
-.shipment-tracking__homePage___hULmW {
-  max-width: 1440px;
 }
 .shipment-tracking__mr-5___fxhoW,
 .shipment-tracking__mr5___DQRl3 {
@@ -3063,16 +2960,6 @@ img::selection {
     padding: 5px !important;
   }
 }
-.shipment-tracking__blog-wrapper___dwdW7 .shipment-tracking__title___BMsCR {
-  color: var(--textHeading, #26201a);
-}
-.shipment-tracking__blog-wrapper___dwdW7 .shipment-tracking__author___oCTkT,
-.shipment-tracking__blog-wrapper___dwdW7 .shipment-tracking__created-on___YEFF9 {
-  color: var(--textLabel, #7d7676) !important;
-}
-.shipment-tracking__blog-wrapper___dwdW7 #shipment-tracking__custom-page-container___hzfIW * {
-  color: var(--textBody, #3c3131);
-}
 .shipment-tracking__view3d-canvas___ww8kS {
   width: 100%;
   height: 100%;
@@ -3092,54 +2979,63 @@ img::selection {
   color: #41434c;
   opacity: 1 !important;
 }
-.shipment-tracking__trackingContainer___tHFOQ {
-  padding: 20px;
+.shipment-tracking__shipmentTracking___vw2lr {
+  border-radius: 4px;
+  padding: 16px 0;
 }
-.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr {
-  border: 1px solid #eeeeee;
+@media only screen and (max-width: 480px) {
+  .shipment-tracking__shipmentTracking___vw2lr {
+    border: 1px solid var(--dividerStokes, #d4d1d1);
+  }
 }
-.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__boldsm___aDLPp {
+.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__boldsm___aDLPp {
   font-weight: 700;
   font-size: 16px;
 }
 @media only screen and (max-width: 768px) {
-  .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__boldsm___aDLPp {
+  .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__boldsm___aDLPp {
     font-size: 14px;
   }
 }
 @media only screen and (max-width: 480px) {
-  .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__boldsm___aDLPp {
+  .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__boldsm___aDLPp {
     font-size: 14px;
   }
 }
-.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__awbText___icUh0 {
+.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__awbText___icUh0 {
   margin-top: 6px;
 }
-.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__lightxxs___zgSgn {
+.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__lightxxs___zgSgn {
   font-weight: 300;
   font-size: 13px;
 }
 @media only screen and (max-width: 768px) {
-  .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__lightxxs___zgSgn {
+  .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__lightxxs___zgSgn {
     font-size: 12px;
   }
 }
 @media only screen and (max-width: 480px) {
-  .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__lightxxs___zgSgn {
+  .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__lightxxs___zgSgn {
     font-size: 12px;
   }
 }
-.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__status___B417y {
+.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__status___B417y {
   display: flex;
-  padding: 10px;
-  border-bottom: 1px solid #eeeeee;
+  padding: 0 16px 16px;
+  border-bottom: 1px solid var(--dividerStokes, #d4d1d1) !important;
   position: relative;
   align-items: center;
 }
-.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__status___B417y .shipment-tracking__subTitle___uf2ZH {
+@media only screen and (max-width: 768px) {
+  .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__status___B417y {
+    padding: 0 0 16px;
+    margin: 0 16px;
+  }
+}
+.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__status___B417y .shipment-tracking__subTitle___uf2ZH {
   margin-top: 10px;
 }
-.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__status___B417y .shipment-tracking__info___KBL6j {
+.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__status___B417y .shipment-tracking__info___KBL6j {
   position: absolute;
   right: 20px;
   text-align: center;
@@ -3148,92 +3044,107 @@ img::selection {
   display: inline-flex;
   border-radius: 3px;
 }
-.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz {
+.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackingItemContainer___W9N9n {
+  padding: 0 16px;
+}
+.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz {
   display: flex;
-  padding: 20px;
+  margin: 16px 0;
   opacity: 0.5;
 }
-.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__trackInfo___A5RXX {
+.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__trackInfo___A5RXX {
   margin-left: 20px;
 }
-.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__trackInfo___A5RXX .shipment-tracking__boldsm___aDLPp {
+.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__trackInfo___A5RXX .shipment-tracking__boldsm___aDLPp {
   font-weight: 700;
   font-size: 14px;
 }
-.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__trackInfo___A5RXX .shipment-tracking__time___UZX8Q {
+.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__trackInfo___A5RXX .shipment-tracking__time___UZX8Q {
   margin-top: 5px;
 }
-.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__trackInfo___A5RXX .shipment-tracking__lightxxs___zgSgn {
+.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__trackInfo___A5RXX .shipment-tracking__lightxxs___zgSgn {
   font-weight: 300;
   font-size: 13px;
 }
 @media only screen and (max-width: 768px) {
-  .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__trackInfo___A5RXX .shipment-tracking__lightxxs___zgSgn {
+  .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__trackInfo___A5RXX .shipment-tracking__lightxxs___zgSgn {
     font-size: 12px;
   }
 }
 @media only screen and (max-width: 480px) {
-  .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__trackInfo___A5RXX .shipment-tracking__lightxxs___zgSgn {
+  .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__trackInfo___A5RXX .shipment-tracking__lightxxs___zgSgn {
     font-size: 12px;
   }
 }
-.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__inTransitItem___pHEUR,
-.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__trackingDetails___EyxRE {
+.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__inTransitItem___pHEUR,
+.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__trackingDetails___EyxRE {
   display: flex;
   width: 100%;
 }
-.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__dropdownArrow___m8GIu {
+.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__dropdownArrow___m8GIu {
   margin-left: auto;
 }
-.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__title___BMsCR {
+.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__title___BMsCR {
   font-weight: bold;
   color: #41434c;
   opacity: 1 !important;
 }
-.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__detailedTracking___ff1aw {
+.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__detailedTracking___ff1aw {
   cursor: pointer;
   transition: all 0.2s;
 }
-.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__detailedTracking___ff1aw .shipment-tracking__inTransitItem___pHEUR,
-.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__detailedTracking___ff1aw .shipment-tracking__trackingDetails___EyxRE {
+.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__detailedTracking___ff1aw .shipment-tracking__inTransitItem___pHEUR,
+.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__detailedTracking___ff1aw .shipment-tracking__trackingDetails___EyxRE {
   display: flex;
   width: 100%;
 }
-.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__detailedTracking___ff1aw .shipment-tracking__inTransitItem___pHEUR {
+.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__detailedTracking___ff1aw .shipment-tracking__inTransitItem___pHEUR {
   flex-direction: column;
 }
-.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__detailedTracking___ff1aw .shipment-tracking__inTransitItem___pHEUR .shipment-tracking__trackingItem___s3F2d {
+.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__detailedTracking___ff1aw .shipment-tracking__inTransitItem___pHEUR .shipment-tracking__trackingItem___s3F2d {
   display: flex;
   padding: 10px 20px;
   border-bottom: 1px solid #cccccc;
 }
-.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__detailedTracking___ff1aw .shipment-tracking__inTransitItem___pHEUR .shipment-tracking__trackingItem___s3F2d:first-child {
+.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__detailedTracking___ff1aw .shipment-tracking__inTransitItem___pHEUR .shipment-tracking__trackingItem___s3F2d:first-child {
   margin-top: 10px;
 }
-.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__hover___Td6HY:hover {
+.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__hover___Td6HY:hover {
   background: #eeeeee;
 }
-.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI {
+.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI {
   display: flex;
   justify-content: center;
-  color: var(--buttonLink, #b1655b);
+  color: var(--textHeading, #26201a);
+  border-top: 1px solid var(--dividerStokes, #d4d1d1);
+  padding-top: 16px;
 }
-.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI div,
-.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI a {
+@media only screen and (max-width: 768px) {
+  .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI {
+    margin: 0 16px;
+  }
+}
+.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI div,
+.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI a {
   flex: 1;
   justify-content: center;
   display: flex;
   cursor: pointer;
-  padding: 15px 10px;
-  border-top: 1px solid #eeeeee;
-  border-right: 1px solid #eeeeee;
   text-align: center;
   align-items: center;
-  font-size: 14px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 140%;
+  border-right: 1px solid var(--dividerStokes, #d4d1d1);
+  color: var(--buttonLink, #b1655b);
 }
-.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI div:hover,
-.shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI a:hover {
-  background-color: #eeeeee;
+.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI div:last-child,
+.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI a:last-child {
+  border-right: none;
+}
+.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI div:hover,
+.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI a:hover {
+  color: var(--buttonLinkL2, #d0a39d);
 }
 
 .shipment-breakup__slide-fade-enter-active___oi8co,
@@ -3534,12 +3445,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .shipment-breakup__caption-medium___eJwty,
+  .shipment-breakup__captionMedium___ZXLI8 {
+    font-size: 11px;
+  }
+}
 .shipment-breakup__caption-semi-bold___gAeeK,
 .shipment-breakup__captionSemiBold___lFZ3J {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .shipment-breakup__caption-semi-bold___gAeeK,
+  .shipment-breakup__captionSemiBold___lFZ3J {
+    font-size: 11px;
+  }
 }
 .shipment-breakup__btn-link___SPzjH,
 .shipment-breakup__btnLink___KEJX3 {
@@ -3597,33 +3520,12 @@ button {
 .shipment-breakup__removeScroll___KZgRh {
   overflow-y: hidden !important;
 }
-.shipment-breakup__orders___sQoWj .shipment-breakup__order-status___TseMv .shipment-breakup__inline-svg___wJYer {
-  height: 63px;
-}
-.shipment-breakup__order-item___n36hB .shipment-breakup__oder-header___lFLXO .shipment-breakup__filter-arrow-up___qDNSS {
-  margin-right: none !important;
-}
-.shipment-breakup__buttons___ZOupI {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.shipment-breakup__checkout___kCaYs {
-  width: calc(100% - 20px) !important;
-}
-.shipment-breakup__guest-checkout___K7zCy {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.shipment-breakup__home-page___euhpQ,
-.shipment-breakup__homePage___Q6_lN {
-  max-width: 1440px;
 }
 .shipment-breakup__mr-5___Jb0dL,
 .shipment-breakup__mr5___UpWoT {
@@ -3691,16 +3593,6 @@ img::selection {
     padding: 5px !important;
   }
 }
-.shipment-breakup__blog-wrapper___S5SZI .shipment-breakup__title___MNnnU {
-  color: var(--textHeading, #26201a);
-}
-.shipment-breakup__blog-wrapper___S5SZI .shipment-breakup__author___FFA1X,
-.shipment-breakup__blog-wrapper___S5SZI .shipment-breakup__created-on___YqwdN {
-  color: var(--textLabel, #7d7676) !important;
-}
-.shipment-breakup__blog-wrapper___S5SZI #shipment-breakup__custom-page-container___Exyms * {
-  color: var(--textBody, #3c3131);
-}
 .shipment-breakup__view3d-canvas___keMLD {
   width: 100%;
   height: 100%;
@@ -3747,16 +3639,28 @@ img::selection {
   }
 }
 .shipment-breakup__billing___FTdqB {
-  padding: 10px;
+  padding: 16px;
   position: relative;
 }
 .shipment-breakup__billing___FTdqB div {
-  margin: 15px;
+  margin-bottom: 8px;
+}
+.shipment-breakup__billing___FTdqB div:last-child {
+  margin-bottom: 0px;
+}
+.shipment-breakup__billing___FTdqB .shipment-breakup__label___SHy4X {
+  color: var(--textBody, #3c3131);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 140%;
 }
 .shipment-breakup__billing___FTdqB .shipment-breakup__values___Ji3lV {
   position: absolute;
-  right: 30px;
+  right: 16px;
+  color: var(--textBody, #3c3131);
+  font-size: 12px;
   font-weight: 400;
+  line-height: 140%;
 }
 .shipment-breakup__billing___FTdqB .shipment-breakup__total___X7nmQ {
   padding-top: 10px;
@@ -3779,5 +3683,13 @@ img::selection {
   margin-left: auto;
   margin-right: 10px;
   right: 0px;
+}
+.shipment-breakup__billing___FTdqB :last-child .shipment-breakup__totalValContainer___wFKSr :last-child {
+  font-size: 14px;
+  font-weight: 600;
+}
+.shipment-breakup__billing___FTdqB :last-child .shipment-breakup__totalValContainer___wFKSr :nth-last-child(2) {
+  font-size: 14px;
+  font-weight: 600;
 }
 

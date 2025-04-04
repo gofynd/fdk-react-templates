@@ -296,12 +296,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .sort__caption-medium___nr2a7,
+  .sort__captionMedium___WfP0J {
+    font-size: 11px;
+  }
+}
 .sort__caption-semi-bold___GYtms,
 .sort__captionSemiBold___b3M8T {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .sort__caption-semi-bold___GYtms,
+  .sort__captionSemiBold___b3M8T {
+    font-size: 11px;
+  }
 }
 .sort__btn-link___HM1p6,
 .sort__btnLink___aMGyq {
@@ -359,33 +371,12 @@ button {
 .sort__removeScroll___amFIH {
   overflow-y: hidden !important;
 }
-.sort__orders___lp8lM .sort__order-status___VMmmF .sort__inline-svg___CsAKR {
-  height: 63px;
-}
-.sort__order-item___tUCFc .sort__oder-header___C3Tv4 .sort__filter-arrow-up___R3icZ {
-  margin-right: none !important;
-}
-.sort__buttons___bW2iP {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.sort__checkout___cN5aT {
-  width: calc(100% - 20px) !important;
-}
-.sort__guest-checkout___TiXb3 {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.sort__home-page___Qs9Hz,
-.sort__homePage____vPyl {
-  max-width: 1440px;
 }
 .sort__mr-5___XTPJD,
 .sort__mr5___e_pVn {
@@ -452,16 +443,6 @@ img::selection {
     font-size: 12px !important;
     padding: 5px !important;
   }
-}
-.sort__blog-wrapper___PO8TE .sort__title___u9BLu {
-  color: var(--textHeading, #26201a);
-}
-.sort__blog-wrapper___PO8TE .sort__author___oNi_X,
-.sort__blog-wrapper___PO8TE .sort__created-on___DjCUZ {
-  color: var(--textLabel, #7d7676) !important;
-}
-.sort__blog-wrapper___PO8TE #sort__custom-page-container___bi1F1 * {
-  color: var(--textBody, #3c3131);
 }
 .sort__view3d-canvas___DdoR7 {
   width: 100%;
