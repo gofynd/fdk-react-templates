@@ -5,14 +5,24 @@
   cursor: pointer;
   margin-left: 10px;
   position: relative;
-  font-weight: 300;
+  color: @TextBody;
+  font-weight: 400;
+  line-height: 140%;
+
+  @media @mobile {
+    font-size: 12px;
+  }
+
   .menu {
-    box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.1);
-    background-color: @ThemeAccentL5;
     position: absolute;
     top: 40px;
     white-space: nowrap;
     z-index: @layer;
+    padding: 12px;
+    border-radius: 2px;
+    border: 1px solid @DividerStokes;
+    background: @DialogBackground;
+
     @media @mobile {
       right: 0;
     }
@@ -20,7 +30,12 @@
     li {
       display: flex;
       align-items: center;
-      padding: 5px 15px;
+      margin-bottom: 6px;
+      gap: 8px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
   }
 }
