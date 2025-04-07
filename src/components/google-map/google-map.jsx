@@ -14,7 +14,8 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { LoadScript, GoogleMap, Marker } from "@react-google-maps/api";
 import * as styles from "./google-map.less";
 import Autocomplete from "react-google-autocomplete";
-import SvgWrapper from "../core/svgWrapper/SvgWrapper";
+import SearchIcon from "../../assets/images/search.svg";
+import LocateIcon from "../../assets/images/locate.svg";
 
 const libraries = ["places"];
 const mapContainerStyle = {
@@ -37,6 +38,7 @@ const GoogleMapAddress = ({
   addressItem,
   onLoad = () => {},
 }) => {
+  const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [selectedPlace, setSelectedPlace] = useState({
     lat: countryDetails?.latitude,
     lng: countryDetails?.longitude,
@@ -120,22 +122,21 @@ const GoogleMapAddress = ({
       stateReset();
       let subLocalities = [];
       addressComponents.forEach((component) => {
-        if (component.types.includes("premise")) {
+        if (component.types.includes("plus_code")) {
           setPremise(component.long_name);
-        }
-        if (component.types.includes("country")) {
+        } else if (component.types.includes("premise")) {
+          setPremise(component.long_name);
+        } else if (component.types.includes("street_number")) {
+          setPremise((prev) => (prev += component.long_name));
+        } else if (component.types.includes("country")) {
           setCountry(component.long_name);
-        }
-        if (component.types.includes("locality")) {
+        } else if (component.types.includes("locality")) {
           setCity(component.long_name);
-        }
-        if (component.types.includes("administrative_area_level_1")) {
+        } else if (component.types.includes("administrative_area_level_1")) {
           setState(component.long_name);
-        }
-        if (component.types.includes("postal_code")) {
+        } else if (component.types.includes("postal_code")) {
           setPincode(component.long_name);
-        }
-        if (
+        } else if (
           component.types.includes("sublocality") ||
           component.types.includes("sublocality_level_1") ||
           component.types.includes("sublocality_level_2")
@@ -235,67 +236,78 @@ const GoogleMapAddress = ({
     );
   };
 
+  const onMapLoad = (map) => {
+    mapRef.current = map;
+    setIsMapLoaded(true);
+    onLoad(map);
+  };
+
   return (
     <div className={styles.mapAddress}>
-      <LoadScript googleMapsApiKey={mapApiKey} libraries={libraries}>
-        <div ref={inputRef} className={styles.autoCompleteWrap}>
-          <SvgWrapper
-            className={styles.searchAutoIcon}
-            svgSrc="search"
-          ></SvgWrapper>
-          <Autocomplete
-            placeholder="Search Google Maps"
-            apiKey={mapApiKey}
-            style={autoCompleteStyles}
-            onPlaceSelected={handlePlaceSelect}
-            options={{
-              types: ["geocode", "establishment"],
-              componentRestrictions: { country: countryDetails?.iso2 },
-            }}
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-          />
-        </div>
-        <div className={styles.mapCompWrap}>
-          <GoogleMap
-            mapContainerStyle={mapContainerStyle}
-            center={selectedPlace}
-            zoom={selectedPlace ? 15 : 10}
-            options={{
-              fullscreenControl: false,
-              mapTypeControl: false,
-              streetViewControl: false,
-            }}
-            onLoad={(map) => {
-              mapRef.current = map;
-              onLoad(map);
-            }}
+      <div className={styles.mapWrapper} style={mapContainerStyle}>
+        <LoadScript googleMapsApiKey={mapApiKey} libraries={libraries}>
+          <div
+            ref={inputRef}
+            className={styles.autoCompleteWrap}
+            style={{ display: !isMapLoaded && "none" }}
           >
-            {selectedPlace && (
-              <Marker
-                position={selectedPlace}
-                draggable={true}
-                onDragEnd={handleMarkerDragEnd}
-              />
-            )}
-          </GoogleMap>
-          <button
-            title="Detect My Location"
-            onClick={locateUser}
-            className={styles.locateIconBtn}
+            <SearchIcon className={styles.searchAutoIcon} />
+            <Autocomplete
+              placeholder="Search Google Maps"
+              apiKey={mapApiKey}
+              style={autoCompleteStyles}
+              onPlaceSelected={handlePlaceSelect}
+              options={{
+                types: ["geocode", "establishment"],
+                componentRestrictions: { country: countryDetails?.iso2 },
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            />
+          </div>
+          <div
+            className={styles.mapCompWrap}
+            style={{ display: !isMapLoaded && "none" }}
           >
-            <SvgWrapper
-              className={styles.locateIcon}
-              svgSrc="locate"
-            ></SvgWrapper>
-          </button>
-        </div>
-      </LoadScript>
+            <GoogleMap
+              mapContainerStyle={mapContainerStyle}
+              center={selectedPlace}
+              zoom={selectedPlace ? 15 : 10}
+              options={{
+                fullscreenControl: false,
+                mapTypeControl: false,
+                streetViewControl: false,
+              }}
+              onLoad={onMapLoad}
+            >
+              {selectedPlace && (
+                <Marker
+                  position={selectedPlace}
+                  draggable={true}
+                  onDragEnd={handleMarkerDragEnd}
+                />
+              )}
+            </GoogleMap>
+            <button
+              title="Detect My Location"
+              onClick={locateUser}
+              className={styles.locateIconBtn}
+            >
+              <LocateIcon className={styles.locateIcon} />
+            </button>
+          </div>
+        </LoadScript>
+        {!isMapLoaded && (
+          <div className={styles.skeleton}>
+            <canvas />
+          </div>
+        )}
+      </div>
       {address && (
         <div className={styles.addressSelect}>
           <p>{address}</p>
-          <button onClick={selectAddress}> Use This</button>
+          <button onClick={selectAddress}>Use This</button>
         </div>
       )}
     </div>
