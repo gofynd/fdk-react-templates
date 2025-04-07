@@ -1,116 +1,6 @@
-.login-register-toggle__slide-fade-enter-active___xdZ4t,
-.login-register-toggle__slide-fade-leave-active___NlWeQ {
-  transition: all 0.5s;
-}
-.login-register-toggle__slide-fade-enter___zTKRT,
-.login-register-toggle__slide-fade-leave-to___RxGGD {
-  opacity: 0;
-  transform: translateY(10px);
-}
-.login-register-toggle__fade-enter-active___UevcO,
-.login-register-toggle__fade-leave-active___RkLgl {
-  transition: all 0.5s;
-}
-.login-register-toggle__fade-enter___KL3A0,
-.login-register-toggle__fade-leave-to___s3XpH {
-  opacity: 0;
-}
-.login-register-toggle__slide-leave-active___ybzao,
-.login-register-toggle__slide-enter-active___eeod3 {
-  transition: 0.5s;
-}
-.login-register-toggle__slide-enter___nkXSM,
-.login-register-toggle__slide-leave-to___QgTgM {
-  transform: translate(-100%, 0%);
-}
-.login-register-toggle__slide-left-enter-active___t8SFT,
-.login-register-toggle__slide-left-leave-active___Q3s6v {
-  transition: all 0.5s;
-}
-.login-register-toggle__slide-left-enter___a7kL7,
-.login-register-toggle__slide-left-leave-to___YjwMR {
-  transform: translate(200%, 0%);
-}
-.login-register-toggle__slide-down-enter-active___tcy9X,
-.login-register-toggle__slide-down-leave-active___RFQwf {
-  transition: all 0.5s;
-}
-.login-register-toggle__slide-down-enter___xn4kZ,
-.login-register-toggle__slide-down-leave-to___p18X5 {
-  opacity: 0;
-  transform: translateY(-100%);
-}
-.login-register-toggle__slide-up-enter-active___NAlL6,
-.login-register-toggle__slide-up-leave-active___x3GDo {
-  transition: all 0.5s ease-in-out;
-}
-.login-register-toggle__slide-up-enter___y6xfU,
-.login-register-toggle__slide-up-leave-to___bCtum {
-  opacity: 0;
-  transform: translateY(100vh);
-}
-.login-register-toggle__animation-fade-up___x2tqx {
-  transition: transform 0.5s ease-in var(--delay, 0ms), opacity 0.5s ease-in var(--delay, 0ms) !important;
-  opacity: 0 !important;
-  transform: translateY(10px) !important;
-}
-.login-register-toggle__animation-fade-up___x2tqx.login-register-toggle__animate___fRJXg {
-  opacity: 1 !important;
-  transform: translateY(0) !important;
-}
-.login-register-toggle__animation-fade___tcbux {
-  transition: opacity 0.4s ease-in var(--delay, 0ms) !important;
-  opacity: 0 !important;
-}
-.login-register-toggle__animation-fade___tcbux.login-register-toggle__animate___fRJXg {
-  opacity: 1 !important;
-}
 /**color by character**/
 /** Font family **/
 /** Font weight **/
-a {
-  color: inherit;
-  text-decoration: none;
-}
-.login-register-toggle__ct-header-wrapper___dtvSl,
-.login-register-toggle__ctHeaderWrapper___oeHEd {
-  position: sticky;
-  top: 0;
-  z-index: 40;
-}
-body {
-  box-sizing: border-box;
-  overflow-x: hidden;
-}
-@media only screen and (min-width: 769px) {
-  body {
-    min-height: calc(100vh - 404px);
-  }
-}
-.login-register-toggle__active-app___Os6qy,
-.login-register-toggle__activeApp___JyV_k {
-  background-color: var(--pageBackground, #f8f8f8);
-}
-.login-register-toggle__card-item___c_keP .login-register-toggle__card-desc___mlyiy .login-register-toggle__price___cCYue .login-register-toggle__effective-price___dpk9d {
-  font-size: 0.875rem;
-}
-.login-register-toggle__login-modal___FaC0Z .login-register-toggle__tingle-modal-box___nLbLS {
-  background: #f5f5f5;
-}
-.login-register-toggle__content___V2VqZ {
-  font-size: 0.875rem;
-  margin: 0 auto;
-  max-width: unset !important;
-  min-height: 75vh;
-}
-.login-register-toggle__modal___m4nKx {
-  overflow-x: hidden;
-  font-size: 0.875rem;
-}
-.login-register-toggle__product-details-page___j2JPU,
-.login-register-toggle__productDetailsPage___R0aBD {
-  max-width: 1440px;
-}
 .login-register-toggle__display-block___CdsMp {
   display: block;
 }
@@ -296,12 +186,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .login-register-toggle__caption-medium___TPPc2,
+  .login-register-toggle__captionMedium___SG74Q {
+    font-size: 11px;
+  }
+}
 .login-register-toggle__caption-semi-bold___jC8wa,
 .login-register-toggle__captionSemiBold___ps_L5 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .login-register-toggle__caption-semi-bold___jC8wa,
+  .login-register-toggle__captionSemiBold___ps_L5 {
+    font-size: 11px;
+  }
 }
 .login-register-toggle__btn-link___hm7_F,
 .login-register-toggle__btnLink___Kszjb {
@@ -359,33 +261,12 @@ button {
 .login-register-toggle__removeScroll___eMSJj {
   overflow-y: hidden !important;
 }
-.login-register-toggle__orders___zk61g .login-register-toggle__order-status___ixixM .login-register-toggle__inline-svg___WVJ2G {
-  height: 63px;
-}
-.login-register-toggle__order-item___eXFaU .login-register-toggle__oder-header___E1s7e .login-register-toggle__filter-arrow-up___gMP5o {
-  margin-right: none !important;
-}
-.login-register-toggle__buttons___caLJf {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.login-register-toggle__checkout___y2aDy {
-  width: calc(100% - 20px) !important;
-}
-.login-register-toggle__guest-checkout___se7Eo {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.login-register-toggle__home-page___M6_wf,
-.login-register-toggle__homePage___qF904 {
-  max-width: 1440px;
 }
 .login-register-toggle__mr-5___v7zhF,
 .login-register-toggle__mr5___c7UOL {
@@ -431,10 +312,6 @@ img::selection {
   background-color: var(--accentColor);
   color: #fff;
 }
-.login-register-toggle__glide-cont___D2aU8,
-.login-register-toggle__glideCont___B4ZLS {
-  position: relative;
-}
 .login-register-toggle__no-scroll___zVu6K,
 .login-register-toggle__noScroll___QGoz1 {
   overflow-y: hidden;
@@ -452,16 +329,6 @@ img::selection {
     font-size: 12px !important;
     padding: 5px !important;
   }
-}
-.login-register-toggle__blog-wrapper___Lflfj .login-register-toggle__title___p9JJ5 {
-  color: var(--textHeading, #26201a);
-}
-.login-register-toggle__blog-wrapper___Lflfj .login-register-toggle__author___UYhrj,
-.login-register-toggle__blog-wrapper___Lflfj .login-register-toggle__created-on___JbkNu {
-  color: var(--textLabel, #7d7676) !important;
-}
-.login-register-toggle__blog-wrapper___Lflfj #login-register-toggle__custom-page-container___elzxb * {
-  color: var(--textBody, #3c3131);
 }
 .login-register-toggle__view3d-canvas___IObky {
   width: 100%;
