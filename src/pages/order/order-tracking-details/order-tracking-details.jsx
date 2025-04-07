@@ -110,10 +110,12 @@ function OrderTrackingDetails({
               {Object.keys(orderShipments)?.length !== 0 &&
                 orderShipments?.shipments?.length !== 0 && (
                   <div className={`${styles.orderShipments}`}>
-                    <OrderShipment
-                      orderInfo={orderShipments}
-                      isBuyAgainEligible={false}
-                    ></OrderShipment>
+                    <div className={`${styles.orderShipmentsWrapper}`}>
+                      <OrderShipment
+                        orderInfo={orderShipments}
+                        isBuyAgainEligible={false}
+                      ></OrderShipment>
+                    </div>
                     {isShipmentLoading ? (
                       <Loader />
                     ) : (

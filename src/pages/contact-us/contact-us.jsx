@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import * as styles from "./contact-us.less";
 import FyInput from "../../components/core/fy-input/fy-input";
 import { Controller, useForm } from "react-hook-form";
-import { FDKLink } from "fdk-core/components";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
 import FyButton from "../../components/core/fy-button/fy-button";
 import FyImage from "../../components/core/fy-image/fy-image";
-import { isRunningOnClient } from "../../helper/utils";
-import { detectMobileWidth } from "../../helper/utils";
 
 function ContactSupport({
   contactInfo = "",
@@ -31,17 +28,9 @@ function ContactSupport({
     mode: "onSubmit",
     reValidateMode: "onChange",
   });
-  const [isMobile, setIsMobile] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+
   const [focusedInput, setFocusedInput] = useState(null);
   const [text, setText] = useState("");
-
-  useEffect(() => {
-    if (isRunningOnClient()) {
-      setIsMobile(detectMobileWidth());
-      setIsLoading(false);
-    }
-  }, []);
 
   const inputFields = [
     {
@@ -52,7 +41,10 @@ function ContactSupport({
       showAsterik: true,
       required: true,
       error: errors?.name,
-      pattern: null,
+      pattern: {
+        value: /^[a-zA-Z0-9 ]+$/,
+        message: "Please enter a valid name",
+      },
       errorMessage: "Please enter your name",
     },
     {
@@ -65,12 +57,12 @@ function ContactSupport({
       error: errors?.phone,
       pattern: {
         value: /^[0-9]{10}$/,
-        message: "Invalid Mobile Number",
+        message: "Please enter a valid phone number",
       },
-      errorMessage: errors?.phone?.message || "Invalid Mobile Number",
+      errorMessage: "Please enter your phone number",
     },
     {
-      type: "email",
+      type: "text",
       label: "Email",
       name: "email",
       multiline: false,
@@ -79,9 +71,9 @@ function ContactSupport({
       error: errors?.email,
       pattern: {
         value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-        message: "Invalid email address",
+        message: "Please enter a valid email address",
       },
-      errorMessage: errors?.email?.message || "Invalid email address",
+      errorMessage: "Please enter your email address",
     },
     {
       type: "textarea",
@@ -107,19 +99,53 @@ function ContactSupport({
     reset();
     setText("");
   };
+  const showAddress =
+    typeof pageConfig?.show_address === "boolean"
+      ? pageConfig.show_address
+      : true;
+
+  const showPhone =
+    typeof pageConfig?.show_phone === "boolean" ? pageConfig?.show_phone : true;
+
+  const showEmail =
+    typeof pageConfig?.show_email === "boolean" ? pageConfig?.show_email : true;
+  const showWorkingHours =
+    typeof pageConfig?.show_working_hours === "boolean"
+      ? pageConfig?.show_working_hours
+      : true;
+  const showIcons =
+    typeof pageConfig?.show_icons === "boolean" ? pageConfig?.show_icons : true;
+
+  const showListItems = useMemo(
+    () =>
+      (showAddress && contactInfo?.address?.address_line[0].length > 0) ||
+      (showPhone && contact?.number) ||
+      (showEmail && email?.length) ||
+      (showIcons && contactInfo?.social_links) ||
+      (showWorkingHours && contactInfo?.support?.timing),
+    [
+      showAddress,
+      showPhone,
+      showEmail,
+      showIcons,
+      showWorkingHours,
+      contactInfo,
+      supportInfo,
+    ]
+  );
 
   return (
     <div
       className={`${styles.basePageContainer} ${styles.contactUs_mainContainer} ${pageConfig?.align_image === "left" && styles.invert}`}
     >
-      {!isLoading && (
-        <div
-          className={`${styles.contact_container} ${!isLoading && !isMobile && pageConfig?.image_desktop && styles.onImageContainer}`}
-        >
-          <div className={`${styles.flex_item}`}>
-            <h3 className={styles.fontHeader}>Contact Us</h3>
+      <div
+        className={`${styles.contact_container} ${pageConfig?.image_desktop ? styles.onImageContainer : ""}`}
+      >
+        <div className={`${styles.flex_item}`}>
+          <h3 className={`fontHeader ${styles.showDesktop}`}>Contact Us</h3>
+          {showListItems && (
             <div className={styles.listItems}>
-              {pageConfig?.show_address &&
+              {showAddress &&
                 contactInfo?.address?.address_line[0].length > 0 && (
                   <div className={`${styles.item} fontBody b1`}>
                     <div>
@@ -127,105 +153,115 @@ function ContactSupport({
                     </div>
                     <div>
                       {contactInfo?.address?.address_line?.map((el, i) => (
-                        <span key={i}>{el}</span>
+                        <span key={i}>{el}&nbsp;</span>
                       ))}
                       <span>{` ${contactInfo?.address?.city}`}</span>
-                      <span>,{` ${contactInfo?.address?.pincode}`}</span>
+                      <span>
+                        &nbsp;{`${contactInfo?.address?.country}`}&nbsp;
+                      </span>
+                      <span>{` ${contactInfo?.address?.pincode}`}</span>
                     </div>
                   </div>
                 )}
-              {pageConfig?.show_phone && contact?.number && (
+              {showPhone && contact?.number && (
                 <div className={`${styles.item} fontBody b1`}>
                   <SvgWrapper svgSrc="callSupport" />
-                  <FDKLink to={`tel:${contact?.number}`}>
+                  <a href={`tel:${contact?.number}`}>
                     {contact?.code}-{contact?.number}
-                  </FDKLink>
+                  </a>
                 </div>
               )}
-              {pageConfig?.show_email && email?.length && (
+              {showEmail && email?.length && (
                 <div className={`${styles.item} fontBody b1`}>
                   <SvgWrapper svgSrc="contactEmail" />
-                  <FDKLink to={`mailto:${email}`}>{email}</FDKLink>
+                  <a href={`mailto:${email}`}>{email}</a>
                 </div>
               )}
-              {pageConfig?.show_working_hours &&
-                contactInfo?.support?.timing && (
-                  <div className={`${styles.item} fontBody b1`}>
-                    <SvgWrapper svgSrc="timer" />
-                    {contactInfo?.support?.timing}
-                  </div>
-                )}
-              {pageConfig?.show_icons && contactInfo?.social_links && (
-                <SocailMedia social_links={contactInfo?.social_links} />
+              {showWorkingHours && contactInfo?.support?.timing && (
+                <div className={`${styles.item} fontBody b1`}>
+                  <SvgWrapper svgSrc="timer" />
+                  {contactInfo?.support?.timing}
+                </div>
+              )}
+              {showIcons && contactInfo?.social_links && (
+                <SocailMedia
+                  social_links={contactInfo?.social_links}
+                  customClassName={styles.iconSpacing}
+                />
               )}
             </div>
-          </div>
-          <div className={styles.flex_item}>
-            <form onSubmit={handleSubmit(submitForm)}>
-              {inputFields?.map((field, index) => (
-                <div className={styles.form_row} key={index}>
-                  <Controller
-                    name={field.name}
-                    control={control}
-                    rules={{
-                      required: field.required,
-                      pattern: field.pattern,
-                    }}
-                    render={({ field: { onChange, value } }) => (
-                      <FyInput
-                        htmlFor={field.name}
-                        labelClassName={styles.lableText}
-                        inputClassName={`${styles.inputPlaceholder} fontBody`}
-                        label={focusedInput === field.name ? field.label : ""}
-                        onFocus={() => setFocusedInput(field.name)}
-                        onBlur={() => setFocusedInput(null)}
-                        placeholder={field.label}
-                        showAsterik={field.showAsterik}
-                        required={field.required}
-                        labelVariant="floating"
-                        type={field.type}
-                        maxLength={field.type === "textarea" ? 500 : null}
-                        error={errors[field.name]}
-                        onChange={(e) => {
-                          onChange(e);
-                          if (field?.type === "textarea") {
-                            setText(e.target.value);
-                          }
-                        }}
-                        value={value}
-                        multiline={field.multiline}
-                        errorMessage={
-                          errors[field.name]
-                            ? errors[field.name].message || field.errorMessage
-                            : ""
-                        }
-                      />
-                    )}
-                  />
-                  {field?.type === "textarea" && (
-                    <div className={`${styles.maxChar} fontBody`}>
-                      {text.length}/{500}
-                    </div>
-                  )}
-                </div>
-              ))}
-              <div>
-                <FyButton
-                  className={`${styles.btn_submit}`}
-                  variant="outlined"
-                  size="large"
-                  color="primary"
-                  fullWidth={true}
-                  type="submit"
-                >
-                  SEND MESSAGE
-                </FyButton>
-              </div>
-            </form>
-          </div>
+          )}
         </div>
-      )}
-      {!isLoading && !isMobile && pageConfig?.image_desktop && (
+        <div className={styles.flex_item}>
+          <h3 className={`${styles.showMobile} fontHeader`}>Contact Us</h3>
+          <form onSubmit={handleSubmit(submitForm)}>
+            {inputFields?.map((field, index) => (
+              <div className={styles.form_row} key={index}>
+                <Controller
+                  name={field.name}
+                  control={control}
+                  rules={{
+                    required: field.required,
+                    pattern: field.pattern,
+                  }}
+                  render={({ field: { onChange, value } }) => (
+                    <FyInput
+                      htmlFor={field.name}
+                      labelClassName={styles.lableText}
+                      inputClassName={`${styles.inputPlaceholder} fontBody`}
+                      label={
+                        focusedInput === field.name || Boolean(value)
+                          ? field.label
+                          : ""
+                      }
+                      onFocus={() => setFocusedInput(field.name)}
+                      onBlur={() => setFocusedInput(null)}
+                      placeholder={field.label}
+                      showAsterik={field.showAsterik}
+                      required={field.required}
+                      labelVariant="floating"
+                      type={field.type}
+                      maxLength={field.type === "textarea" ? 500 : null}
+                      error={errors[field.name]}
+                      onChange={(e) => {
+                        onChange(e);
+                        if (field?.type === "textarea") {
+                          setText(e.target.value);
+                        }
+                      }}
+                      value={value}
+                      multiline={field.multiline}
+                      errorMessage={
+                        errors[field.name]
+                          ? errors[field.name].message || field.errorMessage
+                          : ""
+                      }
+                    />
+                  )}
+                />
+                {field?.type === "textarea" && (
+                  <div className={`${styles.maxChar} fontBody`}>
+                    {text.length}/{500}
+                  </div>
+                )}
+              </div>
+            ))}
+            <div>
+              <FyButton
+                className={`${styles.btn_submit}`}
+                variant="outlined"
+                size="large"
+                color="primary"
+                fullWidth={true}
+                type="submit"
+              >
+                SEND MESSAGE
+              </FyButton>
+            </div>
+          </form>
+        </div>
+      </div>
+      {pageConfig?.image_desktop && (
         <div className={styles.imageContainer} style={overlayStyles}>
           <FyImage
             customClass={styles.imageWrapper}
