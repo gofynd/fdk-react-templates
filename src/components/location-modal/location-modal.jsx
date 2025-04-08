@@ -25,6 +25,7 @@ function LocationModal({
   isOpen = true,
   pincode = "",
   error = null,
+  isLocationButton = false,
   onClose = () => {},
   onSubmit = () => {},
   onCurrentLocationClick = () => {},
@@ -32,15 +33,18 @@ function LocationModal({
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid, isDirty },
+    formState: { errors, isValid },
+    watch,
     reset,
     setError,
     clearErrors,
   } = useForm({
     defaultValues: {
-      pincode: pincode,
+      pincode,
     },
   });
+
+  const currentPincode = watch("pincode");
 
   useEffect(() => {
     reset({ pincode });
@@ -59,6 +63,10 @@ function LocationModal({
       clearErrors();
     }
   }, [isOpen, pincode]);
+
+  useEffect(() => {
+    clearErrors("root");
+  }, [currentPincode, clearErrors]);
 
   return (
     <Modal
@@ -91,22 +99,26 @@ function LocationModal({
               message: "Pincode must be exactly 6 digits long",
             },
           })}
-          error={!!errors.pincode || (!isDirty && !!errors.root)}
-          errorMessage={
-            errors.pincode?.message || (!isDirty && errors.root?.message)
-          }
+          error={!!errors.pincode || !!errors.root}
+          errorMessage={errors.pincode?.message || errors.root?.message}
         />
-        <FyButton type="submit" disabled={!isValid}>
+        <FyButton
+          className={styles.applyPincode}
+          type="submit"
+          disabled={!isValid}
+        >
           APPLY
         </FyButton>
       </form>
-      <button
-        type="button"
-        className={styles.currentLocation}
-        onClick={onCurrentLocationClick}
-      >
-        use my current location
-      </button>
+      {isLocationButton && (
+        <button
+          type="button"
+          className={styles.currentLocation}
+          onClick={onCurrentLocationClick}
+        >
+          use my current location
+        </button>
+      )}
     </Modal>
   );
 }

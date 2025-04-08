@@ -8,6 +8,7 @@ import DeliveryInfo from "../delivery-info/delivery-info";
 import Loader from "../../../../components/loader/loader";
 import QuantityControl from "../../../../components/quantity-control/quantity-control";
 import FyDropdown from "../../../../components/core/fy-dropdown/fy-dropdown";
+import { currencyFormat, isEmptyOrNull } from "../../../../helper/utils";
 
 const AddToCart = ({
   isLoading = false,
@@ -56,7 +57,32 @@ const AddToCart = ({
   ];
 
   const getProductPrice = (key) => {
-    return `${price_per_piece?.currency_symbol || ""} ${price_per_piece?.[key] || ""}`;
+    const priceDataDefault = sizes?.price;
+    if (selectedSize && !isEmptyOrNull(productPrice?.price)) {
+      if (productPrice?.set) {
+        return currencyFormat(price_per_piece[key]) || "";
+      }
+      const price = productPrice?.price || "";
+      return currencyFormat(price?.[key], price?.currency_symbol) || "";
+    }
+    if (selectedSize && priceDataDefault) {
+      return (
+        currencyFormat(
+          priceDataDefault?.[key]?.min,
+          priceDataDefault?.[key]?.currency_symbol
+        ) || ""
+      );
+    }
+    if (priceDataDefault) {
+      return priceDataDefault?.[key]?.min !== priceDataDefault?.[key]?.max
+        ? `${priceDataDefault?.[key]?.currency_symbol || ""} ${
+            currencyFormat(priceDataDefault?.[key]?.min) || ""
+          } - ${currencyFormat(priceDataDefault?.[key]?.max) || ""}`
+        : currencyFormat(
+            priceDataDefault?.[key]?.max,
+            priceDataDefault?.[key]?.currency_symbol
+          ) || "";
+    }
   };
 
   const isSizeGuideAvailable = () => {
@@ -64,11 +90,11 @@ const AddToCart = ({
     return Object.keys(sizeChartHeader).length > 0 || sizes?.size_chart?.image;
   };
 
-  useEffect(() => {
-    if (isSizeCollapsed || (preSelectFirstOfMany && sizes !== undefined)) {
-      onSizeSelection(sizes?.sizes?.[0]?.value);
-    }
-  }, [isSizeCollapsed, preSelectFirstOfMany, sizes?.sizes]);
+  // useEffect(() => {
+  //   if (isSizeCollapsed || (preSelectFirstOfMany && sizes !== undefined)) {
+  //     onSizeSelection(sizes?.sizes?.[0]?.value);
+  //   }
+  // }, [isSizeCollapsed, preSelectFirstOfMany, sizes?.sizes]);
 
   const disabledSizeOptions = useMemo(() => {
     return sizes?.sizes
@@ -108,8 +134,8 @@ const AddToCart = ({
                 </div>
 
                 {/* ---------- Product Name ----------  */}
-                <h1 className={styles.product__title}>{slug && name}</h1>
                 <div className={styles.product__brand}>{brand?.name}</div>
+                <h1 className={styles.product__title}>{slug && name}</h1>
                 {/* ---------- Product Price ---------- */}
                 {show_price && sizes?.sellable && (
                   <div className={styles.product__price}>
@@ -130,7 +156,7 @@ const AddToCart = ({
                   </div>
                 )}
                 {/* ---------- Product Tax Label ---------- */}
-                {pageConfig?.tax_label && (
+                {pageConfig?.tax_label && show_price && sizes?.sellable && (
                   <div className={styles.taxLabel}>
                     ({pageConfig?.tax_label})
                   </div>

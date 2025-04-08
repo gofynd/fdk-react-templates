@@ -11,11 +11,9 @@
  * @param {boolean} props.isFixedAspectRatio - Determines if the image should maintain a fixed aspect ratio.
  * @param {number} props.aspectRatio - The aspect ratio for desktop view.
  * @param {number} [props.mobileAspectRatio] - The aspect ratio for mobile view.
- * @param {boolean} props.showSkeleton - Determines if a skeleton loader should be shown while loading.
  * @param {boolean} props.showOverlay - Determines if an overlay should be shown over the image.
  * @param {string} props.overlayColor - The color of the overlay.
  * @param {Array} props.sources - An array of objects defining responsive image sources with breakpoints and widths.
- * @param {boolean} props.isLazyLoaded - Determines if the image should be lazy-loaded.
  * @param {number} props.blurWidth - The width for the blurred version of the image.
  * @param {string} [props.customClass] - Custom CSS class for additional styling.
  * @param {Object} [props.globalConfig] - Global configuration object for additional settings.
@@ -25,9 +23,8 @@
  * @returns {JSX.Element} A JSX element representing the image container with the configured properties and behaviors.
  */
 
-import React, { useState, useEffect, useRef, useMemo, forwardRef } from "react";
+import React, { useState, useMemo, forwardRef } from "react";
 import * as styles from "./fy-image.less";
-import ImageSkeleton from "../skeletons/image-skeleton";
 import { transformImage } from "../../../helper/utils";
 
 const IMAGE_SIZES = [
@@ -70,7 +67,6 @@ const FyImage = forwardRef(
       isFixedAspectRatio = true,
       aspectRatio = 1,
       mobileAspectRatio,
-      showSkeleton = false,
       showOverlay = false,
       overlayColor = "#ffffff",
       sources = [
@@ -80,44 +76,20 @@ const FyImage = forwardRef(
         { breakpoint: { min: 361 }, width: 900 },
         { breakpoint: { max: 360 }, width: 640 },
       ],
-      isLazyLoaded = true,
-      blurWidth = 50,
       customClass,
       globalConfig,
       defer = true,
+      overlayCustomClass,
+      onLoad = ()=>{},
     },
     ref
   ) => {
     const [isError, setIsError] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
-    const [isIntersecting, setIsIntersecting] = useState(false);
-    const imgWrapperRef = useRef(null);
-
-    useEffect(() => {
-      const handleIntersection = (entries) => {
-        if (entries?.[0]?.isIntersecting) {
-          setIsIntersecting(true);
-        }
-      };
-
-      const observer = new IntersectionObserver(handleIntersection);
-
-      if (isLazyLoaded) {
-        observer.observe(imgWrapperRef.current);
-      }
-
-      return () => {
-        observer.disconnect();
-      };
-    }, [isLazyLoaded]);
 
     const dynamicStyles = {
       "--aspect-ratio-desktop": `${aspectRatio}`,
       "--aspect-ratio-mobile": `${mobileAspectRatio || aspectRatio}`,
       "--bg-color": `${globalConfig?.img_container_bg || backgroundColor}`,
-    };
-
-    const overlayStyles = {
       "--overlay-bgcolor": overlayColor,
     };
 
@@ -134,10 +106,6 @@ const FyImage = forwardRef(
 
       const key = searchStringInArray(src, IMAGE_SIZES);
 
-      if (isLazyLoaded && !isIntersecting) {
-        return transformImage(src, key, blurWidth);
-      }
-
       if (isError) {
         return placeholder;
       } else {
@@ -148,7 +116,7 @@ const FyImage = forwardRef(
     const fallbackSrcset = () => {
       let url = src;
 
-      if ((isLazyLoaded && !isIntersecting) || !isImageResizable) {
+      if (!isImageResizable) {
         return "";
       }
 
@@ -159,27 +127,23 @@ const FyImage = forwardRef(
       const key = searchStringInArray(url, IMAGE_SIZES);
 
       return sources
-        .map((s) => {
+        .reduce((srcset, s) => {
           let src = url;
-
-          if (key) {
+          if (key && s?.width) {
             src = transformImage(url, key, s.width);
+            srcset.push(`${src} ${s.width}w`);
           }
-
-          return `${src} ${s.width}w`;
-        })
+          return srcset;
+        }, [])
         .join(", ");
     };
 
-    const getLazyLoadSources = () =>
-      sources?.map((source) => {
-        source.media = getMedia(source);
-        source.srcset = getUrl(source.blurWidth ?? blurWidth, source.url);
-        return source;
-      });
-
     const getSources = () => {
-      return getLazyLoadSources().map((source) => {
+      if (!isImageResizable) {
+        return [];
+      }
+      return sources?.map((source) => {
+        source.media = getMedia(source);
         source.srcset = getUrl(source.width, source.url);
         return source;
       });
@@ -221,15 +185,7 @@ const FyImage = forwardRef(
     };
 
     const onError = () => {
-      if (isLazyLoaded && !isIntersecting) {
-        return;
-      }
       setIsError(true);
-      setIsLoading(false);
-    };
-
-    const onLoad = (e) => {
-      setIsLoading(false);
     };
 
     return (
@@ -237,10 +193,9 @@ const FyImage = forwardRef(
         className={`${styles.imageWrapper} ${isImageFill ? styles.fill : ""}
       ${isFixedAspectRatio ? styles.fixedAspRatio : ""} ${customClass}`}
         style={dynamicStyles}
-        ref={imgWrapperRef}
       >
         {showOverlay && (
-          <div className={styles.overlay} style={overlayStyles}></div>
+          <div className={`${styles.overlay} ${overlayCustomClass}`}></div>
         )}
         <picture>
           {getSources().map((source, index) => (
@@ -253,25 +208,15 @@ const FyImage = forwardRef(
           ))}
           <img
             className={styles.fyImg}
-            style={{
-              display: !showSkeleton || !isLoading ? "block" : "none",
-            }}
             srcSet={fallbackSrcset()}
             src={getSrc()}
             alt={alt}
             onError={onError}
             onLoad={onLoad}
             loading={defer ? "lazy" : "eager"}
-            fetchPriority={defer ? "low" : "high"}
+            fetchpriority={defer ? "low" : "high"}
             ref={ref}
           />
-          {showSkeleton && isLoading && (
-            <ImageSkeleton
-              className={styles.fyImg}
-              aspectRatio={aspectRatio}
-              mobileAspectRatio={mobileAspectRatio || aspectRatio}
-            />
-          )}
         </picture>
       </div>
     );
