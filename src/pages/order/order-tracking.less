@@ -1,15 +1,12 @@
 @import "../../styles/main.less";
 
-.content {
-  background: @White;
-}
-
 .trackOrderCntr {
   display: flex;
   justify-content: center;
-  background: @White;
+  background: @PageBackground;
   min-height: 700px;
   margin: 14px;
+
   .trackOrder {
     width: 100%;
     text-align: center;
@@ -18,16 +15,14 @@
     .flex-center();
     color: @ErrorText;
     margin-bottom: 10px;
-    visibility: hidden;
+    display: none;
     text-transform: uppercase;
   }
   .visible {
-    visibility: visible;
+    display: block;
   }
   .orderTitle {
     padding: 20px;
-    font-size: 2em;
-    text-align: center;
   }
   .regularxxs {
     font-weight: 400;
