@@ -1,116 +1,6 @@
-.sticky-pay-now__slide-fade-enter-active___UuXIT,
-.sticky-pay-now__slide-fade-leave-active___WzvWj {
-  transition: all 0.5s;
-}
-.sticky-pay-now__slide-fade-enter___s5Zc2,
-.sticky-pay-now__slide-fade-leave-to___GS09v {
-  opacity: 0;
-  transform: translateY(10px);
-}
-.sticky-pay-now__fade-enter-active___eI0u5,
-.sticky-pay-now__fade-leave-active___rTPUw {
-  transition: all 0.5s;
-}
-.sticky-pay-now__fade-enter___VsU_a,
-.sticky-pay-now__fade-leave-to___xLNqU {
-  opacity: 0;
-}
-.sticky-pay-now__slide-leave-active___ORAmk,
-.sticky-pay-now__slide-enter-active___d0BT1 {
-  transition: 0.5s;
-}
-.sticky-pay-now__slide-enter___IafWi,
-.sticky-pay-now__slide-leave-to___CDouT {
-  transform: translate(-100%, 0%);
-}
-.sticky-pay-now__slide-left-enter-active____vExW,
-.sticky-pay-now__slide-left-leave-active___rWDuq {
-  transition: all 0.5s;
-}
-.sticky-pay-now__slide-left-enter___cfLMP,
-.sticky-pay-now__slide-left-leave-to___nwmkc {
-  transform: translate(200%, 0%);
-}
-.sticky-pay-now__slide-down-enter-active___eaWjT,
-.sticky-pay-now__slide-down-leave-active___ZA6GV {
-  transition: all 0.5s;
-}
-.sticky-pay-now__slide-down-enter___aXIlb,
-.sticky-pay-now__slide-down-leave-to___k1VYQ {
-  opacity: 0;
-  transform: translateY(-100%);
-}
-.sticky-pay-now__slide-up-enter-active___lzXBV,
-.sticky-pay-now__slide-up-leave-active___FLSSd {
-  transition: all 0.5s ease-in-out;
-}
-.sticky-pay-now__slide-up-enter___ye4IG,
-.sticky-pay-now__slide-up-leave-to___cF01k {
-  opacity: 0;
-  transform: translateY(100vh);
-}
-.sticky-pay-now__animation-fade-up___t2uIO {
-  transition: transform 0.5s ease-in var(--delay, 0ms), opacity 0.5s ease-in var(--delay, 0ms) !important;
-  opacity: 0 !important;
-  transform: translateY(10px) !important;
-}
-.sticky-pay-now__animation-fade-up___t2uIO.sticky-pay-now__animate___B1wHx {
-  opacity: 1 !important;
-  transform: translateY(0) !important;
-}
-.sticky-pay-now__animation-fade___k7rX1 {
-  transition: opacity 0.4s ease-in var(--delay, 0ms) !important;
-  opacity: 0 !important;
-}
-.sticky-pay-now__animation-fade___k7rX1.sticky-pay-now__animate___B1wHx {
-  opacity: 1 !important;
-}
 /**color by character**/
 /** Font family **/
 /** Font weight **/
-a {
-  color: inherit;
-  text-decoration: none;
-}
-.sticky-pay-now__ct-header-wrapper___t2TA5,
-.sticky-pay-now__ctHeaderWrapper___cYnDf {
-  position: sticky;
-  top: 0;
-  z-index: 40;
-}
-body {
-  box-sizing: border-box;
-  overflow-x: hidden;
-}
-@media only screen and (min-width: 769px) {
-  body {
-    min-height: calc(100vh - 404px);
-  }
-}
-.sticky-pay-now__active-app___hLs_S,
-.sticky-pay-now__activeApp___lxP_T {
-  background-color: var(--pageBackground, #f8f8f8);
-}
-.sticky-pay-now__card-item___P9WdA .sticky-pay-now__card-desc___DJBPD .sticky-pay-now__price___bQrYJ .sticky-pay-now__effective-price___cZNrh {
-  font-size: 0.875rem;
-}
-.sticky-pay-now__login-modal___WgF9J .sticky-pay-now__tingle-modal-box___u0kKJ {
-  background: #f5f5f5;
-}
-.sticky-pay-now__content___PzJoH {
-  font-size: 0.875rem;
-  margin: 0 auto;
-  max-width: unset !important;
-  min-height: 75vh;
-}
-.sticky-pay-now__modal___DlV90 {
-  overflow-x: hidden;
-  font-size: 0.875rem;
-}
-.sticky-pay-now__product-details-page___VBuo6,
-.sticky-pay-now__productDetailsPage___mOwPl {
-  max-width: 1440px;
-}
 .sticky-pay-now__display-block___VLyRZ {
   display: block;
 }
@@ -296,12 +186,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .sticky-pay-now__caption-medium___gZCqf,
+  .sticky-pay-now__captionMedium___V6P3J {
+    font-size: 11px;
+  }
+}
 .sticky-pay-now__caption-semi-bold___QX3JZ,
 .sticky-pay-now__captionSemiBold___Fc8TZ {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .sticky-pay-now__caption-semi-bold___QX3JZ,
+  .sticky-pay-now__captionSemiBold___Fc8TZ {
+    font-size: 11px;
+  }
 }
 .sticky-pay-now__btn-link___zQJQL,
 .sticky-pay-now__btnLink___ge_XT {
@@ -359,33 +261,12 @@ button {
 .sticky-pay-now__removeScroll___kF3g4 {
   overflow-y: hidden !important;
 }
-.sticky-pay-now__orders___uP4cv .sticky-pay-now__order-status___rYyRr .sticky-pay-now__inline-svg___tt4LT {
-  height: 63px;
-}
-.sticky-pay-now__order-item___wzjNQ .sticky-pay-now__oder-header___QnaEt .sticky-pay-now__filter-arrow-up___y6SP9 {
-  margin-right: none !important;
-}
-.sticky-pay-now__buttons___mGE4w {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.sticky-pay-now__checkout___AMJS1 {
-  width: calc(100% - 20px) !important;
-}
-.sticky-pay-now__guest-checkout___pKYv0 {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.sticky-pay-now__home-page___JypfA,
-.sticky-pay-now__homePage___bcyep {
-  max-width: 1440px;
 }
 .sticky-pay-now__mr-5___oR6lr,
 .sticky-pay-now__mr5___HP_gl {
@@ -431,10 +312,6 @@ img::selection {
   background-color: var(--accentColor);
   color: #fff;
 }
-.sticky-pay-now__glide-cont___lWfkI,
-.sticky-pay-now__glideCont___KCamC {
-  position: relative;
-}
 .sticky-pay-now__no-scroll___RHPQu,
 .sticky-pay-now__noScroll___yclwp {
   overflow-y: hidden;
@@ -452,16 +329,6 @@ img::selection {
     font-size: 12px !important;
     padding: 5px !important;
   }
-}
-.sticky-pay-now__blog-wrapper___M4cHN .sticky-pay-now__title___Dzqgv {
-  color: var(--textHeading, #26201a);
-}
-.sticky-pay-now__blog-wrapper___M4cHN .sticky-pay-now__author___Oq5wy,
-.sticky-pay-now__blog-wrapper___M4cHN .sticky-pay-now__created-on___ZEFY0 {
-  color: var(--textLabel, #7d7676) !important;
-}
-.sticky-pay-now__blog-wrapper___M4cHN #sticky-pay-now__custom-page-container___elb3i * {
-  color: var(--textBody, #3c3131);
 }
 .sticky-pay-now__view3d-canvas___OKgzu {
   width: 100%;

@@ -15,12 +15,12 @@ import * as styles from "./shipment-address.less";
 
 function ShipmentAddress({ address }) {
   return (
-    <div className={`${styles.address} ${styles.lightsm}`}>
+    <div className={`${styles.address}`}>
       <div className={`${styles.title} ${styles.boldsm}`}>ADDRESS</div>
       <div className={styles.lightsm}>
-        {`${address?.name || ""} - ${address?.country_phone_code || ""}${address?.phone || ""}`}
+        {`${address?.name || ""} - ${address?.country_phone_code || ""} ${address?.phone || ""}`}
       </div>
-      <div className={`${styles.lightsm} ${styles.displayAddress}`}>
+      <div className={`${styles.displayAddress}`}>
         {address?.display_address || ""}
       </div>
     </div>
