@@ -22,14 +22,14 @@
     }
     .filter {
       position: absolute;
-      right: 20px;
+      inset-inline-end: 20px;
     }
     .filterArrowUp {
-      margin-left: auto;
+      margin-inline-start: auto;
       transform: rotate(180deg);
     }
     .filterArrowDown {
-      margin-left: auto;
+      margin-inline-start: auto;
     }
     .bold {
       font-weight: 700;
@@ -69,11 +69,11 @@
       #total-item {
         text-align: center;
         position: relative;
-        float: right;
+        float: inline-end;
         background: @Mako2;
         color: white;
         top: -40px;
-        left: -10px;
+        inset-inline-start: -10px;
         border-radius: 50%;
         width: 35px;
         height: 35px;
@@ -166,7 +166,7 @@
       color: @ThemeAccentL5;
       cursor: pointer;
       .reorderIcon {
-        margin-right: 10px;
+        margin-inline-end: 10px;
         position: relative;
         top: -2px;
       }
@@ -174,10 +174,10 @@
   }
 
   .showAccordionBody {
-    visibility: visible;
+    display: block;
   }
 
   .hideAccordionBody {
-    visibility: hidden;
+    display: none;
   }
 }

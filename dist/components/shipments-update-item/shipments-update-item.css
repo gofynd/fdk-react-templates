@@ -23,6 +23,10 @@
 .shipments-update-item__slide-leave-to___KUk2N {
   transform: translate(-100%, 0%);
 }
+[dir="rtl"] .shipments-update-item__slide-enter___AWzZC,
+[dir="rtl"] .shipments-update-item__slide-leave-to___KUk2N {
+  transform: translate(100%, 0%);
+}
 .shipments-update-item__slide-left-enter-active___AkBOc,
 .shipments-update-item__slide-left-leave-active___H7vif {
   transition: all 0.5s;
@@ -30,6 +34,10 @@
 .shipments-update-item__slide-left-enter___ijw9a,
 .shipments-update-item__slide-left-leave-to___nzr4R {
   transform: translate(200%, 0%);
+}
+[dir="rtl"] .shipments-update-item__slide-left-enter___ijw9a,
+[dir="rtl"] .shipments-update-item__slide-left-leave-to___nzr4R {
+  transform: translate(-200%, 0%);
 }
 .shipments-update-item__slide-down-enter-active___Se3nY,
 .shipments-update-item__slide-down-leave-active___m6XyX {
@@ -296,12 +304,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .shipments-update-item__caption-medium___e2eH7,
+  .shipments-update-item__captionMedium___j4gnY {
+    font-size: 11px;
+  }
+}
 .shipments-update-item__caption-semi-bold___gc2RD,
 .shipments-update-item__captionSemiBold___fGkPk {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .shipments-update-item__caption-semi-bold___gc2RD,
+  .shipments-update-item__captionSemiBold___fGkPk {
+    font-size: 11px;
+  }
 }
 .shipments-update-item__btn-link___Q6kcV,
 .shipments-update-item__btnLink___TM4TP {
@@ -363,7 +383,7 @@ button {
   height: 63px;
 }
 .shipments-update-item__order-item___eJ9cA .shipments-update-item__oder-header___G1hhQ .shipments-update-item__filter-arrow-up___s7mgg {
-  margin-right: none !important;
+  margin-inline-end: none !important;
 }
 .shipments-update-item__buttons___COB2Y {
   display: block !important;
@@ -389,11 +409,11 @@ img::selection {
 }
 .shipments-update-item__mr-5___OKPgq,
 .shipments-update-item__mr5___ktkZU {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .shipments-update-item__mr-2___i7uF8,
 .shipments-update-item__mr2___sw0Zt {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .shipments-update-item__py-5___ELXSn,
 .shipments-update-item__py5___Acslp {
@@ -482,7 +502,10 @@ img::selection {
   align-items: center;
 }
 .shipments-update-item__updateItem___SC6gf .shipments-update-item__bagImg___bn385 {
-  margin: 20px 20px 20px 0;
+  margin-top: 20px;
+  margin-inline-end: 20px;
+  margin-bottom: 20px;
+  margin-inline-start: 0px;
 }
 .shipments-update-item__updateItem___SC6gf .shipments-update-item__bagImg___bn385 img {
   max-width: 100px;
@@ -534,8 +557,9 @@ img::selection {
 }
 .shipments-update-item__updateItem___SC6gf .shipments-update-item__bagInfo___RyCGy .shipments-update-item__sizeQuantityContainer___gDz7R .shipments-update-item__sizeContainer___wfP66 {
   background: white;
-  padding: 10px 20px 10px 10px;
-  border: 1px solid #e4e5e6;
+  padding: 10px;
+  border: 1px solid var(--dividerStokes, #d4d1d1);
+  font-size: 14px;
 }
 .shipments-update-item__updateItem___SC6gf .shipments-update-item__bagInfo___RyCGy .shipments-update-item__sizeQuantityContainer___gDz7R .shipments-update-item__sizeContainer___wfP66 .shipments-update-item__regular-xxs___BJaPb {
   font-weight: 400;
@@ -578,12 +602,12 @@ img::selection {
   }
 }
 .shipments-update-item__updateItem___SC6gf .shipments-update-item__qtyCtrl___qDcgF {
-  margin-left: auto;
+  margin-inline-start: auto;
   position: relative;
 }
 @media only screen and (max-width: 480px) {
   .shipments-update-item__updateItem___SC6gf .shipments-update-item__qtyCtrl___qDcgF {
-    margin-left: 20px;
+    margin-inline-start: 20px;
   }
 }
 .shipments-update-item__updateItem___SC6gf .shipments-update-item__qtyCtrl___qDcgF .shipments-update-item__maxAvail___VZxqT {
@@ -633,6 +657,10 @@ img::selection {
 .quantity-ctrl__slide-leave-to___VukkV {
   transform: translate(-100%, 0%);
 }
+[dir="rtl"] .quantity-ctrl__slide-enter___unTBn,
+[dir="rtl"] .quantity-ctrl__slide-leave-to___VukkV {
+  transform: translate(100%, 0%);
+}
 .quantity-ctrl__slide-left-enter-active___EQZKt,
 .quantity-ctrl__slide-left-leave-active___IZSgv {
   transition: all 0.5s;
@@ -640,6 +668,10 @@ img::selection {
 .quantity-ctrl__slide-left-enter___ZZSrm,
 .quantity-ctrl__slide-left-leave-to___H39Ko {
   transform: translate(200%, 0%);
+}
+[dir="rtl"] .quantity-ctrl__slide-left-enter___ZZSrm,
+[dir="rtl"] .quantity-ctrl__slide-left-leave-to___H39Ko {
+  transform: translate(-200%, 0%);
 }
 .quantity-ctrl__slide-down-enter-active___akDai,
 .quantity-ctrl__slide-down-leave-active___JQI6G {
@@ -906,12 +938,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .quantity-ctrl__caption-medium___DIRyS,
+  .quantity-ctrl__captionMedium___dKA8v {
+    font-size: 11px;
+  }
+}
 .quantity-ctrl__caption-semi-bold___rirfZ,
 .quantity-ctrl__captionSemiBold___iIOPk {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .quantity-ctrl__caption-semi-bold___rirfZ,
+  .quantity-ctrl__captionSemiBold___iIOPk {
+    font-size: 11px;
+  }
 }
 .quantity-ctrl__btn-link___mJhFV,
 .quantity-ctrl__btnLink___1Jg_z {
@@ -973,7 +1017,7 @@ button {
   height: 63px;
 }
 .quantity-ctrl__order-item___Q2c8d .quantity-ctrl__oder-header___Dz1Uz .quantity-ctrl__filter-arrow-up___TVA3G {
-  margin-right: none !important;
+  margin-inline-end: none !important;
 }
 .quantity-ctrl__buttons___S6NcY {
   display: block !important;
@@ -999,11 +1043,11 @@ img::selection {
 }
 .quantity-ctrl__mr-5___kmh67,
 .quantity-ctrl__mr5___CFB_e {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .quantity-ctrl__mr-2___cU7kf,
 .quantity-ctrl__mr2___HK0ti {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .quantity-ctrl__py-5___etXc7,
 .quantity-ctrl__py5___t9UTF {
@@ -1089,8 +1133,7 @@ img::selection {
 }
 .quantity-ctrl__qtyControl___LvP42 {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: space-around;
   border: 1px solid #eeeeee;
   border-radius: 3px;
 }
@@ -1120,8 +1163,8 @@ img::selection {
   width: 38px;
   height: 25px;
   border-radius: 3px;
-  border-left: 1px solid #eeeeee;
-  border-right: 1px solid #eeeeee;
+  border-inline-start: 1px solid #eeeeee;
+  border-inline-end: 1px solid #eeeeee;
   margin: 0px;
   background-color: var(--pageBackground, #f8f8f8);
 }

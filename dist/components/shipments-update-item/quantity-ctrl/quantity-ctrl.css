@@ -23,6 +23,10 @@
 .quantity-ctrl__slide-leave-to___VukkV {
   transform: translate(-100%, 0%);
 }
+[dir="rtl"] .quantity-ctrl__slide-enter___unTBn,
+[dir="rtl"] .quantity-ctrl__slide-leave-to___VukkV {
+  transform: translate(100%, 0%);
+}
 .quantity-ctrl__slide-left-enter-active___EQZKt,
 .quantity-ctrl__slide-left-leave-active___IZSgv {
   transition: all 0.5s;
@@ -30,6 +34,10 @@
 .quantity-ctrl__slide-left-enter___ZZSrm,
 .quantity-ctrl__slide-left-leave-to___H39Ko {
   transform: translate(200%, 0%);
+}
+[dir="rtl"] .quantity-ctrl__slide-left-enter___ZZSrm,
+[dir="rtl"] .quantity-ctrl__slide-left-leave-to___H39Ko {
+  transform: translate(-200%, 0%);
 }
 .quantity-ctrl__slide-down-enter-active___akDai,
 .quantity-ctrl__slide-down-leave-active___JQI6G {
@@ -296,12 +304,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .quantity-ctrl__caption-medium___DIRyS,
+  .quantity-ctrl__captionMedium___dKA8v {
+    font-size: 11px;
+  }
+}
 .quantity-ctrl__caption-semi-bold___rirfZ,
 .quantity-ctrl__captionSemiBold___iIOPk {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .quantity-ctrl__caption-semi-bold___rirfZ,
+  .quantity-ctrl__captionSemiBold___iIOPk {
+    font-size: 11px;
+  }
 }
 .quantity-ctrl__btn-link___mJhFV,
 .quantity-ctrl__btnLink___1Jg_z {
@@ -363,7 +383,7 @@ button {
   height: 63px;
 }
 .quantity-ctrl__order-item___Q2c8d .quantity-ctrl__oder-header___Dz1Uz .quantity-ctrl__filter-arrow-up___TVA3G {
-  margin-right: none !important;
+  margin-inline-end: none !important;
 }
 .quantity-ctrl__buttons___S6NcY {
   display: block !important;
@@ -389,11 +409,11 @@ img::selection {
 }
 .quantity-ctrl__mr-5___kmh67,
 .quantity-ctrl__mr5___CFB_e {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .quantity-ctrl__mr-2___cU7kf,
 .quantity-ctrl__mr2___HK0ti {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .quantity-ctrl__py-5___etXc7,
 .quantity-ctrl__py5___t9UTF {
@@ -479,8 +499,7 @@ img::selection {
 }
 .quantity-ctrl__qtyControl___LvP42 {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: space-around;
   border: 1px solid #eeeeee;
   border-radius: 3px;
 }
@@ -510,8 +529,8 @@ img::selection {
   width: 38px;
   height: 25px;
   border-radius: 3px;
-  border-left: 1px solid #eeeeee;
-  border-right: 1px solid #eeeeee;
+  border-inline-start: 1px solid #eeeeee;
+  border-inline-end: 1px solid #eeeeee;
   margin: 0px;
   background-color: var(--pageBackground, #f8f8f8);
 }

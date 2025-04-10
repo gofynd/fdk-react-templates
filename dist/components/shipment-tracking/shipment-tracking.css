@@ -23,6 +23,10 @@
 .shipment-tracking__slide-leave-to___QnAYs {
   transform: translate(-100%, 0%);
 }
+[dir="rtl"] .shipment-tracking__slide-enter___QJTn3,
+[dir="rtl"] .shipment-tracking__slide-leave-to___QnAYs {
+  transform: translate(100%, 0%);
+}
 .shipment-tracking__slide-left-enter-active___XnxEE,
 .shipment-tracking__slide-left-leave-active___gIPs6 {
   transition: all 0.5s;
@@ -30,6 +34,10 @@
 .shipment-tracking__slide-left-enter___xMh2k,
 .shipment-tracking__slide-left-leave-to___viZzU {
   transform: translate(200%, 0%);
+}
+[dir="rtl"] .shipment-tracking__slide-left-enter___xMh2k,
+[dir="rtl"] .shipment-tracking__slide-left-leave-to___viZzU {
+  transform: translate(-200%, 0%);
 }
 .shipment-tracking__slide-down-enter-active___nXLkj,
 .shipment-tracking__slide-down-leave-active___XMQAQ {
@@ -296,12 +304,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .shipment-tracking__caption-medium___pthjN,
+  .shipment-tracking__captionMedium___s9jz3 {
+    font-size: 11px;
+  }
+}
 .shipment-tracking__caption-semi-bold___H_RVN,
 .shipment-tracking__captionSemiBold___TTyHu {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .shipment-tracking__caption-semi-bold___H_RVN,
+  .shipment-tracking__captionSemiBold___TTyHu {
+    font-size: 11px;
+  }
 }
 .shipment-tracking__btn-link___P77hT,
 .shipment-tracking__btnLink___YL9mX {
@@ -363,7 +383,7 @@ button {
   height: 63px;
 }
 .shipment-tracking__order-item___eHb07 .shipment-tracking__oder-header___Jz6ad .shipment-tracking__filter-arrow-up___Yh3A5 {
-  margin-right: none !important;
+  margin-inline-end: none !important;
 }
 .shipment-tracking__buttons___yC_Od {
   display: block !important;
@@ -389,11 +409,11 @@ img::selection {
 }
 .shipment-tracking__mr-5___fxhoW,
 .shipment-tracking__mr5___DQRl3 {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .shipment-tracking__mr-2___aTSzF,
 .shipment-tracking__mr2___gHYdd {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .shipment-tracking__py-5___kE_oS,
 .shipment-tracking__py5___PvwvP {
@@ -531,7 +551,7 @@ img::selection {
 }
 .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__status___B417y .shipment-tracking__info___KBL6j {
   position: absolute;
-  right: 20px;
+  inset-inline-end: 20px;
   text-align: center;
   color: #ffffff;
   padding: 10px;
@@ -544,7 +564,7 @@ img::selection {
   opacity: 0.5;
 }
 .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__trackInfo___A5RXX {
-  margin-left: 20px;
+  margin-inline-start: 20px;
 }
 .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__trackInfo___A5RXX .shipment-tracking__boldsm___aDLPp {
   font-weight: 700;
@@ -573,7 +593,7 @@ img::selection {
   width: 100%;
 }
 .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__dropdownArrow___m8GIu {
-  margin-left: auto;
+  margin-inline-start: auto;
 }
 .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__title___BMsCR {
   font-weight: bold;
@@ -616,7 +636,7 @@ img::selection {
   cursor: pointer;
   padding: 15px 10px;
   border-top: 1px solid #eeeeee;
-  border-right: 1px solid #eeeeee;
+  border-inline-end: 1px solid #eeeeee;
   text-align: center;
   align-items: center;
   font-size: 14px;

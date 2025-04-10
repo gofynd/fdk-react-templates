@@ -23,6 +23,10 @@
 .edit-profile__slide-leave-to___I2lCz {
   transform: translate(-100%, 0%);
 }
+[dir="rtl"] .edit-profile__slide-enter___ECYwE,
+[dir="rtl"] .edit-profile__slide-leave-to___I2lCz {
+  transform: translate(100%, 0%);
+}
 .edit-profile__slide-left-enter-active___KeipV,
 .edit-profile__slide-left-leave-active___two7j {
   transition: all 0.5s;
@@ -30,6 +34,10 @@
 .edit-profile__slide-left-enter___HylyL,
 .edit-profile__slide-left-leave-to___W3GAS {
   transform: translate(200%, 0%);
+}
+[dir="rtl"] .edit-profile__slide-left-enter___HylyL,
+[dir="rtl"] .edit-profile__slide-left-leave-to___W3GAS {
+  transform: translate(-200%, 0%);
 }
 .edit-profile__slide-down-enter-active___njrLn,
 .edit-profile__slide-down-leave-active___Ii_U3 {
@@ -296,12 +304,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .edit-profile__caption-medium___D6wDI,
+  .edit-profile__captionMedium___MDrPq {
+    font-size: 11px;
+  }
+}
 .edit-profile__caption-semi-bold___Cx2fM,
 .edit-profile__captionSemiBold___UbwTg {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .edit-profile__caption-semi-bold___Cx2fM,
+  .edit-profile__captionSemiBold___UbwTg {
+    font-size: 11px;
+  }
 }
 .edit-profile__btn-link___VVllm,
 .edit-profile__btnLink___jpW5g {
@@ -363,7 +383,7 @@ button {
   height: 63px;
 }
 .edit-profile__order-item___uRQ3p .edit-profile__oder-header___QiiJ3 .edit-profile__filter-arrow-up___IBtkl {
-  margin-right: none !important;
+  margin-inline-end: none !important;
 }
 .edit-profile__buttons___YS_GE {
   display: block !important;
@@ -389,11 +409,11 @@ img::selection {
 }
 .edit-profile__mr-5___UQxgl,
 .edit-profile__mr5___SBvUV {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .edit-profile__mr-2___GC0kw,
 .edit-profile__mr2___J8WEx {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .edit-profile__py-5___z04F_,
 .edit-profile__py5___P4UBC {
@@ -559,7 +579,7 @@ img::selection {
 }
 .edit-profile__editProfileAlert___HgY6w .edit-profile__alertMessage___eFskF {
   display: inline-block;
-  margin-right: 8px;
+  margin-inline-end: 8px;
   font-size: 13px;
 }
 .edit-profile__genderRadioContainer___aWiXv {
@@ -567,8 +587,8 @@ img::selection {
 }
 .edit-profile__genderRadioContainer___aWiXv .edit-profile__radioContainer___K8gz5 {
   margin-bottom: 8px;
-  padding-left: 24px;
-  margin-right: 12px;
+  padding-inline-start: 24px;
+  margin-inline-end: 12px;
   position: relative;
   color: var(--textBody, #3c3131);
   font-size: 14px;
@@ -586,12 +606,12 @@ img::selection {
   width: 16px;
   position: absolute;
   top: 50%;
-  left: 0;
+  inset-inline-start: 0;
   transform: translateY(-50%);
   border: 1px solid #919191;
   border-radius: 50%;
 }
-.edit-profile__genderRadioContainer___aWiXv .edit-profile__radioContainer___K8gz5 .edit-profile__checkmark___yZQ_b:after {
+[dir="ltr"] .edit-profile__genderRadioContainer___aWiXv .edit-profile__radioContainer___K8gz5 .edit-profile__checkmark___yZQ_b:after {
   content: "";
   position: absolute;
   display: none;
@@ -603,7 +623,28 @@ img::selection {
   border-radius: 50%;
   background: #919191;
 }
-.edit-profile__genderRadioContainer___aWiXv .edit-profile__radioContainer___K8gz5 input:checked ~ .edit-profile__checkmark___yZQ_b:after {
+[dir="rtl"] [dir="ltr"] .edit-profile__genderRadioContainer___aWiXv .edit-profile__radioContainer___K8gz5 .edit-profile__checkmark___yZQ_b:after {
+  transform: translate(50%, -50%);
+}
+[dir="ltr"] .edit-profile__genderRadioContainer___aWiXv .edit-profile__radioContainer___K8gz5 input:checked ~ .edit-profile__checkmark___yZQ_b:after {
+  display: block;
+}
+[dir="rtl"] .edit-profile__genderRadioContainer___aWiXv .edit-profile__radioContainer___K8gz5 .edit-profile__checkmark___yZQ_b:before {
+  content: "";
+  position: absolute;
+  display: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #919191;
+}
+[dir="rtl"] [dir="rtl"] .edit-profile__genderRadioContainer___aWiXv .edit-profile__radioContainer___K8gz5 .edit-profile__checkmark___yZQ_b:before {
+  transform: translate(50%, -50%);
+}
+[dir="rtl"] .edit-profile__genderRadioContainer___aWiXv .edit-profile__radioContainer___K8gz5 input:checked ~ .edit-profile__checkmark___yZQ_b:before {
   display: block;
 }
 .edit-profile__editProfileNameInput___GNfyk,
@@ -681,6 +722,10 @@ img::selection {
 .verify-both__slide-leave-to___DF5Eu {
   transform: translate(-100%, 0%);
 }
+[dir="rtl"] .verify-both__slide-enter___sQRYP,
+[dir="rtl"] .verify-both__slide-leave-to___DF5Eu {
+  transform: translate(100%, 0%);
+}
 .verify-both__slide-left-enter-active___VLHYS,
 .verify-both__slide-left-leave-active____pl_0 {
   transition: all 0.5s;
@@ -688,6 +733,10 @@ img::selection {
 .verify-both__slide-left-enter___BZGb6,
 .verify-both__slide-left-leave-to___Z00eY {
   transform: translate(200%, 0%);
+}
+[dir="rtl"] .verify-both__slide-left-enter___BZGb6,
+[dir="rtl"] .verify-both__slide-left-leave-to___Z00eY {
+  transform: translate(-200%, 0%);
 }
 .verify-both__slide-down-enter-active___TCu7S,
 .verify-both__slide-down-leave-active___PHrPi {
@@ -954,12 +1003,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .verify-both__caption-medium___QjOc_,
+  .verify-both__captionMedium___vIB7N {
+    font-size: 11px;
+  }
+}
 .verify-both__caption-semi-bold___hN2r2,
 .verify-both__captionSemiBold___ZGDKF {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .verify-both__caption-semi-bold___hN2r2,
+  .verify-both__captionSemiBold___ZGDKF {
+    font-size: 11px;
+  }
 }
 .verify-both__btn-link___RRoeT,
 .verify-both__btnLink___BZ7fx {
@@ -1021,7 +1082,7 @@ button {
   height: 63px;
 }
 .verify-both__order-item___KQSJu .verify-both__oder-header___XRWq1 .verify-both__filter-arrow-up___a3uo0 {
-  margin-right: none !important;
+  margin-inline-end: none !important;
 }
 .verify-both__buttons___nyXhE {
   display: block !important;
@@ -1047,11 +1108,11 @@ img::selection {
 }
 .verify-both__mr-5___IG86K,
 .verify-both__mr5___XKxD3 {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .verify-both__mr-2___dO4B7,
 .verify-both__mr2___JTLZw {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .verify-both__py-5___kBc3U,
 .verify-both__py5___WBjq8 {
@@ -1291,6 +1352,10 @@ img::selection {
 .mobile-number__slide-leave-to___C7gI_ {
   transform: translate(-100%, 0%);
 }
+[dir="rtl"] .mobile-number__slide-enter___mQpnY,
+[dir="rtl"] .mobile-number__slide-leave-to___C7gI_ {
+  transform: translate(100%, 0%);
+}
 .mobile-number__slide-left-enter-active___u2AAJ,
 .mobile-number__slide-left-leave-active___u1pra {
   transition: all 0.5s;
@@ -1298,6 +1363,10 @@ img::selection {
 .mobile-number__slide-left-enter___JuFd_,
 .mobile-number__slide-left-leave-to___EsZxB {
   transform: translate(200%, 0%);
+}
+[dir="rtl"] .mobile-number__slide-left-enter___JuFd_,
+[dir="rtl"] .mobile-number__slide-left-leave-to___EsZxB {
+  transform: translate(-200%, 0%);
 }
 .mobile-number__slide-down-enter-active___mSDgW,
 .mobile-number__slide-down-leave-active___UFZbE {
@@ -1564,12 +1633,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .mobile-number__caption-medium___syZZb,
+  .mobile-number__captionMedium___iKNxh {
+    font-size: 11px;
+  }
+}
 .mobile-number__caption-semi-bold___Rbomr,
 .mobile-number__captionSemiBold___cKKg4 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .mobile-number__caption-semi-bold___Rbomr,
+  .mobile-number__captionSemiBold___cKKg4 {
+    font-size: 11px;
+  }
 }
 .mobile-number__btn-link___QbUx_,
 .mobile-number__btnLink___dTaco {
@@ -1631,7 +1712,7 @@ button {
   height: 63px;
 }
 .mobile-number__order-item___kK82S .mobile-number__oder-header___o5NAz .mobile-number__filter-arrow-up___hT2Bo {
-  margin-right: none !important;
+  margin-inline-end: none !important;
 }
 .mobile-number__buttons___pPkid {
   display: block !important;
@@ -1657,11 +1738,11 @@ img::selection {
 }
 .mobile-number__mr-5___gRl4u,
 .mobile-number__mr5___tOVbz {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .mobile-number__mr-2___UJPQR,
 .mobile-number__mr2___V6EUH {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .mobile-number__py-5___Co0IS,
 .mobile-number__py5___LSFQJ {
@@ -1767,28 +1848,24 @@ img::selection {
 .mobile-number__mobileInputWrapper___Na12n.mobile-number__errorInput___TKkzT .mobile-number__mobileNumberInput___iRnFG {
   border: 1px solid var(--errorText, #b24141);
 }
-.mobile-number__mobileInputContainer___deIgv {
+.mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv {
   height: auto;
 }
-.mobile-number__mobileNumberInput___iRnFG {
-  height: 48px;
-  width: 100%;
-  box-sizing: border-box;
-  color: var(--textBody, #3c3131);
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 19.6px;
-  display: flex;
-  border: 1px solid var(--dividerStokes, #d4d1d1);
-  border-radius: 4px;
-  background-color: var(--pageBackground, #f8f8f8);
+.mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__dialCodePreview___E0m4Z {
+  border-inline: none;
   padding-right: 4px;
 }
-.mobile-number__mobileNumberInput___iRnFG:focus-visible {
+.mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG {
+  width: 100%;
+  font-weight: 400;
+  display: flex;
+  border-left: none;
+  padding-left: 4px;
+}
+.mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG:focus-visible {
   outline: none;
 }
-.mobile-number__mobileNumberInput___iRnFG::placeholder {
+.mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG::placeholder {
   color: var(--textLabel, #7d7676);
   opacity: 0.3;
 }

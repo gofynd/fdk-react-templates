@@ -18,7 +18,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    padding-left: 15px;
+    padding-inline-start: 15px;
     font-size: 14px;
     font-weight: 600;
     line-height: 140%;
@@ -43,7 +43,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    padding-left: 15px;
+    padding-inline-start: 15px;
 
     .title {
       font-size: 14px;
@@ -69,7 +69,8 @@
     border: 1px solid var(--buttonPrimary);
     text-transform: uppercase;
     text-align: center;
-    line-height: 140%;
+    display: flex;
+    align-items: center;
     cursor: pointer;
   }
 }
@@ -88,6 +89,7 @@
     border-radius: 0;
     border-left: none;
     border-right: none;
+    display: none;
   }
   .left {
     display: flex;
@@ -108,9 +110,9 @@
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    padding-left: 15px;
+    padding-inline-start: 15px;
     @media @mobile {
-      padding-left: 0;
+      padding-inline-start: 0;
     }
     .orderSummary {
       font-size: 14px;
@@ -134,8 +136,9 @@
     color: var(--buttonPrimary);
     border: 1px solid var(--buttonPrimary);
     text-transform: uppercase;
-    line-height: 140%;
     cursor: pointer;
+    display: flex;
+    align-items: center;
   }
 
   .proceedPay {
@@ -146,10 +149,11 @@
     border: 1px solid var(--buttonPrimary);
     background-color: var(--buttonPrimary);
     color: var(--buttonSecondary);
-    margin-left: 24px;
+    margin-inline-start: 24px;
     text-transform: uppercase;
-    line-height: 140%;
     display: flex;
     cursor: pointer;
+    display: flex;
+    align-items: center;
   }
 }

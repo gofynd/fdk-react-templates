@@ -11,8 +11,10 @@
 import React, { useMemo } from "react";
 import * as styles from "./shipment-breakup.less";
 import { priceFormatCurrencySymbol } from "../../helper/utils";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function ShipmentBreakup({ breakup }) {
+  const { t } = useGlobalTranslation("translation");
   const getPriceFormat = (symbol, price) => {
     return priceFormatCurrencySymbol(symbol, price);
   };
@@ -27,37 +29,37 @@ function ShipmentBreakup({ breakup }) {
 
   return (
     <div className={`${styles.billing} ${styles.lightsm}`}>
-      <div className={`${styles.title} ${styles.boldsm}`}>BILLING</div>
+      <div className={`${styles.title} ${styles.boldsm}`}>{t("resource.common.billing_caps")}</div>
       <>
         {breakupValues?.map((item, index) => (
           <div key={index} className={`${styles.breakupItem}`}>
             {((index !== breakup.length - 1 && item.value !== "0") ||
               (index === breakup.length - 1 && item.value !== "0")) && (
-              <>
-                {index !== breakup.length - 1 && (
-                  <span>
-                    <span>{item.display}</span>
-                    <span className={`${styles.values}`}>
-                      {getPriceFormat(
-                        item.currency_symbol,
-                        Number(item.value.toString().replace(/,/g, ""))
-                      )}
+                <>
+                  {index !== breakup.length - 1 && (
+                    <span>
+                      <span>{item.display}</span>
+                      <span className={`${styles.values}`}>
+                        {getPriceFormat(
+                          item.currency_symbol,
+                          Number(item.value.toString().replace(/,/g, ""))
+                        )}
+                      </span>
                     </span>
-                  </span>
-                )}
-                {index === breakup.length - 1 && (
-                  <span>
-                    <span>{item.display}</span>
-                    <span className={`${styles.values}`}>
-                      {getPriceFormat(
-                        item.currency_symbol,
-                        Number(item.value.toString().replace(/,/g, ""))
-                      )}
+                  )}
+                  {index === breakup.length - 1 && (
+                    <span>
+                      <span>{item.display}</span>
+                      <span className={`${styles.values}`}>
+                        {getPriceFormat(
+                          item.currency_symbol,
+                          Number(item.value.toString().replace(/,/g, ""))
+                        )}
+                      </span>
                     </span>
-                  </span>
-                )}
-              </>
-            )}
+                  )}
+                </>
+              )}
           </div>
         ))}
       </>

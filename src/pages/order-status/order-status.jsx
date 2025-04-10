@@ -2,6 +2,7 @@ import React from "react";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
 import {
   convertDate,
+  formatLocale,
   getAddressStr,
   numberWithCommas,
 } from "../../helper/utils";
@@ -11,12 +12,17 @@ import CartGiftItem from "./components/cart-gift-item/cart-gift-item";
 import FyButton from "../../components/core/fy-button/fy-button";
 import Modal from "../../components/core/modal/modal";
 import { FDKLink } from "fdk-core/components";
+import {
+  useGlobalStore,
+  useFPI,
+  useGlobalTranslation
+} from "fdk-core/utils";
 
 const orderFailurePageInfo = {
   link: "",
-  linktext: "RETRY",
-  text: "Oops! Your payment failed!",
-  subText: "You can retry checkout or take another option for payment.",
+  linktext: "resource.common.retry_caps",
+  text: "resource.common.oops_payment_failed",
+  subText: "resource.common.retry_checkout_or_other_payment_option",
   icon: "",
 };
 
@@ -30,11 +36,13 @@ function OrderStatus({
   pollingComp = null,
   loader,
 }) {
+  const { t } = useGlobalTranslation("translation");
+  const fpi = useFPI();
+  const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
+  const locale = language?.locale
   function getOrderLink() {
-    if (isLoggedIn) {
-      return "/profile/orders/";
-    }
-    return "/order-tracking/" + orderData?.order_id;
+    const basePath = isLoggedIn ? "/profile/orders/" : `/order-tracking/${orderData?.order_id}`;
+    return locale && locale !== "en" ? `/${locale}${basePath}` : basePath;
   }
 
   function getItemCount() {
@@ -73,7 +81,7 @@ function OrderStatus({
   const markedPriceCheck = (item) => item?.prices?.price_marked;
 
   const getAddressData = orderData?.shipments?.[0]?.delivery_address || {
-    name: "John Doe",
+    name: t("resource.order.john_doe"),
     address_type: "Home",
     phone: "1234567890",
   };
@@ -86,9 +94,8 @@ function OrderStatus({
       <div className={styles.shipmentItem} key={index}>
         <div className={styles.shipmentItemHead}>
           <div>
-            <p className={styles.shipmentNumber}>{`Shipment ${
-              index + 1
-            } / ${shipmentLength}`}</p>
+            <p className={styles.shipmentNumber}>{`${t("resource.common.shipment")} ${index + 1
+              } / ${shipmentLength}`}</p>
             <h5 style={{ marginTop: "8px" }}>{shipment?.shipment_id}</h5>
           </div>
           <div
@@ -100,7 +107,7 @@ function OrderStatus({
               }),
             }}
           >
-            Status: <span>{shipment?.shipment_status?.title}</span>
+            {t("resource.order.status")}: <span>{shipment?.shipment_status?.title}</span>
           </div>
           <div
             className={styles.statusWrapperMobile}
@@ -113,13 +120,13 @@ function OrderStatus({
           >
             {shipment?.shipment_status?.title}
           </div>
-        </div>
+        </div >
         <div className={styles.shipmentItemItemsData}>
           {getBags(shipment?.bags)?.map((item, index) => (
             <ProductItem product={item} index={index} key={index} />
           ))}
         </div>
-      </div>
+      </div >
     );
   }
 
@@ -140,11 +147,11 @@ function OrderStatus({
                 <div className={styles.sizeInfo}>
                   <div className={styles.sizeQuantity}>
                     <div className={styles.size}>
-                      Size: &nbsp;
+                      {t("resource.common.size")}: &nbsp;
                       {product?.item?.size}
                     </div>
                     <div className={styles.sizeQuantity}>
-                      Qty:&nbsp;
+                      {t("resource.common.qty")}:&nbsp;
                       {product?.quantity}
                     </div>
                   </div>
@@ -159,7 +166,7 @@ function OrderStatus({
                   )}
                   {markedPriceCheck(product) > 0 &&
                     effectivePriceCheck(product) !==
-                      markedPriceCheck(product) && (
+                    markedPriceCheck(product) && (
                       <div className={styles.markedPrice}>
                         {getMarkedPrice(product)}
                       </div>
@@ -175,7 +182,7 @@ function OrderStatus({
                       disabled={product}
                       checked={product?.meta?.gift_card?.is_gift_applied}
                     />
-                    <label htmlFor={product?.id}>Gift wrap Added</label>
+                    <label htmlFor={product?.id}>{t("resource.order.gift_wrap_added")}</label>
                   </div>
                 )}
                 {/* Show Free Gifts  Desktop */}
@@ -207,21 +214,22 @@ function OrderStatus({
               {" "}
               <SvgWrapper svgSrc="true-check" />{" "}
             </div>
-            <div className={styles.orderConfirmed}>ORDER CONFIRMED</div>
+            <div className={styles.orderConfirmed}>{t("resource.order.order_confirmed_caps")}</div>
             <div className={styles.successMsg}>
-              Thank you for shopping with us! Your order is placed successfully
+              {t("resource.order.order_success")}
             </div>
             <div className={styles.orderId}>
-              ORDER ID: <span>{orderData.order_id}</span>
+              {t("resource.order.order_id_caps")}: <span>{orderData.order_id}</span>
             </div>
             <div className={styles.orderTime}>
-              Placed on:
-              <span> {convertDate(orderData.order_created_time)}</span>
+              {t("resource.order.placed_on")}:
+              <span> {convertDate(orderData.order_created_time, formatLocale(locale, countryCode)
+              )}</span>
             </div>
             <div className={styles.trackOrderBtn}>
               <a href={getOrderLink()} style={{ display: "inline-block" }}>
                 <FyButton color="secondary" type="button">
-                  TRACK ORDER
+                  {t("resource.order.track_order_caps")}
                 </FyButton>
               </a>
             </div>
@@ -243,28 +251,33 @@ function OrderStatus({
               {isLoggedIn && (
                 <div className={`${styles["payment-address"]} fontBody`}>
                   <div className={styles["payment-wrapper"]}>
-                    <div className={styles["mode"]}>PAYMENT MODE</div>
-                    {orderData?.shipments?.[0]?.payment && (
-                      <div className={styles["mode-data"]}>
-                        <span>
-                          <img
-                            src={
-                              orderData?.shipments?.[0]?.payment?.logo ||
-                              "https://cdn.iconscout.com/icon/premium/png-512-thumb/debit-card-10-742447.png?f=webp&w=256"
-                            }
-                            alt={orderData?.shipments?.[0]?.payment?.mode}
-                          />
-                        </span>
-                        <span className={styles["mode-name"]}>
-                          {orderData?.shipments?.[0]?.payment?.display_name ||
-                            "COD"}
-                        </span>
-                      </div>
-                    )}
-                  </div>
+                    <div className={styles["mode"]}>{t("resource.common.payment_mode")}</div>
+                    {orderData?.shipments?.[0]?.payment_info?.length > 0 &&
+                      orderData?.shipments?.[0]?.payment_info?.map(
+                        (paymentInfo) => (
+                          <div
+                            key={paymentInfo?.display_name}
+                            className={styles["mode-data"]}
+                          >
+                            <span>
+                              <img
+                                src={
+                                  paymentInfo?.logo ||
+                                  "https://cdn.iconscout.com/icon/premium/png-512-thumb/debit-card-10-742447.png?f=webp&w=256"
+                                }
+                                alt={paymentInfo?.mode}
+                              />
+                            </span>
+                            <span className={styles["mode-name"]}>
+                              {paymentInfo?.display_name || t("resource.order.cod")}
+                            </span>
+                          </div>
+                        )
+                      )}
+                  </div >
                   <div className={styles["delivery-wrapper"]}>
                     <div className={styles["delivery-header"]}>
-                      DELIVERY ADDRESS
+                      {t("resource.order.delivery_address")}
                     </div>
                     <div className={styles["delivery-details"]}>
                       <div className={styles["name-label"]}>
@@ -300,8 +313,8 @@ function OrderStatus({
           <Modal isOpen={true} hideHeader={true}>
             <div className={styles.orderStatusModal}>
               <div className={styles.loader}></div>
-              <p className={styles.title}>Fetching Order Details</p>
-              <p className={styles.message}>Please do not press back button</p>
+              <p className={styles.title}>{t("resource.order.fetching_order_details")}</p>
+              <p className={styles.message}>{t("resource.order.please_do_not_press_back_button")}</p>
             </div>
           </Modal>
         </div>
@@ -312,13 +325,13 @@ function OrderStatus({
       <div className={styles.orderFail}>
         <img src={orderFailImg} alt={orderFailImg} />
         <div className={styles.cartErrorText}>
-          <span>{orderFailurePageInfo.text}</span>
-          <span className={styles.subtext}>{orderFailurePageInfo.subText}</span>
+          <span>{t(orderFailurePageInfo.text)}</span>
+          <span className={styles.subtext}>{t(orderFailurePageInfo.subText)}</span>
           <button
             className={`${styles.commonBtn} ${styles.linkBtn} ${styles.boldSm}`}
             onClick={onOrderFailure}
           >
-            {orderFailurePageInfo.linktext}
+            {t(orderFailurePageInfo.linktext)}
           </button>
         </div>
       </div>

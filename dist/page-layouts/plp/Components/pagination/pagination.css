@@ -23,6 +23,10 @@
 .pagination__slide-leave-to___GuO_a {
   transform: translate(-100%, 0%);
 }
+[dir="rtl"] .pagination__slide-enter___NsRbs,
+[dir="rtl"] .pagination__slide-leave-to___GuO_a {
+  transform: translate(100%, 0%);
+}
 .pagination__slide-left-enter-active___uiXw4,
 .pagination__slide-left-leave-active___tUhFd {
   transition: all 0.5s;
@@ -30,6 +34,10 @@
 .pagination__slide-left-enter___Wxc7t,
 .pagination__slide-left-leave-to___dyiSC {
   transform: translate(200%, 0%);
+}
+[dir="rtl"] .pagination__slide-left-enter___Wxc7t,
+[dir="rtl"] .pagination__slide-left-leave-to___dyiSC {
+  transform: translate(-200%, 0%);
 }
 .pagination__slide-down-enter-active___M16VT,
 .pagination__slide-down-leave-active___U0Xb2 {
@@ -296,12 +304,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .pagination__caption-medium___jtoVr,
+  .pagination__captionMedium___jNBGw {
+    font-size: 11px;
+  }
+}
 .pagination__caption-semi-bold___fVaBz,
 .pagination__captionSemiBold___pXxji {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .pagination__caption-semi-bold___fVaBz,
+  .pagination__captionSemiBold___pXxji {
+    font-size: 11px;
+  }
 }
 .pagination__btn-link___orr5r,
 .pagination__btnLink___F95Uy {
@@ -363,7 +383,7 @@ button {
   height: 63px;
 }
 .pagination__order-item___E1UHy .pagination__oder-header___VW2oq .pagination__filter-arrow-up___HXA2Y {
-  margin-right: none !important;
+  margin-inline-end: none !important;
 }
 .pagination__buttons___TueNd {
   display: block !important;
@@ -389,11 +409,11 @@ img::selection {
 }
 .pagination__mr-5___oY4X5,
 .pagination__mr5___FEPwz {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .pagination__mr-2___Pg3RF,
 .pagination__mr2___FR8Uf {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .pagination__py-5___aTqEc,
 .pagination__py5___jYCpJ {
@@ -495,8 +515,14 @@ img::selection {
 .pagination__pagination___G0GGL .pagination__arrowIcon___Fwbz0.pagination__leftArrow___su3ON {
   transform: rotate(90deg);
 }
+[dir="rtl"] .pagination__pagination___G0GGL .pagination__arrowIcon___Fwbz0.pagination__leftArrow___su3ON {
+  transform: rotate(-90deg);
+}
 .pagination__pagination___G0GGL .pagination__arrowIcon___Fwbz0.pagination__rightArrow___DMTd1 {
   transform: rotate(-90deg);
+}
+[dir="rtl"] .pagination__pagination___G0GGL .pagination__arrowIcon___Fwbz0.pagination__rightArrow___DMTd1 {
+  transform: rotate(90deg);
 }
 .pagination__pagination___G0GGL .pagination__pageContainer___c78xQ {
   display: flex;

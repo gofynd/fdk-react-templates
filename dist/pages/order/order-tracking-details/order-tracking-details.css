@@ -23,6 +23,10 @@
 .order-tracking-details__slide-leave-to___KK57x {
   transform: translate(-100%, 0%);
 }
+[dir="rtl"] .order-tracking-details__slide-enter___u9WoI,
+[dir="rtl"] .order-tracking-details__slide-leave-to___KK57x {
+  transform: translate(100%, 0%);
+}
 .order-tracking-details__slide-left-enter-active___MwMOy,
 .order-tracking-details__slide-left-leave-active___n_3db {
   transition: all 0.5s;
@@ -30,6 +34,10 @@
 .order-tracking-details__slide-left-enter___Ve5MR,
 .order-tracking-details__slide-left-leave-to___ZpXe3 {
   transform: translate(200%, 0%);
+}
+[dir="rtl"] .order-tracking-details__slide-left-enter___Ve5MR,
+[dir="rtl"] .order-tracking-details__slide-left-leave-to___ZpXe3 {
+  transform: translate(-200%, 0%);
 }
 .order-tracking-details__slide-down-enter-active___i_SdI,
 .order-tracking-details__slide-down-leave-active___OqCx0 {
@@ -296,12 +304,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .order-tracking-details__caption-medium___JCE5V,
+  .order-tracking-details__captionMedium___IG6Y0 {
+    font-size: 11px;
+  }
+}
 .order-tracking-details__caption-semi-bold___sIGNx,
 .order-tracking-details__captionSemiBold___pMQUZ {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .order-tracking-details__caption-semi-bold___sIGNx,
+  .order-tracking-details__captionSemiBold___pMQUZ {
+    font-size: 11px;
+  }
 }
 .order-tracking-details__btn-link___YrAFb,
 .order-tracking-details__btnLink___fAQyq {
@@ -363,7 +383,7 @@ button {
   height: 63px;
 }
 .order-tracking-details__order-item___hKV9N .order-tracking-details__oder-header___INCzu .order-tracking-details__filter-arrow-up___NnlBu {
-  margin-right: none !important;
+  margin-inline-end: none !important;
 }
 .order-tracking-details__buttons___WTuem {
   display: block !important;
@@ -389,11 +409,11 @@ img::selection {
 }
 .order-tracking-details__mr-5___FXhFB,
 .order-tracking-details__mr5___ESIVc {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .order-tracking-details__mr-2___gHLRB,
 .order-tracking-details__mr2___OXoCB {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .order-tracking-details__py-5___NpkiN,
 .order-tracking-details__py5___XgqEk {
@@ -552,7 +572,7 @@ img::selection {
 }
 .order-tracking-details__view___DwqT2 {
   text-align: center;
-  padding-right: 30px;
+  padding-inline-end: 30px;
   padding-top: 5px;
   cursor: pointer;
 }
@@ -587,12 +607,12 @@ img::selection {
 }
 @media only screen and (max-width: 480px) {
   .order-tracking-details__orderShipments___N9p2M /deep/ .order-tracking-details__shipmentTracking___JqJz5 .order-tracking-details__status___adlON {
-    padding-right: 100px;
+    padding-inline-end: 100px;
   }
 }
 @media only screen and (max-width: 480px) {
   .order-tracking-details__orderShipments___N9p2M /deep/ .order-tracking-details__shipmentTracking___JqJz5 .order-tracking-details__status___adlON .order-tracking-details__info___ymJVE {
-    right: 15px;
+    inset-inline-end: 15px;
   }
 }
 .order-tracking-details__loaderText____xM3Z {
@@ -613,7 +633,7 @@ img::selection {
   border: 1px solid #eeeeee;
 }
 .order-tracking-details__orderData___YWVrp .order-tracking-details__track___tAq7W {
-  margin-left: 20px;
+  margin-inline-start: 20px;
 }
 .order-tracking-details__orderData___YWVrp .order-tracking-details__secondaryInput___hE5gY {
   margin: 0px;
@@ -629,7 +649,7 @@ img::selection {
   justify-content: center;
   align-items: center;
   color: var(--errorText, #b24141);
-  margin-left: 20px;
+  margin-inline-start: 20px;
   visibility: hidden;
   text-transform: uppercase;
 }
@@ -688,6 +708,10 @@ img::selection {
 .empty-state__slide-leave-to___BGL07 {
   transform: translate(-100%, 0%);
 }
+[dir="rtl"] .empty-state__slide-enter___WPCIO,
+[dir="rtl"] .empty-state__slide-leave-to___BGL07 {
+  transform: translate(100%, 0%);
+}
 .empty-state__slide-left-enter-active___faIal,
 .empty-state__slide-left-leave-active___WJ60Z {
   transition: all 0.5s;
@@ -695,6 +719,10 @@ img::selection {
 .empty-state__slide-left-enter___bvIjF,
 .empty-state__slide-left-leave-to___DTEWa {
   transform: translate(200%, 0%);
+}
+[dir="rtl"] .empty-state__slide-left-enter___bvIjF,
+[dir="rtl"] .empty-state__slide-left-leave-to___DTEWa {
+  transform: translate(-200%, 0%);
 }
 .empty-state__slide-down-enter-active___Y19hM,
 .empty-state__slide-down-leave-active___YECS1 {
@@ -961,12 +989,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .empty-state__caption-medium___Cj9cn,
+  .empty-state__captionMedium___e0w26 {
+    font-size: 11px;
+  }
+}
 .empty-state__caption-semi-bold___ftnL8,
 .empty-state__captionSemiBold___yK0OI {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .empty-state__caption-semi-bold___ftnL8,
+  .empty-state__captionSemiBold___yK0OI {
+    font-size: 11px;
+  }
 }
 .empty-state__btn-link___PNnk2,
 .empty-state__btnLink___FxbuH {
@@ -1028,7 +1068,7 @@ button {
   height: 63px;
 }
 .empty-state__order-item___hbooi .empty-state__oder-header___XOD31 .empty-state__filter-arrow-up___rPPlQ {
-  margin-right: none !important;
+  margin-inline-end: none !important;
 }
 .empty-state__buttons___Mllxg {
   display: block !important;
@@ -1054,11 +1094,11 @@ img::selection {
 }
 .empty-state__mr-5___t8B92,
 .empty-state__mr5___Fx2yp {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .empty-state__mr-2___oKoMx,
 .empty-state__mr2___Ie3qo {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .empty-state__py-5___wedmM,
 .empty-state__py5___KMhDB {
@@ -1208,9 +1248,9 @@ img::selection {
   overflow: visible;
   margin: auto;
   top: 0;
-  left: 0;
+  inset-inline-start: 0;
   bottom: 0;
-  right: 0;
+  inset-inline-end: 0;
 }
 /* Transparent Overlay */
 .loader__loading___r6ySa:before {
@@ -1218,7 +1258,7 @@ img::selection {
   display: block;
   position: fixed;
   top: 0;
-  left: 0;
+  inset-inline-start: 0;
   width: 100%;
   height: 100%;
   background: radial-gradient(rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.8));
@@ -1317,7 +1357,7 @@ img::selection {
 .loader__page-loader-container___jJHee {
   position: fixed;
   top: 0;
-  left: 0;
+  inset-inline-start: 0;
   width: 100%;
   background: rgba(0, 0, 0, 0.1);
   display: flex;
@@ -1335,7 +1375,7 @@ img::selection {
   width: 50px;
   height: 50px;
   animation: loader__spin___omoke 2s linear infinite;
-  margin-left: 10%;
+  margin-inline-start: 10%;
 }
 @keyframes loader__spin___omoke {
   0% {
@@ -1346,7 +1386,7 @@ img::selection {
   }
 }
 .loader__page-loader-container___jJHee p {
-  margin-left: 10px;
+  margin-inline-start: 10px;
   font-weight: bold;
   color: #333;
   /* Dark grey */
@@ -1377,6 +1417,10 @@ img::selection {
 .order-shipment__slide-leave-to___IBRgv {
   transform: translate(-100%, 0%);
 }
+[dir="rtl"] .order-shipment__slide-enter___UM2mw,
+[dir="rtl"] .order-shipment__slide-leave-to___IBRgv {
+  transform: translate(100%, 0%);
+}
 .order-shipment__slide-left-enter-active___XW6Hk,
 .order-shipment__slide-left-leave-active___DOgB7 {
   transition: all 0.5s;
@@ -1384,6 +1428,10 @@ img::selection {
 .order-shipment__slide-left-enter___QWXeU,
 .order-shipment__slide-left-leave-to___Ks6PF {
   transform: translate(200%, 0%);
+}
+[dir="rtl"] .order-shipment__slide-left-enter___QWXeU,
+[dir="rtl"] .order-shipment__slide-left-leave-to___Ks6PF {
+  transform: translate(-200%, 0%);
 }
 .order-shipment__slide-down-enter-active___cbNim,
 .order-shipment__slide-down-leave-active___rvcBx {
@@ -1650,12 +1698,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .order-shipment__caption-medium___iVsKd,
+  .order-shipment__captionMedium___heY5O {
+    font-size: 11px;
+  }
+}
 .order-shipment__caption-semi-bold___GDTDo,
 .order-shipment__captionSemiBold___QfcUW {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .order-shipment__caption-semi-bold___GDTDo,
+  .order-shipment__captionSemiBold___QfcUW {
+    font-size: 11px;
+  }
 }
 .order-shipment__btn-link___tRzON,
 .order-shipment__btnLink___tclr2 {
@@ -1717,7 +1777,7 @@ button {
   height: 63px;
 }
 .order-shipment__order-item___g0iIi .order-shipment__oder-header___VYM_B .order-shipment__filter-arrow-up___UAxk3 {
-  margin-right: none !important;
+  margin-inline-end: none !important;
 }
 .order-shipment__buttons___vYAo_ {
   display: block !important;
@@ -1743,11 +1803,11 @@ img::selection {
 }
 .order-shipment__mr-5___rzLTi,
 .order-shipment__mr5___lRqcq {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .order-shipment__mr-2___Fa5xI,
 .order-shipment__mr2___y9Ful {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .order-shipment__py-5___R6BD3,
 .order-shipment__py5___vMTwA {
@@ -1853,14 +1913,14 @@ img::selection {
 }
 .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__filter___lnsey {
   position: absolute;
-  right: 20px;
+  inset-inline-end: 20px;
 }
 .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__filterArrowUp___g46yt {
-  margin-left: auto;
+  margin-inline-start: auto;
   transform: rotate(180deg);
 }
 .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__filterArrowDown___XfgoC {
-  margin-left: auto;
+  margin-inline-start: auto;
 }
 .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__bold___YKz_e {
   font-weight: 700;
@@ -1907,11 +1967,11 @@ img::selection {
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentLeft___o0Q0q #order-shipment__total-item___SOgWJ {
   text-align: center;
   position: relative;
-  float: right;
+  float: inline-end;
   background: #4242ad;
   color: white;
   top: -40px;
-  left: -10px;
+  inset-inline-start: -10px;
   border-radius: 50%;
   width: 35px;
   height: 35px;
@@ -2014,15 +2074,15 @@ img::selection {
   cursor: pointer;
 }
 .order-shipment__orderItem____zenT .order-shipment__buttons___vYAo_ .order-shipment__ordercheckout___m3RkW .order-shipment__reorderIcon___gHoWM {
-  margin-right: 10px;
+  margin-inline-end: 10px;
   position: relative;
   top: -2px;
 }
 .order-shipment__orderItem____zenT .order-shipment__showAccordionBody___KPdMs {
-  visibility: visible;
+  display: block;
 }
 .order-shipment__orderItem____zenT .order-shipment__hideAccordionBody___IOXsZ {
-  visibility: hidden;
+  display: none;
 }
 
 .shipment-item__slide-fade-enter-active___PZcYX,
@@ -2050,6 +2110,10 @@ img::selection {
 .shipment-item__slide-leave-to___NIz8a {
   transform: translate(-100%, 0%);
 }
+[dir="rtl"] .shipment-item__slide-enter___B3SnY,
+[dir="rtl"] .shipment-item__slide-leave-to___NIz8a {
+  transform: translate(100%, 0%);
+}
 .shipment-item__slide-left-enter-active___TEV__,
 .shipment-item__slide-left-leave-active___jt9mv {
   transition: all 0.5s;
@@ -2057,6 +2121,10 @@ img::selection {
 .shipment-item__slide-left-enter___jbfcJ,
 .shipment-item__slide-left-leave-to___i8BW6 {
   transform: translate(200%, 0%);
+}
+[dir="rtl"] .shipment-item__slide-left-enter___jbfcJ,
+[dir="rtl"] .shipment-item__slide-left-leave-to___i8BW6 {
+  transform: translate(-200%, 0%);
 }
 .shipment-item__slide-down-enter-active___dr5wY,
 .shipment-item__slide-down-leave-active___RfkIx {
@@ -2323,12 +2391,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .shipment-item__caption-medium___MXqan,
+  .shipment-item__captionMedium___NjJG7 {
+    font-size: 11px;
+  }
+}
 .shipment-item__caption-semi-bold___UaKSI,
 .shipment-item__captionSemiBold___gV1Lp {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .shipment-item__caption-semi-bold___UaKSI,
+  .shipment-item__captionSemiBold___gV1Lp {
+    font-size: 11px;
+  }
 }
 .shipment-item__btn-link___ljHOl,
 .shipment-item__btnLink___b0uFd {
@@ -2390,7 +2470,7 @@ button {
   height: 63px;
 }
 .shipment-item__order-item___Zi8cU .shipment-item__oder-header___XlTlI .shipment-item__filter-arrow-up___kWlD5 {
-  margin-right: none !important;
+  margin-inline-end: none !important;
 }
 .shipment-item__buttons___ah83q {
   display: block !important;
@@ -2416,11 +2496,11 @@ img::selection {
 }
 .shipment-item__mr-5___f1mzr,
 .shipment-item__mr5___I5hrj {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .shipment-item__mr-2___y7vtV,
 .shipment-item__mr2___xCdhl {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .shipment-item__py-5___WQTnx,
 .shipment-item__py5___QqzuB {
@@ -2586,7 +2666,7 @@ img::selection {
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__margin___aoRFj {
   color: var(--errorText, #b24141);
-  margin-left: 10px;
+  margin-inline-start: 10px;
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__total___j4dLu {
   display: flex;
@@ -2594,10 +2674,10 @@ img::selection {
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__total___j4dLu .shipment-item__amt___LG95E {
   color: #41434c;
-  margin-right: 10px;
+  margin-inline-end: 10px;
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__total___j4dLu .shipment-item__delivery-at___ZUUCz {
-  margin-left: 5px;
+  margin-inline-start: 5px;
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__effectivePrice___Kqia8 {
   font-weight: 500;
@@ -2633,6 +2713,10 @@ img::selection {
 .shipment-tracking__slide-leave-to___QnAYs {
   transform: translate(-100%, 0%);
 }
+[dir="rtl"] .shipment-tracking__slide-enter___QJTn3,
+[dir="rtl"] .shipment-tracking__slide-leave-to___QnAYs {
+  transform: translate(100%, 0%);
+}
 .shipment-tracking__slide-left-enter-active___XnxEE,
 .shipment-tracking__slide-left-leave-active___gIPs6 {
   transition: all 0.5s;
@@ -2640,6 +2724,10 @@ img::selection {
 .shipment-tracking__slide-left-enter___xMh2k,
 .shipment-tracking__slide-left-leave-to___viZzU {
   transform: translate(200%, 0%);
+}
+[dir="rtl"] .shipment-tracking__slide-left-enter___xMh2k,
+[dir="rtl"] .shipment-tracking__slide-left-leave-to___viZzU {
+  transform: translate(-200%, 0%);
 }
 .shipment-tracking__slide-down-enter-active___nXLkj,
 .shipment-tracking__slide-down-leave-active___XMQAQ {
@@ -2906,12 +2994,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .shipment-tracking__caption-medium___pthjN,
+  .shipment-tracking__captionMedium___s9jz3 {
+    font-size: 11px;
+  }
+}
 .shipment-tracking__caption-semi-bold___H_RVN,
 .shipment-tracking__captionSemiBold___TTyHu {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .shipment-tracking__caption-semi-bold___H_RVN,
+  .shipment-tracking__captionSemiBold___TTyHu {
+    font-size: 11px;
+  }
 }
 .shipment-tracking__btn-link___P77hT,
 .shipment-tracking__btnLink___YL9mX {
@@ -2973,7 +3073,7 @@ button {
   height: 63px;
 }
 .shipment-tracking__order-item___eHb07 .shipment-tracking__oder-header___Jz6ad .shipment-tracking__filter-arrow-up___Yh3A5 {
-  margin-right: none !important;
+  margin-inline-end: none !important;
 }
 .shipment-tracking__buttons___yC_Od {
   display: block !important;
@@ -2999,11 +3099,11 @@ img::selection {
 }
 .shipment-tracking__mr-5___fxhoW,
 .shipment-tracking__mr5___DQRl3 {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .shipment-tracking__mr-2___aTSzF,
 .shipment-tracking__mr2___gHYdd {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .shipment-tracking__py-5___kE_oS,
 .shipment-tracking__py5___PvwvP {
@@ -3141,7 +3241,7 @@ img::selection {
 }
 .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__status___B417y .shipment-tracking__info___KBL6j {
   position: absolute;
-  right: 20px;
+  inset-inline-end: 20px;
   text-align: center;
   color: #ffffff;
   padding: 10px;
@@ -3154,7 +3254,7 @@ img::selection {
   opacity: 0.5;
 }
 .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__trackInfo___A5RXX {
-  margin-left: 20px;
+  margin-inline-start: 20px;
 }
 .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__trackInfo___A5RXX .shipment-tracking__boldsm___aDLPp {
   font-weight: 700;
@@ -3183,7 +3283,7 @@ img::selection {
   width: 100%;
 }
 .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__dropdownArrow___m8GIu {
-  margin-left: auto;
+  margin-inline-start: auto;
 }
 .shipment-tracking__trackingContainer___tHFOQ .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__title___BMsCR {
   font-weight: bold;
@@ -3226,7 +3326,7 @@ img::selection {
   cursor: pointer;
   padding: 15px 10px;
   border-top: 1px solid #eeeeee;
-  border-right: 1px solid #eeeeee;
+  border-inline-end: 1px solid #eeeeee;
   text-align: center;
   align-items: center;
   font-size: 14px;
@@ -3261,6 +3361,10 @@ img::selection {
 .shipment-breakup__slide-leave-to___jGpu0 {
   transform: translate(-100%, 0%);
 }
+[dir="rtl"] .shipment-breakup__slide-enter___Xn6RL,
+[dir="rtl"] .shipment-breakup__slide-leave-to___jGpu0 {
+  transform: translate(100%, 0%);
+}
 .shipment-breakup__slide-left-enter-active___hNZLC,
 .shipment-breakup__slide-left-leave-active___j2L2p {
   transition: all 0.5s;
@@ -3268,6 +3372,10 @@ img::selection {
 .shipment-breakup__slide-left-enter___K5l0R,
 .shipment-breakup__slide-left-leave-to___IZcPB {
   transform: translate(200%, 0%);
+}
+[dir="rtl"] .shipment-breakup__slide-left-enter___K5l0R,
+[dir="rtl"] .shipment-breakup__slide-left-leave-to___IZcPB {
+  transform: translate(-200%, 0%);
 }
 .shipment-breakup__slide-down-enter-active___tYqeK,
 .shipment-breakup__slide-down-leave-active___sc1qz {
@@ -3534,12 +3642,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .shipment-breakup__caption-medium___eJwty,
+  .shipment-breakup__captionMedium___ZXLI8 {
+    font-size: 11px;
+  }
+}
 .shipment-breakup__caption-semi-bold___gAeeK,
 .shipment-breakup__captionSemiBold___lFZ3J {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .shipment-breakup__caption-semi-bold___gAeeK,
+  .shipment-breakup__captionSemiBold___lFZ3J {
+    font-size: 11px;
+  }
 }
 .shipment-breakup__btn-link___SPzjH,
 .shipment-breakup__btnLink___KEJX3 {
@@ -3601,7 +3721,7 @@ button {
   height: 63px;
 }
 .shipment-breakup__order-item___n36hB .shipment-breakup__oder-header___lFLXO .shipment-breakup__filter-arrow-up___qDNSS {
-  margin-right: none !important;
+  margin-inline-end: none !important;
 }
 .shipment-breakup__buttons___ZOupI {
   display: block !important;
@@ -3627,11 +3747,11 @@ img::selection {
 }
 .shipment-breakup__mr-5___Jb0dL,
 .shipment-breakup__mr5___UpWoT {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .shipment-breakup__mr-2___AzdRX,
 .shipment-breakup__mr2___ppqQe {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .shipment-breakup__py-5___Qrnyv,
 .shipment-breakup__py5___Ipw8f {
@@ -3755,7 +3875,7 @@ img::selection {
 }
 .shipment-breakup__billing___FTdqB .shipment-breakup__values___Ji3lV {
   position: absolute;
-  right: 30px;
+  inset-inline-end: 30px;
   font-weight: 400;
 }
 .shipment-breakup__billing___FTdqB .shipment-breakup__total___X7nmQ {
@@ -3776,8 +3896,8 @@ img::selection {
 }
 .shipment-breakup__paymentDetails___IT5XS .shipment-breakup__rightAlign___EBUte {
   position: relative;
-  margin-left: auto;
-  margin-right: 10px;
-  right: 0px;
+  margin-inline-start: auto;
+  margin-inline-end: 10px;
+  inset-inline-end: 0px;
 }
 

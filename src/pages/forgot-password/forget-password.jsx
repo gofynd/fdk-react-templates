@@ -2,14 +2,16 @@ import React, { useId, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { validateEmailField } from "../../helper/utils";
 import * as styles from "./forget-password.less";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function ForgetPassword({
   isFormSubmitSuccess = false,
   error = null,
-  onForgotPasswordSubmit = () => {},
-  onBackToLoginClick = () => {},
-  onResendEmailClick = () => {},
+  onForgotPasswordSubmit = () => { },
+  onBackToLoginClick = () => { },
+  onResendEmailClick = () => { },
 }) {
+  const { t } = useGlobalTranslation("translation");
   const emailInputId = useId();
 
   const {
@@ -31,13 +33,13 @@ function ForgetPassword({
 
   return (
     <div>
-      <h1 className={styles.forgotPasswordTitle}>Reset Your Password</h1>
+      <h1 className={styles.forgotPasswordTitle}>{t("resource.auth.reset_your_password")}</h1>
       {!isFormSubmitSuccess ? (
         <div className={styles.forgotPasswordWrapper}>
           <form onSubmit={handleSubmit(onForgotPasswordSubmit)}>
             <div className={styles.forgotPasswordInputGroup}>
               <label className={styles.loginInputTitle} htmlFor={emailInputId}>
-                Email
+                {t("resource.common.email")}
               </label>
               <input
                 id={emailInputId}
@@ -45,7 +47,7 @@ function ForgetPassword({
                 {...register("email", {
                   validate: (value) =>
                     validateEmailField(value) ||
-                    "Please enter valid email address",
+                    t("resource.common.please_enter_valid_email_address"),
                 })}
               />
               {errors.email && (
@@ -67,24 +69,24 @@ function ForgetPassword({
               disabled={!isValid}
               type="submit"
             >
-              RESET PASSWORD
+              {t("resource.auth.reset_password_caps")}
             </button>
           </form>
           <button className={styles.loginLink} onClick={onBackToLoginClick}>
-            Back to login
+            {t("resource.auth.back_to_login")}
           </button>
           {/* Extension slot: below_reset_button */}
         </div>
       ) : (
         <div className={styles.submitWrapper}>
           <p className={styles.submitSuccessMsg}>
-            Reset Link has been sent to your primary email address.
+            {t("resource.common.reset_link_sent")}
           </p>
           <button
             className={styles.resendBtn}
             onClick={() => onResendEmailClick(getValues())}
           >
-            RESEND EMAIL
+            {t("resource.auth.resend_email")}
           </button>
         </div>
       )}

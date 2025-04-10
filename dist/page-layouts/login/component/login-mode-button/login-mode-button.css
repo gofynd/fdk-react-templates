@@ -23,6 +23,10 @@
 .login-mode-button__slide-leave-to___GfJMD {
   transform: translate(-100%, 0%);
 }
+[dir="rtl"] .login-mode-button__slide-enter___iBOue,
+[dir="rtl"] .login-mode-button__slide-leave-to___GfJMD {
+  transform: translate(100%, 0%);
+}
 .login-mode-button__slide-left-enter-active___BCTwN,
 .login-mode-button__slide-left-leave-active___isrpx {
   transition: all 0.5s;
@@ -30,6 +34,10 @@
 .login-mode-button__slide-left-enter___tM2v0,
 .login-mode-button__slide-left-leave-to___iglej {
   transform: translate(200%, 0%);
+}
+[dir="rtl"] .login-mode-button__slide-left-enter___tM2v0,
+[dir="rtl"] .login-mode-button__slide-left-leave-to___iglej {
+  transform: translate(-200%, 0%);
 }
 .login-mode-button__slide-down-enter-active___P7bu9,
 .login-mode-button__slide-down-leave-active___ECnTn {
@@ -296,12 +304,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .login-mode-button__caption-medium___sMaLa,
+  .login-mode-button__captionMedium___Bnrn4 {
+    font-size: 11px;
+  }
+}
 .login-mode-button__caption-semi-bold____qWoY,
 .login-mode-button__captionSemiBold___R3HRn {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .login-mode-button__caption-semi-bold____qWoY,
+  .login-mode-button__captionSemiBold___R3HRn {
+    font-size: 11px;
+  }
 }
 .login-mode-button__btn-link___PTaPz,
 .login-mode-button__btnLink___dovNG {
@@ -363,7 +383,7 @@ button {
   height: 63px;
 }
 .login-mode-button__order-item____bvEb .login-mode-button__oder-header___q32Nz .login-mode-button__filter-arrow-up___m_Nqb {
-  margin-right: none !important;
+  margin-inline-end: none !important;
 }
 .login-mode-button__buttons___U3lSn {
   display: block !important;
@@ -389,11 +409,11 @@ img::selection {
 }
 .login-mode-button__mr-5___f_aDn,
 .login-mode-button__mr5___UHJOX {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .login-mode-button__mr-2___tzSde,
 .login-mode-button__mr2___NgLmw {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .login-mode-button__py-5___eXLUS,
 .login-mode-button__py5___kNtbB {
@@ -494,7 +514,7 @@ img::selection {
   flex: 0 0 24px;
 }
 .login-mode-button__loginModeBtn___BqUzp .login-mode-button__loginModeLabel___BYT3_ {
-  margin-right: 24px;
+  margin-inline-end: 24px;
   color: var(--textHeading, #26201a);
   font-size: 14px;
   font-style: normal;

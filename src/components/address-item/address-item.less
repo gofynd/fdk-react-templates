@@ -24,13 +24,13 @@
         font-style: normal;
         font-weight: 600;
         font-size: 14px;
-        margin-right: 8px;
+        margin-inline-end: 8px;
         align-self: center;
         line-height: 140%;
         @media @mobile {
           font-size: 12px;
-          margin-right: 4px;
-          margin-left: 4px;
+          margin-inline-end: 4px;
+          margin-inline-start: 4px;
         }
       }
 
@@ -55,6 +55,8 @@
     margin-top: 8px;
     line-height: 140%;
     color: var(--textBody);
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
   .addressMid,
   .phEnd {

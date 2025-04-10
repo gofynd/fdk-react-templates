@@ -15,14 +15,16 @@ import React, { useState, useEffect } from "react";
 import * as styles from "./sort-modal.less";
 import Modal from "../core/modal/modal";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function SortModal({
   isOpen = true,
   sortList = [],
-  onCloseModalClick = () => {},
-  onResetBtnClick = () => {},
-  onApplyBtnClick = () => {},
+  onCloseModalClick = () => { },
+  onResetBtnClick = () => { },
+  onApplyBtnClick = () => { },
 }) {
+  const { t } = useGlobalTranslation("translation");
   const [selectedSort, setSelectedSort] = useState(() => {
     let selectedItem = sortList?.find((x) => x.is_selected);
     return selectedItem || sortList?.[0];
@@ -42,7 +44,7 @@ function SortModal({
       isOpen={isOpen}
       modalType="right-modal"
       closeDialog={onCloseModalClick}
-      title="Sort by"
+      title={t("resource.facets.sort_by")}
     >
       <div className={styles.contentWrapper}>
         <div className={styles.modalContent}>
@@ -68,13 +70,13 @@ function SortModal({
         </div>
         <div className={styles.modalFooter}>
           <button className={styles.resetBtn} onClick={onResetBtnClick}>
-            Reset
+            {t("resource.facets.reset")}
           </button>
           <button
             className={styles.applyBtn}
             onClick={() => onApplyBtnClick(selectedSort)}
           >
-            Apply
+            {t("resource.facets.apply")}
           </button>
         </div>
       </div>

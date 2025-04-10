@@ -5,6 +5,7 @@ import Modal from "../../../components/core/modal/modal";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import StickyPayNow from "./sticky-pay-now/sticky-pay-now";
 import { priceFormatCurrencySymbol } from "../../../helper/utils";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function CardForm({
   cardNumberRef,
@@ -42,7 +43,7 @@ function CardForm({
   isCardValid,
   cardDetailsData,
   isMobile,
-  onPriceDetailsClick = () => {},
+  onPriceDetailsClick = () => { },
   addNewCard,
   isCvvInfo,
   handleCvvInfo,
@@ -50,6 +51,7 @@ function CardForm({
   setCardValidity,
   resetCardValidationErrors,
 }) {
+  const { t } = useGlobalTranslation("translation");
   const isFormatterSet = useRef(false);
 
   useEffect(() => {
@@ -70,10 +72,61 @@ function CardForm({
     </>
   );
 
+  const CvvInfo = () => {
+    return (
+      <div className={styles.cvvInfoContainer}>
+        <div className={styles.cvvInfo}>
+          {!isMobile && isCvvInfo ? (
+            <SvgWrapper
+              svgSrc="paymentTooltipArrow"
+              className={styles.upArrowMark}
+            />
+          ) : (
+            <span
+              onClick={() => handleCvvInfo(false)}
+              className={styles.crossMobile}
+            >
+              {" "}
+              <SvgWrapper svgSrc="closeBold" />{" "}
+            </span>
+          )}
+          {cardDetailsData &&
+            (!cardDetailsData.card_brand ||
+              (cardDetailsData.card_brand &&
+                cardDetailsData.card_brand !== "American Express")) && (
+              <div className={styles.type}>
+                <p className={styles.title}>{t("resource.checkout.what_is_cvv_number")}</p>
+                <p className={styles.desc}>
+                  {t("resource.checkout.cvv_description")}
+                </p>
+                <div className={styles.cvImage}>
+                  <SvgWrapper svgSrc="non-amex-card-cvv" />
+                </div>
+              </div>
+            )}
+          {cardDetailsData &&
+            (!cardDetailsData.card_brand ||
+              (cardDetailsData.card_brand &&
+                cardDetailsData.card_brand === "American Express")) && (
+              <div className={styles.type}>
+                <p className={styles.title}>{t("resource.checkout.have_american_express_card")}</p>
+                <p className={styles.desc}>
+                  {t("resource.checkout.amex_cvv_description")}
+                </p>
+                <div className={styles.cvImage}>
+                  <SvgWrapper svgSrc="amex-card-cvv" />
+                </div>
+              </div>
+            )}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       <div className={styles.newCard} id="card-validation">
-        <div className={styles.cardInputWrapper}>
+        <div className={`${styles.cardInputWrapper} ${styles.cardNumberBox}`}>
           <input
             placeholder="Card Number*"
             className={`${cardNumberError ? styles.error : ""} ${styles.cardNumber}`}
@@ -118,7 +171,9 @@ function CardForm({
             <div className={styles.formError}>{cardNameError}</div>
           )}
         </div>
-        <div className={styles.cardDateCvvWrapper}>
+        <div
+          className={`${styles.cardDateCvvWrapper} ${!loggedIn ? styles.marginBottom : ""}`}
+        >
           <div className={styles.cardInputWrapper}>
             <IMaskInput
               value={cardExpiryDate}
@@ -168,11 +223,26 @@ function CardForm({
               onChange={handleCvvNumberInput}
               onBlur={validateCvv}
             />
-            <SvgWrapper
-              svgSrc="cvv"
-              className={styles.cvv}
-              onClick={() => handleCvvInfo(true)}
-            />
+            <div
+              className={`${styles.cvvContainer} ${styles.cvv} ${cardCVVError ? styles.cvvError : ""}`}
+              onMouseEnter={() => {
+                if (!isMobile) {
+                  handleCvvInfo(true);
+                }
+              }}
+              onMouseLeave={() => {
+                if (!isMobile) {
+                  handleCvvInfo(false);
+                }
+              }}
+            >
+              <SvgWrapper
+                svgSrc="cvv"
+                className={`${styles.cvv}`}
+                onClick={() => handleCvvInfo(true)}
+              />
+              {!isMobile && isCvvInfo && <CvvInfo />}
+            </div>
             {(cvvNumber || cardCVVError) && (
               <span
                 className={`${styles.inputName} ${cardCVVError ? styles.errorInputName : ""}`}
@@ -257,43 +327,13 @@ function CardForm({
             onClick={() => payUsingCard()}
             disabled={!isCardValid()}
           >
-            PAY {priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue())}
+            {t("resource.common.pay_caps")} {priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue())}
           </button>
         )}
       </div>
-      {isCvvInfo && (
-        <Modal isOpen={isCvvInfo} closeDialog={() => handleCvvInfo(false)}>
-          <div className={styles.cvvInfo}>
-            {cardDetailsData &&
-              (!cardDetailsData.card_brand ||
-                (cardDetailsData.card_brand &&
-                  cardDetailsData.card_brand !== "American Express")) && (
-                <div className={styles.type}>
-                  <p className={styles.title}>What is CVV Number?</p>
-                  <p className={styles.desc}>
-                    It is a 3-digit code on the back of your card.
-                  </p>
-                  <div className={styles.cvImage}>
-                    <SvgWrapper svgSrc="non-amex-card-cvv" />
-                  </div>
-                </div>
-              )}
-            {cardDetailsData &&
-              (!cardDetailsData.card_brand ||
-                (cardDetailsData.card_brand &&
-                  cardDetailsData.card_brand === "American Express")) && (
-                <div className={styles.type}>
-                  <p className={styles.title}>Have American Express Card?</p>
-                  <p className={styles.desc}>
-                    It is a 4-digit number on the front, just above your credit
-                    card number.
-                  </p>
-                  <div className={styles.cvImage}>
-                    <SvgWrapper svgSrc="amex-card-cvv" />
-                  </div>
-                </div>
-              )}
-          </div>
+      {isCvvInfo && isMobile && (
+        <Modal isOpen={isCvvInfo} hideHeader={true}>
+          <CvvInfo />
         </Modal>
       )}
     </>

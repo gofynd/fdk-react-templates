@@ -30,11 +30,14 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      margin-left: auto;
+      margin-inline-start: auto;
       background: none;
       border: none;
       width: 2rem;
       height: 2rem;
+      [dir="rtl"] & {
+        transform: rotate(180deg);
+      }
     }
   }
   .couponIcon {
@@ -86,7 +89,7 @@
       margin-bottom: 16px;
       padding-top: 12px;
       padding-bottom: 12px;
-      padding-left: 24px;
+      padding-inline-start: 24px;
       display: flex;
       align-items: center;
       line-height: 140%;
@@ -101,7 +104,7 @@
       .colorErrorNormal {
         font-size: 12px;
         font-weight: 600;
-        margin-left: 14px;
+        margin-inline-start: 14px;
         color: @ErrorText;
       }
     }
@@ -139,7 +142,7 @@
         padding: 0px 13px;
         cursor: pointer;
         position: absolute;
-        right: 5%;
+        inset-inline-end: 5%;
       }
       .checkBtn:disabled {
         opacity: 0.5;
@@ -154,7 +157,7 @@
       font-weight: 500;
       @media @mobile {
         margin-bottom: 12px;
-        padding-left: 16px;
+        padding-inline-start: 16px;
       }
     }
     .couponList {
@@ -188,8 +191,11 @@
           content: "";
           position: absolute;
           top: 50%;
-          left: 0;
+          inset-inline-start: 0;
           transform: translate(-50%, -50%) rotate(45deg);
+          [dir="rtl"] & {
+            transform: translate(50%, -50%) rotate(-45deg);
+          }
           width: 16px;
           aspect-ratio: 1;
           background: @DialogBackground;
@@ -198,9 +204,12 @@
           border-color: @SuccessText @SuccessText transparent transparent;
         }
         &:after {
-          right: 0;
-          left: auto;
+          inset-inline-end: 0;
+          inset-inline-start: auto;
           transform: translate(50%, -50%) rotate(-135deg);
+          [dir="rtl"] & {
+            transform: translate(-50%, -50%) rotate(135deg);
+          }
         }
       }
       .couponTitle {
@@ -230,7 +239,7 @@
         font-size: 14px;
         font-weight: 600;
         cursor: pointer;
-        margin-left: auto;
+        margin-inline-start: auto;
       }
     }
     .noCouponsAvailable {

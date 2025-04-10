@@ -13,8 +13,10 @@ import React, { useState, useEffect } from "react";
 import * as styles from "./quantity-ctrl.less";
 import SvgWrapper from "../../core/svgWrapper/SvgWrapper";
 import { isNumberKey, isFreeNavigation } from "../../../helper/utils";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function QuantityCtrl({ currquantity, incDecQuantity, changeQty }) {
+  const { t } = useGlobalTranslation("translation");
   const [quantity, setQuantity] = useState(currquantity);
   const [isdisabled, setIsdisabled] = useState(false);
   useEffect(() => {
@@ -42,7 +44,7 @@ function QuantityCtrl({ currquantity, incDecQuantity, changeQty }) {
     <div className={`${styles.qtyControl}`}>
       <button
         type="button"
-        aria-label="Dec Quantity"
+        aria-label={t("resource.order.aria_label_dec_quantity")}
         className={`${styles.operator}`}
         onClick={() => incrDecrQuantity(-1)}
         disabled={isdisabled}
@@ -64,7 +66,7 @@ function QuantityCtrl({ currquantity, incDecQuantity, changeQty }) {
       </div>
       <button
         type="button"
-        aria-label="Inc Quantity"
+        aria-label={t("resource.order.aria_label_inc_quantity")}
         className={`${styles.operator}`}
         onClick={() => incrDecrQuantity(1)}
       >

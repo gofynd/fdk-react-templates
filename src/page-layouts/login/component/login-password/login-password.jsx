@@ -4,14 +4,16 @@ import { checkIfNumber } from "../../../../helper/utils";
 import * as styles from "./login-password.less";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import MobileNumber from "../../../auth/mobile-number/mobile-number";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function loginPassword({
-  loginButtonText = "LOGIN",
+  loginButtonText,
   error = null,
   isForgotPassword = true,
-  onForgotPasswordClick = () => {},
-  onLoginFormSubmit = () => {},
+  onForgotPasswordClick = () => { },
+  onLoginFormSubmit = () => { },
 }) {
+  const { t } = useGlobalTranslation("translation");
   const usernameInputId = useId();
   const passwordInputId = useId();
   const [isPasswordShow, setIsPasswordShow] = useState(false);
@@ -83,7 +85,7 @@ function loginPassword({
       <div className={styles.loginMobileInput}>
         <div className={styles.loginInputGroup}>
           <label className={styles.loginInputTitle} htmlFor={usernameInputId}>
-            Email or Phone
+            {t("resource.auth.login.email_or_phone")}
           </label>
           {!showInputNumber ? (
             <input
@@ -108,7 +110,7 @@ function loginPassword({
                     return true;
                   }
                   return (
-                    value.isValidNumber || "Please enter valid phone number"
+                    value.isValidNumber || t("resource.common.enter_valid_phone_number")
                   );
                 },
               }}
@@ -129,7 +131,7 @@ function loginPassword({
         </div>
         <div className={styles.loginInputGroup}>
           <label className={styles.loginInputTitle} htmlFor={passwordInputId}>
-            Password
+            {t("resource.auth.login.password")}
           </label>
           <input
             id={passwordInputId}
@@ -142,7 +144,7 @@ function loginPassword({
             <button
               className={styles.passwordToggle}
               onClick={togglePasswordDisplay}
-              aria-label={!isPasswordShow ? "Show Password" : "Hide Password"}
+              aria-label={!isPasswordShow ? t("resource.auth.login.show_password") : t("resource.auth.login.hide_password")}
             >
               <SvgWrapper
                 svgSrc={!isPasswordShow ? "show-password" : "hide-password"}
@@ -156,7 +158,7 @@ function loginPassword({
               className={styles.forgotBtn}
               onClick={handleForgotPasswordClick}
             >
-              Forgot Password?
+              {t("resource.auth.login.forgot_password")}
             </button>
           </div>
         )}
@@ -167,7 +169,7 @@ function loginPassword({
       )}
 
       <button className={styles.loginButton} type="submit" disabled={!isValid}>
-        {loginButtonText}
+        {loginButtonText || t("resource.auth.login.login_caps")}
       </button>
     </form>
   );

@@ -21,16 +21,17 @@
 import React from "react";
 import * as styles from "./beneficiary-list-item.less";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function BeneficiaryItem({ beneficiary, selectedBeneficiary, change }) {
+  const { t } = useGlobalTranslation("translation");
   const getTitle = () => {
     return beneficiary.title;
   };
   const getSubtitle = () => {
     return beneficiary.transfer_mode === "bank"
-      ? `Account Details: ${beneficiary.account_holder} | ${
-          beneficiary.account_no
-        } ${beneficiary.bank_name ? `| ${beneficiary.bank_name}` : ""}`
+      ? `${t("resource.order.account_details")}: ${beneficiary.account_holder} | ${beneficiary.account_no
+      } ${beneficiary.bank_name ? `| ${beneficiary.bank_name}` : ""}`
       : beneficiary.subtitle;
   };
 
@@ -43,10 +44,10 @@ function BeneficiaryItem({ beneficiary, selectedBeneficiary, change }) {
         >
           {(!selectedBeneficiary ||
             selectedBeneficiary.beneficiary_id !==
-              beneficiary.beneficiary_id) && <SvgWrapper svgSrc="regular" />}
+            beneficiary.beneficiary_id) && <SvgWrapper svgSrc="regular" />}
           {selectedBeneficiary &&
             selectedBeneficiary.beneficiary_id ===
-              beneficiary.beneficiary_id && (
+            beneficiary.beneficiary_id && (
               <SvgWrapper svgSrc="radio-selected" />
             )}
           <div className={`${styles.text}`}>
@@ -62,7 +63,7 @@ function BeneficiaryItem({ beneficiary, selectedBeneficiary, change }) {
               <div
                 className={`${styles.beneficiarySubtitle} ${styles.regularxs}`}
               >
-                IFSC Code : {beneficiary.ifsc_code}
+                {t("resource.common.ifsc_code")} : {beneficiary.ifsc_code}
               </div>
             )}
           </div>

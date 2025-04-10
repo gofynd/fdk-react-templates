@@ -4,12 +4,14 @@ import * as styles from "./filter-list.less";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import CustomRangeSlider from "../../../../components/range-slider/range-slider";
 import { isRunningOnClient } from "../../../../helper/utils";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function FilterList({
   filter,
   isCollapsedView = true,
-  onFilterUpdate = () => {},
+  onFilterUpdate = () => { },
 }) {
+  const { t } = useGlobalTranslation("translation");
   const [searchText, setSearchText] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
@@ -125,9 +127,8 @@ function FilterList({
 
   return (
     <div
-      className={`${styles["filter__list"]} ${
-        !filter.isOpen ? styles.open : ""
-      }`}
+      className={`${styles["filter__list"]} ${!filter.isOpen ? styles.open : ""
+        }`}
     >
       {/* Multivalued filter */}
       {filter.key.kind === "multivalued" && (
@@ -139,7 +140,7 @@ function FilterList({
               <input
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
-                placeholder="Search"
+                placeholder={t("resource.facets.search")}
                 className={`${styles.text}`}
               />
               <SvgWrapper
@@ -175,19 +176,17 @@ function FilterList({
                     {filter.key.name === "primary_color" && (
                       <div
                         className={`
-                  ${styles["filter__item--color"]} ${
-                    filterItem.value.toLowerCase() === "none"
-                      ? styles.multiIcon
-                      : ""
-                  }
+                  ${styles["filter__item--color"]} ${filterItem.value.toLowerCase() === "none"
+                            ? styles.multiIcon
+                            : ""
+                          }
                 `}
                         style={{ backgroundColor: `#${filterItem.value}` }}
                       ></div>
                     )}
                     <div
-                      className={`${styles["filter__item--value"]} ${
-                        styles["caption-normal"]
-                      } ${isFilterSelected(filterItem) ? styles.active : ""}`}
+                      className={`${styles["filter__item--value"]} ${styles["caption-normal"]
+                        } ${isFilterSelected(filterItem) ? styles.active : ""}`}
                     >
                       {filterItem.display}
                     </div>
@@ -207,13 +206,12 @@ function FilterList({
               onClick={expandFilter}
             >
               <span className={styles.label}>
-                {isExpanded && <span>View Less</span>}
-                {!isExpanded && <span>View More</span>}
+                {isExpanded && <span>{t("resource.facets.view_less")}</span>}
+                {!isExpanded && <span>{t("resource.facets.view_more")}</span>}
               </span>
               <SvgWrapper
-                className={`${styles["arrow-icon"]} ${
-                  isExpanded ? styles.expanded : ""
-                }`}
+                className={`${styles["arrow-icon"]} ${isExpanded ? styles.expanded : ""
+                  }`}
                 svgSrc="arrow-down"
               ></SvgWrapper>
             </div>
@@ -267,11 +265,9 @@ function FilterList({
                 </div>
 
                 <div
-                  className={`${styles["filter__item--value"]} ${
-                    styles["caption-normal"]
-                  } ${
-                    filter.values[0].is_selected == true ? styles.active : ""
-                  }`}
+                  className={`${styles["filter__item--value"]} ${styles["caption-normal"]
+                    } ${filter.values[0].is_selected == true ? styles.active : ""
+                    }`}
                 >
                   {filter.values[0].display}
                 </div>
@@ -296,7 +292,7 @@ function FilterList({
               <input
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
-                placeholder="Search"
+                placeholder={t("resource.facets.search")}
                 className={styles["search__input"]}
               />
             </div>
@@ -304,9 +300,8 @@ function FilterList({
               {Object.keys(groupedValues).map((alphabet, index) => (
                 <li
                   key={`alphabet-${index}`}
-                  className={`${
-                    groupedValues[alphabet].length === 0 ? styles.disabled : ""
-                  }`}
+                  className={`${groupedValues[alphabet].length === 0 ? styles.disabled : ""
+                    }`}
                 >
                   <a href={`#${alphabet}`}>{alphabet}</a>
                 </li>
@@ -345,11 +340,9 @@ function FilterList({
                           />
                         </div>
                         <div
-                          className={`${styles["filter__item--value"]} ${
-                            styles["caption-normal"]
-                          } ${
-                            isFilterSelected(filterItem) ? styles.active : ""
-                          }`}
+                          className={`${styles["filter__item--value"]} ${styles["caption-normal"]
+                            } ${isFilterSelected(filterItem) ? styles.active : ""
+                            }`}
                         >
                           {filterItem.display}
                         </div>

@@ -23,6 +23,10 @@
 .listing-description__slide-leave-to___DXVTQ {
   transform: translate(-100%, 0%);
 }
+[dir="rtl"] .listing-description__slide-enter___m70XZ,
+[dir="rtl"] .listing-description__slide-leave-to___DXVTQ {
+  transform: translate(100%, 0%);
+}
 .listing-description__slide-left-enter-active___GuLW9,
 .listing-description__slide-left-leave-active___2rzTH {
   transition: all 0.5s;
@@ -30,6 +34,10 @@
 .listing-description__slide-left-enter___gaG3Y,
 .listing-description__slide-left-leave-to___pdHZG {
   transform: translate(200%, 0%);
+}
+[dir="rtl"] .listing-description__slide-left-enter___gaG3Y,
+[dir="rtl"] .listing-description__slide-left-leave-to___pdHZG {
+  transform: translate(-200%, 0%);
 }
 .listing-description__slide-down-enter-active___PbRAr,
 .listing-description__slide-down-leave-active___RYitF {
@@ -296,12 +304,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .listing-description__caption-medium___W4MXk,
+  .listing-description__captionMedium___SNge0 {
+    font-size: 11px;
+  }
+}
 .listing-description__caption-semi-bold___dfN2m,
 .listing-description__captionSemiBold___MiV23 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .listing-description__caption-semi-bold___dfN2m,
+  .listing-description__captionSemiBold___MiV23 {
+    font-size: 11px;
+  }
 }
 .listing-description__btn-link___Zae4w,
 .listing-description__btnLink___YOTpf {
@@ -363,7 +383,7 @@ button {
   height: 63px;
 }
 .listing-description__order-item___UBApb .listing-description__oder-header___K2sNg .listing-description__filter-arrow-up___Epv2n {
-  margin-right: none !important;
+  margin-inline-end: none !important;
 }
 .listing-description__buttons___PXd05 {
   display: block !important;
@@ -389,11 +409,11 @@ img::selection {
 }
 .listing-description__mr-5___Z5PmL,
 .listing-description__mr5___p_tyf {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .listing-description__mr-2___x37Ko,
 .listing-description__mr2___DyFdb {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .listing-description__py-5___FMOgo,
 .listing-description__py5___BPf72 {
@@ -505,6 +525,11 @@ img::selection {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+@media only screen and (max-width: 480px) {
+  .listing-description__descriptionWrapper___tzE5e .listing-description__descriptionContent___nGHJ_ {
+    font-size: 11px;
+  }
 }
 .listing-description__descriptionWrapper___tzE5e .listing-description__actionBtn___Xw4a9 {
   font-weight: 500;

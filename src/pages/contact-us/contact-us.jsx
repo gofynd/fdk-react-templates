@@ -8,14 +8,16 @@ import FyButton from "../../components/core/fy-button/fy-button";
 import FyImage from "../../components/core/fy-image/fy-image";
 import { isRunningOnClient } from "../../helper/utils";
 import { detectMobileWidth } from "../../helper/utils";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function ContactSupport({
   contactInfo = "",
   supportInfo = "",
-  handleSubmitForm = () => {},
+  handleSubmitForm = () => { },
   pageConfig = "",
   SocailMedia = () => <></>,
 }) {
+  const { t } = useGlobalTranslation("translation");
   const {
     handleSubmit,
     formState: { errors },
@@ -46,18 +48,18 @@ function ContactSupport({
   const inputFields = [
     {
       type: "text",
-      label: "Full Name",
+      label: t("resource.common.full_name"),
       name: "name",
       multiline: false,
       showAsterik: true,
       required: true,
       error: errors?.name,
       pattern: null,
-      errorMessage: "Please enter your name",
+      errorMessage: t("resource.contact_us.please_enter_your_name"),
     },
     {
       type: "number",
-      label: "Phone Number",
+      label: t("resource.common.phone_number"),
       name: "phone",
       multiline: false,
       showAsterik: true,
@@ -65,13 +67,13 @@ function ContactSupport({
       error: errors?.phone,
       pattern: {
         value: /^[0-9]{10}$/,
-        message: "Invalid Mobile Number",
+        message: t("resource.common.invalid_mobile_number"),
       },
-      errorMessage: errors?.phone?.message || "Invalid Mobile Number",
+      errorMessage: errors?.phone?.message || t("resource.common.invalid_mobile_number"),
     },
     {
       type: "email",
-      label: "Email",
+      label: t("resource.common.email"),
       name: "email",
       multiline: false,
       showAsterik: true,
@@ -79,19 +81,19 @@ function ContactSupport({
       error: errors?.email,
       pattern: {
         value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-        message: "Invalid email address",
+        message: t("resource.common.invalid_email_address"),
       },
-      errorMessage: errors?.email?.message || "Invalid email address",
+      errorMessage: errors?.email?.message || t("resource.common.invalid_email_address"),
     },
     {
       type: "textarea",
-      label: "Message",
+      label: t("resource.contact_us.message"),
       name: "comment",
       showAsterik: false,
       required: false,
       error: errors?.comment,
       pattern: null,
-      errorMessage: "Please enter your comment",
+      errorMessage: t("resource.contact_us.please_enter_your_comment"),
       multiline: true,
     },
   ];
@@ -117,7 +119,7 @@ function ContactSupport({
           className={`${styles.contact_container} ${!isLoading && !isMobile && pageConfig?.image_desktop && styles.onImageContainer}`}
         >
           <div className={`${styles.flex_item}`}>
-            <h3 className={styles.fontHeader}>Contact Us</h3>
+            <h3 className={styles.fontHeader}>{t("resource.common.contact_us")}</h3>
             <div className={styles.listItems}>
               {pageConfig?.show_address &&
                 contactInfo?.address?.address_line[0].length > 0 && (
@@ -129,8 +131,8 @@ function ContactSupport({
                       {contactInfo?.address?.address_line?.map((el, i) => (
                         <span key={i}>{el}</span>
                       ))}
-                      <span>{` ${contactInfo?.address?.city}`}</span>
-                      <span>,{` ${contactInfo?.address?.pincode}`}</span>
+                      {contactInfo?.address?.city && <span>{` ${contactInfo?.address?.city}`}</span>}
+                      {contactInfo?.address?.pincode && <span>,{` ${contactInfo?.address?.pincode}`}</span>}
                     </div>
                   </div>
                 )}
@@ -218,7 +220,7 @@ function ContactSupport({
                   fullWidth={true}
                   type="submit"
                 >
-                  SEND MESSAGE
+                  {t("resource.contact_us.send_message")}
                 </FyButton>
               </div>
             </form>

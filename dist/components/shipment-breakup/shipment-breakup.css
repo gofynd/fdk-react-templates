@@ -23,6 +23,10 @@
 .shipment-breakup__slide-leave-to___jGpu0 {
   transform: translate(-100%, 0%);
 }
+[dir="rtl"] .shipment-breakup__slide-enter___Xn6RL,
+[dir="rtl"] .shipment-breakup__slide-leave-to___jGpu0 {
+  transform: translate(100%, 0%);
+}
 .shipment-breakup__slide-left-enter-active___hNZLC,
 .shipment-breakup__slide-left-leave-active___j2L2p {
   transition: all 0.5s;
@@ -30,6 +34,10 @@
 .shipment-breakup__slide-left-enter___K5l0R,
 .shipment-breakup__slide-left-leave-to___IZcPB {
   transform: translate(200%, 0%);
+}
+[dir="rtl"] .shipment-breakup__slide-left-enter___K5l0R,
+[dir="rtl"] .shipment-breakup__slide-left-leave-to___IZcPB {
+  transform: translate(-200%, 0%);
 }
 .shipment-breakup__slide-down-enter-active___tYqeK,
 .shipment-breakup__slide-down-leave-active___sc1qz {
@@ -296,12 +304,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .shipment-breakup__caption-medium___eJwty,
+  .shipment-breakup__captionMedium___ZXLI8 {
+    font-size: 11px;
+  }
+}
 .shipment-breakup__caption-semi-bold___gAeeK,
 .shipment-breakup__captionSemiBold___lFZ3J {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .shipment-breakup__caption-semi-bold___gAeeK,
+  .shipment-breakup__captionSemiBold___lFZ3J {
+    font-size: 11px;
+  }
 }
 .shipment-breakup__btn-link___SPzjH,
 .shipment-breakup__btnLink___KEJX3 {
@@ -363,7 +383,7 @@ button {
   height: 63px;
 }
 .shipment-breakup__order-item___n36hB .shipment-breakup__oder-header___lFLXO .shipment-breakup__filter-arrow-up___qDNSS {
-  margin-right: none !important;
+  margin-inline-end: none !important;
 }
 .shipment-breakup__buttons___ZOupI {
   display: block !important;
@@ -389,11 +409,11 @@ img::selection {
 }
 .shipment-breakup__mr-5___Jb0dL,
 .shipment-breakup__mr5___UpWoT {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .shipment-breakup__mr-2___AzdRX,
 .shipment-breakup__mr2___ppqQe {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .shipment-breakup__py-5___Qrnyv,
 .shipment-breakup__py5___Ipw8f {
@@ -517,7 +537,7 @@ img::selection {
 }
 .shipment-breakup__billing___FTdqB .shipment-breakup__values___Ji3lV {
   position: absolute;
-  right: 30px;
+  inset-inline-end: 30px;
   font-weight: 400;
 }
 .shipment-breakup__billing___FTdqB .shipment-breakup__total___X7nmQ {
@@ -538,8 +558,8 @@ img::selection {
 }
 .shipment-breakup__paymentDetails___IT5XS .shipment-breakup__rightAlign___EBUte {
   position: relative;
-  margin-left: auto;
-  margin-right: 10px;
-  right: 0px;
+  margin-inline-start: auto;
+  margin-inline-end: 10px;
+  inset-inline-end: 0px;
 }
 

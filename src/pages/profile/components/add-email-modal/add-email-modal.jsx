@@ -4,8 +4,10 @@ import Modal from "../../../../components/core/modal/modal";
 import FyInput from "../../../../components/core/fy-input/fy-input";
 import FyButton from "../../../../components/core/fy-button/fy-button";
 import { useForm } from "react-hook-form";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function AddEmailModal({ isOpen, onClose, onAdd }) {
+  const { t } = useGlobalTranslation("translation");
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -36,7 +38,7 @@ function AddEmailModal({ isOpen, onClose, onAdd }) {
       isOpen={isOpen}
       closeDialog={onClose}
       modalType="center-modal"
-      title="Add Email"
+      title={t("resource.profile.add_email")}
     >
       <div className={styles.modalContainer}>
         <div className={`${styles.body} ${styles.form}`}>
@@ -44,14 +46,14 @@ function AddEmailModal({ isOpen, onClose, onAdd }) {
             <div className={styles.formInputContainer}>
               <FyInput
                 type="text"
-                placeholder="john123xyz@gmail.com"
+                placeholder={t("resource.profile.placeholder_email")}
                 error={errors?.email}
                 errorMessage={errors?.email?.message}
                 {...register("email", {
-                  required: "Please enter a email address",
+                  required: t("resource.profile.please_enter_a_email_address"),
                   pattern: {
                     value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                    message: "Invalid email address",
+                    message: t("resource.common.invalid_email_address"),
                   },
                 })}
               />
@@ -64,7 +66,7 @@ function AddEmailModal({ isOpen, onClose, onAdd }) {
                 className={styles.yesBtn}
                 isLoading={isLoading}
               >
-                Add
+                {t("resource.facets.add")}
               </FyButton>
             </div>
           </form>

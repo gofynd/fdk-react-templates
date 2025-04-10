@@ -26,6 +26,9 @@
 .slide-enter,
 .slide-leave-to {
   transform: translate(-100%, 0%);
+  [dir="rtl"] & {
+    transform: translate(100%, 0%);
+  }
 }
 
 .slide-left-enter-active,
@@ -35,6 +38,9 @@
 .slide-left-enter,
 .slide-left-leave-to {
   transform: translate(200%, 0%);
+  [dir="rtl"] & {
+    transform: translate(-200%, 0%);
+  }
 }
 
 // Slide down

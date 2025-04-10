@@ -1,9 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
-import { convertUTCDateToLocalDate } from "../../../../helper/utils";
+import { convertUTCDateToLocalDate, formatLocale } from "../../../../helper/utils";
 import * as styles from "./delivery-info.less";
 import FyButton from "../../../../components/core/fy-button/fy-button";
 import FyInput from "../../../../components/core/fy-input/fy-input";
+import {
+  useGlobalStore,
+  useFPI,
+  useGlobalTranslation
+} from "fdk-core/utils";
 
 function DeliveryInfo({
   tat,
@@ -12,6 +17,10 @@ function DeliveryInfo({
   checkPincode,
   setPincodeErrorMessage,
 }) {
+  const { t } = useGlobalTranslation("translation");
+  const fpi = useFPI();
+  const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
+  const locale = language?.locale;
   const [postCode, setPostCode] = useState(pincode || "");
   const [tatMessage, setTatMessage] = useState("");
   const pincodeInputRef = useRef(null);
@@ -50,14 +59,14 @@ function DeliveryInfo({
       return false;
     }
 
-    const minDate = convertUTCDateToLocalDate(min, options);
-    const maxDate = convertUTCDateToLocalDate(max, options);
+    const minDate = convertUTCDateToLocalDate(min, options, formatLocale(locale, countryCode));
+    const maxDate = convertUTCDateToLocalDate(max, options, formatLocale(locale, countryCode));
     setTimeout(() => {
-      setTatMessage(
-        `Will be delivered ${
-          min === max ? `on ${minDate}` : `between ${minDate} - ${maxDate}`
-        }`
-      );
+      const deliveryMessage = min === max
+        ? t('resource.product.delivery_on', { date: minDate })
+        : t('resource.product.delivery_between', { minDate, maxDate });
+
+      setTatMessage(deliveryMessage);
     }, 1000);
   };
 
@@ -81,13 +90,13 @@ function DeliveryInfo({
 
   return (
     <div className={styles.deliveryInfo}>
-      <h4 className={`${styles.deliveryLabel} b2`}>Select delivery location</h4>
+      <h4 className={`${styles.deliveryLabel} b2`}>{t("resource.common.address.select_delivery_location")}</h4>
       <div className={styles.delivery}>
         <FyInput
           ref={pincodeInputRef}
           autoComplete="off"
           value={postCode}
-          placeholder="Check delivery time"
+          placeholder={t("resource.product.check_delivery_time")}
           inputClassName={styles.pincodeInput}
           containerClassName={styles.pincodeInputContainer}
           maxLength="6"
@@ -105,7 +114,7 @@ function DeliveryInfo({
             <SvgWrapper svgSrc="delivery" className={styles.deliveryIcon} />
           }
         >
-          {pincodeChecked ? "CHANGE" : "CHECK"}
+          {pincodeChecked ? t("resource.common.change_caps") : t("resource.facets.check")}
         </FyButton>
       </div>
       {!pincodeErrorMessage && (

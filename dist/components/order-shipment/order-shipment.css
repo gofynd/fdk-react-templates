@@ -23,6 +23,10 @@
 .order-shipment__slide-leave-to___IBRgv {
   transform: translate(-100%, 0%);
 }
+[dir="rtl"] .order-shipment__slide-enter___UM2mw,
+[dir="rtl"] .order-shipment__slide-leave-to___IBRgv {
+  transform: translate(100%, 0%);
+}
 .order-shipment__slide-left-enter-active___XW6Hk,
 .order-shipment__slide-left-leave-active___DOgB7 {
   transition: all 0.5s;
@@ -30,6 +34,10 @@
 .order-shipment__slide-left-enter___QWXeU,
 .order-shipment__slide-left-leave-to___Ks6PF {
   transform: translate(200%, 0%);
+}
+[dir="rtl"] .order-shipment__slide-left-enter___QWXeU,
+[dir="rtl"] .order-shipment__slide-left-leave-to___Ks6PF {
+  transform: translate(-200%, 0%);
 }
 .order-shipment__slide-down-enter-active___cbNim,
 .order-shipment__slide-down-leave-active___rvcBx {
@@ -296,12 +304,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .order-shipment__caption-medium___iVsKd,
+  .order-shipment__captionMedium___heY5O {
+    font-size: 11px;
+  }
+}
 .order-shipment__caption-semi-bold___GDTDo,
 .order-shipment__captionSemiBold___QfcUW {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .order-shipment__caption-semi-bold___GDTDo,
+  .order-shipment__captionSemiBold___QfcUW {
+    font-size: 11px;
+  }
 }
 .order-shipment__btn-link___tRzON,
 .order-shipment__btnLink___tclr2 {
@@ -363,7 +383,7 @@ button {
   height: 63px;
 }
 .order-shipment__order-item___g0iIi .order-shipment__oder-header___VYM_B .order-shipment__filter-arrow-up___UAxk3 {
-  margin-right: none !important;
+  margin-inline-end: none !important;
 }
 .order-shipment__buttons___vYAo_ {
   display: block !important;
@@ -389,11 +409,11 @@ img::selection {
 }
 .order-shipment__mr-5___rzLTi,
 .order-shipment__mr5___lRqcq {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .order-shipment__mr-2___Fa5xI,
 .order-shipment__mr2___y9Ful {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .order-shipment__py-5___R6BD3,
 .order-shipment__py5___vMTwA {
@@ -499,14 +519,14 @@ img::selection {
 }
 .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__filter___lnsey {
   position: absolute;
-  right: 20px;
+  inset-inline-end: 20px;
 }
 .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__filterArrowUp___g46yt {
-  margin-left: auto;
+  margin-inline-start: auto;
   transform: rotate(180deg);
 }
 .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__filterArrowDown___XfgoC {
-  margin-left: auto;
+  margin-inline-start: auto;
 }
 .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__bold___YKz_e {
   font-weight: 700;
@@ -553,11 +573,11 @@ img::selection {
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentLeft___o0Q0q #order-shipment__total-item___SOgWJ {
   text-align: center;
   position: relative;
-  float: right;
+  float: inline-end;
   background: #4242ad;
   color: white;
   top: -40px;
-  left: -10px;
+  inset-inline-start: -10px;
   border-radius: 50%;
   width: 35px;
   height: 35px;
@@ -660,14 +680,14 @@ img::selection {
   cursor: pointer;
 }
 .order-shipment__orderItem____zenT .order-shipment__buttons___vYAo_ .order-shipment__ordercheckout___m3RkW .order-shipment__reorderIcon___gHoWM {
-  margin-right: 10px;
+  margin-inline-end: 10px;
   position: relative;
   top: -2px;
 }
 .order-shipment__orderItem____zenT .order-shipment__showAccordionBody___KPdMs {
-  visibility: visible;
+  display: block;
 }
 .order-shipment__orderItem____zenT .order-shipment__hideAccordionBody___IOXsZ {
-  visibility: hidden;
+  display: none;
 }
 

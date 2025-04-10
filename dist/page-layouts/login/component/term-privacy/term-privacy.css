@@ -23,6 +23,10 @@
 .term-privacy__slide-leave-to___Oc3Cr {
   transform: translate(-100%, 0%);
 }
+[dir="rtl"] .term-privacy__slide-enter___YAxUa,
+[dir="rtl"] .term-privacy__slide-leave-to___Oc3Cr {
+  transform: translate(100%, 0%);
+}
 .term-privacy__slide-left-enter-active___hGTdD,
 .term-privacy__slide-left-leave-active___uoGc8 {
   transition: all 0.5s;
@@ -30,6 +34,10 @@
 .term-privacy__slide-left-enter___Q2gWB,
 .term-privacy__slide-left-leave-to___Y403I {
   transform: translate(200%, 0%);
+}
+[dir="rtl"] .term-privacy__slide-left-enter___Q2gWB,
+[dir="rtl"] .term-privacy__slide-left-leave-to___Y403I {
+  transform: translate(-200%, 0%);
 }
 .term-privacy__slide-down-enter-active___g7SUI,
 .term-privacy__slide-down-leave-active___VZwCd {
@@ -296,12 +304,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .term-privacy__caption-medium___BBCs7,
+  .term-privacy__captionMedium___Fllq8 {
+    font-size: 11px;
+  }
+}
 .term-privacy__caption-semi-bold___qAFOD,
 .term-privacy__captionSemiBold___yh7S3 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .term-privacy__caption-semi-bold___qAFOD,
+  .term-privacy__captionSemiBold___yh7S3 {
+    font-size: 11px;
+  }
 }
 .term-privacy__btn-link___eSSEu,
 .term-privacy__btnLink___GcKXv {
@@ -363,7 +383,7 @@ button {
   height: 63px;
 }
 .term-privacy__order-item___n7lfs .term-privacy__oder-header___HNv5Y .term-privacy__filter-arrow-up___P9q2k {
-  margin-right: none !important;
+  margin-inline-end: none !important;
 }
 .term-privacy__buttons___Xkcdw {
   display: block !important;
@@ -389,11 +409,11 @@ img::selection {
 }
 .term-privacy__mr-5___u4G87,
 .term-privacy__mr5___FIRoA {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .term-privacy__mr-2___dYr2G,
 .term-privacy__mr2___NXGpu {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .term-privacy__py-5___Op8YM,
 .term-privacy__py5___exKgA {
