@@ -18,12 +18,14 @@ import { useParams } from "react-router-dom";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./blog-page.less";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
-import Loader from "../../components/loader/loader";
 import FyImage from "../core/fy-image/fy-image";
 import HTMLContent from "../core/html-content/html-content";
 import BlogTabs from "../blog-tabs/blog-tabs";
 import BlogFooter from "../blog-footer/blog-footer";
 import { convertUTCDateToLocalDate } from "../../helper/utils";
+import { useLocation } from "react-router-dom";
+import { isRunningOnClient } from "../../helper/utils";
+import Shimmer from "../shimmer/shimmer";
 
 function BlogPage({
   contactInfo,
@@ -32,15 +34,40 @@ function BlogPage({
   footerProps,
   getBlog,
   isBlogDetailsLoading,
+  SocailMedia = () => {},
 }) {
   const params = useParams();
+  const location = useLocation();
   useEffect(() => {
     if (!blogDetails) {
-      getBlog(params?.slug);
+      const searchParams = new URLSearchParams(location.search);
+      const previewFlag = searchParams.get("__preview"); // Extract __preview if exists
+
+      getBlog(params?.slug, previewFlag ? true : false);
     }
-  }, [params?.slug]);
+  }, [params?.slug, location?.search]);
 
   const containerRef = useRef(null);
+
+  useEffect(() => {
+    if (isRunningOnClient()) {
+      setTimeout(() => {
+        if (window.instgrm) {
+          window.instgrm.Embeds.process(); // Process all embeds
+        } else {
+          const script = document.createElement("script");
+          script.src = "https://www.instagram.com/embed.js";
+          script.async = true;
+          script.onload = () => {
+            if (containerRef.current) {
+              window.instgrm.Embeds.process(containerRef.current);
+            }
+          };
+          document.body.appendChild(script);
+        }
+      }, 0);
+    }
+  }, [blogDetails?.content?.[0]?.value]);
 
   const socialLinks = useMemo(() => {
     const socialLinksObj = contactInfo?.social_links || {};
@@ -86,14 +113,7 @@ function BlogPage({
   };
 
   if (isBlogDetailsLoading) {
-    return (
-      <div className={styles.loader}>
-        <Loader
-          containerClassName={styles.loaderContainer}
-          loaderClassName={styles.customLoader}
-        />
-      </div>
-    );
+    return <Shimmer />;
   }
 
   return (
@@ -148,20 +168,7 @@ function BlogPage({
               {socialLinks?.length > 0 && (
                 <div className={`${styles.social}`}>
                   <div className={`${styles.social__label}`}>Follow us </div>
-                  {socialLinks?.map(({ link, title }, index) => (
-                    <FDKLink
-                      key={index}
-                      to={link}
-                      target="_blank"
-                      title={title}
-                      className={styles.social__link}
-                    >
-                      <SvgWrapper
-                        className={styles.social__icon}
-                        svgSrc={`socail-${title?.toLowerCase()}`}
-                      />
-                    </FDKLink>
-                  ))}
+                  <SocailMedia social_links={contactInfo?.social_links} />
                 </div>
               )}
             </div>
@@ -177,6 +184,7 @@ function BlogPage({
               alt={blogDetails?.title}
               placeholder={sliderProps?.fallback_image}
               isFixedAspectRatio={false}
+              defer={false}
             />
           </div>
           <div className={`${styles.blogPost__content}`}>
