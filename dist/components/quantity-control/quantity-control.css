@@ -1,116 +1,6 @@
-.quantity-control__slide-fade-enter-active___ITjLF,
-.quantity-control__slide-fade-leave-active___r6rze {
-  transition: all 0.5s;
-}
-.quantity-control__slide-fade-enter___K2klh,
-.quantity-control__slide-fade-leave-to___YZXw9 {
-  opacity: 0;
-  transform: translateY(10px);
-}
-.quantity-control__fade-enter-active___A0t2j,
-.quantity-control__fade-leave-active___Opda0 {
-  transition: all 0.5s;
-}
-.quantity-control__fade-enter___MWark,
-.quantity-control__fade-leave-to___lbAcd {
-  opacity: 0;
-}
-.quantity-control__slide-leave-active____oEWR,
-.quantity-control__slide-enter-active___p3BJq {
-  transition: 0.5s;
-}
-.quantity-control__slide-enter___hEeIU,
-.quantity-control__slide-leave-to____453z {
-  transform: translate(-100%, 0%);
-}
-.quantity-control__slide-left-enter-active___mJfAw,
-.quantity-control__slide-left-leave-active___DgzuD {
-  transition: all 0.5s;
-}
-.quantity-control__slide-left-enter___KJrdv,
-.quantity-control__slide-left-leave-to___O6TEs {
-  transform: translate(200%, 0%);
-}
-.quantity-control__slide-down-enter-active___HLHPz,
-.quantity-control__slide-down-leave-active___xBRRL {
-  transition: all 0.5s;
-}
-.quantity-control__slide-down-enter___B5mHC,
-.quantity-control__slide-down-leave-to___rX3XY {
-  opacity: 0;
-  transform: translateY(-100%);
-}
-.quantity-control__slide-up-enter-active___nZBLk,
-.quantity-control__slide-up-leave-active___IdF3e {
-  transition: all 0.5s ease-in-out;
-}
-.quantity-control__slide-up-enter___irRvB,
-.quantity-control__slide-up-leave-to___aLssU {
-  opacity: 0;
-  transform: translateY(100vh);
-}
-.quantity-control__animation-fade-up___PbKcw {
-  transition: transform 0.5s ease-in var(--delay, 0ms), opacity 0.5s ease-in var(--delay, 0ms) !important;
-  opacity: 0 !important;
-  transform: translateY(10px) !important;
-}
-.quantity-control__animation-fade-up___PbKcw.quantity-control__animate___EHnUt {
-  opacity: 1 !important;
-  transform: translateY(0) !important;
-}
-.quantity-control__animation-fade___G0Trn {
-  transition: opacity 0.4s ease-in var(--delay, 0ms) !important;
-  opacity: 0 !important;
-}
-.quantity-control__animation-fade___G0Trn.quantity-control__animate___EHnUt {
-  opacity: 1 !important;
-}
 /**color by character**/
 /** Font family **/
 /** Font weight **/
-a {
-  color: inherit;
-  text-decoration: none;
-}
-.quantity-control__ct-header-wrapper___wJESF,
-.quantity-control__ctHeaderWrapper___edoBn {
-  position: sticky;
-  top: 0;
-  z-index: 40;
-}
-body {
-  box-sizing: border-box;
-  overflow-x: hidden;
-}
-@media only screen and (min-width: 769px) {
-  body {
-    min-height: calc(100vh - 404px);
-  }
-}
-.quantity-control__active-app___ZwmHE,
-.quantity-control__activeApp___aPfYA {
-  background-color: var(--pageBackground, #f8f8f8);
-}
-.quantity-control__card-item___nqF0_ .quantity-control__card-desc___PFI82 .quantity-control__price___FMGd0 .quantity-control__effective-price___AV3tz {
-  font-size: 0.875rem;
-}
-.quantity-control__login-modal___JPj6T .quantity-control__tingle-modal-box___DqhH0 {
-  background: #f5f5f5;
-}
-.quantity-control__content___SOEMh {
-  font-size: 0.875rem;
-  margin: 0 auto;
-  max-width: unset !important;
-  min-height: 75vh;
-}
-.quantity-control__modal___nvp7K {
-  overflow-x: hidden;
-  font-size: 0.875rem;
-}
-.quantity-control__product-details-page___LsnJJ,
-.quantity-control__productDetailsPage___PkyZF {
-  max-width: 1440px;
-}
 .quantity-control__display-block___Iysfz {
   display: block;
 }
@@ -296,12 +186,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .quantity-control__caption-medium___hXqzw,
+  .quantity-control__captionMedium___aDZsC {
+    font-size: 11px;
+  }
+}
 .quantity-control__caption-semi-bold___Rxtpw,
 .quantity-control__captionSemiBold___JouZf {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .quantity-control__caption-semi-bold___Rxtpw,
+  .quantity-control__captionSemiBold___JouZf {
+    font-size: 11px;
+  }
 }
 .quantity-control__btn-link___RxSzj,
 .quantity-control__btnLink___i2I60 {
@@ -359,33 +261,12 @@ button {
 .quantity-control__removeScroll___OJlc8 {
   overflow-y: hidden !important;
 }
-.quantity-control__orders___Eix14 .quantity-control__order-status___BXUNa .quantity-control__inline-svg___EqYrn {
-  height: 63px;
-}
-.quantity-control__order-item___bVGEI .quantity-control__oder-header___T8gUa .quantity-control__filter-arrow-up___e92Ov {
-  margin-right: none !important;
-}
-.quantity-control__buttons___owRIc {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.quantity-control__checkout___A3YSg {
-  width: calc(100% - 20px) !important;
-}
-.quantity-control__guest-checkout___mTqHr {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.quantity-control__home-page___fNO1e,
-.quantity-control__homePage___Lkruz {
-  max-width: 1440px;
 }
 .quantity-control__mr-5___KrHWb,
 .quantity-control__mr5___HDUFR {
@@ -431,10 +312,6 @@ img::selection {
   background-color: var(--accentColor);
   color: #fff;
 }
-.quantity-control__glide-cont___HQlOu,
-.quantity-control__glideCont___J5N1b {
-  position: relative;
-}
 .quantity-control__no-scroll___GmwG1,
 .quantity-control__noScroll___HYUF6 {
   overflow-y: hidden;
@@ -452,16 +329,6 @@ img::selection {
     font-size: 12px !important;
     padding: 5px !important;
   }
-}
-.quantity-control__blog-wrapper___ff3DZ .quantity-control__title___gm7GP {
-  color: var(--textHeading, #26201a);
-}
-.quantity-control__blog-wrapper___ff3DZ .quantity-control__author___uZtTF,
-.quantity-control__blog-wrapper___ff3DZ .quantity-control__created-on___SkYHw {
-  color: var(--textLabel, #7d7676) !important;
-}
-.quantity-control__blog-wrapper___ff3DZ #quantity-control__custom-page-container___xC_1B * {
-  color: var(--textBody, #3c3131);
 }
 .quantity-control__view3d-canvas___NG5oN {
   width: 100%;
@@ -511,7 +378,11 @@ img::selection {
 }
 .quantity-control__quantityCtrlContainer___RPVmM .quantity-control__increaseCount___Xwog1:disabled {
   opacity: 0.5;
-  cursor: not-allowed;
+  cursor: default;
+}
+.quantity-control__quantityCtrlContainer___RPVmM .quantity-control__decreaseCount___H6nUq:disabled {
+  opacity: 0.5;
+  cursor: default;
 }
 .quantity-control__quantityCtrlContainer___RPVmM .quantity-control__count___JvxLy {
   display: flex;

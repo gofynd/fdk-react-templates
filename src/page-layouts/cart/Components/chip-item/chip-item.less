@@ -4,14 +4,10 @@
   padding: 24px;
   border: 1px solid @DividerStokes;
   border-top: 0 solid @DividerStokes;
+
   @media @mobile {
     padding: 16px;
-  }
-  &:last-child {
-    border-radius: 0 0 8px 8px;
-    @media @mobile {
-      border-radius: 0;
-    }
+    border-width: 0 0 1px;
   }
 
   .eachItemContainer {
@@ -96,7 +92,7 @@
             line-height: 140%;
             @media @mobile {
               padding: 0 10px;
-              width: 98px;
+              max-width: unset;
             }
             .sizeName {
               font-size: 12px;
@@ -169,23 +165,19 @@
             align-self: flex-start;
             margin-top: 12px;
           }
+
           .shippingLogo {
-            color: @TextHeading;
-            @media @mobile {
-              display: none;
-            }
+            color: @SuccessText;
           }
+
           .deliveryDate {
-            font-weight: 600;
+            font-weight: 500;
             font-size: 12px;
             text-align: right;
-            color: @ButtonPrimary;
+            color: @SuccessText;
             align-self: center;
             margin-left: 8px;
             line-height: 140%;
-            @media @mobile {
-              margin-left: 0;
-            }
           }
         }
       }
@@ -226,6 +218,13 @@
     margin-top: 12px;
     margin-left: 0;
   }
+
+  svg {
+    path {
+      fill: @ButtonPrimary;
+    }
+  }
+
   .ml6 {
     margin-left: 6px;
   }
@@ -256,19 +255,18 @@
 
 .outOfStock {
   opacity: 0.4;
-  pointer-events: none;
 }
 .sModalContainer {
   min-height: 100px;
   max-height: 720px;
   overflow: auto;
   @media @desktop {
-    min-width: 400px;
-    max-width: 400px;
+    min-width: 500px !important;
+    max-width: 500px !important;
   }
   .sizeModalHeader {
     background-color: #f8f8f8;
-    padding: 24px;
+    padding: 16px;
     align-items: flex-start;
   }
   .sizeModalTitle {
@@ -278,8 +276,9 @@
     align-items: center;
     .sizeModalDiv {
       display: flex;
+      gap: 16px;
       .sizeModalImage {
-        width: 18%;
+        flex: 0 0 18%;
         img {
           width: 100%;
           border-radius: 4px;
@@ -288,7 +287,6 @@
       .sizeModalContent {
         color: #1f1f1f;
         line-height: 140%;
-        margin-left: 16px;
         display: flex;
         flex-direction: column;
         flex: 1;
@@ -325,7 +323,7 @@
     }
   }
   .sizeModalBody {
-    padding: 24px 0 24px 24px;
+    padding: 16px;
     .sizeSelectHeading {
       font-size: 14px;
       font-weight: 600;
@@ -334,8 +332,9 @@
       display: flex;
       flex-wrap: wrap;
       .singleSize {
-        margin-right: 24px;
+        margin-right: 12px;
         margin-top: 12px;
+
         .singleSizeDetails {
           color: var(--buttonPrimary);
           border-color: var(--buttonPrimary);
@@ -376,16 +375,16 @@
   }
   .sizeModalErrCls {
     padding: 0 0 4px 24px;
-    margin-top: -16px;
+    margin-top: -12px;
     height: 22px;
     font-weight: 600;
     font-size: 12px;
-    color: @ButtonPrimary;
+    color: @ErrorText;
     line-height: 140%;
   }
   .sizeModalFooter {
     border-top: 1px solid #f0f0f0;
-    padding: 24px;
+    padding: 16px 16px 24px;
     width: 100%;
     .updateSizeButton {
       border-radius: @ButtonRadius;

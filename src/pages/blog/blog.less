@@ -265,12 +265,13 @@
       @media @mobile {
         background: transparent;
         border: none;
+        color: @ButtonLink;
       }
     }
   }
 }
 .filterWrapper {
-  padding-top: 40px;
+  padding-top: 12px;
   @media @mobile-up {
     padding-top: 60px;
   }
@@ -282,8 +283,10 @@
     display: flex;
     justify-content: space-between;
     .resetBtn {
+      color: @ButtonLink;
       padding-bottom: 0.2rem;
       cursor: pointer;
+      height: 23.2px;
     }
   }
   &__content {
@@ -407,4 +410,9 @@
       transform: scale(1.1);
     }
   }
+}
+.emptyBlog {
+  justify-content: unset !important;
+  margin-top: 38px !important;
+  min-height: unset !important;
 }
