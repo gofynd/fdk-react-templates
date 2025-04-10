@@ -17,11 +17,11 @@
   z-index: 3;
   @media @tablet {
     position: fixed;
-    bottom: 0;
+    top: 0;
     left: 0;
     justify-content: center;
     width: 100vw;
-    height: 100vh;
+    height: 100dvh;
     z-index: 999;
   }
 
@@ -47,14 +47,15 @@
   }
   .close {
     display: none;
-    position: absolute;
-    cursor: pointer;
-    width: 22px;
-    height: 22px;
     @media @tablet {
+      position: absolute;
       top: 24px;
-      right: 16px;
-      display: block;
+        right: 16px;
+        width: 22px;
+        height: 22px;
+      display: flex !important;
+        align-items: center;
+        justify-content: center;
     }
   }
 
@@ -62,20 +63,17 @@
     display: flex;
     margin-bottom: 10px;
     align-items: center;
-    div {
-      padding: 5px 0;
+    gap: 15px;
+    .shareIcon {
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       width: 25px;
+      height: 25px;
       @media @tablet {
         width: 35px;
-      }
-      &:not(:last-child) {
-        margin-right: 15px;
-      }
-      .shareIcon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        height: 35px;
       }
     }
   }

@@ -11,6 +11,7 @@ function Faq({
   updateSearchParams,
   hasCatQuery,
   isLoading = false,
+  defaultFaqCategory,
   EmptyStateComponent = () => <></>,
 }) {
   const handleQuestionClick = (index) => {
@@ -38,107 +39,121 @@ function Faq({
     <div
       className={`${styles.faq} ${styles.basePageContainer} ${styles.margin0auto} fontBody`}
     >
-      <div className={styles.heading}>
-        <div className={styles["back-head"]}>
-          {hasCatQuery && (
-            <>
-              <span
-                onClick={() => {
-                  updateSearchParams({ action: "delete" });
-                }}
+      {faqCategories?.length > 0 ? (
+        <>
+          {" "}
+          <div className={styles.heading}>
+            <div className={styles["back-head"]}>
+              {hasCatQuery && (
+                <>
+                  <span
+                    onClick={() => {
+                      defaultFaqCategory();
+                      updateSearchParams({ action: "delete" });
+                    }}
+                  >
+                    <SvgWrapper svgSrc="ArrowLeftLong" />
+                  </span>
+                  <h3 className={`${styles["show-on-mobile"]} fontHeader`}>
+                    {activeFaqCat?.title}
+                  </h3>
+                </>
+              )}
+              <h1
+                className={`${styles[hasCatQuery && "hide-on-mobile"]} fontHeader`}
               >
-                <SvgWrapper svgSrc="arrow-left" />
-              </span>
-              <h3 className={`${styles["show-on-mobile"]} fontHeader`}>
-                {activeFaqCat?.title}
-              </h3>
-            </>
-          )}
-          <h3
-            className={`${styles[hasCatQuery && "hide-on-mobile"]} fontHeader`}
-          >
-            Frequently Asked Questions
-          </h3>
-        </div>
-        <div className={styles["contact-us"]}>
-          <span>Still need help?</span>
-          <FDKLink to="/contact-us">
-            <button type="button" onClick={navigateToContactUsPage}>
-              CONTACT US
-            </button>
-          </FDKLink>
-        </div>
-      </div>
-      <div className={styles["faq-container"]}>
-        {faqCategories?.length > 0 && (
-          <div
-            className={`${styles.sidebar} ${styles[hasCatQuery && "hide-on-mobile"]}`}
-          >
-            <ul>
-              {faqCategories?.map((el, i) => (
-                <div
-                  key={i}
-                  onClick={() => handleCategoryClick({ value: el.slug })}
-                  className={
-                    activeFaqCat?.slug === el.slug ? styles.active : ""
-                  }
-                >
-                  <SvgWrapper className={styles.star} svgSrc="star" />
-                  <li className="fontHeader">{el.title}</li>
-                  <SvgWrapper
-                    className={styles.arrowRight}
-                    svgSrc="arrow-right"
-                  />
-                </div>
-              ))}
-            </ul>
-          </div>
-        )}
-        {!isLoading &&
-          (faqs?.length > 0 ? (
-            <div
-              className={`${styles.contentContainer} ${!hasCatQuery && styles["hide-on-mobile"]}`}
-            >
-              <div className={styles.content}>
-                <div
-                  className={`${styles["top-queries"]} ${styles["hide-on-mobile"]}`}
-                >
-                  <h4 className="fontHeader">{activeFaqCat?.title}</h4>
-                </div>
-                <div className={styles["faq-list"]}>
-                  <ul>
-                    {faqs?.map((item, index) => (
-                      <li
-                        className={styles["faq-item"]}
-                        key={index}
-                        onClick={() => handleQuestionClick(index)}
-                      >
-                        <div className={styles.quesContainer}>
-                          <div className={styles["qa-box"]}>
-                            {" "}
-                            <span className={`${styles.question} fontHeader`}>
-                              {item.question}
-                            </span>
-                            {item.open && (
-                              <div className={styles.answer}>{item.answer}</div>
-                            )}
-                          </div>
-                          {item.open ? (
-                            <SvgWrapper svgSrc="minus-circle" />
-                          ) : (
-                            <SvgWrapper svgSrc="plus-circle" />
-                          )}
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
+                Frequently Asked Questions
+              </h1>
             </div>
-          ) : (
-            <EmptyStateComponent />
-          ))}
-      </div>
+            <div className={styles["contact-us"]}>
+              <span>Still need help?</span>
+              <FDKLink to="/contact-us">
+                <button type="button" onClick={navigateToContactUsPage}>
+                  CONTACT US
+                </button>
+              </FDKLink>
+            </div>
+          </div>
+          <div
+            className={`${styles["faq-container"]} ${faqs?.length === 0 ? styles["emptyStateCentre"] : ""}`}
+          >
+            {faqCategories?.length > 0 && (
+              <div
+                className={`${styles.sidebar} ${styles[hasCatQuery && "hide-on-mobile"]}`}
+              >
+                <ul>
+                  {faqCategories?.map((el, i) => (
+                    <div
+                      key={i}
+                      onClick={() => handleCategoryClick({ value: el.slug })}
+                      className={
+                        activeFaqCat?.slug === el.slug ? styles.active : ""
+                      }
+                    >
+                      <SvgWrapper className={styles.star} svgSrc="star" />
+                      <li className="fontHeader">{el.title}</li>
+                      <SvgWrapper
+                        className={styles.arrowRight}
+                        svgSrc="arrow-right"
+                      />
+                    </div>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {!isLoading &&
+              (faqs?.length > 0 ? (
+                <div
+                  className={`${styles.contentContainer} ${!hasCatQuery && styles["hide-on-mobile"]}`}
+                >
+                  <div className={styles.content}>
+                    <div
+                      className={`${styles["top-queries"]} ${styles["hide-on-mobile"]}`}
+                    >
+                      <h4 className="fontHeader">{activeFaqCat?.title}</h4>
+                    </div>
+                    <div className={styles["faq-list"]}>
+                      <ul>
+                        {faqs?.map((item, index) => (
+                          <li
+                            className={styles["faq-item"]}
+                            key={index}
+                            onClick={() => handleQuestionClick(index)}
+                          >
+                            <div className={styles.quesContainer}>
+                              <div className={styles["qa-box"]}>
+                                {" "}
+                                <span
+                                  className={`${styles.question} fontHeader`}
+                                >
+                                  {item.question}
+                                </span>
+                                {item.open && (
+                                  <div className={styles.answer}>
+                                    {item.answer}
+                                  </div>
+                                )}
+                              </div>
+                              {item.open ? (
+                                <SvgWrapper svgSrc="minus-circle" />
+                              ) : (
+                                <SvgWrapper svgSrc="plus-circle" />
+                              )}
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <EmptyStateComponent customClassName={styles.emptyState} />
+              ))}
+          </div>{" "}
+        </>
+      ) : (
+        <>{!isLoading && <EmptyStateComponent />}</>
+      )}
     </div>
   );
 }

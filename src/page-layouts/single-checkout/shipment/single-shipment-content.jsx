@@ -1,20 +1,23 @@
 import React from "react";
-
 import {
   numberWithCommas,
   priceFormatCurrencySymbol,
 } from "../../../helper/utils";
-import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./single-shipment-content.less";
 import { FDKLink } from "fdk-core/components";
 import FreeGiftItem from "../../cart/Components/free-gift-item/free-gift-item";
+import Shimmer from "../../../components/shimmer/shimmer";
+import AppliedCouponIcon from "../../../assets/images/applied-coupon-small.svg";
+import ShippingLogoIcon from "../../../assets/images/shipping-logo.svg";
 
 function SingleShipmentContent({
   shipments,
+  isShipmentLoading,
   showPaymentOptions,
   isHyperlocal = false,
   convertHyperlocalTat = () => {},
   loader,
+  buybox = {},
 }) {
   const getShipmentItems = (shipment) => {
     let grpBySameSellerAndProduct = shipment?.items?.reduce((result, item) => {
@@ -78,8 +81,10 @@ function SingleShipmentContent({
 
   return (
     <>
-      {shipments.loading ? (
-        loader
+      {isShipmentLoading ? (
+        <div className={styles.parent}>
+          {loader || <Shimmer className={styles.shimmer} />}
+        </div>
       ) : (
         <div className={styles.parent}>
           {shipments?.length > 0 &&
@@ -95,13 +100,15 @@ function SingleShipmentContent({
                             Shipment {index + 1}/{shipments.length}
                           </div>
                           <div className={styles.itemCount}>
+                            (
                             {`${shipmentItems.length} ${shipmentItems.length > 1 ? "Items" : "Item"}`}
+                            )
                           </div>
                         </div>
                         {item?.promise && (
                           <div className={styles.deliveryDateWrapper}>
                             <div className={styles.shippingLogo}>
-                              <SvgWrapper svgSrc={"shipping-logo"}></SvgWrapper>
+                              <ShippingLogoIcon />
                             </div>
 
                             <div className={styles.deliveryDate}>
@@ -120,9 +127,7 @@ function SingleShipmentContent({
                           >
                             {product?.item?.coupon_message.length > 0 && (
                               <div className={styles.couponRibbon}>
-                                <SvgWrapper
-                                  svgSrc={"applied-coupon-small"}
-                                ></SvgWrapper>
+                                <AppliedCouponIcon />
                                 <span className={styles.ribbonMsg}>
                                   {product?.item?.coupon_message}
                                 </span>
@@ -187,7 +192,8 @@ function SingleShipmentContent({
                                   </div>
                                   <div className={styles.offersWarning}>
                                     {product?.item?.article?.quantity < 11 &&
-                                      product?.item?.article?.quantity > 0 && (
+                                      product?.item?.article?.quantity > 0 &&
+                                      !buybox?.is_seller_buybox_enabled && (
                                         <div className={styles.limitedQnty}>
                                           Hurry! Only{" "}
                                           {product?.item?.article?.quantity}{" "}
