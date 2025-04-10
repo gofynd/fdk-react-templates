@@ -5,6 +5,7 @@ import FyImage from "../../../../components/core/fy-image/fy-image";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./pic-zoom.less";
 import { getProductImgAspectRatio } from "../../../../helper/utils";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function PicZoom({
   source,
@@ -18,6 +19,7 @@ function PicZoom({
   isLoading,
   hideImagePreview = false,
 }) {
+  const { t } = useGlobalTranslation("translation");
   const [imageFullyLoaded, setImageFullyLoaded] = useState(true);
   const [imageLoading, setImageLoading] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
@@ -166,7 +168,7 @@ function PicZoom({
               src={getOriginalImage()}
               allowFullScreen
               onLoad={iframeload}
-              title="Youtube"
+              title={t("resource.common.social_accounts.youtube")}
             />
           )}
           {isFrameLoading && <div id="loader" />}
@@ -179,7 +181,7 @@ function PicZoom({
             type="button"
             className={styles.expandBtn}
             onClick={() => onClickImage(currentIndex)}
-            aria-label="Open"
+            aria-label={t("resource.common.open")}
           >
             <SvgWrapper svgSrc="auto-rotate" />
           </button>

@@ -23,6 +23,10 @@
 .dropdown__slide-leave-to___v61CB {
   transform: translate(-100%, 0%);
 }
+[dir="rtl"] .dropdown__slide-enter___pzyHN,
+[dir="rtl"] .dropdown__slide-leave-to___v61CB {
+  transform: translate(100%, 0%);
+}
 .dropdown__slide-left-enter-active___O6ml5,
 .dropdown__slide-left-leave-active___EfvmJ {
   transition: all 0.5s;
@@ -30,6 +34,10 @@
 .dropdown__slide-left-enter___OeH_w,
 .dropdown__slide-left-leave-to___qoXue {
   transform: translate(200%, 0%);
+}
+[dir="rtl"] .dropdown__slide-left-enter___OeH_w,
+[dir="rtl"] .dropdown__slide-left-leave-to___qoXue {
+  transform: translate(-200%, 0%);
 }
 .dropdown__slide-down-enter-active___xjrKO,
 .dropdown__slide-down-leave-active____AS_J {
@@ -296,12 +304,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .dropdown__caption-medium___OjyHY,
+  .dropdown__captionMedium___LM7MY {
+    font-size: 11px;
+  }
+}
 .dropdown__caption-semi-bold___UmDDQ,
 .dropdown__captionSemiBold___k3W8T {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .dropdown__caption-semi-bold___UmDDQ,
+  .dropdown__captionSemiBold___k3W8T {
+    font-size: 11px;
+  }
 }
 .dropdown__btn-link___NwF7a,
 .dropdown__btnLink___EM_A_ {
@@ -363,7 +383,7 @@ button {
   height: 63px;
 }
 .dropdown__order-item____co3J .dropdown__oder-header___HlJwP .dropdown__filter-arrow-up___vV94L {
-  margin-right: none !important;
+  margin-inline-end: none !important;
 }
 .dropdown__buttons___GyOOZ {
   display: block !important;
@@ -389,11 +409,11 @@ img::selection {
 }
 .dropdown__mr-5___QlQ0X,
 .dropdown__mr5___dgj6b {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .dropdown__mr-2___tho7s,
 .dropdown__mr2___h5Onb {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .dropdown__py-5___QPo_V,
 .dropdown__py5___TbJRq {
@@ -482,7 +502,7 @@ img::selection {
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  margin-left: 10px;
+  margin-inline-start: 10px;
   position: relative;
   font-weight: 300;
 }
@@ -496,12 +516,13 @@ img::selection {
 }
 @media only screen and (max-width: 480px) {
   .dropdown__selected___rZEuQ .dropdown__menu____Aa1u {
-    right: 0;
+    inset-inline-end: 0;
   }
 }
 .dropdown__selected___rZEuQ .dropdown__menu____Aa1u li {
   display: flex;
   align-items: center;
   padding: 5px 15px;
+  gap: 8px;
 }
 

@@ -15,6 +15,7 @@ import { LoadScript, GoogleMap, Marker } from "@react-google-maps/api";
 import * as styles from "./google-map.less";
 import Autocomplete from "react-google-autocomplete";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 const libraries = ["places"];
 const mapContainerStyle = {
@@ -35,8 +36,9 @@ const GoogleMapAddress = ({
   onAddressSelect,
   countryDetails,
   addressItem,
-  onLoad = () => {},
+  onLoad = () => { },
 }) => {
+  const { t } = useGlobalTranslation("translation");
   const [selectedPlace, setSelectedPlace] = useState({
     lat: countryDetails?.latitude,
     lng: countryDetails?.longitude,
@@ -244,7 +246,7 @@ const GoogleMapAddress = ({
             svgSrc="search"
           ></SvgWrapper>
           <Autocomplete
-            placeholder="Search Google Maps"
+            placeholder={t("resource.localization.search_google_maps")}
             apiKey={mapApiKey}
             style={autoCompleteStyles}
             onPlaceSelected={handlePlaceSelect}
@@ -281,7 +283,7 @@ const GoogleMapAddress = ({
             )}
           </GoogleMap>
           <button
-            title="Detect My Location"
+            title={t("resource.localization.detect_my_location")}
             onClick={locateUser}
             className={styles.locateIconBtn}
           >
@@ -295,7 +297,7 @@ const GoogleMapAddress = ({
       {address && (
         <div className={styles.addressSelect}>
           <p>{address}</p>
-          <button onClick={selectAddress}> Use This</button>
+          <button onClick={selectAddress}> {t("resource.common.use_this")}</button>
         </div>
       )}
     </div>

@@ -2,6 +2,7 @@ import React, { useEffect, useId } from "react";
 import { useForm, Controller } from "react-hook-form";
 import * as styles from "./login-otp.less";
 import MobileNumber from "../../../auth/mobile-number/mobile-number";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function LoginOtp({
   mobileInfo = {
@@ -13,10 +14,11 @@ function LoginOtp({
   otpResendTime = 0,
   otpError = null,
   isFormSubmitSuccess = false,
-  onLoginFormSubmit = () => {},
-  onOtpSubmit = () => {},
-  onResendOtpClick = () => {},
+  onLoginFormSubmit = () => { },
+  onOtpSubmit = () => { },
+  onResendOtpClick = () => { },
 }) {
+  const { t } = useGlobalTranslation("translation");
   const {
     handleSubmit,
     control,
@@ -39,7 +41,7 @@ function LoginOtp({
             rules={{
               validate: (value) => {
                 if (value?.mobile && !value.isValidNumber) {
-                  return "Please enter valid phone number";
+                  return t("resource.common.enter_valid_phone_number");
                 }
                 return true;
               },
@@ -60,7 +62,7 @@ function LoginOtp({
             type="submit"
             disabled={!isValid}
           >
-            GET OTP
+            {t("resource.auth.login.get_otp")}
           </button>
         </form>
       ) : (
@@ -84,9 +86,10 @@ function OtpForm({
   mobileInfo = {},
   otpResendTime,
   error,
-  onOtpSubmit = () => {},
-  onResendOtpClick = () => {},
+  onOtpSubmit = () => { },
+  onResendOtpClick = () => { },
 }) {
+  const { t } = useGlobalTranslation("translation");
   const otpInputId = useId();
 
   const {
@@ -96,6 +99,7 @@ function OtpForm({
     setError,
     watch,
     clearErrors,
+    resetField,
   } = useForm();
   const mobileOtp = watch("mobileOtp");
 
@@ -120,15 +124,20 @@ function OtpForm({
     }
   }, [error]);
 
+  const resendOtp = () => {
+    resetField("mobileOtp");
+    onResendOtpClick(mobileInfo);
+  };
+
   return (
     <>
       <form
         className={styles.loginInputGroup}
         onSubmit={handleSubmit(onOtpSubmit)}
       >
-        <p className={styles.otpSentMsg}>{`OTP sent to ${submittedMobile}`}</p>
+        <p className={styles.otpSentMsg}>{`${t("resource.common.otp_sent_to")} ${submittedMobile}`}</p>
         <label className={styles.loginInputTitle} htmlFor={otpInputId}>
-          Enter OTP
+          {t("resource.common.enter_otp")}
         </label>
         <input
           id={otpInputId}
@@ -152,15 +161,15 @@ function OtpForm({
           </div>
         )}
         <button className={styles.verifyOtpBtn} type="submit">
-          Continue
+          {t("resource.common.continue")}
         </button>
       </form>
       <button
         className={styles.resendOtpBtn}
-        onClick={() => onResendOtpClick(mobileInfo)}
+        onClick={resendOtp}
         disabled={isResendBtnDisabled}
       >
-        {`Resend OTP${isResendBtnDisabled ? ` (${otpResendTime}S)` : ""}`}
+        {`${t("resource.common.resend_otp")}${isResendBtnDisabled ? ` (${otpResendTime}S)` : ""}`}
       </button>
     </>
   );

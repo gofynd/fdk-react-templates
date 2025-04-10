@@ -23,6 +23,10 @@
 .breadcrumb__slide-leave-to___C0wAY {
   transform: translate(-100%, 0%);
 }
+[dir="rtl"] .breadcrumb__slide-enter___MmUPT,
+[dir="rtl"] .breadcrumb__slide-leave-to___C0wAY {
+  transform: translate(100%, 0%);
+}
 .breadcrumb__slide-left-enter-active___yp5Ce,
 .breadcrumb__slide-left-leave-active___Boyx1 {
   transition: all 0.5s;
@@ -30,6 +34,10 @@
 .breadcrumb__slide-left-enter___zyeVw,
 .breadcrumb__slide-left-leave-to___CWEHr {
   transform: translate(200%, 0%);
+}
+[dir="rtl"] .breadcrumb__slide-left-enter___zyeVw,
+[dir="rtl"] .breadcrumb__slide-left-leave-to___CWEHr {
+  transform: translate(-200%, 0%);
 }
 .breadcrumb__slide-down-enter-active___L9qvF,
 .breadcrumb__slide-down-leave-active___KL5_K {
@@ -296,12 +304,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .breadcrumb__caption-medium___MxQAd,
+  .breadcrumb__captionMedium___MZtNV {
+    font-size: 11px;
+  }
+}
 .breadcrumb__caption-semi-bold___FE1Mr,
 .breadcrumb__captionSemiBold___LSXfW {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .breadcrumb__caption-semi-bold___FE1Mr,
+  .breadcrumb__captionSemiBold___LSXfW {
+    font-size: 11px;
+  }
 }
 .breadcrumb__btn-link___Odnr3,
 .breadcrumb__btnLink___G4bPc {
@@ -363,7 +383,7 @@ button {
   height: 63px;
 }
 .breadcrumb__order-item___A72vP .breadcrumb__oder-header___T2laR .breadcrumb__filter-arrow-up___Bsg9e {
-  margin-right: none !important;
+  margin-inline-end: none !important;
 }
 .breadcrumb__buttons___rDJLd {
   display: block !important;
@@ -389,11 +409,11 @@ img::selection {
 }
 .breadcrumb__mr-5___MN4Mm,
 .breadcrumb__mr5___yoqTb {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .breadcrumb__mr-2___V9vvI,
 .breadcrumb__mr2___tKzUk {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .breadcrumb__py-5___VA9Kd,
 .breadcrumb__py5___c2hdY {
@@ -484,6 +504,11 @@ img::selection {
   font-weight: 400;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+@media only screen and (max-width: 480px) {
+  .breadcrumb__breadcrumbs___lMY9E {
+    font-size: 11px;
+  }
 }
 .breadcrumb__breadcrumbs___lMY9E span {
   color: var(--textSecondary, #9c9c9c);

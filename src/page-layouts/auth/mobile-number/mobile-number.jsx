@@ -3,6 +3,7 @@ import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 import * as styles from "./mobile-number.less";
 import { PhoneNumberUtil } from "google-libphonenumber";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function MobileNumber({
   name = "",
@@ -10,7 +11,7 @@ function MobileNumber({
   countryCode = "91",
   disable = false,
   isShowLabel = true,
-  isRequired = "required",
+  isRequired,
   allowDropdown = true,
   isFocused = false,
   placeholder = "",
@@ -25,7 +26,9 @@ function MobileNumber({
   height = "48px",
   textColor = "var(--textBody, #3c3131)",
   backgroundColor = "var(--pageBackground, #f8f8f8)",
+  ...rest
 }) {
+  const { t } = useGlobalTranslation("translation");
   const inputId = useId();
   const phoneInputRef = useRef(null);
 
@@ -68,7 +71,7 @@ function MobileNumber({
           htmlFor={inputId}
         >
           {label ||
-            `Mobile ${isRequired === "optional" ? " (optional)" : " *"}`}
+            `${t("resource.common.mobile")} ${isRequired === "optional" ? ` (${t("resource.common.optional_lower")})` : " *"}`}
         </label>
       )}
 
@@ -79,7 +82,7 @@ function MobileNumber({
         onChange={handleChange}
         forceDialCode
         ref={phoneInputRef}
-        required={isRequired}
+        required={isRequired || t("resource.common.required_lower")}
         style={{
           "--react-international-phone-height": height,
           "--react-international-phone-text-color": textColor,
@@ -91,6 +94,8 @@ function MobileNumber({
           "--react-international-phone-selected-dropdown-item-background-color":
             "var(--highlightColor)",
           "--react-international-phone-dropdown-top": `calc(${height} + 4px)`,
+          "--react-international-phone-font-size": "14px",
+          direction: "ltr",
         }}
         countrySelectorStyleProps={{
           buttonContentWrapperStyle: {
@@ -99,6 +104,7 @@ function MobileNumber({
           buttonStyle: {
             padding: "0 8px",
           },
+          buttonClassName: `${styles.countryButton}`,
           dropdownStyleProps: {
             style: {
               zIndex: 999,
@@ -110,10 +116,18 @@ function MobileNumber({
         inputClassName={`${styles.mobileNumberInput} ${inputClassName || ""}`}
         inputProps={{
           id: inputId,
+          autoComplete: "tel",
           ...inputProps,
         }}
         placeholder={placeholder}
         hideDropdown={!allowDropdown}
+        dialCodePreviewStyleProps={{
+          className: styles.dialCodePreview,
+        }}
+        disableDialCodePrefill={true}
+        disableDialCodeAndPrefix={true}
+        showDisabledDialCodeAndPrefix={true}
+        {...rest}
       />
       {error && <span className={styles.errorText}>{error.message}</span>}
     </div>

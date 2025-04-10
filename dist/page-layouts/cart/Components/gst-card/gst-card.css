@@ -23,6 +23,10 @@
 .gst-card__slide-leave-to___HBLq_ {
   transform: translate(-100%, 0%);
 }
+[dir="rtl"] .gst-card__slide-enter___wsT7T,
+[dir="rtl"] .gst-card__slide-leave-to___HBLq_ {
+  transform: translate(100%, 0%);
+}
 .gst-card__slide-left-enter-active___cE3Tn,
 .gst-card__slide-left-leave-active___JY_rE {
   transition: all 0.5s;
@@ -30,6 +34,10 @@
 .gst-card__slide-left-enter___XKHmx,
 .gst-card__slide-left-leave-to___nQHuV {
   transform: translate(200%, 0%);
+}
+[dir="rtl"] .gst-card__slide-left-enter___XKHmx,
+[dir="rtl"] .gst-card__slide-left-leave-to___nQHuV {
+  transform: translate(-200%, 0%);
 }
 .gst-card__slide-down-enter-active___WADFU,
 .gst-card__slide-down-leave-active___V8mi3 {
@@ -296,12 +304,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .gst-card__caption-medium___h8x5g,
+  .gst-card__captionMedium___1mSBU {
+    font-size: 11px;
+  }
+}
 .gst-card__caption-semi-bold___ltQND,
 .gst-card__captionSemiBold___bvqz0 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .gst-card__caption-semi-bold___ltQND,
+  .gst-card__captionSemiBold___bvqz0 {
+    font-size: 11px;
+  }
 }
 .gst-card__btn-link___fAuOT,
 .gst-card__btnLink___R8X5Y {
@@ -363,7 +383,7 @@ button {
   height: 63px;
 }
 .gst-card__order-item____jP3z .gst-card__oder-header___LSIFp .gst-card__filter-arrow-up___uNkQh {
-  margin-right: none !important;
+  margin-inline-end: none !important;
 }
 .gst-card__buttons___OjKAY {
   display: block !important;
@@ -389,11 +409,11 @@ img::selection {
 }
 .gst-card__mr-5___SGx3p,
 .gst-card__mr5___cZ60B {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .gst-card__mr-2___qDaBc,
 .gst-card__mr2___Cx5_E {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .gst-card__py-5___rr4p2,
 .gst-card__py5___HCGzi {
@@ -510,7 +530,7 @@ img::selection {
   padding: 0;
   margin: 0;
   background-color: var(--pageBackground, #f8f8f8);
-  margin-right: 12px;
+  margin-inline-end: 12px;
 }
 .gst-card__gstContainer___LJVYg .gst-card__gstValidationBox___mgE2M {
   display: flex;
@@ -548,7 +568,7 @@ img::selection {
 }
 .gst-card__gstContainer___LJVYg .gst-card__inputBox___mMywn .gst-card__crossBtn___ERJyk {
   position: absolute;
-  right: 12px;
+  inset-inline-end: 12px;
   cursor: pointer;
 }
 .gst-card__colorErrorNormal___qjGLA {

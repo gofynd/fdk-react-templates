@@ -194,6 +194,9 @@ h5,
 
 .caption() {
   font-size: 12px;
+  @media @mobile {
+    font-size: 11px;
+    }
   line-height: 14px;
   letter-spacing: -0.02em;
 }
@@ -309,7 +312,7 @@ button {
   height: 63px;
 }
 .order-item .oder-header .filter-arrow-up {
-  margin-right: none !important;
+  margin-inline-end: none !important;
 }
 
 // guest checkout
@@ -342,12 +345,12 @@ img::selection {
 
 .mr-5,
 .mr5 {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 
 .mr-2,
 .mr2 {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 
 .py-5,

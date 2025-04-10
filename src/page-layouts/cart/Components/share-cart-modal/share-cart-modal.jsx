@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import * as styles from "./share-cart-modal.less";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import Loader from "../../../../components/loader/loader";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function ShareCartModal({
   isOpen,
@@ -13,6 +14,7 @@ function ShareCartModal({
   onTwitterShareClick,
   onCloseDialogClick,
 }) {
+  const { t } = useGlobalTranslation("translation");
   const sharePopupRef = useRef(null);
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -46,7 +48,7 @@ function ShareCartModal({
               className={styles.qrCode}
               dangerouslySetInnerHTML={{ __html: qrCode }}
             />
-            <p className={styles.nccMb10}>OR</p>
+            <p className={styles.nccMb10}>{t("resource.common.or")}</p>
             <div className={styles.icons}>
               <div className={styles.copy} onClick={onCopyToClipboardClick}>
                 <span className={styles.shareIcon}>

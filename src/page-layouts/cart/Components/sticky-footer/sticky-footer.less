@@ -37,7 +37,7 @@
       .nccTotalPrice {
         font-size: 14px;
         font-weight: 600;
-        margin-left: 4px;
+        margin-inline-start: 4px;
       }
     }
 
@@ -50,14 +50,14 @@
       margin: 0;
     }
     .rewardDiv {
-      margin-left: 12px;
+      margin-inline-start: 12px;
       display: flex;
       align-items: center;
       .rewardPoi {
         font-size: 12px;
         font-weight: 500;
         display: flex;
-        margin-right: 12px;
+        margin-inline-end: 12px;
       }
     }
   }
@@ -76,7 +76,7 @@
     justify-content: center;
     padding: 20px;
     @media @tablet {
-      margin-left: 16px;
+      margin-inline-start: 16px;
     }
   }
 
@@ -122,12 +122,12 @@
     justify-content: center;
     padding: 20px;
     @media @tablet {
-      margin-left: 16px;
+      margin-inline-start: 16px;
     }
   }
   .secondaryCheckoutBtn {
     background: @ButtonPrimary;
-    border-radius: 4px;
+    border-radius: @ButtonRadius;
     line-height: 140%;
     text-transform: uppercase;
     color: @ButtonSecondary;

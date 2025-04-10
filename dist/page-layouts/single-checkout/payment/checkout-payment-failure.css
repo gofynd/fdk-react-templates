@@ -23,6 +23,10 @@
 .checkout-payment-failure__slide-leave-to___Rf3JQ {
   transform: translate(-100%, 0%);
 }
+[dir="rtl"] .checkout-payment-failure__slide-enter___UWYuT,
+[dir="rtl"] .checkout-payment-failure__slide-leave-to___Rf3JQ {
+  transform: translate(100%, 0%);
+}
 .checkout-payment-failure__slide-left-enter-active___HJ0JY,
 .checkout-payment-failure__slide-left-leave-active___Ubt7k {
   transition: all 0.5s;
@@ -30,6 +34,10 @@
 .checkout-payment-failure__slide-left-enter___gsQmQ,
 .checkout-payment-failure__slide-left-leave-to___uxDX5 {
   transform: translate(200%, 0%);
+}
+[dir="rtl"] .checkout-payment-failure__slide-left-enter___gsQmQ,
+[dir="rtl"] .checkout-payment-failure__slide-left-leave-to___uxDX5 {
+  transform: translate(-200%, 0%);
 }
 .checkout-payment-failure__slide-down-enter-active___fxg6V,
 .checkout-payment-failure__slide-down-leave-active___bcXtU {
@@ -296,12 +304,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .checkout-payment-failure__caption-medium___iwrm3,
+  .checkout-payment-failure__captionMedium___Su0F1 {
+    font-size: 11px;
+  }
+}
 .checkout-payment-failure__caption-semi-bold___NT7Uc,
 .checkout-payment-failure__captionSemiBold___Crx0h {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .checkout-payment-failure__caption-semi-bold___NT7Uc,
+  .checkout-payment-failure__captionSemiBold___Crx0h {
+    font-size: 11px;
+  }
 }
 .checkout-payment-failure__btn-link___oTKdf,
 .checkout-payment-failure__btnLink___r_R2A {
@@ -363,7 +383,7 @@ button {
   height: 63px;
 }
 .checkout-payment-failure__order-item___DrrYp .checkout-payment-failure__oder-header___KlwsK .checkout-payment-failure__filter-arrow-up___xa0Ii {
-  margin-right: none !important;
+  margin-inline-end: none !important;
 }
 .checkout-payment-failure__buttons___ZI5ip {
   display: block !important;
@@ -389,11 +409,11 @@ img::selection {
 }
 .checkout-payment-failure__mr-5___Cg1Ro,
 .checkout-payment-failure__mr5___JTHvr {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .checkout-payment-failure__mr-2___VWckW,
 .checkout-payment-failure__mr2___BwOh3 {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .checkout-payment-failure__py-5___X6S4p,
 .checkout-payment-failure__py5___6HXKo {

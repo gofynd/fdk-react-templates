@@ -2,7 +2,7 @@ import React from "react";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./single-page-shipment.less";
 import SingleShipmentContent from "./single-shipment-content";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useGlobalTranslation, useGlobalStore } from "fdk-core/utils";
 
 function SinglePageShipment({
   shipments,
@@ -12,9 +12,11 @@ function SinglePageShipment({
   showShipment,
   showPayment,
   isHyperlocal = false,
-  convertHyperlocalTat = () => {},
+  convertHyperlocalTat = () => { },
   loader,
+  buybox = {},
 }) {
+  const { t } = useGlobalTranslation("translation");
   const navigate = useNavigate();
   const getShipmentCount = shipments?.length || 0;
 
@@ -36,21 +38,21 @@ function SinglePageShipment({
                 <SvgWrapper svgSrc={"two-number"}></SvgWrapper>
               </div>
               <div className={styles.headerContainer}>
-                <div className={styles.orderSummary}>Order Summary</div>
+                <div className={styles.orderSummary}>{t("resource.checkout.order_summary")}</div>
                 <div className={styles.shipment}>
                   {getShipmentCount > 1
-                    ? getShipmentCount + " shipments"
-                    : getShipmentCount + " shipment"}
+                    ? getShipmentCount + ` ${t("resource.common.shipments_plural")}`
+                    : getShipmentCount + ` ${t("resource.common.shipments")}`}
                 </div>
               </div>
             </div>
 
             <div className={styles.right}>
               <div className={styles.editCart} onClick={gotoCart}>
-                Edit Cart
+                {t("resource.checkout.edit_cart_lower")}
               </div>
               <div className={styles.proceedPay} onClick={showPaymentOptions}>
-                Proceed To Pay
+                {t("resource.checkout.proceed_to_pay")}
               </div>
             </div>
           </div>
@@ -60,6 +62,7 @@ function SinglePageShipment({
             isHyperlocal={isHyperlocal}
             convertHyperlocalTat={convertHyperlocalTat}
             loader={loader}
+            buybox={buybox}
           ></SingleShipmentContent>
         </>
       ) : (
@@ -71,22 +74,22 @@ function SinglePageShipment({
                   <SvgWrapper svgSrc="checkmark"></SvgWrapper>
                 </div>
                 <div className={styles.deliverAdd}>
-                  <div className={styles.title}>Order Summary</div>
+                  <div className={styles.title}>{t("resource.checkout.order_summary")}</div>
                   <div className={styles.address}>
                     {getShipmentCount > 1
-                      ? getShipmentCount + " shipments"
-                      : getShipmentCount + " shipment"}
+                      ? getShipmentCount + ` ${t("resource.common.shipments_plural")}`
+                      : getShipmentCount + ` ${t("resource.common.shipments")}`}
                   </div>
                 </div>
               </div>
               <div className={styles.rightSelected} onClick={editShipment}>
-                Edit
+                {t("resource.facets.edit")}
               </div>
             </div>
           ) : (
             <div className={styles.reviewHeaderUnselect}>
               <SvgWrapper svgSrc={"two-number"}></SvgWrapper>
-              <div className={styles.heading}>Order Summary</div>
+              <div className={styles.heading}>{t("resource.checkout.order_summary")}</div>
             </div>
           )}
         </>

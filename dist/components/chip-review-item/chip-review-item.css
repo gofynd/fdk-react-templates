@@ -23,6 +23,10 @@
 .chip-review-item__slide-leave-to___xxsXB {
   transform: translate(-100%, 0%);
 }
+[dir="rtl"] .chip-review-item__slide-enter___nr6X1,
+[dir="rtl"] .chip-review-item__slide-leave-to___xxsXB {
+  transform: translate(100%, 0%);
+}
 .chip-review-item__slide-left-enter-active___q2WbC,
 .chip-review-item__slide-left-leave-active___bOD3K {
   transition: all 0.5s;
@@ -30,6 +34,10 @@
 .chip-review-item__slide-left-enter___xwMk3,
 .chip-review-item__slide-left-leave-to____lSIY {
   transform: translate(200%, 0%);
+}
+[dir="rtl"] .chip-review-item__slide-left-enter___xwMk3,
+[dir="rtl"] .chip-review-item__slide-left-leave-to____lSIY {
+  transform: translate(-200%, 0%);
 }
 .chip-review-item__slide-down-enter-active___uOSXJ,
 .chip-review-item__slide-down-leave-active___ihdCA {
@@ -296,12 +304,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .chip-review-item__caption-medium___TahcP,
+  .chip-review-item__captionMedium___TqlGQ {
+    font-size: 11px;
+  }
+}
 .chip-review-item__caption-semi-bold___AG3ci,
 .chip-review-item__captionSemiBold___azy1h {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .chip-review-item__caption-semi-bold___AG3ci,
+  .chip-review-item__captionSemiBold___azy1h {
+    font-size: 11px;
+  }
 }
 .chip-review-item__btn-link___Iclpz,
 .chip-review-item__btnLink___srPw_ {
@@ -363,7 +383,7 @@ button {
   height: 63px;
 }
 .chip-review-item__order-item___NhT4F .chip-review-item__oder-header___QDXRu .chip-review-item__filter-arrow-up___xcFpy {
-  margin-right: none !important;
+  margin-inline-end: none !important;
 }
 .chip-review-item__buttons___tgVED {
   display: block !important;
@@ -389,11 +409,11 @@ img::selection {
 }
 .chip-review-item__mr-5___giiGG,
 .chip-review-item__mr5___hfNxR {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .chip-review-item__mr-2___tFXxQ,
 .chip-review-item__mr2___LanD1 {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .chip-review-item__py-5___kcqhz,
 .chip-review-item__py5___P3nAb {
@@ -576,7 +596,7 @@ img::selection {
 }
 .chip-review-item__customSelect___oNYXu {
   width: 80px;
-  margin-right: 10px;
+  margin-inline-end: 10px;
 }
 .chip-review-item__offersContainer___y4Eas {
   border-radius: 3px;
@@ -590,7 +610,7 @@ img::selection {
   color: #20ce81;
 }
 .chip-review-item__maxAvail___ZGQx2 {
-  text-align: left;
+  text-align: start;
   color: #ee485d;
 }
 .chip-review-item__chip___MPqlt {
@@ -617,7 +637,10 @@ img::selection {
   }
 }
 .chip-review-item__chip___MPqlt .chip-review-item__productMetas___nU57E .chip-review-item__priceCntr___o6_FD {
-  margin: 0px 0px 0px 5px;
+  margin-top: 0px;
+  margin-inline-end: 0px;
+  margin-bottom: 0px;
+  margin-inline-start: 5px;
 }
 @media only screen and (max-width: 480px) {
   .chip-review-item__chip___MPqlt .chip-review-item__productMetas___nU57E .chip-review-item__priceCntr___o6_FD {
@@ -649,12 +672,12 @@ img::selection {
 }
 .chip-review-item__chip___MPqlt .chip-review-item__rightItems___xD6ri {
   display: flex;
-  margin-left: auto;
+  margin-inline-start: auto;
   align-content: center;
 }
 @media only screen and (max-width: 480px) {
   .chip-review-item__chip___MPqlt .chip-review-item__rightItems___xD6ri {
-    margin-left: 0;
+    margin-inline-start: 0;
   }
 }
 .chip-review-item__chip___MPqlt .chip-review-item__rightItems___xD6ri .chip-review-item__quantity___B_WUz {

@@ -8,7 +8,7 @@
     height: 75vh;
     background: transparent;
     .customLoader {
-      margin-left: 0;
+      margin-inline-start: 0;
     }
   }
 }
@@ -19,12 +19,18 @@
 
   .formContainer {
     background-color: @White;
-    padding: 25px 5px 10px 30px;
+    padding-top: 25px;
+    padding-inline-end: 5px;
+    padding-bottom: 10px;
+    padding-inline-start: 30px;
     margin: 25px auto auto;
     display: flex;
     flex-direction: column;
     @media @mobile {
-      padding: 25px 0px 10px 3px;
+      padding-top: 25px;
+      padding-inline-end: 0px;
+      padding-bottom: 10px;
+      padding-inline-start: 3px;
       width: 100%;
     }
 
@@ -86,8 +92,8 @@
 
           .verifyButton {
             padding: 11px;
-            margin-right: 10px;
-            margin-left: 5px;
+            margin-inline-end: 10px;
+            margin-inline-start: 5px;
             white-space: nowrap;
             height: 100%;
           }

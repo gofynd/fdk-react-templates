@@ -15,13 +15,13 @@ import SortModal from "../../components/sort-modal/sort-modal";
 import FilterModal from "../../components/filter-modal/filter-modal";
 import ScrollTop from "../../components/scroll-top/scroll-top";
 import EmptyState from "../../components/empty-state/empty-state";
-import Loader from "../../components/loader/loader";
 import FyImage from "../../components/core/fy-image/fy-image";
 import { isRunningOnClient } from "../../helper/utils";
 import Modal from "../../components/core/modal/modal";
 import AddToCart from "../../page-layouts/plp/Components/add-to-cart/add-to-cart";
 import { useViewport } from "../../helper/hooks";
 import SizeGuide from "../../page-layouts/plp/Components/size-guide/size-guide";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 const ProductListing = ({
   breadcrumb = [],
@@ -60,19 +60,18 @@ const ProductListing = ({
   listingPrice = "range",
   banner = {},
   showAddToCart = false,
-  onColumnCountUpdate = () => {},
-  onResetFiltersClick = () => {},
-  onFilterUpdate = () => {},
-  onSortUpdate = () => {},
-  onFilterModalBtnClick = () => {},
-  onSortModalBtnClick = () => {},
-  onWishlistClick = () => {},
-  onViewMoreClick = () => {},
-  onLoadMoreProducts = () => {},
-  EmptyStateComponent = (
-    <EmptyState title="Sorry, we couldn’t find any results" />
-  ),
+  onColumnCountUpdate = () => { },
+  onResetFiltersClick = () => { },
+  onFilterUpdate = () => { },
+  onSortUpdate = () => { },
+  onFilterModalBtnClick = () => { },
+  onSortModalBtnClick = () => { },
+  onWishlistClick = () => { },
+  onViewMoreClick = () => { },
+  onLoadMoreProducts = () => { },
+  EmptyStateComponent
 }) => {
+  const { t } = useGlobalTranslation("translation");
   const isTablet = useViewport(0, 768);
   const {
     handleAddToCart,
@@ -103,17 +102,12 @@ const ProductListing = ({
   return (
     <div className={styles.plpWrapper} ref={plpWrapperRef} style={wrapperStyle}>
       {isRunningOnClient() && isPageLoading ? (
-        <div className={styles.loader}>
-          <Loader
-            containerClassName={styles.loaderContainer}
-            loaderClassName={styles.customLoader}
-          />
-        </div>
+        <div className={styles.loader}></div>
       ) : productList?.length === 0 && !(isPageLoading || isPageLoading) ? (
         <div>{EmptyStateComponent}</div>
       ) : (
         <>
-          <div className={styles.breadcrumbWrapperDesktop}>
+          <div className={styles.breadcrumbWrapper}>
             <Breadcrumb breadcrumb={breadcrumb} />
           </div>
           <div className={styles.mobileHeader}>
@@ -124,56 +118,52 @@ const ProductListing = ({
                   onClick={onFilterModalBtnClick}
                 >
                   <SvgWrapper svgSrc="filter" />
-                  <span>Filter</span>
+                  <span>{t("resource.common.filter")}</span>
                 </button>
               )}
               <button onClick={onSortModalBtnClick}>
                 <SvgWrapper svgSrc="sort" />
-                <span>Sort By</span>
+                <span>{t("resource.facets.sort_by")}</span>
               </button>
             </div>
             <div className={styles.headerRight}>
               <button
-                className={`${styles.colIconBtn} ${styles.mobile} ${
-                  columnCount?.mobile === 1 ? styles.active : ""
-                }`}
+                className={`${styles.colIconBtn} ${styles.mobile} ${columnCount?.mobile === 1 ? styles.active : ""
+                  }`}
                 onClick={() =>
                   onColumnCountUpdate({ screen: "mobile", count: 1 })
                 }
-                title="Mobile grid one"
+                title={t("resource.product.mobile_grid_one")}
               >
                 <SvgWrapper svgSrc="grid-one-mob" />
               </button>
               <button
-                className={`${styles.colIconBtn} ${styles.mobile} ${
-                  columnCount?.mobile === 2 ? styles.active : ""
-                }`}
+                className={`${styles.colIconBtn} ${styles.mobile} ${columnCount?.mobile === 2 ? styles.active : ""
+                  }`}
                 onClick={() =>
                   onColumnCountUpdate({ screen: "mobile", count: 2 })
                 }
-                title="Mobile grid two"
+                title={t("resource.product.mobile_grid_two")}
               >
                 <SvgWrapper svgSrc="grid-two-mob" />
               </button>
               <button
-                className={`${styles.colIconBtn} ${styles.tablet} ${
-                  columnCount?.tablet === 2 ? styles.active : ""
-                }`}
+                className={`${styles.colIconBtn} ${styles.tablet} ${columnCount?.tablet === 2 ? styles.active : ""
+                  }`}
                 onClick={() =>
                   onColumnCountUpdate({ screen: "tablet", count: 2 })
                 }
-                title="Tablet grid two"
+                title={t("resource.product.tablet_grid_two")}
               >
                 <SvgWrapper svgSrc="grid-two" />
               </button>
               <button
-                className={`${styles.colIconBtn} ${styles.tablet} ${
-                  columnCount?.tablet === 3 ? styles.active : ""
-                }`}
+                className={`${styles.colIconBtn} ${styles.tablet} ${columnCount?.tablet === 3 ? styles.active : ""
+                  }`}
                 onClick={() =>
                   onColumnCountUpdate({ screen: "tablet", count: 3 })
                 }
-                title="Tablet grid four"
+                title={t("resource.product.tablet_grid_four")}
               >
                 <SvgWrapper svgSrc="grid-four" />
               </button>
@@ -185,13 +175,13 @@ const ProductListing = ({
                 <StickyColumn>
                   <div className={styles.filterHeaderContainer}>
                     <div className={styles.filterHeader}>
-                      <h4 className={styles.title}>FILTERS</h4>
+                      <h4 className={styles.title}>{t("resource.product.filters_caps")}</h4>
                       {!isResetFilterDisable && (
                         <button
                           className={styles.resetBtn}
                           onClick={onResetFiltersClick}
                         >
-                          RESET
+                          {t("resource.facets.reset_caps")}
                         </button>
                       )}
                     </div>
@@ -218,31 +208,29 @@ const ProductListing = ({
                   {title && <h1 className={styles.title}>{title}</h1>}
                   {isProductCountDisplayed && (
                     <span className={styles.productCount}>
-                      {`${productCount} ${productCount > 1 ? "Items" : "Item"}`}
+                      {`${productCount} ${productCount > 1 ? t("resource.common.item_simple_text_plural") : t("resource.common.item_simple_text")}`}
                     </span>
                   )}
                 </div>
                 <div className={styles.headerRight}>
                   <Sort sortList={sortList} onSortUpdate={onSortUpdate} />
                   <button
-                    className={`${styles.colIconBtn} ${
-                      columnCount?.desktop === 2 ? styles.active : ""
-                    }`}
+                    className={`${styles.colIconBtn} ${columnCount?.desktop === 2 ? styles.active : ""
+                      }`}
                     onClick={() =>
                       onColumnCountUpdate({ screen: "desktop", count: 2 })
                     }
-                    title="Desktop grid two"
+                    title={t("resource.product.desktop_grid_two")}
                   >
                     <SvgWrapper svgSrc="grid-two"></SvgWrapper>
                   </button>
                   <button
-                    className={`${styles.colIconBtn} ${
-                      columnCount?.desktop === 4 ? styles.active : ""
-                    }`}
+                    className={`${styles.colIconBtn} ${columnCount?.desktop === 4 ? styles.active : ""
+                      }`}
                     onClick={() =>
                       onColumnCountUpdate({ screen: "desktop", count: 4 })
                     }
-                    title="Desktop grid four"
+                    title={t("resource.product.desktop_grid_four")}
                   >
                     <SvgWrapper svgSrc="grid-four"></SvgWrapper>
                   </button>
@@ -257,7 +245,7 @@ const ProductListing = ({
                     to={banner?.redirectLink}
                   >
                     <FyImage
-                      alt="desktop banner"
+                      alt={t("resource.product.desktop_banner_alt")}
                       src={banner?.desktopBanner}
                       customClass={styles.banner}
                       isFixedAspectRatio={false}
@@ -276,7 +264,7 @@ const ProductListing = ({
                     to={banner?.redirectLink}
                   >
                     <FyImage
-                      alt="mobile banner"
+                      alt={t("resource.product.mobile_banner")}
                       src={banner?.mobileBanner}
                       customClass={styles.banner}
                       isFixedAspectRatio={false}
@@ -365,13 +353,10 @@ const ProductListing = ({
                       tabIndex="0"
                       disabled={isProductLoading}
                     >
-                      View More
+                      {t("resource.facets.view_more")}
                     </button>
                   </div>
                 )}
-              </div>
-              <div className={styles.breadcrumbWrapperMobile}>
-                <Breadcrumb breadcrumb={breadcrumb} />
               </div>
               <ListingDescription
                 key={description.length}
@@ -434,8 +419,8 @@ function ProductGrid({
   showAddToCart = false,
   imageBackgroundColor = "",
   imagePlaceholder = "",
-  onWishlistClick = () => {},
-  handleAddToCart = () => {},
+  onWishlistClick = () => { },
+  handleAddToCart = () => { },
 }) {
   return (
     <div
@@ -450,7 +435,7 @@ function ProductGrid({
         productList.map((product, index) => (
           <FDKLink
             className={styles["product-wrapper"]}
-            to={`/product/${product?.slug}`}
+            action={product?.action}
             key={product?.uid}
             target={isProductOpenInNewTab ? "_blank" : "_self"}
             style={{

@@ -23,6 +23,10 @@
 .order-tracking__slide-leave-to___TDuf7 {
   transform: translate(-100%, 0%);
 }
+[dir="rtl"] .order-tracking__slide-enter___KWg2a,
+[dir="rtl"] .order-tracking__slide-leave-to___TDuf7 {
+  transform: translate(100%, 0%);
+}
 .order-tracking__slide-left-enter-active___G0pRf,
 .order-tracking__slide-left-leave-active___YuG_C {
   transition: all 0.5s;
@@ -30,6 +34,10 @@
 .order-tracking__slide-left-enter____wgnG,
 .order-tracking__slide-left-leave-to___drBoI {
   transform: translate(200%, 0%);
+}
+[dir="rtl"] .order-tracking__slide-left-enter____wgnG,
+[dir="rtl"] .order-tracking__slide-left-leave-to___drBoI {
+  transform: translate(-200%, 0%);
 }
 .order-tracking__slide-down-enter-active___VtgAh,
 .order-tracking__slide-down-leave-active___vhKnL {
@@ -296,12 +304,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .order-tracking__caption-medium___tazF9,
+  .order-tracking__captionMedium___MdpIt {
+    font-size: 11px;
+  }
+}
 .order-tracking__caption-semi-bold___k2Wmw,
 .order-tracking__captionSemiBold___YjsHC {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .order-tracking__caption-semi-bold___k2Wmw,
+  .order-tracking__captionSemiBold___YjsHC {
+    font-size: 11px;
+  }
 }
 .order-tracking__btn-link___IsiPa,
 .order-tracking__btnLink___d6h_U {
@@ -363,7 +383,7 @@ button {
   height: 63px;
 }
 .order-tracking__order-item___epM0h .order-tracking__oder-header___gqJVO .order-tracking__filter-arrow-up___XYjUF {
-  margin-right: none !important;
+  margin-inline-end: none !important;
 }
 .order-tracking__buttons___L5_vK {
   display: block !important;
@@ -389,11 +409,11 @@ img::selection {
 }
 .order-tracking__mr-5___N1ZJt,
 .order-tracking__mr5___b3DsE {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .order-tracking__mr-2___uYR61,
 .order-tracking__mr2___me0vC {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .order-tracking__py-5___OJZDb,
 .order-tracking__py5___Bjk9M {
@@ -573,6 +593,9 @@ img::selection {
 .order-tracking__trackOrderCntr___ikuJz .order-tracking__demoImg___ATvyI {
   width: 100%;
   max-width: 500px;
-  margin: 20px 0 10px 0;
+  margin-top: 20px;
+  margin-inline-end: 0px;
+  margin-bottom: 10px;
+  margin-inline-start: 0px;
 }
 

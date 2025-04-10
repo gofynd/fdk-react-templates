@@ -1,13 +1,15 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import * as styles from "./delivery-location.less";
-import { isValidPincode } from "../../../../helper/utils";
 import Modal from "../../../../components/core/modal/modal";
 import AddressItem from "../../../../components/address-item/address-item";
 import AddressForm from "../../../../components/address-form/address-form";
+import { useGlobalTranslation } from "fdk-core/utils";
+
 function DeliveryLocation({
-  deliveryLocation,
   pincode = "",
+  deliveryLocation,
+  pincodeInput,
   error = null,
   isPincodeModalOpen = false,
   isAddressModalOpen = false,
@@ -20,21 +22,22 @@ function DeliveryLocation({
   getLocality,
   selectAddress,
   addrError,
-  onChangeButtonClick = () => {},
-  onAddButtonClick = () => {},
-  onPincodeSubmit = () => {},
-  onCloseModalClick = () => {},
-  setSelectedAddressId = () => {},
-  addAddress = () => {},
+  onChangeButtonClick = () => { },
+  onAddButtonClick = () => { },
+  onPincodeSubmit = () => { },
+  onCloseModalClick = () => { },
+  setSelectedAddressId = () => { },
+  addAddress = () => { },
   isInternationalShippingEnabled = false,
   addressFormSchema,
   addressItem,
-  setI18nDetails = () => {},
-  handleCountrySearch = () => {},
-  getFilteredCountries = () => {},
+  onCountryChange = () => { },
+  handleCountrySearch = () => { },
+  getFilteredCountries = () => { },
   selectedCountry,
   countryDetails,
 }) {
+  const { t } = useGlobalTranslation("translation");
   const {
     handleSubmit,
     register,
@@ -47,6 +50,7 @@ function DeliveryLocation({
       pincode,
     },
   });
+  const { displayName, maxLength, validatePincode } = pincodeInput;
 
   useEffect(() => {
     if (error) {
@@ -68,20 +72,20 @@ function DeliveryLocation({
     <div className={styles.cartPincodeContainer}>
       <div className={styles.pinCodeDetailsContainer}>
         <span className={styles.pincodeHeading}>
-          {deliveryLocation ? "Deliver To:" : "Check delivery time & services"}
-        </span>
+          {deliveryLocation ? `${t("resource.common.deliver_to")}:` : t("resource.cart.check_delivery_time_services")}
+        </span >
         <span className={styles.pinCode}>
           &nbsp;
           {deliveryLocation}
         </span>
-      </div>
+      </div >
       <div className={styles.changePinCodeButton} onClick={onChangeButtonClick}>
-        Change
-      </div>
+        {t("resource.cart.change")}
+      </div >
       <Modal
         isOpen={isPincodeModalOpen}
         closeDialog={onCloseModalClick}
-        title="Delivery PIN Code"
+        title={`${t("resource.common.delivery")} ${displayName}`}
         containerClassName={styles.pincodeModal}
         bodyClassName={styles.modalBody}
       >
@@ -92,15 +96,15 @@ function DeliveryLocation({
           <div className={styles.modalPincodeInput}>
             <input
               type="text"
-              placeholder="Enter Pincode"
+              placeholder={`${t("resource.common.enter")} ${displayName}`}
               {...register("pincode", {
-                validate: (value) =>
-                  isValidPincode(value) || "Please enter valid pincode",
+                validate: validatePincode,
               })}
+              maxLength={maxLength}
             />
           </div>
           <button className={styles.modalChangePinCodeButton} type="submit">
-            CHECK
+            {t("resource.facets.check")}
           </button>
           {errors.pincode && (
             <div className={styles.errorText}>{errors?.pincode?.message}</div>
@@ -114,7 +118,7 @@ function DeliveryLocation({
         isOpen={isAddressModalOpen}
         modalType="right-modal"
         closeDialog={onCloseModalClick}
-        title="Change Address"
+        title={t("resource.cart.change_address")}
       >
         <div className={styles.addressModal}>
           <div className={styles.modalBody}>
@@ -125,15 +129,15 @@ function DeliveryLocation({
               <div className={styles.modalPincodeInput}>
                 <input
                   type="text"
-                  placeholder="Enter Pincode"
+                  placeholder={`${t("resource.common.enter")} ${displayName}`}
                   {...register("pincode", {
-                    validate: (value) =>
-                      isValidPincode(value) || "Please enter valid pincode",
+                    validate: validatePincode,
                   })}
+                  maxLength={maxLength}
                 />
               </div>
               <button className={styles.modalChangePinCodeButton} type="submit">
-                CHECK
+                {t("resource.cart.check")}
               </button>
               {errors.pincode && (
                 <div className={styles.errorText}>
@@ -147,7 +151,7 @@ function DeliveryLocation({
             <div className={styles.addressContentConitainer}>
               {defaultAddress?.length > 0 && (
                 <>
-                  <div className={styles.heading}>Default Address</div>
+                  <div className={styles.heading}>{t("resource.common.address.default_address")}</div>
                   {defaultAddress?.map((item, index) => {
                     return (
                       <AddressItem
@@ -164,7 +168,7 @@ function DeliveryLocation({
               )}
               {otherAddresses?.length > 0 && (
                 <>
-                  <div className={styles.heading}>Other Address</div>
+                  <div className={styles.heading}>{t("resource.common.address.other_address")}</div>
                   {otherAddresses.map((item, index) => {
                     return (
                       <AddressItem
@@ -184,7 +188,7 @@ function DeliveryLocation({
                 className={`${styles.commonBtn} ${styles.addCta}`}
                 onClick={onAddButtonClick}
               >
-                + &nbsp; Add New Address
+                + &nbsp; {t("resource.common.address.add_new_address")}
               </button>
               {selectedAddressId &&
                 (defaultAddress.length > 0 || otherAddresses?.length > 0) && (
@@ -192,7 +196,7 @@ function DeliveryLocation({
                     className={`${styles.commonBtn} ${styles.selectCta}`}
                     onClick={selectAddress}
                   >
-                    select this address
+                    {t("resource.cart.select_this_address")}
                   </button>
                 )}
             </div>
@@ -200,7 +204,7 @@ function DeliveryLocation({
         </div>
       </Modal>
       <Modal
-        title="Add new Address"
+        title={t("resource.common.address.add_new_address")}
         isOpen={isAddAddressModalOpen}
         closeDialog={onCloseModalClick}
         modalType="right-modal"
@@ -218,7 +222,7 @@ function DeliveryLocation({
               showGoogleMap={showGoogleMap}
               onGetLocality={getLocality}
               defaultPincode={pincode}
-              setI18nDetails={setI18nDetails}
+              setI18nDetails={onCountryChange}
               handleCountrySearch={handleCountrySearch}
               getFilteredCountries={getFilteredCountries}
               selectedCountry={selectedCountry?.display_name ?? ""}

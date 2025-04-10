@@ -4,10 +4,11 @@ import { FDKLink } from "fdk-core/components";
 import InfiniteLoader from "../../components/core/infinite-loader/infinite-loader";
 import Breadcrumb from "../../components/breadcrumb/breadcrumb";
 import ProductCard from "../../components/product-card/product-card";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 const Wishlist = ({
   breadcrumb = [],
-  title = "Wishlist",
+  title,
   productList = [],
   totalCount = 0,
   isBrand = true,
@@ -24,11 +25,12 @@ const Wishlist = ({
   hasNext = false,
   isLoading = false,
   EmptyStateComponent,
-  onLoadMore = () => {},
-  onWishlistClick = () => {},
+  onLoadMore = () => { },
+  onWishlistClick = () => { },
   imagePlaceholder = "",
 }) => {
-  const countLabel = totalCount > 1 ? `${totalCount} items` : "";
+  const { t } = useGlobalTranslation("translation");
+  const countLabel = totalCount > 1 ? `${totalCount} ${t("resource.common.items")}` : "";
 
   const followedIdList = productList.map((m) => m.uid);
 
@@ -42,7 +44,7 @@ const Wishlist = ({
         <Breadcrumb breadcrumb={breadcrumb} />
       </div>
       <div className={styles.titleWrapper}>
-        <h1 className={styles.title}>{title}</h1>
+        <h1 className={styles.title}>{title || t("resource.common.breadcrumb.wishlist")}</h1>
         {countLabel && (
           <span className={styles.wishlistCount}>{countLabel}</span>
         )}

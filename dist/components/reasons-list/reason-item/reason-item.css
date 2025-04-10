@@ -23,6 +23,10 @@
 .reason-item__slide-leave-to___Sja5w {
   transform: translate(-100%, 0%);
 }
+[dir="rtl"] .reason-item__slide-enter___dk44J,
+[dir="rtl"] .reason-item__slide-leave-to___Sja5w {
+  transform: translate(100%, 0%);
+}
 .reason-item__slide-left-enter-active___Jq9NU,
 .reason-item__slide-left-leave-active___P_d6d {
   transition: all 0.5s;
@@ -30,6 +34,10 @@
 .reason-item__slide-left-enter___gLMYm,
 .reason-item__slide-left-leave-to___y5EjN {
   transform: translate(200%, 0%);
+}
+[dir="rtl"] .reason-item__slide-left-enter___gLMYm,
+[dir="rtl"] .reason-item__slide-left-leave-to___y5EjN {
+  transform: translate(-200%, 0%);
 }
 .reason-item__slide-down-enter-active___fGVGx,
 .reason-item__slide-down-leave-active___Dx5nW {
@@ -296,12 +304,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .reason-item__caption-medium___xZiVD,
+  .reason-item__captionMedium___qy6tX {
+    font-size: 11px;
+  }
+}
 .reason-item__caption-semi-bold___LEpl7,
 .reason-item__captionSemiBold___Jt9oT {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .reason-item__caption-semi-bold___LEpl7,
+  .reason-item__captionSemiBold___Jt9oT {
+    font-size: 11px;
+  }
 }
 .reason-item__btn-link___BmrQN,
 .reason-item__btnLink___sLtLt {
@@ -363,7 +383,7 @@ button {
   height: 63px;
 }
 .reason-item__order-item___rHv1Q .reason-item__oder-header___LFllF .reason-item__filter-arrow-up____p7AT {
-  margin-right: none !important;
+  margin-inline-end: none !important;
 }
 .reason-item__buttons___zn_NB {
   display: block !important;
@@ -389,11 +409,11 @@ img::selection {
 }
 .reason-item__mr-5___l5sqm,
 .reason-item__mr5___VEu5F {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .reason-item__mr-2___jtN_J,
 .reason-item__mr2___PgQFC {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .reason-item__py-5___FB2Mz,
 .reason-item__py5___MRDZz {
@@ -488,7 +508,7 @@ img::selection {
   width: fit-content;
 }
 .reason-item__reasonItem___X1uR_ .reason-item__reasonContent___dteU7 .reason-item__text___jS7OJ {
-  margin-left: 10px;
+  margin-inline-start: 10px;
 }
 .reason-item__reasonItem___X1uR_ .reason-item__reasonContent___dteU7 .reason-item__lightxs___nD5Od {
   font-weight: 300;

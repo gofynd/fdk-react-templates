@@ -5,13 +5,18 @@ import FyInputGroup from "../core/fy-input-group/fy-input-group";
 import FyDropdown from "../core/fy-dropdown/fy-dropdown";
 import MobileNumber from "../../page-layouts/auth/mobile-number/mobile-number";
 import * as styles from "./form-input-selector.less";
+import { startsWithResource, translateValidationMessages } from "../../helper/utils";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 const FormInputSelector = ({
   formData,
   control,
+  setValue = () => { },
   allowDropdown,
   isSingleField = false,
+  mobileNumberProps = {},
 }) => {
+  const { t } = useGlobalTranslation("translation");
   const {
     display = "",
     enum: options = [],
@@ -25,7 +30,7 @@ const FormInputSelector = ({
     countryCode,
     disabled = false,
     readOnly = false,
-    onChange = () => {},
+    onChange = () => { },
   } = formData;
   const getInput = ({ error, field }) => {
     switch (type) {
@@ -35,14 +40,14 @@ const FormInputSelector = ({
           <FyInputGroup
             name={key}
             options={options}
-            label={display}
+            label={startsWithResource(display) ? t(display) : display}
             type={type}
             required={required}
             error={error}
             value={field?.value}
             onChange={(value) => {
               field?.onChange(value);
-              onChange(value);
+              onChange(value, setValue);
             }}
           />
         );
@@ -55,13 +60,13 @@ const FormInputSelector = ({
             options={options}
             value={field?.value}
             required={required}
-            label={display}
+            label={startsWithResource(display) ? t(display) : display}
             placeholder={placeholder}
             containerClassName={`${styles.customClass} ${isSingleField ? styles.singleField : ""}`}
             disabled={disabled}
             onChange={(value) => {
               field?.onChange(value);
-              onChange(value);
+              onChange(value, setValue);
             }}
           />
         );
@@ -71,15 +76,15 @@ const FormInputSelector = ({
           <MobileNumber
             name={key}
             mobile={field?.value?.mobile}
-            label={`${display}${required ? " *" : ""}`}
+            label={startsWithResource(display) ? `${t(display)}${required ? " *" : ""}` : `${display}${required ? " *" : ""}`}
             error={error}
             isRequired={required}
             placeholder={placeholder}
             countryCode={countryCode}
             containerClassName={`${styles.customClass} ${isSingleField ? styles.singleField : ""}`}
-            inputClassName={styles.mobileInput}
             labelClassName={styles.mobileLabel}
             telInputClassName={styles.telInput}
+            {...mobileNumberProps}
             allowDropdown={allowDropdown}
             backgroundColor="transparent"
             height="40px"
@@ -87,7 +92,7 @@ const FormInputSelector = ({
             inputProps={{ readOnly }}
             onChange={(value) => {
               field?.onChange(value);
-              onChange(value);
+              onChange(value, setValue);
             }}
           />
         );
@@ -96,7 +101,7 @@ const FormInputSelector = ({
         return (
           <FyInput
             name={key}
-            label={display}
+            label={startsWithResource(display) ? t(display) : display}
             type={type}
             multiline={type === "textarea"}
             required={required}
@@ -110,7 +115,7 @@ const FormInputSelector = ({
             readOnly={readOnly}
             onChange={(event) => {
               field?.onChange(event?.target?.value);
-              onChange(event?.target?.value);
+              onChange(event?.target?.value, setValue);
             }}
           />
         );
@@ -122,7 +127,7 @@ const FormInputSelector = ({
     <Controller
       name={key}
       control={control}
-      rules={formData.validation}
+      rules={translateValidationMessages(formData.validation, t)}
       render={({ field, fieldState: { error } }) => {
         return getInput({ field, error });
       }}

@@ -6,9 +6,8 @@
   gap: 8px;
   padding: 8px;
   color: @ThemeAccentD2;
-  box-shadow:
-    0px 8px 8px -4px rgba(0, 0, 0, 0.6),
-    0px 4px 6px -4px rgba(0, 0, 0, 0.12);
+  box-shadow: 0px 4px 6px -4px rgba(78, 63, 9, 0.12),
+      0px 8px 8px -4px rgba(78, 63, 9, 0.06);
   background-color: @DialogBackground;
   border-radius: 24px;
   transition: top 0.25s ease-in-out;
@@ -16,9 +15,12 @@
   position: fixed;
   top: calc(var(--topPosition, var(--headerHeight)) + 69px);
   z-index: 1;
-  right: 50%;
+  inset-inline-end: 50%;
   z-index: 1;
   transform: translateX(50%);
+  [dir="rtl"] & {
+    transform: translateX(-50%);
+  }
   .scrollTopText {
     .captionNormal();
   }
@@ -40,7 +42,7 @@
   @media @desktop {
     justify-content: center;
     top: unset;
-    right: 40px;
+    inset-inline-end: 40px;
     bottom: 40px;
     width: 40px;
     height: 40px;

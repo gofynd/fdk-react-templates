@@ -8,6 +8,7 @@ import DeliveryInfo from "../delivery-info/delivery-info";
 import Loader from "../../../../components/loader/loader";
 import QuantityControl from "../../../../components/quantity-control/quantity-control";
 import FyDropdown from "../../../../components/core/fy-dropdown/fy-dropdown";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 const AddToCart = ({
   isLoading = false,
@@ -18,20 +19,21 @@ const AddToCart = ({
   selectedSize = "",
   deliverInfoProps = {},
   sizeError = false,
-  handleSlugChange = (updatedSlug) => {},
-  onSizeSelection = () => {},
-  handleShowSizeGuide = () => {},
-  addProductForCheckout = () => {},
-  handleViewMore = () => {},
-  handleClose = () => {},
+  handleSlugChange = (updatedSlug) => { },
+  onSizeSelection = () => { },
+  handleShowSizeGuide = () => { },
+  addProductForCheckout = () => { },
+  handleViewMore = () => { },
+  handleClose = () => { },
   selectedItemDetails = {},
   isCartUpdating = false,
   isHyperlocal = false,
-  cartUpdateHandler = () => {},
+  cartUpdateHandler = () => { },
   minCartQuantity,
   maxCartQuantity,
   incrementDecrementUnit,
 }) => {
+  const { t } = useGlobalTranslation("translation");
   const { product = {}, productPrice = {} } = productData;
 
   const { button_options, disable_cart, show_price, show_quantity_control } =
@@ -118,10 +120,10 @@ const AddToCart = ({
                     </h4>
                     {getProductPrice("effective") !==
                       getProductPrice("marked") && (
-                      <span className={styles["product__price--marked"]}>
-                        {getProductPrice("marked")}
-                      </span>
-                    )}
+                        <span className={styles["product__price--marked"]}>
+                          {getProductPrice("marked")}
+                        </span>
+                      )}
                     {sizes?.discount && (
                       <span className={styles["product__price--discount"]}>
                         ({sizes?.discount})
@@ -163,8 +165,8 @@ const AddToCart = ({
                         className={`${styles.b2} ${styles.sizeSelection__label}`}
                       >
                         <span>
-                          Style:{" "}
-                          {Boolean(selectedSize) && `Size (${selectedSize})`}
+                          {t("resource.product.style")}:{" "}
+                          {Boolean(selectedSize) && `${t("resource.common.size")} (${selectedSize})`}
                         </span>
                       </p>
                       {pageConfig?.show_size_guide &&
@@ -181,7 +183,7 @@ const AddToCart = ({
                               />
                             }
                           >
-                            SIZE GUIDE
+                            {t("resource.common.size_guide")}
                           </FyButton>
                         )}
                     </div>
@@ -191,17 +193,14 @@ const AddToCart = ({
                         <button
                           type="button"
                           key={`${size?.display}`}
-                          className={`${styles.b2} ${styles.sizeSelection__block} ${
-                            size.quantity === 0 &&
+                          className={`${styles.b2} ${styles.sizeSelection__block} ${size.quantity === 0 &&
                             !isMto &&
                             styles["sizeSelection__block--disable"]
-                          } ${
-                            (size?.quantity !== 0 || isMto) &&
+                            } ${(size?.quantity !== 0 || isMto) &&
                             styles["sizeSelection__block--selectable"]
-                          } ${
-                            selectedSize === size?.value &&
+                            } ${selectedSize === size?.value &&
                             styles["sizeSelection__block--selected"]
-                          } `}
+                            } `}
                           title={size?.value}
                           onClick={() => onSizeSelection(size?.value)}
                         >
@@ -223,8 +222,8 @@ const AddToCart = ({
                       options={sizes?.sizes || []}
                       value={selectedSize}
                       onChange={onSizeSelection}
-                      placeholder="SELECT SIZE"
-                      valuePrefix="Size :"
+                      placeholder={t("resource.common.select_size_caps")}
+                      valuePrefix={`${t("resource.common.size")}:`}
                       dataKey="value"
                       containerClassName={styles.dropdownContainer}
                       dropdownListClassName={styles.dropdown}
@@ -247,14 +246,14 @@ const AddToCart = ({
                             />
                           }
                         >
-                          SIZE GUIDE
+                          {t("resource.common.size_guide")}
                         </FyButton>
                       )}
                   </div>
                 )}
                 {sizeError && (
                   <div className={styles.sizeError}>
-                    Please select size to continue
+                    {t("resource.product.select_size_to_continue")}
                   </div>
                 )}
                 {!isHyperlocal && sizes?.sellable && selectedSize && (
@@ -262,7 +261,7 @@ const AddToCart = ({
                 )}
 
                 <div className={styles.viewMore}>
-                  <span onClick={handleViewMore}>View Full details</span>
+                  <span onClick={handleViewMore}>{t("resource.product.view_full_details")}</span>
                 </div>
               </div>
               {/* ---------- Buy Now and Add To Cart ---------- */}
@@ -278,13 +277,13 @@ const AddToCart = ({
                           addProductForCheckout(event, selectedSize, true)
                         }
                       >
-                        BUY NOW
+                        {t("resource.common.buy_now_caps")}
                       </FyButton>
                     )}
                     {button_options?.includes("addtocart") && (
                       <>
                         {selectedItemDetails?.quantity &&
-                        show_quantity_control ? (
+                          show_quantity_control ? (
                           <QuantityControl
                             isCartUpdating={isCartUpdating}
                             count={selectedItemDetails?.quantity || 0}
@@ -321,7 +320,7 @@ const AddToCart = ({
                               addProductForCheckout(event, selectedSize, false)
                             }
                           >
-                            ADD TO CART
+                            {t("resource.common.add_to_cart")}
                           </FyButton>
                         )}
                       </>
@@ -330,7 +329,7 @@ const AddToCart = ({
                 )}
                 {!sizes?.sellable && (
                   <FyButton variant="outlined" disabled size="medium">
-                    PRODUCT NOT AVAILABLE
+                    {t("resource.common.product_not_available")}
                   </FyButton>
                 )}
               </div>

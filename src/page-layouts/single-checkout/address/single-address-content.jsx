@@ -1,8 +1,8 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import AddressItem from "../../../components/address-item/address-item";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./single-address-content.less";
+import { useNavigate, useGlobalTranslation } from "fdk-core/utils";
 
 function AddressRight({
   selectedAddressId,
@@ -10,6 +10,7 @@ function AddressRight({
   editAddress,
   removeAddress,
 }) {
+  const { t } = useGlobalTranslation("translation");
   return (
     <>
       {selectedAddressId == addressItem?.id && (
@@ -18,11 +19,11 @@ function AddressRight({
             className={styles.edit}
             onClick={() => editAddress(addressItem)}
           >
-            edit
+            {t("resource.common.edit_lower")}
           </span>
           <span>|</span>
           <span className={styles.remove} onClick={() => removeAddress()}>
-            Remove
+            {t("resource.facets.remove")}
           </span>
         </div>
       )}
@@ -31,6 +32,7 @@ function AddressRight({
 }
 
 function DeliverBtn({ selectedAddressId, id, selectAddress }) {
+  const { t } = useGlobalTranslation("translation");
   return (
     <>
       {selectedAddressId === id && (
@@ -38,7 +40,7 @@ function DeliverBtn({ selectedAddressId, id, selectAddress }) {
           className={styles.deliverToThis}
           onClick={() => selectAddress()}
         >
-          DELIVER TO THIS ADDRESS
+          {t("resource.checkout.deliver_to_this_address")}
         </button>
       )}
     </>
@@ -46,6 +48,7 @@ function DeliverBtn({ selectedAddressId, id, selectAddress }) {
 }
 
 function InvalidAddress({ errorMessage }) {
+  const { t } = useGlobalTranslation("translation");
   const navigate = useNavigate();
   return (
     <div className={styles.invalidAddError}>
@@ -66,7 +69,7 @@ function InvalidAddress({ errorMessage }) {
           navigate("/cart/bag");
         }}
       >
-        Edit CART
+        {t("resource.checkout.edit_cart")}
       </button>
     </div>
   );
@@ -86,6 +89,7 @@ function SingleAddressContent({
   getDefaultAddress,
   loader,
 }) {
+  const { t } = useGlobalTranslation("translation");
   function selectAdd(id) {
     setSelectedAddressId(id);
   }
@@ -94,84 +98,84 @@ function SingleAddressContent({
       {allAddresses && allAddresses.length && !addressLoader ? (
         <div className={styles.addressContentConitainer}>
           {getDefaultAddress.length ? (
-            <div className={styles.heading}>Default Address</div>
+            <div className={styles.heading}>{t("resource.common.address.default_address")}</div>
           ) : null}
           {getDefaultAddress?.length > 0
             ? getDefaultAddress.map((item, index) => {
-                return (
-                  <AddressItem
-                    containerClassName={styles.customAddressItem}
-                    key={`${item?.id}_#${index}`}
-                    addressItem={item}
-                    onAddressSelect={selectAdd}
-                    showAddressSelectionCheckbox={true}
-                    selectedAddressId={selectedAddressId}
-                    headerRightSlot={
-                      <AddressRight
+              return (
+                <AddressItem
+                  containerClassName={styles.customAddressItem}
+                  key={`${item?.id}_#${index}`}
+                  addressItem={item}
+                  onAddressSelect={selectAdd}
+                  showAddressSelectionCheckbox={true}
+                  selectedAddressId={selectedAddressId}
+                  headerRightSlot={
+                    <AddressRight
+                      selectedAddressId={selectedAddressId}
+                      addressItem={item}
+                      editAddress={editAddress}
+                      removeAddress={removeAddress}
+                    />
+                  }
+                  belowAddressSlot={
+                    <>
+                      {invalidAddressError?.id === item?.id &&
+                        selectedAddressId === item?.id && (
+                          <InvalidAddress
+                            errorMessage={invalidAddressError.message}
+                          />
+                        )}
+                      <DeliverBtn
                         selectedAddressId={selectedAddressId}
-                        addressItem={item}
-                        editAddress={editAddress}
-                        removeAddress={removeAddress}
+                        id={item?.id}
+                        selectAddress={selectAddress}
                       />
-                    }
-                    belowAddressSlot={
-                      <>
-                        {invalidAddressError?.id === item?.id &&
-                          selectedAddressId === item?.id && (
-                            <InvalidAddress
-                              errorMessage={invalidAddressError.message}
-                            />
-                          )}
-                        <DeliverBtn
-                          selectedAddressId={selectedAddressId}
-                          id={item?.id}
-                          selectAddress={selectAddress}
-                        />
-                      </>
-                    }
-                  ></AddressItem>
-                );
-              })
+                    </>
+                  }
+                ></AddressItem>
+              );
+            })
             : null}
           {getOtherAddress.length ? (
-            <div className={styles.heading}>Other Address</div>
+            <div className={styles.heading}>{t("resource.common.address.other_address")}</div>
           ) : null}
           {getOtherAddress?.length > 0
             ? getOtherAddress.map((item, index) => {
-                return (
-                  <AddressItem
-                    containerClassName={styles.customAddressItem}
-                    key={`${item?.id}_#${index}`}
-                    addressItem={item}
-                    onAddressSelect={selectAdd}
-                    showAddressSelectionCheckbox={true}
-                    selectedAddressId={selectedAddressId}
-                    headerRightSlot={
-                      <AddressRight
+              return (
+                <AddressItem
+                  containerClassName={styles.customAddressItem}
+                  key={`${item?.id}_#${index}`}
+                  addressItem={item}
+                  onAddressSelect={selectAdd}
+                  showAddressSelectionCheckbox={true}
+                  selectedAddressId={selectedAddressId}
+                  headerRightSlot={
+                    <AddressRight
+                      selectedAddressId={selectedAddressId}
+                      addressItem={item}
+                      editAddress={editAddress}
+                      removeAddress={removeAddress}
+                    />
+                  }
+                  belowAddressSlot={
+                    <>
+                      {invalidAddressError?.id === item?.id &&
+                        selectedAddressId === item?.id && (
+                          <InvalidAddress
+                            errorMessage={invalidAddressError.message}
+                          />
+                        )}
+                      <DeliverBtn
                         selectedAddressId={selectedAddressId}
-                        addressItem={item}
-                        editAddress={editAddress}
-                        removeAddress={removeAddress}
+                        id={item?.id}
+                        selectAddress={selectAddress}
                       />
-                    }
-                    belowAddressSlot={
-                      <>
-                        {invalidAddressError?.id === item?.id &&
-                          selectedAddressId === item?.id && (
-                            <InvalidAddress
-                              errorMessage={invalidAddressError.message}
-                            />
-                          )}
-                        <DeliverBtn
-                          selectedAddressId={selectedAddressId}
-                          id={item?.id}
-                          selectAddress={selectAddress}
-                        />
-                      </>
-                    }
-                  ></AddressItem>
-                );
-              })
+                    </>
+                  }
+                ></AddressItem>
+              );
+            })
             : ""}
         </div>
       ) : (
@@ -184,11 +188,10 @@ function SingleAddressContent({
               style={{
                 textAlign: "center",
                 color: "var(--textLabel)",
-                padding: "4px 16px",
               }}
             >
               {" "}
-              No Address Found, Please Add Address
+              {t("resource.checkout.no_address_found")}
             </div>
           )}
         </>
