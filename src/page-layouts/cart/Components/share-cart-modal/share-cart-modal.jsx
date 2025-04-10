@@ -1,17 +1,20 @@
 import React, { useEffect, useRef } from "react";
 import * as styles from "./share-cart-modal.less";
-import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import Loader from "../../../../components/loader/loader";
+import CloseIcon from "../../../../assets/images/item-close.svg";
+import ShareCopyIcon from "../../../../assets/images/share-copy.svg";
+import ShareFacebookIcon from "../../../../assets/images/share-facebook.svg";
+import ShareTwitterIcon from "../../../../assets/images/share-twitter.svg";
 
 function ShareCartModal({
   isOpen,
   title,
   qrCode,
   isShareLoading,
-  onCopyToClipboardClick,
-  onFacebookShareClick,
-  onTwitterShareClick,
-  onCloseDialogClick,
+  onCopyToClipboardClick = () => {},
+  onFacebookShareClick = () => {},
+  onTwitterShareClick = () => {},
+  onCloseDialogClick = () => {},
 }) {
   const sharePopupRef = useRef(null);
   useEffect(() => {
@@ -40,7 +43,7 @@ function ShareCartModal({
           <>
             {title && <p className={styles.popupTitle}>{title}</p>}
             <div className={styles.close} onClick={onCloseDialogClick}>
-              <SvgWrapper svgSrc="item-close" />
+              <CloseIcon />
             </div>
             <div
               className={styles.qrCode}
@@ -48,20 +51,17 @@ function ShareCartModal({
             />
             <p className={styles.nccMb10}>OR</p>
             <div className={styles.icons}>
-              <div className={styles.copy} onClick={onCopyToClipboardClick}>
-                <span className={styles.shareIcon}>
-                  <SvgWrapper svgSrc="share-copy" />
-                </span>
+              <div
+                className={styles.shareIcon}
+                onClick={onCopyToClipboardClick}
+              >
+                <ShareCopyIcon />
               </div>
-              <div className={styles.facebook} onClick={onFacebookShareClick}>
-                <span className={styles.shareIcon}>
-                  <SvgWrapper svgSrc="share-facebook" />
-                </span>
+              <div className={styles.shareIcon} onClick={onFacebookShareClick}>
+                <ShareFacebookIcon />
               </div>
-              <div className={styles.twitter} onClick={onTwitterShareClick}>
-                <span className={styles.shareIcon}>
-                  <SvgWrapper svgSrc="share-twitter" />
-                </span>
+              <div className={styles.shareIcon} onClick={onTwitterShareClick}>
+                <ShareTwitterIcon />
               </div>
             </div>
           </>
