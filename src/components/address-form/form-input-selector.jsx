@@ -11,6 +11,9 @@ const FormInputSelector = ({
   control,
   allowDropdown,
   isSingleField = false,
+  mobileNumberProps = {},
+  labelClassName = "",
+  formMethods = {},
 }) => {
   const {
     display = "",
@@ -26,6 +29,7 @@ const FormInputSelector = ({
     disabled = false,
     readOnly = false,
     onChange = () => {},
+    countryIso = "",
   } = formData;
   const getInput = ({ error, field }) => {
     switch (type) {
@@ -42,7 +46,7 @@ const FormInputSelector = ({
             value={field?.value}
             onChange={(value) => {
               field?.onChange(value);
-              onChange(value);
+              onChange(value, formMethods);
             }}
           />
         );
@@ -61,7 +65,7 @@ const FormInputSelector = ({
             disabled={disabled}
             onChange={(value) => {
               field?.onChange(value);
-              onChange(value);
+              onChange(value, formMethods);
             }}
           />
         );
@@ -71,23 +75,24 @@ const FormInputSelector = ({
           <MobileNumber
             name={key}
             mobile={field?.value?.mobile}
-            label={`${display}${required ? " *" : ""}`}
+            label={display}
             error={error}
             isRequired={required}
             placeholder={placeholder}
             countryCode={countryCode}
             containerClassName={`${styles.customClass} ${isSingleField ? styles.singleField : ""}`}
-            inputClassName={styles.mobileInput}
-            labelClassName={styles.mobileLabel}
+            labelClassName={`${styles.mobileLabel} ${labelClassName}`}
             telInputClassName={styles.telInput}
+            {...mobileNumberProps}
             allowDropdown={allowDropdown}
             backgroundColor="transparent"
             height="40px"
             disabled={disabled}
             inputProps={{ readOnly }}
+            countryIso={countryIso}
             onChange={(value) => {
               field?.onChange(value);
-              onChange(value);
+              onChange(value, formMethods);
             }}
           />
         );
@@ -95,6 +100,7 @@ const FormInputSelector = ({
       default: {
         return (
           <FyInput
+            labelClassName={labelClassName}
             name={key}
             label={display}
             type={type}
@@ -110,7 +116,7 @@ const FormInputSelector = ({
             readOnly={readOnly}
             onChange={(event) => {
               field?.onChange(event?.target?.value);
-              onChange(event?.target?.value);
+              onChange(event?.target?.value, formMethods);
             }}
           />
         );

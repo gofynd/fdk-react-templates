@@ -6,15 +6,17 @@ import {
   validatePasswordField,
 } from "../../helper/utils";
 import * as styles from "./register.less";
-import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
 import MobileNumber from "../../page-layouts/auth/mobile-number/mobile-number";
 import VerifyBoth from "../../page-layouts/auth/verify-both/verify-both";
 import LoginRegisterToggle from "../../page-layouts/auth/login-register-toggle/login-register-toggle";
+import ShowPasswordIcon from "../../assets/images/show-password.svg";
+import HidePasswordIcon from "../../assets/images/hide-password.svg";
 
 function Register({
   isFormSubmitSuccess = false,
   isMobile = true,
   mobileLevel = "hard",
+  mobileInfo,
   isEmail = true,
   emailLevel = "hard",
   error = null,
@@ -57,9 +59,7 @@ function Register({
       gender: "male",
       email: "",
       phone: {
-        countryCode: "91",
-        mobile: "",
-        isValidNumber: false,
+        ...mobileInfo,
       },
       password: "",
       confirmPassword: "",
@@ -68,10 +68,18 @@ function Register({
 
   const isEmailRequired = useMemo(() => {
     if (emailLevel === "soft") {
-      return "Email (optional)";
+      return (
+        <>
+          Email <span className={styles.optional}>(optional)</span>
+        </>
+      );
     }
     if (emailLevel === "hard") {
-      return "Email*";
+      return (
+        <>
+          Email <span className={styles.required}>*</span>
+        </>
+      );
     }
     return "";
   }, [emailLevel]);
@@ -118,7 +126,7 @@ function Register({
             className={`${styles.registerNameInput} ${errors.firstName ? styles.errorInput : ""}`}
           >
             <label className={styles.inputTitle} htmlFor={firstnameId}>
-              First Name*
+              First Name<span className={styles.required}> *</span>
             </label>
             <input
               id={firstnameId}
@@ -141,7 +149,7 @@ function Register({
             className={`${styles.registerNameInput} ${errors.lastName ? styles.errorInput : ""}`}
           >
             <label className={styles.inputTitle} htmlFor={lastnameId}>
-              Last Name*
+              Last Name<span className={styles.required}> *</span>
             </label>
             <input
               id={lastnameId}
@@ -232,7 +240,7 @@ function Register({
             }`}
           >
             <label className={styles.inputTitle} htmlFor={passwordId}>
-              Password*
+              Password<span className={styles.required}> *</span>
             </label>
             <div className={styles.passwordInputWrapper}>
               <input
@@ -254,9 +262,11 @@ function Register({
                   }
                   onClick={togglePasswordDisplay}
                 >
-                  <SvgWrapper
-                    svgSrc={!isPasswordShow ? "show-password" : "hide-password"}
-                  />
+                  {!isPasswordShow ? (
+                    <ShowPasswordIcon />
+                  ) : (
+                    <HidePasswordIcon />
+                  )}
                 </button>
               )}
             </div>
@@ -270,13 +280,17 @@ function Register({
             }`}
           >
             <label className={styles.inputTitle} htmlFor={confirmPasswordId}>
-              Confirm Password*
+              Confirm Password<span className={styles.required}> *</span>
             </label>
             <div className={styles.passwordInputWrapper}>
               <input
                 id={confirmPasswordId}
                 type={isConfirmPasswordShow ? "text" : "password"}
                 {...register("confirmPassword", {
+                  required: {
+                    value: true,
+                    message: "Please enter a valid password",
+                  },
                   validate: (value) =>
                     value === getValues("password") ||
                     "Password does not match",
@@ -292,11 +306,11 @@ function Register({
                   }
                   onClick={toggleConfirmPasswordDisplay}
                 >
-                  <SvgWrapper
-                    svgSrc={
-                      !isConfirmPasswordShow ? "show-password" : "hide-password"
-                    }
-                  />
+                  {!isConfirmPasswordShow ? (
+                    <ShowPasswordIcon />
+                  ) : (
+                    <HidePasswordIcon />
+                  )}
                 </button>
               )}
             </div>

@@ -1,116 +1,6 @@
-.gst-card__slide-fade-enter-active____XiB0,
-.gst-card__slide-fade-leave-active___UXLvj {
-  transition: all 0.5s;
-}
-.gst-card__slide-fade-enter___x7_Ob,
-.gst-card__slide-fade-leave-to___MUxtL {
-  opacity: 0;
-  transform: translateY(10px);
-}
-.gst-card__fade-enter-active___Lg_Rk,
-.gst-card__fade-leave-active___n3a8V {
-  transition: all 0.5s;
-}
-.gst-card__fade-enter___mlKmX,
-.gst-card__fade-leave-to___rgF1o {
-  opacity: 0;
-}
-.gst-card__slide-leave-active___ygIW4,
-.gst-card__slide-enter-active___bm_bW {
-  transition: 0.5s;
-}
-.gst-card__slide-enter___wsT7T,
-.gst-card__slide-leave-to___HBLq_ {
-  transform: translate(-100%, 0%);
-}
-.gst-card__slide-left-enter-active___cE3Tn,
-.gst-card__slide-left-leave-active___JY_rE {
-  transition: all 0.5s;
-}
-.gst-card__slide-left-enter___XKHmx,
-.gst-card__slide-left-leave-to___nQHuV {
-  transform: translate(200%, 0%);
-}
-.gst-card__slide-down-enter-active___WADFU,
-.gst-card__slide-down-leave-active___V8mi3 {
-  transition: all 0.5s;
-}
-.gst-card__slide-down-enter___Pfv0E,
-.gst-card__slide-down-leave-to___KX72_ {
-  opacity: 0;
-  transform: translateY(-100%);
-}
-.gst-card__slide-up-enter-active___ai1Pd,
-.gst-card__slide-up-leave-active___gsIId {
-  transition: all 0.5s ease-in-out;
-}
-.gst-card__slide-up-enter___B7hK4,
-.gst-card__slide-up-leave-to___Z3uLf {
-  opacity: 0;
-  transform: translateY(100vh);
-}
-.gst-card__animation-fade-up___Fvwr9 {
-  transition: transform 0.5s ease-in var(--delay, 0ms), opacity 0.5s ease-in var(--delay, 0ms) !important;
-  opacity: 0 !important;
-  transform: translateY(10px) !important;
-}
-.gst-card__animation-fade-up___Fvwr9.gst-card__animate___lAeAO {
-  opacity: 1 !important;
-  transform: translateY(0) !important;
-}
-.gst-card__animation-fade___Qlk7_ {
-  transition: opacity 0.4s ease-in var(--delay, 0ms) !important;
-  opacity: 0 !important;
-}
-.gst-card__animation-fade___Qlk7_.gst-card__animate___lAeAO {
-  opacity: 1 !important;
-}
 /**color by character**/
 /** Font family **/
 /** Font weight **/
-a {
-  color: inherit;
-  text-decoration: none;
-}
-.gst-card__ct-header-wrapper___RPAQk,
-.gst-card__ctHeaderWrapper___dKysj {
-  position: sticky;
-  top: 0;
-  z-index: 40;
-}
-body {
-  box-sizing: border-box;
-  overflow-x: hidden;
-}
-@media only screen and (min-width: 769px) {
-  body {
-    min-height: calc(100vh - 404px);
-  }
-}
-.gst-card__active-app___Tvl8J,
-.gst-card__activeApp___xWzis {
-  background-color: var(--pageBackground, #f8f8f8);
-}
-.gst-card__card-item___jOmZR .gst-card__card-desc___LnoDd .gst-card__price___TXMSY .gst-card__effective-price___kDILB {
-  font-size: 0.875rem;
-}
-.gst-card__login-modal___vK39J .gst-card__tingle-modal-box___aLJyJ {
-  background: #f5f5f5;
-}
-.gst-card__content___m3PkS {
-  font-size: 0.875rem;
-  margin: 0 auto;
-  max-width: unset !important;
-  min-height: 75vh;
-}
-.gst-card__modal___hUWie {
-  overflow-x: hidden;
-  font-size: 0.875rem;
-}
-.gst-card__product-details-page___kQgry,
-.gst-card__productDetailsPage___Zghzd {
-  max-width: 1440px;
-}
 .gst-card__display-block___lQcTM {
   display: block;
 }
@@ -296,12 +186,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .gst-card__caption-medium___h8x5g,
+  .gst-card__captionMedium___1mSBU {
+    font-size: 11px;
+  }
+}
 .gst-card__caption-semi-bold___ltQND,
 .gst-card__captionSemiBold___bvqz0 {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .gst-card__caption-semi-bold___ltQND,
+  .gst-card__captionSemiBold___bvqz0 {
+    font-size: 11px;
+  }
 }
 .gst-card__btn-link___fAuOT,
 .gst-card__btnLink___R8X5Y {
@@ -359,33 +261,12 @@ button {
 .gst-card__removeScroll___uQ8AM {
   overflow-y: hidden !important;
 }
-.gst-card__orders___Nbyjp .gst-card__order-status____UYI9 .gst-card__inline-svg___FDJSm {
-  height: 63px;
-}
-.gst-card__order-item____jP3z .gst-card__oder-header___LSIFp .gst-card__filter-arrow-up___uNkQh {
-  margin-right: none !important;
-}
-.gst-card__buttons___OjKAY {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.gst-card__checkout___fOsdB {
-  width: calc(100% - 20px) !important;
-}
-.gst-card__guest-checkout___jTmKE {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.gst-card__home-page___xAmId,
-.gst-card__homePage___UAVlu {
-  max-width: 1440px;
 }
 .gst-card__mr-5___SGx3p,
 .gst-card__mr5___cZ60B {
@@ -431,10 +312,6 @@ img::selection {
   background-color: var(--accentColor);
   color: #fff;
 }
-.gst-card__glide-cont___Esiz2,
-.gst-card__glideCont___rdii3 {
-  position: relative;
-}
 .gst-card__no-scroll___O8NKc,
 .gst-card__noScroll___jLtxu {
   overflow-y: hidden;
@@ -452,16 +329,6 @@ img::selection {
     font-size: 12px !important;
     padding: 5px !important;
   }
-}
-.gst-card__blog-wrapper___EujYg .gst-card__title___kDl92 {
-  color: var(--textHeading, #26201a);
-}
-.gst-card__blog-wrapper___EujYg .gst-card__author___A__et,
-.gst-card__blog-wrapper___EujYg .gst-card__created-on___o_oxW {
-  color: var(--textLabel, #7d7676) !important;
-}
-.gst-card__blog-wrapper___EujYg #gst-card__custom-page-container___wmqyj * {
-  color: var(--textBody, #3c3131);
 }
 .gst-card__view3d-canvas___NcnzP {
   width: 100%;
@@ -482,17 +349,12 @@ img::selection {
   flex-direction: column;
   padding: 24px;
   border: 1px solid var(--dividerStokes, #d4d1d1);
-  border-radius: 8px;
   line-height: 140%;
-}
-@media only screen and (max-width: 768px) {
-  .gst-card__gstContainer___LJVYg {
-    border-radius: 0 !important;
-  }
 }
 @media only screen and (max-width: 480px) {
   .gst-card__gstContainer___LJVYg {
     padding: 16px;
+    border-width: 1px 0;
   }
 }
 .gst-card__gstContainer___LJVYg .gst-card__gstCheckboxContainer___R07hX .gst-card__gstTitle___WlTUl {
