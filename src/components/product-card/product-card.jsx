@@ -44,7 +44,13 @@ const ProductCard = ({
   product,
   customClass = [],
   listingPrice = "range",
-  isHdimgUsed = false,
+  imgSrcSet = [
+    { breakpoint: { min: 1024 }, width: 600 },
+    { breakpoint: { min: 768 }, width: 300 },
+    { breakpoint: { min: 481 }, width: 300 },
+    { breakpoint: { max: 390 }, width: 300 },
+    { breakpoint: { max: 480 }, width: 300 },
+  ],
   aspectRatio = 0.8,
   isBrand = true,
   isPrice = true,
@@ -98,25 +104,6 @@ const ProductCard = ({
         break;
     }
     return price;
-  };
-
-  const getImgSrcSet = () => {
-    if (isHdimgUsed) {
-      return [
-        { breakpoint: { min: 1024 }, width: 600 },
-        { breakpoint: { min: 768 }, width: 500 },
-        { breakpoint: { min: 481 }, width: 500 },
-        { breakpoint: { max: 390 }, width: 400 },
-        { breakpoint: { max: 480 }, width: 400 },
-      ];
-    }
-    return [
-      { breakpoint: { min: 1024 }, width: 600 },
-      { breakpoint: { min: 768 }, width: 300 },
-      { breakpoint: { min: 481 }, width: 300 },
-      { breakpoint: { max: 390 }, width: 300 },
-      { breakpoint: { max: 480 }, width: 300 },
-    ];
   };
 
   const getProductImages = () => {
@@ -192,8 +179,8 @@ const ProductCard = ({
             backgroundColor={imageBackgroundColor}
             isFixedAspectRatio={true}
             customClass={`${styles.productImage} ${styles.hoverImage}`}
-            sources={getImgSrcSet()}
-            defer={false}
+            sources={imgSrcSet}
+            defer={true}
           />
         )}
         <FyImage
@@ -204,7 +191,7 @@ const ProductCard = ({
           backgroundColor={imageBackgroundColor}
           isFixedAspectRatio={true}
           customClass={`${styles.productImage} ${styles.mainImage}`}
-          sources={getImgSrcSet()}
+          sources={imgSrcSet}
           defer={false}
         />
         {isWishlistIcon && (
@@ -278,7 +265,7 @@ const ProductCard = ({
                 <span
                   className={`${styles["productPrice--discount"]} ${styles.captionNormal} `}
                 >
-                  ({product.discount})
+                  ({product.discount?.toString().toLowerCase()})
                 </span>
               )}
             </div>

@@ -1,116 +1,6 @@
-.fy-input-group__slide-fade-enter-active___BuCN8,
-.fy-input-group__slide-fade-leave-active___DS3Yc {
-  transition: all 0.5s;
-}
-.fy-input-group__slide-fade-enter___s_qOS,
-.fy-input-group__slide-fade-leave-to____c31n {
-  opacity: 0;
-  transform: translateY(10px);
-}
-.fy-input-group__fade-enter-active___b8O4W,
-.fy-input-group__fade-leave-active___HYDHh {
-  transition: all 0.5s;
-}
-.fy-input-group__fade-enter___Ou4TY,
-.fy-input-group__fade-leave-to___HMjQH {
-  opacity: 0;
-}
-.fy-input-group__slide-leave-active___dE1DC,
-.fy-input-group__slide-enter-active___OXl8X {
-  transition: 0.5s;
-}
-.fy-input-group__slide-enter___HvqQj,
-.fy-input-group__slide-leave-to___xHzyz {
-  transform: translate(-100%, 0%);
-}
-.fy-input-group__slide-left-enter-active____uUkK,
-.fy-input-group__slide-left-leave-active___mZiN9 {
-  transition: all 0.5s;
-}
-.fy-input-group__slide-left-enter___HN4uV,
-.fy-input-group__slide-left-leave-to___cWyvt {
-  transform: translate(200%, 0%);
-}
-.fy-input-group__slide-down-enter-active___GEmqn,
-.fy-input-group__slide-down-leave-active___MnNdA {
-  transition: all 0.5s;
-}
-.fy-input-group__slide-down-enter___m0fMo,
-.fy-input-group__slide-down-leave-to___Do1m3 {
-  opacity: 0;
-  transform: translateY(-100%);
-}
-.fy-input-group__slide-up-enter-active___gYggv,
-.fy-input-group__slide-up-leave-active___ukM33 {
-  transition: all 0.5s ease-in-out;
-}
-.fy-input-group__slide-up-enter___BWp7e,
-.fy-input-group__slide-up-leave-to___lZKbm {
-  opacity: 0;
-  transform: translateY(100vh);
-}
-.fy-input-group__animation-fade-up___aNmo2 {
-  transition: transform 0.5s ease-in var(--delay, 0ms), opacity 0.5s ease-in var(--delay, 0ms) !important;
-  opacity: 0 !important;
-  transform: translateY(10px) !important;
-}
-.fy-input-group__animation-fade-up___aNmo2.fy-input-group__animate___CKDxv {
-  opacity: 1 !important;
-  transform: translateY(0) !important;
-}
-.fy-input-group__animation-fade___BLPGN {
-  transition: opacity 0.4s ease-in var(--delay, 0ms) !important;
-  opacity: 0 !important;
-}
-.fy-input-group__animation-fade___BLPGN.fy-input-group__animate___CKDxv {
-  opacity: 1 !important;
-}
 /**color by character**/
 /** Font family **/
 /** Font weight **/
-a {
-  color: inherit;
-  text-decoration: none;
-}
-.fy-input-group__ct-header-wrapper___pH1s9,
-.fy-input-group__ctHeaderWrapper___YPbWr {
-  position: sticky;
-  top: 0;
-  z-index: 40;
-}
-body {
-  box-sizing: border-box;
-  overflow-x: hidden;
-}
-@media only screen and (min-width: 769px) {
-  body {
-    min-height: calc(100vh - 404px);
-  }
-}
-.fy-input-group__active-app___OIvgP,
-.fy-input-group__activeApp___hxq08 {
-  background-color: var(--pageBackground, #f8f8f8);
-}
-.fy-input-group__card-item___U38Lq .fy-input-group__card-desc___CiogG .fy-input-group__price___ZWY5Q .fy-input-group__effective-price___clSeX {
-  font-size: 0.875rem;
-}
-.fy-input-group__login-modal___bzHra .fy-input-group__tingle-modal-box___kYsKK {
-  background: #f5f5f5;
-}
-.fy-input-group__content___O3Ndz {
-  font-size: 0.875rem;
-  margin: 0 auto;
-  max-width: unset !important;
-  min-height: 75vh;
-}
-.fy-input-group__modal___Bi3ez {
-  overflow-x: hidden;
-  font-size: 0.875rem;
-}
-.fy-input-group__product-details-page___hqLUq,
-.fy-input-group__productDetailsPage___z5cvO {
-  max-width: 1440px;
-}
 .fy-input-group__display-block___Rpq6L {
   display: block;
 }
@@ -296,12 +186,24 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 500;
 }
+@media only screen and (max-width: 480px) {
+  .fy-input-group__caption-medium___ULDb6,
+  .fy-input-group__captionMedium___GIuhk {
+    font-size: 11px;
+  }
+}
 .fy-input-group__caption-semi-bold___B0YEk,
 .fy-input-group__captionSemiBold___aQt3D {
   font-size: 12px;
   line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .fy-input-group__caption-semi-bold___B0YEk,
+  .fy-input-group__captionSemiBold___aQt3D {
+    font-size: 11px;
+  }
 }
 .fy-input-group__btn-link___gqxe4,
 .fy-input-group__btnLink___ltxo_ {
@@ -359,33 +261,12 @@ button {
 .fy-input-group__removeScroll___axbTm {
   overflow-y: hidden !important;
 }
-.fy-input-group__orders___Mi_y4 .fy-input-group__order-status___K71il .fy-input-group__inline-svg___zteM8 {
-  height: 63px;
-}
-.fy-input-group__order-item___FWNRa .fy-input-group__oder-header___Wz5Rg .fy-input-group__filter-arrow-up___eGoSf {
-  margin-right: none !important;
-}
-.fy-input-group__buttons___lvyoH {
-  display: block !important;
-  margin-bottom: 8px;
-}
-.fy-input-group__checkout___b21U0 {
-  width: calc(100% - 20px) !important;
-}
-.fy-input-group__guest-checkout___OJkmL {
-  text-decoration: underline;
-  padding-top: 15px;
-}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
-}
-.fy-input-group__home-page___SFvTa,
-.fy-input-group__homePage___iN5VZ {
-  max-width: 1440px;
 }
 .fy-input-group__mr-5___eP9x0,
 .fy-input-group__mr5___MAQOI {
@@ -431,10 +312,6 @@ img::selection {
   background-color: var(--accentColor);
   color: #fff;
 }
-.fy-input-group__glide-cont____FwCH,
-.fy-input-group__glideCont___fbJs4 {
-  position: relative;
-}
 .fy-input-group__no-scroll___CL3eN,
 .fy-input-group__noScroll___GQKs8 {
   overflow-y: hidden;
@@ -452,16 +329,6 @@ img::selection {
     font-size: 12px !important;
     padding: 5px !important;
   }
-}
-.fy-input-group__blog-wrapper___T0E7u .fy-input-group__title___HqOdP {
-  color: var(--textHeading, #26201a);
-}
-.fy-input-group__blog-wrapper___T0E7u .fy-input-group__author___KXUdQ,
-.fy-input-group__blog-wrapper___T0E7u .fy-input-group__created-on___DWS59 {
-  color: var(--textLabel, #7d7676) !important;
-}
-.fy-input-group__blog-wrapper___T0E7u #fy-input-group__custom-page-container___iwL0S * {
-  color: var(--textBody, #3c3131);
 }
 .fy-input-group__view3d-canvas___wbiVK {
   width: 100%;
@@ -492,6 +359,9 @@ img::selection {
   color: var(--textLabel, #7d7676);
   font-size: 12px;
   line-height: 21px;
+}
+.fy-input-group__required___A8_zF {
+  color: var(--errorText, #b24141);
 }
 .fy-input-group__fyInput___ufjFf {
   accent-color: var(--buttonPrimary, #4e3f09);
