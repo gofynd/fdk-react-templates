@@ -67,7 +67,9 @@ const FyInput = forwardRef(
         {label && (
           <label htmlFor={id} className={customLabelClassName}>
             {label}
-            {required && showAsterik && <span> *</span>}
+            {required && showAsterik && (
+              <span className={styles.required}> *</span>
+            )}
           </label>
         )}
         {multiline ? (
@@ -80,12 +82,17 @@ const FyInput = forwardRef(
           ></textarea>
         ) : (
           <div
-            className={`${styles.adornmentContainer} ${customInputClassName}`}
+            className={`${styles.adornmentContainer} ${props?.disabled ? styles.inputDisable : ""} ${customInputClassName}`}
           >
             {startAdornment && (
               <div className={styles.startAdornment}>{startAdornment}</div>
             )}
-            <input className={styles.fyInput} {...props} id={id} ref={ref} />
+            <input
+              {...props}
+              className={`${styles.fyInput} ${props?.className || ""}`}
+              id={id}
+              ref={ref}
+            />
             {endAdornment && (
               <div className={styles.endAdornment}>{endAdornment}</div>
             )}

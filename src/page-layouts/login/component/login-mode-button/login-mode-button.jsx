@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import * as styles from "./login-mode-button.less";
-import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
+import LoginIcon from "../../../../assets/images/login_icon.svg";
 
 function LoginModeButton({ isOtp = true, onLoginToggleClick = () => {} }) {
   const getButtonLabel = useMemo(
@@ -9,7 +9,7 @@ function LoginModeButton({ isOtp = true, onLoginToggleClick = () => {} }) {
   );
   return (
     <button className={styles.loginModeBtn} onClick={onLoginToggleClick}>
-      <SvgWrapper svgSrc="login-icon" />
+      <LoginIcon />
       <span className={styles.loginModeLabel}>{getButtonLabel}</span>
     </button>
   );
