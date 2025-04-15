@@ -16,8 +16,8 @@
   text-decoration: line-through;
 }
 .free-gift-items-container {
-  display: grid;
-  grid-template-columns: 50% 50%;
+  // display: grid;
+  // grid-template-columns: 50% 50%;
   .free-items:nth-child(odd) {
     margin-right: 10px;
   }
@@ -30,6 +30,8 @@
     flex: 0 0 46px;
     height: auto;
     min-width: 0;
+    object-fit: contain;
+    flex-shrink: 0;
   }
 }
 .free-gift-box {
@@ -105,8 +107,8 @@
     }
   }
   .free-article-container {
-    display: grid;
-    grid-template-columns: 50% 50%;
+    // display: grid;
+    // grid-template-columns: 50% 50%;
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
 
