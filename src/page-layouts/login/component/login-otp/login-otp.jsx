@@ -1,7 +1,8 @@
-import React, { useEffect, useId, useLayoutEffect } from "react";
+import React, { useEffect, useId } from "react";
 import { useForm, Controller } from "react-hook-form";
 import * as styles from "./login-otp.less";
 import MobileNumber from "../../../auth/mobile-number/mobile-number";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function LoginOtp({
   mobileInfo = {
@@ -10,14 +11,14 @@ function LoginOtp({
     isValidNumber: false,
   },
   submittedMobile = "",
-  setSubmittedMobile = () => {},
+  setSubmittedMobile = () => { },
   otpResendTime = 0,
   otpError = null,
   isFormSubmitSuccess = false,
-  setIsFormSubmitSuccess = () => {},
-  onLoginFormSubmit = () => {},
-  onOtpSubmit = () => {},
-  onResendOtpClick = () => {},
+  setIsFormSubmitSuccess = () => { },
+  onLoginFormSubmit = () => { },
+  onOtpSubmit = () => { },
+  onResendOtpClick = () => { },
 }) {
   const { handleSubmit, control, getValues, reset, setValue } = useForm({
     mode: "onChange",
@@ -75,8 +76,9 @@ function LoginOtp({
           onResendOtpClick={onResendOtpClick}
           onChangeButton={onChangeButton}
         />
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 }
 
@@ -87,10 +89,11 @@ function OtpForm({
   mobileInfo = {},
   otpResendTime,
   error,
-  onOtpSubmit = () => {},
-  onResendOtpClick = () => {},
-  onChangeButton = () => {},
+  onOtpSubmit = () => { },
+  onResendOtpClick = () => { },
+  onChangeButton = () => { },
 }) {
+  const { t } = useGlobalTranslation("translation");
   const otpInputId = useId();
 
   const {
@@ -124,12 +127,6 @@ function OtpForm({
       clearErrors("root");
     }
   }, [error]);
-
-  useLayoutEffect(() => {
-    window?.scrollTo({
-      top: 0,
-    });
-  }, []);
 
   const resendOtp = () => {
     resetField("mobileOtp");
@@ -186,15 +183,15 @@ function OtpForm({
           )}
         </div>
         <button className={styles.verifyOtpBtn} type="submit">
-          Continue
+          {t("resource.common.continue")}
         </button>
-      </form>
+      </form >
       <button
         className={styles.resendOtpBtn}
         onClick={resendOtp}
         disabled={isResendBtnDisabled}
       >
-        {`Resend OTP${isResendBtnDisabled ? ` (${otpResendTime}S)` : ""}`}
+        {`${t("resource.common.resend_otp")}${isResendBtnDisabled ? ` (${otpResendTime}S)` : ""}`}
       </button>
     </>
   );

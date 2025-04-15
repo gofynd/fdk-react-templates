@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import * as styles from "./comment.less";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import Modal from "../../../../components/core/modal/modal";
+import { useGlobalTranslation } from "fdk-core/utils";
 import { useMobile } from "../../../../helper/hooks/useMobile";
 
-function Comment({ comment = "", onCommentChange = () => {} }) {
+function Comment({ comment = "", onCommentChange = () => { } }) {
+  const { t } = useGlobalTranslation("translation");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isCommentError = comment.length > 500;
   const isMobile = useMobile();
@@ -41,12 +43,13 @@ function Comment({ comment = "", onCommentChange = () => {} }) {
               <div className={styles.body}>
                 Want to provide any specific instructions?
               </div>
-            </div>
-          )}
+            </div >
+          )
+          }
           <div className={styles.addBtn} onClick={openCommentModal}>
-            {comment.length > 0 ? "Edit" : "+ ADD"}
+            {comment.length > 0 ? t("resource.facets.edit") : `+ ${t("resource.facets.add_caps")}`}
           </div>
-        </div>
+        </div >
         <div className={styles.inputBox}>
           <div className={styles.commentBox}>
             <SvgWrapper
@@ -56,7 +59,7 @@ function Comment({ comment = "", onCommentChange = () => {} }) {
             <input
               type="text"
               value={comment}
-              placeholder="Have any specific comment?..."
+              placeholder={t("resource.cart.placeholder_specific_comment")}
               onChange={(e) => onCommentChange(e.target.value)}
             />
             <div
@@ -65,13 +68,13 @@ function Comment({ comment = "", onCommentChange = () => {} }) {
           </div>
           {isCommentError && (
             <div className={styles.commentError}>
-              Comment should be within 500 characters
+              {t("resource.cart.comment_character_limit")}
             </div>
           )}
         </div>
-      </div>
+      </div >
       <Modal
-        title="Add Comment"
+        title={t("resource.cart.add_comment")}
         isOpen={isModalOpen}
         closeDialog={() => setIsModalOpen(false)}
         headerClassName={styles.modelHeader}
@@ -80,7 +83,7 @@ function Comment({ comment = "", onCommentChange = () => {} }) {
         <div className={styles.modalContent}>
           <div>
             <textarea
-              placeholder="Have any specific instructions..."
+              placeholder={t("resource.cart.have_any_specific_instructions")}
               className={styles.modalTextarea}
               value={comment}
               onChange={(e) => onCommentChange(e.target.value)}
@@ -88,7 +91,7 @@ function Comment({ comment = "", onCommentChange = () => {} }) {
             <div className={styles.modalErrorWrapper}>
               {isCommentError && (
                 <div className={styles.modalCommentError}>
-                  Comment should be within 500 characters
+                  {t("resource.cart.comment_character_limit")}
                 </div>
               )}
               <div
@@ -101,10 +104,10 @@ function Comment({ comment = "", onCommentChange = () => {} }) {
             className={styles.modalActionBtn}
             onClick={closeCommentModal}
           >
-            Add Comment
+            {t("resource.cart.add_comment")}
           </button>
         </div>
-      </Modal>
+      </Modal >
     </>
   );
 }

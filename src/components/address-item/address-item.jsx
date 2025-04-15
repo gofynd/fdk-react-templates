@@ -117,13 +117,13 @@ function AddressItem({
       <>{belowNameSlot}</>
       <div
         className={styles.addressMid}
-        style={{ marginLeft: showAddressSelectionCheckbox ? "25px" : 0 }}
+        style={{ marginInlineStart: showAddressSelectionCheckbox ? "25px" : 0 }}
       >
         {getAddress}
       </div>
       <div
         className={styles.phEnd}
-        style={{ marginLeft: showAddressSelectionCheckbox ? "25px" : 0 }}
+        style={{ marginInlineStart: showAddressSelectionCheckbox ? "25px" : 0 }}
       >
         {addressItem.country_phone_code + "-" + addressItem.phone}
       </div>

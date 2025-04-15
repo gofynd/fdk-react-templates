@@ -1,6 +1,124 @@
+.modal__slide-fade-enter-active___IYJpQ,
+.modal__slide-fade-leave-active____6Xi5 {
+  transition: all 0.5s;
+}
+.modal__slide-fade-enter___tx3RI,
+.modal__slide-fade-leave-to___w5iAn {
+  opacity: 0;
+  transform: translateY(10px);
+}
+.modal__fade-enter-active___KQ7oU,
+.modal__fade-leave-active___DIvgd {
+  transition: all 0.5s;
+}
+.modal__fade-enter___LVNwz,
+.modal__fade-leave-to___tpni1 {
+  opacity: 0;
+}
+.modal__slide-leave-active___zfwtq,
+.modal__slide-enter-active___UbFn3 {
+  transition: 0.5s;
+}
+.modal__slide-enter___k9vGG,
+.modal__slide-leave-to___Ad7me {
+  transform: translate(-100%, 0%);
+}
+[dir="rtl"] .modal__slide-enter___k9vGG,
+[dir="rtl"] .modal__slide-leave-to___Ad7me {
+  transform: translate(100%, 0%);
+}
+.modal__slide-left-enter-active___S4nRV,
+.modal__slide-left-leave-active___m1H0r {
+  transition: all 0.5s;
+}
+.modal__slide-left-enter___RRrhU,
+.modal__slide-left-leave-to___eUR8I {
+  transform: translate(200%, 0%);
+}
+[dir="rtl"] .modal__slide-left-enter___RRrhU,
+[dir="rtl"] .modal__slide-left-leave-to___eUR8I {
+  transform: translate(-200%, 0%);
+}
+.modal__slide-down-enter-active___CjFQ6,
+.modal__slide-down-leave-active___zMge6 {
+  transition: all 0.5s;
+}
+.modal__slide-down-enter___znd4P,
+.modal__slide-down-leave-to___hX309 {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+.modal__slide-up-enter-active___gwwWv,
+.modal__slide-up-leave-active___W9v5D {
+  transition: all 0.5s ease-in-out;
+}
+.modal__slide-up-enter___Vd3os,
+.modal__slide-up-leave-to___jzuos {
+  opacity: 0;
+  transform: translateY(100vh);
+}
+.modal__animation-fade-up___J9WWe {
+  transition: transform 0.5s ease-in var(--delay, 0ms), opacity 0.5s ease-in var(--delay, 0ms) !important;
+  opacity: 0 !important;
+  transform: translateY(10px) !important;
+}
+.modal__animation-fade-up___J9WWe.modal__animate___ioMve {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+.modal__animation-fade___oxwoJ {
+  transition: opacity 0.4s ease-in var(--delay, 0ms) !important;
+  opacity: 0 !important;
+}
+.modal__animation-fade___oxwoJ.modal__animate___ioMve {
+  opacity: 1 !important;
+}
 /**color by character**/
 /** Font family **/
 /** Font weight **/
+a {
+  color: inherit;
+  text-decoration: none;
+}
+.modal__ct-header-wrapper___IMQuH,
+.modal__ctHeaderWrapper___C4Wm7 {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+body {
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+@media only screen and (min-width: 769px) {
+  body {
+    min-height: calc(100vh - 404px);
+  }
+}
+.modal__active-app___Qzgo8,
+.modal__activeApp___mC7dS {
+  background-color: var(--pageBackground, #f8f8f8);
+}
+.modal__card-item___gLt7g .modal__card-desc___jG0nm .modal__price___P3iLo .modal__effective-price___tdfLO {
+  font-size: 0.875rem;
+}
+.modal__login-modal___CdP8e .modal__tingle-modal-box___GN84U {
+  background: #f5f5f5;
+}
+.modal__content___J1BbE {
+  font-size: 0.875rem;
+  margin: 0 auto;
+  max-width: unset !important;
+  min-height: 75vh;
+}
+.modal__modal___kWj4c {
+  overflow-x: hidden;
+  font-size: 0.875rem;
+}
+.modal__product-details-page___Z_7ZO,
+.modal__productDetailsPage___gVszL {
+  max-width: 1440px;
+}
 .modal__display-block___Q7cA_ {
   display: block;
 }
@@ -261,6 +379,23 @@ button {
 .modal__removeScroll___PkoZ2 {
   overflow-y: hidden !important;
 }
+.modal__orders___eHFYA .modal__order-status___vUf_n .modal__inline-svg___qbpWt {
+  height: 63px;
+}
+.modal__order-item___M988m .modal__oder-header___rCpG7 .modal__filter-arrow-up___L2xsm {
+  margin-inline-end: none !important;
+}
+.modal__buttons___mXVll {
+  display: block !important;
+  margin-bottom: 8px;
+}
+.modal__checkout___gwQC2 {
+  width: calc(100% - 20px) !important;
+}
+.modal__guest-checkout___rGxd4 {
+  text-decoration: underline;
+  padding-top: 15px;
+}
 ::selection {
   background-color: #e8a76c;
   color: #000;
@@ -268,13 +403,17 @@ button {
 img::selection {
   background-color: transparent;
 }
+.modal__home-page___TepXH,
+.modal__homePage___T_rHA {
+  max-width: 1440px;
+}
 .modal__mr-5___rqVB7,
 .modal__mr5___OnXKv {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .modal__mr-2___TjkMn,
 .modal__mr2___0s6r4 {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .modal__py-5___ymlx9,
 .modal__py5___hpEP2 {
@@ -312,6 +451,10 @@ img::selection {
   background-color: var(--accentColor);
   color: #fff;
 }
+.modal__glide-cont___ypHi0,
+.modal__glideCont___CRmHv {
+  position: relative;
+}
 .modal__no-scroll___dUAVM,
 .modal__noScroll___SAALJ {
   overflow-y: hidden;
@@ -329,6 +472,16 @@ img::selection {
     font-size: 12px !important;
     padding: 5px !important;
   }
+}
+.modal__blog-wrapper___cRefd .modal__title___mrRPb {
+  color: var(--textHeading, #26201a);
+}
+.modal__blog-wrapper___cRefd .modal__author___iTIqZ,
+.modal__blog-wrapper___cRefd .modal__created-on___hZOrh {
+  color: var(--textLabel, #7d7676) !important;
+}
+.modal__blog-wrapper___cRefd #modal__custom-page-container___KwyHT * {
+  color: var(--textBody, #3c3131);
 }
 .modal__view3d-canvas___ZJBbt {
   width: 100%;
@@ -354,8 +507,8 @@ img::selection {
   position: fixed;
   top: 0;
   bottom: 0;
-  left: 0;
-  right: 0;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
   z-index: 100;
   overflow-y: auto;
   overflow-x: hidden;
@@ -370,11 +523,11 @@ img::selection {
   width: 40%;
   position: fixed;
   bottom: 0;
-  right: 0;
+  inset-inline-end: 0;
   opacity: 0;
   transition: right 0.5s ease-in-out;
   /* Added transition property for animation */
-  right: -40%;
+  inset-inline-end: -40%;
   /* Initial state - hidden off the right side */
   /* Track */
   /* Handle */
@@ -382,14 +535,14 @@ img::selection {
 @media only screen and (max-width: 768px) {
   .modal__modalContainerCss___ZR5ho {
     width: 60%;
-    right: -60%;
+    inset-inline-end: -60%;
     /* Initial state - hidden off the right side */
   }
 }
 @media only screen and (max-width: 480px) {
   .modal__modalContainerCss___ZR5ho {
     width: 100%;
-    right: -100%;
+    inset-inline-end: -100%;
     /* Initial state - hidden off the right side */
   }
 }
@@ -439,7 +592,7 @@ img::selection {
   line-height: 140%;
 }
 .modal__modalContainerCss___ZR5ho.modal__slideIn____gLvj {
-  right: 0;
+  inset-inline-end: 0;
   /* Final state - fully visible */
   opacity: 1;
 }
@@ -452,5 +605,9 @@ img::selection {
 .modal__slideFadeEnter___Qtfum .modal__modalContainerCss___ZR5ho,
 .modal__slideFadeLeaveTo___kGzGV .modal__modalContainerCss___ZR5ho {
   transform: translate3d(100vh, 0, 0);
+}
+[dir="rtl"] .modal__slideFadeEnter___Qtfum .modal__modalContainerCss___ZR5ho,
+[dir="rtl"] .modal__slideFadeLeaveTo___kGzGV .modal__modalContainerCss___ZR5ho {
+  transform: translate3d(-100vh, 0, 0);
 }
 

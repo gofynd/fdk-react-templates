@@ -54,60 +54,60 @@ function SingleAddress({
 
   return (
     <>
-      <div
-        className={`${styles.addressContainerLeft} ${showPayment ? styles.hideAddress : ""}`}
-      >
-        <SinglesAddressHeader
-          allAddresses={allAddresses}
-          showAddNewAddressModal={showAddNewAddressModal}
-          showPayment={showPayment}
-          showShipment={showShipment}
-          backToEdit={backToEdit}
-        ></SinglesAddressHeader>
-        <Modal
-          title={modalTitle}
-          isOpen={openModal}
-          closeDialog={resetAddressState}
-          modalType="right-modal"
-        >
-          <div className={styles.addressWrapper}>
-            <AddressForm
-              internationalShipping={isInternationalShippingEnabled}
-              formSchema={defaultFormSchema}
-              isNewAddress={isNewAddress}
-              addressItem={addressItem}
-              onUpdateAddress={updateAddress}
-              onAddAddress={addAddress}
-              mapApiKey={mapApiKey}
-              showGoogleMap={showGoogleMap}
-              openModal={openModal}
-              onGetLocality={getLocality}
-              setI18nDetails={setI18nDetails}
-              handleCountrySearch={handleCountrySearch}
-              getFilteredCountries={getFilteredCountries}
-              selectedCountry={selectedCountry?.display_name ?? ""}
-              countryDetails={countryDetails}
-              isGuestUser={isGuestUser}
-            ></AddressForm>
-          </div>
-        </Modal>
-        {showShipment || showPayment ? null : (
-          <SingleAddressContent
+      {!showPayment && (
+        <div className={styles.addressContainerLeft}>
+          <SinglesAddressHeader
             allAddresses={allAddresses}
-            addressLoading={isAddressLoading}
-            editAddress={editAddress}
-            removeAddress={removeAddress}
-            addressLoader={addressLoader}
-            selectAddress={selectAddress}
-            invalidAddressError={invalidAddressError}
-            selectedAddressId={selectedAddressId}
-            setSelectedAddressId={setSelectedAddressId}
-            getOtherAddress={getOtherAddress}
-            getDefaultAddress={getDefaultAddress}
-            loader={loader}
-          ></SingleAddressContent>
-        )}
-      </div>
+            showAddNewAddressModal={showAddNewAddressModal}
+            showPayment={showPayment}
+            showShipment={showShipment}
+            backToEdit={backToEdit}
+          ></SinglesAddressHeader>
+          <Modal
+            title={modalTitle}
+            isOpen={openModal}
+            closeDialog={resetAddressState}
+            modalType="right-modal"
+          >
+            <div className={styles.addressWrapper}>
+              <AddressForm
+                internationalShipping={isInternationalShippingEnabled}
+                formSchema={defaultFormSchema}
+                isNewAddress={isNewAddress}
+                addressItem={addressItem}
+                onUpdateAddress={updateAddress}
+                onAddAddress={addAddress}
+                mapApiKey={mapApiKey}
+                showGoogleMap={showGoogleMap}
+                openModal={openModal}
+                onGetLocality={getLocality}
+                setI18nDetails={setI18nDetails}
+                handleCountrySearch={handleCountrySearch}
+                getFilteredCountries={getFilteredCountries}
+                selectedCountry={selectedCountry?.display_name ?? ""}
+                countryDetails={countryDetails}
+                isGuestUser={isGuestUser}
+              ></AddressForm>
+            </div>
+          </Modal>
+          {showShipment || showPayment ? null : (
+            <SingleAddressContent
+              allAddresses={allAddresses}
+              addressLoading={isAddressLoading}
+              editAddress={editAddress}
+              removeAddress={removeAddress}
+              addressLoader={addressLoader}
+              selectAddress={selectAddress}
+              invalidAddressError={invalidAddressError}
+              selectedAddressId={selectedAddressId}
+              setSelectedAddressId={setSelectedAddressId}
+              getOtherAddress={getOtherAddress}
+              getDefaultAddress={getDefaultAddress}
+              loader={loader}
+            ></SingleAddressContent>
+          )}
+        </div>
+      )}
     </>
   );
 }

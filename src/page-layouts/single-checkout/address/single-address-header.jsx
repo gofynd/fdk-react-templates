@@ -3,6 +3,7 @@ import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./single-address-header.less";
 import { getAddressStr } from "../../../helper/utils";
 import { useSearchParams } from "react-router-dom";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function SinglesAddressHeader({
   allAddresses,
@@ -11,6 +12,7 @@ function SinglesAddressHeader({
   showShipment,
   backToEdit,
 }) {
+  const { t } = useGlobalTranslation("translation");
   const [searchParams] = useSearchParams();
   const selectedAddId = searchParams.get("address_id");
 
@@ -40,45 +42,32 @@ function SinglesAddressHeader({
               </div>
             </div>
             <div className={styles.rightSelected} onClick={backToEdit}>
-              Change
-            </div>
-          </div>
+              {t("resource.cart.change")}
+            </div >
+          </div >
         </>
       ) : (
-        <>
-          <div
-            className={`${styles.addressHeaderContainer} ${styles.addressHeaderContainer__mobile}`}
-            onClick={showAddNewAddressModal}
-          >
-            <div className={styles.buttonWrapper}>
-              <button className={`${styles.commonBtn} ${styles.addBtn}`}>
-                <SvgWrapper svgSrc="addAddress" /> <span>Add New Address</span>
-              </button>
-            </div>
-          </div>
-          <div
-            className={`${styles.addressHeaderContainer} ${styles.addressHeaderContainer__desktop}`}
-          >
-            <div className={styles.wrapper}>
-              <SvgWrapper svgSrc="one-number"></SvgWrapper>
-              <div className={styles.headerWrapper}>
-                <div className={styles.addressHeading}>Delivery Address</div>
-                <div className={styles.addressString}>
-                  Select delivery address
-                </div>
+        <div className={styles.addressHeaderContainer}>
+          <div className={styles.wrapper}>
+            <SvgWrapper svgSrc="one-number"></SvgWrapper>
+            <div className={styles.headerWrapper}>
+              <div className={styles.addressHeading}>{t("resource.checkout.delivery_address")}</div>
+              <div className={styles.addressString}>
+                {t("resource.checkout.select_delivery_address")}
               </div>
             </div>
-            <div className={styles.buttonWrapper}>
-              <button
-                className={`${styles.commonBtn} ${styles.addBtn}`}
-                onClick={showAddNewAddressModal}
-              >
-                <SvgWrapper svgSrc="addAddress" /> <span>Add New Address</span>
-              </button>
-            </div>
           </div>
-        </>
-      )}
+          <div className={styles.buttonWrapper}>
+            <button
+              className={`${styles.commonBtn} ${styles.addBtn}`}
+              onClick={showAddNewAddressModal}
+            >
+              <SvgWrapper svgSrc="addAddress" /> <span>Add New Address</span>
+            </button >
+          </div >
+        </div >
+      )
+      }
     </>
   );
 }

@@ -18,12 +18,14 @@ import React, { useState } from "react";
 import * as styles from "./shipments-update-item.less";
 import QuantityCtrl from "./quantity-ctrl/quantity-ctrl";
 import { numberWithCommas } from "../../helper/utils";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function ShipmentUpdateItem({
   selectedBagId,
   item,
-  updatedQuantity = () => {},
+  updatedQuantity = () => { },
 }) {
+  const { t } = useGlobalTranslation("translation");
   const [showQuantityError, setShowQuantityError] = useState(false);
   const [showQuantity, setshowQuantity] = useState(true);
   const [currQuantity, setcurrQuantity] = useState(item.quantity);
@@ -93,9 +95,9 @@ function ShipmentUpdateItem({
                   {showQuantityError && (
                     <div className={`${styles.maxAvail} ${styles.regularxxxs}`}>
                       {currQuantity > 0 && (
-                        <span>Max quantity: {currQuantity}</span>
+                        <span>{t("resource.common.max_quantity")}: {currQuantity}</span>
                       )}
-                      {currQuantity === 0 && <span>Min quantity: 0</span>}
+                      {currQuantity === 0 && <span>{t("resource.common.min_quantity")}: 0</span>}
                     </div>
                   )}
                 </div>
@@ -112,12 +114,13 @@ function ShipmentUpdateItem({
               </span>
               <span className={`${styles.lightxxs}`}>
                 {" "}
-                ({item?.quantity} {item?.quantity === 1 ? "Piece" : "Pieces"})
-              </span>
-            </div>
-          </div>
-        </div>
-      )}
+                ({item?.quantity} {item?.quantity === 1 ? t("resource.common.single_piece") : t("resource.common.multiple_piece")})
+              </span >
+            </div >
+          </div >
+        </div >
+      )
+      }
     </>
   );
 }

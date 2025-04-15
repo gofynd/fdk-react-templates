@@ -5,8 +5,10 @@ import { GENDER_OPTIONS } from "../../helper/constant";
 import FyInput from "../../components/core/fy-input/fy-input";
 import FyButton from "../../components/core/fy-button/fy-button";
 import { deepEqual } from "../../helper/utils";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function ProfileDetails({ userData, handleSave }) {
+  const { t } = useGlobalTranslation("translation");
   const [isLoading, setIsLoading] = useState(false);
   const { firstName, lastName, gender } = userData;
 
@@ -149,7 +151,7 @@ function ProfileDetails({ userData, handleSave }) {
 
           <div className={styles.radioInputContainer}>
             <div className={styles.formLabel}>
-              Gender <span className={styles.required}>*</span>
+              {t("resource.profile.gender")} <span className={styles.required}>*</span>
             </div>
             <div className={styles.radioContent}>
               {GENDER_OPTIONS.map(({ value, display }) => (
@@ -166,7 +168,7 @@ function ProfileDetails({ userData, handleSave }) {
                     className={styles.radioLabel}
                     htmlFor={`gender-${value}`}
                   >
-                    {display}
+                    {t(display)}
                   </label>
                 </div>
               ))}
@@ -179,7 +181,7 @@ function ProfileDetails({ userData, handleSave }) {
               className={styles.submitBtn}
               type="submit"
             >
-              Save
+              {t("resource.facets.save")}
             </FyButton>
           </div>
         </form>

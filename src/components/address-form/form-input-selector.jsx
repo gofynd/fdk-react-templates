@@ -5,6 +5,8 @@ import FyInputGroup from "../core/fy-input-group/fy-input-group";
 import FyDropdown from "../core/fy-dropdown/fy-dropdown";
 import MobileNumber from "../../page-layouts/auth/mobile-number/mobile-number";
 import * as styles from "./form-input-selector.less";
+import { startsWithResource, translateValidationMessages } from "../../helper/utils";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 const FormInputSelector = ({
   formData,
@@ -15,6 +17,7 @@ const FormInputSelector = ({
   labelClassName = "",
   formMethods = {},
 }) => {
+  const { t } = useGlobalTranslation("translation");
   const {
     display = "",
     enum: options = [],
@@ -28,7 +31,7 @@ const FormInputSelector = ({
     countryCode,
     disabled = false,
     readOnly = false,
-    onChange = () => {},
+    onChange = () => { },
     countryIso = "",
   } = formData;
   const getInput = ({ error, field }) => {
@@ -39,7 +42,7 @@ const FormInputSelector = ({
           <FyInputGroup
             name={key}
             options={options}
-            label={display}
+            label={startsWithResource(display) ? t(display) : display}
             type={type}
             required={required}
             error={error}
@@ -59,7 +62,7 @@ const FormInputSelector = ({
             options={options}
             value={field?.value}
             required={required}
-            label={display}
+            label={startsWithResource(display) ? t(display) : display}
             placeholder={placeholder}
             containerClassName={`${styles.customClass} ${isSingleField ? styles.singleField : ""}`}
             disabled={disabled}
@@ -102,7 +105,7 @@ const FormInputSelector = ({
           <FyInput
             labelClassName={labelClassName}
             name={key}
-            label={display}
+            label={startsWithResource(display) ? t(display) : display}
             type={type}
             multiline={type === "textarea"}
             required={required}
@@ -128,7 +131,7 @@ const FormInputSelector = ({
     <Controller
       name={key}
       control={control}
-      rules={formData.validation}
+      rules={translateValidationMessages(formData.validation, t)}
       render={({ field, fieldState: { error } }) => {
         return getInput({ field, error });
       }}

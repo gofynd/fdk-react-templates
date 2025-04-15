@@ -15,14 +15,16 @@ import React, { useState, useEffect } from "react";
 import * as styles from "./sort-modal.less";
 import Modal from "../core/modal/modal";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function SortModal({
   isOpen = true,
   sortList = [],
-  onCloseModalClick = () => {},
-  onResetBtnClick = () => {},
-  onApplyBtnClick = () => {},
+  onCloseModalClick = () => { },
+  onResetBtnClick = () => { },
+  onApplyBtnClick = () => { },
 }) {
+  const { t } = useGlobalTranslation("translation");
   const [selectedSort, setSelectedSort] = useState(() => {
     let selectedItem = sortList?.find((x) => x.is_selected);
     return selectedItem || sortList?.[0];

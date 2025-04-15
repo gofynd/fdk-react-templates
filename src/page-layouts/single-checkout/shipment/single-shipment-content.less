@@ -27,7 +27,7 @@
           font-weight: 600;
           font-size: 14px;
           color: var(--textHeading);
-          margin-right: 8px;
+          margin-inline-end: 8px;
           line-height: 140%;
           white-space: nowrap;
           @media @mobile {
@@ -93,8 +93,13 @@
         padding: 4px 12px;
         margin-bottom: 16px;
 
+        svg {
+          path {
+            fill: @SuccessText;
+          }
+        }
         span {
-          margin-left: 6px;
+          margin-inline-start: 6px;
         }
         .ribbonMsg {
           align-self: center;
@@ -169,7 +174,7 @@
                 line-height: 140%;
                 flex-wrap: wrap;
                 .size {
-                  margin-right: 12px;
+                  margin-inline-end: 12px;
                   line-height: 140%;
                 }
               }
@@ -182,9 +187,7 @@
 
             .priceWrapper {
               display: flex;
-              margin-right: 12px;
-              align-items: center;
-
+              margin-inline-end: 12px;
               .effectivePrice {
                 color: @TextHeading;
                 font-size: 16px;
@@ -228,7 +231,7 @@
                 margin-right: 12px;
                 width: fit-content;
                 .offerInfoIcon {
-                  margin-left: 6px;
+                  margin-inline-start: 6px;
                   cursor: pointer;
                 }
               }

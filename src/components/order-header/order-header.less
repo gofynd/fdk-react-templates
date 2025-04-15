@@ -2,16 +2,14 @@
 
 .orderHeader {
   padding: 16px 0px;
+
   display: flex;
   align-items: center;
   flex: 0.9;
 
-  @media @mobile {
+  @media @tablet {
     flex-direction: column;
     align-items: normal;
-  }
-
-  @media @tablet {
     padding: 16px;
   }
 
@@ -63,24 +61,23 @@
 
   .rightAlign {
     display: flex;
-    margin-left: auto;
+    margin-inline-start: auto;
     padding: 0;
 
-    @media @tablet {
+    @media @mobile {
       flex-direction: column;
-      margin: 16px 0 0;
+      margin: 0 16px;
       font-size: 14px;
       row-gap: 12px;
     }
-
     .orderDropdown {
       flex: auto;
       flex-direction: row;
       padding: 0;
       .flex-center();
       color: @Mako;
-      margin-left: 16px;
-      @media @tablet {
+      margin: 0px 20px;
+      @media @mobile {
         margin: 0;
         justify-content: space-between;
       }

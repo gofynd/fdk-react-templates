@@ -16,6 +16,7 @@ import * as styles from "./google-map.less";
 import Autocomplete from "react-google-autocomplete";
 import SearchIcon from "../../assets/images/search.svg";
 import LocateIcon from "../../assets/images/locate.svg";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 const libraries = ["places"];
 const mapContainerStyle = {
@@ -36,8 +37,9 @@ const GoogleMapAddress = ({
   onAddressSelect,
   countryDetails,
   addressItem,
-  onLoad = () => {},
+  onLoad = () => { },
 }) => {
+  const { t } = useGlobalTranslation("translation");
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [selectedPlace, setSelectedPlace] = useState({
     lat: countryDetails?.latitude,
@@ -298,19 +300,21 @@ const GoogleMapAddress = ({
             </button>
           </div>
         </LoadScript>
-        {!isMapLoaded && (
-          <div className={styles.skeleton}>
-            <canvas />
-          </div>
-        )}
-      </div>
+        {
+          !isMapLoaded && (
+            <div className={styles.skeleton}>
+              <canvas />
+            </div>
+          )
+        }
+      </div >
       {address && (
         <div className={styles.addressSelect}>
           <p>{address}</p>
           <button onClick={selectAddress}>Use This</button>
-        </div>
+        </div >
       )}
-    </div>
+    </div >
   );
 };
 

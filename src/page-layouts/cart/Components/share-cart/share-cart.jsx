@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 import * as styles from "./share-cart.less";
+import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import ShareCartModal from "../share-cart-modal/share-cart-modal";
-import ShareCartIcon from "../../../../assets/images/share-cart.svg";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function ShareCart({
   showCard = false,
   qrCode = "",
   isShareLoading = false,
-  onCopyToClipboardClick = () => {},
-  onFacebookShareClick = () => {},
-  onTwitterShareClick = () => {},
-  onShareClick = () => {},
+  onCopyToClipboardClick = () => { },
+  onFacebookShareClick = () => { },
+  onTwitterShareClick = () => { },
+  onShareClick = () => { },
 }) {
+  const { t } = useGlobalTranslation("translation");
   const [showShare, setShowShare] = useState(false);
 
   const getCartShareLink = () => {
@@ -26,25 +28,25 @@ function ShareCart({
           <div className={styles.shareCartBox}>
             <div className={styles.leftPart}>
               <span className={styles.shareCartIcon}>
-                <ShareCartIcon />
+                <SvgWrapper svgSrc="share-cart" />
               </span>
-              SHARE SHOPPING CART
+              {t("resource.cart.share_shopping_cart_caps")}
             </div>
             <div className={styles.rightPart} onClick={getCartShareLink}>
-              SHARE
+              {t("resource.common.share_caps")}
             </div>
           </div>
         ) : (
           <div className={styles.nccCartShare} onClick={getCartShareLink}>
             <span className={styles.shareCartIconGreen}>
-              <ShareCartIcon />
+              <SvgWrapper svgSrc="share-cart" />
             </span>
-            <span className={styles.shareBagBtn}>SHARE BAG</span>
+            <span className={styles.shareBagBtn}>{t("resource.cart.share_bag_caps")}</span>
           </div>
         )}
       </div>
       <ShareCartModal
-        title="Spread the shopping delight! Scan QR & share these products with your loved ones"
+        title={t("resource.cart.share_shopping_qr")}
         isOpen={showShare}
         {...{
           isShareLoading,

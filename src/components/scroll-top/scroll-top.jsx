@@ -8,10 +8,12 @@
 
 import React, { useState, useEffect } from "react";
 import * as styles from "./scroll-top.less";
+import SvgWrapper from "../core/svgWrapper/SvgWrapper";
+import { useGlobalTranslation } from "fdk-core/utils";
 import { isRunningOnClient } from "../../helper/utils";
-import ScrollTopIcon from "../../assets/images/scroll-top.svg";
 
 function ScrollTop() {
+  const { t } = useGlobalTranslation("translation");
   const [isActive, setIsActive] = useState(false);
 
   const scrollToTop = () => {
@@ -46,9 +48,9 @@ function ScrollTop() {
       onClick={scrollToTop}
     >
       <span className={styles.scrollTopIcon}>
-        <ScrollTopIcon />
+        <SvgWrapper svgSrc="scroll-top" />
       </span>
-      <span className={styles.scrollTopText}>Back to top</span>
+      <span className={styles.scrollTopText}>{t("resource.common.back_to_top")}</span>
     </button>
   );
 }

@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "../../styles/product-listing.less";
+import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
 import InfiniteLoader from "../../components/core/infinite-loader/infinite-loader";
 import Breadcrumb from "../../components/breadcrumb/breadcrumb";
 import ProductCard from "../../components/product-card/product-card";
@@ -20,12 +21,7 @@ import Modal from "../../components/core/modal/modal";
 import AddToCart from "../../page-layouts/plp/Components/add-to-cart/add-to-cart";
 import { useViewport } from "../../helper/hooks";
 import SizeGuide from "../../page-layouts/plp/Components/size-guide/size-guide";
-import FilterIcon from "../../assets/images/filter.svg";
-import SortIcon from "../../assets/images/sort.svg";
-import TwoGridIcon from "../../assets/images/grid-two.svg";
-import FourGridIcon from "../../assets/images/grid-four.svg";
-import TwoGridMobIcon from "../../assets/images/grid-two-mob.svg";
-import OneGridMobIcon from "../../assets/images/grid-one-mob.svg";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 const ProductListing = ({
   breadcrumb = [],
@@ -51,7 +47,7 @@ const ProductListing = ({
   isSaleBadge = true,
   isPrice = true,
   globalConfig = {},
-  imgSrcSet,
+  isHdimgUsed = false,
   isImageFill = false,
   showImageOnHover = false,
   isResetFilterDisable = false,
@@ -64,20 +60,18 @@ const ProductListing = ({
   listingPrice = "range",
   banner = {},
   showAddToCart = false,
-  stickyFilterTopOffset = 0,
-  onColumnCountUpdate = () => {},
-  onResetFiltersClick = () => {},
-  onFilterUpdate = () => {},
-  onSortUpdate = () => {},
-  onFilterModalBtnClick = () => {},
-  onSortModalBtnClick = () => {},
-  onWishlistClick = () => {},
-  onViewMoreClick = () => {},
-  onLoadMoreProducts = () => {},
-  EmptyStateComponent = (
-    <EmptyState title="Sorry, we couldn’t find any results" />
-  ),
+  onColumnCountUpdate = () => { },
+  onResetFiltersClick = () => { },
+  onFilterUpdate = () => { },
+  onSortUpdate = () => { },
+  onFilterModalBtnClick = () => { },
+  onSortModalBtnClick = () => { },
+  onWishlistClick = () => { },
+  onViewMoreClick = () => { },
+  onLoadMoreProducts = () => { },
+  EmptyStateComponent
 }) => {
+  const { t } = useGlobalTranslation("translation");
   const isTablet = useViewport(0, 768);
   const {
     handleAddToCart,
@@ -102,59 +96,55 @@ const ProductListing = ({
                   className={styles.filterBtn}
                   onClick={onFilterModalBtnClick}
                 >
-                  <FilterIcon />
+                  <SvgWrapper svgSrc="filter" />
                   <span>Filter</span>
                 </button>
               )}
               <button onClick={onSortModalBtnClick}>
-                <SortIcon />
-                <span>Sort By</span>
+                <SvgWrapper svgSrc="sort" />
+                <span>{t("resource.facets.sort_by")}</span>
               </button>
             </div>
             <div className={styles.headerRight}>
               <button
-                className={`${styles.colIconBtn} ${styles.mobile} ${
-                  columnCount?.mobile === 1 ? styles.active : ""
-                }`}
+                className={`${styles.colIconBtn} ${styles.mobile} ${columnCount?.mobile === 1 ? styles.active : ""
+                  }`}
                 onClick={() =>
                   onColumnCountUpdate({ screen: "mobile", count: 1 })
                 }
-                title="Mobile grid one"
+                title={t("resource.product.mobile_grid_one")}
               >
-                <OneGridMobIcon />
+                <SvgWrapper svgSrc="grid-one-mob" />
               </button>
               <button
-                className={`${styles.colIconBtn} ${styles.mobile} ${
-                  columnCount?.mobile === 2 ? styles.active : ""
-                }`}
+                className={`${styles.colIconBtn} ${styles.mobile} ${columnCount?.mobile === 2 ? styles.active : ""
+                  }`}
                 onClick={() =>
                   onColumnCountUpdate({ screen: "mobile", count: 2 })
                 }
-                title="Mobile grid two"
+                title={t("resource.product.mobile_grid_two")}
               >
-                <TwoGridMobIcon />
+                <SvgWrapper svgSrc="grid-two-mob" />
               </button>
               <button
-                className={`${styles.colIconBtn} ${styles.tablet} ${
-                  columnCount?.tablet === 2 ? styles.active : ""
-                }`}
+                className={`${styles.colIconBtn} ${styles.tablet} ${columnCount?.tablet === 2 ? styles.active : ""
+                  }`}
                 onClick={() =>
                   onColumnCountUpdate({ screen: "tablet", count: 2 })
                 }
-                title="Tablet grid two"
+                title={t("resource.product.tablet_grid_two")}
               >
-                <TwoGridIcon />
+                <SvgWrapper svgSrc="grid-two" />
               </button>
               <button
-                className={`${styles.colIconBtn} ${styles.tablet} ${
-                  columnCount?.tablet === 3 ? styles.active : ""
-                }`}
+                className={`${styles.colIconBtn} ${styles.tablet} ${columnCount?.tablet === 3 ? styles.active : ""
+                  }`}
                 onClick={() =>
                   onColumnCountUpdate({ screen: "tablet", count: 3 })
                 }
-                title="Tablet grid four"
+                title={t("resource.product.tablet_grid_four")}
               >
-                <FourGridIcon />
+                <SvgWrapper svgSrc="grid-four" />
               </button>
             </div>
           </div>
@@ -163,36 +153,36 @@ const ProductListing = ({
           </div>
           <div className={styles.contentWrapper}>
             {filterList?.length !== 0 && (
-              <StickyColumn
-                className={styles.left}
-                topOffset={stickyFilterTopOffset}
-              >
-                <div className={styles.filterHeaderContainer}>
-                  <div className={styles.filterHeader}>
-                    <h4 className={styles.title}>FILTERS</h4>
-                    {!isResetFilterDisable && (
-                      <button
-                        className={styles.resetBtn}
-                        onClick={onResetFiltersClick}
-                      >
-                        RESET
-                      </button>
-                    )}
+              <div className={styles?.left}>
+                <StickyColumn>
+                  <div className={styles.filterHeaderContainer}>
+                    <div className={styles.filterHeader}>
+                      <h4 className={styles.title}>{t("resource.product.filters_caps")}</h4>
+                      {!isResetFilterDisable && (
+                        <button
+                          className={styles.resetBtn}
+                          onClick={onResetFiltersClick}
+                        >
+                          {t("resource.facets.reset_caps")}
+                        </button>
+                      )}
+                    </div>
+
+                    <FilterTags
+                      selectedFilters={selectedFilters}
+                      onFilterUpdate={onFilterUpdate}
+                    />
                   </div>
-                  <FilterTags
-                    selectedFilters={selectedFilters}
-                    onFilterUpdate={onFilterUpdate}
-                  />
-                </div>
-                {filterList?.map((filter, idx) => (
-                  <FilterItem
-                    isMobileView={false}
-                    key={idx + "-desktop" + filter.key.display}
-                    filter={filter}
-                    onFilterUpdate={onFilterUpdate}
-                  />
-                ))}
-              </StickyColumn>
+                  {filterList?.map((filter, idx) => (
+                    <FilterItem
+                      isMobileView={false}
+                      key={idx + "-desktop" + filter.key.display}
+                      filter={filter}
+                      onFilterUpdate={onFilterUpdate}
+                    />
+                  ))}
+                </StickyColumn>
+              </div>
             )}
             <div className={styles.right}>
               <div className={styles.rightHeader}>
@@ -201,35 +191,33 @@ const ProductListing = ({
                   {isProductCountDisplayed && (
                     <span className={styles.productCount}>
                       {`${productCount} ${productCount > 1 ? "items" : "item"}`}
-                    </span>
+                    </span >
                   )}
-                </div>
+                </div >
                 <div className={styles.headerRight}>
                   <Sort sortList={sortList} onSortUpdate={onSortUpdate} />
                   <button
-                    className={`${styles.colIconBtn} ${
-                      columnCount?.desktop === 2 ? styles.active : ""
-                    }`}
+                    className={`${styles.colIconBtn} ${columnCount?.desktop === 2 ? styles.active : ""
+                      }`}
                     onClick={() =>
                       onColumnCountUpdate({ screen: "desktop", count: 2 })
                     }
-                    title="Desktop grid two"
+                    title={t("resource.product.desktop_grid_two")}
                   >
-                    <TwoGridIcon />
+                    <SvgWrapper svgSrc="grid-two"></SvgWrapper>
                   </button>
                   <button
-                    className={`${styles.colIconBtn} ${
-                      columnCount?.desktop === 4 ? styles.active : ""
-                    }`}
+                    className={`${styles.colIconBtn} ${columnCount?.desktop === 4 ? styles.active : ""
+                      }`}
                     onClick={() =>
                       onColumnCountUpdate({ screen: "desktop", count: 4 })
                     }
-                    title="Desktop grid four"
+                    title={t("resource.product.desktop_grid_four")}
                   >
-                    <FourGridIcon />
+                    <SvgWrapper svgSrc="grid-four"></SvgWrapper>
                   </button>
                 </div>
-              </div>
+              </div >
               {banner?.desktopBanner && (
                 <div
                   className={`${styles.bannerContainer} ${styles.desktopBanner}`}
@@ -239,7 +227,7 @@ const ProductListing = ({
                     to={banner?.redirectLink}
                   >
                     <FyImage
-                      alt="desktop banner"
+                      alt={t("resource.product.desktop_banner_alt")}
                       src={banner?.desktopBanner}
                       customClass={styles.banner}
                       isFixedAspectRatio={false}
@@ -249,34 +237,38 @@ const ProductListing = ({
                   </FDKLink>
                 </div>
               )}
-              {banner?.mobileBanner && (
-                <div
-                  className={`${styles.bannerContainer} ${styles.mobileBanner}`}
-                >
-                  <FDKLink
-                    className={styles.redirectionLink}
-                    to={banner?.redirectLink}
+              {
+                banner?.mobileBanner && (
+                  <div
+                    className={`${styles.bannerContainer} ${styles.mobileBanner}`}
                   >
-                    <FyImage
-                      alt="mobile banner"
-                      src={banner?.mobileBanner}
-                      customClass={styles.banner}
-                      isFixedAspectRatio={false}
-                      aspectRatio="auto"
-                      defer={false}
+                    <FDKLink
+                      className={styles.redirectionLink}
+                      to={banner?.redirectLink}
+                    >
+                      <FyImage
+                        alt={t("resource.product.mobile_banner")}
+                        src={banner?.mobileBanner}
+                        customClass={styles.banner}
+                        isFixedAspectRatio={false}
+                        aspectRatio="auto"
+                        defer={false}
+                      />
+                    </FDKLink>
+                  </div>
+                )
+              }
+              {
+                selectedFilters?.length > 0 && (
+                  <div className={styles.filterTags}>
+                    <FilterTags
+                      selectedFilters={selectedFilters}
+                      onFilterUpdate={onFilterUpdate}
+                      onResetFiltersClick={onResetFiltersClick}
                     />
-                  </FDKLink>
-                </div>
-              )}
-              {selectedFilters?.length > 0 && (
-                <div className={styles.filterTags}>
-                  <FilterTags
-                    selectedFilters={selectedFilters}
-                    onFilterUpdate={onFilterUpdate}
-                    onResetFiltersClick={onResetFiltersClick}
-                  />
-                </div>
-              )}
+                  </div>
+                )
+              }
               <div className={styles["plp-container"]}>
                 {loadingOption === "infinite" ? (
                   <InfiniteLoader
@@ -292,6 +284,7 @@ const ProductListing = ({
                         isBrand,
                         isSaleBadge,
                         isPrice,
+                        isHdimgUsed,
                         aspectRatio,
                         isWishlistIcon,
                         WishlistIconComponent,
@@ -304,7 +297,6 @@ const ProductListing = ({
                         imageBackgroundColor,
                         imagePlaceholder,
                         handleAddToCart,
-                        imgSrcSet,
                       }}
                     />
                   </InfiniteLoader>
@@ -317,6 +309,7 @@ const ProductListing = ({
                       isBrand,
                       isSaleBadge,
                       isPrice,
+                      isHdimgUsed,
                       aspectRatio,
                       isWishlistIcon,
                       WishlistIconComponent,
@@ -330,7 +323,6 @@ const ProductListing = ({
                       isProductLoading,
                       imagePlaceholder,
                       handleAddToCart,
-                      imgSrcSet,
                     }}
                   />
                 )}
@@ -347,7 +339,7 @@ const ProductListing = ({
                       tabIndex="0"
                       disabled={isProductLoading}
                     >
-                      View More
+                      {t("resource.facets.view_more")}
                     </button>
                   </div>
                 )}
@@ -356,41 +348,43 @@ const ProductListing = ({
                 key={description.length}
                 description={description}
               />
-            </div>
-          </div>
+            </div >
+          </div >
           <SortModal {...sortModalProps} />
           <FilterModal {...{ isResetFilterDisable, ...filterModalProps }} />
           {isScrollTop && <ScrollTop />}
-          {showAddToCart && (
-            <>
-              <Modal
-                isOpen={isAddToCartOpen}
-                hideHeader={!isTablet}
-                containerClassName={styles.addToCartContainer}
-                bodyClassName={styles.addToCartBody}
-                titleClassName={styles.addToCartTitle}
-                title={
-                  isTablet
-                    ? restAddToModalProps?.productData?.product?.name
-                    : ""
-                }
-                closeDialog={restAddToModalProps?.handleClose}
-              >
-                <AddToCart
-                  {...restAddToModalProps}
-                  globalConfig={globalConfig}
+          {
+            showAddToCart && (
+              <>
+                <Modal
+                  isOpen={isAddToCartOpen}
+                  hideHeader={!isTablet}
+                  containerClassName={styles.addToCartContainer}
+                  bodyClassName={styles.addToCartBody}
+                  titleClassName={styles.addToCartTitle}
+                  title={
+                    isTablet
+                      ? restAddToModalProps?.productData?.product?.name
+                      : ""
+                  }
+                  closeDialog={restAddToModalProps?.handleClose}
+                >
+                  <AddToCart
+                    {...restAddToModalProps}
+                    globalConfig={globalConfig}
+                  />
+                </Modal>
+                <SizeGuide
+                  isOpen={showSizeGuide}
+                  onCloseDialog={handleCloseSizeGuide}
+                  productMeta={restAddToModalProps?.productData?.product?.sizes}
                 />
-              </Modal>
-              <SizeGuide
-                isOpen={showSizeGuide}
-                onCloseDialog={handleCloseSizeGuide}
-                productMeta={restAddToModalProps?.productData?.product?.sizes}
-              />
-            </>
-          )}
+              </>
+            )
+          }
         </>
       )}
-    </div>
+    </div >
   );
 };
 
@@ -401,7 +395,7 @@ function ProductGrid({
   isSaleBadge = true,
   isPrice = true,
   isWishlistIcon = true,
-  imgSrcSet,
+  isHdimgUsed = false,
   aspectRatio,
   WishlistIconComponent,
   isProductOpenInNewTab = false,
@@ -414,8 +408,8 @@ function ProductGrid({
   showAddToCart = false,
   imageBackgroundColor = "",
   imagePlaceholder = "",
-  onWishlistClick = () => {},
-  handleAddToCart = () => {},
+  onWishlistClick = () => { },
+  handleAddToCart = () => { },
 }) {
   return (
     <div
@@ -442,11 +436,11 @@ function ProductGrid({
               product={product}
               listingPrice={listingPrice}
               columnCount={columnCount}
+              isHdimgUsed={isHdimgUsed}
               aspectRatio={aspectRatio}
               isBrand={isBrand}
               isPrice={isPrice}
               isSaleBadge={isSaleBadge}
-              imgSrcSet={imgSrcSet}
               isWishlistIcon={isWishlistIcon}
               WishlistIconComponent={WishlistIconComponent}
               followedIdList={followedIdList}

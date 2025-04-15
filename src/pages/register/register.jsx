@@ -9,6 +9,7 @@ import * as styles from "./register.less";
 import MobileNumber from "../../page-layouts/auth/mobile-number/mobile-number";
 import VerifyBoth from "../../page-layouts/auth/verify-both/verify-both";
 import LoginRegisterToggle from "../../page-layouts/auth/login-register-toggle/login-register-toggle";
+import { useGlobalTranslation } from "fdk-core/utils";
 import ShowPasswordIcon from "../../assets/images/show-password.svg";
 import HidePasswordIcon from "../../assets/images/hide-password.svg";
 
@@ -20,11 +21,12 @@ function Register({
   isEmail = true,
   emailLevel = "hard",
   error = null,
-  loginButtonLabel = "GO TO LOGIN",
-  onLoginButtonClick = () => {},
-  onRegisterFormSubmit = () => {},
+  loginButtonLabel,
+  onLoginButtonClick = () => { },
+  onRegisterFormSubmit = () => { },
   verifyDetailsProp = {},
 }) {
+  const { t } = useGlobalTranslation("translation");
   const firstnameId = useId();
   const lastnameId = useId();
   const emailId = useId();
@@ -86,10 +88,10 @@ function Register({
 
   const isMobileRequired = useMemo(() => {
     if (mobileLevel === "soft") {
-      return "optional";
+      return t("resource.common.optional_lower");
     }
     if (mobileLevel === "hard") {
-      return "required";
+      return t("resource.common.required_lower");
     }
     return "";
   }, [mobileLevel]);
@@ -121,127 +123,134 @@ function Register({
           className={styles.registerFormWrapper}
           onSubmit={handleSubmit(onRegisterFormSubmit)}
         >
-          <h1 className={styles.title}>Complete Signup</h1>
+          <h1 className={styles.title}>{t("resource.common.complete_signup")}</h1>
           <div
             className={`${styles.registerNameInput} ${errors.firstName ? styles.errorInput : ""}`}
           >
             <label className={styles.inputTitle} htmlFor={firstnameId}>
               First Name<span className={styles.required}> *</span>
-            </label>
+            </label >
             <input
               id={firstnameId}
               type="text"
               maxLength="30"
               {...register("firstName", {
                 validate: (value) =>
-                  validateName(value) || "Please enter a valid first name",
+                  validateName(value) || t("resource.common.please_enter_valid_first_name"),
                 maxLength: {
                   value: 30,
-                  message: "Maximum 30 characters allowed",
+                  message: t("resource.common.maximum_30_characters_allowed"),
                 },
               })}
             />
-            {errors.firstName && (
-              <p className={styles.errorText}>{errors.firstName.message}</p>
-            )}
-          </div>
+            {
+              errors.firstName && (
+                <p className={styles.errorText}>{errors.firstName.message}</p>
+              )
+            }
+          </div >
           <div
             className={`${styles.registerNameInput} ${errors.lastName ? styles.errorInput : ""}`}
           >
             <label className={styles.inputTitle} htmlFor={lastnameId}>
               Last Name<span className={styles.required}> *</span>
-            </label>
+            </label >
             <input
               id={lastnameId}
               type="text"
               maxLength="30"
               {...register("lastName", {
                 validate: (value) =>
-                  validateName(value) || "Please enter a valid last name",
+                  validateName(value) || t("resource.common.please_enter_valid_last_name"),
                 maxLength: {
                   value: 30,
-                  message: "Maximum 30 characters allowed",
+                  message: t("resource.common.maximum_30_characters_allowed"),
                 },
               })}
             />
-            {errors.lastName && (
-              <p className={styles.errorText}>{errors.lastName.message}</p>
-            )}
-          </div>
+            {
+              errors.lastName && (
+                <p className={styles.errorText}>{errors.lastName.message}</p>
+              )
+            }
+          </div >
           <div className={styles.genderRadioContainer}>
             <label className={styles.radioContainer}>
-              Male
+              {t("resource.common.male")}
               <input type="radio" value="male" {...register("gender")} />
               <span className={styles.checkmark} />
             </label>
             <label className={styles.radioContainer}>
-              Female
+              {t("resource.common.female")}
               <input type="radio" value="female" {...register("gender")} />
               <span className={styles.checkmark} />
             </label>
             <label className={styles.radioContainer}>
-              Other
+              {t("resource.common.other")}
               <input type="radio" value="unisex" {...register("gender")} />
               <span className={styles.checkmark} />
             </label>
           </div>
-          {isEmail && (
-            <div
-              className={`${styles.registerEmail} ${errors.email ? styles.errorInput : ""}`}
-            >
-              <label className={styles.inputTitle} htmlFor={emailId}>
-                {isEmailRequired}
-              </label>
-              <input
-                id={emailId}
-                type="text"
-                {...register("email", {
-                  validate: (value) =>
-                    validateEmail(value) || "Please enter valid email address",
-                })}
-              />
-              {errors.email && (
-                <p className={styles.errorText}>{errors.email.message}</p>
-              )}
-            </div>
-          )}
-          {isMobile && (
-            <div className={styles.registerMobileInput}>
-              <Controller
-                name="phone"
-                control={control}
-                rules={{
-                  validate: (value) => {
-                    if (isMobileRequired === "required" || value?.mobile) {
-                      return (
-                        value.isValidNumber || "Please enter valid phone number"
-                      );
-                    }
-                    return true;
-                  },
-                }}
-                render={({ field, fieldState: { error } }) => (
-                  <MobileNumber
-                    mobile={field.value.mobile}
-                    countryCode={field.value.countryCode}
-                    isRequired={isMobileRequired}
-                    error={error}
-                    onChange={(value) => {
-                      field.onChange(value);
-                    }}
-                  />
+          {
+            isEmail && (
+              <div
+                className={`${styles.registerEmail} ${errors.email ? styles.errorInput : ""}`}
+              >
+                <label className={styles.inputTitle} htmlFor={emailId}>
+                  {isEmailRequired}
+                </label>
+                <input
+                  id={emailId}
+                  type="text"
+                  {...register("email", {
+                    validate: (value) =>
+                      validateEmail(value) || t("resource.common.please_enter_valid_email_address"),
+                  })}
+                />
+                {errors.email && (
+                  <p className={styles.errorText}>{errors.email.message}</p>
                 )}
-              />
-            </div>
-          )}
+              </div>
+            )
+          }
+          {
+            isMobile && (
+              <div className={styles.registerMobileInput}>
+                <Controller
+                  name="phone"
+                  control={control}
+                  rules={{
+                    validate: (value) => {
+                      if (isMobileRequired === "required" || value?.mobile) {
+                        return (
+                          value.isValidNumber || t("resource.common.enter_valid_phone_number")
+                        );
+                      }
+                      return true;
+                    },
+                  }}
+                  render={({ field, fieldState: { error } }) => (
+                    <MobileNumber
+                      mobile={field.value.mobile}
+                      countryCode={field.value.countryCode}
+                      isRequired={isMobileRequired}
+                      error={error}
+                      onChange={(value) => {
+                        field.onChange(value);
+                      }}
+                    />
+                  )}
+                />
+              </div>
+            )
+          }
           <div
-            className={`${styles.registerPasswordInput} ${
-              errors.password ? styles.errorInput : ""
-            }`}
+            className={`${styles.registerPasswordInput} ${errors.password ? styles.errorInput : ""
+              }`}
           >
             <label className={styles.inputTitle} htmlFor={passwordId}>
               Password<span className={styles.required}> *</span>
-            </label>
+            </label >
             <div className={styles.passwordInputWrapper}>
               <input
                 id={passwordId}
@@ -249,7 +258,7 @@ function Register({
                 {...register("password", {
                   validate: (value) =>
                     validatePassword(value) ||
-                    "Password must be at least 8 characters and contain at least 1 letter, 1 number and 1 special character.",
+                    t("resource.auth.password_requirements"),
                 })}
               />
               {watch("password") && (
@@ -257,8 +266,8 @@ function Register({
                   className={styles.passwordToggle}
                   aria-label={
                     !isPasswordShow
-                      ? "Show confirm password"
-                      : "Hide confirm password"
+                      ? t("resource.auth.show_confirm_password")
+                      : t("resource.auth.hide_confirm_password")
                   }
                   onClick={togglePasswordDisplay}
                 >
@@ -270,18 +279,19 @@ function Register({
                 </button>
               )}
             </div>
-            {errors.password && (
-              <p className={styles.errorText}>{errors.password.message}</p>
-            )}
-          </div>
+            {
+              errors.password && (
+                <p className={styles.errorText}>{errors.password.message}</p>
+              )
+            }
+          </div >
           <div
-            className={`${styles.registerConfirmPasswordInput} ${
-              errors.confirmPassword ? styles.errorInput : ""
-            }`}
+            className={`${styles.registerConfirmPasswordInput} ${errors.confirmPassword ? styles.errorInput : ""
+              }`}
           >
             <label className={styles.inputTitle} htmlFor={confirmPasswordId}>
               Confirm Password<span className={styles.required}> *</span>
-            </label>
+            </label >
             <div className={styles.passwordInputWrapper}>
               <input
                 id={confirmPasswordId}
@@ -293,7 +303,7 @@ function Register({
                   },
                   validate: (value) =>
                     value === getValues("password") ||
-                    "Password does not match",
+                    t("resource.auth.password_does_not_match"),
                 })}
               />
               {watch("confirmPassword") && (
@@ -301,8 +311,8 @@ function Register({
                   className={styles.passwordToggle}
                   aria-label={
                     !isConfirmPasswordShow
-                      ? "Show confirm password"
-                      : "Hide confirm password"
+                      ? t("resource.auth.show_confirm_password")
+                      : t("resource.auth.hide_confirm_password")
                   }
                   onClick={toggleConfirmPasswordDisplay}
                 >
@@ -314,33 +324,38 @@ function Register({
                 </button>
               )}
             </div>
-            {errors.confirmPassword && (
-              <p className={styles.errorText}>
-                {errors.confirmPassword.message}
-              </p>
-            )}
-          </div>
-          {errors.root && (
-            <div className={styles.loginAlert}>
-              <span>{errors.root.message}</span>
-            </div>
-          )}
+            {
+              errors.confirmPassword && (
+                <p className={styles.errorText}>
+                  {errors.confirmPassword.message}
+                </p>
+              )
+            }
+          </div >
+          {
+            errors.root && (
+              <div className={styles.loginAlert}>
+                <span>{errors.root.message}</span>
+              </div>
+            )
+          }
 
           {/* Extension slot: above_register_button */}
 
           <button className={styles.registerBtn} type="submit">
-            Continue
+            {t("resource.common.continue")}
           </button>
 
           <LoginRegisterToggle
-            label={loginButtonLabel}
+            label={loginButtonLabel || t("resource.auth.login.go_to_login")}
             onClick={onLoginButtonClick}
           />
-        </form>
+        </form >
       ) : (
         <VerifyBoth {...verifyDetailsProp} />
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 }
 

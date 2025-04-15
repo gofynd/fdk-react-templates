@@ -14,13 +14,15 @@
 import React, { useState } from "react";
 import * as styles from "./reason-item.less";
 import RadioIcon from "../../../assets/images/radio";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function ReasonItem({
   reason,
   selectedReason,
-  change = () => {},
+  change = () => { },
   otherReason,
 }) {
+  const { t } = useGlobalTranslation("translation");
   const [reasonOtherText, setReasonOtherText] = useState("");
   const isSelected = selectedReason?.id === reason?.id;
   return (

@@ -22,13 +22,15 @@ import MobileNumber from "../../page-layouts/auth/mobile-number/mobile-number";
 import FyButton from "../core/fy-button/fy-button";
 import FyImage from "../core/fy-image/fy-image";
 import Loader from "../loader/loader";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 const FormBuilder = ({
   data,
   onFormSubmit,
-  successMessage = "Enquiry Submitted",
+  successMessage,
   isLoading = false,
 }) => {
+  const { t } = useGlobalTranslation("translation");
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   const { inputs = [], header_image, title, description } = data;
@@ -41,7 +43,7 @@ const FormBuilder = ({
     try {
       await onFormSubmit?.(data);
       setShowSuccessMessage(true);
-    } catch (error) {}
+    } catch (error) { }
   }, []);
 
   if (isLoading) {
@@ -66,7 +68,7 @@ const FormBuilder = ({
         {description && <div className={styles.description}>{description}</div>}
 
         {showSuccessMessage ? (
-          <div className={styles.submissionMessage}>{successMessage}</div>
+          <div className={styles.submissionMessage}>{successMessage || t("resource.common.enquiry_submitted")}</div>
         ) : (
           <form className={styles.inputs} onSubmit={handleSubmit(onSubmit)}>
             {inputs?.map((formData) => (
@@ -77,7 +79,7 @@ const FormBuilder = ({
               />
             ))}
             <FyButton className={styles.submitBtn} type="submit">
-              SUBMIT
+              {t("resource.facets.submit")}
             </FyButton>
           </form>
         )}
@@ -89,6 +91,7 @@ const FormBuilder = ({
 export default FormBuilder;
 
 const FormInputSelector = ({ formData, control }) => {
+  const { t } = useGlobalTranslation("translation");
   const {
     display = "",
     enum: options = [],
@@ -176,12 +179,12 @@ const FormInputSelector = ({ formData, control }) => {
       rules={{
         required: {
           value: required,
-          message: `Please enter ${display}`,
+          message: `${t("resource.common.please_enter")} ${display}`,
         },
         ...(showRegexInput && {
           pattern: {
             value: new RegExp(regex),
-            message: error_message || `Please enter ${display}`,
+            message: error_message || `${t("resource.common.please_enter")} ${display}`,
           },
         }),
       }}

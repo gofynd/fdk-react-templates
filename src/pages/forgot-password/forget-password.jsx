@@ -2,15 +2,17 @@ import React, { useId, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { validateEmailField } from "../../helper/utils";
 import * as styles from "./forget-password.less";
+import { useGlobalTranslation } from "fdk-core/utils";
 import LoginRegisterToggle from "../../page-layouts/auth/login-register-toggle/login-register-toggle";
 
 function ForgetPassword({
   isFormSubmitSuccess = false,
   error = null,
-  onForgotPasswordSubmit = () => {},
-  onBackToLoginClick = () => {},
-  onResendEmailClick = () => {},
+  onForgotPasswordSubmit = () => { },
+  onBackToLoginClick = () => { },
+  onResendEmailClick = () => { },
 }) {
+  const { t } = useGlobalTranslation("translation");
   const emailInputId = useId();
 
   const {
@@ -45,7 +47,7 @@ function ForgetPassword({
               className={`${styles.forgotPasswordInputGroup} ${errors.email ? styles.errorInput : ""}`}
             >
               <label className={styles.loginInputTitle} htmlFor={emailInputId}>
-                Email
+                {t("resource.common.email")}
               </label>
               <input
                 id={emailInputId}
@@ -54,7 +56,7 @@ function ForgetPassword({
                 {...register("email", {
                   validate: (value) =>
                     validateEmailField(value) ||
-                    "Please enter valid email address",
+                    t("resource.common.please_enter_valid_email_address"),
                 })}
               />
               {errors.email && (
@@ -83,7 +85,7 @@ function ForgetPassword({
             className={styles.resendBtn}
             onClick={() => onResendEmailClick(getValues())}
           >
-            RESEND EMAIL
+            {t("resource.auth.resend_email")}
           </button>
         </div>
       )}

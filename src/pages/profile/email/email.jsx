@@ -4,6 +4,7 @@ import AddEmailModal from "../components/add-email-modal/add-email-modal";
 import FyButton from "../../../components/core/fy-button/fy-button";
 import FyInput from "../../../components/core/fy-input/fy-input";
 import Loader from "../../../components/loader/loader";
+import { useGlobalTranslation } from "fdk-core/utils";
 import EmptyState from "../components/empty-state/empty-state";
 import AddAddressIcon from "../../../assets/images/add-address.svg";
 
@@ -14,6 +15,7 @@ function Email({
   deleteEmail,
   emails,
 }) {
+  const { t } = useGlobalTranslation("translation");
   const [showAddModal, setShowAddModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedEmail, setSelectedEmail] = useState({});
@@ -184,7 +186,7 @@ function Email({
       )}
       {/* {showDeleteModal && (
         <ConfirmModal
-          text="Are you sure you want to remove the email?"
+          text={t("resource.profile.confirm_remove_email")}
           isOpen={showDeleteModal}
           onClose={handleCloseDeleteModal}
           onConfirm={async () => {

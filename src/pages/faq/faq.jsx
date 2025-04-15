@@ -2,6 +2,7 @@ import React from "react";
 import { FDKLink } from "fdk-core/components";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./faq.less";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function Faq({
   faqCategories,
@@ -14,6 +15,7 @@ function Faq({
   defaultFaqCategory,
   EmptyStateComponent = () => <></>,
 }) {
+  const { t } = useGlobalTranslation("translation");
   const handleQuestionClick = (index) => {
     setFaqs((preVal) => {
       const updatedFaqs = [...preVal];
@@ -33,7 +35,7 @@ function Faq({
     updateSearchParams(params);
   };
 
-  const navigateToContactUsPage = () => {};
+  const navigateToContactUsPage = () => { };
 
   return (
     <div
@@ -59,11 +61,11 @@ function Faq({
                   </h3>
                 </>
               )}
-              <h1
+              <h3
                 className={`${styles[hasCatQuery && "hide-on-mobile"]} fontHeader`}
               >
                 Frequently Asked Questions
-              </h1>
+              </h3>
             </div>
             <div className={styles["contact-us"]}>
               <span>Still need help?</span>
@@ -79,9 +81,7 @@ function Faq({
           >
             {faqCategories?.length > 0 && (
               <div
-                className={`${styles.sidebar} ${
-                  faqCategories.length === 1 ? styles.hideOnDesktop : ""
-                } ${styles[hasCatQuery && "hide-on-mobile"]}`}
+                className={`${styles.sidebar} ${styles[hasCatQuery && "hide-on-mobile"]}`}
               >
                 <ul>
                   {faqCategories?.map((el, i) => (
@@ -106,9 +106,7 @@ function Faq({
             {!isLoading &&
               (faqs?.length > 0 ? (
                 <div
-                  className={`${styles.contentContainer} ${
-                    faqCategories?.length <= 1 ? styles.fullWidth : ""
-                  } ${!hasCatQuery && styles["hide-on-mobile"]}`}
+                  className={`${styles.contentContainer} ${!hasCatQuery && styles["hide-on-mobile"]}`}
                 >
                   <div className={styles.content}>
                     <div

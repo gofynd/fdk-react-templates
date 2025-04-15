@@ -17,17 +17,19 @@ import React, { useEffect, useMemo, useState } from "react";
 import * as styles from "./filter-modal.less";
 import Modal from "../core/modal/modal";
 import FilterList from "../../page-layouts/plp/Components/filter-list/filter-list";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useNavigate, useGlobalTranslation } from "fdk-core/utils";
 
 function FilterModal({
   isOpen = true,
   filters = [],
   isResetFilterDisable = false,
-  onCloseModalClick = () => {},
-  onResetBtnClick = () => {},
-  onApplyBtnClick = () => {},
-  onFilterUpdate = () => {},
+  onCloseModalClick = () => { },
+  onResetBtnClick = () => { },
+  onApplyBtnClick = () => { },
+  onFilterUpdate = () => { },
 }) {
+  const { t } = useGlobalTranslation("translation");
   const [activeFilterName, setActiveFilterName] = useState("");
   const [selectedFiltersParams, setSelectedFiltersParams] = useState("");
   const navigate = useNavigate();
@@ -72,7 +74,7 @@ function FilterModal({
       isOpen={isOpen}
       modalType="right-modal"
       closeDialog={handleModalClose}
-      title="Filters"
+      title={t("resource.common.filter")}
     >
       <div className={styles.contentWrapper}>
         <div className={styles.modalContent}>

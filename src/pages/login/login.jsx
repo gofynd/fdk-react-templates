@@ -6,19 +6,20 @@ import LoginOtp from "../../page-layouts/login/component/login-otp/login-otp";
 import LoginModeButton from "../../page-layouts/login/component/login-mode-button/login-mode-button";
 import LoginRegisterToggle from "../../page-layouts/auth/login-register-toggle/login-register-toggle";
 import TermPrivacy from "../../page-layouts/login/component/term-privacy/term-privacy";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function Login({
   logo = {},
-  title = "Login",
-  subTitle = "Login to Shop",
+  title,
+  subTitle,
   isPassword = false,
   isOtp = true,
   showLoginToggleButton = true,
   isRegisterEnabled = true,
-  registerButtonLabel = "GO TO REGISTER",
-  onLoginToggleClick = () => {},
-  onRegisterButtonClick = () => {},
-  onLoginFormSubmit = () => {},
+  registerButtonLabel,
+  onLoginToggleClick = () => { },
+  onRegisterButtonClick = () => { },
+  onLoginFormSubmit = () => { },
 
   mobileInfo,
   submittedMobile,
@@ -35,6 +36,7 @@ function Login({
   passwordError,
   onForgotPasswordClick,
 }) {
+  const { t } = useGlobalTranslation("translation");
   return (
     <div className={styles.loginWrapper}>
       <div>
@@ -105,8 +107,8 @@ function Login({
             </div>
           </>
         )}
-      </div>
-    </div>
+      </div >
+    </div >
   );
 }
 

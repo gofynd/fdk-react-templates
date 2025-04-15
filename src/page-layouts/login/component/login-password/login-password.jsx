@@ -4,14 +4,16 @@ import { checkIfNumber, validatePasswordField } from "../../../../helper/utils";
 import * as styles from "./login-password.less";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import MobileNumber from "../../../auth/mobile-number/mobile-number";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function loginPassword({
-  loginButtonText = "LOGIN",
+  loginButtonText,
   error = null,
   isForgotPassword = true,
-  onForgotPasswordClick = () => {},
-  onLoginFormSubmit = () => {},
+  onForgotPasswordClick = () => { },
+  onLoginFormSubmit = () => { },
 }) {
+  const { t } = useGlobalTranslation("translation");
   const usernameInputId = useId();
   const passwordInputId = useId();
   const [isPasswordShow, setIsPasswordShow] = useState(false);
@@ -94,7 +96,7 @@ function loginPassword({
           className={`${styles.loginInputGroup} ${errors?.username || errors?.phone || errors?.root ? styles.error : ""}`}
         >
           <label className={styles.loginInputTitle} htmlFor={usernameInputId}>
-            Email or Phone
+            {t("resource.auth.login.email_or_phone")}
           </label>
           {!showInputNumber ? (
             <input
@@ -119,7 +121,7 @@ function loginPassword({
                     return true;
                   }
                   return (
-                    value.isValidNumber || "Please enter valid phone number"
+                    value.isValidNumber || t("resource.common.enter_valid_phone_number")
                   );
                 },
               }}
@@ -184,7 +186,7 @@ function loginPassword({
               className={styles.forgotBtn}
               onClick={handleForgotPasswordClick}
             >
-              Forgot Password?
+              {t("resource.auth.login.forgot_password")}
             </button>
           </div>
         )}

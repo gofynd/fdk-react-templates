@@ -4,6 +4,7 @@ import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
 import ProductCard from "../../components/product-card/product-card";
 import FyImage from "../../components/core/fy-image/fy-image";
 import * as styles from "./compare.less";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function Compare({
   isLoading,
@@ -22,22 +23,23 @@ function Compare({
   },
   imagePlaceholder = "",
   loader = <></>,
-  setShowSearch = () => {},
-  handleAdd = () => {},
-  handleRemove = () => {},
-  handleInputChange = () => {},
-  isDifferentAttr = () => {},
-  getAttribute = () => {},
-  checkHtml = () => {},
+  setShowSearch = () => { },
+  handleAdd = () => { },
+  handleRemove = () => { },
+  handleInputChange = () => { },
+  isDifferentAttr = () => { },
+  getAttribute = () => { },
+  checkHtml = () => { },
 }) {
+  const { t } = useGlobalTranslation("translation");
   return (
     <div className={styles.compare}>
       <div className={`${styles.compare__breadcrumbs} ${styles.captionNormal}`}>
         <span>
-          <FDKLink to="/">Home</FDKLink>&nbsp; / &nbsp;
+          <FDKLink to="/">{t("resource.common.breadcrumb.home")}</FDKLink>&nbsp; / &nbsp;
         </span>
         <span>
-          <FDKLink to="/products">Products</FDKLink>&nbsp; / &nbsp;
+          <FDKLink to="/products">{t("resource.common.breadcrumb.products")}</FDKLink>&nbsp; / &nbsp;
         </span>
         {category?.name && category?.url && (
           <span>
@@ -45,7 +47,7 @@ function Compare({
             &nbsp; / &nbsp;
           </span>
         )}
-        <span className={styles.active}>Compare Products</span>
+        <span className={styles.active}>{t("resource.compare.compare_products")}</span>
       </div>
       <h1 className={`${styles.compare__title} fontHeader`}>
         Add Products to Compare
@@ -68,7 +70,7 @@ function Compare({
                       }}
                     >
                       <SvgWrapper svgSrc="compare-arrow" />
-                      <div>Add Products To Compare</div>
+                      <div>{t("resource.compare.add_products_to_compare")}</div>
                     </div>
                   )}
                 </div>
@@ -110,9 +112,8 @@ function Compare({
                             className={styles.attrListWrap}
                           >
                             <div
-                              className={`${styles.attrName} ${styles.alignAttribute} ${
-                                isDifferentAttr(attribute) ? styles.differ : ""
-                              }`}
+                              className={`${styles.attrName} ${styles.alignAttribute} ${isDifferentAttr(attribute) ? styles.differ : ""
+                                }`}
                             >
                               {attribute.display}
                             </div>
@@ -126,7 +127,7 @@ function Compare({
                                 ) ? (
                                   <span
                                     className={styles.attr}
-                                    style={{ textAlign: "left" }}
+                                    style={{ textAlign: "start" }}
                                     dangerouslySetInnerHTML={{
                                       __html: getAttribute(cProduct, attribute),
                                     }}
@@ -148,7 +149,7 @@ function Compare({
 
               {products?.length >= 4 && (
                 <div className={`${styles.errorMessage} ${styles.attr}`}>
-                  *You can only add four products at a time
+                  *{t("resource.compare.max_four_products_allowed")}
                 </div>
               )}
             </div>
@@ -157,7 +158,7 @@ function Compare({
               <div className={styles.searchBox}>
                 <div className={styles.searchBlock}>
                   <div className={styles.searchHeader}>
-                    <div className={styles.addSearchTitle}>Search Here</div>
+                    <div className={styles.addSearchTitle}>{t("resource.common.search_here")}</div>
                     {products?.length > 0 && (
                       <div
                         className={styles.crossBtn}
@@ -173,7 +174,7 @@ function Compare({
                       type="text"
                       defaultValue={searchText}
                       onChange={(e) => handleInputChange(e?.target?.value)}
-                      placeholder="Search Product here"
+                      placeholder={t("resource.compare.search_product_here")}
                     />
                     <SvgWrapper
                       svgSrc="search-black"
@@ -221,19 +222,21 @@ function Compare({
                           </div>
                         ) : (
                           <div className={styles.notFound}>
-                            No Product Found
+                            <div className={styles.notFound}>{t("resource.common.no_product_found")}</div>
                           </div>
                         )}
                       </>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
+                    )
+                    }
+                  </div >
+                </div >
+              </div >
+            </div >
+          )
+          }
         </>
       )}
-    </div>
+    </div >
   );
 }
 
