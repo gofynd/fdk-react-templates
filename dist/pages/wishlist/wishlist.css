@@ -812,9 +812,6 @@ img::selection {
 .breadcrumb__breadcrumbs___lMY9E span {
   color: var(--textSecondary, #9c9c9c);
 }
-.breadcrumb__breadcrumbs___lMY9E span.breadcrumb__active___NRqNx {
-  color: var(--buttonPrimary, #4e3f09);
-}
 
 /**color by character**/
 /** Font family **/
@@ -1208,6 +1205,9 @@ img::selection {
   letter-spacing: -0.02em;
   font-weight: 400;
 }
+.product-card__productCard___VMIjd .product-card__removeIcon___C1vVY path {
+  fill: var(--textBody, #3c3131) !important;
+}
 .product-card__productCard___VMIjd.product-card__sliderCard___Owqig .product-card__productDescContainer___S8oiv {
   flex-direction: column !important;
 }
@@ -1403,7 +1403,6 @@ img::selection {
   z-index: -2;
 }
 .product-card__productCard___VMIjd .product-card__productDescContainer___S8oiv .product-card__addToCart___KUnfH {
-  border: 0.8px solid var(--dividerStokes, #d4d1d1);
   background: var(--buttonSecondary, #fff);
   font-weight: 500;
   line-height: 16px;
@@ -7392,23 +7391,6 @@ img::selection {
 }
 .fy-input__adornmentContainer___MtgI6 input {
   flex: 1;
-}
-
-.shimmer__shimmerBox___LToot {
-  width: var(--width);
-  height: var(--height);
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: shimmer__shimmer___b_S5k 1.5s infinite linear;
-  border-radius: 8px;
-}
-@keyframes shimmer__shimmer___b_S5k {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
 }
 
 /**color by character**/
