@@ -1,0 +1,109 @@
+@import "../../styles/main.less";
+
+.quantityCtrlContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid @DividerStokes;
+  border-radius: 4px;
+  overflow: hidden;
+  height: 46px;
+  padding: 16px 8px 16px 16px;
+
+  &.notServiceable {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #ededed;
+  }
+
+  .size {
+    font-size: 14px;
+    line-height: normal;
+    color: @TextHeading;
+    width: 36px;
+  }
+
+  .quantityControl {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+
+    .decreaseCount,
+    .increaseCount {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: none;
+      width: 50px;
+      padding: 0;
+      height: 100%;
+      color: @TextHeading;
+      @media @mobile {
+        width: 32px;
+      }
+
+      .svgContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: @ThemeAccentL3;
+        border-radius: 50%;
+        width: 22px;
+        height: 22px;
+
+        .decreaseCountSvg svg {
+          width: 20px;
+          height: 20px;
+        }
+
+        .increaseCountSvg svg {
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+    .increaseCount:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+    .decreaseCount:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+    .count {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 55px;
+      height: 100%;
+      border-left: 1px solid @DividerStokes;
+      border-right: 1px solid @DividerStokes;
+      font-size: 12px;
+      line-height: normal;
+      color: @TextBody;
+      @media @mobile {
+        width: 50px;
+      }
+
+      .qtyInput {
+        border: none;
+        background: none;
+        color: inherit;
+        width: 100%;
+        text-align: center;
+        padding: 0;
+
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+  }
+}
+
+.errorMessage {
+  color: @ErrorText;
+  font-size: 12px;
+  padding-top: 2px;
+}
