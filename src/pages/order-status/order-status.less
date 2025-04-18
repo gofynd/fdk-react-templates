@@ -331,7 +331,9 @@
 }
 
 .payment-address {
-  border: 1px solid @DividerStokes;
+  @media @desktop {
+    border: 1px solid @DividerStokes;
+  }
   border-radius: 8px;
   margin-top: 16px;
   @media @tablet {

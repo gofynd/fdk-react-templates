@@ -78,7 +78,7 @@ const CartGiftItem = ({ bagItem }) => {
                           {appliedItem?.free_gift_item_details
                             ?.item_price_details?.effective?.max && (
                             <span
-                              className={styles["ncc-free-gift line-through"]}
+                              className={styles["gift-line-through"]}
                             >
                               {getCurrencySymbol +
                                 appliedItem.free_gift_item_details
