@@ -7962,7 +7962,7 @@ img::selection {
 .fy-button__button___UES8C span {
   display: inline-flex;
 }
-.fy-button__button___UES8C:focus {
+.fy-button__button___UES8C:focus-visible {
   outline: none;
   box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }
@@ -11583,11 +11583,8 @@ img::selection {
 }
 .sticky-footer__stickyFooter___vhgUO {
   display: none;
-  position: fixed;
-  position: -webkit-fixed;
-  position: -moz-fixed;
-  position: -ms-fixed;
-  position: -o-fixed;
+  position: sticky;
+  position: -webkit-sticky;
   width: 100%;
   line-height: 140%;
   z-index: 1;
@@ -14526,9 +14523,6 @@ img::selection {
 .breadcrumb__breadcrumbs___lMY9E span {
   color: var(--textSecondary, #9c9c9c);
 }
-.breadcrumb__breadcrumbs___lMY9E span.breadcrumb__active___NRqNx {
-  color: var(--buttonPrimary, #4e3f09);
-}
 
 /**color by character**/
 /** Font family **/
@@ -14885,6 +14879,9 @@ img::selection {
   letter-spacing: -0.02em;
   font-weight: 400;
 }
+.product-card__productCard___VMIjd .product-card__removeIcon___C1vVY path {
+  fill: var(--textBody, #3c3131) !important;
+}
 .product-card__productCard___VMIjd.product-card__sliderCard___Owqig .product-card__productDescContainer___S8oiv {
   flex-direction: column !important;
 }
@@ -15080,7 +15077,6 @@ img::selection {
   z-index: -2;
 }
 .product-card__productCard___VMIjd .product-card__productDescContainer___S8oiv .product-card__addToCart___KUnfH {
-  border: 0.8px solid var(--dividerStokes, #d4d1d1);
   background: var(--buttonSecondary, #fff);
   font-weight: 500;
   line-height: 16px;
@@ -24206,23 +24202,6 @@ img::selection {
   letter-spacing: -0.24px;
 }
 
-.shimmer__shimmerBox___LToot {
-  width: var(--width);
-  height: var(--height);
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: shimmer__shimmer___b_S5k 1.5s infinite linear;
-  border-radius: 8px;
-}
-@keyframes shimmer__shimmer___b_S5k {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
-}
-
 /**color by character**/
 /** Font family **/
 /** Font weight **/
@@ -29142,8 +29121,28 @@ img::selection {
   font-style: normal;
   font-weight: 400;
   line-height: 16.8px;
+  display: flex;
+  gap: 8px;
+}
+.term-privacy__midLinks___nJVYw .term-privacy__checkbox___o5MpQ {
+  accent-color: var(--buttonPrimary);
+  cursor: pointer;
 }
 .term-privacy__midLinks___nJVYw a {
+  font-weight: 500;
+  color: var(--buttonLink, #b1655b);
+}
+.term-privacy__byContinuingText___FqqI0 {
+  color: var(--textSecondary, #9c9c9c);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16.8px;
+  text-align: center;
+  margin-top: 24px;
+  display: block;
+}
+.term-privacy__byContinuingText___FqqI0 a {
   font-weight: 500;
   color: var(--buttonLink, #b1655b);
 }
@@ -29687,6 +29686,15 @@ img::selection {
   width: 100%;
   padding-right: 40px;
   background-color: var(--pageBackground, #f8f8f8);
+}
+.register__consentWrapper___eRJuQ .register__errorText___W8444 {
+  display: inline-block;
+  color: var(--errorText, #b24141);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16.8px;
+  margin-top: 8px;
 }
 .register__passwordToggle___oXOLW {
   height: 24px;
@@ -31301,6 +31309,23 @@ img::selection {
   .single-shipment-content__proceedBtnWrapper___r54yh .single-shipment-content__proceedBtn___csoKN {
     padding: 20px 24px;
     font-size: 14px;
+  }
+}
+
+.shimmer__shimmerBox___LToot {
+  width: var(--width);
+  height: var(--height);
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer__shimmer___b_S5k 1.5s infinite linear;
+  border-radius: 8px;
+}
+@keyframes shimmer__shimmer___b_S5k {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
   }
 }
 
@@ -33153,6 +33178,7 @@ img::selection {
   .checkout__mainContainer___sD3Rj {
     display: block;
     padding: 0px;
+    padding-bottom: 104px;
   }
 }
 .checkout__leftContainer___Ov5FK {
