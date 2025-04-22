@@ -294,7 +294,7 @@ function ProductItem({ product, orderLink = "" }) {
             <div className={styles.paymentInfo}>
               {effectivePriceCheck > 0 && (
                 <div className={styles.effectivePrice}>
-                  {`${product?.prices?.currency_symbol} ${getEffectivePrice(
+                  {`${product?.prices?.currency_symbol}${getEffectivePrice(
                     product
                   )}`}
                 </div>
@@ -302,7 +302,7 @@ function ProductItem({ product, orderLink = "" }) {
               {markedPriceCheck > 0 &&
                 effectivePriceCheck !== markedPriceCheck && (
                   <div className={styles.markedPrice}>
-                    {getMarkedPrice(product)}
+                    {`${product?.prices?.currency_symbol}${getMarkedPrice(product)}`}
                   </div>
                 )}
             </div>
