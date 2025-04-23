@@ -206,8 +206,8 @@ export const getProductImgAspectRatio = function (
   global_config,
   defaultAspectRatio = 0.8
 ) {
-  const productImgWidth = global_config?.props?.product_img_width;
-  const productImgHeight = global_config?.props?.product_img_height;
+  const productImgWidth = global_config?.product_img_width;
+  const productImgHeight = global_config?.product_img_height;
   if (productImgWidth && productImgHeight) {
     const aspectRatio = Number(productImgWidth / productImgHeight).toFixed(2);
     return aspectRatio >= 0.6 && aspectRatio <= 1

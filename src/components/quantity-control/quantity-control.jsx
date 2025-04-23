@@ -101,7 +101,9 @@ function QuantityControl({
       <div className={`${styles.count} ${inputClassName}`}>
         <input
           className={styles.qtyInput}
-          type="text"
+          type="tel"
+          inputMode="numeric"
+          pattern="[0-9]*"
           value={quantity}
           onChange={onCurrentQtyChange}
           onBlur={onQtyLostFocus}
