@@ -5,6 +5,12 @@
   flex-direction: column;
   height: 100%;
 
+  .removeIcon {
+    path {
+      fill: @TextBody !important;
+    }
+  }
+
   &.sliderCard {
     .productDescContainer {
       flex-direction: column !important;
@@ -109,6 +115,16 @@
     .extension {
       position: absolute;
     }
+
+    .b2bAvailableOffer {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      background-color: @ThemeAccentD5;
+      border-radius: 4px;
+    }
   }
   .productDescContainer {
     display: flex;
@@ -140,6 +156,7 @@
           text-align: center;
         }
       }
+
       .productPrice {
         display: flex;
         flex-wrap: wrap;
@@ -203,10 +220,44 @@
           }
         }
       }
+
+      .badge_section {
+        display: flex;
+        align-items: center;
+        margin-bottom: 4px;
+
+        .badge {
+          display: flex;
+          align-items: center;
+          padding: 4px 8px;
+          border-radius: 4px;
+          background-color: @SuccessText;
+          color: #fff;
+          font-size: 12px;
+          font-weight: 400 !important;
+          gap: 4px;
+
+          .info_icon {
+            display: flex;
+            align-items: center;
+          }
+        }
+      }
     }
 
     .addToCart {
-      border: 0.8px solid @DividerStokes;
+      background: @ButtonSecondary;
+      font-weight: 500;
+      line-height: 16px;
+      letter-spacing: -0.24px;
+      text-transform: uppercase;
+      padding: 12px 16px;
+      height: 40px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .b2bAvailableOffers {
       background: @ButtonSecondary;
       font-weight: 500;
       line-height: 16px;
@@ -237,6 +288,10 @@
           left: 16px;
           bottom: 16px;
         }
+        .b2bAvailableOffer {
+          left: 16px;
+          bottom: 16px;
+        }
       }
     }
     &.mob-grid-2-card {
@@ -258,6 +313,10 @@
         .addToCart {
           width: 100%;
         }
+
+        .b2bAvailableOffers {
+          width: 100%;
+        }
       }
       .imageContainer {
         .wishlistBtn {
@@ -276,12 +335,20 @@
           left: 8px;
           bottom: 8px;
         }
+        .b2bAvailableOffer {
+          left: 8px;
+          bottom: 8px;
+        }
       }
     }
   }
   @media @mobile-up {
     &.tablet-grid-2-card {
       .addToCart {
+        width: 104px;
+      }
+
+      .b2bAvailableOffers {
         width: 104px;
       }
 
@@ -302,6 +369,10 @@
           left: 24px;
           bottom: 24px;
         }
+        .b2bAvailableOffer {
+          left: 24px;
+          bottom: 24px;
+        }
       }
       .productDesc {
         .productName {
@@ -311,6 +382,10 @@
     }
     &.tablet-grid-3-card {
       .addToCart {
+        width: 104px;
+      }
+
+      .b2bAvailableOffers {
         width: 104px;
       }
 
@@ -331,6 +406,10 @@
           left: 12px;
           bottom: 12px;
         }
+        .b2bAvailableOffer {
+          left: 12px;
+          bottom: 12px;
+        }
       }
       .productDesc {
         .product-name {
@@ -344,6 +423,11 @@
       .addToCart {
         width: 144px;
       }
+
+      .b2bAvailableOffers {
+        width: 144px;
+      }
+
       .imageContainer {
         .wishlistBtn {
           top: 24px;
@@ -361,6 +445,10 @@
           left: 24px;
           bottom: 24px;
         }
+        .b2bAvailableOffer {
+          left: 24px;
+          bottom: 24px;
+        }
       }
       .productDesc {
         .productName {
@@ -373,6 +461,10 @@
         flex-direction: column;
 
         .addToCart {
+          width: 100%;
+        }
+
+        .b2bAvailableOffers {
           width: 100%;
         }
 
@@ -397,6 +489,10 @@
           bottom: 12px;
         }
         .extension {
+          left: 12px;
+          bottom: 12px;
+        }
+        .b2bAvailableOffer {
           left: 12px;
           bottom: 12px;
         }

@@ -39,6 +39,8 @@ import FyImage from "../core/fy-image/fy-image";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
 import * as styles from "./product-card.less";
 import FyButton from "../core/fy-button/fy-button";
+import { useFPI } from "fdk-core/utils";
+import Tooltip from "../tool-tip/tool-tip";
 
 const ProductCard = ({
   product,
@@ -63,7 +65,9 @@ const ProductCard = ({
   columnCount = { desktop: 4, tablet: 3, mobile: 1 },
   WishlistIconComponent = () => <SvgWrapper svgSrc="wishlist-plp" />,
   isRemoveIcon = false,
-  RemoveIconComponent = () => <SvgWrapper svgSrc="item-close" />,
+  RemoveIconComponent = () => (
+    <SvgWrapper svgSrc="item-close" className={styles.removeIcon} />
+  ),
   followedIdList = [],
   onWishlistClick = () => {},
   handleAddToCart = () => {},
@@ -72,8 +76,11 @@ const ProductCard = ({
   showAddToCart = false,
   showBadge = true,
   isSlider = false,
+  isB2bAvailableOffer = true,
+  showB2bAvailableOffers = false,
 }) => {
   const isMobile = useMobile();
+  const fpi = useFPI();
 
   const getListingPrice = (key) => {
     if (!product.price) return "";
@@ -161,6 +168,15 @@ const ProductCard = ({
     handleAddToCart(product?.slug);
   };
 
+  const handleB2bAvailableOfferClick = (event) => {
+    event?.preventDefault();
+    event?.stopPropagation();
+    fpi.custom.setValue("b2bAvailableOffers", {
+      slug: product?.slug,
+      isModalOpen: true,
+    });
+  };
+
   return (
     <div
       className={`${styles.productCard} ${
@@ -212,6 +228,14 @@ const ProductCard = ({
             <RemoveIconComponent />
           </button>
         )}
+        {/* {isB2bAvailableOffer && (
+          <div
+            className={styles["b2bAvailableOffer"]}
+            onClick={handleB2bAvailableOfferClick}
+          >
+            <SvgWrapper svgSrc="local-offer" />
+          </div>
+        )} */}
         {!product.sellable ? (
           <div className={`${styles.badge} ${styles.outOfStock}`}>
             <span className={`${styles.text} ${styles.captionNormal}`}>
@@ -244,31 +268,107 @@ const ProductCard = ({
             {product.name}
           </h5>
           {isPrice && (
-            <div
-              className={`${styles.productPrice} ${centerAlign ? styles.center : ""}`}
-            >
-              {product?.price?.effective && (
-                <span
-                  className={`${styles["productPrice--sale"]} ${styles.h4}`}
+            <>
+              {product?.contract || product?.quotation ? (
+                <>
+                  {product.contract && (
+                    <Tooltip
+                      position="bottom"
+                      title={
+                        <>
+                          Contract applied -{" "}
+                          {product?.contract?.used_count === 0 ? (
+                            <>{product?.contract?.total_count} qty available</>
+                          ) : (
+                            <>
+                              {product?.contract?.total_count -
+                                product?.contract?.used_count}
+                              /{product?.contract?.total_count} qty available
+                            </>
+                          )}
+                        </>
+                      }
+                    >
+                      <div className={styles.badge_section}>
+                        <div className={styles.badge}>
+                          <span>Contract Price</span>
+                          <span className={styles.info_icon}>
+                            <SvgWrapper svgSrc="info-white" />
+                          </span>
+                        </div>
+                      </div>
+                    </Tooltip>
+                  )}
+
+                  {product?.quotation && (
+                    <Tooltip
+                      position="bottom"
+                      title={
+                        <>
+                          Quote Price -{" "}
+                          {product?.quotation?.used_count === 0 ? (
+                            <>{product?.quotation?.total_count} qty available</>
+                          ) : (
+                            <>
+                              {product?.quotation?.total_count -
+                                product?.quotation?.used_count}
+                              /{product?.quotation?.total_count} qty available
+                            </>
+                          )}
+                        </>
+                      }
+                    >
+                      <div className={styles.badge_section}>
+                        <div className={styles.badge}>
+                          <span>Quoted Price</span>
+                          <span className={styles.info_icon}>
+                            <SvgWrapper svgSrc="info-white" />
+                          </span>
+                        </div>
+                      </div>
+                    </Tooltip>
+                  )}
+                  <div
+                    className={`${styles.productPrice} ${centerAlign ? styles.center : ""}`}
+                  >
+                    <span
+                      className={`${styles["productPrice--sale"]} ${styles.h4}`}
+                    >
+                      {currencyFormat(
+                        product.best_price.price,
+                        product.best_price.currency_symbol
+                      )}
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <div
+                  className={`${styles.productPrice} ${centerAlign ? styles.center : ""}`}
                 >
-                  {getListingPrice("effective")}
-                </span>
+                  {product?.price?.effective && (
+                    <span
+                      className={`${styles["productPrice--sale"]} ${styles.h4}`}
+                    >
+                      {getListingPrice("effective")}
+                    </span>
+                  )}
+                  {hasDiscount && (
+                    <span
+                      className={`${styles["productPrice--regular"]} ${styles.captionNormal}`}
+                    >
+                      {getListingPrice("marked")}
+                    </span>
+                  )}
+                  {product.discount && (
+                    <span
+                      className={`${styles["productPrice--discount"]} ${styles.captionNormal} `}
+                    >
+                      ({product.discount?.toString().toLowerCase()})
+                    </span>
+                  )}
+                </div>
               )}
-              {hasDiscount && (
-                <span
-                  className={`${styles["productPrice--regular"]} ${styles.captionNormal}`}
-                >
-                  {getListingPrice("marked")}
-                </span>
-              )}
-              {product.discount && (
-                <span
-                  className={`${styles["productPrice--discount"]} ${styles.captionNormal} `}
-                >
-                  ({product.discount?.toString().toLowerCase()})
-                </span>
-              )}
-            </div>
+            </>
           )}
           {shadeVariantsCount !== 0 && (
             <div className={styles.productVariants}>
@@ -305,6 +405,16 @@ const ProductCard = ({
             onClick={handleAddToCartClick}
           >
             ADD TO CART
+          </FyButton>
+        )}
+
+        {showB2bAvailableOffers && (
+          <FyButton
+            variant="outlined"
+            className={styles.addToCart}
+            onClick={handleB2bAvailableOfferClick}
+          >
+            Available Offers
           </FyButton>
         )}
       </div>
