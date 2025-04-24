@@ -65,6 +65,7 @@ const ProductListing = ({
   banner = {},
   showAddToCart = false,
   stickyFilterTopOffset = 0,
+  showB2bAvailableOffers = true,
   onColumnCountUpdate = () => {},
   onResetFiltersClick = () => {},
   onFilterUpdate = () => {},
@@ -305,6 +306,7 @@ const ProductListing = ({
                         imagePlaceholder,
                         handleAddToCart,
                         imgSrcSet,
+                        showB2bAvailableOffers,
                       }}
                     />
                   </InfiniteLoader>
@@ -331,6 +333,7 @@ const ProductListing = ({
                       imagePlaceholder,
                       handleAddToCart,
                       imgSrcSet,
+                      showB2bAvailableOffers,
                     }}
                   />
                 )}
@@ -416,6 +419,7 @@ function ProductGrid({
   imagePlaceholder = "",
   onWishlistClick = () => {},
   handleAddToCart = () => {},
+  showB2bAvailableOffers = true,
 }) {
   return (
     <div
@@ -457,6 +461,7 @@ function ProductGrid({
               imageBackgroundColor={imageBackgroundColor}
               imagePlaceholder={imagePlaceholder}
               handleAddToCart={handleAddToCart}
+              showB2bAvailableOffers={showB2bAvailableOffers}
             />
           </FDKLink>
         ))}
