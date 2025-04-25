@@ -616,7 +616,7 @@ img::selection {
   justify-content: space-between;
   border-radius: var(--buttonRadius, 0px);
   padding: 0 12px;
-  background-color: var(--buttonPrimary, #4e3f09);
+  background-color: var(--buttonSecondary, #fff);
   flex: 1;
 }
 @media only screen and (max-width: 768px) {
@@ -624,12 +624,8 @@ img::selection {
     height: 40px;
   }
 }
-.add-to-cart__productDescContainer___w6xlt .add-to-cart__right___AYndS .add-to-cart__productInfo___AyYit .add-to-cart__actionButtons___XqXoR .add-to-cart__qtyContainer___thA9_ svg path {
-  fill: var(--buttonSecondary, #fff);
-}
 .add-to-cart__productDescContainer___w6xlt .add-to-cart__right___AYndS .add-to-cart__productInfo___AyYit .add-to-cart__actionButtons___XqXoR .add-to-cart__inputContainer___vwPxp {
   border: none;
-  color: var(--buttonSecondary, #fff);
 }
 .add-to-cart__sizeCartContainer___ILhna {
   display: flex;
@@ -4267,7 +4263,7 @@ img::selection {
 .fy-button__button___UES8C span {
   display: inline-flex;
 }
-.fy-button__button___UES8C:focus {
+.fy-button__button___UES8C:focus-visible {
   outline: none;
   box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }
@@ -5376,23 +5372,6 @@ img::selection {
 }
 .fy-input__adornmentContainer___MtgI6 input {
   flex: 1;
-}
-
-.shimmer__shimmerBox___LToot {
-  width: var(--width);
-  height: var(--height);
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: shimmer__shimmer___b_S5k 1.5s infinite linear;
-  border-radius: 8px;
-}
-@keyframes shimmer__shimmer___b_S5k {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
 }
 
 /**color by character**/
