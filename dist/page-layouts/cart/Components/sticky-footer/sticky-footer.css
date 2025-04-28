@@ -270,11 +270,11 @@ img::selection {
 }
 .sticky-footer__mr-5___Lai2Z,
 .sticky-footer__mr5___kGo_t {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .sticky-footer__mr-2___afhM3,
 .sticky-footer__mr2___LB3yM {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .sticky-footer__py-5___aP2Mr,
 .sticky-footer__py5___siXVO {
@@ -346,11 +346,8 @@ img::selection {
 }
 .sticky-footer__stickyFooter___vhgUO {
   display: none;
-  position: fixed;
-  position: -webkit-fixed;
-  position: -moz-fixed;
-  position: -ms-fixed;
-  position: -o-fixed;
+  position: sticky;
+  position: -webkit-sticky;
   width: 100%;
   line-height: 140%;
   z-index: 1;
@@ -386,7 +383,7 @@ img::selection {
 .sticky-footer__stickyFooter___vhgUO .sticky-footer__billContainer___ghTrz .sticky-footer__getTotalPrice___GFfah .sticky-footer__nccTotalPrice___zE4Wa {
   font-size: 14px;
   font-weight: 600;
-  margin-left: 4px;
+  margin-inline-start: 4px;
 }
 .sticky-footer__stickyFooter___vhgUO .sticky-footer__billContainer___ghTrz input[type="checkbox"] {
   accent-color: var(--buttonPrimary, #4e3f09);
@@ -397,7 +394,7 @@ img::selection {
   margin: 0;
 }
 .sticky-footer__stickyFooter___vhgUO .sticky-footer__billContainer___ghTrz .sticky-footer__rewardDiv___zaXm2 {
-  margin-left: 12px;
+  margin-inline-start: 12px;
   display: flex;
   align-items: center;
 }
@@ -405,7 +402,7 @@ img::selection {
   font-size: 12px;
   font-weight: 500;
   display: flex;
-  margin-right: 12px;
+  margin-inline-end: 12px;
 }
 .sticky-footer__stickyFooter___vhgUO .sticky-footer__nccStickyBtn___QWGhh {
   display: flex;
@@ -424,7 +421,7 @@ img::selection {
 }
 @media only screen and (max-width: 768px) {
   .sticky-footer__stickyFooter___vhgUO .sticky-footer__cartCheckoutBtn3___zDfII {
-    margin-left: 16px;
+    margin-inline-start: 16px;
   }
 }
 .sticky-footer__stickyFooter___vhgUO .sticky-footer__billContainer2___wE3Mj {
@@ -475,7 +472,7 @@ img::selection {
 }
 @media only screen and (max-width: 768px) {
   .sticky-footer__stickyFooter___vhgUO .sticky-footer__cartCheckoutBtn3___zDfII {
-    margin-left: 16px;
+    margin-inline-start: 16px;
   }
 }
 .sticky-footer__stickyFooter___vhgUO .sticky-footer__secondaryCheckoutBtn___nTrMf {

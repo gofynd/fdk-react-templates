@@ -16,8 +16,10 @@ import { useLocation } from "react-router-dom";
 import * as styles from "./order-header.less";
 import Dropdown from "../dropdown/dropdown";
 import { DATE_FILTERS } from "../../helper/constant";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function OrdersHeader({ title, subtitle, filters, flag, customClassName }) {
+  const { t } = useGlobalTranslation("translation");
   const location = useLocation();
   const getSelectedDateFilter = () => {
     const selectedFilter = getDateFilterOptions()?.find(
@@ -58,7 +60,7 @@ function OrdersHeader({ title, subtitle, filters, flag, customClassName }) {
       {filters?.statuses && (
         <div className={`${styles.rightAlign}`}>
           <div className={`${styles.orderDropdown} ${styles.bold}`}>
-            <span>Order Date:</span>
+            <span>{t("resource.order.order_date")}:</span>
             <Dropdown
               type="time"
               selectedOption={getSelectedDateFilter()}
@@ -68,7 +70,7 @@ function OrdersHeader({ title, subtitle, filters, flag, customClassName }) {
           <div
             className={`${styles.orderHeader} ${styles.orderDropdown}  ${styles.bold}`}
           >
-            <span>Order Status:</span>
+            <span>{t("resource.order.order_status")}:</span>
             <Dropdown
               type="status"
               selectedOption={getSelectedStatus}

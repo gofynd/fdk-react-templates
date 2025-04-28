@@ -1,6 +1,7 @@
 import React, { useEffect, useId } from "react";
 import { useForm } from "react-hook-form";
 import * as styles from "./verify-both.less";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function VerifyBoth({
   isShowMobileOtp = true,
@@ -11,10 +12,10 @@ function VerifyBoth({
   submittedEmail = "",
   emailOtpResendTime = 0,
   emailFormError = null,
-  onVerifyMobileSubmit = () => {},
-  onResendMobileOtpClick = () => {},
-  onVerifyEmailSubmit = () => {},
-  onResendEmailOtpClick = () => {},
+  onVerifyMobileSubmit = () => { },
+  onResendMobileOtpClick = () => { },
+  onVerifyEmailSubmit = () => { },
+  onResendEmailOtpClick = () => { },
 }) {
   return (
     <div className={styles.verifyBoth}>
@@ -50,9 +51,10 @@ function VerifyMobile({
   submittedMobile = "",
   mobileOtpResendTime = 0,
   error = null,
-  onVerifyMobileSubmit = () => {},
-  onResendMobileOtpClick = () => {},
+  onVerifyMobileSubmit = () => { },
+  onResendMobileOtpClick = () => { },
 }) {
+  const { t } = useGlobalTranslation("translation");
   const {
     handleSubmit,
     register,
@@ -84,7 +86,7 @@ function VerifyMobile({
 
   return (
     <div className={styles.formWrapper}>
-      <h3 className={styles.header}>Verify Mobile</h3>
+      <h3 className={styles.header}>{t("resource.auth.verify_mobile")}</h3>
       <form
         className={styles.verifyOtpForm}
         onSubmit={handleSubmit(onVerifyMobileSubmit)}
@@ -92,10 +94,10 @@ function VerifyMobile({
         <div>
           <p
             className={styles.otpSentMessage}
-          >{`OTP sent to ${submittedMobile}`}</p>
+          >{`${t("resource.common.otp_sent_to")} ${submittedMobile}`}</p>
           <div className={styles.inputGroup}>
             <label className={styles.label} htmlFor={mobileOtpId}>
-              Enter OTP
+              {t("resource.common.enter_otp")}
             </label>
             <input
               id={mobileOtpId}
@@ -120,7 +122,7 @@ function VerifyMobile({
           </div>
         )}
         <button className={styles.submitBtn} type="submit" disabled={!isValid}>
-          Submit
+          {t("resource.facets.submit_action")}
         </button>
       </form>
       <div className={styles.resendOtpWrapper}>
@@ -129,7 +131,7 @@ function VerifyMobile({
           onClick={resendOtp}
           disabled={isResendBtnDisabled}
         >
-          {`Resend OTP${isResendBtnDisabled ? ` (${mobileOtpResendTime}S)` : ""}`}
+          {`${t("resource.common.resend_otp")}${isResendBtnDisabled ? ` (${mobileOtpResendTime}S)` : ""}`}
         </button>
       </div>
     </div>
@@ -140,9 +142,10 @@ function VerifyEmail({
   submittedEmail = "",
   emailOtpResendTime = 0,
   error = null,
-  onVerifyEmailSubmit = () => {},
-  onResendEmailOtpClick = () => {},
+  onVerifyEmailSubmit = () => { },
+  onResendEmailOtpClick = () => { },
 }) {
+  const { t } = useGlobalTranslation("translation");
   const {
     handleSubmit,
     register,
@@ -174,7 +177,7 @@ function VerifyEmail({
 
   return (
     <div className={styles.formWrapper}>
-      <h3 className={styles.header}>Verify Email</h3>
+      <h3 className={styles.header}>{t("resource.auth.verify_email")}</h3>
       <form
         className={styles.verifyOtpForm}
         onSubmit={handleSubmit(onVerifyEmailSubmit)}
@@ -182,12 +185,12 @@ function VerifyEmail({
         <div>
           <p
             className={styles.otpSentMessage}
-          >{`OTP sent to ${submittedEmail}`}</p>
+          >{`${t("resource.common.otp_sent_to")} ${submittedEmail}`}</p>
           <div
             className={`${styles.inputGroup} ${errors?.root || errors?.otp ? styles.error : ""}`}
           >
             <label className={styles.label} htmlFor={emailOtpId}>
-              Enter OTP
+              {t("resource.common.enter_otp")}
             </label>
             <input
               id={emailOtpId}
@@ -202,7 +205,7 @@ function VerifyEmail({
               }}
               {...register("otp", {
                 validate: (value) =>
-                  /^[0-9]{4}$/.test(value) || "Please enter a valid otp",
+                  /^[0-9]{4}$/.test(value) || t("resource.common.enter_valid_otp"),
               })}
             />
             {errors?.otp && (
@@ -211,7 +214,7 @@ function VerifyEmail({
           </div>
         </div>
         <button className={styles.submitBtn} type="submit">
-          <span>Submit</span>
+          <span>{t("resource.facets.submit_action")}</span>
         </button>
       </form>
       <div className={styles.resendOtpWrapper}>
@@ -220,7 +223,7 @@ function VerifyEmail({
           onClick={resendOtp}
           disabled={isResendBtnDisabled}
         >
-          {`Resend OTP${isResendBtnDisabled ? ` (${emailOtpResendTime}S)` : ""}`}
+          {`${t("resource.common.resend_otp")}${isResendBtnDisabled ? ` (${emailOtpResendTime}S)` : ""}`}
         </button>
       </div>
     </div>
