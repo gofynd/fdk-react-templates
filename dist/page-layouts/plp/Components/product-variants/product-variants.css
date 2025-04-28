@@ -307,11 +307,11 @@ img::selection {
 }
 .product-variants__mr-5___e28UX,
 .product-variants__mr5___seqS1 {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .product-variants__mr-2___LyfNy,
 .product-variants__mr2___zibjW {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .product-variants__py-5___KE2xC,
 .product-variants__py5____O1hM {
@@ -404,13 +404,13 @@ img::selection {
 }
 @supports not (gap: 6px 8px) {
   .product-variants__variantContainer___J1jRs {
-    margin-left: -4px;
-    margin-right: -4px;
+    margin-inline-start: -4px;
+    margin-inline-end: -4px;
     margin-bottom: -6px;
   }
   .product-variants__variantContainer___J1jRs > * {
-    padding-left: 8px / 2;
-    padding-right: 8px / 2;
+    padding-inline-start: 8px / 2;
+    padding-inline-end: 8px / 2;
     margin-bottom: 6px;
   }
 }
@@ -457,7 +457,7 @@ img::selection {
   background: rgba(255, 255, 255, 0.4);
   position: absolute;
   top: 0;
-  left: 0;
+  inset-inline-start: 0;
   height: 100%;
   width: 100%;
   pointer-events: none;
@@ -472,9 +472,13 @@ img::selection {
   width: 24px;
   position: absolute;
   top: 50%;
-  left: 50%;
+  inset-inline-start: 50%;
   transform: translate(-50%, -50%);
   fill: var(--buttonSecondary, #fff);
+}
+[dir="rtl"] .product-variants__variantContainer___J1jRs .product-variants__variantItemImage___vLXOQ .product-variants__selectedIcon___bQB5Q,
+[dir="rtl"] .product-variants__variantContainer___J1jRs .product-variants__variantItemColor___Lomkf .product-variants__color___rvpbQ .product-variants__selectedIcon___bQB5Q {
+  transform: translate(50%, -50%);
 }
 .product-variants__variantContainer___J1jRs .product-variants__variantItemImage___vLXOQ {
   display: inline-block;
@@ -490,7 +494,7 @@ img::selection {
   height: 80px;
   width: 80px;
   bottom: 0;
-  border-left: 1px solid var(--buttonSecondary, #fff);
+  border-inline-start: 1px solid var(--buttonSecondary, #fff);
   transform: rotate(45deg);
   transform-origin: bottom left;
 }
@@ -516,8 +520,8 @@ img::selection {
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 0;
-  right: 0;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
   background-color: var(--dividerStokes, #d4d1d1);
   clip-path: polygon(calc(100% + 1px) 0, 100% 0, 0 100%, 0 calc(100% + 1px));
 }

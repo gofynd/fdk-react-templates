@@ -270,11 +270,11 @@ img::selection {
 }
 .skeletons__mr-5___dJOZi,
 .skeletons__mr5___JOISB {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .skeletons__mr-2___gyXFm,
 .skeletons__mr2___ZAxYg {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .skeletons__py-5___kZ8WX,
 .skeletons__py5___G9_Fm {
@@ -360,6 +360,9 @@ img::selection {
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
   animation: skeletons__loading___qKZUW 0.8s infinite;
 }
+[dir="rtl"] .skeletons__card___njYyO canvas {
+  transform: translateX(100%);
+}
 @media only screen and (max-width: 768px) {
   .skeletons__card___njYyO canvas {
     display: none;
@@ -376,6 +379,9 @@ img::selection {
 @keyframes skeletons__loading___qKZUW {
   100% {
     transform: translateX(100%);
+  }
+  [dir="rtl"] 100% {
+    transform: translateX(-100%);
   }
 }
 

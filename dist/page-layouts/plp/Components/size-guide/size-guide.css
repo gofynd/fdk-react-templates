@@ -270,11 +270,11 @@ img::selection {
 }
 .size-guide__mr-5___x3jkZ,
 .size-guide__mr5___Ks7yP {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .size-guide__mr-2___v8t6J,
 .size-guide__mr2___BKhq9 {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .size-guide__py-5___DuX0E,
 .size-guide__py5___TBonk {
@@ -373,15 +373,15 @@ img::selection {
   color: var(--textLabel, #7d7676);
 }
 .size-guide__sizeContainer___EDqdR .size-guide__sizeTabs___zvaSu .size-guide__tab___HBjSu.size-guide__tabSizeGuide___wjsav {
-  margin-left: 1.5rem;
+  margin-inline-start: 1.5rem;
 }
 @media only screen and (max-width: 768px) {
   .size-guide__sizeContainer___EDqdR .size-guide__sizeTabs___zvaSu .size-guide__tab___HBjSu.size-guide__tabSizeGuide___wjsav {
-    margin-left: 1rem;
+    margin-inline-start: 1rem;
   }
 }
 .size-guide__sizeContainer___EDqdR .size-guide__sizeTabs___zvaSu .size-guide__tab___HBjSu.size-guide__tabMeasure___OVXNX {
-  margin-left: 1.5rem;
+  margin-inline-start: 1.5rem;
 }
 .size-guide__sizeContainer___EDqdR .size-guide__sidebarBody___JRYlv {
   height: 100%;
@@ -481,7 +481,7 @@ img::selection {
   padding: 4px 8px;
 }
 .size-guide__btnGroup___wPXct .size-guide__btnContainer___MrABQ > *:not(:last-child) {
-  margin-right: 3px;
+  margin-inline-end: 3px;
 }
 .size-guide__unitBtn____SwNz {
   padding: 2px 7px;
@@ -500,7 +500,7 @@ img::selection {
   height: 100%;
   position: fixed;
   top: 0;
-  left: 0;
+  inset-inline-start: 0;
   background-color: rgba(20, 19, 14, 0.6);
   opacity: 0;
   transition: all 0.4s;
@@ -843,11 +843,11 @@ img::selection {
 }
 .modal__mr-5___DjKqT,
 .modal__mr5___il5jH {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .modal__mr-2___SKD1t,
 .modal__mr2___BSxti {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .modal__py-5___OpCsp,
 .modal__py5___hfa2b {
@@ -974,8 +974,8 @@ img::selection {
   .modal__modalContainer--borders____AGZf {
     border: none;
     border-radius: 0;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
+    border-start-start-radius: 8px;
+    border-start-end-radius: 8px;
   }
 }
 .modal__modalHeader___xKo1g {

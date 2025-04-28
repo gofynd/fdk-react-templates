@@ -5,6 +5,7 @@ import Modal from "../../../components/core/modal/modal";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import StickyPayNow from "./sticky-pay-now/sticky-pay-now";
 import { priceFormatCurrencySymbol } from "../../../helper/utils";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function CardForm({
   cardNumberRef,
@@ -42,7 +43,7 @@ function CardForm({
   isCardValid,
   cardDetailsData,
   isMobile,
-  onPriceDetailsClick = () => {},
+  onPriceDetailsClick = () => { },
   addNewCard,
   isCvvInfo,
   handleCvvInfo,
@@ -50,6 +51,7 @@ function CardForm({
   setCardValidity,
   resetCardValidationErrors,
 }) {
+  const { t } = useGlobalTranslation("translation");
   const isFormatterSet = useRef(false);
 
   useEffect(() => {
@@ -93,9 +95,9 @@ function CardForm({
               (cardDetailsData.card_brand &&
                 cardDetailsData.card_brand !== "American Express")) && (
               <div className={styles.type}>
-                <p className={styles.title}>What is CVV Number?</p>
+                <p className={styles.title}>{t("resource.checkout.what_is_cvv_number")}</p>
                 <p className={styles.desc}>
-                  It is a 3-digit code on the back of your card.
+                  {t("resource.checkout.cvv_description")}
                 </p>
                 <div className={styles.cvImage}>
                   <SvgWrapper svgSrc="non-amex-card-cvv" />
@@ -107,10 +109,9 @@ function CardForm({
               (cardDetailsData.card_brand &&
                 cardDetailsData.card_brand === "American Express")) && (
               <div className={styles.type}>
-                <p className={styles.title}>Have American Express Card?</p>
+                <p className={styles.title}>{t("resource.checkout.have_american_express_card")}</p>
                 <p className={styles.desc}>
-                  It is a 4-digit number on the front, just above your credit
-                  card number.
+                  {t("resource.checkout.amex_cvv_description")}
                 </p>
                 <div className={styles.cvImage}>
                   <SvgWrapper svgSrc="amex-card-cvv" />
@@ -326,7 +327,7 @@ function CardForm({
             onClick={() => payUsingCard()}
             disabled={!isCardValid()}
           >
-            PAY {priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue())}
+            {t("resource.common.pay_caps")} {priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue())}
           </button>
         )}
       </div>

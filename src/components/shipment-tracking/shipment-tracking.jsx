@@ -13,10 +13,15 @@
  */
 
 import React, { useState, Fragment } from "react";
-import { useNavigate } from "react-router-dom";
 import * as styles from "./shipment-tracking.less";
-import { convertUTCDateToLocalDate } from "../../helper/utils";
+import { convertUTCDateToLocalDate, formatLocale } from "../../helper/utils";
 import TickActiveIcon from "../../assets/images/tick-black-active.svg";
+import {
+  useNavigate,
+  useGlobalStore,
+  useFPI,
+  useGlobalTranslation
+} from "fdk-core/utils";
 
 function ShipmentTracking({
   tracking,
@@ -24,11 +29,17 @@ function ShipmentTracking({
   changeinit,
   invoiceDetails,
 }) {
+  const { t } = useGlobalTranslation("translation");
+  const fpi = useFPI();
+  const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
+  const locale = language?.locale;
   const navigate = useNavigate();
   const [showDetailedTracking, setShowDetailedTracking] = useState(false);
   const getTime = (item) => {
     return convertUTCDateToLocalDate(
-      item?.created_ts ? item?.created_ts : item?.time
+      item?.created_ts ? item?.created_ts : item?.time, 
+      "", 
+      formatLocale(locale, countryCode)
     );
   };
 
@@ -43,20 +54,20 @@ function ShipmentTracking({
     }
     if (shipmentInfo?.track_url) {
       arrLinks.push({
-        text: "TRACK",
+        text: t("resource.common.track"),
         link: shipmentInfo?.track_url ? shipmentInfo?.track_url : "",
       });
     }
     if (shipmentInfo?.need_help_url) {
       arrLinks.push({
         type: "internal",
-        text: "NEED HELP",
+        text: t("resource.common.need_help"),
         link: "/faq/" || shipmentInfo?.need_help_url,
       });
     }
     if (invoiceDetails?.success) {
       arrLinks.push({
-        text: "DOWNLOAD INVOICE",
+        text: t("resource.common.download_invoice"),
         link: invoiceDetails?.presigned_url,
       });
     }
@@ -66,6 +77,11 @@ function ShipmentTracking({
   const updateType = () => {
     return shipmentInfo?.can_return ? "RETURN" : "CANCEL";
   };
+
+  // const updateTypeText = () => {
+  //   return shipmentInfo?.can_return ? "resource.facets.return_caps" : "resource.facets.cancel_caps";
+  // };
+
   const update = (item) => {
     if (["CANCEL", "RETURN"].includes(item?.text)) {
       changeinit({
@@ -82,11 +98,11 @@ function ShipmentTracking({
       <div className={`${styles.status}`}>
         <div>
           <div className={`${styles.title} ${styles.boldsm}`}>
-            Shipment: {shipmentInfo?.shipment_id}
+          {t("resource.common.shipment")}: {shipmentInfo?.shipment_id}
           </div>
           {shipmentInfo?.awb_no && (
             <div className={`${styles.awbText} ${styles.lightxxs}`}>
-              AWB: {shipmentInfo?.awb_no}
+              {t("resource.common.awb")}: {shipmentInfo?.awb_no}
             </div>
           )}
         </div>
@@ -165,7 +181,7 @@ function ShipmentTracking({
                 onClick={() => update(item)}
                 className={`${styles.regularsm}`}
               >
-                {item?.text}
+                {item?.text === "RETURN" ? t("resource.facets.return_caps") : item?.text === "CANCEL" ? t("resource.facets.cancel_caps") : item?.text}
               </div>
             ) : (
               <a
@@ -173,7 +189,7 @@ function ShipmentTracking({
                 href={`${item?.link}`}
                 className={`${styles.regularsm}`}
               >
-                {item?.text}
+                {item?.text === "RETURN" ? t("resource.facets.return_caps") : item?.text === "CANCEL" ? t("resource.facets.cancel_caps") : item?.text}
               </a>
             )}
           </Fragment>
