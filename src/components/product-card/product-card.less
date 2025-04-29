@@ -5,6 +5,12 @@
   flex-direction: column;
   height: 100%;
 
+  .removeIcon {
+    path{
+      fill: @TextBody !important;
+    }
+  }
+
   &.sliderCard {
     .productDescContainer {
       flex-direction: column !important;
@@ -68,7 +74,7 @@
     .badge {
       position: absolute;
       min-width: 50px;
-      border-radius: 24px;
+      border-radius: @BadgeRadius;
       padding: 6px 12px;
       text-align: center;
       background-color: @SaleBadgeBackground;
@@ -206,7 +212,6 @@
     }
 
     .addToCart {
-      border: 0.8px solid @DividerStokes;
       background: @ButtonSecondary;
       font-weight: 500;
       line-height: 16px;
@@ -404,6 +409,7 @@
     }
   }
   .captionNormal();
+ 
 }
 
 // .animate {

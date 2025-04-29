@@ -11,7 +11,7 @@
  *
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as styles from "./reason-item.less";
 import RadioIcon from "../../../assets/images/radio";
 
@@ -22,7 +22,29 @@ function ReasonItem({
   otherReason,
 }) {
   const [reasonOtherText, setReasonOtherText] = useState("");
+  const [error, setError] = useState("");
   const isSelected = selectedReason?.id === reason?.id;
+  const isRemarkRequired = reason?.meta?.remark_required;
+
+  useEffect(() => {
+    setReasonOtherText(selectedReason?.reason_other_text || "");
+    setError("");
+  }, [selectedReason?.id]);
+
+  const handleChange = (e) => {
+    const value = e.target.value?.slice(0, 1000) || "";
+    setReasonOtherText(value);
+    otherReason(value);
+    if (isRemarkRequired && value.trim() !== "") {
+      setError("");
+    }
+  };
+
+  const handleBlur = () => {
+    if (isRemarkRequired && reasonOtherText.trim() === "") {
+      setError("Field is required.");
+    }
+  };
   return (
     <div className={`${styles.reasonItem}`}>
       <div className={`${styles.reasonContent}`} onClick={() => change(reason)}>
@@ -39,12 +61,14 @@ function ReasonItem({
       {isSelected && reason?.meta?.show_text_area && (
         <div className={`${styles.textarea}`}>
           <textarea
-            className={`${styles.textarea}`}
+            className={styles.textarea}
             value={reasonOtherText}
-            placeholder="Enter reason"
-            onChange={(e) => setReasonOtherText(e.target.value?.slice(0, 1000))}
-            onBlur={() => otherReason(reasonOtherText)}
+            placeholder={`Enter reason${isRemarkRequired ? "*" : ""}`}
+            maxLength={1000}
+            onChange={handleChange}
+            onBlur={handleBlur}
           ></textarea>
+          {error && <div className={styles.error}>{error}</div>}
         </div>
       )}
     </div>

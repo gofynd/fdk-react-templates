@@ -509,7 +509,7 @@ img::selection {
   font-size: 12px;
   font-weight: 500;
   margin-right: 12px;
-  color: var(--successText, #1c958f);
+  color: var(--saleDiscountText, #1c958f);
 }
 .chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__deliveryDateWrapper___TcR1g {
   display: flex;
@@ -619,7 +619,6 @@ img::selection {
   align-items: flex-start;
 }
 .chip-item__sModalContainer___ARs9G .chip-item__sizeModalTitle___ITUcq {
-  border-bottom: 1px solid #f0f0f0;
   position: relative;
   display: flex;
   align-items: center;
@@ -654,7 +653,7 @@ img::selection {
   font-weight: 400;
 }
 .chip-item__sModalContainer___ARs9G .chip-item__sizeModalTitle___ITUcq .chip-item__sizeModalDiv____Vutd .chip-item__sizeModalContent___TAnsO .chip-item__sizeDiscount___yJRZW {
-  margin-top: 16px;
+  margin-top: 8px;
   font-size: 14px;
   font-weight: 600;
 }
@@ -679,9 +678,7 @@ img::selection {
 .chip-item__sModalContainer___ARs9G .chip-item__sizeModalBody___hpEJF .chip-item__sizeHorizontalList___vfOZf {
   display: flex;
   flex-wrap: wrap;
-}
-.chip-item__sModalContainer___ARs9G .chip-item__sizeModalBody___hpEJF .chip-item__sizeHorizontalList___vfOZf .chip-item__singleSize___wixkk {
-  margin-right: 12px;
+  gap: 12px;
   margin-top: 12px;
 }
 .chip-item__sModalContainer___ARs9G .chip-item__sizeModalBody___hpEJF .chip-item__sizeHorizontalList___vfOZf .chip-item__singleSize___wixkk .chip-item__singleSizeDetails___CgTsc {
@@ -690,9 +687,7 @@ img::selection {
   background: #fff;
   border: 1px solid #e2e2e2;
   border-radius: 4px;
-  padding: 0px 20px;
-  padding-bottom: 14px;
-  padding-top: 14px;
+  padding: 12px;
   display: inline-block;
   cursor: pointer;
 }
