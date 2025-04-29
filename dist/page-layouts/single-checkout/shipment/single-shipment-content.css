@@ -250,9 +250,6 @@ h5,
 .single-shipment-content__margin0auto___IGsne {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .single-shipment-content__base-page-container___K7IyN,
 .single-shipment-content__basePageContainer___Pxi32 {
   max-width: 1440px !important;
@@ -260,13 +257,6 @@ button {
 .single-shipment-content__remove-scroll___vD2sk,
 .single-shipment-content__removeScroll___TWbdg {
   overflow-y: hidden !important;
-}
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
 }
 .single-shipment-content__mr-5___Zv6MF,
 .single-shipment-content__mr5___E_a2K {
@@ -548,7 +538,7 @@ img::selection {
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__itemWrapper___Sz3u9 .single-shipment-content__rightDetails___Ll92n .single-shipment-content__paymentInfo___lbLQI .single-shipment-content__priceWrapper___KZYrt .single-shipment-content__discount___ur9L7 {
   font-weight: 500;
   font-size: 12px;
-  color: var(--successText, #1c958f);
+  color: var(--saleDiscountText, #1c958f);
 }
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__itemWrapper___Sz3u9 .single-shipment-content__rightDetails___Ll92n .single-shipment-content__paymentInfo___lbLQI .single-shipment-content__offersWarning___bo1Rp {
   display: flex;
@@ -887,9 +877,6 @@ h5,
 .free-gift-item__margin0auto___hpTPs {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .free-gift-item__base-page-container___LIKt3,
 .free-gift-item__basePageContainer___lzNzG {
   max-width: 1440px !important;
@@ -897,13 +884,6 @@ button {
 .free-gift-item__remove-scroll___x270S,
 .free-gift-item__removeScroll___DdTl9 {
   overflow-y: hidden !important;
-}
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
 }
 .free-gift-item__mr-5___R4N5D,
 .free-gift-item__mr5___OIG6F {

@@ -59,18 +59,27 @@
     }
     .trackOrderBtn {
       margin-top: 24px;
-      button {
-        padding: 14px 24px;
-        border: 1px solid var(--buttonPrimary);
-        border-radius: @ButtonRadius;
-        font-size: 14px;
-        @media @mobile {
-          padding: 12px;
-          height: 41px;
+      .trackBtn {
+          padding: 14px 24px;
+          border: 1px solid var(--buttonPrimary);
+          border-radius: @ButtonRadius;
+          font-size: 14px;
+      
+          @media @mobile {
+            padding: 12px;
+            height: 41px;
+          }
+        }
+      a {
+        &:nth-child(2) {
+          @media (max-width: 378px) {
+            padding-top: 12px;
+          }
         }
       }
     }
   }
+
 
   .orderDetail {
     display: flex;
@@ -331,7 +340,9 @@
 }
 
 .payment-address {
-  border: 1px solid @DividerStokes;
+  @media @desktop {
+    border: 1px solid @DividerStokes;
+  }
   border-radius: 8px;
   margin-top: 16px;
   @media @tablet {

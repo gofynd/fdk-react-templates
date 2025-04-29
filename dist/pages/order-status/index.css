@@ -250,9 +250,6 @@ h5,
 .order-status__margin0auto___pLJaS {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .order-status__base-page-container___PKIZX,
 .order-status__basePageContainer___SxrPZ {
   max-width: 1440px !important;
@@ -260,13 +257,6 @@ button {
 .order-status__remove-scroll___Gfjdk,
 .order-status__removeScroll___nKF1t {
   overflow-y: hidden !important;
-}
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
 }
 .order-status__mr-5___BBR7K,
 .order-status__mr5___JkAKp {
@@ -414,16 +404,21 @@ img::selection {
 .order-status__orders___N_SnV .order-status__orderStatus___gGK9U .order-status__trackOrderBtn___woN1W {
   margin-top: 24px;
 }
-.order-status__orders___N_SnV .order-status__orderStatus___gGK9U .order-status__trackOrderBtn___woN1W button {
+.order-status__orders___N_SnV .order-status__orderStatus___gGK9U .order-status__trackOrderBtn___woN1W .order-status__trackBtn___eXwYp {
   padding: 14px 24px;
   border: 1px solid var(--buttonPrimary);
   border-radius: var(--buttonRadius, 0px);
   font-size: 14px;
 }
 @media only screen and (max-width: 480px) {
-  .order-status__orders___N_SnV .order-status__orderStatus___gGK9U .order-status__trackOrderBtn___woN1W button {
+  .order-status__orders___N_SnV .order-status__orderStatus___gGK9U .order-status__trackOrderBtn___woN1W .order-status__trackBtn___eXwYp {
     padding: 12px;
     height: 41px;
+  }
+}
+@media (max-width: 378px) {
+  .order-status__orders___N_SnV .order-status__orderStatus___gGK9U .order-status__trackOrderBtn___woN1W a:nth-child(2) {
+    padding-top: 12px;
   }
 }
 .order-status__orders___N_SnV .order-status__orderDetail___wNvPW {
@@ -687,9 +682,13 @@ img::selection {
   margin: auto;
 }
 .order-status__payment-address___SqyyO {
-  border: 1px solid var(--dividerStokes, #d4d1d1);
   border-radius: 8px;
   margin-top: 16px;
+}
+@media only screen and (min-width: 769px) {
+  .order-status__payment-address___SqyyO {
+    border: 1px solid var(--dividerStokes, #d4d1d1);
+  }
 }
 @media only screen and (max-width: 768px) {
   .order-status__payment-address___SqyyO {
@@ -1058,9 +1057,6 @@ h5,
 .price-breakup__margin0auto___mg_Tr {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .price-breakup__base-page-container___q5GMA,
 .price-breakup__basePageContainer___uyNsJ {
   max-width: 1440px !important;
@@ -1068,13 +1064,6 @@ button {
 .price-breakup__remove-scroll___JHwDZ,
 .price-breakup__removeScroll___ZpjfH {
   overflow-y: hidden !important;
-}
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
 }
 .price-breakup__mr-5___IBp4f,
 .price-breakup__mr5___ucqoB {
@@ -1520,9 +1509,6 @@ h5,
 .cart-gift-item__margin0auto___vAlKx {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .cart-gift-item__base-page-container___R9diF,
 .cart-gift-item__basePageContainer___whKqq {
   max-width: 1440px !important;
@@ -1530,13 +1516,6 @@ button {
 .cart-gift-item__remove-scroll___TuTlz,
 .cart-gift-item__removeScroll___tU5T_ {
   overflow-y: hidden !important;
-}
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
 }
 .cart-gift-item__mr-5___mJPbt,
 .cart-gift-item__mr5___fFMzT {
@@ -1626,12 +1605,8 @@ img::selection {
 .cart-gift-item__ncc-d-flex___S66n9 {
   display: flex;
 }
-.cart-gift-item__line-through___WBqT8 {
+.cart-gift-item__gift-line-through___puUFd {
   text-decoration: line-through;
-}
-.cart-gift-item__free-gift-items-container___MTdn8 {
-  display: grid;
-  grid-template-columns: 50% 50%;
 }
 .cart-gift-item__free-gift-items-container___MTdn8 .cart-gift-item__free-items___mrJLz:nth-child(odd) {
   margin-right: 10px;
@@ -1644,6 +1619,8 @@ img::selection {
   flex: 0 0 46px;
   height: auto;
   min-width: 0;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 .cart-gift-item__free-gift-box___LbfBC {
   border-radius: 8px;
@@ -1722,8 +1699,6 @@ img::selection {
   }
 }
 .cart-gift-item__free-gift-box___LbfBC .cart-gift-item__free-article-container____KmiK {
-  display: grid;
-  grid-template-columns: 50% 50%;
   -ms-overflow-style: none;
   /* IE and Edge */
   scrollbar-width: none;
@@ -2002,9 +1977,6 @@ h5,
 .fy-button__margin0auto___LCb81 {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .fy-button__base-page-container___blkPJ,
 .fy-button__basePageContainer___ciPsX {
   max-width: 1440px !important;
@@ -2012,13 +1984,6 @@ button {
 .fy-button__remove-scroll___Kd5MZ,
 .fy-button__removeScroll___UpL4U {
   overflow-y: hidden !important;
-}
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
 }
 .fy-button__mr-5___A5qJJ,
 .fy-button__mr5___BRUgW {
@@ -2111,7 +2076,7 @@ img::selection {
 .fy-button__button___UES8C span {
   display: inline-flex;
 }
-.fy-button__button___UES8C:focus {
+.fy-button__button___UES8C:focus-visible {
   outline: none;
   box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }
@@ -2667,9 +2632,6 @@ h5,
 .modal__margin0auto___dB88d {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .modal__base-page-container___eZhia,
 .modal__basePageContainer___QUmCs {
   max-width: 1440px !important;
@@ -2677,13 +2639,6 @@ button {
 .modal__remove-scroll___vOtMk,
 .modal__removeScroll___sjuCx {
   overflow-y: hidden !important;
-}
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
 }
 .modal__mr-5___DjKqT,
 .modal__mr5___il5jH {

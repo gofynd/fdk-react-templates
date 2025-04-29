@@ -11,6 +11,7 @@ import VerifyBoth from "../../page-layouts/auth/verify-both/verify-both";
 import LoginRegisterToggle from "../../page-layouts/auth/login-register-toggle/login-register-toggle";
 import ShowPasswordIcon from "../../assets/images/show-password.svg";
 import HidePasswordIcon from "../../assets/images/hide-password.svg";
+import TermPrivacy from "../../page-layouts/login/component/term-privacy/term-privacy";
 
 function Register({
   isFormSubmitSuccess = false,
@@ -57,6 +58,7 @@ function Register({
       firstName: "",
       lastName: "",
       gender: "male",
+      consent: true,
       email: "",
       phone: {
         ...mobileInfo,
@@ -327,6 +329,16 @@ function Register({
           )}
 
           {/* Extension slot: above_register_button */}
+
+          <div className={styles.consentWrapper}>
+            <Controller
+              name="consent"
+              control={control}
+              render={({ field }) => (
+                <TermPrivacy onChange={field.onChange} checked={field.value} />
+              )}
+            />
+          </div>
 
           <button className={styles.registerBtn} type="submit">
             Continue

@@ -173,20 +173,23 @@ function BlogPage({
               )}
             </div>
           </div>
-          <div className={`${styles.blogPost__image}`}>
-            <FyImage
-              key={blogDetails?.slug}
-              customClass={`${styles.blogPost__image}`}
-              src={
-                blogDetails?.feature_image?.secure_url ||
-                sliderProps?.fallback_image
-              }
-              alt={blogDetails?.title}
-              placeholder={sliderProps?.fallback_image}
-              isFixedAspectRatio={false}
-              defer={false}
-            />
-          </div>
+          {(!!blogDetails?.feature_image?.secure_url ||
+            !!sliderProps?.fallback_image) && (
+            <div className={`${styles.blogPost__image}`}>
+              <FyImage
+                key={blogDetails?.slug}
+                customClass={`${styles.blogPost__image}`}
+                src={
+                  blogDetails?.feature_image?.secure_url ||
+                  sliderProps?.fallback_image
+                }
+                alt={blogDetails?.title}
+                placeholder={sliderProps?.fallback_image}
+                isFixedAspectRatio={false}
+                defer={false}
+              />
+            </div>
+          )}
           <div className={`${styles.blogPost__content}`}>
             {blogDetails?.content && (
               <HTMLContent
