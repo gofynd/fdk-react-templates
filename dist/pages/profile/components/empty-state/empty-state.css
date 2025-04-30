@@ -250,9 +250,6 @@ h5,
 .fy-button__margin0auto___LCb81 {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .fy-button__base-page-container___blkPJ,
 .fy-button__basePageContainer___ciPsX {
   max-width: 1440px !important;
@@ -260,13 +257,6 @@ button {
 .fy-button__remove-scroll___Kd5MZ,
 .fy-button__removeScroll___UpL4U {
   overflow-y: hidden !important;
-}
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
 }
 .fy-button__mr-5___A5qJJ,
 .fy-button__mr5___BRUgW {
@@ -359,7 +349,7 @@ img::selection {
 .fy-button__button___UES8C span {
   display: inline-flex;
 }
-.fy-button__button___UES8C:focus {
+.fy-button__button___UES8C:focus-visible {
   outline: none;
   box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }
@@ -915,9 +905,6 @@ h5,
 .empty-state__margin0auto___MdjpN {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .empty-state__base-page-container___Rs1GA,
 .empty-state__basePageContainer___rpPQg {
   max-width: 1440px !important;
@@ -925,13 +912,6 @@ button {
 .empty-state__remove-scroll___C_Bmc,
 .empty-state__removeScroll___WpvCq {
   overflow-y: hidden !important;
-}
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
 }
 .empty-state__mr-5___HffGR,
 .empty-state__mr5___Wg4Mk {
