@@ -250,9 +250,6 @@ h5,
 .profile-details__margin0auto___H96PG {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .profile-details__base-page-container___WwMDM,
 .profile-details__basePageContainer___SdKRN {
   max-width: 1440px !important;
@@ -260,13 +257,6 @@ button {
 .profile-details__remove-scroll___F1x9T,
 .profile-details__removeScroll___knsog {
   overflow-y: hidden !important;
-}
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
 }
 .profile-details__mr-5___HuYey,
 .profile-details__mr5___MhBdP {
@@ -655,9 +645,6 @@ h5,
 .fy-input__margin0auto___dSSwm {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .fy-input__base-page-container___DIijL,
 .fy-input__basePageContainer___iFW9V {
   max-width: 1440px !important;
@@ -665,13 +652,6 @@ button {
 .fy-input__remove-scroll___B0TU7,
 .fy-input__removeScroll___ZJHN4 {
   overflow-y: hidden !important;
-}
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
 }
 .fy-input__mr-5___v4vQm,
 .fy-input__mr5___FnOZz {
@@ -1129,9 +1109,6 @@ h5,
 .fy-button__margin0auto___LCb81 {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .fy-button__base-page-container___blkPJ,
 .fy-button__basePageContainer___ciPsX {
   max-width: 1440px !important;
@@ -1139,13 +1116,6 @@ button {
 .fy-button__remove-scroll___Kd5MZ,
 .fy-button__removeScroll___UpL4U {
   overflow-y: hidden !important;
-}
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
 }
 .fy-button__mr-5___A5qJJ,
 .fy-button__mr5___BRUgW {
@@ -1238,7 +1208,7 @@ img::selection {
 .fy-button__button___UES8C span {
   display: inline-flex;
 }
-.fy-button__button___UES8C:focus {
+.fy-button__button___UES8C:focus-visible {
   outline: none;
   box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }

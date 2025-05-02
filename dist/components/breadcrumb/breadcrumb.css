@@ -250,9 +250,6 @@ h5,
 .breadcrumb__margin0auto___Qp6uT {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .breadcrumb__base-page-container___cZJdW,
 .breadcrumb__basePageContainer___x6QWs {
   max-width: 1440px !important;
@@ -260,13 +257,6 @@ button {
 .breadcrumb__remove-scroll___ppUqX,
 .breadcrumb__removeScroll___yP_Qb {
   overflow-y: hidden !important;
-}
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
 }
 .breadcrumb__mr-5___MN4Mm,
 .breadcrumb__mr5___yoqTb {
@@ -359,8 +349,5 @@ img::selection {
 }
 .breadcrumb__breadcrumbs___lMY9E span {
   color: var(--textSecondary, #9c9c9c);
-}
-.breadcrumb__breadcrumbs___lMY9E span.breadcrumb__active___NRqNx {
-  color: var(--buttonPrimary, #4e3f09);
 }
 
