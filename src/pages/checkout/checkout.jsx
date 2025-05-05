@@ -36,6 +36,7 @@ function Checkout({
 }) {
   const [cancelQrPayment, setCancelQrPayment] = useState(null);
   const { onFailedGetCartShipmentDetails } = address;
+  const { availableCouponList, ...restCouponProps } = cartCouponProps;
   return (
     <div className={`${styles.mainContainer} fontBody`}>
       <div className={styles["view-mobile"]}>
@@ -81,11 +82,14 @@ function Checkout({
         ></CheckoutPayment>
       </div>
       <div className={styles.rightContainer}>
-        <Coupon
-          {...cartCouponProps}
-          currencySymbol={currencySymbol}
-          handleRemoveQr={cancelQrPayment}
-        />
+        {!!availableCouponList?.length && (
+          <Coupon
+            availableCouponList={availableCouponList}
+            {...restCouponProps}
+            currencySymbol={currencySymbol}
+            handleRemoveQr={cancelQrPayment}
+          />
+        )}
         <Comment {...cartCommentProps} />
         <PriceBreakup
           breakUpValues={breakupValues}

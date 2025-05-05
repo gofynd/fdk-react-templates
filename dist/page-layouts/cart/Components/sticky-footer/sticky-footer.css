@@ -250,9 +250,6 @@ h5,
 .sticky-footer__margin0auto___Zv2YS {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .sticky-footer__base-page-container___TyeXH,
 .sticky-footer__basePageContainer___LIprl {
   max-width: 1440px !important;
@@ -260,13 +257,6 @@ button {
 .sticky-footer__remove-scroll___AtBPE,
 .sticky-footer__removeScroll___lYDgv {
   overflow-y: hidden !important;
-}
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
 }
 .sticky-footer__mr-5___Lai2Z,
 .sticky-footer__mr5___kGo_t {
@@ -346,11 +336,8 @@ img::selection {
 }
 .sticky-footer__stickyFooter___vhgUO {
   display: none;
-  position: fixed;
-  position: -webkit-fixed;
-  position: -moz-fixed;
-  position: -ms-fixed;
-  position: -o-fixed;
+  position: sticky;
+  position: -webkit-sticky;
   width: 100%;
   line-height: 140%;
   z-index: 1;
