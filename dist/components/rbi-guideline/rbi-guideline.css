@@ -10,7 +10,10 @@
   font-size: 14px;
   line-height: 20px;
   color: #41434c;
-  margin: 32px 0px 24px 0px;
+  margin-top: 32px;
+  margin-inline-end: 0px;
+  margin-bottom: 24px;
+  margin-inline-start: 0px;
 }
 .rbi-guideline__secure-details___zijm4 {
   display: flex;
@@ -27,7 +30,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-left: 13px;
+  margin-inline-start: 13px;
 }
 .rbi-guideline__secure-payment-text___AxYUy {
   font-family: inherit;
