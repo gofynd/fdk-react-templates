@@ -86,17 +86,16 @@ function ShipmentItem({ bag, initial, selectId, onChangeValue, type }) {
                 {bag?.quantity} {bag?.quantity === 1 ? "Piece" : "Pieces"}
               </span>
             </div>
-            {bag?.prices?.currency_symbol !== null &&
-              bag?.prices?.price_effective !== null && (
-                <div className={`${styles.effectivePrice}`}>
-                  <span className={`${styles.effectivePrice}`}>
-                    {getPriceCurrencyFormat(
-                      bag?.prices?.currency_symbol,
-                      getPriceValue(bag?.prices?.price_effective)
-                    )}
-                  </span>
-                </div>
-              )}
+            {bag?.prices?.currency_symbol && bag?.prices?.price_effective && (
+              <div className={`${styles.effectivePrice}`}>
+                <span className={`${styles.effectivePrice}`}>
+                  {getPriceCurrencyFormat(
+                    bag?.prices?.currency_symbol,
+                    getPriceValue(bag?.prices?.price_effective)
+                  )}
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </div>

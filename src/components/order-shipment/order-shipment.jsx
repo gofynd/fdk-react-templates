@@ -97,56 +97,58 @@ function OrderShipment({
           orderInfo?.shipments?.length !== 0 &&
           orderInfo?.shipments?.map((item, index) => {
             return (
-              <div className={styles.shipmentData} key={`${item.shipment_id}`}>
-                <div
-                  onClick={() => naivgateToShipment(item)}
-                  className={`${styles.shipmentLeft}`}
-                >
-                  <img
-                    className={`${isOpen ? styles.filterArrowUp : styles.filterArrowdown}`}
-                    src={item?.bags?.[0]?.item?.image?.[0]}
-                    alt={item?.shipment_images?.[0]}
-                  />
-                  {item?.bags?.length > 1 && (
-                    <div id="total-item">
-                      +{item?.bags?.length - 1 + " "}
-                      more
-                    </div>
-                  )}
-                </div>
-                <div className={`${styles.shipmentRight}`}>
-                  <div className={`${styles.uktLinks}`}>
-                    {item?.bags?.length > 1 ? (
-                      <div>
-                        {getProductsName(item?.bags)?.[0]} +
-                        {item.bags.length - 1 + " "}
+              <div
+                className={`${styles.shipmentData} ${selectedShipment === item.shipment_id ? styles.selectedto : ""}`}
+                key={`${item.shipment_id}`}
+              >
+                <div onClick={() => naivgateToShipment(item)}>
+                  <div className={`${styles.shipmentLeft}`}>
+                    <img
+                      className={`${isOpen ? styles.filterArrowUp : styles.filterArrowdown}`}
+                      src={item?.bags?.[0]?.item?.image?.[0]}
+                      alt={item?.shipment_images?.[0]}
+                    />
+                    {item?.bags?.length > 1 && (
+                      <div id="total-item">
+                        +{item?.bags?.length - 1 + " "}
                         more
                       </div>
-                    ) : (
-                      <div>{getProductsName(item?.bags)?.[0]}</div>
                     )}
                   </div>
-                  <div
-                    className={`${styles.shipmentId} ${styles.uktLinks} ${styles.boldls}`}
-                  >
-                    Shipment: {item?.shipment_id}
-                  </div>
-                  <div className={`${styles.shipmentStats} ${styles.light}`}>
-                    <span>{getTotalItems(item?.bags?.length)}</span>
-                    <span>{` | `}</span>
-                    <span>{getTotalPieces(item?.bags)}</span>
-                  </div>
-                  <div className={styles.status}>
-                    {item?.shipment_status?.title}
-                  </div>
-                  {isAdmin && (
-                    <div
-                      className={`${styles.shipmentBrands} ${styles.uktLinks}`}
-                    >
-                      <span className={`${styles.bold}`}>Brand</span> :
-                      {item?.brand_name}
+                  <div className={`${styles.shipmentRight}`}>
+                    <div className={`${styles.uktLinks}`}>
+                      {item?.bags?.length > 1 ? (
+                        <div>
+                          {getProductsName(item?.bags)?.[0]} +
+                          {item.bags.length - 1 + " "}
+                          more
+                        </div>
+                      ) : (
+                        <div>{getProductsName(item?.bags)?.[0]}</div>
+                      )}
                     </div>
-                  )}
+                    <div
+                      className={`${styles.shipmentId} ${styles.uktLinks} ${styles.boldls}`}
+                    >
+                      Shipment: {item?.shipment_id}
+                    </div>
+                    <div className={`${styles.shipmentStats} ${styles.light}`}>
+                      <span>{getTotalItems(item?.bags?.length)}</span>
+                      <span>{` | `}</span>
+                      <span>{getTotalPieces(item?.bags)}</span>
+                    </div>
+                    <div className={styles.status}>
+                      {item?.shipment_status?.title}
+                    </div>
+                    {isAdmin && (
+                      <div
+                        className={`${styles.shipmentBrands} ${styles.uktLinks}`}
+                      >
+                        <span className={`${styles.bold}`}>Brand</span> :
+                        {item?.brand_name}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             );

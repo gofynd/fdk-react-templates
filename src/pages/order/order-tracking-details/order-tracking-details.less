@@ -1,139 +1,178 @@
 @import "../../../styles/main.less";
 
-.orderTrackingDetails {
-  padding: 16px 0;
-
-  @media @desktop {
-    padding: 40px;
+.error {
+  background-color: @PageBackground;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  justify-content: center;
+  height: 100%;
+  .bold {
+    font-size: 32px;
+    line-height: 42px;
+    margin: 0 0 32px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: @TextHeading;
   }
+}
 
-  .trackOrder {
-    padding: 24px 0;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-
-    @media @tablet {
-      padding: 16px;
-    }
-
-    @media @mobile {
-      flex-direction: column;
-      width: 100%;
-      gap: 12px;
-      align-items: stretch;
-    }
-
-    .orderIdInput {
-      text-transform: uppercase;
-      font-size: 12px;
-      width: 350px;
-
-      @media @mobile {
-        width: 100%;
-      }
-    }
-
-    .btn {
-      font-size: 12px;
-
-      @media @mobile {
-        width: 100%;
-      }
-
-      &:focus {
-        box-shadow: none;
-      }
-    }
-  }
-
-  .error {
-    background-color: @PageBackground;
-    display: flex;
+.updateDisable {
+  opacity: 0.4;
+}
+.orderData {
+  @media @mobile {
     flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    justify-content: center;
-    height: 100%;
-    .bold {
-      font-size: 32px;
-      line-height: 42px;
-      margin: 0 0 32px;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      color: @TextHeading;
+  }
+  .secondaryInput {
+    padding: 10px;
+    border-radius: 3px;
+    width: 300px;
+    max-width: 300px;
+    border: 1px solid #eee;
+    @media @mobile {
+      width: inherit;
     }
   }
-
-  .updateDisable {
-    opacity: 0.4;
-    pointer-events: none;
-    cursor: not-allowed;
+  .secondaryBtn {
+    background-color: var(--textHeading);
+    text-align: center;
+    color: #fff;
+    cursor: pointer;
   }
-  .orderShipments {
-    display: flex;
-    background-color: @PageBackground;
-    gap: 24px;
+  .track {
+    @media @mobile {
+      margin: 10px 0 0 !important;
+      width: inherit;
+    }
+  }
+}
+.shipmentBagItem {
+  width: 100%;
+  display: flex;
+  flex-flow: wrap;
+  flex-direction: row;
+  position: relative;
 
-    .orderShipmentsWrapper {
+  .bagItem {
+    flex: 0 1 50%;
+  }
+
+  @media @tablet {
+    width: 100%;
+    margin: 16px 0;
+    flex-direction: column;
+  }
+}
+.view {
+  text-align: center;
+  padding-right: 30px;
+  padding-top: 5px;
+  cursor: pointer;
+}
+.orderShipments {
+  display: flex;
+  background-color: @White;
+  @media @mobile {
+    flex-direction: column;
+  }
+  .shipment {
+    border-radius: 3px;
+    background-color: @White;
+    margin: 20px 30px;
+    @media @mobile {
       width: 100%;
-
-      @media @tablet {
-        padding: 0 16px;
+      margin: 20px 0;
+      box-sizing: border-box;
+    }
+  }
+  .shipmentDetails {
+    width: 60%;
+    @media @mobile {
+      width: 100%;
+    }
+  }
+  /deep/.shipmentTracking {
+    .status {
+      @media @mobile {
+        padding-right: 100px;
       }
-    }
-
-    @media @tablet {
-      flex-direction: column;
-    }
-    .shipment {
-      border-radius: 4px;
-      background-color: @PageBackground;
-      margin: 16px 0;
-      border: 1px solid @DividerStokes;
-
-      @media @tablet {
-        border: none;
-        margin: 16px;
-
-        &.noPadding {
-          margin: 16px 0;
-          border: 1px solid @DividerStokes;
-          border-width: 1px 0;
-          border-radius: 0;
+      .info {
+        @media @mobile {
+          right: 15px;
         }
       }
     }
-    .shipmentDetails {
-      padding: 0 24px;
-      border-left: 1px solid @DividerStokes;
-      min-width: 352px;
-
-      @media @tablet {
-        width: 100%;
-        padding: 0;
-        min-width: unset;
-        border-left: none;
-      }
-    }
-
-    .shipmentBagItem {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      margin: 16px 0;
-      gap: 16px;
-
-      @media @tablet {
-        padding: 0 16px;
-      }
-    }
-    .view {
-      text-align: center;
-      padding-right: 30px;
-      padding-top: 5px;
-      cursor: pointer;
-    }
   }
+}
+
+.loaderText {
+  text-align: center;
+  color: #41434c;
+  font-weight: 600;
+  padding-bottom: 10px;
+  line-height: 20px;
+}
+.orderDetails {
+  margin: 20px;
+  border: 1px solid @LightGray;
+  background-color: @White;
+}
+.orderData {
+  padding: 20px;
+  display: flex;
+  border: 1px solid @LightGray;
+  .track {
+    margin-left: 20px;
+  }
+  .secondaryInput {
+    margin: 0px;
+  }
+  .secondaryBtn {
+    padding: 15px 30px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .error {
+    .flex-center();
+    color: @ErrorText;
+    margin-left: 20px;
+    visibility: hidden;
+    text-transform: uppercase;
+  }
+  .visible {
+    visibility: visible;
+  }
+}
+
+.orderSuccess {
+  div {
+    font-weight: 600;
+    color: #41434c;
+    text-align: center;
+    padding: 15px;
+    border-top: 1px;
+    border-bottom: 1px;
+    border-style: solid;
+    border-color: #eee;
+  }
+}
+.orderSuccess__note {
+  line-height: 20px;
+}
+.orderSuccess__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #41434c;
+  text-align: center;
+  padding-top: 25px;
+  padding-bottom: 10px;
+}
+
+.orderSuccess__id {
+  font-size: 13px;
+  font-weight: 400;
+  padding-top: 10px;
 }

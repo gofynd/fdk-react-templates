@@ -1,10 +1,17 @@
 @import "../../styles/main.less";
 
+.selectedto {
+  background-color: @LightGray;
+}
 .orderItem {
   color: @Mako;
   background-color: @HighlightColor;
+  margin-top: 16px;
   padding: 16px;
-  border-radius: 4px;
+
+  @media @mobile {
+    margin-top: 12px;
+  }
 
   .orderHeader {
     cursor: pointer;
@@ -45,8 +52,6 @@
     margin: 16px 0;
     padding: 0;
     cursor: pointer;
-    display: flex;
-    gap: 16px;
 
     .shipmentLeft {
       display: table-cell;
@@ -91,6 +96,8 @@
     .shipmentRight {
       display: table-cell;
       vertical-align: top;
+      padding: 8px;
+      padding-left: 16px;
 
       .shipmentId {
         margin: 4px 0px;
@@ -132,9 +139,12 @@
   .buttons {
     display: flex;
     .ordercheckout {
-      width: 100%;
+      width: calc(100% - 20px) !important;
       height: 40px;
+      margin: 10px;
+      padding: 15px;
       border-radius: @ButtonRadius;
+      margin: 10px;
       font-weight: 700;
       background-color: @TextHeading;
       border: none;

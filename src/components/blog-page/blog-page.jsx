@@ -18,6 +18,7 @@ import { useParams } from "react-router-dom";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./blog-page.less";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
+import Loader from "../../components/loader/loader";
 import FyImage from "../core/fy-image/fy-image";
 import HTMLContent from "../core/html-content/html-content";
 import BlogTabs from "../blog-tabs/blog-tabs";
@@ -25,7 +26,6 @@ import BlogFooter from "../blog-footer/blog-footer";
 import { convertUTCDateToLocalDate } from "../../helper/utils";
 import { useLocation } from "react-router-dom";
 import { isRunningOnClient } from "../../helper/utils";
-import Shimmer from "../shimmer/shimmer";
 
 function BlogPage({
   contactInfo,
@@ -113,7 +113,14 @@ function BlogPage({
   };
 
   if (isBlogDetailsLoading) {
-    return <Shimmer />;
+    return (
+      <div className={styles.loader}>
+        <Loader
+          containerClassName={styles.loaderContainer}
+          loaderClassName={styles.customLoader}
+        />
+      </div>
+    );
   }
 
   return (

@@ -1,6 +1,6 @@
 import React from "react";
 import * as styles from "./login-register-toggle.less";
-import LoginIcon from "../../../assets/images/login_icon.svg";
+import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 
 function LoginRegisterToggle({ label = "GO TO REGISTER", onClick = () => {} }) {
   const handleBtnClick = (e) => {
@@ -10,7 +10,7 @@ function LoginRegisterToggle({ label = "GO TO REGISTER", onClick = () => {} }) {
   };
   return (
     <button className={styles.loginRegisterToggle} onClick={handleBtnClick}>
-      <LoginIcon />
+      <SvgWrapper svgSrc="login-icon" />
       <span className={styles.label}>{label}</span>
     </button>
   );

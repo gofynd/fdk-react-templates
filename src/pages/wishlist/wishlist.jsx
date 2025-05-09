@@ -17,7 +17,7 @@ const Wishlist = ({
   isBrand = true,
   isSaleBadge = true,
   isPrice = true,
-  imgSrcSet,
+  isHdimgUsed = false,
   aspectRatio,
   isProductOpenInNewTab = false,
   showImageOnHover = false,
@@ -79,7 +79,7 @@ const Wishlist = ({
               <ProductCard
                 product={product}
                 listingPrice={listingPrice}
-                imgSrcSet={imgSrcSet}
+                isHdimgUsed={isHdimgUsed}
                 aspectRatio={aspectRatio}
                 isBrand={isBrand}
                 isPrice={isPrice}

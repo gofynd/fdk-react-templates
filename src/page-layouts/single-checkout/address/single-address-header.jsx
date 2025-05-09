@@ -45,39 +45,25 @@ function SinglesAddressHeader({
           </div>
         </>
       ) : (
-        <>
-          <div
-            className={`${styles.addressHeaderContainer} ${styles.addressHeaderContainer__mobile}`}
-            onClick={showAddNewAddressModal}
-          >
-            <div className={styles.buttonWrapper}>
-              <button className={`${styles.commonBtn} ${styles.addBtn}`}>
-                <SvgWrapper svgSrc="addAddress" /> <span>Add New Address</span>
-              </button>
-            </div>
-          </div>
-          <div
-            className={`${styles.addressHeaderContainer} ${styles.addressHeaderContainer__desktop}`}
-          >
-            <div className={styles.wrapper}>
-              <SvgWrapper svgSrc="one-number"></SvgWrapper>
-              <div className={styles.headerWrapper}>
-                <div className={styles.addressHeading}>Delivery Address</div>
-                <div className={styles.addressString}>
-                  Select delivery address
-                </div>
+        <div className={styles.addressHeaderContainer}>
+          <div className={styles.wrapper}>
+            <SvgWrapper svgSrc="one-number"></SvgWrapper>
+            <div className={styles.headerWrapper}>
+              <div className={styles.addressHeading}>Delivery Address</div>
+              <div className={styles.addressString}>
+                Select delivery address
               </div>
             </div>
-            <div className={styles.buttonWrapper}>
-              <button
-                className={`${styles.commonBtn} ${styles.addBtn}`}
-                onClick={showAddNewAddressModal}
-              >
-                <SvgWrapper svgSrc="addAddress" /> <span>Add New Address</span>
-              </button>
-            </div>
           </div>
-        </>
+          <div className={styles.buttonWrapper}>
+            <button
+              className={`${styles.commonBtn} ${styles.addBtn}`}
+              onClick={showAddNewAddressModal}
+            >
+              <SvgWrapper svgSrc="addAddress" /> <span>Add New Address</span>
+            </button>
+          </div>
+        </div>
       )}
     </>
   );

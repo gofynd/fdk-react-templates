@@ -7,12 +7,18 @@
       cursor: pointer;
       display: flex;
       align-items: center;
-      color: @ButtonLink;
       .shareCartIconGreen {
         display: flex;
         align-items: center;
+
+        svg {
+          path {
+            fill: @ButtonLink;
+          }
+        }
       }
       .shareBagBtn {
+        color: @ButtonLink;
         font-size: 12px;
         font-weight: 600;
         margin-left: 8px;
@@ -38,6 +44,11 @@
         color: @TextHeading;
         display: flex;
         .shareCartIcon {
+          svg {
+            path {
+              fill: @TextHeading;
+            }
+          }
           display: flex;
           align-items: center;
           margin-right: 12px;

@@ -10,13 +10,13 @@ import BlogFooter from "../../components/blog-footer/blog-footer";
 import EmptyState from "../../components/empty-state/empty-state";
 import InfiniteLoader from "../../components/core/infinite-loader/infinite-loader";
 import Pagination from "../../page-layouts/plp/Components/pagination/pagination";
+import Loader from "../../components/loader/loader";
 
 import {
   isRunningOnClient,
   throttle,
   convertUTCDateToLocalDate,
 } from "../../helper/utils";
-import Shimmer from "../../components/shimmer/shimmer";
 
 function MemoizedSlide({ blog, index, sliderProps, getBlogTitle }) {
   const getFormattedDate = (dateString) => {
@@ -199,7 +199,7 @@ function BlogList({
     const searchParams = isRunningOnClient()
       ? new URLSearchParams(location?.search)
       : null;
-    searchParams?.delete("page_no");
+
     if (filter.key === "search_text") {
       searchParams?.delete("search", filter?.display);
       setSearchText("");
@@ -356,7 +356,14 @@ function BlogList({
   };
 
   if (isBlogPageLoading) {
-    return <Shimmer />;
+    return (
+      <div className={styles.loader}>
+        <Loader
+          containerClassName={styles.loaderContainer}
+          loaderClassName={styles.customLoader}
+        />
+      </div>
+    );
   }
   const showBlogSlideShow =
     typeof sliderProps?.show_blog_slide_show === "boolean" ||

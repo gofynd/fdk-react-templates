@@ -1,14 +1,22 @@
 @import "../../../styles/main.less";
 
 .paymentContainer {
-  margin-top: 20px;
+  margin-top: 12px;
+
+  @media @mobile-up {
+    margin-top: 20px;
+  }
+
+  .creditNote {
+    margin-bottom: 12px;
+
+    @media @mobile-up {
+      display: none;
+    }
+  }
 
   @media @mobile {
     margin-top: 12px;
-
-    &.hidePayment {
-      display: none;
-    }
   }
 
   .reviewHeaderUnselect {

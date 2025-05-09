@@ -87,12 +87,7 @@ const FyInput = forwardRef(
             {startAdornment && (
               <div className={styles.startAdornment}>{startAdornment}</div>
             )}
-            <input
-              {...props}
-              className={`${styles.fyInput} ${props?.className || ""}`}
-              id={id}
-              ref={ref}
-            />
+            <input className={styles.fyInput} {...props} id={id} ref={ref} />
             {endAdornment && (
               <div className={styles.endAdornment}>{endAdornment}</div>
             )}

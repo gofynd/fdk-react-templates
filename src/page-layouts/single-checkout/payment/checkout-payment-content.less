@@ -8,6 +8,26 @@
     border: 1px solid var(--dividerStokes);
     border-top: none;
     border-radius: 0 0 8px 8px;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .creditNote {
+    display: none;
+
+    @media @mobile-up {
+      display: block;
+    }
+  }
+
+  .paymentOptions {
+    display: flex;
+
+    &.disable {
+      cursor: not-allowed;
+      pointer-events: none;
+      opacity: 0.5;
+    }
   }
   .navigationLink {
     width: 33.33%;
@@ -585,6 +605,7 @@
           border: 1px solid var(--dividerStokes);
           border-radius: 4px;
           color: @TextBody;
+          pointer-events: inherit;
         }
         .error {
           border: 1px solid @ErrorText;
@@ -1578,7 +1599,7 @@
     border: 1px solid @DividerStokes;
     padding: 8px 4px;
     border-radius: 50%;
-    object-fit: contain;
+    object-fit: cover;
     @media @mobile {
       margin-right: 8px;
     }

@@ -118,7 +118,7 @@ function ContactSupport({
 
   const showListItems = useMemo(
     () =>
-      (showAddress && contactInfo?.address?.address_line?.[0]?.length > 0) ||
+      (showAddress && contactInfo?.address?.address_line[0].length > 0) ||
       (showPhone && contact?.number) ||
       (showEmail && email?.length) ||
       (showIcons && contactInfo?.social_links) ||
@@ -142,11 +142,11 @@ function ContactSupport({
         className={`${styles.contact_container} ${pageConfig?.image_desktop ? styles.onImageContainer : ""}`}
       >
         <div className={`${styles.flex_item}`}>
-          <h1 className={`fontHeader ${styles.showDesktop}`}>Contact Us</h1>
+          <h3 className={`fontHeader ${styles.showDesktop}`}>Contact Us</h3>
           {showListItems && (
             <div className={styles.listItems}>
               {showAddress &&
-                contactInfo?.address?.address_line?.[0]?.length > 0 && (
+                contactInfo?.address?.address_line[0].length > 0 && (
                   <div className={`${styles.item} fontBody b1`}>
                     <div>
                       <SvgWrapper svgSrc="location" />
@@ -193,7 +193,7 @@ function ContactSupport({
           )}
         </div>
         <div className={styles.flex_item}>
-          <h1 className={`${styles.showMobile} fontHeader`}>Contact Us</h1>
+          <h3 className={`${styles.showMobile} fontHeader`}>Contact Us</h3>
           <form onSubmit={handleSubmit(submitForm)}>
             {inputFields?.map((field, index) => (
               <div className={styles.form_row} key={index}>

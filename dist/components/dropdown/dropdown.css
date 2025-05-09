@@ -1,6 +1,116 @@
+.dropdown__slide-fade-enter-active___PJsSN,
+.dropdown__slide-fade-leave-active___DWuJ0 {
+  transition: all 0.5s;
+}
+.dropdown__slide-fade-enter___zgVCI,
+.dropdown__slide-fade-leave-to___wI3IR {
+  opacity: 0;
+  transform: translateY(10px);
+}
+.dropdown__fade-enter-active___uZa09,
+.dropdown__fade-leave-active___r6GaG {
+  transition: all 0.5s;
+}
+.dropdown__fade-enter___E56Tc,
+.dropdown__fade-leave-to___Ebpbk {
+  opacity: 0;
+}
+.dropdown__slide-leave-active___RGUta,
+.dropdown__slide-enter-active___rIaVR {
+  transition: 0.5s;
+}
+.dropdown__slide-enter___pzyHN,
+.dropdown__slide-leave-to___v61CB {
+  transform: translate(-100%, 0%);
+}
+.dropdown__slide-left-enter-active___O6ml5,
+.dropdown__slide-left-leave-active___EfvmJ {
+  transition: all 0.5s;
+}
+.dropdown__slide-left-enter___OeH_w,
+.dropdown__slide-left-leave-to___qoXue {
+  transform: translate(200%, 0%);
+}
+.dropdown__slide-down-enter-active___xjrKO,
+.dropdown__slide-down-leave-active____AS_J {
+  transition: all 0.5s;
+}
+.dropdown__slide-down-enter___JGVz8,
+.dropdown__slide-down-leave-to___L2ToA {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+.dropdown__slide-up-enter-active___eEn0X,
+.dropdown__slide-up-leave-active___seVme {
+  transition: all 0.5s ease-in-out;
+}
+.dropdown__slide-up-enter___burXK,
+.dropdown__slide-up-leave-to___woa1J {
+  opacity: 0;
+  transform: translateY(100vh);
+}
+.dropdown__animation-fade-up___IsFyN {
+  transition: transform 0.5s ease-in var(--delay, 0ms), opacity 0.5s ease-in var(--delay, 0ms) !important;
+  opacity: 0 !important;
+  transform: translateY(10px) !important;
+}
+.dropdown__animation-fade-up___IsFyN.dropdown__animate___ihAGa {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+.dropdown__animation-fade___RryYk {
+  transition: opacity 0.4s ease-in var(--delay, 0ms) !important;
+  opacity: 0 !important;
+}
+.dropdown__animation-fade___RryYk.dropdown__animate___ihAGa {
+  opacity: 1 !important;
+}
 /**color by character**/
 /** Font family **/
 /** Font weight **/
+a {
+  color: inherit;
+  text-decoration: none;
+}
+.dropdown__ct-header-wrapper____E0_n,
+.dropdown__ctHeaderWrapper___l9yJ2 {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+body {
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+@media only screen and (min-width: 769px) {
+  body {
+    min-height: calc(100vh - 404px);
+  }
+}
+.dropdown__active-app___VYo34,
+.dropdown__activeApp___cGomG {
+  background-color: var(--pageBackground, #f8f8f8);
+}
+.dropdown__card-item___G23YD .dropdown__card-desc___jaf07 .dropdown__price___lZ0t6 .dropdown__effective-price___tjRyM {
+  font-size: 0.875rem;
+}
+.dropdown__login-modal___QgeLG .dropdown__tingle-modal-box____VPvF {
+  background: #f5f5f5;
+}
+.dropdown__content____z4Ov {
+  font-size: 0.875rem;
+  margin: 0 auto;
+  max-width: unset !important;
+  min-height: 75vh;
+}
+.dropdown__modal___l7UVH {
+  overflow-x: hidden;
+  font-size: 0.875rem;
+}
+.dropdown__product-details-page___Xuvaa,
+.dropdown__productDetailsPage___hV00j {
+  max-width: 1440px;
+}
 .dropdown__display-block___jGjhq {
   display: block;
 }
@@ -261,12 +371,33 @@ button {
 .dropdown__removeScroll___tOBHf {
   overflow-y: hidden !important;
 }
+.dropdown__orders___PuQol .dropdown__order-status___nVZ5I .dropdown__inline-svg___jkzii {
+  height: 63px;
+}
+.dropdown__order-item____co3J .dropdown__oder-header___HlJwP .dropdown__filter-arrow-up___vV94L {
+  margin-right: none !important;
+}
+.dropdown__buttons___GyOOZ {
+  display: block !important;
+  margin-bottom: 8px;
+}
+.dropdown__checkout___ZUYsc {
+  width: calc(100% - 20px) !important;
+}
+.dropdown__guest-checkout___nFZav {
+  text-decoration: underline;
+  padding-top: 15px;
+}
 ::selection {
   background-color: #e8a76c;
   color: #000;
 }
 img::selection {
   background-color: transparent;
+}
+.dropdown__home-page___iWPoj,
+.dropdown__homePage___nvfbM {
+  max-width: 1440px;
 }
 .dropdown__mr-5___QlQ0X,
 .dropdown__mr5___dgj6b {
@@ -312,6 +443,10 @@ img::selection {
   background-color: var(--accentColor);
   color: #fff;
 }
+.dropdown__glide-cont___NMwK4,
+.dropdown__glideCont___sCgr4 {
+  position: relative;
+}
 .dropdown__no-scroll___KmEvZ,
 .dropdown__noScroll___W6P5U {
   overflow-y: hidden;
@@ -329,6 +464,16 @@ img::selection {
     font-size: 12px !important;
     padding: 5px !important;
   }
+}
+.dropdown__blog-wrapper___NCf8F .dropdown__title___YPzqz {
+  color: var(--textHeading, #26201a);
+}
+.dropdown__blog-wrapper___NCf8F .dropdown__author___Pkq7U,
+.dropdown__blog-wrapper___NCf8F .dropdown__created-on___vtUVU {
+  color: var(--textLabel, #7d7676) !important;
+}
+.dropdown__blog-wrapper___NCf8F #dropdown__custom-page-container___KKjxx * {
+  color: var(--textBody, #3c3131);
 }
 .dropdown__view3d-canvas___jd2Y_ {
   width: 100%;
@@ -361,14 +506,12 @@ img::selection {
   }
 }
 .dropdown__selected___rZEuQ .dropdown__menu____Aa1u {
+  box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.1);
+  background-color: var(--themeAccentL5, #fff);
   position: absolute;
   top: 40px;
   white-space: nowrap;
   z-index: 1;
-  padding: 12px;
-  border-radius: 2px;
-  border: 1px solid var(--dividerStokes, #d4d1d1);
-  background: var(--dialogBackground, #fff);
 }
 @media only screen and (max-width: 480px) {
   .dropdown__selected___rZEuQ .dropdown__menu____Aa1u {
@@ -378,10 +521,7 @@ img::selection {
 .dropdown__selected___rZEuQ .dropdown__menu____Aa1u li {
   display: flex;
   align-items: center;
-  margin-bottom: 6px;
+  padding: 5px 15px;
   gap: 8px;
-}
-.dropdown__selected___rZEuQ .dropdown__menu____Aa1u li:last-child {
-  margin-bottom: 0;
 }
 

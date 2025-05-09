@@ -1,16 +1,14 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import * as styles from "./add-to-cart.less";
 import ImageGallery from "../image-gallery/image-gallery";
 import ProductVariants from "../product-variants/product-variants";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import FyButton from "../../../../components/core/fy-button/fy-button";
 import DeliveryInfo from "../delivery-info/delivery-info";
-import Shimmer from "../../../../components/shimmer/shimmer";
+import Loader from "../../../../components/loader/loader";
 import QuantityControl from "../../../../components/quantity-control/quantity-control";
 import FyDropdown from "../../../../components/core/fy-dropdown/fy-dropdown";
 import { currencyFormat, isEmptyOrNull } from "../../../../helper/utils";
-import CartIcon from "../../../../assets/images/cart.svg";
-import BuyNowIcon from "../../../../assets/images/buy-now.svg";
 
 const AddToCart = ({
   isLoading = false,
@@ -107,7 +105,12 @@ const AddToCart = ({
   return (
     <div className={styles.productDescContainer}>
       {isLoading ? (
-        <Shimmer className={styles.shimmer} />
+        <div className={styles.loader}>
+          <Loader
+            containerClassName={styles.loaderContainer}
+            loaderClassName={styles.customLoader}
+          />
+        </div>
       ) : (
         <>
           <div className={styles.left}>
@@ -292,6 +295,18 @@ const AddToCart = ({
               <div className={styles.actionButtons}>
                 {!disable_cart && sizes?.sellable && (
                   <>
+                    {button_options?.includes("buynow") && (
+                      <FyButton
+                        className={styles.buyNow}
+                        color="secondary"
+                        size="medium"
+                        onClick={(event) =>
+                          addProductForCheckout(event, selectedSize, true)
+                        }
+                      >
+                        BUY NOW
+                      </FyButton>
+                    )}
                     {button_options?.includes("addtocart") && (
                       <>
                         {selectedItemDetails?.quantity &&
@@ -326,30 +341,16 @@ const AddToCart = ({
                           />
                         ) : (
                           <FyButton
-                            variant="outlined"
+                            variant="contained"
                             size="medium"
                             onClick={(event) =>
                               addProductForCheckout(event, selectedSize, false)
                             }
-                            startIcon={<CartIcon className={styles.cartIcon} />}
                           >
                             ADD TO CART
                           </FyButton>
                         )}
                       </>
-                    )}
-                    {button_options?.includes("buynow") && (
-                      <FyButton
-                        className={styles.buyNow}
-                        variant="contained"
-                        size="medium"
-                        onClick={(event) =>
-                          addProductForCheckout(event, selectedSize, true)
-                        }
-                        startIcon={<BuyNowIcon className={styles.cartIcon} />}
-                      >
-                        BUY NOW
-                      </FyButton>
                     )}
                   </>
                 )}

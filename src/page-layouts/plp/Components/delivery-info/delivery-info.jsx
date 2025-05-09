@@ -52,7 +52,7 @@ function DeliveryInfo({
     const maxDate = convertUTCDateToLocalDate(max, options);
     setTimeout(() => {
       setTatMessage(
-        `Delivery ${
+        `Will be delivered ${
           min === max ? `on ${minDate}` : `between ${minDate} - ${maxDate}`
         }`
       );

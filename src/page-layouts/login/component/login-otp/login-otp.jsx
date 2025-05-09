@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useLayoutEffect } from "react";
+import React, { useEffect, useId } from "react";
 import { useForm, Controller } from "react-hook-form";
 import * as styles from "./login-otp.less";
 import MobileNumber from "../../../auth/mobile-number/mobile-number";
@@ -124,12 +124,6 @@ function OtpForm({
       clearErrors("root");
     }
   }, [error]);
-
-  useLayoutEffect(() => {
-    window?.scrollTo({
-      top: 0,
-    });
-  }, []);
 
   const resendOtp = () => {
     resetField("mobileOtp");

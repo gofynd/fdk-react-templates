@@ -5,10 +5,10 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import cardValidator from "card-validator";
 import Modal from "../../../components/core/modal/modal";
 import { useMobile } from "../../../helper/hooks/useMobile";
-// import UktModal from "./ukt-modal";
 import StickyPayNow from "./sticky-pay-now/sticky-pay-now";
 import { priceFormatCurrencySymbol } from "../../../helper/utils";
 import { useGlobalStore } from "fdk-core/utils";
+import CreditNote from "./credit-note/credit-note";
 import Spinner from "../../../components/spinner/spinner";
 
 const upiDisplayWrapperStyle = {
@@ -163,6 +163,8 @@ function CheckoutPaymentContent({
     showUpiRedirectionModal,
     validateCardDetails,
     setShowUpiRedirectionModal,
+    partialPaymentOption,
+    updateStoreCredits,
   } = payment;
 
   const isChromeOrSafari =
@@ -3058,132 +3060,146 @@ function CheckoutPaymentContent({
         <div className={styles.container}>
           {true ? (
             <>
-              <div className={styles.navigationLink}>
-                {paymentOptions?.map((opt, index) =>
-                  navigationTitle(opt, index)
-                )}
-                {otherPaymentOptions?.length > 0 && (
-                  <div
-                    className={`${styles.linkWrapper} ${selectedTab === "Other" && !isMobile ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === "Other" && isMobile ? styles.headerHightlight : ""}`}
-                  >
+              <div className={styles.creditNote}>
+                <CreditNote
+                  data={partialPaymentOption}
+                  updateStoreCredits={updateStoreCredits}
+                />
+              </div>
+              <div
+                className={`${styles.paymentOptions} ${!getTotalValue() ? styles.disable : ""}`}
+              >
+                <div className={styles.navigationLink}>
+                  {paymentOptions?.map((opt, index) =>
+                    navigationTitle(opt, index)
+                  )}
+                  {otherPaymentOptions?.length > 0 && (
                     <div
-                      className={styles["linkWrapper-row1"]}
-                      onClick={() => {
-                        setTab("Other");
-                        setSelectedTab("Other");
-                        toggleMop("Other");
-                      }}
+                      className={`${styles.linkWrapper} ${selectedTab === "Other" && !isMobile ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === "Other" && isMobile ? styles.headerHightlight : ""}`}
                     >
                       <div
-                        className={`${selectedTab === "Other" ? styles.indicator : ""} ${styles["view-mobile-up"]}`}
+                        className={styles["linkWrapper-row1"]}
+                        onClick={() => {
+                          setTab("Other");
+                          setSelectedTab("Other");
+                          toggleMop("Other");
+                        }}
                       >
-                        &nbsp;
-                      </div>
-                      <div className={styles.link}>
-                        <div className={styles.icon}>
-                          {/* <img src={opt.svg} alt="" /> */}
-                          <SvgWrapper svgSrc="payment-other"></SvgWrapper>
-                        </div>
                         <div
-                          className={`${styles.modeName} ${selectedTab === "Other" ? styles.selectedModeName : ""}`}
-                        >
-                          {paymentOptions?.length > 0 &&
-                          otherPaymentOptions?.length > 0
-                            ? "More Payment Options"
-                            : "Pay Online"}
-                        </div>
-                      </div>
-                      <div
-                        className={`${styles.arrowContainer} ${styles["view-mobile"]} ${styles.activeIconColor}`}
-                      >
-                        <SvgWrapper
-                          className={
-                            selectedTab === "Other" && activeMop === "Other"
-                              ? styles.upsideDown
-                              : ""
-                          }
-                          svgSrc="accordion-arrow"
-                        />
-                      </div>
-                    </div>
-                    {isMobile && activeMop === "Other" && (
-                      <div className={styles["view-mobile"]}>
-                        {selectedTab === "Other" && navigationTab()}
-                      </div>
-                    )}
-                  </div>
-                )}
-                {codOption && (
-                  <div style={{ display: "flex", flex: "1" }}>
-                    <div
-                      className={`${styles.linkWrapper} ${selectedTab === codOption.name && !isMobile ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === codOption.name && isMobile ? styles.headerHightlight : ""}`}
-                      key={codOption.display_name}
-                      onClick={() => {
-                        selectMop(
-                          codOption.name,
-                          codOption.name,
-                          codOption.name
-                        );
-                      }}
-                    >
-                      <div className={styles["linkWrapper-row1"]}>
-                        <div
-                          className={` ${selectedTab === codOption.name ? styles.indicator : ""} ${styles["view-mobile-up"]}`}
+                          className={`${selectedTab === "Other" ? styles.indicator : ""} ${styles["view-mobile-up"]}`}
                         >
                           &nbsp;
                         </div>
                         <div className={styles.link}>
                           <div className={styles.icon}>
-                            <SvgWrapper svgSrc={codOption.svg}></SvgWrapper>
+                            {/* <img src={opt.svg} alt="" /> */}
+                            <SvgWrapper svgSrc="payment-other"></SvgWrapper>
                           </div>
-                          <div>
-                            <div
-                              className={`${styles.modeName} ${selectedTab === codOption.name ? styles.selectedModeName : ""}`}
-                            >
-                              {codOption.display_name}
-                            </div>
-                            {isMobile && codCharges > 0 && (
-                              <div className={styles.codCharge}>
-                                +
-                                {priceFormatCurrencySymbol(
-                                  getCurrencySymbol,
-                                  codCharges
-                                )}{" "}
-                                extra charges
-                              </div>
-                            )}
+                          <div
+                            className={`${styles.modeName} ${selectedTab === "Other" ? styles.selectedModeName : ""}`}
+                          >
+                            {paymentOptions?.length > 0 &&
+                            otherPaymentOptions?.length > 0
+                              ? "More Payment Options"
+                              : "Pay Online"}
                           </div>
                         </div>
-                        {codOption?.image_src && (
-                          <div className={styles["payment-icons"]}>
-                            <img
-                              src={codOption?.image_src}
-                              alt={codOption?.svg}
-                            />
-                          </div>
-                        )}
                         <div
-                          className={`${styles.arrowContainer} ${styles["view-mobile"]} ${styles.activeIconColor} ${styles.codIconContainer}`}
+                          className={`${styles.arrowContainer} ${styles["view-mobile"]} ${styles.activeIconColor}`}
                         >
-                          <SvgWrapper svgSrc="accordion-arrow" />
+                          <SvgWrapper
+                            className={
+                              selectedTab === "Other" && activeMop === "Other"
+                                ? styles.upsideDown
+                                : ""
+                            }
+                            svgSrc="accordion-arrow"
+                          />
                         </div>
                       </div>
-                      {isMobile && (
+                      {isMobile && activeMop === "Other" && (
                         <div className={styles["view-mobile"]}>
-                          {selectedTab === codOption.name && navigationTab()}
+                          {selectedTab === "Other" && navigationTab()}
                         </div>
                       )}
                     </div>
+                  )}
+                  {codOption && (
+                    <div style={{ display: "flex", flex: "1" }}>
+                      <div
+                        className={`${styles.linkWrapper} ${selectedTab === codOption.name && !isMobile ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === codOption.name && isMobile ? styles.headerHightlight : ""}`}
+                        key={codOption.display_name}
+                        onClick={() => {
+                          selectMop(
+                            codOption.name,
+                            codOption.name,
+                            codOption.name
+                          );
+                        }}
+                      >
+                        <div className={styles["linkWrapper-row1"]}>
+                          <div
+                            className={` ${selectedTab === codOption.name ? styles.indicator : ""} ${styles["view-mobile-up"]}`}
+                          >
+                            &nbsp;
+                          </div>
+                          <div className={styles.link}>
+                            <div className={styles.icon}>
+                              <SvgWrapper svgSrc={codOption.svg}></SvgWrapper>
+                            </div>
+                            <div>
+                              <div
+                                className={`${styles.modeName} ${selectedTab === codOption.name ? styles.selectedModeName : ""}`}
+                              >
+                                {codOption.display_name}
+                              </div>
+                              {isMobile &&
+                                breakUpValues?.filter(
+                                  (value) => value.key === "cod_charge"
+                                )[0]?.value > 0 && (
+                                  <div className={styles.codCharge}>
+                                    +₹
+                                    {
+                                      breakUpValues?.filter(
+                                        (value) => value.key === "cod_charge"
+                                      )[0]?.value
+                                    }{" "}
+                                    extra charges
+                                  </div>
+                                )}
+                            </div>
+                          </div>
+                          {codOption?.image_src && (
+                            <div className={styles["payment-icons"]}>
+                              <img
+                                src={codOption?.image_src}
+                                alt={codOption?.svg}
+                              />
+                            </div>
+                          )}
+                          <div
+                            className={`${styles.arrowContainer} ${styles["view-mobile"]} ${styles.activeIconColor} ${styles.codIconContainer}`}
+                          >
+                            <SvgWrapper svgSrc="accordion-arrow" />
+                          </div>
+                        </div>
+                        {isMobile && (
+                          <div className={styles["view-mobile"]}>
+                            {selectedTab === codOption.name && navigationTab()}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+                {!isMobile && (
+                  <div
+                    className={`${styles.navigationTab} ${styles["view-mobile-up"]}`}
+                  >
+                    {navigationTab()}
                   </div>
                 )}
               </div>
-              {!isMobile && (
-                <div
-                  className={`${styles.navigationTab} ${styles["view-mobile-up"]}`}
-                >
-                  {navigationTab()}
-                </div>
-              )}
             </>
           ) : (
             <div className={styles.container}>
