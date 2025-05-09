@@ -250,9 +250,6 @@ h5,
 .order-shipment__margin0auto___rpKKm {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .order-shipment__base-page-container___VVQwF,
 .order-shipment__basePageContainer___U0Lls {
   max-width: 1440px !important;
@@ -261,20 +258,13 @@ button {
 .order-shipment__removeScroll___TPcns {
   overflow-y: hidden !important;
 }
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
-}
 .order-shipment__mr-5___rzLTi,
 .order-shipment__mr5___lRqcq {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .order-shipment__mr-2___Fa5xI,
 .order-shipment__mr2___y9Ful {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .order-shipment__py-5___R6BD3,
 .order-shipment__py5___vMTwA {
@@ -359,11 +349,11 @@ img::selection {
   right: 0px;
 }
 .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__filterArrowUp___g46yt {
-  margin-left: auto;
+  margin-inline-start: auto;
   transform: rotate(180deg);
 }
 .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__filterArrowDown___XfgoC {
-  margin-left: auto;
+  margin-inline-start: auto;
 }
 .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__orderId___LUgiY {
   color: var(--textHeading, #26201a);
@@ -399,11 +389,11 @@ img::selection {
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentLeft___o0Q0q #order-shipment__total-item___SOgWJ {
   text-align: center;
   position: relative;
-  float: right;
+  float: inline-end;
   background: #4242ad;
   color: white;
   top: -40px;
-  left: -10px;
+  inset-inline-start: -10px;
   border-radius: 50%;
   width: 35px;
   height: 35px;
@@ -487,7 +477,7 @@ img::selection {
   cursor: pointer;
 }
 .order-shipment__orderItem____zenT .order-shipment__buttons___vYAo_ .order-shipment__ordercheckout___m3RkW .order-shipment__reorderIcon___gHoWM {
-  margin-right: 10px;
+  margin-inline-end: 10px;
   position: relative;
   top: -2px;
 }

@@ -1,3 +1,5 @@
+import { DEFAULT_CURRENCY_LOCALE, DEFAULT_UTC_LOCALE } from "./constant";
+
 export const debounce = (func, wait) => {
   let timeout;
   return function (...args) {
@@ -60,7 +62,7 @@ export function isRunningOnClient() {
   return false;
 }
 
-export function convertDate(dateString) {
+export function convertDate(dateString, locale = "en-US") {
   const date = new Date(dateString);
 
   const options = {
@@ -73,7 +75,7 @@ export function convertDate(dateString) {
     timeZone: "UTC",
   };
 
-  const formatter = new Intl.DateTimeFormat("en-US", options);
+  const formatter = new Intl.DateTimeFormat(locale, options);
   const formattedDate = formatter.format(date);
 
   return formattedDate;
@@ -84,7 +86,7 @@ export function validateName(name) {
   return regexp.test(String(name).toLowerCase().trim());
 }
 
-export const convertUTCDateToLocalDate = (date, format) => {
+export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
   if (!format) {
     format = {
       weekday: "long",
@@ -105,7 +107,7 @@ export const convertUTCDateToLocalDate = (date, format) => {
   };
   // Convert the UTC date and time to the desired format
   const formattedDate = utcDate
-    .toLocaleString("en-US", options)
+    .toLocaleString(locale, options)
     .replace(" at ", ", ");
   return formattedDate;
 };
@@ -206,8 +208,8 @@ export const getProductImgAspectRatio = function (
   global_config,
   defaultAspectRatio = 0.8
 ) {
-  const productImgWidth = global_config?.props?.product_img_width;
-  const productImgHeight = global_config?.props?.product_img_height;
+  const productImgWidth = global_config?.product_img_width;
+  const productImgHeight = global_config?.product_img_height;
   if (productImgWidth && productImgHeight) {
     const aspectRatio = Number(productImgWidth / productImgHeight).toFixed(2);
     return aspectRatio >= 0.6 && aspectRatio <= 1
@@ -218,14 +220,14 @@ export const getProductImgAspectRatio = function (
   return defaultAspectRatio;
 };
 
-export const currencyFormat = (value, currencySymbol) => {
+export const currencyFormat = (value, currencySymbol, locale = "en-IN") => {
   if (currencySymbol && (value || value === 0)) {
     if (/^[A-Z]+$/.test(currencySymbol)) {
-      return `${currencySymbol} ${value?.toLocaleString("en-IN")}`;
+      return `${currencySymbol} ${value?.toLocaleString(locale)}`;
     }
-    return `${currencySymbol}${value?.toLocaleString("en-IN")}`;
+    return `${currencySymbol}${value?.toLocaleString(locale)}`;
   }
-  return `${value?.toLocaleString("en-IN")}`;
+  return `${value?.toLocaleString(locale)}`;
 };
 
 export const getReviewRatingData = function (customMeta) {
@@ -380,6 +382,42 @@ export function isFreeNavigation(e) {
   return false;
 }
 
+export const formatLocale = (locale, countryCode, isCurrencyLocale = false) => {
+  if ((locale === "en" || !locale) && isCurrencyLocale) {
+    return DEFAULT_CURRENCY_LOCALE;
+  }
+  if (locale === "en" || !locale) {
+    return DEFAULT_UTC_LOCALE;
+  }
+  if (locale.includes("-")) {
+    return locale;
+  }
+  return `${locale}${countryCode ? "-" + countryCode : ""}`;
+};
+
+export const startsWithResource = (str) => {
+  return str.startsWith("resource.");
+};
+
+export const translateValidationMessages = (validationObject, t) => {
+  const updatedValidation = { ...validationObject };
+
+  Object.keys(updatedValidation).forEach((key) => {
+    const rule = updatedValidation[key];
+
+    if (
+      typeof rule === "object" &&
+      rule.message &&
+      startsWithResource(rule.message)
+    ) {
+      rule.message = t(rule.message);
+    } else if (typeof rule === "string" && startsWithResource(rule)) {
+      updatedValidation[key] = t(rule);
+    }
+  });
+
+  return updatedValidation;
+};
 export const getAddressStr = (item, isAddressTypeAvailable) => {
   if (!item || typeof item !== "object") {
     return "";

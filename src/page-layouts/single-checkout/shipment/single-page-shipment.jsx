@@ -2,8 +2,7 @@ import React from "react";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./single-page-shipment.less";
 import SingleShipmentContent from "./single-shipment-content";
-import { useNavigate } from "react-router-dom";
-import { useGlobalStore } from "fdk-core/utils";
+import { useNavigate, useGlobalTranslation, useGlobalStore } from "fdk-core/utils";
 import StickyPayNow from "../payment/sticky-pay-now/sticky-pay-now";
 import Shimmer from "../../../components/shimmer/shimmer";
 
@@ -16,12 +15,13 @@ function SinglePageShipment({
   showShipment,
   showPayment,
   isHyperlocal = false,
-  convertHyperlocalTat = () => {},
+  convertHyperlocalTat = () => { },
   loader,
   buybox = {},
   totalValue = "",
   onPriceDetailsClick = () => {},
 }) {
+  const { t } = useGlobalTranslation("translation");
   const navigate = useNavigate();
   const getShipmentCount = shipments?.length || 0;
 
@@ -43,12 +43,12 @@ function SinglePageShipment({
                 <SvgWrapper svgSrc={"two-number"}></SvgWrapper>
               </div>
               <div className={styles.headerContainer}>
-                <div className={styles.orderSummary}>Order Summary</div>
+                <div className={styles.orderSummary}>{t("resource.checkout.order_summary")}</div>
                 <div className={styles.shipment}>
                   {isShipmentLoading ? (
                     <Shimmer height="12px" width="120px" />
                   ) : (
-                    `${getShipmentCount} shipment${getShipmentCount > 1 ? "s" : ""}`
+                    `${getShipmentCount} ${t(getShipmentCount > 1 ? "resource.common.shipments_plural" : "resource.common.shipment")}`
                   )}
                 </div>
               </div>
@@ -56,10 +56,10 @@ function SinglePageShipment({
 
             <div className={styles.right}>
               <div className={styles.editCart} onClick={gotoCart}>
-                Edit Cart
+                {t("resource.checkout.edit_cart_lower")}
               </div>
               <div className={styles.proceedPay} onClick={showPaymentOptions}>
-                Proceed To Pay
+                {t("resource.checkout.proceed_to_pay")}
               </div>
             </div>
           </div>
@@ -72,7 +72,7 @@ function SinglePageShipment({
             buybox={buybox}
           ></SingleShipmentContent>
           <StickyPayNow
-            btnTitle="PROCEED TO PAY"
+            btnTitle={t("resource.checkout.proceed_to_pay_caps")}
             onPriceDetailsClick={onPriceDetailsClick}
             value={totalValue}
             proceedToPay={() => {
@@ -92,22 +92,22 @@ function SinglePageShipment({
                   <SvgWrapper svgSrc="checkmark"></SvgWrapper>
                 </div>
                 <div className={styles.deliverAdd}>
-                  <div className={styles.title}>Order Summary</div>
+                  <div className={styles.title}>{t("resource.checkout.order_summary")}</div>
                   <div className={styles.address}>
                     {getShipmentCount > 1
-                      ? getShipmentCount + " shipments"
-                      : getShipmentCount + " shipment"}
+                      ? getShipmentCount + ` ${t("resource.common.shipments_plural")}`
+                      : getShipmentCount + ` ${t("resource.common.shipments")}`}
                   </div>
                 </div>
               </div>
               <div className={styles.rightSelected} onClick={editShipment}>
-                Edit
+                {t("resource.facets.edit")}
               </div>
             </div>
           ) : (
             <div className={styles.reviewHeaderUnselect}>
               <SvgWrapper svgSrc={"two-number"}></SvgWrapper>
-              <div className={styles.heading}>Order Summary</div>
+              <div className={styles.heading}>{t("resource.checkout.order_summary")}</div>
             </div>
           )}
         </>

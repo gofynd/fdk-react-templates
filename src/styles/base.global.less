@@ -8,41 +8,6 @@
   box-sizing: border-box;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-.ct-header-wrapper,
-.ctHeaderWrapper {
-  position: sticky;
-  top: 0;
-  z-index: @header;
-}
-
-body {
-  box-sizing: border-box;
-  overflow-x: hidden;
-  @media @desktop {
-    min-height: calc(100vh - 404px);
-  }
-}
-
-.active-app,
-.activeApp {
-  background-color: @PageBackground;
-}
-
-//SVG fix on cart checkout page
-// .card-container.cart-page-container {
-//   .inline-svg {
-//     width: 24px;
-//     height: 24px;
-//   }
-//   .address-left .inline-svg {
-//     display: inline-block;
-//   }
-// }
 
 .card-item .card-desc .price .effective-price {
   font-size: 0.875rem;
@@ -61,11 +26,6 @@ body {
 .modal {
   overflow-x: hidden;
   font-size: 0.875rem;
-}
-
-.product-details-page,
-.productDetailsPage {
-  max-width: @page-width;
 }
 
 // Utility classes
@@ -117,16 +77,6 @@ body {
 .justifyEvenly {
   justify-content: space-evenly;
 }
-// .desktop {
-//   @media @tablet {
-//     display: none;
-//   }
-// }
-// .mobile {
-//   @media @desktop {
-//     display: none;
-//   }
-// }
 
 // Topography
 h1,
@@ -333,50 +283,14 @@ button {
   overflow-y: hidden !important;
 }
 
-//order-placed
-.orders .order-status .inline-svg {
-  height: 63px;
-}
-.order-item .oder-header .filter-arrow-up {
-  margin-right: none !important;
-}
-
-// guest checkout
-.buttons {
-  display: block !important;
-  margin-bottom: 8px;
-}
-
-.checkout {
-  width: calc(100% - 20px) !important;
-}
-.guest-checkout {
-  text-decoration: underline;
-  padding-top: 15px;
-}
-
-::selection {
-  background-color: @primary-color;
-  color: @color-black;
-}
-
-img::selection {
-  background-color: transparent;
-}
-
-.home-page,
-.homePage {
-  max-width: @page-width;
-}
-
 .mr-5,
 .mr5 {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 
 .mr-2,
 .mr2 {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 
 .py-5,
@@ -405,25 +319,12 @@ img::selection {
   @media @mobile {
     margin-top: 24px;
   }
-  // &.view-all-horizontal {
-  //   @media @tablet {
-  //     margin-top: 40px;
-  //   }
-  //   @media @mobile {
-  //     margin-top: 24px;
-  //   }
-  // }
 }
 
 .accent-btn,
 .accentBtn {
   background-color: var(--accentColor);
   color: @color-white;
-}
-
-.glide-cont,
-.glideCont {
-  position: relative;
 }
 
 .no-scroll,
@@ -446,28 +347,7 @@ img::selection {
   }
 }
 
-//Blog page colour mapping override
-.blog-wrapper {
-  .title {
-    color: @TextHeading;
-  }
-  .author,
-  .created-on {
-    color: @TextLabel !important;
-  }
-  #custom-page-container {
-    * {
-      color: @TextBody;
-    }
-  }
-}
-
 .view3d-canvas {
   width: 100%;
   height: 100%;
 }
-
-//TODO remove before Prod deployment
-// .wrapper-class {
-//   display: block !important;
-// }

@@ -250,9 +250,6 @@ h5,
 .shipment-item__margin0auto___w6Fk9 {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .shipment-item__base-page-container___qCF3r,
 .shipment-item__basePageContainer___Zrr1Q {
   max-width: 1440px !important;
@@ -261,20 +258,13 @@ button {
 .shipment-item__removeScroll___sQWKM {
   overflow-y: hidden !important;
 }
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
-}
 .shipment-item__mr-5___f1mzr,
 .shipment-item__mr5___I5hrj {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .shipment-item__mr-2___y7vtV,
 .shipment-item__mr2___xCdhl {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .shipment-item__py-5___WQTnx,
 .shipment-item__py5___QqzuB {
@@ -439,7 +429,7 @@ img::selection {
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__margin___aoRFj {
   color: var(--errorText, #b24141);
-  margin-left: 10px;
+  margin-inline-start: 10px;
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__total___j4dLu {
   display: flex;
@@ -447,10 +437,10 @@ img::selection {
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__total___j4dLu .shipment-item__amt___LG95E {
   color: #41434c;
-  margin-right: 10px;
+  margin-inline-end: 10px;
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__total___j4dLu .shipment-item__delivery-at___ZUUCz {
-  margin-left: 5px;
+  margin-inline-start: 5px;
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__effectivePrice___Kqia8 {
   color: var(--textHeading, #26201a);
