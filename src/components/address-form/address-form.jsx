@@ -393,6 +393,18 @@ const AddressForm = ({
     }
   };
 
+  const handleCountryChange = (event) => {
+    setI18nDetails(event);
+    setValue("country", event);
+    setTimeout(() => {
+      formSchema?.forEach((group) =>
+        group?.fields?.forEach(({ key }) => {
+          setValue(key, "");
+        })
+      );
+    }, 0);
+  };
+
   const selectAddress = (data) => {
     //setResetStatus(false);
     reset(data);
@@ -422,12 +434,7 @@ const AddressForm = ({
           <div className={`${styles.formGroup} ${styles.formContainer}`}>
             <FyDropdown
               value={selectedCountry}
-              onChange={(event) => {
-                reset();
-                setValue("country", event);
-
-                setI18nDetails(event);
-              }}
+              onChange={handleCountryChange}
               onSearch={handleCountrySearch}
               options={getFilteredCountries()}
               optionValue="display_name"
