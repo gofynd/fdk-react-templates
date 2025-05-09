@@ -5,9 +5,9 @@
     span {
       color: @TextDisabled;
 
-      &.active {
-        color: @ButtonPrimary;
-      }
+      // &.active {
+      //   color: @ButtonPrimary;
+      // }
     }
     margin-bottom: 24px;
   }
@@ -176,12 +176,12 @@
           }
         }
         &:last-child {
-          border-right: 0;
+          border-inline-end: 0;
         }
       }
       .alignAttribute {
         padding: 16px;
-        text-align: left;
+        text-align: start;
         @media @mobile {
           min-width: 149px;
           min-height: 53px;
@@ -212,7 +212,7 @@
     .searchBox {
       .crossBtn {
         top: 10px;
-        right: 10px;
+        inset-inline-end: 10px;
         cursor: pointer;
         svg {
           width: 16px;
@@ -247,7 +247,7 @@
           }
           .crossBtn {
             top: 10px;
-            right: 10px;
+            inset-inline-end: 10px;
 
             svg {
               width: 16px;
@@ -319,7 +319,10 @@
           background: @ThemeAccentL4;
           cursor: pointer;
           margin: 0 auto;
-          padding: 12px 0 12px 10px;
+          padding-top: 12px;
+          padding-inline-end: 0px;
+          padding-bottom: 12px;
+          padding-inline-start: 10px;
           position: relative;
           margin-top: 8px;
 
@@ -342,7 +345,7 @@
           .mediaLeft {
             flex: 0 0 56px;
             height: 56px;
-            margin-right: 12px;
+            margin-inline-end: 12px;
             img {
               width: 55px;
             }

@@ -39,7 +39,7 @@
       display: block;
       font-size: 12px;
       font-weight: 500;
-      margin-right: 8px;
+      margin-inline-end: 8px;
       max-height: 38px;
       width: calc(100% - 40px);
       overflow: hidden;
@@ -66,9 +66,9 @@
       }
     }
     .addBtn {
-      margin-left: auto;
+      margin-inline-start: auto;
       color: @ButtonPrimary;
-      text-align: right;
+      text-align: end;
       width: 40px;
       display: flex;
       justify-content: flex-end;
@@ -94,13 +94,16 @@
       .commentNoteIcon {
         position: absolute;
         top: 50%;
-        left: 10px;
+        inset-inline-start: 10px;
         transform: translateY(-50%);
       }
       input {
         flex: 1;
         background: transparent;
-        padding: 12px 12px 12px 40px;
+        padding-top: 12px;
+        padding-inline-end: 12px;
+        padding-bottom: 12px;
+        padding-inline-start: 40px;
         font-size: 12px;
         font-weight: 400;
         width: 100%;

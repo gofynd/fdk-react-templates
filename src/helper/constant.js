@@ -11,21 +11,21 @@ export const ALL_PROFILE_MENU = [
   {
     key: "orders",
     Icon: OrdersIcon,
-    display: "My Orders",
+    display: "resource.common.my_orders",
     link: "/profile/orders",
     disabled_cart: false,
   },
   {
     key: "phone",
     Icon: CallIcon,
-    display: "Phone Number",
+    display: "resource.common.phone_number",
     link: "/profile/phone",
     disabled_cart: true,
   },
   {
     key: "email",
     Icon: EmailIcon,
-    display: "Email Address",
+    display: "resource.common.email_address",
     link: "/profile/email",
     staff: false,
     disabled_cart: true,
@@ -33,7 +33,7 @@ export const ALL_PROFILE_MENU = [
   {
     key: "address",
     Icon: AddressIcon,
-    display: "My Address",
+    display: "resource.common.my_address",
     link: "/profile/address",
     disabled_cart: false,
   },
@@ -42,37 +42,40 @@ export const ALL_PROFILE_MENU = [
 export const GENDER_OPTIONS = [
   {
     value: "male",
-    display: "Male",
+    display: "resource.common.male",
   },
   {
     value: "female",
-    display: "Female",
+    display: "resource.common.female",
   },
   {
     value: "unisex",
-    display: "Other",
+    display: "resource.common.other",
   },
 ];
 
 export const DATE_FILTERS = [
   {
-    display: "Last 30 days",
+    display: "resource.common.date_filter_options.last_30_days",
     value: 30,
     is_selected: false,
   },
   {
-    display: "Last 6 months",
+    display: "resource.common.date_filter_options.last_6_months",
     value: 180,
     is_selected: false,
   },
   {
-    display: "Last 12 months",
+    display: "resource.common.date_filter_options.last_12_months",
     value: 365,
     is_selected: false,
   },
   {
-    display: "Last 24 months",
+    display: "resource.common.date_filter_options.last_24_months",
     value: 730,
     is_selected: true,
   },
 ];
+
+export const DEFAULT_UTC_LOCALE = "en-US";
+export const DEFAULT_CURRENCY_LOCALE = "en-IN";

@@ -250,9 +250,6 @@ h5,
 .scroll-top__margin0auto___XMsgM {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .scroll-top__base-page-container___Xgxyk,
 .scroll-top__basePageContainer___A_rCu {
   max-width: 1440px !important;
@@ -261,20 +258,13 @@ button {
 .scroll-top__removeScroll___nK1eP {
   overflow-y: hidden !important;
 }
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
-}
 .scroll-top__mr-5___keRrD,
 .scroll-top__mr5___GGs97 {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .scroll-top__mr-2___l8QiF,
 .scroll-top__mr2___UOEIP {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .scroll-top__py-5___aibHC,
 .scroll-top__py5___kuQUi {
@@ -357,9 +347,12 @@ img::selection {
   border: none;
   position: fixed;
   top: calc(var(--headerHeight) + 69px);
-  right: 50%;
+  inset-inline-end: 50%;
   z-index: 1;
   transform: translateX(50%);
+}
+[dir="rtl"] .scroll-top__scrollTop___xohSh {
+  transform: translateX(-50%);
 }
 .scroll-top__scrollTop___xohSh .scroll-top__scrollTopText___lswQd {
   font-size: 12px;
@@ -389,7 +382,7 @@ img::selection {
   .scroll-top__scrollTop___xohSh {
     justify-content: center;
     top: unset;
-    right: 40px;
+    inset-inline-end: 40px;
     bottom: 40px;
     width: 40px;
     height: 40px;

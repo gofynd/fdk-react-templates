@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Slider from "react-slick";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./blog.less";
@@ -10,19 +10,33 @@ import BlogFooter from "../../components/blog-footer/blog-footer";
 import EmptyState from "../../components/empty-state/empty-state";
 import InfiniteLoader from "../../components/core/infinite-loader/infinite-loader";
 import Pagination from "../../page-layouts/plp/Components/pagination/pagination";
+import {
+  useNavigate,
+  useGlobalStore,
+  useFPI,
+  useGlobalTranslation
+} from "fdk-core/utils";
 
 import {
   isRunningOnClient,
   throttle,
   convertUTCDateToLocalDate,
+  formatLocale,
 } from "../../helper/utils";
 import Shimmer from "../../components/shimmer/shimmer";
 
 function MemoizedSlide({ blog, index, sliderProps, getBlogTitle }) {
+  const { t } = useGlobalTranslation("translation");
+  const fpi = useFPI();
+  const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
+  const locale = language?.locale;
   const getFormattedDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
     return isRunningOnClient()
-      ? convertUTCDateToLocalDate(dateString, options)
+      ? convertUTCDateToLocalDate(
+        dateString, 
+        options, 
+        formatLocale(locale, countryCode))
       : "";
   };
   const getBlogTag = (tags) => {
@@ -62,7 +76,9 @@ function MemoizedSlide({ blog, index, sliderProps, getBlogTitle }) {
           title={blog?.title}
           to={`/blog/${blog?.slug}`}
         >
-          {sliderProps?.btn_text}
+          {sliderProps?.btn_text?.startsWith(t(`resource.common.${sliderProps?.btn_text?.trim().toLowerCase().split(" ").join("_")}`)) 
+            ? sliderProps?.btn_text
+            : t(`resource.common.${sliderProps?.btn_text?.trim().toLowerCase().split(" ").join("_")}`)}
         </FDKLink>
       </div>
       <FyImage
@@ -70,7 +86,7 @@ function MemoizedSlide({ blog, index, sliderProps, getBlogTitle }) {
         src={blog?.feature_image?.secure_url || sliderProps?.fallback_image}
         isFixedAspectRatio={false}
         defer={false}
-        alt={`slide-${index}`}
+        alt={`${t("resource.blog.slide_alt")}-${index}`}
         showSkeleton={false}
         isImageFill
       />
@@ -91,6 +107,10 @@ function BlogList({
   ssrSearch,
   ssrFilters,
 }) {
+  const { t } = useGlobalTranslation("translation");
+  const fpi = useFPI();
+  const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
+  const locale = language?.locale;
   const navigate = useNavigate();
   const location = useLocation();
   const [blogFilter, setBlogFilter] = useState(ssrFilters || []);
@@ -185,12 +205,12 @@ function BlogList({
       ...(tagBlogFilters || []),
       ...(search
         ? [
-            {
-              display: search,
-              pretext: "text",
-              key: "search_text",
-            },
-          ]
+          {
+            display: search,
+            pretext: "text",
+            key: "search_text",
+          },
+        ]
         : []),
     ]);
   }, [location?.search]);
@@ -241,7 +261,10 @@ function BlogList({
   const getFormattedDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
     return isRunningOnClient()
-      ? convertUTCDateToLocalDate(dateString, options)
+      ? convertUTCDateToLocalDate(
+        dateString, 
+        options, 
+        formatLocale(locale, countryCode))
       : "";
   };
   const getBlogTag = (tags) => {
@@ -377,7 +400,7 @@ function BlogList({
     <div>
       <div className={styles.blogContainer}>
         {blogFilter?.length === 0 && blogs?.page?.item_total === 0 && (
-          <EmptyState title="No blogs found"></EmptyState>
+          <EmptyState title={t("resource.blog.no_blogs_found")}></EmptyState>
         )}
         {showBlogSlideShow && (
           <div className={styles.sliderWrapper}>
@@ -404,17 +427,17 @@ function BlogList({
           <div className={`${styles.filterWrapper__header}`}>
             <div>
               {blogFilter?.length > 0 && (
-                <span>Showing {blogs?.page?.item_total} results of </span>
+                <span>{t("resource.blog.showing_results", { count: blogs?.page?.item_total })} </span>
               )}
               {blogCount > 0 && (
                 <>
-                  <span>{blogCount}</span> items
+                  <span>{blogCount}</span> {t("resource.common.items")}
                 </>
               )}
             </div>
 
             <span className={`${styles.resetBtn}`} onClick={resetFilters}>
-              {blogFilter?.length > 0 && "Reset All"}
+              {blogFilter?.length > 0 && t("resource.facets.reset_all")}
             </span>
           </div>
 
@@ -437,7 +460,7 @@ function BlogList({
                 <input
                   type="text"
                   className={`${styles.blogSearch__input}`}
-                  placeholder="Search here..."
+                  placeholder={`${t("resource.common.search_here")}...`}
                   maxLength="80"
                   value={searchText}
                   onChange={(e) => searchTextUpdate(e?.target?.value)}
@@ -452,7 +475,7 @@ function BlogList({
           <div className={`${styles.blog__contentLeft}`}>
             <div className={`${styles.filterList}`}>
               {showFilters && blogFilter?.length > 0 && (
-                <div>Filtering by:</div>
+                <div>{t("resource.facets.filtering_by")}:</div>
               )}
               {showFilters &&
                 [...blogFilter].map((filter) => (
@@ -469,7 +492,7 @@ function BlogList({
 
             {blogFilter?.length > 0 && blogs?.page?.item_total === 0 && (
               <EmptyState
-                title="No blogs found"
+                title={t("resource.blog.no_blogs_found")}
                 customClassName={styles.emptyBlog}
               ></EmptyState>
             )}
