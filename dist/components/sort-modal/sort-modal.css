@@ -250,9 +250,6 @@ h5,
 .sort-modal__margin0auto___Vyp8e {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .sort-modal__base-page-container___YHFJ9,
 .sort-modal__basePageContainer___KywTZ {
   max-width: 1440px !important;
@@ -261,20 +258,13 @@ button {
 .sort-modal__removeScroll___AUpp7 {
   overflow-y: hidden !important;
 }
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
-}
 .sort-modal__mr-5___YeRLl,
 .sort-modal__mr5___Mt0nc {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .sort-modal__mr-2___Azjig,
 .sort-modal__mr2___Y0Seo {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .sort-modal__py-5___MQhxw,
 .sort-modal__py5___ex__Y {
@@ -707,9 +697,6 @@ h5,
 .modal__margin0auto___dB88d {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .modal__base-page-container___eZhia,
 .modal__basePageContainer___QUmCs {
   max-width: 1440px !important;
@@ -718,20 +705,13 @@ button {
 .modal__removeScroll___sjuCx {
   overflow-y: hidden !important;
 }
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
-}
 .modal__mr-5___DjKqT,
 .modal__mr5___il5jH {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .modal__mr-2___SKD1t,
 .modal__mr2___BSxti {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .modal__py-5___OpCsp,
 .modal__py5___hfa2b {
@@ -858,8 +838,8 @@ img::selection {
   .modal__modalContainer--borders____AGZf {
     border: none;
     border-radius: 0;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
+    border-start-start-radius: 8px;
+    border-start-end-radius: 8px;
   }
 }
 .modal__modalHeader___xKo1g {

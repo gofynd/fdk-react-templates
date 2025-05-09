@@ -1,8 +1,15 @@
 import React from "react";
 import * as styles from "./free-gift-item.less";
-import { currencyFormat, numberWithCommas } from "../../../../helper/utils";
+import { currencyFormat, formatLocale, numberWithCommas } from "../../../../helper/utils";
+import {
+  useGlobalStore,
+  useFPI
+} from "fdk-core/utils";
 
 const FreeGiftItem = ({ item, currencySymbol = "₹" }) => {
+  const fpi = useFPI();
+  const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
+  const locale = language?.locale;
   return (
     <>
       {item?.promotions_applied?.map(
@@ -54,7 +61,8 @@ const FreeGiftItem = ({ item, currencySymbol = "₹" }) => {
                               numberWithCommas(
                                 item_price_details?.effective?.max
                               ),
-                              currencySymbol
+                              currencySymbol,
+                              formatLocale(locale, countryCode, true)
                             )}
                           </span>
                         )}
