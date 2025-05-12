@@ -16,6 +16,7 @@ import * as styles from "./google-map.less";
 import Autocomplete from "react-google-autocomplete";
 import SearchIcon from "../../assets/images/search.svg";
 import LocateIcon from "../../assets/images/locate.svg";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 const libraries = ["places"];
 const mapContainerStyle = {
@@ -36,8 +37,9 @@ const GoogleMapAddress = ({
   onAddressSelect,
   countryDetails,
   addressItem,
-  onLoad = () => {},
+  onLoad = () => { },
 }) => {
+  const { t } = useGlobalTranslation("translation");
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [selectedPlace, setSelectedPlace] = useState({
     lat: countryDetails?.latitude,
@@ -253,7 +255,7 @@ const GoogleMapAddress = ({
           >
             <SearchIcon className={styles.searchAutoIcon} />
             <Autocomplete
-              placeholder="Search Google Maps"
+              placeholder={t("resource.localization.search_google_maps")}
               apiKey={mapApiKey}
               style={autoCompleteStyles}
               onPlaceSelected={handlePlaceSelect}
@@ -290,7 +292,7 @@ const GoogleMapAddress = ({
               )}
             </GoogleMap>
             <button
-              title="Detect My Location"
+              title={t("resource.localization.detect_my_location")}
               onClick={locateUser}
               className={styles.locateIconBtn}
             >
@@ -307,10 +309,10 @@ const GoogleMapAddress = ({
       {address && (
         <div className={styles.addressSelect}>
           <p>{address}</p>
-          <button onClick={selectAddress}>Use This</button>
+          <button onClick={selectAddress}>{t("resource.common.use_this")}</button>
         </div>
       )}
-    </div>
+    </div >
   );
 };
 

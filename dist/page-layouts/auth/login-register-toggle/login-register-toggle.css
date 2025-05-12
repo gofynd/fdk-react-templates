@@ -250,9 +250,6 @@ h5,
 .login-register-toggle__margin0auto___T1A02 {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .login-register-toggle__base-page-container___xhAPo,
 .login-register-toggle__basePageContainer___Seotj {
   max-width: 1440px !important;
@@ -261,20 +258,13 @@ button {
 .login-register-toggle__removeScroll___eMSJj {
   overflow-y: hidden !important;
 }
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
-}
 .login-register-toggle__mr-5___v7zhF,
 .login-register-toggle__mr5___c7UOL {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .login-register-toggle__mr-2___eS3ge,
 .login-register-toggle__mr2___rxBof {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .login-register-toggle__py-5___D9ksb,
 .login-register-toggle__py5___K4lAE {
@@ -361,7 +351,7 @@ img::selection {
   flex: 0 0 24px;
 }
 .login-register-toggle__loginRegisterToggle___JgREz .login-register-toggle__label___hpP0C {
-  margin-right: 24px;
+  margin-inline-end: 24px;
   color: var(--textHeading, #26201a);
   font-size: 14px;
   font-style: normal;

@@ -52,7 +52,8 @@
 import React, { useMemo } from "react";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
 import * as styles from "./address-item.less";
-import { getAddressStr } from "../../helper/utils";
+import { getAddressStr, startsWithResource } from "../../helper/utils";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 const AddressType = {
   area: "",
@@ -78,6 +79,7 @@ function AddressItem({
   containerClassName = "",
   ...restProps
 }) {
+  const { t } = useGlobalTranslation("translation");
   const getAddress = useMemo(
     () => getAddressStr(addressItem, false),
     [addressItem]
@@ -108,7 +110,7 @@ function AddressItem({
           <span className={styles.addressName}>{addressItem.name}</span>
           {showAddressType && (
             <span className={styles.addressType}>
-              {addressItem.address_type}
+              {startsWithResource(t(`resource.common.${addressItem.address_type.toLowerCase().split(" ").join("_")}`)) ? addressItem.address_type : t(`resource.common.${addressItem.address_type.toLowerCase().split(" ").join("_")}`)}
             </span>
           )}
         </div>
@@ -117,13 +119,13 @@ function AddressItem({
       <>{belowNameSlot}</>
       <div
         className={styles.addressMid}
-        style={{ marginLeft: showAddressSelectionCheckbox ? "25px" : 0 }}
+        style={{ marginInlineStart: showAddressSelectionCheckbox ? "25px" : 0 }}
       >
         {getAddress}
       </div>
       <div
         className={styles.phEnd}
-        style={{ marginLeft: showAddressSelectionCheckbox ? "25px" : 0 }}
+        style={{ marginInlineStart: showAddressSelectionCheckbox ? "25px" : 0 }}
       >
         {addressItem.country_phone_code + "-" + addressItem.phone}
       </div>

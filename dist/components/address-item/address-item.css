@@ -250,9 +250,6 @@ h5,
 .address-item__margin0auto___xOJ1C {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .address-item__base-page-container___KQ_WO,
 .address-item__basePageContainer___Uq5VA {
   max-width: 1440px !important;
@@ -261,20 +258,13 @@ button {
 .address-item__removeScroll___pnOdH {
   overflow-y: hidden !important;
 }
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
-}
 .address-item__mr-5___XwVAS,
 .address-item__mr5___XLJZf {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .address-item__mr-2___kIt4m,
 .address-item__mr2___s93C5 {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .address-item__py-5___DM0Sd,
 .address-item__py5___gN5GU {

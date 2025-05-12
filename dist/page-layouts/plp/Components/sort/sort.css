@@ -250,9 +250,6 @@ h5,
 .sort__margin0auto___LYqa9 {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .sort__base-page-container___fjZga,
 .sort__basePageContainer___wFZBk {
   max-width: 1440px !important;
@@ -261,20 +258,13 @@ button {
 .sort__removeScroll___amFIH {
   overflow-y: hidden !important;
 }
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
-}
 .sort__mr-5___XTPJD,
 .sort__mr5___e_pVn {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .sort__mr-2___Pluak,
 .sort__mr2___ugPWn {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .sort__py-5___V97ZB,
 .sort__py5___hfQpl {
@@ -371,7 +361,7 @@ img::selection {
   color: var(--textLabel, #7d7676);
 }
 .sort__dropdown___l0mgV .sort__selectedSortWrapper___lyRDq {
-  margin-left: 8px;
+  margin-inline-start: 8px;
   color: var(--textHeading, #26201a);
   display: flex;
   align-items: center;
@@ -385,7 +375,7 @@ img::selection {
   width: 16px;
   height: 16px;
   fill: var(--textHeading, #26201a);
-  margin-left: 4px;
+  margin-inline-start: 4px;
 }
 .sort__dropdown___l0mgV .sort__selectedSortWrapper___lyRDq .sort__arrowIcon___ZgKu2.sort__open___ZNAMR {
   transform: scale(1, -1);
@@ -394,7 +384,7 @@ img::selection {
   background-color: var(--dialogBackground, #fff);
   position: absolute;
   top: 32px;
-  left: 10px;
+  inset-inline-start: 10px;
   z-index: 32;
   margin: auto;
   min-width: 190px;
@@ -428,8 +418,8 @@ img::selection {
   .sort__dropdown___l0mgV.sort__sort-list___I4Z1g .sort__dropdownList___RA2Li {
     position: fixed;
     top: 0;
-    left: 0;
-    right: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
     bottom: 0;
   }
   .sort__dropdown___l0mgV.sort__sort-list___I4Z1g .sort__dropdownList___RA2Li li {

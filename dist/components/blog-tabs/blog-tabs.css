@@ -250,9 +250,6 @@ h5,
 .blog-tabs__margin0auto___vIodS {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .blog-tabs__base-page-container___OtQmp,
 .blog-tabs__basePageContainer___GcBfF {
   max-width: 1440px !important;
@@ -261,20 +258,13 @@ button {
 .blog-tabs__removeScroll___puf0A {
   overflow-y: hidden !important;
 }
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
-}
 .blog-tabs__mr-5___Zc_UE,
 .blog-tabs__mr5___FnrEd {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .blog-tabs__mr-2___Moh00,
 .blog-tabs__mr2___lZY1_ {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .blog-tabs__py-5___mqbHB,
 .blog-tabs__py5___K3TKY {
@@ -376,8 +366,8 @@ img::selection {
   width: 100%;
   max-width: 275px;
   height: 48px;
-  margin-left: auto;
-  margin-right: auto;
+  margin-inline-start: auto;
+  margin-inline-end: auto;
   padding: 4px;
   display: flex;
   box-shadow: 0 4px 9px 4px rgba(235, 235, 235, 0.5);
@@ -397,8 +387,8 @@ img::selection {
   color: var(--buttonSecondary, #fff);
   border-radius: 100px;
   flex: 1;
-  padding-left: 16px;
-  padding-right: 16px;
+  padding-inline-start: 16px;
+  padding-inline-end: 16px;
 }
 .blog-tabs__sideTabs__content___fjiH5 {
   margin-top: 20px;
