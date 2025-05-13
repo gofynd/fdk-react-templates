@@ -96,6 +96,7 @@ const Wishlist = ({
                 columnCount={{ desktop: 4, tablet: 3, mobile: 2 }}
                 showAddToCart={showAddToCart}
                 handleAddToCart={handleAddToCart}
+                globalConfig={globalConfig}
               />
             </FDKLink>
           ))}
