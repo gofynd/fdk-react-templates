@@ -305,6 +305,7 @@ const ProductListing = ({
                         imagePlaceholder,
                         handleAddToCart,
                         imgSrcSet,
+                        globalConfig,
                       }}
                     />
                   </InfiniteLoader>
@@ -331,6 +332,7 @@ const ProductListing = ({
                       imagePlaceholder,
                       handleAddToCart,
                       imgSrcSet,
+                      globalConfig
                     }}
                   />
                 )}
@@ -416,6 +418,7 @@ function ProductGrid({
   imagePlaceholder = "",
   onWishlistClick = () => {},
   handleAddToCart = () => {},
+  globalConfig = {},
 }) {
   return (
     <div
@@ -457,6 +460,7 @@ function ProductGrid({
               imageBackgroundColor={imageBackgroundColor}
               imagePlaceholder={imagePlaceholder}
               handleAddToCart={handleAddToCart}
+              globalConfig={globalConfig}
             />
           </FDKLink>
         ))}
