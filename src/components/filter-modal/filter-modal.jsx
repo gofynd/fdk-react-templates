@@ -106,10 +106,10 @@ function FilterModal({
             onClick={onResetBtnClick}
             disabled={isResetFilterDisable}
           >
-            RESET
+            Reset
           </button>
           <button className={styles.applyBtn} onClick={() => onApplyBtnClick()}>
-            APPLY
+            Apply
           </button>
         </div>
       </div>

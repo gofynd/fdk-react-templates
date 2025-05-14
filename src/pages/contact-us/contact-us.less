@@ -17,13 +17,18 @@
         object-fit: cover;
       }
       .overlay {
-        opacity: var(--overlay-opacity) !important;
+        opacity: var(--overlay-opacity);
       }
     }
-
-    @media @tablet {
-      display: none;
-    }
+  }
+}
+.onImageContainer {
+  flex-direction: column;
+  width: 50% !important;
+  padding: 80px 120px !important;
+  gap: 56px !important;
+  .flex_item {
+    width: 100%;
   }
 }
 
@@ -34,39 +39,11 @@
   margin: 0 auto;
   padding: 80px 0px;
   gap: 80px;
-
-  &.onImageContainer {
-    @media @desktop {
-      flex-direction: column;
-      width: 50%;
-      padding: 80px 120px;
-      gap: 56px;
-      .flex_item {
-        width: 100%;
-      }
-    }
-  }
-
   @media @tablet {
-    flex-direction: column-reverse;
+    flex-direction: column;
     width: 100%;
     padding: 32px 16px;
     gap: 48px;
-  }
-}
-
-.showDesktop {
-  display: none;
-  @media @desktop {
-    display: flex;
-  }
-}
-
-.showMobile {
-  display: none;
-
-  @media @tablet {
-    display: flex;
   }
 }
 
@@ -91,11 +68,6 @@
       svg g > path {
         fill: @TextHeading;
       }
-      span {
-        display: inline-block;
-        word-break: break-word;
-        overflow-wrap: break-word;
-      }
     }
   }
   form {
@@ -111,17 +83,12 @@
     .inputPlaceholder {
       padding: 16px;
       background-color: @ThemeAccentL5;
-
-      input::placeholder {
-        color: @TextSecondary;
-        opacity: 1;
-      }
     }
     textarea {
       height: 118px;
     }
     .inputPlaceholder::placeholder {
-      color: @TextSecondary;
+      color: @TextLabel;
       opacity: 1;
     }
     .inputPlaceholder:focus::placeholder {
@@ -131,8 +98,6 @@
 }
 
 .btn_submit {
-  background-color: @ButtonPrimary;
-  color: @ButtonSecondary;
   height: 48px;
   padding: 20px 24px !important;
   width: unset !important;
@@ -151,9 +116,4 @@
   font-weight: 400;
   line-height: normal;
   letter-spacing: -0.24px;
-}
-.iconSpacing {
-  @media @mobile {
-    gap: 12px;
-  }
 }

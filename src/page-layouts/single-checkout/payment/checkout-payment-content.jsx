@@ -1,15 +1,16 @@
-import React, { useEffect, useRef, useState, useMemo } from "react";
+import React, { memo, useEffect, useRef, useState, useMemo } from "react";
 import * as styles from "./checkout-payment-content.less";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import cardValidator from "card-validator";
+import RbiSecureGuideline from "../../../components/rbi-guideline/rbi-guideline";
+import FyButton from "../../../components/core/fy-button/fy-button";
 import Modal from "../../../components/core/modal/modal";
 import { useMobile } from "../../../helper/hooks/useMobile";
-// import UktModal from "./ukt-modal";
+import UktModal from "./ukt-modal";
 import StickyPayNow from "./sticky-pay-now/sticky-pay-now";
 import { priceFormatCurrencySymbol } from "../../../helper/utils";
 import { useGlobalStore } from "fdk-core/utils";
-import Spinner from "../../../components/spinner/spinner";
 
 const upiDisplayWrapperStyle = {
   padding: "24px",
@@ -73,7 +74,6 @@ const cancelBtnStyle = {
 
 const UPI_INVALID_VPA_ERROR = "Please enter correct UPI ID";
 import CardForm from "./card-form";
-import Shimmer from "../../../components/shimmer/shimmer";
 
 export const CREDIT_CARD_MASK = [
   {
@@ -1254,7 +1254,9 @@ function CheckoutPaymentContent({
     if (qrPaymentOption) {
       setIsQrMopPresent(true);
     }
-    if (paymentOptions?.length > 0) {
+    if (getTotalValue?.() === 0) {
+      setSelectedTab("COD");
+    } else if (paymentOptions?.length > 0) {
       setSelectedTab(paymentOptions[0].name);
       setActiveMop(paymentOptions[0].name);
     } else if (otherPaymentOptions?.length > 0) {
@@ -1302,8 +1304,6 @@ function CheckoutPaymentContent({
       console.log("Payment cancellation failed");
     }
   };
-  const codCharges =
-    breakUpValues?.filter((value) => value.key === "cod_charge")[0]?.value ?? 0;
 
   const navigationTab = () => {
     switch (selectedTab) {
@@ -1846,7 +1846,7 @@ function CheckoutPaymentContent({
                   />
                 </div>
                 {filteredWallets?.length === 0 ? (
-                  <p className={styles.noResultFound}>No results found</p>
+                  <p>No results found</p>
                 ) : (
                   filteredWallets.map((wlt, index) => (
                     <WalletItem
@@ -2396,7 +2396,7 @@ function CheckoutPaymentContent({
                   />
                 </div>
                 {filteredBanks?.length === 0 ? (
-                  <p className={styles.noResultFound}>No results found</p>
+                  <p>No results found</p>
                 ) : (
                   filteredBanks?.map((nb, index) => (
                     <NbItem
@@ -2413,7 +2413,7 @@ function CheckoutPaymentContent({
       case "COD":
         return (
           <div>
-            {!isMobile ? (
+            {!isMobile && (
               <div>
                 <div
                   className={`${styles.codHeader} ${styles["view-mobile-up"]}`}
@@ -2423,9 +2423,15 @@ function CheckoutPaymentContent({
                 <p className={styles.codTitle}>
                   Pay in cash or using UPI at the time of delivery
                 </p>
-                {codCharges > 0 && (
+                {breakUpValues?.filter((value) => value.key === "cod_charge")[0]
+                  ?.value > 0 && (
                   <div className={styles.codInfo}>
-                    +{priceFormatCurrencySymbol(getCurrencySymbol, codCharges)}{" "}
+                    +₹
+                    {
+                      breakUpValues?.filter(
+                        (value) => value.key === "cod_charge"
+                      )[0]?.value
+                    }{" "}
                     will be charged extra for Cash on delivery option.
                   </div>
                 )}
@@ -2438,8 +2444,6 @@ function CheckoutPaymentContent({
                   </button>
                 </div>
               </div>
-            ) : (
-              <Spinner />
             )}
           </div>
         );
@@ -2821,9 +2825,6 @@ function CheckoutPaymentContent({
             setTab(opt.name);
             toggleMop(opt.name);
             if (selectedTab !== opt.name) {
-              if (isMobile) {
-                setSelectedPaymentPayload({});
-              }
               setNameOnCard("");
               setCardExpiryDate("");
               setCvvNumber("");
@@ -2850,17 +2851,7 @@ function CheckoutPaymentContent({
           {opt.subMopIcons && (
             <div className={styles.subMopIcons}>
               {opt.name === "UPI" && (
-                <>
-                  <span className={`${styles.subMopIcon} ${styles.upiIcon}`}>
-                    <SvgWrapper svgSrc="gpay" />
-                  </span>
-                  <span className={`${styles.subMopIcon} ${styles.upiIcon}`}>
-                    <SvgWrapper svgSrc="phonepe" />
-                  </span>
-                  <span className={`${styles.subMopIcon} ${styles.upiIcon}`}>
-                    <SvgWrapper svgSrc="bhim" />
-                  </span>
-                </>
+                <SvgWrapper svgSrc="upi-icons" alt="No Image" />
               )}
               {opt.subMopIcons !== "UPI" &&
                 opt.subMopIcons?.map((subMopIcon) =>
@@ -3021,9 +3012,15 @@ function CheckoutPaymentContent({
               <p className={styles.message}>
                 Are you sure you want to proceed with Cash on delivery?
               </p>
-              {codCharges > 0 && (
+              {breakUpValues?.filter((value) => value.key === "cod_charge")[0]
+                ?.value > 0 && (
                 <p className={styles.codCharges}>
-                  +{priceFormatCurrencySymbol(getCurrencySymbol, codCharges)}{" "}
+                  +₹
+                  {
+                    breakUpValues?.filter(
+                      (value) => value.key === "cod_charge"
+                    )[0]?.value
+                  }{" "}
                   extra charges
                 </p>
               )}
@@ -3051,9 +3048,7 @@ function CheckoutPaymentContent({
         </Modal>
       )}
       {isLoading ? (
-        <div className={styles.container}>
-          <Shimmer height="300px" />
-        </div>
+        <Loader />
       ) : (
         <div className={styles.container}>
           {true ? (
@@ -3142,16 +3137,20 @@ function CheckoutPaymentContent({
                             >
                               {codOption.display_name}
                             </div>
-                            {isMobile && codCharges > 0 && (
-                              <div className={styles.codCharge}>
-                                +
-                                {priceFormatCurrencySymbol(
-                                  getCurrencySymbol,
-                                  codCharges
-                                )}{" "}
-                                extra charges
-                              </div>
-                            )}
+                            {isMobile &&
+                              breakUpValues?.filter(
+                                (value) => value.key === "cod_charge"
+                              )[0]?.value > 0 && (
+                                <div className={styles.codCharge}>
+                                  +₹
+                                  {
+                                    breakUpValues?.filter(
+                                      (value) => value.key === "cod_charge"
+                                    )[0]?.value
+                                  }{" "}
+                                  extra charges
+                                </div>
+                              )}
                           </div>
                         </div>
                         {codOption?.image_src && (
@@ -3186,9 +3185,7 @@ function CheckoutPaymentContent({
               )}
             </>
           ) : (
-            <div className={styles.container}>
-              <Shimmer height="300px" />
-            </div>
+            <Loader />
           )}
         </div>
       )}

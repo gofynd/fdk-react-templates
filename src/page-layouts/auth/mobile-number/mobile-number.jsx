@@ -25,8 +25,6 @@ function MobileNumber({
   height = "48px",
   textColor = "var(--textBody, #3c3131)",
   backgroundColor = "var(--pageBackground, #f8f8f8)",
-  fontSize = "14px",
-  countryIso,
   ...rest
 }) {
   const inputId = useId();
@@ -61,12 +59,6 @@ function MobileNumber({
     }
   }, [inputId, isFocused]);
 
-  useEffect(() => {
-    if (countryIso && phoneInputRef?.current?.setCountry) {
-      phoneInputRef?.current?.setCountry(countryIso);
-    }
-  }, [countryIso, phoneInputRef?.current, mobile]);
-
   return (
     <div
       className={`${styles.mobileInputWrapper} ${error ? styles.errorInput : ""} ${containerClassName || ""}`}
@@ -76,12 +68,8 @@ function MobileNumber({
           className={`${styles.inputTitle} ${labelClassName || ""}`}
           htmlFor={inputId}
         >
-          {label || "Mobile "}
-          {isRequired === "optional" ? (
-            " (optional)"
-          ) : (
-            <span className={styles.required}> * </span>
-          )}
+          {label ||
+            `Mobile ${isRequired === "optional" ? " (optional)" : " *"}`}
         </label>
       )}
 
@@ -92,6 +80,7 @@ function MobileNumber({
         onChange={handleChange}
         forceDialCode
         ref={phoneInputRef}
+        required={isRequired}
         style={{
           "--react-international-phone-height": height,
           "--react-international-phone-text-color": textColor,
@@ -103,8 +92,7 @@ function MobileNumber({
           "--react-international-phone-selected-dropdown-item-background-color":
             "var(--highlightColor)",
           "--react-international-phone-dropdown-top": `calc(${height} + 4px)`,
-          "--react-international-phone-font-size": fontSize,
-          "--react-international-phone-country-selector-border-color": `${error ? "var(--errorText, #b24141)" : "var(--dividerStokes, #d4d1d1)"}`,
+          "--react-international-phone-font-size": "14px",
           direction: "ltr",
         }}
         countrySelectorStyleProps={{

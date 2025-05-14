@@ -2,14 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { validatePasswordField } from "../../helper/utils";
 import * as styles from "./set-password.less";
-import ShowPasswordIcon from "../../assets/images/show-password.svg";
-import HidePasswordIcon from "../../assets/images/hide-password.svg";
+import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
 
 function SetPassword({ error = null, onSetPasswordSubmit = () => {} }) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     getValues,
     setError,
     clearErrors,
@@ -33,12 +32,6 @@ function SetPassword({ error = null, onSetPasswordSubmit = () => {} }) {
     }
   }, [error]);
 
-  useEffect(() => {
-    if (error) {
-      clearErrors("root");
-    }
-  }, [watch("confirmNewPassword"), watch("newPassword")]);
-
   return (
     <form
       className={styles.setWrapper}
@@ -46,7 +39,7 @@ function SetPassword({ error = null, onSetPasswordSubmit = () => {} }) {
     >
       <div className={styles.setContentTitle}>Create New Password</div>
       <div
-        className={`${styles.setInputGroup} ${errors?.newPassword || errors?.root ? `${styles.errorInput}` : ""}`}
+        className={`${styles.setInputGroup} ${errors.newPassword ? `${styles.errorInput}` : ""}`}
       >
         <label className={styles.setInputTitle} htmlFor="newPassword">
           New Password
@@ -62,7 +55,9 @@ function SetPassword({ error = null, onSetPasswordSubmit = () => {} }) {
           />
           {watch("newPassword") && (
             <span onClick={() => setShowPassword(!showPassword)}>
-              {!showPassword ? <ShowPasswordIcon /> : <HidePasswordIcon />}
+              <SvgWrapper
+                svgSrc={!showPassword ? "show-password" : "hide-password"}
+              />
             </span>
           )}
         </div>
@@ -73,9 +68,7 @@ function SetPassword({ error = null, onSetPasswordSubmit = () => {} }) {
 
       <div
         className={`${styles.setInputGroup} ${
-          errors?.confirmNewPassword || errors?.root
-            ? `${styles.errorInput}`
-            : ""
+          errors.confirmNewPassword ? `${styles.errorInput}` : ""
         }`}
       >
         <label className={styles.setInputTitle} htmlFor="confirmNewPassword">
@@ -85,33 +78,33 @@ function SetPassword({ error = null, onSetPasswordSubmit = () => {} }) {
           <input
             type={showConfirmPassword ? "text" : "password"}
             {...register("confirmNewPassword", {
-              required: {
-                value: true,
-                message: "Please enter a valid password",
-              },
               validate: (value) =>
-                value === getValues("newPassword") ||
-                "Password didn’t match. Try again.",
+                value === getValues("newPassword") || "Password does not match",
             })}
           />
           {watch("confirmNewPassword") && (
             <span onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
-              {!showConfirmPassword ? (
-                <ShowPasswordIcon />
-              ) : (
-                <HidePasswordIcon />
-              )}
+              <SvgWrapper
+                svgSrc={
+                  !showConfirmPassword ? "show-password" : "hide-password"
+                }
+              />
             </span>
           )}
         </div>
-        {(errors?.confirmNewPassword || errors?.root) && (
+        {errors.confirmNewPassword && (
           <p className={styles.errorText}>
-            {errors?.confirmNewPassword?.message || errors?.root?.message}
+            {errors.confirmNewPassword.message}
           </p>
         )}
       </div>
+      {errors.root && (
+        <div className={styles.loginAlert}>
+          <span>{errors.root.message}</span>
+        </div>
+      )}
 
-      <button className={styles.setSubmitBtn} type="submit">
+      <button className={styles.setSubmitBtn} type="submit" disabled={!isValid}>
         Set Password
       </button>
     </form>

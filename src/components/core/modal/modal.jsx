@@ -26,8 +26,8 @@
 
 import React, { useEffect, useMemo, useRef } from "react";
 import * as styles from "./modal.less";
+import SvgWrapper from "../svgWrapper/SvgWrapper";
 import { useMobile } from "../../../helper/hooks/useMobile";
-import CloseBoldIcon from "../../../assets/images/close-bold.svg";
 
 function Modal({
   isOpen,
@@ -75,21 +75,14 @@ function Modal({
   };
 
   useEffect(() => {
-    const openModals = document.querySelectorAll(`.${styles.modalContainer}`);
-
     if (isOpen) {
       document.body.style.overflow = "hidden";
-    } else if (openModals.length < 1) {
+    } else {
       document.body.style.overflow = "unset";
     }
 
     return () => {
-      const remainingModals = document.querySelectorAll(
-        `.${styles.modalContainer}`
-      );
-      if (remainingModals.length < 1) {
-        document.body.style.overflow = "unset";
-      }
+      document.body.style.overflow = "unset";
     };
   }, [isOpen]);
 
@@ -171,7 +164,7 @@ function Modal({
                   )}
                 </div>
                 <div className={styles.crossIcon} onClick={closeDialog}>
-                  <CloseBoldIcon />
+                  <SvgWrapper svgSrc="closeBold" />
                 </div>
               </div>
             )}

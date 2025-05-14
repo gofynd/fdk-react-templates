@@ -19,7 +19,7 @@ function CheckoutPayment({
   const [paymentErrHeading, setPaymentErrHeading] = useState("");
   const [paymentErrMsg, setPaymentErrMsg] = useState("");
   const [timerId, setTimerId] = useState(null);
-  const { errorMessage, setErrorMessage } = payment;
+  const { errorMessage, getTotalValue } = payment;
   const isMobile = useMobile();
 
   useEffect(() => {
@@ -39,7 +39,7 @@ function CheckoutPayment({
       });
       onFailedGetCartShipmentDetails();
     }
-  }, [errorMessage]);
+  }, [window.location.search, errorMessage]);
 
   const scrollToTop = () => {
     if (isMobile) {
@@ -79,7 +79,6 @@ function CheckoutPayment({
     setShowFailedMessage(false);
     setPaymentErrHeading("");
     setPaymentErrMsg("");
-    setErrorMessage("");
 
     const newUrlParams = new URLSearchParams(window.location.search);
     newUrlParams.delete("failed");
@@ -97,45 +96,43 @@ function CheckoutPayment({
   };
 
   return (
-    <>
-      <div
-        className={`${styles.paymentContainer} ${!showPayment ? styles.hidePayment : ""}`}
-      >
-        {showPayment ? (
-          <>
-            <div className={styles.paymentHeaderSelect}>
-              <div className={`${styles.icon} ${styles["view-mobile-up"]}`}>
-                <SvgWrapper svgSrc={"three-number"}></SvgWrapper>
-              </div>
-              <div className={styles.title}>Select Payment Method</div>
+    <div
+      className={`${styles.paymentContainer} ${getTotalValue?.() === 0 ? styles.disabledPayment : ""}`}
+    >
+      {showPayment ? (
+        <>
+          <div className={styles.paymentHeaderSelect}>
+            <div className={`${styles.icon} ${styles["view-mobile-up"]}`}>
+              <SvgWrapper svgSrc={"three-number"}></SvgWrapper>
             </div>
-            {showFailedMessage && (
-              <div className={styles.paymentFailedHeader}>
-                <div className={styles.redSplit}></div>
-                <CheckoutPaymentFailure
-                  paymentErrHeading={paymentErrHeading}
-                  paymentErrMsg={paymentErrMsg}
-                ></CheckoutPaymentFailure>
-              </div>
-            )}
-            <CheckoutPaymentContent
-              payment={payment}
-              loader={loader}
-              handleShowFailedMessage={handleShowFailedMessage}
-              onPriceDetailsClick={onPriceDetailsClick}
-              breakUpValues={breakUpValues}
-              removeDialogueError={hideFailedMessage}
-              setCancelQrPayment={setCancelQrPayment}
-            ></CheckoutPaymentContent>
-          </>
-        ) : (
-          <div className={styles.reviewHeaderUnselect}>
-            <SvgWrapper svgSrc={"three-number"}></SvgWrapper>
             <div className={styles.title}>Select Payment Method</div>
           </div>
-        )}
-      </div>
-    </>
+          {showFailedMessage && (
+            <div className={styles.paymentFailedHeader}>
+              <div className={styles.redSplit}></div>
+              <CheckoutPaymentFailure
+                paymentErrHeading={paymentErrHeading}
+                paymentErrMsg={paymentErrMsg}
+              ></CheckoutPaymentFailure>
+            </div>
+          )}
+          <CheckoutPaymentContent
+            payment={payment}
+            loader={loader}
+            handleShowFailedMessage={handleShowFailedMessage}
+            onPriceDetailsClick={onPriceDetailsClick}
+            breakUpValues={breakUpValues}
+            removeDialogueError={hideFailedMessage}
+            setCancelQrPayment={setCancelQrPayment}
+          ></CheckoutPaymentContent>
+        </>
+      ) : (
+        <div className={styles.reviewHeaderUnselect}>
+          <SvgWrapper svgSrc={"three-number"}></SvgWrapper>
+          <div className={styles.title}>Select Payment Method</div>
+        </div>
+      )}
+    </div>
   );
 }
 

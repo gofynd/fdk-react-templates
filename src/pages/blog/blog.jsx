@@ -10,13 +10,13 @@ import BlogFooter from "../../components/blog-footer/blog-footer";
 import EmptyState from "../../components/empty-state/empty-state";
 import InfiniteLoader from "../../components/core/infinite-loader/infinite-loader";
 import Pagination from "../../page-layouts/plp/Components/pagination/pagination";
+import Loader from "../../components/loader/loader";
 
 import {
   isRunningOnClient,
   throttle,
   convertUTCDateToLocalDate,
 } from "../../helper/utils";
-import Shimmer from "../../components/shimmer/shimmer";
 
 function MemoizedSlide({ blog, index, sliderProps, getBlogTitle }) {
   const getFormattedDate = (dateString) => {
@@ -104,23 +104,14 @@ function BlogList({
     show_recent_blog,
     recentBlogs = [],
   } = sliderProps;
-
-  const showRecentBlog =
-    typeof show_recent_blog === "boolean" || show_recent_blog === ""
-      ? show_recent_blog
-      : true;
-  const showTopBlogs =
-    typeof show_top_blog === "boolean" || show_top_blog === ""
-      ? show_top_blog
-      : true;
   const [windowWidth, setWindowWidth] = useState(0);
   const [config, setConfig] = useState({
     dots: false,
-    speed: Number(sliderProps?.slide_interval * 1000),
+    speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
     swipeToSlide: true,
-    autoplay: sliderProps?.autoplay,
+    autoplay: false,
     pauseOnHover: true,
     cssEase: "linear",
     centerPadding: "75px",
@@ -146,10 +137,10 @@ function BlogList({
       setConfig((prevConfig) => ({
         ...prevConfig,
         autoplay: sliderProps.autoplay,
-        speed: Number(sliderProps.slide_interval * 1000),
+        speed: sliderProps.slide_interval * 100,
       }));
     }
-  }, [sliderProps.autoplay, sliderProps.slide_interval]);
+  }, [sliderProps?.autoplay]);
 
   useEffect(() => {
     const handleResize = throttle(() => {
@@ -199,7 +190,7 @@ function BlogList({
     const searchParams = isRunningOnClient()
       ? new URLSearchParams(location?.search)
       : null;
-    searchParams?.delete("page_no");
+
     if (filter.key === "search_text") {
       searchParams?.delete("search", filter?.display);
       setSearchText("");
@@ -269,12 +260,8 @@ function BlogList({
     }
     return blogTitle;
   };
-  const showTags =
-    typeof sliderProps?.show_tags === "boolean" || sliderProps?.show_tags === ""
-      ? sliderProps?.show_tags
-      : true;
   const tagsList = () => {
-    if (showTags) {
+    if (sliderProps?.show_tags) {
       return (blogs?.filters?.tags || [])?.reduce((tagObj, tag) => {
         tag = tag?.trim();
         if (tag) {
@@ -309,9 +296,9 @@ function BlogList({
 
   const isSidebarDisplayed = useMemo(
     () =>
-      (showTopBlogs && topViewedBlogs?.length) ||
-      (showRecentBlog && recentBlogs?.length),
-    [showTopBlogs, topViewedBlogs, showRecentBlog, recentBlogs]
+      (show_top_blog && topViewedBlogs?.length) ||
+      (show_recent_blog && recentBlogs?.length),
+    [show_top_blog, topViewedBlogs, show_recent_blog, recentBlogs]
   );
 
   const renderBlogs = () => {
@@ -333,7 +320,6 @@ function BlogList({
                 customClass={styles.blog__image}
                 isImageFill
                 isFixedAspectRatio={false}
-                defer={false}
               />
               <div className={`${styles.blog__info}`}>
                 <div className={`${styles.blog__meta}`}>
@@ -356,30 +342,23 @@ function BlogList({
   };
 
   if (isBlogPageLoading) {
-    return <Shimmer />;
+    return (
+      <div className={styles.loader}>
+        <Loader
+          containerClassName={styles.loaderContainer}
+          loaderClassName={styles.customLoader}
+        />
+      </div>
+    );
   }
-  const showBlogSlideShow =
-    typeof sliderProps?.show_blog_slide_show === "boolean" ||
-    sliderProps?.show_blog_slide_show === ""
-      ? sliderProps?.show_blog_slide_show
-      : true;
-  const showSearch =
-    typeof sliderProps?.show_search === "boolean" ||
-    sliderProps?.show_search === ""
-      ? sliderProps?.show_search
-      : true;
-  const showFilters =
-    typeof sliderProps?.show_filters === "boolean" ||
-    sliderProps?.show_filters === ""
-      ? sliderProps?.show_filters
-      : true;
+
   return (
     <div>
       <div className={styles.blogContainer}>
         {blogFilter?.length === 0 && blogs?.page?.item_total === 0 && (
           <EmptyState title="No blogs found"></EmptyState>
         )}
-        {showBlogSlideShow && (
+        {sliderProps?.show_blog_slide_show && (
           <div className={styles.sliderWrapper}>
             <Slider
               {...config}
@@ -412,10 +391,11 @@ function BlogList({
                 </>
               )}
             </div>
-
-            <span className={`${styles.resetBtn}`} onClick={resetFilters}>
-              {blogFilter?.length > 0 && "Reset All"}
-            </span>
+            {blogFilter?.length > 0 && (
+              <span className={`${styles.resetBtn}`} onClick={resetFilters}>
+                Reset All
+              </span>
+            )}
           </div>
 
           <div className={`${styles.filterWrapper__content}`}>
@@ -425,14 +405,14 @@ function BlogList({
                   <button
                     key={index}
                     type="button"
-                    className={`${styles.tagBtn} ${blogFilter?.some((item) => item.display === tag?.display) ? `${styles.tagBtnSelected}` : ""}`}
+                    className={`${styles.tagBtn} ${blogFilter?.some((item) => item.key === tag?.key) ? `${styles.tagBtnSelected}` : ""}`}
                     onClick={() => toggleTagFilter(tag)}
                   >
                     {tag.display}
                   </button>
                 ))}
             </div>
-            {showSearch && (
+            {sliderProps?.show_search && (
               <div className={`${styles.blogSearch}`}>
                 <input
                   type="text"
@@ -451,10 +431,10 @@ function BlogList({
         >
           <div className={`${styles.blog__contentLeft}`}>
             <div className={`${styles.filterList}`}>
-              {showFilters && blogFilter?.length > 0 && (
+              {sliderProps?.show_filters && blogFilter?.length > 0 && (
                 <div>Filtering by:</div>
               )}
-              {showFilters &&
+              {sliderProps?.show_filters &&
                 [...blogFilter].map((filter) => (
                   <div className={`${styles.filterItem}`} key={filter?.key}>
                     <span>{`${filter?.pretext}: ${filter?.display}`}</span>
@@ -468,10 +448,7 @@ function BlogList({
             </div>
 
             {blogFilter?.length > 0 && blogs?.page?.item_total === 0 && (
-              <EmptyState
-                title="No blogs found"
-                customClassName={styles.emptyBlog}
-              ></EmptyState>
+              <EmptyState title="No blogs found"></EmptyState>
             )}
             <div className={`${styles.blogContainer__grid}`}>
               {sliderProps?.loadingOption === "infinite" ? (
@@ -486,12 +463,11 @@ function BlogList({
                 renderBlogs()
               )}
             </div>
-            {sliderProps?.loadingOption === "pagination" &&
-              blogs?.page?.item_total !== 0 && (
-                <div className={styles.paginationWrapper}>
-                  <Pagination {...paginationProps} />
-                </div>
-              )}
+            {sliderProps?.loadingOption === "pagination" && (
+              <div className={styles.paginationWrapper}>
+                <Pagination {...paginationProps} />
+              </div>
+            )}
           </div>
           <BlogTabs
             className={styles.blog__contentRight}

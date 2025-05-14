@@ -2,7 +2,6 @@ import React, { useId, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { validateEmailField } from "../../helper/utils";
 import * as styles from "./forget-password.less";
-import LoginRegisterToggle from "../../page-layouts/auth/login-register-toggle/login-register-toggle";
 
 function ForgetPassword({
   isFormSubmitSuccess = false,
@@ -20,37 +19,29 @@ function ForgetPassword({
     getValues,
     setError,
     clearErrors,
-    watch,
   } = useForm({ mode: "onChange" });
 
   useEffect(() => {
     if (error) {
-      setError("email", error);
+      setError("root", error);
     } else {
-      clearErrors("email");
+      clearErrors("root");
     }
   }, [error]);
 
   return (
-    <div className={styles.forgetPasswordWrapper}>
-      <h1
-        className={`${styles.forgotPasswordTitle} ${isFormSubmitSuccess ? styles.formSubmitted : ""}`}
-      >
-        Reset Your Password
-      </h1>
+    <div>
+      <h1 className={styles.forgotPasswordTitle}>Reset Your Password</h1>
       {!isFormSubmitSuccess ? (
         <div className={styles.forgotPasswordWrapper}>
           <form onSubmit={handleSubmit(onForgotPasswordSubmit)}>
-            <div
-              className={`${styles.forgotPasswordInputGroup} ${errors.email ? styles.errorInput : ""}`}
-            >
+            <div className={styles.forgotPasswordInputGroup}>
               <label className={styles.loginInputTitle} htmlFor={emailInputId}>
                 Email
               </label>
               <input
                 id={emailInputId}
                 type="text"
-                placeholder="example@gmail.com"
                 {...register("email", {
                   validate: (value) =>
                     validateEmailField(value) ||
@@ -63,21 +54,31 @@ function ForgetPassword({
                 </p>
               )}
             </div>
+            {errors.root && (
+              <div className={styles.forgotPasswordAlert}>
+                <span className={styles.alertMessage}>
+                  {errors.root?.details?.error ?? errors.root?.message}
+                </span>
+              </div>
+            )}
             {/* Extension slot: above_reset_button */}
-            <button className={styles.forgotPasswordSubmitBtn} type="submit">
+            <button
+              className={styles.forgotPasswordSubmitBtn}
+              disabled={!isValid}
+              type="submit"
+            >
               RESET PASSWORD
             </button>
           </form>
-          <LoginRegisterToggle
-            label="BACK TO LOGIN"
-            onClick={onBackToLoginClick}
-          />
+          <button className={styles.loginLink} onClick={onBackToLoginClick}>
+            Back to login
+          </button>
           {/* Extension slot: below_reset_button */}
         </div>
       ) : (
         <div className={styles.submitWrapper}>
           <p className={styles.submitSuccessMsg}>
-            Reset Link has been sent to {watch("email")} email address.
+            Reset Link has been sent to your primary email address.
           </p>
           <button
             className={styles.resendBtn}

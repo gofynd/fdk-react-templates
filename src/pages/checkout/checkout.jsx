@@ -7,7 +7,7 @@ import PriceBreakup from "../../components/price-breakup/price-breakup";
 import Stepper from "../../components/stepper/stepper";
 import Coupon from "../../page-layouts/cart/Components/coupon/coupon";
 import Comment from "../../page-layouts/cart/Components/comment/comment";
-import { priceFormatCurrencySymbol } from "../../helper/utils";
+import ZeroPayButton from "../../page-layouts/single-checkout/payment/zero-pay-btn/zero-pay-btn";
 
 function Checkout({
   breakupValues,
@@ -17,7 +17,6 @@ function Checkout({
   showShipment,
   showPayment,
   shipments,
-  isShipmentLoading,
   payment,
   showPaymentOptions,
   setShowShipment,
@@ -32,7 +31,6 @@ function Checkout({
   cartCouponProps,
   cartCommentProps,
   buybox = {},
-  isGuestUser = false,
 }) {
   const [cancelQrPayment, setCancelQrPayment] = useState(null);
   const { onFailedGetCartShipmentDetails } = address;
@@ -50,11 +48,10 @@ function Checkout({
           setShowPayment={setShowPayment}
           mapApiKey={mapApiKey}
           showGoogleMap={showGoogleMap}
-          isGuestUser={isGuestUser}
+          loader={loader}
         ></SingleAddress>
         <SinglePageShipment
           shipments={shipments}
-          isShipmentLoading={isShipmentLoading}
           showPaymentOptions={showPaymentOptions}
           showShipment={showShipment}
           showPayment={showPayment}
@@ -62,12 +59,9 @@ function Checkout({
           setShowPayment={setShowPayment}
           isHyperlocal={isHyperlocal}
           convertHyperlocalTat={convertHyperlocalTat}
+          loader={loader}
           buybox={buybox}
-          totalValue={priceFormatCurrencySymbol(
-            payment?.getCurrencySymbol,
-            payment?.getTotalValue()
-          )}
-          onPriceDetailsClick={onPriceDetailsClick}
+          payment={payment}
         ></SinglePageShipment>
         <CheckoutPayment
           payment={payment}
@@ -91,6 +85,11 @@ function Checkout({
           breakUpValues={breakupValues}
           cartItemCount={cartItemsCount}
           currencySymbol={currencySymbol}
+        />
+        <ZeroPayButton
+          payment={payment}
+          showPayment={showPayment}
+          onPriceDetailsClick={onPriceDetailsClick}
         />
       </div>
     </div>

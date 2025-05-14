@@ -7,7 +7,7 @@ const StickyPayNow = ({
   value = "",
   onPriceDetailsClick = () => {},
   proceedToPay = () => {},
-  btnTitle = "PAY NOW",
+  btnText = "",
 }) => {
   return (
     <AnimatePresence mode="wait">
@@ -33,7 +33,7 @@ const StickyPayNow = ({
             className={`${styles.cartCheckoutBtn} ${styles.checkoutButton}`}
             onClick={proceedToPay}
           >
-            {btnTitle}
+            {btnText ? btnText : "PAY NOW"}
           </button>
         </div>
       </motion.div>

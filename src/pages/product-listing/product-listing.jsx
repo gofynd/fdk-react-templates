@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "../../styles/product-listing.less";
+import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
 import InfiniteLoader from "../../components/core/infinite-loader/infinite-loader";
 import Breadcrumb from "../../components/breadcrumb/breadcrumb";
 import ProductCard from "../../components/product-card/product-card";
@@ -20,12 +21,6 @@ import Modal from "../../components/core/modal/modal";
 import AddToCart from "../../page-layouts/plp/Components/add-to-cart/add-to-cart";
 import { useViewport } from "../../helper/hooks";
 import SizeGuide from "../../page-layouts/plp/Components/size-guide/size-guide";
-import FilterIcon from "../../assets/images/filter.svg";
-import SortIcon from "../../assets/images/sort.svg";
-import TwoGridIcon from "../../assets/images/grid-two.svg";
-import FourGridIcon from "../../assets/images/grid-four.svg";
-import TwoGridMobIcon from "../../assets/images/grid-two-mob.svg";
-import OneGridMobIcon from "../../assets/images/grid-one-mob.svg";
 
 const ProductListing = ({
   breadcrumb = [],
@@ -51,7 +46,7 @@ const ProductListing = ({
   isSaleBadge = true,
   isPrice = true,
   globalConfig = {},
-  imgSrcSet,
+  isHdimgUsed = false,
   isImageFill = false,
   showImageOnHover = false,
   isResetFilterDisable = false,
@@ -64,7 +59,6 @@ const ProductListing = ({
   listingPrice = "range",
   banner = {},
   showAddToCart = false,
-  stickyFilterTopOffset = 0,
   onColumnCountUpdate = () => {},
   onResetFiltersClick = () => {},
   onFilterUpdate = () => {},
@@ -87,14 +81,35 @@ const ProductListing = ({
     ...restAddToModalProps
   } = addToCartModalProps;
 
+  const [topPosition, setTopPosition] = useState(null);
+  const plpWrapperRef = useRef(null);
+
+  useEffect(() => {
+    const rect = plpWrapperRef.current.getBoundingClientRect();
+    const top = rect.top + window.scrollY;
+    setTopPosition(top);
+  }, []);
+
+  const wrapperStyle = useMemo(() => {
+    if (!topPosition) {
+      return {};
+    }
+    return {
+      "--topPosition": `${topPosition}px`,
+    };
+  }, [topPosition]);
+
   return (
-    <div className={styles.plpWrapper}>
+    <div className={styles.plpWrapper} ref={plpWrapperRef} style={wrapperStyle}>
       {isRunningOnClient() && isPageLoading ? (
         <div className={styles.loader}></div>
       ) : productList?.length === 0 && !(isPageLoading || isPageLoading) ? (
         <div>{EmptyStateComponent}</div>
       ) : (
         <>
+          <div className={styles.breadcrumbWrapper}>
+            <Breadcrumb breadcrumb={breadcrumb} />
+          </div>
           <div className={styles.mobileHeader}>
             <div className={styles.headerLeft}>
               {filterList.length > 0 && (
@@ -102,12 +117,12 @@ const ProductListing = ({
                   className={styles.filterBtn}
                   onClick={onFilterModalBtnClick}
                 >
-                  <FilterIcon />
-                  <span>Filter</span>
+                  <SvgWrapper svgSrc="filter" />
+                  <span>Filters</span>
                 </button>
               )}
               <button onClick={onSortModalBtnClick}>
-                <SortIcon />
+                <SvgWrapper svgSrc="sort" />
                 <span>Sort By</span>
               </button>
             </div>
@@ -121,7 +136,7 @@ const ProductListing = ({
                 }
                 title="Mobile grid one"
               >
-                <OneGridMobIcon />
+                <SvgWrapper svgSrc="grid-one-mob" />
               </button>
               <button
                 className={`${styles.colIconBtn} ${styles.mobile} ${
@@ -132,7 +147,7 @@ const ProductListing = ({
                 }
                 title="Mobile grid two"
               >
-                <TwoGridMobIcon />
+                <SvgWrapper svgSrc="grid-two-mob" />
               </button>
               <button
                 className={`${styles.colIconBtn} ${styles.tablet} ${
@@ -143,7 +158,7 @@ const ProductListing = ({
                 }
                 title="Tablet grid two"
               >
-                <TwoGridIcon />
+                <SvgWrapper svgSrc="grid-two" />
               </button>
               <button
                 className={`${styles.colIconBtn} ${styles.tablet} ${
@@ -154,45 +169,42 @@ const ProductListing = ({
                 }
                 title="Tablet grid four"
               >
-                <FourGridIcon />
+                <SvgWrapper svgSrc="grid-four" />
               </button>
             </div>
           </div>
-          <div className={styles.breadcrumbWrapper}>
-            <Breadcrumb breadcrumb={breadcrumb} />
-          </div>
           <div className={styles.contentWrapper}>
             {filterList?.length !== 0 && (
-              <StickyColumn
-                className={styles.left}
-                topOffset={stickyFilterTopOffset}
-              >
-                <div className={styles.filterHeaderContainer}>
-                  <div className={styles.filterHeader}>
-                    <h4 className={styles.title}>FILTERS</h4>
-                    {!isResetFilterDisable && (
-                      <button
-                        className={styles.resetBtn}
-                        onClick={onResetFiltersClick}
-                      >
-                        RESET
-                      </button>
-                    )}
+              <div className={styles?.left}>
+                <StickyColumn>
+                  <div className={styles.filterHeaderContainer}>
+                    <div className={styles.filterHeader}>
+                      <h4 className={styles.title}>FILTERS</h4>
+                      {!isResetFilterDisable && (
+                        <button
+                          className={styles.resetBtn}
+                          onClick={onResetFiltersClick}
+                        >
+                          RESET
+                        </button>
+                      )}
+                    </div>
+
+                    <FilterTags
+                      selectedFilters={selectedFilters}
+                      onFilterUpdate={onFilterUpdate}
+                    />
                   </div>
-                  <FilterTags
-                    selectedFilters={selectedFilters}
-                    onFilterUpdate={onFilterUpdate}
-                  />
-                </div>
-                {filterList?.map((filter, idx) => (
-                  <FilterItem
-                    isMobileView={false}
-                    key={idx + "-desktop" + filter.key.display}
-                    filter={filter}
-                    onFilterUpdate={onFilterUpdate}
-                  />
-                ))}
-              </StickyColumn>
+                  {filterList?.map((filter, idx) => (
+                    <FilterItem
+                      isMobileView={false}
+                      key={idx + "-desktop" + filter.key.display}
+                      filter={filter}
+                      onFilterUpdate={onFilterUpdate}
+                    />
+                  ))}
+                </StickyColumn>
+              </div>
             )}
             <div className={styles.right}>
               <div className={styles.rightHeader}>
@@ -200,7 +212,7 @@ const ProductListing = ({
                   {title && <h1 className={styles.title}>{title}</h1>}
                   {isProductCountDisplayed && (
                     <span className={styles.productCount}>
-                      {`${productCount} ${productCount > 1 ? "items" : "item"}`}
+                      {`${productCount} ${productCount > 1 ? "Items" : "Item"}`}
                     </span>
                   )}
                 </div>
@@ -215,7 +227,7 @@ const ProductListing = ({
                     }
                     title="Desktop grid two"
                   >
-                    <TwoGridIcon />
+                    <SvgWrapper svgSrc="grid-two"></SvgWrapper>
                   </button>
                   <button
                     className={`${styles.colIconBtn} ${
@@ -226,7 +238,7 @@ const ProductListing = ({
                     }
                     title="Desktop grid four"
                   >
-                    <FourGridIcon />
+                    <SvgWrapper svgSrc="grid-four"></SvgWrapper>
                   </button>
                 </div>
               </div>
@@ -292,6 +304,7 @@ const ProductListing = ({
                         isBrand,
                         isSaleBadge,
                         isPrice,
+                        isHdimgUsed,
                         aspectRatio,
                         isWishlistIcon,
                         WishlistIconComponent,
@@ -304,7 +317,6 @@ const ProductListing = ({
                         imageBackgroundColor,
                         imagePlaceholder,
                         handleAddToCart,
-                        imgSrcSet,
                       }}
                     />
                   </InfiniteLoader>
@@ -317,6 +329,7 @@ const ProductListing = ({
                       isBrand,
                       isSaleBadge,
                       isPrice,
+                      isHdimgUsed,
                       aspectRatio,
                       isWishlistIcon,
                       WishlistIconComponent,
@@ -330,7 +343,6 @@ const ProductListing = ({
                       isProductLoading,
                       imagePlaceholder,
                       handleAddToCart,
-                      imgSrcSet,
                     }}
                   />
                 )}
@@ -366,15 +378,14 @@ const ProductListing = ({
               <Modal
                 isOpen={isAddToCartOpen}
                 hideHeader={!isTablet}
-                containerClassName={styles.addToCartContainer}
                 bodyClassName={styles.addToCartBody}
-                titleClassName={styles.addToCartTitle}
                 title={
                   isTablet
                     ? restAddToModalProps?.productData?.product?.name
                     : ""
                 }
                 closeDialog={restAddToModalProps?.handleClose}
+                containerClassName={styles.addToCartContainer}
               >
                 <AddToCart
                   {...restAddToModalProps}
@@ -401,7 +412,7 @@ function ProductGrid({
   isSaleBadge = true,
   isPrice = true,
   isWishlistIcon = true,
-  imgSrcSet,
+  isHdimgUsed = false,
   aspectRatio,
   WishlistIconComponent,
   isProductOpenInNewTab = false,
@@ -434,7 +445,7 @@ function ProductGrid({
             key={product?.uid}
             target={isProductOpenInNewTab ? "_blank" : "_self"}
             style={{
-              // "--delay": `${(index % 12) * 150}ms`,
+              "--delay": `${(index % 12) * 150}ms`,
               display: "block",
             }}
           >
@@ -442,11 +453,11 @@ function ProductGrid({
               product={product}
               listingPrice={listingPrice}
               columnCount={columnCount}
+              isHdimgUsed={isHdimgUsed}
               aspectRatio={aspectRatio}
               isBrand={isBrand}
               isPrice={isPrice}
               isSaleBadge={isSaleBadge}
-              imgSrcSet={imgSrcSet}
               isWishlistIcon={isWishlistIcon}
               WishlistIconComponent={WishlistIconComponent}
               followedIdList={followedIdList}

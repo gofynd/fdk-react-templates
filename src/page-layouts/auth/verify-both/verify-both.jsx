@@ -99,15 +99,8 @@ function VerifyMobile({
             </label>
             <input
               id={mobileOtpId}
-              type="text"
-              inputMode="numeric"
-              pattern="\d*"
+              type="number"
               maxLength={4}
-              onInput={(e) => {
-                e.target.value = e.target.value
-                  .replace(/[^0-9]/g, "")
-                  .slice(0, 4);
-              }}
               {...register("otp", {
                 validate: (value) => /^[0-9]{4}$/.test(value),
               })}
@@ -146,7 +139,7 @@ function VerifyEmail({
   const {
     handleSubmit,
     register,
-    formState: { errors },
+    formState: { errors, isValid },
     setError,
     clearErrors,
     resetField,
@@ -161,9 +154,9 @@ function VerifyEmail({
 
   useEffect(() => {
     if (error) {
-      setError("otp", error);
+      setError("root", error);
     } else {
-      clearErrors("otp");
+      clearErrors("root");
     }
   }, [error]);
 
@@ -183,34 +176,26 @@ function VerifyEmail({
           <p
             className={styles.otpSentMessage}
           >{`OTP sent to ${submittedEmail}`}</p>
-          <div
-            className={`${styles.inputGroup} ${errors?.root || errors?.otp ? styles.error : ""}`}
-          >
+          <div className={styles.inputGroup}>
             <label className={styles.label} htmlFor={emailOtpId}>
               Enter OTP
             </label>
             <input
               id={emailOtpId}
-              type="text"
-              inputMode="numeric"
-              pattern="\d*"
+              type="number"
               maxLength={4}
-              onInput={(e) => {
-                e.target.value = e.target.value
-                  .replace(/[^0-9]/g, "")
-                  .slice(0, 4);
-              }}
               {...register("otp", {
-                validate: (value) =>
-                  /^[0-9]{4}$/.test(value) || "Please enter a valid otp",
+                validate: (value) => /^[0-9]{4}$/.test(value),
               })}
             />
-            {errors?.otp && (
-              <p className={styles.loginAlert}>{errors?.otp?.message}</p>
-            )}
           </div>
         </div>
-        <button className={styles.submitBtn} type="submit">
+        {errors.root && (
+          <div className={styles.loginAlert}>
+            <span>{errors.root.message}</span>
+          </div>
+        )}
+        <button className={styles.submitBtn} type="submit" disabled={!isValid}>
           <span>Submit</span>
         </button>
       </form>

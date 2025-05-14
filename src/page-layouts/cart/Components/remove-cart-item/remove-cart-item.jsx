@@ -24,8 +24,6 @@ function RemoveCartItem({
       isOpen={isOpen}
       closeDialog={onCloseDialogClick}
       headerClassName={styles.header}
-      subTitleClassName={styles.subTitle}
-      containerClassName={styles.modalContainer}
       subTitle="Are your sure you want to remove this item?"
     >
       <div className={styles.removeModalBody}>
@@ -35,12 +33,7 @@ function RemoveCartItem({
               <img src={getProductImage} alt={cartItem?.product?.name} />
             </div>
           )}
-          <div>
-            <div className={styles.itemBrand}>
-              {cartItem?.product?.brand?.name}
-            </div>
-            <div className={styles.itemName}>{cartItem?.product?.name}</div>
-          </div>
+          <div className={styles.itemName}>{cartItem?.product?.name}</div>
         </div>
       </div>
       <div className={styles.removeModalFooter}>

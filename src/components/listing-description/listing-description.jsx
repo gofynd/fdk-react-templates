@@ -24,9 +24,7 @@ function ListingDescription({ description = "" }) {
   return (
     <div className={styles.descriptionWrapper}>
       <div className={styles.descriptionContent}>
-        {isCollapsed
-          ? `${description.substring(0, 600).trim()}...`
-          : description}
+        {isCollapsed ? `${description.substring(0, 600)}...` : description}
       </div>
       {description.length > 600 && (
         <button className={styles.actionBtn} onClick={toggleCollapsedState}>

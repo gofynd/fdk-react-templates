@@ -67,9 +67,7 @@ const FyInput = forwardRef(
         {label && (
           <label htmlFor={id} className={customLabelClassName}>
             {label}
-            {required && showAsterik && (
-              <span className={styles.required}> *</span>
-            )}
+            {required && showAsterik && <span> *</span>}
           </label>
         )}
         {multiline ? (
@@ -87,12 +85,7 @@ const FyInput = forwardRef(
             {startAdornment && (
               <div className={styles.startAdornment}>{startAdornment}</div>
             )}
-            <input
-              {...props}
-              className={`${styles.fyInput} ${props?.className || ""}`}
-              id={id}
-              ref={ref}
-            />
+            <input className={styles.fyInput} {...props} id={id} ref={ref} />
             {endAdornment && (
               <div className={styles.endAdornment}>{endAdornment}</div>
             )}

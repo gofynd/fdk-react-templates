@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import * as styles from "./share-cart.less";
+import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import ShareCartModal from "../share-cart-modal/share-cart-modal";
-import ShareCartIcon from "../../../../assets/images/share-cart.svg";
 
 function ShareCart({
   showCard = false,
@@ -26,7 +26,7 @@ function ShareCart({
           <div className={styles.shareCartBox}>
             <div className={styles.leftPart}>
               <span className={styles.shareCartIcon}>
-                <ShareCartIcon />
+                <SvgWrapper svgSrc="share-cart" />
               </span>
               SHARE SHOPPING CART
             </div>
@@ -37,7 +37,7 @@ function ShareCart({
         ) : (
           <div className={styles.nccCartShare} onClick={getCartShareLink}>
             <span className={styles.shareCartIconGreen}>
-              <ShareCartIcon />
+              <SvgWrapper svgSrc="share-cart" />
             </span>
             <span className={styles.shareBagBtn}>SHARE BAG</span>
           </div>

@@ -1,18 +1,28 @@
 @import "../../styles/main.less";
 
+.selectedto {
+  background-color: @LightGray;
+}
 .orderItem {
   color: @Mako;
-  background-color: @HighlightColor;
-  padding: 16px;
-  border-radius: 4px;
+  background-color: @PageBackground;
+  border-radius: 5px;
+  margin: 20px 0px;
+  padding: 10px;
 
   .orderHeader {
     cursor: pointer;
     position: relative;
 
+    h3 {
+      margin: 10px;
+    }
+    h4 {
+      margin: 10px;
+    }
     .filter {
       position: absolute;
-      right: 0px;
+      right: 20px;
     }
     .filterArrowUp {
       margin-left: auto;
@@ -21,40 +31,39 @@
     .filterArrowDown {
       margin-left: auto;
     }
-
-    .orderId {
-      color: @TextHeading;
-      font-weight: 600;
-      line-height: 140%;
+    .bold {
       font-weight: 700;
-      font-size: 16px;
+      font-size: 20px;
+      @media @tablet {
+        font-size: 18px;
+      }
+      @media @mobile {
+        font-size: 16px;
+      }
     }
-
-    .orderTime {
-      color: @TextLabel;
-      font-size: 12px;
-      font-weight: 400;
-      line-height: 140%;
-      margin-top: 4px;
+    .light {
+      font-weight: 300;
+      font-size: 13px;
+      @media @tablet {
+        font-size: 12px;
+      }
+      @media @mobile {
+        font-size: 12px;
+      }
     }
   }
 
   .shipmentData {
     animation: fadeIn 0.5s ease;
     border-top: none;
-    margin: 16px 0;
-    padding: 0;
+    padding: 10px;
     cursor: pointer;
-    display: flex;
-    gap: 16px;
-
     .shipmentLeft {
       display: table-cell;
-
+      width: 125px;
       img {
-        width: 80px;
-        height: 100px;
-        object-fit: cover;
+        max-width: 110px;
+        max-height: 180px;
       }
 
       #total-item {
@@ -87,44 +96,52 @@
         font-size: 14px;
       }
     }
-
+    .regular {
+      font-weight: 400;
+      font-size: 14px;
+      @media @tablet {
+        font-size: 13px;
+      }
+      @media @mobile {
+        font-size: 13px;
+      }
+    }
     .shipmentRight {
       display: table-cell;
       vertical-align: top;
-
+      color: @Mako;
       .shipmentId {
-        margin: 4px 0px;
+        margin: 10px 0px;
+        line-height: 20px;
       }
       .boldls {
-        font-weight: 600;
+        font-weight: 700;
+        font-size: 14px;
+        @media @tablet {
+          font-size: 13px;
+        }
+        @media @mobile {
+          font-size: 13px;
+        }
       }
       .uktLinks {
+        color: @ButtonLink;
+        font-weight: 700;
         cursor: pointer;
         text-decoration: none;
-        color: @TextHeading;
-        font-size: 12px;
-        font-weight: 500;
-        line-height: 140%;
       }
       .shipmentStats {
-        margin: 4px 0px;
-        color: @TextLabel;
-        font-size: 12px;
-        font-weight: 500;
-        line-height: 140%; /* 16.8px */
+        margin: 10px 0px;
       }
       .status {
-        border-radius: 4px;
-        background: @SuccessBackground;
-        padding: 4px;
-        color: @SuccessText;
-        font-size: 12px;
-        font-weight: 500;
-        line-height: 140%;
-        width: fit-content;
+        text-align: center;
+        color: @White;
+        padding: 10px;
+        display: inline-flex;
+        border-radius: 3px;
       }
       .shipmentBrands {
-        margin: 8px 0px;
+        margin: 10px 0px;
       }
     }
   }
@@ -132,9 +149,12 @@
   .buttons {
     display: flex;
     .ordercheckout {
-      width: 100%;
+      width: calc(100% - 20px) !important;
       height: 40px;
+      margin: 10px;
+      padding: 15px;
       border-radius: @ButtonRadius;
+      margin: 10px;
       font-weight: 700;
       background-color: @TextHeading;
       border: none;

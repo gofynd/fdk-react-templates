@@ -217,9 +217,7 @@ const FyDropdown = ({
       {label && (
         <label className={customLabelClassName}>
           {label}
-          {required && showAsterik && (
-            <span className={styles.required}> *</span>
-          )}
+          {required && showAsterik && <span> *</span>}
         </label>
       )}
       <div

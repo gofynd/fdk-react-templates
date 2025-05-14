@@ -1,18 +1,17 @@
 @import "../../styles//main.less";
 
 .title {
-  color: @TextHeading;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 140%;
-  margin-bottom: 8px;
+  color: @Mako;
 }
 .lightsm {
-  color: @TextHeading;
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 140%;
-  margin-bottom: 4px;
+  font-weight: 300;
+  font-size: 16px;
+  @media @tablet {
+    font-size: 14px;
+  }
+  @media @mobile {
+    font-size: 14px;
+  }
 }
 .boldsm {
   font-weight: 700;
@@ -26,15 +25,11 @@
   }
 }
 .address {
-  padding: 16px;
-
+  padding: 10px;
+  div {
+    margin: 10px;
+  }
   .displayAddress {
     white-space: pre-wrap;
-    color: @TextBody;
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 140%;
-    text-overflow: ellipsis;
-    overflow: hidden;
   }
 }

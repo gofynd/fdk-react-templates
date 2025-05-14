@@ -1,4 +1,5 @@
-import React, { useMemo } from "react";
+import React from "react";
+import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
 import {
   convertDate,
   getAddressStr,
@@ -10,7 +11,6 @@ import CartGiftItem from "./components/cart-gift-item/cart-gift-item";
 import FyButton from "../../components/core/fy-button/fy-button";
 import Modal from "../../components/core/modal/modal";
 import { FDKLink } from "fdk-core/components";
-import TrueCheckIcon from "../../assets/images/true-check.svg";
 
 const orderFailurePageInfo = {
   link: "",
@@ -30,13 +30,12 @@ function OrderStatus({
   pollingComp = null,
   loader,
 }) {
-  const orderLink = useMemo(
-    () =>
-      isLoggedIn
-        ? "/profile/orders/"
-        : `/order-tracking/${orderData?.order_id || ""}`,
-    [isLoggedIn, orderData?.order_id]
-  );
+  function getOrderLink() {
+    if (isLoggedIn) {
+      return "/profile/orders/";
+    }
+    return "/order-tracking/" + orderData?.order_id;
+  }
 
   function getItemCount() {
     return orderData?.shipments?.reduce((total, ship) => {
@@ -45,11 +44,33 @@ function OrderStatus({
     }, 0);
   }
 
+  const getBags = (bags) => {
+    return bags.filter(
+      (bag) => Object.keys(bag?.parent_promo_bags)?.length === 0
+    );
+  };
+
+  function getItem(bag) {
+    let bagItem = { ...bag };
+    if (bagItem.applied_promos) {
+      bagItem.promotions_applied = bagItem.applied_promos;
+      delete bagItem.applied_promos;
+    }
+    return bagItem;
+  }
+
   function getFullAddress(addr) {
     if (addr) {
       return getAddressStr(addr, false);
     }
   }
+
+  const effectivePriceCheck = (item) => item?.prices?.price_effective;
+  const getEffectivePrice = (item) =>
+    numberWithCommas(item?.prices?.price_effective);
+  const getMarkedPrice = (item) => numberWithCommas(item?.prices?.price_marked);
+
+  const markedPriceCheck = (item) => item?.prices?.price_marked;
 
   const getAddressData = orderData?.shipments?.[0]?.delivery_address || {
     name: "John Doe",
@@ -57,13 +78,134 @@ function OrderStatus({
     phone: "1234567890",
   };
 
+  function shipmentItem(shipment, index, shipmentLength) {
+    const isShipmentCancelled =
+      shipment?.shipment_status?.value === "cancelled";
+
+    return (
+      <div className={styles.shipmentItem} key={index}>
+        <div className={styles.shipmentItemHead}>
+          <div>
+            <p className={styles.shipmentNumber}>{`Shipment ${
+              index + 1
+            } / ${shipmentLength}`}</p>
+            <h5 style={{ marginTop: "8px" }}>{shipment?.shipment_id}</h5>
+          </div>
+          <div
+            className={styles.statusWrapper}
+            style={{
+              ...(isShipmentCancelled && {
+                background: shipment?.shipment_status?.hex_code,
+                color: "#fff",
+              }),
+            }}
+          >
+            Status: <span>{shipment?.shipment_status?.title}</span>
+          </div>
+          <div
+            className={styles.statusWrapperMobile}
+            style={{
+              ...(isShipmentCancelled && {
+                background: shipment?.shipment_status?.hex_code,
+                color: "#fff",
+              }),
+            }}
+          >
+            {shipment?.shipment_status?.title}
+          </div>
+        </div>
+        <div className={styles.shipmentItemItemsData}>
+          {getBags(shipment?.bags)?.map((item, index) => (
+            <ProductItem product={item} index={index} key={index} />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  function ProductItem({ product: product }) {
+    return (
+      <>
+        <FDKLink to={getOrderLink()}>
+          <div className={styles.shipmentProdItem}>
+            <div className={styles.prodImg}>
+              <img src={product.item.image[0]} alt={product?.item?.name} />
+            </div>
+            <div className={styles.prodItemData}>
+              <div className={styles.productDetails}>
+                <div className={styles.brandName}>
+                  {product?.item?.brand?.name}
+                </div>
+                <div className={styles.productName}>{product?.item?.name}</div>
+                <div className={styles.sizeInfo}>
+                  <div className={styles.sizeQuantity}>
+                    <div className={styles.size}>
+                      Size: &nbsp;
+                      {product?.item?.size}
+                    </div>
+                    <div className={styles.sizeQuantity}>
+                      Qty:&nbsp;
+                      {product?.quantity}
+                    </div>
+                  </div>
+                </div>
+                <div className={styles.paymentInfo}>
+                  {effectivePriceCheck(product) > 0 && (
+                    <div className={styles.effectivePrice}>
+                      {`${product?.prices?.currency_symbol} ${getEffectivePrice(
+                        product
+                      )}`}
+                    </div>
+                  )}
+                  {markedPriceCheck(product) > 0 &&
+                    effectivePriceCheck(product) !==
+                      markedPriceCheck(product) && (
+                      <div className={styles.markedPrice}>
+                        {getMarkedPrice(product)}
+                      </div>
+                    )}
+                </div>
+
+                {/* Gift Wrap Display UI */}
+                {product?.meta?.gift_card?.is_gift_applied && (
+                  <div className={styles["gift-wrap"]}>
+                    <input
+                      type="checkbox"
+                      id={product.id}
+                      disabled={product}
+                      checked={product?.meta?.gift_card?.is_gift_applied}
+                    />
+                    <label htmlFor={product?.id}>Gift wrap Added</label>
+                  </div>
+                )}
+                {/* Show Free Gifts  Desktop */}
+                {getItem(product)?.promotions_applied?.length > 0 && (
+                  <div className={styles["desktop-free-gift"]}>
+                    <CartGiftItem bagItem={getItem(product)}></CartGiftItem>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          {/* Show Free Gifts  Mobile */}
+          {getItem(product)?.promotions_applied?.length > 0 && (
+            <div className={styles["mobile-free-gift"]}>
+              <CartGiftItem bagItem={getItem(product)}></CartGiftItem>
+            </div>
+          )}
+        </FDKLink>
+      </>
+    );
+  }
+
   return success === "true" ? (
-    <div className={styles.orders}>
+    <div className={`${styles.orders} fontBody`}>
       {orderData?.order_id ? (
         <div>
           <div className={styles.orderStatus}>
             <div>
-              <TrueCheckIcon />
+              {" "}
+              <SvgWrapper svgSrc="true-check" />{" "}
             </div>
             <div className={styles.orderConfirmed}>ORDER CONFIRMED</div>
             <div className={styles.successMsg}>
@@ -77,7 +219,7 @@ function OrderStatus({
               <span> {convertDate(orderData.order_created_time)}</span>
             </div>
             <div className={styles.trackOrderBtn}>
-              <a href={orderLink} style={{ display: "inline-block" }}>
+              <a href={getOrderLink()} style={{ display: "inline-block" }}>
                 <FyButton color="secondary" type="button">
                   TRACK ORDER
                 </FyButton>
@@ -87,26 +229,17 @@ function OrderStatus({
           <div className={styles.orderDetail}>
             <div className={styles.leftOrderDetails}>
               <div className={`${styles.shipmentList} fontBody`}>
-                {orderData?.shipments?.map((shipment, index) => (
-                  <ShipmentItem
-                    shipment={shipment}
-                    index={index}
-                    shipmentLength={orderData?.shipments?.length}
-                    orderLink={orderLink}
-                  />
-                ))}
+                {orderData?.shipments?.map((shipment, index) =>
+                  shipmentItem(shipment, index, orderData?.shipments?.length)
+                )}
               </div>
             </div>
             <div className={styles.rightOrderDetails}>
-              <div className={styles.orderStatusPriceBreakup}>
-                <PriceBreakup
-                  breakUpValues={orderData?.breakup_values}
-                  cartItemCount={getItemCount()}
-                  currencySymbol={
-                    orderData?.breakup_values?.[0]?.currency_symbol
-                  }
-                />
-              </div>
+              <PriceBreakup
+                breakUpValues={orderData?.breakup_values}
+                cartItemCount={getItemCount()}
+                currencySymbol={orderData?.breakup_values?.[0]?.currency_symbol}
+              />
               {isLoggedIn && (
                 <div className={`${styles["payment-address"]} fontBody`}>
                   <div className={styles["payment-wrapper"]}>
@@ -199,141 +332,3 @@ function OrderStatus({
 }
 
 export default OrderStatus;
-
-function ShipmentItem({ shipment, index, shipmentLength, orderLink = "" }) {
-  const getBags = (bags) => {
-    return bags.filter(
-      (bag) => Object.keys(bag?.parent_promo_bags)?.length === 0
-    );
-  };
-
-  const isShipmentCancelled = shipment?.shipment_status?.value === "cancelled";
-
-  return (
-    <div className={styles.shipmentItem} key={index}>
-      <div className={styles.shipmentItemHead}>
-        <div>
-          <p className={styles.shipmentNumber}>{`Shipment ${
-            index + 1
-          } / ${shipmentLength}`}</p>
-          <h5 style={{ marginTop: "8px" }}>{shipment?.shipment_id}</h5>
-        </div>
-        <div
-          className={styles.statusWrapper}
-          style={{
-            ...(isShipmentCancelled && {
-              background: shipment?.shipment_status?.hex_code,
-              color: "#fff",
-            }),
-          }}
-        >
-          Status: <span>{shipment?.shipment_status?.title}</span>
-        </div>
-        <div
-          className={styles.statusWrapperMobile}
-          style={{
-            ...(isShipmentCancelled && {
-              background: shipment?.shipment_status?.hex_code,
-              color: "#fff",
-            }),
-          }}
-        >
-          {shipment?.shipment_status?.title}
-        </div>
-      </div>
-      <div className={styles.shipmentItemItemsData}>
-        {getBags(shipment?.bags)?.map((item, index) => (
-          <div className={styles.shipmentProdItemWrapper}>
-            <ProductItem product={item} key={index} orderLink={orderLink} />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function ProductItem({ product, orderLink = "" }) {
-  const markedPriceCheck = product?.prices?.price_marked;
-  const effectivePriceCheck = product?.prices?.price_effective;
-
-  const getMarkedPrice = (item) => numberWithCommas(item?.prices?.price_marked);
-  const getEffectivePrice = (item) =>
-    numberWithCommas(item?.prices?.price_effective);
-
-  function getItem(bag) {
-    let bagItem = { ...bag };
-    if (bagItem.applied_promos) {
-      bagItem.promotions_applied = bagItem.applied_promos;
-      delete bagItem.applied_promos;
-    }
-    return bagItem;
-  }
-
-  return (
-    <FDKLink to={orderLink}>
-      <div className={styles.shipmentProdItem}>
-        <div className={styles.prodImg}>
-          <img src={product.item.image[0]} alt={product?.item?.name} />
-        </div>
-        <div className={styles.prodItemData}>
-          <div className={styles.productDetails}>
-            <div className={styles.brandName}>{product?.item?.brand?.name}</div>
-            <div className={styles.productName}>{product?.item?.name}</div>
-            <div className={styles.sizeInfo}>
-              <div className={styles.sizeQuantity}>
-                <div className={styles.size}>
-                  Size: &nbsp;
-                  {product?.item?.size}
-                </div>
-                <div className={styles.sizeQuantity}>
-                  Qty:&nbsp;
-                  {product?.quantity}
-                </div>
-              </div>
-            </div>
-            <div className={styles.paymentInfo}>
-              {effectivePriceCheck > 0 && (
-                <div className={styles.effectivePrice}>
-                  {`${product?.prices?.currency_symbol} ${getEffectivePrice(
-                    product
-                  )}`}
-                </div>
-              )}
-              {markedPriceCheck > 0 &&
-                effectivePriceCheck !== markedPriceCheck && (
-                  <div className={styles.markedPrice}>
-                    {getMarkedPrice(product)}
-                  </div>
-                )}
-            </div>
-
-            {/* Gift Wrap Display UI */}
-            {product?.meta?.gift_card?.is_gift_applied && (
-              <div className={styles["gift-wrap"]}>
-                <input
-                  type="checkbox"
-                  id={product.id}
-                  disabled={product}
-                  checked={product?.meta?.gift_card?.is_gift_applied}
-                />
-                <label htmlFor={product?.id}>Gift wrap Added</label>
-              </div>
-            )}
-            {/* Show Free Gifts  Desktop */}
-            {getItem(product)?.promotions_applied?.length > 0 && (
-              <div className={styles["desktop-free-gift"]}>
-                <CartGiftItem bagItem={getItem(product)}></CartGiftItem>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-      {/* Show Free Gifts  Mobile */}
-      {getItem(product)?.promotions_applied?.length > 0 && (
-        <div className={styles["mobile-free-gift"]}>
-          <CartGiftItem bagItem={getItem(product)}></CartGiftItem>
-        </div>
-      )}
-    </FDKLink>
-  );
-}

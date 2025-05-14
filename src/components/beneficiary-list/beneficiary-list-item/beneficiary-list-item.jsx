@@ -20,11 +20,9 @@
 
 import React from "react";
 import * as styles from "./beneficiary-list-item.less";
-import RadioIcon from "../../../assets/images/radio";
+import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 
 function BeneficiaryItem({ beneficiary, selectedBeneficiary, change }) {
-  const isSelected =
-    selectedBeneficiary?.beneficiary_id === beneficiary?.beneficiary_id;
   const getTitle = () => {
     return beneficiary.title;
   };
@@ -43,13 +41,14 @@ function BeneficiaryItem({ beneficiary, selectedBeneficiary, change }) {
           className={`${styles.beneficiaryContent}`}
           onClick={() => change(beneficiary)}
         >
-          <span
-            className={`${styles.beneficiaryRadio} ${
-              isSelected ? styles.checked : ""
-            }`}
-          >
-            <RadioIcon width={16} checked={isSelected} />
-          </span>
+          {(!selectedBeneficiary ||
+            selectedBeneficiary.beneficiary_id !==
+              beneficiary.beneficiary_id) && <SvgWrapper svgSrc="regular" />}
+          {selectedBeneficiary &&
+            selectedBeneficiary.beneficiary_id ===
+              beneficiary.beneficiary_id && (
+              <SvgWrapper svgSrc="radio-selected" />
+            )}
           <div className={`${styles.text}`}>
             <div className={`${styles.beneficiaryTitle} ${styles.boldxs}`}>
               {getTitle()}

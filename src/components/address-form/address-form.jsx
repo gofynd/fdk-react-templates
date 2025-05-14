@@ -46,13 +46,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as styles from "./address-form.less";
+import SvgWrapper from "../core/svgWrapper/SvgWrapper";
 import GoogleMapAddress from "../google-map/google-map";
 import FormInputSelector from "./form-input-selector";
 import FyDropdown from "../core/fy-dropdown/fy-dropdown";
-import HomeIcon from "../../assets/images/home-type.svg";
-import OfficeIcon from "../../assets/images/office-type.svg";
-import FriendsFamilyIcon from "../../assets/images/friends-family.svg";
-import OtherIcon from "../../assets/images/other-type.svg";
 
 const defaultFormSchema = [
   {
@@ -237,22 +234,22 @@ const addressTypes = [
   {
     label: "Home",
     value: "Home",
-    icon: <HomeIcon className={styles.typeIcon} />,
+    icon: <SvgWrapper svgSrc="homeType" className={styles.typeIcon} />,
   },
   {
     label: "Work",
     value: "Work",
-    icon: <OfficeIcon className={styles.typeIcon} />,
+    icon: <SvgWrapper svgSrc="officeType" className={styles.typeIcon} />,
   },
   {
     label: "Friends & Family",
     value: "Friends & Family",
-    icon: <FriendsFamilyIcon className={styles.typeIcon} />,
+    icon: <SvgWrapper svgSrc="otherType" className={styles.typeIcon} />,
   },
   {
     label: "Other",
     value: "Other",
-    icon: <OtherIcon className={styles.typeIcon} />,
+    icon: <SvgWrapper svgSrc="otherType" className={styles.typeIcon} />,
   },
   // Add more address types as needed
 ];
@@ -268,7 +265,6 @@ const AddressForm = ({
   onAddAddress = () => {},
   onUpdateAddress = () => {},
   onGetLocality = () => {},
-  isGuestUser = false,
   customFooter = (
     <button
       className={`${styles.commonBtn} ${styles.deliverBtn}`}
@@ -295,7 +291,6 @@ const AddressForm = ({
     watch,
     reset,
     trigger,
-    getValues,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -315,13 +310,15 @@ const AddressForm = ({
   const formContainerRef = useRef(null);
   const [currBgColor, setCurrBgColor] = useState("#fff");
   const [showOtherText, setShowOtherText] = useState(false);
+  const [isMapLoaded, setIsMapLoaded] = useState(false);
+  const [resetStatus, setResetStatus] = useState(true);
   const address_type = watch("address_type");
+  const pin = watch("area_code");
   const sector = watch("sector");
 
   useEffect(() => {
     if (addressItem) {
       reset({
-        ...getValues(),
         ...addressItem,
         address_type: addressItem?.address_type
           ? isOtherAddressType
@@ -340,6 +337,59 @@ const AddressForm = ({
   useEffect(() => {
     setShowOtherText(address_type === "Other");
   }, [address_type]);
+
+  const validatePin = async () => {
+    const isPinValid = await trigger("area_code");
+    if (!isPinValid) {
+      return;
+    }
+    onGetLocality("pincode", pin).then((data) => {
+      if (resetStatus) {
+        getLatLngFromPostalCode(pin);
+      }
+      setValue("city", "");
+      setValue("state", "");
+      if (data?.showError) {
+        setError("area_code", {
+          type: "manual",
+          message: data?.errorMsg,
+        });
+      } else {
+        const { city = "", state = "" } = data;
+        setValue("city", city);
+        setValue("state", state);
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (pin) {
+      validatePin();
+    }
+  }, [pin, setValue]);
+
+  const getLatLngFromPostalCode = async (postalCode) => {
+    try {
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${postalCode}&key=${mapApiKey}`
+      );
+      const data = await response.json();
+      if (data?.results?.length > 0) {
+        const location = data.results[0]?.geometry?.location;
+        setValue("geo_location", {
+          latitude: location?.lat,
+          longitude: location?.lng,
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching coordinates from postal code:", error);
+    }
+  };
+
+  useEffect(() => {
+    reset();
+    setValue("country", selectedCountry);
+  }, [selectedCountry]);
 
   useEffect(() => {
     if (sector && sector.length > 0) {
@@ -394,7 +444,7 @@ const AddressForm = ({
   };
 
   const selectAddress = (data) => {
-    //setResetStatus(false);
+    setResetStatus(false);
     reset(data);
     formSchema?.forEach((group) =>
       group?.fields?.forEach(({ type, key }) => {
@@ -405,8 +455,19 @@ const AddressForm = ({
     );
   };
 
+  const onLoadMap = (map) => {
+    if (map) {
+      setIsMapLoaded(true);
+    }
+  };
+
+  const isAddressForm = !showGoogleMap || !mapApiKey || isMapLoaded;
+
   return (
-    <div className={styles.addressFormWrapper}>
+    <div
+      className={styles.addressFormWrapper}
+      style={{ display: isAddressForm ? "block" : "none" }}
+    >
       {showGoogleMap && mapApiKey && (
         <div className={styles.mapWrap}>
           <GoogleMapAddress
@@ -414,6 +475,7 @@ const AddressForm = ({
             onAddressSelect={selectAddress}
             countryDetails={countryDetails}
             addressItem={addressItem}
+            onLoad={onLoadMap}
           />
         </div>
       )}
@@ -422,12 +484,7 @@ const AddressForm = ({
           <div className={`${styles.formGroup} ${styles.formContainer}`}>
             <FyDropdown
               value={selectedCountry}
-              onChange={(event) => {
-                reset();
-                setValue("country", event);
-
-                setI18nDetails(event);
-              }}
+              onChange={setI18nDetails}
               onSearch={handleCountrySearch}
               options={getFilteredCountries()}
               optionValue="display_name"
@@ -442,14 +499,13 @@ const AddressForm = ({
         {formSchema?.map((group, index) => (
           <div key={index} className={styles.formGroup}>
             <div ref={formContainerRef} className={styles.formContainer}>
-              {group?.fields?.map((field) => (
+              {group.fields.map((field) => (
                 <FormInputSelector
-                  labelClassName={styles.labelClassName}
                   isSingleField={group?.fields?.length === 1}
                   key={field.key}
                   formData={field}
                   control={control}
-                  formMethods={{ setValue, getValues, setError, trigger }}
+                  setValue={setValue}
                   allowDropdown={false}
                 />
               ))}
@@ -464,7 +520,13 @@ const AddressForm = ({
                 type="button"
                 key={type.value}
                 onClick={() => setValue("address_type", type.value)}
-                className={`${styles.typeBtn} ${watch("address_type") === type.value ? styles.selected : ""}`}
+                className={styles.typeBtn}
+                style={{
+                  border:
+                    watch("address_type") === type.value
+                      ? "2px solid var(--buttonPrimary)"
+                      : "1px solid var(--dividerStokes)",
+                }}
               >
                 {type.icon}
                 <span>{type.label}</span>
@@ -485,13 +547,13 @@ const AddressForm = ({
               className={styles.formLabel}
               style={{ backgroundColor: currBgColor }}
             >
-              Other Address Type <span className={`${styles.formReq}`}>*</span>
+              Other Address Type*
             </label>
             <input
               {...register("otherAddressType", {
                 validate: (value) => {
-                  if (!value.trim()) {
-                    return "Address Type is required";
+                  if (!value) {
+                    return "Field is required";
                   }
                   if (value.length < 1 || value.length > 30) {
                     return "Length must be between 1 and 30";
@@ -506,19 +568,6 @@ const AddressForm = ({
                 {errors.otherAddressType.message}
               </div>
             )}
-          </div>
-        )}
-        {!isGuestUser && (
-          <div className={styles.defaultAddressContainer}>
-            <input
-              id="is_default_address"
-              className={styles.checkbox}
-              type="checkbox"
-              {...register("is_default_address")}
-            />
-            <label className={styles.label} htmlFor="is_default_address">
-              Make this my default address
-            </label>
           </div>
         )}
         <div>{customFooter}</div>

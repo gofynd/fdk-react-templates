@@ -1,18 +1,16 @@
 import React from "react";
+
 import {
   numberWithCommas,
   priceFormatCurrencySymbol,
 } from "../../../helper/utils";
+import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./single-shipment-content.less";
 import { FDKLink } from "fdk-core/components";
 import FreeGiftItem from "../../cart/Components/free-gift-item/free-gift-item";
-import Shimmer from "../../../components/shimmer/shimmer";
-import AppliedCouponIcon from "../../../assets/images/applied-coupon-small.svg";
-import ShippingLogoIcon from "../../../assets/images/shipping-logo.svg";
 
 function SingleShipmentContent({
   shipments,
-  isShipmentLoading,
   showPaymentOptions,
   isHyperlocal = false,
   convertHyperlocalTat = () => {},
@@ -81,10 +79,8 @@ function SingleShipmentContent({
 
   return (
     <>
-      {isShipmentLoading ? (
-        <div className={styles.parent}>
-          {loader || <Shimmer className={styles.shimmer} />}
-        </div>
+      {shipments.loading ? (
+        loader
       ) : (
         <div className={styles.parent}>
           {shipments?.length > 0 &&
@@ -108,7 +104,7 @@ function SingleShipmentContent({
                         {item?.promise && (
                           <div className={styles.deliveryDateWrapper}>
                             <div className={styles.shippingLogo}>
-                              <ShippingLogoIcon />
+                              <SvgWrapper svgSrc={"shipping-logo"}></SvgWrapper>
                             </div>
 
                             <div className={styles.deliveryDate}>
@@ -127,7 +123,9 @@ function SingleShipmentContent({
                           >
                             {product?.item?.coupon_message.length > 0 && (
                               <div className={styles.couponRibbon}>
-                                <AppliedCouponIcon />
+                                <SvgWrapper
+                                  svgSrc={"applied-coupon-small"}
+                                ></SvgWrapper>
                                 <span className={styles.ribbonMsg}>
                                   {product?.item?.coupon_message}
                                 </span>

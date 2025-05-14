@@ -17,7 +17,7 @@ import * as styles from "./order-header.less";
 import Dropdown from "../dropdown/dropdown";
 import { DATE_FILTERS } from "../../helper/constant";
 
-function OrdersHeader({ title, subtitle, filters, flag, customClassName }) {
+function OrdersHeader({ title, subtitle, filters, flag }) {
   const location = useLocation();
   const getSelectedDateFilter = () => {
     const selectedFilter = getDateFilterOptions()?.find(
@@ -44,12 +44,10 @@ function OrdersHeader({ title, subtitle, filters, flag, customClassName }) {
     return DATE_FILTERS;
   };
   return (
-    <div
-      className={`${styles.orderHeader} ${styles.bottomLine} ${customClassName}`}
-    >
+    <div className={`${styles.orderHeader}`}>
       <div
         className={`${styles.title} ${styles.boldmd}`}
-        style={{ marginLeft: flag ? 0 : "16px" }}
+        style={{ marginLeft: flag ? 0 : "15px" }}
       >
         {title}
         <span className={` ${styles.subTitle}`}>{subtitle}</span>

@@ -34,7 +34,6 @@ function DeliveryLocation({
   getFilteredCountries = () => {},
   selectedCountry,
   countryDetails,
-  isGuestUser = false,
 }) {
   const {
     handleSubmit,
@@ -86,7 +85,6 @@ function DeliveryLocation({
         title={`Delivery ${displayName}`}
         containerClassName={styles.pincodeModal}
         bodyClassName={styles.modalBody}
-        headerClassName={styles.modalHeader}
       >
         <form
           className={styles.modalPincodeContainer}
@@ -149,13 +147,12 @@ function DeliveryLocation({
             </form>
             <div className={styles.addressContentConitainer}>
               {defaultAddress?.length > 0 && (
-                <div className={styles.addressItemContainer}>
+                <>
                   <div className={styles.heading}>Default Address</div>
                   {defaultAddress?.map((item, index) => {
                     return (
                       <AddressItem
                         key={`${item?.id}_#${index}`}
-                        containerClassName={styles.customAddressItem}
                         addressItem={item}
                         onAddressSelect={setSelectedAddressId}
                         showAddressSelectionCheckbox={true}
@@ -164,16 +161,15 @@ function DeliveryLocation({
                       ></AddressItem>
                     );
                   })}
-                </div>
+                </>
               )}
               {otherAddresses?.length > 0 && (
-                <div className={styles.addressItemContainer}>
+                <>
                   <div className={styles.heading}>Other Address</div>
                   {otherAddresses.map((item, index) => {
                     return (
                       <AddressItem
                         key={`${item?.id}_#${index}`}
-                        containerClassName={styles.customAddressItem}
                         addressItem={item}
                         onAddressSelect={setSelectedAddressId}
                         showAddressSelectionCheckbox={true}
@@ -182,30 +178,26 @@ function DeliveryLocation({
                       ></AddressItem>
                     );
                   })}
-                </div>
+                </>
               )}
-              <div className={styles.addAddress}>
-                <button
-                  className={`${styles.commonBtn} ${styles.addCta}`}
-                  onClick={onAddButtonClick}
-                >
-                  + &nbsp; Add New Address
-                </button>
-              </div>
+
+              <button
+                className={`${styles.commonBtn} ${styles.addCta}`}
+                onClick={onAddButtonClick}
+              >
+                + &nbsp; Add New Address
+              </button>
+              {selectedAddressId &&
+                (defaultAddress.length > 0 || otherAddresses?.length > 0) && (
+                  <button
+                    className={`${styles.commonBtn} ${styles.selectCta}`}
+                    onClick={selectAddress}
+                  >
+                    select this address
+                  </button>
+                )}
             </div>
           </div>
-
-          {selectedAddressId &&
-            (defaultAddress.length > 0 || otherAddresses?.length > 0) && (
-              <div className={styles.stickyContainer}>
-                <button
-                  className={`${styles.commonBtn} ${styles.selectCta}`}
-                  onClick={selectAddress}
-                >
-                  select this address
-                </button>
-              </div>
-            )}
         </div>
       </Modal>
       <Modal
@@ -232,7 +224,6 @@ function DeliveryLocation({
               getFilteredCountries={getFilteredCountries}
               selectedCountry={selectedCountry?.display_name ?? ""}
               countryDetails={countryDetails}
-              isGuestUser={isGuestUser}
             ></AddressForm>
           </div>
         </div>

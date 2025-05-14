@@ -1,7 +1,6 @@
 import AccordionArrow from "../assets/images/accordion-arrow.svg";
 import ArrowDown from "../assets/images/arrow-down.svg";
 import SearchIcon from "../assets/images/search.svg";
-import SearchBlackIcon from "../assets/images/search-black.svg";
 import CartIcon from "../assets/images/cart.svg";
 import ArrowRight from "../assets/images/arrow-right.svg";
 import ArrowLeft from "../assets/images/arrow-left.svg";
@@ -124,6 +123,7 @@ import cvv from "../assets/images/cvv.svg";
 import amexCardCvv from "../assets/images/amex-card-cvv.svg";
 import nonAmexCardCvv from "../assets/images/non-amex-card-cvv.svg";
 import paymentOther from "../assets/images/payment-other.svg";
+import upiIcons from "../assets/images/upi-icons.svg";
 import codIcon from "../assets/images/cod-icon.svg";
 import moreWallets from "../assets/images/more-wallets.svg";
 import otherBanks from "../assets/images/other-banks.svg";
@@ -131,10 +131,6 @@ import closeBold from "../assets/images/close-bold.svg";
 import NoCoupons from "../assets/images/no-coupon.svg";
 import infoIcon from "../assets/images/info.svg";
 import paymentTooltipArrow from "../assets/images/payment-tooltip.svg";
-import ArrowLeftLong from "../assets/images/arrow-left-long.svg";
-import friendsFamily from "../assets/images/friends-family.svg";
-import addAddress from "../assets/images/add-address.svg";
-import returnRadioSelected from "../assets/images/reason-radio-selected.svg";
 
 export const svgTitleComponentsMappings = {
   "accordion-arrow": AccordionArrow,
@@ -144,17 +140,16 @@ export const svgTitleComponentsMappings = {
   "two-number": twoNumber,
   "three-number": threeNumber,
   "arrow-left": ArrowLeft,
-  "socail-facebook": SocailFacebook,
-  "socail-twitter": SocailTwitter,
-  "socail-google": SocailGoogle,
-  "socail-vimeo": SocailVimeo,
-  "socail-blog": SocailBlog,
-  "socail-instagram": SocailInstagram,
-  "socail-linkedin": SocailLinkedin,
-  "socail-youtube": SocailYoutube,
-  "socail-pinterest": SocailPinterest,
+  "socail-facebook":SocailFacebook,
+  "socail-twitter":SocailTwitter,
+  "socail-google":SocailGoogle,
+  "socail-vimeo":SocailVimeo,
+  "socail-blog":SocailBlog,
+  "socail-instagram":SocailInstagram,
+  "socail-linkedin":SocailLinkedin,
+  "socail-youtube":SocailYoutube,
+  "socail-pinterest":SocailPinterest,
   search: SearchIcon,
-  "search-black": SearchBlackIcon,
   cart: CartIcon,
   "true-check": truecheck,
   check,
@@ -263,6 +258,7 @@ export const svgTitleComponentsMappings = {
   "amex-card-cvv": amexCardCvv,
   "non-amex-card-cvv": nonAmexCardCvv,
   "payment-other": paymentOther,
+  "upi-icons": upiIcons,
   "cod-icon": codIcon,
   "more-wallets": moreWallets,
   "other-banks": otherBanks,
@@ -270,8 +266,4 @@ export const svgTitleComponentsMappings = {
   NoCoupons,
   infoIcon,
   paymentTooltipArrow,
-  ArrowLeftLong,
-  friendsFamily,
-  addAddress,
-  returnRadioSelected,
 };

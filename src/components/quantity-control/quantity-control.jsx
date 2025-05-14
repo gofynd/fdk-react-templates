@@ -48,11 +48,7 @@ function QuantityControl({
   };
 
   const onCurrentQtyChange = (evt) => {
-    if (evt.target?.value === "") {
-      setQuantity("");
-    } else {
-      setQuantity(Number(evt.target?.value));
-    }
+    setQuantity(Number(evt.target?.value));
   };
 
   const onQtyLostFocus = (evt) => {

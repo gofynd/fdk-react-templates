@@ -91,15 +91,6 @@
             margin-left: -5.25px;
             background-color: #fff;
             object-fit: contain;
-            &.upiIcon {
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              & > svg {
-                width: 100%;
-                height: 100%;
-              }
-            }
           }
         }
       }
@@ -996,17 +987,9 @@
         gap: 4px;
 
         .upiAppLogo {
-          width: 38px;
-          height: 38px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
           border: 0.43px solid var(--dividerStokes);
           border-radius: 50%;
-          & > svg {
-            width: 100%;
-            height: 100%;
-          }
+          display: flex;
         }
         .moreUpiApps {
           font-weight: 500;
@@ -1033,7 +1016,6 @@
         font-weight: 600;
         font-size: 12px;
         color: var(--primaryColor);
-        cursor: pointer;
       }
     }
     .upiQrCode {
@@ -1578,7 +1560,7 @@
     border: 1px solid @DividerStokes;
     padding: 8px 4px;
     border-radius: 50%;
-    object-fit: contain;
+    object-fit: cover;
     @media @mobile {
       margin-right: 8px;
     }
@@ -1705,16 +1687,4 @@
 .crossMobile {
   position: absolute;
   right: 16px;
-}
-.noResultFound {
-  color: var(--Text-Body, #4d4d4e);
-  font-family: var(--fontBody);
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 140%; /* 19.6px */
-  height: 75%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }

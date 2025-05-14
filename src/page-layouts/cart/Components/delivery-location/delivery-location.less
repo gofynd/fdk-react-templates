@@ -1,6 +1,7 @@
 @import "../../../../styles/main.less";
 
 .cartPincodeContainer {
+  border-radius: 8px;
   border: 1px solid @DividerStokes;
   line-height: 140%;
   padding: 24px;
@@ -8,9 +9,9 @@
   justify-content: space-between;
   align-items: center;
   @media @mobile {
+    border-radius: 0;
     padding: 16px;
     margin-top: 18px;
-    border-width: 1px 0;
   }
   .pinCodeDetailsContainer {
     .pincodeHeading {
@@ -50,15 +51,16 @@
 
 .pincodeModal {
   width: 400px;
-
   @media @tablet {
     width: unset;
-    border-top-left-radius: 4px !important;
-    border-top-right-radius: 4px !important;
   }
 
   .modalHeader {
-    padding: 16px;
+    border-bottom: 1px solid @DividerStokes;
+    position: relative;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
 
     .modalHeading {
       color: @TextHeading;
@@ -79,8 +81,7 @@
     }
   }
   .modalBody {
-    padding: 24px 16px;
-
+    padding: 24px;
     .modalPincodeContainer {
       display: flex;
       justify-content: space-between;
@@ -232,78 +233,31 @@
   }
 }
 
-.addressItemContainer {
-  @media @tablet {
-    padding: 0;
-    border: 1px solid var(--dividerStokes);
-    border-width: 1px 0;
-  }
-
-  .customAddressItem {
-    margin-bottom: 0;
-    padding: 16px !important;
-    border-bottom: none !important;
-
-    @media @tablet {
-      border-width: 0 0 1px !important;
-    }
-  }
-
-  .customAddressItem:last-child {
-    border-bottom: 1px solid @DividerStokes !important;
-
-    @media @tablet {
-      border-bottom: none !important;
-    }
-  }
-}
-
-.addAddress {
-  margin-top: 32px;
-
-  @media @tablet {
-    margin-top: 24px;
+@media @mobile {
+  .addressContentConitainer {
     padding: 0 16px;
   }
-
-  .addCta {
-    .btnSecondary();
-    padding: 20px 24px;
-    width: 100%;
-    text-transform: uppercase;
-  }
 }
 
-.stickyContainer {
-  position: sticky;
-  bottom: 0;
-  background-color: @DialogBackground;
-  border-top: 1px solid @DividerStokes;
-  padding: 24px;
-  margin-top: 32px;
-
-  @media @tablet {
-    padding: 16px;
-    margin-top: 24px;
-  }
-
-  .selectCta {
-    .btnPrimary();
-    padding: 20px 24px;
-    width: 100%;
-    text-transform: uppercase;
-  }
+.addCta {
+  .btnSecondary();
+  margin-top: 17px;
+  padding: 14px;
+  width: 100%;
+  text-transform: uppercase;
+}
+.selectCta {
+  .btnPrimary();
+  margin-top: 17px;
+  padding: 14px;
+  width: 100%;
+  text-transform: uppercase;
 }
 .heading {
   margin: 32px 0 12px;
   font-size: 14px;
   font-weight: 600;
   line-height: 140%;
-
-  @media @tablet {
-    padding: 0 16px;
-    margin-top: 24px;
-  }
 }
 .addrErrText {
   margin-left: 25px;

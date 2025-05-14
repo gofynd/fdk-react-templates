@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import { convertUTCDateToLocalDate } from "../../../../helper/utils";
 import * as styles from "./delivery-info.less";
@@ -14,6 +14,8 @@ function DeliveryInfo({
 }) {
   const [postCode, setPostCode] = useState(pincode || "");
   const [tatMessage, setTatMessage] = useState("");
+  const pincodeInputRef = useRef(null);
+  const [pincodeChecked, setPincodeChecked] = useState(false);
   const numberRegex = /^\d*$/;
 
   useEffect(() => {
@@ -52,7 +54,7 @@ function DeliveryInfo({
     const maxDate = convertUTCDateToLocalDate(max, options);
     setTimeout(() => {
       setTatMessage(
-        `Delivery ${
+        `Will be delivered ${
           min === max ? `on ${minDate}` : `between ${minDate} - ${maxDate}`
         }`
       );
@@ -60,15 +62,29 @@ function DeliveryInfo({
   };
 
   const handleDeliveryAction = async () => {
-    await checkPincode(postCode);
-    setPincodeChecked(true);
+    if (pincodeChecked) {
+      setPincodeChecked(false);
+      setPostCode("");
+      setTatMessage("");
+      setPincodeErrorMessage("");
+    } else {
+      await checkPincode(postCode);
+      setPincodeChecked(true);
+    }
   };
+
+  useEffect(() => {
+    if (!pincodeChecked && pincodeInputRef.current && !postCode) {
+      pincodeInputRef.current.focus();
+    }
+  }, [pincodeChecked]);
 
   return (
     <div className={styles.deliveryInfo}>
       <h4 className={`${styles.deliveryLabel} b2`}>Select delivery location</h4>
       <div className={styles.delivery}>
         <FyInput
+          ref={pincodeInputRef}
           autoComplete="off"
           value={postCode}
           placeholder="Check delivery time"
@@ -77,18 +93,19 @@ function DeliveryInfo({
           maxLength="6"
           onChange={changePostCode}
           inputVariant="no-border"
+          disabled={pincodeChecked}
           type="text"
         />
         <FyButton
           variant="text"
           className={styles.deliveryAction}
           onClick={handleDeliveryAction}
-          disabled={postCode?.length !== 6}
+          disabled={!pincodeChecked && postCode?.length !== 6}
           endIcon={
             <SvgWrapper svgSrc="delivery" className={styles.deliveryIcon} />
           }
         >
-          CHECK
+          {pincodeChecked ? "CHANGE" : "CHECK"}
         </FyButton>
       </div>
       {!pincodeErrorMessage && (

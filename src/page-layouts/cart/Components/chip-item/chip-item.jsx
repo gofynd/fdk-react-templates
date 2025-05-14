@@ -26,7 +26,6 @@ export default function ChipItem({
   singleItem,
   buybox,
   isPromoModalOpen,
-  isSoldBy = false,
   onRemoveIconClick = () => {},
   onOpenPromoModal,
   onClosePromoModal,
@@ -121,9 +120,7 @@ export default function ChipItem({
         itemSize,
         totalQuantity,
         itemIndex,
-        operation === "edit_item" ? "update_item" : operation,
-        false,
-        true
+        operation === "edit_item" ? "update_item" : operation
       );
 
       if (isSizeUpdate) {
@@ -228,7 +225,7 @@ export default function ChipItem({
             >
               {singleItemDetails?.product?.name}
             </div>
-            {isSoldBy && !isOutOfStock && (
+            {!isOutOfStock && (
               <div className={styles.itemSellerName}>
                 {`Sold by: ${sellerStoreName}`}
               </div>
@@ -475,10 +472,7 @@ export default function ChipItem({
                 <img
                   src={
                     sizeModalItemValue?.product?.images?.length > 0
-                      ? sizeModalItemValue?.product?.images[0]?.url?.replace(
-                          "original",
-                          "resize-w:250"
-                        )
+                      ? sizeModalItemValue?.product?.images[0]?.url
                       : undefined
                   }
                 />
@@ -495,13 +489,9 @@ export default function ChipItem({
                 <div className={styles.sizeDiscount}>
                   {currencyFormat(
                     numberWithCommas(
-                      sizeModalItemValue?.article?.price?.converted
-                        ?.effective ??
-                        sizeModalItemValue?.article?.price?.base?.effective
-                    ),
-                    sizeModalItemValue?.article?.price?.converted
-                      ?.currency_symbol ??
                       sizeModalItemValue?.article?.price?.base?.effective
+                    ),
+                    sizeModalItemValue?.article?.price?.base?.currency_symbol
                   )}
                 </div>
               </div>

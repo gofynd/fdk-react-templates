@@ -16,6 +16,7 @@
 import React, { useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import { ALL_PROFILE_MENU } from "../../helper/constant";
+import SvgWrapper from "../core/svgWrapper/SvgWrapper";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./profile-navigation.less";
 import { useMobile } from "../../helper/hooks/useMobile";
@@ -56,9 +57,7 @@ function ProfileNavigation({ children, signOut, userProfilePicUrl, userName }) {
                 />
               </div>
               <div className={styles.nameContainer}>
-                <p title={userName} className={styles.name}>
-                  {userName}
-                </p>
+                <p className={styles.name}>{userName}</p>
                 <FDKLink
                   className={styles.flexAlignCenter}
                   to="/profile/details"
@@ -69,16 +68,16 @@ function ProfileNavigation({ children, signOut, userProfilePicUrl, userName }) {
             </div>
             <div className={styles.accountHeader}>My Account</div>
             <ul>
-              {ALL_PROFILE_MENU.map(({ key, display, link, Icon }) => (
+              {ALL_PROFILE_MENU.map((item) => (
                 <li
-                  className={`${styles.nav} ${pathname === link ? styles.selected : ""}`}
-                  key={key}
+                  className={`${styles.nav} ${pathname === item.link ? styles.selected : ""}`}
+                  key={item.display}
                 >
-                  <FDKLink className={styles.flexAlignCenter} to={link}>
+                  <FDKLink className={styles.flexAlignCenter} to={item.link}>
                     <span className={styles.menuIcon}>
-                      <Icon />
+                      <SvgWrapper svgSrc={item.icon} />
                     </span>
-                    <span className={styles.itemTitle}>{display}</span>
+                    <span className={styles.itemTitle}>{item.display}</span>
                   </FDKLink>
                 </li>
               ))}

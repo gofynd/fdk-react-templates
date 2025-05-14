@@ -9,13 +9,24 @@
     max-width: 1200px;
   }
 
-  .shimmer {
+  .loader {
+    position: relative;
     height: 500px;
     width: 80vw;
 
     @media @tablet {
       height: 360px;
       width: 100%;
+    }
+
+    .loaderContainer {
+      position: absolute;
+      height: 100%;
+      background: transparent;
+
+      .customLoader {
+        margin-left: 0;
+      }
     }
   }
 
@@ -55,13 +66,12 @@
           max-height: calc(90vh - 80px);
         }
         @media @tablet {
-          scrollbar-width: thin;
           margin: 16px;
           max-height: 60vh;
         }
 
         &__title {
-          margin-bottom: 16px;
+          margin-bottom: 4px;
           word-wrap: break-word;
           letter-spacing: -0.02em;
           overflow: hidden;
@@ -82,7 +92,7 @@
           font-size: 14px;
           font-weight: 600;
           line-height: normal;
-          margin-bottom: 4px;
+          margin-bottom: 16px;
 
           @media @tablet {
             margin-bottom: 8px;
@@ -218,7 +228,6 @@
           letter-spacing: -0.28px;
           text-transform: uppercase;
           margin-top: 24px;
-          color: @TextHeading;
 
           @media @tablet {
             margin-top: 16px;
@@ -253,14 +262,8 @@
         background-color: @DialogBackground;
         height: 100%;
 
-        .cartIcon {
-          fill: @ButtonPrimary;
-          height: 14px;
-          width: 13px;
-        }
-
         @media @tablet {
-          padding: 16px 16px 32px;
+          padding: 16px;
         }
 
         .buyNow {

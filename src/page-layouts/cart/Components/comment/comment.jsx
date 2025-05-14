@@ -2,12 +2,10 @@ import React, { useState } from "react";
 import * as styles from "./comment.less";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import Modal from "../../../../components/core/modal/modal";
-import { useMobile } from "../../../../helper/hooks/useMobile";
 
 function Comment({ comment = "", onCommentChange = () => {} }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isCommentError = comment.length > 500;
-  const isMobile = useMobile();
 
   const openCommentModal = () => {
     setIsModalOpen(true);
@@ -19,15 +17,9 @@ function Comment({ comment = "", onCommentChange = () => {} }) {
     }
   };
 
-  const handleComment = () => {
-    if (isMobile) {
-      openCommentModal();
-    }
-  };
-
   return (
     <>
-      <div className={styles.commentOuterBox} onClick={handleComment}>
+      <div className={styles.commentOuterBox}>
         <div className={styles.addCommentHeader}>ADD COMMENT</div>
         <div className={styles.commentBoxMobile}>
           <div className={styles.commentIconMobile}>
@@ -38,9 +30,7 @@ function Comment({ comment = "", onCommentChange = () => {} }) {
           ) : (
             <div className={styles.addCommentLabel}>
               <div className={styles.addCommentTitle}>ADD COMMENT</div>
-              <div className={styles.body}>
-                Want to provide any specific instructions?
-              </div>
+              <div>Want to provide any specific instructions?</div>
             </div>
           )}
           <div className={styles.addBtn} onClick={openCommentModal}>
@@ -51,7 +41,7 @@ function Comment({ comment = "", onCommentChange = () => {} }) {
           <div className={styles.commentBox}>
             <SvgWrapper
               className={styles.commentNoteIcon}
-              svgSrc="comment-note-mobile"
+              svgSrc="comment-note"
             />
             <input
               type="text"
@@ -75,7 +65,6 @@ function Comment({ comment = "", onCommentChange = () => {} }) {
         isOpen={isModalOpen}
         closeDialog={() => setIsModalOpen(false)}
         headerClassName={styles.modelHeader}
-        containerClassName={styles.modalContainer}
       >
         <div className={styles.modalContent}>
           <div>

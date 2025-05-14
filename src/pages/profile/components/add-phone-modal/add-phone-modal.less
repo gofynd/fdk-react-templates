@@ -3,28 +3,6 @@
 .addPhoneContainer {
   overflow: visible;
 
-  .header {
-    padding: 24px;
-    border-radius: 8px 8px 0 0;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 140%;
-
-    .modalTitle {
-      font-weight: 600;
-      font-size: 16px;
-      line-height: 140%;
-
-      @media @mobile {
-        font-size: 14px;
-      }
-    }
-
-    @media @mobile {
-      padding: 16px;
-    }
-  }
-
   .addPhoneBody {
     overflow: inherit;
   }
@@ -46,7 +24,16 @@
 }
 
 .loginInputGroup {
-  margin-top: 16px;
+  margin-top: 18px;
+  -webkit-font-smoothing: antialiased;
+
+  .loginInputTitle {
+    margin-bottom: 3px;
+    font-size: 13px;
+    line-height: 13px;
+    color: @TextLabel;
+    display: block;
+  }
 
   .resendOtp {
     margin-top: 3px;
@@ -64,11 +51,6 @@
   }
 
   .addMobileOtp {
-    font-size: 12px;
-    outline: none;
-    border: none;
-    background: transparent;
-
     &::-webkit-outer-spin-button,
     &::-webkit-inner-spin-button {
       -webkit-appearance: none;
@@ -82,25 +64,18 @@
 }
 
 .modalContainer {
+  padding: 15px 25px 5px;
+  background-color: @White;
   min-width: 350px;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-
-  @media @mobile {
-    padding: 0;
-    width: 100%;
-    min-width: unset;
-    gap: 0;
-  }
+  max-width: 400px;
+  min-height: 100px;
+  overflow-wrap: break-word;
+  border-radius: 3px;
   -webkit-font-smoothing: antialiased;
 
   .body {
-    @media @mobile {
-      padding: 16px;
-      width: 100%;
-    }
+    margin: 25px 0 30px 0;
+    line-height: 20px;
   }
 
   .btnContainer {
@@ -108,19 +83,11 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-
-    @media @mobile {
-      border-top: 1px solid @DividerStokes;
-      padding: 16px;
-    }
+    margin-bottom: 3px;
+    border-top: 1px solid @DividerStokes;
 
     .yesBtn {
-      height: 48px;
-      padding: 20px 24px;
-      font-size: 14px;
-      font-weight: 600;
-      line-height: 140%;
-      text-transform: uppercase;
+      margin-top: 6px;
     }
   }
 }

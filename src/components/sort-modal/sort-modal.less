@@ -20,19 +20,16 @@
       align-items: center;
       column-gap: 8px;
       font-size: 12px;
-      font-weight: 400;
-      line-height: normal;
-      letter-spacing: -0.24px;
-      color: @TextBody;
+      line-height: 14px;
+      color: @TextHeading;
 
       .radioIcon {
-        min-width: 28px;
+        width: 28px;
         height: 28px;
         padding: 4px;
-      }
-      
-      &.selected {
-        font-weight: 600;
+        &.selected {
+          color: @ButtonPrimary;
+        }
       }
     }
   }

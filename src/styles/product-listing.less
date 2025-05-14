@@ -10,9 +10,6 @@
       overflow-y: hidden;
     }
   }
-  .addToCartTitle {
-    .text-line-clamp();
-  }
 }
 .productListingPage {
   margin-top: 16px;
@@ -132,7 +129,6 @@
           .btnSecondary();
           background: transparent;
           padding: 12px 32px;
-          text-transform: uppercase;
 
           &:hover {
             background-color: @ButtonPrimary;
@@ -297,7 +293,7 @@
     transition: top 0.25s ease-in-out;
     border: none;
     position: fixed;
-    top: calc(var(--headerHeight) + 69px);
+    top: calc(var(--topPosition, var(--headerHeight)) + 69px);
     z-index: 1;
     right: 50%;
     z-index: 1;
@@ -372,10 +368,14 @@
   margin-bottom: 24px;
   background-color: @PageBackground;
   z-index: 1;
+  top: 0;
   left: 0;
   right: 0;
   position: fixed;
-  top: var(--headerHeight);
+  transition: top 0.4s ease-in-out;
+  top: var(--topPosition, var(--headerHeight));
+  &.active {
+  }
 
   @media @desktop {
     display: none;
@@ -479,9 +479,6 @@
 
   @media @desktop {
     --item-count: var(--desktop-col, 4);
-  }
-  & > * {
-    min-width: 0;
   }
 }
 

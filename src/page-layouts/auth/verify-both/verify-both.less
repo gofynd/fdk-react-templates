@@ -22,10 +22,11 @@
   .verifyOtpForm {
     margin-bottom: 32px;
     color: @TextBody;
+    text-align: center;
     font-size: 14px;
+    font-style: normal;
     font-weight: 400;
     line-height: 19.6px;
-
     .otpSentMessage {
       margin-bottom: 20px;
       margin-bottom: 32px;
@@ -36,12 +37,6 @@
       font-weight: 400;
       line-height: 19.6px;
     }
-  }
-
-  .inputGroup {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 24px;
 
     .label {
       position: absolute;
@@ -56,6 +51,12 @@
       font-weight: 400;
       line-height: 16.8px;
     }
+  }
+
+  .inputGroup {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 24px;
 
     input {
       width: 100%;
@@ -77,16 +78,6 @@
       }
       &:focus-visible {
         outline: none;
-      }
-    }
-
-    &.error {
-      .label {
-        color: @ErrorText;
-      }
-
-      input {
-        border-color: @ErrorText;
       }
     }
   }
@@ -113,10 +104,14 @@
   }
 }
 .loginAlert {
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 140%;
-  margin-top: 8px;
+  min-height: 48px;
+  padding: 0 7px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  background-color: @ErrorBackground;
+  border: 1px dashed @ErrorText;
   color: @ErrorText;
 }
 

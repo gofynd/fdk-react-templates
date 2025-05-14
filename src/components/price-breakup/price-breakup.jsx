@@ -136,7 +136,7 @@ function PriceBreakup({
       )}
       {showTotalDiscount && totalDiscount > 0 && (
         <div className={styles.discountPreviewContiner}>
-          <span className={styles.icon}>{greetingIcon}</span>
+          <span>{greetingIcon}</span>
           <span className={styles.discountPreviewMessage}>
             {discountGreetingMessage}
           </span>

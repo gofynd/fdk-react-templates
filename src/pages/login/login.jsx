@@ -22,11 +22,9 @@ function Login({
 
   mobileInfo,
   submittedMobile,
-  setSubmittedMobile,
   otpResendTime,
   otpError,
   isFormSubmitSuccess,
-  setIsFormSubmitSuccess,
   onOtpSubmit,
   onResendOtpClick,
 
@@ -38,30 +36,26 @@ function Login({
   return (
     <div className={styles.loginWrapper}>
       <div>
-        {!isFormSubmitSuccess && (
-          <>
-            {logo?.desktop?.url && (
-              <FDKLink to={logo?.desktop?.link}>
-                <img
-                  className={styles.loginLogoDesktop}
-                  src={logo?.desktop?.url}
-                  alt={logo?.desktop?.alt}
-                />
-              </FDKLink>
-            )}
-            {logo?.mobile?.url && (
-              <FDKLink to={logo?.mobile?.link}>
-                <img
-                  className={styles.loginLogoMobile}
-                  src={logo?.mobile?.url}
-                  alt={logo?.mobile?.alt}
-                />
-              </FDKLink>
-            )}
-            {title && <h1 className={styles.loginTitle}>{title}</h1>}
-            {subTitle && <p className={styles.loginSubText}>{subTitle}</p>}
-          </>
+        {logo?.desktop?.url && (
+          <FDKLink to={logo?.desktop?.link}>
+            <img
+              className={styles.loginLogoDesktop}
+              src={logo?.desktop?.url}
+              alt={logo?.desktop?.alt}
+            />
+          </FDKLink>
         )}
+        {logo?.mobile?.url && (
+          <FDKLink to={logo?.mobile?.link}>
+            <img
+              className={styles.loginLogoMobile}
+              src={logo?.mobile?.url}
+              alt={logo?.mobile?.alt}
+            />
+          </FDKLink>
+        )}
+        {title && <h1 className={styles.loginTitle}>{title}</h1>}
+        {subTitle && <p className={styles.loginSubText}>{subTitle}</p>}
         {isPassword && (
           <LoginPassword
             error={passwordError}
@@ -78,33 +72,27 @@ function Login({
             {...{
               mobileInfo,
               submittedMobile,
-              setSubmittedMobile,
               otpResendTime,
               otpError,
               isFormSubmitSuccess,
-              setIsFormSubmitSuccess,
               onOtpSubmit,
               onResendOtpClick,
               onLoginFormSubmit,
             }}
           />
         )}
-        {!isFormSubmitSuccess && (
-          <>
-            <TermPrivacy />
-            <div className={styles.loginBtnGroup}>
-              {showLoginToggleButton && (
-                <LoginModeButton {...{ onLoginToggleClick, isOtp }} />
-              )}
-              {isRegisterEnabled && (
-                <LoginRegisterToggle
-                  label={registerButtonLabel}
-                  onClick={onRegisterButtonClick}
-                />
-              )}
-            </div>
-          </>
-        )}
+        <div className={styles.loginBtnGroup}>
+          {showLoginToggleButton && (
+            <LoginModeButton {...{ onLoginToggleClick, isOtp }} />
+          )}
+          {isRegisterEnabled && (
+            <LoginRegisterToggle
+              label={registerButtonLabel}
+              onClick={onRegisterButtonClick}
+            />
+          )}
+        </div>
+        <TermPrivacy />
       </div>
     </div>
   );

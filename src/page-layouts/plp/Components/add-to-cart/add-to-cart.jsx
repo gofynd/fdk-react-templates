@@ -1,16 +1,13 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import * as styles from "./add-to-cart.less";
 import ImageGallery from "../image-gallery/image-gallery";
 import ProductVariants from "../product-variants/product-variants";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import FyButton from "../../../../components/core/fy-button/fy-button";
 import DeliveryInfo from "../delivery-info/delivery-info";
-import Shimmer from "../../../../components/shimmer/shimmer";
+import Loader from "../../../../components/loader/loader";
 import QuantityControl from "../../../../components/quantity-control/quantity-control";
 import FyDropdown from "../../../../components/core/fy-dropdown/fy-dropdown";
-import { currencyFormat, isEmptyOrNull } from "../../../../helper/utils";
-import CartIcon from "../../../../assets/images/cart.svg";
-import BuyNowIcon from "../../../../assets/images/buy-now.svg";
 
 const AddToCart = ({
   isLoading = false,
@@ -59,32 +56,7 @@ const AddToCart = ({
   ];
 
   const getProductPrice = (key) => {
-    const priceDataDefault = sizes?.price;
-    if (selectedSize && !isEmptyOrNull(productPrice?.price)) {
-      if (productPrice?.set) {
-        return currencyFormat(price_per_piece[key]) || "";
-      }
-      const price = productPrice?.price || "";
-      return currencyFormat(price?.[key], price?.currency_symbol) || "";
-    }
-    if (selectedSize && priceDataDefault) {
-      return (
-        currencyFormat(
-          priceDataDefault?.[key]?.min,
-          priceDataDefault?.[key]?.currency_symbol
-        ) || ""
-      );
-    }
-    if (priceDataDefault) {
-      return priceDataDefault?.[key]?.min !== priceDataDefault?.[key]?.max
-        ? `${priceDataDefault?.[key]?.currency_symbol || ""} ${
-            currencyFormat(priceDataDefault?.[key]?.min) || ""
-          } - ${currencyFormat(priceDataDefault?.[key]?.max) || ""}`
-        : currencyFormat(
-            priceDataDefault?.[key]?.max,
-            priceDataDefault?.[key]?.currency_symbol
-          ) || "";
-    }
+    return `${price_per_piece?.currency_symbol || ""} ${price_per_piece?.[key] || ""}`;
   };
 
   const isSizeGuideAvailable = () => {
@@ -92,11 +64,11 @@ const AddToCart = ({
     return Object.keys(sizeChartHeader).length > 0 || sizes?.size_chart?.image;
   };
 
-  // useEffect(() => {
-  //   if (isSizeCollapsed || (preSelectFirstOfMany && sizes !== undefined)) {
-  //     onSizeSelection(sizes?.sizes?.[0]?.value);
-  //   }
-  // }, [isSizeCollapsed, preSelectFirstOfMany, sizes?.sizes]);
+  useEffect(() => {
+    if (isSizeCollapsed || (preSelectFirstOfMany && sizes !== undefined)) {
+      onSizeSelection(sizes?.sizes?.[0]?.value);
+    }
+  }, [isSizeCollapsed, preSelectFirstOfMany, sizes?.sizes]);
 
   const disabledSizeOptions = useMemo(() => {
     return sizes?.sizes
@@ -107,7 +79,12 @@ const AddToCart = ({
   return (
     <div className={styles.productDescContainer}>
       {isLoading ? (
-        <Shimmer className={styles.shimmer} />
+        <div className={styles.loader}>
+          <Loader
+            containerClassName={styles.loaderContainer}
+            loaderClassName={styles.customLoader}
+          />
+        </div>
       ) : (
         <>
           <div className={styles.left}>
@@ -131,8 +108,8 @@ const AddToCart = ({
                 </div>
 
                 {/* ---------- Product Name ----------  */}
-                <div className={styles.product__brand}>{brand?.name}</div>
                 <h1 className={styles.product__title}>{slug && name}</h1>
+                <div className={styles.product__brand}>{brand?.name}</div>
                 {/* ---------- Product Price ---------- */}
                 {show_price && sizes?.sellable && (
                   <div className={styles.product__price}>
@@ -153,7 +130,7 @@ const AddToCart = ({
                   </div>
                 )}
                 {/* ---------- Product Tax Label ---------- */}
-                {pageConfig?.tax_label && show_price && sizes?.sellable && (
+                {pageConfig?.tax_label && (
                   <div className={styles.taxLabel}>
                     ({pageConfig?.tax_label})
                   </div>
@@ -292,6 +269,18 @@ const AddToCart = ({
               <div className={styles.actionButtons}>
                 {!disable_cart && sizes?.sellable && (
                   <>
+                    {button_options?.includes("buynow") && (
+                      <FyButton
+                        className={styles.buyNow}
+                        color="secondary"
+                        size="medium"
+                        onClick={(event) =>
+                          addProductForCheckout(event, selectedSize, true)
+                        }
+                      >
+                        BUY NOW
+                      </FyButton>
+                    )}
                     {button_options?.includes("addtocart") && (
                       <>
                         {selectedItemDetails?.quantity &&
@@ -326,30 +315,16 @@ const AddToCart = ({
                           />
                         ) : (
                           <FyButton
-                            variant="outlined"
+                            variant="contained"
                             size="medium"
                             onClick={(event) =>
                               addProductForCheckout(event, selectedSize, false)
                             }
-                            startIcon={<CartIcon className={styles.cartIcon} />}
                           >
                             ADD TO CART
                           </FyButton>
                         )}
                       </>
-                    )}
-                    {button_options?.includes("buynow") && (
-                      <FyButton
-                        className={styles.buyNow}
-                        variant="contained"
-                        size="medium"
-                        onClick={(event) =>
-                          addProductForCheckout(event, selectedSize, true)
-                        }
-                        startIcon={<BuyNowIcon className={styles.cartIcon} />}
-                      >
-                        BUY NOW
-                      </FyButton>
                     )}
                   </>
                 )}

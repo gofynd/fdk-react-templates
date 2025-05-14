@@ -15,7 +15,9 @@ import { priceFormatCurrencySymbol } from "../../helper/utils";
 
 function PaymentDetailCard({ breakup, paymentDetails }) {
   const totalVal = breakup?.find((item) => item.name === "total") || 0;
-
+  const getPriceFormat = (symbol, price) => {
+    return priceFormatCurrencySymbol(symbol, price);
+  };
   return (
     <div className={`${styles.paymentMode}`}>
       <div className={`${styles.header} ${styles.boldsm}`}>PAYMENT MODE</div>
@@ -34,13 +36,16 @@ function PaymentDetailCard({ breakup, paymentDetails }) {
             </div>
             <div className={`${styles.wrapperflex}`}>
               <span className={`${styles.values} ${styles.lightsm}`}>
-                {!!paymentInfo?.amount &&
-                  priceFormatCurrencySymbol(totalVal?.currency_symbol, paymentInfo?.amount)}
+                {paymentInfo?.amount &&
+                  getPriceFormat(
+                    "₹",
+                    Number(paymentInfo?.amount.toString().replace(/,/g, ""))
+                  )}
                 {!paymentInfo?.amount &&
                   totalVal &&
-                  priceFormatCurrencySymbol(
+                  getPriceFormat(
                     totalVal?.currency_symbol,
-                    totalVal?.value
+                    Number(totalVal?.value.toString().replace(/,/g, ""))
                   )}
               </span>
             </div>

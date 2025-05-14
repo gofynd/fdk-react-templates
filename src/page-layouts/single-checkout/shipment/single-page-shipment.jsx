@@ -4,12 +4,9 @@ import * as styles from "./single-page-shipment.less";
 import SingleShipmentContent from "./single-shipment-content";
 import { useNavigate } from "react-router-dom";
 import { useGlobalStore } from "fdk-core/utils";
-import StickyPayNow from "../payment/sticky-pay-now/sticky-pay-now";
-import Shimmer from "../../../components/shimmer/shimmer";
 
 function SinglePageShipment({
   shipments,
-  isShipmentLoading,
   setShowPayment,
   setShowShipment,
   showPaymentOptions,
@@ -19,10 +16,10 @@ function SinglePageShipment({
   convertHyperlocalTat = () => {},
   loader,
   buybox = {},
-  totalValue = "",
-  onPriceDetailsClick = () => {},
+  payment,
 }) {
   const navigate = useNavigate();
+  const { proceedToPay, getTotalValue } = payment;
   const getShipmentCount = shipments?.length || 0;
 
   const editShipment = () => {
@@ -45,11 +42,9 @@ function SinglePageShipment({
               <div className={styles.headerContainer}>
                 <div className={styles.orderSummary}>Order Summary</div>
                 <div className={styles.shipment}>
-                  {isShipmentLoading ? (
-                    <Shimmer height="12px" width="120px" />
-                  ) : (
-                    `${getShipmentCount} shipment${getShipmentCount > 1 ? "s" : ""}`
-                  )}
+                  {getShipmentCount > 1
+                    ? getShipmentCount + " shipments"
+                    : getShipmentCount + " shipment"}
                 </div>
               </div>
             </div>
@@ -65,23 +60,12 @@ function SinglePageShipment({
           </div>
           <SingleShipmentContent
             shipments={shipments}
-            isShipmentLoading={isShipmentLoading}
             showPaymentOptions={showPaymentOptions}
             isHyperlocal={isHyperlocal}
             convertHyperlocalTat={convertHyperlocalTat}
+            loader={loader}
             buybox={buybox}
           ></SingleShipmentContent>
-          <StickyPayNow
-            btnTitle="PROCEED TO PAY"
-            onPriceDetailsClick={onPriceDetailsClick}
-            value={totalValue}
-            proceedToPay={() => {
-              showPaymentOptions();
-              window?.scrollTo({
-                top: 0,
-              });
-            }}
-          />
         </>
       ) : (
         <>
@@ -100,8 +84,18 @@ function SinglePageShipment({
                   </div>
                 </div>
               </div>
-              <div className={styles.rightSelected} onClick={editShipment}>
-                Edit
+              <div className={styles.orderEditContainer}>
+                <div className={styles.rightSelected} onClick={editShipment}>
+                  Edit
+                </div>
+                {getTotalValue?.() === 0 && (
+                  <button
+                    className={`${styles.commonBtn} ${styles.payBtn}`}
+                    onClick={() => proceedToPay("PP", {})}
+                  >
+                    PLACE ORDER
+                  </button>
+                )}
               </div>
             </div>
           ) : (

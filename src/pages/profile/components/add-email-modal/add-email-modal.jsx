@@ -35,21 +35,18 @@ function AddEmailModal({ isOpen, onClose, onAdd }) {
     <Modal
       isOpen={isOpen}
       closeDialog={onClose}
+      modalType="center-modal"
       title="Add Email"
-      headerClassName={styles.modalHeader}
-      titleClassName={styles.modalTitle}
     >
       <div className={styles.modalContainer}>
         <div className={`${styles.body} ${styles.form}`}>
-          <form className={styles.form} onSubmit={handleSubmit(handleAddEmail)}>
+          <form onSubmit={handleSubmit(handleAddEmail)}>
             <div className={styles.formInputContainer}>
               <FyInput
                 type="text"
-                label="Enter your email address"
-                labelVariant="floating"
+                placeholder="john123xyz@gmail.com"
                 error={errors?.email}
                 errorMessage={errors?.email?.message}
-                className={styles.emailInput}
                 {...register("email", {
                   required: "Please enter a email address",
                   pattern: {
@@ -62,6 +59,7 @@ function AddEmailModal({ isOpen, onClose, onAdd }) {
             <div className={styles.btnContainer}>
               <FyButton
                 fullWidth
+                variant="text"
                 type="submit"
                 className={styles.yesBtn}
                 isLoading={isLoading}

@@ -102,6 +102,7 @@ function PicZoom({
               onClickImage(currentIndex);
             }
           }}
+          title={currentIndex}
         >
           {!isLoading && (
             <FyImage
@@ -174,6 +175,14 @@ function PicZoom({
       {type === "3d_model" && isMounted && (
         <div className={styles.type3dModel}>
           <Viewer3D src={getOriginalImage()} />
+          <button
+            type="button"
+            className={styles.expandBtn}
+            onClick={() => onClickImage(currentIndex)}
+            aria-label="Open"
+          >
+            <SvgWrapper svgSrc="auto-rotate" />
+          </button>
         </div>
       )}
     </div>

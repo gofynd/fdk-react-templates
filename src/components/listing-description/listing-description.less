@@ -18,6 +18,8 @@
   .descriptionContent {
     .captionNormal();
     color: @TextBody;
+
+    .text-line-clamp(2);
   }
 
   .actionBtn {
@@ -25,10 +27,6 @@
     padding: 12px;
     background: transparent;
     margin-top: 16px;
-    &:focus-visible {
-      box-shadow: none;
-      outline: none;
-    }
 
     @media @desktop {
       &:hover {

@@ -99,7 +99,7 @@ function EditProfile({
               }`}
             >
               <label className={styles.inputTitle} htmlFor={fNameInputId}>
-                First Name<span className={styles.required}> *</span>
+                First Name*
               </label>
               <input
                 id={fNameInputId}
@@ -124,7 +124,7 @@ function EditProfile({
               }`}
             >
               <label className={styles.inputTitle} htmlFor={lNameInputId}>
-                Last Name<span className={styles.required}> *</span>
+                Last Name*
               </label>
               <input
                 id={lNameInputId}

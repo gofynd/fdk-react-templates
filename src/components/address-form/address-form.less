@@ -107,11 +107,6 @@
     box-sizing: border-box;
     width: 100%;
     justify-content: space-between;
-    .labelClassName {
-      span {
-        color: @ErrorText;
-      }
-    }
 
     .formItemDiv:nth-child(odd) {
       margin-right: 8px;
@@ -146,7 +141,9 @@
       row-gap: 16px;
     }
     .typeIcon {
-      margin-right: 4px;
+      width: 20px;
+      height: 20px;
+      margin-right: 6px;
     }
     .typeBtn {
       display: flex;
@@ -156,25 +153,6 @@
       white-space: nowrap;
       border-radius: 6px;
       margin-right: 16px;
-      border: 1px solid var(--dividerStokes);
-      color: @TextHeading;
-
-      svg {
-        path {
-          fill: @TextHeading;
-        }
-      }
-
-      &.selected {
-        color: var(--buttonPrimary);
-        border-width: 2px;
-        border-color: var(--buttonPrimary);
-        svg {
-          path {
-            fill: var(--buttonPrimary);
-          }
-        }
-      }
     }
     .addressTypeHeader {
       font-size: 13px;
@@ -235,24 +213,14 @@
   padding: 0;
 }
 
-.defaultAddressContainer {
+.defaultAddress {
+  input {
+    accent-color: var(--buttonPrimary);
+  }
+
   display: flex;
   align-items: center;
   gap: 8px;
-  margin: 20px 0 10px;
-  .checkbox {
-    accent-color: var(--buttonPrimary);
-    height: 13px;
-    width: 13px;
-    cursor: pointer;
-  }
-
-  .label {
-    color: @TextBody;
-    font-size: 14px;
-    line-height: 14px;
-    cursor: pointer;
-  }
 }
 
 .deliverBtnDivEdit {

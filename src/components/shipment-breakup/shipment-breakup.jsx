@@ -35,8 +35,8 @@ function ShipmentBreakup({ breakup }) {
               (index === breakup.length - 1 && item.value !== "0")) && (
               <>
                 {index !== breakup.length - 1 && (
-                  <span className={styles.totalValContainer}>
-                    <span className={styles.label}>{item.display}</span>
+                  <span>
+                    <span>{item.display}</span>
                     <span className={`${styles.values}`}>
                       {getPriceFormat(
                         item.currency_symbol,
@@ -46,8 +46,8 @@ function ShipmentBreakup({ breakup }) {
                   </span>
                 )}
                 {index === breakup.length - 1 && (
-                  <span className={styles.totalValContainer}>
-                    <span className={styles.label}>{item.display}</span>
+                  <span>
+                    <span>{item.display}</span>
                     <span className={`${styles.values}`}>
                       {getPriceFormat(
                         item.currency_symbol,
