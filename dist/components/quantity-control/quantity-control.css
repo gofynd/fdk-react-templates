@@ -250,9 +250,6 @@ h5,
 .quantity-control__margin0auto___uqtOT {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .quantity-control__base-page-container_____NJ7,
 .quantity-control__basePageContainer___P_S4Y {
   max-width: 1440px !important;
@@ -261,20 +258,13 @@ button {
 .quantity-control__removeScroll___OJlc8 {
   overflow-y: hidden !important;
 }
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
-}
 .quantity-control__mr-5___KrHWb,
 .quantity-control__mr5___HDUFR {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .quantity-control__mr-2___Lp6tC,
 .quantity-control__mr2___Dv2uV {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .quantity-control__py-5___egq8u,
 .quantity-control__py5___MUMRY {
@@ -390,8 +380,8 @@ img::selection {
   justify-content: center;
   width: 38px;
   height: 100%;
-  border-left: 1px solid var(--dividerStokes, #d4d1d1);
-  border-right: 1px solid var(--dividerStokes, #d4d1d1);
+  border-inline-start: 1px solid var(--dividerStokes, #d4d1d1);
+  border-inline-end: 1px solid var(--dividerStokes, #d4d1d1);
   font-size: 12px;
   line-height: normal;
   color: var(--textBody, #3c3131);

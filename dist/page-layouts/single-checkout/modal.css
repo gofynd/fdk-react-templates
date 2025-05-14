@@ -250,9 +250,6 @@ h5,
 .modal__margin0auto___rCMEU {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .modal__base-page-container___xOO0u,
 .modal__basePageContainer___gw6D1 {
   max-width: 1440px !important;
@@ -261,20 +258,13 @@ button {
 .modal__removeScroll___PkoZ2 {
   overflow-y: hidden !important;
 }
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
-}
 .modal__mr-5___rqVB7,
 .modal__mr5___OnXKv {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .modal__mr-2___TjkMn,
 .modal__mr2___0s6r4 {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .modal__py-5___ymlx9,
 .modal__py5___hpEP2 {
@@ -354,8 +344,8 @@ img::selection {
   position: fixed;
   top: 0;
   bottom: 0;
-  left: 0;
-  right: 0;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
   z-index: 100;
   overflow-y: auto;
   overflow-x: hidden;
@@ -370,11 +360,11 @@ img::selection {
   width: 40%;
   position: fixed;
   bottom: 0;
-  right: 0;
+  inset-inline-end: 0;
   opacity: 0;
   transition: right 0.5s ease-in-out;
   /* Added transition property for animation */
-  right: -40%;
+  inset-inline-end: -40%;
   /* Initial state - hidden off the right side */
   /* Track */
   /* Handle */
@@ -382,14 +372,14 @@ img::selection {
 @media only screen and (max-width: 768px) {
   .modal__modalContainerCss___ZR5ho {
     width: 60%;
-    right: -60%;
+    inset-inline-end: -60%;
     /* Initial state - hidden off the right side */
   }
 }
 @media only screen and (max-width: 480px) {
   .modal__modalContainerCss___ZR5ho {
     width: 100%;
-    right: -100%;
+    inset-inline-end: -100%;
     /* Initial state - hidden off the right side */
   }
 }
@@ -439,7 +429,7 @@ img::selection {
   line-height: 140%;
 }
 .modal__modalContainerCss___ZR5ho.modal__slideIn____gLvj {
-  right: 0;
+  inset-inline-end: 0;
   /* Final state - fully visible */
   opacity: 1;
 }
@@ -452,5 +442,9 @@ img::selection {
 .modal__slideFadeEnter___Qtfum .modal__modalContainerCss___ZR5ho,
 .modal__slideFadeLeaveTo___kGzGV .modal__modalContainerCss___ZR5ho {
   transform: translate3d(100vh, 0, 0);
+}
+[dir="rtl"] .modal__slideFadeEnter___Qtfum .modal__modalContainerCss___ZR5ho,
+[dir="rtl"] .modal__slideFadeLeaveTo___kGzGV .modal__modalContainerCss___ZR5ho {
+  transform: translate3d(-100vh, 0, 0);
 }
 

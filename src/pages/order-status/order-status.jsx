@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import {
   convertDate,
+  formatLocale,
   getAddressStr,
   numberWithCommas,
 } from "../../helper/utils";
@@ -10,13 +11,18 @@ import CartGiftItem from "./components/cart-gift-item/cart-gift-item";
 import FyButton from "../../components/core/fy-button/fy-button";
 import Modal from "../../components/core/modal/modal";
 import { FDKLink } from "fdk-core/components";
+import {
+  useGlobalStore,
+  useFPI,
+  useGlobalTranslation
+} from "fdk-core/utils";
 import TrueCheckIcon from "../../assets/images/true-check.svg";
 
 const orderFailurePageInfo = {
   link: "",
-  linktext: "RETRY",
-  text: "Oops! Your payment failed!",
-  subText: "You can retry checkout or take another option for payment.",
+  linktext: "resource.common.retry_caps",
+  text: "resource.common.oops_payment_failed",
+  subText: "resource.common.retry_checkout_or_other_payment_option",
   icon: "",
 };
 
@@ -30,6 +36,10 @@ function OrderStatus({
   pollingComp = null,
   loader,
 }) {
+  const { t } = useGlobalTranslation("translation");
+  const fpi = useFPI();
+  const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
+  const locale = language?.locale
   const orderLink = useMemo(
     () =>
       isLoggedIn
@@ -52,7 +62,7 @@ function OrderStatus({
   }
 
   const getAddressData = orderData?.shipments?.[0]?.delivery_address || {
-    name: "John Doe",
+    name: t("resource.order.john_doe"),
     address_type: "Home",
     phone: "1234567890",
   };
@@ -65,21 +75,27 @@ function OrderStatus({
             <div>
               <TrueCheckIcon />
             </div>
-            <div className={styles.orderConfirmed}>ORDER CONFIRMED</div>
+            <div className={styles.orderConfirmed}>{t("resource.order.order_confirmed_caps")}</div>
             <div className={styles.successMsg}>
-              Thank you for shopping with us! Your order is placed successfully
+              {t("resource.order.order_success")}
             </div>
             <div className={styles.orderId}>
-              ORDER ID: <span>{orderData.order_id}</span>
+              {t("resource.order.order_id_caps")}: <span>{orderData.order_id}</span>
             </div>
             <div className={styles.orderTime}>
-              Placed on:
-              <span> {convertDate(orderData.order_created_time)}</span>
+              {t("resource.order.placed_on")}:
+              <span> {convertDate(orderData.order_created_time, formatLocale(locale, countryCode)
+              )}</span>
             </div>
             <div className={styles.trackOrderBtn}>
               <a href={orderLink} style={{ display: "inline-block" }}>
-                <FyButton color="secondary" type="button">
-                  TRACK ORDER
+                <FyButton type="button" variant="outlined">
+                  {t("resource.order.track_order_caps")}
+                </FyButton>
+              </a>
+              <a className={styles.continueBtn} href="/">
+                <FyButton variant="contained" color="primary" type="button">
+                  {t("resource.common.continue_shopping")}
                 </FyButton>
               </a>
             </div>
@@ -110,7 +126,7 @@ function OrderStatus({
               {isLoggedIn && (
                 <div className={`${styles["payment-address"]} fontBody`}>
                   <div className={styles["payment-wrapper"]}>
-                    <div className={styles["mode"]}>PAYMENT MODE</div>
+                    <div className={styles["mode"]}>{t("resource.common.payment_mode")}</div>
                     {orderData?.shipments?.[0]?.payment_info?.length > 0 &&
                       orderData?.shipments?.[0]?.payment_info?.map(
                         (paymentInfo) => (
@@ -128,15 +144,15 @@ function OrderStatus({
                               />
                             </span>
                             <span className={styles["mode-name"]}>
-                              {paymentInfo?.display_name || "COD"}
+                              {paymentInfo?.display_name || t("resource.order.cod")}
                             </span>
                           </div>
                         )
                       )}
-                  </div>
+                  </div >
                   <div className={styles["delivery-wrapper"]}>
                     <div className={styles["delivery-header"]}>
-                      DELIVERY ADDRESS
+                      {t("resource.order.delivery_address")}
                     </div>
                     <div className={styles["delivery-details"]}>
                       <div className={styles["name-label"]}>
@@ -172,8 +188,8 @@ function OrderStatus({
           <Modal isOpen={true} hideHeader={true}>
             <div className={styles.orderStatusModal}>
               <div className={styles.loader}></div>
-              <p className={styles.title}>Fetching Order Details</p>
-              <p className={styles.message}>Please do not press back button</p>
+              <p className={styles.title}>{t("resource.order.fetching_order_details")}</p>
+              <p className={styles.message}>{t("resource.order.please_do_not_press_back_button")}</p>
             </div>
           </Modal>
         </div>
@@ -184,13 +200,13 @@ function OrderStatus({
       <div className={styles.orderFail}>
         <img src={orderFailImg} alt={orderFailImg} />
         <div className={styles.cartErrorText}>
-          <span>{orderFailurePageInfo.text}</span>
-          <span className={styles.subtext}>{orderFailurePageInfo.subText}</span>
+          <span>{t(orderFailurePageInfo.text)}</span>
+          <span className={styles.subtext}>{t(orderFailurePageInfo.subText)}</span>
           <button
             className={`${styles.commonBtn} ${styles.linkBtn} ${styles.boldSm}`}
             onClick={onOrderFailure}
           >
-            {orderFailurePageInfo.linktext}
+            {t(orderFailurePageInfo.linktext)}
           </button>
         </div>
       </div>
@@ -201,6 +217,7 @@ function OrderStatus({
 export default OrderStatus;
 
 function ShipmentItem({ shipment, index, shipmentLength, orderLink = "" }) {
+  const { t } = useGlobalTranslation("translation");
   const getBags = (bags) => {
     return bags.filter(
       (bag) => Object.keys(bag?.parent_promo_bags)?.length === 0
@@ -213,9 +230,8 @@ function ShipmentItem({ shipment, index, shipmentLength, orderLink = "" }) {
     <div className={styles.shipmentItem} key={index}>
       <div className={styles.shipmentItemHead}>
         <div>
-          <p className={styles.shipmentNumber}>{`Shipment ${
-            index + 1
-          } / ${shipmentLength}`}</p>
+          <p className={styles.shipmentNumber}>{`${t("resource.common.shipment")} ${index + 1
+            } / ${shipmentLength}`}</p>
           <h5 style={{ marginTop: "8px" }}>{shipment?.shipment_id}</h5>
         </div>
         <div
@@ -227,7 +243,7 @@ function ShipmentItem({ shipment, index, shipmentLength, orderLink = "" }) {
             }),
           }}
         >
-          Status: <span>{shipment?.shipment_status?.title}</span>
+          {t("resource.order.status")}: <span>{shipment?.shipment_status?.title}</span>
         </div>
         <div
           className={styles.statusWrapperMobile}
@@ -253,6 +269,7 @@ function ShipmentItem({ shipment, index, shipmentLength, orderLink = "" }) {
 }
 
 function ProductItem({ product, orderLink = "" }) {
+  const { t } = useGlobalTranslation("translation");
   const markedPriceCheck = product?.prices?.price_marked;
   const effectivePriceCheck = product?.prices?.price_effective;
 
@@ -282,11 +299,11 @@ function ProductItem({ product, orderLink = "" }) {
             <div className={styles.sizeInfo}>
               <div className={styles.sizeQuantity}>
                 <div className={styles.size}>
-                  Size: &nbsp;
+                  {t("resource.common.size")}: &nbsp;
                   {product?.item?.size}
                 </div>
                 <div className={styles.sizeQuantity}>
-                  Qty:&nbsp;
+                {t("resource.common.qty")}:&nbsp;
                   {product?.quantity}
                 </div>
               </div>
@@ -294,7 +311,7 @@ function ProductItem({ product, orderLink = "" }) {
             <div className={styles.paymentInfo}>
               {effectivePriceCheck > 0 && (
                 <div className={styles.effectivePrice}>
-                  {`${product?.prices?.currency_symbol} ${getEffectivePrice(
+                  {`${product?.prices?.currency_symbol}${getEffectivePrice(
                     product
                   )}`}
                 </div>
@@ -302,7 +319,7 @@ function ProductItem({ product, orderLink = "" }) {
               {markedPriceCheck > 0 &&
                 effectivePriceCheck !== markedPriceCheck && (
                   <div className={styles.markedPrice}>
-                    {getMarkedPrice(product)}
+                    {`${product?.prices?.currency_symbol}${getMarkedPrice(product)}`}
                   </div>
                 )}
             </div>
@@ -316,7 +333,7 @@ function ProductItem({ product, orderLink = "" }) {
                   disabled={product}
                   checked={product?.meta?.gift_card?.is_gift_applied}
                 />
-                <label htmlFor={product?.id}>Gift wrap Added</label>
+                <label htmlFor={product?.id}>{t("resource.order.gift_wrap_added")}</label>
               </div>
             )}
             {/* Show Free Gifts  Desktop */}
