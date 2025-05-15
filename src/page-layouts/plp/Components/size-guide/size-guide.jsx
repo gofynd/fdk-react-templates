@@ -1,17 +1,20 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, Suspense } from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./size-guide.less";
 import FyImage from "../../../../components/core/fy-image/fy-image";
 import FyHTMLRenderer from "../../../../components/core/fy-html-renderer/fy-html-renderer";
-import Modal from "../../../../components/core/modal/modal";
-
+import { useGlobalTranslation } from "fdk-core/utils";
+const Modal = React.lazy(
+  () => import("../../../../components/core/modal/modal")
+);
 function SizeGuide({ isOpen, productMeta, onCloseDialog }) {
+  const { t } = useGlobalTranslation("translation");
   const [previewSelectedMetric, setPreviewSelectedMetric] = useState("cm");
   const [selectedMetric, setSelectedMetric] = useState("cm");
   const [activeTab, setActiveTab] = useState("size_guide");
   const values = {
-    in: "inch",
-    cm: "cm",
+    in: t("resource.common.inch"),
+    cm: t("resource.common.cm"),
   };
 
   const headers = Object.entries(productMeta?.size_chart?.headers ?? {}).filter(
@@ -79,6 +82,7 @@ function SizeGuide({ isOpen, productMeta, onCloseDialog }) {
   }, [activeTab]);
 
   return (
+    <Suspense fallback={<div/>}>
     <Modal
       modalType="right-modal"
       isOpen={isOpen}
@@ -95,12 +99,11 @@ function SizeGuide({ isOpen, productMeta, onCloseDialog }) {
           {isSizeChartAvailable() && (
             <button
               type="button"
-              className={`${styles.b2} ${styles.tab} ${styles.tabSizeGuide} ${
-                activeTab === "size_guide" ? styles.active : ""
-              }`}
+              className={`${styles.b2} ${styles.tab} ${styles.tabSizeGuide} ${activeTab === "size_guide" ? styles.active : ""
+                }`}
               onClick={() => setActiveTab("size_guide")}
             >
-              Size guide
+              {t("resource.product.size_guide_lower")}
             </button>
           )}
 
@@ -108,12 +111,11 @@ function SizeGuide({ isOpen, productMeta, onCloseDialog }) {
           {productMeta?.size_chart && (
             <button
               type="button"
-              className={`${styles.b2} ${styles.tab} ${styles.tabMeasure} ${
-                activeTab === "measure" ? styles.active : ""
-              }`}
+              className={`${styles.b2} ${styles.tab} ${styles.tabMeasure} ${activeTab === "measure" ? styles.active : ""
+                }`}
               onClick={() => setActiveTab("measure")}
             >
-              How to measure
+              {t("resource.product.how_to_measure")}
             </button>
           )}
         </div>
@@ -122,9 +124,8 @@ function SizeGuide({ isOpen, productMeta, onCloseDialog }) {
         <div className={styles.sidebarBody}>
           {/* Left Container */}
           <div
-            className={`${styles.leftContainer} ${
-              !productMeta?.size_chart?.image ? styles.cstLw : ""
-            }`}
+            className={`${styles.leftContainer} ${!productMeta?.size_chart?.image ? styles.cstLw : ""
+              }`}
             style={{ display: activeTab === "size_guide" ? "block" : "none" }}
           >
             {/* Button Group */}
@@ -141,13 +142,11 @@ function SizeGuide({ isOpen, productMeta, onCloseDialog }) {
                       onClick={() => {
                         changeSelectedMetric(key);
                       }}
-                      className={`${styles.h5} ${styles.unitBtn} ${
-                        styles.fontBody
-                      } ${
-                        previewSelectedMetric === key
+                      className={`${styles.h5} ${styles.unitBtn} ${styles.fontBody
+                        } ${previewSelectedMetric === key
                           ? styles.unitBtnSelected
                           : ""
-                      }`}
+                        }`}
                     >
                       {val}
                     </button>
@@ -208,14 +207,14 @@ function SizeGuide({ isOpen, productMeta, onCloseDialog }) {
             {!isSizeChartAvailable() && (
               <div className={styles.notAvailable}>
                 <h3 className={styles.fontHeader}>
-                  Not available, contact us for more information
+                  {t("resource.common.not_available_contact_for_info")}
                 </h3>
                 <FDKLink link="/contact-us" target="_blank">
                   <button
                     type="button"
                     className={`${styles.contactUs} ${styles.btnPrimary} ${styles.fontBody}`}
                   >
-                    CONTACT US
+                    {t("resource.common.contact_us_caps")}
                   </button>
                 </FDKLink>
               </div>
@@ -248,14 +247,14 @@ function SizeGuide({ isOpen, productMeta, onCloseDialog }) {
               (!productMeta.size_chart.image && (
                 <div className={styles.notAvailable}>
                   <h3 className={styles.fontHeader}>
-                    Not available, contact us for more information
+                    {t("resource.common.not_available_contact_for_info")}
                   </h3>
                   <FDKLink link="/contact-us" target="_blank">
                     <button
                       type="button"
                       className={`${styles.contactUs} ${styles.btnPrimary} ${styles.fontBody}`}
                     >
-                      CONTACT US
+                      {t("resource.common.contact_us_caps")}
                     </button>
                   </FDKLink>
                 </div>
@@ -264,6 +263,7 @@ function SizeGuide({ isOpen, productMeta, onCloseDialog }) {
         </div>
       </div>
     </Modal>
+    </Suspense>
   );
 }
 

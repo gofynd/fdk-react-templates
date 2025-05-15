@@ -11,8 +11,10 @@
 import React, { useMemo } from "react";
 import * as styles from "./shipment-breakup.less";
 import { priceFormatCurrencySymbol } from "../../helper/utils";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function ShipmentBreakup({ breakup }) {
+  const { t } = useGlobalTranslation("translation");
   const getPriceFormat = (symbol, price) => {
     return priceFormatCurrencySymbol(symbol, price);
   };
@@ -27,7 +29,7 @@ function ShipmentBreakup({ breakup }) {
 
   return (
     <div className={`${styles.billing} ${styles.lightsm}`}>
-      <div className={`${styles.title} ${styles.boldsm}`}>BILLING</div>
+      <div className={`${styles.title} ${styles.boldsm}`}>{t("resource.common.billing_caps")}</div>
       <>
         {breakupValues?.map((item, index) => (
           <div key={index} className={`${styles.breakupItem}`}>

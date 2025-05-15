@@ -22,8 +22,10 @@ import {
   numberWithCommas,
   priceFormatCurrencySymbol,
 } from "../../helper/utils";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function ShipmentItem({ bag, initial, selectId, onChangeValue, type }) {
+  const { t } = useGlobalTranslation("translation");
   const getPriceValue = (item) => {
     return numberWithCommas(item);
   };
@@ -83,7 +85,7 @@ function ShipmentItem({ bag, initial, selectId, onChangeValue, type }) {
               <span className={`${styles.itemSize}`}>{bag?.item?.size}</span>
               <span className={styles.itemSeparator}>{` | `}</span>
               <span className={`${styles.itemQty}`}>
-                {bag?.quantity} {bag?.quantity === 1 ? "Piece" : "Pieces"}
+                {bag?.quantity} {bag?.quantity === 1 ? t("resource.common.single_piece") : t("resource.common.multiple_piece")}
               </span>
             </div>
             {bag?.prices?.currency_symbol !== null &&
