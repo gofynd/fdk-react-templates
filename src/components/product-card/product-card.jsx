@@ -63,7 +63,10 @@ const ProductCard = ({
   columnCount = { desktop: 4, tablet: 3, mobile: 1 },
   WishlistIconComponent = () => <SvgWrapper svgSrc="wishlist-plp" />,
   isRemoveIcon = false,
-  RemoveIconComponent = () => <SvgWrapper svgSrc="item-close" />,
+  RemoveIconComponent = () => (
+    <SvgWrapper svgSrc="item-close" className={styles.removeIcon} />
+  ),
+  actionButtonText = "ADD TO CART",
   followedIdList = [],
   onWishlistClick = () => {},
   handleAddToCart = () => {},
@@ -304,7 +307,7 @@ const ProductCard = ({
             className={styles.addToCart}
             onClick={handleAddToCartClick}
           >
-            ADD TO CART
+            {actionButtonText}
           </FyButton>
         )}
       </div>

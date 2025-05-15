@@ -250,9 +250,6 @@ h5,
 .quantity-ctrl__margin0auto___N5LC2 {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .quantity-ctrl__base-page-container___yp60K,
 .quantity-ctrl__basePageContainer___muk53 {
   max-width: 1440px !important;
@@ -260,13 +257,6 @@ button {
 .quantity-ctrl__remove-scroll___EfYFS,
 .quantity-ctrl__removeScroll___ypu8m {
   overflow-y: hidden !important;
-}
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
 }
 .quantity-ctrl__mr-5___kmh67,
 .quantity-ctrl__mr5___CFB_e {
@@ -351,7 +341,7 @@ img::selection {
   border-radius: 3px;
 }
 .quantity-ctrl__qtyControl___LvP42 .quantity-ctrl__operator___HaYJA {
-  background: #ffffff;
+  background: var(--pageBackground, #f8f8f8);
   display: flex;
   justify-content: center;
   align-items: center;

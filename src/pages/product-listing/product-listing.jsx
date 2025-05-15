@@ -64,6 +64,7 @@ const ProductListing = ({
   listingPrice = "range",
   banner = {},
   showAddToCart = false,
+  actionButtonText = "Add To cart",
   stickyFilterTopOffset = 0,
   onColumnCountUpdate = () => {},
   onResetFiltersClick = () => {},
@@ -298,6 +299,7 @@ const ProductListing = ({
                         followedIdList,
                         listingPrice,
                         showAddToCart,
+                        actionButtonText,
                         onWishlistClick,
                         isImageFill,
                         showImageOnHover,
@@ -323,6 +325,7 @@ const ProductListing = ({
                       followedIdList,
                       listingPrice,
                       showAddToCart,
+                      actionButtonText,
                       onWishlistClick,
                       isImageFill,
                       showImageOnHover,
@@ -412,6 +415,7 @@ function ProductGrid({
   isImageFill = false,
   showImageOnHover = false,
   showAddToCart = false,
+  actionButtonText = "Add To cart",
   imageBackgroundColor = "",
   imagePlaceholder = "",
   onWishlistClick = () => {},
@@ -451,6 +455,7 @@ function ProductGrid({
               WishlistIconComponent={WishlistIconComponent}
               followedIdList={followedIdList}
               showAddToCart={showAddToCart}
+              actionButtonText={actionButtonText}
               onWishlistClick={onWishlistClick}
               isImageFill={isImageFill}
               showImageOnHover={showImageOnHover}
