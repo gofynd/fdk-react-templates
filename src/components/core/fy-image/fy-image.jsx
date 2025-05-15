@@ -207,7 +207,7 @@ const FyImage = forwardRef(
             />
           ))}
           <img
-            className={styles.fyImg}
+            className={`fx-image ${styles.fyImg}`}
             srcSet={fallbackSrcset()}
             src={getSrc()}
             alt={alt}
