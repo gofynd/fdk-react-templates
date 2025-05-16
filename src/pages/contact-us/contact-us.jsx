@@ -48,7 +48,7 @@ function ContactSupport({
       errorMessage: "Please enter your name",
     },
     {
-      type: "number",
+      type: "tel",
       label: "Phone Number",
       name: "phone",
       multiline: false,
@@ -56,7 +56,7 @@ function ContactSupport({
       required: true,
       error: errors?.phone,
       pattern: {
-        value: /^[0-9]{10}$/,
+        value: /^\+?[0-9\s-]{3,15}$/,
         message: "Please enter a valid phone number",
       },
       errorMessage: "Please enter your phone number",

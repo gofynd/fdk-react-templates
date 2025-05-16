@@ -78,8 +78,13 @@ function OrderStatus({
             </div>
             <div className={styles.trackOrderBtn}>
               <a href={orderLink} style={{ display: "inline-block" }}>
-                <FyButton color="secondary" type="button">
+                <FyButton type="button" variant="outlined">
                   TRACK ORDER
+                </FyButton>
+              </a>
+              <a className={styles.continueBtn} href="/">
+                <FyButton variant="contained" color="primary" type="button">
+                  CONTINUE SHOPPING
                 </FyButton>
               </a>
             </div>
@@ -294,7 +299,7 @@ function ProductItem({ product, orderLink = "" }) {
             <div className={styles.paymentInfo}>
               {effectivePriceCheck > 0 && (
                 <div className={styles.effectivePrice}>
-                  {`${product?.prices?.currency_symbol} ${getEffectivePrice(
+                  {`${product?.prices?.currency_symbol}${getEffectivePrice(
                     product
                   )}`}
                 </div>
@@ -302,7 +307,7 @@ function ProductItem({ product, orderLink = "" }) {
               {markedPriceCheck > 0 &&
                 effectivePriceCheck !== markedPriceCheck && (
                   <div className={styles.markedPrice}>
-                    {getMarkedPrice(product)}
+                    {`${product?.prices?.currency_symbol}${getMarkedPrice(product)}`}
                   </div>
                 )}
             </div>

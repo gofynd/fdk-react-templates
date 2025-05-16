@@ -250,9 +250,6 @@ h5,
 .add-email-modal__margin0auto___p7t0c {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .add-email-modal__base-page-container___qv52Z,
 .add-email-modal__basePageContainer___cAQ_p {
   max-width: 1440px !important;
@@ -260,13 +257,6 @@ button {
 .add-email-modal__remove-scroll___NeoWL,
 .add-email-modal__removeScroll____llYA {
   overflow-y: hidden !important;
-}
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
 }
 .add-email-modal__mr-5___mmQ1n,
 .add-email-modal__mr5___jI0Ga {
@@ -676,9 +666,6 @@ h5,
 .modal__margin0auto___dB88d {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .modal__base-page-container___eZhia,
 .modal__basePageContainer___QUmCs {
   max-width: 1440px !important;
@@ -686,13 +673,6 @@ button {
 .modal__remove-scroll___vOtMk,
 .modal__removeScroll___sjuCx {
   overflow-y: hidden !important;
-}
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
 }
 .modal__mr-5___DjKqT,
 .modal__mr5___il5jH {
@@ -1166,9 +1146,6 @@ h5,
 .fy-input__margin0auto___dSSwm {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .fy-input__base-page-container___DIijL,
 .fy-input__basePageContainer___iFW9V {
   max-width: 1440px !important;
@@ -1176,13 +1153,6 @@ button {
 .fy-input__remove-scroll___B0TU7,
 .fy-input__removeScroll___ZJHN4 {
   overflow-y: hidden !important;
-}
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
 }
 .fy-input__mr-5___v4vQm,
 .fy-input__mr5___FnOZz {
@@ -1640,9 +1610,6 @@ h5,
 .fy-button__margin0auto___LCb81 {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .fy-button__base-page-container___blkPJ,
 .fy-button__basePageContainer___ciPsX {
   max-width: 1440px !important;
@@ -1650,13 +1617,6 @@ button {
 .fy-button__remove-scroll___Kd5MZ,
 .fy-button__removeScroll___UpL4U {
   overflow-y: hidden !important;
-}
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
 }
 .fy-button__mr-5___A5qJJ,
 .fy-button__mr5___BRUgW {
@@ -1749,7 +1709,7 @@ img::selection {
 .fy-button__button___UES8C span {
   display: inline-flex;
 }
-.fy-button__button___UES8C:focus {
+.fy-button__button___UES8C:focus-visible {
   outline: none;
   box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }
