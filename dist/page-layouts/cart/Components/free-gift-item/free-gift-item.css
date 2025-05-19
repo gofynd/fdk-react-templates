@@ -250,9 +250,6 @@ h5,
 .free-gift-item__margin0auto___hpTPs {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .free-gift-item__base-page-container___LIKt3,
 .free-gift-item__basePageContainer___lzNzG {
   max-width: 1440px !important;
@@ -261,20 +258,13 @@ button {
 .free-gift-item__removeScroll___DdTl9 {
   overflow-y: hidden !important;
 }
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
-}
 .free-gift-item__mr-5___R4N5D,
 .free-gift-item__mr5___OIG6F {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .free-gift-item__mr-2___yOfCI,
 .free-gift-item__mr2___lFyA4 {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .free-gift-item__py-5___KNdXo,
 .free-gift-item__py5___mF4s5 {

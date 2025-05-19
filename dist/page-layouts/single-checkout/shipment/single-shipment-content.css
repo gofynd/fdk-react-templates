@@ -250,9 +250,6 @@ h5,
 .single-shipment-content__margin0auto___IGsne {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .single-shipment-content__base-page-container___K7IyN,
 .single-shipment-content__basePageContainer___Pxi32 {
   max-width: 1440px !important;
@@ -261,20 +258,13 @@ button {
 .single-shipment-content__removeScroll___TWbdg {
   overflow-y: hidden !important;
 }
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
-}
 .single-shipment-content__mr-5___Zv6MF,
 .single-shipment-content__mr5___E_a2K {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .single-shipment-content__mr-2___lSx92,
 .single-shipment-content__mr2___nYmRP {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .single-shipment-content__py-5___ghl3k,
 .single-shipment-content__py5___y7CII {
@@ -374,7 +364,7 @@ img::selection {
   font-weight: 600;
   font-size: 14px;
   color: var(--textHeading);
-  margin-right: 8px;
+  margin-inline-end: 8px;
   line-height: 140%;
   white-space: nowrap;
 }
@@ -441,7 +431,7 @@ img::selection {
   margin-bottom: 16px;
 }
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__couponRibbon___huw7i span {
-  margin-left: 6px;
+  margin-inline-start: 6px;
 }
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__couponRibbon___huw7i .single-shipment-content__ribbonMsg___g5K1g {
   align-self: center;
@@ -520,7 +510,7 @@ img::selection {
   flex-wrap: wrap;
 }
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__itemWrapper___Sz3u9 .single-shipment-content__rightDetails___Ll92n .single-shipment-content__productDetails___BshGD .single-shipment-content__sizeInfo___IV1tR .single-shipment-content__sizeQuantity___IbtcK .single-shipment-content__size___t9VZb {
-  margin-right: 12px;
+  margin-inline-end: 12px;
   line-height: 140%;
 }
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__itemWrapper___Sz3u9 .single-shipment-content__rightDetails___Ll92n .single-shipment-content__paymentInfo___lbLQI {
@@ -530,7 +520,7 @@ img::selection {
 }
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__itemWrapper___Sz3u9 .single-shipment-content__rightDetails___Ll92n .single-shipment-content__paymentInfo___lbLQI .single-shipment-content__priceWrapper___KZYrt {
   display: flex;
-  margin-right: 12px;
+  margin-inline-end: 12px;
   align-items: center;
 }
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__itemWrapper___Sz3u9 .single-shipment-content__rightDetails___Ll92n .single-shipment-content__paymentInfo___lbLQI .single-shipment-content__priceWrapper___KZYrt .single-shipment-content__effectivePrice___RcTdJ {
@@ -548,7 +538,7 @@ img::selection {
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__itemWrapper___Sz3u9 .single-shipment-content__rightDetails___Ll92n .single-shipment-content__paymentInfo___lbLQI .single-shipment-content__priceWrapper___KZYrt .single-shipment-content__discount___ur9L7 {
   font-weight: 500;
   font-size: 12px;
-  color: var(--successText, #1c958f);
+  color: var(--saleDiscountText, #1c958f);
 }
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__itemWrapper___Sz3u9 .single-shipment-content__rightDetails___Ll92n .single-shipment-content__paymentInfo___lbLQI .single-shipment-content__offersWarning___bo1Rp {
   display: flex;
@@ -576,7 +566,7 @@ img::selection {
   width: fit-content;
 }
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__itemWrapper___Sz3u9 .single-shipment-content__rightDetails___Ll92n .single-shipment-content__paymentInfo___lbLQI .single-shipment-content__offersWarning___bo1Rp .single-shipment-content__appliedOffer___I9cuC .single-shipment-content__offerInfoIcon___b6JtJ {
-  margin-left: 6px;
+  margin-inline-start: 6px;
   cursor: pointer;
 }
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__proceedBtnWrapper___r54yh .single-shipment-content__viewPriceDetails___by8fc {
@@ -887,9 +877,6 @@ h5,
 .free-gift-item__margin0auto___hpTPs {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .free-gift-item__base-page-container___LIKt3,
 .free-gift-item__basePageContainer___lzNzG {
   max-width: 1440px !important;
@@ -898,20 +885,13 @@ button {
 .free-gift-item__removeScroll___DdTl9 {
   overflow-y: hidden !important;
 }
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
-}
 .free-gift-item__mr-5___R4N5D,
 .free-gift-item__mr5___OIG6F {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .free-gift-item__mr-2___yOfCI,
 .free-gift-item__mr2___lFyA4 {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .free-gift-item__py-5___KNdXo,
 .free-gift-item__py5___mF4s5 {

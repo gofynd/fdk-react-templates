@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from "react";
 import * as styles from "./cart.less";
-import { useNavigate } from "react-router-dom";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
 import DeliveryLocation from "../../page-layouts/cart/Components/delivery-location/delivery-location";
 import Coupon from "../../page-layouts/cart/Components/coupon/coupon";
@@ -11,6 +10,7 @@ import ChipItem from "../../page-layouts/cart/Components/chip-item/chip-item";
 import ShareCart from "../../page-layouts/cart/Components/share-cart/share-cart";
 import StickyFooter from "../../page-layouts/cart/Components/sticky-footer/sticky-footer";
 import RemoveCartItem from "../../page-layouts/cart/Components/remove-cart-item/remove-cart-item";
+import { useNavigate, useGlobalTranslation } from "fdk-core/utils";
 
 const Cart = ({
   isCartUpdating,
@@ -36,16 +36,17 @@ const Cart = ({
   cartShareProps,
   isRemoveModalOpen = false,
   isPromoModalOpen = false,
-  onGotoCheckout = () => {},
-  onRemoveIconClick = () => {},
-  onRemoveButtonClick = () => {},
-  onWishlistButtonClick = () => {},
-  onCloseRemoveModalClick = () => {},
-  onPriceDetailsClick = () => {},
-  updateCartCheckoutMode = () => {},
-  onOpenPromoModal = () => {},
-  onClosePromoModal = () => {},
+  onGotoCheckout = () => { },
+  onRemoveIconClick = () => { },
+  onRemoveButtonClick = () => { },
+  onWishlistButtonClick = () => { },
+  onCloseRemoveModalClick = () => { },
+  onPriceDetailsClick = () => { },
+  updateCartCheckoutMode = () => { },
+  onOpenPromoModal = () => { },
+  onClosePromoModal = () => { },
 }) => {
+  const { t } = useGlobalTranslation("translation");
   const [sizeModal, setSizeModal] = useState(null);
   const [currentSizeModalSize, setCurrentSizeModalSize] = useState(null);
   const [removeItemData, setRemoveItemData] = useState(null);
@@ -83,9 +84,9 @@ const Cart = ({
           <DeliveryLocation {...deliveryLocationProps} />
           <div className={styles.cartTitleContainer}>
             <div className={styles.bagDetailsContainer}>
-              <span className={styles.bagCountHeading}>Your Bag</span>
+              <span className={styles.bagCountHeading}>{t("resource.section.cart.your_bag")}</span>
               <span className={styles.bagCount}>
-                {cartItemsArray?.length || 0} items
+                {cartItemsArray?.length || 0} {t("resource.common.items")}
               </span>
             </div>
             {isShareCart && (
@@ -146,7 +147,7 @@ const Cart = ({
                   onClick={updateCartCheckoutMode}
                   svgSrc={checkoutMode === "other" ? "radio-selected" : "radio"}
                 />
-                <span> Placing order on behalf of Customer</span>
+                <span> {t("resource.section.cart.order_on_behalf")}</span>
               </div>
             )}
             {!isLoggedIn ? (
@@ -155,7 +156,7 @@ const Cart = ({
                   className={styles.priceSummaryLoginButton}
                   onClick={redirectToLogin}
                 >
-                  LOGIN
+                  {t("resource.auth.login.login_caps")}
                 </button>
                 {isAnonymous && (
                   <button
@@ -163,7 +164,7 @@ const Cart = ({
                     disabled={!isValid || isOutOfStock || isNotServicable}
                     onClick={onGotoCheckout}
                   >
-                    CONTINUE AS GUEST
+                    {t("resource.section.cart.continue_as_guest_caps")}
                   </button>
                 )}
               </>
@@ -173,7 +174,7 @@ const Cart = ({
                 disabled={!isValid || isOutOfStock || isNotServicable}
                 onClick={onGotoCheckout}
               >
-                checkout
+                {t("resource.section.cart.checkout_button")}
               </button>
             )}
             {isShareCart && (

@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import * as styles from "./order-tracking-details.less";
 import EmptyState from "../../../components/empty-state/empty-state";
-import Loader from "../../../components/loader/loader";
 import OrderShipment from "../../../components/order-shipment/order-shipment";
 import ShipmentItem from "../../../components/shipment-item/shipment-item";
 import ShipmentTracking from "../../../components/shipment-tracking/shipment-tracking";
 import ShipmentBreakup from "../../../components/shipment-breakup/shipment-breakup";
+import { useNavigate, useGlobalTranslation } from "fdk-core/utils";
 import FyButton from "../../../components/core/fy-button/fy-button";
 import FyInput from "../../../components/core/fy-input/fy-input";
+import Loader from "../../../components/loader/loader";
 
 function OrderTrackingDetails({
   invoiceDetails,
@@ -18,6 +19,7 @@ function OrderTrackingDetails({
   selectedShipment,
   isShipmentLoading,
 }) {
+  const { t } = useGlobalTranslation("translation");
   const params = useParams();
   const [orderId, setOrderId] = useState(params.orderId);
   const [showError, setShowError] = useState(false);
@@ -42,11 +44,11 @@ function OrderTrackingDetails({
 
   useEffect(() => {
     getShipmentDetails();
-    return () => {};
+    return () => { };
   }, [params?.shipmentId]);
   useEffect(() => {
     setSelectedShipmentBag(selectedShipment);
-    return () => {};
+    return () => { };
   }, [selectedShipment]);
   useEffect(() => {
     if (params?.shipmentId) {
@@ -54,7 +56,7 @@ function OrderTrackingDetails({
     } else {
       setSelectedShipmentBag(orderShipments?.shipments?.[0]);
     }
-    return () => {};
+    return () => { };
   }, [orderShipments?.shipments]);
 
   const getBag = () => {
@@ -78,107 +80,97 @@ function OrderTrackingDetails({
       className={`basePageContainer margin0auto ${styles.orderTrackingDetails}`}
     >
       <div className={`${styles.orderDetails}`}>
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <>
-            <div className={`${styles.trackOrder}`}>
-              <FyInput
-                label={isFocussed || orderId ? "Enter Order ID" : ""}
-                labelVariant="floating"
-                value={orderId}
-                placeholder={!isFocussed ? "Enter Order ID" : ""}
-                maxLength="20"
-                error={showError}
-                errorMessage="Invalid Order Id"
-                onChange={(e) => setOrderId(e.target.value)}
-                onFocus={() => setIsFocussed(true)}
-                onBlur={() => setIsFocussed(false)}
-                className={styles.orderIdInput}
-              />
-              <FyButton
-                className={styles.btn}
-                variant="contained"
-                size="medium"
-                onClick={trackOrder}
-              >
-                TRACK ORDER
-              </FyButton>
+        <div className={`${styles.trackOrder}`}>
+          <FyInput
+            label={isFocussed || orderId ? t("resource.order.enter_order_id") : ""}
+            labelVariant="floating"
+            value={orderId}
+            placeholder={!isFocussed ? t("resource.order.enter_order_id") : ""}
+            maxLength="20"
+            error={showError}
+            errorMessage={t("resource.order.invalid_order_id")}
+            onChange={(e) => setOrderId(e.target.value.toUpperCase())}
+            onFocus={() => setIsFocussed(true)}
+            onBlur={() => setIsFocussed(false)}
+            className={styles.orderIdInput}
+          />
+          <FyButton
+            className={styles.btn}
+            variant="contained"
+            size="medium"
+            onClick={trackOrder}
+          >
+            {t("resource.order.track_order_caps")}
+          </FyButton>
+        </div>
+        {(Object.keys(orderShipments)?.length === 0 ||
+          orderShipments?.shipments?.length === 0) &&
+          !isShipmentLoading &&
+          !isLoading && (
+            <div className={`${styles.error}`}>
+              <EmptyState></EmptyState>
             </div>
-            {(Object.keys(orderShipments)?.length === 0 ||
-              orderShipments?.shipments?.length === 0) && (
-              <div className={`${styles.error}`}>
-                <EmptyState></EmptyState>
+          )}
+        {Object.keys(orderShipments)?.length !== 0 &&
+          orderShipments?.shipments?.length !== 0 && (
+            <div className={`${styles.orderShipments}`}>
+              <div className={`${styles.orderShipmentsWrapper}`}>
+                <OrderShipment
+                  orderInfo={orderShipments}
+                  isBuyAgainEligible={false}
+                ></OrderShipment>
               </div>
-            )}
-            {Object.keys(orderShipments)?.length !== 0 &&
-              orderShipments?.shipments?.length !== 0 && (
-                <div className={`${styles.orderShipments}`}>
-                  <div className={`${styles.orderShipmentsWrapper}`}>
-                    <OrderShipment
-                      orderInfo={orderShipments}
-                      isBuyAgainEligible={false}
-                    ></OrderShipment>
+              {isShipmentLoading ? (
+                <Loader />
+              ) : (
+                <div className={`${styles.shipmentDetails}`}>
+                  <div className={`${styles.shipmentBagItem}`}>
+                    {getSlicedGroupedShipmentBags()?.map((item, index) => (
+                      <ShipmentItem
+                        key={item.item.brand.name + index}
+                        bag={item}
+                        shipment={{
+                          traking_no: selectedShipmentBag?.traking_no,
+                          track_url: selectedShipmentBag?.track_url,
+                        }}
+                        type="tracking"
+                      />
+                    ))}
                   </div>
-                  {isShipmentLoading ? (
-                    <Loader />
-                  ) : (
-                    <div className={`${styles.shipmentDetails}`}>
-                      <div className={`${styles.shipmentBagItem}`}>
-                        {getSlicedGroupedShipmentBags()?.map((item, index) => (
-                          <ShipmentItem
-                            key={item.item.brand.name + index}
-                            bag={item}
-                            shipment={{
-                              traking_no: selectedShipmentBag?.traking_no,
-                              track_url: selectedShipmentBag?.track_url,
-                            }}
-                            type="tracking"
-                          />
-                        ))}
-                      </div>
-                      {getBag() && getBag().length > 2 && (
-                        <div>
-                          {!show && (
-                            <div
-                              className={`${styles.view}`}
-                              onClick={showMore}
-                            >
-                              {`+${getBag().length - 2} view more`}
-                            </div>
-                          )}
-                          {show && (
-                            <div
-                              className={`${styles.view}`}
-                              onClick={showLess}
-                            >
-                              view less
-                            </div>
-                          )}
+                  {getBag() && getBag().length > 2 && (
+                    <div>
+                      {!show && (
+                        <div className={`${styles.view}`} onClick={showMore}>
+                          {`+${getBag().length - 2} ${t("resource.facets.view_more_lower")}`}
                         </div>
                       )}
-                      <div className={`${styles.shipment}`}>
-                        <ShipmentTracking
-                          tracking={selectedShipmentBag?.tracking_details}
-                          shipmentInfo={selectedShipmentBag}
-                          changeinit={toggelInit}
-                          invoiceDetails={invoiceDetails}
-                        ></ShipmentTracking>
-                      </div>
-                      <div className={`${styles.shipment} ${styles.noPadding}`}>
-                        <ShipmentBreakup
-                          fpi={fpi}
-                          type="tracking"
-                          breakup={selectedShipmentBag?.breakup_values}
-                          shipmentInfo={selectedShipmentBag}
-                        ></ShipmentBreakup>
-                      </div>
+                      {show && (
+                        <div className={`${styles.view}`} onClick={showLess}>
+                          {t("resource.facets.view_less_lower")}
+                        </div>
+                      )}
                     </div>
                   )}
+                  <div className={`${styles.shipment}`}>
+                    <ShipmentTracking
+                      tracking={selectedShipmentBag?.tracking_details}
+                      shipmentInfo={selectedShipmentBag}
+                      changeinit={toggelInit}
+                      invoiceDetails={invoiceDetails}
+                    ></ShipmentTracking>
+                  </div>
+                  <div className={`${styles.shipment} ${styles.noPadding}`}>
+                    <ShipmentBreakup
+                      fpi={fpi}
+                      type="tracking"
+                      breakup={selectedShipmentBag?.breakup_values}
+                      shipmentInfo={selectedShipmentBag}
+                    ></ShipmentBreakup>
+                  </div>
                 </div>
               )}
-          </>
-        )}
+            </div>
+          )}
       </div>
     </div>
   );

@@ -39,20 +39,22 @@ import React, { useMemo } from "react";
 import { priceFormatCurrencySymbol } from "../../helper/utils";
 import * as styles from "./price-breakup.less";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function PriceBreakup({
-  title = "PRICE SUMMARY",
+  title,
   breakUpValues = [],
   showItemsCount = true,
   cartItemCount = 0,
   currencySymbol = "₹",
   showTotalDiscount = true,
   includeZeroValues = false,
-  discountGreetingMessage = "Yayy!!! You've saved",
+  discountGreetingMessage,
   greetingIcon = <SvgWrapper svgSrc="celebration" className={styles.svgIcon} />,
   cardBorderRadius = "8px",
   isInternationalTaxLabel = false,
 }) {
+  const { t } = useGlobalTranslation("translation");
   const cssVar = {
     "--card-border-radius": `${cardBorderRadius}`,
   };
@@ -93,20 +95,18 @@ function PriceBreakup({
       id="price-breakup-container-id"
     >
       <div className={`fontBody ${styles.priceSummaryHeading}`}>
-        {title}
+        {title || t("resource.common.price_summary")}
         {showItemsCount && (
-          <span>{` ( ${cartItemCount} ${
-            cartItemCount > 1 ? "ITEMS" : "ITEM"
-          } )`}</span>
+          <span>{` ( ${cartItemCount} ${cartItemCount > 1 ? t("resource.common.items_caps_plural") : t("resource.common.items_caps_singular")
+            } )`}</span>
         )}
       </div>
       {breakUpValuesList?.map((item, index) => (
         <div
-          className={`fontBody ${
-            index !== breakUpValuesList.length - 1
-              ? styles.priceSummaryItem
-              : styles.priceSummaryItemTotal
-          }`}
+          className={`fontBody ${index !== breakUpValuesList.length - 1
+            ? styles.priceSummaryItem
+            : styles.priceSummaryItemTotal
+            }`}
           key={item?.key}
         >
           {index !== breakUpValuesList.length - 1 ? (
@@ -130,7 +130,7 @@ function PriceBreakup({
         <div className={styles.internationalTaxLabel}>
           <SvgWrapper className={styles.infoIcon} svgSrc="infoIcon" />
           <span>
-            Local taxes, duties or custom clearance fees may apply on delivery
+            {t("resource.common.delivery_custom_fees_notice")}
           </span>
         </div>
       )}
@@ -138,7 +138,7 @@ function PriceBreakup({
         <div className={styles.discountPreviewContiner}>
           <span className={styles.icon}>{greetingIcon}</span>
           <span className={styles.discountPreviewMessage}>
-            {discountGreetingMessage}
+            {discountGreetingMessage || t("resource.common.discount_greeting_message")}
           </span>
           <span className={styles.discountPreviewAmount}>
             {priceFormatCurrencySymbol(currencySymbol, totalDiscount)}
