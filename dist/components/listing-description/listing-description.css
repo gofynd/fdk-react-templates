@@ -250,9 +250,6 @@ h5,
 .listing-description__margin0auto___V_B_T {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .listing-description__base-page-container___C4YtN,
 .listing-description__basePageContainer___LkrI_ {
   max-width: 1440px !important;
@@ -261,20 +258,13 @@ button {
 .listing-description__removeScroll___TJMqn {
   overflow-y: hidden !important;
 }
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
-}
 .listing-description__mr-5___Z5PmL,
 .listing-description__mr5___p_tyf {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .listing-description__mr-2___x37Ko,
 .listing-description__mr2___DyFdb {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .listing-description__py-5___FMOgo,
 .listing-description__py5___BPf72 {

@@ -250,9 +250,6 @@ h5,
 .order-header__margin0auto___SXpX0 {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .order-header__base-page-container___UF9IX,
 .order-header__basePageContainer___lpZfc {
   max-width: 1440px !important;
@@ -261,20 +258,13 @@ button {
 .order-header__removeScroll___DvxK7 {
   overflow-y: hidden !important;
 }
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
-}
 .order-header__mr-5___eiIQs,
 .order-header__mr5___KagDi {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .order-header__mr-2___fvudi,
 .order-header__mr2___a2Jzk {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .order-header__py-5___I2JzE,
 .order-header__py5___uTEP1 {
@@ -359,6 +349,8 @@ img::selection {
 @media only screen and (max-width: 768px) {
   .order-header__orderHeader___rD3JP {
     padding: 16px;
+    flex-direction: column;
+    align-items: normal;
   }
 }
 .order-header__orderHeader___rD3JP .order-header__boldmd___T936c {
@@ -417,7 +409,7 @@ img::selection {
 }
 .order-header__orderHeader___rD3JP .order-header__rightAlign___cZHsq {
   display: flex;
-  margin-left: auto;
+  margin-inline-start: auto;
   padding: 0;
 }
 @media only screen and (max-width: 768px) {
@@ -697,9 +689,6 @@ h5,
 .dropdown__margin0auto___wx8Zq {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .dropdown__base-page-container___XbSHj,
 .dropdown__basePageContainer___ltGz1 {
   max-width: 1440px !important;
@@ -708,20 +697,13 @@ button {
 .dropdown__removeScroll___tOBHf {
   overflow-y: hidden !important;
 }
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
-}
 .dropdown__mr-5___QlQ0X,
 .dropdown__mr5___dgj6b {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .dropdown__mr-2___tho7s,
 .dropdown__mr2___h5Onb {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .dropdown__py-5___QPo_V,
 .dropdown__py5___TbJRq {
@@ -796,7 +778,7 @@ img::selection {
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  margin-left: 10px;
+  margin-inline-start: 10px;
   position: relative;
   color: var(--textBody, #3c3131);
   font-weight: 400;
@@ -819,7 +801,7 @@ img::selection {
 }
 @media only screen and (max-width: 480px) {
   .dropdown__selected___rZEuQ .dropdown__menu____Aa1u {
-    right: 0;
+    inset-inline-end: 0;
   }
 }
 .dropdown__selected___rZEuQ .dropdown__menu____Aa1u li {
