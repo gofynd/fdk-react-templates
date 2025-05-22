@@ -33,12 +33,17 @@
  */
 
 import React, { useMemo } from "react";
-import { currencyFormat } from "../../helper/utils";
+import { currencyFormat, formatLocale } from "../../helper/utils";
 import { useMobile } from "../../helper/hooks";
 import FyImage from "../core/fy-image/fy-image";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
 import * as styles from "./product-card.less";
 import FyButton from "../core/fy-button/fy-button";
+import {
+  useGlobalStore,
+  useFPI,
+  useGlobalTranslation
+} from "fdk-core/utils";
 
 const ProductCard = ({
   product,
@@ -63,16 +68,24 @@ const ProductCard = ({
   columnCount = { desktop: 4, tablet: 3, mobile: 1 },
   WishlistIconComponent = () => <SvgWrapper svgSrc="wishlist-plp" />,
   isRemoveIcon = false,
-  RemoveIconComponent = () => <SvgWrapper svgSrc="item-close" />,
+  RemoveIconComponent = () => (
+    <SvgWrapper svgSrc="item-close" className={styles.removeIcon} />
+  ),
+  actionButtonText,
   followedIdList = [],
-  onWishlistClick = () => {},
-  handleAddToCart = () => {},
-  onRemoveClick = () => {},
+  onWishlistClick = () => { },
+  handleAddToCart = () => { },
+  onRemoveClick = () => { },
   centerAlign = false,
   showAddToCart = false,
   showBadge = true,
   isSlider = false,
 }) => {
+  const { t } = useGlobalTranslation("translation");
+  const fpi = useFPI();
+  const i18nDetails = useGlobalStore(fpi?.getters?.i18N_DETAILS) || {};
+  const locale = i18nDetails?.language?.locale || "en";
+  const countryCode = i18nDetails?.countryCode || "IN";
   const isMobile = useMobile();
 
   const getListingPrice = (key) => {
@@ -83,22 +96,33 @@ const ProductCard = ({
 
     switch (listingPrice) {
       case "min":
-        price = currencyFormat(priceDetails.min, priceDetails.currency_symbol);
+        price = currencyFormat(
+          priceDetails.min, 
+          priceDetails.currency_symbol, 
+          formatLocale(locale, countryCode, true));
         break;
       case "max":
-        price = currencyFormat(priceDetails.max, priceDetails.currency_symbol);
+        price = currencyFormat(
+          priceDetails.max, 
+          priceDetails.currency_symbol, 
+          formatLocale(locale, countryCode, true));
         break;
       case "range":
         price =
           priceDetails.min !== priceDetails.max
             ? `${currencyFormat(
-                priceDetails.min,
-                priceDetails.currency_symbol
-              )} - ${currencyFormat(
-                priceDetails.max,
-                priceDetails.currency_symbol
-              )}`
-            : currencyFormat(priceDetails.min, priceDetails.currency_symbol);
+              priceDetails.min,
+              priceDetails.currency_symbol,
+              formatLocale(locale, countryCode, true)
+            )} - ${currencyFormat(
+              priceDetails.max,
+              priceDetails.currency_symbol,
+              formatLocale(locale, countryCode, true)
+            )}`
+            : currencyFormat(
+              priceDetails.min, 
+              priceDetails.currency_symbol, 
+              formatLocale(locale, countryCode, true));
         break;
       default:
         break;
@@ -163,11 +187,9 @@ const ProductCard = ({
 
   return (
     <div
-      className={`${styles.productCard} ${
-        !product.sellable ? styles.disableCursor : ""
-      } ${styles[customClass[0]]} ${styles[customClass[1]]} ${
-        styles[customClass[2]]
-      } ${styles.animate} ${gridClass} ${isSlider ? styles.sliderCard : ""}`}
+      className={`${styles.productCard} ${!product.sellable ? styles.disableCursor : ""
+        } ${styles[customClass[0]]} ${styles[customClass[1]]} ${styles[customClass[2]]
+        } ${styles.animate} ${gridClass} ${isSlider ? styles.sliderCard : ""}`}
     >
       <div className={styles.imageContainer}>
         {!isMobile && showImageOnHover && hoverImageUrl && (
@@ -198,7 +220,7 @@ const ProductCard = ({
           <button
             className={`${styles.wishlistBtn} ${isFollowed ? styles.active : ""}`}
             onClick={handleWishlistClick}
-            title="Wislist Icon"
+            title={t("resource.product.wishlist_icon")}
           >
             <WishlistIconComponent isFollowed={isFollowed} />
           </button>
@@ -207,7 +229,7 @@ const ProductCard = ({
           <button
             className={`${styles.wishlistBtn} ${isFollowed ? styles.active : ""}`}
             onClick={handleRemoveClick}
-            title="Remove Icon"
+            title={t("resource.product.wishlist_icon")}
           >
             <RemoveIconComponent />
           </button>
@@ -215,7 +237,7 @@ const ProductCard = ({
         {!product.sellable ? (
           <div className={`${styles.badge} ${styles.outOfStock}`}>
             <span className={`${styles.text} ${styles.captionNormal}`}>
-              Out of stock
+              {t("resource.common.out_of_stock")}
             </span>
           </div>
         ) : product.teaser_tag && showBadge ? (
@@ -227,7 +249,7 @@ const ProductCard = ({
         ) : isSaleBadge && showBadge && product.discount && product.sellable ? (
           <div className={`${styles.badge} ${styles.sale}`}>
             <span className={`${styles.text} ${styles.captionNormal}`}>
-              Sale
+              {t("resource.common.sale")}
             </span>
           </div>
         ) : null}
@@ -304,7 +326,7 @@ const ProductCard = ({
             className={styles.addToCart}
             onClick={handleAddToCartClick}
           >
-            ADD TO CART
+            {actionButtonText ?? t('resource.common.add_to_cart')}
           </FyButton>
         )}
       </div>

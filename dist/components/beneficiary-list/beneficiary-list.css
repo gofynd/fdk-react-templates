@@ -250,9 +250,6 @@ h5,
 .beneficiary-list__margin0auto___WL6L5 {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .beneficiary-list__base-page-container___nEg5T,
 .beneficiary-list__basePageContainer___JHWHu {
   max-width: 1440px !important;
@@ -261,20 +258,13 @@ button {
 .beneficiary-list__removeScroll___iKj4a {
   overflow-y: hidden !important;
 }
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
-}
 .beneficiary-list__mr-5___fPWkL,
 .beneficiary-list__mr5___ipR2D {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .beneficiary-list__mr-2___rkn_H,
 .beneficiary-list__mr2___drhoq {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .beneficiary-list__py-5___cE5T7,
 .beneficiary-list__py5___F1q6P {
@@ -354,7 +344,7 @@ img::selection {
   cursor: pointer;
 }
 .beneficiary-list__beneficiaryItem___MDb8X .beneficiary-list__beneficiaryContent___F8Qd6 .beneficiary-list__text___WX7kl {
-  margin-left: 10px;
+  margin-inline-start: 10px;
 }
 .beneficiary-list__beneficiaryItem___MDb8X .beneficiary-list__beneficiaryContent___F8Qd6 .beneficiary-list__text___WX7kl .beneficiary-list__boldxs___Eq9oU {
   font-weight: 700;
@@ -630,9 +620,6 @@ h5,
 .beneficiary-list-item__margin0auto___CDRTe {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .beneficiary-list-item__base-page-container___HaLfw,
 .beneficiary-list-item__basePageContainer___VI5Vp {
   max-width: 1440px !important;
@@ -641,20 +628,13 @@ button {
 .beneficiary-list-item__removeScroll___pp8vN {
   overflow-y: hidden !important;
 }
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
-}
 .beneficiary-list-item__mr-5___LTMRQ,
 .beneficiary-list-item__mr5___Ldsvj {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .beneficiary-list-item__mr-2___feIGI,
 .beneficiary-list-item__mr2___ZUfwj {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .beneficiary-list-item__py-5___RIVjJ,
 .beneficiary-list-item__py5___vXsZA {
@@ -746,7 +726,7 @@ img::selection {
   color: var(--buttonPrimary, #4e3f09);
 }
 .beneficiary-list-item__beneficiaryItem___A6fh2 .beneficiary-list-item__beneficiaryContent___PrID6 .beneficiary-list-item__text___VqsAZ {
-  margin-left: 10px;
+  margin-inline-start: 10px;
 }
 .beneficiary-list-item__beneficiaryItem___A6fh2 .beneficiary-list-item__beneficiaryContent___PrID6 .beneficiary-list-item__text___VqsAZ .beneficiary-list-item__boldxs___Obtjg {
   font-weight: 700;

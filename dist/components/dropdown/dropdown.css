@@ -250,9 +250,6 @@ h5,
 .dropdown__margin0auto___wx8Zq {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .dropdown__base-page-container___XbSHj,
 .dropdown__basePageContainer___ltGz1 {
   max-width: 1440px !important;
@@ -261,20 +258,13 @@ button {
 .dropdown__removeScroll___tOBHf {
   overflow-y: hidden !important;
 }
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
-}
 .dropdown__mr-5___QlQ0X,
 .dropdown__mr5___dgj6b {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .dropdown__mr-2___tho7s,
 .dropdown__mr2___h5Onb {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .dropdown__py-5___QPo_V,
 .dropdown__py5___TbJRq {
@@ -349,7 +339,7 @@ img::selection {
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  margin-left: 10px;
+  margin-inline-start: 10px;
   position: relative;
   color: var(--textBody, #3c3131);
   font-weight: 400;
@@ -372,7 +362,7 @@ img::selection {
 }
 @media only screen and (max-width: 480px) {
   .dropdown__selected___rZEuQ .dropdown__menu____Aa1u {
-    right: 0;
+    inset-inline-end: 0;
   }
 }
 .dropdown__selected___rZEuQ .dropdown__menu____Aa1u li {

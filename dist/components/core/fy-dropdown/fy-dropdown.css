@@ -250,9 +250,6 @@ h5,
 .fy-dropdown__margin0auto___uQLtQ {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .fy-dropdown__base-page-container___obW4G,
 .fy-dropdown__basePageContainer___UOXvf {
   max-width: 1440px !important;
@@ -261,20 +258,13 @@ button {
 .fy-dropdown__removeScroll___YixrL {
   overflow-y: hidden !important;
 }
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
-}
 .fy-dropdown__mr-5___ctv4d,
 .fy-dropdown__mr5___oPnFN {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .fy-dropdown__mr-2___iH7OK,
 .fy-dropdown__mr2___aN5pl {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .fy-dropdown__py-5___xUq5T,
 .fy-dropdown__py5___VrS0y {

@@ -250,9 +250,6 @@ h5,
 .checkout-payment-failure__margin0auto___hrn9i {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .checkout-payment-failure__base-page-container___H7PkO,
 .checkout-payment-failure__basePageContainer___zSV86 {
   max-width: 1440px !important;
@@ -261,20 +258,13 @@ button {
 .checkout-payment-failure__removeScroll___QdHBp {
   overflow-y: hidden !important;
 }
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
-}
 .checkout-payment-failure__mr-5___Cg1Ro,
 .checkout-payment-failure__mr5___JTHvr {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .checkout-payment-failure__mr-2___VWckW,
 .checkout-payment-failure__mr2___BwOh3 {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .checkout-payment-failure__py-5___X6S4p,
 .checkout-payment-failure__py5___6HXKo {
