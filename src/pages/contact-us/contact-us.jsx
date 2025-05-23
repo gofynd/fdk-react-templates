@@ -5,14 +5,16 @@ import { Controller, useForm } from "react-hook-form";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
 import FyButton from "../../components/core/fy-button/fy-button";
 import FyImage from "../../components/core/fy-image/fy-image";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function ContactSupport({
   contactInfo = "",
   supportInfo = "",
-  handleSubmitForm = () => {},
+  handleSubmitForm = () => { },
   pageConfig = "",
   SocailMedia = () => <></>,
 }) {
+  const { t } = useGlobalTranslation("translation");
   const {
     handleSubmit,
     formState: { errors },
@@ -35,7 +37,7 @@ function ContactSupport({
   const inputFields = [
     {
       type: "text",
-      label: "Full Name",
+      label: t("resource.common.full_name"),
       name: "name",
       multiline: false,
       showAsterik: true,
@@ -43,27 +45,27 @@ function ContactSupport({
       error: errors?.name,
       pattern: {
         value: /^[a-zA-Z0-9 ]+$/,
-        message: "Please enter a valid name",
+        message: t("resource.contact_us.please_enter_a_valid_name"),
       },
-      errorMessage: "Please enter your name",
+      errorMessage: t("resource.contact_us.please_enter_your_name"),
     },
     {
-      type: "number",
-      label: "Phone Number",
+      type: "tel",
+      label: t("resource.common.phone_number"),
       name: "phone",
       multiline: false,
       showAsterik: true,
       required: true,
       error: errors?.phone,
       pattern: {
-        value: /^[0-9]{10}$/,
-        message: "Please enter a valid phone number",
+        value: /^\+?[0-9\s]{1,15}$/,
+        message: t("resource.contact_us.please_enter_a_valid_phone_number"),
       },
-      errorMessage: "Please enter your phone number",
+      errorMessage: t("resource.contact_us.please_enter_your_phone_number"),
     },
     {
       type: "text",
-      label: "Email",
+      label: t("resource.common.email"),
       name: "email",
       multiline: false,
       showAsterik: true,
@@ -71,19 +73,19 @@ function ContactSupport({
       error: errors?.email,
       pattern: {
         value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-        message: "Please enter a valid email address",
+        message: t("resource.contact_us.please_enter_a_valid_email_address"),
       },
-      errorMessage: "Please enter your email address",
+      errorMessage: t("resource.contact_us.please_enter_your_email_address"),
     },
     {
       type: "textarea",
-      label: "Message",
+      label: t("resource.contact_us.message"),
       name: "comment",
       showAsterik: false,
       required: false,
       error: errors?.comment,
       pattern: null,
-      errorMessage: "Please enter your comment",
+      errorMessage: t("resource.contact_us.please_enter_your_comment"),
       multiline: true,
     },
   ];
@@ -142,7 +144,7 @@ function ContactSupport({
         className={`${styles.contact_container} ${pageConfig?.image_desktop ? styles.onImageContainer : ""}`}
       >
         <div className={`${styles.flex_item}`}>
-          <h1 className={`fontHeader ${styles.showDesktop}`}>Contact Us</h1>
+          <h1 className={`fontHeader ${styles.showDesktop}`}>{t("resource.common.contact_us")}</h1>
           {showListItems && (
             <div className={styles.listItems}>
               {showAddress &&
@@ -193,7 +195,7 @@ function ContactSupport({
           )}
         </div>
         <div className={styles.flex_item}>
-          <h1 className={`${styles.showMobile} fontHeader`}>Contact Us</h1>
+          <h3 className={`${styles.showMobile} fontHeader`}>{t("resource.common.contact_us")}</h3>
           <form onSubmit={handleSubmit(submitForm)}>
             {inputFields?.map((field, index) => (
               <div className={styles.form_row} key={index}>
@@ -223,6 +225,17 @@ function ContactSupport({
                       type={field.type}
                       maxLength={field.type === "textarea" ? 500 : null}
                       error={errors[field.name]}
+                      onInput={
+                        field.type === "tel"
+                          ? (e) => {
+                              // Allow only numbers, space, and + for country code
+                              e.target.value = e.target.value
+                                .replace(/[^+\d\s]/g, "")
+                                .slice(0, 15);
+                              onChange(e);
+                            }
+                          : null
+                      }
                       onChange={(e) => {
                         onChange(e);
                         if (field?.type === "textarea") {
@@ -255,7 +268,7 @@ function ContactSupport({
                 fullWidth={true}
                 type="submit"
               >
-                SEND MESSAGE
+                {t("resource.contact_us.send_message")}
               </FyButton>
             </div>
           </form>

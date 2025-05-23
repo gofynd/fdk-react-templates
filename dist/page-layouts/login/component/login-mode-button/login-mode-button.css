@@ -250,9 +250,6 @@ h5,
 .login-mode-button__margin0auto___WZ2Zl {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .login-mode-button__base-page-container___prAig,
 .login-mode-button__basePageContainer___IWlQi {
   max-width: 1440px !important;
@@ -261,20 +258,13 @@ button {
 .login-mode-button__removeScroll___HncN9 {
   overflow-y: hidden !important;
 }
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
-}
 .login-mode-button__mr-5___f_aDn,
 .login-mode-button__mr5___UHJOX {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .login-mode-button__mr-2___tzSde,
 .login-mode-button__mr2___NgLmw {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .login-mode-button__py-5___eXLUS,
 .login-mode-button__py5___kNtbB {
@@ -361,7 +351,7 @@ img::selection {
   flex: 0 0 24px;
 }
 .login-mode-button__loginModeBtn___BqUzp .login-mode-button__loginModeLabel___BYT3_ {
-  margin-right: 24px;
+  margin-inline-end: 24px;
   color: var(--textHeading, #26201a);
   font-size: 14px;
   font-style: normal;
