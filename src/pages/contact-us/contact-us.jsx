@@ -48,7 +48,7 @@ function ContactSupport({
       errorMessage: "Please enter your name",
     },
     {
-      type: "number",
+      type: "tel",
       label: "Phone Number",
       name: "phone",
       multiline: false,
@@ -56,7 +56,7 @@ function ContactSupport({
       required: true,
       error: errors?.phone,
       pattern: {
-        value: /^[0-9]{10}$/,
+        value: /^\+?[0-9\s]{1,15}$/,
         message: "Please enter a valid phone number",
       },
       errorMessage: "Please enter your phone number",
@@ -223,6 +223,17 @@ function ContactSupport({
                       type={field.type}
                       maxLength={field.type === "textarea" ? 500 : null}
                       error={errors[field.name]}
+                      onInput={
+                        field.type === "tel"
+                          ? (e) => {
+                              // Allow only numbers, space, and + for country code
+                              e.target.value = e.target.value
+                                .replace(/[^+\d\s]/g, "")
+                                .slice(0, 15);
+                              onChange(e);
+                            }
+                          : null
+                      }
                       onChange={(e) => {
                         onChange(e);
                         if (field?.type === "textarea") {

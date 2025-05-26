@@ -33,6 +33,7 @@ const Wishlist = ({
   imagePlaceholder = "",
   addToCartModalProps = {},
   showAddToCart = false,
+  actionButtonText = "Add To Cart",
   globalConfig = {},
 }) => {
   const countLabel = totalCount > 1 ? `${totalCount} items` : "";
@@ -95,6 +96,7 @@ const Wishlist = ({
                 imagePlaceholder={imagePlaceholder}
                 columnCount={{ desktop: 4, tablet: 3, mobile: 2 }}
                 showAddToCart={showAddToCart}
+                actionButtonText={actionButtonText}
                 handleAddToCart={handleAddToCart}
               />
             </FDKLink>

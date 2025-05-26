@@ -75,7 +75,7 @@ function FilterList({
     };
 
     getFilteredItems(searchText).forEach((item) => {
-      const firstChar = item.display[0].toUpperCase();
+      const firstChar = item?.display?.[0]?.toUpperCase();
       if (!groupedFilterValues[firstChar]) {
         groupedFilterValues["#"].push(item);
       } else {

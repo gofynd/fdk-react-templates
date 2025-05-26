@@ -97,11 +97,12 @@ function OrderShipment({
           orderInfo?.shipments?.length !== 0 &&
           orderInfo?.shipments?.map((item, index) => {
             return (
-              <div className={styles.shipmentData} key={`${item.shipment_id}`}>
-                <div
-                  onClick={() => naivgateToShipment(item)}
-                  className={`${styles.shipmentLeft}`}
-                >
+              <div
+                className={styles.shipmentData}
+                key={`${item.shipment_id}`}
+                onClick={() => naivgateToShipment(item)}
+              >
+                <div className={`${styles.shipmentLeft}`}>
                   <img
                     className={`${isOpen ? styles.filterArrowUp : styles.filterArrowdown}`}
                     src={item?.bags?.[0]?.item?.image?.[0]}
