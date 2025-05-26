@@ -1,5 +1,6 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useGlobalTranslation } from "fdk-core/utils";
 import * as styles from "./sticky-pay-now.less";
 
 const StickyPayNow = ({
@@ -7,8 +8,10 @@ const StickyPayNow = ({
   value = "",
   onPriceDetailsClick = () => {},
   proceedToPay = () => {},
-  btnTitle = "PAY NOW",
+  btnTitle
 }) => {
+  const { t } = useGlobalTranslation("translation");
+  
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -26,14 +29,14 @@ const StickyPayNow = ({
               className={`${styles.viewPriceBtn} ${styles.viewPBtn}`}
               onClick={onPriceDetailsClick}
             >
-              View Price Details
+              {t("resource.cart.view_price_details")}
             </div>
           </div>
           <button
             className={`${styles.cartCheckoutBtn} ${styles.checkoutButton}`}
             onClick={proceedToPay}
           >
-            {btnTitle}
+            {btnTitle || t('resource.cart.pay_now')}
           </button>
         </div>
       </motion.div>

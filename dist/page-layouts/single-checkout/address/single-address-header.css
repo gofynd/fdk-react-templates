@@ -250,9 +250,6 @@ h5,
 .single-address-header__margin0auto___si1EW {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .single-address-header__base-page-container___DbWbc,
 .single-address-header__basePageContainer___RCZhY {
   max-width: 1440px !important;
@@ -261,20 +258,13 @@ button {
 .single-address-header__removeScroll___nGQFo {
   overflow-y: hidden !important;
 }
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
-}
 .single-address-header__mr-5___DtA3i,
 .single-address-header__mr5___XkhXF {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .single-address-header__mr-2___XUItq,
 .single-address-header__mr2___Q4A0a {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .single-address-header__py-5___FYxYw,
 .single-address-header__py5___ta8qY {
@@ -391,7 +381,7 @@ img::selection {
   font-weight: 400;
   line-height: 140%;
   align-self: center;
-  margin-right: 5px;
+  margin-inline-end: 5px;
 }
 .single-address-header__addressHeaderContainer___uHzhP .single-address-header__selectedAddressSection___CV_Su .single-address-header__deliverTo___gwZ5a .single-address-header__deliverToName___dUeyN {
   font-weight: 600;
@@ -431,7 +421,7 @@ img::selection {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  padding-left: 15px;
+  padding-inline-start: 15px;
 }
 .single-address-header__addressHeaderContainer___uHzhP .single-address-header__wrapper___R6IaT .single-address-header__addressHeading___r9xwn {
   font-size: 14px;

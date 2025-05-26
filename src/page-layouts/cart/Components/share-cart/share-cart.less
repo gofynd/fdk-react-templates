@@ -11,11 +11,17 @@
       .shareCartIconGreen {
         display: flex;
         align-items: center;
+
+        svg {
+          path {
+            fill: @ButtonLink;
+          }
+        }
       }
       .shareBagBtn {
         font-size: 12px;
         font-weight: 600;
-        margin-left: 8px;
+        margin-inline-start: 8px;
       }
     }
     .shareCartBox {
@@ -40,7 +46,7 @@
         .shareCartIcon {
           display: flex;
           align-items: center;
-          margin-right: 12px;
+          margin-inline-end: 12px;
         }
       }
       .rightPart {

@@ -250,9 +250,6 @@ h5,
 .reason-item__margin0auto___LXsy_ {
   margin: 0 auto;
 }
-button {
-  cursor: pointer;
-}
 .reason-item__base-page-container___dgOJh,
 .reason-item__basePageContainer___PS1LO {
   max-width: 1440px !important;
@@ -261,20 +258,13 @@ button {
 .reason-item__removeScroll___y_aeH {
   overflow-y: hidden !important;
 }
-::selection {
-  background-color: #e8a76c;
-  color: #000;
-}
-img::selection {
-  background-color: transparent;
-}
 .reason-item__mr-5___l5sqm,
 .reason-item__mr5___VEu5F {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .reason-item__mr-2___jtN_J,
 .reason-item__mr2___PgQFC {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .reason-item__py-5___FB2Mz,
 .reason-item__py5___MRDZz {
