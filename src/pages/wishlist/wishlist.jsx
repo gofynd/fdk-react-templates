@@ -98,6 +98,7 @@ const Wishlist = ({
                 showAddToCart={showAddToCart}
                 actionButtonText={actionButtonText}
                 handleAddToCart={handleAddToCart}
+                globalConfig={globalConfig}
               />
             </FDKLink>
           ))}

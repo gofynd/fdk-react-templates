@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "../../styles/product-listing.less";
 import InfiniteLoader from "../../components/core/infinite-loader/infinite-loader";
@@ -64,7 +64,7 @@ const ProductListing = ({
   listingPrice = "range",
   banner = {},
   showAddToCart = false,
-  actionButtonText = "Add To Cart",
+  actionButtonText = "Add To cart",
   stickyFilterTopOffset = 0,
   onColumnCountUpdate = () => {},
   onResetFiltersClick = () => {},
@@ -87,6 +87,24 @@ const ProductListing = ({
     handleCloseSizeGuide,
     ...restAddToModalProps
   } = addToCartModalProps;
+
+  useEffect(() => {
+    if (isRunningOnClient()) {
+      const savedPosition = sessionStorage.getItem("plpScrollPosition");
+      if (savedPosition) {
+        window.scrollTo(0, parseInt(savedPosition));
+        sessionStorage.removeItem("plpScrollPosition");
+      }
+      const handleBeforeUnload = () => {
+        sessionStorage.setItem("plpScrollPosition", window.scrollY.toString());
+      };
+
+      window.addEventListener("beforeunload", handleBeforeUnload);
+      return () => {
+        window.removeEventListener("beforeunload", handleBeforeUnload);
+      };
+    }
+  }, []);
 
   return (
     <div className={styles.plpWrapper}>
@@ -307,6 +325,7 @@ const ProductListing = ({
                         imagePlaceholder,
                         handleAddToCart,
                         imgSrcSet,
+                        globalConfig,
                       }}
                     />
                   </InfiniteLoader>
@@ -334,6 +353,7 @@ const ProductListing = ({
                       imagePlaceholder,
                       handleAddToCart,
                       imgSrcSet,
+                      globalConfig
                     }}
                   />
                 )}
@@ -415,12 +435,19 @@ function ProductGrid({
   isImageFill = false,
   showImageOnHover = false,
   showAddToCart = false,
-  actionButtonText = "Add To Cart",
+  actionButtonText = "Add To cart",
   imageBackgroundColor = "",
   imagePlaceholder = "",
   onWishlistClick = () => {},
   handleAddToCart = () => {},
+  globalConfig = {},
 }) {
+  const handleProductClick = (e, product) => {
+    if (isRunningOnClient()) {
+      sessionStorage.setItem("plpScrollPosition", window.scrollY.toString());
+    }
+  };
+
   return (
     <div
       className={styles.productContainer}
@@ -437,6 +464,7 @@ function ProductGrid({
             action={product?.action}
             key={product?.uid}
             target={isProductOpenInNewTab ? "_blank" : "_self"}
+            onClick={(e) => handleProductClick(e, product)}
             style={{
               // "--delay": `${(index % 12) * 150}ms`,
               display: "block",
@@ -462,6 +490,7 @@ function ProductGrid({
               imageBackgroundColor={imageBackgroundColor}
               imagePlaceholder={imagePlaceholder}
               handleAddToCart={handleAddToCart}
+              globalConfig={globalConfig}
             />
           </FDKLink>
         ))}
