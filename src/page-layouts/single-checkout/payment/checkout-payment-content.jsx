@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState, useMemo } from "react";
 import * as styles from "./checkout-payment-content.less";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import cardValidator from "card-validator";
 import Modal from "../../../components/core/modal/modal";
 import { useMobile } from "../../../helper/hooks/useMobile";
 // import UktModal from "./ukt-modal";
 import StickyPayNow from "./sticky-pay-now/sticky-pay-now";
 import { priceFormatCurrencySymbol } from "../../../helper/utils";
-import { useGlobalStore, useGlobalTranslation, useFPI, useNavigate } from "fdk-core/utils";
+import { useGlobalStore } from "fdk-core/utils";
 import Spinner from "../../../components/spinner/spinner";
 
 const upiDisplayWrapperStyle = {
@@ -71,7 +71,7 @@ const cancelBtnStyle = {
   color: "var(--buttonLink)",
 };
 
-const UPI_INVALID_VPA_ERROR = "resource.checkout.please_enter_correct_upi_id";
+const UPI_INVALID_VPA_ERROR = "Please enter correct UPI ID";
 import CardForm from "./card-form";
 import Shimmer from "../../../components/shimmer/shimmer";
 
@@ -132,15 +132,11 @@ function CheckoutPaymentContent({
   payment,
   loader,
   handleShowFailedMessage,
-  onPriceDetailsClick = () => { },
+  onPriceDetailsClick = () => {},
   breakUpValues,
   removeDialogueError,
   setCancelQrPayment,
 }) {
-  const fpi = useFPI();
-  const { language } = useGlobalStore(fpi.getters.i18N_DETAILS);
-  const locale = language?.locale;
-  const { t } = useGlobalTranslation("translation");
   const {
     selectedTab,
     selectedTabData,
@@ -329,12 +325,12 @@ function CheckoutPaymentContent({
   const validateCardNumber = () => {
     if (cardNumber) {
       if (!isCardNumberValid) {
-        setCardNumberError(t("resource.checkout.invalid_card_number"));
+        setCardNumberError("Invalid card number");
       } else if (!cardDetailsData.is_enabled) {
-        setCardNumberError(t("resource.checkout.this_card_network_is_not_supported"));
+        setCardNumberError("This card network is not supported");
       }
     } else {
-      setCardNumberError(t("resource.common.field_required"));
+      setCardNumberError("This field is required");
     }
   };
 
@@ -370,7 +366,7 @@ function CheckoutPaymentContent({
 
   const validateNameOnCard = () => {
     if (!nameOnCard.trim()) {
-      setCardNameError(t("resource.common.field_required"));
+      setCardNameError("This field is required");
     }
   };
 
@@ -390,10 +386,10 @@ function CheckoutPaymentContent({
         (expYear === currentYear && expMonth < currentMonth)
       ) {
         //card has expired
-        setCardExpiryError(t("resource.checkout.expiry_date_passed"));
+        setCardExpiryError("The expiry date has passed");
       }
     } else {
-      setCardExpiryError(t("resource.checkout.enter_expiry_date"));
+      setCardExpiryError("Enter Expiry Date");
     }
   };
 
@@ -404,24 +400,24 @@ function CheckoutPaymentContent({
 
   const validateCvv = () => {
     if (!cvvNumber) {
-      setCardCVVError(t("resource.checkout.enter_cvv"));
+      setCardCVVError("Enter CVV");
     } else if (cvvNumber.toString().length !== cardDetailsData.cvv_length) {
-      setCardCVVError(t("resource.checkout.invalid_cvv"));
+      setCardCVVError("Invalid CVV");
     }
   };
 
   const upiAppData = {
     gpay: {
-      displayName: t("resource.checkout.google_pay"),
+      displayName: "Google Pay",
     },
     phonepe: {
-      displayName: t("resource.checkout.phonepe_upi"),
+      displayName: "PhonePe UPI",
     },
     paytm: {
-      displayName: t("resource.checkout.paytm_upi"),
+      displayName: "Paytm UPI",
     },
     any: {
-      displayName: t("resource.checkout.more_apps"),
+      displayName: "More Apps",
     },
   };
   const prevSelectedTabRef = useRef(selectedTab);
@@ -795,15 +791,15 @@ function CheckoutPaymentContent({
       if (res?.code || res?.message) {
         handleShowFailedMessage({
           failed: true,
-          paymentErrHeading: t("resource.checkout.please_try_again_later"),
+          paymentErrHeading: "Please try again later",
           paymentErrMsg: res.message,
         });
       }
     } catch (err) {
       handleShowFailedMessage({
         failed: true,
-        paymentErrHeading: t("resource.checkout.please_try_again_later"),
-        paymentErrMsg: t("resource.checkout.qr_code_generation_failed"),
+        paymentErrHeading: "Please try again later",
+        paymentErrMsg: "Something went wrong while generating QR code",
       });
     }
     handleIsQrCodeLoading(false);
@@ -828,7 +824,8 @@ function CheckoutPaymentContent({
             params.append(key, qrParams[key]);
           }
         }
-        const finalUrl = `${window.location.origin}${locale && locale !== 'en' ? `/${locale}` : ''}/cart/order-status/?${params.toString()}`;
+        const currentURL = window?.location?.origin + "/cart/order-status/";
+        const finalUrl = `${currentURL}?${params.toString()}`;
         window.location.href = finalUrl;
       } else if (status === "failed") {
         setshowUPIModal(false);
@@ -949,8 +946,8 @@ function CheckoutPaymentContent({
         suffix.trim() === ""
           ? upiSuggestions
           : upiSuggestions.filter((suggestion) =>
-            suggestion.toLowerCase().includes("@" + suffix.toLowerCase())
-          );
+              suggestion.toLowerCase().includes("@" + suffix.toLowerCase())
+            );
 
       setFilteredUPISuggestions(filtered);
       setUPIAutoComplete(true);
@@ -1033,11 +1030,11 @@ function CheckoutPaymentContent({
 
   const isPayByCardCvv = () => {
     if (!cvvNumber) {
-      setCardCVVError(t("resource.checkout.enter_cvv"));
+      setCardCVVError("Enter CVV");
       setShowError(true);
       return false;
     } else if (cvvNumber.toString().length > 4) {
-      setCardCVVError(t("resource.checkout.invalid_cvv"));
+      setCardCVVError("Invalid CVV");
       setShowError(true);
       return false;
     }
@@ -1047,15 +1044,15 @@ function CheckoutPaymentContent({
   const checkEmpty = () => {
     let bEmpty = false;
     if (!cardNumber?.length) {
-      setCardNumberError(t("resource.common.field_required"));
+      setCardNumberError("This field is required");
       bEmpty = true;
     }
     if (!expirationdate_mask?.value) {
-      setCardExpiryError(t("resource.common.field_required"));
+      setCardExpiryError("This field is required");
       bEmpty = true;
     }
     if (!nameOnCard) {
-      setCardNameError(t("resource.common.field_required"));
+      setCardNameError("This field is required");
       bEmpty = true;
     }
     return bEmpty;
@@ -1074,7 +1071,7 @@ function CheckoutPaymentContent({
       (expYear === currentYear && expMonth < currentMonth)
     ) {
       //card has expired
-      setCardExpiryError(t("resource.checkout.expiry_date_passed"));
+      setCardExpiryError("The expiry date has passed");
       return true;
     } else {
       //continue
@@ -1086,22 +1083,22 @@ function CheckoutPaymentContent({
     let bIsEmpty = checkEmpty();
     if (!bIsEmpty) {
       if (!cardDetailsData.is_enabled) {
-        setCardNumberError(t("resource.checkout.card_network_not_supported"));
+        setCardNumberError("Card Network not supported");
         return false;
       }
       if (!cardDetailsData.is_card_valid) {
-        setCardNumberError(t("resource.checkout.invalid_card_number"));
+        setCardNumberError("Invalid card number");
         return false;
       }
       if (numberValidation?.card === null || !numberValidation?.card) {
-        setCardNumberError(t("resource.checkout.invalid_card_number"));
+        setCardNumberError("Card number is invalid");
         return false;
       }
       //Only if card number is proper and expiry date is proper
       if (expirationdate_mask?.masked?.isComplete) {
         return !checkExpiry();
       } else {
-        setCardExpiryError(t("resource.checkout.invalid_expiry_time"));
+        setCardExpiryError("Expiry time is invalid");
       }
       return false;
     }
@@ -1160,7 +1157,7 @@ function CheckoutPaymentContent({
     } else {
       handleShowFailedMessage({
         failed: true,
-        paymentErrHeading: t("resource.checkout.card_verification_failed"),
+        paymentErrHeading: "Please enter the correct card details",
       });
     }
   };
@@ -1285,7 +1282,7 @@ function CheckoutPaymentContent({
     if (disbaleCheckout?.message) {
       handleShowFailedMessage({
         failed: true,
-        paymentErrHeading: t("resource.checkout.please_try_again_later"),
+        paymentErrHeading: "Please try again later",
         paymentErrMsg: disbaleCheckout?.message,
       });
     }
@@ -1318,10 +1315,10 @@ function CheckoutPaymentContent({
                 {savedCards && savedCards?.length > 0 ? (
                   <>
                     <div className={styles.savedCardHeaderWrapper}>
-                      <div className={styles.cardHeader}>{t("resource.checkout.saved_cards")}</div>
+                      <div className={styles.cardHeader}>Saved Cards</div>
                       <button onClick={addNewCardShow}>
                         {" "}
-                        <span>+</span> {t("resource.checkout.new_card")}
+                        <span>+</span> New Card
                       </button>
                     </div>
                     <div className={styles.modeOption}>
@@ -1352,7 +1349,7 @@ function CheckoutPaymentContent({
                                   </div>
                                   <div>
                                     <div className={styles.modeItemName}>
-                                      {`${card?.card_issuer} ${card?.card_type} ${t(resource.common.card)}`}
+                                      {`${card?.card_issuer} ${card?.card_type} Card`}
                                     </div>
                                     <div className={styles.number}>
                                       <span>****</span>{" "}
@@ -1360,41 +1357,43 @@ function CheckoutPaymentContent({
                                     </div>
                                     {selectedCard?.card_id ===
                                       card?.card_id && (
-                                        <div className={styles.whyCvvContainer}>
-                                          <span className={styles.cvvNotNeeded}>
-                                            {t("resource.checkout.cvv_not_needed")}
-                                          </span>
-                                          <span
-                                            className={styles.why}
-                                            onMouseEnter={() =>
-                                              setIsCvvNotNeededModal(true)
-                                            }
-                                            onMouseLeave={() =>
-                                              setIsCvvNotNeededModal(false)
-                                            }
-                                            onClick={() =>
-                                              setIsCvvNotNeededModal(true)
-                                            }
-                                          >
-                                            {t("resource.common.why")}
-                                          </span>
-                                          {isCvvNotNeededModal && !isMobile && (
-                                            <div>
-                                              <p
-                                                className={
-                                                  styles.cvvNotNeededModal
-                                                }
-                                              >
-                                                <SvgWrapper
-                                                  svgSrc="paymentTooltipArrow"
-                                                  className={styles.upArrowMark}
-                                                />
-                                                {t("resource.checkout.card_saved_rbi")}
-                                              </p>
-                                            </div>
-                                          )}
-                                        </div>
-                                      )}
+                                      <div className={styles.whyCvvContainer}>
+                                        <span className={styles.cvvNotNeeded}>
+                                          CVV not needed
+                                        </span>
+                                        <span
+                                          className={styles.why}
+                                          onMouseEnter={() =>
+                                            setIsCvvNotNeededModal(true)
+                                          }
+                                          onMouseLeave={() =>
+                                            setIsCvvNotNeededModal(false)
+                                          }
+                                          onClick={() =>
+                                            setIsCvvNotNeededModal(true)
+                                          }
+                                        >
+                                          WHY?
+                                        </span>
+                                        {isCvvNotNeededModal && !isMobile && (
+                                          <div>
+                                            <p
+                                              className={
+                                                styles.cvvNotNeededModal
+                                              }
+                                            >
+                                              <SvgWrapper
+                                                svgSrc="paymentTooltipArrow"
+                                                className={styles.upArrowMark}
+                                              />
+                                              You card is saved as per new RBI
+                                              guidelines and does not require a
+                                              CVV for making this payment
+                                            </p>
+                                          </div>
+                                        )}
+                                      </div>
+                                    )}
                                     {selectedCard?.card_id &&
                                       selectedCard?.card_id === card?.card_id &&
                                       !card.cvv_less && (
@@ -1416,7 +1415,7 @@ function CheckoutPaymentContent({
                                             type="text"
                                             autoComplete="off"
                                             maxLength="4"
-                                            placeholder={`${t("resource.checkout.cvv")}*`}
+                                            placeholder="CVV*"
                                             className={styles.cvv}
                                           />
                                           <SvgWrapper
@@ -1431,8 +1430,8 @@ function CheckoutPaymentContent({
                                 <div className={styles.walletLeft}>
                                   {(!selectedCard ||
                                     selectedCard.card_id !== card.card_id) && (
-                                      <SvgWrapper svgSrc={"radio"}></SvgWrapper>
-                                    )}
+                                    <SvgWrapper svgSrc={"radio"}></SvgWrapper>
+                                  )}
                                   {selectedCard &&
                                     selectedCard.card_id === card.card_id && (
                                       <SvgWrapper
@@ -1475,7 +1474,7 @@ function CheckoutPaymentContent({
                                       acceptOrder();
                                     }}
                                   >
-                                    {t("resource.common.pay_caps")}{" "}
+                                    PAY{" "}
                                     {priceFormatCurrencySymbol(
                                       getCurrencySymbol,
                                       getTotalValue()
@@ -1500,11 +1499,12 @@ function CheckoutPaymentContent({
                                     <div className={styles.type}>
                                       <div className={styles.closeWrapper}>
                                         <p className={styles.title}>
-                                          {t("resource.checkout.what_is_cvv_number")}
+                                          What is CVV Number?
                                         </p>
                                       </div>
                                       <p className={styles.desc}>
-                                        {t("resource.checkout.cvv_description")}
+                                        It is a 3-digit code on the back of your
+                                        card.
                                       </p>
                                       <div className={styles.img}>
                                         <SvgWrapper svgSrc="non-amex-card-cvv" />
@@ -1516,10 +1516,11 @@ function CheckoutPaymentContent({
                                   card?.card_brand === "American Express" && (
                                     <div className={styles.type}>
                                       <p className={styles.title}>
-                                        {t("resource.checkout.have_american_express_card")}
+                                        Have American Express Card?
                                       </p>
                                       <p className={styles.desc}>
-                                        {t("resource.checkout.amex_cvv_description")}
+                                        It is a 4-digit number on the front,
+                                        just above your credit card number.
                                       </p>
                                       <div className={styles.img}>
                                         <SvgWrapper svgSrc="amex-card-cvv" />
@@ -1538,7 +1539,7 @@ function CheckoutPaymentContent({
                     <div
                       className={`${styles.walletHeader} ${styles["view-mobile-up"]} ${styles.cardDetailsHeader}`}
                     >
-                      {t("resource.checkout.enter_card_details")}
+                      Enter card details
                     </div>
                     <CardForm
                       cardNumberRef={cardNumberRef}
@@ -1593,7 +1594,7 @@ function CheckoutPaymentContent({
                   <button onClick={hideNewCard}>
                     <SvgWrapper svgSrc={"back"}></SvgWrapper>
                   </button>
-                  <div className={styles.newCardHeaderText}>{t("resource.checkout.add_new_card")}</div>
+                  <div className={styles.newCardHeaderText}>Add New Card</div>
                 </div>
                 <CardForm
                   cardNumberRef={cardNumberRef}
@@ -1642,7 +1643,7 @@ function CheckoutPaymentContent({
               <Modal
                 isOpen={addNewCard}
                 closeDialog={hideNewCard}
-                title={t("resource.checkout.add_new_card")}
+                title="Add New Card"
                 headerClassName={styles.newCardModalHeader}
                 customClassName={styles.newCardBodyModal}
               >
@@ -1769,7 +1770,7 @@ function CheckoutPaymentContent({
                         }
                       }}
                     >
-                      {t("resource.common.pay_caps")}{" "}
+                      PAY{" "}
                       {priceFormatCurrencySymbol(
                         getCurrencySymbol,
                         getTotalValue()
@@ -1786,7 +1787,7 @@ function CheckoutPaymentContent({
             <div
               className={`${styles.walletHeader} ${styles["view-mobile-up"]}`}
             >
-              {t("resource.checkout.select_wallet")}
+              Select Wallet
             </div>
             <div className={styles.modeOption}>
               {topWallets?.map((wlt, index) => (
@@ -1816,7 +1817,7 @@ function CheckoutPaymentContent({
                           />
                         </span>
                       </div>
-                      <div className={styles.moreModeName}>{t("resource.checkout.other_wallets")}</div>
+                      <div className={styles.moreModeName}>Other Wallets</div>
                     </div>
                     <span className={styles.moreModeIcon}>
                       <SvgWrapper svgSrc="accordion-arrow" />
@@ -1833,7 +1834,7 @@ function CheckoutPaymentContent({
                   setOpenMoreWalletModal(false);
                   setWalletSearchText("");
                 }}
-                title={t("resource.checkout.select_wallet")}
+                title="Select Wallet"
               >
                 <div className={styles.searchBox}>
                   <SvgWrapper svgSrc="search" className={styles.searchIcon} />
@@ -1841,11 +1842,11 @@ function CheckoutPaymentContent({
                     type="text"
                     defaultValue={walletSearchText}
                     onChange={(e) => setWalletSearchText(e?.target?.value)}
-                    placeholder={t("resource.checkout.search_for_wallets")}
+                    placeholder="Search for Wallets"
                   />
                 </div>
                 {filteredWallets?.length === 0 ? (
-                  <p className={styles.noResultFound}>{t("resource.common.empty_state")}</p>
+                  <p className={styles.noResultFound}>No results found</p>
                 ) : (
                   filteredWallets.map((wlt, index) => (
                     <WalletItem
@@ -1856,8 +1857,8 @@ function CheckoutPaymentContent({
                   ))
                 )}
               </Modal>
-            </div >
-          </div >
+            </div>
+          </div>
         );
       case "UPI":
         return (
@@ -1888,8 +1889,8 @@ function CheckoutPaymentContent({
                         </p>
                         {(!selectedUpiIntentApp ||
                           selectedUpiIntentApp !== app) && (
-                            <SvgWrapper svgSrc={"radio"} />
-                          )}
+                          <SvgWrapper svgSrc={"radio"} />
+                        )}
                         {selectedUpiIntentApp &&
                           selectedUpiIntentApp === app && (
                             <SvgWrapper svgSrc={"radio-selected"} />
@@ -1926,13 +1927,13 @@ function CheckoutPaymentContent({
               )}
             {!isMobile && isQrMopPresent && (
               <div>
-                <p className={styles.upiSectionTitle}>{t("resource.checkout.upi_qr_code_caps")}</p>
+                <p className={styles.upiSectionTitle}>UPI QR CODE</p>
                 <div className={styles.upiQrCodeSection}>
                   <div className={styles.upiQrCodeDescription}>
                     <div>
-                      <p className={styles.scanQrTitle}>{t("resource.checkout.scan_qr_to_pay")}</p>
+                      <p className={styles.scanQrTitle}>Scan QR to pay</p>
                       <p className={styles.scanQrDescripton}>
-                        {t("resource.checkout.scan_qr_upi")}
+                        Scan the QR code using any UPI app on your phone.
                       </p>
                     </div>
                     <div className={styles.scanQrApps}>
@@ -1948,15 +1949,15 @@ function CheckoutPaymentContent({
                       <div className={styles.upiAppLogo}>
                         <SvgWrapper svgSrc="amazon-pay" />
                       </div>
-                      <p className={styles.moreUpiApps}>{t("resource.checkout.and_more")}</p>
+                      <p className={styles.moreUpiApps}>& more</p>
                     </div>
                     {isQrCodeVisible && (
                       <span className={styles.expiryText}>
-                        {t("resource.checkout.valid_for")}
+                        Valid for
                         <span className={styles.countDown}>
                           {formatTime(countdown)}
                         </span>
-                        <span className={styles.minutes}>{t("resource.common.minutes")}</span>
+                        <span className={styles.minutes}>minutes</span>
                       </span>
                     )}
                     {isQrCodeVisible && (
@@ -1966,7 +1967,7 @@ function CheckoutPaymentContent({
                           cancelQrPayment();
                         }}
                       >
-                        {t("resource.facets.cancel_caps")}
+                        CANCEL
                       </p>
                     )}
                   </div>
@@ -1993,7 +1994,7 @@ function CheckoutPaymentContent({
                           setSavedUPISelect(null);
                         }}
                       >
-                        {t("resource.checkout.show_qr")}
+                        SHOW QR
                       </p>
                     )}
                   </div>
@@ -2004,10 +2005,10 @@ function CheckoutPaymentContent({
               isChromeOrSafari &&
               (upiApps?.length > 0 || upiApps?.includes("any"))) ||
               (!isMobile && isQrMopPresent)) && (
-                <div className={styles.upiOrLine}>
-                  <span className={styles.upiOrText}>{t("resource.common.or")}</span>
-                </div>
-              )}
+              <div className={styles.upiOrLine}>
+                <span className={styles.upiOrText}>OR</span>
+              </div>
+            )}
             {loggedIn && savedUpi?.length > 0 && (
               <div>
                 <div>
@@ -2016,7 +2017,7 @@ function CheckoutPaymentContent({
                       <div
                         className={`${styles.upiHeader} ${styles["view-mobile-up"]}`}
                       >
-                        {t("resource.checkout.saved_upi_id")}
+                        Saved UPI ID
                       </div>
                     )}
                     <div className={styles.modeOption}>
@@ -2051,7 +2052,7 @@ function CheckoutPaymentContent({
                                   isUPIError &&
                                   item.vpa === savedUPISelect && (
                                     <p className={` ${styles.upiError}`}>
-                                      {t("resource.checkout.invalid_upi_id")}
+                                      Invalid UPI ID
                                     </p>
                                   )}
                               </div>
@@ -2079,7 +2080,7 @@ function CheckoutPaymentContent({
                                   }}
                                   disabled={savedUPISelect && isUPIError}
                                 >
-                                  {t("resource.common.pay_caps")}{" "}
+                                  PAY{" "}
                                   {priceFormatCurrencySymbol(
                                     getCurrencySymbol,
                                     getTotalValue()
@@ -2093,19 +2094,19 @@ function CheckoutPaymentContent({
                   </div>
                 </div>
                 <div className={styles.upiOrLine}>
-                  <span className={styles.upiOrText}>{t("resource.common.or")}</span>
+                  <span className={styles.upiOrText}>OR</span>
                 </div>
               </div>
             )}
             <div style={{ position: "relative" }}>
               {!isMobile && (
-                <p className={styles.upiSectionTitle}>{t("resource.checkout.upi_id_number")}</p>
+                <p className={styles.upiSectionTitle}>UPI ID / Number</p>
               )}
               <div className={styles.upiIdWrapper}>
                 <input
                   className={`${vpa && isUPIError ? styles.error : ""} ${vpa ? styles.input : ""} ${styles.upiInput}`}
                   type="text"
-                  placeholder={t("resource.common.enter_upi_id")}
+                  placeholder="Enter UPI ID"
                   onFocus={() => {
                     setUpiSaveForLaterChecked(true);
                   }}
@@ -2116,13 +2117,13 @@ function CheckoutPaymentContent({
                   <span
                     className={`${styles.inputName} ${isUPIError ? styles.errorInputName : ""}`}
                   >
-                    {t("resource.common.enter_upi_id")}<span className={styles.required}>*</span>
+                    Enter UPI ID<span className={styles.required}>*</span>
                   </span>
                 )}
               </div>
 
               {isUPIError && vpa ? (
-                <p className={styles.formError}>{t(UPI_INVALID_VPA_ERROR)}</p>
+                <p className={styles.formError}>{UPI_INVALID_VPA_ERROR}</p>
               ) : null}
 
               {/* Show suggestions if '@' is present and we have filtered suggestions */}
@@ -2193,7 +2194,7 @@ function CheckoutPaymentContent({
                     <span
                       className={`${!vpa || !!savedUPISelect ? styles.disableSaveUpiTitle : styles.saveUpiTitle}`}
                     >
-                      {t("resource.checkout.save_upi_id")}
+                      Save UPI ID for future use
                     </span>
                   </label>
                 </div>
@@ -2239,7 +2240,7 @@ function CheckoutPaymentContent({
                         !(isUpiSuffixSelected || !!selectedUpiIntentApp)
                       }
                     >
-                      {t("resource.common.pay_caps")}{" "}
+                      PAY{" "}
                       {priceFormatCurrencySymbol(
                         getCurrencySymbol,
                         getTotalValue()
@@ -2249,7 +2250,7 @@ function CheckoutPaymentContent({
                 )}
               </div>
             </div>
-          </div >
+          </div>
         );
       case "NB":
         const initialVisibleBankCount = 4;
@@ -2292,7 +2293,7 @@ function CheckoutPaymentContent({
                     )}
                   </div>
                 </div>
-              </label >
+              </label>
               <div className={styles.modePay}>
                 {!openMoreNbModal && isMobile ? (
                   <StickyPayNow
@@ -2320,7 +2321,7 @@ function CheckoutPaymentContent({
                         }
                       }}
                     >
-                      {t("resource.common.pay_caps")}{" "}
+                      PAY{" "}
                       {priceFormatCurrencySymbol(
                         getCurrencySymbol,
                         getTotalValue()
@@ -2329,14 +2330,14 @@ function CheckoutPaymentContent({
                   )
                 )}
               </div>
-            </div >
+            </div>
           );
         };
 
         return (
           <div>
             <div className={`${styles.nbHeader} ${styles["view-mobile-up"]}`}>
-              {t("resource.checkout.select_bank")}
+              Select Bank
             </div>
             <div className={styles.modeOption}>
               {topBanks?.map((nb, index) => (
@@ -2367,7 +2368,7 @@ function CheckoutPaymentContent({
                           />
                         </span>
                       </div>
-                      <div className={styles.moreModeName}>{t("resource.checkout.other_banks")}</div>
+                      <div className={styles.moreModeName}>Other Banks</div>
                     </div>
                     <span className={styles.moreModeIcon}>
                       <SvgWrapper svgSrc="accordion-arrow" />
@@ -2385,7 +2386,7 @@ function CheckoutPaymentContent({
                   setOpenMoreNbModal(false);
                   setNbSearchText("");
                 }}
-                title={t("resource.checkout.select_bank")}
+                title="Select Bank"
               >
                 <div className={styles.searchBox}>
                   <SvgWrapper svgSrc="search" className={styles.searchIcon} />
@@ -2393,11 +2394,11 @@ function CheckoutPaymentContent({
                     type="text"
                     defaultValue={nbSearchText}
                     onChange={(e) => setNbSearchText(e?.target?.value)}
-                    placeholder={t("resource.checkout.search_for_banks")}
+                    placeholder="Search for Banks"
                   />
                 </div>
                 {filteredBanks?.length === 0 ? (
-                  <p className={styles.noResultFound}>{t("resource.common.empty_state")}</p>
+                  <p className={styles.noResultFound}>No results found</p>
                 ) : (
                   filteredBanks?.map((nb, index) => (
                     <NbItem
@@ -2419,15 +2420,15 @@ function CheckoutPaymentContent({
                 <div
                   className={`${styles.codHeader} ${styles["view-mobile-up"]}`}
                 >
-                  {t("resource.checkout.cash_on_delivery")}
+                  Cash On Delivery (Cash/UPI)
                 </div>
                 <p className={styles.codTitle}>
-                  {t("resource.checkout.pay_on_delivery")}
+                  Pay in cash or using UPI at the time of delivery
                 </p>
                 {codCharges > 0 && (
                   <div className={styles.codInfo}>
                     +{priceFormatCurrencySymbol(getCurrencySymbol, codCharges)}{" "}
-                    {t("resource.checkout.cod_extra_charge")}
+                    will be charged extra for Cash on delivery option.
                   </div>
                 )}
                 <div className={styles.codPay}>
@@ -2435,7 +2436,7 @@ function CheckoutPaymentContent({
                     className={`${styles.commonBtn} ${styles.payBtn}`}
                     onClick={() => proceedToPay("COD", selectedPaymentPayload)}
                   >
-                    {t("resource.checkout.place_order")}
+                    PLACE ORDER
                   </button>
                 </div>
               </div>
@@ -2450,7 +2451,7 @@ function CheckoutPaymentContent({
             <div
               className={`${styles.payLaterHeader} ${styles["view-mobile-up"]}`}
             >
-              {t("resource.checkout.select_pay_later_option")}
+              Select Pay Later option
             </div>
             <div className={styles.modeOption}>
               {getNormalisedList(selectedTabData)?.map(
@@ -2484,8 +2485,8 @@ function CheckoutPaymentContent({
                           <div>
                             {(!selectedPayLater ||
                               selectedPayLater.code !== payLater.code) && (
-                                <SvgWrapper svgSrc={"radio"}></SvgWrapper>
-                              )}
+                              <SvgWrapper svgSrc={"radio"}></SvgWrapper>
+                            )}
                             {selectedPayLater &&
                               selectedPayLater.code === payLater.code && (
                                 <SvgWrapper
@@ -2520,7 +2521,7 @@ function CheckoutPaymentContent({
                                 acceptOrder();
                               }}
                             >
-                              {t("resource.common.pay_caps")}{" "}
+                              PAY{" "}
                               {priceFormatCurrencySymbol(
                                 getCurrencySymbol,
                                 getTotalValue()
@@ -2533,7 +2534,7 @@ function CheckoutPaymentContent({
                   )
               )}
             </div>
-          </div >
+          </div>
         );
       case "CARDLESS_EMI":
         return (
@@ -2541,7 +2542,7 @@ function CheckoutPaymentContent({
             <div
               className={`${styles.cardlessHeader} ${styles["view-mobile-up"]}`}
             >
-              {t("resource.checkout.select_emi_option")}
+              Select EMI option
             </div>
             <div className={styles.modeOption}>
               {selectedTabData.list?.map((emi) => (
@@ -2569,7 +2570,7 @@ function CheckoutPaymentContent({
                       </div>
                       <div>
                         {!selectedCardless ||
-                          selectedCardless.code !== emi.code ? (
+                        selectedCardless.code !== emi.code ? (
                           <SvgWrapper svgSrc={"radio"}></SvgWrapper>
                         ) : (
                           <SvgWrapper svgSrc={"radio-selected"}></SvgWrapper>
@@ -2606,7 +2607,7 @@ function CheckoutPaymentContent({
                               acceptOrder();
                             }}
                           >
-                            {t("resource.common.pay_caps")}{" "}
+                            PAY{" "}
                             {priceFormatCurrencySymbol(
                               getCurrencySymbol,
                               getTotalValue()
@@ -2648,9 +2649,9 @@ function CheckoutPaymentContent({
                   <div className={styles.otherLeft}>
                     {(!selectedOtherPayment ||
                       selectedOtherPayment?.code !==
-                      other?.list?.[0]?.code) && (
-                        <SvgWrapper svgSrc={"radio"}></SvgWrapper>
-                      )}
+                        other?.list?.[0]?.code) && (
+                      <SvgWrapper svgSrc={"radio"}></SvgWrapper>
+                    )}
                     {selectedOtherPayment &&
                       selectedOtherPayment?.code === other?.list?.[0]?.code && (
                         <SvgWrapper svgSrc="radio-selected" />
@@ -2689,7 +2690,7 @@ function CheckoutPaymentContent({
                         acceptOrder();
                       }}
                     >
-                      {t("resource.common.pay_caps")}{" "}
+                      PAY{" "}
                       {priceFormatCurrencySymbol(
                         getCurrencySymbol,
                         getTotalValue()
@@ -2706,7 +2707,7 @@ function CheckoutPaymentContent({
             <div
               className={`${styles.otherHeader} ${styles["view-mobile-up"]}`}
             >
-              {t("resource.checkout.select_payment_option")}
+              Select Payment Option
             </div>
             <div className={styles.modeOption}>
               {otherPaymentOptions?.length &&
@@ -2722,7 +2723,7 @@ function CheckoutPaymentContent({
             <div
               className={`${styles.otherHeader} ${styles["view-mobile-up"]}`}
             >
-              {t("resource.checkout.choose_an_option")}
+              Choose An Option
             </div>
             <div className={styles.modeOption}>
               {selectedTabData?.list?.map((op, index) => (
@@ -2751,8 +2752,8 @@ function CheckoutPaymentContent({
                       <div>
                         {(!selectedOtherPayment ||
                           selectedOtherPayment.code !== op.code) && (
-                            <SvgWrapper svgSrc={"radio"}></SvgWrapper>
-                          )}
+                          <SvgWrapper svgSrc={"radio"}></SvgWrapper>
+                        )}
                         {selectedOtherPayment &&
                           selectedOtherPayment.code === op.code && (
                             <SvgWrapper svgSrc="radio-selected" />
@@ -2784,7 +2785,7 @@ function CheckoutPaymentContent({
                               acceptOrder();
                             }}
                           >
-                            {t("resource.common.pay_caps")}{" "}
+                            PAY{" "}
                             {priceFormatCurrencySymbol(
                               getCurrencySymbol,
                               getTotalValue()
@@ -2795,8 +2796,8 @@ function CheckoutPaymentContent({
                     )}
                 </div>
               ))}
-            </div >
-          </div >
+            </div>
+          </div>
         );
       }
     }
@@ -2869,7 +2870,7 @@ function CheckoutPaymentContent({
                     <img
                       className={styles.subMopIcon}
                       src={subMopIcon}
-                      alt={t("resource.checkout.no_image")}
+                      alt="No Image"
                     />
                   ) : null
                 )}
@@ -2917,20 +2918,20 @@ function CheckoutPaymentContent({
           hideHeader={true}
         >
           <div style={upiDisplayWrapperStyle}>
-            <div style={upiHeadingStyle}>{t("resource.checkout.complete_your_payment")}</div>
-            <div style={upiVpaStyle}>{t("resource.checkout.sent_to")} {savedUPISelect || vpa}</div>
+            <div style={upiHeadingStyle}>Complete Your Payment</div>
+            <div style={upiVpaStyle}>Sent to {savedUPISelect || vpa}</div>
             <div style={upiLabelWrapperStyle}>
               <SvgWrapper svgSrc="upi-payment-popup" />
             </div>
             <div style={timeDisplayStyle}>
-            {t("resource.checkout.valid_for")}{" "}
+              Valid for{" "}
               <span style={timeDisplaySpanStyle}>
                 {formatTime(timeRemaining)}
               </span>{" "}
-              {t("resource.common.minutes")}
+              minutes
             </div>
             <div style={cancelBtnStyle} onClick={cancelUPIPayment}>
-            {t("resource.checkout.cancel_payment_caps")}
+              CANCEL PAYMENT
             </div>
           </div>
         </Modal>
@@ -2957,7 +2958,7 @@ function CheckoutPaymentContent({
                   setShowCouponValidityModal(false);
                 }}
               >
-                {t("resource.common.yes")}
+                Yes
               </div>
               <div
                 className={`${styles.commonBtn} ${styles.noBtn}`}
@@ -2968,7 +2969,7 @@ function CheckoutPaymentContent({
                   setShowCouponValidityModal(false);
                 }}
               >
-                {t("resource.common.no")}
+                No
               </div>
             </div>
           </div>
@@ -2978,9 +2979,9 @@ function CheckoutPaymentContent({
         <Modal isOpen={showUpiRedirectionModal} hideHeader={true}>
           <div className={styles.upiRedirectionModal}>
             <div className={styles.loader}></div>
-            <p className={styles.title}>{t("resource.checkout.finalising_payment")}</p>
+            <p className={styles.title}>Finalising Payment</p>
             <p className={styles.message}>
-              {t("resource.checkout.redirecting_upi")}
+              Redirecting to your UPI App. Please do not press back button
             </p>
             <div
               style={cancelBtnStyle}
@@ -2989,7 +2990,7 @@ function CheckoutPaymentContent({
                 cancelUpiAppPayment();
               }}
             >
-              {t("resource.checkout.cancel_payment_caps")}
+              CANCEL PAYMENT
             </div>
           </div>
         </Modal>
@@ -3020,12 +3021,12 @@ function CheckoutPaymentContent({
             </div>
             <div>
               <p className={styles.message}>
-              {t("resource.checkout.confirm_cod")}
+                Are you sure you want to proceed with Cash on delivery?
               </p>
               {codCharges > 0 && (
                 <p className={styles.codCharges}>
                   +{priceFormatCurrencySymbol(getCurrencySymbol, codCharges)}{" "}
-                  {t("resource.checkout.extra_charges")}
+                  extra charges
                 </p>
               )}
             </div>
@@ -3033,7 +3034,7 @@ function CheckoutPaymentContent({
               className={`${styles.commonBtn} ${styles.payBtn}`}
               onClick={() => proceedToPay("COD", selectedPaymentPayload)}
             >
-               {t("resource.checkout.continue_with_cod")}{" "}
+              CONTINUE WITH COD{" "}
               {priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue())}
             </button>
           </div>
@@ -3043,10 +3044,11 @@ function CheckoutPaymentContent({
         <Modal
           isOpen={isCvvNotNeededModal}
           closeDialog={() => setIsCvvNotNeededModal(false)}
-          title={t("resource.checkout.cvv_not_needed")}
+          title="CVV not needed"
         >
           <p className={styles.cvvNotNeededModal}>
-            {t("resource.checkout.card_saved_rbi")}
+            You card is saved as per new RBI guidelines and does not require a
+            CVV for making this payment
           </p>
         </Modal>
       )}
@@ -3088,9 +3090,9 @@ function CheckoutPaymentContent({
                           className={`${styles.modeName} ${selectedTab === "Other" ? styles.selectedModeName : ""}`}
                         >
                           {paymentOptions?.length > 0 &&
-                            otherPaymentOptions?.length > 0
-                            ? t("resource.checkout.more_payment_options")
-                            : t("resource.checkout.pay_online")}
+                          otherPaymentOptions?.length > 0
+                            ? "More Payment Options"
+                            : "Pay Online"}
                         </div>
                       </div>
                       <div
@@ -3149,7 +3151,7 @@ function CheckoutPaymentContent({
                                   getCurrencySymbol,
                                   codCharges
                                 )}{" "}
-                                {t("resource.checkout.extra_charges")}
+                                extra charges
                               </div>
                             )}
                           </div>
