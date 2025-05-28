@@ -260,11 +260,11 @@ h5,
 }
 .coupon__mr-5___Q2ora,
 .coupon__mr5___a6PQR {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .coupon__mr-2___sWQWU,
 .coupon__mr2___TGrbc {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .coupon__py-5___TYsCo,
 .coupon__py5___hDCpA {
@@ -366,11 +366,15 @@ h5,
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: auto;
+  margin-inline-start: auto;
   background: none;
   border: none;
   width: 2rem;
   height: 2rem;
+}
+[dir="rtl"] .coupon__couponBoxContainer___yJTiZ .coupon__couponApplyBox___HJFgo .coupon__removeIcon___NieyV,
+[dir="rtl"] .coupon__couponBoxContainer___yJTiZ .coupon__couponApplyBox___HJFgo .coupon__arrowIcon___yL8Tb {
+  transform: rotate(180deg);
 }
 .coupon__couponBoxContainer___yJTiZ .coupon__couponIcon___klJuN {
   width: 40px;
@@ -419,7 +423,7 @@ h5,
   margin-bottom: 16px;
   padding-top: 12px;
   padding-bottom: 12px;
-  padding-left: 24px;
+  padding-inline-start: 24px;
   display: flex;
   align-items: center;
   line-height: 140%;
@@ -437,7 +441,7 @@ h5,
 .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__cartErrorContainer___n1BZa .coupon__colorErrorNormal___EkO_A {
   font-size: 12px;
   font-weight: 600;
-  margin-left: 14px;
+  margin-inline-start: 14px;
   color: var(--errorText, #b24141);
 }
 .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponInputBox___mlvGS {
@@ -479,7 +483,7 @@ h5,
   padding: 0px 13px;
   cursor: pointer;
   position: absolute;
-  right: 5%;
+  inset-inline-end: 5%;
 }
 .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponInputBox___mlvGS .coupon__checkBtn___2vM1S:disabled {
   opacity: 0.5;
@@ -496,7 +500,7 @@ h5,
   .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponListTitle___HHaXr {
     margin-top: 24px;
     margin-bottom: 12px;
-    padding-left: 16px;
+    padding-inline-start: 16px;
   }
 }
 .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponList___ydQtn {
@@ -539,7 +543,7 @@ h5,
   content: "";
   position: absolute;
   top: 50%;
-  left: 0;
+  inset-inline-start: 0;
   transform: translate(-50%, -50%) rotate(45deg);
   width: 16px;
   aspect-ratio: 1;
@@ -548,10 +552,17 @@ h5,
   border-radius: 50%;
   border-color: var(--successText, #1c958f) var(--successText, #1c958f) transparent transparent;
 }
+[dir="rtl"] .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponItem___EgDig .coupon__couponCode___v03ce:before,
+[dir="rtl"] .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponItem___EgDig .coupon__couponCode___v03ce:after {
+  transform: translate(50%, -50%) rotate(-45deg);
+}
 .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponItem___EgDig .coupon__couponCode___v03ce:after {
-  right: 0;
-  left: auto;
+  inset-inline-end: 0;
+  inset-inline-start: auto;
   transform: translate(50%, -50%) rotate(-135deg);
+}
+[dir="rtl"] .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponItem___EgDig .coupon__couponCode___v03ce:after {
+  transform: translate(-50%, -50%) rotate(135deg);
 }
 .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponItem___EgDig .coupon__couponTitle___y9MkM {
   line-height: 140%;
@@ -580,7 +591,7 @@ h5,
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  margin-left: auto;
+  margin-inline-start: auto;
 }
 .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__noCouponsAvailable___itJE6 {
   display: flex;
@@ -966,11 +977,11 @@ h5,
 }
 .modal__mr-5___DjKqT,
 .modal__mr5___il5jH {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .modal__mr-2___SKD1t,
 .modal__mr2___BSxti {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .modal__py-5___OpCsp,
 .modal__py5___hfa2b {
@@ -1097,8 +1108,8 @@ h5,
   .modal__modalContainer--borders____AGZf {
     border: none;
     border-radius: 0;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
+    border-start-start-radius: 8px;
+    border-start-end-radius: 8px;
   }
 }
 .modal__modalHeader___xKo1g {

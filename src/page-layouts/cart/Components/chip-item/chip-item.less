@@ -46,7 +46,7 @@
       .removeItemSvgContainer {
         position: absolute;
         top: 0;
-        right: 0;
+        inset-inline-end: 0;
       }
       .itemBrand {
         color: var(--textHeading);
@@ -60,11 +60,11 @@
       }
       .itemSellerName {
         color: @TextLabel;
-        padding-right: 90px;
+        padding-inline-end: 90px;
         margin-top: 4px;
         font-size: 12px;
         @media @mobile {
-          padding-right: 30px;
+          padding-inline-end: 30px;
         }
       }
       .itemSizeQuantityContainer {
@@ -102,7 +102,7 @@
               overflow: hidden;
               text-overflow: ellipsis;
               max-width: 90%;
-              margin-right: 3px;
+              margin-inline-end: 3px;
             }
             .itemSvg {
               display: flex;
@@ -142,18 +142,18 @@
             color: @TextHeading;
             font-size: 16px;
             font-weight: 600;
-            margin-right: 12px;
+            margin-inline-end: 12px;
           }
           .markedPrice {
             font-size: 12px;
             text-decoration: line-through;
             color: @TextLabel;
-            margin-right: 12px;
+            margin-inline-end: 12px;
           }
           .discount {
             font-size: 12px;
             font-weight: 500;
-            margin-right: 12px;
+            margin-inline-end: 12px;
             color: @SaleDiscountText;
           }
         }
@@ -176,7 +176,7 @@
             text-align: right;
             color: @SuccessText;
             align-self: center;
-            margin-left: 8px;
+            margin-inline-start: 8px;
             line-height: 140%;
           }
         }
@@ -196,7 +196,7 @@
   border-radius: 4px;
   width: fit-content;
   .couponText {
-    margin-left: 6px;
+    margin-inline-start: 6px;
     font-weight: 600;
     font-size: 10px;
   }
@@ -216,7 +216,7 @@
 
   @media @mobile {
     margin-top: 12px;
-    margin-left: 0;
+    margin-inline-start: 0;
   }
 
   svg {
@@ -226,7 +226,7 @@
   }
 
   .ml6 {
-    margin-left: 6px;
+    margin-inline-start: 6px;
   }
 }
 
@@ -270,6 +270,7 @@
     align-items: flex-start;
   }
   .sizeModalTitle {
+    // border-bottom: 1px solid #f0f0f0;
     position: relative;
     display: flex;
     align-items: center;
@@ -291,13 +292,13 @@
         flex: 1;
         div {
           .sizeModalBrand {
-            margin-right: 20px;
+            margin-inline-end: 20px;
             margin-bottom: 8px;
             font-size: 16px;
             font-weight: 600;
           }
           .sizeModalName {
-            margin-right: 20px;
+            margin-inline-end: 20px;
             font-size: 16px;
             font-weight: 400;
           }
@@ -312,7 +313,7 @@
     .modalCloseIcon {
       position: absolute;
       top: 24px;
-      right: 24px;
+      inset-inline-end: 24px;
       cursor: pointer;
       span {
         display: flex;
@@ -359,7 +360,7 @@
           width: 100%;
           height: 100%;
           top: 0;
-          left: 0;
+          inset-inline-start: 0;
 
           line {
             stroke: @DividerStokes;
@@ -433,7 +434,7 @@
 
       .labelTextWrapper {
         display: flex;
-        margin-left: 14px;
+        margin-inline-start: 14px;
         flex-direction: column;
         .promoLabel {
           font-weight: 600;
@@ -452,7 +453,7 @@
             color: @TextBody;
           }
           .termCondition {
-            margin-left: 5px;
+            margin-inline-start: 5px;
             font-weight: 600;
             font-size: 12px;
             color: @SuccessText;

@@ -3,6 +3,7 @@ import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 import * as styles from "./mobile-number.less";
 import { PhoneNumberUtil } from "google-libphonenumber";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function MobileNumber({
   name = "",
@@ -10,7 +11,7 @@ function MobileNumber({
   countryCode = "91",
   disable = false,
   isShowLabel = true,
-  isRequired = "required",
+  isRequired,
   allowDropdown = true,
   isFocused = false,
   placeholder = "",
@@ -29,6 +30,7 @@ function MobileNumber({
   countryIso,
   ...rest
 }) {
+  const { t } = useGlobalTranslation("translation");
   const inputId = useId();
   const phoneInputRef = useRef(null);
 
@@ -76,9 +78,9 @@ function MobileNumber({
           className={`${styles.inputTitle} ${labelClassName || ""}`}
           htmlFor={inputId}
         >
-          {label || "Mobile "}
+          {label || t("resource.common.mobile")}
           {isRequired === "optional" ? (
-            " (optional)"
+            ` (${t("resource.common.optional_lower")})`
           ) : (
             <span className={styles.required}> * </span>
           )}
@@ -114,6 +116,7 @@ function MobileNumber({
           buttonStyle: {
             padding: "0 8px",
           },
+          buttonClassName: `${styles.countryButton}`,
           dropdownStyleProps: {
             style: {
               zIndex: 999,

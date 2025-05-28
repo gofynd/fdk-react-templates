@@ -4,6 +4,7 @@ import { FDKLink } from "fdk-core/components";
 import InfiniteLoader from "../../components/core/infinite-loader/infinite-loader";
 import Breadcrumb from "../../components/breadcrumb/breadcrumb";
 import ProductCard from "../../components/product-card/product-card";
+import { useGlobalTranslation } from "fdk-core/utils";
 import Modal from "../../components/core/modal/modal";
 import AddToCart from "../../page-layouts/plp/Components/add-to-cart/add-to-cart";
 import SizeGuide from "../../page-layouts/plp/Components/size-guide/size-guide";
@@ -11,7 +12,7 @@ import { useViewport } from "../../helper/hooks";
 
 const Wishlist = ({
   breadcrumb = [],
-  title = "Wishlist",
+  title,
   productList = [],
   totalCount = 0,
   isBrand = true,
@@ -33,10 +34,11 @@ const Wishlist = ({
   imagePlaceholder = "",
   addToCartModalProps = {},
   showAddToCart = false,
-  actionButtonText = "Add To Cart",
+  actionButtonText,
   globalConfig = {},
 }) => {
-  const countLabel = totalCount > 1 ? `${totalCount} items` : "";
+  const { t } = useGlobalTranslation("translation");
+  const countLabel = totalCount > 1 ? `${totalCount} ${t("resource.common.items")}` : "";
 
   const followedIdList = productList.map((m) => m.uid);
   const isTablet = useViewport(0, 768);
@@ -58,7 +60,7 @@ const Wishlist = ({
         <Breadcrumb breadcrumb={breadcrumb} />
       </div>
       <div className={styles.titleWrapper}>
-        <h1 className={styles.title}>{title}</h1>
+        <h1 className={styles.title}>{title || t("resource.common.breadcrumb.wishlist")}</h1>
         {countLabel && (
           <span className={styles.wishlistCount}>{countLabel}</span>
         )}
@@ -96,7 +98,7 @@ const Wishlist = ({
                 imagePlaceholder={imagePlaceholder}
                 columnCount={{ desktop: 4, tablet: 3, mobile: 2 }}
                 showAddToCart={showAddToCart}
-                actionButtonText={actionButtonText}
+                actionButtonText={actionButtonText ?? t('resource.common.add_to_cart')}
                 handleAddToCart={handleAddToCart}
               />
             </FDKLink>

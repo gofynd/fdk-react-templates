@@ -260,11 +260,11 @@ h5,
 }
 .profile-details__mr-5___HuYey,
 .profile-details__mr5___MhBdP {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .profile-details__mr-2___ZwVA9,
 .profile-details__mr2___Gp7Un {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .profile-details__py-5___Ibsz5,
 .profile-details__py5___sVgLE {
@@ -376,7 +376,7 @@ h5,
   cursor: pointer;
 }
 .profile-details__profileDetailsContainer___J7jB7 .profile-details__formContainer___OK2Sx .profile-details__form____WyPW .profile-details__radioInputContainer___FtZNA .profile-details__radioContent___Z1Me4 .profile-details__radioInput___cNyEW .profile-details__radioLabel___Fk88m {
-  margin-left: 10px;
+  margin-inline-start: 10px;
   font-weight: 300;
   font-size: 14px;
   color: #41434c;
@@ -655,11 +655,11 @@ h5,
 }
 .fy-input__mr-5___v4vQm,
 .fy-input__mr5___FnOZz {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .fy-input__mr-2___u3YuI,
 .fy-input__mr2___EOVYz {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .fy-input__py-5___QoQ9q,
 .fy-input__py5___q5mpm {
@@ -848,10 +848,10 @@ h5,
   padding: 0 0.5rem;
 }
 .fy-input__adornmentContainer___MtgI6 .fy-input__startAdornment___SVGGG {
-  margin-right: 0.5rem;
+  margin-inline-end: 0.5rem;
 }
 .fy-input__adornmentContainer___MtgI6 .fy-input__endAdornment___ce3Ta {
-  margin-left: 0.5rem;
+  margin-inline-start: 0.5rem;
 }
 .fy-input__adornmentContainer___MtgI6 input {
   flex: 1;
@@ -1119,11 +1119,11 @@ h5,
 }
 .fy-button__mr-5___A5qJJ,
 .fy-button__mr5___BRUgW {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .fy-button__mr-2___Qtkhv,
 .fy-button__mr2___ajbyt {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .fy-button__py-5___y7k5w,
 .fy-button__py5___Zi5JN {
@@ -1368,9 +1368,9 @@ h5,
   overflow: visible;
   margin: auto;
   top: 0;
-  left: 0;
+  inset-inline-start: 0;
   bottom: 0;
-  right: 0;
+  inset-inline-end: 0;
 }
 /* Transparent Overlay */
 .loader__loading___r6ySa:before {
@@ -1378,7 +1378,7 @@ h5,
   display: block;
   position: fixed;
   top: 0;
-  left: 0;
+  inset-inline-start: 0;
   width: 100%;
   height: 100%;
   background: radial-gradient(rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.8));
@@ -1477,7 +1477,7 @@ h5,
 .loader__page-loader-container___jJHee {
   position: fixed;
   top: 0;
-  left: 0;
+  inset-inline-start: 0;
   width: 100%;
   background: rgba(0, 0, 0, 0.1);
   display: flex;
@@ -1495,7 +1495,7 @@ h5,
   width: 50px;
   height: 50px;
   animation: loader__spin___omoke 2s linear infinite;
-  margin-left: 10%;
+  margin-inline-start: 10%;
 }
 @keyframes loader__spin___omoke {
   0% {
@@ -1506,7 +1506,7 @@ h5,
   }
 }
 .loader__page-loader-container___jJHee p {
-  margin-left: 10px;
+  margin-inline-start: 10px;
   font-weight: bold;
   color: #333;
   /* Dark grey */

@@ -45,7 +45,7 @@
     }
     .linkWrapper {
       border-bottom: 1px solid var(--dividerStokes);
-      border-right: 1px solid var(--dividerStokes);
+      border-inline-end: 1px solid var(--dividerStokes);
       background-color: #f8f8f8;
       .link {
         .icon {
@@ -64,7 +64,7 @@
       }
       @media @mobile {
         background-color: @PageBackground;
-        border-right: none;
+        border-inline-end: none;
         padding: 0 16px;
       }
       cursor: pointer;
@@ -75,7 +75,7 @@
           display: flex;
           flex: 1;
           align-items: center;
-          padding-left: 12px;
+          padding-inline-start: 12px;
 
           @media @mobile-up {
             justify-content: flex-end;
@@ -88,7 +88,7 @@
             height: 28px;
             border-radius: 50%;
             border: 1px solid var(--dividerStokes);
-            margin-left: -5.25px;
+            margin-inline-start: -5.25px;
             background-color: #fff;
             object-fit: contain;
             &.upiIcon {
@@ -120,14 +120,14 @@
         }
         .modeName {
           align-self: center;
-          margin-left: 16px;
+          margin-inline-start: 16px;
           color: var(--Text-Body, #4d4d4e);
           font-size: 14px;
           font-weight: 500;
           line-height: 140%;
           @media @mobile {
             color: @TextHeading;
-            margin-left: 8px;
+            margin-inline-start: 8px;
           }
         }
         .selectedModeName {
@@ -180,7 +180,7 @@
         }
       }
     }
-    border-right: none;
+    border-inline-end: none;
     background-color: @PageBackground;
   }
   .headerHightlight {
@@ -208,7 +208,7 @@
     }
   }
   .linkWrapper.selectedNavigationTab {
-    border-right: none;
+    border-inline-end: none;
     background-color: @PageBackground;
   }
   .navigationTab {
@@ -289,7 +289,7 @@
         font-weight: 400;
         line-height: 19.6px;
         color: var(--primaryColor);
-        margin-right: 8px;
+        margin-inline-end: 8px;
       }
       .why {
         font-size: 14px;
@@ -310,7 +310,7 @@
 
         .cvvIcon {
           position: absolute;
-          right: 16px;
+          inset-inline-end: 16px;
           top: 50%;
           transform: translateY(-50%);
         }
@@ -354,7 +354,7 @@
             .cardDetailsRow1 {
               display: flex;
               .cardLeft {
-                margin-right: 10px;
+                margin-inline-end: 10px;
               }
               .cardMiddle {
                 display: flex;
@@ -364,7 +364,7 @@
                   .number {
                     font-size: 14px;
                     font-weight: 400;
-                    margin-right: 8px;
+                    margin-inline-end: 8px;
                     align-self: center;
                     line-height: 140%;
                     span {
@@ -388,7 +388,7 @@
                     line-height: 16px;
                     text-transform: capitalize;
                     color: #27ae60;
-                    margin-left: 4px;
+                    margin-inline-start: 4px;
                     line-height: 140%;
                   }
                 }
@@ -397,7 +397,7 @@
 
             .cardDetailsRow2 {
               display: flex;
-              padding-left: 32px;
+              padding-inline-start: 32px;
               height: 48px;
 
               input {
@@ -500,7 +500,7 @@
         }
         .newCardHeaderText {
           align-self: center;
-          margin-left: 10px;
+          margin-inline-start: 10px;
         }
       }
       .newCard {
@@ -521,7 +521,7 @@
         .cvv {
           cursor: pointer;
           position: absolute;
-          right: 8px;
+          inset-inline-end: 8px;
           top: 50%;
           transform: translateY(-50%);
           &.cvvError {
@@ -548,7 +548,7 @@
         .cardDateCvvWrapper {
           .upArrowMark {
             position: absolute;
-            left: 50%;
+            inset-inline-start: 50%;
             top: -6px;
             path {
               fill: @DividerStokes;
@@ -592,7 +592,7 @@
         .inputName {
           position: absolute;
           top: -8px;
-          left: 16px;
+          inset-inline-start: 16px;
           font-size: 12px;
           font-weight: 400;
           background-color: @PageBackground;
@@ -695,7 +695,7 @@
           border-radius: 8px;
           position: absolute;
           z-index: 99;
-          right: -116px;
+          inset-inline-end: -116px;
           transform: unset;
           background: @DialogBackground;
           border: 1px solid @DividerStokes;
@@ -825,6 +825,9 @@
         }
         .moreModeArrow {
           transform: rotate(270deg);
+          [dir = 'rtl'] & {
+            transform: rotate(90deg);
+          }
         }
         .otherModeArrow {
           transform: rotate(360deg);
@@ -1134,7 +1137,7 @@
     .inputName {
       position: absolute;
       top: -8px;
-      left: 16px;
+      inset-inline-start: 16px;
       font-size: 12px;
       font-weight: 400;
       background-color: @PageBackground;
@@ -1236,13 +1239,13 @@
 
       .otherLeft {
         align-self: center;
-        margin-right: 10px;
-        margin-left: 10px;
+        margin-inline-end: 10px;
+        margin-inline-start: 10px;
       }
 
       .otherMiddle {
         align-self: center;
-        margin-right: 10px;
+        margin-inline-end: 10px;
 
         img {
           width: 45px;
@@ -1360,7 +1363,7 @@
     margin-top: 24px;
 
     .saveForLater {
-      margin-right: 5px;
+      margin-inline-end: 5px;
       accent-color: var(--primaryColor);
     }
     .saveUpiTitle {
@@ -1461,7 +1464,7 @@
   position: relative;
   .closeCodModal {
     position: absolute;
-    right: 24px;
+    inset-inline-end: 24px;
   }
   .message {
     font-size: 16px;
@@ -1500,7 +1503,7 @@
   position: relative;
   .upArrowMark {
     position: absolute;
-    left: 50%;
+    inset-inline-start: 50%;
     top: -6px;
     path {
       fill: @DividerStokes;
@@ -1520,7 +1523,7 @@
     border-radius: 8px;
     position: absolute;
     z-index: 99;
-    right: -116px;
+    inset-inline-end: -116px;
     transform: unset;
     background: @DialogBackground;
     border: 1px solid @DividerStokes;
@@ -1580,9 +1583,9 @@
     border-radius: 50%;
     object-fit: contain;
     @media @mobile {
-      margin-right: 8px;
+      margin-inline-end: 8px;
     }
-    margin-right: 12px;
+    margin-inline-end: 12px;
   }
 }
 .logoNameContainer {
@@ -1630,6 +1633,9 @@
 }
 .moreModeIcon {
   transform: rotate(270deg);
+  [dir = 'rtl'] & {
+    transform: rotate(90deg);
+  }
   display: flex;
   align-items: center;
   svg {

@@ -7,9 +7,10 @@ import FyButton from "../../../../components/core/fy-button/fy-button";
 import DeliveryInfo from "../delivery-info/delivery-info";
 import QuantityControl from "../../../../components/quantity-control/quantity-control";
 import FyDropdown from "../../../../components/core/fy-dropdown/fy-dropdown";
-import { currencyFormat, isEmptyOrNull } from "../../../../helper/utils";
+import { currencyFormat, formatLocale, isEmptyOrNull } from "../../../../helper/utils";
 import CartIcon from "../../../../assets/images/cart.svg";
 import BuyNowIcon from "../../../../assets/images/buy-now.svg";
+import { useGlobalTranslation, useGlobalStore, useFPI } from "fdk-core/utils";
 
 const AddToCart = ({
   productData = {},
@@ -19,20 +20,24 @@ const AddToCart = ({
   selectedSize = "",
   deliverInfoProps = {},
   sizeError = false,
-  handleSlugChange = (updatedSlug) => {},
-  onSizeSelection = () => {},
-  handleShowSizeGuide = () => {},
-  addProductForCheckout = () => {},
-  handleViewMore = () => {},
-  handleClose = () => {},
+  handleSlugChange = (updatedSlug) => { },
+  onSizeSelection = () => { },
+  handleShowSizeGuide = () => { },
+  addProductForCheckout = () => { },
+  handleViewMore = () => { },
+  handleClose = () => { },
   selectedItemDetails = {},
   isCartUpdating = false,
   isHyperlocal = false,
-  cartUpdateHandler = () => {},
+  cartUpdateHandler = () => { },
   minCartQuantity,
   maxCartQuantity,
   incrementDecrementUnit,
 }) => {
+  const fpi = useFPI();
+  const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
+  const locale = language?.locale;
+  const { t } = useGlobalTranslation("translation");
   const { product = {}, productPrice = {} } = productData;
 
   const { button_options, disable_cart, show_price, show_quantity_control } =
@@ -63,13 +68,17 @@ const AddToCart = ({
         return currencyFormat(price_per_piece[key]) || "";
       }
       const price = productPrice?.price || "";
-      return currencyFormat(price?.[key], price?.currency_symbol) || "";
+      return currencyFormat(
+        price?.[key], 
+        price?.currency_symbol, 
+        formatLocale(locale, countryCode, true)) || "";
     }
     if (selectedSize && priceDataDefault) {
       return (
         currencyFormat(
           priceDataDefault?.[key]?.min,
-          priceDataDefault?.[key]?.currency_symbol
+          priceDataDefault?.[key]?.currency_symbol,
+          formatLocale(locale, countryCode, true)
         ) || ""
       );
     }
@@ -80,7 +89,8 @@ const AddToCart = ({
           } - ${currencyFormat(priceDataDefault?.[key]?.max) || ""}`
         : currencyFormat(
             priceDataDefault?.[key]?.max,
-            priceDataDefault?.[key]?.currency_symbol
+            priceDataDefault?.[key]?.currency_symbol,
+            formatLocale(locale, countryCode, true)
           ) || "";
     }
   };
@@ -175,7 +185,7 @@ const AddToCart = ({
                 <div className={styles.sizeHeaderContainer}>
                   <p className={`${styles.b2} ${styles.sizeSelection__label}`}>
                     <span>
-                      Style: {Boolean(selectedSize) && `Size (${selectedSize})`}
+                      {t("resource.product.style")}: {Boolean(selectedSize) && `${t("resource.common.size")} (${selectedSize})`}
                     </span>
                   </p>
                   {pageConfig?.show_size_guide &&
@@ -192,7 +202,7 @@ const AddToCart = ({
                           />
                         }
                       >
-                        SIZE GUIDE
+                        {t("resource.common.size_guide")}
                       </FyButton>
                     )}
                 </div>
@@ -234,8 +244,8 @@ const AddToCart = ({
                   options={sizes?.sizes || []}
                   value={selectedSize}
                   onChange={onSizeSelection}
-                  placeholder="SELECT SIZE"
-                  valuePrefix="Size :"
+                  placeholder={t("resource.common.select_size_caps")}
+                  valuePrefix={`${t("resource.common.size")}:`}
                   dataKey="value"
                   containerClassName={styles.dropdownContainer}
                   dropdownListClassName={styles.dropdown}
@@ -258,14 +268,14 @@ const AddToCart = ({
                         />
                       }
                     >
-                      SIZE GUIDE
+                      {t("resource.common.size_guide")}
                     </FyButton>
                   )}
               </div>
             )}
             {sizeError && (
               <div className={styles.sizeError}>
-                Please select size to continue
+                {t("resource.product.please_select_size")}
               </div>
             )}
             {!isHyperlocal && sizes?.sellable && selectedSize && (
@@ -273,7 +283,7 @@ const AddToCart = ({
             )}
 
             <div className={styles.viewMore}>
-              <span onClick={handleViewMore}>View Full details</span>
+              <span onClick={handleViewMore}>{t("resource.product.view_full_details")}</span>
             </div>
           </div>
           {/* ---------- Buy Now and Add To Cart ---------- */}
@@ -320,7 +330,7 @@ const AddToCart = ({
                         }
                         startIcon={<CartIcon className={styles.cartIcon} />}
                       >
-                        ADD TO CART
+                        {t("resource.cart.add_to_cart_caps")}
                       </FyButton>
                     )}
                   </>
@@ -335,14 +345,14 @@ const AddToCart = ({
                     }
                     startIcon={<BuyNowIcon className={styles.cartIcon} />}
                   >
-                    BUY NOW
+                    {t("resource.common.buy_now_caps")}
                   </FyButton>
                 )}
               </>
             )}
             {!sizes?.sellable && (
               <FyButton variant="outlined" disabled size="medium">
-                PRODUCT NOT AVAILABLE
+                {t("resource.common.product_not_available")}
               </FyButton>
             )}
           </div>
