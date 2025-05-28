@@ -260,11 +260,11 @@ h5,
 }
 .shared-cart__mr-5___BIzAp,
 .shared-cart__mr5___abA5H {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .shared-cart__mr-2___ZAZc3,
 .shared-cart__mr2___WCGdk {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .shared-cart__py-5___MfQmr,
 .shared-cart__py5___qWZ67 {
@@ -336,7 +336,10 @@ h5,
 }
 .shared-cart__sharedCartContainer___xlmtr .shared-cart__subTitle____CY9o {
   font-size: 14px;
-  margin: 10px 10px 10px 5px;
+  margin-top: 10px;
+  margin-inline-end: 10px;
+  margin-bottom: 10px;
+  margin-inline-start: 5px;
   color: #979797;
   font-weight: 500;
 }
@@ -344,7 +347,10 @@ h5,
   font-size: 20px;
   color: #41434c;
   font-weight: 700;
-  margin: 10px 10px 10px 20px;
+  margin-top: 10px;
+  margin-inline-end: 10px;
+  margin-bottom: 10px;
+  margin-inline-start: 20px;
 }
 .shared-cart__sharedCartContainer___xlmtr .shared-cart__shareBtnContainer___HeEja {
   display: flex;
@@ -395,14 +401,14 @@ h5,
 .shared-cart__sharedCartContainer___xlmtr .shared-cart__sharedCart___znMz6 .shared-cart__itemContainer_____6wF {
   padding-top: 20px;
   position: relative;
-  border-right: 1px solid #eee;
+  border-inline-end: 1px solid #eee;
   flex: 1;
 }
 .shared-cart__sharedCartContainer___xlmtr .shared-cart__sharedCart___znMz6 .shared-cart__breakUpContainer___iN8yo {
   padding-top: 20px;
-  padding-right: 0;
+  padding-inline-end: 0;
   flex: 0 0 360px;
-  border-left: 1px solid #eee;
+  border-inline-start: 1px solid #eee;
 }
 .shared-cart__sharedCartContainer___xlmtr .shared-cart__sharedCart___znMz6 .shared-cart__breakUpContainer___iN8yo .shared-cart__couponContainer___GzVMk {
   pointer-events: none;
@@ -447,13 +453,16 @@ h5,
 }
 .shared-cart__breakupWrapper___ACdnQ .shared-cart__title___CVqHW .shared-cart__value___UTUiN,
 .shared-cart__breakupWrapper___ACdnQ .shared-cart__subTitle____CY9o .shared-cart__value___UTUiN {
-  margin-left: auto;
-  right: 0px;
+  margin-inline-start: auto;
+  inset-inline-end: 0px;
   position: relative;
 }
 .shared-cart__breakupWrapper___ACdnQ .shared-cart__subTitle____CY9o {
   font-size: 14px;
-  margin: 10px 10px 10px 5px;
+  margin-top: 10px;
+  margin-inline-end: 10px;
+  margin-bottom: 10px;
+  margin-inline-start: 5px;
   color: #979797;
   padding: 5px 10px;
   font-weight: 400;
@@ -462,7 +471,10 @@ h5,
   font-size: 20px;
   color: #41434c;
   font-weight: 700;
-  margin: 10px 10px 10px 20px;
+  margin-top: 10px;
+  margin-inline-end: 10px;
+  margin-bottom: 10px;
+  margin-inline-start: 20px;
   border-top: 1px solid #eee;
 }
 
@@ -728,11 +740,11 @@ h5,
 }
 .chip-review-item__mr-5___giiGG,
 .chip-review-item__mr5___hfNxR {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .chip-review-item__mr-2___tFXxQ,
 .chip-review-item__mr2___LanD1 {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .chip-review-item__py-5___kcqhz,
 .chip-review-item__py5___P3nAb {
@@ -901,7 +913,7 @@ h5,
 }
 .chip-review-item__customSelect___oNYXu {
   width: 80px;
-  margin-right: 10px;
+  margin-inline-end: 10px;
 }
 .chip-review-item__offersContainer___y4Eas {
   border-radius: 3px;
@@ -915,7 +927,7 @@ h5,
   color: #20ce81;
 }
 .chip-review-item__maxAvail___ZGQx2 {
-  text-align: left;
+  text-align: start;
   color: #ee485d;
 }
 .chip-review-item__chip___MPqlt {
@@ -942,7 +954,10 @@ h5,
   }
 }
 .chip-review-item__chip___MPqlt .chip-review-item__productMetas___nU57E .chip-review-item__priceCntr___o6_FD {
-  margin: 0px 0px 0px 5px;
+  margin-top: 0px;
+  margin-inline-end: 0px;
+  margin-bottom: 0px;
+  margin-inline-start: 5px;
 }
 @media only screen and (max-width: 480px) {
   .chip-review-item__chip___MPqlt .chip-review-item__productMetas___nU57E .chip-review-item__priceCntr___o6_FD {
@@ -974,12 +989,12 @@ h5,
 }
 .chip-review-item__chip___MPqlt .chip-review-item__rightItems___xD6ri {
   display: flex;
-  margin-left: auto;
+  margin-inline-start: auto;
   align-content: center;
 }
 @media only screen and (max-width: 480px) {
   .chip-review-item__chip___MPqlt .chip-review-item__rightItems___xD6ri {
-    margin-left: 0;
+    margin-inline-start: 0;
   }
 }
 .chip-review-item__chip___MPqlt .chip-review-item__rightItems___xD6ri .chip-review-item__quantity___B_WUz {

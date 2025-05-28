@@ -5,6 +5,7 @@ import Modal from "../../../components/core/modal/modal";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import StickyPayNow from "./sticky-pay-now/sticky-pay-now";
 import { priceFormatCurrencySymbol } from "../../../helper/utils";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function CardForm({
   cardNumberRef,
@@ -42,7 +43,7 @@ function CardForm({
   isCardValid,
   cardDetailsData,
   isMobile,
-  onPriceDetailsClick = () => {},
+  onPriceDetailsClick = () => { },
   addNewCard,
   isCvvInfo,
   handleCvvInfo,
@@ -50,6 +51,7 @@ function CardForm({
   setCardValidity,
   resetCardValidationErrors,
 }) {
+  const { t } = useGlobalTranslation("translation");
   const isFormatterSet = useRef(false);
 
   useEffect(() => {
@@ -66,7 +68,7 @@ function CardForm({
 
   const starPlaceholder = (
     <>
-      Expiry Date<span style={{ color: "red" }}>*</span>
+      {t('resource.checkout.expiry_date')}<span style={{ color: "red" }}>*</span>
     </>
   );
 
@@ -93,9 +95,9 @@ function CardForm({
               (cardDetailsData.card_brand &&
                 cardDetailsData.card_brand !== "American Express")) && (
               <div className={styles.type}>
-                <p className={styles.title}>What is CVV Number?</p>
+                <p className={styles.title}>{t("resource.checkout.what_is_cvv_number")}</p>
                 <p className={styles.desc}>
-                  It is a 3-digit code on the back of your card.
+                  {t("resource.checkout.cvv_description")}
                 </p>
                 <div className={styles.cvImage}>
                   <SvgWrapper svgSrc="non-amex-card-cvv" />
@@ -107,10 +109,9 @@ function CardForm({
               (cardDetailsData.card_brand &&
                 cardDetailsData.card_brand === "American Express")) && (
               <div className={styles.type}>
-                <p className={styles.title}>Have American Express Card?</p>
+                <p className={styles.title}>{t("resource.checkout.have_american_express_card")}</p>
                 <p className={styles.desc}>
-                  It is a 4-digit number on the front, just above your credit
-                  card number.
+                  {t("resource.checkout.amex_cvv_description")}
                 </p>
                 <div className={styles.cvImage}>
                   <SvgWrapper svgSrc="amex-card-cvv" />
@@ -127,7 +128,7 @@ function CardForm({
       <div className={styles.newCard} id="card-validation">
         <div className={`${styles.cardInputWrapper} ${styles.cardNumberBox}`}>
           <input
-            placeholder="Card Number*"
+            placeholder={`${t('resource.checkout.card_number')}*`}
             className={`${cardNumberError ? styles.error : ""} ${styles.cardNumber}`}
             id="card-number"
             onPaste={handleCardNumberPaste}
@@ -137,7 +138,7 @@ function CardForm({
             <span
               className={`${styles.inputName} ${cardNumberError ? styles.errorInputName : ""}`}
             >
-              Card Number<span className={styles.required}>*</span>
+              {t('resource.checkout.card_number')}<span className={styles.required}>*</span>
             </span>
           )}
           {cardDetailsData && cardDetailsData.logo && (
@@ -151,7 +152,7 @@ function CardForm({
           <input
             maxLength="20"
             type="text"
-            placeholder="Name on card*"
+            placeholder={`${t('resource.checkout.name_on_card')}*`}
             className={`${cardNameError ? styles.error : ""} ${styles.cardName}`}
             ref={nameRef}
             contentEditable="true"
@@ -163,7 +164,7 @@ function CardForm({
             <span
               className={`${styles.inputName} ${cardNameError ? styles.errorInputName : ""}`}
             >
-              Name on Card<span className={styles.required}>*</span>
+              {t('resource.checkout.name_on_card')}<span className={styles.required}>*</span>
             </span>
           )}
           {cardNameError && (
@@ -196,7 +197,7 @@ function CardForm({
                   mask: "/",
                 },
               }}
-              placeholder="Expiry Date*"
+              placeholder={`${t('resource.checkout.expiry_date')}*`}
               className={`${cardExpiryError ? styles.error : ""} ${styles.cardExpiry}`}
               onBlur={validateCardExpiryDate}
             />
@@ -204,7 +205,7 @@ function CardForm({
               <span
                 className={`${styles.inputName} ${cardExpiryError ? styles.errorInputName : ""}`}
               >
-                Expiry Date<span className={styles.required}>*</span>
+                {t('resource.checkout.expiry_date')}<span className={styles.required}>*</span>
               </span>
             )}
             {cardExpiryError && (
@@ -217,7 +218,7 @@ function CardForm({
               type="password"
               onKeyPress={keypressCvv}
               maxLength="4"
-              placeholder="CVV*"
+              placeholder={`${t('resource.checkout.cvv')}*`}
               className={`${cardCVVError ? styles.error : ""} ${styles.cardCvv}`}
               onChange={handleCvvNumberInput}
               onBlur={validateCvv}
@@ -246,7 +247,7 @@ function CardForm({
               <span
                 className={`${styles.inputName} ${cardCVVError ? styles.errorInputName : ""}`}
               >
-                CVV<span className={styles.required}>*</span>
+                {t('resource.checkout.cvv')}<span className={styles.required}>*</span>
               </span>
             )}
             {cardCVVError && (
@@ -266,7 +267,7 @@ function CardForm({
               />
             </label>
             <div className={styles.rbiGuidelinesText}>
-              Save this card as per RBI Guidelines
+              {t('resource.checkout.save_this_card_rbi_guidelines')}
             </div>
             <span className={styles.infoIcon}>
               <SvgWrapper
@@ -286,8 +287,8 @@ function CardForm({
                 return (
                   <div style={{ display: "flex", padding: "8px" }}>
                     <SvgWrapper svgSrc="card-payment" />
-                    <span style={{ paddingLeft: "8px", fontSize: "14px" }}>
-                      Improve your card security
+                    <span style={{ paddingInlineStart: "8px", fontSize: "14px" }}>
+                      {t('resource.checkout.improve_your_card_security')}
                     </span>
                   </div>
                 );
@@ -296,12 +297,10 @@ function CardForm({
               <div className={styles.rbiGuidelinesContent}>
                 <ul>
                   <li className="fontBody">
-                    Your bank/card network will securely save your card info via
-                    tokenization if you give consent for the same.
+                    {t('resource.checkout.card_consent_request_1')}
                   </li>
                   <li className="fontBody">
-                    In case you choose to not tokenize, you will have to enter
-                    the card details every time you pay.
+                  {t('resource.checkout.card_consent_request_2')}
                   </li>
                 </ul>
               </div>
@@ -326,7 +325,7 @@ function CardForm({
             onClick={() => payUsingCard()}
             disabled={!isCardValid()}
           >
-            PAY {priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue())}
+            {t("resource.common.pay_caps")} {priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue())}
           </button>
         )}
       </div>

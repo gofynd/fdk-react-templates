@@ -1,8 +1,10 @@
 import React from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./term-privacy.less";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function TermPrivacy({ onChange, checked }) {
+  const { t } = useGlobalTranslation("translation");
   const isRegisterPage =
     typeof window !== "undefined" &&
     window.location.pathname.includes("auth/register");
@@ -17,28 +19,28 @@ function TermPrivacy({ onChange, checked }) {
             onChange={(e) => onChange?.(e.target.checked)}
             checked={checked}
             aria-required="true"
-            aria-label="Accept Terms and Privacy Policy"
+            aria-label={t('resource.common.terms_and_privacy')}
           />
           <span>
-            I agree to the&nbsp;
+            {t("resource.auth.login.agree_to_the")}&nbsp;
             <FDKLink to="/terms-and-conditions" target="_blank">
-              Terms of Service
+              {t("resource.auth.login.terms_of_service")}
             </FDKLink>
-            &nbsp;&amp;&nbsp;
+            &nbsp;{t("resource.auth.login.and_symbol")}&nbsp;
             <FDKLink to="/privacy-policy" target="_blank">
-              Privacy Policy
+            {t("resource.auth.login.privacy_policy")}
             </FDKLink>
           </span>
         </div>
       ) : (
         <span className={styles.byContinuingText}>
-          By continuing, I agree to the&nbsp;
+          {t("resource.auth.login.agree_to_terms_prompt")}&nbsp;
           <FDKLink to="/terms-and-conditions" target="_blank">
-            Terms of Service
+            {t("resource.auth.login.terms_of_service")}
           </FDKLink>
-          &nbsp;&amp;&nbsp;
+          &nbsp;{t("resource.auth.login.and_symbol")}&nbsp;
           <FDKLink to="/privacy-policy" target="_blank">
-            Privacy Policy
+            {t("resource.auth.login.privacy_policy")}
           </FDKLink>
         </span>
       )}

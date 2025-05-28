@@ -5,8 +5,10 @@ import { GENDER_OPTIONS } from "../../helper/constant";
 import FyInput from "../../components/core/fy-input/fy-input";
 import FyButton from "../../components/core/fy-button/fy-button";
 import { deepEqual } from "../../helper/utils";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function ProfileDetails({ userData, handleSave }) {
+  const { t } = useGlobalTranslation("translation");
   const [isLoading, setIsLoading] = useState(false);
   const { firstName, lastName, gender } = userData;
 
@@ -99,7 +101,7 @@ function ProfileDetails({ userData, handleSave }) {
         <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
           <FyInput
             id="firstName"
-            label="First Name"
+            label={t("resource.common.first_name")}
             showAsterik
             inputVariant="underline"
             containerClassName={styles.inputContainer}
@@ -108,14 +110,14 @@ function ProfileDetails({ userData, handleSave }) {
             error={errors?.firstName && errors.firstName.type === "required"}
             errorMessage={
               errors?.firstName?.type === "maxLength"
-                ? "Maximum 30 characters allowed"
-                : "Required"
+                ? t("resource.common.maximum_30_characters_allowed")
+                : t("resource.common.required")
             }
             {...register("firstName", {
               required: true,
               maxLength: {
                 value: 30,
-                message: "Maximum 30 characters allowed",
+                message: t("resource.common.maximum_30_characters_allowed"),
               },
             })}
             required
@@ -124,7 +126,7 @@ function ProfileDetails({ userData, handleSave }) {
 
           <FyInput
             id="lastName"
-            label="Last Name"
+            label={t("resource.common.last_name")}
             showAsterik
             inputVariant="underline"
             containerClassName={styles.inputContainer}
@@ -133,14 +135,14 @@ function ProfileDetails({ userData, handleSave }) {
             error={errors?.lastName && errors.lastName.type === "required"}
             errorMessage={
               errors?.lastName?.type === "maxLength"
-                ? "Maximum 30 characters allowed"
-                : "Required"
+                ? t("resource.common.maximum_30_characters_allowed")
+                : t("resource.common.required")
             }
             {...register("lastName", {
               required: true,
               maxLength: {
                 value: 30,
-                message: "Maximum 30 characters allowed",
+                message: t("resource.common.maximum_30_characters_allowed"),
               },
             })}
             required
@@ -149,7 +151,7 @@ function ProfileDetails({ userData, handleSave }) {
 
           <div className={styles.radioInputContainer}>
             <div className={styles.formLabel}>
-              Gender <span className={styles.required}>*</span>
+              {t("resource.profile.gender")} <span className={styles.required}>*</span>
             </div>
             <div className={styles.radioContent}>
               {GENDER_OPTIONS.map(({ value, display }) => (
@@ -166,7 +168,7 @@ function ProfileDetails({ userData, handleSave }) {
                     className={styles.radioLabel}
                     htmlFor={`gender-${value}`}
                   >
-                    {display}
+                    {t(display)}
                   </label>
                 </div>
               ))}
@@ -179,7 +181,7 @@ function ProfileDetails({ userData, handleSave }) {
               className={styles.submitBtn}
               type="submit"
             >
-              Save
+              {t("resource.facets.save")}
             </FyButton>
           </div>
         </form>

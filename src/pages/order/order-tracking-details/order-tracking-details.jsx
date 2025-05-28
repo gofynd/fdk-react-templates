@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import * as styles from "./order-tracking-details.less";
 import EmptyState from "../../../components/empty-state/empty-state";
 import OrderShipment from "../../../components/order-shipment/order-shipment";
 import ShipmentItem from "../../../components/shipment-item/shipment-item";
 import ShipmentTracking from "../../../components/shipment-tracking/shipment-tracking";
 import ShipmentBreakup from "../../../components/shipment-breakup/shipment-breakup";
+import { useNavigate, useGlobalTranslation } from "fdk-core/utils";
 import FyButton from "../../../components/core/fy-button/fy-button";
 import FyInput from "../../../components/core/fy-input/fy-input";
 import Loader from "../../../components/loader/loader";
@@ -18,6 +19,7 @@ function OrderTrackingDetails({
   selectedShipment,
   isShipmentLoading,
 }) {
+  const { t } = useGlobalTranslation("translation");
   const params = useParams();
   const [orderId, setOrderId] = useState(params.orderId);
   const [showError, setShowError] = useState(false);
@@ -42,11 +44,11 @@ function OrderTrackingDetails({
 
   useEffect(() => {
     getShipmentDetails();
-    return () => {};
+    return () => { };
   }, [params?.shipmentId]);
   useEffect(() => {
     setSelectedShipmentBag(selectedShipment);
-    return () => {};
+    return () => { };
   }, [selectedShipment]);
   useEffect(() => {
     if (params?.shipmentId) {
@@ -54,7 +56,7 @@ function OrderTrackingDetails({
     } else {
       setSelectedShipmentBag(orderShipments?.shipments?.[0]);
     }
-    return () => {};
+    return () => { };
   }, [orderShipments?.shipments]);
 
   const getBag = () => {
@@ -80,13 +82,13 @@ function OrderTrackingDetails({
       <div className={`${styles.orderDetails}`}>
         <div className={`${styles.trackOrder}`}>
           <FyInput
-            label={isFocussed || orderId ? "Enter Order ID" : ""}
+            label={isFocussed || orderId ? t("resource.order.enter_order_id") : ""}
             labelVariant="floating"
             value={orderId}
-            placeholder={!isFocussed ? "Enter Order ID" : ""}
+            placeholder={!isFocussed ? t("resource.order.enter_order_id") : ""}
             maxLength="20"
             error={showError}
-            errorMessage="Invalid Order Id"
+            errorMessage={t("resource.order.invalid_order_id")}
             onChange={(e) => setOrderId(e.target.value.toUpperCase())}
             onFocus={() => setIsFocussed(true)}
             onBlur={() => setIsFocussed(false)}
@@ -98,7 +100,7 @@ function OrderTrackingDetails({
             size="medium"
             onClick={trackOrder}
           >
-            TRACK ORDER
+            {t("resource.order.track_order_caps")}
           </FyButton>
         </div>
         {(Object.keys(orderShipments)?.length === 0 ||
@@ -139,12 +141,12 @@ function OrderTrackingDetails({
                     <div>
                       {!show && (
                         <div className={`${styles.view}`} onClick={showMore}>
-                          {`+${getBag().length - 2} view more`}
+                          {`+${getBag().length - 2} ${t("resource.facets.view_more_lower")}`}
                         </div>
                       )}
                       {show && (
                         <div className={`${styles.view}`} onClick={showLess}>
-                          view less
+                          {t("resource.facets.view_less_lower")}
                         </div>
                       )}
                     </div>
