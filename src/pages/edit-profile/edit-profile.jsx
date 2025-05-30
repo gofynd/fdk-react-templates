@@ -4,7 +4,6 @@ import * as styles from "./edit-profile.less";
 import VerifyBoth from "../../page-layouts/auth/verify-both/verify-both";
 import MobileNumber from "../../page-layouts/auth/mobile-number/mobile-number";
 import { validateName, validateEmailField } from "../../helper/utils";
-import { useGlobalTranslation } from "fdk-core/utils";
 
 function EditProfile({
   isFormSubmitSuccess = false,
@@ -29,11 +28,10 @@ function EditProfile({
   isSkipButton = true,
   error = null,
   verifyDetailsProp = {},
-  onEditProfileSubmit = () => { },
-  onLogoutButtonClick = () => { },
-  onSkipButtonClick = () => { },
+  onEditProfileSubmit = () => {},
+  onLogoutButtonClick = () => {},
+  onSkipButtonClick = () => {},
 }) {
-  const { t } = useGlobalTranslation("translation");
   const fNameInputId = useId();
   const lNameInputId = useId();
   const emailInputId = useId();
@@ -47,7 +45,7 @@ function EditProfile({
 
   const isEmailRequired = useMemo(() => {
     if (emailLevel === "soft") {
-      return ` (${t("resource.common.optional_lower")})`;
+      return " (optional)";
     }
     if (emailLevel === "hard") {
       return "*";
@@ -57,10 +55,10 @@ function EditProfile({
 
   const isMobileRequired = useMemo(() => {
     if (mobileLevel === "soft") {
-      return t("resource.common.optional_lower");
+      return "optional";
     }
     if (mobileLevel === "hard") {
-      return t("resource.common.required_lower");
+      return "required";
     }
     return "";
   }, [mobileLevel]);
@@ -94,13 +92,14 @@ function EditProfile({
       {!isFormSubmitSuccess ? (
         <>
           <form onSubmit={handleSubmit(onEditProfileSubmit)}>
-            <div className={styles.editProfileTitle}>{t("resource.common.complete_signup")}</div>
+            <div className={styles.editProfileTitle}>Complete Signup</div>
             <div
-              className={`${styles.inputGroup} ${styles.editProfileNameInput} ${errors?.firstName ? styles.errorInput : ""
-                }`}
+              className={`${styles.inputGroup} ${styles.editProfileNameInput} ${
+                errors?.firstName ? styles.errorInput : ""
+              }`}
             >
               <label className={styles.inputTitle} htmlFor={fNameInputId}>
-                {t("resource.common.first_name")}<span className={styles.required}> *</span>
+                First Name<span className={styles.required}> *</span>
               </label>
               <input
                 id={fNameInputId}
@@ -108,10 +107,10 @@ function EditProfile({
                 maxLength="30"
                 {...register("firstName", {
                   validate: (value) =>
-                    validateName(value) || t("resource.common.please_enter_valid_first_name"),
+                    validateName(value) || "Please enter a valid first name",
                   maxLength: {
                     value: 30,
-                    message: t("resource.common.maximum_30_characters_allowed"),
+                    message: "Maximum 30 characters allowed",
                   },
                 })}
               />
@@ -120,11 +119,12 @@ function EditProfile({
               )}
             </div>
             <div
-              className={`${styles.inputGroup} ${styles.editProfileNameInput} ${errors.lastName ? styles.errorInput : ""
-                }`}
+              className={`${styles.inputGroup} ${styles.editProfileNameInput} ${
+                errors.lastName ? styles.errorInput : ""
+              }`}
             >
               <label className={styles.inputTitle} htmlFor={lNameInputId}>
-                {t("resource.common.last_name")}<span className={styles.required}> *</span>
+                Last Name<span className={styles.required}> *</span>
               </label>
               <input
                 id={lNameInputId}
@@ -132,10 +132,10 @@ function EditProfile({
                 maxLength="30"
                 {...register("lastName", {
                   validate: (value) =>
-                    validateName(value) || t("resource.common.please_enter_valid_last_name"),
+                    validateName(value) || "Please enter a valid last name",
                   maxLength: {
                     value: 30,
-                    message: t("resource.common.maximum_30_characters_allowed"),
+                    message: "Maximum 30 characters allowed",
                   },
                 })}
               />
@@ -145,28 +145,29 @@ function EditProfile({
             </div>
             <div className={styles.genderRadioContainer}>
               <label className={styles.radioContainer}>
-                {t("resource.common.male")}
+                Male
                 <input type="radio" value="male" {...register("gender")} />
                 <span className={styles.checkmark} />
               </label>
               <label className={styles.radioContainer}>
-                {t("resource.common.female")}
+                Female
                 <input type="radio" value="female" {...register("gender")} />
                 <span className={styles.checkmark} />
               </label>
               <label className={styles.radioContainer}>
-                {t("resource.common.other")}
+                Other
                 <input type="radio" value="unisex" {...register("gender")} />
                 <span className={styles.checkmark} />
               </label>
             </div>
             {isEmail && (
               <div
-                className={`${styles.inputGroup} ${styles.editProfileEmail} ${errors.email ? styles.errorInput : ""
-                  }`}
+                className={`${styles.inputGroup} ${styles.editProfileEmail} ${
+                  errors.email ? styles.errorInput : ""
+                }`}
               >
                 <label className={styles.inputTitle} htmlFor={emailInputId}>
-                  {`${t("resource.common.email")}${isEmailRequired}`}
+                  {`Email${isEmailRequired}`}
                 </label>
                 <input
                   id={emailInputId}
@@ -175,7 +176,7 @@ function EditProfile({
                   {...register("email", {
                     validate: (value) =>
                       validateEmail(value) ||
-                      t("resource.common.please_enter_valid_email_address"),
+                      "Please enter valid email address",
                   })}
                 />
                 {errors.email && (
@@ -193,7 +194,7 @@ function EditProfile({
                       if (isMobileRequired === "required" || value?.mobile) {
                         return (
                           value.isValidNumber ||
-                          t("resource.common.enter_valid_phone_number")
+                          "Please enter valid phone number"
                         );
                       }
                       return true;
@@ -222,17 +223,17 @@ function EditProfile({
               </div>
             )}
             <button className={styles.continueBtn} type="submit">
-              {t("resource.common.continue")}
+              Continue
             </button>
           </form>
           {isLogoutButton && (
             <button className={styles.logoutBtn} onClick={onLogoutButtonClick}>
-              {t("resource.profile.logout")}
+              Logout
             </button>
           )}
           {isSkipButton && (
             <button className={styles.skipBtn} onClick={onSkipButtonClick}>
-              {t("resource.profile.skip_caps")}
+              SKIP
             </button>
           )}
         </>

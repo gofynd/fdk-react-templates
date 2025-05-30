@@ -5,7 +5,6 @@ import { Controller, useForm } from "react-hook-form";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
 import FyButton from "../../components/core/fy-button/fy-button";
 import FyImage from "../../components/core/fy-image/fy-image";
-import { useGlobalTranslation } from "fdk-core/utils";
 
 function ContactSupport({
   contactInfo = "",
@@ -14,7 +13,6 @@ function ContactSupport({
   pageConfig = "",
   SocailMedia = () => <></>,
 }) {
-  const { t } = useGlobalTranslation("translation");
   const {
     handleSubmit,
     formState: { errors },
@@ -37,7 +35,7 @@ function ContactSupport({
   const inputFields = [
     {
       type: "text",
-      label: t("resource.common.full_name"),
+      label: "Full Name",
       name: "name",
       multiline: false,
       showAsterik: true,
@@ -45,13 +43,13 @@ function ContactSupport({
       error: errors?.name,
       pattern: {
         value: /^[a-zA-Z0-9 ]+$/,
-        message: t("resource.contact_us.please_enter_a_valid_name"),
+        message: "Please enter a valid name",
       },
-      errorMessage: t("resource.contact_us.please_enter_your_name"),
+      errorMessage: "Please enter your name",
     },
     {
       type: "tel",
-      label: t("resource.common.phone_number"),
+      label: "Phone Number",
       name: "phone",
       multiline: false,
       showAsterik: true,
@@ -59,13 +57,13 @@ function ContactSupport({
       error: errors?.phone,
       pattern: {
         value: /^\+?[0-9\s]{1,15}$/,
-        message: t("resource.contact_us.please_enter_a_valid_phone_number"),
+        message: "Please enter a valid phone number",
       },
-      errorMessage: t("resource.contact_us.please_enter_your_phone_number"),
+      errorMessage: "Please enter your phone number",
     },
     {
       type: "text",
-      label: t("resource.common.email"),
+      label: "Email",
       name: "email",
       multiline: false,
       showAsterik: true,
@@ -73,19 +71,19 @@ function ContactSupport({
       error: errors?.email,
       pattern: {
         value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-        message: t("resource.contact_us.please_enter_a_valid_email_address"),
+        message: "Please enter a valid email address",
       },
-      errorMessage: t("resource.contact_us.please_enter_your_email_address"),
+      errorMessage: "Please enter your email address",
     },
     {
       type: "textarea",
-      label: t("resource.contact_us.message"),
+      label: "Message",
       name: "comment",
       showAsterik: false,
       required: false,
       error: errors?.comment,
       pattern: null,
-      errorMessage: t("resource.contact_us.please_enter_your_comment"),
+      errorMessage: "Please enter your comment",
       multiline: true,
     },
   ];
@@ -144,7 +142,7 @@ function ContactSupport({
         className={`${styles.contact_container} ${pageConfig?.image_desktop ? styles.onImageContainer : ""}`}
       >
         <div className={`${styles.flex_item}`}>
-          <h1 className={`fontHeader ${styles.showDesktop}`}>{t("resource.common.contact_us")}</h1>
+          <h1 className={`fontHeader ${styles.showDesktop}`}>Contact Us</h1>
           {showListItems && (
             <div className={styles.listItems}>
               {showAddress &&
@@ -195,7 +193,7 @@ function ContactSupport({
           )}
         </div>
         <div className={styles.flex_item}>
-          <h3 className={`${styles.showMobile} fontHeader`}>{t("resource.common.contact_us")}</h3>
+          <h1 className={`${styles.showMobile} fontHeader`}>Contact Us</h1>
           <form onSubmit={handleSubmit(submitForm)}>
             {inputFields?.map((field, index) => (
               <div className={styles.form_row} key={index}>
@@ -268,7 +266,7 @@ function ContactSupport({
                 fullWidth={true}
                 type="submit"
               >
-                {t("resource.contact_us.send_message")}
+                SEND MESSAGE
               </FyButton>
             </div>
           </form>

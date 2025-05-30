@@ -92,7 +92,7 @@
 
   .alertMessage {
     display: inline-block;
-    margin-inline-end: 8px;
+    margin-right: 8px;
     font-size: 13px;
   }
 }
@@ -101,8 +101,8 @@
 
   .radioContainer {
     margin-bottom: 8px;
-    padding-inline-start: 24px;
-    margin-inline-end: 12px;
+    padding-left: 24px;
+    margin-right: 12px;
     position: relative;
     color: @TextBody;
     font-size: 14px;
@@ -120,52 +120,26 @@
       width: 16px;
       position: absolute;
       top: 50%;
-      inset-inline-start: 0;
+      left: 0;
       transform: translateY(-50%);
       border: 1px solid #919191;
       border-radius: 50%;
     }
-    [dir="ltr"] & {
-      .checkmark:after {
-        content: "";
-        position: absolute;
-        display: none;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        [dir="rtl"] & {
-          transform: translate(50%, -50%);
-        }
-        width: 9px;
-        height: 9px;
-        border-radius: 50%;
-        background: #919191;
-      }
-      input:checked ~ .checkmark:after {
-        display: block;
-      }
+    .checkmark:after {
+      content: "";
+      position: absolute;
+      display: none;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #919191;
     }
-    [dir="rtl"] & {
-      .checkmark:before {
-        content: "";
-        position: absolute;
-        display: none;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        [dir="rtl"] & {
-          transform: translate(50%, -50%);
-        }
-        width: 9px;
-        height: 9px;
-        border-radius: 50%;
-        background: #919191;
-      }
-      input:checked ~ .checkmark:before {
-        display: block;
-      }
+    input:checked ~ .checkmark:after {
+      display: block;
     }
-    
   }
 }
 .editProfileNameInput,
