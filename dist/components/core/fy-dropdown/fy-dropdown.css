@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 18px;
+  line-height: 1.5;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 24px;
+    line-height: 1.5;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .fy-dropdown__caption-medium___HCy1Y,
 .fy-dropdown__captionMedium___BdPX5 {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .fy-dropdown__caption-semi-bold___RDalx,
 .fy-dropdown__captionSemiBold___t1x78 {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -260,11 +260,11 @@ h5,
 }
 .fy-dropdown__mr-5___ctv4d,
 .fy-dropdown__mr5___oPnFN {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .fy-dropdown__mr-2___iH7OK,
 .fy-dropdown__mr2___aN5pl {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .fy-dropdown__py-5___xUq5T,
 .fy-dropdown__py5___VrS0y {

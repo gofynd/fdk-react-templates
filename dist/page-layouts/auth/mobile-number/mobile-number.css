@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 18px;
+  line-height: 1.5;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 24px;
+    line-height: 1.5;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .mobile-number__caption-medium___syZZb,
 .mobile-number__captionMedium___iKNxh {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .mobile-number__caption-semi-bold___Rbomr,
 .mobile-number__captionSemiBold___cKKg4 {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -260,11 +260,11 @@ h5,
 }
 .mobile-number__mr-5___gRl4u,
 .mobile-number__mr5___tOVbz {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .mobile-number__mr-2___UJPQR,
 .mobile-number__mr2___V6EUH {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .mobile-number__py-5___Co0IS,
 .mobile-number__py5___LSFQJ {

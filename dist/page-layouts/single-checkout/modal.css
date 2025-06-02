@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 18px;
+  line-height: 1.5;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 24px;
+    line-height: 1.5;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .modal__caption-medium___SqykN,
 .modal__captionMedium___m3HHM {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .modal__caption-semi-bold___LJCt3,
 .modal__captionSemiBold___x12Yl {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -260,11 +260,11 @@ h5,
 }
 .modal__mr-5___rqVB7,
 .modal__mr5___OnXKv {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .modal__mr-2___TjkMn,
 .modal__mr2___0s6r4 {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .modal__py-5___ymlx9,
 .modal__py5___hpEP2 {
@@ -344,8 +344,8 @@ h5,
   position: fixed;
   top: 0;
   bottom: 0;
-  inset-inline-start: 0;
-  inset-inline-end: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
   overflow-y: auto;
   overflow-x: hidden;
@@ -360,11 +360,11 @@ h5,
   width: 40%;
   position: fixed;
   bottom: 0;
-  inset-inline-end: 0;
+  right: 0;
   opacity: 0;
   transition: right 0.5s ease-in-out;
   /* Added transition property for animation */
-  inset-inline-end: -40%;
+  right: -40%;
   /* Initial state - hidden off the right side */
   /* Track */
   /* Handle */
@@ -372,14 +372,14 @@ h5,
 @media only screen and (max-width: 768px) {
   .modal__modalContainerCss___ZR5ho {
     width: 60%;
-    inset-inline-end: -60%;
+    right: -60%;
     /* Initial state - hidden off the right side */
   }
 }
 @media only screen and (max-width: 480px) {
   .modal__modalContainerCss___ZR5ho {
     width: 100%;
-    inset-inline-end: -100%;
+    right: -100%;
     /* Initial state - hidden off the right side */
   }
 }
@@ -429,7 +429,7 @@ h5,
   line-height: 140%;
 }
 .modal__modalContainerCss___ZR5ho.modal__slideIn____gLvj {
-  inset-inline-end: 0;
+  right: 0;
   /* Final state - fully visible */
   opacity: 1;
 }
@@ -442,9 +442,5 @@ h5,
 .modal__slideFadeEnter___Qtfum .modal__modalContainerCss___ZR5ho,
 .modal__slideFadeLeaveTo___kGzGV .modal__modalContainerCss___ZR5ho {
   transform: translate3d(100vh, 0, 0);
-}
-[dir="rtl"] .modal__slideFadeEnter___Qtfum .modal__modalContainerCss___ZR5ho,
-[dir="rtl"] .modal__slideFadeLeaveTo___kGzGV .modal__modalContainerCss___ZR5ho {
-  transform: translate3d(-100vh, 0, 0);
 }
 

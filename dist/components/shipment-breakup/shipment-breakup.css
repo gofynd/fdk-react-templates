@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 18px;
+  line-height: 1.5;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 24px;
+    line-height: 1.5;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .shipment-breakup__caption-medium___eJwty,
 .shipment-breakup__captionMedium___ZXLI8 {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .shipment-breakup__caption-semi-bold___gAeeK,
 .shipment-breakup__captionSemiBold___lFZ3J {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -260,11 +260,11 @@ h5,
 }
 .shipment-breakup__mr-5___Jb0dL,
 .shipment-breakup__mr5___UpWoT {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .shipment-breakup__mr-2___AzdRX,
 .shipment-breakup__mr2___ppqQe {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .shipment-breakup__py-5___Qrnyv,
 .shipment-breakup__py5___Ipw8f {
@@ -407,17 +407,9 @@ h5,
 }
 .shipment-breakup__paymentDetails___IT5XS .shipment-breakup__rightAlign___EBUte {
   position: relative;
-  margin-inline-start: auto;
-  margin-inline-end: 10px;
-  inset-inline-end: 0px;
-}
-.shipment-breakup__billing___FTdqB :last-child .shipment-breakup__totalValContainer___wFKSr :last-child {
-  font-size: 14px;
-  font-weight: 600;
-}
-.shipment-breakup__billing___FTdqB :last-child .shipment-breakup__totalValContainer___wFKSr :nth-last-child(2) {
-  font-size: 14px;
-  font-weight: 600;
+  margin-left: auto;
+  margin-right: 10px;
+  right: 0px;
 }
 .shipment-breakup__billing___FTdqB :last-child .shipment-breakup__totalValContainer___wFKSr :last-child {
   font-size: 14px;

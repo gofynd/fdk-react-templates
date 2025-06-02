@@ -172,12 +172,12 @@
           }
         }
         &:last-child {
-          border-inline-end: 0;
+          border-right: 0;
         }
       }
       .alignAttribute {
         padding: 16px;
-        text-align: start;
+        text-align: left;
         @media @mobile {
           min-width: 149px;
           min-height: 53px;
@@ -208,7 +208,7 @@
     .searchBox {
       .crossBtn {
         top: 10px;
-        inset-inline-end: 10px;
+        right: 10px;
         cursor: pointer;
         svg {
           width: 16px;
@@ -243,7 +243,7 @@
           }
           .crossBtn {
             top: 10px;
-            inset-inline-end: 10px;
+            right: 10px;
 
             svg {
               width: 16px;
@@ -315,10 +315,7 @@
           background: @ThemeAccentL4;
           cursor: pointer;
           margin: 0 auto;
-          padding-top: 12px;
-          padding-inline-end: 0px;
-          padding-bottom: 12px;
-          padding-inline-start: 10px;
+          padding: 12px 0 12px 10px;
           position: relative;
           margin-top: 8px;
 
@@ -341,7 +338,7 @@
           .mediaLeft {
             flex: 0 0 56px;
             height: 56px;
-            margin-inline-end: 12px;
+            margin-right: 12px;
             img {
               width: 55px;
             }
