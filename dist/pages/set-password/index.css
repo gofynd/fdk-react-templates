@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 18px;
+  line-height: 1.5;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 24px;
+    line-height: 1.5;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .set-password__caption-medium___Cj2gP,
 .set-password__captionMedium___dlBa4 {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .set-password__caption-semi-bold___Vwntz,
 .set-password__captionSemiBold___SzQtc {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -260,11 +260,11 @@ h5,
 }
 .set-password__mr-5___dN20C,
 .set-password__mr5___gu6Ey {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .set-password__mr-2___PU577,
 .set-password__mr2___PqsuE {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .set-password__py-5___q59E8,
 .set-password__py5___EnYrV {
@@ -345,11 +345,11 @@ h5,
 }
 .set-password__setWrapper___fVVhH .set-password__flexItem___yfpnD input {
   width: 100%;
-  padding-inline-end: 48px;
+  padding-right: 48px;
 }
 .set-password__setWrapper___fVVhH .set-password__flexItem___yfpnD span {
   position: absolute;
-  inset-inline-end: 16px;
+  right: 16px;
   width: 20px;
   height: 20px;
 }

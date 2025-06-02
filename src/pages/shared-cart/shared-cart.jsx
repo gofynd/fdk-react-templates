@@ -1,23 +1,17 @@
 import React, { useMemo } from "react";
 import * as styles from "./shared-cart.less";
-import { currencyFormat, formatLocale, numberWithCommas } from "../../helper/utils";
+import { currencyFormat, numberWithCommas } from "../../helper/utils";
 import ChipReviewItem from "../../components/chip-review-item/chip-review-item";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
-import {
-  useGlobalStore,
-  useFPI,
-  useGlobalTranslation
-} from "fdk-core/utils";
 
 const SharedCart = ({
   sharedCartData = {},
   bagItems = [],
   showReplaceBtn = false,
-  onMergeBagClick = () => { },
-  onAddToBagClick = () => { },
-  onReplaceBagClick = () => { },
+  onMergeBagClick = () => {},
+  onAddToBagClick = () => {},
+  onReplaceBagClick = () => {},
 }) => {
-  const { t } = useGlobalTranslation("translation");
   const getPieces = useMemo(() => {
     return (
       sharedCartData?.items?.reduce(
@@ -28,22 +22,22 @@ const SharedCart = ({
   }, [sharedCartData]);
 
   const itemCountLabel = useMemo(() => {
-    let itmStrng = bagItems.length > 1 ? t("resource.common.item_simple_text_plural") : t("resource.common.item_simple_text");
-    return `(${bagItems.length} ${itmStrng} | ${getPieces} ${t("resource.common.qty")})`;
+    let itmStrng = bagItems.length > 1 ? "Items" : "Item";
+    return `(${bagItems.length} ${itmStrng} | ${getPieces} Qty)`;
   }, [bagItems, getPieces]);
 
   const sharedCartCouponProps = useMemo(() => {
     let couponBreakup = sharedCartData?.breakup_values?.coupon;
     let couponAttrs = {
       icon: "coupon",
-      title: t("resource.cart.offers_and_coupons"),
+      title: "Offers & Coupons",
     };
     if (couponBreakup && couponBreakup?.code && couponBreakup?.is_applied) {
       couponAttrs.hasCancel = true;
-      couponAttrs.subtitle = `${t("resource.common.applied")}: ${couponBreakup.code}`;
+      couponAttrs.subtitle = `Applied: ${couponBreakup.code}`;
     } else {
       couponAttrs.hasCancel = false;
-      couponAttrs.subtitle = t("resource.cart.no_coupon_applied");
+      couponAttrs.subtitle = `No coupon applied`;
     }
     return couponAttrs;
   }, [sharedCartData]);
@@ -52,7 +46,7 @@ const SharedCart = ({
     <div className={styles.cardContainer}>
       <div className={styles.sharedCartContainer}>
         <div className={styles.title}>
-          {t("resource.cart.shared_bag")}
+          Shared bag
           <span className={styles.subTitle}>{itemCountLabel}</span>
         </div>
         <div className={styles.sharedCart}>
@@ -77,7 +71,7 @@ const SharedCart = ({
                   className={styles.shareBtn}
                   onClick={onMergeBagClick}
                 >
-                  {t("resource.cart.merge_bag")}
+                  Merge Bag
                 </button>
               ) : (
                 <button
@@ -85,7 +79,7 @@ const SharedCart = ({
                   className={styles.shareBtn}
                   onClick={onAddToBagClick}
                 >
-                  {t("resource.cart.add_to_bag")}
+                  Add To Bag
                 </button>
               )}
               {showReplaceBtn && (
@@ -94,7 +88,7 @@ const SharedCart = ({
                   className={styles.shareBtn}
                   onClick={onReplaceBagClick}
                 >
-                  {t("resource.cart.replace_bag")}
+                  Replace Bag
                 </button>
               )}
             </div>
@@ -108,19 +102,18 @@ const SharedCart = ({
 export default SharedCart;
 
 const SharedCartCoupons = ({
-  title,
+  title = "Offers & Coupons",
   subtitle = "",
   icon = "coupon",
   hasCancel = false,
 }) => {
-  const { t } = useGlobalTranslation("translation");
   return (
     <div className={styles.list}>
       <span className={styles.icons}>
         <SvgWrapper svgSrc={icon} />
       </span>
       <div className={styles.offer}>
-        <div className={styles.desc}>{title || t("resource.cart.offers_and_coupons")}</div>
+        <div className={styles.desc}>{title}</div>
         <div
           className={`${styles.subDesc} ${hasCancel ? styles.couponApplied : ""}`}
         >
@@ -132,9 +125,6 @@ const SharedCartCoupons = ({
 };
 
 const SharedCartBreakup = ({ breakup = [] }) => {
-  const fpi = useFPI();
-  const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
-  const locale = language?.locale;
   return (
     <div className={styles.breakupWrapper}>
       {breakup.map((item, index) => (
@@ -148,8 +138,7 @@ const SharedCartBreakup = ({ breakup = [] }) => {
                 <span>
                   {currencyFormat(
                     numberWithCommas(item.value),
-                    item?.currency_symbol || "₹",
-                    formatLocale(locale, countryCode, true)
+                    item?.currency_symbol || "₹"
                   )}
                 </span>
               </div>
@@ -161,8 +150,7 @@ const SharedCartBreakup = ({ breakup = [] }) => {
               <div className={styles.value}>
                 {currencyFormat(
                   numberWithCommas(item.value),
-                  item?.currency_symbol || "₹",
-                  formatLocale(locale, countryCode, true)
+                  item?.currency_symbol || "₹"
                 )}
               </div>
             </div>

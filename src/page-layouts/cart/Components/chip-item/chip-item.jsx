@@ -1,17 +1,12 @@
 import React, { useState, useMemo } from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./chip-item.less";
-import { convertUTCDateToLocalDate, currencyFormat, formatLocale, numberWithCommas } from "../../../../helper/utils";
+import { currencyFormat, numberWithCommas } from "../../../../helper/utils";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import QuantityControl from "../../../../components/quantity-control/quantity-control";
 import Modal from "../../../../components/core/modal/modal";
 import { useMobile } from "../../../../helper/hooks";
 import FreeGiftItem from "../free-gift-item/free-gift-item";
-import {
-  useGlobalStore,
-  useFPI,
-  useGlobalTranslation
-} from "fdk-core/utils";
 
 export default function ChipItem({
   isCartUpdating,
@@ -36,10 +31,6 @@ export default function ChipItem({
   onOpenPromoModal,
   onClosePromoModal,
 }) {
-  const { t } = useGlobalTranslation("translation");
-  const fpi = useFPI();
-  const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
-  const locale = language?.locale;
   const isMobile = useMobile();
   const [showQuantityError, setShowQuantityError] = useState(false);
   const [sizeModalErr, setSizeModalErr] = useState(null);
@@ -142,7 +133,7 @@ export default function ChipItem({
           setSizeModalErr(null);
         } else {
           setSizeModal(currentSizeModalSize);
-          setSizeModalErr(t("resource.cart.size_is_out_of_stock"));
+          setSizeModalErr("Size is out of stock");
         }
       }
     }
@@ -150,8 +141,8 @@ export default function ChipItem({
 
   const promoTitle = useMemo(() => {
     const totalPromo = singleItemDetails?.promotions_applied?.length || 0;
-    if (totalPromo === 1) return t("resource.cart.one_offer");
-    else if (totalPromo > 1) return `${totalPromo} ${t("resource.common.offers")}`;
+    if (totalPromo === 1) return "1 Offer";
+    else if (totalPromo > 1) return `${totalPromo} Offers`;
     else return "";
   }, [singleItemDetails]);
 
@@ -174,7 +165,7 @@ export default function ChipItem({
           <div
             className={`${styles["out-of-stock-chip"]} ${styles["new-cart-red-color"]}`}
           >
-            <span>{singleItemDetails?.message || t("resource.common.out_of_stock")}</span>
+            <span>{singleItemDetails?.message || "Out Of Stock"}</span>
             <span
               className={styles.removeAction}
               onClick={(e) =>
@@ -189,7 +180,7 @@ export default function ChipItem({
               }
             >
               {" "}
-              {t("resource.facets.remove_caps")}
+              REMOVE
             </span>
           </div>
         )}
@@ -201,8 +192,9 @@ export default function ChipItem({
         )}
         <div className={styles.eachItemContainer}>
           <div
-            className={`${styles.itemImageContainer} ${isOutOfStock ? styles.outOfStock : ""
-              }`}
+            className={`${styles.itemImageContainer} ${
+              isOutOfStock ? styles.outOfStock : ""
+            }`}
           >
             <FDKLink to={`/product/${singleItemDetails?.product?.slug}`}>
               <img src={productImage} alt={singleItemDetails?.product?.name} />
@@ -230,17 +222,17 @@ export default function ChipItem({
               {singleItemDetails?.product?.brand?.name}
             </div>
             <div
-              className={`${styles.itemName} ${isOutOfStock ? styles.outOfStock : ""
-                } `}
+              className={`${styles.itemName} ${
+                isOutOfStock ? styles.outOfStock : ""
+              } `}
             >
               {singleItemDetails?.product?.name}
             </div>
             {isSoldBy && !isOutOfStock && (
               <div className={styles.itemSellerName}>
-                {`${t("resource.common.sold_by")}: ${sellerStoreName}`}
-              </div >
-            )
-            }
+                {`Sold by: ${sellerStoreName}`}
+              </div>
+            )}
             <div className={styles.itemSizeQuantityContainer}>
               <div className={styles.itemSizeQuantitySubContainer}>
                 <button
@@ -251,7 +243,7 @@ export default function ChipItem({
                   }}
                 >
                   <div className={styles.sizeName}>
-                    {`${t("resource.common.size")}: ${currentSize}`}
+                    {`Size: ${currentSize}`}
                   </div>
                   <span className={styles.itemSvg}>
                     <SvgWrapper
@@ -299,11 +291,11 @@ export default function ChipItem({
                   />
                 )}
                 {isOutOfStock && (
-                  <div className={styles.outOfStockChip}>{t("resource.common.out_of_stock")}</div>
+                  <div className={styles.outOfStockChip}>Out Of Stock</div>
                 )}
                 {!isServiceable && (
                   <div className={styles.outOfStockChip}>
-                    {t("resource.cart.item_not_deliverable")}
+                    Item Not Deliverable
                   </div>
                 )}
               </div>
@@ -312,53 +304,50 @@ export default function ChipItem({
                 !isOutOfStock &&
                 isServiceable && (
                   <div className={styles.limitedQtyBox}>
-                    {` ${t("resource.common.max_quantity")}: ${maxCartQuantity}`}
+                    {` Max Quantity: ${maxCartQuantity}`}
                   </div>
                 )}
 
-              {
-                getMaxQuantity(singleItemDetails) > 0 &&
+              {getMaxQuantity(singleItemDetails) > 0 &&
                 getMaxQuantity(singleItemDetails) < 11 &&
                 !isOutOfStock &&
                 isServiceable &&
                 !isCustomOrder &&
                 !buybox?.is_seller_buybox_enabled && (
                   <div className={styles.limitedQtyBox}>
-                    {t("resource.common.hurry_only_left", { quantity: getMaxQuantity(singleItemDetails) })}
-                  </div >
-                )
-              }
-            </div >
+                    {` Hurry! Only ${getMaxQuantity(singleItemDetails)} Left`}
+                  </div>
+                )}
+            </div>
             <div className={styles.itemTotalContainer}>
               <div className={styles.itemPrice}>
                 <span
-                  className={`${styles.effectivePrice} ${isOutOfStock ? styles.outOfStock : ""
-                    }`}
+                  className={`${styles.effectivePrice} ${
+                    isOutOfStock ? styles.outOfStock : ""
+                  }`}
                 >
                   {currencyFormat(
                     numberWithCommas(
                       singleItemDetails?.price?.converted?.effective ??
-                      singleItemDetails?.price?.base?.effective
+                        singleItemDetails?.price?.base?.effective
                     ),
                     singleItemDetails?.price?.converted?.currency_symbol ??
-                    singleItemDetails?.price?.base?.currency_symbol,
-                    formatLocale(locale, countryCode, true)
+                      singleItemDetails?.price?.base?.currency_symbol
                   )}
                 </span>
                 {singleItemDetails?.price?.converted?.effective <
                   singleItemDetails?.price?.converted?.marked && (
-                    <span className={styles.markedPrice}>
-                      {currencyFormat(
-                        numberWithCommas(
-                          singleItemDetails?.price?.converted?.marked ??
+                  <span className={styles.markedPrice}>
+                    {currencyFormat(
+                      numberWithCommas(
+                        singleItemDetails?.price?.converted?.marked ??
                           singleItemDetails?.price?.base?.marked
-                        ),
-                        singleItemDetails?.price?.converted?.currency_symbol ??
-                        singleItemDetails?.price?.base?.currency_symbol,
-                        formatLocale(locale, countryCode, true)
-                      )}
-                    </span>
-                  )}
+                      ),
+                      singleItemDetails?.price?.converted?.currency_symbol ??
+                        singleItemDetails?.price?.base?.currency_symbol
+                    )}
+                  </span>
+                )}
                 <span className={styles.discount}>
                   {singleItemDetails?.discount}
                 </span>
@@ -372,18 +361,12 @@ export default function ChipItem({
                       <SvgWrapper svgSrc="truck" />
                     </div>
                     <div className={styles.deliveryDate}>
-                      {`${t("resource.common.delivery_by", {
-                        date: convertUTCDateToLocalDate(
-                          singleItemDetails?.delivery_promise?.formatted?.max,
-                          { weekday: 'short', day: '2-digit', month: 'short' }, 
-                          formatLocale(locale, countryCode, true),
-                          )})}`}
+                      {`Delivery by ${singleItemDetails?.delivery_promise?.formatted?.max}`}
                     </div>
                   </div>
                 )}
             </div>
-            {
-              singleItemDetails?.promotions_applied?.length > 0 &&
+            {singleItemDetails?.promotions_applied?.length > 0 &&
               !isOutOfStock &&
               isServiceable && (
                 <div
@@ -394,12 +377,11 @@ export default function ChipItem({
                     setClickedPromoIndex(itemIndex);
                   }}
                 >
-                  <span>{`${promoTitle} ${t("resource.common.applied")}`}</span>
+                  <span>{`${promoTitle} Applied`}</span>
                   <SvgWrapper svgSrc="applied-promo" className={styles.ml6} />
                 </div>
-              )
-            }
-          </div >
+              )}
+          </div>
 
           <FreeGiftItem
             item={singleItemDetails}
@@ -408,7 +390,7 @@ export default function ChipItem({
               singleItemDetails?.price?.base?.currency_symbol
             }
           />
-        </div >
+        </div>
         {isPromoModalOpen && clickedPromoIndex === itemIndex && (
           <Modal
             isOpen={isPromoModalOpen}
@@ -417,7 +399,7 @@ export default function ChipItem({
               setClickedPromoIndex(null);
             }}
             modalType={isMobile ? "right-modal" : "center-modal"}
-            title={`${promoTitle} ${t("resource.common.applied")}`}
+            title={`${promoTitle} Applied`}
             isCancellable={false}
             containerClassName={styles.chipModal}
           >
@@ -448,7 +430,7 @@ export default function ChipItem({
                                 toggleActivePromo(e, index);
                               }}
                             >
-                              {t("resource.cart.t&c")}
+                              T&C
                             </div>
                           )}
                         </div>
@@ -470,9 +452,8 @@ export default function ChipItem({
               )}
             </div>
           </Modal>
-        )
-        }
-      </div >
+        )}
+      </div>
 
       <Modal
         isOpen={
@@ -520,8 +501,7 @@ export default function ChipItem({
                     ),
                     sizeModalItemValue?.article?.price?.converted
                       ?.currency_symbol ??
-                      sizeModalItemValue?.article?.price?.base?.effective,
-                    formatLocale(locale, countryCode, true)
+                      sizeModalItemValue?.article?.price?.base?.effective
                   )}
                 </div>
               </div>
@@ -532,8 +512,8 @@ export default function ChipItem({
         <div className={styles.sizeModalBody}>
           <div className={styles.sizeSelectHeading}>
             {sizeModalItemValue?.availability?.available_sizes?.length > 0
-              ? t("resource.common.select_size")
-              : t("resource.cart.product_not_available")}
+              ? "Select Size"
+              : "This Product is not available"}
           </div>
           <div className={styles.sizeHorizontalList}>
             {sizeModalItemValue?.availability?.available_sizes?.length > 0 &&
@@ -553,11 +533,13 @@ export default function ChipItem({
                       }}
                     >
                       <div
-                        className={`${styles.singleSizeDetails} ${(isEarlierSelectedSize || isCurrentSelectedSize) &&
+                        className={`${styles.singleSizeDetails} ${
+                          (isEarlierSelectedSize || isCurrentSelectedSize) &&
                           styles.singleSizeSelected
-                          }
-                          ${!singleSize?.is_available &&
-                          styles.sigleSizeDisabled
+                        }
+                          ${
+                            !singleSize?.is_available &&
+                            styles.sigleSizeDisabled
                           }
                           `}
                         onClick={(e) => {
@@ -565,8 +547,9 @@ export default function ChipItem({
                           if (!singleSize?.is_available) return;
                           if (singleSize?.value && !isEarlierSelectedSize) {
                             setSizeModalErr(null);
-                            const newSizeModalValue = `${sizeModal?.split("_")[0]
-                              }_${singleSize?.value}_${sizeModal?.split("_")[2]}`;
+                            const newSizeModalValue = `${
+                              sizeModal?.split("_")[0]
+                            }_${singleSize?.value}_${sizeModal?.split("_")[2]}`;
                             setCurrentSizeModalSize(newSizeModalValue);
                           }
                         }}
@@ -616,7 +599,7 @@ export default function ChipItem({
             );
           }}
         >
-          <div className={styles.updateSizeButton}>{t("resource.facets.update")}</div>
+          <div className={styles.updateSizeButton}>UPDATE</div>
         </button>
       </Modal>
     </>

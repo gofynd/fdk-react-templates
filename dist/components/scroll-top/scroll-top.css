@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 18px;
+  line-height: 1.5;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 24px;
+    line-height: 1.5;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .scroll-top__caption-medium___vGhhh,
 .scroll-top__captionMedium___Cq3UM {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .scroll-top__caption-semi-bold___s0AWa,
 .scroll-top__captionSemiBold___kaoff {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -260,11 +260,11 @@ h5,
 }
 .scroll-top__mr-5___keRrD,
 .scroll-top__mr5___GGs97 {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .scroll-top__mr-2___l8QiF,
 .scroll-top__mr2___UOEIP {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .scroll-top__py-5___aibHC,
 .scroll-top__py5___kuQUi {
@@ -347,16 +347,13 @@ h5,
   border: none;
   position: fixed;
   top: calc(var(--headerHeight) + 69px);
-  inset-inline-end: 50%;
+  right: 50%;
   z-index: 1;
   transform: translateX(50%);
 }
-[dir="rtl"] .scroll-top__scrollTop___xohSh {
-  transform: translateX(-50%);
-}
 .scroll-top__scrollTop___xohSh .scroll-top__scrollTopText___lswQd {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 400;
 }
@@ -382,7 +379,7 @@ h5,
   .scroll-top__scrollTop___xohSh {
     justify-content: center;
     top: unset;
-    inset-inline-end: 40px;
+    right: 40px;
     bottom: 40px;
     width: 40px;
     height: 40px;
