@@ -54,6 +54,7 @@ function Checkout({
           isGuestUser={isGuestUser}
         ></SingleAddress>
         <SinglePageShipment
+          customClassName={styles.customStylesShipment}
           shipments={shipments}
           isShipmentLoading={isShipmentLoading}
           showPaymentOptions={showPaymentOptions}
@@ -92,6 +93,7 @@ function Checkout({
         )}
         <Comment {...cartCommentProps} />
         <PriceBreakup
+          customClassName={styles.customStyles}
           breakUpValues={breakupValues}
           cartItemCount={cartItemsCount}
           currencySymbol={currencySymbol}

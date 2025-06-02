@@ -260,11 +260,11 @@ h5,
 }
 .contact-us__mr-5____JkIV,
 .contact-us__mr5___oh0GS {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .contact-us__mr-2___gdTSM,
 .contact-us__mr2___XitVS {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .contact-us__py-5___b4Db9,
 .contact-us__py5___rzIcv {
@@ -477,7 +477,7 @@ h5,
   flex-direction: row-reverse;
 }
 .contact-us__maxChar___mnnNI {
-  float: inline-end;
+  float: right;
   margin-top: 8px;
   color: var(--textLabel, #7d7676);
   font-size: 12px;
@@ -754,11 +754,11 @@ h5,
 }
 .fy-input__mr-5___v4vQm,
 .fy-input__mr5___FnOZz {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .fy-input__mr-2___u3YuI,
 .fy-input__mr2___EOVYz {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .fy-input__py-5___QoQ9q,
 .fy-input__py5___q5mpm {
@@ -947,10 +947,10 @@ h5,
   padding: 0 0.5rem;
 }
 .fy-input__adornmentContainer___MtgI6 .fy-input__startAdornment___SVGGG {
-  margin-inline-end: 0.5rem;
+  margin-right: 0.5rem;
 }
 .fy-input__adornmentContainer___MtgI6 .fy-input__endAdornment___ce3Ta {
-  margin-inline-start: 0.5rem;
+  margin-left: 0.5rem;
 }
 .fy-input__adornmentContainer___MtgI6 input {
   flex: 1;
@@ -1218,11 +1218,11 @@ h5,
 }
 .fy-button__mr-5___A5qJJ,
 .fy-button__mr5___BRUgW {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .fy-button__mr-2___Qtkhv,
 .fy-button__mr2___ajbyt {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .fy-button__py-5___y7k5w,
 .fy-button__py5___Zi5JN {
@@ -1467,9 +1467,9 @@ h5,
   overflow: visible;
   margin: auto;
   top: 0;
-  inset-inline-start: 0;
+  left: 0;
   bottom: 0;
-  inset-inline-end: 0;
+  right: 0;
 }
 /* Transparent Overlay */
 .loader__loading___r6ySa:before {
@@ -1477,7 +1477,7 @@ h5,
   display: block;
   position: fixed;
   top: 0;
-  inset-inline-start: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background: radial-gradient(rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.8));
@@ -1576,7 +1576,7 @@ h5,
 .loader__page-loader-container___jJHee {
   position: fixed;
   top: 0;
-  inset-inline-start: 0;
+  left: 0;
   width: 100%;
   background: rgba(0, 0, 0, 0.1);
   display: flex;
@@ -1594,7 +1594,7 @@ h5,
   width: 50px;
   height: 50px;
   animation: loader__spin___omoke 2s linear infinite;
-  margin-inline-start: 10%;
+  margin-left: 10%;
 }
 @keyframes loader__spin___omoke {
   0% {
@@ -1605,7 +1605,7 @@ h5,
   }
 }
 .loader__page-loader-container___jJHee p {
-  margin-inline-start: 10px;
+  margin-left: 10px;
   font-weight: bold;
   color: #333;
   /* Dark grey */
