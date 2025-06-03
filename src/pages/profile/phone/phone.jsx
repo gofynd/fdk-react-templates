@@ -4,7 +4,6 @@ import MobileNumber from "../../../page-layouts/auth/mobile-number/mobile-number
 import FyButton from "../../../components/core/fy-button/fy-button";
 import AddPhoneModal from "../components/add-phone-modal/add-phone-modal";
 import Loader from "../../../components/loader/loader";
-import { useGlobalTranslation } from "fdk-core/utils";
 import EmptyState from "../components/empty-state/empty-state";
 import AddAddressIcon from "../../../assets/images/add-address.svg";
 
@@ -17,7 +16,6 @@ function Phone({
   resendOtp,
   countryCode = "91",
 }) {
-  const { t } = useGlobalTranslation("translation");
   const [showAddModal, setShowAddModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -74,7 +72,7 @@ function Phone({
   return (
     <>
       <div className={styles.main}>
-        <div className={styles.header}>{t("resource.common.phone_number")}</div>
+        <div className={styles.header}>Phone Number</div>
         {phoneNumbers?.length > 0 && (
           <div className={styles.formContainer}>
             <div className={styles.formItem}>
@@ -105,7 +103,7 @@ function Phone({
                             className={styles.verified}
                             disabled
                           >
-                            {t("resource.profile.verified")}
+                            Verified
                           </FyButton>
                         )}
                         {/* {primary && (
@@ -115,7 +113,7 @@ function Phone({
                         // variant="outlined"
                         className={styles.primary}
                       >
-                        {t("resource.profile.primary")}
+                        Primary
                       </FyButton>
                     )} */}
                         {!verified && (
@@ -125,7 +123,7 @@ function Phone({
                             size="small"
                             isLoading={isLoading}
                           >
-                            {t("resource.facets.verify")}
+                            Verify
                           </FyButton>
                         )}
                         {/* {!primary && verified && (
@@ -138,7 +136,7 @@ function Phone({
                         }}
                         isLoading={isLoading}
                       >
-                        {t("resource.profile.set_primary")}
+                        Set Primary
                       </FyButton>
                     )}
                     {!primary && (
@@ -159,9 +157,9 @@ function Phone({
         )}
         {!phoneNumbers?.length && (
           <EmptyState
-            title={t("resource.profile.no_phone_number_added")}
+            title="No Phone Number Added"
             onBtnClick={() => handleShowAddModal(true)}
-            btnTitle={t("resource.profile.add_phone_number_caps")}
+            btnTitle="ADD PHONE NUMBER"
             icon={<AddAddressIcon />}
           />
         )}
@@ -179,7 +177,7 @@ function Phone({
       )}
       {/* {showDeleteModal && (
         <ConfirmModal
-          text={t("resource.profile.confirm_remove_number")}
+          text="Are you sure you want to remove the number?"
           isOpen={showDeleteModal}
           onClose={handleCloseDeleteModal}
           onConfirm={handleDelete}

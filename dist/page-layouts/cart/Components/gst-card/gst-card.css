@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 18px;
+  line-height: 1.5;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 24px;
+    line-height: 1.5;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .gst-card__caption-medium___h8x5g,
 .gst-card__captionMedium___1mSBU {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .gst-card__caption-semi-bold___ltQND,
 .gst-card__captionSemiBold___bvqz0 {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -260,11 +260,11 @@ h5,
 }
 .gst-card__mr-5___SGx3p,
 .gst-card__mr5___cZ60B {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .gst-card__mr-2___qDaBc,
 .gst-card__mr2___Cx5_E {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .gst-card__py-5___rr4p2,
 .gst-card__py5___HCGzi {
@@ -362,7 +362,7 @@ h5,
   padding: 0;
   margin: 0;
   background-color: var(--pageBackground, #f8f8f8);
-  margin-inline-end: 12px;
+  margin-right: 12px;
 }
 .gst-card__gstContainer___LJVYg .gst-card__gstValidationBox___mgE2M {
   display: flex;
@@ -400,7 +400,7 @@ h5,
 }
 .gst-card__gstContainer___LJVYg .gst-card__inputBox___mMywn .gst-card__crossBtn___ERJyk {
   position: absolute;
-  inset-inline-end: 12px;
+  right: 12px;
   cursor: pointer;
 }
 .gst-card__colorErrorNormal___qjGLA {
