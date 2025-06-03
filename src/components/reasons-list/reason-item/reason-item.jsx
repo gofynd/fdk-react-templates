@@ -14,15 +14,13 @@
 import React, { useState } from "react";
 import * as styles from "./reason-item.less";
 import RadioIcon from "../../../assets/images/radio";
-import { useGlobalTranslation } from "fdk-core/utils";
 
 function ReasonItem({
   reason,
   selectedReason,
-  change = () => { },
+  change = () => {},
   otherReason,
 }) {
-  const { t } = useGlobalTranslation("translation");
   const [reasonOtherText, setReasonOtherText] = useState("");
   const isSelected = selectedReason?.id === reason?.id;
   return (
@@ -43,7 +41,7 @@ function ReasonItem({
           <textarea
             className={`${styles.textarea}`}
             value={reasonOtherText}
-            placeholder={t("resource.common.enter_reason")}
+            placeholder="Enter reason"
             onChange={(e) => setReasonOtherText(e.target.value?.slice(0, 1000))}
             onBlur={() => otherReason(reasonOtherText)}
           ></textarea>

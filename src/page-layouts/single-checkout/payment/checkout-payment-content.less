@@ -2,7 +2,7 @@
 
 .container {
   background: @PageBackground;
-  @media @mobile-up {
+  @media @desktop {
     display: flex;
     padding: 24px;
     border: 1px solid var(--dividerStokes);
@@ -17,7 +17,7 @@
     border-style: solid;
     border-color: var(--dividerStokes);
     border-radius: 4px 0px 0px 4px;
-    @media @mobile {
+    @media @tablet {
       width: 100%;
       border: none;
     }
@@ -25,11 +25,11 @@
     .linkWrapper:last-child {
       .linkWrapper-row1 {
         border-bottom: 1px solid var(--dividerStokes);
-        @media @mobile {
+        @media @tablet {
           border-bottom: unset;
         }
       }
-      // @media @mobile {
+      // @media @tablet {
       //   border-bottom: 1px solid var(--dividerStokes);
       // }
       border-bottom: none;
@@ -45,7 +45,7 @@
     }
     .linkWrapper {
       border-bottom: 1px solid var(--dividerStokes);
-      border-inline-end: 1px solid var(--dividerStokes);
+      border-right: 1px solid var(--dividerStokes);
       background-color: #f8f8f8;
       .link {
         .icon {
@@ -62,9 +62,9 @@
           fill: @TextHeading;
         }
       }
-      @media @mobile {
+      @media @tablet {
         background-color: @PageBackground;
-        border-inline-end: none;
+        border-right: none;
         padding: 0 16px;
       }
       cursor: pointer;
@@ -75,9 +75,11 @@
           display: flex;
           flex: 1;
           align-items: center;
-          padding-inline-start: 12px;
-
-          @media @mobile-up {
+          padding-left: 12px;
+          @media @tablet {
+            flex: unset !important;
+          }
+          @media @desktop {
             justify-content: flex-end;
             flex: 1;
             padding: 0 16px;
@@ -88,7 +90,7 @@
             height: 28px;
             border-radius: 50%;
             border: 1px solid var(--dividerStokes);
-            margin-inline-start: -5.25px;
+            margin-left: -5.25px;
             background-color: #fff;
             object-fit: contain;
             &.upiIcon {
@@ -108,6 +110,9 @@
         width: 4px;
         background-color: var(--primaryColor);
         border: 1px solid var(--primaryColor);
+        @media @tablet {
+          display: none;
+        }
       }
       .link {
         display: flex;
@@ -115,19 +120,19 @@
         overflow: hidden;
         word-break: break-word;
         align-items: center;
-        @media @mobile {
+        @media @tablet {
           padding: 24px 0px;
         }
         .modeName {
           align-self: center;
-          margin-inline-start: 16px;
+          margin-left: 16px;
           color: var(--Text-Body, #4d4d4e);
           font-size: 14px;
           font-weight: 500;
           line-height: 140%;
-          @media @mobile {
+          @media @tablet {
             color: @TextHeading;
-            margin-inline-start: 8px;
+            margin-left: 8px;
           }
         }
         .selectedModeName {
@@ -140,7 +145,7 @@
           color: @ErrorText;
           line-height: 140%;
           border-radius: 4px;
-          @media @mobile {
+          @media @tablet {
             padding-top: 4px;
           }
           text-align: center;
@@ -150,13 +155,16 @@
         display: flex;
         align-items: center;
 
-        @media @mobile-up {
+        @media @desktop {
           justify-content: flex-end;
           flex: 1;
           padding: 0 12px;
         }
       }
       .arrowContainer {
+        @media @desktop {
+          display: none;
+        }
         display: flex;
         align-items: center;
         justify-content: flex-end;
@@ -180,7 +188,7 @@
         }
       }
     }
-    border-inline-end: none;
+    border-right: none;
     background-color: @PageBackground;
   }
   .headerHightlight {
@@ -208,7 +216,7 @@
     }
   }
   .linkWrapper.selectedNavigationTab {
-    border-inline-end: none;
+    border-right: none;
     background-color: @PageBackground;
   }
   .navigationTab {
@@ -218,7 +226,7 @@
     border-style: solid;
     border-width: 1px 1px 1px 0;
     border-radius: 0px 4px 4px 0px;
-    @media @mobile {
+    @media @tablet {
       padding: 6px;
     }
   }
@@ -226,12 +234,12 @@
     .modeItemName {
       font-weight: 600 !important;
     }
-    @media @mobile-up {
+    @media @desktop {
       border: 1px solid var(--primaryColor);
     }
   }
   .nonSelectedBorder {
-    @media @mobile-up {
+    @media @desktop {
       border: 1px solid var(--dividerStokes);
     }
   }
@@ -244,14 +252,15 @@
   .addCardHeader,
   .otherHeader {
     font-weight: 600;
-    @media @mobile {
+    @media @tablet {
       font-weight: 500;
+      display: none;
     }
     font-size: 14px;
     color: var(--textHeading);
     margin-bottom: 15px;
     line-height: 140%;
-    @media @mobile {
+    @media @tablet {
       margin-bottom: 6px;
       line-height: 1;
     }
@@ -269,7 +278,7 @@
             font-size: 16px;
           }
         }
-        @media @mobile {
+        @media @tablet {
           margin-bottom: 16px;
         }
         display: flex;
@@ -289,7 +298,7 @@
         font-weight: 400;
         line-height: 19.6px;
         color: var(--primaryColor);
-        margin-inline-end: 8px;
+        margin-right: 8px;
       }
       .why {
         font-size: 14px;
@@ -310,7 +319,7 @@
 
         .cvvIcon {
           position: absolute;
-          inset-inline-end: 16px;
+          right: 16px;
           top: 50%;
           transform: translateY(-50%);
         }
@@ -343,7 +352,7 @@
           padding: 16px;
           border-radius: 8px;
           margin-bottom: 15px;
-          @media @mobile {
+          @media @tablet {
             padding: 0px;
           }
           .cardDetailsWrapper {
@@ -354,7 +363,7 @@
             .cardDetailsRow1 {
               display: flex;
               .cardLeft {
-                margin-inline-end: 10px;
+                margin-right: 10px;
               }
               .cardMiddle {
                 display: flex;
@@ -364,7 +373,7 @@
                   .number {
                     font-size: 14px;
                     font-weight: 400;
-                    margin-inline-end: 8px;
+                    margin-right: 8px;
                     align-self: center;
                     line-height: 140%;
                     span {
@@ -388,7 +397,7 @@
                     line-height: 16px;
                     text-transform: capitalize;
                     color: #27ae60;
-                    margin-inline-start: 4px;
+                    margin-left: 4px;
                     line-height: 140%;
                   }
                 }
@@ -397,7 +406,7 @@
 
             .cardDetailsRow2 {
               display: flex;
-              padding-inline-start: 32px;
+              padding-left: 32px;
               height: 48px;
 
               input {
@@ -443,7 +452,7 @@
             text-transform: uppercase;
             line-height: 140%;
             cursor: pointer;
-            @media @mobile {
+            @media @tablet {
               padding: 6px;
               font-size: 12px;
             }
@@ -463,7 +472,7 @@
             text-transform: uppercase;
             line-height: 140%;
             cursor: unset;
-            @media @mobile {
+            @media @tablet {
               padding: 6px;
               font-size: 12px;
             }
@@ -481,7 +490,7 @@
         width: 100%;
         line-height: 140%;
         cursor: pointer;
-        @media @mobile {
+        @media @tablet {
           padding: 6px;
           font-size: 12px;
         }
@@ -500,14 +509,14 @@
         }
         .newCardHeaderText {
           align-self: center;
-          margin-inline-start: 10px;
+          margin-left: 10px;
         }
       }
       .newCard {
         display: flex;
         flex-direction: column;
         .cardInputWrapper {
-          @media @mobile {
+          @media @tablet {
             &.cardNumberBox {
               margin-top: 0;
             }
@@ -521,7 +530,7 @@
         .cvv {
           cursor: pointer;
           position: absolute;
-          inset-inline-end: 8px;
+          right: 8px;
           top: 50%;
           transform: translateY(-50%);
           &.cvvError {
@@ -541,14 +550,14 @@
         .cardInputWrapper.expiryContainer,
         .cardInputWrapper.cvvContainer {
           width: 47%;
-          @media @mobile {
+          @media @tablet {
             width: 100%;
           }
         }
         .cardDateCvvWrapper {
           .upArrowMark {
             position: absolute;
-            inset-inline-start: 50%;
+            left: 50%;
             top: -6px;
             path {
               fill: @DividerStokes;
@@ -561,7 +570,7 @@
             }
           }
           &.marginBottom {
-            @media @mobile {
+            @media @tablet {
               margin-bottom: 24px;
             }
           }
@@ -592,7 +601,7 @@
         .inputName {
           position: absolute;
           top: -8px;
-          inset-inline-start: 16px;
+          left: 16px;
           font-size: 12px;
           font-weight: 400;
           background-color: @PageBackground;
@@ -608,7 +617,7 @@
           color: @ErrorText;
         }
         .rbiGuidelines {
-          @media @mobile {
+          @media @tablet {
             margin-bottom: 24px;
           }
           input:checked:before {
@@ -630,7 +639,7 @@
             line-height: 140%;
           }
           .rbiGuidelinesModal {
-            @media @mobile-up {
+            @media @desktop {
               max-width: 450px;
               padding: 8px;
             }
@@ -695,7 +704,7 @@
           border-radius: 8px;
           position: absolute;
           z-index: 99;
-          inset-inline-end: -116px;
+          right: -116px;
           transform: unset;
           background: @DialogBackground;
           border: 1px solid @DividerStokes;
@@ -771,7 +780,7 @@
     flex-wrap: wrap;
     flex-direction: column;
     gap: 16px;
-    @media @mobile {
+    @media @tablet {
       gap: 0px;
     }
     .modeItemWrapper {
@@ -785,7 +794,7 @@
       label {
         cursor: pointer;
       }
-      @media @mobile {
+      @media @tablet {
         padding: 24px 0px;
         &:not(:last-child) {
           border-bottom: 1px solid @DividerStokes;
@@ -818,16 +827,13 @@
           font-size: 14px;
           font-weight: 400;
           line-height: 140%;
-          @media @mobile {
+          @media @tablet {
             color: @TextHeading;
             font-weight: 500;
           }
         }
         .moreModeArrow {
           transform: rotate(270deg);
-          [dir = 'rtl'] & {
-            transform: rotate(90deg);
-          }
         }
         .otherModeArrow {
           transform: rotate(360deg);
@@ -851,7 +857,7 @@
       max-height: 70vh;
       min-height: 40vh;
 
-      @media @mobile-up {
+      @media @desktop {
         max-height: 554px;
         min-width: 420px;
         & > div {
@@ -885,7 +891,7 @@
 
   .upiMop {
     padding-bottom: 24px;
-    @media @mobile {
+    @media @tablet {
       .upiApp {
         &:first-child {
           padding-top: 0;
@@ -1137,7 +1143,7 @@
     .inputName {
       position: absolute;
       top: -8px;
-      inset-inline-start: 16px;
+      left: 16px;
       font-size: 12px;
       font-weight: 400;
       background-color: @PageBackground;
@@ -1239,13 +1245,13 @@
 
       .otherLeft {
         align-self: center;
-        margin-inline-end: 10px;
-        margin-inline-start: 10px;
+        margin-right: 10px;
+        margin-left: 10px;
       }
 
       .otherMiddle {
         align-self: center;
-        margin-inline-end: 10px;
+        margin-right: 10px;
 
         img {
           width: 45px;
@@ -1363,7 +1369,7 @@
     margin-top: 24px;
 
     .saveForLater {
-      margin-inline-end: 5px;
+      margin-right: 5px;
       accent-color: var(--primaryColor);
     }
     .saveUpiTitle {
@@ -1464,7 +1470,7 @@
   position: relative;
   .closeCodModal {
     position: absolute;
-    inset-inline-end: 24px;
+    right: 24px;
   }
   .message {
     font-size: 16px;
@@ -1503,7 +1509,7 @@
   position: relative;
   .upArrowMark {
     position: absolute;
-    inset-inline-start: 50%;
+    left: 50%;
     top: -6px;
     path {
       fill: @DividerStokes;
@@ -1523,7 +1529,7 @@
     border-radius: 8px;
     position: absolute;
     z-index: 99;
-    inset-inline-end: -116px;
+    right: -116px;
     transform: unset;
     background: @DialogBackground;
     border: 1px solid @DividerStokes;
@@ -1568,7 +1574,7 @@
         fill: @TextBody;
       }
     }
-    @media @mobile {
+    @media @tablet {
       g > path {
         fill: @TextHeading;
       }
@@ -1582,10 +1588,10 @@
     padding: 8px 4px;
     border-radius: 50%;
     object-fit: contain;
-    @media @mobile {
-      margin-inline-end: 8px;
+    @media @tablet {
+      margin-right: 8px;
     }
-    margin-inline-end: 12px;
+    margin-right: 12px;
   }
 }
 .logoNameContainer {
@@ -1609,7 +1615,7 @@
     width: 420px;
     height: 606px;
   }
-  @media @mobile {
+  @media @tablet {
     height: 434px;
   }
 }
@@ -1618,7 +1624,7 @@
   min-height: unset !important;
   margin-bottom: 16px;
   max-height: unset !important;
-  @media @mobile {
+  @media @tablet {
     .modeItemName {
       color: @TextBody !important;
       font-size: 12px;
@@ -1633,9 +1639,6 @@
 }
 .moreModeIcon {
   transform: rotate(270deg);
-  [dir = 'rtl'] & {
-    transform: rotate(90deg);
-  }
   display: flex;
   align-items: center;
   svg {
@@ -1648,7 +1651,7 @@
 }
 .otherBorder {
   border: 1px solid @DividerStokes;
-  @media @mobile {
+  @media @tablet {
     border: none;
   }
 }
@@ -1659,7 +1662,7 @@
       height: 24px;
     }
   }
-  @media @mobile {
+  @media @tablet {
     span {
       border: 1px solid @DividerStokes;
       padding: 8px 4px;
@@ -1674,7 +1677,7 @@
   }
 }
 .upiMargin {
-  @media @mobile {
+  @media @tablet {
     &:last-child {
       padding-bottom: 0 !important;
     }
@@ -1682,13 +1685,13 @@
 }
 .cardTab {
   .newCardModalHeader {
-    @media @mobile {
+    @media @tablet {
       padding: 16px !important;
     }
   }
 }
 .newCardBodyModal {
-  @media @mobile {
+  @media @tablet {
     .rbiGuidelines {
       margin-top: 24px !important;
     }
@@ -1723,4 +1726,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.visibleOnTab {
+  @media @tablet {
+    display: block !important;
+  }
+}
+.onDesktopView {
+  @media @tablet {
+    display: none;
+  }
 }

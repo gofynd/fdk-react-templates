@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 18px;
+  line-height: 1.5;
 }
 @media only screen and (min-width: 1024px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 24px;
+    line-height: 1.5;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .pagination__caption-medium___jtoVr,
 .pagination__captionMedium___jNBGw {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .pagination__caption-semi-bold___fVaBz,
 .pagination__captionSemiBold___pXxji {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -260,11 +260,11 @@ h5,
 }
 .pagination__mr-5___oY4X5,
 .pagination__mr5___FEPwz {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .pagination__mr-2___Pg3RF,
 .pagination__mr2___FR8Uf {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .pagination__py-5___aTqEc,
 .pagination__py5___jYCpJ {
@@ -352,14 +352,8 @@ h5,
 .pagination__pagination___G0GGL .pagination__arrowIcon___Fwbz0.pagination__leftArrow___su3ON {
   transform: rotate(90deg);
 }
-[dir="rtl"] .pagination__pagination___G0GGL .pagination__arrowIcon___Fwbz0.pagination__leftArrow___su3ON {
-  transform: rotate(-90deg);
-}
 .pagination__pagination___G0GGL .pagination__arrowIcon___Fwbz0.pagination__rightArrow___DMTd1 {
   transform: rotate(-90deg);
-}
-[dir="rtl"] .pagination__pagination___G0GGL .pagination__arrowIcon___Fwbz0.pagination__rightArrow___DMTd1 {
-  transform: rotate(90deg);
 }
 .pagination__pagination___G0GGL .pagination__pageContainer___c78xQ {
   display: flex;

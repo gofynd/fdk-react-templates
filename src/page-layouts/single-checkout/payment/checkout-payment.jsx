@@ -2,11 +2,8 @@ import React, { useEffect, useState } from "react";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import CheckoutPaymentContent from "./checkout-payment-content";
 import * as styles from "./checkout-payment.less";
-
-
 import CheckoutPaymentFailure from "./checkout-payment-failure";
 import { useMobile } from "../../../helper/hooks/useMobile";
-import { useGlobalTranslation } from "fdk-core/utils";
 
 function CheckoutPayment({
   loader,
@@ -17,8 +14,8 @@ function CheckoutPayment({
   onPriceDetailsClick,
   setCancelQrPayment,
   onFailedGetCartShipmentDetails,
+  isCouponApplied,
 }) {
-  const { t } = useGlobalTranslation("translation");
   const [showFailedMessage, setShowFailedMessage] = useState(false);
   const [paymentErrHeading, setPaymentErrHeading] = useState("");
   const [paymentErrMsg, setPaymentErrMsg] = useState("");
@@ -31,7 +28,7 @@ function CheckoutPayment({
     if (errorMessage?.length > 0) {
       handleShowFailedMessage({
         failed: true,
-        paymentErrHeading: t("resource.checkout.please_try_again_later"),
+        paymentErrHeading: "Please try again later",
         paymentErrMsg: errorMessage,
       });
       onFailedGetCartShipmentDetails();
@@ -111,7 +108,7 @@ function CheckoutPayment({
               <div className={`${styles.icon} ${styles["view-mobile-up"]}`}>
                 <SvgWrapper svgSrc={"three-number"}></SvgWrapper>
               </div>
-              <div className={styles.title}>{t("resource.checkout.select_payment_method")}</div>
+              <div className={styles.title}>Select Payment Method</div>
             </div>
             {showFailedMessage && (
               <div className={styles.paymentFailedHeader}>
@@ -130,12 +127,13 @@ function CheckoutPayment({
               breakUpValues={breakUpValues}
               removeDialogueError={hideFailedMessage}
               setCancelQrPayment={setCancelQrPayment}
+              isCouponApplied={isCouponApplied}
             ></CheckoutPaymentContent>
           </>
         ) : (
           <div className={styles.reviewHeaderUnselect}>
             <SvgWrapper svgSrc={"three-number"}></SvgWrapper>
-            <div className={styles.title}>{t("resource.checkout.select_payment_method")}</div>
+            <div className={styles.title}>Select Payment Method</div>
           </div>
         )}
       </div>
