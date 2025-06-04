@@ -42,8 +42,8 @@ function CardForm({
   validateCvv,
   isCardValid,
   cardDetailsData,
-  isMobile,
-  onPriceDetailsClick = () => { },
+  isTablet,
+  onPriceDetailsClick = () => {},
   addNewCard,
   isCvvInfo,
   handleCvvInfo,
@@ -76,7 +76,7 @@ function CardForm({
     return (
       <div className={styles.cvvInfoContainer}>
         <div className={styles.cvvInfo}>
-          {!isMobile && isCvvInfo ? (
+          {!isTablet && isCvvInfo ? (
             <SvgWrapper
               svgSrc="paymentTooltipArrow"
               className={styles.upArrowMark}
@@ -226,12 +226,12 @@ function CardForm({
             <div
               className={`${styles.cvvContainer} ${styles.cvv} ${cardCVVError ? styles.cvvError : ""}`}
               onMouseEnter={() => {
-                if (!isMobile) {
+                if (!isTablet) {
                   handleCvvInfo(true);
                 }
               }}
               onMouseLeave={() => {
-                if (!isMobile) {
+                if (!isTablet) {
                   handleCvvInfo(false);
                 }
               }}
@@ -241,7 +241,7 @@ function CardForm({
                 className={`${styles.cvv}`}
                 onClick={() => handleCvvInfo(true)}
               />
-              {!isMobile && isCvvInfo && <CvvInfo />}
+              {!isTablet && isCvvInfo && <CvvInfo />}
             </div>
             {(cvvNumber || cardCVVError) && (
               <span
@@ -309,8 +309,9 @@ function CardForm({
         )}
       </div>
       <div>
-        {!addNewCard && isMobile ? (
+        {!addNewCard && isTablet ? (
           <StickyPayNow
+            customClassName={styles.visibleOnTab}
             disabled={!isCardValid()}
             value={priceFormatCurrencySymbol(
               getCurrencySymbol,
@@ -329,7 +330,7 @@ function CardForm({
           </button>
         )}
       </div>
-      {isCvvInfo && isMobile && (
+      {isCvvInfo && isTablet && (
         <Modal isOpen={isCvvInfo} hideHeader={true}>
           <CvvInfo />
         </Modal>
