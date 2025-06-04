@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 18px;
+  line-height: 1.5;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 24px;
+    line-height: 1.5;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .checkout-payment-content__caption-medium___s4nwJ,
 .checkout-payment-content__captionMedium___boOFu {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .checkout-payment-content__caption-semi-bold____upNw,
 .checkout-payment-content__captionSemiBold___ThE5O {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -337,7 +337,7 @@ h5,
 .checkout-payment-content__container___HusGh {
   background: var(--pageBackground, #f8f8f8);
 }
-@media only screen and (min-width: 481px) {
+@media only screen and (min-width: 769px) {
   .checkout-payment-content__container___HusGh {
     display: flex;
     padding: 24px;
@@ -355,7 +355,7 @@ h5,
   border-color: var(--dividerStokes);
   border-radius: 4px 0px 0px 4px;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz {
     width: 100%;
     border: none;
@@ -368,7 +368,7 @@ h5,
 .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK:last-child .checkout-payment-content__linkWrapper-row1___NJqkx {
   border-bottom: 1px solid var(--dividerStokes);
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK:last-child .checkout-payment-content__linkWrapper-row1___NJqkx {
     border-bottom: unset;
   }
@@ -396,7 +396,7 @@ h5,
 .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__activeIconColor___TWPaB svg > g > path {
   fill: var(--textHeading, #26201a);
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK {
     background-color: var(--pageBackground, #f8f8f8);
     border-inline-end: none;
@@ -412,7 +412,12 @@ h5,
   align-items: center;
   padding-inline-start: 12px;
 }
-@media only screen and (min-width: 481px) {
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__linkWrapper-row1___NJqkx .checkout-payment-content__subMopIcons___KG7BY {
+    flex: unset !important;
+  }
+}
+@media only screen and (min-width: 769px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__linkWrapper-row1___NJqkx .checkout-payment-content__subMopIcons___KG7BY {
     justify-content: flex-end;
     flex: 1;
@@ -442,6 +447,11 @@ h5,
   background-color: var(--primaryColor);
   border: 1px solid var(--primaryColor);
 }
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__indicator___tucmm {
+    display: none;
+  }
+}
 .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__link___ZIR_i {
   display: flex;
   padding: 24px 16px;
@@ -449,7 +459,7 @@ h5,
   word-break: break-word;
   align-items: center;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__link___ZIR_i {
     padding: 24px 0px;
   }
@@ -462,7 +472,7 @@ h5,
   font-weight: 500;
   line-height: 140%;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__link___ZIR_i .checkout-payment-content__modeName___oABQ2 {
     color: var(--textHeading, #26201a);
     margin-inline-start: 8px;
@@ -480,7 +490,7 @@ h5,
   border-radius: 4px;
   text-align: center;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__link___ZIR_i .checkout-payment-content__codCharge___o7TCE {
     padding-top: 4px;
   }
@@ -489,7 +499,7 @@ h5,
   display: flex;
   align-items: center;
 }
-@media only screen and (min-width: 481px) {
+@media only screen and (min-width: 769px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__payment-icons___Kaaz7 {
     justify-content: flex-end;
     flex: 1;
@@ -501,6 +511,11 @@ h5,
   align-items: center;
   justify-content: flex-end;
   flex: 1;
+}
+@media only screen and (min-width: 769px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__arrowContainer___LDeoa {
+    display: none;
+  }
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__arrowContainer___LDeoa.checkout-payment-content__codIconContainer____fdEj svg {
   transform: rotate(270deg);
@@ -539,7 +554,7 @@ h5,
   border-width: 1px 1px 1px 0;
   border-radius: 0px 4px 4px 0px;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__navigationTab___Tfdjy {
     padding: 6px;
   }
@@ -547,12 +562,12 @@ h5,
 .checkout-payment-content__container___HusGh .checkout-payment-content__selectedBorder___xIVt8 .checkout-payment-content__modeItemName___FvXEZ {
   font-weight: 600 !important;
 }
-@media only screen and (min-width: 481px) {
+@media only screen and (min-width: 769px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__selectedBorder___xIVt8 {
     border: 1px solid var(--primaryColor);
   }
 }
-@media only screen and (min-width: 481px) {
+@media only screen and (min-width: 769px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__nonSelectedBorder___zA4x7 {
     border: 1px solid var(--dividerStokes);
   }
@@ -571,7 +586,7 @@ h5,
   margin-bottom: 15px;
   line-height: 140%;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__cardHeader___t2z6i,
   .checkout-payment-content__container___HusGh .checkout-payment-content__walletHeader___XQ4tZ,
   .checkout-payment-content__container___HusGh .checkout-payment-content__nbHeader___TAaVo,
@@ -581,9 +596,10 @@ h5,
   .checkout-payment-content__container___HusGh .checkout-payment-content__addCardHeader___KWnY5,
   .checkout-payment-content__container___HusGh .checkout-payment-content__otherHeader___Mizrt {
     font-weight: 500;
+    display: none;
   }
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__cardHeader___t2z6i,
   .checkout-payment-content__container___HusGh .checkout-payment-content__walletHeader___XQ4tZ,
   .checkout-payment-content__container___HusGh .checkout-payment-content__nbHeader___TAaVo,
@@ -610,7 +626,7 @@ h5,
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__savedCardWrapper___HlKIX .checkout-payment-content__savedCardHeaderWrapper___Mx_n_ button span {
   font-size: 16px;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__savedCardWrapper___HlKIX .checkout-payment-content__savedCardHeaderWrapper___Mx_n_ {
     margin-bottom: 16px;
   }
@@ -679,7 +695,7 @@ h5,
   border-radius: 8px;
   margin-bottom: 15px;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__savedCardWrapper___HlKIX .checkout-payment-content__cardList___b7iIC .checkout-payment-content__cardItem___joyot {
     padding: 0px;
   }
@@ -777,7 +793,7 @@ h5,
   line-height: 140%;
   cursor: pointer;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__savedCardWrapper___HlKIX .checkout-payment-content__cardList___b7iIC .checkout-payment-content__cardItem___joyot .checkout-payment-content__payBtn___dgcAp {
     padding: 6px;
     font-size: 12px;
@@ -799,7 +815,7 @@ h5,
   line-height: 140%;
   cursor: unset;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__savedCardWrapper___HlKIX .checkout-payment-content__cardList___b7iIC .checkout-payment-content__cardItem___joyot .checkout-payment-content__payBtn___dgcAp[disabled] {
     padding: 6px;
     font-size: 12px;
@@ -817,7 +833,7 @@ h5,
   line-height: 140%;
   cursor: pointer;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__savedCardWrapper___HlKIX .checkout-payment-content__addNewCard___PpZop {
     padding: 6px;
     font-size: 12px;
@@ -848,7 +864,7 @@ h5,
   margin-top: 16px;
   position: relative;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardInputWrapper___YqlSP.checkout-payment-content__cardNumberBox___UUp9q {
     margin-top: 0;
   }
@@ -883,7 +899,7 @@ h5,
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardInputWrapper___YqlSP.checkout-payment-content__cvvContainer___gw5Dt {
   width: 47%;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardInputWrapper___YqlSP.checkout-payment-content__expiryContainer___uq0BY,
   .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardInputWrapper___YqlSP.checkout-payment-content__cvvContainer___gw5Dt {
     width: 100%;
@@ -908,7 +924,7 @@ h5,
     left: 5px;
   }
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardDateCvvWrapper___dLwSn.checkout-payment-content__marginBottom___qTP6J {
     margin-bottom: 24px;
   }
@@ -956,7 +972,7 @@ h5,
   margin-top: 16px;
   accent-color: var(--primaryColor);
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__rbiGuidelines___jmtpW {
     margin-bottom: 24px;
   }
@@ -974,7 +990,7 @@ h5,
   align-self: center;
   line-height: 140%;
 }
-@media only screen and (min-width: 481px) {
+@media only screen and (min-width: 769px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__rbiGuidelines___jmtpW .checkout-payment-content__rbiGuidelinesModal___s6bGj {
     max-width: 450px;
     padding: 8px;
@@ -1118,7 +1134,7 @@ h5,
   flex-direction: column;
   gap: 16px;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__modeOption___onKtJ {
     gap: 0px;
   }
@@ -1137,7 +1153,7 @@ h5,
 .checkout-payment-content__container___HusGh .checkout-payment-content__modeOption___onKtJ .checkout-payment-content__modeItemWrapper___IlJf3 label {
   cursor: pointer;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__modeOption___onKtJ .checkout-payment-content__modeItemWrapper___IlJf3 {
     padding: 24px 0px;
   }
@@ -1174,7 +1190,7 @@ h5,
   font-weight: 400;
   line-height: 140%;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__modeOption___onKtJ .checkout-payment-content__modeItemWrapper___IlJf3 .checkout-payment-content__modeItem___M6Obf .checkout-payment-content__moreModeName___F_lVI {
     color: var(--textHeading, #26201a);
     font-weight: 500;
@@ -1204,7 +1220,7 @@ h5,
   max-height: 70vh;
   min-height: 40vh;
 }
-@media only screen and (min-width: 481px) {
+@media only screen and (min-width: 769px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__modeOption___onKtJ .checkout-payment-content__modalBody___pTEbc {
     max-height: 554px;
     min-width: 420px;
@@ -1234,7 +1250,7 @@ h5,
 .checkout-payment-content__container___HusGh .checkout-payment-content__upiMop___LVvVY {
   padding-bottom: 24px;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__upiMop___LVvVY .checkout-payment-content__upiApp___M2sjF:first-child {
     padding-top: 0;
   }
@@ -1855,7 +1871,7 @@ h5,
     fill: var(--textBody, #3c3131);
   }
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__modeItemLogo___mixsN .checkout-payment-content__svgColor___07c9F g > path {
     fill: var(--textHeading, #26201a);
   }
@@ -1870,7 +1886,7 @@ h5,
   object-fit: contain;
   margin-inline-end: 12px;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__modeItemLogo___mixsN img {
     margin-inline-end: 8px;
   }
@@ -1897,7 +1913,7 @@ h5,
     height: 606px;
   }
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__moreOptionContainer___lSVOn {
     height: 434px;
   }
@@ -1908,7 +1924,7 @@ h5,
   margin-bottom: 16px;
   max-height: unset !important;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__bodyContainer___HeZQG .checkout-payment-content__modeItemName___FvXEZ {
     color: var(--textBody, #3c3131) !important;
     font-size: 12px;
@@ -1936,7 +1952,7 @@ h5,
 .checkout-payment-content__otherBorder___ARrf8 {
   border: 1px solid var(--dividerStokes, #d4d1d1);
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__otherBorder___ARrf8 {
     border: none;
   }
@@ -1947,7 +1963,7 @@ h5,
     height: 24px;
   }
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__modeItemLogo___mixsN span {
     border: 1px solid var(--dividerStokes, #d4d1d1);
     padding: 8px 4px;
@@ -1960,17 +1976,17 @@ h5,
     align-items: anchor-center;
   }
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__upiMargin___LomcN:last-child {
     padding-bottom: 0 !important;
   }
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardModalHeader___ixj3K {
     padding: 16px !important;
   }
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__newCardBodyModal___R9U49 .checkout-payment-content__rbiGuidelines___jmtpW {
     margin-top: 24px !important;
   }
@@ -2005,6 +2021,16 @@ h5,
   display: flex;
   align-items: center;
   justify-content: center;
+}
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__visibleOnTab___SSdnx {
+    display: block !important;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__onDesktopView___JFn5k {
+    display: none;
+  }
 }
 
 /**color by character**/
@@ -2115,7 +2141,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 18px;
+  line-height: 1.5;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -2124,7 +2150,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 24px;
+    line-height: 1.5;
   }
 }
 h5,
@@ -2191,7 +2217,7 @@ h5,
 .modal__caption-medium___GbhtF,
 .modal__captionMedium___zCJpb {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -2204,7 +2230,7 @@ h5,
 .modal__caption-semi-bold___feZV5,
 .modal__captionSemiBold___pxAn7 {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -2595,7 +2621,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 18px;
+  line-height: 1.5;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -2604,7 +2630,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 24px;
+    line-height: 1.5;
   }
 }
 h5,
@@ -2671,7 +2697,7 @@ h5,
 .sticky-pay-now__caption-medium___gZCqf,
 .sticky-pay-now__captionMedium___V6P3J {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -2684,7 +2710,7 @@ h5,
 .sticky-pay-now__caption-semi-bold___QX3JZ,
 .sticky-pay-now__captionSemiBold___Fc8TZ {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 600;
 }

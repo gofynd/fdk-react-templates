@@ -155,7 +155,7 @@ const ProductCard = ({
     .slice(0, 3);
 
   const hasDiscount =
-    getListingPrice("effective") !== getListingPrice("marked");
+    getListingPrice("effective") !== getListingPrice("marked"); 
 
   const isFollowed = useMemo(() => {
     return !!followedIdList?.includes(product?.uid);

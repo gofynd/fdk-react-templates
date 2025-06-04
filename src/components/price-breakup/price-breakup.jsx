@@ -53,6 +53,7 @@ function PriceBreakup({
   greetingIcon = <SvgWrapper svgSrc="celebration" className={styles.svgIcon} />,
   cardBorderRadius = "8px",
   isInternationalTaxLabel = false,
+  customClassName,
 }) {
   const { t } = useGlobalTranslation("translation");
   const cssVar = {
@@ -94,7 +95,9 @@ function PriceBreakup({
       style={cssVar}
       id="price-breakup-container-id"
     >
-      <div className={`fontBody ${styles.priceSummaryHeading}`}>
+      <div
+        className={`fontBody ${styles.priceSummaryHeading} ${customClassName}`}
+      >
         {title || t("resource.common.price_summary")}
         {showItemsCount && (
           <span>{` ( ${cartItemCount} ${cartItemCount > 1 ? t("resource.common.items_caps_plural") : t("resource.common.items_caps_singular")
@@ -103,10 +106,11 @@ function PriceBreakup({
       </div>
       {breakUpValuesList?.map((item, index) => (
         <div
-          className={`fontBody ${index !== breakUpValuesList.length - 1
-            ? styles.priceSummaryItem
-            : styles.priceSummaryItemTotal
-            }`}
+          className={`fontBody ${
+            index !== breakUpValuesList.length - 1
+              ? styles.priceSummaryItem
+              : styles.priceSummaryItemTotal
+          } ${customClassName}`}
           key={item?.key}
         >
           {index !== breakUpValuesList.length - 1 ? (

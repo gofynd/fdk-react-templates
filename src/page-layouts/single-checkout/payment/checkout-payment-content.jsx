@@ -5,6 +5,7 @@ import { useSearchParams } from "react-router-dom";
 import cardValidator from "card-validator";
 import Modal from "../../../components/core/modal/modal";
 import { useMobile } from "../../../helper/hooks/useMobile";
+import { useViewport } from "../../../helper/hooks";
 // import UktModal from "./ukt-modal";
 import StickyPayNow from "./sticky-pay-now/sticky-pay-now";
 import { priceFormatCurrencySymbol } from "../../../helper/utils";
@@ -136,6 +137,7 @@ function CheckoutPaymentContent({
   breakUpValues,
   removeDialogueError,
   setCancelQrPayment,
+  isCouponApplied,
 }) {
   const fpi = useFPI();
   const { language } = useGlobalStore(fpi.getters.i18N_DETAILS);
@@ -182,8 +184,6 @@ function CheckoutPaymentContent({
   let upiSuggestions = paymentOption?.payment_option?.find?.(
     (ele) => ele.name === "UPI"
   )?.suggested_list || ["okhdfcbank", "okicici", "oksbi"];
-
-  const isMobile = useMobile();
 
   //card
   const [addNewCard, setAddNewCard] = useState(false);
@@ -286,6 +286,7 @@ function CheckoutPaymentContent({
   const toggleMop = (mop) => {
     setActiveMop((prev) => (prev === mop ? null : mop));
   };
+  const isTablet = useViewport(0, 768);
 
   const setCardValidity = async ({ isValid, card_number }) => {
     setCardNumberError("");
@@ -633,110 +634,127 @@ function CheckoutPaymentContent({
   };
 
   const selectMop = async (tab, mop, subMop) => {
-    if (mop) {
-      setTab(tab);
-      setMop(mop);
-      setSubMop(subMop);
-      const { mopData, subMopData } = paymentModeDetails(mop, subMop);
-      let payload;
-      if (tab === "CARD") {
-        if (subMop === "newCard") {
-          payload = {
-            id: cart_id,
-            addressId: address_id,
-            paymentMode: mop,
-            aggregatorName: mopData?.aggregator_name,
-            iin: cardNumber.replace(/[^0-9]/g, "").slice(0, 6),
-          };
-        } else {
-          payload = {
-            id: cart_id,
-            addressId: address_id,
-            paymentMode: mop,
-            aggregatorName: subMopData?.aggregator_name || "Razorpay",
-            cardId: subMopData?.card_id,
-            paymentIdentifier: subMopData?.card_id,
-            type: subMopData?.card_type || "debit",
-            network: subMopData?.card_brand || cardDetailsData?.card_brand,
-          };
-        }
+    if (!mop) return;
+
+    setTab(tab);
+    setMop(mop);
+    setSubMop(subMop);
+
+    const { mopData, subMopData } = paymentModeDetails(mop, subMop);
+    let payload;
+
+    if (tab === "CARD") {
+      if (subMop === "newCard") {
+        payload = {
+          id: cart_id,
+          addressId: address_id,
+          paymentMode: mop,
+          aggregatorName: mopData?.aggregator_name,
+          iin: cardNumber.replace(/[^0-9]/g, "").slice(0, 6),
+        };
       } else {
         payload = {
           id: cart_id,
           addressId: address_id,
           paymentMode: mop,
-          aggregatorName: subMopData?.aggregator_name,
-          paymentIdentifier: subMopData?.code,
-          merchantCode: subMopData.merchant_code,
+          aggregatorName: subMopData?.aggregator_name || "Razorpay",
+          cardId: subMopData?.card_id,
+          paymentIdentifier: subMopData?.card_id,
+          type: subMopData?.card_type || "debit",
+          network: subMopData?.card_brand || cardDetailsData?.card_brand,
         };
       }
+    } else {
+      payload = {
+        id: cart_id,
+        addressId: address_id,
+        paymentMode: mop,
+        aggregatorName: subMopData?.aggregator_name,
+        paymentIdentifier: subMopData?.code,
+        merchantCode: subMopData?.merchant_code,
+      };
+    }
+
+    let isValid = true;
+
+    if (isCouponApplied) {
       const { code, title, display_message_en, valid } =
         await checkCouponValidity(payload);
-      if (!code || (code && valid)) {
-        let paymentModePayload;
-        if (mop === "CARD") {
-          if (subMop === "newCARD") {
-            paymentModePayload = {
-              id: cart_id,
-              address_id: address_id,
-              payment_mode: mop,
-              aggregator_name: mopData?.aggregator_name,
-            };
-          } else {
-            paymentModePayload = {
-              id: cart_id,
-              address_id: address_id,
-              payment_mode: mop,
-              aggregator_name: subMopData?.aggregator_name,
-              payment_identifier: subMopData?.card_id,
-            };
-          }
-        } else {
-          paymentModePayload = {
-            id: cart_id,
-            address_id,
-            payment_mode: mop,
-            aggregator_name: subMopData?.aggregator_name,
-            payment_identifier: subMopData?.code,
-            merchant_code: subMopData?.merchant_code,
-          };
-        }
-        selectPaymentMode(paymentModePayload).then(() => {
-          console.log("Payment mode selected");
-        });
+      isValid = !code || (code && valid);
 
-        if (tab === "COD") {
-          setSelectedTab(tab);
-          setIsCodModalOpen(true);
-        } else if (tab === "CARD") {
-          if (subMop !== "newCARD") {
-            setSelectedCard(subMopData);
-          }
-        } else if (tab === "CARDLESS_EMI") {
-          setSelectedCardless(subMopData);
-        } else if (tab === "UPI") {
-          if (mop === "QR") {
-            await showQrCode();
-          } else if (mop === "UPI") {
-            await handleProceedToPayClick();
-          }
-        } else if (tab === "WL") {
-          setSelectedWallet(subMopData);
-        } else if (tab === "NB") {
-          setSelectedNB(subMopData);
-        } else if (tab === "PL") {
-          setSelectedPayLater(subMopData);
-        } else if (tab === "Other") {
-          setSelectedOtherPayment(subMopData);
-        }
-      } else if (code && !valid) {
+      if (!isValid) {
         setCouponValidity({
           title,
           message: display_message_en,
           valid,
         });
         setShowCouponValidityModal(true);
+        return;
       }
+    }
+
+    let paymentModePayload;
+
+    if (mop === "CARD") {
+      if (subMop === "newCARD") {
+        paymentModePayload = {
+          id: cart_id,
+          address_id: address_id,
+          payment_mode: mop,
+          aggregator_name: mopData?.aggregator_name,
+        };
+      } else {
+        paymentModePayload = {
+          id: cart_id,
+          address_id: address_id,
+          payment_mode: mop,
+          aggregator_name: subMopData?.aggregator_name,
+          payment_identifier: subMopData?.card_id,
+        };
+      }
+    } else {
+      paymentModePayload = {
+        id: cart_id,
+        address_id,
+        payment_mode: mop,
+        aggregator_name: subMopData?.aggregator_name,
+        payment_identifier: subMopData?.code,
+        merchant_code: subMopData?.merchant_code,
+      };
+    }
+
+    // selectPaymentMode(paymentModePayload).then(() => {
+    //   console.log("Payment mode selected");
+    // });
+
+    // Handle tab-specific UI and logic
+    if (tab === "COD") {
+      selectPaymentMode(paymentModePayload).then(() => {
+        console.log("Payment mode selected");
+      });
+
+      setSelectedTab(tab);
+      setIsCodModalOpen(true);
+    } else if (tab === "CARD") {
+      if (subMop !== "newCARD") {
+        setSelectedCard(subMopData);
+      }
+    } else if (tab === "CARDLESS_EMI") {
+      setSelectedCardless(subMopData);
+    } else if (tab === "UPI") {
+      if (mop === "QR") {
+        await showQrCode();
+      } else if (mop === "UPI") {
+        await handleProceedToPayClick();
+      }
+    } else if (tab === "WL") {
+      setSelectedWallet(subMopData);
+    } else if (tab === "NB") {
+      setSelectedNB(subMopData);
+    } else if (tab === "PL") {
+      setSelectedPayLater(subMopData);
+    } else if (tab === "Other") {
+      setSelectedOtherPayment(subMopData);
     }
   };
 
@@ -1313,7 +1331,7 @@ function CheckoutPaymentContent({
       case "CARD":
         return (
           <div className={styles.cardTab}>
-            {(!addNewCard || isMobile) && (
+            {(!addNewCard || isTablet) && (
               <div className={styles.savedCardWrapper}>
                 {savedCards && savedCards?.length > 0 ? (
                   <>
@@ -1360,41 +1378,41 @@ function CheckoutPaymentContent({
                                     </div>
                                     {selectedCard?.card_id ===
                                       card?.card_id && (
-                                        <div className={styles.whyCvvContainer}>
-                                          <span className={styles.cvvNotNeeded}>
-                                            {t("resource.checkout.cvv_not_needed")}
-                                          </span>
-                                          <span
-                                            className={styles.why}
-                                            onMouseEnter={() =>
-                                              setIsCvvNotNeededModal(true)
-                                            }
-                                            onMouseLeave={() =>
-                                              setIsCvvNotNeededModal(false)
-                                            }
-                                            onClick={() =>
-                                              setIsCvvNotNeededModal(true)
-                                            }
-                                          >
-                                            {t("resource.common.why")}
-                                          </span>
-                                          {isCvvNotNeededModal && !isMobile && (
-                                            <div>
-                                              <p
-                                                className={
-                                                  styles.cvvNotNeededModal
-                                                }
-                                              >
-                                                <SvgWrapper
-                                                  svgSrc="paymentTooltipArrow"
-                                                  className={styles.upArrowMark}
-                                                />
-                                                {t("resource.checkout.card_saved_rbi")}
-                                              </p>
-                                            </div>
-                                          )}
-                                        </div>
-                                      )}
+                                      <div className={styles.whyCvvContainer}>
+                                        <span className={styles.cvvNotNeeded}>
+                                          {t("resource.checkout.cvv_not_needed")}
+                                        </span>
+                                        <span
+                                          className={styles.why}
+                                          onMouseEnter={() =>
+                                            setIsCvvNotNeededModal(true)
+                                          }
+                                          onMouseLeave={() =>
+                                            setIsCvvNotNeededModal(false)
+                                          }
+                                          onClick={() =>
+                                            setIsCvvNotNeededModal(true)
+                                          }
+                                        >
+                                          {t("resource.common.why")}
+                                        </span>
+                                        {isCvvNotNeededModal && !isTablet && (
+                                          <div>
+                                            <p
+                                              className={
+                                                styles.cvvNotNeededModal
+                                              }
+                                            >
+                                              <SvgWrapper
+                                                svgSrc="paymentTooltipArrow"
+                                                className={styles.upArrowMark}
+                                              />
+                                              {t("resource.checkout.card_saved_rbi")}
+                                            </p>
+                                          </div>
+                                        )}
+                                      </div>
+                                    )}
                                     {selectedCard?.card_id &&
                                       selectedCard?.card_id === card?.card_id &&
                                       !card.cvv_less && (
@@ -1428,7 +1446,7 @@ function CheckoutPaymentContent({
                                       )}
                                   </div>
                                 </div>
-                                <div className={styles.walletLeft}>
+                                {/* <div className={styles.walletLeft}>
                                   {(!selectedCard ||
                                     selectedCard.card_id !== card.card_id) && (
                                       <SvgWrapper svgSrc={"radio"}></SvgWrapper>
@@ -1439,13 +1457,14 @@ function CheckoutPaymentContent({
                                         svgSrc={"radio-selected"}
                                       ></SvgWrapper>
                                     )}
-                                </div>
+                                </div> */}
                               </div>
                             </div>
 
                             <div className={styles.modePay}>
-                              {!addNewCard && isMobile ? (
+                              {!addNewCard && isTablet ? (
                                 <StickyPayNow
+                                  customClassName={styles.visibleOnTab}
                                   value={priceFormatCurrencySymbol(
                                     getCurrencySymbol,
                                     getTotalValue()
@@ -1575,7 +1594,7 @@ function CheckoutPaymentContent({
                       validateCvv={validateCvv}
                       handleCvvNumberInput={handleCvvNumberInput}
                       isCardValid={isCardValid}
-                      isMobile={isMobile}
+                      isTablet={isTablet}
                       onPriceDetailsClick={onPriceDetailsClick}
                       isCvvInfo={isCvvInfo}
                       handleCvvInfo={handleCvvInfo}
@@ -1587,7 +1606,7 @@ function CheckoutPaymentContent({
                 )}
               </div>
             )}
-            {addNewCard && !isMobile && (
+            {addNewCard && !isTablet && (
               <div className={styles.newCardWrapper}>
                 <div className={styles.addCardHeader}>
                   <button onClick={hideNewCard}>
@@ -1638,7 +1657,7 @@ function CheckoutPaymentContent({
                 />
               </div>
             )}
-            {addNewCard && isMobile && (
+            {addNewCard && isTablet && (
               <Modal
                 isOpen={addNewCard}
                 closeDialog={hideNewCard}
@@ -1685,7 +1704,7 @@ function CheckoutPaymentContent({
                     validateCvv={validateCvv}
                     handleCvvNumberInput={handleCvvNumberInput}
                     isCardValid={isCardValid}
-                    isMobile={isMobile}
+                    isTablet={isTablet}
                     onPriceDetailsClick={onPriceDetailsClick}
                     isCvvInfo={isCvvInfo}
                     handleCvvInfo={handleCvvInfo}
@@ -1715,13 +1734,12 @@ function CheckoutPaymentContent({
             <div
               key={key}
               className={`${styles.modeItemWrapper} ${getWalletdBorder(wlt)}`}
+              onClick={(e) => {
+                removeDialogueError();
+                selectMop("WL", "WL", wlt?.code);
+              }}
             >
-              <label
-                onClick={(e) => {
-                  removeDialogueError();
-                  selectMop("WL", "WL", wlt?.code);
-                }}
-              >
+              <label>
                 <div className={styles.modeItem}>
                   <div className={styles.logoNameContainer}>
                     <div className={styles.modeItemLogo}>
@@ -1731,20 +1749,21 @@ function CheckoutPaymentContent({
                       {wlt?.display_name ?? ""}
                     </div>
                   </div>
-                  <div className={styles.walletLeft}>
+                  {/* <div className={styles.walletLeft}>
                     {(!selectedWallet || selectedWallet.code !== wlt.code) && (
                       <SvgWrapper svgSrc={"radio"}></SvgWrapper>
                     )}
                     {selectedWallet && selectedWallet.code === wlt.code && (
                       <SvgWrapper svgSrc={"radio-selected"}></SvgWrapper>
                     )}
-                  </div>
+                  </div> */}
                 </div>
               </label>
 
               <div className={styles.modePay}>
-                {!openMoreWalletModal && isMobile ? (
+                {!openMoreWalletModal && isTablet ? (
                   <StickyPayNow
+                    customClassName={styles.visibleOnTab}
                     value={priceFormatCurrencySymbol(
                       getCurrencySymbol,
                       getTotalValue()
@@ -1862,7 +1881,7 @@ function CheckoutPaymentContent({
       case "UPI":
         return (
           <div className={styles.upiMop}>
-            {isMobile && isChromeOrSafari && (
+            {isTablet && isChromeOrSafari && (
               <div>
                 {upiApps?.length > 0 &&
                   upiApps
@@ -1886,19 +1905,19 @@ function CheckoutPaymentContent({
                         <p className={styles.displayName}>
                           {upiAppData[app]?.displayName}
                         </p>
-                        {(!selectedUpiIntentApp ||
+                        {/* {(!selectedUpiIntentApp ||
                           selectedUpiIntentApp !== app) && (
-                            <SvgWrapper svgSrc={"radio"} />
-                          )}
-                        {selectedUpiIntentApp &&
+                          <SvgWrapper svgSrc={"radio"} />
+                        )} */}
+                        {/* {selectedUpiIntentApp &&
                           selectedUpiIntentApp === app && (
                             <SvgWrapper svgSrc={"radio-selected"} />
-                          )}
+                          )} */}
                       </label>
                     ))}
               </div>
             )}
-            {isMobile &&
+            {isTablet &&
               isChromeOrSafari &&
               upiApps?.length > 0 &&
               upiApps?.includes("any") && (
@@ -1924,7 +1943,7 @@ function CheckoutPaymentContent({
                   </div>
                 </label>
               )}
-            {!isMobile && isQrMopPresent && (
+            {!isTablet && isQrMopPresent && (
               <div>
                 <p className={styles.upiSectionTitle}>{t("resource.checkout.upi_qr_code_caps")}</p>
                 <div className={styles.upiQrCodeSection}>
@@ -2000,19 +2019,19 @@ function CheckoutPaymentContent({
                 </div>
               </div>
             )}
-            {((isMobile &&
+            {((isTablet &&
               isChromeOrSafari &&
               (upiApps?.length > 0 || upiApps?.includes("any"))) ||
-              (!isMobile && isQrMopPresent)) && (
-                <div className={styles.upiOrLine}>
-                  <span className={styles.upiOrText}>{t("resource.common.or")}</span>
-                </div>
-              )}
+              (!isTablet && isQrMopPresent)) && (
+              <div className={styles.upiOrLine}>
+                <span className={styles.upiOrText}>{t("resource.common.or")}</span>
+              </div>
+            )}
             {loggedIn && savedUpi?.length > 0 && (
               <div>
                 <div>
                   <div>
-                    {!isMobile && (
+                    {!isTablet && (
                       <div
                         className={`${styles.upiHeader} ${styles["view-mobile-up"]}`}
                       >
@@ -2023,16 +2042,13 @@ function CheckoutPaymentContent({
                       {savedUpi?.map((item) => (
                         <div
                           className={`${styles.modeItemWrapper} ${getSavedUpiBorder(item.vpa)} ${styles.upiMargin}`}
+                          onClick={() => {
+                            removeDialogueError();
+                            handleSavedUPISelect(item.vpa);
+                            cancelQrPayment();
+                          }}
                         >
-                          <div
-                            className={styles.modeItem}
-                            key={item.vpa}
-                            onClick={() => {
-                              removeDialogueError();
-                              handleSavedUPISelect(item.vpa);
-                              cancelQrPayment();
-                            }}
-                          >
+                          <div className={styles.modeItem} key={item.vpa}>
                             <div
                               style={{ display: "flex", alignItems: "center" }}
                             >
@@ -2056,13 +2072,13 @@ function CheckoutPaymentContent({
                                   )}
                               </div>
                             </div>
-                            {savedUPISelect === item.vpa ? (
+                            {/* {savedUPISelect === item.vpa ? (
                               <SvgWrapper svgSrc="radio-selected" />
                             ) : (
                               <SvgWrapper svgSrc="radio" />
-                            )}
+                            )} */}
                           </div>
-                          {!isMobile &&
+                          {!isTablet &&
                             savedUPISelect &&
                             savedUPISelect === item.vpa && (
                               <div className={styles.modePay}>
@@ -2098,7 +2114,7 @@ function CheckoutPaymentContent({
               </div>
             )}
             <div style={{ position: "relative" }}>
-              {!isMobile && (
+              {!isTablet && (
                 <p className={styles.upiSectionTitle}>{t("resource.checkout.upi_id_number")}</p>
               )}
               <div className={styles.upiIdWrapper}>
@@ -2126,7 +2142,7 @@ function CheckoutPaymentContent({
               ) : null}
 
               {/* Show suggestions if '@' is present and we have filtered suggestions */}
-              {!isMobile &&
+              {!isTablet &&
                 showUPIAutoComplete &&
                 filteredUPISuggestions.length > 0 && (
                   <div className={styles.upiSuggestionsDesktop}>
@@ -2147,7 +2163,7 @@ function CheckoutPaymentContent({
                     </ul>
                   </div>
                 )}
-              {isMobile &&
+              {isTablet &&
                 showUPIAutoComplete &&
                 filteredUPISuggestions.length > 0 && (
                   <div>
@@ -2200,8 +2216,9 @@ function CheckoutPaymentContent({
               )}
 
               <div className={styles.upiPay}>
-                {isMobile ? (
+                {isTablet ? (
                   <StickyPayNow
+                    customClassName={styles.visibleOnTab}
                     disabled={
                       !(
                         isUpiSuffixSelected ||
@@ -2266,13 +2283,12 @@ function CheckoutPaymentContent({
             <div
               key={nb.display_name}
               className={`${styles.modeItemWrapper} ${getNBBorder(nb)}`}
+              onClick={() => {
+                removeDialogueError();
+                selectMop("NB", "NB", nb.code);
+              }}
             >
-              <label
-                onClick={() => {
-                  removeDialogueError();
-                  selectMop("NB", "NB", nb.code);
-                }}
-              >
+              <label>
                 <div className={styles.modeItem}>
                   <div className={styles.logoNameContainer}>
                     <div className={styles.modeItemLogo}>
@@ -2283,19 +2299,20 @@ function CheckoutPaymentContent({
                     </div>
                   </div>
 
-                  <div className={styles.nbLeft}>
+                  {/* <div className={styles.nbLeft}>
                     {(!selectedNB || selectedNB.code !== nb.code) && (
                       <SvgWrapper svgSrc={"radio"}></SvgWrapper>
                     )}
                     {selectedNB && selectedNB.code === nb.code && (
                       <SvgWrapper svgSrc="radio-selected" />
                     )}
-                  </div>
+                  </div> */}
                 </div>
               </label >
               <div className={styles.modePay}>
-                {!openMoreNbModal && isMobile ? (
+                {!openMoreNbModal && isTablet ? (
                   <StickyPayNow
+                    customClassName={styles.visibleOnTab}
                     value={priceFormatCurrencySymbol(
                       getCurrencySymbol,
                       getTotalValue()
@@ -2414,7 +2431,7 @@ function CheckoutPaymentContent({
       case "COD":
         return (
           <div>
-            {!isMobile ? (
+            {!isTablet ? (
               <div>
                 <div
                   className={`${styles.codHeader} ${styles["view-mobile-up"]}`}
@@ -2459,14 +2476,12 @@ function CheckoutPaymentContent({
                     <div
                       key={payLater.id}
                       className={`${styles.modeItemWrapper} ${getPayLaterBorder(payLater)}`}
+                      onClick={() => {
+                        removeDialogueError();
+                        selectMop("PL", "PL", payLater.code);
+                      }}
                     >
-                      <label
-                        id={payLater.id}
-                        onClick={() => {
-                          removeDialogueError();
-                          selectMop("PL", "PL", payLater.code);
-                        }}
-                      >
+                      <label id={payLater.id}>
                         <div className={styles.modeItem}>
                           <div
                             style={{ display: "flex", alignItems: "center" }}
@@ -2481,7 +2496,7 @@ function CheckoutPaymentContent({
                               {payLater?.display_name ?? ""}
                             </div>
                           </div>
-                          <div>
+                          {/* <div>
                             {(!selectedPayLater ||
                               selectedPayLater.code !== payLater.code) && (
                                 <SvgWrapper svgSrc={"radio"}></SvgWrapper>
@@ -2492,13 +2507,14 @@ function CheckoutPaymentContent({
                                   svgSrc={"radio-selected"}
                                 ></SvgWrapper>
                               )}
-                          </div>
+                          </div> */}
                         </div>
                       </label>
 
                       <div className={styles.modePay}>
-                        {isMobile ? (
+                        {isTablet ? (
                           <StickyPayNow
+                            customClassName={styles.visibleOnTab}
                             value={priceFormatCurrencySymbol(
                               getCurrencySymbol,
                               getTotalValue()
@@ -2548,13 +2564,12 @@ function CheckoutPaymentContent({
                 <div
                   key={emi?.display_name}
                   className={`${styles.modeItemWrapper} ${getCardlessBorder(emi)}`}
+                  onClick={() => {
+                    removeDialogueError();
+                    selectMop("CARDLESS_EMI", "CARDLESS_EMI", emi.code);
+                  }}
                 >
-                  <label
-                    onClick={() => {
-                      removeDialogueError();
-                      selectMop("CARDLESS_EMI", "CARDLESS_EMI", emi.code);
-                    }}
-                  >
+                  <label>
                     <div className={styles.modeItem}>
                       <div style={{ display: "flex", alignItems: "center" }}>
                         <div className={styles.modeItemLogo}>
@@ -2567,21 +2582,22 @@ function CheckoutPaymentContent({
                           {emi?.display_name ?? ""}
                         </div>
                       </div>
-                      <div>
+                      {/* <div>
                         {!selectedCardless ||
                           selectedCardless.code !== emi.code ? (
                           <SvgWrapper svgSrc={"radio"}></SvgWrapper>
                         ) : (
                           <SvgWrapper svgSrc={"radio-selected"}></SvgWrapper>
                         )}
-                      </div>
+                      </div> */}
                     </div>
                   </label>
                   {selectedCardless.code === emi.code &&
                     selectedCardless.code && (
                       <div className={styles.modePay}>
-                        {isMobile ? (
+                        {isTablet ? (
                           <StickyPayNow
+                            customClassName={styles.visibleOnTab}
                             value={priceFormatCurrencySymbol(
                               getCurrencySymbol,
                               getTotalValue()
@@ -2626,13 +2642,12 @@ function CheckoutPaymentContent({
             <div
               key={key}
               className={`${styles.modeItemWrapper} ${getOPBorder(other?.list?.[0])}`}
+              onClick={() => {
+                removeDialogueError();
+                selectMop("Other", other?.name, other?.list?.[0]?.code);
+              }}
             >
-              <label
-                onClick={() => {
-                  removeDialogueError();
-                  selectMop("Other", other?.name, other?.list?.[0]?.code);
-                }}
-              >
+              <label>
                 <div className={styles.modeItem}>
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <div className={styles.modeItemLogo}>
@@ -2645,7 +2660,7 @@ function CheckoutPaymentContent({
                       {other?.list?.[0]?.display_name ?? ""}
                     </div>
                   </div>
-                  <div className={styles.otherLeft}>
+                  {/* <div className={styles.otherLeft}>
                     {(!selectedOtherPayment ||
                       selectedOtherPayment?.code !==
                       other?.list?.[0]?.code) && (
@@ -2655,7 +2670,7 @@ function CheckoutPaymentContent({
                       selectedOtherPayment?.code === other?.list?.[0]?.code && (
                         <SvgWrapper svgSrc="radio-selected" />
                       )}
-                  </div>
+                  </div> */}
                   {/* <div className={styles.otherMiddle}>
                         <img
                           src={op?.list[0].logo_url?.small}
@@ -2666,8 +2681,9 @@ function CheckoutPaymentContent({
                 </div>
               </label>
               <div className={styles.otherPay}>
-                {isMobile ? (
+                {isTablet ? (
                   <StickyPayNow
+                    customClassName={styles.visibleOnTab}
                     value={priceFormatCurrencySymbol(
                       getCurrencySymbol,
                       getTotalValue()
@@ -2729,13 +2745,12 @@ function CheckoutPaymentContent({
                 <div
                   key={op.display_name}
                   className={`${styles.modeItemWrapper} ${getOPBorder()}`}
+                  onClick={() => {
+                    removeDialogueError();
+                    setSelectedOtherPayment(op);
+                  }}
                 >
-                  <label
-                    onClick={() => {
-                      removeDialogueError();
-                      setSelectedOtherPayment(op);
-                    }}
-                  >
+                  <label>
                     <div className={styles.modeItem}>
                       <div style={{ display: "flex", alignItems: "center" }}>
                         <div className={styles.modeItemLogo}>
@@ -2748,7 +2763,7 @@ function CheckoutPaymentContent({
                           {op?.display_name ?? ""}
                         </div>
                       </div>
-                      <div>
+                      {/* <div>
                         {(!selectedOtherPayment ||
                           selectedOtherPayment.code !== op.code) && (
                             <SvgWrapper svgSrc={"radio"}></SvgWrapper>
@@ -2757,15 +2772,16 @@ function CheckoutPaymentContent({
                           selectedOtherPayment.code === op.code && (
                             <SvgWrapper svgSrc="radio-selected" />
                           )}
-                      </div>
+                      </div> */}
                     </div>
                   </label>
 
                   {selectedOtherPayment.code &&
                     selectedOtherPayment.code === op.code && (
                       <div className={styles.otherPay}>
-                        {isMobile ? (
+                        {isTablet ? (
                           <StickyPayNow
+                            customClassName={styles.visibleOnTab}
                             value={priceFormatCurrencySymbol(
                               getCurrencySymbol,
                               getTotalValue()
@@ -2805,14 +2821,14 @@ function CheckoutPaymentContent({
   const navigationTitle = (opt, index) => {
     return (
       <div
-        className={`${styles.linkWrapper} ${selectedTab === opt.name && !isMobile ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === opt.name && isMobile ? styles.headerHightlight : ""}`}
+        className={`${styles.linkWrapper} ${selectedTab === opt.name && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === opt.name && isTablet ? styles.headerHightlight : ""}`}
         key={opt?.display_name}
         id={`nav-title-${index}`}
       >
         <div
           className={styles["linkWrapper-row1"]}
           onClick={() => {
-            if (isMobile) {
+            if (isTablet) {
               handleScrollToTop(index);
               setSelectedTab((prev) => (prev === opt.name ? "" : opt.name));
             } else {
@@ -2822,7 +2838,7 @@ function CheckoutPaymentContent({
             setTab(opt.name);
             toggleMop(opt.name);
             if (selectedTab !== opt.name) {
-              if (isMobile) {
+              if (isTablet) {
                 setSelectedPaymentPayload({});
               }
               setNameOnCard("");
@@ -2833,7 +2849,7 @@ function CheckoutPaymentContent({
           }}
         >
           <div
-            className={`${selectedTab === opt.name ? styles.indicator : ""} ${styles["view-mobile-up"]}`}
+            className={`${selectedTab === opt.name ? styles.indicator : ""} ${styles.onDesktopView}`}
           >
             &nbsp;
           </div>
@@ -2876,7 +2892,7 @@ function CheckoutPaymentContent({
             </div>
           )}
           <div
-            className={`${styles.arrowContainer} ${styles.activeIconColor} ${styles["view-mobile"]}`}
+            className={`${styles.arrowContainer} ${styles.activeIconColor} `}
           >
             <SvgWrapper
               className={
@@ -2888,10 +2904,8 @@ function CheckoutPaymentContent({
             />
           </div>
         </div>
-        {isMobile && activeMop === opt.name && (
-          <div className={styles["view-mobile"]}>
-            {selectedTab === opt.name && navigationTab()}
-          </div>
+        {isTablet && activeMop === opt.name && (
+          <div>{selectedTab === opt.name && navigationTab()}</div>
         )}
       </div>
     );
@@ -2994,7 +3008,7 @@ function CheckoutPaymentContent({
           </div>
         </Modal>
       )}
-      {isCodModalOpen && isMobile && (
+      {isCodModalOpen && isTablet && (
         <Modal
           isOpen={isCodModalOpen}
           hideHeader={true}
@@ -3039,7 +3053,7 @@ function CheckoutPaymentContent({
           </div>
         </Modal>
       )}
-      {isCvvNotNeededModal && isMobile && (
+      {isCvvNotNeededModal && isTablet && (
         <Modal
           isOpen={isCvvNotNeededModal}
           closeDialog={() => setIsCvvNotNeededModal(false)}
@@ -3064,7 +3078,7 @@ function CheckoutPaymentContent({
                 )}
                 {otherPaymentOptions?.length > 0 && (
                   <div
-                    className={`${styles.linkWrapper} ${selectedTab === "Other" && !isMobile ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === "Other" && isMobile ? styles.headerHightlight : ""}`}
+                    className={`${styles.linkWrapper} ${selectedTab === "Other" && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === "Other" && isTablet ? styles.headerHightlight : ""}`}
                   >
                     <div
                       className={styles["linkWrapper-row1"]}
@@ -3075,7 +3089,7 @@ function CheckoutPaymentContent({
                       }}
                     >
                       <div
-                        className={`${selectedTab === "Other" ? styles.indicator : ""} ${styles["view-mobile-up"]}`}
+                        className={`${selectedTab === "Other" ? styles.indicator : ""} ${styles.onDesktopView}`}
                       >
                         &nbsp;
                       </div>
@@ -3094,7 +3108,7 @@ function CheckoutPaymentContent({
                         </div>
                       </div>
                       <div
-                        className={`${styles.arrowContainer} ${styles["view-mobile"]} ${styles.activeIconColor}`}
+                        className={`${styles.arrowContainer}  ${styles.activeIconColor}`}
                       >
                         <SvgWrapper
                           className={
@@ -3106,7 +3120,7 @@ function CheckoutPaymentContent({
                         />
                       </div>
                     </div>
-                    {isMobile && activeMop === "Other" && (
+                    {isTablet && activeMop === "Other" && (
                       <div className={styles["view-mobile"]}>
                         {selectedTab === "Other" && navigationTab()}
                       </div>
@@ -3116,7 +3130,7 @@ function CheckoutPaymentContent({
                 {codOption && (
                   <div style={{ display: "flex", flex: "1" }}>
                     <div
-                      className={`${styles.linkWrapper} ${selectedTab === codOption.name && !isMobile ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === codOption.name && isMobile ? styles.headerHightlight : ""}`}
+                      className={`${styles.linkWrapper} ${selectedTab === codOption.name && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === codOption.name && isTablet ? styles.headerHightlight : ""}`}
                       key={codOption?.display_name ?? ""}
                       onClick={() => {
                         selectMop(
@@ -3128,7 +3142,7 @@ function CheckoutPaymentContent({
                     >
                       <div className={styles["linkWrapper-row1"]}>
                         <div
-                          className={` ${selectedTab === codOption.name ? styles.indicator : ""} ${styles["view-mobile-up"]}`}
+                          className={` ${selectedTab === codOption.name ? styles.indicator : ""} ${styles.onDesktopView}`}
                         >
                           &nbsp;
                         </div>
@@ -3142,7 +3156,7 @@ function CheckoutPaymentContent({
                             >
                               {codOption?.display_name ?? ""}
                             </div>
-                            {isMobile && codCharges > 0 && (
+                            {isTablet && codCharges > 0 && (
                               <div className={styles.codCharge}>
                                 +
                                 {priceFormatCurrencySymbol(
@@ -3163,13 +3177,13 @@ function CheckoutPaymentContent({
                           </div>
                         )}
                         <div
-                          className={`${styles.arrowContainer} ${styles["view-mobile"]} ${styles.activeIconColor} ${styles.codIconContainer}`}
+                          className={`${styles.arrowContainer} ${styles.activeIconColor} ${styles.codIconContainer}`}
                         >
                           <SvgWrapper svgSrc="accordion-arrow" />
                         </div>
                       </div>
-                      {isMobile && (
-                        <div className={styles["view-mobile"]}>
+                      {isTablet && (
+                        <div>
                           {selectedTab === codOption.name && navigationTab()}
                         </div>
                       )}
@@ -3177,9 +3191,9 @@ function CheckoutPaymentContent({
                   </div>
                 )}
               </div>
-              {!isMobile && (
+              {!isTablet && (
                 <div
-                  className={`${styles.navigationTab} ${styles["view-mobile-up"]}`}
+                  className={`${styles.navigationTab} ${styles.onDesktopView}`}
                 >
                   {navigationTab()}
                 </div>
