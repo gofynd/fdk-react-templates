@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 18px;
+  line-height: 1.5;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 24px;
+    line-height: 1.5;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .faq__caption-medium___Bvo0S,
 .faq__captionMedium___js12T {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .faq__caption-semi-bold___qWoeO,
 .faq__captionSemiBold___iHFwI {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -260,11 +260,11 @@ h5,
 }
 .faq__mr-5___x_OUN,
 .faq__mr5___upit7 {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .faq__mr-2___WuSTC,
 .faq__mr2___Ko2Xv {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .faq__py-5___CK6OB,
 .faq__py5___fp9cQ {
