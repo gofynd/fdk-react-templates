@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 18px;
+  line-height: 1.5;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 24px;
+    line-height: 1.5;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .comment__caption-medium___HIEb0,
 .comment__captionMedium___NxnB1 {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .comment__caption-semi-bold___VdA6Z,
 .comment__captionSemiBold___lxBFk {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -260,11 +260,11 @@ h5,
 }
 .comment__mr-5___lgGRF,
 .comment__mr5___POQNm {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .comment__mr-2___UGv6b,
 .comment__mr2___PUmmD {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .comment__py-5___xQRBS,
 .comment__py5___bSx47 {
@@ -380,7 +380,7 @@ h5,
   display: block;
   font-size: 12px;
   font-weight: 500;
-  margin-inline-end: 8px;
+  margin-right: 8px;
   max-height: 38px;
   width: calc(100% - 40px);
   overflow: hidden;
@@ -406,9 +406,9 @@ h5,
   color: var(--textBody, #3c3131);
 }
 .comment__commentOuterBox___tyEJJ .comment__commentBoxMobile___hjowv .comment__addBtn___ocbwH {
-  margin-inline-start: auto;
+  margin-left: auto;
   color: var(--buttonPrimary, #4e3f09);
-  text-align: end;
+  text-align: right;
   width: 40px;
   display: flex;
   justify-content: flex-end;
@@ -437,16 +437,13 @@ h5,
 .comment__commentOuterBox___tyEJJ .comment__inputBox___hqxzy .comment__commentBox___oRYzk .comment__commentNoteIcon___et7MS {
   position: absolute;
   top: 50%;
-  inset-inline-start: 10px;
+  left: 10px;
   transform: translateY(-50%);
 }
 .comment__commentOuterBox___tyEJJ .comment__inputBox___hqxzy .comment__commentBox___oRYzk input {
   flex: 1;
   background: transparent;
-  padding-top: 12px;
-  padding-inline-end: 12px;
-  padding-bottom: 12px;
-  padding-inline-start: 40px;
+  padding: 12px 12px 12px 40px;
   font-size: 12px;
   font-weight: 400;
   width: 100%;
@@ -664,7 +661,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 18px;
+  line-height: 1.5;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -673,7 +670,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 24px;
+    line-height: 1.5;
   }
 }
 h5,
@@ -740,7 +737,7 @@ h5,
 .modal__caption-medium___GbhtF,
 .modal__captionMedium___zCJpb {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -753,7 +750,7 @@ h5,
 .modal__caption-semi-bold___feZV5,
 .modal__captionSemiBold___pxAn7 {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -818,11 +815,11 @@ h5,
 }
 .modal__mr-5___DjKqT,
 .modal__mr5___il5jH {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .modal__mr-2___SKD1t,
 .modal__mr2___BSxti {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .modal__py-5___OpCsp,
 .modal__py5___hfa2b {
@@ -949,8 +946,8 @@ h5,
   .modal__modalContainer--borders____AGZf {
     border: none;
     border-radius: 0;
-    border-start-start-radius: 8px;
-    border-start-end-radius: 8px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
   }
 }
 .modal__modalHeader___xKo1g {

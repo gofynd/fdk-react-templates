@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 18px;
+  line-height: 1.5;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 24px;
+    line-height: 1.5;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .chip-review-item__caption-medium___TahcP,
 .chip-review-item__captionMedium___TqlGQ {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .chip-review-item__caption-semi-bold___AG3ci,
 .chip-review-item__captionSemiBold___azy1h {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -260,11 +260,11 @@ h5,
 }
 .chip-review-item__mr-5___giiGG,
 .chip-review-item__mr5___hfNxR {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .chip-review-item__mr-2___tFXxQ,
 .chip-review-item__mr2___LanD1 {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .chip-review-item__py-5___kcqhz,
 .chip-review-item__py5___P3nAb {
@@ -433,7 +433,7 @@ h5,
 }
 .chip-review-item__customSelect___oNYXu {
   width: 80px;
-  margin-inline-end: 10px;
+  margin-right: 10px;
 }
 .chip-review-item__offersContainer___y4Eas {
   border-radius: 3px;
@@ -447,7 +447,7 @@ h5,
   color: #20ce81;
 }
 .chip-review-item__maxAvail___ZGQx2 {
-  text-align: start;
+  text-align: left;
   color: #ee485d;
 }
 .chip-review-item__chip___MPqlt {
@@ -474,10 +474,7 @@ h5,
   }
 }
 .chip-review-item__chip___MPqlt .chip-review-item__productMetas___nU57E .chip-review-item__priceCntr___o6_FD {
-  margin-top: 0px;
-  margin-inline-end: 0px;
-  margin-bottom: 0px;
-  margin-inline-start: 5px;
+  margin: 0px 0px 0px 5px;
 }
 @media only screen and (max-width: 480px) {
   .chip-review-item__chip___MPqlt .chip-review-item__productMetas___nU57E .chip-review-item__priceCntr___o6_FD {
@@ -509,12 +506,12 @@ h5,
 }
 .chip-review-item__chip___MPqlt .chip-review-item__rightItems___xD6ri {
   display: flex;
-  margin-inline-start: auto;
+  margin-left: auto;
   align-content: center;
 }
 @media only screen and (max-width: 480px) {
   .chip-review-item__chip___MPqlt .chip-review-item__rightItems___xD6ri {
-    margin-inline-start: 0;
+    margin-left: 0;
   }
 }
 .chip-review-item__chip___MPqlt .chip-review-item__rightItems___xD6ri .chip-review-item__quantity___B_WUz {

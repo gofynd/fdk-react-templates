@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 18px;
+  line-height: 1.5;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 24px;
+    line-height: 1.5;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .remove-cart-item__caption-medium___V8S1f,
 .remove-cart-item__captionMedium___s34BJ {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .remove-cart-item__caption-semi-bold___w3ddG,
 .remove-cart-item__captionSemiBold___j5Zkl {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -260,11 +260,11 @@ h5,
 }
 .remove-cart-item__mr-5___zd5nA,
 .remove-cart-item__mr5___lt6uE {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .remove-cart-item__mr-2___M3lcb,
 .remove-cart-item__mr2___zEQQk {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .remove-cart-item__py-5___vcaRt,
 .remove-cart-item__py5___vmymN {
@@ -542,7 +542,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 18px;
+  line-height: 1.5;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -551,7 +551,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 24px;
+    line-height: 1.5;
   }
 }
 h5,
@@ -618,7 +618,7 @@ h5,
 .modal__caption-medium___GbhtF,
 .modal__captionMedium___zCJpb {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -631,7 +631,7 @@ h5,
 .modal__caption-semi-bold___feZV5,
 .modal__captionSemiBold___pxAn7 {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -696,11 +696,11 @@ h5,
 }
 .modal__mr-5___DjKqT,
 .modal__mr5___il5jH {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .modal__mr-2___SKD1t,
 .modal__mr2___BSxti {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .modal__py-5___OpCsp,
 .modal__py5___hfa2b {
@@ -827,8 +827,8 @@ h5,
   .modal__modalContainer--borders____AGZf {
     border: none;
     border-radius: 0;
-    border-start-start-radius: 8px;
-    border-start-end-radius: 8px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
   }
 }
 .modal__modalHeader___xKo1g {

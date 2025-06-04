@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 18px;
+  line-height: 1.5;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 24px;
+    line-height: 1.5;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .fy-input__caption-medium___ypzRG,
 .fy-input__captionMedium___cFBcK {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .fy-input__caption-semi-bold___WmtaG,
 .fy-input__captionSemiBold___UuNTY {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -260,11 +260,11 @@ h5,
 }
 .fy-input__mr-5___v4vQm,
 .fy-input__mr5___FnOZz {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .fy-input__mr-2___u3YuI,
 .fy-input__mr2___EOVYz {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .fy-input__py-5___QoQ9q,
 .fy-input__py5___q5mpm {
@@ -453,10 +453,10 @@ h5,
   padding: 0 0.5rem;
 }
 .fy-input__adornmentContainer___MtgI6 .fy-input__startAdornment___SVGGG {
-  margin-inline-end: 0.5rem;
+  margin-right: 0.5rem;
 }
 .fy-input__adornmentContainer___MtgI6 .fy-input__endAdornment___ce3Ta {
-  margin-inline-start: 0.5rem;
+  margin-left: 0.5rem;
 }
 .fy-input__adornmentContainer___MtgI6 input {
   flex: 1;
