@@ -6,6 +6,7 @@ import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import StickyPayNow from "./sticky-pay-now/sticky-pay-now";
 import { priceFormatCurrencySymbol } from "../../../helper/utils";
 import { useGlobalTranslation } from "fdk-core/utils";
+import JuspayCardForm from "./juspay-card-from";
 
 function CardForm({
   cardNumberRef,
@@ -42,14 +43,17 @@ function CardForm({
   validateCvv,
   isCardValid,
   cardDetailsData,
-  isTablet,
-  onPriceDetailsClick = () => {},
+  isMobile,
+  onPriceDetailsClick = () => { },
   addNewCard,
   isCvvInfo,
   handleCvvInfo,
   validateCardDetails,
   setCardValidity,
   resetCardValidationErrors,
+  paymentResponse,
+  paymentOption,
+  isJuspayEnabled,
 }) {
   const { t } = useGlobalTranslation("translation");
   const isFormatterSet = useRef(false);
@@ -76,7 +80,7 @@ function CardForm({
     return (
       <div className={styles.cvvInfoContainer}>
         <div className={styles.cvvInfo}>
-          {!isTablet && isCvvInfo ? (
+          {!isMobile && isCvvInfo ? (
             <SvgWrapper
               svgSrc="paymentTooltipArrow"
               className={styles.upArrowMark}
@@ -122,6 +126,17 @@ function CardForm({
       </div>
     );
   };
+  
+  if (isJuspayEnabled()) {
+    return (
+      <JuspayCardForm 
+        paymentResponse={paymentResponse}
+        paymentOption={paymentOption}
+        getCurrencySymbol={getCurrencySymbol}
+        getTotalValue={getTotalValue}
+      />
+    )
+  }
 
   return (
     <>
@@ -226,12 +241,12 @@ function CardForm({
             <div
               className={`${styles.cvvContainer} ${styles.cvv} ${cardCVVError ? styles.cvvError : ""}`}
               onMouseEnter={() => {
-                if (!isTablet) {
+                if (!isMobile) {
                   handleCvvInfo(true);
                 }
               }}
               onMouseLeave={() => {
-                if (!isTablet) {
+                if (!isMobile) {
                   handleCvvInfo(false);
                 }
               }}
@@ -241,7 +256,7 @@ function CardForm({
                 className={`${styles.cvv}`}
                 onClick={() => handleCvvInfo(true)}
               />
-              {!isTablet && isCvvInfo && <CvvInfo />}
+              {!isMobile && isCvvInfo && <CvvInfo />}
             </div>
             {(cvvNumber || cardCVVError) && (
               <span
@@ -309,9 +324,8 @@ function CardForm({
         )}
       </div>
       <div>
-        {!addNewCard && isTablet ? (
+        {!addNewCard && isMobile ? (
           <StickyPayNow
-            customClassName={styles.visibleOnTab}
             disabled={!isCardValid()}
             value={priceFormatCurrencySymbol(
               getCurrencySymbol,
@@ -330,7 +344,7 @@ function CardForm({
           </button>
         )}
       </div>
-      {isCvvInfo && isTablet && (
+      {isCvvInfo && isMobile && (
         <Modal isOpen={isCvvInfo} hideHeader={true}>
           <CvvInfo />
         </Modal>

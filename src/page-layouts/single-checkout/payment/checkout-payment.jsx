@@ -17,7 +17,6 @@ function CheckoutPayment({
   onPriceDetailsClick,
   setCancelQrPayment,
   onFailedGetCartShipmentDetails,
-  isCouponApplied,
 }) {
   const { t } = useGlobalTranslation("translation");
   const [showFailedMessage, setShowFailedMessage] = useState(false);
@@ -131,7 +130,6 @@ function CheckoutPayment({
               breakUpValues={breakUpValues}
               removeDialogueError={hideFailedMessage}
               setCancelQrPayment={setCancelQrPayment}
-              isCouponApplied={isCouponApplied}
             ></CheckoutPaymentContent>
           </>
         ) : (

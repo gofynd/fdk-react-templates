@@ -8,15 +8,14 @@ const StickyPayNow = ({
   value = "",
   onPriceDetailsClick = () => {},
   proceedToPay = () => {},
-  btnTitle,
-  customClassName,
+  btnTitle
 }) => {
   const { t } = useGlobalTranslation("translation");
   
   return (
     <AnimatePresence mode="wait">
       <motion.div
-        className={`${styles.stickyBtnContainer} ${customClassName}`}
+        className={`${styles.stickyBtnContainer}`}
         key="pay-now-container"
         // initial={{ opacity: 0, y: "100%" }}
         // animate={{ opacity: 1, y: "0%" }}

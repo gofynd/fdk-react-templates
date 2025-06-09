@@ -59,25 +59,26 @@
     }
     .trackOrderBtn {
       margin-top: 24px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: center;
-
       .trackBtn {
-        padding: 14px 24px;
-        border: 1px solid var(--buttonPrimary);
-        border-radius: @ButtonRadius;
-        font-size: 14px;
-
-        @media @mobile {
-          padding: 12px;
-          height: 41px;
+          padding: 14px 24px;
+          border: 1px solid var(--buttonPrimary);
+          border-radius: @ButtonRadius;
+          font-size: 14px;
+      
+          @media @mobile {
+            padding: 12px;
+            height: 41px;
+          }
         }
-      }
-
       .continueBtn {
-        padding-left: 0; // optional, not needed with gap
+        display: inline-block;
+        padding-left: 12px;
+        &:nth-child(2) {
+          @media (max-width: 378px) {
+            padding-top: 12px;
+            padding-left: 0;
+          }
+        }
       }
     }
   }

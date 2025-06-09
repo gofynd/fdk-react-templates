@@ -65,10 +65,7 @@ const AddToCart = ({
     const priceDataDefault = sizes?.price;
     if (selectedSize && !isEmptyOrNull(productPrice?.price)) {
       if (productPrice?.set) {
-        return currencyFormat(
-          price_per_piece[key], 
-          productPrice?.price?.currency_symbol || "", 
-          formatLocale(locale, countryCode, true)) || "";
+        return currencyFormat(price_per_piece[key]) || "";
       }
       const price = productPrice?.price || "";
       return currencyFormat(

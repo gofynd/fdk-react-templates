@@ -1,8 +1,70 @@
 @import "../../../styles/main.less";
 
+:global {
+  .card_number_div,
+  .card_exp_month_div,
+  .card_exp_year_div,
+  .security_code_div,
+  .name_on_card_div {
+    height: 48px;
+    border: 1px solid var(--dividerStokes);
+    border-radius: 4px;
+    color: @TextBody;    
+    overflow: hidden;
+    padding-left: 16px;
+    padding-right: 16px;
+    outline: none;
+    margin-top: 16px; 
+  }
+
+  .security_code_div{
+    width: 103px;
+  }
+
+  .card_exp_month_div,
+  .card_exp_year_div{
+    width: 25%;
+  }
+  .security_code_div{
+    width: 50%;
+  }
+
+  @media screen and (max-width: 768px) {
+    .card_number_div,
+    .card_exp_month_div,
+    .card_exp_year_div,
+    .security_code_div,
+    .name_on_card_div {
+      height: 42px;
+    }
+  }
+}
+
+.cardDateCvvJuspayWrapper{
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.checkbox {
+  accent-color: var(--buttonPrimary);
+  height: 13px;
+  width: 13px;
+  cursor: pointer;
+}
+
+.checkboxWrapper {
+  display: flex;
+  justify-content: start;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
 .container {
   background: @PageBackground;
-  @media @desktop {
+  @media @mobile-up {
     display: flex;
     padding: 24px;
     border: 1px solid var(--dividerStokes);
@@ -17,7 +79,7 @@
     border-style: solid;
     border-color: var(--dividerStokes);
     border-radius: 4px 0px 0px 4px;
-    @media @tablet {
+    @media @mobile {
       width: 100%;
       border: none;
     }
@@ -25,11 +87,11 @@
     .linkWrapper:last-child {
       .linkWrapper-row1 {
         border-bottom: 1px solid var(--dividerStokes);
-        @media @tablet {
+        @media @mobile {
           border-bottom: unset;
         }
       }
-      // @media @tablet {
+      // @media @mobile {
       //   border-bottom: 1px solid var(--dividerStokes);
       // }
       border-bottom: none;
@@ -62,7 +124,7 @@
           fill: @TextHeading;
         }
       }
-      @media @tablet {
+      @media @mobile {
         background-color: @PageBackground;
         border-inline-end: none;
         padding: 0 16px;
@@ -76,10 +138,8 @@
           flex: 1;
           align-items: center;
           padding-inline-start: 12px;
-          @media @tablet {
-            flex: unset !important;
-          }
-          @media @desktop {
+
+          @media @mobile-up {
             justify-content: flex-end;
             flex: 1;
             padding: 0 16px;
@@ -110,9 +170,6 @@
         width: 4px;
         background-color: var(--primaryColor);
         border: 1px solid var(--primaryColor);
-        @media @tablet {
-          display: none;
-        }
       }
       .link {
         display: flex;
@@ -120,7 +177,7 @@
         overflow: hidden;
         word-break: break-word;
         align-items: center;
-        @media @tablet {
+        @media @mobile {
           padding: 24px 0px;
         }
         .modeName {
@@ -130,7 +187,7 @@
           font-size: 14px;
           font-weight: 500;
           line-height: 140%;
-          @media @tablet {
+          @media @mobile {
             color: @TextHeading;
             margin-inline-start: 8px;
           }
@@ -145,7 +202,7 @@
           color: @ErrorText;
           line-height: 140%;
           border-radius: 4px;
-          @media @tablet {
+          @media @mobile {
             padding-top: 4px;
           }
           text-align: center;
@@ -155,16 +212,13 @@
         display: flex;
         align-items: center;
 
-        @media @desktop {
+        @media @mobile-up {
           justify-content: flex-end;
           flex: 1;
           padding: 0 12px;
         }
       }
       .arrowContainer {
-        @media @desktop {
-          display: none;
-        }
         display: flex;
         align-items: center;
         justify-content: flex-end;
@@ -226,7 +280,7 @@
     border-style: solid;
     border-width: 1px 1px 1px 0;
     border-radius: 0px 4px 4px 0px;
-    @media @tablet {
+    @media @mobile {
       padding: 6px;
     }
   }
@@ -234,12 +288,12 @@
     .modeItemName {
       font-weight: 600 !important;
     }
-    @media @desktop {
+    @media @mobile-up {
       border: 1px solid var(--primaryColor);
     }
   }
   .nonSelectedBorder {
-    @media @desktop {
+    @media @mobile-up {
       border: 1px solid var(--dividerStokes);
     }
   }
@@ -252,15 +306,14 @@
   .addCardHeader,
   .otherHeader {
     font-weight: 600;
-    @media @tablet {
+    @media @mobile {
       font-weight: 500;
-      display: none;
     }
     font-size: 14px;
     color: var(--textHeading);
     margin-bottom: 15px;
     line-height: 140%;
-    @media @tablet {
+    @media @mobile {
       margin-bottom: 6px;
       line-height: 1;
     }
@@ -278,7 +331,7 @@
             font-size: 16px;
           }
         }
-        @media @tablet {
+        @media @mobile {
           margin-bottom: 16px;
         }
         display: flex;
@@ -352,7 +405,7 @@
           padding: 16px;
           border-radius: 8px;
           margin-bottom: 15px;
-          @media @tablet {
+          @media @mobile {
             padding: 0px;
           }
           .cardDetailsWrapper {
@@ -452,7 +505,7 @@
             text-transform: uppercase;
             line-height: 140%;
             cursor: pointer;
-            @media @tablet {
+            @media @mobile {
               padding: 6px;
               font-size: 12px;
             }
@@ -472,7 +525,7 @@
             text-transform: uppercase;
             line-height: 140%;
             cursor: unset;
-            @media @tablet {
+            @media @mobile {
               padding: 6px;
               font-size: 12px;
             }
@@ -490,7 +543,7 @@
         width: 100%;
         line-height: 140%;
         cursor: pointer;
-        @media @tablet {
+        @media @mobile {
           padding: 6px;
           font-size: 12px;
         }
@@ -516,7 +569,7 @@
         display: flex;
         flex-direction: column;
         .cardInputWrapper {
-          @media @tablet {
+          @media @mobile {
             &.cardNumberBox {
               margin-top: 0;
             }
@@ -550,7 +603,7 @@
         .cardInputWrapper.expiryContainer,
         .cardInputWrapper.cvvContainer {
           width: 47%;
-          @media @tablet {
+          @media @mobile {
             width: 100%;
           }
         }
@@ -570,7 +623,7 @@
             }
           }
           &.marginBottom {
-            @media @tablet {
+            @media @mobile {
               margin-bottom: 24px;
             }
           }
@@ -617,7 +670,7 @@
           color: @ErrorText;
         }
         .rbiGuidelines {
-          @media @tablet {
+          @media @mobile {
             margin-bottom: 24px;
           }
           input:checked:before {
@@ -639,7 +692,7 @@
             line-height: 140%;
           }
           .rbiGuidelinesModal {
-            @media @desktop {
+            @media @mobile-up {
               max-width: 450px;
               padding: 8px;
             }
@@ -780,7 +833,7 @@
     flex-wrap: wrap;
     flex-direction: column;
     gap: 16px;
-    @media @tablet {
+    @media @mobile {
       gap: 0px;
     }
     .modeItemWrapper {
@@ -794,7 +847,7 @@
       label {
         cursor: pointer;
       }
-      @media @tablet {
+      @media @mobile {
         padding: 24px 0px;
         &:not(:last-child) {
           border-bottom: 1px solid @DividerStokes;
@@ -827,7 +880,7 @@
           font-size: 14px;
           font-weight: 400;
           line-height: 140%;
-          @media @tablet {
+          @media @mobile {
             color: @TextHeading;
             font-weight: 500;
           }
@@ -860,7 +913,7 @@
       max-height: 70vh;
       min-height: 40vh;
 
-      @media @desktop {
+      @media @mobile-up {
         max-height: 554px;
         min-width: 420px;
         & > div {
@@ -894,7 +947,7 @@
 
   .upiMop {
     padding-bottom: 24px;
-    @media @tablet {
+    @media @mobile {
       .upiApp {
         &:first-child {
           padding-top: 0;
@@ -1577,7 +1630,7 @@
         fill: @TextBody;
       }
     }
-    @media @tablet {
+    @media @mobile {
       g > path {
         fill: @TextHeading;
       }
@@ -1591,7 +1644,7 @@
     padding: 8px 4px;
     border-radius: 50%;
     object-fit: contain;
-    @media @tablet {
+    @media @mobile {
       margin-inline-end: 8px;
     }
     margin-inline-end: 12px;
@@ -1618,7 +1671,7 @@
     width: 420px;
     height: 606px;
   }
-  @media @tablet {
+  @media @mobile {
     height: 434px;
   }
 }
@@ -1627,7 +1680,7 @@
   min-height: unset !important;
   margin-bottom: 16px;
   max-height: unset !important;
-  @media @tablet {
+  @media @mobile {
     .modeItemName {
       color: @TextBody !important;
       font-size: 12px;
@@ -1657,7 +1710,7 @@
 }
 .otherBorder {
   border: 1px solid @DividerStokes;
-  @media @tablet {
+  @media @mobile {
     border: none;
   }
 }
@@ -1668,7 +1721,7 @@
       height: 24px;
     }
   }
-  @media @tablet {
+  @media @mobile {
     span {
       border: 1px solid @DividerStokes;
       padding: 8px 4px;
@@ -1683,7 +1736,7 @@
   }
 }
 .upiMargin {
-  @media @tablet {
+  @media @mobile {
     &:last-child {
       padding-bottom: 0 !important;
     }
@@ -1691,13 +1744,13 @@
 }
 .cardTab {
   .newCardModalHeader {
-    @media @tablet {
+    @media @mobile {
       padding: 16px !important;
     }
   }
 }
 .newCardBodyModal {
-  @media @tablet {
+  @media @mobile {
     .rbiGuidelines {
       margin-top: 24px !important;
     }
@@ -1732,19 +1785,4 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.visibleOnTab {
-  @media @tablet {
-    display: block !important;
-  }
-}
-.onDesktopView {
-  @media @tablet {
-    display: none;
-  }
-}
-.onMobileView {
-  @media @desktop {
-    display: none;
-  }
 }

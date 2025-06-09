@@ -20,7 +20,6 @@ function SinglePageShipment({
   buybox = {},
   totalValue = "",
   onPriceDetailsClick = () => {},
-  customClassName,
 }) {
   const { t } = useGlobalTranslation("translation");
   const navigate = useNavigate();
@@ -87,9 +86,7 @@ function SinglePageShipment({
       ) : (
         <>
           {showPayment ? (
-            <div
-              className={`${styles.addressSelectedHeaderContainer} ${customClassName}`}
-            >
+            <div className={styles.addressSelectedHeaderContainer}>
               <div className={styles.leftSelected}>
                 <div className={styles.icon}>
                   <SvgWrapper svgSrc="checkmark"></SvgWrapper>
