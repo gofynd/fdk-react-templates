@@ -21,6 +21,7 @@ function OrderTrackingDetails({
   selectedShipment,
   isShipmentLoading,
   linkOrderDetails,
+  availableFOCount,
 }) {
   const { t } = useGlobalTranslation("translation");
   const params = useParams();
@@ -130,6 +131,7 @@ function OrderTrackingDetails({
                   <OrderShipment
                     orderInfo={orderShipments}
                     isBuyAgainEligible={false}
+                    availableFOCount={availableFOCount}
                   ></OrderShipment>
                 </div>
                 {isShipmentLoading ? (
@@ -166,7 +168,7 @@ function OrderTrackingDetails({
                     <div className={`${styles.shipment}`}>
                       <ShipmentTracking
                         tracking={selectedShipmentBag?.tracking_details}
-                        shipmentInfo={selectedShipmentBag}
+                        shipmentInfo={selectedShipmentBag || {}}
                         changeinit={toggelInit}
                         invoiceDetails={invoiceDetails}
                       ></ShipmentTracking>
