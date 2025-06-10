@@ -10,9 +10,10 @@ const StickyPayNow = ({
   proceedToPay = () => {},
   btnTitle,
   customClassName,
+  enableLinkPaymentOption = false,
 }) => {
   const { t } = useGlobalTranslation("translation");
-  
+
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -24,20 +25,22 @@ const StickyPayNow = ({
         // transition={{ duration: 0.5 }}
       >
         <div className={`${styles.stickyBtnContainer1}`}>
-          <div className={styles.priceContainerMobile}>
-            <div className={styles.totalPrice}>{value}</div>
-            <div
-              className={`${styles.viewPriceBtn} ${styles.viewPBtn}`}
-              onClick={onPriceDetailsClick}
-            >
-              {t("resource.cart.view_price_details")}
+          {!enableLinkPaymentOption && (
+            <div className={styles.priceContainerMobile}>
+              <div className={styles.totalPrice}>{value}</div>
+              <div
+                className={`${styles.viewPriceBtn} ${styles.viewPBtn}`}
+                onClick={onPriceDetailsClick}
+              >
+                {t("resource.cart.view_price_details")}
+              </div>
             </div>
-          </div>
+          )}
           <button
-            className={`${styles.cartCheckoutBtn} ${styles.checkoutButton}`}
+            className={`${styles.cartCheckoutBtn} ${styles.checkoutButton} ${enableLinkPaymentOption ? styles.buttonWidth : ""}`}
             onClick={proceedToPay}
           >
-            {btnTitle || t('resource.cart.pay_now')}
+            {btnTitle || t("resource.cart.pay_now")}
           </button>
         </div>
       </motion.div>

@@ -336,6 +336,63 @@ h5,
 }
 .order-tracking-details__orderTrackingDetails___FRBMf {
   padding: 16px 0;
+  margin: 0 auto;
+}
+.order-tracking-details__orderTrackingDetails___FRBMf .order-tracking-details__linkMainBox___xfPqE {
+  margin: auto;
+}
+@media only screen and (min-width: 769px) {
+  .order-tracking-details__orderTrackingDetails___FRBMf .order-tracking-details__linkMainBox___xfPqE {
+    width: 381px;
+  }
+}
+.order-tracking-details__orderTrackingDetails___FRBMf .order-tracking-details__linkMainBox___xfPqE .order-tracking-details__paymentSuccessIconBox___ZyClk {
+  display: flex;
+  height: 274px;
+  padding: 16px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.order-tracking-details__orderTrackingDetails___FRBMf .order-tracking-details__linkMainBox___xfPqE .order-tracking-details__paymentSuccessIconBox___ZyClk .order-tracking-details__successText___cmnlz {
+  color: var(--textHeading, #26201a);
+  text-align: center;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 140%;
+  align-self: stretch;
+}
+.order-tracking-details__orderTrackingDetails___FRBMf .order-tracking-details__linkMainBox___xfPqE .order-tracking-details__orderInfo___r3SlR {
+  display: flex;
+  padding: 16px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 12px;
+}
+.order-tracking-details__orderTrackingDetails___FRBMf .order-tracking-details__linkMainBox___xfPqE .order-tracking-details__orderInfo___r3SlR .order-tracking-details__linkOrderId___bUG5d {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  align-self: stretch;
+}
+.order-tracking-details__orderTrackingDetails___FRBMf .order-tracking-details__linkMainBox___xfPqE .order-tracking-details__orderInfo___r3SlR .order-tracking-details__linkOrderId___bUG5d .order-tracking-details__orderIdText___R9nlj {
+  color: var(--textHeading, #26201a);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  flex: 1 0 0;
+}
+.order-tracking-details__orderTrackingDetails___FRBMf .order-tracking-details__linkMainBox___xfPqE .order-tracking-details__orderInfo___r3SlR .order-tracking-details__linkOrderId___bUG5d .order-tracking-details__orderIdValue___WFwSM {
+  color: var(--textHeading, #26201a);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 140%;
 }
 @media only screen and (min-width: 769px) {
   .order-tracking-details__orderTrackingDetails___FRBMf {
