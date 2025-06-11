@@ -369,6 +369,14 @@ h5,
   padding: 80px 0px;
   gap: 80px;
 }
+.contact-us__contact_container___qEJcu.contact-us__reducedBottomGap___u9UlZ {
+  padding-bottom: 61px;
+}
+@media only screen and (max-width: 768px) {
+  .contact-us__contact_container___qEJcu.contact-us__reducedBottomGap___u9UlZ {
+    padding-bottom: 0;
+  }
+}
 @media only screen and (min-width: 769px) {
   .contact-us__contact_container___qEJcu.contact-us__onImageContainer___O2nmX {
     flex-direction: column;
@@ -385,7 +393,7 @@ h5,
     flex-direction: column-reverse;
     width: 100%;
     padding: 32px 16px;
-    gap: 48px;
+    gap: 24px;
   }
 }
 .contact-us__showDesktop___pnBd_ {
@@ -410,9 +418,48 @@ h5,
   gap: 24px;
   width: 50%;
 }
+.contact-us__flex_item___zn3y0.contact-us__descriptionMargin___mEgpu {
+  max-width: 464px !important;
+  text-align: center;
+  margin: 0 auto;
+  padding-bottom: 40px;
+}
+.contact-us__flex_item___zn3y0.contact-us__descriptionMargin___mEgpu p {
+  margin-top: 0;
+}
+@media only screen and (max-width: 768px) {
+  .contact-us__flex_item___zn3y0.contact-us__descriptionMargin___mEgpu {
+    margin: unset;
+    padding: 0 16px;
+    padding-bottom: 32px;
+  }
+}
+@media only screen and (min-width: 769px) {
+  .contact-us__flex_item___zn3y0.contact-us__descriptionPaddingTop___xxwdi {
+    padding-top: 61px;
+  }
+}
+.contact-us__flex_item___zn3y0 .contact-us__description___stLxt {
+  color: var(--textBody, #3c3131);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.32px;
+  align-self: stretch;
+  margin-top: 12px;
+}
+@media only screen and (max-width: 768px) {
+  .contact-us__flex_item___zn3y0 .contact-us__description___stLxt {
+    font-size: 14px;
+    text-align: left;
+  }
+}
 @media only screen and (max-width: 768px) {
   .contact-us__flex_item___zn3y0 {
     width: 100%;
+    flex-direction: column-reverse;
+    gap: 48px;
   }
 }
 .contact-us__flex_item___zn3y0 .contact-us__listItems___vBJur {
