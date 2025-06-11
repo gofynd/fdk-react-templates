@@ -2,9 +2,7 @@
 
 .paymentContainer {
   margin-top: 20px;
-  &.unsetMarginTop {
-    margin-top: unset !important;
-  }
+
   @media @mobile {
     margin-top: 12px;
 
@@ -33,9 +31,6 @@
       line-height: 140%;
       color: var(--textHeading);
     }
-    .unsetPaddingLeft {
-      padding-left: 0 !important;
-    }
   }
   .paymentHeaderSelect {
     display: flex;
@@ -43,20 +38,7 @@
     padding: 24px;
     border-radius: 8px 8px 0 0;
     border: 1px solid var(--dividerStokes);
-    background-color: @PageBackground;
-    &.unsetBorder {
-      border: unset !important;
-      @media @desktop {
-        padding-bottom: 16px !important;
-      }
-      @media @mobile {
-        border-bottom: 1px solid var(--dividerStokes) !important;
-      }
-    }
-    @media @tablet {
-      padding: 16px;
-      border-radius: 0;
-    }
+
     @media @mobile {
       padding: 16px;
       border: 1px solid var(--dividerStokes);
@@ -71,9 +53,6 @@
       @media @mobile-up {
         padding-inline-start: 15px;
       }
-    }
-    .unsetPaddingLeft {
-      padding-left: 0 !important;
     }
   }
   .paymentFailedHeader {
