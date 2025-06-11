@@ -53,7 +53,6 @@ function PriceBreakup({
   greetingIcon = <SvgWrapper svgSrc="celebration" className={styles.svgIcon} />,
   cardBorderRadius = "8px",
   isInternationalTaxLabel = false,
-  customClassName,
 }) {
   const { t } = useGlobalTranslation("translation");
   const cssVar = {
@@ -95,25 +94,19 @@ function PriceBreakup({
       style={cssVar}
       id="price-breakup-container-id"
     >
-      <div
-        className={`fontBody ${styles.priceSummaryHeading} ${customClassName}`}
-      >
+      <div className={`fontBody ${styles.priceSummaryHeading}`}>
         {title || t("resource.common.price_summary")}
         {showItemsCount && (
-          <span>{` ( ${cartItemCount} ${
-            cartItemCount > 1
-              ? t("resource.common.items_caps_plural")
-              : t("resource.common.items_caps_singular")
-          } )`}</span>
+          <span>{` ( ${cartItemCount} ${cartItemCount > 1 ? t("resource.common.items_caps_plural") : t("resource.common.items_caps_singular")
+            } )`}</span>
         )}
       </div>
       {breakUpValuesList?.map((item, index) => (
         <div
-          className={`fontBody ${
-            index !== breakUpValuesList.length - 1
-              ? styles.priceSummaryItem
-              : styles.priceSummaryItemTotal
-          } ${customClassName}`}
+          className={`fontBody ${index !== breakUpValuesList.length - 1
+            ? styles.priceSummaryItem
+            : styles.priceSummaryItemTotal
+            }`}
           key={item?.key}
         >
           {index !== breakUpValuesList.length - 1 ? (
@@ -136,15 +129,16 @@ function PriceBreakup({
       {isInternationalTaxLabel && (
         <div className={styles.internationalTaxLabel}>
           <SvgWrapper className={styles.infoIcon} svgSrc="infoIcon" />
-          <span>{t("resource.common.delivery_custom_fees_notice")}</span>
+          <span>
+            {t("resource.common.delivery_custom_fees_notice")}
+          </span>
         </div>
       )}
       {showTotalDiscount && totalDiscount > 0 && (
         <div className={styles.discountPreviewContiner}>
           <span className={styles.icon}>{greetingIcon}</span>
           <span className={styles.discountPreviewMessage}>
-            {discountGreetingMessage ||
-              t("resource.common.discount_greeting_message")}
+            {discountGreetingMessage || t("resource.common.discount_greeting_message")}
           </span>
           <span className={styles.discountPreviewAmount}>
             {priceFormatCurrencySymbol(currencySymbol, totalDiscount)}
