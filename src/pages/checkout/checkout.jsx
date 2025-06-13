@@ -32,13 +32,11 @@ function Checkout({
   cartCouponProps,
   cartCommentProps,
   buybox = {},
-  availableFOCount,
   isGuestUser = false,
 }) {
   const [cancelQrPayment, setCancelQrPayment] = useState(null);
   const { onFailedGetCartShipmentDetails } = address;
-  const { availableCouponList, successCoupon, ...restCouponProps } =
-    cartCouponProps;
+  const { availableCouponList, ...restCouponProps } = cartCouponProps;
   return (
     <div className={`${styles.mainContainer} fontBody`}>
       <div className={styles["view-mobile"]}>
@@ -56,7 +54,6 @@ function Checkout({
           isGuestUser={isGuestUser}
         ></SingleAddress>
         <SinglePageShipment
-          customClassName={styles.customStylesShipment}
           shipments={shipments}
           isShipmentLoading={isShipmentLoading}
           showPaymentOptions={showPaymentOptions}
@@ -67,7 +64,6 @@ function Checkout({
           isHyperlocal={isHyperlocal}
           convertHyperlocalTat={convertHyperlocalTat}
           buybox={buybox}
-          availableFOCount={availableFOCount}
           totalValue={priceFormatCurrencySymbol(
             payment?.getCurrencySymbol,
             payment?.getTotalValue()
@@ -83,29 +79,19 @@ function Checkout({
           showPaymentOptions={showPaymentOptions}
           setCancelQrPayment={setCancelQrPayment}
           onFailedGetCartShipmentDetails={onFailedGetCartShipmentDetails}
-          isCouponApplied={successCoupon?.is_applied}
         ></CheckoutPayment>
       </div>
       <div className={styles.rightContainer}>
-        <Coupon
-          successCoupon={successCoupon}
-          availableCouponList={availableCouponList}
-          {...restCouponProps}
-          currencySymbol={currencySymbol}
-          handleRemoveQr={cancelQrPayment}
-        />
-        {/* {!!availableCouponList?.length && (
+        {!!availableCouponList?.length && (
           <Coupon
-            successCoupon={successCoupon}
             availableCouponList={availableCouponList}
             {...restCouponProps}
             currencySymbol={currencySymbol}
             handleRemoveQr={cancelQrPayment}
           />
-        )} */}
+        )}
         <Comment {...cartCommentProps} />
         <PriceBreakup
-          customClassName={styles.customStyles}
           breakUpValues={breakupValues}
           cartItemCount={cartItemsCount}
           currencySymbol={currencySymbol}
