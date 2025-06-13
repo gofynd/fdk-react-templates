@@ -294,7 +294,6 @@ export default function ChipItem({
             </FDKLink>
           </div>
           <div className={styles.eachItemDetailsContainer}>
-            {!isOutOfStock && (
               <button
                 className={styles.removeItemSvgContainer}
                 onClick={() =>
@@ -310,7 +309,6 @@ export default function ChipItem({
                   className={styles.itemRemoveIcon}
                 />
               </button>
-            )}
             <div className={styles.itemBrand}>
               {singleItemDetails?.product?.brand?.name}
             </div>
