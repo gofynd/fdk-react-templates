@@ -18,10 +18,8 @@ function SinglePageShipment({
   convertHyperlocalTat = () => { },
   loader,
   buybox = {},
-  availableFOCount,
   totalValue = "",
   onPriceDetailsClick = () => {},
-  customClassName,
 }) {
   const { t } = useGlobalTranslation("translation");
   const navigate = useNavigate();
@@ -72,7 +70,6 @@ function SinglePageShipment({
             isHyperlocal={isHyperlocal}
             convertHyperlocalTat={convertHyperlocalTat}
             buybox={buybox}
-            availableFOCount={availableFOCount}
           ></SingleShipmentContent>
           <StickyPayNow
             btnTitle={t("resource.checkout.proceed_to_pay_caps")}
@@ -89,9 +86,7 @@ function SinglePageShipment({
       ) : (
         <>
           {showPayment ? (
-            <div
-              className={`${styles.addressSelectedHeaderContainer} ${customClassName}`}
-            >
+            <div className={styles.addressSelectedHeaderContainer}>
               <div className={styles.leftSelected}>
                 <div className={styles.icon}>
                   <SvgWrapper svgSrc="checkmark"></SvgWrapper>
