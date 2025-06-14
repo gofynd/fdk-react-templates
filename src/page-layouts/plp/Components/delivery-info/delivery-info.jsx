@@ -1,14 +1,9 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
-import { convertUTCDateToLocalDate, formatLocale } from "../../../../helper/utils";
+import { convertUTCDateToLocalDate } from "../../../../helper/utils";
 import * as styles from "./delivery-info.less";
 import FyButton from "../../../../components/core/fy-button/fy-button";
 import FyInput from "../../../../components/core/fy-input/fy-input";
-import {
-  useGlobalStore,
-  useFPI,
-  useGlobalTranslation
-} from "fdk-core/utils";
 
 function DeliveryInfo({
   tat,
@@ -16,13 +11,7 @@ function DeliveryInfo({
   pincodeErrorMessage,
   checkPincode,
   setPincodeErrorMessage,
-  fulfillmentOptions,
-  availableFOCount,
 }) {
-  const { t } = useGlobalTranslation("translation");
-  const fpi = useFPI();
-  const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
-  const locale = language?.locale;
   const [postCode, setPostCode] = useState(pincode || "");
   const [tatMessage, setTatMessage] = useState("");
   const numberRegex = /^\d*$/;
@@ -59,14 +48,14 @@ function DeliveryInfo({
       return false;
     }
 
-    const minDate = convertUTCDateToLocalDate(min, options, formatLocale(locale, countryCode));
-    const maxDate = convertUTCDateToLocalDate(max, options, formatLocale(locale, countryCode));
+    const minDate = convertUTCDateToLocalDate(min, options);
+    const maxDate = convertUTCDateToLocalDate(max, options);
     setTimeout(() => {
-      const deliveryMessage = min === max
-        ? t('resource.product.delivery_on', { date: minDate })
-        : t('resource.product.delivery_between', { minDate, maxDate });
-
-      setTatMessage(deliveryMessage);
+      setTatMessage(
+        `Delivery ${
+          min === max ? `on ${minDate}` : `between ${minDate} - ${maxDate}`
+        }`
+      );
     }, 1000);
   };
 
@@ -75,18 +64,14 @@ function DeliveryInfo({
     setPincodeChecked(true);
   };
 
-  const foCount = useMemo(() => {
-    return fulfillmentOptions?.length || 0;
-  }, [fulfillmentOptions]);
-
   return (
     <div className={styles.deliveryInfo}>
-      <h4 className={`${styles.deliveryLabel} b2`}>{t("resource.common.address.select_delivery_location")}</h4>
+      <h4 className={`${styles.deliveryLabel} b2`}>Select delivery location</h4>
       <div className={styles.delivery}>
         <FyInput
           autoComplete="off"
           value={postCode}
-          placeholder={t("resource.product.check_delivery_time")}
+          placeholder="Check delivery time"
           inputClassName={styles.pincodeInput}
           containerClassName={styles.pincodeInputContainer}
           maxLength="6"
@@ -103,10 +88,10 @@ function DeliveryInfo({
             <SvgWrapper svgSrc="delivery" className={styles.deliveryIcon} />
           }
         >
-          {t("resource.facets.check")}
+          CHECK
         </FyButton>
       </div>
-      {!pincodeErrorMessage && availableFOCount === 1 && (
+      {!pincodeErrorMessage && (
         <div className={`${styles.deliveryDate} ${styles.dateInfoContainer}`}>
           {postCode?.length === 6 && tatMessage?.length > 0 && (
             <>

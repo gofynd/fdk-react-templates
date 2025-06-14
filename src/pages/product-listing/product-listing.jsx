@@ -26,7 +26,6 @@ import TwoGridIcon from "../../assets/images/grid-two.svg";
 import FourGridIcon from "../../assets/images/grid-four.svg";
 import TwoGridMobIcon from "../../assets/images/grid-two-mob.svg";
 import OneGridMobIcon from "../../assets/images/grid-one-mob.svg";
-import { useGlobalTranslation } from "fdk-core/utils";
 
 const ProductListing = ({
   breadcrumb = [],
@@ -65,7 +64,6 @@ const ProductListing = ({
   listingPrice = "range",
   banner = {},
   showAddToCart = false,
-  actionButtonText,
   stickyFilterTopOffset = 0,
   onColumnCountUpdate = () => {},
   onResetFiltersClick = () => {},
@@ -76,9 +74,10 @@ const ProductListing = ({
   onWishlistClick = () => {},
   onViewMoreClick = () => {},
   onLoadMoreProducts = () => {},
-  EmptyStateComponent,
+  EmptyStateComponent = (
+    <EmptyState title="Sorry, we couldn’t find any results" />
+  ),
 }) => {
-  const { t } = useGlobalTranslation("translation");
   const isTablet = useViewport(0, 768);
   const {
     handleAddToCart,
@@ -93,7 +92,7 @@ const ProductListing = ({
       {isRunningOnClient() && isPageLoading ? (
         <div className={styles.loader}></div>
       ) : productList?.length === 0 && !(isPageLoading || isPageLoading) ? (
-        <div>{EmptyStateComponent ? EmptyStateComponent : <EmptyState title={t('resource.common.sorry_we_couldnt_find_any_results')} />}</div>
+        <div>{EmptyStateComponent}</div>
       ) : (
         <>
           <div className={styles.mobileHeader}>
@@ -104,12 +103,12 @@ const ProductListing = ({
                   onClick={onFilterModalBtnClick}
                 >
                   <FilterIcon />
-                  <span>{t("resource.common.filter")}</span>
+                  <span>Filter</span>
                 </button>
               )}
               <button onClick={onSortModalBtnClick}>
                 <SortIcon />
-                <span>{t("resource.facets.sort_by")}</span>
+                <span>Sort By</span>
               </button>
             </div>
             <div className={styles.headerRight}>
@@ -120,7 +119,7 @@ const ProductListing = ({
                 onClick={() =>
                   onColumnCountUpdate({ screen: "mobile", count: 1 })
                 }
-                title={t("resource.product.mobile_grid_one")}
+                title="Mobile grid one"
               >
                 <OneGridMobIcon />
               </button>
@@ -131,7 +130,7 @@ const ProductListing = ({
                 onClick={() =>
                   onColumnCountUpdate({ screen: "mobile", count: 2 })
                 }
-                title={t("resource.product.mobile_grid_two")}
+                title="Mobile grid two"
               >
                 <TwoGridMobIcon />
               </button>
@@ -142,7 +141,7 @@ const ProductListing = ({
                 onClick={() =>
                   onColumnCountUpdate({ screen: "tablet", count: 2 })
                 }
-                title={t("resource.product.tablet_grid_two")}
+                title="Tablet grid two"
               >
                 <TwoGridIcon />
               </button>
@@ -153,7 +152,7 @@ const ProductListing = ({
                 onClick={() =>
                   onColumnCountUpdate({ screen: "tablet", count: 3 })
                 }
-                title={t("resource.product.tablet_grid_four")}
+                title="Tablet grid four"
               >
                 <FourGridIcon />
               </button>
@@ -170,13 +169,13 @@ const ProductListing = ({
               >
                 <div className={styles.filterHeaderContainer}>
                   <div className={styles.filterHeader}>
-                    <h4 className={styles.title}>{t("resource.product.filters_caps")}</h4>
+                    <h4 className={styles.title}>FILTERS</h4>
                     {!isResetFilterDisable && (
                       <button
                         className={styles.resetBtn}
                         onClick={onResetFiltersClick}
                       >
-                        {t("resource.facets.reset_caps")}
+                        RESET
                       </button>
                     )}
                   </div>
@@ -201,7 +200,7 @@ const ProductListing = ({
                   {title && <h1 className={styles.title}>{title}</h1>}
                   {isProductCountDisplayed && (
                     <span className={styles.productCount}>
-                      {`${productCount} ${productCount > 1 ? t("resource.common.items") : t("resource.common.item")}`}
+                      {`${productCount} ${productCount > 1 ? "items" : "item"}`}
                     </span>
                   )}
                 </div>
@@ -214,7 +213,7 @@ const ProductListing = ({
                     onClick={() =>
                       onColumnCountUpdate({ screen: "desktop", count: 2 })
                     }
-                    title={t("resource.product.desktop_grid_two")}
+                    title="Desktop grid two"
                   >
                     <TwoGridIcon />
                   </button>
@@ -225,7 +224,7 @@ const ProductListing = ({
                     onClick={() =>
                       onColumnCountUpdate({ screen: "desktop", count: 4 })
                     }
-                    title={t("resource.product.desktop_grid_four")}
+                    title="Desktop grid four"
                   >
                     <FourGridIcon />
                   </button>
@@ -240,7 +239,7 @@ const ProductListing = ({
                     to={banner?.redirectLink}
                   >
                     <FyImage
-                      alt={t("resource.product.desktop_banner_alt")}
+                      alt="desktop banner"
                       src={banner?.desktopBanner}
                       customClass={styles.banner}
                       isFixedAspectRatio={false}
@@ -259,7 +258,7 @@ const ProductListing = ({
                     to={banner?.redirectLink}
                   >
                     <FyImage
-                      alt={t("resource.product.mobile_banner")}
+                      alt="mobile banner"
                       src={banner?.mobileBanner}
                       customClass={styles.banner}
                       isFixedAspectRatio={false}
@@ -299,7 +298,6 @@ const ProductListing = ({
                         followedIdList,
                         listingPrice,
                         showAddToCart,
-                        actionButtonText: actionButtonText ?? t('resource.common.add_to_cart'),
                         onWishlistClick,
                         isImageFill,
                         showImageOnHover,
@@ -325,7 +323,6 @@ const ProductListing = ({
                       followedIdList,
                       listingPrice,
                       showAddToCart,
-                      actionButtonText: actionButtonText ?? t('resource.common.add_to_cart'),
                       onWishlistClick,
                       isImageFill,
                       showImageOnHover,
@@ -350,7 +347,7 @@ const ProductListing = ({
                       tabIndex="0"
                       disabled={isProductLoading}
                     >
-                      {t("resource.facets.view_more")}
+                      View More
                     </button>
                   </div>
                 )}
@@ -366,7 +363,6 @@ const ProductListing = ({
           {isScrollTop && <ScrollTop />}
           {showAddToCart && (
             <>
-           { isAddToCartOpen &&
               <Modal
                 isOpen={isAddToCartOpen}
                 hideHeader={!isTablet}
@@ -385,7 +381,6 @@ const ProductListing = ({
                   globalConfig={globalConfig}
                 />
               </Modal>
-            }
               <SizeGuide
                 isOpen={showSizeGuide}
                 onCloseDialog={handleCloseSizeGuide}
@@ -417,7 +412,6 @@ function ProductGrid({
   isImageFill = false,
   showImageOnHover = false,
   showAddToCart = false,
-  actionButtonText,
   imageBackgroundColor = "",
   imagePlaceholder = "",
   onWishlistClick = () => {},
@@ -457,7 +451,6 @@ function ProductGrid({
               WishlistIconComponent={WishlistIconComponent}
               followedIdList={followedIdList}
               showAddToCart={showAddToCart}
-              actionButtonText={actionButtonText ?? t('resource.common.add_to_cart')}
               onWishlistClick={onWishlistClick}
               isImageFill={isImageFill}
               showImageOnHover={showImageOnHover}

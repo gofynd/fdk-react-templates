@@ -15,12 +15,9 @@
   position: fixed;
   top: calc(var(--headerHeight) + 69px);
   z-index: 1;
-  inset-inline-end: 50%;
+  right: 50%;
   z-index: 1;
   transform: translateX(50%);
-  [dir="rtl"] & {
-    transform: translateX(-50%);
-  }
   .scrollTopText {
     .captionNormal();
   }
@@ -42,7 +39,7 @@
   @media @desktop {
     justify-content: center;
     top: unset;
-    inset-inline-end: 40px;
+    right: 40px;
     bottom: 40px;
     width: 40px;
     height: 40px;

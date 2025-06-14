@@ -11,27 +11,16 @@
  */
 
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import * as styles from "./order-shipment.less";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
-import { convertUTCDateToLocalDate, formatLocale } from "../../helper/utils";
-import {
-  useNavigate,
-  useGlobalStore,
-  useFPI,
-  useGlobalTranslation
-} from "fdk-core/utils";
+import { convertUTCDateToLocalDate } from "../../helper/utils";
 
 function OrderShipment({
   orderInfo,
-  onBuyAgainClick = () => { },
+  onBuyAgainClick = () => {},
   isBuyAgainEligible,
-  availableFOCount,
 }) {
-  const { t } = useGlobalTranslation("translation");
-  const fpi = useFPI();
-  const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
-  const locale = language?.locale
   const [isOpen, setIsOpen] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [selectedShipment, setSelectedShipment] = useState("");
@@ -45,7 +34,7 @@ function OrderShipment({
   }, [params?.orderId]);
 
   const getTime = (time) => {
-    return convertUTCDateToLocalDate(time, "", formatLocale(locale, countryCode));
+    return convertUTCDateToLocalDate(time);
   };
   const clickopen = () => {
     setIsOpen(!isOpen);
@@ -76,14 +65,14 @@ function OrderShipment({
     return [];
   };
   const getTotalItems = (items) => {
-    return items === 1 ? `${items} ${t("resource.common.item_simple_text")}` : `${items} ${t("resource.common.item_simple_text_plural")}`;
+    return items === 1 ? `${items} Item` : `${items} Items`;
   };
   const getTotalPieces = (pieces) => {
     const total = pieces.reduce((pre, curr) => {
       return pre + curr.quantity;
     }, 0);
 
-    return total === 1 ? `${total} ${t("resource.common.single_piece")}` : `${total} ${t("resource.common.multiple_piece")}`;
+    return total === 1 ? `${total} Piece` : `${total} Pieces`;
   };
 
   return (
@@ -122,7 +111,7 @@ function OrderShipment({
                   {item?.bags?.length > 1 && (
                     <div id="total-item">
                       +{item?.bags?.length - 1 + " "}
-                      {t("resource.facets.more")}
+                      more
                     </div>
                   )}
                 </div>
@@ -132,7 +121,7 @@ function OrderShipment({
                       <div>
                         {getProductsName(item?.bags)?.[0]} +
                         {item.bags.length - 1 + " "}
-                        {t("resource.facets.more")}
+                        more
                       </div>
                     ) : (
                       <div>{getProductsName(item?.bags)?.[0]}</div>
@@ -141,15 +130,8 @@ function OrderShipment({
                   <div
                     className={`${styles.shipmentId} ${styles.uktLinks} ${styles.boldls}`}
                   >
-                    {t("resource.common.shipment")}: {item?.shipment_id}
+                    Shipment: {item?.shipment_id}
                   </div>
-                  {availableFOCount > 1 && item?.fulfillment_option?.name && (
-                    <div
-                      className={`${styles.shipmentId} ${styles.uktLinks} ${styles.boldls}`}
-                    >
-                      {item?.fulfillment_option?.name}
-                    </div>
-                  )}
                   <div className={`${styles.shipmentStats} ${styles.light}`}>
                     <span>{getTotalItems(item?.bags?.length)}</span>
                     <span>{` | `}</span>
@@ -162,7 +144,7 @@ function OrderShipment({
                     <div
                       className={`${styles.shipmentBrands} ${styles.uktLinks}`}
                     >
-                      <span className={`${styles.bold}`}>{t("resource.common.brand")}</span> :
+                      <span className={`${styles.bold}`}>Brand</span> :
                       {item?.brand_name}
                     </div>
                   )}
@@ -181,12 +163,12 @@ function OrderShipment({
                 className={`${styles.reorderIcon}`}
                 svgSrc="re-order"
               />
-              {t("resource.common.buy_again")}
+              BUY AGAIN
             </button>
           </div>
         )}
       </div>
-    </div >
+    </div>
   );
 }
 

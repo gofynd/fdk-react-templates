@@ -4,14 +4,12 @@ import * as styles from "./filter-list.less";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import CustomRangeSlider from "../../../../components/range-slider/range-slider";
 import { isRunningOnClient } from "../../../../helper/utils";
-import { useGlobalTranslation } from "fdk-core/utils";
 
 function FilterList({
   filter,
   isCollapsedView = true,
-  onFilterUpdate = () => { },
+  onFilterUpdate = () => {},
 }) {
-  const { t } = useGlobalTranslation("translation");
   const [searchText, setSearchText] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
@@ -77,7 +75,7 @@ function FilterList({
     };
 
     getFilteredItems(searchText).forEach((item) => {
-      const firstChar = item?.display?.[0]?.toUpperCase();
+      const firstChar = item.display[0].toUpperCase();
       if (!groupedFilterValues[firstChar]) {
         groupedFilterValues["#"].push(item);
       } else {
@@ -135,8 +133,9 @@ function FilterList({
 
   return (
     <div
-      className={`${styles["filter__list"]} ${!filter.isOpen ? styles.open : ""
-        }`}
+      className={`${styles["filter__list"]} ${
+        !filter.isOpen ? styles.open : ""
+      }`}
     >
       {/* Multivalued filter */}
       {filter.key.kind === "multivalued" && (
@@ -148,7 +147,7 @@ function FilterList({
               <input
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
-                placeholder={t("resource.facets.search")}
+                placeholder="Search"
                 className={`${styles.text}`}
               />
               <SvgWrapper
@@ -217,7 +216,7 @@ function FilterList({
                   <div
                     className={`${styles["filter__item"]} ${styles.flexCenter} ${styles["caption-normal"]}`}
                   >
-                    {t("resource.common.empty_state")}
+                    No Result Found
                   </div>
                 </li>
               )}
@@ -230,12 +229,13 @@ function FilterList({
               onClick={expandFilter}
             >
               <span className={styles.label}>
-                {isExpanded && <span>{t("resource.facets.view_less")}</span>}
-                {!isExpanded && <span>{t("resource.facets.view_more")}</span>}
+                {isExpanded && <span>View Less</span>}
+                {!isExpanded && <span>View More</span>}
               </span>
               <SvgWrapper
-                className={`${styles["arrow-icon"]} ${isExpanded ? styles.expanded : ""
-                  }`}
+                className={`${styles["arrow-icon"]} ${
+                  isExpanded ? styles.expanded : ""
+                }`}
                 svgSrc="arrow-down"
               ></SvgWrapper>
             </div>
@@ -289,9 +289,11 @@ function FilterList({
                 </div>
 
                 <div
-                  className={`${styles["filter__item--value"]} ${styles["caption-normal"]
-                    } ${filter.values[0].is_selected == true ? styles.active : ""
-                    }`}
+                  className={`${styles["filter__item--value"]} ${
+                    styles["caption-normal"]
+                  } ${
+                    filter.values[0].is_selected == true ? styles.active : ""
+                  }`}
                 >
                   {filter.values[0].display}
                 </div>
@@ -316,7 +318,7 @@ function FilterList({
               <input
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
-                placeholder={t("resource.facets.search")}
+                placeholder="Search"
                 className={styles["search__input"]}
               />
             </div>
@@ -324,8 +326,9 @@ function FilterList({
               {Object.keys(groupedValues).map((alphabet, index) => (
                 <li
                   key={`alphabet-${index}`}
-                  className={`${groupedValues[alphabet].length === 0 ? styles.disabled : ""
-                    }`}
+                  className={`${
+                    groupedValues[alphabet].length === 0 ? styles.disabled : ""
+                  }`}
                 >
                   <a href={`#${alphabet}`}>{alphabet}</a>
                 </li>
@@ -387,7 +390,7 @@ function FilterList({
                 </React.Fragment>
               ))
             ) : (
-              <li className={styles.emptyMessage}>{t("resource.common.empty_state")}</li>
+              <li className={styles.emptyMessage}>No Result Found</li>
             )}
           </ul>
         </div>

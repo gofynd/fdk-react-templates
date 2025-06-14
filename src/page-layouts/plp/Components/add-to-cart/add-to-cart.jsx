@@ -7,16 +7,9 @@ import FyButton from "../../../../components/core/fy-button/fy-button";
 import DeliveryInfo from "../delivery-info/delivery-info";
 import QuantityControl from "../../../../components/quantity-control/quantity-control";
 import FyDropdown from "../../../../components/core/fy-dropdown/fy-dropdown";
-import {
-  currencyFormat,
-  isEmptyOrNull,
-  formatLocale,
-} from "../../../../helper/utils";
-import RadioIcon from "../../../../assets/images/radio";
-import TruckIcon from "../../../../assets/images/truck-icon.svg";
+import { currencyFormat, isEmptyOrNull } from "../../../../helper/utils";
 import CartIcon from "../../../../assets/images/cart.svg";
 import BuyNowIcon from "../../../../assets/images/buy-now.svg";
-import { useGlobalTranslation, useGlobalStore, useFPI } from "fdk-core/utils";
 
 const AddToCart = ({
   productData = {},
@@ -39,15 +32,7 @@ const AddToCart = ({
   minCartQuantity,
   maxCartQuantity,
   incrementDecrementUnit,
-  fulfillmentOptions = [],
-  currentFO = {},
-  setCurrentFO = () => {},
-  availableFOCount,
 }) => {
-  const fpi = useFPI();
-  const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
-  const locale = language?.locale;
-  const { t } = useGlobalTranslation("translation");
   const { product = {}, productPrice = {} } = productData;
 
   const { button_options, disable_cart, show_price, show_quantity_control } =
@@ -75,26 +60,16 @@ const AddToCart = ({
     const priceDataDefault = sizes?.price;
     if (selectedSize && !isEmptyOrNull(productPrice?.price)) {
       if (productPrice?.set) {
-        return currencyFormat(
-          price_per_piece[key], 
-          productPrice?.price?.currency_symbol || "", 
-          formatLocale(locale, countryCode, true)) || "";
+        return currencyFormat(price_per_piece[key]) || "";
       }
       const price = productPrice?.price || "";
-      return (
-        currencyFormat(
-          price?.[key],
-          price?.currency_symbol,
-          formatLocale(locale, countryCode, true)
-        ) || ""
-      );
+      return currencyFormat(price?.[key], price?.currency_symbol) || "";
     }
     if (selectedSize && priceDataDefault) {
       return (
         currencyFormat(
           priceDataDefault?.[key]?.min,
-          priceDataDefault?.[key]?.currency_symbol,
-          formatLocale(locale, countryCode, true)
+          priceDataDefault?.[key]?.currency_symbol
         ) || ""
       );
     }
@@ -105,8 +80,7 @@ const AddToCart = ({
           } - ${currencyFormat(priceDataDefault?.[key]?.max) || ""}`
         : currencyFormat(
             priceDataDefault?.[key]?.max,
-            priceDataDefault?.[key]?.currency_symbol,
-            formatLocale(locale, countryCode, true)
+            priceDataDefault?.[key]?.currency_symbol
           ) || "";
     }
   };
@@ -127,24 +101,6 @@ const AddToCart = ({
       ?.filter((size) => size?.quantity === 0 && !isMto)
       ?.map((size) => size?.value);
   }, [sizes?.sizes]);
-
-  const getDeliveryDate = (deliveryPromise) => {
-    const options = {
-      weekday: "short",
-      month: "short",
-      day: "numeric",
-      timeZone: "UTC",
-    };
-
-    const { max } = deliveryPromise || {};
-
-    if (!max) return false;
-
-    const dateFormatter = new Intl.DateTimeFormat(undefined, options);
-    const maxDate = dateFormatter.format(new Date(max));
-
-    return maxDate;
-  };
 
   return (
     <div className={styles.productDescContainer}>
@@ -219,9 +175,7 @@ const AddToCart = ({
                 <div className={styles.sizeHeaderContainer}>
                   <p className={`${styles.b2} ${styles.sizeSelection__label}`}>
                     <span>
-                      {t("resource.product.style")}:{" "}
-                      {Boolean(selectedSize) &&
-                        `${t("resource.common.size")} (${selectedSize})`}
+                      Style: {Boolean(selectedSize) && `Size (${selectedSize})`}
                     </span>
                   </p>
                   {pageConfig?.show_size_guide &&
@@ -238,7 +192,7 @@ const AddToCart = ({
                           />
                         }
                       >
-                        {t("resource.common.size_guide")}
+                        SIZE GUIDE
                       </FyButton>
                     )}
                 </div>
@@ -280,8 +234,8 @@ const AddToCart = ({
                   options={sizes?.sizes || []}
                   value={selectedSize}
                   onChange={onSizeSelection}
-                  placeholder={t("resource.common.select_size_caps")}
-                  valuePrefix={`${t("resource.common.size")}:`}
+                  placeholder="SELECT SIZE"
+                  valuePrefix="Size :"
                   dataKey="value"
                   containerClassName={styles.dropdownContainer}
                   dropdownListClassName={styles.dropdown}
@@ -304,65 +258,22 @@ const AddToCart = ({
                         />
                       }
                     >
-                      {t("resource.common.size_guide")}
+                      SIZE GUIDE
                     </FyButton>
                   )}
               </div>
             )}
             {sizeError && (
               <div className={styles.sizeError}>
-                {t("resource.product.please_select_size")}
+                Please select size to continue
               </div>
             )}
             {!isHyperlocal && sizes?.sellable && selectedSize && (
               <DeliveryInfo {...deliverInfoProps} />
             )}
 
-            {selectedSize &&
-              !!fulfillmentOptions.length &&
-              availableFOCount > 1 && (
-                <div className={styles.fulfillmentWrapper}>
-                  <div className={styles.foList}>
-                    {fulfillmentOptions.map((foItem, index) => (
-                      <div
-                        key={index}
-                        className={styles.fulfillmentOption}
-                        onClick={() =>
-                          setCurrentFO(foItem?.fulfillment_option || {})
-                        }
-                      >
-                        {fulfillmentOptions.length === 1 ? (
-                          <TruckIcon className={styles.fulfillmentOption} />
-                        ) : (
-                          <RadioIcon
-                            checked={
-                              foItem?.fulfillment_option?.slug ===
-                              currentFO?.slug
-                            }
-                          />
-                        )}
-
-                        <div className={styles.foDetails}>
-                          {!!getDeliveryDate(foItem?.delivery_promise) && (
-                            <p className={styles.promiseLabel}>
-                              Get it by{" "}
-                              {getDeliveryDate(foItem?.delivery_promise)}
-                            </p>
-                          )}
-                          <p className={styles.foLabel}>
-                            {foItem?.fulfillment_option?.name}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
             <div className={styles.viewMore}>
-              <span onClick={handleViewMore}>
-                {t("resource.product.view_full_details")}
-              </span>
+              <span onClick={handleViewMore}>View Full details</span>
             </div>
           </div>
           {/* ---------- Buy Now and Add To Cart ---------- */}
@@ -409,7 +320,7 @@ const AddToCart = ({
                         }
                         startIcon={<CartIcon className={styles.cartIcon} />}
                       >
-                        {t("resource.cart.add_to_cart_caps")}
+                        ADD TO CART
                       </FyButton>
                     )}
                   </>
@@ -424,14 +335,14 @@ const AddToCart = ({
                     }
                     startIcon={<BuyNowIcon className={styles.cartIcon} />}
                   >
-                    {t("resource.common.buy_now_caps")}
+                    BUY NOW
                   </FyButton>
                 )}
               </>
             )}
             {!sizes?.sellable && (
               <FyButton variant="outlined" disabled size="medium">
-                {t("resource.common.product_not_available")}
+                PRODUCT NOT AVAILABLE
               </FyButton>
             )}
           </div>
