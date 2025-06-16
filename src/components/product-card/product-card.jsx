@@ -39,11 +39,7 @@ import FyImage from "../core/fy-image/fy-image";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
 import * as styles from "./product-card.less";
 import FyButton from "../core/fy-button/fy-button";
-import {
-  useGlobalStore,
-  useFPI,
-  useGlobalTranslation
-} from "fdk-core/utils";
+import { useGlobalStore, useFPI, useGlobalTranslation } from "fdk-core/utils";
 
 const ProductCard = ({
   product,
@@ -73,9 +69,9 @@ const ProductCard = ({
   ),
   actionButtonText,
   followedIdList = [],
-  onWishlistClick = () => { },
-  handleAddToCart = () => { },
-  onRemoveClick = () => { },
+  onWishlistClick = () => {},
+  handleAddToCart = () => {},
+  onRemoveClick = () => {},
   centerAlign = false,
   showAddToCart = false,
   showBadge = true,
@@ -97,32 +93,35 @@ const ProductCard = ({
     switch (listingPrice) {
       case "min":
         price = currencyFormat(
-          priceDetails.min, 
-          priceDetails.currency_symbol, 
-          formatLocale(locale, countryCode, true));
+          priceDetails.min,
+          priceDetails.currency_symbol,
+          formatLocale(locale, countryCode, true)
+        );
         break;
       case "max":
         price = currencyFormat(
-          priceDetails.max, 
-          priceDetails.currency_symbol, 
-          formatLocale(locale, countryCode, true));
+          priceDetails.max,
+          priceDetails.currency_symbol,
+          formatLocale(locale, countryCode, true)
+        );
         break;
       case "range":
         price =
           priceDetails.min !== priceDetails.max
             ? `${currencyFormat(
-              priceDetails.min,
-              priceDetails.currency_symbol,
-              formatLocale(locale, countryCode, true)
-            )} - ${currencyFormat(
-              priceDetails.max,
-              priceDetails.currency_symbol,
-              formatLocale(locale, countryCode, true)
-            )}`
+                priceDetails.min,
+                priceDetails.currency_symbol,
+                formatLocale(locale, countryCode, true)
+              )} - ${currencyFormat(
+                priceDetails.max,
+                priceDetails.currency_symbol,
+                formatLocale(locale, countryCode, true)
+              )}`
             : currencyFormat(
-              priceDetails.min, 
-              priceDetails.currency_symbol, 
-              formatLocale(locale, countryCode, true));
+                priceDetails.min,
+                priceDetails.currency_symbol,
+                formatLocale(locale, countryCode, true)
+              );
         break;
       default:
         break;
@@ -155,7 +154,7 @@ const ProductCard = ({
     .slice(0, 3);
 
   const hasDiscount =
-    getListingPrice("effective") !== getListingPrice("marked"); 
+    getListingPrice("effective") !== getListingPrice("marked");
 
   const isFollowed = useMemo(() => {
     return !!followedIdList?.includes(product?.uid);
@@ -187,9 +186,11 @@ const ProductCard = ({
 
   return (
     <div
-      className={`${styles.productCard} ${!product.sellable ? styles.disableCursor : ""
-        } ${styles[customClass[0]]} ${styles[customClass[1]]} ${styles[customClass[2]]
-        } ${styles.animate} ${gridClass} ${isSlider ? styles.sliderCard : ""}`}
+      className={`${styles.productCard} ${
+        !product.sellable ? styles.disableCursor : ""
+      } ${styles[customClass[0]]} ${styles[customClass[1]]} ${
+        styles[customClass[2]]
+      } ${styles.animate} ${gridClass} ${isSlider ? styles.sliderCard : ""}`}
     >
       <div className={styles.imageContainer}>
         {!isMobile && showImageOnHover && hoverImageUrl && (
@@ -285,7 +286,7 @@ const ProductCard = ({
               )}
               {product.discount && (
                 <span
-                  className={`${styles["productPrice--discount"]} ${styles.captionNormal} `}
+                  className={`${styles["productPrice--discount"]} ${styles.captionNormal}   ${centerAlign ? styles["productPrice--textCenter"] : ""}`}
                 >
                   ({product.discount?.toString().toLowerCase()})
                 </span>
@@ -326,7 +327,7 @@ const ProductCard = ({
             className={styles.addToCart}
             onClick={handleAddToCartClick}
           >
-            {actionButtonText ?? t('resource.common.add_to_cart')}
+            {actionButtonText ?? t("resource.common.add_to_cart")}
           </FyButton>
         )}
       </div>
