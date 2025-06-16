@@ -17,9 +17,9 @@ function Login({
   showLoginToggleButton = true,
   isRegisterEnabled = true,
   registerButtonLabel,
-  onLoginToggleClick = () => { },
-  onRegisterButtonClick = () => { },
-  onLoginFormSubmit = () => { },
+  onLoginToggleClick = () => {},
+  onRegisterButtonClick = () => {},
+  onLoginFormSubmit = () => {},
 
   mobileInfo,
   submittedMobile,
@@ -35,6 +35,7 @@ function Login({
   isForgotPassword,
   passwordError,
   onForgotPasswordClick,
+  getOtpLoading,
 }) {
   const { t } = useGlobalTranslation("translation");
   return (
@@ -60,8 +61,20 @@ function Login({
                 />
               </FDKLink>
             )}
-            {title && <h1 className={styles.loginTitle}>{title|| t("resource.auth.login.login")}</h1>}
-            {subTitle && <p className={styles.loginSubText || t("resource.auth.login.login_to_shop")}>{subTitle}</p>}
+            {title && (
+              <h1 className={styles.loginTitle}>
+                {title || t("resource.auth.login.login")}
+              </h1>
+            )}
+            {subTitle && (
+              <p
+                className={
+                  styles.loginSubText || t("resource.auth.login.login_to_shop")
+                }
+              >
+                {subTitle}
+              </p>
+            )}
           </>
         )}
         {isPassword && (
@@ -88,6 +101,7 @@ function Login({
               onOtpSubmit,
               onResendOtpClick,
               onLoginFormSubmit,
+              getOtpLoading,
             }}
           />
         )}
@@ -100,7 +114,9 @@ function Login({
               )}
               {isRegisterEnabled && (
                 <LoginRegisterToggle
-                  label={registerButtonLabel || t("resource.common.go_to_register")}
+                  label={
+                    registerButtonLabel || t("resource.common.go_to_register")
+                  }
                   onClick={onRegisterButtonClick}
                 />
               )}

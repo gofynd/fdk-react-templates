@@ -19,6 +19,7 @@ function LoginOtp({
   onLoginFormSubmit = () => {},
   onOtpSubmit = () => {},
   onResendOtpClick = () => {},
+  getOtpLoading,
 }) {
   const { t } = useGlobalTranslation("translation");
   const { handleSubmit, control, getValues, reset, setValue } = useForm({
@@ -63,7 +64,11 @@ function LoginOtp({
               />
             )}
           />
-          <button className={styles.sendOtpBtn} type="submit">
+          <button
+            className={styles.sendOtpBtn}
+            type="submit"
+            disabled={getOtpLoading}
+          >
             {t("resource.auth.login.get_otp")}
           </button>
         </form>
@@ -77,9 +82,8 @@ function LoginOtp({
           onResendOtpClick={onResendOtpClick}
           onChangeButton={onChangeButton}
         />
-      )
-      }
-    </div >
+      )}
+    </div>
   );
 }
 
@@ -146,7 +150,9 @@ function OtpForm({
         className={styles.loginInputGroup}
         onSubmit={handleSubmit(onOtpSubmit)}
       >
-        <h3 className={styles.otpTitle}>{t("resource.localization.verify_account")}</h3>
+        <h3 className={styles.otpTitle}>
+          {t("resource.localization.verify_account")}
+        </h3>
         <p className={styles.otpSentMsg}>
           {`${t("resource.common.otp_sent_to")} ${submittedMobile}`}
           <button
@@ -163,7 +169,8 @@ function OtpForm({
             className={`${styles.loginInputTitle} ${errors?.root || errors?.mobileOtp ? styles.error : ""}`}
             htmlFor={otpInputId}
           >
-            {t("resource.common.enter_otp")} <span className={`${styles.formReq}`}>*</span>
+            {t("resource.common.enter_otp")}{" "}
+            <span className={`${styles.formReq}`}>*</span>
           </label>
           <input
             id={otpInputId}
@@ -178,7 +185,10 @@ function OtpForm({
             }}
             className={`${styles.otpInput} ${errors?.root || errors?.mobileOtp ? styles.error : ""}`}
             {...register("mobileOtp", {
-              required: { message: t("resource.common.enter_valid_otp"), value: true },
+              required: {
+                message: t("resource.common.enter_valid_otp"),
+                value: true,
+              },
               maxLength: 4,
             })}
           />
@@ -192,7 +202,7 @@ function OtpForm({
         <button className={styles.verifyOtpBtn} type="submit">
           {t("resource.common.continue")}
         </button>
-      </form >
+      </form>
       <button
         className={styles.resendOtpBtn}
         onClick={resendOtp}
