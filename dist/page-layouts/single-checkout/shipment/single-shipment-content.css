@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 18px;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 1.5;
+    line-height: 24px;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .single-shipment-content__caption-medium____fLHP,
 .single-shipment-content__captionMedium___lqQPn {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .single-shipment-content__caption-semi-bold___V3P3n,
 .single-shipment-content__captionSemiBold___rwvuu {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -356,11 +356,6 @@ h5,
     padding: 16px;
   }
 }
-@media only screen and (max-width: 768px) {
-  .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF {
-    flex-direction: column;
-  }
-}
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF .single-shipment-content__headerLeft___ffG20 {
   display: flex;
   padding: 4px 12px 4px 0px;
@@ -396,23 +391,12 @@ h5,
   gap: 8px;
   align-items: center;
 }
-@media only screen and (max-width: 768px) {
-  .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF .single-shipment-content__deliveryDateWrapper___1R8Nn {
-    gap: 6px;
-  }
-}
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF .single-shipment-content__deliveryDateWrapper___1R8Nn .single-shipment-content__shippingLogo____xKH7 {
   height: 20px;
   width: 20px;
 }
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF .single-shipment-content__deliveryDateWrapper___1R8Nn .single-shipment-content__shippingLogo____xKH7 svg path {
   fill: var(--successText, #1c958f);
-}
-.single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF .single-shipment-content__deliveryDateWrapper___1R8Nn .single-shipment-content__foName___vTtLP {
-  color: var(--textLabel, #7d7676);
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 140%;
 }
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF .single-shipment-content__deliveryDateWrapper___1R8Nn .single-shipment-content__deliveryDate___qOrq4 {
   font-weight: 600;
@@ -749,7 +733,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 18px;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -758,7 +742,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 1.5;
+    line-height: 24px;
   }
 }
 h5,
@@ -825,7 +809,7 @@ h5,
 .free-gift-item__caption-medium___J3sTr,
 .free-gift-item__captionMedium___UxDCd {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -838,7 +822,7 @@ h5,
 .free-gift-item__caption-semi-bold___rj6i6,
 .free-gift-item__captionSemiBold___TCDo6 {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
