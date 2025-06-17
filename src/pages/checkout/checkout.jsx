@@ -32,7 +32,6 @@ function Checkout({
   cartCouponProps,
   cartCommentProps,
   buybox = {},
-  availableFOCount,
   isGuestUser = false,
 }) {
   const [cancelQrPayment, setCancelQrPayment] = useState(null);
@@ -67,7 +66,6 @@ function Checkout({
           isHyperlocal={isHyperlocal}
           convertHyperlocalTat={convertHyperlocalTat}
           buybox={buybox}
-          availableFOCount={availableFOCount}
           totalValue={priceFormatCurrencySymbol(
             payment?.getCurrencySymbol,
             payment?.getTotalValue()

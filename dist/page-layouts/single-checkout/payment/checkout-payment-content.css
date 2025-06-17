@@ -334,84 +334,8 @@ h5,
     display: none !important;
   }
 }
-.card_number_div, .card_exp_month_div, .card_exp_year_div, .security_code_div, .name_on_card_div {
-  height: 48px;
-  border: 1px solid var(--dividerStokes);
-  border-radius: 4px;
-  color: var(--textBody, #3c3131);
-  overflow: hidden;
-  padding-left: 16px;
-  padding-right: 16px;
-  outline: none;
-  margin-top: 16px;
-}
-.security_code_div {
-  width: 103px;
-}
-.card_exp_month_div, .card_exp_year_div {
-  width: 25%;
-}
-.security_code_div {
-  width: 50%;
-}
-@media screen and (max-width: 768px) {
-  .card_number_div, .card_exp_month_div, .card_exp_year_div, .security_code_div, .name_on_card_div {
-    height: 48px;
-  }
-}
-.checkout-payment-content__cardDateCvvJuspayWrapper____0KQj {
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-}
-.checkout-payment-content__checkbox___ci4x4 {
-  accent-color: var(--buttonPrimary);
-  height: 13px;
-  width: 13px;
-  cursor: pointer;
-}
-.checkout-payment-content__checkboxWrapper___ohDrw {
-  display: flex;
-  justify-content: start;
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-  margin-top: 16px;
-}
-.checkout-payment-content__rbiGuidelines___jmtpW {
-  display: flex;
-  align-items: center;
-  margin-top: 16px;
-}
-@media only screen and (max-width: 480px) {
-  .checkout-payment-content__rbiGuidelines___jmtpW {
-    margin-bottom: 24px;
-  }
-}
-.checkout-payment-content__rbiGuidelines___jmtpW input:checked:before {
-  background-color: var(--buttonPrimary);
-}
-.checkout-payment-content__rbiGuidelines___jmtpW .checkout-payment-content__rbiGuidelinesText___N6rOU {
-  display: flex;
-  font-family: inherit;
-  font-weight: 400;
-  font-size: 12px;
-  color: #1f1f1f;
-  margin: 0 8px;
-  align-self: center;
-  line-height: 140%;
-}
-@media only screen and (max-width: 480px) {
-  .checkout-payment-content__marginBottom___qTP6J {
-    margin-bottom: 24px;
-  }
-}
 .checkout-payment-content__container___HusGh {
   background: var(--pageBackground, #f8f8f8);
-}
-.checkout-payment-content__container___HusGh.checkout-payment-content__unsetBorder___iXIU7 {
-  border: unset;
-  padding-top: 0;
 }
 @media only screen and (min-width: 769px) {
   .checkout-payment-content__container___HusGh {
@@ -547,7 +471,6 @@ h5,
   font-size: 14px;
   font-weight: 500;
   line-height: 140%;
-  height: 18px;
 }
 @media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__link___ZIR_i .checkout-payment-content__modeName___oABQ2 {
@@ -935,11 +858,6 @@ h5,
   display: flex;
   flex-direction: column;
 }
-@media only screen and (max-width: 480px) {
-  .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk.checkout-payment-content__addPaddingBottom___Qc5bl {
-    padding-bottom: 24px;
-  }
-}
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardInputWrapper___YqlSP {
   display: flex;
   flex-direction: column;
@@ -1091,12 +1009,12 @@ h5,
   margin-bottom: 16px;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__saveNewCard___cPi2y {
-  padding: 16px;
-  border-radius: var(--buttonRadius, 0px);
+  padding: 8px;
+  border-radius: 5px;
   background-color: var(--primaryColor);
   border: none;
   width: 100%;
-  margin-top: 16px;
+  margin-top: 24px;
   font-weight: 600;
   font-size: 14px;
   text-transform: uppercase;
@@ -1105,12 +1023,12 @@ h5,
   line-height: 140%;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__saveNewCard___cPi2y[disabled] {
-  padding: 16px;
-  border-radius: var(--buttonRadius, 0px);
+  padding: 8px;
+  border-radius: 5px;
   background-color: var(--primaryColor);
   border: none;
   width: 100%;
-  margin-top: 16px;
+  margin-top: 24px;
   font-weight: 600;
   font-size: 14px;
   text-transform: uppercase;
@@ -1281,7 +1199,7 @@ h5,
 .checkout-payment-content__container___HusGh .checkout-payment-content__modeOption___onKtJ .checkout-payment-content__modeItemWrapper___IlJf3 .checkout-payment-content__modeItem___M6Obf .checkout-payment-content__moreModeArrow___yBQbk {
   transform: rotate(270deg);
 }
-[dir="rtl"] .checkout-payment-content__container___HusGh .checkout-payment-content__modeOption___onKtJ .checkout-payment-content__modeItemWrapper___IlJf3 .checkout-payment-content__modeItem___M6Obf .checkout-payment-content__moreModeArrow___yBQbk {
+[dir='rtl'] .checkout-payment-content__container___HusGh .checkout-payment-content__modeOption___onKtJ .checkout-payment-content__modeItemWrapper___IlJf3 .checkout-payment-content__modeItem___M6Obf .checkout-payment-content__moreModeArrow___yBQbk {
   transform: rotate(90deg);
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__modeOption___onKtJ .checkout-payment-content__modeItemWrapper___IlJf3 .checkout-payment-content__modeItem___M6Obf .checkout-payment-content__otherModeArrow___ulm30 {
@@ -1358,12 +1276,6 @@ h5,
   align-items: center;
   border: 1px solid var(--dividerStokes);
   border-radius: 100px;
-  width: 38px;
-  height: 38px;
-  padding: 8px 4px;
-}
-.checkout-payment-content__container___HusGh .checkout-payment-content__upiApp___M2sjF .checkout-payment-content__logo___jNLmQ:last-child {
-  padding: unset;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__upiApp___M2sjF .checkout-payment-content__displayName___dLKMP {
   flex: 1;
@@ -1590,8 +1502,7 @@ h5,
   text-transform: uppercase;
   cursor: pointer;
   line-height: 140%;
-  margin-top: 16px;
-  margin-bottom: 24px;
+  margin: 24px 0;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__upiPay___CycYi .checkout-payment-content__payBtn___dgcAp:hover {
   background-color: var(--buttonPrimaryL1, #71653a);
@@ -2028,7 +1939,7 @@ h5,
   display: flex;
   align-items: center;
 }
-[dir="rtl"] .checkout-payment-content__moreModeIcon___Hjipo {
+[dir='rtl'] .checkout-payment-content__moreModeIcon___Hjipo {
   transform: rotate(90deg);
 }
 .checkout-payment-content__moreModeIcon___Hjipo svg {
@@ -2125,10 +2036,6 @@ h5,
   .checkout-payment-content__onMobileView___IBzw6 {
     display: none;
   }
-}
-.checkout-payment-content__mopIcon___koORc {
-  width: 24px;
-  height: 24px;
 }
 
 /**color by character**/
@@ -3029,9 +2936,6 @@ h5,
 }
 .sticky-pay-now__checkoutButton___mtO42 {
   gap: 12px;
-}
-.sticky-pay-now__buttonWidth___nKraw {
-  width: 100%;
 }
 
 /**color by character**/

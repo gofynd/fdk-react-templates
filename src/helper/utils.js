@@ -456,24 +456,3 @@ export function isEmptyOrNull(obj) {
     (typeof obj === "object" && Object.keys(obj).length === 0)
   );
 }
-
-export function injectScript(script) {
-  let scriptObject = {
-      src: script,
-  };
-
-  return new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = scriptObject.src;
-
-      // Resolve promise when script is loaded
-      script.onload = () => {
-          resolve();
-      };
-      script.onerror = () => {
-          reject(new Error(`Failed to load script: ${script.src}`));
-      };
-
-      document.body.appendChild(script);
-  });
-}
