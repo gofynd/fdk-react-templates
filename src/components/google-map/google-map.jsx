@@ -11,12 +11,11 @@
  */
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+import { LoadScript, GoogleMap, Marker } from "@react-google-maps/api";
 import * as styles from "./google-map.less";
 import Autocomplete from "react-google-autocomplete";
 import SearchIcon from "../../assets/images/search.svg";
 import LocateIcon from "../../assets/images/locate.svg";
-import { useGlobalTranslation } from "fdk-core/utils";
 
 const libraries = ["places"];
 const mapContainerStyle = {
@@ -39,7 +38,7 @@ const GoogleMapAddress = ({
   addressItem,
   onLoad = () => {},
 }) => {
-  const { t } = useGlobalTranslation("translation");
+  const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [selectedPlace, setSelectedPlace] = useState({
     lat: countryDetails?.latitude,
     lng: countryDetails?.longitude,
@@ -53,11 +52,6 @@ const GoogleMapAddress = ({
   const [country, setCountry] = useState("India");
   const inputRef = useRef(null);
   const mapRef = useRef(null);
-
-  const { isLoaded: isMapLoaded } = useJsApiLoader({
-    googleMapsApiKey: mapApiKey,
-    libraries,
-  });
 
   useEffect(() => {
     if (addressItem?.geo_location) {
@@ -244,13 +238,14 @@ const GoogleMapAddress = ({
 
   const onMapLoad = (map) => {
     mapRef.current = map;
+    setIsMapLoaded(true);
     onLoad(map);
   };
 
   return (
     <div className={styles.mapAddress}>
       <div className={styles.mapWrapper} style={mapContainerStyle}>
-        <div>
+        <LoadScript googleMapsApiKey={mapApiKey} libraries={libraries}>
           <div
             ref={inputRef}
             className={styles.autoCompleteWrap}
@@ -258,7 +253,7 @@ const GoogleMapAddress = ({
           >
             <SearchIcon className={styles.searchAutoIcon} />
             <Autocomplete
-              placeholder={t("resource.localization.search_google_maps")}
+              placeholder="Search Google Maps"
               apiKey={mapApiKey}
               style={autoCompleteStyles}
               onPlaceSelected={handlePlaceSelect}
@@ -295,14 +290,14 @@ const GoogleMapAddress = ({
               )}
             </GoogleMap>
             <button
-              title={t("resource.localization.detect_my_location")}
+              title="Detect My Location"
               onClick={locateUser}
               className={styles.locateIconBtn}
             >
               <LocateIcon className={styles.locateIcon} />
             </button>
           </div>
-        </div>
+        </LoadScript>
         {!isMapLoaded && (
           <div className={styles.skeleton}>
             <canvas />
@@ -312,9 +307,7 @@ const GoogleMapAddress = ({
       {address && (
         <div className={styles.addressSelect}>
           <p>{address}</p>
-          <button onClick={selectAddress}>
-            {t("resource.common.use_this")}
-          </button>
+          <button onClick={selectAddress}>Use This</button>
         </div>
       )}
     </div>

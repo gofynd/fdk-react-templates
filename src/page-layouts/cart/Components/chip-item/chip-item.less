@@ -1,7 +1,7 @@
 @import "../../../../styles/main.less";
 
 .cartItemsListContainer {
-  padding: 24px;
+  padding: 16px;
   border: 1px solid @DividerStokes;
   border-top: 0 solid @DividerStokes;
 
@@ -32,7 +32,7 @@
       display: flex;
       a {
         img {
-          width: 100%;
+          width: 85%;
           border-radius: 4px;
         }
       }
@@ -46,7 +46,7 @@
       .removeItemSvgContainer {
         position: absolute;
         top: 0;
-        inset-inline-end: 0;
+        right: 0;
       }
       .itemBrand {
         color: var(--textHeading);
@@ -60,11 +60,11 @@
       }
       .itemSellerName {
         color: @TextLabel;
-        padding-inline-end: 90px;
+        padding-right: 90px;
         margin-top: 4px;
         font-size: 12px;
         @media @mobile {
-          padding-inline-end: 30px;
+          padding-right: 30px;
         }
       }
       .itemSizeQuantityContainer {
@@ -78,7 +78,6 @@
           display: flex;
           align-items: center;
           gap: 12px;
-          min-width: 0;
           .sizeContainer {
             display: flex;
             justify-content: space-between;
@@ -103,7 +102,7 @@
               overflow: hidden;
               text-overflow: ellipsis;
               max-width: 90%;
-              margin-inline-end: 3px;
+              margin-right: 3px;
             }
             .itemSvg {
               display: flex;
@@ -127,9 +126,9 @@
         }
       }
       .itemTotalContainer {
-        // display: flex;
-        // align-items: center;
-        // justify-content: space-between;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         margin-top: 16px;
         @media @tablet {
           flex-direction: column;
@@ -143,18 +142,18 @@
             color: @TextHeading;
             font-size: 16px;
             font-weight: 600;
-            margin-inline-end: 12px;
+            margin-right: 12px;
           }
           .markedPrice {
             font-size: 12px;
             text-decoration: line-through;
             color: @TextLabel;
-            margin-inline-end: 12px;
+            margin-right: 12px;
           }
           .discount {
             font-size: 12px;
             font-weight: 500;
-            margin-inline-end: 12px;
+            margin-right: 12px;
             color: @SaleDiscountText;
           }
         }
@@ -177,68 +176,11 @@
             text-align: right;
             color: @SuccessText;
             align-self: center;
-            margin-inline-start: 8px;
+            margin-left: 8px;
             line-height: 140%;
           }
         }
       }
-    }
-  }
-
-  .deliveryDateWrapper {
-    display: flex;
-    align-items: center;
-    margin-top: 16px;
-
-    &--desktop {
-      display: none;
-
-      @media @desktop {
-        display: flex;
-      }
-    }
-
-    &--mobile {
-      display: flex;
-
-      @media @desktop {
-        display: none;
-      }
-    }
-
-    @media @mobile {
-      margin-top: 12px;
-    }
-
-    .shippingLogo {
-      color: @TextBody;
-      display: flex;
-    }
-
-    .deliveryDate {
-      margin-left: 8px;
-      color: @TextHeading;
-      font-size: 14px;
-      font-weight: 500;
-      line-height: 140%;
-    }
-
-    .selectedFO {
-      color: @TextLabel;
-      font-size: 14px;
-      font-weight: 500;
-      line-height: 140%;
-      margin-left: 8px;
-    }
-
-    .changeFO {
-      color: @ButtonLink;
-      font-size: 12px;
-      font-weight: 600;
-      line-height: 140%;
-      text-transform: uppercase;
-      margin-left: 12px;
-      cursor: pointer;
     }
   }
 }
@@ -254,7 +196,7 @@
   border-radius: 4px;
   width: fit-content;
   .couponText {
-    margin-inline-start: 6px;
+    margin-left: 6px;
     font-weight: 600;
     font-size: 10px;
   }
@@ -274,7 +216,7 @@
 
   @media @mobile {
     margin-top: 12px;
-    margin-inline-start: 0;
+    margin-left: 0;
   }
 
   svg {
@@ -284,7 +226,7 @@
   }
 
   .ml6 {
-    margin-inline-start: 6px;
+    margin-left: 6px;
   }
 }
 
@@ -328,6 +270,7 @@
     align-items: flex-start;
   }
   .sizeModalTitle {
+    // border-bottom: 1px solid #f0f0f0;
     position: relative;
     display: flex;
     align-items: center;
@@ -349,13 +292,13 @@
         flex: 1;
         div {
           .sizeModalBrand {
-            margin-inline-end: 20px;
+            margin-right: 20px;
             margin-bottom: 8px;
             font-size: 16px;
             font-weight: 600;
           }
           .sizeModalName {
-            margin-inline-end: 20px;
+            margin-right: 20px;
             font-size: 16px;
             font-weight: 400;
           }
@@ -370,7 +313,7 @@
     .modalCloseIcon {
       position: absolute;
       top: 24px;
-      inset-inline-end: 24px;
+      right: 24px;
       cursor: pointer;
       span {
         display: flex;
@@ -417,7 +360,7 @@
           width: 100%;
           height: 100%;
           top: 0;
-          inset-inline-start: 0;
+          left: 0;
 
           line {
             stroke: @DividerStokes;
@@ -491,7 +434,7 @@
 
       .labelTextWrapper {
         display: flex;
-        margin-inline-start: 14px;
+        margin-left: 14px;
         flex-direction: column;
         .promoLabel {
           font-weight: 600;
@@ -510,7 +453,7 @@
             color: @TextBody;
           }
           .termCondition {
-            margin-inline-start: 5px;
+            margin-left: 5px;
             font-weight: 600;
             font-size: 12px;
             color: @SuccessText;
@@ -536,148 +479,4 @@
 }
 .chipModal {
   transform: none !important;
-}
-
-.foModalContainer {
-  min-height: 100px;
-  max-height: 720px;
-  overflow: auto;
-
-  .foModalTitle {
-    color: @TextHeading;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 140%;
-
-    @media @tablet {
-      font-size: 14px;
-    }
-  }
-
-  @media @desktop {
-    min-width: 500px !important;
-    max-width: 500px !important;
-  }
-
-  .foModalHeader {
-    padding: 16px 24px;
-    align-items: flex-start;
-
-    @media @tablet {
-      padding: 16px;
-    }
-  }
-
-  .foModalBody {
-    padding: 24px;
-
-    @media @tablet {
-      padding: 16px;
-    }
-
-    .foModalWrapper {
-      display: flex;
-
-      .foModalImage {
-        width: 91px;
-        flex: 0 0 91px;
-        .aspect-ratio(0.8);
-
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-          border-radius: 4px;
-        }
-      }
-
-      .foModalContent {
-        margin-left: 16px;
-
-        .foModalBrand {
-          color: @TextHeading;
-          font-size: 14px;
-          font-weight: 600;
-          line-height: 140%;
-        }
-
-        .foModalName {
-          color: @TextBody;
-          font-size: 14px;
-          font-weight: 400;
-          line-height: 140%;
-          margin-top: 8px;
-        }
-
-        .foSellerName {
-          color: @TextLabel;
-          font-size: 12px;
-          font-weight: 400;
-          line-height: 140%;
-          margin-top: 4px;
-        }
-      }
-    }
-
-    .foModalOption {
-      margin-top: 24px;
-
-      @media @tablet {
-        margin-top: 16px;
-      }
-
-      .deliveryLabel {
-        color: @TextHeading;
-        font-size: 12px;
-        font-weight: 600;
-        line-height: 140%;
-      }
-
-      .foList {
-        .fulfillmentOption {
-          display: flex;
-          margin-top: 8px;
-          gap: 8px;
-          cursor: pointer;
-          width: fit-content;
-
-          .foDetails {
-            .promiseLabel {
-              color: @SuccessText;
-              font-size: 14px;
-              font-weight: 600;
-              line-height: 140%;
-            }
-
-            .foLabel {
-              margin-top: 6px;
-              color: @TextBody;
-              font-size: 12px;
-              font-weight: 400;
-              line-height: 140%;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  .foModalFooter {
-    border-top: 1px solid @DividerStokes;
-    padding: 24px;
-    width: 100%;
-
-    .updateSizeButton {
-      border-radius: @ButtonRadius;
-      text-transform: capitalize;
-      color: @ButtonSecondary;
-      background-color: @ButtonPrimary;
-      padding: 14px 0;
-      text-align: center;
-    }
-  }
-
-  .disableBtn {
-    opacity: 0.5;
-  }
 }

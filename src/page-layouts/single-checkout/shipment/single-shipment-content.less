@@ -19,10 +19,6 @@
         padding: 16px;
       }
 
-      @media @tablet {
-        flex-direction: column;
-      }
-
       .headerLeft {
         display: flex;
         padding: 4px 12px 4px 0px;
@@ -31,7 +27,7 @@
           font-weight: 600;
           font-size: 14px;
           color: var(--textHeading);
-          margin-inline-end: 8px;
+          margin-right: 8px;
           line-height: 140%;
           white-space: nowrap;
           @media @mobile {
@@ -55,10 +51,6 @@
         color: @SuccessText;
         gap: 8px;
         align-items: center;
-
-        @media @tablet {
-          gap: 6px;
-        }
         .shippingLogo {
           height: 20px;
           width: 20px;
@@ -67,12 +59,6 @@
               fill: @SuccessText;
             }
           }
-        }
-        .foName {
-          color: @TextLabel;
-          font-size: 14px;
-          font-weight: 500;
-          line-height: 140%;
         }
         .deliveryDate {
           font-weight: 600;
@@ -108,7 +94,7 @@
         margin-bottom: 16px;
 
         span {
-          margin-inline-start: 6px;
+          margin-left: 6px;
         }
         .ribbonMsg {
           align-self: center;
@@ -183,7 +169,7 @@
                 line-height: 140%;
                 flex-wrap: wrap;
                 .size {
-                  margin-inline-end: 12px;
+                  margin-right: 12px;
                   line-height: 140%;
                 }
               }
@@ -196,7 +182,7 @@
 
             .priceWrapper {
               display: flex;
-              margin-inline-end: 12px;
+              margin-right: 12px;
               align-items: center;
 
               .effectivePrice {
@@ -242,7 +228,7 @@
                 margin-right: 12px;
                 width: fit-content;
                 .offerInfoIcon {
-                  margin-inline-start: 6px;
+                  margin-left: 6px;
                   cursor: pointer;
                 }
               }
