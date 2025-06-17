@@ -143,6 +143,7 @@ function CheckoutPaymentContent({
   removeDialogueError,
   setCancelQrPayment,
   isCouponApplied,
+  juspayErrorMessage,
 }) {
   const fpi = useFPI();
   const { language } = useGlobalStore(fpi.getters.i18N_DETAILS);
@@ -241,6 +242,7 @@ function CheckoutPaymentContent({
     selectedOtherPayment: selectedOtherPayment,
     selectedUpiIntentApp: selectedUpiIntentApp,
   });
+  const [paymentResponse, setPaymentResponse] = useState(null);
 
   const [showUPIModal, setshowUPIModal] = useState(false);
   const [showCouponValidityModal, setShowCouponValidityModal] = useState(false);
@@ -1177,6 +1179,43 @@ function CheckoutPaymentContent({
     return false;
   };
 
+  const isJuspayEnabled = () => {
+    return paymentOption?.payment_option?.find(
+      (opt) => opt.aggregator_name?.toLowerCase() === "juspay" && opt.name === "CARD"
+    );
+  };
+
+  const handlePayment = async () => {
+    try {
+      const response = await payUsingJuspayCard();
+      
+      setPaymentResponse(response);
+    } catch (error) {
+      setPaymentResponse({ error });
+    }
+  };
+
+
+  useEffect(() => {
+    const initializeJuspay = async () => {
+      if (isJuspayEnabled() && !paymentResponse) {
+        try {
+          await handlePayment();
+        } catch (error) {
+          console.error("Juspay initialization error:", error);
+        }
+      }
+    };
+
+    if (juspayErrorMessage && !paymentResponse && paymentOption?.payment_option?.find(
+      (opt) => opt.aggregator_name?.toLowerCase() === "juspay" && opt.name === "CARD"
+    )) {
+      handlePayment()
+    }
+    
+    initializeJuspay();
+  }, [paymentResponse, juspayErrorMessage, paymentOption])
+
   const isCardDetailsValid = () => {
     //reset error
     setCardNumberError("");
@@ -1210,6 +1249,14 @@ function CheckoutPaymentContent({
       !cardExpiryError &&
       !cardCVVError
     );
+  };
+
+  const payUsingJuspayCard = async () => {
+    const newPayload = {
+      ...selectedPaymentPayload,
+    };
+    const res = await proceedToPay("newCARD", newPayload);
+    return res;
   };
 
   const payUsingCard = async () => {
@@ -1674,6 +1721,9 @@ function CheckoutPaymentContent({
                       setCardValidity={setCardValidity}
                       resetCardValidationErrors={resetCardValidationErrors}
                       enableLinkPaymentOption={enableLinkPaymentOption}
+                      paymentOption={paymentOption}
+                      paymentResponse={paymentResponse}
+                      isJuspayEnabled={isJuspayEnabled}
                     />
                   </div>
                 )}
@@ -1730,6 +1780,9 @@ function CheckoutPaymentContent({
                   setCardValidity={setCardValidity}
                   resetCardValidationErrors={resetCardValidationErrors}
                   enableLinkPaymentOption={enableLinkPaymentOption}
+                  paymentOption={paymentOption}
+                  paymentResponse={paymentResponse}
+                  isJuspayEnabled={isJuspayEnabled}
                 />
               </div>
             )}
@@ -1788,6 +1841,9 @@ function CheckoutPaymentContent({
                     setCardValidity={setCardValidity}
                     resetCardValidationErrors={resetCardValidationErrors}
                     enableLinkPaymentOption={enableLinkPaymentOption}
+                    paymentOption={paymentOption}
+                    paymentResponse={paymentResponse}
+                    isJuspayEnabled={isJuspayEnabled}
                   />
                 </div>
               </Modal>

@@ -6,6 +6,7 @@ import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import StickyPayNow from "./sticky-pay-now/sticky-pay-now";
 import { priceFormatCurrencySymbol } from "../../../helper/utils";
 import { useGlobalTranslation } from "fdk-core/utils";
+import JuspayCardForm from "./juspay-card-from";
 
 function CardForm({
   cardNumberRef,
@@ -50,6 +51,9 @@ function CardForm({
   validateCardDetails,
   setCardValidity,
   resetCardValidationErrors,
+  paymentResponse,
+  paymentOption,
+  isJuspayEnabled,
   enableLinkPaymentOption,
 }) {
   const { t } = useGlobalTranslation("translation");
@@ -128,6 +132,21 @@ function CardForm({
       </div>
     );
   };
+  
+  if (isJuspayEnabled()) {
+    return (
+      <JuspayCardForm 
+        paymentResponse={paymentResponse}
+        paymentOption={paymentOption}
+        getCurrencySymbol={getCurrencySymbol}
+        getTotalValue={getTotalValue}
+        loggedIn={loggedIn}
+        setOpenGuidelinesModal={setOpenGuidelinesModal}
+        openGuidelinesModal={openGuidelinesModal}
+        onPriceDetailsClick={onPriceDetailsClick}
+      />
+    )
+  }
 
   return (
     <>
