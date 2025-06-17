@@ -9,7 +9,12 @@ import { useViewport } from "../../../helper/hooks";
 // import UktModal from "./ukt-modal";
 import StickyPayNow from "./sticky-pay-now/sticky-pay-now";
 import { priceFormatCurrencySymbol } from "../../../helper/utils";
-import { useGlobalStore, useGlobalTranslation, useFPI, useNavigate } from "fdk-core/utils";
+import {
+  useGlobalStore,
+  useGlobalTranslation,
+  useFPI,
+  useNavigate,
+} from "fdk-core/utils";
 import Spinner from "../../../components/spinner/spinner";
 
 const upiDisplayWrapperStyle = {
@@ -133,11 +138,12 @@ function CheckoutPaymentContent({
   payment,
   loader,
   handleShowFailedMessage,
-  onPriceDetailsClick = () => { },
+  onPriceDetailsClick = () => {},
   breakUpValues,
   removeDialogueError,
   setCancelQrPayment,
   isCouponApplied,
+  juspayErrorMessage,
 }) {
   const fpi = useFPI();
   const { language } = useGlobalStore(fpi.getters.i18N_DETAILS);
@@ -169,8 +175,14 @@ function CheckoutPaymentContent({
     showUpiRedirectionModal,
     validateCardDetails,
     setShowUpiRedirectionModal,
+    enableLinkPaymentOption,
   } = payment;
 
+  useEffect(() => {
+    if (enableLinkPaymentOption && selectedTab) {
+      setActiveMop(selectedTab);
+    }
+  }, [selectedTab]);
   const isChromeOrSafari =
     /Chrome/.test(navigator.userAgent) ||
     /Safari/.test(navigator.userAgent) ||
@@ -230,6 +242,7 @@ function CheckoutPaymentContent({
     selectedOtherPayment: selectedOtherPayment,
     selectedUpiIntentApp: selectedUpiIntentApp,
   });
+  const [paymentResponse, setPaymentResponse] = useState(null);
 
   const [showUPIModal, setshowUPIModal] = useState(false);
   const [showCouponValidityModal, setShowCouponValidityModal] = useState(false);
@@ -278,7 +291,7 @@ function CheckoutPaymentContent({
   const [isCardNumberValid, setIsCardNumberValid] = useState(false);
   const [activeMop, setActiveMop] = useState(null);
   const [userOrderId, setUserOrderId] = useState(null);
-
+  const [lastValidatedBin, setLastValidatedBin] = useState("");
   const disbaleCheckout = useGlobalStore(fpi?.getters?.SHIPMENTS);
   const isCouponAppliedSuccess =
     useGlobalStore(fpi?.getters?.CUSTOM_VALUE) ?? {};
@@ -294,11 +307,15 @@ function CheckoutPaymentContent({
     const value = card_number.replace(/[^0-9]/g, "");
     setIsCardNumberValid(isValid);
     if (value.length === 6) {
-      const res = await cardDetails(value);
-      const { data } = res.data.payment.card_details;
-      setCardDetailsData(data);
+      if (value !== lastValidatedBin) {
+        setLastValidatedBin(value);
+        const res = await cardDetails(value);
+        const { data } = res.data.payment.card_details;
+        setCardDetailsData(data);
+      }
     } else if (value.length < 6) {
       setCardDetailsData({});
+      setLastValidatedBin("");
     }
   };
 
@@ -319,37 +336,67 @@ function CheckoutPaymentContent({
     value = value.replace(/\s+/g, "");
     setCardNumber(value);
     if (value.length === 6) {
-      const res = await cardDetails(value);
-      const { data } = res.data.payment.card_details;
-      setCardDetailsData(data);
+      if (value !== lastValidatedBin) {
+        setLastValidatedBin(value);
+        const res = await cardDetails(value);
+        const { data } = res.data.payment.card_details;
+        setCardDetailsData(data);
+      }
     } else if (value.length < 6) {
       setCardDetailsData({});
+      setLastValidatedBin("");
     }
   };
 
-  const validateCardNumber = () => {
-    if (cardNumber) {
-      if (!isCardNumberValid) {
-        setCardNumberError(t("resource.checkout.invalid_card_number"));
-      } else if (!cardDetailsData.is_enabled) {
-        setCardNumberError(t("resource.checkout.this_card_network_is_not_supported"));
+  const validateCardNumber = async (e) => {
+    try {
+      const value = e.target.value.replace(/[^0-9]/g, "");
+      if (value.length >= 6) {
+        const currentBin = value.slice(0, 6);
+        if (currentBin !== lastValidatedBin) {
+          setLastValidatedBin(currentBin);
+          const res = await cardDetails(currentBin);
+          const { data } = res.data.payment.card_details;
+          if (data || cardNumber) {
+            setCardDetailsData(data);
+            if (!data?.is_card_valid) {
+              setCardNumberError(t("resource.checkout.invalid_card_number"));
+            } else if (!cardDetailsData.is_enabled) {
+            } else if (!data?.is_enabled) {
+              setCardNumberError(
+                t("resource.checkout.this_card_network_is_not_supported")
+              );
+            } else {
+              setCardNumberError("");
+            }
+          } else {
+            setCardNumberError(t("resource.common.field_required"));
+          }
+        }
+      } else {
+        setCardDetailsData({});
+        setLastValidatedBin("");
       }
-    } else {
-      setCardNumberError(t("resource.common.field_required"));
+    } catch (error) {
+      console.log(error, "cardValidation error");
     }
   };
-
   const handleCardNumberPaste = async (e) => {
     setCardNumberError("");
     let value = e.clipboardData.getData("Text");
+    const currentBin = value.slice(0, 6);
     setCardNumber(value);
     value = value.replace(/[^0-9]/g, "");
     if (value.length >= 6) {
-      const res = await cardDetails(value.slice(0, 6));
-      const { data } = res.data.payment.card_details;
-      setCardDetailsData(data);
-    } else if (value.length < 6) {
+      if (currentBin !== lastValidatedBin) {
+        setLastValidatedBin(currentBin);
+        const res = await cardDetails(currentBin);
+        const { data } = res.data.payment.card_details;
+        setCardDetailsData(data);
+      }
+    } else {
       setCardDetailsData({});
+      setLastValidatedBin("");
     }
   };
 
@@ -460,7 +507,11 @@ function CheckoutPaymentContent({
         setUpiApps(data);
       });
     }
-    if (prevSelectedTabRef.current === "COD" && selectedTab !== "COD") {
+    if (
+      prevSelectedTabRef.current === "COD" &&
+      selectedTab !== "COD" &&
+      !enableLinkPaymentOption
+    ) {
       selectPaymentMode({
         id: cart_id,
         address_id: address_id,
@@ -679,7 +730,7 @@ function CheckoutPaymentContent({
 
     if (isCouponApplied) {
       const { code, title, display_message_en, valid } =
-        await checkCouponValidity(payload);
+        !enableLinkPaymentOption && (await checkCouponValidity(payload));
       isValid = !code || (code && valid);
 
       if (!isValid) {
@@ -846,7 +897,7 @@ function CheckoutPaymentContent({
             params.append(key, qrParams[key]);
           }
         }
-        const finalUrl = `${window.location.origin}${locale && locale !== 'en' ? `/${locale}` : ''}/cart/order-status/?${params.toString()}`;
+        const finalUrl = `${window.location.origin}${locale && locale !== "en" ? `/${locale}` : ""}/cart/order-status/?${params.toString()}`;
         window.location.href = finalUrl;
       } else if (status === "failed") {
         setshowUPIModal(false);
@@ -945,7 +996,9 @@ function CheckoutPaymentContent({
   const handleUPIChange = (event) => {
     setUPIError(false);
     setIsUpiSuffixSelected(false);
-    let value = event.target.value.trim();
+    let value = event.target.value
+      .replace(/[^a-zA-Z0-9._@-]/g, "")
+      .replace(/@{2,}/g, "@");
 
     // Ensure only one '@' character
     const atCount = (value.match(/@/g) || []).length;
@@ -1126,6 +1179,43 @@ function CheckoutPaymentContent({
     return false;
   };
 
+  const isJuspayEnabled = () => {
+    return paymentOption?.payment_option?.find(
+      (opt) => opt.aggregator_name?.toLowerCase() === "juspay" && opt.name === "CARD"
+    );
+  };
+
+  const handlePayment = async () => {
+    try {
+      const response = await payUsingJuspayCard();
+      
+      setPaymentResponse(response);
+    } catch (error) {
+      setPaymentResponse({ error });
+    }
+  };
+
+
+  useEffect(() => {
+    const initializeJuspay = async () => {
+      if (isJuspayEnabled() && !paymentResponse) {
+        try {
+          await handlePayment();
+        } catch (error) {
+          console.error("Juspay initialization error:", error);
+        }
+      }
+    };
+
+    if (juspayErrorMessage && !paymentResponse && paymentOption?.payment_option?.find(
+      (opt) => opt.aggregator_name?.toLowerCase() === "juspay" && opt.name === "CARD"
+    )) {
+      handlePayment()
+    }
+    
+    initializeJuspay();
+  }, [paymentResponse, juspayErrorMessage, paymentOption])
+
   const isCardDetailsValid = () => {
     //reset error
     setCardNumberError("");
@@ -1159,6 +1249,14 @@ function CheckoutPaymentContent({
       !cardExpiryError &&
       !cardCVVError
     );
+  };
+
+  const payUsingJuspayCard = async () => {
+    const newPayload = {
+      ...selectedPaymentPayload,
+    };
+    const res = await proceedToPay("newCARD", newPayload);
+    return res;
   };
 
   const payUsingCard = async () => {
@@ -1275,14 +1373,16 @@ function CheckoutPaymentContent({
     if (qrPaymentOption) {
       setIsQrMopPresent(true);
     }
-    if (paymentOptions?.length > 0) {
-      setSelectedTab(paymentOptions[0].name);
-      setActiveMop(paymentOptions[0].name);
-    } else if (otherPaymentOptions?.length > 0) {
-      setSelectedTab("Other");
-      setActiveMop("Other");
-    } else if (codOption?.name) {
-      selectMop(codOption?.name, codOption?.name, codOption?.name);
+    if (!enableLinkPaymentOption) {
+      if (paymentOptions?.length > 0) {
+        setSelectedTab(paymentOptions[0].name);
+        setActiveMop(paymentOptions[0].name);
+      } else if (otherPaymentOptions?.length > 0) {
+        setSelectedTab("Other");
+        setActiveMop("Other");
+      } else if (codOption?.name) {
+        selectMop(codOption?.name, codOption?.name, codOption?.name);
+      }
     }
   }, [paymentOption]);
 
@@ -1333,10 +1433,14 @@ function CheckoutPaymentContent({
           <div className={styles.cardTab}>
             {(!addNewCard || isTablet) && (
               <div className={styles.savedCardWrapper}>
-                {savedCards && savedCards?.length > 0 ? (
+                {savedCards &&
+                savedCards?.length > 0 &&
+                !enableLinkPaymentOption ? (
                   <>
                     <div className={styles.savedCardHeaderWrapper}>
-                      <div className={styles.cardHeader}>{t("resource.checkout.saved_cards")}</div>
+                      <div className={styles.cardHeader}>
+                        {t("resource.checkout.saved_cards")}
+                      </div>
                       <button onClick={addNewCardShow}>
                         {" "}
                         <span>+</span> {t("resource.checkout.new_card")}
@@ -1380,7 +1484,9 @@ function CheckoutPaymentContent({
                                       card?.card_id && (
                                       <div className={styles.whyCvvContainer}>
                                         <span className={styles.cvvNotNeeded}>
-                                        {t("resource.checkout.cvv_not_needed")}
+                                          {t(
+                                            "resource.checkout.cvv_not_needed"
+                                          )}
                                         </span>
                                         <span
                                           className={styles.why}
@@ -1407,7 +1513,9 @@ function CheckoutPaymentContent({
                                                 svgSrc="paymentTooltipArrow"
                                                 className={styles.upArrowMark}
                                               />
-                                              {t("resource.checkout.card_saved_rbi")}
+                                              {t(
+                                                "resource.checkout.card_saved_rbi"
+                                              )}
                                             </p>
                                           </div>
                                         )}
@@ -1473,6 +1581,9 @@ function CheckoutPaymentContent({
                                   )}
                                   onPriceDetailsClick={onPriceDetailsClick}
                                   disabled={!selectedCard?.card_id}
+                                  enableLinkPaymentOption={
+                                    enableLinkPaymentOption
+                                  }
                                   proceedToPay={() => {
                                     proceedToPay("CARD", {
                                       ...selectedPaymentPayload,
@@ -1521,11 +1632,13 @@ function CheckoutPaymentContent({
                                     <div className={styles.type}>
                                       <div className={styles.closeWrapper}>
                                         <p className={styles.title}>
-                                        {t("resource.checkout.what_is_cvv_number")}
+                                          {t(
+                                            "resource.checkout.what_is_cvv_number"
+                                          )}
                                         </p>
                                       </div>
                                       <p className={styles.desc}>
-                                      {t("resource.checkout.cvv_description")}
+                                        {t("resource.checkout.cvv_description")}
                                       </p>
                                       <div className={styles.img}>
                                         <SvgWrapper svgSrc="non-amex-card-cvv" />
@@ -1537,10 +1650,14 @@ function CheckoutPaymentContent({
                                   card?.card_brand === "American Express" && (
                                     <div className={styles.type}>
                                       <p className={styles.title}>
-                                      {t("resource.checkout.have_american_express_card")}
+                                        {t(
+                                          "resource.checkout.have_american_express_card"
+                                        )}
                                       </p>
                                       <p className={styles.desc}>
-                                      {t("resource.checkout.amex_cvv_description")}
+                                        {t(
+                                          "resource.checkout.amex_cvv_description"
+                                        )}
                                       </p>
                                       <div className={styles.img}>
                                         <SvgWrapper svgSrc="amex-card-cvv" />
@@ -1603,6 +1720,10 @@ function CheckoutPaymentContent({
                       validateCardDetails={validateCardDetails}
                       setCardValidity={setCardValidity}
                       resetCardValidationErrors={resetCardValidationErrors}
+                      enableLinkPaymentOption={enableLinkPaymentOption}
+                      paymentOption={paymentOption}
+                      paymentResponse={paymentResponse}
+                      isJuspayEnabled={isJuspayEnabled}
                     />
                   </div>
                 )}
@@ -1614,7 +1735,9 @@ function CheckoutPaymentContent({
                   <button onClick={hideNewCard}>
                     <SvgWrapper svgSrc={"back"}></SvgWrapper>
                   </button>
-                  <div className={styles.newCardHeaderText}>{t("resource.checkout.add_new_card")}</div>
+                  <div className={styles.newCardHeaderText}>
+                    {t("resource.checkout.add_new_card")}
+                  </div>
                 </div>
                 <CardForm
                   cardNumberRef={cardNumberRef}
@@ -1656,6 +1779,10 @@ function CheckoutPaymentContent({
                   validateCardDetails={validateCardDetails}
                   setCardValidity={setCardValidity}
                   resetCardValidationErrors={resetCardValidationErrors}
+                  enableLinkPaymentOption={enableLinkPaymentOption}
+                  paymentOption={paymentOption}
+                  paymentResponse={paymentResponse}
+                  isJuspayEnabled={isJuspayEnabled}
                 />
               </div>
             )}
@@ -1713,6 +1840,10 @@ function CheckoutPaymentContent({
                     validateCardDetails={validateCardDetails}
                     setCardValidity={setCardValidity}
                     resetCardValidationErrors={resetCardValidationErrors}
+                    enableLinkPaymentOption={enableLinkPaymentOption}
+                    paymentOption={paymentOption}
+                    paymentResponse={paymentResponse}
+                    isJuspayEnabled={isJuspayEnabled}
                   />
                 </div>
               </Modal>
@@ -1774,6 +1905,7 @@ function CheckoutPaymentContent({
                     )}
                     onPriceDetailsClick={onPriceDetailsClick}
                     disabled={!selectedWallet.code}
+                    enableLinkPaymentOption={enableLinkPaymentOption}
                     proceedToPay={() => {
                       proceedToPay("WL", selectedPaymentPayload);
                       acceptOrder();
@@ -1839,7 +1971,9 @@ function CheckoutPaymentContent({
                           />
                         </span>
                       </div>
-                      <div className={styles.moreModeName}>{t("resource.checkout.other_wallets")}</div>
+                      <div className={styles.moreModeName}>
+                        {t("resource.checkout.other_wallets")}
+                      </div>
                     </div>
                     <span className={styles.moreModeIcon}>
                       <SvgWrapper svgSrc="accordion-arrow" />
@@ -1868,7 +2002,9 @@ function CheckoutPaymentContent({
                   />
                 </div>
                 {filteredWallets?.length === 0 ? (
-                  <p className={styles.noResultFound}>{t("resource.common.empty_state")}</p>
+                  <p className={styles.noResultFound}>
+                    {t("resource.common.empty_state")}
+                  </p>
                 ) : (
                   filteredWallets.map((wlt, index) => (
                     <WalletItem
@@ -1955,13 +2091,17 @@ function CheckoutPaymentContent({
               )}
             {!isTablet && isQrMopPresent && (
               <div>
-                <p className={styles.upiSectionTitle}>{t("resource.checkout.upi_qr_code_caps")}</p>
+                <p className={styles.upiSectionTitle}>
+                  {t("resource.checkout.upi_qr_code_caps")}
+                </p>
                 <div className={styles.upiQrCodeSection}>
                   <div className={styles.upiQrCodeDescription}>
                     <div>
-                      <p className={styles.scanQrTitle}>{t("resource.checkout.scan_qr_to_pay")}</p>
+                      <p className={styles.scanQrTitle}>
+                        {t("resource.checkout.scan_qr_to_pay")}
+                      </p>
                       <p className={styles.scanQrDescripton}>
-                      {t("resource.checkout.scan_qr_upi")}
+                        {t("resource.checkout.scan_qr_upi")}
                       </p>
                     </div>
                     <div className={styles.scanQrApps}>
@@ -1977,7 +2117,9 @@ function CheckoutPaymentContent({
                       <div className={styles.upiAppLogo}>
                         <SvgWrapper svgSrc="amazon-pay" />
                       </div>
-                      <p className={styles.moreUpiApps}>{t("resource.checkout.and_more")}</p>
+                      <p className={styles.moreUpiApps}>
+                        {t("resource.checkout.and_more")}
+                      </p>
                     </div>
                     {isQrCodeVisible && (
                       <span className={styles.expiryText}>
@@ -1985,7 +2127,9 @@ function CheckoutPaymentContent({
                         <span className={styles.countDown}>
                           {formatTime(countdown)}
                         </span>
-                        <span className={styles.minutes}>{t("resource.common.minutes")}</span>
+                        <span className={styles.minutes}>
+                          {t("resource.common.minutes")}
+                        </span>
                       </span>
                     )}
                     {isQrCodeVisible && (
@@ -2034,10 +2178,12 @@ function CheckoutPaymentContent({
               (upiApps?.length > 0 || upiApps?.includes("any"))) ||
               (!isTablet && isQrMopPresent)) && (
               <div className={styles.upiOrLine}>
-                <span className={styles.upiOrText}>{t("resource.common.or")}</span>
+                <span className={styles.upiOrText}>
+                  {t("resource.common.or")}
+                </span>
               </div>
             )}
-            {loggedIn && savedUpi?.length > 0 && (
+            {loggedIn && savedUpi?.length > 0 && !enableLinkPaymentOption && (
               <div>
                 <div>
                   <div>
@@ -2125,13 +2271,17 @@ function CheckoutPaymentContent({
                   </div>
                 </div>
                 <div className={styles.upiOrLine}>
-                  <span className={styles.upiOrText}>{t("resource.common.or")}</span>
+                  <span className={styles.upiOrText}>
+                    {t("resource.common.or")}
+                  </span>
                 </div>
               </div>
             )}
             <div style={{ position: "relative" }}>
               {!isTablet && (
-                <p className={styles.upiSectionTitle}>{t("resource.checkout.upi_id_number")}</p>
+                <p className={styles.upiSectionTitle}>
+                  {t("resource.checkout.upi_id_number")}
+                </p>
               )}
               <div className={styles.upiIdWrapper}>
                 <input
@@ -2141,6 +2291,7 @@ function CheckoutPaymentContent({
                   onFocus={() => {
                     setUpiSaveForLaterChecked(true);
                   }}
+                  maxLength="55"
                   value={vpa}
                   onChange={handleUPIChange}
                 />
@@ -2148,7 +2299,8 @@ function CheckoutPaymentContent({
                   <span
                     className={`${styles.inputName} ${isUPIError ? styles.errorInputName : ""}`}
                   >
-                    {t("resource.common.enter_upi_id")}<span className={styles.required}>*</span>
+                    {t("resource.common.enter_upi_id")}
+                    <span className={styles.required}>*</span>
                   </span>
                 )}
               </div>
@@ -2200,7 +2352,7 @@ function CheckoutPaymentContent({
                     </ul>
                   </div>
                 )}
-              {loggedIn && (
+              {loggedIn && !enableLinkPaymentOption && (
                 <div>
                   <label
                     htmlFor="upiSaveForLater"
@@ -2248,6 +2400,7 @@ function CheckoutPaymentContent({
                       getTotalValue()
                     )}
                     onPriceDetailsClick={onPriceDetailsClick}
+                    enableLinkPaymentOption={enableLinkPaymentOption}
                     proceedToPay={() => {
                       if (disbaleCheckout?.message) {
                         acceptOrder();
@@ -2335,6 +2488,7 @@ function CheckoutPaymentContent({
                     )}
                     onPriceDetailsClick={onPriceDetailsClick}
                     disabled={!selectedNB.code}
+                    enableLinkPaymentOption={enableLinkPaymentOption}
                     proceedToPay={() => {
                       proceedToPay("NB", selectedPaymentPayload);
                       acceptOrder();
@@ -2369,7 +2523,7 @@ function CheckoutPaymentContent({
         return (
           <div>
             <div className={`${styles.nbHeader} ${styles["view-mobile-up"]}`}>
-            {t("resource.checkout.select_bank")}
+              {t("resource.checkout.select_bank")}
             </div>
             <div className={styles.modeOption}>
               {topBanks?.map((nb, index) => (
@@ -2400,7 +2554,9 @@ function CheckoutPaymentContent({
                           />
                         </span>
                       </div>
-                      <div className={styles.moreModeName}>{t("resource.checkout.other_banks")}</div>
+                      <div className={styles.moreModeName}>
+                        {t("resource.checkout.other_banks")}
+                      </div>
                     </div>
                     <span className={styles.moreModeIcon}>
                       <SvgWrapper svgSrc="accordion-arrow" />
@@ -2430,7 +2586,9 @@ function CheckoutPaymentContent({
                   />
                 </div>
                 {filteredBanks?.length === 0 ? (
-                  <p className={styles.noResultFound}>{t("resource.common.empty_state")}</p>
+                  <p className={styles.noResultFound}>
+                    {t("resource.common.empty_state")}
+                  </p>
                 ) : (
                   filteredBanks?.map((nb, index) => (
                     <NbItem
@@ -2455,7 +2613,7 @@ function CheckoutPaymentContent({
                   {t("resource.checkout.cash_on_delivery")}
                 </div>
                 <p className={styles.codTitle}>
-                {t("resource.checkout.pay_on_delivery")}
+                  {t("resource.checkout.pay_on_delivery")}
                 </p>
                 {codCharges > 0 && (
                   <div className={styles.codInfo}>
@@ -2537,6 +2695,7 @@ function CheckoutPaymentContent({
                             )}
                             onPriceDetailsClick={onPriceDetailsClick}
                             disabled={!selectedPayLater.code}
+                            enableLinkPaymentOption={enableLinkPaymentOption}
                             proceedToPay={() => {
                               proceedToPay("PL", selectedPaymentPayload);
                               acceptOrder();
@@ -2619,6 +2778,7 @@ function CheckoutPaymentContent({
                               getTotalValue()
                             )}
                             onPriceDetailsClick={onPriceDetailsClick}
+                            enableLinkPaymentOption={enableLinkPaymentOption}
                             proceedToPay={() => {
                               proceedToPay(
                                 "CARDLESS_EMI",
@@ -2706,6 +2866,7 @@ function CheckoutPaymentContent({
                     )}
                     onPriceDetailsClick={onPriceDetailsClick}
                     disabled={!selectedOtherPayment?.code}
+                    enableLinkPaymentOption={enableLinkPaymentOption}
                     proceedToPay={() => {
                       proceedToPay("Other", selectedPaymentPayload);
                       acceptOrder();
@@ -2803,6 +2964,7 @@ function CheckoutPaymentContent({
                               getTotalValue()
                             )}
                             onPriceDetailsClick={onPriceDetailsClick}
+                            enableLinkPaymentOption={enableLinkPaymentOption}
                             proceedToPay={() => {
                               proceedToPay("Other", selectedPaymentPayload);
                               acceptOrder();
@@ -2861,6 +3023,7 @@ function CheckoutPaymentContent({
               setCardExpiryDate("");
               setCvvNumber("");
               hideNewCard();
+              setLastValidatedBin("");
             }
           }}
         >
@@ -2870,7 +3033,7 @@ function CheckoutPaymentContent({
             &nbsp;
           </div>
           <div className={styles.link}>
-            <div className={styles.icon}>
+            <div className={`${styles.icon} ${styles.mopIcon}`}>
               {/* <img src={opt.svg} alt="" /> */}
               <SvgWrapper svgSrc={opt.svg}></SvgWrapper>
             </div>
@@ -2947,20 +3110,24 @@ function CheckoutPaymentContent({
           hideHeader={true}
         >
           <div style={upiDisplayWrapperStyle}>
-            <div style={upiHeadingStyle}>{t("resource.checkout.complete_your_payment")}</div>
-            <div style={upiVpaStyle}>{t("resource.checkout.sent_to")} {savedUPISelect || vpa}</div>
+            <div style={upiHeadingStyle}>
+              {t("resource.checkout.complete_your_payment")}
+            </div>
+            <div style={upiVpaStyle}>
+              {t("resource.checkout.sent_to")} {savedUPISelect || vpa}
+            </div>
             <div style={upiLabelWrapperStyle}>
               <SvgWrapper svgSrc="upi-payment-popup" />
             </div>
             <div style={timeDisplayStyle}>
-            {t("resource.checkout.valid_for")}{" "}
+              {t("resource.checkout.valid_for")}{" "}
               <span style={timeDisplaySpanStyle}>
                 {formatTime(timeRemaining)}
               </span>{" "}
               {t("resource.common.minutes")}
             </div>
             <div style={cancelBtnStyle} onClick={cancelUPIPayment}>
-            {t("resource.checkout.cancel_payment_caps")}
+              {t("resource.checkout.cancel_payment_caps")}
             </div>
           </div>
         </Modal>
@@ -3008,9 +3175,11 @@ function CheckoutPaymentContent({
         <Modal isOpen={showUpiRedirectionModal} hideHeader={true}>
           <div className={styles.upiRedirectionModal}>
             <div className={styles.loader}></div>
-            <p className={styles.title}>{t("resource.checkout.finalising_payment")}</p>
+            <p className={styles.title}>
+              {t("resource.checkout.finalising_payment")}
+            </p>
             <p className={styles.message}>
-            {t("resource.checkout.redirecting_upi")}
+              {t("resource.checkout.redirecting_upi")}
             </p>
             <div
               style={cancelBtnStyle}
@@ -3050,7 +3219,7 @@ function CheckoutPaymentContent({
             </div>
             <div>
               <p className={styles.message}>
-              {t("resource.checkout.confirm_cod")}
+                {t("resource.checkout.confirm_cod")}
               </p>
               {codCharges > 0 && (
                 <p className={styles.codCharges}>
@@ -3076,7 +3245,7 @@ function CheckoutPaymentContent({
           title={t("resource.checkout.cvv_not_needed")}
         >
           <p className={styles.cvvNotNeededModal}>
-          {t("resource.checkout.card_saved_rbi")}
+            {t("resource.checkout.card_saved_rbi")}
           </p>
         </Modal>
       )}
@@ -3085,7 +3254,9 @@ function CheckoutPaymentContent({
           <Shimmer height="300px" />
         </div>
       ) : (
-        <div className={styles.container}>
+        <div
+          className={`${styles.container} ${enableLinkPaymentOption ? styles.unsetBorder : ""}`}
+        >
           {true ? (
             <>
               <div className={styles.navigationLink}>
@@ -3119,8 +3290,8 @@ function CheckoutPaymentContent({
                         >
                           {paymentOptions?.length > 0 &&
                           otherPaymentOptions?.length > 0
-                          ? t("resource.checkout.more_payment_options")
-                          : t("resource.checkout.pay_online")}
+                            ? t("resource.checkout.more_payment_options")
+                            : t("resource.checkout.pay_online")}
                         </div>
                       </div>
                       <div
