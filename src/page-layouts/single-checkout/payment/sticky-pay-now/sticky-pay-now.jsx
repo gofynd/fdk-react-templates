@@ -10,7 +10,7 @@ const StickyPayNow = ({
   proceedToPay = () => {},
   btnTitle,
   customClassName,
-  enableLinkPaymentOption = false,,
+  enableLinkPaymentOption = false,
   isJuspay = false,
 }) => {
   const { t } = useGlobalTranslation("translation");
