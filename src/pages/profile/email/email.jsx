@@ -4,7 +4,6 @@ import AddEmailModal from "../components/add-email-modal/add-email-modal";
 import FyButton from "../../../components/core/fy-button/fy-button";
 import FyInput from "../../../components/core/fy-input/fy-input";
 import Loader from "../../../components/loader/loader";
-import { useGlobalTranslation } from "fdk-core/utils";
 import EmptyState from "../components/empty-state/empty-state";
 import AddAddressIcon from "../../../assets/images/add-address.svg";
 
@@ -15,7 +14,6 @@ function Email({
   deleteEmail,
   emails,
 }) {
-  const { t } = useGlobalTranslation("translation");
   const [showAddModal, setShowAddModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedEmail, setSelectedEmail] = useState({});
@@ -93,7 +91,7 @@ function Email({
   return (
     <>
       <div className={styles.main}>
-        <div className={styles.header}>{t("resource.common.email_address")}</div>
+        <div className={styles.header}>Email Address</div>
         {emails?.length > 0 && (
           <div className={styles.formContainer}>
             <div className={styles.formItem}>
@@ -116,7 +114,7 @@ function Email({
                           className={styles.verified}
                           disabled
                         >
-                          {t("resource.profile.verified")}
+                          Verified
                         </FyButton>
                       )}
                       {/* {primary && (
@@ -125,7 +123,7 @@ function Email({
                             size="small"
                             className={styles.primary}
                           >
-                            {t("resource.profile.primary")}
+                            Primary
                           </FyButton>
                         )} */}
 
@@ -137,7 +135,7 @@ function Email({
                           size="small"
                           isLoading={isLoading}
                         >
-                          {t("resource.facets.verify")}
+                          Verify
                         </FyButton>
                       )}
 
@@ -149,7 +147,7 @@ function Email({
                             onClick={() => handleSetPrimary(email)}
                             isLoading={isLoading}
                           >
-                           {t("resource.profile.set_primary")}
+                            Set Primary
                           </FyButton>
                         )} */}
                       {/* {!primary && (
@@ -169,9 +167,9 @@ function Email({
         )}
         {!emails?.length && (
           <EmptyState
-            title={t("resource.profile.no_email_address_added")}
+            title="No Email Address Added"
             onBtnClick={() => handleShowAddModal(true)}
-            btnTitle={t("resource.profile.add_email_address")}
+            btnTitle="Add Email Address"
             icon={<AddAddressIcon />}
           />
         )}
@@ -186,7 +184,7 @@ function Email({
       )}
       {/* {showDeleteModal && (
         <ConfirmModal
-          text={t("resource.profile.confirm_remove_email")}
+          text="Are you sure you want to remove the email?"
           isOpen={showDeleteModal}
           onClose={handleCloseDeleteModal}
           onConfirm={async () => {
