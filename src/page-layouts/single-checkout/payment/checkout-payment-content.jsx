@@ -3308,7 +3308,7 @@ function CheckoutPaymentContent({
                       </div>
                     </div>
                     {isTablet && activeMop === "Other" && (
-                      <div className={styles["view-mobile"]}>
+                      <div className={` ${styles.onMobileView}`}>
                         {selectedTab === "Other" && navigationTab()}
                       </div>
                     )}
