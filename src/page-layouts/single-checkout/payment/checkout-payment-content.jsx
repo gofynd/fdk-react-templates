@@ -143,7 +143,6 @@ function CheckoutPaymentContent({
   removeDialogueError,
   setCancelQrPayment,
   isCouponApplied,
-  juspayErrorMessage,
 }) {
   const fpi = useFPI();
   const { language } = useGlobalStore(fpi.getters.i18N_DETAILS);
@@ -242,7 +241,6 @@ function CheckoutPaymentContent({
     selectedOtherPayment: selectedOtherPayment,
     selectedUpiIntentApp: selectedUpiIntentApp,
   });
-  const [paymentResponse, setPaymentResponse] = useState(null);
 
   const [showUPIModal, setshowUPIModal] = useState(false);
   const [showCouponValidityModal, setShowCouponValidityModal] = useState(false);
@@ -1179,43 +1177,6 @@ function CheckoutPaymentContent({
     return false;
   };
 
-  const isJuspayEnabled = () => {
-    return paymentOption?.payment_option?.find(
-      (opt) => opt.aggregator_name?.toLowerCase() === "juspay" && opt.name === "CARD"
-    );
-  };
-
-  const handlePayment = async () => {
-    try {
-      const response = await payUsingJuspayCard();
-      
-      setPaymentResponse(response);
-    } catch (error) {
-      setPaymentResponse({ error });
-    }
-  };
-
-
-  useEffect(() => {
-    const initializeJuspay = async () => {
-      if (isJuspayEnabled() && !paymentResponse) {
-        try {
-          await handlePayment();
-        } catch (error) {
-          console.error("Juspay initialization error:", error);
-        }
-      }
-    };
-
-    if (juspayErrorMessage && !paymentResponse && paymentOption?.payment_option?.find(
-      (opt) => opt.aggregator_name?.toLowerCase() === "juspay" && opt.name === "CARD"
-    )) {
-      handlePayment()
-    }
-    
-    initializeJuspay();
-  }, [paymentResponse, juspayErrorMessage, paymentOption])
-
   const isCardDetailsValid = () => {
     //reset error
     setCardNumberError("");
@@ -1249,14 +1210,6 @@ function CheckoutPaymentContent({
       !cardExpiryError &&
       !cardCVVError
     );
-  };
-
-  const payUsingJuspayCard = async () => {
-    const newPayload = {
-      ...selectedPaymentPayload,
-    };
-    const res = await proceedToPay("newCARD", newPayload);
-    return res;
   };
 
   const payUsingCard = async () => {
@@ -1721,9 +1674,6 @@ function CheckoutPaymentContent({
                       setCardValidity={setCardValidity}
                       resetCardValidationErrors={resetCardValidationErrors}
                       enableLinkPaymentOption={enableLinkPaymentOption}
-                      paymentOption={paymentOption}
-                      paymentResponse={paymentResponse}
-                      isJuspayEnabled={isJuspayEnabled}
                     />
                   </div>
                 )}
@@ -1780,9 +1730,6 @@ function CheckoutPaymentContent({
                   setCardValidity={setCardValidity}
                   resetCardValidationErrors={resetCardValidationErrors}
                   enableLinkPaymentOption={enableLinkPaymentOption}
-                  paymentOption={paymentOption}
-                  paymentResponse={paymentResponse}
-                  isJuspayEnabled={isJuspayEnabled}
                 />
               </div>
             )}
@@ -1841,9 +1788,6 @@ function CheckoutPaymentContent({
                     setCardValidity={setCardValidity}
                     resetCardValidationErrors={resetCardValidationErrors}
                     enableLinkPaymentOption={enableLinkPaymentOption}
-                    paymentOption={paymentOption}
-                    paymentResponse={paymentResponse}
-                    isJuspayEnabled={isJuspayEnabled}
                   />
                 </div>
               </Modal>
@@ -2203,6 +2147,7 @@ function CheckoutPaymentContent({
                             handleSavedUPISelect(item.vpa);
                             cancelQrPayment();
                           }}
+                          key={item?.vpa}
                         >
                           <div className={styles.modeItem} key={item.vpa}>
                             <div
@@ -2527,7 +2472,7 @@ function CheckoutPaymentContent({
             </div>
             <div className={styles.modeOption}>
               {topBanks?.map((nb, index) => (
-                <NbItem nb={nb} key={index} />
+                <NbItem nb={nb} key={`nb-${index}`} />
               ))}
 
               {selectedTabData?.list?.length > initialVisibleBankCount && (
@@ -2904,7 +2849,7 @@ function CheckoutPaymentContent({
             <div className={styles.modeOption}>
               {otherPaymentOptions?.length &&
                 otherPaymentOptions.map((op, index) => (
-                  <OtherItem other={op} key={index} />
+                  <OtherItem other={op} key={`other-${index}`} />
                 ))}
             </div>
           </div>
@@ -3065,6 +3010,7 @@ function CheckoutPaymentContent({
                       className={styles.subMopIcon}
                       src={subMopIcon}
                       alt={t("resource.checkout.no_image")}
+                      key={subMopIcon}
                     />
                   ) : null
                 )}
@@ -3308,7 +3254,7 @@ function CheckoutPaymentContent({
                       </div>
                     </div>
                     {isTablet && activeMop === "Other" && (
-                      <div className={` ${styles.onMobileView}`}>
+                      <div className={`${styles.onMobileView}`}>
                         {selectedTab === "Other" && navigationTab()}
                       </div>
                     )}
