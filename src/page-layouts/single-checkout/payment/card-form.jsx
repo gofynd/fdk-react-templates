@@ -6,6 +6,7 @@ import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import StickyPayNow from "./sticky-pay-now/sticky-pay-now";
 import { priceFormatCurrencySymbol } from "../../../helper/utils";
 import { useGlobalTranslation } from "fdk-core/utils";
+import JuspayCardForm from "./juspay-card-from";
 
 function CardForm({
   cardNumberRef,
@@ -50,6 +51,9 @@ function CardForm({
   validateCardDetails,
   setCardValidity,
   resetCardValidationErrors,
+  paymentResponse,
+  paymentOption,
+  isJuspayEnabled,
   enableLinkPaymentOption,
 }) {
   const { t } = useGlobalTranslation("translation");
@@ -129,6 +133,21 @@ function CardForm({
     );
   };
 
+  if (isJuspayEnabled()) {
+    return (
+      <JuspayCardForm
+        paymentResponse={paymentResponse}
+        paymentOption={paymentOption}
+        getCurrencySymbol={getCurrencySymbol}
+        getTotalValue={getTotalValue}
+        loggedIn={loggedIn}
+        setOpenGuidelinesModal={setOpenGuidelinesModal}
+        openGuidelinesModal={openGuidelinesModal}
+        onPriceDetailsClick={onPriceDetailsClick}
+      />
+    );
+  }
+
   return (
     <>
       <div
@@ -153,7 +172,10 @@ function CardForm({
             </span>
           )}
           {cardDetailsData && cardDetailsData.logo && (
-            <img src={cardDetailsData.logo} className={styles.cardNetwork} />
+            <img
+              src={cardDetailsData.logo}
+              className={`${styles.cardNetwork} ${cardNumberError ? styles.iconPositionOnError : ""}`}
+            />
           )}
           {cardNumberError && (
             <div className={`${styles.formError}`}>{cardNumberError}</div>
@@ -237,7 +259,7 @@ function CardForm({
               onBlur={validateCvv}
             />
             <div
-              className={`${styles.cvvContainer} ${styles.cvv} ${cardCVVError ? styles.cvvError : ""}`}
+              className={`${styles.cvvContainer} ${styles.cvv} ${cardCVVError || cardExpiryError ? styles.iconPositionOnError : ""}`}
               onMouseEnter={() => {
                 if (!isTablet) {
                   handleCvvInfo(true);

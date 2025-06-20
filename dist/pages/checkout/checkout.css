@@ -844,6 +844,11 @@ h5,
     padding: 16px;
   }
 }
+@media only screen and (max-width: 768px) {
+  .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF {
+    flex-direction: column;
+  }
+}
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF .single-shipment-content__headerLeft___ffG20 {
   display: flex;
   padding: 4px 12px 4px 0px;
@@ -879,12 +884,23 @@ h5,
   gap: 8px;
   align-items: center;
 }
+@media only screen and (max-width: 768px) {
+  .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF .single-shipment-content__deliveryDateWrapper___1R8Nn {
+    gap: 6px;
+  }
+}
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF .single-shipment-content__deliveryDateWrapper___1R8Nn .single-shipment-content__shippingLogo____xKH7 {
   height: 20px;
   width: 20px;
 }
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF .single-shipment-content__deliveryDateWrapper___1R8Nn .single-shipment-content__shippingLogo____xKH7 svg path {
   fill: var(--successText, #1c958f);
+}
+.single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF .single-shipment-content__deliveryDateWrapper___1R8Nn .single-shipment-content__foName___vTtLP {
+  color: var(--textLabel, #7d7676);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 140%;
 }
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF .single-shipment-content__deliveryDateWrapper___1R8Nn .single-shipment-content__deliveryDate___qOrq4 {
   font-weight: 600;
@@ -3173,19 +3189,6 @@ h5,
   display: flex;
   align-items: center;
   position: relative;
-}
-.fy-input__adornmentContainer___MtgI6 .fy-input__startAdornment___SVGGG,
-.fy-input__adornmentContainer___MtgI6 .fy-input__endAdornment___ce3Ta {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 0.5rem;
-}
-.fy-input__adornmentContainer___MtgI6 .fy-input__startAdornment___SVGGG {
-  margin-inline-end: 0.5rem;
-}
-.fy-input__adornmentContainer___MtgI6 .fy-input__endAdornment___ce3Ta {
-  margin-inline-start: 0.5rem;
 }
 .fy-input__adornmentContainer___MtgI6 input {
   flex: 1;
@@ -7396,6 +7399,78 @@ h5,
     display: none !important;
   }
 }
+.card_number_div, .card_exp_month_div, .card_exp_year_div, .security_code_div, .name_on_card_div {
+  height: 48px;
+  border: 1px solid var(--dividerStokes);
+  border-radius: 4px;
+  color: var(--textBody, #3c3131);
+  overflow: hidden;
+  padding-left: 16px;
+  padding-right: 16px;
+  outline: none;
+  margin-top: 16px;
+}
+.security_code_div {
+  width: 103px;
+}
+.card_exp_month_div, .card_exp_year_div {
+  width: 25%;
+}
+.security_code_div {
+  width: 50%;
+}
+@media screen and (max-width: 768px) {
+  .card_number_div, .card_exp_month_div, .card_exp_year_div, .security_code_div, .name_on_card_div {
+    height: 48px;
+  }
+}
+.checkout-payment-content__cardDateCvvJuspayWrapper____0KQj {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+.checkout-payment-content__checkbox___ci4x4 {
+  accent-color: var(--buttonPrimary);
+  height: 13px;
+  width: 13px;
+  cursor: pointer;
+}
+.checkout-payment-content__checkboxWrapper___ohDrw {
+  display: flex;
+  justify-content: start;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+.checkout-payment-content__rbiGuidelines___jmtpW {
+  display: flex;
+  align-items: center;
+  margin-top: 16px;
+}
+@media only screen and (max-width: 480px) {
+  .checkout-payment-content__rbiGuidelines___jmtpW {
+    margin-bottom: 24px;
+  }
+}
+.checkout-payment-content__rbiGuidelines___jmtpW input:checked:before {
+  background-color: var(--buttonPrimary);
+}
+.checkout-payment-content__rbiGuidelines___jmtpW .checkout-payment-content__rbiGuidelinesText___N6rOU {
+  display: flex;
+  font-family: inherit;
+  font-weight: 400;
+  font-size: 12px;
+  color: #1f1f1f;
+  margin: 0 8px;
+  align-self: center;
+  line-height: 140%;
+}
+@media only screen and (max-width: 480px) {
+  .checkout-payment-content__marginBottom___qTP6J {
+    margin-bottom: 24px;
+  }
+}
 .checkout-payment-content__container___HusGh {
   background: var(--pageBackground, #f8f8f8);
 }
@@ -7949,8 +8024,8 @@ h5,
   top: 50%;
   transform: translateY(-50%);
 }
-.checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardNetwork___GK7gx.checkout-payment-content__cvvError___gUVr7,
-.checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cvv___b1NMm.checkout-payment-content__cvvError___gUVr7 {
+.checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardNetwork___GK7gx.checkout-payment-content__iconPositionOnError___teSxE,
+.checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cvv___b1NMm.checkout-payment-content__iconPositionOnError___teSxE {
   top: 35%;
 }
 @media only screen and (min-width: 769px) {
@@ -7959,8 +8034,8 @@ h5,
     top: 38%;
     transform: unset;
   }
-  .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardNetwork___GK7gx.checkout-payment-content__cvvError___gUVr7,
-  .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cvv___b1NMm.checkout-payment-content__cvvError___gUVr7 {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardNetwork___GK7gx.checkout-payment-content__iconPositionOnError___teSxE,
+  .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cvv___b1NMm.checkout-payment-content__iconPositionOnError___teSxE {
     top: 25%;
   }
 }
