@@ -23,7 +23,6 @@ function CheckoutPayment({
   const [showFailedMessage, setShowFailedMessage] = useState(false);
   const [paymentErrHeading, setPaymentErrHeading] = useState("");
   const [paymentErrMsg, setPaymentErrMsg] = useState("");
-  const [juspayErrorMessage, setJuspayErrorMessage] = useState(false);
   const [timerId, setTimerId] = useState(null);
   const { errorMessage, setErrorMessage, enableLinkPaymentOption } = payment;
   const isMobile = useMobile();
@@ -44,7 +43,6 @@ function CheckoutPayment({
         paymentErrMsg: urlParams?.get("error"),
       });
       onFailedGetCartShipmentDetails();
-      setJuspayErrorMessage(true);
     }
   }, [errorMessage]);
 
@@ -141,7 +139,6 @@ function CheckoutPayment({
               breakUpValues={breakUpValues}
               removeDialogueError={hideFailedMessage}
               setCancelQrPayment={setCancelQrPayment}
-              juspayErrorMessage={juspayErrorMessage}
               isCouponApplied={isCouponApplied}
             ></CheckoutPaymentContent>
           </>
