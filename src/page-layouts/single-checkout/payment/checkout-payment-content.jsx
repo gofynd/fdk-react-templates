@@ -8,13 +8,8 @@ import { useMobile } from "../../../helper/hooks/useMobile";
 import { useViewport } from "../../../helper/hooks";
 // import UktModal from "./ukt-modal";
 import StickyPayNow from "./sticky-pay-now/sticky-pay-now";
-import { priceFormatCurrencySymbol } from "../../../helper/utils";
-import {
-  useGlobalStore,
-  useGlobalTranslation,
-  useFPI,
-  useNavigate,
-} from "fdk-core/utils";
+import { priceFormatCurrencySymbol, translateDynamicLabel } from "../../../helper/utils";
+import { useGlobalStore, useGlobalTranslation, useFPI, useNavigate } from "fdk-core/utils";
 import Spinner from "../../../components/spinner/spinner";
 
 const upiDisplayWrapperStyle = {
@@ -1829,7 +1824,7 @@ function CheckoutPaymentContent({
                       <img src={wlt?.logo_url?.small} alt={wlt?.display_name} />
                     </div>
                     <div className={styles.modeItemName}>
-                      {wlt?.display_name ?? ""}
+                      {translateDynamicLabel(wlt?.display_name ?? "", t)}
                     </div>
                   </div>
                   <div
@@ -2415,7 +2410,7 @@ function CheckoutPaymentContent({
                       <img src={nb.logo_url.small} alt={nb?.display_name} />
                     </div>
                     <div className={styles.modeItemName}>
-                      {nb?.display_name ?? ""}
+                      {translateDynamicLabel(nb?.display_name ?? "", t)}
                     </div>
                   </div>
 
@@ -2618,7 +2613,7 @@ function CheckoutPaymentContent({
                               />
                             </div>
                             <div className={styles.modeItemName}>
-                              {payLater?.display_name ?? ""}
+                              {translateDynamicLabel(payLater?.display_name ?? "", t)}
                             </div>
                           </div>
                           <div className={styles.onMobileView}>
@@ -2705,7 +2700,7 @@ function CheckoutPaymentContent({
                           />
                         </div>
                         <div className={styles.modeItemName}>
-                          {emi?.display_name ?? ""}
+                          {translateDynamicLabel(emi?.display_name ?? "", t)}
                         </div>
                       </div>
                       <div className={styles.onMobileView}>
@@ -2991,7 +2986,7 @@ function CheckoutPaymentContent({
             <div
               className={`${styles.modeName} ${selectedTab === opt.name ? styles.selectedModeName : ""}`}
             >
-              {opt?.display_name ?? ""}
+              {translateDynamicLabel(opt?.display_name ?? "", t)}
             </div>
           </div>
           {opt.subMopIcons && (
@@ -3293,7 +3288,7 @@ function CheckoutPaymentContent({
                             <div
                               className={`${styles.modeName} ${selectedTab === codOption.name ? styles.selectedModeName : ""}`}
                             >
-                              {codOption?.display_name ?? ""}
+                              {translateDynamicLabel(codOption?.display_name ?? "", t)}
                             </div>
                             {isTablet && codCharges > 0 && (
                               <div className={styles.codCharge}>

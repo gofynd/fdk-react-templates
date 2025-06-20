@@ -382,6 +382,15 @@ export function isFreeNavigation(e) {
   return false;
 }
 
+const isValidLocale = (tag) => {
+  try {
+    new Intl.Locale(tag);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 export const formatLocale = (locale, countryCode, isCurrencyLocale = false) => {
   if ((locale === "en" || !locale) && isCurrencyLocale) {
     return DEFAULT_CURRENCY_LOCALE;
@@ -389,14 +398,9 @@ export const formatLocale = (locale, countryCode, isCurrencyLocale = false) => {
   if (locale === "en" || !locale) {
     return DEFAULT_UTC_LOCALE;
   }
-  if (locale.includes("-")) {
-    return locale;
-  }
-  return `${locale}${countryCode ? "-" + countryCode : ""}`;
-};
+  const finalLocale = locale.includes("-") ? locale : `${locale}${countryCode ? "-" + countryCode : ""}`;
 
-export const startsWithResource = (str) => {
-  return str.startsWith("resource.");
+  return isValidLocale(finalLocale) ? finalLocale : DEFAULT_UTC_LOCALE;
 };
 
 export const translateValidationMessages = (validationObject, t) => {
@@ -407,12 +411,11 @@ export const translateValidationMessages = (validationObject, t) => {
 
     if (
       typeof rule === "object" &&
-      rule.message &&
-      startsWithResource(rule.message)
+      rule.message
     ) {
-      rule.message = t(rule.message);
-    } else if (typeof rule === "string" && startsWithResource(rule)) {
-      updatedValidation[key] = t(rule);
+      rule.message = translateDynamicLabel(rule.message, t);
+    } else if (typeof rule === "string") {
+      updatedValidation[key] = translateDynamicLabel(rule, t);
     }
   });
 
@@ -455,4 +458,18 @@ export function isEmptyOrNull(obj) {
     obj === undefined ||
     (typeof obj === "object" && Object.keys(obj).length === 0)
   );
+}
+
+export function translateDynamicLabel(input, t) {
+  const safeInput = input
+    .toLowerCase()
+    .replace(/\//g, '_') // replace slashes with underscores
+    .replace(/[^a-z0-9_\s]/g, '') // remove special characters except underscores and spaces
+    .trim()
+    .replace(/\s+/g, '_'); // replace spaces with underscores
+
+  const translationKey = `resource.dynamic_label.${safeInput}`;
+  const translated = t(translationKey);
+
+  return translated.split('.').pop() === safeInput ? input : translated;
 }

@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./chip-item.less";
-import { convertUTCDateToLocalDate, currencyFormat, formatLocale, numberWithCommas } from "../../../../helper/utils";
+import { convertUTCDateToLocalDate, currencyFormat, formatLocale, numberWithCommas, translateDynamicLabel } from "../../../../helper/utils";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import QuantityControl from "../../../../components/quantity-control/quantity-control";
 import Modal from "../../../../components/core/modal/modal";
@@ -174,7 +174,7 @@ export default function ChipItem({
           <div
             className={`${styles["out-of-stock-chip"]} ${styles["new-cart-red-color"]}`}
           >
-            <span>{singleItemDetails?.message || t("resource.common.out_of_stock")}</span>
+            <span>{translateDynamicLabel(singleItemDetails?.message, t) || t("resource.common.out_of_stock")}</span>
             <span
               className={styles.removeAction}
               onClick={(e) =>
