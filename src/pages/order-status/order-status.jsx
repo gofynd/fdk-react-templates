@@ -4,6 +4,7 @@ import {
   formatLocale,
   getAddressStr,
   numberWithCommas,
+  translateDynamicLabel,
 } from "../../helper/utils";
 import * as styles from "./order-status.less";
 import PriceBreakup from "../../components/price-breakup/price-breakup";
@@ -141,7 +142,7 @@ function OrderStatus({
                               />
                             </span>
                             <span className={styles["mode-name"]}>
-                              {paymentInfo?.display_name || t("resource.order.cod")}
+                              {translateDynamicLabel(paymentInfo?.display_name, t) || t("resource.order.cod")}
                             </span>
                           </div>
                         )
