@@ -1,6 +1,6 @@
 import React, { useState, useId, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { checkIfNumber, translateDynamicLabel, validatePasswordField } from "../../../../helper/utils";
+import { checkIfNumber, validatePasswordField } from "../../../../helper/utils";
 import * as styles from "./login-password.less";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import MobileNumber from "../../../auth/mobile-number/mobile-number";
@@ -193,7 +193,7 @@ function loginPassword({
       </div>
 
       <button className={styles.loginButton} type="submit">
-        {translateDynamicLabel(loginButtonText, t) || t("resource.auth.login.login_caps")}
+        {loginButtonText || t("resource.auth.login.login_caps")}
       </button>
     </form>
   );

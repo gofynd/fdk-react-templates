@@ -10,7 +10,7 @@
 
 import React, { useMemo } from "react";
 import * as styles from "./shipment-breakup.less";
-import { priceFormatCurrencySymbol, translateDynamicLabel } from "../../helper/utils";
+import { priceFormatCurrencySymbol } from "../../helper/utils";
 import { useGlobalTranslation } from "fdk-core/utils";
 
 function ShipmentBreakup({ breakup }) {
@@ -38,7 +38,7 @@ function ShipmentBreakup({ breakup }) {
               <>
                 {index !== breakup.length - 1 && (
                   <span className={styles.totalValContainer}>
-                    <span className={styles.label}>{translateDynamicLabel(item.display, t)}</span>
+                    <span className={styles.label}>{item.display}</span>
                     <span className={`${styles.values}`}>
                       {getPriceFormat(
                         item.currency_symbol,
@@ -49,7 +49,7 @@ function ShipmentBreakup({ breakup }) {
                 )}
                 {index === breakup.length - 1 && (
                   <span className={styles.totalValContainer}>
-                    <span className={styles.label}>{translateDynamicLabel(item.display, t)}</span>
+                    <span className={styles.label}>{item.display}</span>
                     <span className={`${styles.values}`}>
                       {getPriceFormat(
                         item.currency_symbol,

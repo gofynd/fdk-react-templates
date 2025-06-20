@@ -11,7 +11,7 @@
 
 import React from "react";
 import * as styles from "./payment-detail-card.less";
-import { priceFormatCurrencySymbol, translateDynamicLabel } from "../../helper/utils";
+import { priceFormatCurrencySymbol } from "../../helper/utils";
 import { useGlobalTranslation } from "fdk-core/utils";
 
 function PaymentDetailCard({ breakup, paymentDetails }) {
@@ -30,7 +30,7 @@ function PaymentDetailCard({ breakup, paymentDetails }) {
               </span>
               <span className={`${styles.desc}`}>
                 <span className={`${styles.text} ${styles.regularxs}`}>
-                  {translateDynamicLabel(paymentInfo?.display_name, t)}
+                  {paymentInfo?.display_name}
                 </span>
               </span>
             </div>

@@ -150,7 +150,9 @@
         display: flex;
         flex-wrap: wrap;
         align-items: baseline;
-
+        &--textCenter {
+          text-align: center;
+        }
         &.center {
           justify-content: center;
         }
@@ -167,9 +169,6 @@
         }
         &--discount {
           color: @SaleDiscountText;
-        }
-        &--textCenter {
-          text-align: center;
         }
       }
       .productVariants {
@@ -429,4 +428,7 @@
 //     opacity: 1;
 //     transform: translateY(0);
 //   }
+// }
+// .textCenter {
+//   text-align: center;
 // }
