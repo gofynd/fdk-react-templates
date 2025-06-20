@@ -36,7 +36,7 @@
       background: transparent;
 
       .customLoader {
-        margin-inline-start: 0;
+        margin-left: 0;
       }
     }
   }
@@ -55,7 +55,7 @@
 
     .left {
       flex: 0 0 259px;
-      margin-inline-end: 16px;
+      margin-right: 16px;
       z-index: 1;
       max-width: 259px;
 
@@ -174,7 +174,7 @@
   .filter__modal {
     position: fixed;
     top: 0;
-    inset-inline-start: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     display: flex;
@@ -232,7 +232,7 @@
             width: 28px;
             height: 28px;
             padding: 4px;
-            margin-inline-end: 8px;
+            margin-right: 8px;
 
             &.selected {
               color: @ButtonPrimary;
@@ -263,14 +263,14 @@
       .leftPane {
         flex: 0 0 122px;
         overflow-y: auto;
-        border-inline-end: 1px solid @DividerStokes;
+        border-right: 1px solid @DividerStokes;
 
         .filter-title {
           padding: 14px 16px;
           border-bottom: 1px solid @DividerStokes;
 
           &.active {
-            border-inline-end: 2px solid @ButtonPrimary;
+            border-right: 2px solid @ButtonPrimary;
           }
         }
       }
@@ -299,12 +299,9 @@
     position: fixed;
     top: calc(var(--headerHeight) + 69px);
     z-index: 1;
-    inset-inline-end: 50%;
+    right: 50%;
     z-index: 1;
     transform: translateX(50%);
-    [dir="rtl"] & {
-      transform: translateX(-50%);
-    }
 
     & > .arrow-top-icon {
       fill: currentColor;
@@ -315,7 +312,7 @@
     @media @desktop {
       justify-content: center;
       top: unset;
-      inset-inline-end: 40px;
+      right: 40px;
       bottom: 40px;
       width: 40px;
       height: 40px;
@@ -393,9 +390,9 @@
       column-gap: 4px;
       color: @TextHeading;
       &.filterBtn {
-        padding-inline-end: 16px;
-        border-inline-end: 1px solid @DividerStokes;
-        margin-inline-end: 16px;
+        padding-right: 16px;
+        border-right: 1px solid @DividerStokes;
+        margin-right: 16px;
       }
     }
   }
@@ -451,7 +448,7 @@
   justify-content: center;
   color: @TextHeading;
   &:not(:last-child) {
-    margin-inline-end: 8px;
+    margin-right: 8px;
   }
   &.active {
     border-color: @DividerStokes;
