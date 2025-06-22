@@ -158,10 +158,10 @@ function OrderStatus({
                           {getAddressData?.name}
                         </div>
                         <div className={styles["label"]}>
-                          {getAddressData?.address_type
+                          {translateDynamicLabel(getAddressData?.address_type
                             ?.charAt(0)
                             ?.toUpperCase() +
-                            getAddressData?.address_type.slice(1)}
+                            getAddressData?.address_type.slice(1), t)}
                         </div>
                       </div>
                       <div className={styles["address-phone"]}>
