@@ -382,7 +382,7 @@ h5,
 }
 .filter-list__filter__list--items___vtOJk .filter-list__filter__item--value___PVzdh {
   color: var(--textBody, #3c3131);
-  margin-inline-end: 4px;
+  margin-right: 4px;
   text-overflow: ellipsis;
   overflow: hidden;
 }
@@ -472,7 +472,7 @@ h5,
   padding: 24px 12px;
   overflow-x: auto;
   scroll-behavior: smooth;
-  scroll-margin-inline-start: 24px;
+  scroll-margin-left: 24px;
 }
 .filter-list__filter__list___rtO83 .filter-list__filter__popup--content___hMKDx.filter-list__emptyPopupContent___f2RjY {
   justify-content: center;
@@ -877,10 +877,7 @@ h5,
 }
 .range-slider__CustomRangeSlider___Uo_rw .range-slider__price-Container--title___i8SYy {
   font-size: small;
-  margin-top: 0;
-  margin-inline-end: 0px;
-  margin-bottom: 12px;
-  margin-inline-start: 0px;
+  margin: 0px 0px 12px 0px;
   display: none;
 }
 @media only screen and (max-width: 480px) {
@@ -1388,19 +1385,6 @@ h5,
   display: flex;
   align-items: center;
   position: relative;
-}
-.fy-input__adornmentContainer___MtgI6 .fy-input__startAdornment___SVGGG,
-.fy-input__adornmentContainer___MtgI6 .fy-input__endAdornment___ce3Ta {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 0.5rem;
-}
-.fy-input__adornmentContainer___MtgI6 .fy-input__startAdornment___SVGGG {
-  margin-inline-end: 0.5rem;
-}
-.fy-input__adornmentContainer___MtgI6 .fy-input__endAdornment___ce3Ta {
-  margin-inline-start: 0.5rem;
 }
 .fy-input__adornmentContainer___MtgI6 input {
   flex: 1;

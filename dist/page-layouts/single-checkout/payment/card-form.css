@@ -334,6 +334,78 @@ h5,
     display: none !important;
   }
 }
+.card_number_div, .card_exp_month_div, .card_exp_year_div, .security_code_div, .name_on_card_div {
+  height: 48px;
+  border: 1px solid var(--dividerStokes);
+  border-radius: 4px;
+  color: var(--textBody, #3c3131);
+  overflow: hidden;
+  padding-left: 16px;
+  padding-right: 16px;
+  outline: none;
+  margin-top: 16px;
+}
+.security_code_div {
+  width: 103px;
+}
+.card_exp_month_div, .card_exp_year_div {
+  width: 25%;
+}
+.security_code_div {
+  width: 50%;
+}
+@media screen and (max-width: 768px) {
+  .card_number_div, .card_exp_month_div, .card_exp_year_div, .security_code_div, .name_on_card_div {
+    height: 48px;
+  }
+}
+.checkout-payment-content__cardDateCvvJuspayWrapper____0KQj {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+.checkout-payment-content__checkbox___ci4x4 {
+  accent-color: var(--buttonPrimary);
+  height: 13px;
+  width: 13px;
+  cursor: pointer;
+}
+.checkout-payment-content__checkboxWrapper___ohDrw {
+  display: flex;
+  justify-content: start;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+.checkout-payment-content__rbiGuidelines___jmtpW {
+  display: flex;
+  align-items: center;
+  margin-top: 16px;
+}
+@media only screen and (max-width: 480px) {
+  .checkout-payment-content__rbiGuidelines___jmtpW {
+    margin-bottom: 24px;
+  }
+}
+.checkout-payment-content__rbiGuidelines___jmtpW input:checked:before {
+  background-color: var(--buttonPrimary);
+}
+.checkout-payment-content__rbiGuidelines___jmtpW .checkout-payment-content__rbiGuidelinesText___N6rOU {
+  display: flex;
+  font-family: inherit;
+  font-weight: 400;
+  font-size: 12px;
+  color: #1f1f1f;
+  margin: 0 8px;
+  align-self: center;
+  line-height: 140%;
+}
+@media only screen and (max-width: 480px) {
+  .checkout-payment-content__marginBottom___qTP6J {
+    margin-bottom: 24px;
+  }
+}
 .checkout-payment-content__container___HusGh {
   background: var(--pageBackground, #f8f8f8);
 }
@@ -525,9 +597,6 @@ h5,
 .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__arrowContainer___LDeoa.checkout-payment-content__codIconContainer____fdEj svg {
   transform: rotate(270deg);
 }
-[dir='rtl'] .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__arrowContainer___LDeoa.checkout-payment-content__codIconContainer____fdEj svg {
-  transform: rotate(90deg);
-}
 .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__arrowContainer___LDeoa .checkout-payment-content__upsideDown___dk0Z9 {
   transform: rotate(180deg);
 }
@@ -688,10 +757,7 @@ h5,
   color: var(--textHeading);
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__savedCardWrapper___HlKIX .checkout-payment-content__cvvInfo___UveDM .checkout-payment-content__type___rvnHr .checkout-payment-content__desc___aVB9G {
-  margin-top: 8px;
-  margin-inline-end: 0;
-  margin-bottom: 16px;
-  margin-inline-start: 0;
+  margin: 8px 0 16px 0;
   color: var(--textBody);
   font-size: 12px;
 }
@@ -1016,10 +1082,7 @@ h5,
   padding: 16px;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__rbiGuidelines___jmtpW .checkout-payment-content__rbiGuidelinesContent___ycqoZ ul {
-  padding-top: 0;
-  padding-inline-end: 0;
-  padding-bottom: 0;
-  padding-inline-start: 16px;
+  padding: 0 0 0 16px;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__rbiGuidelines___jmtpW .checkout-payment-content__rbiGuidelinesContent___ycqoZ ul li {
   list-style-type: disc;
@@ -1094,10 +1157,7 @@ h5,
   }
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__cvvInfo___UveDM .checkout-payment-content__type___rvnHr .checkout-payment-content__desc___aVB9G {
-  margin-top: 8px;
-  margin-inline-end: 0;
-  margin-bottom: 16px;
-  margin-inline-start: 0;
+  margin: 8px 0 16px 0;
   color: var(--textBody);
 }
 @media only screen and (min-width: 769px) {
@@ -1106,10 +1166,7 @@ h5,
   }
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__addNewCardModal___HuBPW {
-  padding-top: 0px;
-  padding-inline-end: 16px;
-  padding-bottom: 24px;
-  padding-inline-start: 16px;
+  padding: 0px 16px 24px 16px;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__modePay___tBSpm .checkout-payment-content__payBtn___dgcAp,
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardlessPay___dcGhw .checkout-payment-content__payBtn___dgcAp,
@@ -1744,10 +1801,7 @@ h5,
   font-weight: 700;
   font-size: 24px;
   line-height: 33.6px;
-  margin-top: 16px;
-  margin-inline-end: 0;
-  margin-bottom: 8px;
-  margin-inline-start: 0;
+  margin: 16px 0 8px 0;
   color: var(--primaryColor);
 }
 .checkout-payment-content__upiRedirectionModal___A77Sr .checkout-payment-content__message___r1UVA {
@@ -2042,7 +2096,7 @@ h5,
 }
 .checkout-payment-content__crossMobile___jmnlv {
   position: absolute;
-  inset-inline-end: 16px;
+  right: 16px;
 }
 .checkout-payment-content__noResultFound___suFuv {
   color: var(--Text-Body, #4d4d4e);
@@ -2898,8 +2952,8 @@ h5,
   width: 100%;
   z-index: 1;
   bottom: 0;
-  inset-inline-start: 0;
-  inset-inline-end: 0;
+  left: 0;
+  right: 0;
   display: none;
   box-sizing: border-box;
   background-color: var(--pageBackground, #f8f8f8);
@@ -2978,5 +3032,22 @@ h5,
 }
 .sticky-pay-now__buttonWidth___nKraw {
   width: 100%;
+}
+
+.shimmer__shimmerBox___LToot {
+  width: var(--width);
+  height: var(--height);
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer__shimmer___b_S5k 1.5s infinite linear;
+  border-radius: 8px;
+}
+@keyframes shimmer__shimmer___b_S5k {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 

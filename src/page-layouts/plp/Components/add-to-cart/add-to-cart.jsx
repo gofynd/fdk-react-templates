@@ -7,7 +7,13 @@ import FyButton from "../../../../components/core/fy-button/fy-button";
 import DeliveryInfo from "../delivery-info/delivery-info";
 import QuantityControl from "../../../../components/quantity-control/quantity-control";
 import FyDropdown from "../../../../components/core/fy-dropdown/fy-dropdown";
-import { currencyFormat, formatLocale, isEmptyOrNull } from "../../../../helper/utils";
+import {
+  currencyFormat,
+  isEmptyOrNull,
+  formatLocale,
+} from "../../../../helper/utils";
+import RadioIcon from "../../../../assets/images/radio";
+import TruckIcon from "../../../../assets/images/truck-icon.svg";
 import CartIcon from "../../../../assets/images/cart.svg";
 import BuyNowIcon from "../../../../assets/images/buy-now.svg";
 import { useGlobalTranslation, useGlobalStore, useFPI } from "fdk-core/utils";
@@ -20,19 +26,23 @@ const AddToCart = ({
   selectedSize = "",
   deliverInfoProps = {},
   sizeError = false,
-  handleSlugChange = (updatedSlug) => { },
-  onSizeSelection = () => { },
-  handleShowSizeGuide = () => { },
-  addProductForCheckout = () => { },
-  handleViewMore = () => { },
-  handleClose = () => { },
+  handleSlugChange = (updatedSlug) => {},
+  onSizeSelection = () => {},
+  handleShowSizeGuide = () => {},
+  addProductForCheckout = () => {},
+  handleViewMore = () => {},
+  handleClose = () => {},
   selectedItemDetails = {},
   isCartUpdating = false,
   isHyperlocal = false,
-  cartUpdateHandler = () => { },
+  cartUpdateHandler = () => {},
   minCartQuantity,
   maxCartQuantity,
   incrementDecrementUnit,
+  fulfillmentOptions = [],
+  currentFO = {},
+  setCurrentFO = () => {},
+  availableFOCount,
 }) => {
   const fpi = useFPI();
   const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
@@ -71,10 +81,13 @@ const AddToCart = ({
           formatLocale(locale, countryCode, true)) || "";
       }
       const price = productPrice?.price || "";
-      return currencyFormat(
-        price?.[key], 
-        price?.currency_symbol, 
-        formatLocale(locale, countryCode, true)) || "";
+      return (
+        currencyFormat(
+          price?.[key],
+          price?.currency_symbol,
+          formatLocale(locale, countryCode, true)
+        ) || ""
+      );
     }
     if (selectedSize && priceDataDefault) {
       return (
@@ -114,6 +127,24 @@ const AddToCart = ({
       ?.filter((size) => size?.quantity === 0 && !isMto)
       ?.map((size) => size?.value);
   }, [sizes?.sizes]);
+
+  const getDeliveryDate = (deliveryPromise) => {
+    const options = {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+      timeZone: "UTC",
+    };
+
+    const { max } = deliveryPromise || {};
+
+    if (!max) return false;
+
+    const dateFormatter = new Intl.DateTimeFormat(undefined, options);
+    const maxDate = dateFormatter.format(new Date(max));
+
+    return maxDate;
+  };
 
   return (
     <div className={styles.productDescContainer}>
@@ -188,7 +219,9 @@ const AddToCart = ({
                 <div className={styles.sizeHeaderContainer}>
                   <p className={`${styles.b2} ${styles.sizeSelection__label}`}>
                     <span>
-                      {t("resource.product.style")}: {Boolean(selectedSize) && `${t("resource.common.size")} (${selectedSize})`}
+                      {t("resource.product.style")}:{" "}
+                      {Boolean(selectedSize) &&
+                        `${t("resource.common.size")} (${selectedSize})`}
                     </span>
                   </p>
                   {pageConfig?.show_size_guide &&
@@ -285,8 +318,51 @@ const AddToCart = ({
               <DeliveryInfo {...deliverInfoProps} />
             )}
 
+            {selectedSize &&
+              !!fulfillmentOptions.length &&
+              availableFOCount > 1 && (
+                <div className={styles.fulfillmentWrapper}>
+                  <div className={styles.foList}>
+                    {fulfillmentOptions.map((foItem, index) => (
+                      <div
+                        key={index}
+                        className={styles.fulfillmentOption}
+                        onClick={() =>
+                          setCurrentFO(foItem?.fulfillment_option || {})
+                        }
+                      >
+                        {fulfillmentOptions.length === 1 ? (
+                          <TruckIcon className={styles.fulfillmentOption} />
+                        ) : (
+                          <RadioIcon
+                            checked={
+                              foItem?.fulfillment_option?.slug ===
+                              currentFO?.slug
+                            }
+                          />
+                        )}
+
+                        <div className={styles.foDetails}>
+                          {!!getDeliveryDate(foItem?.delivery_promise) && (
+                            <p className={styles.promiseLabel}>
+                              Get it by{" "}
+                              {getDeliveryDate(foItem?.delivery_promise)}
+                            </p>
+                          )}
+                          <p className={styles.foLabel}>
+                            {foItem?.fulfillment_option?.name}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
             <div className={styles.viewMore}>
-              <span onClick={handleViewMore}>{t("resource.product.view_full_details")}</span>
+              <span onClick={handleViewMore}>
+                {t("resource.product.view_full_details")}
+              </span>
             </div>
           </div>
           {/* ---------- Buy Now and Add To Cart ---------- */}

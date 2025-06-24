@@ -244,6 +244,65 @@
             display: none;
           }
         }
+
+        .fulfillmentWrapper {
+          border-radius: @ButtonRadius;
+          border: 1px solid @DividerStokes;
+          padding: 16px;
+          margin: 24px 0;
+
+          .deliveryBy {
+            color: @TextBody;
+            font-size: 16px;
+            font-weight: 600;
+            line-height: normal;
+            letter-spacing: -0.32px;
+
+            .storeSellerLabel {
+              color: @ButtonLink;
+              font-size: 14px;
+              font-weight: 500;
+              line-height: normal;
+              letter-spacing: -0.28px;
+              text-decoration-line: underline;
+              text-transform: uppercase;
+              margin-left: 8px;
+              cursor: pointer;
+            }
+          }
+
+          .foList {
+            .fulfillmentOption {
+              display: flex;
+              margin-top: 16px;
+              gap: 8px;
+              cursor: pointer;
+
+              .foDetails {
+                .promiseLabel {
+                  color: @TextHeading;
+                  font-size: 14px;
+                  font-weight: 500;
+                  line-height: normal;
+                  margin-bottom: 4px;
+                }
+
+                .foLabel {
+                  color: @TextLabel;
+                  font-size: 14px;
+                  font-weight: 400;
+                  line-height: 18px;
+                  letter-spacing: -0.28px;
+                  margin-top: 1px;
+                }
+              }
+
+              &:first-child {
+                margin-top: 0px;
+              }
+            }
+          }
+        }
       }
       .actionButtons {
         display: flex;

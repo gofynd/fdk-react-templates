@@ -56,22 +56,22 @@ export const GENDER_OPTIONS = [
 
 export const DATE_FILTERS = [
   {
-    display: "Last 30 days",
+    display: "resource.common.date_filter_options.last_30_days",
     value: 30,
     is_selected: false,
   },
   {
-    display: "Last 6 months",
+    display: "resource.common.date_filter_options.last_6_months",
     value: 180,
     is_selected: false,
   },
   {
-    display: "Last 12 months",
+    display: "resource.common.date_filter_options.last_12_months",
     value: 365,
     is_selected: false,
   },
   {
-    display: "Last 24 months",
+    display: "resource.common.date_filter_options.last_24_months",
     value: 730,
     is_selected: true,
   },

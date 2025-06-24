@@ -4,7 +4,6 @@ import {
   validateName,
   validateEmailField,
   validatePasswordField,
-  translateDynamicLabel,
 } from "../../helper/utils";
 import * as styles from "./register.less";
 import MobileNumber from "../../page-layouts/auth/mobile-number/mobile-number";
@@ -44,6 +43,7 @@ function Register({
     }
     return true;
   };
+
   const validatePassword = (value) => validatePasswordField(value);
 
   const {
@@ -90,10 +90,10 @@ function Register({
 
   const isMobileRequired = useMemo(() => {
     if (mobileLevel === "soft") {
-      return "optional";
+      return t("resource.common.optional_lower");
     }
     if (mobileLevel === "hard") {
-      return "required";
+      return t("resource.common.required_lower");
     }
     return "";
   }, [mobileLevel]);
@@ -337,7 +337,7 @@ function Register({
           {
             errors.root && (
               <div className={styles.loginAlert}>
-                <span>{translateDynamicLabel(errors.root.message, t)}</span>
+                <span>{errors.root.message}</span>
               </div>
             )
           }

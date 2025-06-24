@@ -22,7 +22,7 @@ import {
   throttle,
   convertUTCDateToLocalDate,
   formatLocale,
-  translateDynamicLabel,
+  startsWithResource,
 } from "../../helper/utils";
 import Shimmer from "../../components/shimmer/shimmer";
 
@@ -78,7 +78,9 @@ function MemoizedSlide({ blog, index, sliderProps, getBlogTitle }) {
           title={blog?.title}
           to={`/blog/${blog?.slug}`}
         >
-          {translateDynamicLabel(sliderProps?.btn_text, t)}
+          {startsWithResource(t(`resource.common.${sliderProps?.btn_text?.trim().toLowerCase().split(" ").join("_")}`))
+            ? sliderProps?.btn_text
+            : t(`resource.common.${sliderProps?.btn_text?.trim().toLowerCase().split(" ").join("_")}`)}
         </FDKLink>
       </div>
       <FyImage

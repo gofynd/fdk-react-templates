@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import * as styles from "./order-tracking-details.less";
 import EmptyState from "../../../components/empty-state/empty-state";
 import OrderShipment from "../../../components/order-shipment/order-shipment";
 import ShipmentItem from "../../../components/shipment-item/shipment-item";
 import ShipmentTracking from "../../../components/shipment-tracking/shipment-tracking";
 import ShipmentBreakup from "../../../components/shipment-breakup/shipment-breakup";
-import { useGlobalTranslation, useNavigate } from "fdk-core/utils";
+import { useGlobalTranslation } from "fdk-core/utils";
 import FyButton from "../../../components/core/fy-button/fy-button";
 import FyInput from "../../../components/core/fy-input/fy-input";
 import Loader from "../../../components/loader/loader";
@@ -21,6 +21,7 @@ function OrderTrackingDetails({
   selectedShipment,
   isShipmentLoading,
   linkOrderDetails,
+  availableFOCount,
 }) {
   const { t } = useGlobalTranslation("translation");
   const params = useParams();
@@ -130,6 +131,7 @@ function OrderTrackingDetails({
                   <OrderShipment
                     orderInfo={orderShipments}
                     isBuyAgainEligible={false}
+                    availableFOCount={availableFOCount}
                   ></OrderShipment>
                 </div>
                 {isShipmentLoading ? (
@@ -166,7 +168,7 @@ function OrderTrackingDetails({
                     <div className={`${styles.shipment}`}>
                       <ShipmentTracking
                         tracking={selectedShipmentBag?.tracking_details}
-                        shipmentInfo={selectedShipmentBag}
+                        shipmentInfo={selectedShipmentBag || {}}
                         changeinit={toggelInit}
                         invoiceDetails={invoiceDetails}
                       ></ShipmentTracking>

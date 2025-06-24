@@ -47,7 +47,7 @@ const FreeGiftItem = ({ item, currencySymbol = "₹" }) => {
                       <div className={styles.freeGiftItemName}>{item_name}</div>
                       {item?.quantity && (
                         <div className={styles.freeGiftQuantity}>
-                          <span className={styles.quantityColor}>{t("resource.common.quantity")}</span>
+                          <span className={styles.quantityColor}>Quantity</span>
                           <span className={styles.quantityCount}>
                             {item?.quantity}
                           </span>
@@ -55,7 +55,7 @@ const FreeGiftItem = ({ item, currencySymbol = "₹" }) => {
                       )}
                       <div className={styles.freeGiftItemPrice}>
                         <span className={styles.freeGiftItemFreeLabel}>
-                        {t("resource.common.free")}
+                          FREE
                         </span>
                         {item_price_details?.effective?.max && (
                           <span className={styles.freeGiftItemFreeEffective}>
