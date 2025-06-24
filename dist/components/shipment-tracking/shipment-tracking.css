@@ -392,7 +392,7 @@ h5,
 }
 .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__status___B417y .shipment-tracking__info___KBL6j {
   position: absolute;
-  right: 20px;
+  inset-inline-end: 20px;
   text-align: center;
   color: #ffffff;
   padding: 10px;
@@ -408,7 +408,7 @@ h5,
   opacity: 0.5;
 }
 .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__trackInfo___A5RXX {
-  margin-left: 20px;
+  margin-inline-start: 20px;
 }
 .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__trackInfo___A5RXX .shipment-tracking__boldsm___aDLPp {
   font-weight: 700;
@@ -437,7 +437,7 @@ h5,
   width: 100%;
 }
 .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__dropdownArrow___m8GIu {
-  margin-left: auto;
+  margin-inline-start: auto;
 }
 .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__title___BMsCR {
   font-weight: bold;
@@ -486,12 +486,12 @@ h5,
   font-size: 12px;
   font-weight: 500;
   line-height: 140%;
-  border-right: 1px solid var(--dividerStokes, #d4d1d1);
+  border-inline-end: 1px solid var(--dividerStokes, #d4d1d1);
   color: var(--buttonLink, #b1655b);
 }
 .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI div:last-child,
 .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI a:last-child {
-  border-right: none;
+  border-inline-end: none;
 }
 .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI div:hover,
 .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI a:hover {

@@ -69,8 +69,7 @@ function CardForm({
 
   const starPlaceholder = (
     <>
-      {t("resource.checkout.expiry_date")}
-      <span style={{ color: "red" }}>*</span>
+      {t('resource.checkout.expiry_date')}<span style={{ color: "red" }}>*</span>
     </>
   );
 
@@ -148,8 +147,7 @@ function CardForm({
             <span
               className={`${styles.inputName} ${cardNumberError ? styles.errorInputName : ""}`}
             >
-              {t("resource.checkout.card_number")}
-              <span className={styles.required}>*</span>
+              {t('resource.checkout.card_number')}<span className={styles.required}>*</span>
             </span>
           )}
           {cardDetailsData && cardDetailsData.logo && (
@@ -166,7 +164,7 @@ function CardForm({
           <input
             maxLength="20"
             type="text"
-            placeholder={`${t("resource.checkout.name_on_card")}*`}
+            placeholder={`${t('resource.checkout.name_on_card')}*`}
             className={`${cardNameError ? styles.error : ""} ${styles.cardName}`}
             ref={nameRef}
             contentEditable="true"
@@ -178,8 +176,7 @@ function CardForm({
             <span
               className={`${styles.inputName} ${cardNameError ? styles.errorInputName : ""}`}
             >
-              {t("resource.checkout.name_on_card")}
-              <span className={styles.required}>*</span>
+              {t('resource.checkout.name_on_card')}<span className={styles.required}>*</span>
             </span>
           )}
           {cardNameError && (
@@ -212,7 +209,7 @@ function CardForm({
                   mask: "/",
                 },
               }}
-              placeholder={`${t("resource.checkout.expiry_date")}*`}
+              placeholder={`${t('resource.checkout.expiry_date')}*`}
               className={`${cardExpiryError ? styles.error : ""} ${styles.cardExpiry}`}
               onBlur={validateCardExpiryDate}
             />
@@ -220,8 +217,7 @@ function CardForm({
               <span
                 className={`${styles.inputName} ${cardExpiryError ? styles.errorInputName : ""}`}
               >
-                {t("resource.checkout.expiry_date")}
-                <span className={styles.required}>*</span>
+                {t('resource.checkout.expiry_date')}<span className={styles.required}>*</span>
               </span>
             )}
             {cardExpiryError && (
@@ -234,7 +230,7 @@ function CardForm({
               type="password"
               onKeyPress={keypressCvv}
               maxLength="4"
-              placeholder={`${t("resource.checkout.cvv")}*`}
+              placeholder={`${t('resource.checkout.cvv')}*`}
               className={`${cardCVVError ? styles.error : ""} ${styles.cardCvv}`}
               onChange={handleCvvNumberInput}
               onBlur={validateCvv}
@@ -263,8 +259,7 @@ function CardForm({
               <span
                 className={`${styles.inputName} ${cardCVVError ? styles.errorInputName : ""}`}
               >
-                {t("resource.checkout.cvv")}
-                <span className={styles.required}>*</span>
+                {t('resource.checkout.cvv')}<span className={styles.required}>*</span>
               </span>
             )}
             {cardCVVError && (
@@ -284,7 +279,7 @@ function CardForm({
               />
             </label>
             <div className={styles.rbiGuidelinesText}>
-              {t("resource.checkout.save_this_card_rbi_guidelines")}
+              {t('resource.checkout.save_this_card_rbi_guidelines')}
             </div>
             <span className={styles.infoIcon}>
               <SvgWrapper
@@ -304,10 +299,8 @@ function CardForm({
                 return (
                   <div style={{ display: "flex", padding: "8px" }}>
                     <SvgWrapper svgSrc="card-payment" />
-                    <span
-                      style={{ paddingInlineStart: "8px", fontSize: "14px" }}
-                    >
-                      {t("resource.checkout.improve_your_card_security")}
+                    <span style={{ paddingInlineStart: "8px", fontSize: "14px" }}>
+                      {t('resource.checkout.improve_your_card_security')}
                     </span>
                   </div>
                 );
@@ -316,10 +309,10 @@ function CardForm({
               <div className={styles.rbiGuidelinesContent}>
                 <ul>
                   <li className="fontBody">
-                    {t("resource.checkout.card_consent_request_1")}
+                    {t('resource.checkout.card_consent_request_1')}
                   </li>
                   <li className="fontBody">
-                    {t("resource.checkout.card_consent_request_2")}
+                  {t('resource.checkout.card_consent_request_2')}
                   </li>
                 </ul>
               </div>
