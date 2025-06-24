@@ -52,8 +52,7 @@
 import React, { useMemo } from "react";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
 import * as styles from "./address-item.less";
-import { getAddressStr, translateDynamicLabel } from "../../helper/utils";
-import { useGlobalTranslation } from "fdk-core/utils";
+import { getAddressStr } from "../../helper/utils";
 
 const AddressType = {
   area: "",
@@ -79,7 +78,6 @@ function AddressItem({
   containerClassName = "",
   ...restProps
 }) {
-  const { t } = useGlobalTranslation("translation");
   const getAddress = useMemo(
     () => getAddressStr(addressItem, false),
     [addressItem]
@@ -110,7 +108,7 @@ function AddressItem({
           <span className={styles.addressName}>{addressItem.name}</span>
           {showAddressType && (
             <span className={styles.addressType}>
-              {translateDynamicLabel(addressItem.address_type, t)}
+              {addressItem.address_type}
             </span>
           )}
         </div>
@@ -119,13 +117,13 @@ function AddressItem({
       <>{belowNameSlot}</>
       <div
         className={styles.addressMid}
-        style={{ marginInlineStart: showAddressSelectionCheckbox ? "25px" : 0 }}
+        style={{ marginLeft: showAddressSelectionCheckbox ? "25px" : 0 }}
       >
         {getAddress}
       </div>
       <div
         className={styles.phEnd}
-        style={{ marginInlineStart: showAddressSelectionCheckbox ? "25px" : 0 }}
+        style={{ marginLeft: showAddressSelectionCheckbox ? "25px" : 0 }}
       >
         {addressItem.country_phone_code + "-" + addressItem.phone}
       </div>

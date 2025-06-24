@@ -48,10 +48,7 @@
 
     .productInfo {
       .product {
-        margin-top: 24px;
-        margin-inline-end: 24px;
-        margin-bottom: 0px;
-        margin-inline-start: 24px;
+        margin: 24px 24px 0px 24px;
         overflow: auto;
 
         @media @desktop {
@@ -121,7 +118,7 @@
             .ratingIcon {
               width: 14px;
               height: 14px;
-              margin-inline-start: 4px;
+              margin-left: 4px;
 
               /deep/ svg path {
                 fill: @ThemeAccentD2;
@@ -130,7 +127,7 @@
           }
 
           .separator {
-            border-inline-start: 1px solid @DividerStokes;
+            border-left: 1px solid @DividerStokes;
             height: 100%;
             margin: 0 6px;
             width: 1px;
@@ -160,7 +157,7 @@
           }
 
           &--marked {
-            margin-inline-start: 0.25rem;
+            margin-left: 0.25rem;
             color: @TextLabel;
             font-size: 12px;
             font-weight: 400;
@@ -170,7 +167,7 @@
           }
 
           &--discount {
-            margin-inline-start: 8px;
+            margin-left: 8px;
             color: @SaleDiscountText;
             font-size: 12px;
             font-style: normal;
@@ -237,7 +234,7 @@
         .crossIcon {
           position: absolute;
           top: 16px;
-          inset-inline-end: 16px;
+          right: 16px;
           cursor: pointer;
 
           @media @tablet {
@@ -291,10 +288,15 @@
           @media @tablet {
             height: 40px;
           }
+
+          // svg path {
+          //   fill: @ButtonPrimary;
+          // }
         }
 
         .inputContainer {
           border: none;
+          // color: @ButtonPrimary;
         }
       }
     }
@@ -317,7 +319,7 @@
     transition: all 0.5s;
 
     @media @tablet {
-      margin-inline-end: 8px;
+      margin-right: 8px;
     }
 
     .sizeButton {
@@ -340,7 +342,7 @@
       }
 
       .selectedSize {
-        text-align: start;
+        text-align: left;
         color: @TextHeading;
         border-radius: unset;
         .text-line-clamp();
@@ -465,7 +467,7 @@
       width: 100%;
       height: 100%;
       top: 0;
-      inset-inline-start: 0;
+      left: 0;
 
       line {
         stroke: @DividerStokes;
