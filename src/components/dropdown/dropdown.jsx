@@ -17,7 +17,7 @@ import OutsideClickHandler from "react-outside-click-handler";
 import * as styles from "./dropdown.less";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
 import { useNavigate, useGlobalTranslation } from "fdk-core/utils";
-import { startsWithResource } from "../../helper/utils";
+import { translateDynamicLabel } from "../../helper/utils";
 
 function Dropdown({ type, selectedOption, dropdownData }) {
   const { t } = useGlobalTranslation("translation");
@@ -55,7 +55,7 @@ function Dropdown({ type, selectedOption, dropdownData }) {
   return (
     <OutsideClickHandler onOutsideClick={() => setIsOpen(false)}>
       <div className={`${styles.selected}`} onClick={openDropdown}>
-        {startsWithResource(selectedOption) ? t(selectedOption) : selectedOption}
+        {translateDynamicLabel(selectedOption, t)}
         <SvgWrapper svgSrc="arrowDropdownBlack" onBlur={close} />
         {isOpen && (
           <ul className={`${styles.menu}`}>
@@ -63,7 +63,7 @@ function Dropdown({ type, selectedOption, dropdownData }) {
               <li key={index} onClick={() => replaceQuery(option)}>
                 {!option.is_selected && <SvgWrapper svgSrc="radio" />}
                 {option.is_selected && <SvgWrapper svgSrc="radio-selected" />}
-                <span>{startsWithResource(option.display) ? t(option.display) : option.display}</span>
+                <span>{translateDynamicLabel(option?.display, t)}</span>
               </li>
             ))}
           </ul>

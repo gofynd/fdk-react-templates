@@ -106,27 +106,22 @@ function ProfileDetails({ userData, handleSave }) {
             inputVariant="underline"
             containerClassName={styles.inputContainer}
             type="text"
-            maxLength={64}
-            error={!!errors?.firstName}
+            maxLength={30} // Ensures maxLength is passed to FyInput
+            error={errors?.firstName && errors.firstName.type === "required"}
             errorMessage={
               errors?.firstName?.type === "maxLength"
-                ? t("resource.common.maximum_64_characters_allowed")
-                : errors?.firstName?.type === "pattern"
-                  ? t("resource.common.invalid_name")
-                  : t("resource.common.required")
+                ? t("resource.common.maximum_30_characters_allowed")
+                : t("resource.common.required")
             }
             {...register("firstName", {
               required: true,
               maxLength: {
-                value: 64,
-                message: t("resource.common.maximum_64_characters_allowed"),
-              },
-              pattern: {
-                value: /^[A-Za-z\s'-]+$/,
-                message: t("resource.common.invalid_name"),
+                value: 30,
+                message: t("resource.common.maximum_30_characters_allowed"),
               },
             })}
             required
+            onKeyDown={handleKeyDown}
           />
 
           <FyInput
@@ -136,33 +131,27 @@ function ProfileDetails({ userData, handleSave }) {
             inputVariant="underline"
             containerClassName={styles.inputContainer}
             type="text"
-            maxLength={64}
-            error={!!errors?.lastName}
+            maxLength={30} // Ensures maxLength is passed to FyInput
+            error={errors?.lastName && errors.lastName.type === "required"}
             errorMessage={
               errors?.lastName?.type === "maxLength"
-                ? t("resource.common.maximum_64_characters_allowed")
-                : errors?.lastName?.type === "pattern"
-                  ? t("resource.common.invalid_name")
-                  : t("resource.common.required")
+                ? t("resource.common.maximum_30_characters_allowed")
+                : t("resource.common.required")
             }
             {...register("lastName", {
               required: true,
               maxLength: {
-                value: 64,
-                message: t("resource.common.maximum_50_characters_allowed"),
-              },
-              pattern: {
-                value: /^[A-Za-z\s'-]+$/,
-                message: t("resource.common.invalid_name"),
+                value: 30,
+                message: t("resource.common.maximum_30_characters_allowed"),
               },
             })}
             required
+            onKeyDown={handleKeyDown}
           />
 
           <div className={styles.radioInputContainer}>
             <div className={styles.formLabel}>
-              {t("resource.profile.gender")}{" "}
-              <span className={styles.required}>*</span>
+              {t("resource.profile.gender")} <span className={styles.required}>*</span>
             </div>
             <div className={styles.radioContent}>
               {GENDER_OPTIONS.map(({ value, display }) => (
