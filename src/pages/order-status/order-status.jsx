@@ -4,7 +4,6 @@ import {
   formatLocale,
   getAddressStr,
   numberWithCommas,
-  translateDynamicLabel,
 } from "../../helper/utils";
 import * as styles from "./order-status.less";
 import PriceBreakup from "../../components/price-breakup/price-breakup";
@@ -142,7 +141,7 @@ function OrderStatus({
                               />
                             </span>
                             <span className={styles["mode-name"]}>
-                              {translateDynamicLabel(paymentInfo?.display_name, t) || t("resource.order.cod")}
+                              {paymentInfo?.display_name || t("resource.order.cod")}
                             </span>
                           </div>
                         )
@@ -158,10 +157,10 @@ function OrderStatus({
                           {getAddressData?.name}
                         </div>
                         <div className={styles["label"]}>
-                          {translateDynamicLabel(getAddressData?.address_type
+                          {getAddressData?.address_type
                             ?.charAt(0)
                             ?.toUpperCase() +
-                            getAddressData?.address_type.slice(1), t)}
+                            getAddressData?.address_type.slice(1)}
                         </div>
                       </div>
                       <div className={styles["address-phone"]}>

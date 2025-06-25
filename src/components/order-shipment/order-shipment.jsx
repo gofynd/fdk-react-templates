@@ -26,6 +26,7 @@ function OrderShipment({
   orderInfo,
   onBuyAgainClick = () => { },
   isBuyAgainEligible,
+  availableFOCount,
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -142,6 +143,13 @@ function OrderShipment({
                   >
                     {t("resource.common.shipment")}: {item?.shipment_id}
                   </div>
+                  {availableFOCount > 1 && item?.fulfillment_option?.name && (
+                    <div
+                      className={`${styles.shipmentId} ${styles.uktLinks} ${styles.boldls}`}
+                    >
+                      {item?.fulfillment_option?.name}
+                    </div>
+                  )}
                   <div className={`${styles.shipmentStats} ${styles.light}`}>
                     <span>{getTotalItems(item?.bags?.length)}</span>
                     <span>{` | `}</span>

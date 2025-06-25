@@ -36,7 +36,7 @@
  */
 
 import React, { useMemo } from "react";
-import { priceFormatCurrencySymbol, translateDynamicLabel } from "../../helper/utils";
+import { priceFormatCurrencySymbol } from "../../helper/utils";
 import * as styles from "./price-breakup.less";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
 import { useGlobalTranslation } from "fdk-core/utils";
@@ -100,8 +100,11 @@ function PriceBreakup({
       >
         {title || t("resource.common.price_summary")}
         {showItemsCount && (
-          <span>{` ( ${cartItemCount} ${cartItemCount > 1 ? t("resource.common.items_caps_plural") : t("resource.common.items_caps_singular")
-            } )`}</span>
+          <span>{` ( ${cartItemCount} ${
+            cartItemCount > 1
+              ? t("resource.common.items_caps_plural")
+              : t("resource.common.items_caps_singular")
+          } )`}</span>
         )}
       </div>
       {breakUpValuesList?.map((item, index) => (
@@ -115,14 +118,14 @@ function PriceBreakup({
         >
           {index !== breakUpValuesList.length - 1 ? (
             <>
-              <div>{translateDynamicLabel(item?.display, t)}</div>
+              <div>{item?.display}</div>
               <div className={Number(item.value) < 0 ? styles.discount : ""}>
                 {priceFormatCurrencySymbol(item?.currency_symbol, item?.value)}
               </div>
             </>
           ) : (
             <>
-              <div>{translateDynamicLabel(item?.display, t)}</div>
+              <div>{item?.display}</div>
               <div>
                 {priceFormatCurrencySymbol(item?.currency_symbol, item?.value)}
               </div>
@@ -133,16 +136,15 @@ function PriceBreakup({
       {isInternationalTaxLabel && (
         <div className={styles.internationalTaxLabel}>
           <SvgWrapper className={styles.infoIcon} svgSrc="infoIcon" />
-          <span>
-            {t("resource.common.delivery_custom_fees_notice")}
-          </span>
+          <span>{t("resource.common.delivery_custom_fees_notice")}</span>
         </div>
       )}
       {showTotalDiscount && totalDiscount > 0 && (
         <div className={styles.discountPreviewContiner}>
           <span className={styles.icon}>{greetingIcon}</span>
           <span className={styles.discountPreviewMessage}>
-            {discountGreetingMessage || t("resource.common.discount_greeting_message")}
+            {discountGreetingMessage ||
+              t("resource.common.discount_greeting_message")}
           </span>
           <span className={styles.discountPreviewAmount}>
             {priceFormatCurrencySymbol(currencySymbol, totalDiscount)}

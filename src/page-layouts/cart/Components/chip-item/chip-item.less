@@ -127,9 +127,9 @@
         }
       }
       .itemTotalContainer {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        // display: flex;
+        // align-items: center;
+        // justify-content: space-between;
         margin-top: 16px;
         @media @tablet {
           flex-direction: column;
@@ -182,6 +182,63 @@
           }
         }
       }
+    }
+  }
+
+  .deliveryDateWrapper {
+    display: flex;
+    align-items: center;
+    margin-top: 16px;
+
+    &--desktop {
+      display: none;
+
+      @media @desktop {
+        display: flex;
+      }
+    }
+
+    &--mobile {
+      display: flex;
+
+      @media @desktop {
+        display: none;
+      }
+    }
+
+    @media @mobile {
+      margin-top: 12px;
+    }
+
+    .shippingLogo {
+      color: @TextBody;
+      display: flex;
+    }
+
+    .deliveryDate {
+      margin-left: 8px;
+      color: @TextHeading;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 140%;
+    }
+
+    .selectedFO {
+      color: @TextLabel;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 140%;
+      margin-left: 8px;
+    }
+
+    .changeFO {
+      color: @ButtonLink;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 140%;
+      text-transform: uppercase;
+      margin-left: 12px;
+      cursor: pointer;
     }
   }
 }
@@ -266,7 +323,7 @@
     max-width: 500px !important;
   }
   .sizeModalHeader {
-    background-color: #f8f8f8;
+    background-color: unset;
     padding: 16px;
     align-items: flex-start;
   }
@@ -479,4 +536,148 @@
 }
 .chipModal {
   transform: none !important;
+}
+
+.foModalContainer {
+  min-height: 100px;
+  max-height: 720px;
+  overflow: auto;
+
+  .foModalTitle {
+    color: @TextHeading;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 140%;
+
+    @media @tablet {
+      font-size: 14px;
+    }
+  }
+
+  @media @desktop {
+    min-width: 500px !important;
+    max-width: 500px !important;
+  }
+
+  .foModalHeader {
+    padding: 16px 24px;
+    align-items: flex-start;
+
+    @media @tablet {
+      padding: 16px;
+    }
+  }
+
+  .foModalBody {
+    padding: 24px;
+
+    @media @tablet {
+      padding: 16px;
+    }
+
+    .foModalWrapper {
+      display: flex;
+
+      .foModalImage {
+        width: 91px;
+        flex: 0 0 91px;
+        .aspect-ratio(0.8);
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          border-radius: 4px;
+        }
+      }
+
+      .foModalContent {
+        margin-left: 16px;
+
+        .foModalBrand {
+          color: @TextHeading;
+          font-size: 14px;
+          font-weight: 600;
+          line-height: 140%;
+        }
+
+        .foModalName {
+          color: @TextBody;
+          font-size: 14px;
+          font-weight: 400;
+          line-height: 140%;
+          margin-top: 8px;
+        }
+
+        .foSellerName {
+          color: @TextLabel;
+          font-size: 12px;
+          font-weight: 400;
+          line-height: 140%;
+          margin-top: 4px;
+        }
+      }
+    }
+
+    .foModalOption {
+      margin-top: 24px;
+
+      @media @tablet {
+        margin-top: 16px;
+      }
+
+      .deliveryLabel {
+        color: @TextHeading;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 140%;
+      }
+
+      .foList {
+        .fulfillmentOption {
+          display: flex;
+          margin-top: 8px;
+          gap: 8px;
+          cursor: pointer;
+          width: fit-content;
+
+          .foDetails {
+            .promiseLabel {
+              color: @SuccessText;
+              font-size: 14px;
+              font-weight: 600;
+              line-height: 140%;
+            }
+
+            .foLabel {
+              margin-top: 6px;
+              color: @TextBody;
+              font-size: 12px;
+              font-weight: 400;
+              line-height: 140%;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .foModalFooter {
+    border-top: 1px solid @DividerStokes;
+    padding: 24px;
+    width: 100%;
+
+    .updateSizeButton {
+      border-radius: @ButtonRadius;
+      text-transform: capitalize;
+      color: @ButtonSecondary;
+      background-color: @ButtonPrimary;
+      padding: 14px 0;
+      text-align: center;
+    }
+  }
+
+  .disableBtn {
+    opacity: 0.5;
+  }
 }

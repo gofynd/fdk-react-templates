@@ -5,7 +5,6 @@ import Modal from "../../../../components/core/modal/modal";
 import AddressItem from "../../../../components/address-item/address-item";
 import AddressForm from "../../../../components/address-form/address-form";
 import { useGlobalTranslation } from "fdk-core/utils";
-import { translateDynamicLabel } from "../../../../helper/utils";
 
 function DeliveryLocation({
   pincode = "",
@@ -66,7 +65,7 @@ function DeliveryLocation({
     return (
       id === addrError?.id &&
       addrError?.message && (
-        <div className={styles.addrErrText}>{translateDynamicLabel(addrError?.message, t)}</div>
+        <div className={styles.addrErrText}>{addrError?.message}</div>
       )
     );
   };

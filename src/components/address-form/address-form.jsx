@@ -63,47 +63,47 @@ const defaultFormSchema = [
     fields: [
       {
         key: "address",
-        display: "Flat No/House No",
+        display: "resource.common.house_flat_number",
         type: "text",
         required: true,
         maxLength: 80,
         fullWidth: false,
         validation: {
-          required: "House No. is required",
+          required: "resource.common.house_number_required",
           pattern: {
             value: /^[A-Za-z0-9,./\s-]+$/,
             message:
-            "House No can only contain letters, numbers, comma, period, hyphen, and slash",
+              "resource.common.house_no_validation_msg",
           },
           maxLength: {
             value: 80,
-            message: "Can not exceed 80 characters",
+            message: "resource.common.cannot_exceed_80_characters",
           },
         },
       },
       {
         key: "area",
-        display: "Building Name/ Street",
+        display: "resource.common.building_name_street",
         type: "text",
         required: true,
         maxLength: 80,
         fullWidth: false,
         validation: {
-          required: "Building name or street is required",
+          required: "resource.common.building_name_street_required",
           pattern: {
             value: /^[A-Za-z0-9,./\s-]+$/,
             message:
-              "address can only contain letters, numbers, comma, period, hyphen, and slash"
+              "resource.common.address_validation_msg",
           },
           maxLength: {
             value: 80,
-            message: "Can not exceed 80 characters",
+            message: "resource.common.cannot_exceed_80_characters",
           },
         },
       },
       {
         key: "landmark",
-        display: "Locality/ Landmark",
+        display: "resource.common.locality_landmark",
         type: "text",
         required: false,
         fullWidth: false,
@@ -112,66 +112,66 @@ const defaultFormSchema = [
           pattern: {
             value: /^[A-Za-z0-9,./\s-]+$/,
             message:
-              "address can only contain letters, numbers, comma, period, hyphen, and slash",
+              "resource.common.address_validation_msg",
           },
           maxLength: {
             value: 80,
-            message: "Can not exceed 80 characters",
+            message: "resource.common.cannot_exceed_80_characters",
           },
         },
       },
       {
         key: "area_code",
-        display: "Pincode",
+        display: "resource.common.pincode",
         type: "text",
         required: true,
         maxLength: 6,
         fullWidth: false,
         validation: {
-          required: "Pincode is required",
+          required: "resource.common.pincode_is_required",
           pattern: {
             value: /^[1-9][0-9]{5}$/,
-            message: "Invalid pincode",
+            message: "resource.common.invalid_pincode",
           },
           maxLength: {
             value: 6,
-            message: "Can not exceed 6 digits",
+            message: "resource.common.cannot_exceed_6_digits",
           },
         },
       },
       {
         key: "city",
-        display: "City",
+        display: "resource.common.city",
         type: "text",
         required: true,
         fullWidth: false,
         validation: {
-          required: "City is required",
+          required: "resource.common.city_is_required",
           pattern: {
             value: /^[A-Za-z\s_]+$/,
-            message: "City can only contain letters",
+            message: "resource.common.city_can_only_contain_letters",
           },
           maxLength: {
             value: 50,
-            message: "City cannot exceed 50 characters",
+            message: "resource.common.city_cannot_exceed_50_characters",
           },
         },
       },
       {
         key: "state",
-        display: "State",
+        display: "resource.common.state",
         type: "text",
         required: true,
         fullWidth: false,
         validation: {
-          required: "State is required",
+          required: "resource.common.state_is_required",
           pattern: {
             value: /^[A-Za-z\s_]+$/,
-            message: "State can only contain letters",
+            message: "resource.common.state_can_only_contain_letters",
           },
           maxLength: {
             value: 50,
-            message: "State cannot exceed 50 characters",
+            message: "resource.common.state_cannot_exceed_50_characters",
           },
         },
       },
@@ -185,49 +185,49 @@ const defaultFormSchema = [
     fields: [
       {
         key: "name",
-        display: "Full Name",
+        display: "resource.common.full_name",
         type: "text",
         required: true,
         fullWidth: true,
         validation: {
-          required: "Name is required",
+          required: "resource.common.name_is_required",
           pattern: {
             value: /^[A-Za-z\s]+$/,
-            message: "Name can only contain letters",
+            message: "resource.common.name_can_only_contain_letters",
           },
           maxLength: {
             value: 50,
-            message: "Name cannot exceed 50 characters",
+            message: "resource.common.name_cannot_exceed_50_characters",
           },
         },
       },
       {
         key: "phone",
-        display: "Mobile Number",
+        display: "resource.common.mobile_number",
         type: "text",
         required: true,
         fullWidth: false,
         validation: {
-          required: "Mobile number is required",
+          required: "resource.common.mobile_number_required",
           pattern: {
             value: /^[6-9]\d{9}$/,
-            message: "Invalid mobile number",
+            message: "resource.common.invalid_mobile_number",
           },
         },
       },
       {
         key: "email",
-        display: "Email",
+        display: "resource.common.email",
         type: "email",
         fullWidth: false,
         validation: {
           pattern: {
             value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
-            message: "Invalid email address",
+            message: "resource.common.invalid_email_address",
           },
           maxLength: {
             value: 50,
-            message: "Email cannot exceed 50 characters",
+            message: "resource.common.email_cannot_exceed_50_characters",
           },
         },
       },

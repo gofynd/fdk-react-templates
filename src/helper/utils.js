@@ -87,6 +87,10 @@ export function validateName(name) {
 }
 
 export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
+  if (!date) {
+    return "Invalid date";
+  }
+
   if (!format) {
     format = {
       weekday: "long",
@@ -98,18 +102,49 @@ export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
       hour12: true,
     };
   }
-  const utcDate = new Date(date);
-  // Convert the UTC date to the local date using toLocaleString() with specific time zone
-  const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const options = {
-    ...format,
-    timeZone: browserTimezone,
-  };
-  // Convert the UTC date and time to the desired format
-  const formattedDate = utcDate
-    .toLocaleString(locale, options)
-    .replace(" at ", ", ");
-  return formattedDate;
+
+  let parsedDate;
+
+  try {
+    // Handle different date string formats
+    if (typeof date === 'string') {
+      // Check if it's a partial date like "Thu, 03 Jul" without year
+      if (date.match(/^[A-Za-z]{3},\s+\d{1,2}\s+[A-Za-z]{3}$/)) {
+        // Add current year to make it a valid date
+        const currentYear = new Date().getFullYear();
+        parsedDate = new Date(`${date} ${currentYear}`);
+      } 
+      // Check if it's an ISO string or other standard format
+      else {
+        parsedDate = new Date(date);
+      }
+    } else {
+      parsedDate = new Date(date);
+    }
+
+    // Check if the parsed date is valid
+    if (isNaN(parsedDate.getTime())) {
+      console.error('Invalid date provided:', date);
+      return "Invalid date";
+    }
+
+    // Convert the UTC date to the local date using toLocaleString() with specific time zone
+    const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const options = {
+      ...format,
+      timeZone: browserTimezone,
+    };
+
+    // Convert the UTC date and time to the desired format
+    const formattedDate = parsedDate
+      .toLocaleString(locale, options)
+      .replace(" at ", ", ");
+    
+    return formattedDate;
+  } catch (error) {
+    console.error('Error formatting date:', error, 'Original date:', date);
+    return "Invalid date";
+  }
 };
 
 export function validateEmailField(value) {
@@ -382,15 +417,6 @@ export function isFreeNavigation(e) {
   return false;
 }
 
-const isValidLocale = (tag) => {
-  try {
-    new Intl.Locale(tag);
-    return true;
-  } catch {
-    return false;
-  }
-};
-
 export const formatLocale = (locale, countryCode, isCurrencyLocale = false) => {
   if ((locale === "en" || !locale) && isCurrencyLocale) {
     return DEFAULT_CURRENCY_LOCALE;
@@ -398,9 +424,14 @@ export const formatLocale = (locale, countryCode, isCurrencyLocale = false) => {
   if (locale === "en" || !locale) {
     return DEFAULT_UTC_LOCALE;
   }
-  const finalLocale = locale.includes("-") ? locale : `${locale}${countryCode ? "-" + countryCode : ""}`;
+  if (locale.includes("-")) {
+    return locale;
+  }
+  return `${locale}${countryCode ? "-" + countryCode : ""}`;
+};
 
-  return isValidLocale(finalLocale) ? finalLocale : DEFAULT_UTC_LOCALE;
+export const startsWithResource = (str) => {
+  return str.startsWith("resource.");
 };
 
 export const translateValidationMessages = (validationObject, t) => {
@@ -411,11 +442,12 @@ export const translateValidationMessages = (validationObject, t) => {
 
     if (
       typeof rule === "object" &&
-      rule.message
+      rule.message &&
+      startsWithResource(rule.message)
     ) {
-      rule.message = translateDynamicLabel(rule.message, t);
-    } else if (typeof rule === "string") {
-      updatedValidation[key] = translateDynamicLabel(rule, t);
+      rule.message = t(rule.message);
+    } else if (typeof rule === "string" && startsWithResource(rule)) {
+      updatedValidation[key] = t(rule);
     }
   });
 
@@ -460,16 +492,23 @@ export function isEmptyOrNull(obj) {
   );
 }
 
-export function translateDynamicLabel(input, t) {
-  const safeInput = input
-    .toLowerCase()
-    .replace(/\//g, '_') // replace slashes with underscores
-    .replace(/[^a-z0-9_\s]/g, '') // remove special characters except underscores and spaces
-    .trim()
-    .replace(/\s+/g, '_'); // replace spaces with underscores
+export function injectScript(script) {
+  let scriptObject = {
+      src: script,
+  };
 
-  const translationKey = `resource.dynamic_label.${safeInput}`;
-  const translated = t(translationKey);
+  return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = scriptObject.src;
 
-  return translated.split('.').pop() === safeInput ? input : translated;
+      // Resolve promise when script is loaded
+      script.onload = () => {
+          resolve();
+      };
+      script.onerror = () => {
+          reject(new Error(`Failed to load script: ${script.src}`));
+      };
+
+      document.body.appendChild(script);
+  });
 }
