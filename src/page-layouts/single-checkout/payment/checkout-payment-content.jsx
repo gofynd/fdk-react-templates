@@ -1004,8 +1004,10 @@ function CheckoutPaymentContent({
     setIsUpiSuffixSelected(false);
     let value = event.target.value
       .replace(/[^a-zA-Z0-9._@-]/g, "")
-      .replace(/@{2,}/g, "@");
-
+      .replace(/@{2,}/g, "@")
+      .replace(/^([^@]*)@([^@]*)$/, (_, user, domain) => {
+        return `${user}@${domain.replace(/[^a-zA-Z0-9]/g, "")}`;
+      });
     // Ensure only one '@' character
     const atCount = (value.match(/@/g) || []).length;
     if (atCount > 1) {
