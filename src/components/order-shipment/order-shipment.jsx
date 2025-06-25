@@ -15,26 +15,28 @@ import { useParams } from "react-router-dom";
 import * as styles from "./order-shipment.less";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
 import { convertUTCDateToLocalDate, formatLocale } from "../../helper/utils";
+import Accordion from "../accordion/accordion";
 import {
   useNavigate,
   useGlobalStore,
   useFPI,
-  useGlobalTranslation
+  useGlobalTranslation,
 } from "fdk-core/utils";
 
 function OrderShipment({
   orderInfo,
-  onBuyAgainClick = () => { },
+  onBuyAgainClick = () => {},
   isBuyAgainEligible,
   availableFOCount,
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
   const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
-  const locale = language?.locale
+  const locale = language?.locale;
   const [isOpen, setIsOpen] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [selectedShipment, setSelectedShipment] = useState("");
+  const [openAccordions, setOpenAccordions] = useState({});
   const navigate = useNavigate();
   const params = useParams();
 
@@ -45,7 +47,11 @@ function OrderShipment({
   }, [params?.orderId]);
 
   const getTime = (time) => {
-    return convertUTCDateToLocalDate(time, "", formatLocale(locale, countryCode));
+    return convertUTCDateToLocalDate(
+      time,
+      "",
+      formatLocale(locale, countryCode)
+    );
   };
   const clickopen = () => {
     setIsOpen(!isOpen);
@@ -76,14 +82,30 @@ function OrderShipment({
     return [];
   };
   const getTotalItems = (items) => {
-    return items === 1 ? `${items} ${t("resource.common.item_simple_text")}` : `${items} ${t("resource.common.item_simple_text_plural")}`;
+    return items === 1
+      ? `${items} ${t("resource.common.item_simple_text")}`
+      : `${items} ${t("resource.common.item_simple_text_plural")}`;
   };
   const getTotalPieces = (pieces) => {
     const total = pieces.reduce((pre, curr) => {
       return pre + curr.quantity;
     }, 0);
 
-    return total === 1 ? `${total} ${t("resource.common.single_piece")}` : `${total} ${t("resource.common.multiple_piece")}`;
+    return total === 1
+      ? `${total} ${t("resource.common.single_piece")}`
+      : `${total} ${t("resource.common.multiple_piece")}`;
+  };
+  const getCustomizationOptions = (orderInfo) => {
+    return orderInfo?.shipments?.map(
+      (ship) => ship.bags[0]?.meta?._custom_json?._display || []
+    );
+  };
+
+  const handleShipmentAccordionClick = (shipmentId) => {
+    setOpenAccordions((prev) => ({
+      ...prev,
+      [shipmentId]: !prev[shipmentId],
+    }));
   };
 
   return (
@@ -107,67 +129,91 @@ function OrderShipment({
         {Object.keys(orderInfo)?.length !== 0 &&
           orderInfo?.shipments?.length !== 0 &&
           orderInfo?.shipments?.map((item, index) => {
+            const customizationOptions =
+              getCustomizationOptions({ shipments: [item] })?.[0] || [];
+            const shipmentItems = [
+              {
+                title: `Customization`,
+                content: customizationOptions,
+                open: openAccordions[item.shipment_id] || false,
+              },
+            ];
             return (
-              <div
-                className={styles.shipmentData}
-                key={`${item.shipment_id}`}
-                onClick={() => naivgateToShipment(item)}
-              >
-                <div className={`${styles.shipmentLeft}`}>
-                  <img
-                    className={`${isOpen ? styles.filterArrowUp : styles.filterArrowdown}`}
-                    src={item?.bags?.[0]?.item?.image?.[0]}
-                    alt={item?.shipment_images?.[0]}
-                  />
-                  {item?.bags?.length > 1 && (
-                    <div id="total-item">
-                      +{item?.bags?.length - 1 + " "}
-                      {t("resource.facets.more")}
-                    </div>
-                  )}
-                </div>
-                <div className={`${styles.shipmentRight}`}>
-                  <div className={`${styles.uktLinks}`}>
-                    {item?.bags?.length > 1 ? (
-                      <div>
-                        {getProductsName(item?.bags)?.[0]} +
-                        {item.bags.length - 1 + " "}
+              <React.Fragment key={item.shipment_id}>
+                <div
+                  className={styles.shipmentData}
+                  key={`${item.shipment_id}`}
+                  onClick={() => naivgateToShipment(item)}
+                >
+                  <div className={`${styles.shipmentLeft}`}>
+                    <img
+                      className={`${isOpen ? styles.filterArrowUp : styles.filterArrowdown}`}
+                      src={item?.bags?.[0]?.item?.image?.[0]}
+                      alt={item?.shipment_images?.[0]}
+                    />
+                    {item?.bags?.length > 1 && (
+                      <div id="total-item">
+                        +{item?.bags?.length - 1 + " "}
                         {t("resource.facets.more")}
                       </div>
-                    ) : (
-                      <div>{getProductsName(item?.bags)?.[0]}</div>
                     )}
                   </div>
-                  <div
-                    className={`${styles.shipmentId} ${styles.uktLinks} ${styles.boldls}`}
-                  >
-                    {t("resource.common.shipment")}: {item?.shipment_id}
-                  </div>
-                  {availableFOCount > 1 && item?.fulfillment_option?.name && (
+                  <div className={`${styles.shipmentRight}`}>
+                    <div className={`${styles.uktLinks}`}>
+                      {item?.bags?.length > 1 ? (
+                        <div>
+                          {getProductsName(item?.bags)?.[0]} +
+                          {item.bags.length - 1 + " "}
+                          {t("resource.facets.more")}
+                        </div>
+                      ) : (
+                        <div>{getProductsName(item?.bags)?.[0]}</div>
+                      )}
+                    </div>
                     <div
                       className={`${styles.shipmentId} ${styles.uktLinks} ${styles.boldls}`}
                     >
-                      {item?.fulfillment_option?.name}
+                      {t("resource.common.shipment")}: {item?.shipment_id}
                     </div>
-                  )}
-                  <div className={`${styles.shipmentStats} ${styles.light}`}>
-                    <span>{getTotalItems(item?.bags?.length)}</span>
-                    <span>{` | `}</span>
-                    <span>{getTotalPieces(item?.bags)}</span>
-                  </div>
-                  <div className={styles.status}>
-                    {item?.shipment_status?.title}
-                  </div>
-                  {isAdmin && (
-                    <div
-                      className={`${styles.shipmentBrands} ${styles.uktLinks}`}
-                    >
-                      <span className={`${styles.bold}`}>{t("resource.common.brand")}</span> :
-                      {item?.brand_name}
+                    {availableFOCount > 1 && item?.fulfillment_option?.name && (
+                      <div
+                        className={`${styles.shipmentId} ${styles.uktLinks} ${styles.boldls}`}
+                      >
+                        {item?.fulfillment_option?.name}
+                      </div>
+                    )}
+                    <div className={`${styles.shipmentStats} ${styles.light}`}>
+                      <span>{getTotalItems(item?.bags?.length)}</span>
+                      <span>{` | `}</span>
+                      <span>{getTotalPieces(item?.bags)}</span>
                     </div>
+                    <div className={styles.status}>
+                      {item?.shipment_status?.title}
+                    </div>
+                    {isAdmin && (
+                      <div
+                        className={`${styles.shipmentBrands} ${styles.uktLinks}`}
+                      >
+                        <span className={`${styles.bold}`}>
+                          {t("resource.common.brand")}
+                        </span>{" "}
+                        :{item?.brand_name}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className={styles.productCustomizationContainer}>
+                  {customizationOptions.length > 0 && (
+                    <Accordion
+                      key={`${item.shipment_id}`}
+                      items={shipmentItems}
+                      onItemClick={() =>
+                        handleShipmentAccordionClick(item.shipment_id)
+                      }
+                    />
                   )}
                 </div>
-              </div>
+              </React.Fragment>
             );
           })}
         {isBuyAgainEligible && (
@@ -186,7 +232,7 @@ function OrderShipment({
           </div>
         )}
       </div>
-    </div >
+    </div>
   );
 }
 

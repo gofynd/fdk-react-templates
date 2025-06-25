@@ -13,6 +13,7 @@ import Modal from "../../../../components/core/modal/modal";
 import { useMobile } from "../../../../helper/hooks";
 import FreeGiftItem from "../free-gift-item/free-gift-item";
 import RadioIcon from "../../../../assets/images/radio";
+import Accordion from "../../../../components/accordion/accordion";
 import { useGlobalStore, useFPI, useGlobalTranslation } from "fdk-core/utils";
 
 export default function ChipItem({
@@ -64,6 +65,12 @@ export default function ChipItem({
   const couponText = singleItemDetails?.coupon_message || "";
   const moq = singleItemDetails?.moq;
   const incrementDecrementUnit = moq?.increment_unit ?? 1;
+  const customizationOptions =
+    singleItemDetails?.article?._custom_json?._display || [];
+
+  const [items, setItems] = useState([
+    { title: "Customization", content: customizationOptions, open: false },
+  ]);
 
   const isSellerBuyBoxListing = useMemo(() => {
     return (
@@ -248,6 +255,17 @@ export default function ChipItem({
 
     return maxDate;
   };
+
+   const handleItemClick = (index) => {
+     setItems((prevItems) => {
+       const updatedItems = [...prevItems];
+       updatedItems[index] = {
+         ...updatedItems[index],
+         open: !updatedItems[index].open,
+       };
+       return updatedItems;
+     });
+   };
 
   return (
     <>
@@ -496,8 +514,12 @@ export default function ChipItem({
                   <SvgWrapper svgSrc="applied-promo" className={styles.ml6} />
                 </div>
               )}
+            {customizationOptions.length > 0 && (
+              <div className={styles.productCustomizationContainer}>
+                <Accordion items={items} onItemClick={handleItemClick} />
+              </div>
+            )}
           </div>
-
           <FreeGiftItem
             item={singleItemDetails}
             currencySymbol={
