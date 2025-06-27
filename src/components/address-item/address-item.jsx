@@ -52,7 +52,7 @@
 import React, { useMemo } from "react";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
 import * as styles from "./address-item.less";
-import { getAddressStr, startsWithResource } from "../../helper/utils";
+import { getAddressStr, translateDynamicLabel } from "../../helper/utils";
 import { useGlobalTranslation } from "fdk-core/utils";
 
 const AddressType = {
@@ -110,7 +110,7 @@ function AddressItem({
           <span className={styles.addressName}>{addressItem.name}</span>
           {showAddressType && (
             <span className={styles.addressType}>
-              {startsWithResource(t(`resource.common.${addressItem.address_type.toLowerCase().split(" ").join("_")}`)) ? addressItem.address_type : t(`resource.common.${addressItem.address_type.toLowerCase().split(" ").join("_")}`)}
+              {translateDynamicLabel(addressItem.address_type, t)}
             </span>
           )}
         </div>

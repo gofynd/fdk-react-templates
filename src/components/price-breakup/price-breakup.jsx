@@ -36,7 +36,7 @@
  */
 
 import React, { useMemo } from "react";
-import { priceFormatCurrencySymbol } from "../../helper/utils";
+import { priceFormatCurrencySymbol, translateDynamicLabel } from "../../helper/utils";
 import * as styles from "./price-breakup.less";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
 import { useGlobalTranslation } from "fdk-core/utils";
@@ -118,14 +118,14 @@ function PriceBreakup({
         >
           {index !== breakUpValuesList.length - 1 ? (
             <>
-              <div>{item?.display}</div>
+              <div>{translateDynamicLabel(item?.display, t)}</div>
               <div className={Number(item.value) < 0 ? styles.discount : ""}>
                 {priceFormatCurrencySymbol(item?.currency_symbol, item?.value)}
               </div>
             </>
           ) : (
             <>
-              <div>{item?.display}</div>
+              <div>{translateDynamicLabel(item?.display, t)}</div>
               <div>
                 {priceFormatCurrencySymbol(item?.currency_symbol, item?.value)}
               </div>

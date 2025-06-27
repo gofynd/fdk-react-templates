@@ -342,6 +342,11 @@ h5,
   justify-content: space-between;
   align-items: center;
 }
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  .delivery-location__cartPincodeContainer____lhBS {
+    padding: 16px;
+  }
+}
 @media only screen and (max-width: 480px) {
   .delivery-location__cartPincodeContainer____lhBS {
     padding: 16px;

@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import * as styles from "./shared-cart.less";
-import { currencyFormat, formatLocale, numberWithCommas } from "../../helper/utils";
+import { currencyFormat, formatLocale, numberWithCommas, translateDynamicLabel } from "../../helper/utils";
 import ChipReviewItem from "../../components/chip-review-item/chip-review-item";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
 import {
@@ -133,8 +133,10 @@ const SharedCartCoupons = ({
 
 const SharedCartBreakup = ({ breakup = [] }) => {
   const fpi = useFPI();
+  const { t } = useGlobalTranslation("translation");
   const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
   const locale = language?.locale;
+
   return (
     <div className={styles.breakupWrapper}>
       {breakup.map((item, index) => (
@@ -143,7 +145,7 @@ const SharedCartBreakup = ({ breakup = [] }) => {
             <div
               className={`${styles.subTitle} ${Number(item.value) < 0 ? styles.discount : ""}`}
             >
-              <div>{item.display}</div>
+              <div>{translateDynamicLabel(item.display, t)}</div>
               <div className={styles.value}>
                 <span>
                   {currencyFormat(
@@ -157,7 +159,7 @@ const SharedCartBreakup = ({ breakup = [] }) => {
           )}
           {index === breakup.length - 1 && (
             <div className={styles.title}>
-              <div>{item.display}</div>
+              <div>{translateDynamicLabel(item.display, t)}</div>
               <div className={styles.value}>
                 {currencyFormat(
                   numberWithCommas(item.value),

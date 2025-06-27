@@ -5,7 +5,7 @@ import FyInputGroup from "../core/fy-input-group/fy-input-group";
 import FyDropdown from "../core/fy-dropdown/fy-dropdown";
 import MobileNumber from "../../page-layouts/auth/mobile-number/mobile-number";
 import * as styles from "./form-input-selector.less";
-import { startsWithResource, translateValidationMessages } from "../../helper/utils";
+import { translateDynamicLabel, translateValidationMessages } from "../../helper/utils";
 import { useGlobalTranslation } from "fdk-core/utils";
 
 const FormInputSelector = ({
@@ -42,7 +42,7 @@ const FormInputSelector = ({
           <FyInputGroup
             name={key}
             options={options}
-            label={startsWithResource(display) ? t(display) : display}
+            label={translateDynamicLabel(display, t)}
             type={type}
             required={required}
             error={error}
@@ -62,7 +62,7 @@ const FormInputSelector = ({
             options={options}
             value={field?.value}
             required={required}
-            label={startsWithResource(display) ? t(display) : display}
+            label={translateDynamicLabel(display, t)}
             placeholder={placeholder}
             containerClassName={`${styles.customClass} ${isSingleField ? styles.singleField : ""}`}
             disabled={disabled}
@@ -78,7 +78,7 @@ const FormInputSelector = ({
           <MobileNumber
             name={key}
             mobile={field?.value?.mobile}
-            label={startsWithResource(display) ? `${t(display)}` : `${display}`}
+            label={translateDynamicLabel(display, t)}
             error={error}
             isRequired={required}
             placeholder={placeholder}
@@ -105,7 +105,7 @@ const FormInputSelector = ({
           <FyInput
             labelClassName={labelClassName}
             name={key}
-            label={startsWithResource(display) ? t(display) : display}
+            label={translateDynamicLabel(display, t)}
             type={type}
             multiline={type === "textarea"}
             required={required}
