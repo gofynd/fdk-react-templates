@@ -540,7 +540,13 @@ export default function ChipItem({
                 <SvgWrapper svgSrc="truck" />
               </div>
               <div className={styles.deliveryDate}>
-                {`Get it by ${singleItemDetails?.delivery_promise?.formatted?.max}`}
+                {`${t("resource.common.delivery_by", {
+                  date: convertUTCDateToLocalDate(
+                    singleItemDetails?.delivery_promise?.formatted?.max,
+                    { weekday: "short", day: "2-digit", month: "short" },
+                    formatLocale(locale, countryCode, true)
+                  ),
+                })}`}
               </div>
               {availableFOCount > 1 && (
                 <div className={styles.selectedFO}>

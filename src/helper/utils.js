@@ -107,13 +107,13 @@ export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
 
   try {
     // Handle different date string formats
-    if (typeof date === 'string') {
+    if (typeof date === "string") {
       // Check if it's a partial date like "Thu, 03 Jul" without year
       if (date.match(/^[A-Za-z]{3},\s+\d{1,2}\s+[A-Za-z]{3}$/)) {
         // Add current year to make it a valid date
         const currentYear = new Date().getFullYear();
         parsedDate = new Date(`${date} ${currentYear}`);
-      } 
+      }
       // Check if it's an ISO string or other standard format
       else {
         parsedDate = new Date(date);
@@ -124,7 +124,7 @@ export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
 
     // Check if the parsed date is valid
     if (isNaN(parsedDate.getTime())) {
-      console.error('Invalid date provided:', date);
+      console.error("Invalid date provided:", date);
       return "Invalid date";
     }
 
@@ -139,10 +139,10 @@ export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
     const formattedDate = parsedDate
       .toLocaleString(locale, options)
       .replace(" at ", ", ");
-    
+
     return formattedDate;
   } catch (error) {
-    console.error('Error formatting date:', error, 'Original date:', date);
+    console.error("Error formatting date:", error, "Original date:", date);
     return "Invalid date";
   }
 };
@@ -494,21 +494,48 @@ export function isEmptyOrNull(obj) {
 
 export function injectScript(script) {
   let scriptObject = {
-      src: script,
+    src: script,
   };
 
   return new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = scriptObject.src;
+    const script = document.createElement("script");
+    script.src = scriptObject.src;
 
-      // Resolve promise when script is loaded
-      script.onload = () => {
-          resolve();
-      };
-      script.onerror = () => {
-          reject(new Error(`Failed to load script: ${script.src}`));
-      };
+    // Resolve promise when script is loaded
+    script.onload = () => {
+      resolve();
+    };
+    script.onerror = () => {
+      reject(new Error(`Failed to load script: ${script.src}`));
+    };
 
-      document.body.appendChild(script);
+    document.body.appendChild(script);
   });
 }
+
+export const getAddressFromComponents = (components, name) => {
+  const typeToName = Object.fromEntries(
+    components.flatMap(({ long_name, short_name, types }) =>
+      types.map((type) => [type, { short_name, long_name }])
+    )
+  );
+
+  const address = [
+    name,
+    typeToName["street_number"]?.long_name || null,
+    typeToName["route"]?.long_name || null,
+  ]
+    .filter(Boolean)
+    .join(", ");
+
+  return {
+    address: address || null,
+    area: typeToName["sublocality_level_2"]?.long_name || null,
+    landmark: typeToName["sublocality_level_1"]?.long_name || null,
+    city: typeToName["locality"]?.long_name || null,
+    state: typeToName["administrative_area_level_1"]?.long_name || null,
+    area_code: typeToName["postal_code"]?.long_name || null,
+    country: typeToName["country"]?.long_name || null,
+    country_iso_code: typeToName["country"]?.short_name || null,
+  };
+};

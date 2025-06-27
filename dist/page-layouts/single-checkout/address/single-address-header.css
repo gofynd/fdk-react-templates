@@ -533,4 +533,21 @@ h5,
     display: none;
   }
 }
+.single-address-header__addressModalContainer___kPuPf {
+  display: block;
+}
+.single-address-header__addressModalBody___umHZR {
+  display: grid;
+  grid-template-columns: 450px;
+  grid-template-rows: 1fr;
+  min-height: 84.26vh;
+  overflow: hidden;
+}
+@media only screen and (max-width: 768px) {
+  .single-address-header__addressModalBody___umHZR {
+    grid-template-columns: 1fr;
+    max-height: unset;
+    height: 100dvh;
+  }
+}
 
