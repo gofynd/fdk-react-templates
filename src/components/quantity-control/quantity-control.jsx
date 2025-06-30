@@ -108,6 +108,7 @@ function QuantityControl({
           onChange={onCurrentQtyChange}
           onBlur={onQtyLostFocus}
           onKeyDown={handleKeyDown}
+          dir="ltr"
         />
       </div>
       <button

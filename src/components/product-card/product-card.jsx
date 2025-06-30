@@ -40,6 +40,7 @@ import SvgWrapper from "../core/svgWrapper/SvgWrapper";
 import * as styles from "./product-card.less";
 import FyButton from "../core/fy-button/fy-button";
 import { useGlobalStore, useFPI, useGlobalTranslation } from "fdk-core/utils";
+import ForcedLtr from "../forced-ltr/forced-ltr";
 
 const ProductCard = ({
   product,
@@ -274,19 +275,23 @@ const ProductCard = ({
                 <span
                   className={`${styles["productPrice--sale"]} ${styles.h4}`}
                 >
-                  {getListingPrice("effective")}
+                  <ForcedLtr
+                    text={getListingPrice("effective")}
+                  />
                 </span>
               )}
               {hasDiscount && (
                 <span
                   className={`${styles["productPrice--regular"]} ${styles.captionNormal}`}
                 >
-                  {getListingPrice("marked")}
+                  <ForcedLtr
+                    text={getListingPrice("marked")}
+                  />
                 </span>
               )}
               {product.discount && (
                 <span
-                  className={`${styles["productPrice--discount"]} ${styles.captionNormal}   ${centerAlign ? styles["productPrice--textCenter"] : ""}`}
+                  className={`${styles["productPrice--discount"]} ${styles.captionNormal} ${centerAlign ? styles["productPrice--textCenter"] : ""}`}
                 >
                   ({product.discount?.toString().toLowerCase()})
                 </span>

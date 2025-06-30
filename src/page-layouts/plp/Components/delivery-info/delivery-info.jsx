@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import { convertUTCDateToLocalDate, formatLocale } from "../../../../helper/utils";
 import * as styles from "./delivery-info.less";
@@ -16,8 +16,6 @@ function DeliveryInfo({
   pincodeErrorMessage,
   checkPincode,
   setPincodeErrorMessage,
-  fulfillmentOptions,
-  availableFOCount,
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -43,7 +41,7 @@ function DeliveryInfo({
       setPostCode(value);
       setTatMessage("");
       setPincodeErrorMessage("");
-     // setPincodeChecked(false);
+      setPincodeChecked(false);
     }
   };
 
@@ -72,12 +70,8 @@ function DeliveryInfo({
 
   const handleDeliveryAction = async () => {
     await checkPincode(postCode);
-    //setPincodeChecked(true);
+    setPincodeChecked(true);
   };
-
-  const foCount = useMemo(() => {
-    return fulfillmentOptions?.length || 0;
-  }, [fulfillmentOptions]);
 
   return (
     <div className={styles.deliveryInfo}>
@@ -106,7 +100,7 @@ function DeliveryInfo({
           {t("resource.facets.check")}
         </FyButton>
       </div>
-      {!pincodeErrorMessage && availableFOCount === 1 && (
+      {!pincodeErrorMessage && (
         <div className={`${styles.deliveryDate} ${styles.dateInfoContainer}`}>
           {postCode?.length === 6 && tatMessage?.length > 0 && (
             <>

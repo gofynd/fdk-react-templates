@@ -138,7 +138,6 @@ function CheckoutPaymentContent({
   removeDialogueError,
   setCancelQrPayment,
   isCouponApplied,
-  juspayErrorMessage,
 }) {
   const fpi = useFPI();
   const { language } = useGlobalStore(fpi.getters.i18N_DETAILS);
@@ -237,7 +236,6 @@ function CheckoutPaymentContent({
     selectedOtherPayment: selectedOtherPayment,
     selectedUpiIntentApp: selectedUpiIntentApp,
   });
-  const [paymentResponse, setPaymentResponse] = useState(null);
 
   const [showUPIModal, setshowUPIModal] = useState(false);
   const [showCouponValidityModal, setShowCouponValidityModal] = useState(false);
@@ -999,10 +997,8 @@ function CheckoutPaymentContent({
     setIsUpiSuffixSelected(false);
     let value = event.target.value
       .replace(/[^a-zA-Z0-9._@-]/g, "")
-      .replace(/@{2,}/g, "@")
-      .replace(/^([^@]*)@([^@]*)$/, (_, user, domain) => {
-        return `${user}@${domain.replace(/[^a-zA-Z0-9]/g, "")}`;
-      });
+      .replace(/@{2,}/g, "@");
+
     // Ensure only one '@' character
     const atCount = (value.match(/@/g) || []).length;
     if (atCount > 1) {
@@ -1182,48 +1178,6 @@ function CheckoutPaymentContent({
     return false;
   };
 
-  const isJuspayEnabled = () => {
-    return paymentOption?.payment_option?.find(
-      (opt) =>
-        opt.aggregator_name?.toLowerCase() === "juspay" && opt.name === "CARD"
-    );
-  };
-
-  const handlePayment = async () => {
-    try {
-      const response = await payUsingJuspayCard();
-
-      setPaymentResponse(response);
-    } catch (error) {
-      setPaymentResponse({ error });
-    }
-  };
-
-  useEffect(() => {
-    const initializeJuspay = async () => {
-      if (isJuspayEnabled() && !paymentResponse) {
-        try {
-          await handlePayment();
-        } catch (error) {
-          console.error("Juspay initialization error:", error);
-        }
-      }
-    };
-
-    if (
-      juspayErrorMessage &&
-      !paymentResponse &&
-      paymentOption?.payment_option?.find(
-        (opt) =>
-          opt.aggregator_name?.toLowerCase() === "juspay" && opt.name === "CARD"
-      )
-    ) {
-      handlePayment();
-    }
-
-    initializeJuspay();
-  }, [paymentResponse, juspayErrorMessage, paymentOption]);
-
   const isCardDetailsValid = () => {
     //reset error
     setCardNumberError("");
@@ -1257,14 +1211,6 @@ function CheckoutPaymentContent({
       !cardExpiryError &&
       !cardCVVError
     );
-  };
-
-  const payUsingJuspayCard = async () => {
-    const newPayload = {
-      ...selectedPaymentPayload,
-    };
-    const res = await proceedToPay("newCARD", newPayload);
-    return res;
   };
 
   const payUsingCard = async () => {
@@ -1729,10 +1675,6 @@ function CheckoutPaymentContent({
                       setCardValidity={setCardValidity}
                       resetCardValidationErrors={resetCardValidationErrors}
                       enableLinkPaymentOption={enableLinkPaymentOption}
-                      paymentOption={paymentOption}
-                      paymentResponse={paymentResponse}
-                      isJuspayEnabled={isJuspayEnabled}
-                      handleShowFailedMessage={handleShowFailedMessage}
                     />
                   </div>
                 )}
@@ -1789,10 +1731,6 @@ function CheckoutPaymentContent({
                   setCardValidity={setCardValidity}
                   resetCardValidationErrors={resetCardValidationErrors}
                   enableLinkPaymentOption={enableLinkPaymentOption}
-                  paymentOption={paymentOption}
-                  paymentResponse={paymentResponse}
-                  isJuspayEnabled={isJuspayEnabled}
-                  handleShowFailedMessage={handleShowFailedMessage}
                 />
               </div>
             )}
@@ -1851,10 +1789,6 @@ function CheckoutPaymentContent({
                     setCardValidity={setCardValidity}
                     resetCardValidationErrors={resetCardValidationErrors}
                     enableLinkPaymentOption={enableLinkPaymentOption}
-                    paymentOption={paymentOption}
-                    paymentResponse={paymentResponse}
-                    isJuspayEnabled={isJuspayEnabled}
-                    handleShowFailedMessage={handleShowFailedMessage}
                   />
                 </div>
               </Modal>
@@ -3321,7 +3255,7 @@ function CheckoutPaymentContent({
                       </div>
                     </div>
                     {isTablet && activeMop === "Other" && (
-                      <div className={` ${styles.onMobileView}`}>
+                      <div className={`${styles.onMobileView}`}>
                         {selectedTab === "Other" && navigationTab()}
                       </div>
                     )}

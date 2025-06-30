@@ -3,6 +3,7 @@ import { useForm, Controller } from "react-hook-form";
 import * as styles from "./login-otp.less";
 import MobileNumber from "../../../auth/mobile-number/mobile-number";
 import { useGlobalTranslation } from "fdk-core/utils";
+import ForcedLtr from "../../../../components/forced-ltr/forced-ltr";
 
 function LoginOtp({
   mobileInfo = {
@@ -154,7 +155,7 @@ function OtpForm({
           {t("resource.localization.verify_account")}
         </h3>
         <p className={styles.otpSentMsg}>
-          {`${t("resource.common.otp_sent_to")} ${submittedMobile}`}
+          {`${t("resource.common.otp_sent_to")}`} <ForcedLtr text={submittedMobile}/>
           <button
             type="button"
             className={styles.changeBtn}
@@ -178,6 +179,7 @@ function OtpForm({
             inputMode="numeric"
             pattern="\d*"
             maxLength={4}
+            dir="ltr"
             onInput={(e) => {
               e.target.value = e.target.value
                 .replace(/[^0-9]/g, "")

@@ -32,9 +32,7 @@ function Checkout({
   cartCouponProps,
   cartCommentProps,
   buybox = {},
-  availableFOCount,
   isGuestUser = false,
-  isCartValid = true,
 }) {
   const [cancelQrPayment, setCancelQrPayment] = useState(null);
   const { onFailedGetCartShipmentDetails } = address;
@@ -68,13 +66,11 @@ function Checkout({
           isHyperlocal={isHyperlocal}
           convertHyperlocalTat={convertHyperlocalTat}
           buybox={buybox}
-          availableFOCount={availableFOCount}
           totalValue={priceFormatCurrencySymbol(
             payment?.getCurrencySymbol,
             payment?.getTotalValue()
           )}
           onPriceDetailsClick={onPriceDetailsClick}
-          isCartValid={isCartValid}
         ></SinglePageShipment>
         <CheckoutPayment
           payment={payment}

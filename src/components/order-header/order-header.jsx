@@ -51,7 +51,7 @@ function OrdersHeader({ title, subtitle, filters, flag, customClassName }) {
     >
       <div
         className={`${styles.title} ${styles.boldmd}`}
-        style={{ marginLeft: flag ? 0 : "16px" }}
+        style={{ marginInlineStart: flag ? 0 : "16px" }}
       >
         {title}
         <span className={` ${styles.subTitle}`}>{subtitle}</span>

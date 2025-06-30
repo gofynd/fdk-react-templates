@@ -746,11 +746,6 @@ h5,
     font-size: 12px;
   }
 }
-@media only screen and (min-width: 769px) and (max-width: 1024px) {
-  .single-address-content__addressContentConitainer___CupPn {
-    padding: 16px;
-  }
-}
 @media only screen and (max-width: 480px) {
   .single-address-content__addressContentConitainer___CupPn {
     padding: 0;
@@ -824,8 +819,8 @@ h5,
   .single-address-content__addressContentConitainer___CupPn .single-address-content__actionContainer___vCQh2 {
     position: fixed;
     bottom: 0;
-    left: 0;
-    right: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
     padding: 16px;
     background: var(--pageBackground, #f8f8f8);
     z-index: 2;
