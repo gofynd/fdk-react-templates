@@ -22,6 +22,7 @@ import FyButton from "../../core/fy-button/fy-button";
 import { useGlobalTranslation } from "fdk-core/utils";
 import Shimmer from "../../shimmer/shimmer";
 import { getAddressFromComponents } from "../../../helper/utils";
+import { useStateRef } from "../../../helper/hooks";
 
 const libraries = ["places"];
 
@@ -35,7 +36,8 @@ const GoogleMapAddress = ({
 }) => {
   const { t } = useGlobalTranslation("translation");
   const [isLocationError, setIsLocationError] = useState(false);
-  const [currentLocation, setCurrentLocation] = useState(addressItem);
+  const [currentLocation, setCurrentLocation, currentLocationRef] =
+    useStateRef(addressItem);
   const mapRef = useRef(null);
   const mapCenterRef = useRef({
     lat: Number(
@@ -64,159 +66,23 @@ const GoogleMapAddress = ({
     mapRef?.current?.panTo(location);
   }, [countryDetails, addressItem]);
 
-  // function stateReset() {
-  //   setPincode("");
-  //   setCity("");
-  //   setCountry("India");
-  //   setLocality("");
-  //   setState("");
-  // }
-
-  // function selectAddress() {
-  //   onAddressSelect({
-  //     city: city,
-  //     area_code: pincode,
-  //     state: state,
-  //     area: locality,
-  //     address: premise,
-  //     country: country,
-  //     geo_location: {
-  //       latitude: selectedPlace?.lat,
-  //       longitude: selectedPlace?.lng,
-  //     },
-  //   });
-  // }
-
-  // const handlePlaceSelect = useCallback((place) => {
-  //   if (place?.geometry) {
-  //     const location = place?.geometry?.location;
-  //     const lat = location.lat();
-  //     const lng = location.lng();
-  //     setSelectedPlace({ lat, lng });
-  //     setAddress(place.formatted_address);
-  //     let prem = place?.address_components?.find((m) =>
-  //       m?.types?.includes("premise")
-  //     );
-  //     setPremise(prem?.long_name || "");
-  //     // Get city and state from the location
-  //     getCityAndState(lat, lng);
-  //   } else {
-  //     console.error("No geometry available for selected place");
-  //   }
-  // }, []);
-
-  // const getCityAndState = async (lat, lng) => {
-  //   try {
-  //     const response = await fetch(
-  //       `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${mapApiKey}`
-  //     );
-  //     const data = await response.json();
-  //     const addressComponents = data.results[0].address_components;
-  //     stateReset();
-  //     let subLocalities = [];
-  //     addressComponents.forEach((component) => {
-  //       if (component.types.includes("plus_code")) {
-  //         setPremise(component.long_name);
-  //       } else if (component.types.includes("premise")) {
-  //         setPremise(component.long_name);
-  //       } else if (component.types.includes("street_number")) {
-  //         setPremise((prev) => (prev += component.long_name));
-  //       } else if (component.types.includes("country")) {
-  //         setCountry(component.long_name);
-  //       } else if (component.types.includes("locality")) {
-  //         setCity(component.long_name);
-  //       } else if (component.types.includes("administrative_area_level_1")) {
-  //         setState(component.long_name);
-  //       } else if (component.types.includes("postal_code")) {
-  //         setPincode(component.long_name);
-  //       } else if (
-  //         component.types.includes("sublocality") ||
-  //         component.types.includes("sublocality_level_1") ||
-  //         component.types.includes("sublocality_level_2")
-  //       ) {
-  //         subLocalities.push(component.long_name);
-  //       }
-
-  //       setLocality(subLocalities.join(", "));
-  //     });
-  //   } catch (error) {
-  //     console.error("Error fetching city and state:", error);
-  //   }
-  // };
-
-  // const getAddressFromLatLng = async (lat, lng) => {
-  //   try {
-  //     const response = await fetch(
-  //       `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${mapApiKey}`
-  //     );
-  //     const data = await response.json();
-  //     let subLocalities = [];
-  //     if (data.results && data.results.length > 0) {
-  //       const place = data.results[0];
-  //       setAddress(place.formatted_address);
-
-  //       if (place?.geometry) {
-  //         const location = place?.geometry?.location;
-  //         const lat = location.lat;
-  //         const lng = location.lng;
-  //         setSelectedPlace({ lat, lng });
-  //       }
-  //       // Extract city, state, and pincode from the place
-  //       place.address_components.forEach((component) => {
-  //         if (component.types.includes("premise")) {
-  //           setPremise(component.long_name);
-  //         }
-  //         if (component.types.includes("country")) {
-  //           setCountry(component.long_name);
-  //         }
-  //         if (component.types.includes("locality")) {
-  //           setCity(component.long_name);
-  //         }
-  //         if (component.types.includes("administrative_area_level_1")) {
-  //           setState(component.long_name);
-  //         }
-  //         if (component.types.includes("postal_code")) {
-  //           setPincode(component.long_name);
-  //         }
-  //         if (
-  //           component.types.includes("sublocality") ||
-  //           component.types.includes("sublocality_level_1") ||
-  //           component.types.includes("sublocality_level_2")
-  //         ) {
-  //           subLocalities.push(component.long_name);
-  //         }
-
-  //         setLocality(subLocalities.join(", "));
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching address:", error);
-  //   }
-  // };
-
   const locateUser = () => {
-    if (!navigator?.geolocation || !mapApiKey) return;
+    if (!navigator?.geolocation || !mapRef.current) return;
 
     navigator.geolocation.getCurrentPosition(
       async (position) => {
-        mapRef.current?.panTo({
+        mapRef.current.panTo({
           lat: position.coords.latitude,
           lng: position.coords.longitude,
         });
       },
-      (err) => {}
+      (err) => {
+        setIsLocationError(true);
+      }
     );
   };
 
-  // const handleLocationError = (browserHasGeolocation, pos) => {
-  //   console.error(
-  //     browserHasGeolocation
-  //       ? "Error: The Geolocation service failed."
-  //       : "Error: Your browser doesn't support geolocation."
-  //   );
-  // };
-
-   const AutocompleteProps = useMemo(
+  const AutocompleteProps = useMemo(
     () => ({
       onPlaceSelected: (place) => {
         if (place?.geometry) {
@@ -225,6 +91,7 @@ const GoogleMapAddress = ({
             lat: location.lat(),
             lng: location.lng(),
           });
+          setIsLocationError(false);
         } else {
           console.error("No geometry available for selected place");
         }
@@ -235,6 +102,10 @@ const GoogleMapAddress = ({
 
   const GoogleMapProps = useMemo(
     () => ({
+      mapContainerStyle: { width: "100%", height: "100%" },
+      center: mapCenterRef.current,
+      zoom: 19,
+      options: { disableDefaultUI: true, gestureHandling: "greedy" },
       onLoad: (map) => {
         mapRef.current = map;
         onLoad(map);
@@ -244,10 +115,11 @@ const GoogleMapAddress = ({
           const newCenter = mapRef.current.getCenter();
           const lat = newCenter.lat();
           const lng = newCenter.lng();
-
+          setIsLocationError(false);
           if (
             mapCenterRef.current.lat !== lat ||
-            mapCenterRef.current.lng !== lng || !currentLocation
+            mapCenterRef.current.lng !== lng ||
+            !currentLocationRef.current
           ) {
             mapCenterRef.current = { lat, lng };
             const geocoder = new window.google.maps.Geocoder();
@@ -274,14 +146,12 @@ const GoogleMapAddress = ({
     []
   );
 
-  // const isMapCountryError = useMemo(() => {
-  //   return (
-  //     !!currentLocation?.country_iso_code &&
-  //     i18nDetails?.countryCode !== currentLocation?.country_iso_code
-  //   );
-  // }, [i18nDetails, currentLocation]);
-
-  const isMapCountryError = false;
+  const isMapCountryError = useMemo(() => {
+    return (
+      !!currentLocation?.country_iso_code &&
+      countryDetails?.iso2 !== currentLocation?.country_iso_code
+    );
+  }, [countryDetails?.iso2, currentLocation?.country_iso_code]);
 
   const displayAddress = useMemo(() => {
     if (!currentLocation) return null;
@@ -305,24 +175,15 @@ const GoogleMapAddress = ({
       <div className={styles.mapContainer}>
         {isMapLoaded ? (
           <>
-            <GoogleMap
-              mapContainerStyle={{ width: "100%", height: "100%" }}
-              center={mapCenterRef.current}
-              zoom={19}
-              options={{
-                disableDefaultUI: true,
-                gestureHandling: "greedy",
-              }}
-              {...GoogleMapProps}
-            />
+            <GoogleMap {...GoogleMapProps} />
             <div className={styles.autocompleteWrapper}>
               <SearchIcon className={styles.autocompleteIcon} />
               <Autocomplete
                 className={styles.autocompleteInput}
-                placeholder="Search for pincode, area, street name..."
+                placeholder={t("resource.localization.search_google_maps")}
                 options={{
                   componentRestrictions: {
-                    // country: i18nDetails?.countryCode,
+                    country: countryDetails?.iso2,
                   },
                   types: ["geocode", "establishment"],
                 }}
@@ -339,9 +200,9 @@ const GoogleMapAddress = ({
               </div>
             </span>
             <FyButton
-              aria-label="Use Current Location"
+              aria-label={t("resource.localization.use_current_location")}
               onClick={locateUser}
-              className={`${styles.locateIconBtn} ${isLocationError || isMapCountryError && styles.locationError}`}
+              className={`${styles.locateIconBtn} ${(isLocationError || isMapCountryError) && styles.locationError}`}
             >
               <LocateIcon />
             </FyButton>

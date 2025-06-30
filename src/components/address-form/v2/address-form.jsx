@@ -325,8 +325,6 @@ const AddressForm = ({
   const address_type = watch("address_type");
   const sector = watch("sector");
 
-  console.log({ isMap, mapApiKey, isMapView, isMapAvailable, addressItem, cond: !addressItem });
-
   useEffect(() => {
     if (addressItem) {
       reset({
