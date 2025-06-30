@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 18px;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 1.5;
+    line-height: 24px;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .quantity-ctrl__caption-medium___DIRyS,
 .quantity-ctrl__captionMedium___dKA8v {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .quantity-ctrl__caption-semi-bold___rirfZ,
 .quantity-ctrl__captionSemiBold___iIOPk {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -260,11 +260,11 @@ h5,
 }
 .quantity-ctrl__mr-5___kmh67,
 .quantity-ctrl__mr5___CFB_e {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .quantity-ctrl__mr-2___cU7kf,
 .quantity-ctrl__mr2___HK0ti {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .quantity-ctrl__py-5___etXc7,
 .quantity-ctrl__py5___t9UTF {
@@ -363,8 +363,8 @@ h5,
 .quantity-ctrl__qtyControl___LvP42 .quantity-ctrl__qtyAmount___NVSUc {
   width: 38px;
   height: 100%;
-  border-inline-start: 1px solid var(--dividerStokes, #d4d1d1);
-  border-inline-end: 1px solid var(--dividerStokes, #d4d1d1);
+  border-left: 1px solid var(--dividerStokes, #d4d1d1);
+  border-right: 1px solid var(--dividerStokes, #d4d1d1);
   margin: 0px;
   background-color: var(--pageBackground, #f8f8f8);
   display: flex;

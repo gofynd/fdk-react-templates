@@ -1,5 +1,3 @@
-import { DEFAULT_CURRENCY_LOCALE, DEFAULT_UTC_LOCALE } from "./constant";
-
 export const debounce = (func, wait) => {
   let timeout;
   return function (...args) {
@@ -62,7 +60,7 @@ export function isRunningOnClient() {
   return false;
 }
 
-export function convertDate(dateString, locale = "en-US") {
+export function convertDate(dateString) {
   const date = new Date(dateString);
 
   const options = {
@@ -75,7 +73,7 @@ export function convertDate(dateString, locale = "en-US") {
     timeZone: "UTC",
   };
 
-  const formatter = new Intl.DateTimeFormat(locale, options);
+  const formatter = new Intl.DateTimeFormat("en-US", options);
   const formattedDate = formatter.format(date);
 
   return formattedDate;
@@ -86,7 +84,7 @@ export function validateName(name) {
   return regexp.test(String(name).toLowerCase().trim());
 }
 
-export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
+export const convertUTCDateToLocalDate = (date, format) => {
   if (!format) {
     format = {
       weekday: "long",
@@ -107,7 +105,7 @@ export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
   };
   // Convert the UTC date and time to the desired format
   const formattedDate = utcDate
-    .toLocaleString(locale, options)
+    .toLocaleString("en-US", options)
     .replace(" at ", ", ");
   return formattedDate;
 };
@@ -220,14 +218,14 @@ export const getProductImgAspectRatio = function (
   return defaultAspectRatio;
 };
 
-export const currencyFormat = (value, currencySymbol, locale = "en-IN") => {
+export const currencyFormat = (value, currencySymbol) => {
   if (currencySymbol && (value || value === 0)) {
     if (/^[A-Z]+$/.test(currencySymbol)) {
-      return `${currencySymbol} ${value?.toLocaleString(locale)}`;
+      return `${currencySymbol} ${value?.toLocaleString("en-IN")}`;
     }
-    return `${currencySymbol}${value?.toLocaleString(locale)}`;
+    return `${currencySymbol}${value?.toLocaleString("en-IN")}`;
   }
-  return `${value?.toLocaleString(locale)}`;
+  return `${value?.toLocaleString("en-IN")}`;
 };
 
 export const getReviewRatingData = function (customMeta) {
@@ -382,45 +380,6 @@ export function isFreeNavigation(e) {
   return false;
 }
 
-const isValidLocale = (tag) => {
-  try {
-    new Intl.Locale(tag);
-    return true;
-  } catch {
-    return false;
-  }
-};
-
-export const formatLocale = (locale, countryCode, isCurrencyLocale = false) => {
-  if ((locale === "en" || !locale) && isCurrencyLocale) {
-    return DEFAULT_CURRENCY_LOCALE;
-  }
-  if (locale === "en" || !locale) {
-    return DEFAULT_UTC_LOCALE;
-  }
-  const finalLocale = locale.includes("-") ? locale : `${locale}${countryCode ? "-" + countryCode : ""}`;
-
-  return isValidLocale(finalLocale) ? finalLocale : DEFAULT_UTC_LOCALE;
-};
-
-export const translateValidationMessages = (validationObject, t) => {
-  const updatedValidation = { ...validationObject };
-
-  Object.keys(updatedValidation).forEach((key) => {
-    const rule = updatedValidation[key];
-
-    if (
-      typeof rule === "object" &&
-      rule.message
-    ) {
-      rule.message = translateDynamicLabel(rule.message, t);
-    } else if (typeof rule === "string") {
-      updatedValidation[key] = translateDynamicLabel(rule, t);
-    }
-  });
-
-  return updatedValidation;
-};
 export const getAddressStr = (item, isAddressTypeAvailable) => {
   if (!item || typeof item !== "object") {
     return "";
@@ -458,23 +417,4 @@ export function isEmptyOrNull(obj) {
     obj === undefined ||
     (typeof obj === "object" && Object.keys(obj).length === 0)
   );
-}
-
-export function translateDynamicLabel(input, t) {
-  const safeInput = input
-    .toLowerCase()
-    .replace(/\//g, '_') // replace slashes with underscores
-    .replace(/[^a-z0-9_\s]/g, '') // remove special characters except underscores and spaces
-    .trim()
-    .replace(/\s+/g, '_'); // replace spaces with underscores
-
-  const translationKey = `resource.dynamic_label.${safeInput}`;
-  const translated = t(translationKey);
-
-  return translated.split('.').pop() === safeInput ? input : translated;
-}
-
-export function getLocaleDirection(fpi) {
-  const dir = fpi?.store?.getState()?.custom?.currentLocaleDetails?.direction;
-  return dir || "ltr";
 }
