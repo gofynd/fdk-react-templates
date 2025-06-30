@@ -95,11 +95,15 @@ function OrderShipment({
       ? `${total} ${t("resource.common.single_piece")}`
       : `${total} ${t("resource.common.multiple_piece")}`;
   };
-  const getCustomizationOptions = (orderInfo) => {
-    return orderInfo?.shipments?.map(
-      (ship) => ship.bags[0]?.meta?._custom_json?._display || []
-    );
-  };
+const getCustomizationOptions = (orderInfo) => {
+  if (!orderInfo?.shipments) return [];
+  return orderInfo.shipments
+    .flatMap((shipment) =>
+      shipment.bags?.map((bag) => bag.meta?._custom_json?._display || []).flat()
+    )
+    .filter(Boolean);
+};
+
 
   const handleShipmentAccordionClick = (shipmentId) => {
     setOpenAccordions((prev) => ({
@@ -129,11 +133,13 @@ function OrderShipment({
         {Object.keys(orderInfo)?.length !== 0 &&
           orderInfo?.shipments?.length !== 0 &&
           orderInfo?.shipments?.map((item, index) => {
-            const customizationOptions =
-              getCustomizationOptions({ shipments: [item] })?.[0] || [];
+            const customizationOptions = getCustomizationOptions({
+              shipments: [item],
+            });
+
             const shipmentItems = [
               {
-                title: `Customization`,
+                title: "Customization",
                 content: customizationOptions,
                 open: openAccordions[item.shipment_id] || false,
               },

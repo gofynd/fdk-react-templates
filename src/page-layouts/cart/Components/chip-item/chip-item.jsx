@@ -112,7 +112,7 @@ export default function ChipItem({
   ) => {
     let totalQuantity = (itemDetails?.quantity || 0) + quantity;
 
-    if (operation === "edit_item") {
+    if (operation === "edit_item" || isSizeUpdate) {
       totalQuantity = quantity;
     }
 
@@ -136,7 +136,8 @@ export default function ChipItem({
 
     if (
       itemDetails?.quantity !== totalQuantity ||
-      operation === "remove_item"
+      operation === "remove_item" ||
+      isSizeUpdate
     ) {
       const cartUpdateResponse = await onUpdateCartItems(
         event,
