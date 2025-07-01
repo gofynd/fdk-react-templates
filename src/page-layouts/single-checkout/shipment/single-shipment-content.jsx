@@ -18,9 +18,10 @@ function SingleShipmentContent({
   isShipmentLoading,
   showPaymentOptions,
   isHyperlocal = false,
-  convertHyperlocalTat = () => { },
+  convertHyperlocalTat = () => {},
   loader,
   buybox = {},
+  isCartValid,
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -30,15 +31,15 @@ function SingleShipmentContent({
     let grpBySameSellerAndProduct = shipment?.items?.reduce((result, item) => {
       result[
         "" +
-        item?.article?.seller?.uid +
-        item?.article?.store?.uid +
-        item?.product?.uid
+          item?.article?.seller?.uid +
+          item?.article?.store?.uid +
+          item?.product?.uid
       ] = (
         result[
-        "" +
-        item?.article?.seller?.uid +
-        item?.article?.store?.uid +
-        item?.product?.uid
+          "" +
+            item?.article?.seller?.uid +
+            item?.article?.store?.uid +
+            item?.product?.uid
         ] || []
       ).concat(item);
       return result;
@@ -104,14 +105,15 @@ function SingleShipmentContent({
                       <div className={styles.shipmentHeading}>
                         <div className={styles.headerLeft}>
                           <div className={styles.shipmentNumber}>
-                            {t("resource.common.shipment")} {index + 1}/{shipments.length}
+                            {t("resource.common.shipment")} {index + 1}/
+                            {shipments.length}
                           </div>
                           <div className={styles.itemCount}>
                             (
                             {`${shipmentItems.length} ${shipmentItems.length > 1 ? t("resource.common.item_simple_text_plural") : t("resource.common.item_simple_text")}`}
                             )
-                          </div >
-                        </div >
+                          </div>
+                        </div>
                         {item?.promise && (
                           <div className={styles.deliveryDateWrapper}>
                             <div className={styles.shippingLogo}>
@@ -121,17 +123,21 @@ function SingleShipmentContent({
                             <div className={styles.deliveryDate}>
                               {isHyperlocal
                                 ? convertHyperlocalTat(item?.promise?.iso?.max)
-                                : `${t("resource.common.delivery_by", { 
-                                  date: convertUTCDateToLocalDate(
-                                    item?.promise?.formatted?.max,
-                                    { weekday: 'short', day: '2-digit', month: 'short' },
-                                    formatLocale(locale, countryCode, true)
-                                  )})}`}
+                                : `${t("resource.common.delivery_by", {
+                                    date: convertUTCDateToLocalDate(
+                                      item?.promise?.formatted?.max,
+                                      {
+                                        weekday: "short",
+                                        day: "2-digit",
+                                        month: "short",
+                                      },
+                                      formatLocale(locale, countryCode, true)
+                                    ),
+                                  })}`}
                             </div>
                           </div>
-                        )
-                        }
-                      </div >
+                        )}
+                      </div>
                       <div>
                         {shipmentItems.map((product, index) => (
                           <div
@@ -172,10 +178,12 @@ function SingleShipmentContent({
                                         key={article?.article?.size + index}
                                       >
                                         <div className={styles.size}>
-                                          {t("resource.common.size")}: {article?.article.size}
+                                          {t("resource.common.size")}:{" "}
+                                          {article?.article.size}
                                         </div>
                                         <div className={styles.qty}>
-                                          {t("resource.common.qty")}: {article?.quantity}
+                                          {t("resource.common.qty")}:{" "}
+                                          {article?.quantity}
                                         </div>
                                       </div>
                                     ))}
@@ -191,7 +199,7 @@ function SingleShipmentContent({
                                     </div>
                                     {!product.item.is_set &&
                                       getMarkedPrice(product?.articles) !==
-                                      null && (
+                                        null && (
                                         <div className={styles.markedPrice}>
                                           {priceFormatCurrencySymbol(
                                             getCurrencySymbol(),
@@ -208,7 +216,14 @@ function SingleShipmentContent({
                                       product?.item?.article?.quantity > 0 &&
                                       !buybox?.is_seller_buybox_enabled && (
                                         <div className={styles.limitedQnty}>
-                                          {t("resource.common.hurry_only_left", { quantity: product?.item?.article?.quantity })}
+                                          {t(
+                                            "resource.common.hurry_only_left",
+                                            {
+                                              quantity:
+                                                product?.item?.article
+                                                  ?.quantity,
+                                            }
+                                          )}
                                         </div>
                                       )}
                                   </div>
@@ -226,17 +241,21 @@ function SingleShipmentContent({
                           </div>
                         ))}
                       </div>
-                    </div >
-                  </div >
-                </React.Fragment >
+                    </div>
+                  </div>
+                </React.Fragment>
               );
             })}
           <div className={styles.proceedBtnWrapper}>
-            <button className={styles.proceedBtn} onClick={showPaymentOptions}>
+            <button
+              className={styles.proceedBtn}
+              onClick={showPaymentOptions}
+              disabled={!isCartValid}
+            >
               {t("resource.checkout.proceed_to_pay")}
             </button>
           </div>
-        </div >
+        </div>
       )}
     </>
   );

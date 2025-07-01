@@ -87,6 +87,10 @@ export function validateName(name) {
 }
 
 export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
+  if (!date) {
+    return "Invalid date";
+  }
+
   if (!format) {
     format = {
       weekday: "long",
@@ -98,20 +102,50 @@ export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
       hour12: true,
     };
   }
-  const utcDate = new Date(date);
-  // Convert the UTC date to the local date using toLocaleString() with specific time zone
-  const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const options = {
-    ...format,
-    timeZone: browserTimezone,
-  };
-  // Convert the UTC date and time to the desired format
-  const formattedDate = utcDate
-    .toLocaleString(locale, options)
-    .replace(" at ", ", ");
-  return formattedDate;
-};
 
+  let parsedDate;
+
+  try {
+    // Handle different date string formats
+    if (typeof date === 'string') {
+      // Check if it's a partial date like "Thu, 03 Jul" without year
+      if (date.match(/^[A-Za-z]{3},\s+\d{1,2}\s+[A-Za-z]{3}$/)) {
+        // Add current year to make it a valid date
+        const currentYear = new Date().getFullYear();
+        parsedDate = new Date(`${date} ${currentYear}`);
+      } 
+      // Check if it's an ISO string or other standard format
+      else {
+        parsedDate = new Date(date);
+      }
+    } else {
+      parsedDate = new Date(date);
+    }
+
+    // Check if the parsed date is valid
+    if (isNaN(parsedDate.getTime())) {
+      console.error('Invalid date provided:', date);
+      return "Invalid date";
+    }
+
+    // Convert the UTC date to the local date using toLocaleString() with specific time zone
+    const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const options = {
+      ...format,
+      timeZone: browserTimezone,
+    };
+
+    // Convert the UTC date and time to the desired format
+    const formattedDate = parsedDate
+      .toLocaleString(locale, options)
+      .replace(" at ", ", ");
+    
+    return formattedDate;
+  } catch (error) {
+    console.error('Error formatting date:', error, 'Original date:', date);
+    return "Invalid date";
+  }
+};
 export function validateEmailField(value) {
   const emailPattern =
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -472,9 +506,4 @@ export function translateDynamicLabel(input, t) {
   const translated = t(translationKey);
 
   return translated.split('.').pop() === safeInput ? input : translated;
-}
-
-export function getLocaleDirection(fpi) {
-  const dir = fpi?.store?.getState()?.custom?.currentLocaleDetails?.direction;
-  return dir || "ltr";
 }

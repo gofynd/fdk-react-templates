@@ -32,11 +32,11 @@
           cursor: pointer;
           position: absolute;
           z-index: 1;
-          inset-inline-end: 16px;
+          right: 16px;
           top: 16px;
 
           @media @tablet {
-            inset-inline-end: 12px;
+            right: 12px;
             top: 12px;
           }
 
@@ -278,10 +278,8 @@
           }
         }
         .compareItems {
-          padding-top: 8px;
-          padding-inline-end: 0px;
-          padding-bottom: 16px;
-          padding-inline-start: 16px;
+          padding: 8px 16px 16px;
+          padding-right: 0;
           background: #fff;
           border-radius: 4px;
           border: 1px solid #d4d1d1;
@@ -358,11 +356,11 @@
       .searchResults {
         position: relative;
         max-height: 400px;
-        padding-inline-end: 16px;
+        padding-right: 16px;
 
         @media @mobile {
           max-height: 300px;
-          padding-inline-end: 8px;
+          padding-right: 8px;
         }
         overflow: auto;
 

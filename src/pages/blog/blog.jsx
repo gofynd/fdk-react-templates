@@ -25,7 +25,6 @@ import {
   translateDynamicLabel,
 } from "../../helper/utils";
 import Shimmer from "../../components/shimmer/shimmer";
-import useLocaleDirection from "../../helper/hooks/useLocaleDirection";
 
 function MemoizedSlide({ blog, index, sliderProps, getBlogTitle }) {
   const { t } = useGlobalTranslation("translation");
@@ -108,7 +107,6 @@ function BlogList({
   ssrSearch,
   ssrFilters,
 }) {
-  const { isRTL } = useLocaleDirection();
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
   const i18nDetails = useGlobalStore(fpi?.getters?.i18N_DETAILS) || {};
@@ -151,7 +149,6 @@ function BlogList({
     nextArrow: <SvgWrapper svgSrc="arrow-right" />,
     prevArrow: <SvgWrapper svgSrc="arrow-left" />,
     infinite: sliderBlogs?.tems?.length > 1,
-    rtl: isRTL,
   });
 
   useEffect(() => {

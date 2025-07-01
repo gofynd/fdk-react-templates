@@ -7,6 +7,7 @@ import QuantityControl from "../../../../components/quantity-control/quantity-co
 import Modal from "../../../../components/core/modal/modal";
 import { useMobile } from "../../../../helper/hooks";
 import FreeGiftItem from "../free-gift-item/free-gift-item";
+import Accordion from "../../../../components/accordion/accordion";
 import {
   useGlobalStore,
   useFPI,
@@ -52,6 +53,11 @@ export default function ChipItem({
   const couponText = singleItemDetails?.coupon_message || "";
   const moq = singleItemDetails?.moq;
   const incrementDecrementUnit = moq?.increment_unit ?? 1;
+  const customizationOptions = singleItemDetails?.article?._custom_json?._display || [];
+
+  const [items, setItems] = useState([
+    { title: "Customization", content: customizationOptions , open: false },
+  ]);
 
   const isSellerBuyBoxListing = useMemo(() => {
     return (
@@ -98,7 +104,7 @@ export default function ChipItem({
   ) => {
     let totalQuantity = (itemDetails?.quantity || 0) + quantity;
 
-    if (operation === "edit_item") {
+    if (operation === "edit_item" || isSizeUpdate) {
       totalQuantity = quantity;
     }
 
@@ -122,7 +128,8 @@ export default function ChipItem({
 
     if (
       itemDetails?.quantity !== totalQuantity ||
-      operation === "remove_item"
+      operation === "remove_item" ||
+      isSizeUpdate
     ) {
       const cartUpdateResponse = await onUpdateCartItems(
         event,
@@ -167,6 +174,17 @@ export default function ChipItem({
     if (activePromoIndex === index) setActivePromoIndex(null);
     else setActivePromoIndex(index);
   };
+ 
+  const handleItemClick = (index) => {
+    setItems((prevItems) => {
+      const updatedItems = [...prevItems];
+      updatedItems[index] = {
+        ...updatedItems[index],
+        open: !updatedItems[index].open,
+      };
+      return updatedItems;
+    });
+  }
   return (
     <>
       <div className={styles.cartItemsListContainer} key={itemIndex}>
@@ -397,6 +415,13 @@ export default function ChipItem({
                 </div>
               )
             }
+            {customizationOptions.length > 0 && <div className={styles.productCustomizationContainer}>
+              <Accordion
+                items={items}
+                onItemClick={handleItemClick}
+              />
+            </div>
+          }
           </div >
 
           <FreeGiftItem

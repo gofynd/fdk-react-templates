@@ -41,7 +41,7 @@ function DeliveryInfo({
       setPostCode(value);
       setTatMessage("");
       setPincodeErrorMessage("");
-      setPincodeChecked(false);
+     // setPincodeChecked(false);
     }
   };
 
@@ -70,7 +70,7 @@ function DeliveryInfo({
 
   const handleDeliveryAction = async () => {
     await checkPincode(postCode);
-    setPincodeChecked(true);
+    //setPincodeChecked(true);
   };
 
   return (

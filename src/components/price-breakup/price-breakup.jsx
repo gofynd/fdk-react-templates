@@ -40,7 +40,6 @@ import { priceFormatCurrencySymbol, translateDynamicLabel } from "../../helper/u
 import * as styles from "./price-breakup.less";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
 import { useGlobalTranslation } from "fdk-core/utils";
-import ForcedLtr from "../forced-ltr/forced-ltr";
 
 function PriceBreakup({
   title,
@@ -118,14 +117,14 @@ function PriceBreakup({
             <>
               <div>{translateDynamicLabel(item?.display, t)}</div>
               <div className={Number(item.value) < 0 ? styles.discount : ""}>
-              <ForcedLtr text={priceFormatCurrencySymbol(item?.currency_symbol, item?.value)}/>
+                {priceFormatCurrencySymbol(item?.currency_symbol, item?.value)}
               </div>
             </>
           ) : (
             <>
               <div>{translateDynamicLabel(item?.display, t)}</div>
               <div>
-              <ForcedLtr text={priceFormatCurrencySymbol(item?.currency_symbol, item?.value)}/>
+                {priceFormatCurrencySymbol(item?.currency_symbol, item?.value)}
               </div>
             </>
           )}
@@ -146,7 +145,7 @@ function PriceBreakup({
             {discountGreetingMessage || t("resource.common.discount_greeting_message")}
           </span>
           <span className={styles.discountPreviewAmount}>
-          <ForcedLtr text={priceFormatCurrencySymbol(currencySymbol, totalDiscount)}/>
+            {priceFormatCurrencySymbol(currencySymbol, totalDiscount)}
           </span>
         </div>
       )}

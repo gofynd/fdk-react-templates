@@ -33,6 +33,7 @@ function Checkout({
   cartCommentProps,
   buybox = {},
   isGuestUser = false,
+  isCartValid,
 }) {
   const [cancelQrPayment, setCancelQrPayment] = useState(null);
   const { onFailedGetCartShipmentDetails } = address;
@@ -71,6 +72,7 @@ function Checkout({
             payment?.getTotalValue()
           )}
           onPriceDetailsClick={onPriceDetailsClick}
+          isCartValid={isCartValid}
         ></SinglePageShipment>
         <CheckoutPayment
           payment={payment}

@@ -8,8 +8,16 @@ import { useMobile } from "../../../helper/hooks/useMobile";
 import { useViewport } from "../../../helper/hooks";
 // import UktModal from "./ukt-modal";
 import StickyPayNow from "./sticky-pay-now/sticky-pay-now";
-import { priceFormatCurrencySymbol, translateDynamicLabel } from "../../../helper/utils";
-import { useGlobalStore, useGlobalTranslation, useFPI, useNavigate } from "fdk-core/utils";
+import {
+  priceFormatCurrencySymbol,
+  translateDynamicLabel,
+} from "../../../helper/utils";
+import {
+  useGlobalStore,
+  useGlobalTranslation,
+  useFPI,
+  useNavigate,
+} from "fdk-core/utils";
 import Spinner from "../../../components/spinner/spinner";
 
 const upiDisplayWrapperStyle = {
@@ -997,8 +1005,10 @@ function CheckoutPaymentContent({
     setIsUpiSuffixSelected(false);
     let value = event.target.value
       .replace(/[^a-zA-Z0-9._@-]/g, "")
-      .replace(/@{2,}/g, "@");
-
+      .replace(/@{2,}/g, "@")
+      .replace(/^([^@]*)@([^@]*)$/, (_, user, domain) => {
+        return `${user}@${domain.replace(/[^a-zA-Z0-9]/g, "")}`;
+      });
     // Ensure only one '@' character
     const atCount = (value.match(/@/g) || []).length;
     if (atCount > 1) {
@@ -2613,7 +2623,10 @@ function CheckoutPaymentContent({
                               />
                             </div>
                             <div className={styles.modeItemName}>
-                              {translateDynamicLabel(payLater?.display_name ?? "", t)}
+                              {translateDynamicLabel(
+                                payLater?.display_name ?? "",
+                                t
+                              )}
                             </div>
                           </div>
                           <div className={styles.onMobileView}>
@@ -3288,7 +3301,10 @@ function CheckoutPaymentContent({
                             <div
                               className={`${styles.modeName} ${selectedTab === codOption.name ? styles.selectedModeName : ""}`}
                             >
-                              {translateDynamicLabel(codOption?.display_name ?? "", t)}
+                              {translateDynamicLabel(
+                                codOption?.display_name ?? "",
+                                t
+                              )}
                             </div>
                             {isTablet && codCharges > 0 && (
                               <div className={styles.codCharge}>
