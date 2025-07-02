@@ -270,7 +270,10 @@ export default function ChipItem({
           <div
             className={`${styles["out-of-stock-chip"]} ${styles["new-cart-red-color"]}`}
           >
-            <span>{translateDynamicLabel(singleItemDetails?.message, t) || t("resource.common.out_of_stock")}</span>
+            <span>
+              {translateDynamicLabel(singleItemDetails?.message, t) ||
+                t("resource.common.out_of_stock")}
+            </span>
             <span
               className={styles.removeAction}
               onClick={(e) =>
@@ -475,7 +478,7 @@ export default function ChipItem({
                       {`${t("resource.common.delivery_by", {
                         date: convertUTCDateToLocalDate(
                           singleItemDetails?.delivery_promise?.formatted?.max,
-                          { weekday: "short", day: "2-digit", month: "short" },
+                          { weekday: "short", day: "numeric", month: "short" },
                           formatLocale(locale, countryCode, true)
                         ),
                       })}`}
@@ -537,7 +540,7 @@ export default function ChipItem({
                 {`${t("resource.common.delivery_by", {
                   date: convertUTCDateToLocalDate(
                     singleItemDetails?.delivery_promise?.formatted?.max,
-                    { weekday: "short", day: "2-digit", month: "short" },
+                    { weekday: "short", day: "numeric", month: "short" },
                     formatLocale(locale, countryCode, true)
                   ),
                 })}`}

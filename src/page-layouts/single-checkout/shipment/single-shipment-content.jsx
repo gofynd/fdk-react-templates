@@ -129,7 +129,7 @@ function SingleShipmentContent({
                                       item?.promise?.formatted?.max,
                                       {
                                         weekday: "short",
-                                        day: "2-digit",
+                                        day: "numeric",
                                         month: "short",
                                       },
                                       formatLocale(locale, countryCode, true)
