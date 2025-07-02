@@ -367,6 +367,11 @@ h5,
   font-weight: 600;
   background: var(--pageBackground, #f8f8f8);
 }
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  .share-cart__cartSharePopup___ISttH .share-cart__cartShare___mjVv6 .share-cart__shareCartBox___Wlycv {
+    padding: 16px;
+  }
+}
 @media only screen and (max-width: 480px) {
   .share-cart__cartSharePopup___ISttH .share-cart__cartShare___mjVv6 .share-cart__shareCartBox___Wlycv {
     border-width: 1px 0;
