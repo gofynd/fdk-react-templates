@@ -467,7 +467,7 @@ export default function ChipItem({
               {isDeliveryPromise &&
                 !isOutOfStock &&
                 isServiceable &&
-                singleItemDetails?.delivery_promise?.formatted?.max && (
+                singleItemDetails?.delivery_promise?.iso?.max && (
                   <div
                     className={`${styles.deliveryDateWrapper} ${styles["deliveryDateWrapper--desktop"]}`}
                   >
@@ -477,7 +477,7 @@ export default function ChipItem({
                     <div className={styles.deliveryDate}>
                       {`${t("resource.common.delivery_by", {
                         date: convertUTCDateToLocalDate(
-                          singleItemDetails?.delivery_promise?.formatted?.max,
+                          singleItemDetails?.delivery_promise?.iso?.max,
                           { weekday: "short", day: "numeric", month: "short" },
                           formatLocale(locale, countryCode, true)
                         ),
@@ -529,7 +529,7 @@ export default function ChipItem({
         {isDeliveryPromise &&
           !isOutOfStock &&
           isServiceable &&
-          singleItemDetails?.delivery_promise?.formatted?.max && (
+          singleItemDetails?.delivery_promise?.iso?.max && (
             <div
               className={`${styles.deliveryDateWrapper} ${styles["deliveryDateWrapper--mobile"]}`}
             >
@@ -539,7 +539,7 @@ export default function ChipItem({
               <div className={styles.deliveryDate}>
                 {`${t("resource.common.delivery_by", {
                   date: convertUTCDateToLocalDate(
-                    singleItemDetails?.delivery_promise?.formatted?.max,
+                    singleItemDetails?.delivery_promise?.iso?.max,
                     { weekday: "short", day: "numeric", month: "short" },
                     formatLocale(locale, countryCode, true)
                   ),

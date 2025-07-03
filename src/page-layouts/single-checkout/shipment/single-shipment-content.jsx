@@ -126,7 +126,7 @@ function SingleShipmentContent({
                                 ? convertHyperlocalTat(item?.promise?.iso?.max)
                                 : `${t("resource.common.delivery_by", {
                                     date: convertUTCDateToLocalDate(
-                                      item?.promise?.formatted?.max,
+                                      item?.promise?.iso?.max,
                                       {
                                         weekday: "short",
                                         day: "numeric",
