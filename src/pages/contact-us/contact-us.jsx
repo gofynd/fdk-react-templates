@@ -14,6 +14,7 @@ function ContactSupport({
   pageConfig = "",
   SocailMedia = () => <></>,
   appInfo,
+  prefillData,
 }) {
   const { t } = useGlobalTranslation("translation");
   const {
@@ -23,10 +24,10 @@ function ContactSupport({
     control,
   } = useForm({
     defaultValues: {
-      email: "",
-      name: "",
-      phone: "",
-      comment: "",
+      name: (prefillData?.name || "").replace(/^"|"$/g, ""),
+      phone: (prefillData?.phone || "").replace(/^"|"$/g, ""),
+      email: (prefillData?.email || "").replace(/^"|"$/g, ""),
+      comment: (prefillData?.comment || "").replace(/^"|"$/g, ""),
     },
     mode: "onSubmit",
     reValidateMode: "onChange",
