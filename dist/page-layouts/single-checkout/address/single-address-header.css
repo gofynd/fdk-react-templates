@@ -345,6 +345,11 @@ h5,
     padding: 16px;
   }
 }
+@media only screen and (min-width: 769px) {
+  .single-address-header__addressHeaderContainer___uHzhP {
+    border-radius: 8px 8px 0 0;
+  }
+}
 .single-address-header__addressHeaderContainer__mobile___OsAjO {
   display: none;
 }
@@ -471,6 +476,7 @@ h5,
 .single-address-header__addressSelectedHeaderContainer___iphxk {
   padding: 24px;
   display: flex;
+  border-radius: 8px;
   justify-content: space-between;
   border: 1px solid var(--dividerStokes);
   align-items: center;

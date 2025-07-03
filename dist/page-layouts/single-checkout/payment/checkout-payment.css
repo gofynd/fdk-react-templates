@@ -3788,6 +3788,11 @@ h5,
 .checkout-payment__paymentContainer___1UBn5 {
   margin-top: 20px;
 }
+@media only screen and (min-width: 769px) {
+  .checkout-payment__paymentContainer___1UBn5 {
+    border-radius: 8px;
+  }
+}
 .checkout-payment__paymentContainer___1UBn5.checkout-payment__unsetMarginTop___yjz9p {
   margin-top: unset !important;
 }
@@ -3804,6 +3809,11 @@ h5,
   display: flex;
   border: 1px solid var(--dividerStokes);
   opacity: 0.5;
+}
+@media only screen and (min-width: 769px) {
+  .checkout-payment__paymentContainer___1UBn5 .checkout-payment__reviewHeaderUnselect___KZS1G {
+    border-radius: 8px;
+  }
 }
 @media only screen and (min-width: 769px) and (max-width: 1024px) {
   .checkout-payment__paymentContainer___1UBn5 .checkout-payment__reviewHeaderUnselect___KZS1G {

@@ -346,6 +346,11 @@ h5,
     padding: 16px;
   }
 }
+@media only screen and (min-width: 769px) {
+  .gst-card__gstContainer___LJVYg {
+    border-radius: 8px;
+  }
+}
 @media only screen and (max-width: 480px) {
   .gst-card__gstContainer___LJVYg {
     padding: 16px;

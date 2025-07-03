@@ -350,6 +350,11 @@ h5,
   border: 1px solid var(--dividerStokes);
   padding: 16px 24px;
 }
+@media only screen and (min-width: 769px) {
+  .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF {
+    border-radius: 8px 8px 0 0;
+  }
+}
 @media only screen and (max-width: 480px) {
   .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF {
     border-width: 1px 0;
@@ -592,6 +597,11 @@ h5,
   border: 1px solid var(--dividerStokes);
   padding: 24px;
   border-top: none;
+}
+@media only screen and (min-width: 769px) {
+  .single-shipment-content__parent___NFi_h {
+    border-radius: 0px 0px 8px 8px;
+  }
 }
 @media only screen and (min-width: 769px) and (max-width: 1024px) {
   .single-shipment-content__parent___NFi_h {

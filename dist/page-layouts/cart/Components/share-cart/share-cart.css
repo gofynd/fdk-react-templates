@@ -372,6 +372,11 @@ h5,
     padding: 16px;
   }
 }
+@media only screen and (min-width: 769px) {
+  .share-cart__cartSharePopup___ISttH .share-cart__cartShare___mjVv6 .share-cart__shareCartBox___Wlycv {
+    border-radius: 8px;
+  }
+}
 @media only screen and (max-width: 480px) {
   .share-cart__cartSharePopup___ISttH .share-cart__cartShare___mjVv6 .share-cart__shareCartBox___Wlycv {
     border-width: 1px 0;

@@ -13,7 +13,9 @@
       justify-content: space-between;
       border: 1px solid var(--dividerStokes);
       padding: 16px 24px;
-
+      @media @desktop {
+        border-radius: 8px 8px 0 0;
+      }
       @media @mobile {
         border-width: 1px 0;
         padding: 16px;
@@ -263,6 +265,9 @@
 .parent {
   border: 1px solid var(--dividerStokes);
   padding: 24px;
+  @media @desktop {
+    border-radius: 0px 0px 8px 8px;
+  }
   @media @tablet-range {
     padding: 16px;
   }

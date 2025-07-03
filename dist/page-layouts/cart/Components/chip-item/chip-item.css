@@ -552,6 +552,11 @@ h5,
   margin-left: 12px;
   cursor: pointer;
 }
+@media only screen and (min-width: 769px) {
+  .chip-item__cartItemsListContainer___ud9jU:last-child {
+    border-radius: 0 0 8px 8px;
+  }
+}
 .chip-item__appliedCouponRibbon___J3qAi {
   display: flex;
   align-items: center;
