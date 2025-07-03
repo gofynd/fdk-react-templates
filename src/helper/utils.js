@@ -87,7 +87,10 @@ export function validateName(name) {
 }
 
 export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
+  console.log("🔹 Initial input →", { date, format, locale });
+
   if (!date) {
+    console.warn("⚠️ No date provided. Returning 'Invalid date'");
     return "Invalid date";
   }
 
@@ -101,51 +104,55 @@ export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
       minute: "numeric",
       hour12: true,
     };
+    console.log("ℹ️ No format provided. Using default format →", format);
   }
 
   let parsedDate;
 
   try {
-    // Handle different date string formats
     if (typeof date === "string") {
-      // Check if it's a partial date like "Thu, 03 Jul" without year
+      console.log("🔍 Input is a string. Checking for partial format...");
+
       if (date.match(/^[A-Za-z]{3},\s+\d{1,2}\s+[A-Za-z]{3}$/)) {
-        // Add current year to make it a valid date
         const currentYear = new Date().getFullYear();
+        console.log("📆 Detected partial format. Using current year:", currentYear);
         parsedDate = new Date(`${date} ${currentYear}`);
-      }
-      // Check if it's an ISO string or other standard format
-      else {
+        console.log("📆 Parsed partial date →", parsedDate.toISOString());
+      } else {
         parsedDate = new Date(date);
+        console.log("📆 Parsed ISO/standard string date →", parsedDate.toISOString());
       }
     } else {
       parsedDate = new Date(date);
+      console.log("📆 Parsed Date object or timestamp →", parsedDate.toISOString());
     }
 
-    // Check if the parsed date is valid
     if (isNaN(parsedDate.getTime())) {
-      console.error("Invalid date provided:", date);
+      console.error("❌ Invalid date after parsing →", parsedDate);
       return "Invalid date";
     }
 
-    // Convert the UTC date to the local date using toLocaleString() with specific time zone
     const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    console.log("🌐 Detected browser time zone →", browserTimezone);
+
     const options = {
       ...format,
       timeZone: browserTimezone,
     };
+    console.log("🛠️ Formatting options →", options);
 
-    // Convert the UTC date and time to the desired format
     const formattedDate = parsedDate
       .toLocaleString(locale, options)
       .replace(" at ", ", ");
 
+    console.log("✅ Final formatted date →", formattedDate);
     return formattedDate;
   } catch (error) {
-    console.error("Error formatting date:", error, "Original date:", date);
+    console.error("❗ Error formatting date:", error, "Original input →", date);
     return "Invalid date";
   }
 };
+
 
 export function validateEmailField(value) {
   const emailPattern =
