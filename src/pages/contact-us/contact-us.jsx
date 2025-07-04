@@ -129,11 +129,21 @@ function ContactSupport({
   const overlayStyles = {
     "--overlay-opacity": `${pageConfig?.opacity}%`,
   };
-  const submitForm = async (data) => {
-    handleSubmitForm(data);
-    reset();
+
+const submitForm = async (data) => {
+  try {
+    await handleSubmitForm(data);
+    reset({
+      name: "",
+      phone: "",
+      email: "",
+      comment: "",
+    });
     setText("");
-  };
+  } catch (err) {
+    console.error("Form submission failed", err);
+  }
+};
   const showAddress =
     typeof pageConfig?.show_address === "boolean"
       ? pageConfig.show_address
@@ -302,10 +312,7 @@ function ContactSupport({
                         }
                         onChange={(e) => {
                           const val = e.target.value;
-                          onChange(e); // update form state
-                          if (errors[field.name]) {
-                            clearErrors(field.name); // clear error
-                          }
+                          onChange(e);
                           if (field.type === "textarea") {
                             setText(val);
                           }
