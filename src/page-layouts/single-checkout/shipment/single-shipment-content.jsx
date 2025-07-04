@@ -21,7 +21,6 @@ function SingleShipmentContent({
   convertHyperlocalTat = () => {},
   loader,
   buybox = {},
-  availableFOCount,
   isCartValid,
 }) {
   const { t } = useGlobalTranslation("translation");
@@ -126,22 +125,16 @@ function SingleShipmentContent({
                                 ? convertHyperlocalTat(item?.promise?.iso?.max)
                                 : `${t("resource.common.delivery_by", {
                                     date: convertUTCDateToLocalDate(
-                                      item?.promise?.iso?.max,
+                                      item?.promise?.formatted?.max,
                                       {
                                         weekday: "short",
-                                        day: "numeric",
+                                        day: "2-digit",
                                         month: "short",
                                       },
                                       formatLocale(locale, countryCode, true)
                                     ),
                                   })}`}
                             </div>
-                            {availableFOCount > 1 &&
-                              item?.fulfillment_option?.name && (
-                                <div className={styles.foName}>
-                                  {item?.fulfillment_option?.name}
-                                </div>
-                              )}
                           </div>
                         )}
                       </div>

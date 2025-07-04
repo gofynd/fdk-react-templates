@@ -8,8 +8,16 @@ import { useMobile } from "../../../helper/hooks/useMobile";
 import { useViewport } from "../../../helper/hooks";
 // import UktModal from "./ukt-modal";
 import StickyPayNow from "./sticky-pay-now/sticky-pay-now";
-import { priceFormatCurrencySymbol, translateDynamicLabel } from "../../../helper/utils";
-import { useGlobalStore, useGlobalTranslation, useFPI, useNavigate } from "fdk-core/utils";
+import {
+  priceFormatCurrencySymbol,
+  translateDynamicLabel,
+} from "../../../helper/utils";
+import {
+  useGlobalStore,
+  useGlobalTranslation,
+  useFPI,
+  useNavigate,
+} from "fdk-core/utils";
 import Spinner from "../../../components/spinner/spinner";
 
 const upiDisplayWrapperStyle = {
@@ -138,7 +146,6 @@ function CheckoutPaymentContent({
   removeDialogueError,
   setCancelQrPayment,
   isCouponApplied,
-  juspayErrorMessage,
 }) {
   const fpi = useFPI();
   const { language } = useGlobalStore(fpi.getters.i18N_DETAILS);
@@ -237,7 +244,6 @@ function CheckoutPaymentContent({
     selectedOtherPayment: selectedOtherPayment,
     selectedUpiIntentApp: selectedUpiIntentApp,
   });
-  const [paymentResponse, setPaymentResponse] = useState(null);
 
   const [showUPIModal, setshowUPIModal] = useState(false);
   const [showCouponValidityModal, setShowCouponValidityModal] = useState(false);
@@ -287,12 +293,9 @@ function CheckoutPaymentContent({
   const [activeMop, setActiveMop] = useState(null);
   const [userOrderId, setUserOrderId] = useState(null);
   const [lastValidatedBin, setLastValidatedBin] = useState("");
-  const [isJuspayCouponApplied, setIsJuspayCouponApplied] = useState(false);
-
   const disbaleCheckout = useGlobalStore(fpi?.getters?.SHIPMENTS);
   const isCouponAppliedSuccess =
     useGlobalStore(fpi?.getters?.CUSTOM_VALUE) ?? {};
-  const lastJuspayInitializationRef = useRef(null);
 
   const toggleMop = (mop) => {
     setActiveMop((prev) => (prev === mop ? null : mop));
@@ -407,12 +410,6 @@ function CheckoutPaymentContent({
   useEffect(() => {
     if (cardDetailsData?.card_brand) selectMop("CARD", "CARD", "newCARD");
   }, [cardDetailsData?.card_brand]);
-
-  useEffect(()=>{
-    if(isCouponApplied || isCouponAppliedSuccess["isCouponApplied"]){
-      selectMop("CARD", "CARD", "CARD");
-    }
-  },[isJuspayCouponApplied, isCouponAppliedSuccess]);
 
   const resetCardValidationErrors = () => {
     setCardNumberError("");
@@ -718,7 +715,7 @@ function CheckoutPaymentContent({
           id: cart_id,
           addressId: address_id,
           paymentMode: mop,
-          aggregatorName: subMopData?.aggregator_name || mopData?.aggregator_name || "Razorpay",
+          aggregatorName: subMopData?.aggregator_name || "Razorpay",
           cardId: subMopData?.card_id,
           paymentIdentifier: subMopData?.card_id,
           type: subMopData?.card_type || "debit",
@@ -1191,61 +1188,6 @@ function CheckoutPaymentContent({
     return false;
   };
 
-  const isJuspayEnabled = () => {
-    return paymentOption?.payment_option?.find(
-      (opt) =>
-        opt.aggregator_name?.toLowerCase() === "juspay" && opt.name === "CARD"
-    );
-  };
-
-  const handlePayment = async () => {
-    try {
-      const response = await payUsingJuspayCard();
-
-      setPaymentResponse(response);
-    } catch (error) {
-      setPaymentResponse({ error });
-    }
-  };
-
-  useEffect(() => {
-    const initializeJuspay = async () => {
-      if (isJuspayEnabled() && !paymentResponse) {
-        const currentInitKey = `${!!paymentResponse}_${!!juspayErrorMessage}_${paymentOption?.payment_option?.length}`;
-        
-        if (lastJuspayInitializationRef.current === currentInitKey) {
-          return; // Already processed this state combination
-        }
-        
-        lastJuspayInitializationRef.current = currentInitKey;
-        
-        try {
-          await handlePayment();
-        } catch (error) {
-          console.error("Juspay initialization error:", error);
-        }
-      }
-    };
-
-    if (
-      juspayErrorMessage &&
-      !paymentResponse &&
-      paymentOption?.payment_option?.find(
-        (opt) =>
-          opt.aggregator_name?.toLowerCase() === "juspay" && opt.name === "CARD"
-      )
-    ) {
-      const currentErrorKey = `error_${juspayErrorMessage}_${!!paymentResponse}`;
-      
-      if (lastJuspayInitializationRef.current !== currentErrorKey) {
-        lastJuspayInitializationRef.current = currentErrorKey;
-        handlePayment();
-      }
-    } else {
-      initializeJuspay();
-    }
-  }, [paymentResponse, juspayErrorMessage, paymentOption]);
-
   const isCardDetailsValid = () => {
     //reset error
     setCardNumberError("");
@@ -1279,14 +1221,6 @@ function CheckoutPaymentContent({
       !cardExpiryError &&
       !cardCVVError
     );
-  };
-
-  const payUsingJuspayCard = async () => {
-    const newPayload = {
-      ...selectedPaymentPayload,
-    };
-    const res = await proceedToPay("newCARD", newPayload);
-    return res;
   };
 
   const payUsingCard = async () => {
@@ -1751,13 +1685,6 @@ function CheckoutPaymentContent({
                       setCardValidity={setCardValidity}
                       resetCardValidationErrors={resetCardValidationErrors}
                       enableLinkPaymentOption={enableLinkPaymentOption}
-                      paymentOption={paymentOption}
-                      paymentResponse={paymentResponse}
-                      isJuspayEnabled={isJuspayEnabled}
-                      handleShowFailedMessage={handleShowFailedMessage}
-                      cardDetails={cardDetails}
-                      selectMop={selectMop}
-                      setIsJuspayCouponApplied={setIsJuspayCouponApplied}
                     />
                   </div>
                 )}
@@ -1814,13 +1741,6 @@ function CheckoutPaymentContent({
                   setCardValidity={setCardValidity}
                   resetCardValidationErrors={resetCardValidationErrors}
                   enableLinkPaymentOption={enableLinkPaymentOption}
-                  paymentOption={paymentOption}
-                  paymentResponse={paymentResponse}
-                  isJuspayEnabled={isJuspayEnabled}
-                  handleShowFailedMessage={handleShowFailedMessage}
-                  cardDetails={cardDetails}
-                  selectMop={selectMop}
-                  setIsJuspayCouponApplied={setIsJuspayCouponApplied}                  
                 />
               </div>
             )}
@@ -1879,13 +1799,6 @@ function CheckoutPaymentContent({
                     setCardValidity={setCardValidity}
                     resetCardValidationErrors={resetCardValidationErrors}
                     enableLinkPaymentOption={enableLinkPaymentOption}
-                    paymentOption={paymentOption}
-                    paymentResponse={paymentResponse}
-                    isJuspayEnabled={isJuspayEnabled}
-                    handleShowFailedMessage={handleShowFailedMessage}
-                    cardDetails={cardDetails}
-                    selectMop={selectMop}
-                    setIsJuspayCouponApplied={setIsJuspayCouponApplied}
                   />
                 </div>
               </Modal>
@@ -2710,7 +2623,10 @@ function CheckoutPaymentContent({
                               />
                             </div>
                             <div className={styles.modeItemName}>
-                              {translateDynamicLabel(payLater?.display_name ?? "", t)}
+                              {translateDynamicLabel(
+                                payLater?.display_name ?? "",
+                                t
+                              )}
                             </div>
                           </div>
                           <div className={styles.onMobileView}>
@@ -3352,7 +3268,7 @@ function CheckoutPaymentContent({
                       </div>
                     </div>
                     {isTablet && activeMop === "Other" && (
-                      <div className={` ${styles.onMobileView}`}>
+                      <div className={`${styles.onMobileView}`}>
                         {selectedTab === "Other" && navigationTab()}
                       </div>
                     )}
@@ -3385,7 +3301,10 @@ function CheckoutPaymentContent({
                             <div
                               className={`${styles.modeName} ${selectedTab === codOption.name ? styles.selectedModeName : ""}`}
                             >
-                              {translateDynamicLabel(codOption?.display_name ?? "", t)}
+                              {translateDynamicLabel(
+                                codOption?.display_name ?? "",
+                                t
+                              )}
                             </div>
                             {isTablet && codCharges > 0 && (
                               <div className={styles.codCharge}>

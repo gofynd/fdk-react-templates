@@ -112,7 +112,7 @@ function ProfileDetails({ userData, handleSave }) {
               errors?.firstName?.type === "maxLength"
                 ? t("resource.common.maximum_64_characters_allowed")
                 : errors?.firstName?.type === "pattern"
-                  ? t("resource.common.invalid_name")
+                  ? t("resource.common.please_enter_valid_first_name")
                   : t("resource.common.required")
             }
             {...register("firstName", {
@@ -123,7 +123,7 @@ function ProfileDetails({ userData, handleSave }) {
               },
               pattern: {
                 value: /^[A-Za-z\s'-]+$/,
-                message: t("resource.common.invalid_name"),
+                message: t("resource.common.please_enter_valid_first_name"),
               },
             })}
             required
@@ -142,7 +142,7 @@ function ProfileDetails({ userData, handleSave }) {
               errors?.lastName?.type === "maxLength"
                 ? t("resource.common.maximum_64_characters_allowed")
                 : errors?.lastName?.type === "pattern"
-                  ? t("resource.common.invalid_name")
+                  ? t("resource.common.please_enter_valid_last_name")
                   : t("resource.common.required")
             }
             {...register("lastName", {
@@ -153,7 +153,7 @@ function ProfileDetails({ userData, handleSave }) {
               },
               pattern: {
                 value: /^[A-Za-z\s'-]+$/,
-                message: t("resource.common.invalid_name"),
+                message: t("resource.common.please_enter_valid_last_name"),
               },
             })}
             required
