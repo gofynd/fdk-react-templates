@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import { convertUTCDateToLocalDate, formatLocale } from "../../../../helper/utils";
 import * as styles from "./delivery-info.less";
-import FyButton from "../../../../components/core/fy-button/fy-button";
-import FyInput from "../../../../components/core/fy-input/fy-input";
+// import FyButton from "../../../../components/core/fy-button/fy-button";
+// import FyInput from "../../../../components/core/fy-input/fy-input";
 import {
   useGlobalStore,
   useFPI,
@@ -16,6 +16,8 @@ function DeliveryInfo({
   pincodeErrorMessage,
   checkPincode,
   setPincodeErrorMessage,
+  fulfillmentOptions,
+  availableFOCount,
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -73,10 +75,14 @@ function DeliveryInfo({
     //setPincodeChecked(true);
   };
 
+  const foCount = useMemo(() => {
+    return fulfillmentOptions?.length || 0;
+  }, [fulfillmentOptions]);
+
   return (
     <div className={styles.deliveryInfo}>
-      <h4 className={`${styles.deliveryLabel} b2`}>{t("resource.common.address.select_delivery_location")}</h4>
-      <div className={styles.delivery}>
+      {/* <h4 className={`${styles.deliveryLabel} b2`}>{t("resource.common.address.select_delivery_location")}</h4> */}
+      {/* <div className={styles.delivery}>
         <FyInput
           autoComplete="off"
           value={postCode}
@@ -99,10 +105,10 @@ function DeliveryInfo({
         >
           {t("resource.facets.check")}
         </FyButton>
-      </div>
-      {!pincodeErrorMessage && (
+      </div> */}
+      {!pincodeErrorMessage && availableFOCount === 1 && (
         <div className={`${styles.deliveryDate} ${styles.dateInfoContainer}`}>
-          {postCode?.length === 6 && tatMessage?.length > 0 && (
+          {tatMessage?.length > 0 && (
             <>
               <SvgWrapper
                 svgSrc="delivery"

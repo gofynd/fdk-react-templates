@@ -11,6 +11,7 @@ const StickyPayNow = ({
   btnTitle,
   customClassName,
   enableLinkPaymentOption = false,
+  isJuspay = false,
 }) => {
   const { t } = useGlobalTranslation("translation");
 
@@ -36,12 +37,23 @@ const StickyPayNow = ({
               </div>
             </div>
           )}
-          <button
-            className={`${styles.cartCheckoutBtn} ${styles.checkoutButton} ${enableLinkPaymentOption ? styles.buttonWidth : ""}`}
-            onClick={proceedToPay}
-          >
-            {btnTitle || t("resource.cart.pay_now")}
-          </button>
+          {!isJuspay ? (
+            <button
+              className={`${styles.cartCheckoutBtn} ${styles.checkoutButton}`}
+              onClick={proceedToPay}
+            >
+              {btnTitle || t("resource.cart.pay_now")}
+            </button>
+          ) : (
+            <button
+              type="submit"
+              id="common_pay_btn"
+              className={`${styles.cartCheckoutBtn} ${styles.checkoutButton}`}
+              disabled={disabled}
+            >
+              {t("resource.common.pay_caps")}{" "}
+            </button>
+          )}
         </div>
       </motion.div>
     </AnimatePresence>

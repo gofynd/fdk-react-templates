@@ -11,7 +11,7 @@
  */
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { LoadScript, GoogleMap, Marker } from "@react-google-maps/api";
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import * as styles from "./google-map.less";
 import Autocomplete from "react-google-autocomplete";
 import SearchIcon from "../../assets/images/search.svg";
@@ -37,10 +37,9 @@ const GoogleMapAddress = ({
   onAddressSelect,
   countryDetails,
   addressItem,
-  onLoad = () => { },
+  onLoad = () => {},
 }) => {
   const { t } = useGlobalTranslation("translation");
-  const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [selectedPlace, setSelectedPlace] = useState({
     lat: countryDetails?.latitude,
     lng: countryDetails?.longitude,
@@ -54,6 +53,11 @@ const GoogleMapAddress = ({
   const [country, setCountry] = useState("India");
   const inputRef = useRef(null);
   const mapRef = useRef(null);
+
+  const { isLoaded: isMapLoaded } = useJsApiLoader({
+    googleMapsApiKey: mapApiKey,
+    libraries,
+  });
 
   useEffect(() => {
     if (addressItem?.geo_location) {
@@ -240,67 +244,67 @@ const GoogleMapAddress = ({
 
   const onMapLoad = (map) => {
     mapRef.current = map;
-    setIsMapLoaded(true);
     onLoad(map);
   };
 
   return (
     <div className={styles.mapAddress}>
       <div className={styles.mapWrapper} style={mapContainerStyle}>
-        <LoadScript googleMapsApiKey={mapApiKey} libraries={libraries}>
-          <div
-            ref={inputRef}
-            className={styles.autoCompleteWrap}
-            style={{ display: !isMapLoaded && "none" }}
-          >
-            <SearchIcon className={styles.searchAutoIcon} />
-            <Autocomplete
-              placeholder={t("resource.localization.search_google_maps")}
-              apiKey={mapApiKey}
-              style={autoCompleteStyles}
-              onPlaceSelected={handlePlaceSelect}
-              options={{
-                types: ["geocode", "establishment"],
-                componentRestrictions: { country: countryDetails?.iso2 },
-              }}
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-            />
-          </div>
-          <div
-            className={styles.mapCompWrap}
-            style={{ display: !isMapLoaded && "none" }}
-          >
-            <GoogleMap
-              mapContainerStyle={mapContainerStyle}
-              center={selectedPlace}
-              zoom={selectedPlace ? 15 : 10}
-              options={{
-                fullscreenControl: false,
-                mapTypeControl: false,
-                streetViewControl: false,
-              }}
-              onLoad={onMapLoad}
+        {isMapLoaded ? (
+          <div>
+            <div
+              ref={inputRef}
+              className={styles.autoCompleteWrap}
+              style={{ display: !isMapLoaded && "none" }}
             >
-              {selectedPlace && (
-                <Marker
-                  position={selectedPlace}
-                  draggable={true}
-                  onDragEnd={handleMarkerDragEnd}
-                />
-              )}
-            </GoogleMap>
-            <button
-              title={t("resource.localization.detect_my_location")}
-              onClick={locateUser}
-              className={styles.locateIconBtn}
+              <SearchIcon className={styles.searchAutoIcon} />
+              <Autocomplete
+                placeholder={t("resource.localization.search_google_maps")}
+                apiKey={mapApiKey}
+                style={autoCompleteStyles}
+                onPlaceSelected={handlePlaceSelect}
+                options={{
+                  types: ["geocode", "establishment"],
+                  componentRestrictions: { country: countryDetails?.iso2 },
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+              />
+            </div>
+            <div
+              className={styles.mapCompWrap}
+              style={{ display: !isMapLoaded && "none" }}
             >
-              <LocateIcon className={styles.locateIcon} />
-            </button>
+              <GoogleMap
+                mapContainerStyle={mapContainerStyle}
+                center={selectedPlace}
+                zoom={selectedPlace ? 15 : 10}
+                options={{
+                  fullscreenControl: false,
+                  mapTypeControl: false,
+                  streetViewControl: false,
+                }}
+                onLoad={onMapLoad}
+              >
+                {selectedPlace && (
+                  <Marker
+                    position={selectedPlace}
+                    draggable={true}
+                    onDragEnd={handleMarkerDragEnd}
+                  />
+                )}
+              </GoogleMap>
+              <button
+                title={t("resource.localization.detect_my_location")}
+                onClick={locateUser}
+                className={styles.locateIconBtn}
+              >
+                <LocateIcon className={styles.locateIcon} />
+              </button>
+            </div>
           </div>
-        </LoadScript>
-        {!isMapLoaded && (
+        ) : (
           <div className={styles.skeleton}>
             <canvas />
           </div>
@@ -309,10 +313,12 @@ const GoogleMapAddress = ({
       {address && (
         <div className={styles.addressSelect}>
           <p>{address}</p>
-          <button onClick={selectAddress}>{t("resource.common.use_this")}</button>
+          <button onClick={selectAddress}>
+            {t("resource.common.use_this")}
+          </button>
         </div>
       )}
-    </div >
+    </div>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import * as styles from "./contact-us.less";
 import FyInput from "../../components/core/fy-input/fy-input";
 import { Controller, useForm } from "react-hook-form";
@@ -14,6 +14,7 @@ function ContactSupport({
   pageConfig = "",
   SocailMedia = () => <></>,
   appInfo,
+  prefillData: { values = {}, errors: prefillErrors = {} } = {},
 }) {
   const { t } = useGlobalTranslation("translation");
   const {
@@ -21,19 +22,50 @@ function ContactSupport({
     formState: { errors },
     reset,
     control,
+    setError,
+    clearErrors,
   } = useForm({
     defaultValues: {
-      email: "",
-      name: "",
-      phone: "",
-      comment: "",
+      name: (values?.name || "").replace(/^"|"$/g, ""),
+      phone: (values?.phone || "").replace(/^"|"$/g, ""),
+      email: (values?.email || "").replace(/^"|"$/g, ""),
+      comment: (values?.comment || "").replace(/^"|"$/g, ""),
     },
-    mode: "onSubmit",
+    mode: "onChange",
     reValidateMode: "onChange",
   });
 
+  useEffect(() => {
+    if (prefillErrors?.name) {
+      setError("name", {
+        type: "manual",
+        message: t("resource.contact_us.please_enter_a_valid_name"),
+      });
+    }
+    if (prefillErrors?.phone) {
+      setError("phone", {
+        type: "manual",
+        message: t("resource.contact_us.please_enter_a_valid_phone_number"),
+      });
+    }
+    if (prefillErrors?.email) {
+      setError("email", {
+        type: "manual",
+        message: t("resource.contact_us.please_enter_a_valid_email_address"),
+      });
+    }
+    if (prefillErrors?.comment) {
+      setError("comment", {
+        type: "manual",
+        message: t("resource.contact_us.please_enter_your_comment"),
+      });
+    }
+  }, [prefillErrors, setError, t]);
+
   const [focusedInput, setFocusedInput] = useState(null);
   const [text, setText] = useState("");
+
+  
 
   const inputFields = [
     {
@@ -73,7 +105,7 @@ function ContactSupport({
       required: true,
       error: errors?.email,
       pattern: {
-        value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+        value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(\.[a-zA-Z]{2,6}){1,2}$/,
         message: t("resource.contact_us.please_enter_a_valid_email_address"),
       },
       errorMessage: t("resource.contact_us.please_enter_your_email_address"),
@@ -269,9 +301,13 @@ function ContactSupport({
                             : null
                         }
                         onChange={(e) => {
-                          onChange(e);
-                          if (field?.type === "textarea") {
-                            setText(e.target.value);
+                          const val = e.target.value;
+                          onChange(e); // update form state
+                          if (errors[field.name]) {
+                            clearErrors(field.name); // clear error
+                          }
+                          if (field.type === "textarea") {
+                            setText(val);
                           }
                         }}
                         value={value}

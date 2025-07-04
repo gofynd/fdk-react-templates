@@ -2,6 +2,9 @@
 
 .reviewHeaderUnselect {
   padding: 24px;
+  @media @tablet-range {
+    padding: 16px;
+  }
   display: flex;
   border: 1px solid var(--dividerStokes);
   border-radius: 8px;
@@ -29,6 +32,9 @@
   padding: 24px;
   margin-top: 20px;
   display: flex;
+  @media @tablet-range {
+    padding: 16px;
+  }
   justify-content: space-between;
   border: 1px solid var(--dividerStokes);
   border-radius: 8px;
@@ -77,6 +83,12 @@
 
 .reviewHeaderSelect {
   padding: 24px;
+  @media @desktop {
+    border-radius: 8px 8px 0 0;
+  }
+  @media @tablet-range {
+    padding: 16px;
+  }
   display: flex;
   justify-content: space-between;
   border: 1px solid var(--dividerStokes);

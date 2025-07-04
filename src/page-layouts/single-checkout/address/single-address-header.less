@@ -2,6 +2,12 @@
 
 .addressHeaderContainer {
   padding: 24px;
+  @media @tablet-range {
+    padding: 16px;
+  }
+  @media @desktop {
+    border-radius: 8px 8px 0 0;
+  }
   display: flex;
   justify-content: space-between;
   border: 1px solid var(--dividerStokes);
@@ -137,6 +143,10 @@
 .addressSelectedHeaderContainer {
   padding: 24px;
   display: flex;
+  border-radius: 8px;
+  @media @tablet-range {
+    padding: 16px;
+  }
   justify-content: space-between;
   border: 1px solid var(--dividerStokes);
   align-items: center;
@@ -202,5 +212,23 @@
 .hideAddress {
   @media @mobile {
     display: none;
+  }
+}
+
+.addressModalContainer {
+  display: block;
+}
+
+.addressModalBody {
+  display: grid;
+  grid-template-columns: 450px;
+  grid-template-rows: 1fr;
+  min-height: 84.26vh;
+  overflow: hidden;
+
+  @media @tablet {
+    grid-template-columns: 1fr;
+    max-height: unset;
+    height: 100dvh;
   }
 }

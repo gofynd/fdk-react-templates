@@ -2,6 +2,9 @@
 
 .paymentContainer {
   margin-top: 20px;
+  @media @desktop {
+    border-radius: 8px;
+  }
   &.unsetMarginTop {
     margin-top: unset !important;
   }
@@ -15,6 +18,12 @@
 
   .reviewHeaderUnselect {
     padding: 24px;
+    @media @desktop {
+      border-radius: 8px;
+    }
+    @media @tablet-range {
+      padding: 16px;
+    }
     display: flex;
     border: 1px solid var(--dividerStokes);
 
@@ -42,6 +51,9 @@
     align-items: center;
     padding: 24px;
     border-radius: 8px 8px 0 0;
+    @media @tablet-range {
+      padding: 16px;
+    }
     border: 1px solid var(--dividerStokes);
     background-color: @PageBackground;
     &.unsetBorder {
