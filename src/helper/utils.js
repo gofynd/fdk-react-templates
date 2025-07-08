@@ -1,5 +1,3 @@
-import { DEFAULT_CURRENCY_LOCALE, DEFAULT_UTC_LOCALE } from "./constant";
-
 export const debounce = (func, wait) => {
   let timeout;
   return function (...args) {
@@ -62,7 +60,7 @@ export function isRunningOnClient() {
   return false;
 }
 
-export function convertDate(dateString, locale = "en-US") {
+export function convertDate(dateString) {
   const date = new Date(dateString);
 
   const options = {
@@ -75,7 +73,7 @@ export function convertDate(dateString, locale = "en-US") {
     timeZone: "UTC",
   };
 
-  const formatter = new Intl.DateTimeFormat(locale, options);
+  const formatter = new Intl.DateTimeFormat("en-US", options);
   const formattedDate = formatter.format(date);
 
   return formattedDate;
@@ -86,11 +84,7 @@ export function validateName(name) {
   return regexp.test(String(name).toLowerCase().trim());
 }
 
-export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
-  if (!date) {
-    return "Invalid date";
-  }
-
+export const convertUTCDateToLocalDate = (date, format) => {
   if (!format) {
     format = {
       weekday: "long",
@@ -102,50 +96,20 @@ export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
       hour12: true,
     };
   }
-
-  let parsedDate;
-
-  try {
-    // Handle different date string formats
-    if (typeof date === 'string') {
-      // Check if it's a partial date like "Thu, 03 Jul" without year
-      if (date.match(/^[A-Za-z]{3},\s+\d{1,2}\s+[A-Za-z]{3}$/)) {
-        // Add current year to make it a valid date
-        const currentYear = new Date().getFullYear();
-        parsedDate = new Date(`${date} ${currentYear}`);
-      } 
-      // Check if it's an ISO string or other standard format
-      else {
-        parsedDate = new Date(date);
-      }
-    } else {
-      parsedDate = new Date(date);
-    }
-
-    // Check if the parsed date is valid
-    if (isNaN(parsedDate.getTime())) {
-      console.error('Invalid date provided:', date);
-      return "Invalid date";
-    }
-
-    // Convert the UTC date to the local date using toLocaleString() with specific time zone
-    const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const options = {
-      ...format,
-      timeZone: browserTimezone,
-    };
-
-    // Convert the UTC date and time to the desired format
-    const formattedDate = parsedDate
-      .toLocaleString(locale, options)
-      .replace(" at ", ", ");
-    
-    return formattedDate;
-  } catch (error) {
-    console.error('Error formatting date:', error, 'Original date:', date);
-    return "Invalid date";
-  }
+  const utcDate = new Date(date);
+  // Convert the UTC date to the local date using toLocaleString() with specific time zone
+  const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const options = {
+    ...format,
+    timeZone: browserTimezone,
+  };
+  // Convert the UTC date and time to the desired format
+  const formattedDate = utcDate
+    .toLocaleString("en-US", options)
+    .replace(" at ", ", ");
+  return formattedDate;
 };
+
 export function validateEmailField(value) {
   const emailPattern =
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -254,14 +218,14 @@ export const getProductImgAspectRatio = function (
   return defaultAspectRatio;
 };
 
-export const currencyFormat = (value, currencySymbol, locale = "en-IN") => {
+export const currencyFormat = (value, currencySymbol) => {
   if (currencySymbol && (value || value === 0)) {
     if (/^[A-Z]+$/.test(currencySymbol)) {
-      return `${currencySymbol} ${value?.toLocaleString(locale)}`;
+      return `${currencySymbol} ${value?.toLocaleString("en-IN")}`;
     }
-    return `${currencySymbol}${value?.toLocaleString(locale)}`;
+    return `${currencySymbol}${value?.toLocaleString("en-IN")}`;
   }
-  return `${value?.toLocaleString(locale)}`;
+  return `${value?.toLocaleString("en-IN")}`;
 };
 
 export const getReviewRatingData = function (customMeta) {
@@ -416,45 +380,6 @@ export function isFreeNavigation(e) {
   return false;
 }
 
-const isValidLocale = (tag) => {
-  try {
-    new Intl.Locale(tag);
-    return true;
-  } catch {
-    return false;
-  }
-};
-
-export const formatLocale = (locale, countryCode, isCurrencyLocale = false) => {
-  if ((locale === "en" || !locale) && isCurrencyLocale) {
-    return DEFAULT_CURRENCY_LOCALE;
-  }
-  if (locale === "en" || !locale) {
-    return DEFAULT_UTC_LOCALE;
-  }
-  const finalLocale = locale.includes("-") ? locale : `${locale}${countryCode ? "-" + countryCode : ""}`;
-
-  return isValidLocale(finalLocale) ? finalLocale : DEFAULT_UTC_LOCALE;
-};
-
-export const translateValidationMessages = (validationObject, t) => {
-  const updatedValidation = { ...validationObject };
-
-  Object.keys(updatedValidation).forEach((key) => {
-    const rule = updatedValidation[key];
-
-    if (
-      typeof rule === "object" &&
-      rule.message
-    ) {
-      rule.message = translateDynamicLabel(rule.message, t);
-    } else if (typeof rule === "string") {
-      updatedValidation[key] = translateDynamicLabel(rule, t);
-    }
-  });
-
-  return updatedValidation;
-};
 export const getAddressStr = (item, isAddressTypeAvailable) => {
   if (!item || typeof item !== "object") {
     return "";
@@ -492,18 +417,4 @@ export function isEmptyOrNull(obj) {
     obj === undefined ||
     (typeof obj === "object" && Object.keys(obj).length === 0)
   );
-}
-
-export function translateDynamicLabel(input, t) {
-  const safeInput = input
-    .toLowerCase()
-    .replace(/\//g, '_') // replace slashes with underscores
-    .replace(/[^a-z0-9_\s]/g, '') // remove special characters except underscores and spaces
-    .trim()
-    .replace(/\s+/g, '_'); // replace spaces with underscores
-
-  const translationKey = `resource.dynamic_label.${safeInput}`;
-  const translated = t(translationKey);
-
-  return translated.split('.').pop() === safeInput ? input : translated;
 }

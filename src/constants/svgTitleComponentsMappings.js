@@ -135,6 +135,9 @@ import ArrowLeftLong from "../assets/images/arrow-left-long.svg";
 import friendsFamily from "../assets/images/friends-family.svg";
 import addAddress from "../assets/images/add-address.svg";
 import returnRadioSelected from "../assets/images/reason-radio-selected.svg";
+import localOffer from "../assets/images/local-offer.svg";
+import infoWhite from "../assets/images/info-white.svg";
+import lockIcon from "../assets/images/lock-icon.svg";
 
 export const svgTitleComponentsMappings = {
   "accordion-arrow": AccordionArrow,
@@ -274,4 +277,7 @@ export const svgTitleComponentsMappings = {
   friendsFamily,
   addAddress,
   returnRadioSelected,
+  "local-offer": localOffer,
+  "info-white": infoWhite,
+  "lock-icon": lockIcon,
 };

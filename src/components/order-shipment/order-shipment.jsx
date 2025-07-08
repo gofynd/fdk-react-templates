@@ -11,31 +11,19 @@
  */
 
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import * as styles from "./order-shipment.less";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
-import { convertUTCDateToLocalDate, formatLocale } from "../../helper/utils";
-import {
-  useNavigate,
-  useGlobalStore,
-  useFPI,
-  useGlobalTranslation
-} from "fdk-core/utils";
-import Accordion from "../accordion/accordion";
+import { convertUTCDateToLocalDate } from "../../helper/utils";
 
 function OrderShipment({
   orderInfo,
-  onBuyAgainClick = () => { },
+  onBuyAgainClick = () => {},
   isBuyAgainEligible,
 }) {
-  const { t } = useGlobalTranslation("translation");
-  const fpi = useFPI();
-  const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
-  const locale = language?.locale
   const [isOpen, setIsOpen] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [selectedShipment, setSelectedShipment] = useState("");
-  const [openAccordions, setOpenAccordions] = useState({});
   const navigate = useNavigate();
   const params = useParams();
 
@@ -46,7 +34,7 @@ function OrderShipment({
   }, [params?.orderId]);
 
   const getTime = (time) => {
-    return convertUTCDateToLocalDate(time, "", formatLocale(locale, countryCode));
+    return convertUTCDateToLocalDate(time);
   };
   const clickopen = () => {
     setIsOpen(!isOpen);
@@ -77,30 +65,14 @@ function OrderShipment({
     return [];
   };
   const getTotalItems = (items) => {
-    return items === 1 ? `${items} ${t("resource.common.item_simple_text")}` : `${items} ${t("resource.common.item_simple_text_plural")}`;
+    return items === 1 ? `${items} Item` : `${items} Items`;
   };
   const getTotalPieces = (pieces) => {
     const total = pieces.reduce((pre, curr) => {
       return pre + curr.quantity;
     }, 0);
 
-    return total === 1 ? `${total} ${t("resource.common.single_piece")}` : `${total} ${t("resource.common.multiple_piece")}`;
-  };
-const getCustomizationOptions = (orderInfo) => {
-  if (!orderInfo?.shipments) return [];
-  return orderInfo.shipments
-    .flatMap((shipment) =>
-      shipment.bags?.map((bag) => bag.meta?._custom_json?._display || []).flat()
-    )
-    .filter(Boolean);
-};
-
-
-  const handleShipmentAccordionClick = (shipmentId) => {
-    setOpenAccordions((prev) => ({
-      ...prev,
-      [shipmentId]: !prev[shipmentId],
-    }));
+    return total === 1 ? `${total} Piece` : `${total} Pieces`;
   };
 
   return (
@@ -124,88 +96,62 @@ const getCustomizationOptions = (orderInfo) => {
         {Object.keys(orderInfo)?.length !== 0 &&
           orderInfo?.shipments?.length !== 0 &&
           orderInfo?.shipments?.map((item, index) => {
-            const customizationOptions = getCustomizationOptions({
-              shipments: [item],
-            });
-
-            const shipmentItems = [
-              {
-                title: "Customization",
-                content: customizationOptions,
-                open: openAccordions[item.shipment_id] || false,
-              },
-            ];
             return (
-              <React.Fragment key={item.shipment_id}>
-                <div
-                  className={styles.shipmentData}
-                  onClick={() => naivgateToShipment(item)}
-                >
-                  <div className={`${styles.shipmentLeft}`}>
-                    <img
-                      className={`${isOpen ? styles.filterArrowUp : styles.filterArrowdown}`}
-                      src={item?.bags?.[0]?.item?.image?.[0]}
-                      alt={item?.shipment_images?.[0]}
-                    />
-                    {item?.bags?.length > 1 && (
-                      <div id="total-item">
-                        +{item?.bags?.length - 1 + " "}
-                        {t("resource.facets.more")}
-                      </div>
-                    )}
-                  </div>
-                  <div className={`${styles.shipmentRight}`}>
-                    <div className={`${styles.uktLinks}`}>
-                      {item?.bags?.length > 1 ? (
-                        <div>
-                          {getProductsName(item?.bags)?.[0]} +
-                          {item.bags.length - 1 + " "}
-                          {t("resource.facets.more")}
-                        </div>
-                      ) : (
-                        <div>{getProductsName(item?.bags)?.[0]}</div>
-                      )}
+              <div
+                className={styles.shipmentData}
+                key={`${item.shipment_id}`}
+                onClick={() => naivgateToShipment(item)}
+              >
+                <div className={`${styles.shipmentLeft}`}>
+                  <img
+                    className={`${isOpen ? styles.filterArrowUp : styles.filterArrowdown}`}
+                    src={item?.bags?.[0]?.item?.image?.[0]}
+                    alt={item?.shipment_images?.[0]}
+                  />
+                  {item?.bags?.length > 1 && (
+                    <div id="total-item">
+                      +{item?.bags?.length - 1 + " "}
+                      more
                     </div>
-                    <div
-                      className={`${styles.shipmentId} ${styles.uktLinks} ${styles.boldls}`}
-                    >
-                      {t("resource.common.shipment")}: {item?.shipment_id}
-                    </div>
-                    <div className={`${styles.shipmentStats} ${styles.light}`}>
-                      <span>{getTotalItems(item?.bags?.length)}</span>
-                      <span>{` | `}</span>
-                      <span>{getTotalPieces(item?.bags)}</span>
-                    </div>
-                    <div className={styles.status}>
-                      {item?.shipment_status?.title}
-                    </div>
-                    {isAdmin && (
-                      <div
-                        className={`${styles.shipmentBrands} ${styles.uktLinks}`}
-                      >
-                        <span className={`${styles.bold}`}>
-                          {t("resource.common.brand")}
-                        </span>{" "}
-                        :{item?.brand_name}
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className={styles.productCustomizationContainer}>
-                  {customizationOptions.length > 0 && (
-                    <Accordion
-                      key={`${item.shipment_id}`}
-                      items={shipmentItems}
-                      onItemClick={() =>
-                        handleShipmentAccordionClick(item.shipment_id)
-                      }
-                    />
                   )}
                 </div>
-              </React.Fragment>
+                <div className={`${styles.shipmentRight}`}>
+                  <div className={`${styles.uktLinks}`}>
+                    {item?.bags?.length > 1 ? (
+                      <div>
+                        {getProductsName(item?.bags)?.[0]} +
+                        {item.bags.length - 1 + " "}
+                        more
+                      </div>
+                    ) : (
+                      <div>{getProductsName(item?.bags)?.[0]}</div>
+                    )}
+                  </div>
+                  <div
+                    className={`${styles.shipmentId} ${styles.uktLinks} ${styles.boldls}`}
+                  >
+                    Shipment: {item?.shipment_id}
+                  </div>
+                  <div className={`${styles.shipmentStats} ${styles.light}`}>
+                    <span>{getTotalItems(item?.bags?.length)}</span>
+                    <span>{` | `}</span>
+                    <span>{getTotalPieces(item?.bags)}</span>
+                  </div>
+                  <div className={styles.status}>
+                    {item?.shipment_status?.title}
+                  </div>
+                  {isAdmin && (
+                    <div
+                      className={`${styles.shipmentBrands} ${styles.uktLinks}`}
+                    >
+                      <span className={`${styles.bold}`}>Brand</span> :
+                      {item?.brand_name}
+                    </div>
+                  )}
+                </div>
+              </div>
             );
           })}
-
         {isBuyAgainEligible && (
           <div className={`${styles.buttons}`}>
             <button
@@ -217,12 +163,12 @@ const getCustomizationOptions = (orderInfo) => {
                 className={`${styles.reorderIcon}`}
                 svgSrc="re-order"
               />
-              {t("resource.common.buy_again")}
+              BUY AGAIN
             </button>
           </div>
         )}
       </div>
-    </div >
+    </div>
   );
 }
 

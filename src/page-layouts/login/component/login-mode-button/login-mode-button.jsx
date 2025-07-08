@@ -1,12 +1,10 @@
 import React, { useMemo } from "react";
 import * as styles from "./login-mode-button.less";
 import LoginIcon from "../../../../assets/images/login_icon.svg";
-import { useGlobalTranslation } from "fdk-core/utils";
 
-function LoginModeButton({ isOtp = true, onLoginToggleClick = () => { } }) {
-  const { t } = useGlobalTranslation("translation");
+function LoginModeButton({ isOtp = true, onLoginToggleClick = () => {} }) {
   const getButtonLabel = useMemo(
-    () => `${t("resource.auth.login.login_with_caps")} ${isOtp ? t("resource.auth.login.password_caps") : t("resource.auth.login.otp")}`,
+    () => `LOGIN WITH ${isOtp ? "PASSWORD" : "OTP"}`,
     [isOtp]
   );
   return (
