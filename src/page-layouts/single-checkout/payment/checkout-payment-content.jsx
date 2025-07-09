@@ -198,7 +198,7 @@ function CheckoutPaymentContent({
   let paymentOptions = PaymentOptionsList();
   let codOption = paymentOptions?.filter((opt) => opt.name === "COD")[0];
   paymentOptions = paymentOptions?.filter((opt) => opt.name !== "COD");
-  const otherPaymentOptions = useMemo(() => otherOptions(), []);
+  const otherPaymentOptions = useMemo(() => otherOptions(), [paymentOption]);
 
   let upiSuggestions = paymentOption?.payment_option?.find?.(
     (ele) => ele.name === "UPI"
