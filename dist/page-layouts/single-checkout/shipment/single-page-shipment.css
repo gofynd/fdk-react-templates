@@ -342,6 +342,11 @@ h5,
   opacity: 0.5;
   margin-top: 20px;
 }
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  .single-page-shipment__reviewHeaderUnselect___mNmXU {
+    padding: 16px;
+  }
+}
 @media only screen and (max-width: 480px) {
   .single-page-shipment__reviewHeaderUnselect___mNmXU {
     display: none;
@@ -366,6 +371,11 @@ h5,
   justify-content: space-between;
   border: 1px solid var(--dividerStokes);
   border-radius: 8px;
+}
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  .single-page-shipment__addressSelectedHeaderContainer___SVaIw {
+    padding: 16px;
+  }
 }
 @media only screen and (max-width: 480px) {
   .single-page-shipment__addressSelectedHeaderContainer___SVaIw {
@@ -412,6 +422,16 @@ h5,
   justify-content: space-between;
   border: 1px solid var(--dividerStokes);
   margin-top: 20px;
+}
+@media only screen and (min-width: 769px) {
+  .single-page-shipment__reviewHeaderSelect___bNgMy {
+    border-radius: 8px 8px 0 0;
+  }
+}
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  .single-page-shipment__reviewHeaderSelect___bNgMy {
+    padding: 16px;
+  }
 }
 @media only screen and (max-width: 480px) {
   .single-page-shipment__reviewHeaderSelect___bNgMy {
@@ -841,10 +861,20 @@ h5,
   border: 1px solid var(--dividerStokes);
   padding: 16px 24px;
 }
+@media only screen and (min-width: 769px) {
+  .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF {
+    border-radius: 8px 8px 0 0;
+  }
+}
 @media only screen and (max-width: 480px) {
   .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF {
     border-width: 1px 0;
     padding: 16px;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF {
+    flex-direction: column;
   }
 }
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF .single-shipment-content__headerLeft___ffG20 {
@@ -882,12 +912,23 @@ h5,
   gap: 8px;
   align-items: center;
 }
+@media only screen and (max-width: 768px) {
+  .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF .single-shipment-content__deliveryDateWrapper___1R8Nn {
+    gap: 6px;
+  }
+}
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF .single-shipment-content__deliveryDateWrapper___1R8Nn .single-shipment-content__shippingLogo____xKH7 {
   height: 20px;
   width: 20px;
 }
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF .single-shipment-content__deliveryDateWrapper___1R8Nn .single-shipment-content__shippingLogo____xKH7 svg path {
   fill: var(--successText, #1c958f);
+}
+.single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF .single-shipment-content__deliveryDateWrapper___1R8Nn .single-shipment-content__foName___vTtLP {
+  color: var(--textLabel, #7d7676);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 140%;
 }
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF .single-shipment-content__deliveryDateWrapper___1R8Nn .single-shipment-content__deliveryDate___qOrq4 {
   font-weight: 600;
@@ -1067,6 +1108,16 @@ h5,
   border: 1px solid var(--dividerStokes);
   padding: 24px;
   border-top: none;
+}
+@media only screen and (min-width: 769px) {
+  .single-shipment-content__parent___NFi_h {
+    border-radius: 0px 0px 8px 8px;
+  }
+}
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  .single-shipment-content__parent___NFi_h {
+    padding: 16px;
+  }
 }
 @media only screen and (max-width: 480px) {
   .single-shipment-content__parent___NFi_h {

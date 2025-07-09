@@ -342,6 +342,16 @@ h5,
   flex-direction: column;
   padding: 24px;
 }
+@media only screen and (min-width: 769px) {
+  .comment__commentOuterBox___tyEJJ {
+    border-radius: 8px;
+  }
+}
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  .comment__commentOuterBox___tyEJJ {
+    padding: 16px;
+  }
+}
 @media only screen and (max-width: 480px) {
   .comment__commentOuterBox___tyEJJ {
     padding: 16px;

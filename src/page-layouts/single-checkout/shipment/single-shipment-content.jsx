@@ -21,6 +21,7 @@ function SingleShipmentContent({
   convertHyperlocalTat = () => {},
   loader,
   buybox = {},
+  availableFOCount,
   isCartValid,
 }) {
   const { t } = useGlobalTranslation("translation");
@@ -135,6 +136,12 @@ function SingleShipmentContent({
                                     ),
                                   })}`}
                             </div>
+                            {availableFOCount > 1 &&
+                              item?.fulfillment_option?.name && (
+                                <div className={styles.foName}>
+                                  {item?.fulfillment_option?.name}
+                                </div>
+                              )}
                           </div>
                         )}
                       </div>
