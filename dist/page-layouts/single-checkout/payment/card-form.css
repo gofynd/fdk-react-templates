@@ -443,7 +443,33 @@ h5,
     border: 1px solid var(--dividerStokes);
     border-top: none;
     border-radius: 0 0 8px 8px;
+    flex-direction: column;
+    gap: 24px;
   }
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__creditNote___giWgh {
+  display: none;
+}
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__creditNote___giWgh {
+    margin-top: 20px;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__creditNote___giWgh {
+    display: block;
+  }
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__paymentOptions___iL15l {
+  display: flex;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__paymentOptions___iL15l.checkout-payment-content__displayNone___XXmrK {
+  display: none;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__paymentOptions___iL15l.checkout-payment-content__disable___KTrde {
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.5;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz {
   width: 33.33%;
@@ -1062,6 +1088,7 @@ h5,
   border: 1px solid var(--dividerStokes);
   border-radius: 4px;
   color: var(--textBody, #3c3131);
+  pointer-events: inherit;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__error___DzZ0L {
   border: 1px solid var(--errorText, #b24141);

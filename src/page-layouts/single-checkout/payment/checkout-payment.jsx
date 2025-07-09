@@ -4,6 +4,7 @@ import CheckoutPaymentContent from "./checkout-payment-content";
 import * as styles from "./checkout-payment.less";
 
 import CheckoutPaymentFailure from "./checkout-payment-failure";
+import CreditNote from "./credit-note/credit-note";
 import { useMobile } from "../../../helper/hooks/useMobile";
 import { useGlobalTranslation } from "fdk-core/utils";
 
@@ -110,6 +111,12 @@ function CheckoutPayment({
       >
         {showPayment ? (
           <>
+            <div className={styles.creditNote}>
+              <CreditNote
+                data={payment?.partialPaymentOption}
+                updateStoreCredits={payment?.updateStoreCredits}
+              />
+            </div>
             <div
               className={`${styles.paymentHeaderSelect} ${customClassName} ${enableLinkPaymentOption ? styles.unsetBorder : ""}`}
             >

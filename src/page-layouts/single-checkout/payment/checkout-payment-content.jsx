@@ -8,8 +8,17 @@ import { useMobile } from "../../../helper/hooks/useMobile";
 import { useViewport } from "../../../helper/hooks";
 // import UktModal from "./ukt-modal";
 import StickyPayNow from "./sticky-pay-now/sticky-pay-now";
-import { priceFormatCurrencySymbol, translateDynamicLabel } from "../../../helper/utils";
-import { useGlobalStore, useGlobalTranslation, useFPI, useNavigate } from "fdk-core/utils";
+import CreditNote from "./credit-note/credit-note";
+import {
+  priceFormatCurrencySymbol,
+  translateDynamicLabel,
+} from "../../../helper/utils";
+import {
+  useGlobalStore,
+  useGlobalTranslation,
+  useFPI,
+  useNavigate,
+} from "fdk-core/utils";
 import Spinner from "../../../components/spinner/spinner";
 
 const upiDisplayWrapperStyle = {
@@ -171,6 +180,9 @@ function CheckoutPaymentContent({
     validateCardDetails,
     setShowUpiRedirectionModal,
     enableLinkPaymentOption,
+    partialPaymentOption,
+    updateStoreCredits,
+    creditUpdating,
   } = payment;
 
   useEffect(() => {
@@ -408,11 +420,11 @@ function CheckoutPaymentContent({
     if (cardDetailsData?.card_brand) selectMop("CARD", "CARD", "newCARD");
   }, [cardDetailsData?.card_brand]);
 
-  useEffect(()=>{
-    if(isCouponApplied || isCouponAppliedSuccess["isCouponApplied"]){
+  useEffect(() => {
+    if (isCouponApplied || isCouponAppliedSuccess["isCouponApplied"]) {
       selectMop("CARD", "CARD", "CARD");
     }
-  },[isJuspayCouponApplied, isCouponAppliedSuccess]);
+  }, [isJuspayCouponApplied, isCouponAppliedSuccess]);
 
   const resetCardValidationErrors = () => {
     setCardNumberError("");
@@ -718,7 +730,10 @@ function CheckoutPaymentContent({
           id: cart_id,
           addressId: address_id,
           paymentMode: mop,
-          aggregatorName: subMopData?.aggregator_name || mopData?.aggregator_name || "Razorpay",
+          aggregatorName:
+            subMopData?.aggregator_name ||
+            mopData?.aggregator_name ||
+            "Razorpay",
           cardId: subMopData?.card_id,
           paymentIdentifier: subMopData?.card_id,
           type: subMopData?.card_type || "debit",
@@ -1212,13 +1227,13 @@ function CheckoutPaymentContent({
     const initializeJuspay = async () => {
       if (isJuspayEnabled() && !paymentResponse) {
         const currentInitKey = `${!!paymentResponse}_${!!juspayErrorMessage}_${paymentOption?.payment_option?.length}`;
-        
+
         if (lastJuspayInitializationRef.current === currentInitKey) {
           return; // Already processed this state combination
         }
-        
+
         lastJuspayInitializationRef.current = currentInitKey;
-        
+
         try {
           await handlePayment();
         } catch (error) {
@@ -1236,7 +1251,7 @@ function CheckoutPaymentContent({
       )
     ) {
       const currentErrorKey = `error_${juspayErrorMessage}_${!!paymentResponse}`;
-      
+
       if (lastJuspayInitializationRef.current !== currentErrorKey) {
         lastJuspayInitializationRef.current = currentErrorKey;
         handlePayment();
@@ -1395,7 +1410,6 @@ function CheckoutPaymentContent({
     }
     return `${styles.nonSelectedBorder}`;
   }
-
   useEffect(() => {
     const qrPaymentOption = paymentOption?.payment_option?.find(
       (opt) => opt.name === "QR"
@@ -1820,7 +1834,7 @@ function CheckoutPaymentContent({
                   handleShowFailedMessage={handleShowFailedMessage}
                   cardDetails={cardDetails}
                   selectMop={selectMop}
-                  setIsJuspayCouponApplied={setIsJuspayCouponApplied}                  
+                  setIsJuspayCouponApplied={setIsJuspayCouponApplied}
                 />
               </div>
             )}
@@ -2710,7 +2724,10 @@ function CheckoutPaymentContent({
                               />
                             </div>
                             <div className={styles.modeItemName}>
-                              {translateDynamicLabel(payLater?.display_name ?? "", t)}
+                              {translateDynamicLabel(
+                                payLater?.display_name ?? "",
+                                t
+                              )}
                             </div>
                           </div>
                           <div className={styles.onMobileView}>
@@ -3303,130 +3320,149 @@ function CheckoutPaymentContent({
         >
           {true ? (
             <>
-              <div className={styles.navigationLink}>
-                {paymentOptions?.map((opt, index) =>
-                  navigationTitle(opt, index)
-                )}
-                {otherPaymentOptions?.length > 0 && (
-                  <div
-                    className={`${styles.linkWrapper} ${selectedTab === "Other" && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === "Other" && isTablet ? styles.headerHightlight : ""}`}
-                  >
-                    <div
-                      className={styles["linkWrapper-row1"]}
-                      onClick={() => {
-                        setTab("Other");
-                        setSelectedTab("Other");
-                        toggleMop("Other");
-                      }}
-                    >
+              <div className={styles.creditNote}>
+                <CreditNote
+                  data={partialPaymentOption}
+                  updateStoreCredits={updateStoreCredits}
+                />
+              </div>
+
+              {creditUpdating ? (
+                <Shimmer height="300px" />
+              ) : (
+                <div
+                  className={`${styles.paymentOptions} ${!getTotalValue() ? styles.displayNone : ""}`}
+                >
+                  <div className={styles.navigationLink}>
+                    {paymentOptions?.map((opt, index) =>
+                      navigationTitle(opt, index)
+                    )}
+                    {otherPaymentOptions?.length > 0 && (
                       <div
-                        className={`${selectedTab === "Other" ? styles.indicator : ""} ${styles.onDesktopView}`}
+                        className={`${styles.linkWrapper} ${selectedTab === "Other" && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === "Other" && isTablet ? styles.headerHightlight : ""}`}
                       >
-                        &nbsp;
-                      </div>
-                      <div className={styles.link}>
-                        <div className={styles.icon}>
-                          {/* <img src={opt.svg} alt="" /> */}
-                          <SvgWrapper svgSrc="payment-other"></SvgWrapper>
-                        </div>
                         <div
-                          className={`${styles.modeName} ${selectedTab === "Other" ? styles.selectedModeName : ""}`}
+                          className={styles["linkWrapper-row1"]}
+                          onClick={() => {
+                            setTab("Other");
+                            setSelectedTab("Other");
+                            toggleMop("Other");
+                          }}
                         >
-                          {paymentOptions?.length > 0 &&
-                          otherPaymentOptions?.length > 0
-                            ? t("resource.checkout.more_payment_options")
-                            : t("resource.checkout.pay_online")}
+                          <div
+                            className={`${selectedTab === "Other" ? styles.indicator : ""} ${styles.onDesktopView}`}
+                          >
+                            &nbsp;
+                          </div>
+                          <div className={styles.link}>
+                            <div className={styles.icon}>
+                              {/* <img src={opt.svg} alt="" /> */}
+                              <SvgWrapper svgSrc="payment-other"></SvgWrapper>
+                            </div>
+                            <div
+                              className={`${styles.modeName} ${selectedTab === "Other" ? styles.selectedModeName : ""}`}
+                            >
+                              {paymentOptions?.length > 0 &&
+                              otherPaymentOptions?.length > 0
+                                ? t("resource.checkout.more_payment_options")
+                                : t("resource.checkout.pay_online")}
+                            </div>
+                          </div>
+                          <div
+                            className={`${styles.arrowContainer}  ${styles.activeIconColor}`}
+                          >
+                            <SvgWrapper
+                              className={
+                                selectedTab === "Other" && activeMop === "Other"
+                                  ? styles.upsideDown
+                                  : ""
+                              }
+                              svgSrc="accordion-arrow"
+                            />
+                          </div>
                         </div>
+                        {isTablet && activeMop === "Other" && (
+                          <div className={` ${styles.onMobileView}`}>
+                            {selectedTab === "Other" && navigationTab()}
+                          </div>
+                        )}
                       </div>
-                      <div
-                        className={`${styles.arrowContainer}  ${styles.activeIconColor}`}
-                      >
-                        <SvgWrapper
-                          className={
-                            selectedTab === "Other" && activeMop === "Other"
-                              ? styles.upsideDown
-                              : ""
-                          }
-                          svgSrc="accordion-arrow"
-                        />
-                      </div>
-                    </div>
-                    {isTablet && activeMop === "Other" && (
-                      <div className={` ${styles.onMobileView}`}>
-                        {selectedTab === "Other" && navigationTab()}
+                    )}
+                    {codOption && (
+                      <div style={{ display: "flex", flex: "1" }}>
+                        <div
+                          className={`${styles.linkWrapper} ${selectedTab === codOption.name && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === codOption.name && isTablet ? styles.headerHightlight : ""}`}
+                          key={codOption?.display_name ?? ""}
+                          onClick={() => {
+                            selectMop(
+                              codOption.name,
+                              codOption.name,
+                              codOption.name
+                            );
+                          }}
+                        >
+                          <div className={styles["linkWrapper-row1"]}>
+                            <div
+                              className={` ${selectedTab === codOption.name ? styles.indicator : ""} ${styles.onDesktopView}`}
+                            >
+                              &nbsp;
+                            </div>
+                            <div className={styles.link}>
+                              <div className={styles.icon}>
+                                <SvgWrapper svgSrc={codOption.svg}></SvgWrapper>
+                              </div>
+                              <div>
+                                <div
+                                  className={`${styles.modeName} ${selectedTab === codOption.name ? styles.selectedModeName : ""}`}
+                                >
+                                  {translateDynamicLabel(
+                                    codOption?.display_name ?? "",
+                                    t
+                                  )}
+                                </div>
+                                {isTablet && codCharges > 0 && (
+                                  <div className={styles.codCharge}>
+                                    +
+                                    {priceFormatCurrencySymbol(
+                                      getCurrencySymbol,
+                                      codCharges
+                                    )}{" "}
+                                    {t("resource.checkout.extra_charges")}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                            {codOption?.image_src && (
+                              <div className={styles["payment-icons"]}>
+                                <img
+                                  src={codOption?.image_src}
+                                  alt={codOption?.svg}
+                                />
+                              </div>
+                            )}
+                            <div
+                              className={`${styles.arrowContainer} ${styles.activeIconColor} ${styles.codIconContainer}`}
+                            >
+                              <SvgWrapper svgSrc="accordion-arrow" />
+                            </div>
+                          </div>
+                          {isTablet && (
+                            <div>
+                              {selectedTab === codOption.name &&
+                                navigationTab()}
+                            </div>
+                          )}
+                        </div>
                       </div>
                     )}
                   </div>
-                )}
-                {codOption && (
-                  <div style={{ display: "flex", flex: "1" }}>
+                  {!isTablet && (
                     <div
-                      className={`${styles.linkWrapper} ${selectedTab === codOption.name && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === codOption.name && isTablet ? styles.headerHightlight : ""}`}
-                      key={codOption?.display_name ?? ""}
-                      onClick={() => {
-                        selectMop(
-                          codOption.name,
-                          codOption.name,
-                          codOption.name
-                        );
-                      }}
+                      className={`${styles.navigationTab} ${styles.onDesktopView}`}
                     >
-                      <div className={styles["linkWrapper-row1"]}>
-                        <div
-                          className={` ${selectedTab === codOption.name ? styles.indicator : ""} ${styles.onDesktopView}`}
-                        >
-                          &nbsp;
-                        </div>
-                        <div className={styles.link}>
-                          <div className={styles.icon}>
-                            <SvgWrapper svgSrc={codOption.svg}></SvgWrapper>
-                          </div>
-                          <div>
-                            <div
-                              className={`${styles.modeName} ${selectedTab === codOption.name ? styles.selectedModeName : ""}`}
-                            >
-                              {translateDynamicLabel(codOption?.display_name ?? "", t)}
-                            </div>
-                            {isTablet && codCharges > 0 && (
-                              <div className={styles.codCharge}>
-                                +
-                                {priceFormatCurrencySymbol(
-                                  getCurrencySymbol,
-                                  codCharges
-                                )}{" "}
-                                {t("resource.checkout.extra_charges")}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        {codOption?.image_src && (
-                          <div className={styles["payment-icons"]}>
-                            <img
-                              src={codOption?.image_src}
-                              alt={codOption?.svg}
-                            />
-                          </div>
-                        )}
-                        <div
-                          className={`${styles.arrowContainer} ${styles.activeIconColor} ${styles.codIconContainer}`}
-                        >
-                          <SvgWrapper svgSrc="accordion-arrow" />
-                        </div>
-                      </div>
-                      {isTablet && (
-                        <div>
-                          {selectedTab === codOption.name && navigationTab()}
-                        </div>
-                      )}
+                      {navigationTab()}
                     </div>
-                  </div>
-                )}
-              </div>
-              {!isTablet && (
-                <div
-                  className={`${styles.navigationTab} ${styles.onDesktopView}`}
-                >
-                  {navigationTab()}
+                  )}
                 </div>
               )}
             </>
