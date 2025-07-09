@@ -4,9 +4,6 @@ import * as styles from "./delivery-location.less";
 import Modal from "../../../../components/core/modal/modal";
 import AddressItem from "../../../../components/address-item/address-item";
 import AddressForm from "../../../../components/address-form/address-form";
-import { useGlobalTranslation } from "fdk-core/utils";
-import { translateDynamicLabel } from "../../../../helper/utils";
-
 function DeliveryLocation({
   pincode = "",
   deliveryLocation,
@@ -23,23 +20,22 @@ function DeliveryLocation({
   getLocality,
   selectAddress,
   addrError,
-  onChangeButtonClick = () => { },
-  onAddButtonClick = () => { },
-  onPincodeSubmit = () => { },
-  onCloseModalClick = () => { },
-  setSelectedAddressId = () => { },
-  addAddress = () => { },
+  onChangeButtonClick = () => {},
+  onAddButtonClick = () => {},
+  onPincodeSubmit = () => {},
+  onCloseModalClick = () => {},
+  setSelectedAddressId = () => {},
+  addAddress = () => {},
   isInternationalShippingEnabled = false,
   addressFormSchema,
   addressItem,
-  onCountryChange = () => { },
-  handleCountrySearch = () => { },
-  getFilteredCountries = () => { },
+  onCountryChange = () => {},
+  handleCountrySearch = () => {},
+  getFilteredCountries = () => {},
   selectedCountry,
   countryDetails,
   isGuestUser = false,
 }) {
-  const { t } = useGlobalTranslation("translation");
   const {
     handleSubmit,
     register,
@@ -66,7 +62,7 @@ function DeliveryLocation({
     return (
       id === addrError?.id &&
       addrError?.message && (
-        <div className={styles.addrErrText}>{translateDynamicLabel(addrError?.message, t)}</div>
+        <div className={styles.addrErrText}>{addrError?.message}</div>
       )
     );
   };
@@ -74,20 +70,20 @@ function DeliveryLocation({
     <div className={styles.cartPincodeContainer}>
       <div className={styles.pinCodeDetailsContainer}>
         <span className={styles.pincodeHeading}>
-        {deliveryLocation ? `${t("resource.common.deliver_to")}:` : t("resource.cart.check_delivery_time_services")}
-        </span >
+          {deliveryLocation ? "Deliver To:" : "Check delivery time & services"}
+        </span>
         <span className={styles.pinCode}>
           &nbsp;
           {deliveryLocation}
         </span>
-      </div >
+      </div>
       <div className={styles.changePinCodeButton} onClick={onChangeButtonClick}>
-        {t("resource.cart.change")}
-      </div >
+        Change
+      </div>
       <Modal
         isOpen={isPincodeModalOpen}
         closeDialog={onCloseModalClick}
-        title={`${t("resource.common.delivery")} ${displayName}`}
+        title={`Delivery ${displayName}`}
         containerClassName={styles.pincodeModal}
         bodyClassName={styles.modalBody}
         headerClassName={styles.modalHeader}
@@ -99,7 +95,7 @@ function DeliveryLocation({
           <div className={styles.modalPincodeInput}>
             <input
               type="text"
-              placeholder={`${t("resource.common.enter")} ${displayName}`}
+              placeholder={`Enter ${displayName}`}
               {...register("pincode", {
                 validate: validatePincode,
               })}
@@ -107,7 +103,7 @@ function DeliveryLocation({
             />
           </div>
           <button className={styles.modalChangePinCodeButton} type="submit">
-            {t("resource.facets.check")}
+            CHECK
           </button>
           {errors.pincode && (
             <div className={styles.errorText}>{errors?.pincode?.message}</div>
@@ -121,7 +117,7 @@ function DeliveryLocation({
         isOpen={isAddressModalOpen}
         modalType="right-modal"
         closeDialog={onCloseModalClick}
-        title={t("resource.cart.change_address")}
+        title="Change Address"
       >
         <div className={styles.addressModal}>
           <div className={styles.modalBody}>
@@ -132,7 +128,7 @@ function DeliveryLocation({
               <div className={styles.modalPincodeInput}>
                 <input
                   type="text"
-                  placeholder={`${t("resource.common.enter")} ${displayName}`}
+                  placeholder={`Enter ${displayName}`}
                   {...register("pincode", {
                     validate: validatePincode,
                   })}
@@ -140,7 +136,7 @@ function DeliveryLocation({
                 />
               </div>
               <button className={styles.modalChangePinCodeButton} type="submit">
-                {t("resource.facets.check")}
+                CHECK
               </button>
               {errors.pincode && (
                 <div className={styles.errorText}>
@@ -154,7 +150,7 @@ function DeliveryLocation({
             <div className={styles.addressContentConitainer}>
               {defaultAddress?.length > 0 && (
                 <div className={styles.addressItemContainer}>
-                  <div className={styles.heading}>{t("resource.common.address.default_address")}</div>
+                  <div className={styles.heading}>Default Address</div>
                   {defaultAddress?.map((item, index) => {
                     return (
                       <AddressItem
@@ -172,7 +168,7 @@ function DeliveryLocation({
               )}
               {otherAddresses?.length > 0 && (
                 <div className={styles.addressItemContainer}>
-                  <div className={styles.heading}>{t("resource.common.address.other_address")}</div>
+                  <div className={styles.heading}>Other Address</div>
                   {otherAddresses.map((item, index) => {
                     return (
                       <AddressItem
@@ -193,7 +189,7 @@ function DeliveryLocation({
                   className={`${styles.commonBtn} ${styles.addCta}`}
                   onClick={onAddButtonClick}
                 >
-                  + &nbsp; {t("resource.common.address.add_address")}
+                  + &nbsp; Add New Address
                 </button>
               </div>
             </div>
@@ -206,14 +202,14 @@ function DeliveryLocation({
                   className={`${styles.commonBtn} ${styles.selectCta}`}
                   onClick={selectAddress}
                 >
-                  {t("resource.cart.select_this_address")}
+                  select this address
                 </button>
               </div>
             )}
         </div>
       </Modal>
       <Modal
-        title={t("resource.common.address.add_new_address")}
+        title="Add new Address"
         isOpen={isAddAddressModalOpen}
         closeDialog={onCloseModalClick}
         modalType="right-modal"
@@ -241,7 +237,7 @@ function DeliveryLocation({
           </div>
         </div>
       </Modal>
-    </div >
+    </div>
   );
 }
 

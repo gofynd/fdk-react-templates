@@ -1,5 +1,5 @@
 import React from "react";
-import SvgWrapper from "../core/svgWrapper/SvgWrapper";
+import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./accordion.less";
 
 const Accordion = ({ items, onItemClick }) => {
@@ -48,11 +48,15 @@ const Accordion = ({ items, onItemClick }) => {
                               >
                                 <span className={styles.accordionContentInner}>
                                   {content.key && (
-                                    <span className={styles.accordionContentKey}>
+                                    <span
+                                      className={styles.accordionContentKey}
+                                    >
                                       {content.key}:{" "}
                                     </span>
                                   )}
-                                  <span className={styles.accordionContentValue}>
+                                  <span
+                                    className={styles.accordionContentValue}
+                                  >
                                     {content.value}
                                   </span>
                                 </span>

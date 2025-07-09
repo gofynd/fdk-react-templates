@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import * as styles from "./add-to-cart.less";
 import ImageGallery from "../image-gallery/image-gallery";
 import ProductVariants from "../product-variants/product-variants";
@@ -7,16 +7,12 @@ import FyButton from "../../../../components/core/fy-button/fy-button";
 import DeliveryInfo from "../delivery-info/delivery-info";
 import QuantityControl from "../../../../components/quantity-control/quantity-control";
 import FyDropdown from "../../../../components/core/fy-dropdown/fy-dropdown";
-import {
-  currencyFormat,
-  isEmptyOrNull,
-  formatLocale,
-} from "../../../../helper/utils";
-import RadioIcon from "../../../../assets/images/radio";
-import TruckIcon from "../../../../assets/images/truck-icon.svg";
+import { currencyFormat, isEmptyOrNull } from "../../../../helper/utils";
 import CartIcon from "../../../../assets/images/cart.svg";
 import BuyNowIcon from "../../../../assets/images/buy-now.svg";
-import { useGlobalTranslation, useGlobalStore, useFPI } from "fdk-core/utils";
+import B2BSizeQuantityControl from "../../../../components/b2b-size-quantity-control/b2b-size-quantity-control";
+import { useNavigate } from "react-router-dom";
+import B2bMOQWrapper from "../../../../components/b2b-size-quantity-control/b2b-moq-wrapper";
 
 const AddToCart = ({
   productData = {},
@@ -36,18 +32,35 @@ const AddToCart = ({
   isCartUpdating = false,
   isHyperlocal = false,
   cartUpdateHandler = () => {},
-  minCartQuantity,
+  minCartQuantity = 1,
   maxCartQuantity,
   incrementDecrementUnit,
-  fulfillmentOptions = [],
-  currentFO = {},
-  setCurrentFO = () => {},
-  availableFOCount,
+  showQuantityController = false,
+  showViewCartButton = false,
+  showMoq = false,
 }) => {
-  const fpi = useFPI();
-  const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
-  const locale = language?.locale;
-  const { t } = useGlobalTranslation("translation");
+  const totalAvailableQuantity =
+    productData?.productPrice?.total_available_quantity;
+
+  const isOutOfStock = useMemo(() => {
+    return (
+      maxCartQuantity < minCartQuantity ||
+      minCartQuantity === 0 ||
+      totalAvailableQuantity === 0
+    );
+  }, [maxCartQuantity, minCartQuantity, totalAvailableQuantity]);
+
+  const navigate = useNavigate();
+
+  const [quantity, setQuantity] = useState(0);
+  const [hasAddedToCart, setHasAddedToCart] = useState(false);
+  const [quantityError, setQuantityError] = useState(() => {
+    if (isOutOfStock) {
+      return { hasError: true, message: "Out of stock" };
+    }
+    return { hasError: false, message: "" };
+  });
+
   const { product = {}, productPrice = {} } = productData;
 
   const { button_options, disable_cart, show_price, show_quantity_control } =
@@ -75,26 +88,16 @@ const AddToCart = ({
     const priceDataDefault = sizes?.price;
     if (selectedSize && !isEmptyOrNull(productPrice?.price)) {
       if (productPrice?.set) {
-        return currencyFormat(
-          price_per_piece[key], 
-          productPrice?.price?.currency_symbol || "", 
-          formatLocale(locale, countryCode, true)) || "";
+        return currencyFormat(price_per_piece[key]) || "";
       }
       const price = productPrice?.price || "";
-      return (
-        currencyFormat(
-          price?.[key],
-          price?.currency_symbol,
-          formatLocale(locale, countryCode, true)
-        ) || ""
-      );
+      return currencyFormat(price?.[key], price?.currency_symbol) || "";
     }
     if (selectedSize && priceDataDefault) {
       return (
         currencyFormat(
           priceDataDefault?.[key]?.min,
-          priceDataDefault?.[key]?.currency_symbol,
-          formatLocale(locale, countryCode, true)
+          priceDataDefault?.[key]?.currency_symbol
         ) || ""
       );
     }
@@ -105,8 +108,7 @@ const AddToCart = ({
           } - ${currencyFormat(priceDataDefault?.[key]?.max) || ""}`
         : currencyFormat(
             priceDataDefault?.[key]?.max,
-            priceDataDefault?.[key]?.currency_symbol,
-            formatLocale(locale, countryCode, true)
+            priceDataDefault?.[key]?.currency_symbol
           ) || "";
     }
   };
@@ -128,23 +130,80 @@ const AddToCart = ({
       ?.map((size) => size?.value);
   }, [sizes?.sizes]);
 
-  const getDeliveryDate = (deliveryPromise) => {
-    const options = {
-      weekday: "short",
-      month: "short",
-      day: "numeric",
-      timeZone: "UTC",
-    };
+  const validateQuantity = (qty) => {
+    if (isOutOfStock) {
+      return {
+        hasError: true,
+        message: "Out of stock",
+      };
+    }
 
-    const { max } = deliveryPromise || {};
+    if (qty === 0) {
+      return { hasError: false, message: "" };
+    }
 
-    if (!max) return false;
+    if (qty < minCartQuantity) {
+      return {
+        hasError: true,
+        message: `Minimum quantity is ${minCartQuantity}`,
+      };
+    }
 
-    const dateFormatter = new Intl.DateTimeFormat(undefined, options);
-    const maxDate = dateFormatter.format(new Date(max));
+    if (qty > maxCartQuantity) {
+      return {
+        hasError: true,
+        message: `Maximum quantity is ${maxCartQuantity}`,
+      };
+    }
 
-    return maxDate;
+    return { hasError: false, message: "" };
   };
+
+  const updateQuantity = (newQuantity) => {
+    setQuantity(newQuantity);
+  };
+
+  const handleQuantityChange = (e, newQuantity) => {
+    const error = validateQuantity(newQuantity);
+    setQuantityError(error);
+    setQuantity(newQuantity);
+  };
+
+  const showWarningForInvalidInput = (inputValue) => {
+    setQuantityError({ hasError: false, message: "" });
+    const error = validateQuantity(inputValue);
+    setQuantityError(error);
+  };
+
+  useEffect(() => {
+    if (selectedSize) {
+      setQuantity(0);
+      // Show out of stock error if product is out of stock
+      if (isOutOfStock) {
+        setQuantityError({ hasError: true, message: "Out of stock" });
+      } else {
+        setQuantityError({ hasError: false, message: "" });
+      }
+    }
+  }, [selectedSize, isOutOfStock]);
+
+  useEffect(() => {
+    if (isOutOfStock) {
+      setQuantityError({ hasError: true, message: "Out of stock" });
+    } else if (selectedSize) {
+      setQuantityError({ hasError: false, message: "" });
+    }
+  }, [isOutOfStock, selectedSize]);
+
+  useEffect(() => {
+    setHasAddedToCart(false);
+  }, [slug]);
+
+  useEffect(() => {
+    if (!selectedSize) {
+      setHasAddedToCart(false);
+    }
+  }, [selectedSize]);
 
   return (
     <div className={styles.productDescContainer}>
@@ -213,15 +272,18 @@ const AddToCart = ({
                 setSlug={handleSlugChange}
               />
             )}
+
+            {showMoq && productData?.product?.moq && (
+              <B2bMOQWrapper productDetails={productData} />
+            )}
+
             {/* ---------- Size Container ---------- */}
             {isSizeSelectionBlock && !isSizeCollapsed && (
               <div className={styles.sizeSelection}>
                 <div className={styles.sizeHeaderContainer}>
                   <p className={`${styles.b2} ${styles.sizeSelection__label}`}>
                     <span>
-                      {t("resource.product.style")}:{" "}
-                      {Boolean(selectedSize) &&
-                        `${t("resource.common.size")} (${selectedSize})`}
+                      Style: {Boolean(selectedSize) && `Size (${selectedSize})`}
                     </span>
                   </p>
                   {pageConfig?.show_size_guide &&
@@ -238,7 +300,7 @@ const AddToCart = ({
                           />
                         }
                       >
-                        {t("resource.common.size_guide")}
+                        SIZE GUIDE
                       </FyButton>
                     )}
                 </div>
@@ -271,17 +333,64 @@ const AddToCart = ({
                     </button>
                   ))}
                 </div>
+                {showQuantityController && (
+                  <div className={styles.quantityControl}>
+                    <B2BSizeQuantityControl
+                      minCartQuantity={minCartQuantity}
+                      maxCartQuantity={maxCartQuantity}
+                      isCartUpdating={isCartUpdating}
+                      placeholder="Qty"
+                      count={quantity}
+                      onDecrementClick={(e) => {
+                        const newQuantity = Math.max(
+                          quantity - incrementDecrementUnit,
+                          minCartQuantity
+                        );
+                        showWarningForInvalidInput(
+                          quantity - incrementDecrementUnit
+                        );
+                        updateQuantity(newQuantity);
+                      }}
+                      serviceable={selectedSize && !isOutOfStock}
+                      onIncrementClick={(e) => {
+                        const newQuantity = Math.min(
+                          quantity + incrementDecrementUnit,
+                          maxCartQuantity
+                        );
+                        showWarningForInvalidInput(
+                          quantity + incrementDecrementUnit
+                        );
+                        updateQuantity(newQuantity);
+                      }}
+                      onQtyChange={(e, currentNum) => {
+                        showWarningForInvalidInput(e.target.value);
+                        const clampedQuantity = Math.max(
+                          Math.min(currentNum, maxCartQuantity),
+                          minCartQuantity
+                        );
+                        updateQuantity(clampedQuantity);
+                      }}
+                      isSizeWrapperVisible={false}
+                      sizeType="medium"
+                      hasError={quantityError.hasError}
+                      errorMessage={quantityError.message}
+                      incrementDecrementUnit={incrementDecrementUnit}
+                    />
+                  </div>
+                )}
               </div>
             )}
             {/* ---------- Size Dropdown And Action Buttons ---------- */}
             {!isSizeSelectionBlock && !isSizeCollapsed && (
-              <div className={styles.sizeCartContainer}>
+              <div
+                className={`${styles.sizeCartContainer} ${showQuantityController ? styles.withQuantityWrapper : ""}`}
+              >
                 <FyDropdown
                   options={sizes?.sizes || []}
                   value={selectedSize}
                   onChange={onSizeSelection}
-                  placeholder={t("resource.common.select_size_caps")}
-                  valuePrefix={`${t("resource.common.size")}:`}
+                  placeholder="SELECT SIZE"
+                  valuePrefix="Size :"
                   dataKey="value"
                   containerClassName={styles.dropdownContainer}
                   dropdownListClassName={styles.dropdown}
@@ -290,6 +399,51 @@ const AddToCart = ({
                   disabledOptionClassName={styles.disabledOption}
                   disableSearch={true}
                 />
+                {showQuantityController && (
+                  <div>
+                    <B2BSizeQuantityControl
+                      minCartQuantity={minCartQuantity}
+                      maxCartQuantity={maxCartQuantity}
+                      isCartUpdating={isCartUpdating}
+                      placeholder="Qty"
+                      count={quantity}
+                      onDecrementClick={(e) => {
+                        const newQuantity = Math.max(
+                          quantity - incrementDecrementUnit,
+                          minCartQuantity
+                        );
+                        showWarningForInvalidInput(
+                          quantity - incrementDecrementUnit
+                        );
+                        updateQuantity(newQuantity);
+                      }}
+                      serviceable={selectedSize && !isOutOfStock}
+                      onIncrementClick={(e) => {
+                        const newQuantity = Math.min(
+                          quantity + incrementDecrementUnit,
+                          maxCartQuantity
+                        );
+                        showWarningForInvalidInput(
+                          quantity + incrementDecrementUnit
+                        );
+                        updateQuantity(newQuantity);
+                      }}
+                      onQtyChange={(e, currentNum) => {
+                        showWarningForInvalidInput(e.target.value);
+                        const clampedQuantity = Math.max(
+                          Math.min(currentNum, maxCartQuantity),
+                          minCartQuantity
+                        );
+                        updateQuantity(clampedQuantity);
+                      }}
+                      isSizeWrapperVisible={false}
+                      sizeType="medium"
+                      hasError={quantityError.hasError}
+                      errorMessage={quantityError.message}
+                      incrementDecrementUnit={incrementDecrementUnit}
+                    />
+                  </div>
+                )}
                 {pageConfig?.show_size_guide &&
                   isSizeGuideAvailable() &&
                   sizes?.sellable && (
@@ -304,65 +458,22 @@ const AddToCart = ({
                         />
                       }
                     >
-                      {t("resource.common.size_guide")}
+                      SIZE GUIDE
                     </FyButton>
                   )}
               </div>
             )}
             {sizeError && (
               <div className={styles.sizeError}>
-                {t("resource.product.please_select_size")}
+                Please select size to continue
               </div>
             )}
             {!isHyperlocal && sizes?.sellable && selectedSize && (
               <DeliveryInfo {...deliverInfoProps} />
             )}
 
-            {selectedSize &&
-              !!fulfillmentOptions.length &&
-              availableFOCount > 1 && (
-                <div className={styles.fulfillmentWrapper}>
-                  <div className={styles.foList}>
-                    {fulfillmentOptions.map((foItem, index) => (
-                      <div
-                        key={index}
-                        className={styles.fulfillmentOption}
-                        onClick={() =>
-                          setCurrentFO(foItem?.fulfillment_option || {})
-                        }
-                      >
-                        {fulfillmentOptions.length === 1 ? (
-                          <TruckIcon className={styles.fulfillmentOption} />
-                        ) : (
-                          <RadioIcon
-                            checked={
-                              foItem?.fulfillment_option?.slug ===
-                              currentFO?.slug
-                            }
-                          />
-                        )}
-
-                        <div className={styles.foDetails}>
-                          {!!getDeliveryDate(foItem?.delivery_promise) && (
-                            <p className={styles.promiseLabel}>
-                              Get it by{" "}
-                              {getDeliveryDate(foItem?.delivery_promise)}
-                            </p>
-                          )}
-                          <p className={styles.foLabel}>
-                            {foItem?.fulfillment_option?.name}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
             <div className={styles.viewMore}>
-              <span onClick={handleViewMore}>
-                {t("resource.product.view_full_details")}
-              </span>
+              <span onClick={handleViewMore}>View Full details</span>
             </div>
           </div>
           {/* ---------- Buy Now and Add To Cart ---------- */}
@@ -402,36 +513,79 @@ const AddToCart = ({
                       />
                     ) : (
                       <FyButton
-                        variant="outlined"
+                        variant={showViewCartButton ? "contained" : "outlined"}
                         size="medium"
-                        onClick={(event) =>
-                          addProductForCheckout(event, selectedSize, false)
+                        onClick={(event) => {
+                          setHasAddedToCart(true);
+                          addProductForCheckout(
+                            event,
+                            selectedSize,
+                            false,
+                            showQuantityController ? quantity : 0
+                          );
+                          if (showQuantityController) {
+                            setQuantity(0);
+                            setQuantityError({ hasError: false, message: "" });
+                          }
+                        }}
+                        disabled={showQuantityController && quantity === 0}
+                        startIcon={
+                          <CartIcon
+                            className={`${styles.cartIcon} ${
+                              showViewCartButton ? styles.fillSecondary : ""
+                            }`}
+                          />
                         }
-                        startIcon={<CartIcon className={styles.cartIcon} />}
+                        className={
+                          hasAddedToCart && showViewCartButton
+                            ? styles.buttonSecondary
+                            : styles.fullWidthButton
+                        }
                       >
-                        {t("resource.cart.add_to_cart_caps")}
+                        ADD TO CART
                       </FyButton>
                     )}
                   </>
                 )}
-                {button_options?.includes("buynow") && (
+
+                {showViewCartButton && hasAddedToCart && (
+                  <FyButton
+                    className={styles.viewCart}
+                    variant="contained"
+                    size="medium"
+                    onClick={() => {
+                      handleClose();
+                      navigate("/cart/bag");
+                    }}
+                    startIcon={<BuyNowIcon className={styles.cartIcon} />}
+                  >
+                    View Cart
+                  </FyButton>
+                )}
+
+                {!showViewCartButton && button_options?.includes("buynow") && (
                   <FyButton
                     className={styles.buyNow}
                     variant="contained"
                     size="medium"
                     onClick={(event) =>
-                      addProductForCheckout(event, selectedSize, true)
+                      addProductForCheckout(
+                        event,
+                        selectedSize,
+                        true,
+                        showQuantityController ? quantity : 0
+                      )
                     }
                     startIcon={<BuyNowIcon className={styles.cartIcon} />}
                   >
-                    {t("resource.common.buy_now_caps")}
+                    BUY NOW
                   </FyButton>
                 )}
               </>
             )}
             {!sizes?.sellable && (
               <FyButton variant="outlined" disabled size="medium">
-                {t("resource.common.product_not_available")}
+                PRODUCT NOT AVAILABLE
               </FyButton>
             )}
           </div>

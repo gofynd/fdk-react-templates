@@ -4,15 +4,9 @@
   border: 1px solid @DividerStokes;
   line-height: 140%;
   padding: 24px;
-  @media @tablet-range {
-    padding: 16px;
-  }
   display: flex;
   justify-content: space-between;
   align-items: center;
-  @media @desktop {
-    border-radius: 8px;
-  }
   @media @mobile {
     padding: 16px;
     margin-top: 18px;
@@ -75,7 +69,7 @@
     .modalCloseIcon {
       position: absolute;
       top: 24px;
-      inset-inline-end: 24px;
+      right: 24px;
       cursor: pointer;
       span {
         display: flex;
@@ -122,7 +116,7 @@
         font-size: 14px;
         font-weight: 600;
         padding: 14px 24px;
-        margin-inline-start: 16px;
+        margin-left: 16px;
         background: @ButtonPrimary;
         border-radius: @ButtonRadius;
         color: @ButtonSecondary;
@@ -134,7 +128,7 @@
           order: 2;
           margin-top: 24px;
           width: 100%;
-          margin-inline-start: 0;
+          margin-left: 0;
           box-sizing: border-box;
         }
       }
@@ -159,7 +153,7 @@
     .modalCloseIcon {
       position: absolute;
       top: 24px;
-      inset-inline-end: 24px;
+      right: 24px;
       cursor: pointer;
       span {
         display: flex;
@@ -220,7 +214,7 @@
         font-size: 14px;
         font-weight: 600;
         padding: 14px 24px;
-        margin-inline-start: 16px;
+        margin-left: 16px;
         background: @ButtonPrimary;
         border-radius: @ButtonRadius;
         color: @ButtonSecondary;
@@ -312,7 +306,7 @@
   }
 }
 .addrErrText {
-  margin-inline-start: 25px;
+  margin-left: 25px;
   margin-top: 8px;
   color: @ErrorText;
   font-weight: 400;
