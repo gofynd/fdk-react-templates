@@ -530,7 +530,8 @@ const AddressForm = ({
           ))}
           <div className={styles.addressTypeContainer}>
             <label className={styles.addressTypeHeader}>
-              {t("resource.common.save_as")}{" "}
+              {t("resource.common.save_as")}
+              <span className={styles.required}> *</span>
             </label>
             <div className={styles.typeWrap}>
               {addressTypes?.map((type) => (
