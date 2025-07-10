@@ -199,7 +199,6 @@ function CheckoutPaymentContent({
   let codOption = paymentOptions?.filter((opt) => opt.name === "COD")[0];
   paymentOptions = paymentOptions?.filter((opt) => opt.name !== "COD");
   const otherPaymentOptions = useMemo(() => otherOptions(), [paymentOption]);
-
   let upiSuggestions = paymentOption?.payment_option?.find?.(
     (ele) => ele.name === "UPI"
   )?.suggested_list || ["okhdfcbank", "okicici", "oksbi"];
@@ -672,7 +671,7 @@ function CheckoutPaymentContent({
         address_id,
         payment_mode: mop,
         aggregator_name: subMopData?.aggregator_name,
-        payment_identifier: subMopData?.code,
+        payment_identifier: subMopData?.code ?? "",
         merchant_code: subMopData?.merchant_code,
       };
     }
@@ -746,7 +745,7 @@ function CheckoutPaymentContent({
         addressId: address_id,
         paymentMode: mop,
         aggregatorName: subMopData?.aggregator_name,
-        paymentIdentifier: subMopData?.code,
+        paymentIdentifier: subMopData?.code ?? "",
         merchantCode: subMopData?.merchant_code,
       };
     }
@@ -794,7 +793,7 @@ function CheckoutPaymentContent({
         address_id,
         payment_mode: mop,
         aggregator_name: subMopData?.aggregator_name,
-        payment_identifier: subMopData?.code,
+        payment_identifier: subMopData?.code ?? "",
         merchant_code: subMopData?.merchant_code,
       };
     }
@@ -844,7 +843,7 @@ function CheckoutPaymentContent({
         selectMop(
           "Other",
           otherPaymentOptions[0]?.name,
-          otherPaymentOptions[0]?.list?.[0]?.code
+          otherPaymentOptions[0]?.list?.[0]?.code ?? ""
         );
       }
       if (
@@ -855,7 +854,7 @@ function CheckoutPaymentContent({
         selectMop(
           selectedTabData?.name,
           selectedTabData?.name,
-          selectedTabData?.list[0]?.code
+          selectedTabData?.list[0]?.code ?? ""
         );
       }
     }
@@ -1380,7 +1379,11 @@ function CheckoutPaymentContent({
       //   return acc;
       // }
       let temp = { ...tab };
-      temp.id = tab.aggregator_name + tab.code;
+      if (tab?.code) {
+        temp.id = tab.aggregator_name + tab.code;
+      } else {
+        temp.id = tab?.aggregator_name ?? "";
+      }
       acc.push(temp);
       return acc;
     }, []);
