@@ -34,7 +34,6 @@ const AddToCart = ({
   handleClose = () => {},
   selectedItemDetails = {},
   isCartUpdating = false,
-  isHyperlocal = false,
   cartUpdateHandler = () => {},
   minCartQuantity,
   maxCartQuantity,
@@ -75,10 +74,13 @@ const AddToCart = ({
     const priceDataDefault = sizes?.price;
     if (selectedSize && !isEmptyOrNull(productPrice?.price)) {
       if (productPrice?.set) {
-        return currencyFormat(
-          price_per_piece[key], 
-          productPrice?.price?.currency_symbol || "", 
-          formatLocale(locale, countryCode, true)) || "";
+        return (
+          currencyFormat(
+            price_per_piece[key],
+            productPrice?.price?.currency_symbol || "",
+            formatLocale(locale, countryCode, true)
+          ) || ""
+        );
       }
       const price = productPrice?.price || "";
       return (
@@ -314,7 +316,7 @@ const AddToCart = ({
                 {t("resource.product.please_select_size")}
               </div>
             )}
-            {!isHyperlocal && sizes?.sellable && selectedSize && (
+            {sizes?.sellable && selectedSize && (
               <DeliveryInfo {...deliverInfoProps} />
             )}
 
