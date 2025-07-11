@@ -135,8 +135,9 @@ function FilterList({
 
   return (
     <div
-      className={`${styles["filter__list"]} ${!filter.isOpen ? styles.open : ""
-        }`}
+      className={`${styles["filter__list"]} ${
+        !filter.isOpen ? styles.open : ""
+      }`}
     >
       {/* Multivalued filter */}
       {filter.key.kind === "multivalued" && (
@@ -234,8 +235,9 @@ function FilterList({
                 {!isExpanded && <span>{t("resource.facets.view_more")}</span>}
               </span>
               <SvgWrapper
-                className={`${styles["arrow-icon"]} ${isExpanded ? styles.expanded : ""
-                  }`}
+                className={`${styles["arrow-icon"]} ${
+                  isExpanded ? styles.expanded : ""
+                }`}
                 svgSrc="arrow-down"
               ></SvgWrapper>
             </div>
@@ -254,6 +256,7 @@ function FilterList({
                 max={value.max}
                 selectedMin={value?.selected_min}
                 selectedMax={value?.selected_max}
+                postfix={value.display?.includes("%") ? "%" : ""}
                 onSliderUpdate={(e) =>
                   handleSliderUpdate({ ...e, value, filter })
                 }
@@ -289,9 +292,11 @@ function FilterList({
                 </div>
 
                 <div
-                  className={`${styles["filter__item--value"]} ${styles["caption-normal"]
-                    } ${filter.values[0].is_selected == true ? styles.active : ""
-                    }`}
+                  className={`${styles["filter__item--value"]} ${
+                    styles["caption-normal"]
+                  } ${
+                    filter.values[0].is_selected == true ? styles.active : ""
+                  }`}
                 >
                   {filter.values[0].display}
                 </div>
@@ -324,8 +329,9 @@ function FilterList({
               {Object.keys(groupedValues).map((alphabet, index) => (
                 <li
                   key={`alphabet-${index}`}
-                  className={`${groupedValues[alphabet].length === 0 ? styles.disabled : ""
-                    }`}
+                  className={`${
+                    groupedValues[alphabet].length === 0 ? styles.disabled : ""
+                  }`}
                 >
                   <a href={`#${alphabet}`}>{alphabet}</a>
                 </li>
@@ -387,7 +393,9 @@ function FilterList({
                 </React.Fragment>
               ))
             ) : (
-              <li className={styles.emptyMessage}>{t("resource.common.empty_state")}</li>
+              <li className={styles.emptyMessage}>
+                {t("resource.common.empty_state")}
+              </li>
             )}
           </ul>
         </div>

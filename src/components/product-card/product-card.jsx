@@ -288,7 +288,7 @@ const ProductCard = ({
                 <span
                   className={`${styles["productPrice--discount"]} ${styles.captionNormal}   ${centerAlign ? styles["productPrice--textCenter"] : ""}`}
                 >
-                  ({product.discount?.toString().toLowerCase()})
+                  ({product.discount})
                 </span>
               )}
             </div>

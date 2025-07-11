@@ -23,18 +23,18 @@ function DeliveryLocation({
   getLocality,
   selectAddress,
   addrError,
-  onChangeButtonClick = () => { },
-  onAddButtonClick = () => { },
-  onPincodeSubmit = () => { },
-  onCloseModalClick = () => { },
-  setSelectedAddressId = () => { },
-  addAddress = () => { },
+  onChangeButtonClick = () => {},
+  onAddButtonClick = () => {},
+  onPincodeSubmit = () => {},
+  onCloseModalClick = () => {},
+  setSelectedAddressId = () => {},
+  addAddress = () => {},
   isInternationalShippingEnabled = false,
   addressFormSchema,
   addressItem,
-  onCountryChange = () => { },
-  handleCountrySearch = () => { },
-  getFilteredCountries = () => { },
+  onCountryChange = () => {},
+  handleCountrySearch = () => {},
+  getFilteredCountries = () => {},
   selectedCountry,
   countryDetails,
   isGuestUser = false,
@@ -47,7 +47,7 @@ function DeliveryLocation({
     setError,
     clearErrors,
   } = useForm({
-    mode: "onChange",
+    mode: "onSubmit",
     defaultValues: {
       pincode,
     },
@@ -66,7 +66,9 @@ function DeliveryLocation({
     return (
       id === addrError?.id &&
       addrError?.message && (
-        <div className={styles.addrErrText}>{translateDynamicLabel(addrError?.message, t)}</div>
+        <div className={styles.addrErrText}>
+          {translateDynamicLabel(addrError?.message, t)}
+        </div>
       )
     );
   };
@@ -74,16 +76,20 @@ function DeliveryLocation({
     <div className={styles.cartPincodeContainer}>
       <div className={styles.pinCodeDetailsContainer}>
         <span className={styles.pincodeHeading}>
-        {deliveryLocation ? `${t("resource.common.deliver_to")}:` : t("resource.cart.check_delivery_time_services")}
-        </span >
+          {deliveryLocation
+            ? `${t("resource.common.deliver_to")}:`
+            : t("resource.cart.check_delivery_time_services")}
+        </span>
         <span className={styles.pinCode}>
           &nbsp;
           {deliveryLocation}
         </span>
-      </div >
+      </div>
       <div className={styles.changePinCodeButton} onClick={onChangeButtonClick}>
-        {t("resource.cart.change")}
-      </div >
+        {deliveryLocation
+          ? t("resource.cart.change")
+          : t("resource.cart.enter_pin_code")}
+      </div>
       <Modal
         isOpen={isPincodeModalOpen}
         closeDialog={onCloseModalClick}
@@ -154,7 +160,9 @@ function DeliveryLocation({
             <div className={styles.addressContentConitainer}>
               {defaultAddress?.length > 0 && (
                 <div className={styles.addressItemContainer}>
-                  <div className={styles.heading}>{t("resource.common.address.default_address")}</div>
+                  <div className={styles.heading}>
+                    {t("resource.common.address.default_address")}
+                  </div>
                   {defaultAddress?.map((item, index) => {
                     return (
                       <AddressItem
@@ -172,7 +180,9 @@ function DeliveryLocation({
               )}
               {otherAddresses?.length > 0 && (
                 <div className={styles.addressItemContainer}>
-                  <div className={styles.heading}>{t("resource.common.address.other_address")}</div>
+                  <div className={styles.heading}>
+                    {t("resource.common.address.other_address")}
+                  </div>
                   {otherAddresses.map((item, index) => {
                     return (
                       <AddressItem
@@ -241,7 +251,7 @@ function DeliveryLocation({
           </div>
         </div>
       </Modal>
-    </div >
+    </div>
   );
 }
 

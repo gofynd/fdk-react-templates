@@ -32,7 +32,8 @@ function CustomRangeSlider({
   selectedMax,
   count,
   currencySymbol = "",
-  onSliderUpdate = () => { },
+  postfix = "",
+  onSliderUpdate = () => {},
 }) {
   const { t } = useGlobalTranslation("translation");
   const [startValue, setStartValue] = useState(selectedMin);
@@ -75,7 +76,9 @@ function CustomRangeSlider({
     if (value < min) {
       setRangeMessage(`${t("resource.product.min_value_should_be")} ${min}`);
     } else if (value >= endValue) {
-      setRangeMessage(`${t("resource.product.min_value_cannot_exceed")} ${endValue}`);
+      setRangeMessage(
+        `${t("resource.product.min_value_cannot_exceed")} ${endValue}`
+      );
     } else setRangeMessage("");
   };
 
@@ -95,7 +98,9 @@ function CustomRangeSlider({
     if (value > max) {
       setRangeMessage(`${t("resource.product.max_value_should_be")} ${max}`);
     } else if (value <= startValue) {
-      setRangeMessage(`${t("resource.product.max_value_should_be_greater_than")} ${startValue}`);
+      setRangeMessage(
+        `${t("resource.product.max_value_should_be_greater_than")} ${startValue}`
+      );
     } else setRangeMessage("");
   };
 
@@ -127,6 +132,9 @@ function CustomRangeSlider({
               inputClassName={styles.fieldItem}
               min={min}
             />
+            {!currencySymbol && postfix && (
+              <span className={styles.postfix}>{postfix}</span>
+            )}
           </div>
         </div>
         <div>
@@ -147,6 +155,9 @@ function CustomRangeSlider({
               inputClassName={styles.fieldItem}
               max={max}
             />
+            {!currencySymbol && postfix && (
+              <span className={styles.postfix}>{postfix}</span>
+            )}
           </div>
         </div>
       </div>
@@ -161,7 +172,9 @@ function CustomRangeSlider({
         />
 
         {count && (
-          <div className={styles.entityCount}>{count} {t("resource.product.products_found")}</div>
+          <div className={styles.entityCount}>
+            {count} {t("resource.product.products_found")}
+          </div>
         )}
 
         {rangeMessage && <p className={styles.errorMessage}>{rangeMessage}</p>}
