@@ -63,7 +63,7 @@ const GoogleMapAddress = ({
         addressItem?.geo_location?.longitude || countryDetails?.longitude || 0
       ),
     };
-    mapRef?.current?.panTo(location);
+    mapRef?.current?.panTo(mapCenterRef.current);
   }, [countryDetails, addressItem]);
 
   const locateUser = () => {

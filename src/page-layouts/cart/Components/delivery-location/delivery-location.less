@@ -231,10 +231,23 @@
       }
     }
   }
-  .addressFormWrapper {
-    @media @mobile {
-      padding: 12px;
-    }
+}
+
+.addAddressModalContainer {
+  display: block;
+}
+
+.addAddressModalBody {
+  display: grid;
+  grid-template-columns: 450px;
+  grid-template-rows: 1fr;
+  min-height: 84.26vh;
+  overflow: hidden;
+
+  @media @tablet {
+    grid-template-columns: 1fr;
+    max-height: unset;
+    height: 100dvh;
   }
 }
 

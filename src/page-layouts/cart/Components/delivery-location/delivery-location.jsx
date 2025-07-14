@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import * as styles from "./delivery-location.less";
 import Modal from "../../../../components/core/modal/modal";
 import AddressItem from "../../../../components/address-item/address-item";
-import AddressForm from "../../../../components/address-form/address-form";
+import AddressForm from "../../../../components/address-form/v2/address-form";
 import { useGlobalTranslation } from "fdk-core/utils";
 import { translateDynamicLabel } from "../../../../helper/utils";
 
@@ -18,8 +18,8 @@ function DeliveryLocation({
   defaultAddress = [],
   otherAddresses = [],
   selectedAddressId = "",
-  mapApiKey,
   showGoogleMap,
+  mapApiKey,
   getLocality,
   selectAddress,
   addrError,
@@ -125,9 +125,9 @@ function DeliveryLocation({
       </Modal>
       <Modal
         isOpen={isAddressModalOpen}
-        modalType="right-modal"
         closeDialog={onCloseModalClick}
         title={t("resource.cart.change_address")}
+        bodyClassName={styles.addAddressModalBody}
       >
         <div className={styles.addressModal}>
           <div className={styles.modalBody}>
@@ -226,30 +226,28 @@ function DeliveryLocation({
         title={t("resource.common.address.add_new_address")}
         isOpen={isAddAddressModalOpen}
         closeDialog={onCloseModalClick}
-        modalType="right-modal"
         ignoreClickOutsideForClass="pac"
+        hideHeader
+        containerClassName={styles.addAddressModalContainer}
+        bodyClassName={styles.addAddressModalBody}
       >
-        <div className={styles.addressModal}>
-          <div className={`${styles.modalBody} ${styles.addressFormWrapper}`}>
-            <AddressForm
-              internationalShipping={isInternationalShippingEnabled}
-              addressItem={addressItem}
-              formSchema={addressFormSchema}
-              isNewAddress={true}
-              onAddAddress={addAddress}
-              mapApiKey={mapApiKey}
-              showGoogleMap={showGoogleMap}
-              onGetLocality={getLocality}
-              defaultPincode={pincode}
-              setI18nDetails={onCountryChange}
-              handleCountrySearch={handleCountrySearch}
-              getFilteredCountries={getFilteredCountries}
-              selectedCountry={selectedCountry?.display_name ?? ""}
-              countryDetails={countryDetails}
-              isGuestUser={isGuestUser}
-            ></AddressForm>
-          </div>
-        </div>
+        <AddressForm
+          internationalShipping={isInternationalShippingEnabled}
+          addressItem={addressItem}
+          formSchema={addressFormSchema}
+          isNewAddress={true}
+          onAddAddress={addAddress}
+          isMap={showGoogleMap}
+          mapApiKey={mapApiKey}
+          onGetLocality={getLocality}
+          defaultPincode={pincode}
+          setI18nDetails={onCountryChange}
+          handleCountrySearch={handleCountrySearch}
+          getFilteredCountries={getFilteredCountries}
+          selectedCountry={selectedCountry?.display_name ?? ""}
+          countryDetails={countryDetails}
+          isGuestUser={isGuestUser}
+        ></AddressForm>
       </Modal>
     </div>
   );
