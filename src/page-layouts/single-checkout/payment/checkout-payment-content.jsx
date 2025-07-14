@@ -711,7 +711,6 @@ function CheckoutPaymentContent({
     setTab(tab);
     setMop(mop);
     setSubMop(subMop);
-
     const { mopData, subMopData } = paymentModeDetails(mop, subMop);
     let payload;
 
@@ -2883,7 +2882,9 @@ function CheckoutPaymentContent({
               className={`${styles.modeItemWrapper} ${getOPBorder(other?.list?.[0])}`}
               onClick={() => {
                 removeDialogueError();
-                selectMop("Other", other?.name, other?.list?.[0]?.code);
+                if (other?.list?.[0]?.code) {
+                  selectMop("Other", other?.name, other?.list?.[0]?.code);
+                }
               }}
             >
               <label>
