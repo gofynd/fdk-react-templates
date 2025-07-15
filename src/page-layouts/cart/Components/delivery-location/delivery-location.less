@@ -4,15 +4,9 @@
   border: 1px solid @DividerStokes;
   line-height: 140%;
   padding: 24px;
-  @media @tablet-range {
-    padding: 16px;
-  }
   display: flex;
   justify-content: space-between;
   align-items: center;
-  @media @desktop {
-    border-radius: 8px;
-  }
   @media @mobile {
     padding: 16px;
     margin-top: 18px;
@@ -231,23 +225,10 @@
       }
     }
   }
-}
-
-.addAddressModalContainer {
-  display: block;
-}
-
-.addAddressModalBody {
-  display: grid;
-  grid-template-columns: 450px;
-  grid-template-rows: 1fr;
-  min-height: 84.26vh;
-  overflow: hidden;
-
-  @media @tablet {
-    grid-template-columns: 1fr;
-    max-height: unset;
-    height: 100dvh;
+  .addressFormWrapper {
+    @media @mobile {
+      padding: 12px;
+    }
   }
 }
 

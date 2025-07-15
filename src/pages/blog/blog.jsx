@@ -38,7 +38,7 @@ function MemoizedSlide({ blog, index, sliderProps, getBlogTitle }) {
       ? convertUTCDateToLocalDate(
         dateString, 
         options, 
-        formatLocale(locale, countryCode, true))
+        formatLocale(locale, countryCode,true))
       : "";
   };
   const getBlogTag = (tags) => {
@@ -265,7 +265,7 @@ function BlogList({
       ? convertUTCDateToLocalDate(
         dateString, 
         options, 
-        formatLocale(locale, countryCode, true))
+        formatLocale(locale, countryCode,true))
       : "";
   };
   const getBlogTag = (tags) => {

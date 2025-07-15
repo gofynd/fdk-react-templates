@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import * as styles from "./delivery-location.less";
 import Modal from "../../../../components/core/modal/modal";
 import AddressItem from "../../../../components/address-item/address-item";
-import AddressForm from "../../../../components/address-form/v2/address-form";
+import AddressForm from "../../../../components/address-form/address-form";
 import { useGlobalTranslation } from "fdk-core/utils";
 import { translateDynamicLabel } from "../../../../helper/utils";
 
@@ -18,23 +18,23 @@ function DeliveryLocation({
   defaultAddress = [],
   otherAddresses = [],
   selectedAddressId = "",
-  showGoogleMap,
   mapApiKey,
+  showGoogleMap,
   getLocality,
   selectAddress,
   addrError,
-  onChangeButtonClick = () => {},
-  onAddButtonClick = () => {},
-  onPincodeSubmit = () => {},
-  onCloseModalClick = () => {},
-  setSelectedAddressId = () => {},
-  addAddress = () => {},
+  onChangeButtonClick = () => { },
+  onAddButtonClick = () => { },
+  onPincodeSubmit = () => { },
+  onCloseModalClick = () => { },
+  setSelectedAddressId = () => { },
+  addAddress = () => { },
   isInternationalShippingEnabled = false,
   addressFormSchema,
   addressItem,
-  onCountryChange = () => {},
-  handleCountrySearch = () => {},
-  getFilteredCountries = () => {},
+  onCountryChange = () => { },
+  handleCountrySearch = () => { },
+  getFilteredCountries = () => { },
   selectedCountry,
   countryDetails,
   isGuestUser = false,
@@ -47,7 +47,7 @@ function DeliveryLocation({
     setError,
     clearErrors,
   } = useForm({
-    mode: "onSubmit",
+    mode: "onChange",
     defaultValues: {
       pincode,
     },
@@ -66,9 +66,7 @@ function DeliveryLocation({
     return (
       id === addrError?.id &&
       addrError?.message && (
-        <div className={styles.addrErrText}>
-          {translateDynamicLabel(addrError?.message, t)}
-        </div>
+        <div className={styles.addrErrText}>{translateDynamicLabel(addrError?.message, t)}</div>
       )
     );
   };
@@ -76,20 +74,16 @@ function DeliveryLocation({
     <div className={styles.cartPincodeContainer}>
       <div className={styles.pinCodeDetailsContainer}>
         <span className={styles.pincodeHeading}>
-          {deliveryLocation
-            ? `${t("resource.common.deliver_to")}:`
-            : t("resource.cart.check_delivery_time_services")}
-        </span>
+        {deliveryLocation ? `${t("resource.common.deliver_to")}:` : t("resource.cart.check_delivery_time_services")}
+        </span >
         <span className={styles.pinCode}>
           &nbsp;
           {deliveryLocation}
         </span>
-      </div>
+      </div >
       <div className={styles.changePinCodeButton} onClick={onChangeButtonClick}>
-        {deliveryLocation
-          ? t("resource.cart.change")
-          : t("resource.cart.enter_pin_code")}
-      </div>
+        {t("resource.cart.change")}
+      </div >
       <Modal
         isOpen={isPincodeModalOpen}
         closeDialog={onCloseModalClick}
@@ -125,9 +119,9 @@ function DeliveryLocation({
       </Modal>
       <Modal
         isOpen={isAddressModalOpen}
+        modalType="right-modal"
         closeDialog={onCloseModalClick}
         title={t("resource.cart.change_address")}
-        bodyClassName={styles.addAddressModalBody}
       >
         <div className={styles.addressModal}>
           <div className={styles.modalBody}>
@@ -160,9 +154,7 @@ function DeliveryLocation({
             <div className={styles.addressContentConitainer}>
               {defaultAddress?.length > 0 && (
                 <div className={styles.addressItemContainer}>
-                  <div className={styles.heading}>
-                    {t("resource.common.address.default_address")}
-                  </div>
+                  <div className={styles.heading}>{t("resource.common.address.default_address")}</div>
                   {defaultAddress?.map((item, index) => {
                     return (
                       <AddressItem
@@ -180,9 +172,7 @@ function DeliveryLocation({
               )}
               {otherAddresses?.length > 0 && (
                 <div className={styles.addressItemContainer}>
-                  <div className={styles.heading}>
-                    {t("resource.common.address.other_address")}
-                  </div>
+                  <div className={styles.heading}>{t("resource.common.address.other_address")}</div>
                   {otherAddresses.map((item, index) => {
                     return (
                       <AddressItem
@@ -226,30 +216,32 @@ function DeliveryLocation({
         title={t("resource.common.address.add_new_address")}
         isOpen={isAddAddressModalOpen}
         closeDialog={onCloseModalClick}
+        modalType="right-modal"
         ignoreClickOutsideForClass="pac"
-        hideHeader
-        containerClassName={styles.addAddressModalContainer}
-        bodyClassName={styles.addAddressModalBody}
       >
-        <AddressForm
-          internationalShipping={isInternationalShippingEnabled}
-          addressItem={addressItem}
-          formSchema={addressFormSchema}
-          isNewAddress={true}
-          onAddAddress={addAddress}
-          isMap={showGoogleMap}
-          mapApiKey={mapApiKey}
-          onGetLocality={getLocality}
-          defaultPincode={pincode}
-          setI18nDetails={onCountryChange}
-          handleCountrySearch={handleCountrySearch}
-          getFilteredCountries={getFilteredCountries}
-          selectedCountry={selectedCountry?.display_name ?? ""}
-          countryDetails={countryDetails}
-          isGuestUser={isGuestUser}
-        ></AddressForm>
+        <div className={styles.addressModal}>
+          <div className={`${styles.modalBody} ${styles.addressFormWrapper}`}>
+            <AddressForm
+              internationalShipping={isInternationalShippingEnabled}
+              addressItem={addressItem}
+              formSchema={addressFormSchema}
+              isNewAddress={true}
+              onAddAddress={addAddress}
+              mapApiKey={mapApiKey}
+              showGoogleMap={showGoogleMap}
+              onGetLocality={getLocality}
+              defaultPincode={pincode}
+              setI18nDetails={onCountryChange}
+              handleCountrySearch={handleCountrySearch}
+              getFilteredCountries={getFilteredCountries}
+              selectedCountry={selectedCountry?.display_name ?? ""}
+              countryDetails={countryDetails}
+              isGuestUser={isGuestUser}
+            ></AddressForm>
+          </div>
+        </div>
       </Modal>
-    </div>
+    </div >
   );
 }
 
