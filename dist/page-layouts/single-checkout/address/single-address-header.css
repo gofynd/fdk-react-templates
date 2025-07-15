@@ -340,6 +340,16 @@ h5,
   justify-content: space-between;
   border: 1px solid var(--dividerStokes);
 }
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  .single-address-header__addressHeaderContainer___uHzhP {
+    padding: 16px;
+  }
+}
+@media only screen and (min-width: 769px) {
+  .single-address-header__addressHeaderContainer___uHzhP {
+    border-radius: 8px 8px 0 0;
+  }
+}
 .single-address-header__addressHeaderContainer__mobile___OsAjO {
   display: none;
 }
@@ -466,10 +476,21 @@ h5,
 .single-address-header__addressSelectedHeaderContainer___iphxk {
   padding: 24px;
   display: flex;
+  border-radius: 8px;
   justify-content: space-between;
   border: 1px solid var(--dividerStokes);
   align-items: center;
   gap: 8px;
+}
+@media only screen and (max-width: 768px) {
+  .single-address-header__addressSelectedHeaderContainer___iphxk {
+    border-radius: unset;
+  }
+}
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  .single-address-header__addressSelectedHeaderContainer___iphxk {
+    padding: 16px;
+  }
 }
 @media only screen and (max-width: 480px) {
   .single-address-header__addressSelectedHeaderContainer___iphxk {
@@ -531,6 +552,23 @@ h5,
 @media only screen and (max-width: 480px) {
   .single-address-header__hideAddress___tjYUK {
     display: none;
+  }
+}
+.single-address-header__addressModalContainer___kPuPf {
+  display: block;
+}
+.single-address-header__addressModalBody___umHZR {
+  display: grid;
+  grid-template-columns: 450px;
+  grid-template-rows: 1fr;
+  min-height: 84.26vh;
+  overflow: hidden;
+}
+@media only screen and (max-width: 768px) {
+  .single-address-header__addressModalBody___umHZR {
+    grid-template-columns: 1fr;
+    max-height: unset;
+    height: 100dvh;
   }
 }
 

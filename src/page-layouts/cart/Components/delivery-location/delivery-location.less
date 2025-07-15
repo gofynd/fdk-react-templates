@@ -4,9 +4,15 @@
   border: 1px solid @DividerStokes;
   line-height: 140%;
   padding: 24px;
+  @media @tablet-range {
+    padding: 16px;
+  }
   display: flex;
   justify-content: space-between;
   align-items: center;
+  @media @desktop {
+    border-radius: 8px;
+  }
   @media @mobile {
     padding: 16px;
     margin-top: 18px;
@@ -136,163 +142,96 @@
   }
 }
 
-.addressModal {
-  .modalHeader {
-    border-bottom: 1px solid @DividerStokes;
-    position: relative;
-    padding: 16px 24px;
-    display: flex;
-    align-items: center;
 
-    .modalHeading {
-      color: @TextHeading;
-      line-height: 140%;
-      font-size: 16px;
-      font-weight: 600;
-    }
-    .modalCloseIcon {
-      position: absolute;
-      top: 24px;
-      inset-inline-end: 24px;
-      cursor: pointer;
-      span {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
+.addAddressModalBody {
+  display: grid;
+  grid-template-columns: 450px;
+  grid-template-rows: 1fr;
+  min-height: 84.26vh;
+  max-height: 84.26vh;
+  overflow: hidden;
+
+  @media @tablet {
+    grid-template-columns: 1fr;
+    max-height: unset;
+    height: 100dvh;
+  }
+}
+
+.deliveryAddressModal {
+  .deliverAddressesModalContainer {
+    width: 100%;
+    max-height: unset;
+    height: 100dvh;
+    @media @desktop {
+      max-width: 450px;
+      max-height: 84.26dvh;
     }
   }
-  .modalBody {
+  .deliveryAddressHeader {
+    padding: 24px;
+    border-bottom: none;
+  }
+
+  .deliveryAddressBody {
     display: flex;
     flex-direction: column;
-    padding: 24px;
-    background: @DialogBackground;
-
-    @media @mobile {
-      padding: 0px;
-    }
-
-    input[type="radio"] {
-      display: none;
-      &:checked {
-        color: @SuccessText;
-      }
-    }
-
-    .pincodeBox {
-      padding: 24px;
+    .deliverAddressesContainer {
+      flex: 1;
       display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      border-radius: 12px;
-      background-color: @PageBackground;
-      .errorText {
-        color: @ErrorText;
-        line-height: 140%;
-        font-size: 12px;
-        font-weight: 400;
-        margin-top: 8px;
-        flex-basis: 100%;
+      flex-direction: column;
+      gap: 1rem;
+      padding-inline: 24px;
+      padding-bottom: 24px;
+      overflow: hidden;
+      .contentHeaderContainer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
       }
-      .modalPincodeInput {
-        flex: 1;
-        input {
-          box-sizing: border-box;
-          border: 1px solid var(--dividerStokes);
-          border-radius: 4px;
-          color: var(--textLabel);
-          padding: 16px;
-          font-size: 14px;
-          font-weight: 400;
-          width: 100%;
-          &:focus-visible {
-            outline: none;
-          }
-        }
-      }
-      .modalChangePinCodeButton {
+      .contentHeader {
         font-size: 14px;
-        font-weight: 600;
-        padding: 14px 24px;
-        margin-inline-start: 16px;
-        background: @ButtonPrimary;
-        border-radius: @ButtonRadius;
-        color: @ButtonSecondary;
-        height: 100%;
+        font-weight: 500;
+        line-height: 140%;
+        color: @TextLabel;
+      }
+      .addCta {
         text-transform: uppercase;
-        text-align: center;
-        box-sizing: border-box;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 140%;
+        color: @ButtonLink;
+        padding: 4px;
+      }
+      .deliveryAddressList {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        overflow-y: auto;
+      }
+      .customAddressItem {
+        margin-bottom: 0;
+        border: none !important;
+        padding: 5px 0;
+      }
+    }
+    .stickyContainer {
+      background-color: @DialogBackground;
+      padding: 24px;
+      box-shadow: 0px -2px 12px 0px rgba(0, 0, 0, 0.06);
+      @media @tablet {
+        padding: 16px;
+      }
+      .deliveryCta {
+        text-transform: uppercase;
       }
     }
   }
-  .addressFormWrapper {
-    @media @mobile {
-      padding: 12px;
-    }
-  }
 }
 
-.addressItemContainer {
-  @media @tablet {
-    padding: 0;
-    border: 1px solid var(--dividerStokes);
-    border-width: 1px 0;
-  }
-
-  .customAddressItem {
-    margin-bottom: 0;
-    padding: 16px !important;
-    border-bottom: none !important;
-
-    @media @tablet {
-      border-width: 0 0 1px !important;
-    }
-  }
-
-  .customAddressItem:last-child {
-    border-bottom: 1px solid @DividerStokes !important;
-
-    @media @tablet {
-      border-bottom: none !important;
-    }
-  }
-}
-
-.addAddress {
-  margin-top: 32px;
-
-  @media @tablet {
-    margin-top: 24px;
-    padding: 0 16px;
-  }
-
-  .addCta {
-    .btnSecondary();
-    padding: 20px 24px;
-    width: 100%;
-    text-transform: uppercase;
-  }
-}
-
-.stickyContainer {
-  position: sticky;
-  bottom: 0;
-  background-color: @DialogBackground;
-  border-top: 1px solid @DividerStokes;
-  padding: 24px;
-  margin-top: 32px;
-
-  @media @tablet {
-    padding: 16px;
-    margin-top: 24px;
-  }
-
-  .selectCta {
-    .btnPrimary();
-    padding: 20px 24px;
-    width: 100%;
-    text-transform: uppercase;
-  }
+.addAddressModalContainer {
+  display: block;
 }
 .heading {
   margin: 32px 0 12px;

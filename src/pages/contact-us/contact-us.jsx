@@ -71,6 +71,8 @@ function ContactSupport({
   const [focusedInput, setFocusedInput] = useState(null);
   const [text, setText] = useState("");
 
+  
+
   const inputFields = [
     {
       type: "text",
@@ -134,20 +136,20 @@ function ContactSupport({
     "--overlay-opacity": `${pageConfig?.opacity}%`,
   };
 
-  const submitForm = async (data) => {
-    try {
-      await handleSubmitForm(data);
-      reset({
-        name: "",
-        phone: "",
-        email: "",
-        comment: "",
-      });
-      setText("");
-    } catch (err) {
-      console.error("Form submission failed", err);
-    }
-  };
+const submitForm = async (data) => {
+  try {
+    await handleSubmitForm(data);
+    reset({
+      name: "",
+      phone: "",
+      email: "",
+      comment: "",
+    });
+    setText("");
+  } catch (err) {
+    console.error("Form submission failed", err);
+  }
+};
   const showAddress =
     typeof pageConfig?.show_address === "boolean"
       ? pageConfig.show_address

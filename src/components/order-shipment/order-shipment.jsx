@@ -15,23 +15,24 @@ import { useParams } from "react-router-dom";
 import * as styles from "./order-shipment.less";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
 import { convertUTCDateToLocalDate, formatLocale } from "../../helper/utils";
+import Accordion from "../accordion/accordion";
 import {
   useNavigate,
   useGlobalStore,
   useFPI,
-  useGlobalTranslation
+  useGlobalTranslation,
 } from "fdk-core/utils";
-import Accordion from "../accordion/accordion";
 
 function OrderShipment({
   orderInfo,
-  onBuyAgainClick = () => { },
+  onBuyAgainClick = () => {},
   isBuyAgainEligible,
+  availableFOCount,
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
   const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
-  const locale = language?.locale
+  const locale = language?.locale;
   const [isOpen, setIsOpen] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [selectedShipment, setSelectedShipment] = useState("");
@@ -46,7 +47,11 @@ function OrderShipment({
   }, [params?.orderId]);
 
   const getTime = (time) => {
-    return convertUTCDateToLocalDate(time, "", formatLocale(locale, countryCode,true));
+    return convertUTCDateToLocalDate(
+      time,
+      "",
+      formatLocale(locale, countryCode)
+    );
   };
   const clickopen = () => {
     setIsOpen(!isOpen);
@@ -77,14 +82,18 @@ function OrderShipment({
     return [];
   };
   const getTotalItems = (items) => {
-    return items === 1 ? `${items} ${t("resource.common.item_simple_text")}` : `${items} ${t("resource.common.item_simple_text_plural")}`;
+    return items === 1
+      ? `${items} ${t("resource.common.item_simple_text")}`
+      : `${items} ${t("resource.common.item_simple_text_plural")}`;
   };
   const getTotalPieces = (pieces) => {
     const total = pieces.reduce((pre, curr) => {
       return pre + curr.quantity;
     }, 0);
 
-    return total === 1 ? `${total} ${t("resource.common.single_piece")}` : `${total} ${t("resource.common.multiple_piece")}`;
+    return total === 1
+      ? `${total} ${t("resource.common.single_piece")}`
+      : `${total} ${t("resource.common.multiple_piece")}`;
   };
 const getCustomizationOptions = (orderInfo) => {
   if (!orderInfo?.shipments) return [];
@@ -139,6 +148,7 @@ const getCustomizationOptions = (orderInfo) => {
               <React.Fragment key={item.shipment_id}>
                 <div
                   className={styles.shipmentData}
+                  key={`${item.shipment_id}`}
                   onClick={() => naivgateToShipment(item)}
                 >
                   <div className={`${styles.shipmentLeft}`}>
@@ -171,6 +181,13 @@ const getCustomizationOptions = (orderInfo) => {
                     >
                       {t("resource.common.shipment")}: {item?.shipment_id}
                     </div>
+                    {availableFOCount > 1 && item?.fulfillment_option?.name && (
+                      <div
+                        className={`${styles.shipmentId} ${styles.uktLinks} ${styles.boldls}`}
+                      >
+                        {item?.fulfillment_option?.name}
+                      </div>
+                    )}
                     <div className={`${styles.shipmentStats} ${styles.light}`}>
                       <span>{getTotalItems(item?.bags?.length)}</span>
                       <span>{` | `}</span>
@@ -205,7 +222,6 @@ const getCustomizationOptions = (orderInfo) => {
               </React.Fragment>
             );
           })}
-
         {isBuyAgainEligible && (
           <div className={`${styles.buttons}`}>
             <button
@@ -222,7 +238,7 @@ const getCustomizationOptions = (orderInfo) => {
           </div>
         )}
       </div>
-    </div >
+    </div>
   );
 }
 
