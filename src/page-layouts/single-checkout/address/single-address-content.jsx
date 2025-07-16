@@ -1,8 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import AddressItem from "../../../components/address-item/address-item";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./single-address-content.less";
-import { useNavigate, useGlobalTranslation } from "fdk-core/utils";
 import Shimmer from "../../../components/shimmer/shimmer";
 
 function AddressRight({
@@ -11,7 +11,6 @@ function AddressRight({
   editAddress,
   removeAddress,
 }) {
-  const { t } = useGlobalTranslation("translation");
   return (
     <>
       {selectedAddressId == addressItem?.id && (
@@ -20,11 +19,11 @@ function AddressRight({
             className={styles.edit}
             onClick={() => editAddress(addressItem)}
           >
-            {t("resource.common.edit_lower")}
+            edit
           </span>
           <span>|</span>
           <span className={styles.remove} onClick={() => removeAddress()}>
-            {t("resource.facets.remove")}
+            Remove
           </span>
         </div>
       )}
@@ -33,7 +32,6 @@ function AddressRight({
 }
 
 function DeliverBtn({ selectedAddressId, id, selectAddress }) {
-  const { t } = useGlobalTranslation("translation");
   return (
     <>
       {selectedAddressId === id && (
@@ -42,7 +40,7 @@ function DeliverBtn({ selectedAddressId, id, selectAddress }) {
             className={styles.deliverToThis}
             onClick={() => selectAddress()}
           >
-            {t("resource.checkout.deliver_to_this_address")}
+            DELIVER TO THIS ADDRESS
           </button>
         </div>
       )}
@@ -51,7 +49,6 @@ function DeliverBtn({ selectedAddressId, id, selectAddress }) {
 }
 
 function InvalidAddress({ errorMessage }) {
-  const { t } = useGlobalTranslation("translation");
   const navigate = useNavigate();
   return (
     <div className={styles.invalidAddError}>
@@ -72,7 +69,7 @@ function InvalidAddress({ errorMessage }) {
           navigate("/cart/bag");
         }}
       >
-        {t("resource.checkout.edit_cart")}
+        Edit CART
       </button>
     </div>
   );
@@ -92,7 +89,6 @@ function SingleAddressContent({
   getDefaultAddress,
   loader,
 }) {
-  const { t } = useGlobalTranslation("translation");
   function selectAdd(id) {
     setSelectedAddressId(id);
   }
@@ -104,7 +100,7 @@ function SingleAddressContent({
         <div className={styles.addressContentConitainer}>
           {getDefaultAddress.length > 0 ? (
             <div className={styles.address}>
-              <div className={styles.heading}>{t("resource.common.address.default_address")}</div>
+              <div className={styles.heading}>Default Address</div>
               {getDefaultAddress.map((item, index) => {
                 return (
                   <AddressItem
@@ -145,7 +141,7 @@ function SingleAddressContent({
 
           {getOtherAddress.length > 0 ? (
             <div className={styles.address}>
-              <div className={styles.heading}>{t("resource.common.address.other_address")}</div>
+              <div className={styles.heading}>Other Address</div>
               {getOtherAddress.map((item, index) => {
                 return (
                   <AddressItem
@@ -199,13 +195,11 @@ function SingleAddressContent({
                 marginBottom:"12px"
               }}
             >
-              {" "}
-              {t("resource.checkout.no_address_found")}
+              No Address Found, Please Add Address
             </div>
           )}
         </>
-      )
-      }
+      )}
     </>
   );
 }

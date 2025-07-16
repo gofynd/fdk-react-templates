@@ -1,0 +1,55 @@
+@import "../../../../styles/main.less";
+
+.bestPriceContainer {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 4px;
+  gap: 6px;
+  background: @HeaderBackground;
+  font-size: 12px;
+  font-weight: 400;
+
+  &__text {
+    background: @SuccessText;
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  &__available {
+    color: @TextBody;
+  }
+
+  &__price {
+    font-size: 14px;
+    font-weight: 500;
+    color: @SuccessText;
+  }
+}
+
+.Shimmer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+
+  .shimmerLine {
+    height: 20px;
+    width: 50%;
+    background: linear-gradient(90deg, #f8f8f8 25%, #f0f0f0 50%, #f8f8f8 75%);
+    background-size: 200% 100%;
+    border-radius: 4px;
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+}

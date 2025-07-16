@@ -1,13 +1,10 @@
 import React from "react";
 import {
-  convertUTCDateToLocalDate,
-  formatLocale,
   numberWithCommas,
   priceFormatCurrencySymbol,
 } from "../../../helper/utils";
 import * as styles from "./single-shipment-content.less";
 import { FDKLink } from "fdk-core/components";
-import { useGlobalTranslation, useFPI, useGlobalStore } from "fdk-core/utils";
 import FreeGiftItem from "../../cart/Components/free-gift-item/free-gift-item";
 import Shimmer from "../../../components/shimmer/shimmer";
 import AppliedCouponIcon from "../../../assets/images/applied-coupon-small.svg";
@@ -21,13 +18,7 @@ function SingleShipmentContent({
   convertHyperlocalTat = () => {},
   loader,
   buybox = {},
-  availableFOCount,
-  isCartValid,
 }) {
-  const { t } = useGlobalTranslation("translation");
-  const fpi = useFPI();
-  const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
-  const locale = language?.locale;
   const getShipmentItems = (shipment) => {
     let grpBySameSellerAndProduct = shipment?.items?.reduce((result, item) => {
       result[
@@ -106,12 +97,11 @@ function SingleShipmentContent({
                       <div className={styles.shipmentHeading}>
                         <div className={styles.headerLeft}>
                           <div className={styles.shipmentNumber}>
-                            {t("resource.common.shipment")} {index + 1}/
-                            {shipments.length}
+                            Shipment {index + 1}/{shipments.length}
                           </div>
                           <div className={styles.itemCount}>
                             (
-                            {`${shipmentItems.length} ${shipmentItems.length > 1 ? t("resource.common.item_simple_text_plural") : t("resource.common.item_simple_text")}`}
+                            {`${shipmentItems.length} ${shipmentItems.length > 1 ? "Items" : "Item"}`}
                             )
                           </div>
                         </div>
@@ -124,24 +114,8 @@ function SingleShipmentContent({
                             <div className={styles.deliveryDate}>
                               {isHyperlocal
                                 ? convertHyperlocalTat(item?.promise?.iso?.max)
-                                : `${t("resource.common.delivery_by", {
-                                    date: convertUTCDateToLocalDate(
-                                      item?.promise?.iso?.max,
-                                      {
-                                        weekday: "short",
-                                        day: "numeric",
-                                        month: "short",
-                                      },
-                                      formatLocale(locale, countryCode, true)
-                                    ),
-                                  })}`}
+                                : `Delivery by ${item?.promise?.formatted?.max}`}
                             </div>
-                            {availableFOCount > 1 &&
-                              item?.fulfillment_option?.name && (
-                                <div className={styles.foName}>
-                                  {item?.fulfillment_option?.name}
-                                </div>
-                              )}
                           </div>
                         )}
                       </div>
@@ -185,12 +159,10 @@ function SingleShipmentContent({
                                         key={article?.article?.size + index}
                                       >
                                         <div className={styles.size}>
-                                          {t("resource.common.size")}:{" "}
-                                          {article?.article.size}
+                                          Size: {article?.article.size}
                                         </div>
                                         <div className={styles.qty}>
-                                          {t("resource.common.qty")}:{" "}
-                                          {article?.quantity}
+                                          Qty: {article?.quantity}
                                         </div>
                                       </div>
                                     ))}
@@ -223,14 +195,9 @@ function SingleShipmentContent({
                                       product?.item?.article?.quantity > 0 &&
                                       !buybox?.is_seller_buybox_enabled && (
                                         <div className={styles.limitedQnty}>
-                                          {t(
-                                            "resource.common.hurry_only_left",
-                                            {
-                                              quantity:
-                                                product?.item?.article
-                                                  ?.quantity,
-                                            }
-                                          )}
+                                          Hurry! Only{" "}
+                                          {product?.item?.article?.quantity}{" "}
+                                          Left
                                         </div>
                                       )}
                                   </div>
@@ -254,12 +221,8 @@ function SingleShipmentContent({
               );
             })}
           <div className={styles.proceedBtnWrapper}>
-            <button
-              className={styles.proceedBtn}
-              onClick={showPaymentOptions}
-              disabled={!isCartValid}
-            >
-              {t("resource.checkout.proceed_to_pay")}
+            <button className={styles.proceedBtn} onClick={showPaymentOptions}>
+              Proceed To Pay
             </button>
           </div>
         </div>

@@ -13,16 +13,10 @@
       justify-content: space-between;
       border: 1px solid var(--dividerStokes);
       padding: 16px 24px;
-      @media @desktop {
-        border-radius: 8px 8px 0 0;
-      }
+
       @media @mobile {
         border-width: 1px 0;
         padding: 16px;
-      }
-
-      @media @tablet {
-        flex-direction: column;
       }
 
       .headerLeft {
@@ -33,7 +27,7 @@
           font-weight: 600;
           font-size: 14px;
           color: var(--textHeading);
-          margin-inline-end: 8px;
+          margin-right: 8px;
           line-height: 140%;
           white-space: nowrap;
           @media @mobile {
@@ -57,10 +51,6 @@
         color: @SuccessText;
         gap: 8px;
         align-items: center;
-
-        @media @tablet {
-          gap: 6px;
-        }
         .shippingLogo {
           height: 20px;
           width: 20px;
@@ -69,12 +59,6 @@
               fill: @SuccessText;
             }
           }
-        }
-        .foName {
-          color: @TextLabel;
-          font-size: 14px;
-          font-weight: 500;
-          line-height: 140%;
         }
         .deliveryDate {
           font-weight: 600;
@@ -110,7 +94,7 @@
         margin-bottom: 16px;
 
         span {
-          margin-inline-start: 6px;
+          margin-left: 6px;
         }
         .ribbonMsg {
           align-self: center;
@@ -185,7 +169,7 @@
                 line-height: 140%;
                 flex-wrap: wrap;
                 .size {
-                  margin-inline-end: 12px;
+                  margin-right: 12px;
                   line-height: 140%;
                 }
               }
@@ -198,7 +182,7 @@
 
             .priceWrapper {
               display: flex;
-              margin-inline-end: 12px;
+              margin-right: 12px;
               align-items: center;
 
               .effectivePrice {
@@ -244,7 +228,7 @@
                 margin-right: 12px;
                 width: fit-content;
                 .offerInfoIcon {
-                  margin-inline-start: 6px;
+                  margin-left: 6px;
                   cursor: pointer;
                 }
               }
@@ -265,12 +249,6 @@
 .parent {
   border: 1px solid var(--dividerStokes);
   padding: 24px;
-  @media @desktop {
-    border-radius: 0px 0px 8px 8px;
-  }
-  @media @tablet-range {
-    padding: 16px;
-  }
   border-top: none;
 
   @media @mobile {
