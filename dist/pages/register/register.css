@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 18px;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 1.5;
+    line-height: 24px;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .register__caption-medium___L4Mr9,
 .register__captionMedium___LtsKn {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .register__caption-semi-bold___iPZBa,
 .register__captionSemiBold___A0_l_ {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -260,11 +260,11 @@ h5,
 }
 .register__mr-5___T97MX,
 .register__mr5___kqmGX {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .register__mr-2___roAsT,
 .register__mr2___cbPkB {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .register__py-5___Bj9U9,
 .register__py5___jb5Np {
@@ -411,8 +411,8 @@ h5,
 }
 .register__registerFormWrapper___nCdfI .register__genderRadioContainer___orGL6 .register__radioContainer___oXJg1 {
   margin-bottom: 8px;
-  padding-inline-start: 24px;
-  margin-inline-end: 12px;
+  padding-left: 24px;
+  margin-right: 12px;
   position: relative;
   color: var(--textBody, #3c3131);
   font-size: 14px;
@@ -430,7 +430,7 @@ h5,
   width: 16px;
   position: absolute;
   top: 50%;
-  inset-inline-start: 0;
+  left: 0;
   transform: translateY(-50%);
   border: 1px solid #919191;
   border-radius: 50%;
@@ -440,15 +440,12 @@ h5,
   position: absolute;
   display: none;
   top: 50%;
-  inset-inline-start: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
   width: 9px;
   height: 9px;
   border-radius: 50%;
   background: #919191;
-}
-[dir="rtl"] .register__registerFormWrapper___nCdfI .register__genderRadioContainer___orGL6 .register__radioContainer___oXJg1 .register__checkmark___xXyWU:after {
-  transform: translate(50%, -50%);
 }
 .register__registerFormWrapper___nCdfI .register__genderRadioContainer___orGL6 .register__radioContainer___oXJg1 input:checked ~ .register__checkmark___xXyWU:after {
   display: block;
@@ -528,7 +525,7 @@ h5,
 }
 .register__passwordInputWrapper___a2PM1 input {
   width: 100%;
-  padding-inline-end: 40px;
+  padding-right: 40px;
   background-color: var(--pageBackground, #f8f8f8);
 }
 .register__consentWrapper___eRJuQ .register__errorText___W8444 {
@@ -546,7 +543,7 @@ h5,
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  inset-inline-end: 12px;
+  right: 12px;
   cursor: pointer;
   background: none;
   border: none;
@@ -663,7 +660,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 18px;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -672,7 +669,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 1.5;
+    line-height: 24px;
   }
 }
 h5,
@@ -739,7 +736,7 @@ h5,
 .mobile-number__caption-medium___syZZb,
 .mobile-number__captionMedium___iKNxh {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -752,7 +749,7 @@ h5,
 .mobile-number__caption-semi-bold___Rbomr,
 .mobile-number__captionSemiBold___cKKg4 {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -817,11 +814,11 @@ h5,
 }
 .mobile-number__mr-5___gRl4u,
 .mobile-number__mr5___tOVbz {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .mobile-number__mr-2___UJPQR,
 .mobile-number__mr2___V6EUH {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .mobile-number__py-5___Co0IS,
 .mobile-number__py5___LSFQJ {
@@ -1062,7 +1059,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 18px;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -1071,7 +1068,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 1.5;
+    line-height: 24px;
   }
 }
 h5,
@@ -1138,7 +1135,7 @@ h5,
 .verify-both__caption-medium___QjOc_,
 .verify-both__captionMedium___vIB7N {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -1151,7 +1148,7 @@ h5,
 .verify-both__caption-semi-bold___hN2r2,
 .verify-both__captionSemiBold___ZGDKF {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -1216,11 +1213,11 @@ h5,
 }
 .verify-both__mr-5___IG86K,
 .verify-both__mr5___XKxD3 {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .verify-both__mr-2___dO4B7,
 .verify-both__mr2___JTLZw {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .verify-both__py-5___kBc3U,
 .verify-both__py5___WBjq8 {
@@ -1529,7 +1526,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 18px;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -1538,7 +1535,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 1.5;
+    line-height: 24px;
   }
 }
 h5,
@@ -1605,7 +1602,7 @@ h5,
 .login-register-toggle__caption-medium___TPPc2,
 .login-register-toggle__captionMedium___SG74Q {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -1618,7 +1615,7 @@ h5,
 .login-register-toggle__caption-semi-bold___jC8wa,
 .login-register-toggle__captionSemiBold___ps_L5 {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -1683,11 +1680,11 @@ h5,
 }
 .login-register-toggle__mr-5___v7zhF,
 .login-register-toggle__mr5___c7UOL {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .login-register-toggle__mr-2___eS3ge,
 .login-register-toggle__mr2___rxBof {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .login-register-toggle__py-5___D9ksb,
 .login-register-toggle__py5___K4lAE {
@@ -1774,7 +1771,7 @@ h5,
   flex: 0 0 24px;
 }
 .login-register-toggle__loginRegisterToggle___JgREz .login-register-toggle__label___hpP0C {
-  margin-inline-end: 24px;
+  margin-right: 24px;
   color: var(--textHeading, #26201a);
   font-size: 14px;
   font-style: normal;
@@ -1892,7 +1889,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 18px;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -1901,7 +1898,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 1.5;
+    line-height: 24px;
   }
 }
 h5,
@@ -1968,7 +1965,7 @@ h5,
 .term-privacy__caption-medium___BBCs7,
 .term-privacy__captionMedium___Fllq8 {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -1981,7 +1978,7 @@ h5,
 .term-privacy__caption-semi-bold___qAFOD,
 .term-privacy__captionSemiBold___yh7S3 {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -2046,11 +2043,11 @@ h5,
 }
 .term-privacy__mr-5___u4G87,
 .term-privacy__mr5___FIRoA {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .term-privacy__mr-2___dYr2G,
 .term-privacy__mr2___NXGpu {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .term-privacy__py-5___Op8YM,
 .term-privacy__py5___exKgA {
