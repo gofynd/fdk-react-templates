@@ -1,7 +1,13 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./chip-item.less";
-import { convertUTCDateToLocalDate, currencyFormat, formatLocale, numberWithCommas, translateDynamicLabel } from "../../../../helper/utils";
+import {
+  convertUTCDateToLocalDate,
+  currencyFormat,
+  formatLocale,
+  numberWithCommas,
+  translateDynamicLabel,
+} from "../../../../helper/utils";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import QuantityControl from "../../../../components/quantity-control/quantity-control";
 import Modal from "../../../../components/core/modal/modal";
@@ -9,7 +15,12 @@ import { useMobile } from "../../../../helper/hooks";
 import FreeGiftItem from "../free-gift-item/free-gift-item";
 import RadioIcon from "../../../../assets/images/radio";
 import Accordion from "../../../../components/accordion/accordion";
-import { useGlobalStore, useFPI, useGlobalTranslation } from "fdk-core/utils";
+import {
+  useGlobalStore,
+  useFPI,
+  useGlobalTranslation,
+  useNavigate,
+} from "fdk-core/utils";
 
 export default function ChipItem({
   isCartUpdating,
@@ -36,9 +47,12 @@ export default function ChipItem({
   onClosePromoModal,
   getFulfillmentOptions,
   pincode,
+  isCartValid = true,
+  inValidCartMsg = "",
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
+  const navigate = useNavigate();
   const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
   const locale = language?.locale;
   const isMobile = useMobile();
@@ -252,44 +266,55 @@ export default function ChipItem({
     return maxDate;
   };
 
-   const handleItemClick = (index) => {
-     setItems((prevItems) => {
-       const updatedItems = [...prevItems];
-       updatedItems[index] = {
-         ...updatedItems[index],
-         open: !updatedItems[index].open,
-       };
-       return updatedItems;
-     });
-   };
+  const handleItemClick = (index) => {
+    setItems((prevItems) => {
+      const updatedItems = [...prevItems];
+      updatedItems[index] = {
+        ...updatedItems[index],
+        open: !updatedItems[index].open,
+      };
+      return updatedItems;
+    });
+  };
 
   return (
     <>
       <div className={styles.cartItemsListContainer} key={itemIndex}>
-        {isOutOfStock && (
+        {(isOutOfStock || !isCartValid) && (
           <div
             className={`${styles["out-of-stock-chip"]} ${styles["new-cart-red-color"]}`}
           >
             <span>
               {translateDynamicLabel(singleItemDetails?.message, t) ||
+                (!isOutOfStock && translateDynamicLabel(inValidCartMsg, t)) ||
                 t("resource.common.out_of_stock")}
             </span>
-            <span
-              className={styles.removeAction}
-              onClick={(e) =>
-                cartUpdateHandler(
-                  e,
-                  singleItemDetails,
-                  currentSize,
-                  0,
-                  itemIndex,
-                  "remove_item"
-                )
-              }
-            >
-              {" "}
-              {t("resource.facets.remove_caps")}
-            </span>
+            {isOutOfStock && (
+              <span
+                className={styles.removeAction}
+                onClick={(e) =>
+                  cartUpdateHandler(
+                    e,
+                    singleItemDetails,
+                    currentSize,
+                    0,
+                    itemIndex,
+                    "remove_item"
+                  )
+                }
+              >
+                {" "}
+                {t("resource.facets.remove_caps")}
+              </span>
+            )}
+            {!isOutOfStock && (
+              <span
+                className={styles.removeAction}
+                onClick={(e) => navigate("/")}
+              >
+                {t("resource.common.continue_shopping")}
+              </span>
+            )}
           </div>
         )}
         {couponText.length > 0 && (
