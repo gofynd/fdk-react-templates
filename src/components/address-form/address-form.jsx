@@ -49,12 +49,10 @@ import * as styles from "./address-form.less";
 import GoogleMapAddress from "../google-map/google-map";
 import FormInputSelector from "./form-input-selector";
 import FyDropdown from "../core/fy-dropdown/fy-dropdown";
-import { useGlobalTranslation } from "fdk-core/utils";
 import HomeIcon from "../../assets/images/home-type.svg";
 import OfficeIcon from "../../assets/images/office-type.svg";
 import FriendsFamilyIcon from "../../assets/images/friends-family.svg";
 import OtherIcon from "../../assets/images/other-type.svg";
-import { isRunningOnClient } from "../../helper/utils";
 
 const defaultFormSchema = [
   {
@@ -73,7 +71,7 @@ const defaultFormSchema = [
           pattern: {
             value: /^[A-Za-z0-9,./\s-]+$/,
             message:
-            "House No can only contain letters, numbers, comma, period, hyphen, and slash",
+              "House No can only contain letters, numbers, comma, period, hyphen, and slash",
           },
           maxLength: {
             value: 80,
@@ -93,7 +91,7 @@ const defaultFormSchema = [
           pattern: {
             value: /^[A-Za-z0-9,./\s-]+$/,
             message:
-              "address can only contain letters, numbers, comma, period, hyphen, and slash"
+              "address can only contain letters, numbers, comma, period, hyphen, and slash",
           },
           maxLength: {
             value: 80,
@@ -237,22 +235,22 @@ const defaultFormSchema = [
 
 const addressTypes = [
   {
-    label: "resource.common.breadcrumb.home",
+    label: "Home",
     value: "Home",
     icon: <HomeIcon className={styles.typeIcon} />,
   },
   {
-    label: "resource.common.work",
+    label: "Work",
     value: "Work",
     icon: <OfficeIcon className={styles.typeIcon} />,
   },
   {
-    label: "resource.common.friends_&_family",
+    label: "Friends & Family",
     value: "Friends & Family",
     icon: <FriendsFamilyIcon className={styles.typeIcon} />,
   },
   {
-    label: "resource.common.other",
+    label: "Other",
     value: "Other",
     icon: <OtherIcon className={styles.typeIcon} />,
   },
@@ -271,14 +269,20 @@ const AddressForm = ({
   onUpdateAddress = () => {},
   onGetLocality = () => {},
   isGuestUser = false,
-  customFooter,
+  customFooter = (
+    <button
+      className={`${styles.commonBtn} ${styles.deliverBtn}`}
+      type="submit"
+    >
+      {isNewAddress ? "Add Address" : "Update Address"}
+    </button>
+  ),
   setI18nDetails,
   handleCountrySearch,
   getFilteredCountries,
   selectedCountry,
   countryDetails,
 }) => {
-  const { t } = useGlobalTranslation("translation");
   const isOtherAddressType = !["Home", "Work", "Friends & Family"].includes(
     addressItem?.address_type
   );
@@ -304,7 +308,7 @@ const AddressForm = ({
       otherAddressType:
         addressItem && isOtherAddressType ? addressItem?.address_type : "",
       geo_location: { latitude: "", longitude: "" },
-      country: selectedCountry || t("resource.localization.india"),
+      country: selectedCountry || "India",
       // area_code: addressItem?.area_code || defaultPincode || "",
     },
   });
@@ -344,7 +348,6 @@ const AddressForm = ({
   }, [sector]);
 
   useEffect(() => {
-    if (!isRunningOnClient()) return;
     if (formContainerRef?.current) {
       let levelChecked = 0;
       const maxLevel = 20;
@@ -437,8 +440,8 @@ const AddressForm = ({
               optionValue="display_name"
               optionLabel="display_name"
               showDropdownIcon
-              label={t("resource.localization.country")}
-              placeholder={t("resource.localization.select_country")}
+              label="Country"
+              placeholder="Select country"
               containerClassName={styles.customClass}
             />
           </div>
@@ -461,9 +464,7 @@ const AddressForm = ({
           </div>
         ))}
         <div className={styles.addressTypeContainer}>
-          <label className={styles.addressTypeHeader}>
-            {t("resource.common.save_as")}{" "}
-          </label>
+          <label className={styles.addressTypeHeader}>SAVE AS </label>
           <div className={styles.typeWrap}>
             {addressTypes?.map((type) => (
               <button
@@ -473,7 +474,7 @@ const AddressForm = ({
                 className={`${styles.typeBtn} ${watch("address_type") === type.value ? styles.selected : ""}`}
               >
                 {type.icon}
-                <span>{t(type.label)}</span>
+                <span>{type.label}</span>
               </button>
             ))}
           </div>
@@ -482,39 +483,37 @@ const AddressForm = ({
             {...register("address_type", { required: true })}
           />
           {errors.address_type && (
-            <span className={`${styles.formError}`}>{t("resource.common.field_required")}</span>
+            <span className={`${styles.formError}`}>Field is required</span>
           )}
-        </div >
+        </div>
         {showOtherText && (
           <div className={styles.formItemDiv}>
             <label
               className={styles.formLabel}
               style={{ backgroundColor: currBgColor }}
             >
-              {t("resource.localization.other_address_type")} <span className={`${styles.formReq}`}>*</span>
-            </label >
+              Other Address Type <span className={`${styles.formReq}`}>*</span>
+            </label>
             <input
               {...register("otherAddressType", {
                 validate: (value) => {
                   if (!value.trim()) {
-                    return `${t("resource.common.address.address_type")} ${t("resource.common.address.is_required")}`;
+                    return "Address Type is required";
                   }
                   if (value.length < 1 || value.length > 30) {
-                    return t("resource.common.validation_length", { min: 1 || 0, max: 30 });
+                    return "Length must be between 1 and 30";
                   }
                   return true;
                 },
               })}
               className={`${styles.formInputBox} ${styles.otherInput}`}
             />
-            {
-              errors.otherAddressType && (
-                <div className={`${styles.formError}`}>
-                  {errors.otherAddressType.message}
-                </div>
-              )
-            }
-          </div >
+            {errors.otherAddressType && (
+              <div className={`${styles.formError}`}>
+                {errors.otherAddressType.message}
+              </div>
+            )}
+          </div>
         )}
         {!isGuestUser && (
           <div className={styles.defaultAddressContainer}>
@@ -525,20 +524,11 @@ const AddressForm = ({
               {...register("is_default_address")}
             />
             <label className={styles.label} htmlFor="is_default_address">
-             {t("resource.common.address.make_this_my_default_address")}
+              Make this my default address
             </label>
           </div>
         )}
-        <div>
-          {customFooter ? 
-            customFooter : 
-            <button
-              className={`${styles.commonBtn} ${styles.deliverBtn}`}
-              type="submit"
-            >
-              {isNewAddress ? t("resource.common.address.add_address") : t("resource.common.address.update_address")}
-          </button>}
-      </div>
+        <div>{customFooter}</div>
       </form>
     </div>
   );

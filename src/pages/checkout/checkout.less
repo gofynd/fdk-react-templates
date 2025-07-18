@@ -6,10 +6,7 @@
   max-width: 1440px;
   margin: auto;
   min-height: 700px;
-  @media @tablet-range {
-    justify-content: center;
-  }
-  @media @tablet {
+  @media @mobile {
     display: block;
     padding: 0px;
     padding-bottom: 104px;
@@ -17,14 +14,10 @@
 }
 .leftContainer {
   width: 64%;
-  margin-inline-end: 2%;
-  @media @tablet-range {
-    width: 64.3%;
-    margin-inline-end: 1.7%;
-  }
-  @media @tablet {
+  margin-right: 2%;
+  @media @mobile {
     width: 100%;
-    margin-inline-end: 0;
+    margin-right: 0;
   }
 }
 .rightContainer {
@@ -32,34 +25,8 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  @media @tablet-range {
-    width: 33.3%;
-  }
-  @media @tablet {
+  @media @mobile {
     width: 100%;
     // margin-top: 15px;
-  }
-}
-.customStyles {
-  @media @tablet {
-    padding-left: 16px !important;
-    padding-right: 16px !important;
-  }
-}
-.customStylesShipment {
-  @media @tablet {
-    border-radius: 0;
-  }
-
-  .placeOrderBtn {
-    font-weight: 600;
-    font-size: 12px;
-    padding: 12px 16px;
-    border-radius: 5px;
-    border: 1px solid var(--buttonPrimary);
-    background-color: var(--buttonPrimary);
-    color: var(--buttonSecondary);
-    line-height: 140%;
-    height: auto;
   }
 }
