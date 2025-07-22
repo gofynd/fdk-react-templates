@@ -256,7 +256,7 @@ function FilterList({
                 max={value.max}
                 selectedMin={value?.selected_min}
                 selectedMax={value?.selected_max}
-                postfix={value?.display?.includes("%") ? "%" : ""}
+                postfix={value.display?.includes("%") ? "%" : ""}
                 onSliderUpdate={(e) =>
                   handleSliderUpdate({ ...e, value, filter })
                 }

@@ -10,7 +10,7 @@ import { useGlobalTranslation } from "fdk-core/utils";
 function ContactSupport({
   contactInfo = "",
   supportInfo = "",
-  handleSubmitForm = () => { },
+  handleSubmitForm = () => {},
   pageConfig = "",
   SocailMedia = () => <></>,
   appInfo,
@@ -61,16 +61,18 @@ function ContactSupport({
       });
     }
     if (prefillErrors?.comment) {
+      const isTooLong = values?.comment?.length > 500;
       setError("comment", {
         type: "manual",
-        message: t("resource.contact_us.please_enter_your_comment"),
+        message: isTooLong
+          ? t("resource.contact_us.entered_msg_greater_than_500_char")
+          : t("resource.contact_us.please_enter_your_comment"),
       });
     }
   }, [prefillErrors, setError, t]);
 
   const [focusedInput, setFocusedInput] = useState(null);
   const [text, setText] = useState("");
-
   const inputFields = [
     {
       type: "text",
@@ -222,11 +224,11 @@ function ContactSupport({
                         {contactInfo?.address?.address_line?.map((el, i) => (
                           <span key={i}>{el}&nbsp;</span>
                         ))}
-                        <span>{` ${contactInfo?.address?.city || ""}`}</span>
+                        <span>{` ${contactInfo?.address?.city}`}</span>
                         <span>
-                          &nbsp;{`${contactInfo?.address?.country || ""}`}&nbsp;
+                          &nbsp;{`${contactInfo?.address?.country}`}&nbsp;
                         </span>
-                        <span>{` ${contactInfo?.address?.pincode || ""}`}</span>
+                        <span>{` ${contactInfo?.address?.pincode}`}</span>
                       </div>
                     </div>
                   )}
@@ -283,6 +285,17 @@ function ContactSupport({
                     rules={{
                       required: field.required,
                       pattern: field.pattern,
+                      validate:
+                        field.name === "comment"
+                          ? (val) => {
+                              if (val && val.length > 500) {
+                                return t(
+                                  "resource.contact_us.entered_msg_greater_than_500_char"
+                                );
+                              }
+                              return true;
+                            }
+                          : undefined,
                     }}
                     render={({ field: { onChange, value } }) => (
                       <FyInput
@@ -306,12 +319,12 @@ function ContactSupport({
                         onInput={
                           field.type === "tel"
                             ? (e) => {
-                              // Allow only numbers, space, and + for country code
-                              e.target.value = e.target.value
-                                .replace(/[^+\d\s]/g, "")
-                                .slice(0, 15);
-                              onChange(e);
-                            }
+                                // Allow only numbers, space, and + for country code
+                                e.target.value = e.target.value
+                                  .replace(/[^+\d\s]/g, "")
+                                  .slice(0, 15);
+                                onChange(e);
+                              }
                             : null
                         }
                         onChange={(e) => {
