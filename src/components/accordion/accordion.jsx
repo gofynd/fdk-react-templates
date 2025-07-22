@@ -32,38 +32,11 @@ const Accordion = ({ items, onItemClick }) => {
                                       <span>{content.key}: </span>
                                     )}
                                   </span>
-                                  {Array.isArray(content.value) ? (
-                                    // Multiple images
-                                    <div
-                                      className={styles.accordionContentImages}
-                                    >
-                                      {content.value.map(
-                                        (imageObj, imgIndex) => (
-                                          <div
-                                            key={imageObj.id || imgIndex}
-                                            className={
-                                              styles.accordionContentImageItem
-                                            }
-                                          >
-                                            <img
-                                              src={imageObj.imageUrl}
-                                              alt={content.alt || content.key}
-                                              className={
-                                                styles.accordionContentImg
-                                              }
-                                            />
-                                          </div>
-                                        )
-                                      )}
-                                    </div>
-                                  ) : (
-                                    // Single image
-                                    <img
-                                      src={content.value}
-                                      alt={content.alt || content.key}
-                                      className={styles.accordionContentImg}
-                                    />
-                                  )}
+                                  <img
+                                    src={content.value}
+                                    alt={content.alt || content.key}
+                                    className={styles.accordionContentImg}
+                                  />
                                 </span>
                               </li>
                             );

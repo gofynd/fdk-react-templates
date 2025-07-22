@@ -6,7 +6,7 @@
   position: absolute;
   z-index: 1;
   top: 16px;
-  left: 50%;
+  inset-inline-start: 50%;
   transform: translateX(-50%);
   border: 1px solid var(--dividerStokes);
   border-radius: 8px;
@@ -85,9 +85,15 @@
   background: linear-gradient(90deg, #cccccc, #efefef, #cccccc);
   animation: google-map__loading___w2nsO 0.8s infinite;
 }
+[dir="rtl"] .google-map__mapWrapper___YR7HM .google-map__skeleton___whDH9 > canvas {
+  transform: translateX(100%);
+}
 @keyframes google-map__loading___w2nsO {
   100% {
     transform: translateX(100%);
+  }
+  [dir="rtl"] 100% {
+    transform: translateX(-100%);
   }
 }
 

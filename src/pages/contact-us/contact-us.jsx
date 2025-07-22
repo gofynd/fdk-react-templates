@@ -10,7 +10,7 @@ import { useGlobalTranslation } from "fdk-core/utils";
 function ContactSupport({
   contactInfo = "",
   supportInfo = "",
-  handleSubmitForm = () => {},
+  handleSubmitForm = () => { },
   pageConfig = "",
   SocailMedia = () => <></>,
   appInfo,
@@ -70,8 +70,6 @@ function ContactSupport({
 
   const [focusedInput, setFocusedInput] = useState(null);
   const [text, setText] = useState("");
-
-  
 
   const inputFields = [
     {
@@ -136,20 +134,20 @@ function ContactSupport({
     "--overlay-opacity": `${pageConfig?.opacity}%`,
   };
 
-const submitForm = async (data) => {
-  try {
-    await handleSubmitForm(data);
-    reset({
-      name: "",
-      phone: "",
-      email: "",
-      comment: "",
-    });
-    setText("");
-  } catch (err) {
-    console.error("Form submission failed", err);
-  }
-};
+  const submitForm = async (data) => {
+    try {
+      await handleSubmitForm(data);
+      reset({
+        name: "",
+        phone: "",
+        email: "",
+        comment: "",
+      });
+      setText("");
+    } catch (err) {
+      console.error("Form submission failed", err);
+    }
+  };
   const showAddress =
     typeof pageConfig?.show_address === "boolean"
       ? pageConfig.show_address
@@ -224,11 +222,11 @@ const submitForm = async (data) => {
                         {contactInfo?.address?.address_line?.map((el, i) => (
                           <span key={i}>{el}&nbsp;</span>
                         ))}
-                        <span>{` ${contactInfo?.address?.city}`}</span>
+                        <span>{` ${contactInfo?.address?.city || ""}`}</span>
                         <span>
-                          &nbsp;{`${contactInfo?.address?.country}`}&nbsp;
+                          &nbsp;{`${contactInfo?.address?.country || ""}`}&nbsp;
                         </span>
-                        <span>{` ${contactInfo?.address?.pincode}`}</span>
+                        <span>{` ${contactInfo?.address?.pincode || ""}`}</span>
                       </div>
                     </div>
                   )}
@@ -308,12 +306,12 @@ const submitForm = async (data) => {
                         onInput={
                           field.type === "tel"
                             ? (e) => {
-                                // Allow only numbers, space, and + for country code
-                                e.target.value = e.target.value
-                                  .replace(/[^+\d\s]/g, "")
-                                  .slice(0, 15);
-                                onChange(e);
-                              }
+                              // Allow only numbers, space, and + for country code
+                              e.target.value = e.target.value
+                                .replace(/[^+\d\s]/g, "")
+                                .slice(0, 15);
+                              onChange(e);
+                            }
                             : null
                         }
                         onChange={(e) => {
