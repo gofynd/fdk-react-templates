@@ -61,18 +61,16 @@ function ContactSupport({
       });
     }
     if (prefillErrors?.comment) {
-      const isTooLong = values?.comment?.length > 500;
       setError("comment", {
         type: "manual",
-        message: isTooLong
-          ? t("resource.contact_us.entered_msg_greater_than_500_char")
-          : t("resource.contact_us.please_enter_your_comment"),
+        message: t("resource.contact_us.please_enter_your_comment"),
       });
     }
   }, [prefillErrors, setError, t]);
 
   const [focusedInput, setFocusedInput] = useState(null);
   const [text, setText] = useState("");
+
   const inputFields = [
     {
       type: "text",
@@ -285,17 +283,6 @@ function ContactSupport({
                     rules={{
                       required: field.required,
                       pattern: field.pattern,
-                      validate:
-                        field.name === "comment"
-                          ? (val) => {
-                              if (val && val.length > 500) {
-                                return t(
-                                  "resource.contact_us.entered_msg_greater_than_500_char"
-                                );
-                              }
-                              return true;
-                            }
-                          : undefined,
                     }}
                     render={({ field: { onChange, value } }) => (
                       <FyInput
