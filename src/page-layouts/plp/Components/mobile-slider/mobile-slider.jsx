@@ -5,7 +5,6 @@ import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import { getProductImgAspectRatio } from "../../../../helper/utils";
 import Viewer3D from "../viewer-3d/viewer-3d";
 import * as styles from "./mobile-slider.less";
-import { useGlobalTranslation } from "fdk-core/utils";
 
 function MobileSlider({
   images,
@@ -15,7 +14,6 @@ function MobileSlider({
   setCurrentImageIndex,
   slideTabCentreNone = false,
 }) {
-  const { t } = useGlobalTranslation("translation");
   const settings = {
     dots: true,
     infinite: !images?.length === 1,
@@ -195,7 +193,7 @@ function MobileSlider({
             )}
             {product?.custom_order?.is_custom_order && (
               <div className={`${styles.badge} ${styles.b4}`}>
-                {t("resource.product.made_to_order")}
+                Made to Order
               </div>
             )}
           </div>

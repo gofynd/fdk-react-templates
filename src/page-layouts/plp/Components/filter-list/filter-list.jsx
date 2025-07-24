@@ -4,14 +4,12 @@ import * as styles from "./filter-list.less";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import CustomRangeSlider from "../../../../components/range-slider/range-slider";
 import { isRunningOnClient } from "../../../../helper/utils";
-import { useGlobalTranslation } from "fdk-core/utils";
 
 function FilterList({
   filter,
   isCollapsedView = true,
-  onFilterUpdate = () => { },
+  onFilterUpdate = () => {},
 }) {
-  const { t } = useGlobalTranslation("translation");
   const [searchText, setSearchText] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
@@ -149,7 +147,7 @@ function FilterList({
               <input
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
-                placeholder={t("resource.facets.search")}
+                placeholder="Search"
                 className={`${styles.text}`}
               />
               <SvgWrapper
@@ -218,7 +216,7 @@ function FilterList({
                   <div
                     className={`${styles["filter__item"]} ${styles.flexCenter} ${styles["caption-normal"]}`}
                   >
-                    {t("resource.common.empty_state")}
+                    No Result Found
                   </div>
                 </li>
               )}
@@ -231,8 +229,8 @@ function FilterList({
               onClick={expandFilter}
             >
               <span className={styles.label}>
-                {isExpanded && <span>{t("resource.facets.view_less")}</span>}
-                {!isExpanded && <span>{t("resource.facets.view_more")}</span>}
+                {isExpanded && <span>View Less</span>}
+                {!isExpanded && <span>View More</span>}
               </span>
               <SvgWrapper
                 className={`${styles["arrow-icon"]} ${
@@ -256,7 +254,6 @@ function FilterList({
                 max={value.max}
                 selectedMin={value?.selected_min}
                 selectedMax={value?.selected_max}
-                postfix={value?.display?.includes("%") ? "%" : ""}
                 onSliderUpdate={(e) =>
                   handleSliderUpdate({ ...e, value, filter })
                 }
@@ -321,7 +318,7 @@ function FilterList({
               <input
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
-                placeholder={t("resource.facets.search")}
+                placeholder="Search"
                 className={styles["search__input"]}
               />
             </div>
@@ -393,9 +390,7 @@ function FilterList({
                 </React.Fragment>
               ))
             ) : (
-              <li className={styles.emptyMessage}>
-                {t("resource.common.empty_state")}
-              </li>
+              <li className={styles.emptyMessage}>No Result Found</li>
             )}
           </ul>
         </div>
