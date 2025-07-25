@@ -519,7 +519,7 @@ h5,
 .chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__deliveryDateWrapper___TcR1g .chip-item__deliveryDate___o3m1j {
   font-weight: 500;
   font-size: 12px;
-  text-align: right;
+  text-align: end;
   color: var(--successText, #1c958f);
   align-self: center;
   margin-inline-start: 8px;
@@ -703,7 +703,10 @@ h5,
   stroke-width: 1;
 }
 .chip-item__sModalContainer___ARs9G .chip-item__sizeModalErrCls___QFoKd {
-  padding: 0 0 4px 24px;
+  padding-top: 0;
+  padding-inline-end: 0;
+  padding-bottom: 4px;
+  padding-inline-start: 24px;
   margin-top: -12px;
   height: 22px;
   font-weight: 600;
@@ -2064,7 +2067,7 @@ h5,
   font-weight: 600;
 }
 .free-gift-item__freeArticleContainer___wFbcr .free-gift-item__quantityCount___zoOkQ {
-  margin-left: 8px;
+  margin-inline-start: 8px;
   color: var(--textBody);
   font-weight: 400;
 }
@@ -2498,16 +2501,6 @@ h5,
 }
 .accordion__accordionItem___X6mJZ .accordion__accordionRow___BbEFH .accordion__accordionBox___NcNK_ .accordion__accordionContent___vRpqI li {
   margin-bottom: 4px;
-}
-.accordion__accordionContentImages___cgp_Q {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-}
-.accordion__accordionContentImageItem____FBCe {
-  display: flex;
-  align-items: center;
 }
 .accordion__accordionContentImg___lbTPr {
   border-radius: 50%;

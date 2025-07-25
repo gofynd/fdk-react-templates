@@ -54,6 +54,7 @@ import SvgWrapper from "../core/svgWrapper/SvgWrapper";
 import * as styles from "./address-item.less";
 import { getAddressStr, translateDynamicLabel } from "../../helper/utils";
 import { useGlobalTranslation } from "fdk-core/utils";
+import ForcedLtr from "../forced-ltr/forced-ltr";
 
 const AddressType = {
   area: "",
@@ -127,7 +128,7 @@ function AddressItem({
         className={styles.phEnd}
         style={{ marginInlineStart: showAddressSelectionCheckbox ? "25px" : 0 }}
       >
-        {addressItem.country_phone_code + "-" + addressItem.phone}
+         <ForcedLtr text={addressItem.country_phone_code + "-" + addressItem.phone}/>
       </div>
       <>{belowAddressSlot}</>
     </div>
