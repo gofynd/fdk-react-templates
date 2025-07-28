@@ -367,8 +367,8 @@ h5,
   display: flex;
   align-items: center;
   background-color: var(--errorBackground, #e6d5d5);
-  border: 1px dashed var(--errorText, #b24141);
-  color: var(--errorText, #b24141);
+  border: 1px dashed var(--errorText, #ff3333);
+  color: var(--errorText, #ff3333);
 }
 .forget-password__forgotPasswordWrapper___dytr2 .forget-password__forgotPasswordAlert___tAU9Y.forget-password__alert-success___IDyO1 {
   background-color: #eefefa;
@@ -381,7 +381,7 @@ h5,
   font-size: 13px;
 }
 .forget-password__forgotPasswordWrapper___dytr2 .forget-password__forgotPasswordAlert___tAU9Y .forget-password__alert-link___WEvmv {
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
   font-size: 9px;
   cursor: pointer;
 }
@@ -423,17 +423,17 @@ h5,
   line-height: 140%;
 }
 .forget-password__forgotPasswordWrapper___dytr2 .forget-password__forgotPasswordInputGroup___XQ61I .forget-password__emailErrorMessage___vW0zC {
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
   font-size: 12px;
   font-weight: 400;
   line-height: 16.8px;
   margin-top: 8px;
 }
 .forget-password__forgotPasswordWrapper___dytr2 .forget-password__errorInput___LgeyJ label {
-  color: var(--errorText, #b24141) !important;
+  color: var(--errorText, #ff3333) !important;
 }
 .forget-password__forgotPasswordWrapper___dytr2 .forget-password__errorInput___LgeyJ input {
-  border: 1px solid var(--errorText, #b24141) !important;
+  border: 1px solid var(--errorText, #ff3333) !important;
 }
 .forget-password__forgotPasswordWrapper___dytr2 .forget-password__forgotPasswordSubmitBtn___TjR_i {
   border: none;

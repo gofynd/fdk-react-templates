@@ -383,7 +383,7 @@ h5,
   line-height: 16.8px;
 }
 .edit-profile__required___rHXXW {
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
 }
 .edit-profile__editProfileNameInput___GNfyk {
   display: flex;
@@ -393,11 +393,11 @@ h5,
   display: none;
 }
 .edit-profile__errorInput___BZKHT input {
-  border: 1px solid var(--errorText, #b24141) !important;
+  border: 1px solid var(--errorText, #ff3333) !important;
 }
 .edit-profile__errorInput___BZKHT .edit-profile__errorText___wZQJH {
   display: inline-block;
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -405,7 +405,7 @@ h5,
   margin-top: 8px;
 }
 .edit-profile__errorInput___BZKHT label {
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
 }
 .edit-profile__editProfileAlert___HgY6w {
   height: 48px;
@@ -414,8 +414,8 @@ h5,
   display: flex;
   align-items: center;
   background-color: var(--errorBackground, #e6d5d5);
-  border: 1px dashed var(--errorText, #b24141);
-  color: var(--errorText, #b24141);
+  border: 1px dashed var(--errorText, #ff3333);
+  color: var(--errorText, #ff3333);
 }
 .edit-profile__editProfileAlert___HgY6w .edit-profile__alertMessage___eFskF {
   display: inline-block;
@@ -456,14 +456,14 @@ h5,
   position: absolute;
   display: none;
   top: 50%;
-  inset-inline-start: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
   width: 9px;
   height: 9px;
   border-radius: 50%;
   background: #919191;
 }
-[dir='rtl'] [dir="ltr"] .edit-profile__genderRadioContainer___aWiXv .edit-profile__radioContainer___K8gz5 .edit-profile__checkmark___yZQ_b:after {
+[dir="rtl"] [dir="ltr"] .edit-profile__genderRadioContainer___aWiXv .edit-profile__radioContainer___K8gz5 .edit-profile__checkmark___yZQ_b:after {
   transform: translate(50%, -50%);
 }
 [dir="ltr"] .edit-profile__genderRadioContainer___aWiXv .edit-profile__radioContainer___K8gz5 input:checked ~ .edit-profile__checkmark___yZQ_b:after {
@@ -474,7 +474,7 @@ h5,
   position: absolute;
   display: none;
   top: 50%;
-  inset-inline-start: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
   width: 9px;
   height: 9px;
@@ -948,10 +948,10 @@ h5,
   outline: none;
 }
 .verify-both__formWrapper___i4gyS .verify-both__inputGroup___WBoRS.verify-both__error___zKEjP .verify-both__label___m7Eae {
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
 }
 .verify-both__formWrapper___i4gyS .verify-both__inputGroup___WBoRS.verify-both__error___zKEjP input {
-  border-color: var(--errorText, #b24141);
+  border-color: var(--errorText, #ff3333);
 }
 .verify-both__submitBtn___rVsbN {
   border: none;
@@ -978,7 +978,7 @@ h5,
   font-weight: 400;
   line-height: 140%;
   margin-top: 8px;
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
 }
 .verify-both__resendOtpWrapper___Mq8mf {
   display: flex;
@@ -1345,7 +1345,7 @@ h5,
   flex-direction: column;
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__errorText___lRww6 {
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -1353,28 +1353,28 @@ h5,
   margin-top: 5px;
 }
 .mobile-number__mobileInputWrapper___Na12n.mobile-number__errorInput___TKkzT label {
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
   line-height: 16.8px;
 }
 .mobile-number__mobileInputWrapper___Na12n.mobile-number__errorInput___TKkzT .mobile-number__mobileNumberInput___iRnFG {
-  border: 1px solid var(--errorText, #b24141);
+  border: 1px solid var(--errorText, #ff3333);
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv {
   height: auto;
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__dialCodePreview___E0m4Z {
   border-inline: none;
-  padding-inline-end: 4px;
+  padding-right: 4px;
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG {
   width: 100%;
   font-weight: 400;
   display: flex;
-  border-inline-start: none;
-  padding-inline-start: 4px;
+  border-left: none;
+  padding-left: 4px;
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG:focus-visible {
   outline: none;
@@ -1384,7 +1384,7 @@ h5,
   opacity: 0.3;
 }
 .mobile-number__required___yHCeh {
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
 }
 .mobile-number__countryDropdown___GP6Fo {
   background-color: aquamarine;

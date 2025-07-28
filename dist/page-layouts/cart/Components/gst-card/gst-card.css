@@ -341,6 +341,16 @@ h5,
   border: 1px solid var(--dividerStokes, #d4d1d1);
   line-height: 140%;
 }
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  .gst-card__gstContainer___LJVYg {
+    padding: 16px;
+  }
+}
+@media only screen and (min-width: 769px) {
+  .gst-card__gstContainer___LJVYg {
+    border-radius: 8px;
+  }
+}
 @media only screen and (max-width: 480px) {
   .gst-card__gstContainer___LJVYg {
     padding: 16px;
@@ -396,7 +406,7 @@ h5,
   outline: none;
 }
 .gst-card__gstContainer___LJVYg .gst-card__inputBox___mMywn .gst-card__errorBox___F_YRZ {
-  border: var(--errorText, #b24141);
+  border: var(--errorText, #ff3333);
 }
 .gst-card__gstContainer___LJVYg .gst-card__inputBox___mMywn .gst-card__crossBtn___ERJyk {
   position: absolute;
@@ -404,7 +414,7 @@ h5,
   cursor: pointer;
 }
 .gst-card__colorErrorNormal___qjGLA {
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
 }
 .gst-card__colorSuccessNormal___cN34g {
   color: var(--successText, #1c958f);

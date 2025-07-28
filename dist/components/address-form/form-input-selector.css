@@ -340,7 +340,7 @@ h5,
   position: relative;
 }
 .fy-input__inputContainer___Du9V3 .fy-input__error___wplxk {
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
   padding-top: 5px;
   font-weight: 400;
   font-size: 12px;
@@ -351,10 +351,10 @@ h5,
   line-height: 21px;
 }
 .fy-input__label___YQgmr span {
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
 }
 .fy-input__required___MaAlL {
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
 }
 .fy-input__floating___jgtoq {
   position: absolute;
@@ -401,7 +401,7 @@ h5,
   border-color: var(--buttonPrimary, #4e3f09);
 }
 .fy-input__inputError___KsMkv {
-  border-color: var(--errorText, #b24141) !important;
+  border-color: var(--errorText, #ff3333) !important;
 }
 .fy-input__no-border____9qYF {
   border: none;
@@ -444,19 +444,6 @@ h5,
   display: flex;
   align-items: center;
   position: relative;
-}
-.fy-input__adornmentContainer___MtgI6 .fy-input__startAdornment___SVGGG,
-.fy-input__adornmentContainer___MtgI6 .fy-input__endAdornment___ce3Ta {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 0.5rem;
-}
-.fy-input__adornmentContainer___MtgI6 .fy-input__startAdornment___SVGGG {
-  margin-inline-end: 0.5rem;
-}
-.fy-input__adornmentContainer___MtgI6 .fy-input__endAdornment___ce3Ta {
-  margin-inline-start: 0.5rem;
 }
 .fy-input__adornmentContainer___MtgI6 input {
   flex: 1;
@@ -804,7 +791,7 @@ h5,
   position: relative;
 }
 .fy-input-group__inputGroupContainer___DUhUi .fy-input-group__error___oRFgR {
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
   font-weight: 400;
   font-size: 12px;
   padding-top: 5px;
@@ -815,7 +802,7 @@ h5,
   line-height: 21px;
 }
 .fy-input-group__required___A8_zF {
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
 }
 .fy-input-group__fyInput___ufjFf {
   accent-color: var(--buttonPrimary, #4e3f09);
@@ -1182,13 +1169,13 @@ h5,
   position: relative;
 }
 .fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__error___HSxiT {
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
   font-weight: 400;
   font-size: 12px;
   padding-top: 5px;
 }
 .fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__required___h4JQY {
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
 }
 .fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__dropdown___N1atH {
   box-sizing: border-box;
@@ -1206,7 +1193,7 @@ h5,
   cursor: not-allowed;
 }
 .fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__dropdown___N1atH.fy-dropdown__dropDownError___IqJV1 {
-  border-color: var(--errorText, #b24141);
+  border-color: var(--errorText, #ff3333);
 }
 .fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__dropdown___N1atH .fy-dropdown__dropdownButton___SqCaQ {
   border-radius: 3px;
@@ -1621,7 +1608,7 @@ h5,
   flex-direction: column;
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__errorText___lRww6 {
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -1629,28 +1616,28 @@ h5,
   margin-top: 5px;
 }
 .mobile-number__mobileInputWrapper___Na12n.mobile-number__errorInput___TKkzT label {
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
   line-height: 16.8px;
 }
 .mobile-number__mobileInputWrapper___Na12n.mobile-number__errorInput___TKkzT .mobile-number__mobileNumberInput___iRnFG {
-  border: 1px solid var(--errorText, #b24141);
+  border: 1px solid var(--errorText, #ff3333);
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv {
   height: auto;
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__dialCodePreview___E0m4Z {
   border-inline: none;
-  padding-inline-end: 4px;
+  padding-right: 4px;
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG {
   width: 100%;
   font-weight: 400;
   display: flex;
-  border-inline-start: none;
-  padding-inline-start: 4px;
+  border-left: none;
+  padding-left: 4px;
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG:focus-visible {
   outline: none;
@@ -1660,7 +1647,7 @@ h5,
   opacity: 0.3;
 }
 .mobile-number__required___yHCeh {
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
 }
 .mobile-number__countryDropdown___GP6Fo {
   background-color: aquamarine;

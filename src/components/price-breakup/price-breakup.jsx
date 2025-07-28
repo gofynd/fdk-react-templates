@@ -40,7 +40,6 @@ import { priceFormatCurrencySymbol, translateDynamicLabel } from "../../helper/u
 import * as styles from "./price-breakup.less";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
 import { useGlobalTranslation } from "fdk-core/utils";
-import ForcedLtr from "../forced-ltr/forced-ltr";
 
 function PriceBreakup({
   title,
@@ -101,8 +100,11 @@ function PriceBreakup({
       >
         {title || t("resource.common.price_summary")}
         {showItemsCount && (
-          <span>{` ( ${cartItemCount} ${cartItemCount > 1 ? t("resource.common.items_caps_plural") : t("resource.common.items_caps_singular")
-            } )`}</span>
+          <span>{` ( ${cartItemCount} ${
+            cartItemCount > 1
+              ? t("resource.common.items_caps_plural")
+              : t("resource.common.items_caps_singular")
+          } )`}</span>
         )}
       </div>
       {breakUpValuesList?.map((item, index) => (
@@ -118,14 +120,14 @@ function PriceBreakup({
             <>
               <div>{translateDynamicLabel(item?.display, t)}</div>
               <div className={Number(item.value) < 0 ? styles.discount : ""}>
-              <ForcedLtr text={priceFormatCurrencySymbol(item?.currency_symbol, item?.value)}/>
+                {priceFormatCurrencySymbol(item?.currency_symbol, item?.value)}
               </div>
             </>
           ) : (
             <>
               <div>{translateDynamicLabel(item?.display, t)}</div>
               <div>
-              <ForcedLtr text={priceFormatCurrencySymbol(item?.currency_symbol, item?.value)}/>
+                {priceFormatCurrencySymbol(item?.currency_symbol, item?.value)}
               </div>
             </>
           )}
@@ -134,19 +136,18 @@ function PriceBreakup({
       {isInternationalTaxLabel && (
         <div className={styles.internationalTaxLabel}>
           <SvgWrapper className={styles.infoIcon} svgSrc="infoIcon" />
-          <span>
-            {t("resource.common.delivery_custom_fees_notice")}
-          </span>
+          <span>{t("resource.common.delivery_custom_fees_notice")}</span>
         </div>
       )}
       {showTotalDiscount && totalDiscount > 0 && (
         <div className={styles.discountPreviewContiner}>
           <span className={styles.icon}>{greetingIcon}</span>
           <span className={styles.discountPreviewMessage}>
-            {discountGreetingMessage || t("resource.common.discount_greeting_message")}
+            {discountGreetingMessage ||
+              t("resource.common.discount_greeting_message")}
           </span>
           <span className={styles.discountPreviewAmount}>
-          <ForcedLtr text={priceFormatCurrencySymbol(currencySymbol, totalDiscount)}/>
+            {priceFormatCurrencySymbol(currencySymbol, totalDiscount)}
           </span>
         </div>
       )}
