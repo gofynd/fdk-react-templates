@@ -346,7 +346,7 @@ h5,
 }
 .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__filter___lnsey {
   position: absolute;
-  right: 0px;
+  inset-inline-end: 0px;
 }
 .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__filterArrowUp___g46yt {
   margin-inline-start: auto;
@@ -883,31 +883,6 @@ h5,
 .accordion__accordionContentImageItem____FBCe {
   display: flex;
   align-items: center;
-  position: relative;
-  cursor: pointer;
-}
-.accordion__accordionContentImageItem____FBCe .accordion__imagePreview___FOjGs {
-  position: absolute;
-  left: -155%;
-  top: -100px;
-  z-index: 20;
-}
-@media only screen and (min-width: 769px) {
-  .accordion__accordionContentImageItem____FBCe .accordion__imagePreview___FOjGs {
-    display: none;
-  }
-}
-.accordion__accordionContentImageItem____FBCe .accordion__largePreviewImg___P4ud_ {
-  width: 73px;
-  height: 92px;
-  border-radius: 4px;
-  background: lightgray 50% / cover no-repeat;
-  box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.16);
-  pointer-events: none;
-}
-/* Show on hover */
-.accordion__accordionContentImageItem____FBCe:hover .accordion__imagePreview___FOjGs {
-  display: block;
 }
 .accordion__accordionContentImg___lbTPr {
   border-radius: 50%;

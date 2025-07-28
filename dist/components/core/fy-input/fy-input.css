@@ -340,7 +340,7 @@ h5,
   position: relative;
 }
 .fy-input__inputContainer___Du9V3 .fy-input__error___wplxk {
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
   padding-top: 5px;
   font-weight: 400;
   font-size: 12px;
@@ -351,10 +351,10 @@ h5,
   line-height: 21px;
 }
 .fy-input__label___YQgmr span {
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
 }
 .fy-input__required___MaAlL {
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
 }
 .fy-input__floating___jgtoq {
   position: absolute;
@@ -401,7 +401,7 @@ h5,
   border-color: var(--buttonPrimary, #4e3f09);
 }
 .fy-input__inputError___KsMkv {
-  border-color: var(--errorText, #ff3333) !important;
+  border-color: var(--errorText, #b24141) !important;
 }
 .fy-input__no-border____9qYF {
   border: none;
@@ -444,6 +444,19 @@ h5,
   display: flex;
   align-items: center;
   position: relative;
+}
+.fy-input__adornmentContainer___MtgI6 .fy-input__startAdornment___SVGGG,
+.fy-input__adornmentContainer___MtgI6 .fy-input__endAdornment___ce3Ta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.5rem;
+}
+.fy-input__adornmentContainer___MtgI6 .fy-input__startAdornment___SVGGG {
+  margin-inline-end: 0.5rem;
+}
+.fy-input__adornmentContainer___MtgI6 .fy-input__endAdornment___ce3Ta {
+  margin-inline-start: 0.5rem;
 }
 .fy-input__adornmentContainer___MtgI6 input {
   flex: 1;

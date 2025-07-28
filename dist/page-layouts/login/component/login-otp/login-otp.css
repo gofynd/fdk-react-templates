@@ -411,7 +411,7 @@ h5,
 .login-otp__loginInputGroup____7Nbd .login-otp__changeBtn___yaRV5 {
   color: var(--buttonPrimary, #4e3f09);
   text-align: center;
-  margin-left: 8px;
+  margin-inline-start: 8px;
   font-size: 14px;
   font-weight: 600;
   line-height: 140%;
@@ -434,7 +434,7 @@ h5,
   line-height: 16.8px;
 }
 .login-otp__loginInputGroup____7Nbd .login-otp__loginInputTitle___oQ_Yc.login-otp__error___gM8rr {
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
 }
 .login-otp__loginInputGroup____7Nbd input {
   width: 100%;
@@ -451,7 +451,7 @@ h5,
   letter-spacing: -0.28px;
 }
 .login-otp__loginInputGroup____7Nbd input.login-otp__error___gM8rr {
-  border-color: var(--errorText, #ff3333);
+  border-color: var(--errorText, #b24141);
 }
 .login-otp__password-lable-wrapper___AmG_5 {
   display: flex;
@@ -463,7 +463,7 @@ h5,
   font-weight: 400;
   line-height: 140%;
   margin-top: 8px;
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
 }
 .login-otp__loading___tFXPV div {
   width: 100%;
@@ -815,7 +815,7 @@ h5,
   flex-direction: column;
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__errorText___lRww6 {
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -823,28 +823,28 @@ h5,
   margin-top: 5px;
 }
 .mobile-number__mobileInputWrapper___Na12n.mobile-number__errorInput___TKkzT label {
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
   line-height: 16.8px;
 }
 .mobile-number__mobileInputWrapper___Na12n.mobile-number__errorInput___TKkzT .mobile-number__mobileNumberInput___iRnFG {
-  border: 1px solid var(--errorText, #ff3333);
+  border: 1px solid var(--errorText, #b24141);
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv {
   height: auto;
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__dialCodePreview___E0m4Z {
   border-inline: none;
-  padding-right: 4px;
+  padding-inline-end: 4px;
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG {
   width: 100%;
   font-weight: 400;
   display: flex;
-  border-left: none;
-  padding-left: 4px;
+  border-inline-start: none;
+  padding-inline-start: 4px;
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG:focus-visible {
   outline: none;
@@ -854,7 +854,7 @@ h5,
   opacity: 0.3;
 }
 .mobile-number__required___yHCeh {
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
 }
 .mobile-number__countryDropdown___GP6Fo {
   background-color: aquamarine;

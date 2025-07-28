@@ -339,7 +339,7 @@ h5,
   flex-direction: column;
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__errorText___lRww6 {
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -347,28 +347,28 @@ h5,
   margin-top: 5px;
 }
 .mobile-number__mobileInputWrapper___Na12n.mobile-number__errorInput___TKkzT label {
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
   line-height: 16.8px;
 }
 .mobile-number__mobileInputWrapper___Na12n.mobile-number__errorInput___TKkzT .mobile-number__mobileNumberInput___iRnFG {
-  border: 1px solid var(--errorText, #ff3333);
+  border: 1px solid var(--errorText, #b24141);
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv {
   height: auto;
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__dialCodePreview___E0m4Z {
   border-inline: none;
-  padding-right: 4px;
+  padding-inline-end: 4px;
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG {
   width: 100%;
   font-weight: 400;
   display: flex;
-  border-left: none;
-  padding-left: 4px;
+  border-inline-start: none;
+  padding-inline-start: 4px;
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG:focus-visible {
   outline: none;
@@ -378,7 +378,7 @@ h5,
   opacity: 0.3;
 }
 .mobile-number__required___yHCeh {
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
 }
 .mobile-number__countryDropdown___GP6Fo {
   background-color: aquamarine;

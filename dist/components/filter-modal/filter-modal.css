@@ -361,7 +361,7 @@ h5,
   letter-spacing: -0.28px;
 }
 .filter-modal__modalContent____3waZ .filter-modal__leftPane___nED3d .filter-modal__filterNameItem___WSuyw.filter-modal__active___OXXZU {
-  border-right: 2px solid var(--buttonPrimary, #4e3f09);
+  border-inline-end: 2px solid var(--buttonPrimary, #4e3f09);
 }
 .filter-modal__modalContent____3waZ .filter-modal__leftPane___nED3d .filter-modal__filterNameItem___WSuyw.filter-modal__active___OXXZU .filter-modal__filterNameTitle___JgHWd {
   font-weight: 600;
@@ -836,7 +836,7 @@ h5,
 }
 .filter-list__filter__list--items___vtOJk .filter-list__filter__item--value___PVzdh {
   color: var(--textBody, #3c3131);
-  margin-right: 4px;
+  margin-inline-end: 4px;
   text-overflow: ellipsis;
   overflow: hidden;
 }
@@ -926,7 +926,7 @@ h5,
   padding: 24px 12px;
   overflow-x: auto;
   scroll-behavior: smooth;
-  scroll-margin-left: 24px;
+  scroll-margin-inline-start: 24px;
 }
 .filter-list__filter__list___rtO83 .filter-list__filter__popup--content___hMKDx.filter-list__emptyPopupContent___f2RjY {
   justify-content: center;
@@ -1331,7 +1331,10 @@ h5,
 }
 .range-slider__CustomRangeSlider___Uo_rw .range-slider__price-Container--title___i8SYy {
   font-size: small;
-  margin: 0px 0px 12px 0px;
+  margin-top: 0;
+  margin-inline-end: 0px;
+  margin-bottom: 12px;
+  margin-inline-start: 0px;
   display: none;
 }
 @media only screen and (max-width: 480px) {
@@ -1380,7 +1383,7 @@ h5,
   font-size: 10px;
   font-weight: 500;
   margin-top: 4px;
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
 }
 .range-slider__CustomRangeSlider___Uo_rw .range-slider__rangeSlider___fC17Q {
   height: 4px;
@@ -1740,7 +1743,7 @@ h5,
   position: relative;
 }
 .fy-input__inputContainer___Du9V3 .fy-input__error___wplxk {
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
   padding-top: 5px;
   font-weight: 400;
   font-size: 12px;
@@ -1751,10 +1754,10 @@ h5,
   line-height: 21px;
 }
 .fy-input__label___YQgmr span {
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
 }
 .fy-input__required___MaAlL {
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
 }
 .fy-input__floating___jgtoq {
   position: absolute;
@@ -1801,7 +1804,7 @@ h5,
   border-color: var(--buttonPrimary, #4e3f09);
 }
 .fy-input__inputError___KsMkv {
-  border-color: var(--errorText, #ff3333) !important;
+  border-color: var(--errorText, #b24141) !important;
 }
 .fy-input__no-border____9qYF {
   border: none;
@@ -1844,6 +1847,19 @@ h5,
   display: flex;
   align-items: center;
   position: relative;
+}
+.fy-input__adornmentContainer___MtgI6 .fy-input__startAdornment___SVGGG,
+.fy-input__adornmentContainer___MtgI6 .fy-input__endAdornment___ce3Ta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.5rem;
+}
+.fy-input__adornmentContainer___MtgI6 .fy-input__startAdornment___SVGGG {
+  margin-inline-end: 0.5rem;
+}
+.fy-input__adornmentContainer___MtgI6 .fy-input__endAdornment___ce3Ta {
+  margin-inline-start: 0.5rem;
 }
 .fy-input__adornmentContainer___MtgI6 input {
   flex: 1;

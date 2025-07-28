@@ -339,7 +339,7 @@ h5,
   padding: 24px;
 }
 .register__required___npDAe {
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
 }
 .register__registerFormWrapper___nCdfI {
   margin-top: 10px;
@@ -495,11 +495,11 @@ h5,
   display: none;
 }
 .register__registerFormWrapper___nCdfI .register__errorInput___TI7Ng input {
-  border: 1px solid var(--errorText, #ff3333);
+  border: 1px solid var(--errorText, #b24141);
 }
 .register__registerFormWrapper___nCdfI .register__errorInput___TI7Ng .register__errorText___W8444 {
   display: inline-block;
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -507,10 +507,10 @@ h5,
   margin-top: 8px;
 }
 .register__registerFormWrapper___nCdfI .register__errorInput___TI7Ng label {
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
 }
 .register__registerFormWrapper___nCdfI .register__errorInput___TI7Ng .register__loginInputWrapper___uBT1u {
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
 }
 .register__registerFormWrapper___nCdfI .register__loginAlert___H8COF {
   height: 48px;
@@ -520,8 +520,8 @@ h5,
   align-items: center;
   font-size: 13px;
   background-color: var(--errorBackground, #e6d5d5);
-  border: 1px dashed var(--errorText, #ff3333);
-  color: var(--errorText, #ff3333);
+  border: 1px dashed var(--errorText, #b24141);
+  color: var(--errorText, #b24141);
 }
 .register__passwordInputWrapper___a2PM1 {
   position: relative;
@@ -533,7 +533,7 @@ h5,
 }
 .register__consentWrapper___eRJuQ .register__errorText___W8444 {
   display: inline-block;
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -896,7 +896,7 @@ h5,
   flex-direction: column;
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__errorText___lRww6 {
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -904,28 +904,28 @@ h5,
   margin-top: 5px;
 }
 .mobile-number__mobileInputWrapper___Na12n.mobile-number__errorInput___TKkzT label {
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
   line-height: 16.8px;
 }
 .mobile-number__mobileInputWrapper___Na12n.mobile-number__errorInput___TKkzT .mobile-number__mobileNumberInput___iRnFG {
-  border: 1px solid var(--errorText, #ff3333);
+  border: 1px solid var(--errorText, #b24141);
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv {
   height: auto;
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__dialCodePreview___E0m4Z {
   border-inline: none;
-  padding-right: 4px;
+  padding-inline-end: 4px;
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG {
   width: 100%;
   font-weight: 400;
   display: flex;
-  border-left: none;
-  padding-left: 4px;
+  border-inline-start: none;
+  padding-inline-start: 4px;
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG:focus-visible {
   outline: none;
@@ -935,7 +935,7 @@ h5,
   opacity: 0.3;
 }
 .mobile-number__required___yHCeh {
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
 }
 .mobile-number__countryDropdown___GP6Fo {
   background-color: aquamarine;
@@ -1365,10 +1365,10 @@ h5,
   outline: none;
 }
 .verify-both__formWrapper___i4gyS .verify-both__inputGroup___WBoRS.verify-both__error___zKEjP .verify-both__label___m7Eae {
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
 }
 .verify-both__formWrapper___i4gyS .verify-both__inputGroup___WBoRS.verify-both__error___zKEjP input {
-  border-color: var(--errorText, #ff3333);
+  border-color: var(--errorText, #b24141);
 }
 .verify-both__submitBtn___rVsbN {
   border: none;
@@ -1395,7 +1395,7 @@ h5,
   font-weight: 400;
   line-height: 140%;
   margin-top: 8px;
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
 }
 .verify-both__resendOtpWrapper___Mq8mf {
   display: flex;

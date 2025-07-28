@@ -22,7 +22,6 @@ function SinglePageShipment({
   convertHyperlocalTat = () => {},
   loader,
   buybox = {},
-  availableFOCount,
   totalValue = "",
   onPriceDetailsClick = () => {},
   customClassName,
@@ -82,7 +81,6 @@ function SinglePageShipment({
             isHyperlocal={isHyperlocal}
             convertHyperlocalTat={convertHyperlocalTat}
             buybox={buybox}
-            availableFOCount={availableFOCount}
             isCartValid={isCartValid}
           ></SingleShipmentContent>
           <StickyPayNow

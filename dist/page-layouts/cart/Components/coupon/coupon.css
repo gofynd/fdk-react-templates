@@ -338,16 +338,6 @@ h5,
   padding: 24px;
   border: 1px solid var(--dividerStokes, #d4d1d1);
 }
-@media only screen and (min-width: 769px) {
-  .coupon__couponBoxContainer___yJTiZ {
-    border-radius: 8px;
-  }
-}
-@media only screen and (min-width: 769px) and (max-width: 1024px) {
-  .coupon__couponBoxContainer___yJTiZ {
-    padding: 16px;
-  }
-}
 @media only screen and (max-width: 480px) {
   .coupon__couponBoxContainer___yJTiZ {
     padding: 16px;
@@ -452,7 +442,7 @@ h5,
   font-size: 12px;
   font-weight: 600;
   margin-inline-start: 14px;
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
 }
 .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponInputBox___mlvGS {
   position: relative;

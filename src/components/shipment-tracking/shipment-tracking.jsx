@@ -20,15 +20,14 @@ import {
   useNavigate,
   useGlobalStore,
   useFPI,
-  useGlobalTranslation,
+  useGlobalTranslation
 } from "fdk-core/utils";
 
 function ShipmentTracking({
   tracking,
-  shipmentInfo = {},
+  shipmentInfo,
   changeinit,
   invoiceDetails,
-  availableFOCount,
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -38,9 +37,9 @@ function ShipmentTracking({
   const [showDetailedTracking, setShowDetailedTracking] = useState(false);
   const getTime = (item) => {
     return convertUTCDateToLocalDate(
-      item?.created_ts ? item?.created_ts : item?.time,
-      "",
-      formatLocale(locale, countryCode)
+      item?.created_ts ? item?.created_ts : item?.time, 
+      "", 
+      formatLocale(locale, countryCode,true)
     );
   };
 
@@ -99,7 +98,7 @@ function ShipmentTracking({
       <div className={`${styles.status}`}>
         <div>
           <div className={`${styles.title} ${styles.boldsm}`}>
-            {t("resource.common.shipment")}: {shipmentInfo?.shipment_id}
+          {t("resource.common.shipment")}: {shipmentInfo?.shipment_id}
           </div>
           {shipmentInfo?.awb_no && (
             <div className={`${styles.awbText} ${styles.lightxxs}`}>
@@ -182,11 +181,7 @@ function ShipmentTracking({
                 onClick={() => update(item)}
                 className={`${styles.regularsm}`}
               >
-                {item?.text === "RETURN"
-                  ? t("resource.facets.return_caps")
-                  : item?.text === "CANCEL"
-                    ? t("resource.facets.cancel_caps")
-                    : item?.text}
+                {item?.text === "RETURN" ? t("resource.facets.return_caps") : item?.text === "CANCEL" ? t("resource.facets.cancel_caps") : item?.text}
               </div>
             ) : (
               <a
@@ -194,11 +189,7 @@ function ShipmentTracking({
                 href={`${item?.link}`}
                 className={`${styles.regularsm}`}
               >
-                {item?.text === "RETURN"
-                  ? t("resource.facets.return_caps")
-                  : item?.text === "CANCEL"
-                    ? t("resource.facets.cancel_caps")
-                    : item?.text}
+                {item?.text === "RETURN" ? t("resource.facets.return_caps") : item?.text === "CANCEL" ? t("resource.facets.cancel_caps") : item?.text}
               </a>
             )}
           </Fragment>
