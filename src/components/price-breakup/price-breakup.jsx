@@ -36,27 +36,23 @@
  */
 
 import React, { useMemo } from "react";
-import { priceFormatCurrencySymbol, translateDynamicLabel } from "../../helper/utils";
+import { priceFormatCurrencySymbol } from "../../helper/utils";
 import * as styles from "./price-breakup.less";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
-import { useGlobalTranslation } from "fdk-core/utils";
-import ForcedLtr from "../forced-ltr/forced-ltr";
 
 function PriceBreakup({
-  title,
+  title = "PRICE SUMMARY",
   breakUpValues = [],
   showItemsCount = true,
   cartItemCount = 0,
   currencySymbol = "₹",
   showTotalDiscount = true,
   includeZeroValues = false,
-  discountGreetingMessage,
+  discountGreetingMessage = "Yayy!!! You've saved",
   greetingIcon = <SvgWrapper svgSrc="celebration" className={styles.svgIcon} />,
   cardBorderRadius = "8px",
   isInternationalTaxLabel = false,
-  customClassName,
 }) {
-  const { t } = useGlobalTranslation("translation");
   const cssVar = {
     "--card-border-radius": `${cardBorderRadius}`,
   };
@@ -96,13 +92,12 @@ function PriceBreakup({
       style={cssVar}
       id="price-breakup-container-id"
     >
-      <div
-        className={`fontBody ${styles.priceSummaryHeading} ${customClassName}`}
-      >
-        {title || t("resource.common.price_summary")}
+      <div className={`fontBody ${styles.priceSummaryHeading}`}>
+        {title}
         {showItemsCount && (
-          <span>{` ( ${cartItemCount} ${cartItemCount > 1 ? t("resource.common.items_caps_plural") : t("resource.common.items_caps_singular")
-            } )`}</span>
+          <span>{` ( ${cartItemCount} ${
+            cartItemCount > 1 ? "ITEMS" : "ITEM"
+          } )`}</span>
         )}
       </div>
       {breakUpValuesList?.map((item, index) => (
@@ -111,21 +106,21 @@ function PriceBreakup({
             index !== breakUpValuesList.length - 1
               ? styles.priceSummaryItem
               : styles.priceSummaryItemTotal
-          } ${customClassName}`}
+          }`}
           key={item?.key}
         >
           {index !== breakUpValuesList.length - 1 ? (
             <>
-              <div>{translateDynamicLabel(item?.display, t)}</div>
+              <div>{item?.display}</div>
               <div className={Number(item.value) < 0 ? styles.discount : ""}>
-              <ForcedLtr text={priceFormatCurrencySymbol(item?.currency_symbol, item?.value)}/>
+                {priceFormatCurrencySymbol(item?.currency_symbol, item?.value)}
               </div>
             </>
           ) : (
             <>
-              <div>{translateDynamicLabel(item?.display, t)}</div>
+              <div>{item?.display}</div>
               <div>
-              <ForcedLtr text={priceFormatCurrencySymbol(item?.currency_symbol, item?.value)}/>
+                {priceFormatCurrencySymbol(item?.currency_symbol, item?.value)}
               </div>
             </>
           )}
@@ -135,7 +130,7 @@ function PriceBreakup({
         <div className={styles.internationalTaxLabel}>
           <SvgWrapper className={styles.infoIcon} svgSrc="infoIcon" />
           <span>
-            {t("resource.common.delivery_custom_fees_notice")}
+            Local taxes, duties or custom clearance fees may apply on delivery
           </span>
         </div>
       )}
@@ -143,10 +138,10 @@ function PriceBreakup({
         <div className={styles.discountPreviewContiner}>
           <span className={styles.icon}>{greetingIcon}</span>
           <span className={styles.discountPreviewMessage}>
-            {discountGreetingMessage || t("resource.common.discount_greeting_message")}
+            {discountGreetingMessage}
           </span>
           <span className={styles.discountPreviewAmount}>
-          <ForcedLtr text={priceFormatCurrencySymbol(currencySymbol, totalDiscount)}/>
+            {priceFormatCurrencySymbol(currencySymbol, totalDiscount)}
           </span>
         </div>
       )}
