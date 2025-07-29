@@ -367,6 +367,16 @@ h5,
   font-weight: 600;
   background: var(--pageBackground, #f8f8f8);
 }
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  .share-cart__cartSharePopup___ISttH .share-cart__cartShare___mjVv6 .share-cart__shareCartBox___Wlycv {
+    padding: 16px;
+  }
+}
+@media only screen and (min-width: 769px) {
+  .share-cart__cartSharePopup___ISttH .share-cart__cartShare___mjVv6 .share-cart__shareCartBox___Wlycv {
+    border-radius: 8px;
+  }
+}
 @media only screen and (max-width: 480px) {
   .share-cart__cartSharePopup___ISttH .share-cart__cartShare___mjVv6 .share-cart__shareCartBox___Wlycv {
     border-width: 1px 0;
@@ -742,7 +752,7 @@ h5,
   .share-cart-modal__sharePopup___mHeWh {
     position: fixed;
     top: 0;
-    inset-inline-start: 0;
+    left: 0;
     justify-content: center;
     width: 100vw;
     height: 100dvh;
@@ -778,7 +788,7 @@ h5,
   .share-cart-modal__sharePopup___mHeWh .share-cart-modal__close___qKEdK {
     position: absolute;
     top: 24px;
-    inset-inline-end: 16px;
+    right: 16px;
     width: 22px;
     height: 22px;
     display: flex !important;

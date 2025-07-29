@@ -6,7 +6,6 @@ import { getProductImgAspectRatio } from "../../../../helper/utils";
 import Viewer3D from "../viewer-3d/viewer-3d";
 import * as styles from "./mobile-slider.less";
 import { useGlobalTranslation } from "fdk-core/utils";
-import useLocaleDirection from "../../../../helper/hooks/useLocaleDirection";
 
 function MobileSlider({
   images,
@@ -17,7 +16,6 @@ function MobileSlider({
   slideTabCentreNone = false,
 }) {
   const { t } = useGlobalTranslation("translation");
-  const { isRTL } = useLocaleDirection();
   const settings = {
     dots: true,
     infinite: !images?.length === 1,
@@ -51,7 +49,6 @@ function MobileSlider({
         },
       },
     ],
-    rtl: isRTL,
   };
 
   const [showReplayButton, setShowReplayButton] = useState(false);

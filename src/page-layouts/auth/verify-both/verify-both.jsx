@@ -2,7 +2,6 @@ import React, { useEffect, useId } from "react";
 import { useForm } from "react-hook-form";
 import * as styles from "./verify-both.less";
 import { useGlobalTranslation } from "fdk-core/utils";
-import ForcedLtr from "../../../components/forced-ltr/forced-ltr";
 
 function VerifyBoth({
   isShowMobileOtp = true,
@@ -95,7 +94,7 @@ function VerifyMobile({
         <div>
           <p
             className={styles.otpSentMessage}
-          >{`${t("resource.common.otp_sent_to")}`}{<ForcedLtr text={submittedMobile}/>}</p>
+          >{`${t("resource.common.otp_sent_to")} ${submittedMobile}`}</p>
           <div className={styles.inputGroup}>
             <label className={styles.label} htmlFor={mobileOtpId}>
               {t("resource.common.enter_otp")}
@@ -106,7 +105,6 @@ function VerifyMobile({
               inputMode="numeric"
               pattern="\d*"
               maxLength={4}
-              dir="ltr"
               onInput={(e) => {
                 e.target.value = e.target.value
                   .replace(/[^0-9]/g, "")
@@ -200,7 +198,6 @@ function VerifyEmail({
               inputMode="numeric"
               pattern="\d*"
               maxLength={4}
-              dir="ltr"
               onInput={(e) => {
                 e.target.value = e.target.value
                   .replace(/[^0-9]/g, "")

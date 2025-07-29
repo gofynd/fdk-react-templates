@@ -9,7 +9,6 @@ import {
   useFPI,
   useGlobalTranslation
 } from "fdk-core/utils";
-import ForcedLtr from "../../../../components/forced-ltr/forced-ltr";
 
 function Coupon({
   title,
@@ -93,11 +92,11 @@ function Coupon({
               <div className={styles.couponAppliedSubtitles}>
                 <span>{t("resource.cart.you_have_saved")} </span>
                 <span>
-                  <ForcedLtr text={currencyFormat(
+                  {currencyFormat(
                     numberWithCommas(couponValue),
                     currencySymbol,
                     formatLocale(locale, countryCode, true)
-                  )} />
+                  )}
                 </span>
               </div>
             ) : (

@@ -1,8 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
 import * as styles from "./accordion.less";
+import { useViewport } from "../../helper/hooks";
 
 const Accordion = ({ items, onItemClick }) => {
+  const [activeIndex, setActiveIndex] = useState("");
+  const isTablet = useViewport(0, 768);
+
+  const ImagePreview = ({ data }) => {
+    return (
+      <>
+        {(activeIndex === data?.imgIndex || !isTablet) && (
+          <div className={styles.imagePreview}>
+            <img
+              src={data?.img}
+              loading="lazy"
+              alt={data?.alt}
+              className={styles.largePreviewImg}
+            />
+          </div>
+        )}
+      </>
+    );
+  };
   return (
     <div className={styles.accordionList}>
       <ul>
@@ -10,7 +30,11 @@ const Accordion = ({ items, onItemClick }) => {
           <li
             className={styles.accordionItem}
             key={index}
-            onClick={() => onItemClick(index)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onItemClick(index);
+              setActiveIndex("");
+            }}
           >
             <div className={styles.accordionRow}>
               <div className={styles.accordionBox}>
@@ -34,27 +58,73 @@ const Accordion = ({ items, onItemClick }) => {
                                   </span>
                                   {Array.isArray(content.value) ? (
                                     // Multiple images
-                                    <div className={styles.accordionContentImages}>
-                                      {content.value.map((imageObj, imgIndex) => (
-                                        <div
-                                          key={imageObj.id || imgIndex}
-                                          className={styles.accordionContentImageItem}
-                                        >
-                                          <img
-                                            src={imageObj.imageUrl}
-                                            alt={content.alt || content.key}
-                                            className={styles.accordionContentImg}
-                                          />
-                                        </div>
-                                      ))}
+                                    <div
+                                      className={styles.accordionContentImages}
+                                    >
+                                      {content.value.map(
+                                        (imageObj, imgIndex) => (
+                                          <div
+                                            key={imageObj.id || imgIndex}
+                                            className={
+                                              styles.accordionContentImageItem
+                                            }
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              setActiveIndex((prev) =>
+                                                prev !==
+                                                `content-child-${imgIndex}`
+                                                  ? `content-child-${imgIndex}`
+                                                  : ""
+                                              );
+                                            }}
+                                          >
+                                            <img
+                                              src={imageObj.imageUrl}
+                                              alt={content.alt || content.key}
+                                              className={
+                                                styles.accordionContentImg
+                                              }
+                                            />
+                                            <ImagePreview
+                                              data={{
+                                                img: imageObj.imageUrl,
+                                                alt: content.alt || content.key,
+                                                imgIndex: `content-child-${imgIndex}`,
+                                              }}
+                                            />
+                                          </div>
+                                        )
+                                      )}
                                     </div>
                                   ) : (
                                     // Single image
-                                    <img
-                                      src={content.value}
-                                      alt={content.alt || content.key}
-                                      className={styles.accordionContentImg}
-                                    />
+                                    <div
+                                      className={
+                                        styles.accordionContentImageItem
+                                      }
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setActiveIndex((prev) =>
+                                          prev !== `content-${i}`
+                                            ? `content-${i}`
+                                            : ""
+                                        );
+                                        // setShowPreview((prev) => !prev);
+                                      }}
+                                    >
+                                      <img
+                                        src={content.value}
+                                        alt={content.alt || content.key}
+                                        className={styles.accordionContentImg}
+                                      />
+                                      <ImagePreview
+                                        data={{
+                                          img: content.value,
+                                          alt: content.alt || content.key,
+                                          imgIndex: `content-${i}`,
+                                        }}
+                                      />
+                                    </div>
                                   )}
                                 </span>
                               </li>
@@ -67,11 +137,15 @@ const Accordion = ({ items, onItemClick }) => {
                               >
                                 <span className={styles.accordionContentInner}>
                                   {content.key && (
-                                    <span className={styles.accordionContentKey}>
+                                    <span
+                                      className={styles.accordionContentKey}
+                                    >
                                       {content.key}:{" "}
                                     </span>
                                   )}
-                                  <span className={styles.accordionContentValue}>
+                                  <span
+                                    className={styles.accordionContentValue}
+                                  >
                                     {content.value}
                                   </span>
                                 </span>
