@@ -19,6 +19,7 @@ function CheckoutPayment({
   onFailedGetCartShipmentDetails = () => {},
   customClassName,
   isCouponApplied,
+  redirectPaymentOptions,
 }) {
   const { t } = useGlobalTranslation("translation");
   const [showFailedMessage, setShowFailedMessage] = useState(false);
@@ -39,7 +40,7 @@ function CheckoutPayment({
       });
       onFailedGetCartShipmentDetails();
     } else if (urlParams.get("failed") === "true") {
-      showPaymentOptions();
+      redirectPaymentOptions();
       handleShowFailedMessage({
         failed: true,
         paymentErrMsg: urlParams?.get("error"),
