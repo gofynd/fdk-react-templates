@@ -87,10 +87,7 @@ export function validateName(name) {
 }
 
 export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
-  console.log("🔹 Initial input →", { date, format, locale });
-
   if (!date) {
-    console.warn("⚠️ No date provided. Returning 'Invalid date'");
     return "Invalid date";
   }
 
@@ -104,56 +101,51 @@ export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
       minute: "numeric",
       hour12: true,
     };
-    console.log("ℹ️ No format provided. Using default format →", format);
   }
 
   let parsedDate;
 
   try {
-    if (typeof date === "string") {
-      console.log("🔍 Input is a string. Checking for partial format...");
-
+    // Handle different date string formats
+    if (typeof date === 'string') {
+      // Check if it's a partial date like "Thu, 03 Jul" without year
       if (date.match(/^[A-Za-z]{3},\s+\d{1,2}\s+[A-Za-z]{3}$/)) {
+        // Add current year to make it a valid date
         const currentYear = new Date().getFullYear();
-        console.log("📆 Detected partial format. Using current year:", currentYear);
         parsedDate = new Date(`${date} ${currentYear}`);
-        console.log("📆 Parsed partial date →", parsedDate.toISOString());
-      } else {
+      } 
+      // Check if it's an ISO string or other standard format
+      else {
         parsedDate = new Date(date);
-        console.log("📆 Parsed ISO/standard string date →", parsedDate.toISOString());
       }
     } else {
       parsedDate = new Date(date);
-      console.log("📆 Parsed Date object or timestamp →", parsedDate.toISOString());
     }
 
+    // Check if the parsed date is valid
     if (isNaN(parsedDate.getTime())) {
-      console.error("❌ Invalid date after parsing →", parsedDate);
+      console.error('Invalid date provided:', date);
       return "Invalid date";
     }
 
+    // Convert the UTC date to the local date using toLocaleString() with specific time zone
     const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    console.log("🌐 Detected browser time zone →", browserTimezone);
-
     const options = {
       ...format,
       timeZone: browserTimezone,
     };
-    console.log("🛠️ Formatting options →", options);
 
+    // Convert the UTC date and time to the desired format
     const formattedDate = parsedDate
       .toLocaleString(locale, options)
       .replace(" at ", ", ");
-
-    console.log("✅ Final formatted date →", formattedDate);
+    
     return formattedDate;
   } catch (error) {
-    console.error("❗ Error formatting date:", error, "Original input →", date);
+    console.error('Error formatting date:', error, 'Original date:', date);
     return "Invalid date";
   }
 };
-
-
 export function validateEmailField(value) {
   const emailPattern =
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -263,14 +255,25 @@ export const getProductImgAspectRatio = function (
 };
 
 export const currencyFormat = (value, currencySymbol, locale = "en-IN") => {
-  if (currencySymbol && (value || value === 0)) {
-    if (/^[A-Z]+$/.test(currencySymbol)) {
-      return `${currencySymbol} ${value?.toLocaleString(locale)}`;
+  const formattingLocale = `${locale}-u-nu-latn`;
+
+  if (value != null) {
+    const formattedValue = value.toLocaleString(formattingLocale);
+
+    if (currencySymbol && /^[A-Z]+$/.test(currencySymbol)) {
+      return `${currencySymbol} ${formattedValue}`;
     }
-    return `${currencySymbol}${value?.toLocaleString(locale)}`;
+
+    if (currencySymbol) {
+      return `${currencySymbol}${formattedValue}`;
+    }
+
+    return formattedValue;
   }
-  return `${value?.toLocaleString(locale)}`;
+
+  return "";
 };
+
 
 export const getReviewRatingData = function (customMeta) {
   const data = {};
@@ -515,50 +518,8 @@ export function translateDynamicLabel(input, t) {
 
   return translated.split('.').pop() === safeInput ? input : translated;
 }
-export function injectScript(script) {
-  let scriptObject = {
-    src: script,
-  };
 
-  return new Promise((resolve, reject) => {
-    const script = document.createElement("script");
-    script.src = scriptObject.src;
-
-    // Resolve promise when script is loaded
-    script.onload = () => {
-      resolve();
-    };
-    script.onerror = () => {
-      reject(new Error(`Failed to load script: ${script.src}`));
-    };
-
-    document.body.appendChild(script);
-  });
+export function getLocaleDirection(fpi) {
+  const dir = fpi?.store?.getState()?.custom?.currentLocaleDetails?.direction;
+  return dir || "ltr";
 }
-
-export const getAddressFromComponents = (components, name) => {
-  const typeToName = Object.fromEntries(
-    components.flatMap(({ long_name, short_name, types }) =>
-      types.map((type) => [type, { short_name, long_name }])
-    )
-  );
-
-  const address = [
-    name,
-    typeToName["street_number"]?.long_name || null,
-    typeToName["route"]?.long_name || null,
-  ]
-    .filter(Boolean)
-    .join(", ");
-
-  return {
-    address: address || null,
-    area: typeToName["sublocality_level_2"]?.long_name || null,
-    landmark: typeToName["sublocality_level_1"]?.long_name || null,
-    city: typeToName["locality"]?.long_name || null,
-    state: typeToName["administrative_area_level_1"]?.long_name || null,
-    area_code: typeToName["postal_code"]?.long_name || null,
-    country: typeToName["country"]?.long_name || null,
-    country_iso_code: typeToName["country"]?.short_name || null,
-  };
-};

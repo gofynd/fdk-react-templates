@@ -73,6 +73,7 @@ function ContactSupport({
 
   const [focusedInput, setFocusedInput] = useState(null);
   const [text, setText] = useState("");
+
   const inputFields = [
     {
       type: "text",
@@ -224,11 +225,11 @@ function ContactSupport({
                         {contactInfo?.address?.address_line?.map((el, i) => (
                           <span key={i}>{el}&nbsp;</span>
                         ))}
-                        <span>{` ${contactInfo?.address?.city}`}</span>
+                        <span>{` ${contactInfo?.address?.city || ""}`}</span>
                         <span>
-                          &nbsp;{`${contactInfo?.address?.country}`}&nbsp;
+                          &nbsp;{`${contactInfo?.address?.country || ""}`}&nbsp;
                         </span>
-                        <span>{` ${contactInfo?.address?.pincode}`}</span>
+                        <span>{` ${contactInfo?.address?.pincode || ""}`}</span>
                       </div>
                     </div>
                   )}

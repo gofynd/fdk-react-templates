@@ -2,26 +2,9 @@
 
 .paymentContainer {
   margin-top: 20px;
-  @media @desktop {
-    border-radius: 8px;
-  }
   &.unsetMarginTop {
     margin-top: unset !important;
   }
-  margin-top: 12px;
-
-  @media @mobile-up {
-    margin-top: 20px;
-  }
-
-  .creditNote {
-    margin-bottom: 12px;
-
-    @media @mobile-up {
-      display: none;
-    }
-  }
-
   @media @mobile {
     margin-top: 12px;
 
@@ -32,12 +15,6 @@
 
   .reviewHeaderUnselect {
     padding: 24px;
-    @media @desktop {
-      border-radius: 8px;
-    }
-    @media @tablet-range {
-      padding: 16px;
-    }
     display: flex;
     border: 1px solid var(--dividerStokes);
 
@@ -57,7 +34,7 @@
       color: var(--textHeading);
     }
     .unsetPaddingLeft {
-      padding-left: 0 !important;
+      padding-inline-start: 0 !important;
     }
   }
   .paymentHeaderSelect {
@@ -65,9 +42,6 @@
     align-items: center;
     padding: 24px;
     border-radius: 8px 8px 0 0;
-    @media @tablet-range {
-      padding: 16px;
-    }
     border: 1px solid var(--dividerStokes);
     background-color: @PageBackground;
     &.unsetBorder {
@@ -99,7 +73,7 @@
       }
     }
     .unsetPaddingLeft {
-      padding-left: 0 !important;
+      padding-inline-start: 0 !important;
     }
   }
   .paymentFailedHeader {
