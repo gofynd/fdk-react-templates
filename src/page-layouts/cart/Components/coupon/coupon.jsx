@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
-import { currencyFormat, formatLocale, numberWithCommas } from "../../../../helper/utils";
+import { currencyFormat, formatLocale, numberWithCommas, translateDynamicLabel } from "../../../../helper/utils";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./coupon.less";
 import Modal from "../../../../components/core/modal/modal";
@@ -134,7 +134,7 @@ function Coupon({
               <div className={styles.cartErrorContainer}>
                 <SvgWrapper svgSrc="error-info-icon" />
                 <div className={styles.colorErrorNormal}>
-                  {errors?.root?.message}
+                  {translateDynamicLabel(errors?.root?.message, t)}
                 </div>
               </div>
             )}

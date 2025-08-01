@@ -43,8 +43,6 @@ export default function ChipItem({
   onRemoveIconClick = () => {},
   onOpenPromoModal,
   onClosePromoModal,
-  isCartValid = true,
-  inValidCartMsg = "",
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -200,13 +198,12 @@ export default function ChipItem({
   return (
     <>
       <div className={styles.cartItemsListContainer} key={itemIndex}>
-        {(isOutOfStock || !isCartValid) && (
+        {isOutOfStock && (
           <div
             className={`${styles["out-of-stock-chip"]} ${styles["new-cart-red-color"]}`}
           >
             <span>
               {translateDynamicLabel(singleItemDetails?.message, t) ||
-                (!isOutOfStock && translateDynamicLabel(inValidCartMsg, t)) ||
                 t("resource.common.out_of_stock")}
             </span>
             {isOutOfStock && (
@@ -225,14 +222,6 @@ export default function ChipItem({
               >
                 {" "}
                 {t("resource.facets.remove_caps")}
-              </span>
-            )}
-            {!isOutOfStock && (
-              <span
-                className={styles.removeAction}
-                onClick={(e) => navigate("/")}
-              >
-                {t("resource.common.continue_shopping")}
               </span>
             )}
           </div>

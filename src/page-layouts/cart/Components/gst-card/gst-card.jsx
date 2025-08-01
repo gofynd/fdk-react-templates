@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { numberWithCommas, currencyFormat, formatLocale } from "../../../../helper/utils";
+import { numberWithCommas, currencyFormat, formatLocale, translateDynamicLabel } from "../../../../helper/utils";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./gst-card.less";
 import {
@@ -77,7 +77,7 @@ function GstCard({
             </span>
           )}
           {isError && gstNumber.length > 0 && (
-            <span className={styles.colorErrorNormal}>{error.message}</span>
+            <span className={styles.colorErrorNormal}>{translateDynamicLabel(error.message, t)}</span>
           )}
           {!isApplied && (
             <span className={styles.statusInfo}>
