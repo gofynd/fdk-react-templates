@@ -419,3 +419,22 @@
   margin-top: 38px !important;
   min-height: unset !important;
 }
+
+@media @desktop {
+  .hideOnDesktop {
+    display: none;
+  }
+}
+@media @tablet {
+  .hideOnDesktop {
+    display: none;
+  }
+}
+@media @mobile {
+  .hideOnMobile {
+    display: none;
+  }
+  .hideOnDesktop {
+    display: block;
+  }
+}

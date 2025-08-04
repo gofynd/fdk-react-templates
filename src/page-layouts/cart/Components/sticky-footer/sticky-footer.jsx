@@ -1,5 +1,5 @@
 import React from "react";
-import { numberWithCommas, currencyFormat, formatLocale, isRunningOnClient } from "../../../../helper/utils";
+import { numberWithCommas, currencyFormat, formatLocale } from "../../../../helper/utils";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./sticky-footer.less";
 import {
@@ -116,7 +116,7 @@ function StickyFooter({
             onClick={onCheckoutClick}
           >
             {t("resource.section.cart.checkout_button_caps")}
-            <SvgWrapper svgSrc="angle-right" className={isRunningOnClient() && document.dir === 'rtl' ?  styles.rotate180 : ""} />
+            <SvgWrapper svgSrc="angle-right" />
           </button>
         </div>
       )}
