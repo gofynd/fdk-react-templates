@@ -4,20 +4,25 @@ import LeftArrow from "../../assets/images/slide-arrow-left.svg";
 import * as styles from "./slider-arrow.less";
 
 export const SliderNextArrow = (props) => {
-  const { onClick } = props;
+  const { onClick, nextArrowStyles } = props;
   return (
-    <div className={`slick-next ${styles.slickArrow}`} onClick={onClick} style={{right:"0px"}}>
+    <div
+      className={` ${styles.slickArrow} ${nextArrowStyles}`}
+      onClick={onClick}
+    >
       <RightArrow />
     </div>
   );
 };
 
 export const SliderPrevArrow = (props) => {
-  const { onClick } = props;
+  const { onClick, prevArrowStyles } = props;
   return (
-    <div className={`slick-prev ${styles.slickArrow}`} onClick={onClick}>
+    <div
+      className={` ${styles.slickArrow} ${prevArrowStyles}`}
+      onClick={onClick}
+    >
       <LeftArrow />
     </div>
   );
 };
-

@@ -150,9 +150,9 @@ function BlogList({
     pauseOnHover: true,
     cssEase: "linear",
     centerPadding: "75px",
-    arrows: !sliderProps?.autoplay,
-    nextArrow: <SliderNextArrow />,
-    prevArrow: <SliderPrevArrow />,
+    arrows: true,
+    nextArrow: <SliderNextArrow nextArrowStyles={styles.nextArrowStyles} />,
+    prevArrow: <SliderPrevArrow prevArrowStyles={styles.prevArrowStyles} />,
     infinite: sliderBlogs?.tems?.length > 1,
     responsive: [
       {
