@@ -115,6 +115,16 @@
     .extension {
       position: absolute;
     }
+
+    .b2bAvailableOffer {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      background-color: @ThemeAccentD5;
+      border-radius: 4px;
+    }
   }
   .productDescContainer {
     display: flex;
@@ -128,7 +138,7 @@
     }
 
     .productDesc {
-      min-width: 0;
+      width: 100%;
       .productBrand {
         margin-bottom: 4px;
         .text-line-clamp();
@@ -146,32 +156,28 @@
           text-align: center;
         }
       }
+
       .productPrice {
         display: flex;
         flex-wrap: wrap;
         align-items: baseline;
-        &--textCenter {
-          text-align: center;
-        }
+
         &.center {
           justify-content: center;
         }
 
         &--sale {
-          margin-inline-end: 8px;
+          margin-right: 8px;
         }
         &--regular {
           text-decoration: line-through;
           color: @TextLabel;
-          margin-inline-end: 4px;
+          margin-right: 4px;
           font-size: 12px;
           line-height: 14px;
         }
         &--discount {
           color: @SaleDiscountText;
-        }
-        &--textCenter {
-          text-align: center;
         }
       }
       .productVariants {
@@ -193,7 +199,7 @@
           }
           .shadeName,
           .shadeCount {
-            margin-inline-start: 4px;
+            margin-left: 4px;
             font-size: 12px;
             line-height: 14px;
             color: @TextBody;
@@ -205,12 +211,35 @@
             display: flex;
             isolation: isolate;
             .shadeColor:not(:first-child) {
-              margin-inline-start: -4px;
+              margin-left: -4px;
               z-index: -1;
             }
             .shadeColor:last-child {
               z-index: -2;
             }
+          }
+        }
+      }
+
+      .badge_section {
+        display: flex;
+        align-items: center;
+        margin-bottom: 4px;
+
+        .badge {
+          display: flex;
+          align-items: center;
+          padding: 4px 8px;
+          border-radius: 4px;
+          background-color: @SuccessText;
+          color: #fff;
+          font-size: 12px;
+          font-weight: 400 !important;
+          gap: 4px;
+
+          .info_icon {
+            display: flex;
+            align-items: center;
           }
         }
       }
@@ -227,24 +256,77 @@
       font-size: 12px;
       white-space: nowrap;
     }
+
+    .b2bAvailableOffers {
+      background: @ButtonSecondary;
+      font-weight: 500;
+      line-height: 16px;
+      letter-spacing: -0.24px;
+      text-transform: uppercase;
+      padding: 12px 16px;
+      height: 40px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .loginToViewPricing {
+      background: @ButtonSecondary;
+      font-size: 14px;
+      line-height: 18px;
+      letter-spacing: -0.28px;
+      border-radius: 4px;
+      padding: 8px;
+      height: 32px;
+      white-space: nowrap;
+      margin-top: 8px;
+      width: 100%;
+    }
+
+    .kycCompletionBadge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px;
+      margin: 8px 0px;
+      background-color: #fff5d6;
+      border-radius: 4px;
+      color: @TextHeading;
+
+      .kycCompletionBadgeIcon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 16px;
+        height: 16px;
+        color: #f5a300;
+      }
+
+      .kycCompletionBadgeText {
+        font-size: 12px;
+      }
+    }
   }
   @media @mobile {
     &.mob-grid-1-card {
       .imageContainer {
         .wishlistBtn {
           top: 16px;
-          inset-inline-end: 16px;
+          right: 16px;
         }
         .badge {
-          inset-inline-start: 16px;
+          left: 16px;
           top: 16px;
         }
         .review {
-          inset-inline-end: 16px;
+          right: 16px;
           bottom: 16px;
         }
         .extension {
-          inset-inline-start: 16px;
+          left: 16px;
+          bottom: 16px;
+        }
+        .b2bAvailableOffer {
+          left: 16px;
           bottom: 16px;
         }
       }
@@ -268,22 +350,35 @@
         .addToCart {
           width: 100%;
         }
+
+        .loginToViewPricing {
+          width: 100%;
+          font-size: 12px;
+        }
+
+        .b2bAvailableOffers {
+          width: 100%;
+        }
       }
       .imageContainer {
         .wishlistBtn {
           top: 8px;
-          inset-inline-end: 8px;
+          right: 8px;
         }
         .badge {
-          inset-inline-start: 8px;
+          left: 8px;
           top: 8px;
         }
         .review {
-          inset-inline-end: 8px;
+          right: 8px;
           bottom: 8px;
         }
         .extension {
-          inset-inline-start: 8px;
+          left: 8px;
+          bottom: 8px;
+        }
+        .b2bAvailableOffer {
+          left: 8px;
           bottom: 8px;
         }
       }
@@ -295,21 +390,33 @@
         width: 104px;
       }
 
+      .loginToViewPricing {
+        width: 100%;
+      }
+
+      .b2bAvailableOffers {
+        width: 104px;
+      }
+
       .imageContainer {
         .wishlistBtn {
           top: 24px;
-          inset-inline-end: 24px;
+          right: 24px;
         }
         .badge {
-          inset-inline-start: 24px;
+          left: 24px;
           top: 29px;
         }
         .review {
-          inset-inline-end: 24px;
+          right: 24px;
           bottom: 24px;
         }
         .extension {
-          inset-inline-start: 24px;
+          left: 24px;
+          bottom: 24px;
+        }
+        .b2bAvailableOffer {
+          left: 24px;
           bottom: 24px;
         }
       }
@@ -324,21 +431,33 @@
         width: 104px;
       }
 
+      .loginToViewPricing {
+        width: 100%;
+      }
+
+      .b2bAvailableOffers {
+        width: 104px;
+      }
+
       .imageContainer {
         .wishlistBtn {
           top: 12px;
-          inset-inline-end: 12px;
+          right: 12px;
         }
         .badge {
-          inset-inline-start: 12px;
+          left: 12px;
           top: 17px;
         }
         .review {
-          inset-inline-end: 12px;
+          right: 12px;
           bottom: 12px;
         }
         .extension {
-          inset-inline-start: 12px;
+          left: 12px;
+          bottom: 12px;
+        }
+        .b2bAvailableOffer {
+          left: 12px;
           bottom: 12px;
         }
       }
@@ -354,21 +473,34 @@
       .addToCart {
         width: 144px;
       }
+
+      .loginToViewPricing {
+        width: 100%;
+      }
+
+      .b2bAvailableOffers {
+        width: 144px;
+      }
+
       .imageContainer {
         .wishlistBtn {
           top: 24px;
-          inset-inline-end: 24px;
+          right: 24px;
         }
         .badge {
-          inset-inline-start: 24px;
+          left: 24px;
           top: 24px;
         }
         .review {
-          inset-inline-end: 24px;
+          right: 24px;
           bottom: 24px;
         }
         .extension {
-          inset-inline-start: 24px;
+          left: 24px;
+          bottom: 24px;
+        }
+        .b2bAvailableOffer {
+          left: 24px;
           bottom: 24px;
         }
       }
@@ -386,6 +518,14 @@
           width: 100%;
         }
 
+        .loginToViewPricing {
+          width: 100%;
+        }
+
+        .b2bAvailableOffers {
+          width: 100%;
+        }
+
         .productDesc {
           .productName {
             margin-bottom: 5px;
@@ -396,18 +536,22 @@
       .imageContainer {
         .wishlistBtn {
           top: 12px;
-          inset-inline-end: 12px;
+          right: 12px;
         }
         .badge {
-          inset-inline-start: 12px;
+          left: 12px;
           top: 12px;
         }
         .review {
-          inset-inline-end: 12px;
+          right: 12px;
           bottom: 12px;
         }
         .extension {
-          inset-inline-start: 12px;
+          left: 12px;
+          bottom: 12px;
+        }
+        .b2bAvailableOffer {
+          left: 12px;
           bottom: 12px;
         }
       }
@@ -431,7 +575,4 @@
 //     opacity: 1;
 //     transform: translateY(0);
 //   }
-// }
-// .textCenter {
-//   text-align: center;
 // }

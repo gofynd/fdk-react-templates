@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 18px;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 1.5;
+    line-height: 24px;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .reason-item__caption-medium___xZiVD,
 .reason-item__captionMedium___qy6tX {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .reason-item__caption-semi-bold___LEpl7,
 .reason-item__captionSemiBold___Jt9oT {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -260,11 +260,11 @@ h5,
 }
 .reason-item__mr-5___l5sqm,
 .reason-item__mr5___VEu5F {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .reason-item__mr-2___jtN_J,
 .reason-item__mr2___PgQFC {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .reason-item__py-5___FB2Mz,
 .reason-item__py5___MRDZz {
@@ -378,14 +378,6 @@ h5,
   appearance: none;
   width: 98%;
   resize: none;
-}
-.reason-item__reasonItem___X1uR_ .reason-item__textarea___XwP_2 .reason-item__error___IjRz1 {
-  color: var(--errorText, #ff3333);
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 16.8px;
-  padding-top: 8px;
 }
 .reason-item__regularRadio___zK0sj {
   color: var(--textHeading, #26201a);

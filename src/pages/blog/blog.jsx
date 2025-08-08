@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./blog.less";
@@ -10,40 +10,19 @@ import BlogFooter from "../../components/blog-footer/blog-footer";
 import EmptyState from "../../components/empty-state/empty-state";
 import InfiniteLoader from "../../components/core/infinite-loader/infinite-loader";
 import Pagination from "../../page-layouts/plp/Components/pagination/pagination";
-import {
-  useNavigate,
-  useGlobalStore,
-  useFPI,
-  useGlobalTranslation,
-} from "fdk-core/utils";
 
 import {
   isRunningOnClient,
   throttle,
   convertUTCDateToLocalDate,
-  formatLocale,
-  translateDynamicLabel,
 } from "../../helper/utils";
 import Shimmer from "../../components/shimmer/shimmer";
-import {
-  SliderNextArrow,
-  SliderPrevArrow,
-} from "../../components/slider-arrow/slider-arrow";
 
 function MemoizedSlide({ blog, index, sliderProps, getBlogTitle }) {
-  const { t } = useGlobalTranslation("translation");
-  const fpi = useFPI();
-  const i18nDetails = useGlobalStore(fpi?.getters?.i18N_DETAILS) || {};
-  const locale = i18nDetails?.language?.locale || "en";
-  const countryCode = i18nDetails?.countryCode || "IN";
   const getFormattedDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
     return isRunningOnClient()
-      ? convertUTCDateToLocalDate(
-          dateString,
-          options,
-          formatLocale(locale, countryCode, true)
-        )
+      ? convertUTCDateToLocalDate(dateString, options)
       : "";
   };
   const getBlogTag = (tags) => {
@@ -83,7 +62,7 @@ function MemoizedSlide({ blog, index, sliderProps, getBlogTitle }) {
           title={blog?.title}
           to={`/blog/${blog?.slug}`}
         >
-          {translateDynamicLabel(sliderProps?.btn_text, t)}
+          {sliderProps?.btn_text}
         </FDKLink>
       </div>
       <FyImage
@@ -91,7 +70,7 @@ function MemoizedSlide({ blog, index, sliderProps, getBlogTitle }) {
         src={blog?.feature_image?.secure_url || sliderProps?.fallback_image}
         isFixedAspectRatio={false}
         defer={false}
-        alt={`${t("resource.blog.slide_alt")}-${index}`}
+        alt={`slide-${index}`}
         showSkeleton={false}
         isImageFill
       />
@@ -112,11 +91,6 @@ function BlogList({
   ssrSearch,
   ssrFilters,
 }) {
-  const { t } = useGlobalTranslation("translation");
-  const fpi = useFPI();
-  const i18nDetails = useGlobalStore(fpi?.getters?.i18N_DETAILS) || {};
-  const locale = i18nDetails?.language?.locale || "en";
-  const countryCode = i18nDetails?.countryCode || "IN";
   const navigate = useNavigate();
   const location = useLocation();
   const [blogFilter, setBlogFilter] = useState(ssrFilters || []);
@@ -145,31 +119,15 @@ function BlogList({
     speed: Number(sliderProps?.slide_interval * 1000),
     slidesToShow: 1,
     slidesToScroll: 1,
-    swipeToSlide: false,
+    swipeToSlide: true,
     autoplay: sliderProps?.autoplay,
     pauseOnHover: true,
     cssEase: "linear",
     centerPadding: "75px",
-    arrows: true,
-    nextArrow: <SliderNextArrow nextArrowStyles={styles.nextArrowStyles} />,
-    prevArrow: <SliderPrevArrow prevArrowStyles={styles.prevArrowStyles} />,
+    arrows: false,
+    nextArrow: <SvgWrapper svgSrc="arrow-right" />,
+    prevArrow: <SvgWrapper svgSrc="arrow-left" />,
     infinite: sliderBlogs?.tems?.length > 1,
-    responsive: [
-      {
-        breakpoint: 768,
-        settings: {
-          arrows: false,
-          centerPadding: "32px",
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          arrows: false,
-          centerPadding: "20px",
-        },
-      },
-    ],
   });
 
   useEffect(() => {
@@ -283,11 +241,7 @@ function BlogList({
   const getFormattedDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
     return isRunningOnClient()
-      ? convertUTCDateToLocalDate(
-          dateString,
-          options,
-          formatLocale(locale, countryCode, true)
-        )
+      ? convertUTCDateToLocalDate(dateString, options)
       : "";
   };
   const getBlogTag = (tags) => {
@@ -423,33 +377,16 @@ function BlogList({
     <div>
       <div className={styles.blogContainer}>
         {blogFilter?.length === 0 && blogs?.page?.item_total === 0 && (
-          <EmptyState title={t("resource.blog.no_blogs_found")}></EmptyState>
+          <EmptyState title="No blogs found"></EmptyState>
         )}
         {showBlogSlideShow && (
           <div className={styles.sliderWrapper}>
             <Slider
               {...config}
               initialSlide={0}
-              className={`${styles.hideOnMobile}
-                ${sliderBlogs?.length <= 3 || windowWidth <= 480 ? "no-nav" : ""}
-              `}
-            >
-              {sliderBlogs?.items?.map((blog, index) => (
-                <MemoizedSlide
-                  key={index}
-                  blog={blog}
-                  index={index}
-                  getBlogTitle={getBlogTitle}
-                  sliderProps={sliderProps}
-                />
-              ))}
-            </Slider>
-            <Slider
-              {...config}
-              initialSlide={0}
-              className={`${styles.hideOnDesktop}
-                ${sliderBlogs?.length <= 3 || windowWidth <= 480 ? "no-nav" : ""}
-              `}
+              className={
+                sliderBlogs?.length <= 3 || windowWidth <= 480 ? "no-nav" : ""
+              }
             >
               {sliderBlogs?.items?.map((blog, index) => (
                 <MemoizedSlide
@@ -467,21 +404,17 @@ function BlogList({
           <div className={`${styles.filterWrapper__header}`}>
             <div>
               {blogFilter?.length > 0 && (
-                <span>
-                  {t("resource.blog.showing_results", {
-                    count: blogs?.page?.item_total,
-                  })}{" "}
-                </span>
+                <span>Showing {blogs?.page?.item_total} results of </span>
               )}
               {blogCount > 0 && (
                 <>
-                  <span>{blogCount}</span> {t("resource.common.items")}
+                  <span>{blogCount}</span> items
                 </>
               )}
             </div>
 
             <span className={`${styles.resetBtn}`} onClick={resetFilters}>
-              {blogFilter?.length > 0 && t("resource.facets.reset_all")}
+              {blogFilter?.length > 0 && "Reset All"}
             </span>
           </div>
 
@@ -504,7 +437,7 @@ function BlogList({
                 <input
                   type="text"
                   className={`${styles.blogSearch__input}`}
-                  placeholder={`${t("resource.common.search_here")}...`}
+                  placeholder="Search here..."
                   maxLength="80"
                   value={searchText}
                   onChange={(e) => searchTextUpdate(e?.target?.value)}
@@ -519,7 +452,7 @@ function BlogList({
           <div className={`${styles.blog__contentLeft}`}>
             <div className={`${styles.filterList}`}>
               {showFilters && blogFilter?.length > 0 && (
-                <div>{t("resource.facets.filtering_by")}:</div>
+                <div>Filtering by:</div>
               )}
               {showFilters &&
                 [...blogFilter].map((filter) => (
@@ -536,7 +469,7 @@ function BlogList({
 
             {blogFilter?.length > 0 && blogs?.page?.item_total === 0 && (
               <EmptyState
-                title={t("resource.blog.no_blogs_found")}
+                title="No blogs found"
                 customClassName={styles.emptyBlog}
               ></EmptyState>
             )}

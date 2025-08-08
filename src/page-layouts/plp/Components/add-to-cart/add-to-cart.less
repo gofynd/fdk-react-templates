@@ -48,10 +48,7 @@
 
     .productInfo {
       .product {
-        margin-top: 24px;
-        margin-inline-end: 24px;
-        margin-bottom: 0px;
-        margin-inline-start: 24px;
+        margin: 24px 24px 0px 24px;
         overflow: auto;
 
         @media @desktop {
@@ -121,7 +118,7 @@
             .ratingIcon {
               width: 14px;
               height: 14px;
-              margin-inline-start: 4px;
+              margin-left: 4px;
 
               /deep/ svg path {
                 fill: @ThemeAccentD2;
@@ -130,7 +127,7 @@
           }
 
           .separator {
-            border-inline-start: 1px solid @DividerStokes;
+            border-left: 1px solid @DividerStokes;
             height: 100%;
             margin: 0 6px;
             width: 1px;
@@ -160,7 +157,7 @@
           }
 
           &--marked {
-            margin-inline-start: 0.25rem;
+            margin-left: 0.25rem;
             color: @TextLabel;
             font-size: 12px;
             font-weight: 400;
@@ -170,7 +167,7 @@
           }
 
           &--discount {
-            margin-inline-start: 8px;
+            margin-left: 8px;
             color: @SaleDiscountText;
             font-size: 12px;
             font-style: normal;
@@ -237,7 +234,7 @@
         .crossIcon {
           position: absolute;
           top: 16px;
-          inset-inline-end: 16px;
+          right: 16px;
           cursor: pointer;
 
           @media @tablet {
@@ -245,60 +242,31 @@
           }
         }
 
-        .fulfillmentWrapper {
-          border-radius: @ButtonRadius;
-          border: 1px solid @DividerStokes;
-          padding: 16px;
-          margin: 24px 0;
+        .badge_section {
+          margin-bottom: 5px;
 
-          .deliveryBy {
-            color: @TextBody;
-            font-size: 16px;
-            font-weight: 600;
+          .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background-color: @SuccessText;
+            color: @White;
+            font-size: 12px;
+            font-weight: 400;
             line-height: normal;
-            letter-spacing: -0.32px;
+            letter-spacing: -0.24px;
 
-            .storeSellerLabel {
-              color: @ButtonLink;
-              font-size: 14px;
-              font-weight: 500;
-              line-height: normal;
-              letter-spacing: -0.28px;
-              text-decoration-line: underline;
-              text-transform: uppercase;
-              margin-left: 8px;
-              cursor: pointer;
-            }
-          }
-
-          .foList {
-            .fulfillmentOption {
+            .info_icon {
               display: flex;
-              margin-top: 16px;
-              gap: 8px;
-              cursor: pointer;
+              align-items: center;
+              width: 12px;
+              height: 12px;
 
-              .foDetails {
-                .promiseLabel {
-                  color: @TextHeading;
-                  font-size: 14px;
-                  font-weight: 500;
-                  line-height: normal;
-                  margin-bottom: 4px;
-                }
-
-                .foLabel {
-                  color: @TextLabel;
-                  font-size: 14px;
-                  font-weight: 400;
-                  line-height: 18px;
-                  letter-spacing: -0.28px;
-                  margin-top: 1px;
-                }
-              }
-
-              &:first-child {
-                margin-top: 0px;
+              /deep/ svg {
+                width: 100%;
+                height: 100%;
               }
             }
           }
@@ -321,12 +289,50 @@
           width: 13px;
         }
 
+        .fillSecondary {
+          fill: @ButtonSecondary;
+        }
+
         @media @tablet {
           padding: 16px 16px 32px;
         }
 
         .buyNow {
           border: 0.8px solid @ButtonPrimary;
+        }
+
+        .viewCart {
+          border: 1px solid @ButtonPrimary;
+          background-color: @ButtonSecondary;
+          color: @ButtonPrimary;
+
+          svg {
+            fill: @ButtonPrimary;
+            path {
+              fill: @ButtonPrimary;
+            }
+          }
+        }
+
+        .buttonSecondary {
+          background-color: @ButtonSecondary;
+          color: @ButtonPrimary;
+          border: 1px solid @ButtonPrimary;
+
+          svg {
+            fill: @ButtonPrimary !important;
+          }
+        }
+
+        .fullWidthButton {
+          flex: 1;
+          width: 100%;
+          background-color: @ButtonPrimary;
+          color: @ButtonSecondary;
+
+          svg {
+            fill: @ButtonSecondary !important;
+          }
         }
 
         button {
@@ -350,10 +356,15 @@
           @media @tablet {
             height: 40px;
           }
+
+          // svg path {
+          //   fill: @ButtonPrimary;
+          // }
         }
 
         .inputContainer {
           border: none;
+          // color: @ButtonPrimary;
         }
       }
     }
@@ -369,6 +380,11 @@
     margin-top: 16px;
   }
 
+  &.withQuantityWrapper {
+    justify-content: flex-start;
+    gap: 16px;
+  }
+
   .sizeWrapper {
     position: relative;
     min-width: 0;
@@ -376,7 +392,7 @@
     transition: all 0.5s;
 
     @media @tablet {
-      margin-inline-end: 8px;
+      margin-right: 8px;
     }
 
     .sizeButton {
@@ -399,7 +415,7 @@
       }
 
       .selectedSize {
-        text-align: start;
+        text-align: left;
         color: @TextHeading;
         border-radius: unset;
         .text-line-clamp();
@@ -457,6 +473,15 @@
   }
 }
 
+.sizeRowContainer {
+  width: 100%;
+  margin-bottom: 8px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
 .short-description {
   margin: 24px 0;
 }
@@ -476,6 +501,11 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
+  }
+
+  .quantityControl {
+    margin-top: 16px;
+    width: min-content;
   }
 
   & > div {
@@ -524,7 +554,7 @@
       width: 100%;
       height: 100%;
       top: 0;
-      inset-inline-start: 0;
+      left: 0;
 
       line {
         stroke: @DividerStokes;
@@ -556,4 +586,48 @@
 .disabledOption {
   text-decoration-line: line-through;
   color: @TextDisabled;
+}
+
+.childDetailsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+  width: 100%;
+
+  .childDetailBox {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    padding: 6px 12px;
+    background-color: @ThemeAccentL5;
+    border: 1px solid @DividerStokes;
+    border-radius: 24px;
+    font-size: 12px;
+
+    .childSize {
+      color: @TextHeading;
+      font-family: var(--font-header, "WorkSans");
+      text-align: center;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 900;
+      line-height: normal;
+      letter-spacing: -0.24px;
+    }
+
+    .childSeparator {
+      color: @TextBody;
+    }
+
+    .childQuantity {
+      color: @TextBody;
+      font-family: var(--font-body, "WorkSans");
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+      letter-spacing: -0.24px;
+    }
+  }
 }

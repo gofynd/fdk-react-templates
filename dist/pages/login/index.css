@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 18px;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 1.5;
+    line-height: 24px;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .login__caption-medium___yMaSs,
 .login__captionMedium___zV5AB {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .login__caption-semi-bold___ePjyl,
 .login__captionSemiBold___tFcYE {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -260,11 +260,11 @@ h5,
 }
 .login__mr-5___dGII4,
 .login__mr5___PAXJj {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .login__mr-2___oSjLx,
 .login__mr2___HdzY9 {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .login__py-5___BLQ6l,
 .login__py5___bGXl5 {
@@ -492,7 +492,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 18px;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -501,7 +501,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 1.5;
+    line-height: 24px;
   }
 }
 h5,
@@ -568,7 +568,7 @@ h5,
 .login-password__caption-medium_____KWc,
 .login-password__captionMedium___NujVg {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -581,7 +581,7 @@ h5,
 .login-password__caption-semi-bold___JR1YM,
 .login-password__captionSemiBold___jdU4j {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -646,11 +646,11 @@ h5,
 }
 .login-password__mr-5___Lshfi,
 .login-password__mr5____3Df_ {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .login-password__mr-2___T0_hr,
 .login-password__mr2___OFiDO {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .login-password__py-5___aH1bA,
 .login-password__py5___hFgUs {
@@ -779,10 +779,10 @@ input:focus-visible {
   opacity: 0.3;
 }
 .login-password__loginInputGroup___fg8lw.login-password__error___DIUG_ .login-password__loginInputTitle___zjz7X {
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
 }
 .login-password__loginInputGroup___fg8lw.login-password__error___DIUG_ input {
-  border-color: var(--errorText, #ff3333);
+  border-color: var(--errorText, #b24141);
 }
 .login-password__password-lable-wrapper___VUcRa {
   display: flex;
@@ -791,7 +791,7 @@ input:focus-visible {
   align-items: center;
 }
 .login-password__forgotBtnWrapper___eBGiZ {
-  text-align: end;
+  text-align: right;
 }
 .login-password__forgotBtnWrapper___eBGiZ .login-password__forgotBtn___ALzk8 {
   background: none;
@@ -812,7 +812,7 @@ input:focus-visible {
   font-weight: 400;
   line-height: 140%;
   margin-top: 8px;
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
 }
 .login-password__passwordToggle___OzbQC {
   height: 24px;
@@ -820,7 +820,7 @@ input:focus-visible {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  inset-inline-end: 12px;
+  right: 12px;
   cursor: pointer;
   background: none;
   border: none;
@@ -937,7 +937,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 18px;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -946,7 +946,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 1.5;
+    line-height: 24px;
   }
 }
 h5,
@@ -1013,7 +1013,7 @@ h5,
 .mobile-number__caption-medium___syZZb,
 .mobile-number__captionMedium___iKNxh {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -1026,7 +1026,7 @@ h5,
 .mobile-number__caption-semi-bold___Rbomr,
 .mobile-number__captionSemiBold___cKKg4 {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -1091,11 +1091,11 @@ h5,
 }
 .mobile-number__mr-5___gRl4u,
 .mobile-number__mr5___tOVbz {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .mobile-number__mr-2___UJPQR,
 .mobile-number__mr2___V6EUH {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .mobile-number__py-5___Co0IS,
 .mobile-number__py5___LSFQJ {
@@ -1170,7 +1170,7 @@ h5,
   flex-direction: column;
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__errorText___lRww6 {
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -1178,14 +1178,14 @@ h5,
   margin-top: 5px;
 }
 .mobile-number__mobileInputWrapper___Na12n.mobile-number__errorInput___TKkzT label {
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
   line-height: 16.8px;
 }
 .mobile-number__mobileInputWrapper___Na12n.mobile-number__errorInput___TKkzT .mobile-number__mobileNumberInput___iRnFG {
-  border: 1px solid var(--errorText, #ff3333);
+  border: 1px solid var(--errorText, #b24141);
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv {
   height: auto;
@@ -1209,7 +1209,7 @@ h5,
   opacity: 0.3;
 }
 .mobile-number__required___yHCeh {
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
 }
 .mobile-number__countryDropdown___GP6Fo {
   background-color: aquamarine;
@@ -1336,7 +1336,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 18px;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -1345,7 +1345,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 1.5;
+    line-height: 24px;
   }
 }
 h5,
@@ -1412,7 +1412,7 @@ h5,
 .login-otp__caption-medium___LLVOc,
 .login-otp__captionMedium___kPFGP {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -1425,7 +1425,7 @@ h5,
 .login-otp__caption-semi-bold___ITiSo,
 .login-otp__captionSemiBold___HdiR4 {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -1490,11 +1490,11 @@ h5,
 }
 .login-otp__mr-5___Ojg9V,
 .login-otp__mr5___VXQm_ {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .login-otp__mr-2___nkiKx,
 .login-otp__mr2___aEsg3 {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .login-otp__py-5___fGlIz,
 .login-otp__py5___jvmo3 {
@@ -1664,7 +1664,7 @@ h5,
   line-height: 16.8px;
 }
 .login-otp__loginInputGroup____7Nbd .login-otp__loginInputTitle___oQ_Yc.login-otp__error___gM8rr {
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
 }
 .login-otp__loginInputGroup____7Nbd input {
   width: 100%;
@@ -1681,7 +1681,7 @@ h5,
   letter-spacing: -0.28px;
 }
 .login-otp__loginInputGroup____7Nbd input.login-otp__error___gM8rr {
-  border-color: var(--errorText, #ff3333);
+  border-color: var(--errorText, #b24141);
 }
 .login-otp__password-lable-wrapper___AmG_5 {
   display: flex;
@@ -1693,7 +1693,7 @@ h5,
   font-weight: 400;
   line-height: 140%;
   margin-top: 8px;
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
 }
 .login-otp__loading___tFXPV div {
   width: 100%;
@@ -1812,7 +1812,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 18px;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -1821,7 +1821,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 1.5;
+    line-height: 24px;
   }
 }
 h5,
@@ -1888,7 +1888,7 @@ h5,
 .login-mode-button__caption-medium___sMaLa,
 .login-mode-button__captionMedium___Bnrn4 {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -1901,7 +1901,7 @@ h5,
 .login-mode-button__caption-semi-bold____qWoY,
 .login-mode-button__captionSemiBold___R3HRn {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -1966,11 +1966,11 @@ h5,
 }
 .login-mode-button__mr-5___f_aDn,
 .login-mode-button__mr5___UHJOX {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .login-mode-button__mr-2___tzSde,
 .login-mode-button__mr2___NgLmw {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .login-mode-button__py-5___eXLUS,
 .login-mode-button__py5___kNtbB {
@@ -2057,7 +2057,7 @@ h5,
   flex: 0 0 24px;
 }
 .login-mode-button__loginModeBtn___BqUzp .login-mode-button__loginModeLabel___BYT3_ {
-  margin-inline-end: 24px;
+  margin-right: 24px;
   color: var(--textHeading, #26201a);
   font-size: 14px;
   font-style: normal;
@@ -2175,7 +2175,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 18px;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -2184,7 +2184,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 1.5;
+    line-height: 24px;
   }
 }
 h5,
@@ -2251,7 +2251,7 @@ h5,
 .login-register-toggle__caption-medium___TPPc2,
 .login-register-toggle__captionMedium___SG74Q {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -2264,7 +2264,7 @@ h5,
 .login-register-toggle__caption-semi-bold___jC8wa,
 .login-register-toggle__captionSemiBold___ps_L5 {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -2329,11 +2329,11 @@ h5,
 }
 .login-register-toggle__mr-5___v7zhF,
 .login-register-toggle__mr5___c7UOL {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .login-register-toggle__mr-2___eS3ge,
 .login-register-toggle__mr2___rxBof {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .login-register-toggle__py-5___D9ksb,
 .login-register-toggle__py5___K4lAE {
@@ -2420,7 +2420,7 @@ h5,
   flex: 0 0 24px;
 }
 .login-register-toggle__loginRegisterToggle___JgREz .login-register-toggle__label___hpP0C {
-  margin-inline-end: 24px;
+  margin-right: 24px;
   color: var(--textHeading, #26201a);
   font-size: 14px;
   font-style: normal;
@@ -2538,7 +2538,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 18px;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -2547,7 +2547,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 1.5;
+    line-height: 24px;
   }
 }
 h5,
@@ -2614,7 +2614,7 @@ h5,
 .term-privacy__caption-medium___BBCs7,
 .term-privacy__captionMedium___Fllq8 {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -2627,7 +2627,7 @@ h5,
 .term-privacy__caption-semi-bold___qAFOD,
 .term-privacy__captionSemiBold___yh7S3 {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -2692,11 +2692,11 @@ h5,
 }
 .term-privacy__mr-5___u4G87,
 .term-privacy__mr5___FIRoA {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .term-privacy__mr-2___dYr2G,
 .term-privacy__mr2___NXGpu {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .term-privacy__py-5___Op8YM,
 .term-privacy__py5___exKgA {
