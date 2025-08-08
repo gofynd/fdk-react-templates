@@ -10,11 +10,9 @@
 
 import React, { useMemo } from "react";
 import * as styles from "./shipment-breakup.less";
-import { priceFormatCurrencySymbol, translateDynamicLabel } from "../../helper/utils";
-import { useGlobalTranslation } from "fdk-core/utils";
+import { priceFormatCurrencySymbol } from "../../helper/utils";
 
 function ShipmentBreakup({ breakup }) {
-  const { t } = useGlobalTranslation("translation");
   const getPriceFormat = (symbol, price) => {
     return priceFormatCurrencySymbol(symbol, price);
   };
@@ -29,7 +27,7 @@ function ShipmentBreakup({ breakup }) {
 
   return (
     <div className={`${styles.billing} ${styles.lightsm}`}>
-      <div className={`${styles.title} ${styles.boldsm}`}>{t("resource.common.billing_caps")}</div>
+      <div className={`${styles.title} ${styles.boldsm}`}>BILLING</div>
       <>
         {breakupValues?.map((item, index) => (
           <div key={index} className={`${styles.breakupItem}`}>
@@ -38,7 +36,7 @@ function ShipmentBreakup({ breakup }) {
               <>
                 {index !== breakup.length - 1 && (
                   <span className={styles.totalValContainer}>
-                    <span className={styles.label}>{translateDynamicLabel(item.display, t)}</span>
+                    <span className={styles.label}>{item.display}</span>
                     <span className={`${styles.values}`}>
                       {getPriceFormat(
                         item.currency_symbol,
@@ -49,7 +47,7 @@ function ShipmentBreakup({ breakup }) {
                 )}
                 {index === breakup.length - 1 && (
                   <span className={styles.totalValContainer}>
-                    <span className={styles.label}>{translateDynamicLabel(item.display, t)}</span>
+                    <span className={styles.label}>{item.display}</span>
                     <span className={`${styles.values}`}>
                       {getPriceFormat(
                         item.currency_symbol,
