@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 18px;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 1.5;
+    line-height: 24px;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .price-breakup__caption-medium___wWsTp,
 .price-breakup__captionMedium___mD2FZ {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .price-breakup__caption-semi-bold___jb1u9,
 .price-breakup__captionSemiBold___OqTV0 {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -260,11 +260,11 @@ h5,
 }
 .price-breakup__mr-5___IBp4f,
 .price-breakup__mr5___ucqoB {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .price-breakup__mr-2___mSipU,
 .price-breakup__mr2___W8IHr {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .price-breakup__py-5___RT2HF,
 .price-breakup__py5___lYQZY {
@@ -341,11 +341,6 @@ h5,
   display: flex;
   flex-direction: column;
 }
-@media only screen and (min-width: 769px) {
-  .price-breakup__priceSummaryContainer___BlEI5 {
-    border-radius: 8px;
-  }
-}
 @media only screen and (max-width: 480px) {
   .price-breakup__priceSummaryContainer___BlEI5 {
     padding: 16px 0;
@@ -372,11 +367,6 @@ h5,
   font-weight: 500;
   color: var(--textBody, #3c3131);
 }
-@media only screen and (min-width: 769px) and (max-width: 1024px) {
-  .price-breakup__priceSummaryContainer___BlEI5 .price-breakup__priceSummaryItem___GwQfY {
-    padding: 0 16px;
-  }
-}
 @media only screen and (max-width: 768px) {
   .price-breakup__priceSummaryContainer___BlEI5 .price-breakup__priceSummaryItem___GwQfY {
     margin-top: 12px;
@@ -393,15 +383,10 @@ h5,
   font-weight: 700;
   padding: 24px 24px 0;
 }
-@media only screen and (min-width: 769px) and (max-width: 1024px) {
-  .price-breakup__priceSummaryContainer___BlEI5 .price-breakup__priceSummaryItemTotal___Pyvj5 {
-    padding: 24px 16px 0;
-  }
-}
 @media only screen and (max-width: 480px) {
   .price-breakup__priceSummaryContainer___BlEI5 .price-breakup__priceSummaryItemTotal___Pyvj5 {
-    padding-inline-end: 16px;
-    padding-inline-start: 16px;
+    padding-right: 16px;
+    padding-left: 16px;
   }
 }
 .price-breakup__priceSummaryContainer___BlEI5 .price-breakup__internationalTaxLabel___k40QY {
@@ -436,11 +421,6 @@ h5,
   justify-content: center;
   align-items: center;
 }
-@media only screen and (min-width: 769px) and (max-width: 1024px) {
-  .price-breakup__priceSummaryContainer___BlEI5 .price-breakup__discountPreviewContiner___ghC_C {
-    margin: 16px 16px 0;
-  }
-}
 @media only screen and (max-width: 480px) {
   .price-breakup__priceSummaryContainer___BlEI5 .price-breakup__discountPreviewContiner___ghC_C {
     margin: 12px 16px 0;
@@ -459,11 +439,11 @@ h5,
   height: 20px;
 }
 .price-breakup__priceSummaryContainer___BlEI5 .price-breakup__discountPreviewContiner___ghC_C .price-breakup__discountPreviewMessage___YsIAZ {
-  margin-inline-start: 4px;
+  margin-left: 4px;
   font-weight: 400;
 }
 .price-breakup__priceSummaryContainer___BlEI5 .price-breakup__discountPreviewContiner___ghC_C .price-breakup__discountPreviewAmount___Ha2i7 {
-  margin-inline-start: 4px;
+  margin-left: 4px;
   font-weight: 600;
 }
 .price-breakup__discount___wyR7w {

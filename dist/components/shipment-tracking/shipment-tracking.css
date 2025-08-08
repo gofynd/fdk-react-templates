@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 18px;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 1.5;
+    line-height: 24px;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .shipment-tracking__caption-medium___pthjN,
 .shipment-tracking__captionMedium___s9jz3 {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .shipment-tracking__caption-semi-bold___H_RVN,
 .shipment-tracking__captionSemiBold___TTyHu {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -260,11 +260,11 @@ h5,
 }
 .shipment-tracking__mr-5___fxhoW,
 .shipment-tracking__mr5___DQRl3 {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .shipment-tracking__mr-2___aTSzF,
 .shipment-tracking__mr2___gHYdd {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .shipment-tracking__py-5___kE_oS,
 .shipment-tracking__py5___PvwvP {
@@ -347,17 +347,6 @@ h5,
   .shipment-tracking__shipmentTracking___vw2lr {
     border: 1px solid var(--dividerStokes, #d4d1d1);
   }
-}
-.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__shipmentTitle___fnc95 {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__shipmentTitle___fnc95 .shipment-tracking__foName___Pcnko {
-  color: var(--textLabel, #7d7676);
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 140%;
 }
 .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__boldsm___aDLPp {
   font-weight: 700;

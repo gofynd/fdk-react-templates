@@ -2,9 +2,6 @@
 
 .reviewHeaderUnselect {
   padding: 24px;
-  @media @tablet-range {
-    padding: 16px;
-  }
   display: flex;
   border: 1px solid var(--dividerStokes);
   border-radius: 8px;
@@ -21,7 +18,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    padding-inline-start: 15px;
+    padding-left: 15px;
     font-size: 14px;
     font-weight: 600;
     line-height: 140%;
@@ -32,9 +29,6 @@
   padding: 24px;
   margin-top: 20px;
   display: flex;
-  @media @tablet-range {
-    padding: 16px;
-  }
   justify-content: space-between;
   border: 1px solid var(--dividerStokes);
   border-radius: 8px;
@@ -49,7 +43,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    padding-inline-start: 15px;
+    padding-left: 15px;
 
     .title {
       font-size: 14px;
@@ -83,12 +77,6 @@
 
 .reviewHeaderSelect {
   padding: 24px;
-  @media @desktop {
-    border-radius: 8px 8px 0 0;
-  }
-  @media @tablet-range {
-    padding: 16px;
-  }
   display: flex;
   justify-content: space-between;
   border: 1px solid var(--dividerStokes);
@@ -119,9 +107,9 @@
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    padding-inline-start: 15px;
+    padding-left: 15px;
     @media @mobile {
-      padding-inline-start: 0;
+      padding-left: 0;
     }
     .orderSummary {
       font-size: 14px;
@@ -158,14 +146,11 @@
     border: 1px solid var(--buttonPrimary);
     background-color: var(--buttonPrimary);
     color: var(--buttonSecondary);
-    margin-inline-start: 24px;
+    margin-left: 24px;
     text-transform: uppercase;
     display: flex;
     cursor: pointer;
     display: flex;
     align-items: center;
-    &.disabledProceed {
-      pointer-events: none;
-    }
   }
 }
