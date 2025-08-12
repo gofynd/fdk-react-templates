@@ -340,7 +340,6 @@ h5,
   border: 1px solid var(--dividerStokes);
   border-radius: 8px;
   opacity: 0.5;
-  margin-top: 20px;
 }
 @media only screen and (min-width: 769px) and (max-width: 1024px) {
   .single-page-shipment__reviewHeaderUnselect___mNmXU {
@@ -11931,10 +11930,6 @@ h5,
     display: none !important;
   }
 }
-.checkout-payment__paymentContainer___1UBn5 {
-  margin-top: 20px;
-  margin-top: 12px;
-}
 @media only screen and (min-width: 769px) {
   .checkout-payment__paymentContainer___1UBn5 {
     border-radius: 8px;
@@ -11943,9 +11938,9 @@ h5,
 .checkout-payment__paymentContainer___1UBn5.checkout-payment__unsetMarginTop___yjz9p {
   margin-top: unset !important;
 }
-@media only screen and (min-width: 481px) {
-  .checkout-payment__paymentContainer___1UBn5 {
-    margin-top: 20px;
+@media only screen and (max-width: 480px) {
+  .checkout-payment__paymentContainer___1UBn5.checkout-payment__hidePayment___wxERU {
+    display: none;
   }
 }
 .checkout-payment__paymentContainer___1UBn5 .checkout-payment__creditNote___pHIJb {
@@ -11953,14 +11948,6 @@ h5,
 }
 @media only screen and (min-width: 481px) {
   .checkout-payment__paymentContainer___1UBn5 .checkout-payment__creditNote___pHIJb {
-    display: none;
-  }
-}
-@media only screen and (max-width: 480px) {
-  .checkout-payment__paymentContainer___1UBn5 {
-    margin-top: 12px;
-  }
-  .checkout-payment__paymentContainer___1UBn5.checkout-payment__hidePayment___wxERU {
     display: none;
   }
 }

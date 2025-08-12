@@ -9,6 +9,7 @@ import Modal from "../../components/core/modal/modal";
 import AddToCart from "../../page-layouts/plp/Components/add-to-cart/add-to-cart";
 import SizeGuide from "../../page-layouts/plp/Components/size-guide/size-guide";
 import { useViewport } from "../../helper/hooks";
+import { useNavigate } from "react-router-dom";
 
 const Wishlist = ({
   breadcrumb = [],
@@ -38,7 +39,9 @@ const Wishlist = ({
   globalConfig = {},
 }) => {
   const { t } = useGlobalTranslation("translation");
-  const countLabel = totalCount > 1 ? `${totalCount} ${t("resource.common.items")}` : "";
+  const navigate = useNavigate();
+  const countLabel =
+    totalCount > 1 ? `${totalCount} ${t("resource.common.items")}` : "";
 
   const followedIdList = productList.map((m) => m.uid);
   const isTablet = useViewport(0, 768);
@@ -60,7 +63,9 @@ const Wishlist = ({
         <Breadcrumb breadcrumb={breadcrumb} />
       </div>
       <div className={styles.titleWrapper}>
-        <h1 className={styles.title}>{title || t("resource.common.breadcrumb.wishlist")}</h1>
+        <h1 className={styles.title}>
+          {title || t("resource.common.breadcrumb.wishlist")}
+        </h1>
         {countLabel && (
           <span className={styles.wishlistCount}>{countLabel}</span>
         )}
@@ -75,8 +80,23 @@ const Wishlist = ({
           {productList.map((product, index) => (
             <FDKLink
               className={styles.productWrapper}
-              to={`/product/${product?.slug}`}
               key={product?.uid}
+              action={{
+                ...product.action,
+                page: {
+                  ...product.action.page,
+                  query: {
+                    ...product.action.page.query,
+                    ...(product.sizes && { size: product.sizes[0] }),
+                  },
+                },
+              }}
+              state={{
+                product: {
+                  ...product,
+                  sizes: { sellable: product.sellable, sizes: product.sizes },
+                },
+              }}
               target={isProductOpenInNewTab ? "_blank" : "_self"}
             >
               <ProductCard
@@ -98,7 +118,9 @@ const Wishlist = ({
                 imagePlaceholder={imagePlaceholder}
                 columnCount={{ desktop: 4, tablet: 3, mobile: 2 }}
                 showAddToCart={showAddToCart}
-                actionButtonText={actionButtonText ?? t('resource.common.add_to_cart')}
+                actionButtonText={
+                  actionButtonText ?? t("resource.common.add_to_cart")
+                }
                 handleAddToCart={handleAddToCart}
               />
             </FDKLink>

@@ -27,6 +27,7 @@ import FourGridIcon from "../../assets/images/grid-four.svg";
 import TwoGridMobIcon from "../../assets/images/grid-two-mob.svg";
 import OneGridMobIcon from "../../assets/images/grid-one-mob.svg";
 import { useGlobalTranslation } from "fdk-core/utils";
+import { useNavigate } from "react-router-dom";
 
 const ProductListing = ({
   breadcrumb = [],
@@ -93,7 +94,15 @@ const ProductListing = ({
       {isRunningOnClient() && isPageLoading ? (
         <div className={styles.loader}></div>
       ) : productList?.length === 0 && !(isPageLoading || isPageLoading) ? (
-        <div>{EmptyStateComponent ? EmptyStateComponent : <EmptyState title={t('resource.common.sorry_we_couldnt_find_any_results')} />}</div>
+        <div>
+          {EmptyStateComponent ? (
+            EmptyStateComponent
+          ) : (
+            <EmptyState
+              title={t("resource.common.sorry_we_couldnt_find_any_results")}
+            />
+          )}
+        </div>
       ) : (
         <>
           <div className={styles.mobileHeader}>
@@ -170,7 +179,9 @@ const ProductListing = ({
               >
                 <div className={styles.filterHeaderContainer}>
                   <div className={styles.filterHeader}>
-                    <h4 className={styles.title}>{t("resource.product.filters_caps")}</h4>
+                    <h4 className={styles.title}>
+                      {t("resource.product.filters_caps")}
+                    </h4>
                     {!isResetFilterDisable && (
                       <button
                         className={styles.resetBtn}
@@ -299,7 +310,8 @@ const ProductListing = ({
                         followedIdList,
                         listingPrice,
                         showAddToCart,
-                        actionButtonText: actionButtonText ?? t('resource.common.add_to_cart'),
+                        actionButtonText:
+                          actionButtonText ?? t("resource.common.add_to_cart"),
                         onWishlistClick,
                         isImageFill,
                         showImageOnHover,
@@ -325,7 +337,8 @@ const ProductListing = ({
                       followedIdList,
                       listingPrice,
                       showAddToCart,
-                      actionButtonText: actionButtonText ?? t('resource.common.add_to_cart'),
+                      actionButtonText:
+                        actionButtonText ?? t("resource.common.add_to_cart"),
                       onWishlistClick,
                       isImageFill,
                       showImageOnHover,
@@ -366,26 +379,26 @@ const ProductListing = ({
           {isScrollTop && <ScrollTop />}
           {showAddToCart && (
             <>
-           { isAddToCartOpen &&
-              <Modal
-                isOpen={isAddToCartOpen}
-                hideHeader={!isTablet}
-                containerClassName={styles.addToCartContainer}
-                bodyClassName={styles.addToCartBody}
-                titleClassName={styles.addToCartTitle}
-                title={
-                  isTablet
-                    ? restAddToModalProps?.productData?.product?.name
-                    : ""
-                }
-                closeDialog={restAddToModalProps?.handleClose}
-              >
-                <AddToCart
-                  {...restAddToModalProps}
-                  globalConfig={globalConfig}
-                />
-              </Modal>
-            }
+              {isAddToCartOpen && (
+                <Modal
+                  isOpen={isAddToCartOpen}
+                  hideHeader={!isTablet}
+                  containerClassName={styles.addToCartContainer}
+                  bodyClassName={styles.addToCartBody}
+                  titleClassName={styles.addToCartTitle}
+                  title={
+                    isTablet
+                      ? restAddToModalProps?.productData?.product?.name
+                      : ""
+                  }
+                  closeDialog={restAddToModalProps?.handleClose}
+                >
+                  <AddToCart
+                    {...restAddToModalProps}
+                    globalConfig={globalConfig}
+                  />
+                </Modal>
+              )}
               <SizeGuide
                 isOpen={showSizeGuide}
                 onCloseDialog={handleCloseSizeGuide}
@@ -423,6 +436,8 @@ function ProductGrid({
   onWishlistClick = () => {},
   handleAddToCart = () => {},
 }) {
+  const navigate = useNavigate();
+
   return (
     <div
       className={styles.productContainer}
@@ -436,7 +451,22 @@ function ProductGrid({
         productList.map((product, index) => (
           <FDKLink
             className={styles["product-wrapper"]}
-            action={product?.action}
+            action={{
+              ...product.action,
+              page: {
+                ...product.action.page,
+                query: {
+                  ...product.action.page.query,
+                  ...(product.sizes && { size: product.sizes[0] }),
+                },
+              },
+            }}
+            state={{
+              product: {
+                ...product,
+                sizes: { sellable: product.sellable, sizes: product.sizes },
+              },
+            }}
             key={product?.uid}
             target={isProductOpenInNewTab ? "_blank" : "_self"}
             style={{
@@ -457,7 +487,9 @@ function ProductGrid({
               WishlistIconComponent={WishlistIconComponent}
               followedIdList={followedIdList}
               showAddToCart={showAddToCart}
-              actionButtonText={actionButtonText ?? t('resource.common.add_to_cart')}
+              actionButtonText={
+                actionButtonText ?? t("resource.common.add_to_cart")
+              }
               onWishlistClick={onWishlistClick}
               isImageFill={isImageFill}
               showImageOnHover={showImageOnHover}

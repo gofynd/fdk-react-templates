@@ -1,17 +1,25 @@
 @import "../../../styles/main.less";
 
 .paymentContainer {
-  margin-top: 20px;
+  // margin-top: 20px;
+
   @media @desktop {
     border-radius: 8px;
   }
   &.unsetMarginTop {
     margin-top: unset !important;
   }
-  margin-top: 12px;
 
   @media @mobile-up {
-    margin-top: 20px;
+    // margin-top: 20px;
+  }
+
+  @media @mobile {
+    // margin-top: 12px;
+
+    &.hidePayment {
+      display: none;
+    }
   }
 
   .creditNote {
@@ -21,15 +29,6 @@
       display: none;
     }
   }
-
-  @media @mobile {
-    margin-top: 12px;
-
-    &.hidePayment {
-      display: none;
-    }
-  }
-
   .reviewHeaderUnselect {
     padding: 24px;
     @media @desktop {
