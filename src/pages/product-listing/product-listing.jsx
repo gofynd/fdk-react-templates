@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "../../styles/product-listing.less";
 import InfiniteLoader from "../../components/core/infinite-loader/infinite-loader";
@@ -20,14 +20,14 @@ import Modal from "../../components/core/modal/modal";
 import AddToCart from "../../page-layouts/plp/Components/add-to-cart/add-to-cart";
 import { useViewport } from "../../helper/hooks";
 import SizeGuide from "../../page-layouts/plp/Components/size-guide/size-guide";
+import SaveToWishlistModal from "../../components/wishlist-modals/save-to-wishlist-modal";
 import FilterIcon from "../../assets/images/filter.svg";
 import SortIcon from "../../assets/images/sort.svg";
 import TwoGridIcon from "../../assets/images/grid-two.svg";
 import FourGridIcon from "../../assets/images/grid-four.svg";
 import TwoGridMobIcon from "../../assets/images/grid-two-mob.svg";
 import OneGridMobIcon from "../../assets/images/grid-one-mob.svg";
-import { useGlobalTranslation } from "fdk-core/utils";
-import { useNavigate } from "react-router-dom";
+import CreateRenameWishlistModal from "../../components/wishlist-modals/create-wishlist-modal";
 
 const ProductListing = ({
   breadcrumb = [],
@@ -66,8 +66,11 @@ const ProductListing = ({
   listingPrice = "range",
   banner = {},
   showAddToCart = false,
-  actionButtonText,
+  actionButtonText = "Add To cart",
   stickyFilterTopOffset = 0,
+  showQuantityController = false,
+  showBuyNowButton = false,
+  showMoq = false,
   onColumnCountUpdate = () => {},
   onResetFiltersClick = () => {},
   onFilterUpdate = () => {},
@@ -77,32 +80,105 @@ const ProductListing = ({
   onWishlistClick = () => {},
   onViewMoreClick = () => {},
   onLoadMoreProducts = () => {},
-  EmptyStateComponent,
+  EmptyStateComponent = (
+    <EmptyState title="Sorry, we couldn’t find any results" />
+  ),
 }) => {
-  const { t } = useGlobalTranslation("translation");
   const isTablet = useViewport(0, 768);
+  const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
+  const [showCreateWishlist, setShowCreateWishlist] = useState(false);
+  const [isCreateWishlistError, setIsCreateWishlistError] = useState(false);
+  const [createWishlistErrorMessage, setCreateWishlistErrorMessage] =
+    useState("");
+
+  const [selectedProductForWishlist, setSelectedProductForWishlist] =
+    useState(null);
+  const [selectedWishlistIds, setSelectedWishlistIds] = useState([]);
+  const [productData, setProductData] = useState(null);
+
   const {
     handleAddToCart,
     isOpen: isAddToCartOpen,
     showSizeGuide,
     handleCloseSizeGuide,
+    fetchAllWishlists,
+    showSnackbarMessage,
+    handleSaveToWishlist,
     ...restAddToModalProps
   } = addToCartModalProps;
+
+  useEffect(() => {
+    if (isRunningOnClient()) {
+      const savedPosition = sessionStorage.getItem("plpScrollPosition");
+      if (savedPosition) {
+        window.scrollTo(0, parseInt(savedPosition));
+        sessionStorage.removeItem("plpScrollPosition");
+      }
+      const handleBeforeUnload = () => {
+        sessionStorage.setItem("plpScrollPosition", window.scrollY.toString());
+      };
+
+      window.addEventListener("beforeunload", handleBeforeUnload);
+      return () => {
+        window.removeEventListener("beforeunload", handleBeforeUnload);
+      };
+    }
+  }, []);
+
+  useEffect(() => {
+    setSelectedProductForWishlist(restAddToModalProps?.productDataWishlist);
+  }, [restAddToModalProps?.productData]);
+
+  const handleWishlistIconClick = async (product) => {
+    await restAddToModalProps?.handleFetchProductDataWishlist(product?.slug);
+    setProductData(product);
+    setIsWishlistModalOpen(true);
+  };
+
+  const handleWishlistModalClose = () => {
+    setIsWishlistModalOpen(false);
+    setSelectedProductForWishlist(null);
+    setSelectedWishlistIds([]);
+  };
+
+  const handleWishlistSave = (product, productPrice, selectedIds) => {
+    if (handleSaveToWishlist) {
+      handleSaveToWishlist(product, productPrice, selectedIds);
+    }
+    onWishlistClick(productData);
+    handleWishlistModalClose();
+  };
+
+  const handleWishlistClick = (wishlistId, selectedIds) => {
+    setSelectedWishlistIds(selectedIds);
+  };
+
+  const createWishlist = async (wishlistName) => {
+    if (wishlistName?.trim()) {
+      const response = await restAddToModalProps.handleCreateWishlist(
+        wishlistName.trim()
+      );
+      if (response.success) {
+        setShowCreateWishlist(false);
+        if (productData) {
+          setSelectedProductForWishlist(productData);
+          setIsWishlistModalOpen(true);
+        }
+        setIsCreateWishlistError(false);
+        setCreateWishlistErrorMessage("");
+      } else {
+        setIsCreateWishlistError(true);
+        setCreateWishlistErrorMessage(response.message);
+      }
+    }
+  };
 
   return (
     <div className={styles.plpWrapper}>
       {isRunningOnClient() && isPageLoading ? (
         <div className={styles.loader}></div>
       ) : productList?.length === 0 && !(isPageLoading || isPageLoading) ? (
-        <div>
-          {EmptyStateComponent ? (
-            EmptyStateComponent
-          ) : (
-            <EmptyState
-              title={t("resource.common.sorry_we_couldnt_find_any_results")}
-            />
-          )}
-        </div>
+        <div>{EmptyStateComponent}</div>
       ) : (
         <>
           <div className={styles.mobileHeader}>
@@ -113,12 +189,12 @@ const ProductListing = ({
                   onClick={onFilterModalBtnClick}
                 >
                   <FilterIcon />
-                  <span>{t("resource.common.filter")}</span>
+                  <span>Filter</span>
                 </button>
               )}
               <button onClick={onSortModalBtnClick}>
                 <SortIcon />
-                <span>{t("resource.facets.sort_by")}</span>
+                <span>Sort By</span>
               </button>
             </div>
             <div className={styles.headerRight}>
@@ -129,7 +205,7 @@ const ProductListing = ({
                 onClick={() =>
                   onColumnCountUpdate({ screen: "mobile", count: 1 })
                 }
-                title={t("resource.product.mobile_grid_one")}
+                title="Mobile grid one"
               >
                 <OneGridMobIcon />
               </button>
@@ -140,7 +216,7 @@ const ProductListing = ({
                 onClick={() =>
                   onColumnCountUpdate({ screen: "mobile", count: 2 })
                 }
-                title={t("resource.product.mobile_grid_two")}
+                title="Mobile grid two"
               >
                 <TwoGridMobIcon />
               </button>
@@ -151,7 +227,7 @@ const ProductListing = ({
                 onClick={() =>
                   onColumnCountUpdate({ screen: "tablet", count: 2 })
                 }
-                title={t("resource.product.tablet_grid_two")}
+                title="Tablet grid two"
               >
                 <TwoGridIcon />
               </button>
@@ -162,7 +238,7 @@ const ProductListing = ({
                 onClick={() =>
                   onColumnCountUpdate({ screen: "tablet", count: 3 })
                 }
-                title={t("resource.product.tablet_grid_four")}
+                title="Tablet grid four"
               >
                 <FourGridIcon />
               </button>
@@ -179,15 +255,13 @@ const ProductListing = ({
               >
                 <div className={styles.filterHeaderContainer}>
                   <div className={styles.filterHeader}>
-                    <h4 className={styles.title}>
-                      {t("resource.product.filters_caps")}
-                    </h4>
+                    <h4 className={styles.title}>FILTERS</h4>
                     {!isResetFilterDisable && (
                       <button
                         className={styles.resetBtn}
                         onClick={onResetFiltersClick}
                       >
-                        {t("resource.facets.reset_caps")}
+                        RESET
                       </button>
                     )}
                   </div>
@@ -212,7 +286,7 @@ const ProductListing = ({
                   {title && <h1 className={styles.title}>{title}</h1>}
                   {isProductCountDisplayed && (
                     <span className={styles.productCount}>
-                      {`${productCount} ${productCount > 1 ? t("resource.common.items") : t("resource.common.item")}`}
+                      {`${productCount} ${productCount > 1 ? "items" : "item"}`}
                     </span>
                   )}
                 </div>
@@ -225,7 +299,7 @@ const ProductListing = ({
                     onClick={() =>
                       onColumnCountUpdate({ screen: "desktop", count: 2 })
                     }
-                    title={t("resource.product.desktop_grid_two")}
+                    title="Desktop grid two"
                   >
                     <TwoGridIcon />
                   </button>
@@ -236,7 +310,7 @@ const ProductListing = ({
                     onClick={() =>
                       onColumnCountUpdate({ screen: "desktop", count: 4 })
                     }
-                    title={t("resource.product.desktop_grid_four")}
+                    title="Desktop grid four"
                   >
                     <FourGridIcon />
                   </button>
@@ -251,7 +325,7 @@ const ProductListing = ({
                     to={banner?.redirectLink}
                   >
                     <FyImage
-                      alt={t("resource.product.desktop_banner_alt")}
+                      alt="desktop banner"
                       src={banner?.desktopBanner}
                       customClass={styles.banner}
                       isFixedAspectRatio={false}
@@ -270,7 +344,7 @@ const ProductListing = ({
                     to={banner?.redirectLink}
                   >
                     <FyImage
-                      alt={t("resource.product.mobile_banner")}
+                      alt="mobile banner"
                       src={banner?.mobileBanner}
                       customClass={styles.banner}
                       isFixedAspectRatio={false}
@@ -310,15 +384,15 @@ const ProductListing = ({
                         followedIdList,
                         listingPrice,
                         showAddToCart,
-                        actionButtonText:
-                          actionButtonText ?? t("resource.common.add_to_cart"),
-                        onWishlistClick,
+                        actionButtonText,
+                        onWishlistClick: handleWishlistIconClick,
                         isImageFill,
                         showImageOnHover,
                         imageBackgroundColor,
                         imagePlaceholder,
                         handleAddToCart,
                         imgSrcSet,
+                        globalConfig,
                       }}
                     />
                   </InfiniteLoader>
@@ -337,9 +411,8 @@ const ProductListing = ({
                       followedIdList,
                       listingPrice,
                       showAddToCart,
-                      actionButtonText:
-                        actionButtonText ?? t("resource.common.add_to_cart"),
-                      onWishlistClick,
+                      actionButtonText,
+                      onWishlistClick: handleWishlistIconClick,
                       isImageFill,
                       showImageOnHover,
                       imageBackgroundColor,
@@ -347,6 +420,7 @@ const ProductListing = ({
                       imagePlaceholder,
                       handleAddToCart,
                       imgSrcSet,
+                      globalConfig,
                     }}
                   />
                 )}
@@ -363,7 +437,7 @@ const ProductListing = ({
                       tabIndex="0"
                       disabled={isProductLoading}
                     >
-                      {t("resource.facets.view_more")}
+                      View More
                     </button>
                   </div>
                 )}
@@ -379,32 +453,62 @@ const ProductListing = ({
           {isScrollTop && <ScrollTop />}
           {showAddToCart && (
             <>
-              {isAddToCartOpen && (
-                <Modal
-                  isOpen={isAddToCartOpen}
-                  hideHeader={!isTablet}
-                  containerClassName={styles.addToCartContainer}
-                  bodyClassName={styles.addToCartBody}
-                  titleClassName={styles.addToCartTitle}
-                  title={
-                    isTablet
-                      ? restAddToModalProps?.productData?.product?.name
-                      : ""
-                  }
-                  closeDialog={restAddToModalProps?.handleClose}
-                >
-                  <AddToCart
-                    {...restAddToModalProps}
-                    globalConfig={globalConfig}
-                  />
-                </Modal>
-              )}
+              <Modal
+                isOpen={isAddToCartOpen}
+                hideHeader={!isTablet}
+                containerClassName={styles.addToCartContainer}
+                bodyClassName={styles.addToCartBody}
+                titleClassName={styles.addToCartTitle}
+                title={
+                  isTablet
+                    ? restAddToModalProps?.productData?.product?.name
+                    : ""
+                }
+                closeDialog={restAddToModalProps?.handleClose}
+              >
+                <AddToCart
+                  {...restAddToModalProps}
+                  globalConfig={globalConfig}
+                  showQuantityController={showQuantityController}
+                  showBuyNowButton={showBuyNowButton}
+                  showMoq={showMoq}
+                />
+              </Modal>
               <SizeGuide
                 isOpen={showSizeGuide}
                 onCloseDialog={handleCloseSizeGuide}
                 productMeta={restAddToModalProps?.productData?.product?.sizes}
               />
             </>
+          )}
+
+          {isWishlistModalOpen && selectedProductForWishlist && (
+            <SaveToWishlistModal
+              isOpen={isWishlistModalOpen}
+              onClose={handleWishlistModalClose}
+              onSuccess={handleWishlistSave}
+              handleWishlistClick={handleWishlistClick}
+              singleSelect={true}
+              fetchAllWishlists={fetchAllWishlists}
+              showSnackbarMessage={showSnackbarMessage}
+              selectedWishlistIds={selectedWishlistIds}
+              setSelectedWishlistIds={setSelectedWishlistIds}
+              productDataWishlist={restAddToModalProps?.productDataWishlist}
+              handleOpenCreateWishlistModal={() => setShowCreateWishlist(true)}
+            />
+          )}
+
+          {showCreateWishlist && (
+            <CreateRenameWishlistModal
+              isOpen={showCreateWishlist}
+              onClose={() => setShowCreateWishlist(false)}
+              title="Create"
+              textAreaTitle="Enter Name"
+              textAreaPlaceholder="Enter Your Wishlist Name..."
+              onSubmit={createWishlist}
+              isError={isCreateWishlistError}
+              errorMessage={createWishlistErrorMessage}
+            />
           )}
         </>
       )}
@@ -430,13 +534,18 @@ function ProductGrid({
   isImageFill = false,
   showImageOnHover = false,
   showAddToCart = false,
-  actionButtonText,
+  actionButtonText = "Add To cart",
   imageBackgroundColor = "",
   imagePlaceholder = "",
   onWishlistClick = () => {},
   handleAddToCart = () => {},
+  globalConfig = {},
 }) {
-  const navigate = useNavigate();
+  const handleProductClick = (e, product) => {
+    if (isRunningOnClient()) {
+      sessionStorage.setItem("plpScrollPosition", window.scrollY.toString());
+    }
+  };
 
   return (
     <div
@@ -451,24 +560,10 @@ function ProductGrid({
         productList.map((product, index) => (
           <FDKLink
             className={styles["product-wrapper"]}
-            action={{
-              ...product.action,
-              page: {
-                ...product.action.page,
-                query: {
-                  ...product.action.page.query,
-                  ...(product.sizes && { size: product.sizes[0] }),
-                },
-              },
-            }}
-            state={{
-              product: {
-                ...product,
-                sizes: { sellable: product.sellable, sizes: product.sizes },
-              },
-            }}
+            action={product?.action}
             key={product?.uid}
             target={isProductOpenInNewTab ? "_blank" : "_self"}
+            onClick={(e) => handleProductClick(e, product)}
             style={{
               // "--delay": `${(index % 12) * 150}ms`,
               display: "block",
@@ -487,15 +582,14 @@ function ProductGrid({
               WishlistIconComponent={WishlistIconComponent}
               followedIdList={followedIdList}
               showAddToCart={showAddToCart}
-              actionButtonText={
-                actionButtonText ?? t("resource.common.add_to_cart")
-              }
+              actionButtonText={actionButtonText}
               onWishlistClick={onWishlistClick}
               isImageFill={isImageFill}
               showImageOnHover={showImageOnHover}
               imageBackgroundColor={imageBackgroundColor}
               imagePlaceholder={imagePlaceholder}
               handleAddToCart={handleAddToCart}
+              globalConfig={globalConfig}
             />
           </FDKLink>
         ))}

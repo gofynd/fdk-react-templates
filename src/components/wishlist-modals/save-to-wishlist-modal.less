@@ -1,0 +1,420 @@
+@import "../../styles/main.less";
+
+.modalContainer {
+  background-color: @ThemeAccentL5;
+}
+
+.wishlistModal {
+  width: 500px;
+  max-width: 90vw;
+  max-height: 80vh;
+  background: @ThemeAccentL5;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  @media @tablet {
+    max-width: 100vw;
+  }
+
+  .wishlistModalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px;
+    border-bottom: 1px solid @DividerStokes;
+
+    @media @tablet {
+      padding: 12px 16px;
+    }
+
+    .wishlistModalTitle {
+      margin: 0;
+      color: @TextBody;
+      font-size: 16px;
+      font-weight: 600;
+      font-family: var(--font-header, "WorkSans");
+      line-height: 140%;
+
+      @media @tablet {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        letter-spacing: -0.32px;
+      }
+    }
+
+    .wishlistModalClose {
+      background: none;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: #f0f0f0;
+      }
+
+      svg {
+        width: 20px;
+        height: 20px;
+        fill: #666;
+      }
+    }
+  }
+
+  .wishlistModalContent {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+    scroll-behavior: smooth;
+
+    @media @tablet {
+      padding: 16px;
+    }
+
+    .loadingState {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      color: #666;
+
+      .spinner {
+        width: 32px;
+        height: 32px;
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #0066cc;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 16px;
+      }
+
+      p {
+        margin: 0;
+        font-size: 14px;
+      }
+    }
+
+    .emptyState {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      text-align: center;
+      color: #666;
+
+      p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+    }
+
+    .wishlistList {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+
+      .wishlistItem {
+        display: flex;
+        align-items: center;
+        padding: 12px;
+        border: 1px solid @DividerStokes;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+
+        &:hover {
+          background-color: #f8f8f8;
+        }
+
+        .wishlistCheckbox {
+          margin-right: 12px;
+
+          .checkbox {
+            width: 18px;
+            height: 18px;
+            accent-color: @ButtonPrimary;
+            cursor: pointer;
+          }
+        }
+
+        .wishlistInfo {
+          flex: 1;
+          min-width: 0;
+
+          .wishlistName {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: @TextHeading;
+            font-family: var(--font-header, "WorkSans");
+            line-height: normal;
+          }
+
+          .wishlistMeta {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: @TextLabel;
+            font-family: var(--font-body, "WorkSans");
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 140%;
+          }
+        }
+
+        .wishlistPreview {
+          margin-left: 16px;
+
+          .previewImages {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            .previewImage {
+              border-radius: 4px;
+              border: 1px solid @DividerStokes;
+            }
+
+            .wishlistCardItem {
+              width: 40px;
+              height: 40px;
+              position: relative;
+              border-radius: 4px;
+            }
+
+            .moreImagesOverlay {
+              font-size: 12px;
+              font-weight: 400;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              border-radius: 4px;
+              z-index: 2;
+              text-align: center;
+              line-height: 1.2;
+              color: @ThemeAccentL5;
+              font-family: var(--font-body, "WorkSans");
+              line-height: normal;
+              letter-spacing: -0.24px;
+              background: linear-gradient(
+                0deg,
+                rgba(39, 34, 34, 0.7) 0%,
+                rgba(39, 34, 34, 0.7) 100%
+              );
+            }
+
+            .moreImages {
+              font-size: 12px;
+              color: #0066cc;
+              font-weight: 500;
+              background: #f0f8ff;
+              padding: 4px 8px;
+              border-radius: 12px;
+              white-space: nowrap;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .createWishlistSection {
+    padding: 12px 24px 0 24px;
+    background: @ThemeAccentL5;
+    flex-shrink: 0;
+
+    @media @mobile {
+      display: none;
+    }
+
+    .createWishlistButton {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: color 0.2s;
+
+      color: @ButtonPrimary;
+      text-align: center;
+      font-family: var(--font-header, "WorkSans");
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 16.8px;
+      text-transform: uppercase;
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      svg {
+        fill: currentColor;
+      }
+    }
+  }
+
+  .wishlistModalFooter {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 24px;
+
+    @media @tablet {
+      padding: 12px;
+      justify-content: space-between;
+    }
+
+    .mobileOptionMenu {
+      display: none;
+    }
+
+    @media @tablet {
+      border-top: 1px solid @DividerStokes;
+
+      .mobileOptionMenu {
+        display: block;
+        padding-left: 16px;
+      }
+    }
+
+    .buttonGroup {
+      display: flex;
+      gap: 12px;
+    }
+
+    .cancelButton,
+    .saveButton {
+      padding: 12px 20px;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      min-width: 80px;
+
+      @media @tablet {
+        padding: 12px 16px;
+      }
+    }
+
+    .cancelButton {
+      color: @ButtonPrimary;
+      border: 1px solid @ButtonPrimary;
+      text-align: center;
+      font-family: var(--font-header, "WorkSans");
+      font-weight: 600;
+      line-height: 19.6px;
+      text-transform: uppercase;
+    }
+
+    .saveButton {
+      padding: 12px 32px;
+
+      background: @ButtonPrimary;
+      border: 1px solid @ButtonPrimary;
+      color: @ButtonSecondary;
+      text-align: center;
+      font-family: var(--font-header, "WorkSans");
+      font-weight: 600;
+      line-height: 19.6px;
+      text-transform: uppercase;
+
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.7;
+      }
+    }
+
+    // OptionMenu styles
+    .option-menu-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    .three-dot-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s;
+
+      svg {
+        fill: @ButtonPrimary;
+      }
+    }
+
+    .option-menu {
+      position: absolute;
+      bottom: 100%;
+      left: 0;
+      background: @ThemeAccentL5;
+      border: 1px solid @DividerStokes;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      z-index: 1000;
+      min-width: 200px;
+      margin-bottom: 8px;
+    }
+
+    .option-menu-list {
+      list-style: none;
+      margin: 0;
+    }
+
+    .option-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      font-family: var(--font-header, "WorkSans");
+      font-size: 14px;
+      font-weight: 500;
+      color: @TextBody;
+
+      &.highlighted {
+        color: @ButtonPrimary;
+        font-weight: 600;
+      }
+
+      svg {
+        fill: @ButtonPrimary;
+      }
+    }
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

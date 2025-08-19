@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 18px;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 1.5;
+    line-height: 24px;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .shipment-item__caption-medium___MXqan,
 .shipment-item__captionMedium___NjJG7 {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .shipment-item__caption-semi-bold___UaKSI,
 .shipment-item__captionSemiBold___gV1Lp {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -260,11 +260,11 @@ h5,
 }
 .shipment-item__mr-5___f1mzr,
 .shipment-item__mr5___I5hrj {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .shipment-item__mr-2___y7vtV,
 .shipment-item__mr2___xCdhl {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .shipment-item__py-5___WQTnx,
 .shipment-item__py5___QqzuB {
@@ -428,8 +428,8 @@ h5,
   line-height: 140%;
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__margin___aoRFj {
-  color: var(--errorText, #ff3333);
-  margin-inline-start: 10px;
+  color: var(--errorText, #b24141);
+  margin-left: 10px;
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__total___j4dLu {
   display: flex;
@@ -437,10 +437,10 @@ h5,
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__total___j4dLu .shipment-item__amt___LG95E {
   color: #41434c;
-  margin-inline-end: 10px;
+  margin-right: 10px;
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__total___j4dLu .shipment-item__delivery-at___ZUUCz {
-  margin-inline-start: 5px;
+  margin-left: 5px;
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__effectivePrice___Kqia8 {
   color: var(--textHeading, #26201a);
