@@ -227,7 +227,7 @@ const AddToCart = ({
                     </span>
                   </p>
                   {pageConfig?.show_size_guide &&
-                    isSizeGuideAvailable() &&
+                    // isSizeGuideAvailable() &&
                     sizes?.sellable && (
                       <FyButton
                         variant="text"
@@ -293,7 +293,7 @@ const AddToCart = ({
                   disableSearch={true}
                 />
                 {pageConfig?.show_size_guide &&
-                  isSizeGuideAvailable() &&
+                  // isSizeGuideAvailable() &&
                   sizes?.sellable && (
                     <FyButton
                       variant="text"
