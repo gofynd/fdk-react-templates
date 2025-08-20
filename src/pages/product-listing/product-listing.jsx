@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "../../styles/product-listing.less";
 import InfiniteLoader from "../../components/core/infinite-loader/infinite-loader";
@@ -93,15 +93,7 @@ const ProductListing = ({
       {isRunningOnClient() && isPageLoading ? (
         <div className={styles.loader}></div>
       ) : productList?.length === 0 && !(isPageLoading || isPageLoading) ? (
-        <div>
-          {EmptyStateComponent ? (
-            EmptyStateComponent
-          ) : (
-            <EmptyState
-              title={t("resource.common.sorry_we_couldnt_find_any_results")}
-            />
-          )}
-        </div>
+        <div>{EmptyStateComponent ? EmptyStateComponent : <EmptyState title={t('resource.common.sorry_we_couldnt_find_any_results')} />}</div>
       ) : (
         <>
           <div className={styles.mobileHeader}>
@@ -178,9 +170,7 @@ const ProductListing = ({
               >
                 <div className={styles.filterHeaderContainer}>
                   <div className={styles.filterHeader}>
-                    <h4 className={styles.title}>
-                      {t("resource.product.filters_caps")}
-                    </h4>
+                    <h4 className={styles.title}>{t("resource.product.filters_caps")}</h4>
                     {!isResetFilterDisable && (
                       <button
                         className={styles.resetBtn}
@@ -309,8 +299,7 @@ const ProductListing = ({
                         followedIdList,
                         listingPrice,
                         showAddToCart,
-                        actionButtonText:
-                          actionButtonText ?? t("resource.common.add_to_cart"),
+                        actionButtonText: actionButtonText ?? t('resource.common.add_to_cart'),
                         onWishlistClick,
                         isImageFill,
                         showImageOnHover,
@@ -336,8 +325,7 @@ const ProductListing = ({
                       followedIdList,
                       listingPrice,
                       showAddToCart,
-                      actionButtonText:
-                        actionButtonText ?? t("resource.common.add_to_cart"),
+                      actionButtonText: actionButtonText ?? t('resource.common.add_to_cart'),
                       onWishlistClick,
                       isImageFill,
                       showImageOnHover,
@@ -378,26 +366,26 @@ const ProductListing = ({
           {isScrollTop && <ScrollTop />}
           {showAddToCart && (
             <>
-              {isAddToCartOpen && (
-                <Modal
-                  isOpen={isAddToCartOpen}
-                  hideHeader={!isTablet}
-                  containerClassName={styles.addToCartContainer}
-                  bodyClassName={styles.addToCartBody}
-                  titleClassName={styles.addToCartTitle}
-                  title={
-                    isTablet
-                      ? restAddToModalProps?.productData?.product?.name
-                      : ""
-                  }
-                  closeDialog={restAddToModalProps?.handleClose}
-                >
-                  <AddToCart
-                    {...restAddToModalProps}
-                    globalConfig={globalConfig}
-                  />
-                </Modal>
-              )}
+           { isAddToCartOpen &&
+              <Modal
+                isOpen={isAddToCartOpen}
+                hideHeader={!isTablet}
+                containerClassName={styles.addToCartContainer}
+                bodyClassName={styles.addToCartBody}
+                titleClassName={styles.addToCartTitle}
+                title={
+                  isTablet
+                    ? restAddToModalProps?.productData?.product?.name
+                    : ""
+                }
+                closeDialog={restAddToModalProps?.handleClose}
+              >
+                <AddToCart
+                  {...restAddToModalProps}
+                  globalConfig={globalConfig}
+                />
+              </Modal>
+            }
               <SizeGuide
                 isOpen={showSizeGuide}
                 onCloseDialog={handleCloseSizeGuide}
@@ -414,33 +402,6 @@ const ProductListing = ({
 export default ProductListing;
 
 function ProductGrid({
-  columnCount = { desktop: 4, tablet: 3, mobile: 1 },
-  productList = [],
-  ...restProps
-}) {
-  return (
-    <div
-      className={styles.productContainer}
-      style={{
-        "--desktop-col": columnCount.desktop,
-        "--tablet-col": columnCount.tablet,
-        "--mobile-col": columnCount.mobile,
-      }}
-    >
-      {productList?.length > 0 &&
-        productList.map((product) => (
-          <ProductGridItem
-            key={product?.uid}
-            product={product}
-            {...restProps}
-          />
-        ))}
-    </div>
-  );
-}
-
-function ProductGridItem({
-  product,
   isBrand = true,
   isSaleBadge = true,
   isPrice = true,
@@ -450,6 +411,7 @@ function ProductGridItem({
   WishlistIconComponent,
   isProductOpenInNewTab = false,
   columnCount = { desktop: 4, tablet: 3, mobile: 1 },
+  productList = [],
   followedIdList = [],
   listingPrice = "range",
   isImageFill = false,
@@ -461,70 +423,50 @@ function ProductGridItem({
   onWishlistClick = () => {},
   handleAddToCart = () => {},
 }) {
-  const { t } = useGlobalTranslation("translation");
-
-  const getProductLinkProps = useMemo(() => {
-    const isMto = product?.custom_order?.is_custom_order || false;
-    let sizeToSelect;
-    let state = { product };
-    if (!!product?.sizes?.sizes?.length) {
-      let firstAvailableSize = product.sizes.sizes.find(
-        (size) => size.quantity > 0 || isMto
-      );
-      sizeToSelect = firstAvailableSize.value;
-    } else if (!!product?.sizes?.length) {
-      sizeToSelect = product.sizes[0];
-      state = {
-        ...product,
-        sizes: { sellable: product.sellable, sizes: product.sizes },
-      };
-    }
-
-    return {
-      action: {
-        ...product.action,
-        page: {
-          ...product.action.page,
-          query: {
-            ...product.action.page.query,
-            ...(sizeToSelect && { size: sizeToSelect }),
-          },
-        },
-      },
-      state,
-    };
-  }, [product]);
-
   return (
-    <FDKLink
-      className={styles["product-wrapper"]}
-      {...getProductLinkProps}
-      target={isProductOpenInNewTab ? "_blank" : "_self"}
+    <div
+      className={styles.productContainer}
       style={{
-        display: "block",
+        "--desktop-col": columnCount.desktop,
+        "--tablet-col": columnCount.tablet,
+        "--mobile-col": columnCount.mobile,
       }}
     >
-      <ProductCard
-        product={product}
-        listingPrice={listingPrice}
-        columnCount={columnCount}
-        aspectRatio={aspectRatio}
-        isBrand={isBrand}
-        isPrice={isPrice}
-        isSaleBadge={isSaleBadge}
-        imgSrcSet={imgSrcSet}
-        isWishlistIcon={isWishlistIcon}
-        WishlistIconComponent={WishlistIconComponent}
-        followedIdList={followedIdList}
-        showAddToCart={showAddToCart}
-        actionButtonText={actionButtonText ?? t("resource.common.add_to_cart")}
-        onWishlistClick={onWishlistClick}
-        isImageFill={isImageFill}
-        showImageOnHover={showImageOnHover}
-        imageBackgroundColor={imageBackgroundColor}
-        imagePlaceholder={imagePlaceholder}
-        handleAddToCart={handleAddToCart}
-      />
-    </FDKLink>
+      {productList?.length > 0 &&
+        productList.map((product, index) => (
+          <FDKLink
+            className={styles["product-wrapper"]}
+            action={product?.action}
+            key={product?.uid}
+            target={isProductOpenInNewTab ? "_blank" : "_self"}
+            style={{
+              // "--delay": `${(index % 12) * 150}ms`,
+              display: "block",
+            }}
+          >
+            <ProductCard
+              product={product}
+              listingPrice={listingPrice}
+              columnCount={columnCount}
+              aspectRatio={aspectRatio}
+              isBrand={isBrand}
+              isPrice={isPrice}
+              isSaleBadge={isSaleBadge}
+              imgSrcSet={imgSrcSet}
+              isWishlistIcon={isWishlistIcon}
+              WishlistIconComponent={WishlistIconComponent}
+              followedIdList={followedIdList}
+              showAddToCart={showAddToCart}
+              actionButtonText={actionButtonText ?? t('resource.common.add_to_cart')}
+              onWishlistClick={onWishlistClick}
+              isImageFill={isImageFill}
+              showImageOnHover={showImageOnHover}
+              imageBackgroundColor={imageBackgroundColor}
+              imagePlaceholder={imagePlaceholder}
+              handleAddToCart={handleAddToCart}
+            />
+          </FDKLink>
+        ))}
+    </div>
   );
 }

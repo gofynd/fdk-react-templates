@@ -71,7 +71,6 @@ const ShipmentDetails = ({
   naivgateToShipment,
   isAdmin,
   t,
-  availableFOCount,
   getTotalItems,
   getTotalPieces,
 }) => {
@@ -129,13 +128,6 @@ const ShipmentDetails = ({
           >
             {t("resource.common.shipment")}: {item?.shipment_id}
           </div>
-          {availableFOCount > 1 && item?.fulfillment_option?.name && (
-            <div
-              className={`${styles.shipmentId} ${styles.uktLinks} ${styles.boldls}`}
-            >
-              {item?.fulfillment_option?.name}
-            </div>
-          )}
           <div className={`${styles.shipmentStats} ${styles.light}`}>
             <span>{getTotalItems(item?.bags?.length, t)}</span>
             <span>{` | `}</span>
@@ -167,7 +159,6 @@ function OrderShipment({
   orderInfo,
   onBuyAgainClick = () => {},
   isBuyAgainEligible,
-  availableFOCount,
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -244,7 +235,6 @@ function OrderShipment({
                       naivgateToShipment={naivgateToShipment}
                       isAdmin={isAdmin}
                       t={t}
-                      availableFOCount={availableFOCount}
                       getTotalItems={getTotalItems}
                       getTotalPieces={getTotalPieces}
                     />
@@ -257,7 +247,6 @@ function OrderShipment({
                     naivgateToShipment={naivgateToShipment}
                     isAdmin={isAdmin}
                     t={t}
-                    availableFOCount={availableFOCount}
                     getTotalItems={getTotalItems}
                     getTotalPieces={getTotalPieces}
                   />
