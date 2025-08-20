@@ -27,6 +27,7 @@
  * @param {Function} [props.onRemoveClick=() => {}] - Callback function for remove icon click.
  * @param {boolean} [props.centerAlign=false] - Flag to center align text.
  * @param {boolean} [props.showAddToCart=false] - Flag to display the add to cart button.
+ * @param {Function} [props.onClick=() => {}] - Callback function for card click.
  *
  * @returns {JSX.Element} The rendered product card component.
  *
@@ -40,7 +41,6 @@ import SvgWrapper from "../core/svgWrapper/SvgWrapper";
 import * as styles from "./product-card.less";
 import FyButton from "../core/fy-button/fy-button";
 import { useGlobalStore, useFPI, useGlobalTranslation } from "fdk-core/utils";
-import ForcedLtr from "../forced-ltr/forced-ltr";
 
 const ProductCard = ({
   product,
@@ -77,6 +77,7 @@ const ProductCard = ({
   showAddToCart = false,
   showBadge = true,
   isSlider = false,
+  onClick = () => {},
 }) => {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -192,6 +193,7 @@ const ProductCard = ({
       } ${styles[customClass[0]]} ${styles[customClass[1]]} ${
         styles[customClass[2]]
       } ${styles.animate} ${gridClass} ${isSlider ? styles.sliderCard : ""}`}
+      onClick={onClick}
     >
       <div className={styles.imageContainer}>
         {!isMobile && showImageOnHover && hoverImageUrl && (
@@ -275,23 +277,19 @@ const ProductCard = ({
                 <span
                   className={`${styles["productPrice--sale"]} ${styles.h4}`}
                 >
-                  <ForcedLtr
-                    text={getListingPrice("effective")}
-                  />
+                  {getListingPrice("effective")}
                 </span>
               )}
               {hasDiscount && (
                 <span
                   className={`${styles["productPrice--regular"]} ${styles.captionNormal}`}
                 >
-                  <ForcedLtr
-                    text={getListingPrice("marked")}
-                  />
+                  {getListingPrice("marked")}
                 </span>
               )}
               {product.discount && (
                 <span
-                  className={`${styles["productPrice--discount"]} ${styles.captionNormal} ${centerAlign ? styles["productPrice--textCenter"] : ""}`}
+                  className={`${styles["productPrice--discount"]} ${styles.captionNormal}   ${centerAlign ? styles["productPrice--textCenter"] : ""}`}
                 >
                   ({product.discount})
                 </span>

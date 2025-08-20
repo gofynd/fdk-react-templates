@@ -82,7 +82,7 @@ function OrderStatus({
             </div>
             <div className={styles.orderTime}>
               {t("resource.order.placed_on")}:
-              <span> {convertDate(orderData.order_created_time, formatLocale(locale, countryCode,true)
+              <span> {convertDate(orderData.order_created_time, formatLocale(locale, countryCode)
               )}</span>
             </div>
             <div className={styles.trackOrderBtn}>

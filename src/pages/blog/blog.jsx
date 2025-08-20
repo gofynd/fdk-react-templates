@@ -14,7 +14,7 @@ import {
   useNavigate,
   useGlobalStore,
   useFPI,
-  useGlobalTranslation
+  useGlobalTranslation,
 } from "fdk-core/utils";
 
 import {
@@ -25,7 +25,10 @@ import {
   translateDynamicLabel,
 } from "../../helper/utils";
 import Shimmer from "../../components/shimmer/shimmer";
-import useLocaleDirection from "../../helper/hooks/useLocaleDirection";
+import {
+  SliderNextArrow,
+  SliderPrevArrow,
+} from "../../components/slider-arrow/slider-arrow";
 
 function MemoizedSlide({ blog, index, sliderProps, getBlogTitle }) {
   const { t } = useGlobalTranslation("translation");
@@ -37,9 +40,10 @@ function MemoizedSlide({ blog, index, sliderProps, getBlogTitle }) {
     const options = { year: "numeric", month: "long", day: "numeric" };
     return isRunningOnClient()
       ? convertUTCDateToLocalDate(
-        dateString, 
-        options, 
-        formatLocale(locale, countryCode,true))
+          dateString,
+          options,
+          formatLocale(locale, countryCode, true)
+        )
       : "";
   };
   const getBlogTag = (tags) => {
@@ -108,7 +112,6 @@ function BlogList({
   ssrSearch,
   ssrFilters,
 }) {
-  const { isRTL } = useLocaleDirection();
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
   const i18nDetails = useGlobalStore(fpi?.getters?.i18N_DETAILS) || {};
@@ -142,16 +145,31 @@ function BlogList({
     speed: Number(sliderProps?.slide_interval * 1000),
     slidesToShow: 1,
     slidesToScroll: 1,
-    swipeToSlide: true,
+    swipeToSlide: false,
     autoplay: sliderProps?.autoplay,
     pauseOnHover: true,
     cssEase: "linear",
     centerPadding: "75px",
-    arrows: false,
-    nextArrow: <SvgWrapper svgSrc="arrow-right" />,
-    prevArrow: <SvgWrapper svgSrc="arrow-left" />,
+    arrows: true,
+    nextArrow: <SliderNextArrow nextArrowStyles={styles.nextArrowStyles} />,
+    prevArrow: <SliderPrevArrow prevArrowStyles={styles.prevArrowStyles} />,
     infinite: sliderBlogs?.tems?.length > 1,
-    rtl: isRTL,
+    responsive: [
+      {
+        breakpoint: 768,
+        settings: {
+          arrows: false,
+          centerPadding: "32px",
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          arrows: false,
+          centerPadding: "20px",
+        },
+      },
+    ],
   });
 
   useEffect(() => {
@@ -209,12 +227,12 @@ function BlogList({
       ...(tagBlogFilters || []),
       ...(search
         ? [
-          {
-            display: search,
-            pretext: "text",
-            key: "search_text",
-          },
-        ]
+            {
+              display: search,
+              pretext: "text",
+              key: "search_text",
+            },
+          ]
         : []),
     ]);
   }, [location?.search]);
@@ -266,9 +284,10 @@ function BlogList({
     const options = { year: "numeric", month: "long", day: "numeric" };
     return isRunningOnClient()
       ? convertUTCDateToLocalDate(
-        dateString, 
-        options, 
-        formatLocale(locale, countryCode,true))
+          dateString,
+          options,
+          formatLocale(locale, countryCode, true)
+        )
       : "";
   };
   const getBlogTag = (tags) => {
@@ -411,9 +430,26 @@ function BlogList({
             <Slider
               {...config}
               initialSlide={0}
-              className={
-                sliderBlogs?.length <= 3 || windowWidth <= 480 ? "no-nav" : ""
-              }
+              className={`${styles.hideOnMobile}
+                ${sliderBlogs?.length <= 3 || windowWidth <= 480 ? "no-nav" : ""}
+              `}
+            >
+              {sliderBlogs?.items?.map((blog, index) => (
+                <MemoizedSlide
+                  key={index}
+                  blog={blog}
+                  index={index}
+                  getBlogTitle={getBlogTitle}
+                  sliderProps={sliderProps}
+                />
+              ))}
+            </Slider>
+            <Slider
+              {...config}
+              initialSlide={0}
+              className={`${styles.hideOnDesktop}
+                ${sliderBlogs?.length <= 3 || windowWidth <= 480 ? "no-nav" : ""}
+              `}
             >
               {sliderBlogs?.items?.map((blog, index) => (
                 <MemoizedSlide
@@ -431,7 +467,11 @@ function BlogList({
           <div className={`${styles.filterWrapper__header}`}>
             <div>
               {blogFilter?.length > 0 && (
-                <span>{t("resource.blog.showing_results", { count: blogs?.page?.item_total })} </span>
+                <span>
+                  {t("resource.blog.showing_results", {
+                    count: blogs?.page?.item_total,
+                  })}{" "}
+                </span>
               )}
               {blogCount > 0 && (
                 <>
