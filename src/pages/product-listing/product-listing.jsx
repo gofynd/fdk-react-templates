@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "../../styles/product-listing.less";
 import InfiniteLoader from "../../components/core/infinite-loader/infinite-loader";
@@ -27,7 +27,6 @@ import FourGridIcon from "../../assets/images/grid-four.svg";
 import TwoGridMobIcon from "../../assets/images/grid-two-mob.svg";
 import OneGridMobIcon from "../../assets/images/grid-one-mob.svg";
 import { useGlobalTranslation } from "fdk-core/utils";
-import { useNavigate } from "react-router-dom";
 
 const ProductListing = ({
   breadcrumb = [],
@@ -415,6 +414,33 @@ const ProductListing = ({
 export default ProductListing;
 
 function ProductGrid({
+  columnCount = { desktop: 4, tablet: 3, mobile: 1 },
+  productList = [],
+  ...restProps
+}) {
+  return (
+    <div
+      className={styles.productContainer}
+      style={{
+        "--desktop-col": columnCount.desktop,
+        "--tablet-col": columnCount.tablet,
+        "--mobile-col": columnCount.mobile,
+      }}
+    >
+      {productList?.length > 0 &&
+        productList.map((product) => (
+          <ProductGridItem
+            key={product?.uid}
+            product={product}
+            {...restProps}
+          />
+        ))}
+    </div>
+  );
+}
+
+function ProductGridItem({
+  product,
   isBrand = true,
   isSaleBadge = true,
   isPrice = true,
@@ -424,7 +450,6 @@ function ProductGrid({
   WishlistIconComponent,
   isProductOpenInNewTab = false,
   columnCount = { desktop: 4, tablet: 3, mobile: 1 },
-  productList = [],
   followedIdList = [],
   listingPrice = "range",
   isImageFill = false,
@@ -436,69 +461,70 @@ function ProductGrid({
   onWishlistClick = () => {},
   handleAddToCart = () => {},
 }) {
-  const navigate = useNavigate();
+  const { t } = useGlobalTranslation("translation");
+
+  const getProductLinkProps = useMemo(() => {
+    const isMto = product?.custom_order?.is_custom_order || false;
+    let sizeToSelect;
+    let state = { product };
+    if (!!product?.sizes?.sizes?.length) {
+      let firstAvailableSize = product.sizes.sizes.find(
+        (size) => size.quantity > 0 || isMto
+      );
+      sizeToSelect = firstAvailableSize.value;
+    } else if (!!product?.sizes?.length) {
+      sizeToSelect = product.sizes[0];
+      state = {
+        ...product,
+        sizes: { sellable: product.sellable, sizes: product.sizes },
+      };
+    }
+
+    return {
+      action: {
+        ...product.action,
+        page: {
+          ...product.action.page,
+          query: {
+            ...product.action.page.query,
+            ...(sizeToSelect && { size: sizeToSelect }),
+          },
+        },
+      },
+      state,
+    };
+  }, [product]);
 
   return (
-    <div
-      className={styles.productContainer}
+    <FDKLink
+      className={styles["product-wrapper"]}
+      {...getProductLinkProps}
+      target={isProductOpenInNewTab ? "_blank" : "_self"}
       style={{
-        "--desktop-col": columnCount.desktop,
-        "--tablet-col": columnCount.tablet,
-        "--mobile-col": columnCount.mobile,
+        display: "block",
       }}
     >
-      {productList?.length > 0 &&
-        productList.map((product, index) => (
-          <FDKLink
-            className={styles["product-wrapper"]}
-            action={{
-              ...product.action,
-              page: {
-                ...product.action.page,
-                query: {
-                  ...product.action.page.query,
-                  ...(product.sizes && { size: product.sizes[0] }),
-                },
-              },
-            }}
-            state={{
-              product: {
-                ...product,
-                sizes: { sellable: product.sellable, sizes: product.sizes },
-              },
-            }}
-            key={product?.uid}
-            target={isProductOpenInNewTab ? "_blank" : "_self"}
-            style={{
-              // "--delay": `${(index % 12) * 150}ms`,
-              display: "block",
-            }}
-          >
-            <ProductCard
-              product={product}
-              listingPrice={listingPrice}
-              columnCount={columnCount}
-              aspectRatio={aspectRatio}
-              isBrand={isBrand}
-              isPrice={isPrice}
-              isSaleBadge={isSaleBadge}
-              imgSrcSet={imgSrcSet}
-              isWishlistIcon={isWishlistIcon}
-              WishlistIconComponent={WishlistIconComponent}
-              followedIdList={followedIdList}
-              showAddToCart={showAddToCart}
-              actionButtonText={
-                actionButtonText ?? t("resource.common.add_to_cart")
-              }
-              onWishlistClick={onWishlistClick}
-              isImageFill={isImageFill}
-              showImageOnHover={showImageOnHover}
-              imageBackgroundColor={imageBackgroundColor}
-              imagePlaceholder={imagePlaceholder}
-              handleAddToCart={handleAddToCart}
-            />
-          </FDKLink>
-        ))}
-    </div>
+      <ProductCard
+        product={product}
+        listingPrice={listingPrice}
+        columnCount={columnCount}
+        aspectRatio={aspectRatio}
+        isBrand={isBrand}
+        isPrice={isPrice}
+        isSaleBadge={isSaleBadge}
+        imgSrcSet={imgSrcSet}
+        isWishlistIcon={isWishlistIcon}
+        WishlistIconComponent={WishlistIconComponent}
+        followedIdList={followedIdList}
+        showAddToCart={showAddToCart}
+        actionButtonText={actionButtonText ?? t("resource.common.add_to_cart")}
+        onWishlistClick={onWishlistClick}
+        isImageFill={isImageFill}
+        showImageOnHover={showImageOnHover}
+        imageBackgroundColor={imageBackgroundColor}
+        imagePlaceholder={imagePlaceholder}
+        handleAddToCart={handleAddToCart}
+      />
+    </FDKLink>
   );
 }
