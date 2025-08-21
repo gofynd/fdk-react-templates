@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 18px;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 1.5;
+    line-height: 24px;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .forget-password__caption-medium___SDp77,
 .forget-password__captionMedium___sYpg4 {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .forget-password__caption-semi-bold___GaUta,
 .forget-password__captionSemiBold___wcMXG {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -260,11 +260,11 @@ h5,
 }
 .forget-password__mr-5___sbYel,
 .forget-password__mr5___aq5fE {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .forget-password__mr-2___bCF7b,
 .forget-password__mr2___vmiBn {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .forget-password__py-5___ChqWC,
 .forget-password__py5___GMURz {
@@ -367,8 +367,8 @@ h5,
   display: flex;
   align-items: center;
   background-color: var(--errorBackground, #e6d5d5);
-  border: 1px dashed var(--errorText, #ff3333);
-  color: var(--errorText, #ff3333);
+  border: 1px dashed var(--errorText, #b24141);
+  color: var(--errorText, #b24141);
 }
 .forget-password__forgotPasswordWrapper___dytr2 .forget-password__forgotPasswordAlert___tAU9Y.forget-password__alert-success___IDyO1 {
   background-color: #eefefa;
@@ -377,11 +377,11 @@ h5,
 }
 .forget-password__forgotPasswordWrapper___dytr2 .forget-password__forgotPasswordAlert___tAU9Y .forget-password__alertMessage___BlRcj {
   display: inline-block;
-  margin-inline-end: 8px;
+  margin-right: 8px;
   font-size: 13px;
 }
 .forget-password__forgotPasswordWrapper___dytr2 .forget-password__forgotPasswordAlert___tAU9Y .forget-password__alert-link___WEvmv {
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
   font-size: 9px;
   cursor: pointer;
 }
@@ -423,17 +423,17 @@ h5,
   line-height: 140%;
 }
 .forget-password__forgotPasswordWrapper___dytr2 .forget-password__forgotPasswordInputGroup___XQ61I .forget-password__emailErrorMessage___vW0zC {
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
   font-size: 12px;
   font-weight: 400;
   line-height: 16.8px;
   margin-top: 8px;
 }
 .forget-password__forgotPasswordWrapper___dytr2 .forget-password__errorInput___LgeyJ label {
-  color: var(--errorText, #ff3333) !important;
+  color: var(--errorText, #b24141) !important;
 }
 .forget-password__forgotPasswordWrapper___dytr2 .forget-password__errorInput___LgeyJ input {
-  border: 1px solid var(--errorText, #ff3333) !important;
+  border: 1px solid var(--errorText, #b24141) !important;
 }
 .forget-password__forgotPasswordWrapper___dytr2 .forget-password__forgotPasswordSubmitBtn___TjR_i {
   border: none;
@@ -606,7 +606,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 18px;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -615,7 +615,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 1.5;
+    line-height: 24px;
   }
 }
 h5,
@@ -682,7 +682,7 @@ h5,
 .login-register-toggle__caption-medium___TPPc2,
 .login-register-toggle__captionMedium___SG74Q {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -695,7 +695,7 @@ h5,
 .login-register-toggle__caption-semi-bold___jC8wa,
 .login-register-toggle__captionSemiBold___ps_L5 {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -760,11 +760,11 @@ h5,
 }
 .login-register-toggle__mr-5___v7zhF,
 .login-register-toggle__mr5___c7UOL {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .login-register-toggle__mr-2___eS3ge,
 .login-register-toggle__mr2___rxBof {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .login-register-toggle__py-5___D9ksb,
 .login-register-toggle__py5___K4lAE {
@@ -851,7 +851,7 @@ h5,
   flex: 0 0 24px;
 }
 .login-register-toggle__loginRegisterToggle___JgREz .login-register-toggle__label___hpP0C {
-  margin-inline-end: 24px;
+  margin-right: 24px;
   color: var(--textHeading, #26201a);
   font-size: 14px;
   font-style: normal;
