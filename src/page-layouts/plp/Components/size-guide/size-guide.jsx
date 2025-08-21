@@ -233,7 +233,7 @@ function SizeGuide({ isOpen, productMeta, onCloseDialog }) {
                       {" "}
                       {t("resource.common.size_not_available_info_description")}
                     </p>
-                    <FDKLink link="/contact-us" target="_blank">
+                    <FDKLink to="/contact-us" target="_blank">
                       <button
                         type="button"
                         className={`${styles.contactUs} ${styles.btnPrimary} ${styles.fontBody}`}
@@ -281,7 +281,7 @@ function SizeGuide({ isOpen, productMeta, onCloseDialog }) {
                           "resource.common.size_measure_not_available_info_description"
                         )}
                       </p>
-                      <FDKLink link="/contact-us" target="_blank">
+                      <FDKLink to="/contact-us" target="_blank">
                         <button
                           type="button"
                           className={`${styles.contactUs} ${styles.btnPrimary} ${styles.fontBody}`}
