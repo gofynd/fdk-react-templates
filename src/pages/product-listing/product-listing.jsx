@@ -475,7 +475,7 @@ function ProductGridItem({
       let firstAvailableSize = product.sizes.sizes.find(
         (size) => size.quantity > 0 || isMto
       );
-      sizeToSelect = firstAvailableSize.value;
+      if (firstAvailableSize) sizeToSelect = firstAvailableSize.value;
     } else if (!!product?.sizes?.length) {
       sizeToSelect = product.sizes[0];
       state = {
