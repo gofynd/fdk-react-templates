@@ -15,6 +15,7 @@ function SingleAddress({
   showGoogleMap,
   loader,
   isGuestUser = false,
+  isApiLoading = false,
 }) {
   const {
     allAddresses = [],
@@ -106,6 +107,7 @@ function SingleAddress({
             getOtherAddress={getOtherAddress}
             getDefaultAddress={getDefaultAddress}
             loader={loader}
+            isApiLoading={isApiLoading}
           ></SingleAddressContent>
         )}
       </div>

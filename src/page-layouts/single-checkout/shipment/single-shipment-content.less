@@ -29,6 +29,10 @@
         display: flex;
         padding: 4px 12px 4px 0px;
 
+        .shipmentLabelLoader {
+          height: 17px;
+        }
+
         .shipmentNumber {
           font-weight: 600;
           font-size: 14px;
@@ -52,11 +56,16 @@
           }
         }
       }
+
       .deliveryDateWrapper {
         display: flex;
         color: @SuccessText;
         gap: 8px;
         align-items: center;
+
+        .deliveryPromiseLoader {
+          height: 20px;
+        }
 
         @media @tablet {
           gap: 6px;

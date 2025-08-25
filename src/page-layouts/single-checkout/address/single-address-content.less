@@ -4,11 +4,44 @@
   @media @desktop {
     border-radius: 0 0 8px 8px;
   }
-  .shimmer {
-    height: 250px;
 
-    @media @tablet {
-      height: 200px;
+  .shimmer {
+    @media @mobile {
+      border-top: 1px solid @DividerStokes;
+      border-bottom: 1px solid @DividerStokes;
+    }
+
+    .defaultAddressLabel {
+      margin: 12px 0;
+
+      @media @mobile {
+        margin: 0;
+        padding: 16px 16px 0;
+      }
+    }
+
+    .addressCard {
+      border-radius: 8px;
+      border: 1px solid @DividerStokes;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+
+      @media @mobile {
+        border: none;
+      }
+      .addressActionBtn {
+        display: flex;
+        justify-content: flex-end;
+        span {
+          width: fit-content;
+        }
+      }
+
+      .addressDeliverBtn {
+        margin-top: 16px;
+      }
     }
   }
 

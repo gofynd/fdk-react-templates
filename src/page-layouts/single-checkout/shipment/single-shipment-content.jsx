@@ -12,6 +12,7 @@ import FreeGiftItem from "../../cart/Components/free-gift-item/free-gift-item";
 import Shimmer from "../../../components/shimmer/shimmer";
 import AppliedCouponIcon from "../../../assets/images/applied-coupon-small.svg";
 import ShippingLogoIcon from "../../../assets/images/shipping-logo.svg";
+import Skeleton from "../../../components/core/skeletons/skeleton";
 
 function SingleShipmentContent({
   shipments,
@@ -92,7 +93,65 @@ function SingleShipmentContent({
     <>
       {isShipmentLoading ? (
         <div className={styles.parent}>
-          {loader || <Shimmer className={styles.shimmer} />}
+          {Array(3)
+            .fill()
+            .map((_) => (
+              <div className={styles.reviewContentContainer}>
+                <div className={styles.shipmentWrapper}>
+                  <div className={styles.shipmentHeading}>
+                    <div className={styles.headerLeft}>
+                      <Skeleton
+                        className={styles.shipmentLabelLoader}
+                        width={145}
+                        height={27}
+                      />
+                    </div>
+                    <div className={styles.deliveryDateWrapper}>
+                      <Skeleton
+                        className={styles.deliveryPromiseLoader}
+                        width={166}
+                        height={27}
+                      />
+                    </div>
+                  </div>
+                  <div className={styles.item}>
+                    <div className={styles.itemWrapper}>
+                      <div className={styles.leftImg}>
+                        <Skeleton width={100} aspectRatio={2 / 3} />
+                      </div>
+                      <div className={styles.rightDetails}>
+                        <div className={styles.productDetails}>
+                          <div>
+                            <div className={styles.brandName}>
+                              <Skeleton width={58} height={20} />
+                            </div>
+                            <div className={styles.productName}>
+                              <Skeleton width={134} height={20} />
+                            </div>
+                          </div>
+                          <div className={styles.sizeInfo}>
+                            <Skeleton width={100} height={20} />
+                          </div>
+                        </div>
+                        <div className={styles.paymentInfo}>
+                          <div className={styles.priceWrapper}>
+                            <div className={styles.effectivePrice}>
+                              <Skeleton width={40} height={20} />
+                            </div>
+                            <div className={styles.markedPrice}>
+                              <Skeleton width={35} height={20} />
+                            </div>
+                            <div className={styles.discount}>
+                              <Skeleton width={52} height={20} />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
         </div>
       ) : (
         <div className={styles.parent}>
