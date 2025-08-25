@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 18px;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 1.5;
+    line-height: 24px;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .profile-navigation__caption-medium___zEr9A,
 .profile-navigation__captionMedium___q4AMz {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .profile-navigation__caption-semi-bold___Nu1mj,
 .profile-navigation__captionSemiBold___P_shD {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -260,11 +260,11 @@ h5,
 }
 .profile-navigation__mr-5___MnMTz,
 .profile-navigation__mr5___MZFtF {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .profile-navigation__mr-2___A9Cvj,
 .profile-navigation__mr2___GX0Ug {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .profile-navigation__py-5___UWLHp,
 .profile-navigation__py5___G_zlw {
@@ -437,7 +437,7 @@ h5,
 @media only screen and (max-width: 768px) {
   .profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__navContainer___pxEcU {
     width: 100%;
-    border-inline-start: 0;
+    border-left: 0;
   }
   .profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__navContainer___pxEcU .profile-navigation__userData___PSyo0 .profile-navigation__nameContainer___G2PUc .profile-navigation__name___sA_rM {
     font-size: 14px;
@@ -445,7 +445,7 @@ h5,
   .profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__accountHeader___XCw9w,
   .profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__nav___Muxd1 {
     font-size: 14px;
-    line-height: 1.5;
+    line-height: 14px;
   }
   .profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__accountHeader___XCw9w {
     padding: 16px 0 4px;

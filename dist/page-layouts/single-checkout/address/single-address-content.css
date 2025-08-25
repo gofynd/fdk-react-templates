@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 18px;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 1.5;
+    line-height: 24px;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .address-item__caption-medium___keR9q,
 .address-item__captionMedium___Mu54H {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .address-item__caption-semi-bold___GchPi,
 .address-item__captionSemiBold___L3J0R {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -260,11 +260,11 @@ h5,
 }
 .address-item__mr-5___XwVAS,
 .address-item__mr5___XLJZf {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .address-item__mr-2___kIt4m,
 .address-item__mr2___s93C5 {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .address-item__py-5___DM0Sd,
 .address-item__py5___gN5GU {
@@ -340,11 +340,6 @@ h5,
   padding: 16px;
   margin-bottom: 12px;
   border: 1px solid var(--dividerStokes);
-}
-@media only screen and (min-width: 769px) {
-  .address-item__addressContent___tqwTi {
-    border-radius: 8px;
-  }
 }
 .address-item__addressContent___tqwTi:last-child {
   margin-bottom: 0;
@@ -500,7 +495,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 18px;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -509,7 +504,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 1.5;
+    line-height: 24px;
   }
 }
 h5,
@@ -576,7 +571,7 @@ h5,
 .single-address-content__caption-medium___DzD4P,
 .single-address-content__captionMedium___vrXNI {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -589,7 +584,7 @@ h5,
 .single-address-content__caption-semi-bold___Qnnkp,
 .single-address-content__captionSemiBold___sQqBw {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -654,11 +649,11 @@ h5,
 }
 .single-address-content__mr-5___T3gO_,
 .single-address-content__mr5___yma3A {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .single-address-content__mr-2___JanzA,
 .single-address-content__mr2___AKJR3 {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .single-address-content__py-5___Yuq0n,
 .single-address-content__py5___AUTxG {
@@ -735,11 +730,6 @@ h5,
   border: 1px solid var(--dividerStokes);
   border-top: none;
 }
-@media only screen and (min-width: 769px) {
-  .single-address-content__addressContentConitainer___CupPn {
-    border-radius: 0 0 8px 8px;
-  }
-}
 .single-address-content__addressContentConitainer___CupPn .single-address-content__shimmer___BBLza {
   height: 250px;
 }
@@ -754,11 +744,6 @@ h5,
 @media only screen and (max-width: 768px) {
   .single-address-content__addressContentConitainer___CupPn.single-address-content__fontSize___V2JXy {
     font-size: 12px;
-  }
-}
-@media only screen and (min-width: 769px) and (max-width: 1024px) {
-  .single-address-content__addressContentConitainer___CupPn {
-    padding: 16px;
   }
 }
 @media only screen and (max-width: 480px) {
@@ -890,7 +875,7 @@ h5,
   font-weight: 600;
   font-size: 12px;
   line-height: 140%;
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
 }
 .single-address-content__invalidAddError___WDHnv .single-address-content__invalidAddErrorLeft___AUwWL .single-address-content__invalidAddErrorData___ardbO .single-address-content__invalidAddErrorSuggestion___BY4RT {
   font-weight: 400;
@@ -904,7 +889,7 @@ h5,
   line-height: 140%;
   text-align: center;
   text-transform: uppercase;
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
   cursor: pointer;
 }
 

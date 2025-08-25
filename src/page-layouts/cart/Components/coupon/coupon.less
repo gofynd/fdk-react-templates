@@ -2,12 +2,6 @@
 
 .couponBoxContainer {
   padding: 24px;
-  @media @desktop {
-    border-radius: 8px;
-  }
-  @media @tablet-range {
-    padding: 16px;
-  }
   border: 1px solid @DividerStokes;
   @media @mobile {
     padding: 16px;
@@ -35,14 +29,11 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      margin-inline-start: auto;
+      margin-left: auto;
       background: none;
       border: none;
       width: 2rem;
       height: 2rem;
-      [dir="rtl"] & {
-        transform: rotate(180deg);
-      }
     }
   }
   .couponIcon {
@@ -94,7 +85,7 @@
       margin-bottom: 16px;
       padding-top: 12px;
       padding-bottom: 12px;
-      padding-inline-start: 24px;
+      padding-left: 24px;
       display: flex;
       align-items: center;
       line-height: 140%;
@@ -109,7 +100,7 @@
       .colorErrorNormal {
         font-size: 12px;
         font-weight: 600;
-        margin-inline-start: 14px;
+        margin-left: 14px;
         color: @ErrorText;
       }
     }
@@ -155,7 +146,7 @@
         padding: 0px 13px;
         cursor: pointer;
         position: absolute;
-        inset-inline-end: 5%;
+        right: 5%;
       }
       .checkBtn:disabled {
         opacity: 0.5;
@@ -171,7 +162,7 @@
       @media @mobile {
         margin-top: 24px;
         margin-bottom: 12px;
-        padding-inline-start: 16px;
+        padding-left: 16px;
       }
     }
     .couponList {
@@ -209,11 +200,8 @@
           content: "";
           position: absolute;
           top: 50%;
-          inset-inline-start: 0;
+          left: 0;
           transform: translate(-50%, -50%) rotate(45deg);
-          [dir="rtl"] & {
-            transform: translate(50%, -50%) rotate(-45deg);
-          }
           width: 16px;
           aspect-ratio: 1;
           background: @DialogBackground;
@@ -222,12 +210,9 @@
           border-color: @SuccessText @SuccessText transparent transparent;
         }
         &:after {
-          inset-inline-end: 0;
-          inset-inline-start: auto;
+          right: 0;
+          left: auto;
           transform: translate(50%, -50%) rotate(-135deg);
-          [dir="rtl"] & {
-            transform: translate(-50%, -50%) rotate(135deg);
-          }
         }
       }
       .couponTitle {
@@ -257,7 +242,7 @@
         font-size: 14px;
         font-weight: 600;
         cursor: pointer;
-        margin-inline-start: auto;
+        margin-left: auto;
       }
     }
     .noCouponsAvailable {
