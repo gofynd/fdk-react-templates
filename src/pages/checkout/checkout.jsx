@@ -81,6 +81,8 @@ function Checkout({
           mapApiKey={mapApiKey}
           showGoogleMap={showGoogleMap}
           isGuestUser={isGuestUser}
+          getTotalValue={payment?.getTotalValue}
+          showPaymentOptions={showPaymentOptions}
         ></SingleAddress>
         <SinglePageShipment
           customClassName={styles.customStylesShipment}

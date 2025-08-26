@@ -32,7 +32,13 @@ function AddressRight({
   );
 }
 
-function DeliverBtn({ selectedAddressId, id, selectAddress }) {
+function DeliverBtn({
+  selectedAddressId,
+  id,
+  selectAddress,
+  getTotalValue,
+  showPaymentOptions,
+}) {
   const { t } = useGlobalTranslation("translation");
   return (
     <>
@@ -40,7 +46,12 @@ function DeliverBtn({ selectedAddressId, id, selectAddress }) {
         <div className={styles.actionContainer}>
           <button
             className={styles.deliverToThis}
-            onClick={() => selectAddress()}
+            onClick={() => {
+              if (getTotalValue?.() === 0) {
+                showPaymentOptions();
+              }
+              selectAddress();
+            }}
           >
             {t("resource.checkout.deliver_to_this_address")}
           </button>
@@ -92,6 +103,8 @@ function SingleAddressContent({
   getDefaultAddress,
   loader,
   isApiLoading,
+  showPaymentOptions,
+  getTotalValue,
 }) {
   const { t } = useGlobalTranslation("translation");
   function selectAdd(id) {
@@ -137,6 +150,8 @@ function SingleAddressContent({
                           selectedAddressId={selectedAddressId}
                           id={item?.id}
                           selectAddress={selectAddress}
+                          getTotalValue={getTotalValue}
+                          showPaymentOptions={showPaymentOptions}
                         />
                       </>
                     }
@@ -180,6 +195,8 @@ function SingleAddressContent({
                           selectedAddressId={selectedAddressId}
                           id={item?.id}
                           selectAddress={selectAddress}
+                          getTotalValue={getTotalValue}
+                          showPaymentOptions={showPaymentOptions}
                         />
                       </>
                     }

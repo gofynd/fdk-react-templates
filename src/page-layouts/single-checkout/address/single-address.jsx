@@ -16,6 +16,8 @@ function SingleAddress({
   loader,
   isGuestUser = false,
   isApiLoading = false,
+  getTotalValue,
+  showPaymentOptions,
 }) {
   const {
     allAddresses = [],
@@ -108,6 +110,8 @@ function SingleAddress({
             getDefaultAddress={getDefaultAddress}
             loader={loader}
             isApiLoading={isApiLoading}
+            showPaymentOptions={showPaymentOptions}
+            getTotalValue={getTotalValue}
           ></SingleAddressContent>
         )}
       </div>
