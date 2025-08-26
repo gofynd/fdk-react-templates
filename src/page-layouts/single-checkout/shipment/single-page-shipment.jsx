@@ -27,9 +27,11 @@ function SinglePageShipment({
   onPriceDetailsClick = () => {},
   customClassName,
   isCartValid,
+  payment,
 }) {
   const { t } = useGlobalTranslation("translation");
   const navigate = useNavigate();
+  const { proceedToPay, getTotalValue, isLoading } = payment;
   const getShipmentCount = shipments?.length || 0;
 
   const editShipment = () => {
@@ -68,10 +70,20 @@ function SinglePageShipment({
                 {t("resource.checkout.edit_cart_lower")}
               </div>
               <div
-                className={`${styles.proceedPay} ${!isCartValid ? styles.disabledProceed : ""}`}
-                onClick={showPaymentOptions}
+                className={styles.proceedPay}
+                onClick={() => {
+                  getTotalValue?.() === 0
+                    ? proceedToPay("PP", {})
+                    : showPaymentOptions();
+                }}
+                style={{
+                  opacity: isLoading ? 0.5 : 1,
+                  pointerEvents: isLoading ? "none" : "auto",
+                }}
               >
-                {t("resource.checkout.proceed_to_pay")}
+                {getTotalValue?.() === 0
+                  ? "Place Order "
+                  : t("resource.checkout.proceed_to_pay")}
               </div>
             </div>
           </div>
@@ -84,17 +96,28 @@ function SinglePageShipment({
             buybox={buybox}
             availableFOCount={availableFOCount}
             isCartValid={isCartValid}
+            getTotalValue={getTotalValue}
+            proceedToPay={proceedToPay}
+            isLoading={isLoading}
           ></SingleShipmentContent>
           <StickyPayNow
-            btnTitle={t("resource.checkout.proceed_to_pay_caps")}
+            btnTitle={
+              getTotalValue?.() === 0
+                ? "PLACE ORDER"
+                : t("resource.checkout.proceed_to_pay_caps")
+            }
             onPriceDetailsClick={onPriceDetailsClick}
             value={totalValue}
-            disabled={!isCartValid}
+            disabled={isLoading || !isCartValid}
             proceedToPay={() => {
-              showPaymentOptions();
-              window?.scrollTo({
-                top: 0,
-              });
+              if (getTotalValue?.() === 0) {
+                proceedToPay("PP", {});
+              } else {
+                showPaymentOptions();
+                window?.scrollTo({
+                  top: 0,
+                });
+              }
             }}
           />
         </>
@@ -120,8 +143,18 @@ function SinglePageShipment({
                   </div>
                 </div>
               </div>
-              <div className={styles.rightSelected} onClick={editShipment}>
-                {t("resource.facets.edit")}
+              <div className={styles.orderEditContainer}>
+                <div className={styles.rightSelected} onClick={editShipment}>
+                  {t("resource.facets.edit")}
+                </div>
+                {getTotalValue?.() === 0 && (
+                  <button
+                    className={`${styles.commonBtn} ${styles.payBtn}`}
+                    onClick={() => proceedToPay("PP", {})}
+                  >
+                    PLACE ORDER
+                  </button>
+                )}
               </div>
             </div>
           ) : (

@@ -27,7 +27,12 @@ function CheckoutPayment({
   const [paymentErrMsg, setPaymentErrMsg] = useState("");
   const [juspayErrorMessage, setJuspayErrorMessage] = useState(false);
   const [timerId, setTimerId] = useState(null);
-  const { errorMessage, setErrorMessage, enableLinkPaymentOption } = payment;
+  const {
+    errorMessage,
+    setErrorMessage,
+    enableLinkPaymentOption,
+    getTotalValue,
+  } = payment;
   const isMobile = useMobile();
 
   useEffect(() => {
@@ -108,7 +113,7 @@ function CheckoutPayment({
   return (
     <>
       <div
-        className={`${styles.paymentContainer} ${!showPayment ? styles.hidePayment : ""} ${enableLinkPaymentOption ? styles.unsetMarginTop : ""}`}
+        className={`${styles.paymentContainer} ${!showPayment ? styles.hidePayment : ""} ${enableLinkPaymentOption ? styles.unsetMarginTop : ""} ${getTotalValue?.() === 0 ? styles.disabledPayment : ""}`}
       >
         {showPayment ? (
           <>

@@ -10,6 +10,7 @@ import Coupon from "../../page-layouts/cart/Components/coupon/coupon";
 import Comment from "../../page-layouts/cart/Components/comment/comment";
 import FyButton from "../../components/core/fy-button/fy-button";
 import { priceFormatCurrencySymbol } from "../../helper/utils";
+import ZeroPayButton from "../../page-layouts/single-checkout/payment/zero-pay-btn/zero-pay-btn";
 
 function Checkout({
   breakupValues,
@@ -93,6 +94,7 @@ function Checkout({
           isHyperlocal={isHyperlocal}
           convertHyperlocalTat={convertHyperlocalTat}
           buybox={buybox}
+          payment={payment}
           availableFOCount={availableFOCount}
           totalValue={priceFormatCurrencySymbol(
             payment?.getCurrencySymbol,
@@ -137,6 +139,11 @@ function Checkout({
           breakUpValues={breakupValues}
           cartItemCount={cartItemsCount}
           currencySymbol={currencySymbol}
+        />
+        <ZeroPayButton
+          payment={payment}
+          showPayment={showPayment}
+          onPriceDetailsClick={onPriceDetailsClick}
         />
         {payment?.storeCreditApplied?.isFullyApplied &&
           showPayment &&

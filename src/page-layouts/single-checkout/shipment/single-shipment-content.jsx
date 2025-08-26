@@ -24,6 +24,9 @@ function SingleShipmentContent({
   buybox = {},
   availableFOCount,
   isCartValid,
+  getTotalValue,
+  proceedToPay,
+  isLoading = false,
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -315,10 +318,14 @@ function SingleShipmentContent({
           <div className={styles.proceedBtnWrapper}>
             <button
               className={styles.proceedBtn}
-              onClick={showPaymentOptions}
-              disabled={!isCartValid}
+              onClick={() => {
+                getTotalValue?.() === 0
+                  ? proceedToPay("PP", {})
+                  : showPaymentOptions();
+              }}
+              disabled={isLoading}
             >
-              {t("resource.checkout.proceed_to_pay")}
+              {getTotalValue?.() === 0 ? "PLACE ORDER" : "Proceed To Pay"}
             </button>
           </div>
         </div>

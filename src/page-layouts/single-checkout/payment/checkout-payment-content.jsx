@@ -1419,7 +1419,9 @@ function CheckoutPaymentContent({
     if (qrPaymentOption) {
       setIsQrMopPresent(true);
     }
-    if (!enableLinkPaymentOption) {
+    if (getTotalValue?.() === 0) {
+      setSelectedTab("COD");
+    } else if (!enableLinkPaymentOption) {
       if (paymentOptions?.length > 0) {
         setSelectedTab(paymentOptions[0].name);
         setActiveMop(paymentOptions[0].name);

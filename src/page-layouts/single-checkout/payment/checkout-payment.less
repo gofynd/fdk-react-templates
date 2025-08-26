@@ -2,7 +2,11 @@
 
 .paymentContainer {
   // margin-top: 20px;
-
+  &.disabledPayment {
+    pointer-events: none; /* Prevents clicks */
+    opacity: 0.5;
+    display: none;
+  }
   @media @desktop {
     border-radius: 8px;
   }

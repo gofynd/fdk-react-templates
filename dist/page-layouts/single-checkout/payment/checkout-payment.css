@@ -4196,6 +4196,12 @@ h5,
     display: none !important;
   }
 }
+.checkout-payment__paymentContainer___1UBn5.checkout-payment__disabledPayment___xwflL {
+  pointer-events: none;
+  /* Prevents clicks */
+  opacity: 0.5;
+  display: none;
+}
 @media only screen and (min-width: 769px) {
   .checkout-payment__paymentContainer___1UBn5 {
     border-radius: 8px;
