@@ -407,7 +407,7 @@ h5,
 }
 @media only screen and (min-width: 769px) {
   .blog__blogContainer___L9tUe {
-    padding: 72px 40px 0;
+    padding: 2em 40px;
   }
 }
 .blog__blogContainer___L9tUe .blog__blog__content___DgJRs {
@@ -417,12 +417,6 @@ h5,
   grid-template-columns: 1fr;
   grid-template-rows: auto;
   grid-auto-columns: 1fr;
-  padding-bottom: 40px;
-}
-@media only screen and (min-width: 481px) {
-  .blog__blogContainer___L9tUe .blog__blog__content___DgJRs {
-    padding-bottom: 60px;
-  }
 }
 @media only screen and (min-width: 769px) {
   .blog__blogContainer___L9tUe .blog__blog__content___DgJRs {
@@ -469,6 +463,9 @@ h5,
 }
 .blog__blogContainer__pagination___LLofA {
   margin: 24px 0 20px;
+}
+.blog__sliderWrapper___VIimB {
+  padding-bottom: 60px;
 }
 .blog__sliderWrapper___VIimB .slick-track {
   display: flex !important;
@@ -678,14 +675,6 @@ h5,
   }
 }
 .blog__filterWrapper___dtFfJ {
-  padding-top: 12px;
-}
-@media only screen and (min-width: 481px) {
-  .blog__filterWrapper___dtFfJ {
-    padding-top: 60px;
-  }
-}
-.blog__filterWrapper___dtFfJ {
   line-height: 20px;
 }
 .blog__filterWrapper__header___HKxGJ {
@@ -875,6 +864,25 @@ h5,
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+@-moz-document url-prefix() {
+  .fy-image__imageWrapper___wKmP2 .fy-image__fyImg___yIv86.fy-image__firefoxAltFix___hSfDR .fy-image__imageWrapper___wKmP2 .fy-image__fyImg___yIv86.fy-image__firefoxAltFix___hSfDR[alt=""] {
+    font-size: 0;
+    text-indent: -9999px;
+    color: transparent;
+    line-height: 0;
+    letter-spacing: -1000px;
+    -webkit-text-fill-color: transparent;
+    text-shadow: none;
+  }
+  .fy-image__imageWrapper___wKmP2 .fy-image__fyImg___yIv86.fy-image__firefoxAltFix___hSfDR .fy-image__imageWrapper___wKmP2 .fy-image__fyImg___yIv86.fy-image__firefoxAltFix___hSfDR[alt=""]::before,
+  .fy-image__imageWrapper___wKmP2 .fy-image__fyImg___yIv86.fy-image__firefoxAltFix___hSfDR .fy-image__imageWrapper___wKmP2 .fy-image__fyImg___yIv86.fy-image__firefoxAltFix___hSfDR[alt=""]::after {
+    display: none;
+    content: none;
+  }
+  .fy-image__imageWrapper___wKmP2 .fy-image__fyImg___yIv86.fy-image__firefoxAltFix___hSfDR .fy-image__imageWrapper___wKmP2 .fy-image__fyImg___yIv86.fy-image__firefoxAltFix___hSfDR {
+    transition: opacity 0.2s ease-in-out;
+  }
 }
 .fy-image__imageWrapper___wKmP2.fy-image__fill___rFWVY .fy-image__fyImg___yIv86 {
   object-fit: cover;

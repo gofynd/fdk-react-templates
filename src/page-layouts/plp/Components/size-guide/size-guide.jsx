@@ -11,6 +11,8 @@ function SizeGuide({ isOpen, productMeta, onCloseDialog }) {
   const [previewSelectedMetric, setPreviewSelectedMetric] = useState("cm");
   const [selectedMetric, setSelectedMetric] = useState("cm");
   const [activeTab, setActiveTab] = useState("size_guide");
+  const [touched, setTouched] = useState(false);
+
   const values = {
     in: t("resource.common.inch"),
     cm: t("resource.common.cm"),
@@ -29,6 +31,12 @@ function SizeGuide({ isOpen, productMeta, onCloseDialog }) {
 
   const changeSelectedMetric = (val) => {
     setPreviewSelectedMetric(val);
+
+    if (selectedMetric === val) {
+      setTouched(false);
+    } else {
+      setTouched(true);
+    }
   };
 
   const isSizeChartAvailable = () => {
@@ -37,10 +45,9 @@ function SizeGuide({ isOpen, productMeta, onCloseDialog }) {
   };
 
   const convertMetrics = (val) => {
-    let value = null;
-    if (previewSelectedMetric === "cm") {
+    if (previewSelectedMetric === "cm" && touched) {
       let finalVal = "";
-      value = val.split("-");
+      val = val.split("-");
       for (let i = 0; i < val.length; i += 1) {
         if (i !== 0 && i < val.length) {
           finalVal += "-";
@@ -54,8 +61,9 @@ function SizeGuide({ isOpen, productMeta, onCloseDialog }) {
       return finalVal;
     }
 
-    if (previewSelectedMetric === "in") {
+    if (previewSelectedMetric === "in" && touched) {
       let finalVal = "";
+      val = val.split("-");
       for (let i = 0; i < val.length; i += 1) {
         if (i !== 0 && i < val.length) {
           finalVal += "-";

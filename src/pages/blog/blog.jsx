@@ -517,22 +517,24 @@ function BlogList({
           className={`${styles.blog__content} ${!isSidebarDisplayed ? `${styles.blog__contentFull}` : ""}`}
         >
           <div className={`${styles.blog__contentLeft}`}>
-            <div className={`${styles.filterList}`}>
-              {showFilters && blogFilter?.length > 0 && (
-                <div>{t("resource.facets.filtering_by")}:</div>
-              )}
-              {showFilters &&
-                [...blogFilter].map((filter) => (
-                  <div className={`${styles.filterItem}`} key={filter?.key}>
-                    <span>{`${filter?.pretext}: ${filter?.display}`}</span>
-                    <SvgWrapper
-                      className={`${styles.filterItem__icon}`}
-                      svgSrc="close"
-                      onClick={() => removeFilter(filter)}
-                    />
-                  </div>
-                ))}
-            </div>
+            {showFilters && blogFilter?.length > 0 && (
+              <div className={`${styles.filterList}`}>
+                {showFilters && blogFilter?.length > 0 && (
+                  <div>{t("resource.facets.filtering_by")}:</div>
+                )}
+                {showFilters &&
+                  [...blogFilter].map((filter) => (
+                    <div className={`${styles.filterItem}`} key={filter?.key}>
+                      <span>{`${filter?.pretext}: ${filter?.display}`}</span>
+                      <SvgWrapper
+                        className={`${styles.filterItem__icon}`}
+                        svgSrc="close"
+                        onClick={() => removeFilter(filter)}
+                      />
+                    </div>
+                  ))}
+              </div>
+            )}
 
             {blogFilter?.length > 0 && blogs?.page?.item_total === 0 && (
               <EmptyState
