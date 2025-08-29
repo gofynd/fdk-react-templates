@@ -18,8 +18,6 @@ function SinglePageShipment({
   showPaymentOptions,
   showShipment,
   showPayment,
-  isHyperlocal = false,
-  convertHyperlocalTat = () => {},
   loader,
   buybox = {},
   availableFOCount,
@@ -28,6 +26,7 @@ function SinglePageShipment({
   customClassName,
   isCartValid,
   payment,
+  getDeliveryPromise,
 }) {
   const { t } = useGlobalTranslation("translation");
   const navigate = useNavigate();
@@ -91,14 +90,13 @@ function SinglePageShipment({
             shipments={shipments}
             isShipmentLoading={isShipmentLoading}
             showPaymentOptions={showPaymentOptions}
-            isHyperlocal={isHyperlocal}
-            convertHyperlocalTat={convertHyperlocalTat}
             buybox={buybox}
             availableFOCount={availableFOCount}
             isCartValid={isCartValid}
             getTotalValue={getTotalValue}
             proceedToPay={proceedToPay}
             isLoading={isLoading}
+            getDeliveryPromise={getDeliveryPromise}
           ></SingleShipmentContent>
           <StickyPayNow
             btnTitle={

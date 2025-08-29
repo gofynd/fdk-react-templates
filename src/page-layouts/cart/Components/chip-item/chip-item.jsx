@@ -489,7 +489,9 @@ export default function ChipItem({
                       <SvgWrapper svgSrc="truck" />
                     </div>
                     <div className={styles.deliveryDate}>
-                      {getDeliveryPromise(singleItemDetails?.delivery_promise)}
+                      {getDeliveryPromise?.(
+                        singleItemDetails?.delivery_promise
+                      )}
                     </div>
                     {availableFOCount > 1 && (
                       <div className={styles.selectedFO}>
@@ -545,7 +547,7 @@ export default function ChipItem({
                 <SvgWrapper svgSrc="truck" />
               </div>
               <div className={styles.deliveryDate}>
-                {getDeliveryPromise(singleItemDetails?.delivery_promise)}
+                {getDeliveryPromise?.(singleItemDetails?.delivery_promise)}
               </div>
               {availableFOCount > 1 && (
                 <div className={styles.selectedFO}>

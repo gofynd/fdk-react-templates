@@ -1,13 +1,11 @@
 import React from "react";
 import {
-  convertUTCDateToLocalDate,
-  formatLocale,
   numberWithCommas,
   priceFormatCurrencySymbol,
 } from "../../../helper/utils";
 import * as styles from "./single-shipment-content.less";
 import { FDKLink } from "fdk-core/components";
-import { useGlobalTranslation, useFPI, useGlobalStore } from "fdk-core/utils";
+import { useGlobalTranslation } from "fdk-core/utils";
 import FreeGiftItem from "../../cart/Components/free-gift-item/free-gift-item";
 import Shimmer from "../../../components/shimmer/shimmer";
 import AppliedCouponIcon from "../../../assets/images/applied-coupon-small.svg";
@@ -18,8 +16,6 @@ function SingleShipmentContent({
   shipments,
   isShipmentLoading,
   showPaymentOptions,
-  isHyperlocal = false,
-  convertHyperlocalTat = () => {},
   loader,
   buybox = {},
   availableFOCount,
@@ -27,11 +23,9 @@ function SingleShipmentContent({
   getTotalValue,
   proceedToPay,
   isLoading = false,
+  getDeliveryPromise,
 }) {
   const { t } = useGlobalTranslation("translation");
-  const fpi = useFPI();
-  const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
-  const locale = language?.locale;
   const getShipmentItems = (shipment) => {
     let grpBySameSellerAndProduct = shipment?.items?.reduce((result, item) => {
       result[
@@ -184,19 +178,7 @@ function SingleShipmentContent({
                             </div>
 
                             <div className={styles.deliveryDate}>
-                              {isHyperlocal
-                                ? convertHyperlocalTat(item?.promise?.iso?.max)
-                                : `${t("resource.common.delivery_by", {
-                                    date: convertUTCDateToLocalDate(
-                                      item?.promise?.iso?.max,
-                                      {
-                                        weekday: "short",
-                                        day: "numeric",
-                                        month: "short",
-                                      },
-                                      formatLocale(locale, countryCode, true)
-                                    ),
-                                  })}`}
+                              {getDeliveryPromise?.(item?.promise)}
                             </div>
                             {availableFOCount > 1 &&
                               item?.fulfillment_option?.name && (
