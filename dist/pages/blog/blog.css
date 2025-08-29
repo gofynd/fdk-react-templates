@@ -374,6 +374,11 @@ h5,
   height: 100%;
 }
 .blog__tagBtn___aUdG5 {
+  letter-spacing: -0.02em;
+  font-size: 12px;
+  line-height: 14px;
+  cursor: pointer;
+  border: 1px solid var(--buttonPrimary, #4e3f09);
   border: none;
   white-space: nowrap;
   background-color: var(--buttonSecondary, #fff);
@@ -386,6 +391,25 @@ h5,
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;
+}
+@media only screen and (min-width: 769px) {
+  .blog__tagBtn___aUdG5 {
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    font-size: 14px;
+    line-height: 16px;
+  }
+}
+@media only screen and (min-width: 769px) {
+  .blog__tagBtn___aUdG5:hover {
+    background-color: var(--buttonPrimary, #4e3f09);
+    color: var(--buttonSecondary, #fff);
+  }
+}
+.blog__tagBtn___aUdG5:active,
+.blog__tagBtn___aUdG5:focus-visible {
+  box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--buttonPrimary, #4e3f09);
 }
 .blog__tagBtnSelected___OCqEN {
   background-color: var(--buttonPrimary, #4e3f09);
@@ -2143,6 +2167,10 @@ h5,
     font-size: 12px;
     line-height: 14.08px;
   }
+}
+.empty-state__button___CLusJ:hover {
+  background-color: var(--buttonPrimary, #4e3f09);
+  color: var(--buttonSecondary, #fff);
 }
 
 .infinite-loader__loaderContainer___GVUYJ {

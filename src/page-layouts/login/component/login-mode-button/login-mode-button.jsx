@@ -10,7 +10,7 @@ function LoginModeButton({ isOtp = true, onLoginToggleClick = () => { } }) {
     [isOtp]
   );
   return (
-    <button className={styles.loginModeBtn} onClick={onLoginToggleClick}>
+    <button className={`btnSecondary ${styles.loginModeBtn}`} onClick={onLoginToggleClick}>
       <LoginIcon />
       <span className={styles.loginModeLabel}>{getButtonLabel}</span>
     </button>
