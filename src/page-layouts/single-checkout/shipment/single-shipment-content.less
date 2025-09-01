@@ -27,7 +27,10 @@
 
       .headerLeft {
         display: flex;
-        padding: 4px 12px 4px 0px;
+        padding-top: 4px;
+        padding-inline-end: 12px;
+        padding-bottom: 4px;
+        padding-inline-start: 0px;
 
         .shipmentLabelLoader {
           height: 17px;
@@ -214,13 +217,13 @@
                 color: @TextHeading;
                 font-size: 16px;
                 font-weight: 600;
-                margin-right: 12px;
+                margin-inline-end: 12px;
               }
               .markedPrice {
                 font-size: 12px;
                 text-decoration: line-through;
                 color: @TextLabel;
-                margin-right: 12px;
+                margin-inline-end: 12px;
               }
               .discount {
                 font-weight: 500;
@@ -250,7 +253,7 @@
                 font-size: 12px;
                 line-height: 140%;
                 color: @SuccessText;
-                margin-right: 12px;
+                margin-inline-end: 12px;
                 width: fit-content;
                 .offerInfoIcon {
                   margin-inline-start: 6px;
@@ -320,7 +323,7 @@
 
     span {
       align-self: center;
-      margin-left: 3px;
+      margin-inline-start: 3px;
     }
 
     @media @mobile {

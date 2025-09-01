@@ -43,6 +43,7 @@ import {
 import * as styles from "./price-breakup.less";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
 import { useGlobalTranslation } from "fdk-core/utils";
+import ForcedLtr from "../forced-ltr/forced-ltr";
 import Skeleton from "../core/skeletons/skeleton";
 
 function PriceBreakup({
@@ -202,7 +203,12 @@ function PriceBreakup({
                   t("resource.common.discount_greeting_message")}
               </span>
               <span className={styles.discountPreviewAmount}>
-                {priceFormatCurrencySymbol(currencySymbol, totalDiscount)}
+                <ForcedLtr
+                  text={priceFormatCurrencySymbol(
+                    currencySymbol,
+                    totalDiscount
+                  )}
+                />
               </span>
             </div>
           )}

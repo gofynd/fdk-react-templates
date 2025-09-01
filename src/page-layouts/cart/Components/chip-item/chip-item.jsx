@@ -274,7 +274,6 @@ export default function ChipItem({
       return updatedItems;
     });
   };
-
   return (
     <>
       <div className={styles.cartItemsListContainer} key={itemIndex}>
@@ -318,15 +317,7 @@ export default function ChipItem({
               isOutOfStock ? styles.outOfStock : ""
             }`}
           >
-            <FDKLink
-              to={`/product/${singleItemDetails?.product?.slug}`}
-              state={{
-                product: {
-                  ...singleItemDetails,
-                  ...(singleItemDetails?.product || {}),
-                },
-              }}
-            >
+            <FDKLink to={`/product/${singleItemDetails?.product?.slug}`}>
               <img src={productImage} alt={singleItemDetails?.product?.name} />
             </FDKLink>
           </div>

@@ -1,14 +1,15 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
-import {
-  currencyFormat,
-  formatLocale,
-  numberWithCommas,
-} from "../../../../helper/utils";
+import { currencyFormat, formatLocale, numberWithCommas, translateDynamicLabel } from "../../../../helper/utils";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./coupon.less";
 import Modal from "../../../../components/core/modal/modal";
-import { useGlobalStore, useFPI, useGlobalTranslation } from "fdk-core/utils";
+import {
+  useGlobalStore,
+  useFPI,
+  useGlobalTranslation
+} from "fdk-core/utils";
+import ForcedLtr from "../../../../components/forced-ltr/forced-ltr";
 
 function Coupon({
   title,
@@ -97,11 +98,11 @@ function Coupon({
               <div className={styles.couponAppliedSubtitles}>
                 <span>{t("resource.cart.you_have_saved")} </span>
                 <span>
-                  {currencyFormat(
+                  <ForcedLtr text={currencyFormat(
                     numberWithCommas(couponValue),
                     currencySymbol,
                     formatLocale(locale, countryCode, true)
-                  )}
+                  )} />
                 </span>
               </div>
             ) : (
@@ -147,7 +148,7 @@ function Coupon({
               <div className={styles.cartErrorContainer}>
                 <SvgWrapper svgSrc="error-info-icon" />
                 <div className={styles.colorErrorNormal}>
-                  {errors?.root?.message}
+                  {translateDynamicLabel(errors?.root?.message, t)}
                 </div>
               </div>
             )}

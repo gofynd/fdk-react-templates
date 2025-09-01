@@ -87,10 +87,7 @@ export function validateName(name) {
 }
 
 export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
-  console.log("🔹 Initial input →", { date, format, locale });
-
   if (!date) {
-    console.warn("⚠️ No date provided. Returning 'Invalid date'");
     return "Invalid date";
   }
 
@@ -263,14 +260,25 @@ export const getProductImgAspectRatio = function (
 };
 
 export const currencyFormat = (value, currencySymbol, locale = "en-IN") => {
-  if (currencySymbol && (value || value === 0)) {
-    if (/^[A-Z]+$/.test(currencySymbol)) {
-      return `${currencySymbol} ${value?.toLocaleString(locale)}`;
+  const formattingLocale = `${locale}-u-nu-latn`;
+
+  if (value != null) {
+    const formattedValue = value.toLocaleString(formattingLocale);
+
+    if (currencySymbol && /^[A-Z]+$/.test(currencySymbol)) {
+      return `${currencySymbol} ${formattedValue}`;
     }
-    return `${currencySymbol}${value?.toLocaleString(locale)}`;
+
+    if (currencySymbol) {
+      return `${currencySymbol}${formattedValue}`;
+    }
+
+    return formattedValue;
   }
-  return `${value?.toLocaleString(locale)}`;
+
+  return "";
 };
+
 
 export const getReviewRatingData = function (customMeta) {
   const data = {};
@@ -514,6 +522,11 @@ export function translateDynamicLabel(input, t) {
   const translated = t(translationKey);
 
   return translated.split('.').pop() === safeInput ? input : translated;
+}
+
+export function getLocaleDirection(fpi) {
+  const dir = fpi?.store?.getState()?.custom?.currentLocaleDetails?.direction;
+  return dir || "ltr";
 }
 export function injectScript(script) {
   let scriptObject = {

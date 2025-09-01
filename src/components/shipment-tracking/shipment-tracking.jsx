@@ -39,9 +39,9 @@ function ShipmentTracking({
   const [showDetailedTracking, setShowDetailedTracking] = useState(false);
   const getTime = (item) => {
     return convertUTCDateToLocalDate(
-      item?.created_ts ? item?.created_ts : item?.time,
-      "",
-      formatLocale(locale, countryCode)
+      item?.created_ts ? item?.created_ts : item?.time, 
+      "", 
+      formatLocale(locale, countryCode,true)
     );
   };
 

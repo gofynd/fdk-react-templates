@@ -318,6 +318,9 @@
         &.codIconContainer {
           svg {
             transform: rotate(270deg);
+            [dir = 'rtl'] & {
+              transform: rotate(90deg);
+            }
           }
         }
         .upsideDown {
@@ -488,7 +491,10 @@
           }
 
           .desc {
-            margin: 8px 0 16px 0;
+            margin-top: 8px;
+            margin-inline-end: 0;
+            margin-bottom: 16px;
+            margin-inline-start: 0;
             color: var(--textBody);
             font-size: 12px;
           }
@@ -804,7 +810,10 @@
           .rbiGuidelinesContent {
             padding: 16px;
             ul {
-              padding: 0 0 0 16px;
+              padding-top: 0;
+              padding-inline-end: 0;
+              padding-bottom: 0;
+              padding-inline-start: 16px;
               li {
                 list-style-type: disc;
                 &:not(:last-child) {
@@ -879,7 +888,10 @@
           }
 
           .desc {
-            margin: 8px 0 16px 0;
+            margin-top: 8px;
+            margin-inline-end: 0;
+            margin-bottom: 16px;
+            margin-inline-start: 0;
             color: var(--textBody);
             @media @desktop {
               font-size: 12px;
@@ -889,7 +901,10 @@
       }
     }
     .addNewCardModal {
-      padding: 0px 16px 24px 16px;
+      padding-top: 0px;
+      padding-inline-end: 16px;
+      padding-bottom: 24px;
+      padding-inline-start: 16px;
     }
   }
 
@@ -1578,7 +1593,10 @@
     font-weight: 700;
     font-size: 24px;
     line-height: 33.6px;
-    margin: 16px 0 8px 0;
+    margin-top: 16px;
+    margin-inline-end: 0;
+    margin-bottom: 8px;
+    margin-inline-start: 0;
     color: var(--primaryColor);
   }
 
@@ -1883,7 +1901,7 @@
 }
 .crossMobile {
   position: absolute;
-  right: 16px;
+  inset-inline-end: 16px;
 }
 .noResultFound {
   color: var(--Text-Body, #4d4d4e);

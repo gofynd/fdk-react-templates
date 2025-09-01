@@ -8,9 +8,13 @@
   }
 
   .bagImg {
-    margin: 0px 20px 20px 0;
+    margin-top: 0;
+    margin-inline-end: 20px;
+    margin-bottom: 20px;
+    margin-inline-start: 0;
     @media @mobile {
-      margin: 0px 16px 16px 0;
+      margin-inline-end: 16px;
+      margin-bottom: 16px;
     }
     img {
       width: 80px;
@@ -108,10 +112,10 @@
     }
   }
   .qtyCtrl {
-    margin-left: 5px;
+    margin-inline-start: 5px;
     position: relative;
     // @media @mobile {
-    //   margin-left: 16px;
+    //   margin-inline-start: 16px;
     // }
     .maxAvail {
       text-align: center;

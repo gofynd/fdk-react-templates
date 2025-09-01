@@ -3466,6 +3466,56 @@ function CheckoutPaymentContent({
                     <div
                       className={`${styles.navigationTab} ${styles.onDesktopView}`}
                     >
+                      <div className={styles["linkWrapper-row1"]}>
+                        <div
+                          className={` ${selectedTab === codOption.name ? styles.indicator : ""} ${styles.onDesktopView}`}
+                        >
+                          &nbsp;
+                        </div>
+                        <div className={styles.link}>
+                          <div className={styles.icon}>
+                            <SvgWrapper svgSrc={codOption.svg}></SvgWrapper>
+                          </div>
+                          <div>
+                            <div
+                              className={`${styles.modeName} ${selectedTab === codOption.name ? styles.selectedModeName : ""}`}
+                            >
+                              {translateDynamicLabel(
+                                codOption?.display_name ?? "",
+                                t
+                              )}
+                            </div>
+                            {isTablet && codCharges > 0 && (
+                              <div className={styles.codCharge}>
+                                +
+                                {priceFormatCurrencySymbol(
+                                  getCurrencySymbol,
+                                  codCharges
+                                )}{" "}
+                                {t("resource.checkout.extra_charges")}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        {codOption?.image_src && (
+                          <div className={styles["payment-icons"]}>
+                            <img
+                              src={codOption?.image_src}
+                              alt={codOption?.svg}
+                            />
+                          </div>
+                        )}
+                        <div
+                          className={`${styles.arrowContainer} ${styles.activeIconColor} ${styles.codIconContainer}`}
+                        >
+                          <SvgWrapper svgSrc="accordion-arrow" />
+                        </div>
+                      </div>
+                      {isTablet && (
+                        <div>
+                          {selectedTab === codOption.name && navigationTab()}
+                        </div>
+                      )}
                       {navigationTab()}
                     </div>
                   )}

@@ -411,7 +411,7 @@ h5,
 .login-otp__loginInputGroup____7Nbd .login-otp__changeBtn___yaRV5 {
   color: var(--buttonPrimary, #4e3f09);
   text-align: center;
-  margin-left: 8px;
+  margin-inline-start: 8px;
   font-size: 14px;
   font-weight: 600;
   line-height: 140%;
@@ -837,14 +837,14 @@ h5,
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__dialCodePreview___E0m4Z {
   border-inline: none;
-  padding-right: 4px;
+  padding-inline-end: 4px;
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG {
   width: 100%;
   font-weight: 400;
   display: flex;
-  border-left: none;
-  padding-left: 4px;
+  border-inline-start: none;
+  padding-inline-start: 4px;
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG:focus-visible {
   outline: none;

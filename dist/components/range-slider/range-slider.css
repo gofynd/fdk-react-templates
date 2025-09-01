@@ -336,7 +336,10 @@ h5,
 }
 .range-slider__CustomRangeSlider___Uo_rw .range-slider__price-Container--title___i8SYy {
   font-size: small;
-  margin: 0px 0px 12px 0px;
+  margin-top: 0;
+  margin-inline-end: 0px;
+  margin-bottom: 12px;
+  margin-inline-start: 0px;
   display: none;
 }
 @media only screen and (max-width: 480px) {
@@ -344,6 +347,11 @@ h5,
     display: block;
     margin-bottom: 20px;
   }
+}
+.range-slider__CustomRangeSlider___Uo_rw .range-slider__postfix___lbLy1 {
+  margin-left: 4px;
+  font-size: 14px;
+  color: var(--textBody, #3c3131);
 }
 .range-slider__CustomRangeSlider___Uo_rw .range-slider__postfix___lbLy1 {
   margin-left: 4px;

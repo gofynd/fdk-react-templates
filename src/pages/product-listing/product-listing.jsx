@@ -479,10 +479,8 @@ function ProductGridItem({
     } else if (!!product?.sizes?.length) {
       sizeToSelect = product.sizes[0];
       state = {
-        product: {
-          ...product,
-          sizes: { sellable: product.sellable, sizes: product.sizes },
-        },
+        ...product,
+        sizes: { sellable: product.sellable, sizes: product.sizes },
       };
     }
 

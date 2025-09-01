@@ -132,7 +132,10 @@
       font-weight: 400;
       font-size: 10px;
       color: @ErrorText;
-      padding: 12px 12px 0px 12px;
+      padding-top: 12px;
+      padding-inline-end: 12px;
+      padding-bottom: 0px;
+      padding-inline-start: 12px;
     }
   }
 }
@@ -155,8 +158,8 @@
 }
 .modalContainer {
   @media @tablet {
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
+    border-start-start-radius: 4px;
+    border-start-end-radius: 4px;
   }
 }
 .modalContent {
@@ -197,7 +200,7 @@
     color: @TextLabel;
     font-weight: 400;
     width: max-content;
-    margin-left: auto;
+    margin-inline-start: auto;
     font-size: 12px;
     line-height: 140%; /* 16.8px */
     margin-top: 8px;

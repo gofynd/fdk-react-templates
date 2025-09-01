@@ -1401,8 +1401,8 @@ button {
 @media only screen and (max-width: 768px) {
   .delivery-location__pincodeModal___KAYH1 {
     width: unset;
-    border-top-left-radius: 4px !important;
-    border-top-right-radius: 4px !important;
+    border-start-start-radius: 4px !important;
+    border-start-end-radius: 4px !important;
   }
 }
 .delivery-location__pincodeModal___KAYH1 .delivery-location__modalHeader____OOl3 {
@@ -4077,7 +4077,7 @@ h5,
   border: 2px solid var(--buttonPrimaryL3, #b8b29d);
   border-top: 2px solid var(--buttonPrimary, #4e3f09);
   padding: 0;
-  margin-left: 0;
+  margin-inline-start: 0;
 }
 .fy-button__button___UES8C .fy-button__loader___eJW6i.fy-button__contained___F5O7g.fy-button__primary___xKz1S {
   border-top-color: #ffffff;
@@ -6342,14 +6342,14 @@ h5,
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__dialCodePreview___E0m4Z {
   border-inline: none;
-  padding-right: 4px;
+  padding-inline-end: 4px;
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG {
   width: 100%;
   font-weight: 400;
   display: flex;
-  border-left: none;
-  padding-left: 4px;
+  border-inline-start: none;
+  padding-inline-start: 4px;
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG:focus-visible {
   outline: none;
@@ -7944,7 +7944,10 @@ h5,
   font-weight: 400;
   font-size: 10px;
   color: var(--errorText, #ff3333);
-  padding: 12px 12px 0px 12px;
+  padding-top: 12px;
+  padding-inline-end: 12px;
+  padding-bottom: 0px;
+  padding-inline-start: 12px;
 }
 .comment__modelHeader___zmsaH {
   display: flex;
@@ -7965,8 +7968,8 @@ h5,
 }
 @media only screen and (max-width: 768px) {
   .comment__modalContainer___iL5Lo {
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
+    border-start-start-radius: 4px;
+    border-start-end-radius: 4px;
   }
 }
 .comment__modalContent___YcBhL {
@@ -8006,7 +8009,7 @@ h5,
   color: var(--textLabel, #7d7676);
   font-weight: 400;
   width: max-content;
-  margin-left: auto;
+  margin-inline-start: auto;
   font-size: 12px;
   line-height: 140%;
   /* 16.8px */
@@ -10057,7 +10060,10 @@ h5,
   stroke-width: 1;
 }
 .chip-item__sModalContainer___ARs9G .chip-item__sizeModalErrCls___QFoKd {
-  padding: 0 0 4px 24px;
+  padding-top: 0;
+  padding-inline-end: 0;
+  padding-bottom: 4px;
+  padding-inline-start: 24px;
   margin-top: -12px;
   height: 22px;
   font-weight: 600;
@@ -11076,7 +11082,7 @@ h5,
   font-weight: 600;
 }
 .free-gift-item__freeArticleContainer___wFbcr .free-gift-item__quantityCount___zoOkQ {
-  margin-left: 8px;
+  margin-inline-start: 8px;
   color: var(--textBody);
   font-weight: 400;
 }
@@ -12339,7 +12345,7 @@ h5,
   .share-cart-modal__sharePopup___mHeWh {
     position: fixed;
     top: 0;
-    left: 0;
+    inset-inline-start: 0;
     justify-content: center;
     width: 100vw;
     height: 100dvh;
@@ -12375,7 +12381,7 @@ h5,
   .share-cart-modal__sharePopup___mHeWh .share-cart-modal__close___qKEdK {
     position: absolute;
     top: 24px;
-    right: 16px;
+    inset-inline-end: 16px;
     width: 22px;
     height: 22px;
     display: flex !important;
@@ -12942,6 +12948,9 @@ h5,
     width: 50% !important;
   }
 }
+.sticky-footer__rotate180___erK50 {
+  transform: rotate(180deg);
+}
 
 /**color by character**/
 /** Font family **/
@@ -13292,8 +13301,8 @@ h5,
   font-weight: 400;
 }
 .remove-cart-item__modalContainer___tytkU {
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
+  border-start-start-radius: 4px;
+  border-start-end-radius: 4px;
 }
 .remove-cart-item__removeModalBody___uY7E6 {
   line-height: 140%;
@@ -13364,7 +13373,7 @@ h5,
 .remove-cart-item__removeModalFooter___wF0NY .remove-cart-item__wishlistBtn___I2k15 {
   padding-top: 14px;
   padding-bottom: 14px;
-  margin-left: 16px;
+  margin-inline-start: 16px;
   text-align: center;
   cursor: pointer;
   color: var(--buttonSecondary, #fff);
