@@ -27,8 +27,7 @@ function Checkout({
   setShowPayment,
   mapApiKey,
   showGoogleMap,
-  isHyperlocal = false,
-  convertHyperlocalTat = () => {},
+  getDeliveryPromise = () => {},
   loader,
   stepperProps,
   onPriceDetailsClick,
@@ -93,8 +92,7 @@ function Checkout({
           showPayment={showPayment}
           setShowShipment={setShowShipment}
           setShowPayment={setShowPayment}
-          isHyperlocal={isHyperlocal}
-          convertHyperlocalTat={convertHyperlocalTat}
+          getDeliveryPromise={getDeliveryPromise}
           buybox={buybox}
           payment={payment}
           availableFOCount={availableFOCount}
