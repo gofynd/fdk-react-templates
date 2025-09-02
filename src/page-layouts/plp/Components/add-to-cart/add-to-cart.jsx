@@ -44,8 +44,9 @@ const AddToCart = ({
   availableFOCount,
 }) => {
   const fpi = useFPI();
-  const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
-  const locale = language?.locale;
+  const { language, countryCode } =
+    useGlobalStore(fpi.getters.i18N_DETAILS) || {};
+  const locale = language?.locale ? language?.locale : "en";
   const { t } = useGlobalTranslation("translation");
   const { product = {}, productPrice = {} } = productData;
 
