@@ -1,86 +1,35 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
-import {
-  convertUTCDateToLocalDate,
-  formatLocale,
-} from "../../../../helper/utils";
 import * as styles from "./delivery-info.less";
 import FyButton from "../../../../components/core/fy-button/fy-button";
 import FyInput from "../../../../components/core/fy-input/fy-input";
-import { useGlobalStore, useFPI, useGlobalTranslation } from "fdk-core/utils";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function DeliveryInfo({
-  tat,
   pincode,
+  setPincode,
   pincodeErrorMessage,
-  isServiceability,
-  checkPincode,
   setPincodeErrorMessage,
+  isServiceability,
+  tatMessage,
+  checkPincode,
   fulfillmentOptions,
   availableFOCount,
 }) {
   const { t } = useGlobalTranslation("translation");
-  const fpi = useFPI();
-  const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
-  const locale = language?.locale;
-  const [postCode, setPostCode] = useState(pincode || "");
-  const [tatMessage, setTatMessage] = useState("");
   const numberRegex = /^\d*$/;
-
-  useEffect(() => {
-    setPostCode(pincode);
-  }, [pincode]);
-
-  useEffect(() => {
-    if (postCode?.length > 5) {
-      getDeliveryDate();
-    }
-  }, [tat]);
 
   const changePostCode = (event) => {
     const value = event?.target?.value;
     if (numberRegex.test(Number(value))) {
-      setPostCode(value);
-      setTatMessage("");
+      setPincode(value);
       setPincodeErrorMessage("");
       // setPincodeChecked(false);
     }
   };
 
-  const getDeliveryDate = () => {
-    const options = {
-      weekday: "short",
-      month: "short",
-      day: "numeric",
-    };
-    const { min, max } = tat || {};
-
-    if (!min) {
-      return false;
-    }
-
-    const minDate = convertUTCDateToLocalDate(
-      min,
-      options,
-      formatLocale(locale, countryCode)
-    );
-    const maxDate = convertUTCDateToLocalDate(
-      max,
-      options,
-      formatLocale(locale, countryCode)
-    );
-    setTimeout(() => {
-      const deliveryMessage =
-        min === max
-          ? t("resource.product.delivery_on", { date: minDate })
-          : t("resource.product.delivery_between", { minDate, maxDate });
-
-      setTatMessage(deliveryMessage);
-    }, 1000);
-  };
-
   const handleDeliveryAction = async () => {
-    await checkPincode(postCode);
+    await checkPincode(pincode);
     //setPincodeChecked(true);
   };
 
@@ -90,7 +39,7 @@ function DeliveryInfo({
 
   return (
     <div className={styles.deliveryInfo}>
-      { !isServiceability &&
+      {!isServiceability && (
         <>
           <h4 className={`${styles.deliveryLabel} b2`}>
             {t("resource.common.address.select_delivery_location")}
@@ -98,7 +47,7 @@ function DeliveryInfo({
           <div className={styles.delivery}>
             <FyInput
               autoComplete="off"
-              value={postCode}
+              value={pincode}
               placeholder={t("resource.product.check_delivery_time")}
               inputClassName={styles.pincodeInput}
               containerClassName={styles.pincodeInputContainer}
@@ -111,7 +60,7 @@ function DeliveryInfo({
               variant="text"
               className={styles.deliveryAction}
               onClick={handleDeliveryAction}
-              disabled={postCode?.length !== 6}
+              disabled={pincode?.length !== 6}
               endIcon={
                 <SvgWrapper svgSrc="delivery" className={styles.deliveryIcon} />
               }
@@ -120,8 +69,8 @@ function DeliveryInfo({
             </FyButton>
           </div>
         </>
-      }
-      
+      )}
+
       {!pincodeErrorMessage && availableFOCount === 1 && (
         <div className={`${styles.deliveryDate} ${styles.dateInfoContainer}`}>
           {tatMessage?.length > 0 && (
