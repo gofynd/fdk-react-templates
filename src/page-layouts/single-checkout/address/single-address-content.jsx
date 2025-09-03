@@ -3,7 +3,7 @@ import AddressItem from "../../../components/address-item/address-item";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./single-address-content.less";
 import { useNavigate, useGlobalTranslation } from "fdk-core/utils";
-import Shimmer from "../../../components/shimmer/shimmer";
+import Skeleton from "../../../components/core/skeletons/skeleton";
 
 function AddressRight({
   selectedAddressId,
@@ -32,7 +32,13 @@ function AddressRight({
   );
 }
 
-function DeliverBtn({ selectedAddressId, id, selectAddress }) {
+function DeliverBtn({
+  selectedAddressId,
+  id,
+  selectAddress,
+  getTotalValue,
+  showPaymentOptions,
+}) {
   const { t } = useGlobalTranslation("translation");
   return (
     <>
@@ -40,7 +46,12 @@ function DeliverBtn({ selectedAddressId, id, selectAddress }) {
         <div className={styles.actionContainer}>
           <button
             className={styles.deliverToThis}
-            onClick={() => selectAddress()}
+            onClick={() => {
+              if (getTotalValue?.() === 0) {
+                showPaymentOptions();
+              }
+              selectAddress();
+            }}
           >
             {t("resource.checkout.deliver_to_this_address")}
           </button>
@@ -91,6 +102,9 @@ function SingleAddressContent({
   getOtherAddress,
   getDefaultAddress,
   loader,
+  isApiLoading,
+  showPaymentOptions,
+  getTotalValue,
 }) {
   const { t } = useGlobalTranslation("translation");
   function selectAdd(id) {
@@ -100,11 +114,13 @@ function SingleAddressContent({
     <>
       {allAddresses &&
       allAddresses.length &&
-      !(addressLoader || addressLoading) ? (
+      !(addressLoader || addressLoading || isApiLoading) ? (
         <div className={styles.addressContentConitainer}>
           {getDefaultAddress.length > 0 ? (
             <div className={styles.address}>
-              <div className={styles.heading}>{t("resource.common.address.default_address")}</div>
+              <div className={styles.heading}>
+                {t("resource.common.address.default_address")}
+              </div>
               {getDefaultAddress.map((item, index) => {
                 return (
                   <AddressItem
@@ -134,6 +150,8 @@ function SingleAddressContent({
                           selectedAddressId={selectedAddressId}
                           id={item?.id}
                           selectAddress={selectAddress}
+                          getTotalValue={getTotalValue}
+                          showPaymentOptions={showPaymentOptions}
                         />
                       </>
                     }
@@ -145,7 +163,9 @@ function SingleAddressContent({
 
           {getOtherAddress.length > 0 ? (
             <div className={styles.address}>
-              <div className={styles.heading}>{t("resource.common.address.other_address")}</div>
+              <div className={styles.heading}>
+                {t("resource.common.address.other_address")}
+              </div>
               {getOtherAddress.map((item, index) => {
                 return (
                   <AddressItem
@@ -175,6 +195,8 @@ function SingleAddressContent({
                           selectedAddressId={selectedAddressId}
                           id={item?.id}
                           selectAddress={selectAddress}
+                          getTotalValue={getTotalValue}
+                          showPaymentOptions={showPaymentOptions}
                         />
                       </>
                     }
@@ -186,9 +208,26 @@ function SingleAddressContent({
         </div>
       ) : (
         <>
-          {addressLoading || addressLoader ? (
+          {addressLoading || addressLoader || isApiLoading ? (
             <div className={styles.addressContentConitainer}>
-              {loader || <Shimmer className={styles.shimmer} />}
+              <div className={styles.shimmer}>
+                <Skeleton
+                  className={styles.defaultAddressLabel}
+                  width={93}
+                  height={17}
+                />
+                <div className={styles.addressCard}>
+                  <Skeleton width={158} height={25} />
+                  <Skeleton width={265} height={17} />
+                  <Skeleton width={100} height={17} />
+
+                  <div className={styles.addressActionBtn}>
+                    <Skeleton width={93} height={17} />
+                  </div>
+
+                  <Skeleton className={styles.addressDeliverBtn} height={37} />
+                </div>
+              </div>
             </div>
           ) : (
             <div
@@ -196,7 +235,7 @@ function SingleAddressContent({
               style={{
                 textAlign: "center",
                 color: "var(--textLabel)",
-                marginBottom:"12px"
+                marginBottom: "12px",
               }}
             >
               {" "}
@@ -204,8 +243,7 @@ function SingleAddressContent({
             </div>
           )}
         </>
-      )
-      }
+      )}
     </>
   );
 }

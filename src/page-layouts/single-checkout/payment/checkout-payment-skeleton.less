@@ -1,0 +1,71 @@
+@import "../../../styles/main.less";
+
+.paymentSkeleton {
+  display: flex;
+  gap: 24px;
+  @media @tablet-range {
+    margin: 8px;
+  }
+  @media @desktop {
+    margin: 24px 0px 10px 0px;
+    border: 1px solid var(--dividerStokes);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+  }
+}
+
+.leftNav {
+  width: 33.33%;
+  display: flex;
+  flex-direction: column;
+  border-color: var(--dividerStokes);
+  border-radius: 4px 0 0 4px;
+  padding: 8px 0;
+  @media @tablet {
+    display: none;
+  }
+}
+
+.navItem {
+  display: grid;
+  grid-template-columns: 38px 1fr;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid var(--dividerStokes);
+}
+
+.rightPanel {
+  width: 66.66%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border-color: var(--dividerStokes);
+  border-radius: 0 4px 4px 0;
+  padding: 24px;
+  @media @tablet-range {
+    width: 100%;
+    padding: 16px;
+    border-width: 1px;
+  }
+}
+
+.field {
+  width: 100%;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 140px;
+  gap: 16px;
+  @media @tablet {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+.checkboxRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

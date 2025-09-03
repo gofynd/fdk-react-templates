@@ -20,14 +20,16 @@ import {
   useNavigate,
   useGlobalStore,
   useFPI,
-  useGlobalTranslation
+  useGlobalTranslation,
 } from "fdk-core/utils";
 
 function ShipmentTracking({
   tracking,
-  shipmentInfo,
+  shipmentInfo = {},
   changeinit,
   invoiceDetails,
+  availableFOCount,
+  bagLength = 0,
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -84,21 +86,35 @@ function ShipmentTracking({
 
   const update = (item) => {
     if (["CANCEL", "RETURN"].includes(item?.text)) {
-      changeinit({
-        ...item,
-        link: `/profile/orders/shipment/update/${shipmentInfo?.shipment_id}/${updateType()?.toLowerCase()}`,
-      });
+      if (bagLength === 1) {
+        const bagId = shipmentInfo?.bags?.[0]?.id;
+        const querParams = new URLSearchParams(location.search);
+        if (bagId) {
+          querParams.set("selectedBagId", bagId);
+        }
+        const finalLink = `/profile/orders/shipment/update/${shipmentInfo?.shipment_id}/${updateType()?.toLowerCase()}`;
+        navigate(
+          finalLink +
+            (querParams?.toString() ? `?${querParams.toString()}` : "")
+        );
+      } else {
+        changeinit({
+          ...item,
+          link: `/profile/orders/shipment/update/${shipmentInfo?.shipment_id}/${updateType()?.toLowerCase()}`,
+        });
+      }
       window.scrollTo(0, 0);
     } else {
       navigate(item?.link);
     }
   };
+
   return (
     <div className={`${styles.shipmentTracking}`}>
       <div className={`${styles.status}`}>
         <div>
           <div className={`${styles.title} ${styles.boldsm}`}>
-          {t("resource.common.shipment")}: {shipmentInfo?.shipment_id}
+            {t("resource.common.shipment")}: {shipmentInfo?.shipment_id}
           </div>
           {shipmentInfo?.awb_no && (
             <div className={`${styles.awbText} ${styles.lightxxs}`}>
@@ -181,7 +197,11 @@ function ShipmentTracking({
                 onClick={() => update(item)}
                 className={`${styles.regularsm}`}
               >
-                {item?.text === "RETURN" ? t("resource.facets.return_caps") : item?.text === "CANCEL" ? t("resource.facets.cancel_caps") : item?.text}
+                {item?.text === "RETURN"
+                  ? t("resource.facets.return_caps")
+                  : item?.text === "CANCEL"
+                    ? t("resource.facets.cancel_caps")
+                    : item?.text}
               </div>
             ) : (
               <a
@@ -189,7 +209,11 @@ function ShipmentTracking({
                 href={`${item?.link}`}
                 className={`${styles.regularsm}`}
               >
-                {item?.text === "RETURN" ? t("resource.facets.return_caps") : item?.text === "CANCEL" ? t("resource.facets.cancel_caps") : item?.text}
+                {item?.text === "RETURN"
+                  ? t("resource.facets.return_caps")
+                  : item?.text === "CANCEL"
+                    ? t("resource.facets.cancel_caps")
+                    : item?.text}
               </a>
             )}
           </Fragment>

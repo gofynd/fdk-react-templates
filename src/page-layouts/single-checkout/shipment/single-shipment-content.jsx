@@ -1,32 +1,31 @@
 import React from "react";
 import {
-  convertUTCDateToLocalDate,
-  formatLocale,
   numberWithCommas,
   priceFormatCurrencySymbol,
 } from "../../../helper/utils";
 import * as styles from "./single-shipment-content.less";
 import { FDKLink } from "fdk-core/components";
-import { useGlobalTranslation, useFPI, useGlobalStore } from "fdk-core/utils";
+import { useGlobalTranslation } from "fdk-core/utils";
 import FreeGiftItem from "../../cart/Components/free-gift-item/free-gift-item";
 import Shimmer from "../../../components/shimmer/shimmer";
 import AppliedCouponIcon from "../../../assets/images/applied-coupon-small.svg";
 import ShippingLogoIcon from "../../../assets/images/shipping-logo.svg";
+import Skeleton from "../../../components/core/skeletons/skeleton";
 
 function SingleShipmentContent({
   shipments,
   isShipmentLoading,
   showPaymentOptions,
-  isHyperlocal = false,
-  convertHyperlocalTat = () => {},
   loader,
   buybox = {},
+  availableFOCount,
   isCartValid,
+  getTotalValue,
+  proceedToPay,
+  isLoading = false,
+  getDeliveryPromise,
 }) {
   const { t } = useGlobalTranslation("translation");
-  const fpi = useFPI();
-  const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
-  const locale = language?.locale;
   const getShipmentItems = (shipment) => {
     let grpBySameSellerAndProduct = shipment?.items?.reduce((result, item) => {
       result[
@@ -91,7 +90,65 @@ function SingleShipmentContent({
     <>
       {isShipmentLoading ? (
         <div className={styles.parent}>
-          {loader || <Shimmer className={styles.shimmer} />}
+          {Array(3)
+            .fill()
+            .map((_) => (
+              <div className={styles.reviewContentContainer}>
+                <div className={styles.shipmentWrapper}>
+                  <div className={styles.shipmentHeading}>
+                    <div className={styles.headerLeft}>
+                      <Skeleton
+                        className={styles.shipmentLabelLoader}
+                        width={145}
+                        height={27}
+                      />
+                    </div>
+                    <div className={styles.deliveryDateWrapper}>
+                      <Skeleton
+                        className={styles.deliveryPromiseLoader}
+                        width={166}
+                        height={27}
+                      />
+                    </div>
+                  </div>
+                  <div className={styles.item}>
+                    <div className={styles.itemWrapper}>
+                      <div className={styles.leftImg}>
+                        <Skeleton width={100} aspectRatio={2 / 3} />
+                      </div>
+                      <div className={styles.rightDetails}>
+                        <div className={styles.productDetails}>
+                          <div>
+                            <div className={styles.brandName}>
+                              <Skeleton width={58} height={20} />
+                            </div>
+                            <div className={styles.productName}>
+                              <Skeleton width={134} height={20} />
+                            </div>
+                          </div>
+                          <div className={styles.sizeInfo}>
+                            <Skeleton width={100} height={20} />
+                          </div>
+                        </div>
+                        <div className={styles.paymentInfo}>
+                          <div className={styles.priceWrapper}>
+                            <div className={styles.effectivePrice}>
+                              <Skeleton width={40} height={20} />
+                            </div>
+                            <div className={styles.markedPrice}>
+                              <Skeleton width={35} height={20} />
+                            </div>
+                            <div className={styles.discount}>
+                              <Skeleton width={52} height={20} />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
         </div>
       ) : (
         <div className={styles.parent}>
@@ -121,20 +178,14 @@ function SingleShipmentContent({
                             </div>
 
                             <div className={styles.deliveryDate}>
-                              {isHyperlocal
-                                ? convertHyperlocalTat(item?.promise?.iso?.max)
-                                : `${t("resource.common.delivery_by", {
-                                    date: convertUTCDateToLocalDate(
-                                      item?.promise?.iso?.max,
-                                      {
-                                        weekday: "short",
-                                        day: "numeric",
-                                        month: "short",
-                                      },
-                                      formatLocale(locale, countryCode, true)
-                                    ),
-                                  })}`}
+                              {getDeliveryPromise?.(item?.promise)}
                             </div>
+                            {availableFOCount > 1 &&
+                              item?.fulfillment_option?.name && (
+                                <div className={styles.foName}>
+                                  {item?.fulfillment_option?.name}
+                                </div>
+                              )}
                           </div>
                         )}
                       </div>
@@ -249,10 +300,14 @@ function SingleShipmentContent({
           <div className={styles.proceedBtnWrapper}>
             <button
               className={styles.proceedBtn}
-              onClick={showPaymentOptions}
-              disabled={!isCartValid}
+              onClick={() => {
+                getTotalValue?.() === 0
+                  ? proceedToPay("PP", {})
+                  : showPaymentOptions();
+              }}
+              disabled={isLoading}
             >
-              {t("resource.checkout.proceed_to_pay")}
+              {getTotalValue?.() === 0 ? "PLACE ORDER" : "Proceed To Pay"}
             </button>
           </div>
         </div>
