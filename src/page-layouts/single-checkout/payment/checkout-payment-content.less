@@ -1,124 +1,10 @@
 @import "../../../styles/main.less";
 
-:global {
-  .card_number_div,
-  .card_exp_month_div,
-  .card_exp_year_div,
-  .security_code_div,
-  .name_on_card_div {
-    height: 48px;
-    border: 1px solid var(--dividerStokes);
-    border-radius: 4px;
-    color: @TextBody;
-    overflow: hidden;
-    padding-left: 16px;
-    padding-right: 16px;
-    outline: none;
-    margin-top: 16px;
-  }
-
-  .security_code_div {
-    width: 103px;
-  }
-
-  .card_exp_month_div,
-  .card_exp_year_div {
-    width: 25%;
-  }
-  .security_code_div {
-    width: 50%;
-  }
-
-  @media screen and (max-width: 768px) {
-    .card_number_div,
-    .card_exp_month_div,
-    .card_exp_year_div,
-    .security_code_div,
-    .name_on_card_div {
-      height: 48px;
-    }
-  }
-}
-
-.juspayCardNumberBox {
-  position: relative;
-}
-
-.juspayCardNetwork {
-  cursor: pointer;
-  height: 28px;
-  position: absolute;
-  inset-inline-end: 8px;
-  top: 25px;
-  transform: translateY(-50%);
-
-  @media @desktop {
-    top: 25px;
-    transform: translateY(-50%);
-    height: 32px;
-  }
-}
-
-.cardDateCvvJuspayWrapper {
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-}
-
-.checkbox {
-  accent-color: var(--buttonPrimary);
-  height: 13px;
-  width: 13px;
-  cursor: pointer;
-}
-
-.checkboxWrapper {
-  display: flex;
-  justify-content: start;
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-  margin-top: 16px;
-}
-
-.rbiGuidelines {
-  @media @mobile {
-    margin-bottom: 24px;
-  }
-
-  input:checked:before {
-    background-color: var(--buttonPrimary);
-  }
-
-  display: flex;
-  align-items: center;
-  margin-top: 16px;
-  .rbiGuidelinesText {
-    display: flex;
-    font-family: inherit;
-    font-weight: 400;
-    font-size: 12px;
-    color: #1f1f1f;
-    margin: 0 8px;
-    align-self: center;
-    line-height: 140%;
-  }
-}
-
-.marginBottom {
-  @media @mobile {
-    margin-bottom: 24px;
-  }
-}
-
 .container {
   background: @PageBackground;
   &.unsetBorder {
     border: unset;
     padding-top: 0;
-  }
-  @media @tablet-range {
-    padding: 16px !important;
   }
   @media @desktop {
     display: flex;
@@ -126,30 +12,6 @@
     border: 1px solid var(--dividerStokes);
     border-top: none;
     border-radius: 0 0 8px 8px;
-    flex-direction: column;
-    gap: 24px;
-  }
-
-  .creditNote {
-    display: none;
-    @media @tablet {
-      margin-top: 20px;
-    }
-    @media @mobile-up {
-      display: block;
-    }
-  }
-
-  .paymentOptions {
-    display: flex;
-    &.displayNone {
-      display: none;
-    }
-    &.disable {
-      cursor: not-allowed;
-      pointer-events: none;
-      opacity: 0.5;
-    }
   }
   .navigationLink {
     width: 33.33%;
@@ -159,9 +21,6 @@
     border-style: solid;
     border-color: var(--dividerStokes);
     border-radius: 4px 0px 0px 4px;
-    @media @tablet-range {
-      width: 42.3%;
-    }
     @media @tablet {
       width: 100%;
       border: none;
@@ -220,14 +79,14 @@
           display: flex;
           flex: 1;
           align-items: center;
-          padding-inline-end: 12px;
+          padding-inline-start: 12px;
           @media @tablet {
             flex: unset !important;
-            padding-inline-start: 12px;
           }
           @media @desktop {
             justify-content: flex-end;
             flex: 1;
+            padding: 0 16px;
           }
 
           .subMopIcon {
@@ -371,11 +230,6 @@
   .navigationTab {
     width: 66.66%;
     padding: 24px;
-    @media @tablet-range {
-      padding: 16px;
-      width: unset;
-      flex: 1 0 0;
-    }
     border-color: var(--dividerStokes);
     border-style: solid;
     border-width: 1px 1px 1px 0;
@@ -756,7 +610,6 @@
           border: 1px solid var(--dividerStokes);
           border-radius: 4px;
           color: @TextBody;
-          pointer-events: inherit;
         }
         .error {
           border: 1px solid @ErrorText;

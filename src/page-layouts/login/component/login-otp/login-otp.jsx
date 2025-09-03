@@ -66,7 +66,7 @@ function LoginOtp({
             )}
           />
           <button
-            className={`btnPrimary ${styles.sendOtpBtn}`}
+            className={styles.sendOtpBtn}
             type="submit"
             disabled={getOtpLoading}
           >
@@ -201,7 +201,7 @@ function OtpForm({
             </div>
           )}
         </div>
-        <button className={`btnPrimary ${styles.verifyOtpBtn}`} type="submit">
+        <button className={styles.verifyOtpBtn} type="submit">
           {t("resource.common.continue")}
         </button>
       </form>

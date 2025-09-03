@@ -2,15 +2,11 @@
 
 .reviewHeaderUnselect {
   padding: 24px;
-  @media @tablet-range {
-    padding: 16px;
-  }
   display: flex;
   border: 1px solid var(--dividerStokes);
   border-radius: 8px;
   opacity: 0.5;
-  // margin-top: 20px;
-
+  margin-top: 20px;
   @media @mobile {
     display: none;
   }
@@ -33,9 +29,6 @@
   padding: 24px;
   margin-top: 20px;
   display: flex;
-  @media @tablet-range {
-    padding: 16px;
-  }
   justify-content: space-between;
   border: 1px solid var(--dividerStokes);
   border-radius: 8px;
@@ -84,12 +77,6 @@
 
 .reviewHeaderSelect {
   padding: 24px;
-  @media @desktop {
-    border-radius: 8px 8px 0 0;
-  }
-  @media @tablet-range {
-    padding: 16px;
-  }
   display: flex;
   justify-content: space-between;
   border: 1px solid var(--dividerStokes);
@@ -169,24 +156,4 @@
       pointer-events: none;
     }
   }
-}
-.payBtn {
-  padding: 14px;
-  border-radius: @ButtonRadius;
-  background-color: var(--primaryColor);
-  border: none;
-  color: #fff;
-  font-weight: 600;
-  font-size: 14px;
-  text-transform: uppercase;
-  cursor: pointer;
-  line-height: 140%;
-  margin-left: 24px;
-  &:hover {
-    background-color: @ButtonPrimaryL1;
-    color: @White;
-  }
-}
-.orderEditContainer {
-  display: flex;
 }

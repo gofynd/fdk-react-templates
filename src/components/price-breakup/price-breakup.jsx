@@ -36,15 +36,11 @@
  */
 
 import React, { useMemo } from "react";
-import {
-  priceFormatCurrencySymbol,
-  translateDynamicLabel,
-} from "../../helper/utils";
+import { priceFormatCurrencySymbol, translateDynamicLabel } from "../../helper/utils";
 import * as styles from "./price-breakup.less";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
 import { useGlobalTranslation } from "fdk-core/utils";
 import ForcedLtr from "../forced-ltr/forced-ltr";
-import Skeleton from "../core/skeletons/skeleton";
 
 function PriceBreakup({
   title,
@@ -59,13 +55,11 @@ function PriceBreakup({
   cardBorderRadius = "8px",
   isInternationalTaxLabel = false,
   customClassName,
-  isLoading = false,
 }) {
   const { t } = useGlobalTranslation("translation");
   const cssVar = {
     "--card-border-radius": `${cardBorderRadius}`,
   };
-  const priceBreakupLoaderWidth = [60, 50, 45, 90, 34];
 
   const totalDiscount = useMemo(() => {
     let totalDis = 0;
@@ -105,114 +99,56 @@ function PriceBreakup({
       <div
         className={`fontBody ${styles.priceSummaryHeading} ${customClassName}`}
       >
-        <span className={styles.priceSummaryLabel}>
-          {title || t("resource.common.price_summary")}
-        </span>
-
-        {isLoading ? (
-          <Skeleton width={66} height={15} />
-        ) : (
-          <>
-            {showItemsCount && (
-              <span>{`( ${cartItemCount} ${
-                cartItemCount > 1
-                  ? t("resource.common.items_caps_plural")
-                  : t("resource.common.items_caps_singular")
-              } )`}</span>
-            )}
-          </>
+        {title || t("resource.common.price_summary")}
+        {showItemsCount && (
+          <span>{` ( ${cartItemCount} ${cartItemCount > 1 ? t("resource.common.items_caps_plural") : t("resource.common.items_caps_singular")
+            } )`}</span>
         )}
       </div>
-      {isLoading ? (
-        <>
-          {priceBreakupLoaderWidth.map((width, index) => (
-            <div
-              className={`${
-                index !== priceBreakupLoaderWidth.length - 1
-                  ? styles.priceSummaryItem
-                  : styles.priceSummaryItemTotal
-              }`}
-            >
-              <Skeleton
-                width={width}
-                height={22}
-                className={styles.priceLoading}
-              />
-              <Skeleton
-                width={index !== priceBreakupLoaderWidth.length - 1 ? 40 : 50}
-                height={22}
-                className={styles.priceLoading}
-              />
-            </div>
-          ))}
-        </>
-      ) : (
-        <>
-          {breakUpValuesList?.map((item, index) => (
-            <div
-              className={`fontBody ${
-                index !== breakUpValuesList.length - 1
-                  ? styles.priceSummaryItem
-                  : styles.priceSummaryItemTotal
-              } ${customClassName}`}
-              key={item?.key}
-            >
-              {index !== breakUpValuesList.length - 1 ? (
-                <>
-                  <div>{translateDynamicLabel(item?.display, t)}</div>
-                  <div
-                    className={Number(item.value) < 0 ? styles.discount : ""}
-                  >
-                    {priceFormatCurrencySymbol(
-                      item?.currency_symbol,
-                      item?.value
-                    )}
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div>{translateDynamicLabel(item?.display, t)}</div>
-                  <div>
-                    {priceFormatCurrencySymbol(
-                      item?.currency_symbol,
-                      item?.value
-                    )}
-                  </div>
-                </>
-              )}
-            </div>
-          ))}
-        </>
-      )}
+      {breakUpValuesList?.map((item, index) => (
+        <div
+          className={`fontBody ${
+            index !== breakUpValuesList.length - 1
+              ? styles.priceSummaryItem
+              : styles.priceSummaryItemTotal
+          } ${customClassName}`}
+          key={item?.key}
+        >
+          {index !== breakUpValuesList.length - 1 ? (
+            <>
+              <div>{translateDynamicLabel(item?.display, t)}</div>
+              <div className={Number(item.value) < 0 ? styles.discount : ""}>
+              <ForcedLtr text={priceFormatCurrencySymbol(item?.currency_symbol, item?.value)}/>
+              </div>
+            </>
+          ) : (
+            <>
+              <div>{translateDynamicLabel(item?.display, t)}</div>
+              <div>
+              <ForcedLtr text={priceFormatCurrencySymbol(item?.currency_symbol, item?.value)}/>
+              </div>
+            </>
+          )}
+        </div>
+      ))}
       {isInternationalTaxLabel && (
         <div className={styles.internationalTaxLabel}>
           <SvgWrapper className={styles.infoIcon} svgSrc="infoIcon" />
-          <span>{t("resource.common.delivery_custom_fees_notice")}</span>
+          <span>
+            {t("resource.common.delivery_custom_fees_notice")}
+          </span>
         </div>
       )}
-
-      {isLoading ? (
-        <Skeleton height={38} className={styles.discountLoading} />
-      ) : (
-        <>
-          {showTotalDiscount && totalDiscount > 0 && (
-            <div className={styles.discountPreviewContiner}>
-              <span className={styles.icon}>{greetingIcon}</span>
-              <span className={styles.discountPreviewMessage}>
-                {discountGreetingMessage ||
-                  t("resource.common.discount_greeting_message")}
-              </span>
-              <span className={styles.discountPreviewAmount}>
-                <ForcedLtr
-                  text={priceFormatCurrencySymbol(
-                    currencySymbol,
-                    totalDiscount
-                  )}
-                />
-              </span>
-            </div>
-          )}
-        </>
+      {showTotalDiscount && totalDiscount > 0 && (
+        <div className={styles.discountPreviewContiner}>
+          <span className={styles.icon}>{greetingIcon}</span>
+          <span className={styles.discountPreviewMessage}>
+            {discountGreetingMessage || t("resource.common.discount_greeting_message")}
+          </span>
+          <span className={styles.discountPreviewAmount}>
+          <ForcedLtr text={priceFormatCurrencySymbol(currencySymbol, totalDiscount)}/>
+          </span>
+        </div>
       )}
     </div>
   );

@@ -27,16 +27,12 @@
  * @param {Function} [props.onRemoveClick=() => {}] - Callback function for remove icon click.
  * @param {boolean} [props.centerAlign=false] - Flag to center align text.
  * @param {boolean} [props.showAddToCart=false] - Flag to display the add to cart button.
- * @param {Function} [props.onClick=() => {}] - Callback function for card click.
- * @param {boolean} [props.showBadge=true] - Flag to display product badges.
- * @param {boolean} [props.isSlider=false] - Flag to indicate if card is used in a slider.
  *
  * @returns {JSX.Element} The rendered product card component.
  *
- * Note: Color variants are now clickable and will change the product image using optimized state management.
  */
 
-import React, { useMemo, useState, useCallback } from "react";
+import React, { useMemo } from "react";
 import { currencyFormat, formatLocale } from "../../helper/utils";
 import { useMobile } from "../../helper/hooks";
 import FyImage from "../core/fy-image/fy-image";
@@ -81,7 +77,6 @@ const ProductCard = ({
   showAddToCart = false,
   showBadge = true,
   isSlider = false,
-  onClick = () => {},
 }) => {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -135,85 +130,29 @@ const ProductCard = ({
     return price;
   };
 
-  // =================== OPTIMIZED COLOR VARIANT FUNCTIONALITY ===================
+  const getProductImages = () => {
+    return product?.media?.filter((media) => media.type === "image");
+  };
 
-  // Memoized variant processing for better performance
-  const colorVariants = useMemo(() => {
-    const variants = product.variants?.find(
-      (variant) =>
-        variant.display_type === "color" || variant.display_type === "image"
-    );
+  const imageUrl = getProductImages()?.[0]?.url || "";
+  const imageAlt =
+    getProductImages()?.[0]?.alt ||
+    `${product?.brand?.name} | ${product?.name}`;
+  const hoverImageUrl = getProductImages()?.[1]?.url || "";
+  const hoverImageAlt =
+    getProductImages()?.[1]?.alt ||
+    `${product?.brand?.name} | ${product?.name}`;
 
-    if (!variants?.items?.length) {
-      return { items: [], count: 0, defaultVariant: null, hasVariants: false };
-    }
-
-    const defaultVariant = variants.items.find(
-      (variant) => product.slug === variant.slug
-    );
-
-    return {
-      items: variants.items,
-      count: variants.items.length,
-      defaultVariant,
-      hasVariants: true,
-    };
-  }, [product.variants, product.slug]);
-
-  // Optimized state management for selected variant
-  const [selectedVariant, setSelectedVariant] = useState(null);
-
-  // Current active variant with fallback
-  const currentShade = selectedVariant || colorVariants.defaultVariant;
-
-  // Optimized image processing with memoization
-  const getProductImages = useCallback(
-    (variant = null) => {
-      // Priority: variant medias -> product media -> empty array
-      if (variant?.medias?.length) {
-        return variant.medias.filter((media) => media.type === "image");
-      }
-      return product?.media?.filter((media) => media.type === "image") || [];
-    },
-    [product?.media]
+  const shadeVariants = product.variants?.find(
+    (variant) => variant.display_type === "color"
   );
-
-  // Memoized image data to prevent unnecessary recalculations
-  const imageData = useMemo(() => {
-    const currentImages = getProductImages(currentShade);
-    const fallbackImages = getProductImages();
-
-    return {
-      url: currentImages[0]?.url || fallbackImages[0]?.url || imagePlaceholder,
-      alt:
-        currentImages[0]?.alt ||
-        fallbackImages[0]?.alt ||
-        `${product?.brand?.name} | ${product?.name}`,
-      hoverUrl: currentImages[1]?.url || fallbackImages[1]?.url || "",
-      hoverAlt:
-        currentImages[1]?.alt ||
-        fallbackImages[1]?.alt ||
-        `${product?.brand?.name} | ${product?.name}`,
-    };
-  }, [
-    currentShade,
-    getProductImages,
-    imagePlaceholder,
-    product?.brand?.name,
-    product?.name,
-  ]);
-
-  // Optimized variant display order with memoization
-  const orderedVariants = useMemo(() => {
-    if (!colorVariants.hasVariants) return [];
-
-    const { items, defaultVariant } = colorVariants;
-    const otherVariants = items.filter((v) => v.uid !== defaultVariant?.uid);
-
-    return defaultVariant ? [defaultVariant, ...otherVariants] : items;
-  }, [colorVariants]);
-
-  // =================== END OPTIMIZED VARIANT FUNCTIONALITY ===================
+  const shadeVariantsCount = shadeVariants?.items?.length - 1 || 0;
+  const currentShade = shadeVariants?.items?.find(
+    (variant) => product?.slug === variant?.slug
+  );
+  const variants = shadeVariants?.items
+    ?.filter((variant) => variant.slug !== currentShade?.slug)
+    .slice(0, 3);
 
   const hasDiscount =
     getListingPrice("effective") !== getListingPrice("marked");
@@ -246,20 +185,6 @@ const ProductCard = ({
     handleAddToCart(product?.slug);
   };
 
-  // Optimized variant click handler with useCallback
-  const handleVariantClick = useCallback(
-    (event, variant) => {
-      event?.preventDefault();
-      event?.stopPropagation();
-
-      // Only update if different variant is selected
-      if (variant.uid !== currentShade?.uid) {
-        setSelectedVariant(variant);
-      }
-    },
-    [currentShade?.uid]
-  );
-
   return (
     <div
       className={`${styles.productCard} ${
@@ -267,13 +192,12 @@ const ProductCard = ({
       } ${styles[customClass[0]]} ${styles[customClass[1]]} ${
         styles[customClass[2]]
       } ${styles.animate} ${gridClass} ${isSlider ? styles.sliderCard : ""}`}
-      onClick={onClick}
     >
       <div className={styles.imageContainer}>
-        {!isMobile && showImageOnHover && imageData.hoverUrl && (
+        {!isMobile && showImageOnHover && hoverImageUrl && (
           <FyImage
-            src={imageData.hoverUrl}
-            alt={imageData.hoverAlt}
+            src={hoverImageUrl}
+            alt={hoverImageAlt}
             aspectRatio={aspectRatio}
             isImageFill={isImageFill}
             backgroundColor={imageBackgroundColor}
@@ -284,8 +208,8 @@ const ProductCard = ({
           />
         )}
         <FyImage
-          src={imageData.url}
-          alt={imageData.alt}
+          src={imageUrl || imagePlaceholder}
+          alt={imageAlt}
           aspectRatio={aspectRatio}
           isImageFill={isImageFill}
           backgroundColor={imageBackgroundColor}
@@ -351,52 +275,52 @@ const ProductCard = ({
                 <span
                   className={`${styles["productPrice--sale"]} ${styles.h4}`}
                 >
-                  <ForcedLtr text={getListingPrice("effective")} />
+                  <ForcedLtr
+                    text={getListingPrice("effective")}
+                  />
                 </span>
               )}
               {hasDiscount && (
                 <span
                   className={`${styles["productPrice--regular"]} ${styles.captionNormal}`}
                 >
-                  <ForcedLtr text={getListingPrice("marked")} />
+                  <ForcedLtr
+                    text={getListingPrice("marked")}
+                  />
                 </span>
               )}
               {product.discount && (
                 <span
-                  className={`${styles["productPrice--discount"]} ${styles.captionNormal}   ${centerAlign ? styles["productPrice--textCenter"] : ""}`}
+                  className={`${styles["productPrice--discount"]} ${styles.captionNormal} ${centerAlign ? styles["productPrice--textCenter"] : ""}`}
                 >
                   ({product.discount})
                 </span>
               )}
             </div>
           )}
-
-          {/* OPTIMIZED COLOR VARIANTS SECTION */}
-          {colorVariants.hasVariants && (
+          {shadeVariantsCount !== 0 && (
             <div className={styles.productVariants}>
-              <div className={styles.colorVariants}>
-                {orderedVariants.slice(0, 4).map((variant) => {
-                  const isSelected = currentShade?.uid === variant.uid;
-
-                  return (
-                    <div
-                      key={variant.uid}
-                      className={`${styles.colorDot} ${isSelected ? styles.currentColor : ""}`}
-                      style={{ "--color": `#${variant.color}` }}
-                      title={variant.color_name || "Color variant"}
-                      onClick={(e) => handleVariantClick(e, variant)}
-                      role="button"
-                      tabIndex={0}
-                      aria-label={`Select ${variant.color_name || "color variant"}`}
-                    />
-                  );
-                })}
-
-                {colorVariants.count > 4 && (
-                  <span className={styles.moreColors}>
-                    +{colorVariants.count - 4}
-                  </span>
+              <div className={`${styles.shade} ${styles.currentShade}`}>
+                <div
+                  className={styles.shadeColor}
+                  style={{ backgroundColor: `#${currentShade?.color}` }}
+                ></div>
+                {currentShade?.color_name && (
+                  <p className={styles.shadeName}>{currentShade?.color_name}</p>
                 )}
+              </div>
+              <div className={`${styles.shade} ${styles.allShades}`}>
+                <div className={styles.variantContainer}>
+                  {variants &&
+                    variants.map((variantItem) => (
+                      <div
+                        key={variantItem.uid}
+                        className={styles.shadeColor}
+                        style={{ backgroundColor: `#${variantItem?.color}` }}
+                      ></div>
+                    ))}
+                </div>
+                <div className={styles.shadeCount}>{shadeVariantsCount}</div>
               </div>
             </div>
           )}

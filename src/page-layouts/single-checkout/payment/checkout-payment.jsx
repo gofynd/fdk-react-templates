@@ -4,7 +4,6 @@ import CheckoutPaymentContent from "./checkout-payment-content";
 import * as styles from "./checkout-payment.less";
 
 import CheckoutPaymentFailure from "./checkout-payment-failure";
-import CreditNote from "./credit-note/credit-note";
 import { useMobile } from "../../../helper/hooks/useMobile";
 import { useGlobalTranslation } from "fdk-core/utils";
 
@@ -25,14 +24,8 @@ function CheckoutPayment({
   const [showFailedMessage, setShowFailedMessage] = useState(false);
   const [paymentErrHeading, setPaymentErrHeading] = useState("");
   const [paymentErrMsg, setPaymentErrMsg] = useState("");
-  const [juspayErrorMessage, setJuspayErrorMessage] = useState(false);
   const [timerId, setTimerId] = useState(null);
-  const {
-    errorMessage,
-    setErrorMessage,
-    enableLinkPaymentOption,
-    getTotalValue,
-  } = payment;
+  const { errorMessage, setErrorMessage, enableLinkPaymentOption } = payment;
   const isMobile = useMobile();
 
   useEffect(() => {
@@ -51,7 +44,6 @@ function CheckoutPayment({
         paymentErrMsg: urlParams?.get("error"),
       });
       onFailedGetCartShipmentDetails();
-      setJuspayErrorMessage(true);
     }
   }, [errorMessage]);
 
@@ -113,16 +105,10 @@ function CheckoutPayment({
   return (
     <>
       <div
-        className={`${styles.paymentContainer} ${!showPayment ? styles.hidePayment : ""} ${enableLinkPaymentOption ? styles.unsetMarginTop : ""} ${getTotalValue?.() === 0 ? styles.disabledPayment : ""}`}
+        className={`${styles.paymentContainer} ${!showPayment ? styles.hidePayment : ""} ${enableLinkPaymentOption ? styles.unsetMarginTop : ""}`}
       >
         {showPayment ? (
           <>
-            <div className={styles.creditNote}>
-              <CreditNote
-                data={payment?.partialPaymentOption}
-                updateStoreCredits={payment?.updateStoreCredits}
-              />
-            </div>
             <div
               className={`${styles.paymentHeaderSelect} ${customClassName} ${enableLinkPaymentOption ? styles.unsetBorder : ""}`}
             >
@@ -154,7 +140,6 @@ function CheckoutPayment({
               breakUpValues={breakUpValues}
               removeDialogueError={hideFailedMessage}
               setCancelQrPayment={setCancelQrPayment}
-              juspayErrorMessage={juspayErrorMessage}
               isCouponApplied={isCouponApplied}
             ></CheckoutPaymentContent>
           </>

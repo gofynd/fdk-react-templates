@@ -2052,23 +2052,13 @@ h5,
   margin-top: 12px;
   height: 48px;
   box-sizing: border-box;
-  color: var(--textHeading, #26201a);
 }
 .login-mode-button__loginModeBtn___BqUzp svg {
   flex: 0 0 24px;
 }
-.login-mode-button__loginModeBtn___BqUzp svg path {
-  fill: #000;
-}
-.login-mode-button__loginModeBtn___BqUzp:hover {
-  background-color: var(--buttonPrimary, #4e3f09);
-  color: var(--buttonSecondary, #fff);
-}
-.login-mode-button__loginModeBtn___BqUzp:hover svg path {
-  fill: var(--buttonSecondary, #fff);
-}
 .login-mode-button__loginModeBtn___BqUzp .login-mode-button__loginModeLabel___BYT3_ {
   margin-inline-end: 24px;
+  color: var(--textHeading, #26201a);
   font-size: 14px;
   font-style: normal;
   font-weight: 600;

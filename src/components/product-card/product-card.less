@@ -150,9 +150,7 @@
         display: flex;
         flex-wrap: wrap;
         align-items: baseline;
-        &--textCenter {
-          text-align: center;
-        }
+
         &.center {
           justify-content: center;
         }
@@ -177,59 +175,40 @@
       .productVariants {
         margin-top: 8px;
 
-        .colorVariants {
+        .flex-align-center();
+        gap: 8px;
+        .shade {
           .flex-align-center();
-          gap: 12px;
-
-          .colorDot {
-            width: 16px;
-            height: 16px;
+          padding: 4px 8px;
+          background-color: @ThemeAccentL5;
+          border: 1px solid @DividerStokes;
+          border-radius: 40px;
+          .shadeColor {
+            width: 12px;
+            height: 12px;
+            border: 1px solid @DividerStokes;
             border-radius: 50%;
-            display: block;
-            cursor: pointer;
-            // transition: all 0.2s ease;
-            text-decoration: none;
-            flex-shrink: 0;
-            position: relative;
-
-            // Default: just the color circle, no border
-            border: none;
-            background-color: var(--color, #ccc);
-
-            &:hover {
-              transform: scale(1.1);
-              z-index: 10;
-            }
-
-            // Only current color gets black outer ring with inner color
-            &.currentColor {
-              border: 1px solid @TextHeading; // Black outer ring
-              background-color: transparent;
-              width: 22px;
-              height: 22px;
-
-              // Inner color circle with spacing for current color only
-              &::before {
-                content: "";
-                position: absolute;
-                top: 2px;
-                left: 2px;
-                right: 2px;
-                bottom: 2px;
-                border-radius: 50%;
-                background-color: var(--color, #ccc);
-                z-index: 1;
-              }
-            }
           }
-
-          .moreColors {
-            color: @TextBody;
+          .shadeName,
+          .shadeCount {
+            margin-inline-start: 4px;
             font-size: 12px;
-            font-weight: 400;
             line-height: 14px;
-            letter-spacing: -0.24px;
-            white-space: nowrap;
+            color: @TextBody;
+            text-transform: capitalize;
+          }
+        }
+        .allShades {
+          .variantContainer {
+            display: flex;
+            isolation: isolate;
+            .shadeColor:not(:first-child) {
+              margin-inline-start: -4px;
+              z-index: -1;
+            }
+            .shadeColor:last-child {
+              z-index: -2;
+            }
           }
         }
       }
@@ -450,7 +429,4 @@
 //     opacity: 1;
 //     transform: translateY(0);
 //   }
-// }
-// .textCenter {
-//   text-align: center;
 // }

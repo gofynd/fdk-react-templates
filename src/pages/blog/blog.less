@@ -1,11 +1,4 @@
 @import "../../styles/main.less";
-.nextArrowStyles {
-  right: 20px;
-  inset-inline-start: "unset";
-}
-.prevArrowStyles {
-  left: 20px;
-}
 
 .loader {
   position: relative;
@@ -48,7 +41,6 @@
   }
 }
 .tagBtn {
-  .btnSecondary();
   border: none;
   white-space: nowrap;
   background-color: @ButtonSecondary;
@@ -67,7 +59,6 @@
   }
 }
 .blogContainer {
-  overflow-x: hidden !important;
   font-size: 14px;
   line-height: 20px;
   max-width: @page-width;
@@ -78,7 +69,7 @@
     padding: 55px 24px 0;
   }
   @media @desktop {
-    padding: 2em 40px;
+    padding: 72px 40px 0;
   }
   &__carousel {
   }
@@ -89,6 +80,10 @@
     grid-template-columns: 1fr;
     grid-template-rows: auto;
     grid-auto-columns: 1fr;
+    padding-bottom: 40px;
+    @media @mobile-up {
+      padding-bottom: 60px;
+    }
     @media @desktop {
       grid-template-columns: 0.85fr 0.4fr;
     }
@@ -129,7 +124,6 @@
   }
 }
 .sliderWrapper {
-  padding-bottom: 60px;
   :global {
     .slick-track {
       display: flex !important;
@@ -276,7 +270,12 @@
     }
   }
 }
-
+.filterWrapper {
+  padding-top: 12px;
+  @media @mobile-up {
+    padding-top: 60px;
+  }
+}
 .filterWrapper {
   line-height: 20px;
   &__header {
@@ -419,23 +418,4 @@
   justify-content: unset !important;
   margin-top: 38px !important;
   min-height: unset !important;
-}
-
-@media @desktop {
-  .hideOnDesktop {
-    display: none;
-  }
-}
-@media @tablet {
-  .hideOnDesktop {
-    display: none;
-  }
-}
-@media @mobile {
-  .hideOnMobile {
-    display: none;
-  }
-  .hideOnDesktop {
-    display: block;
-  }
 }

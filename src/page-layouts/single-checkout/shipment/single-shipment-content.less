@@ -13,16 +13,10 @@
       justify-content: space-between;
       border: 1px solid var(--dividerStokes);
       padding: 16px 24px;
-      @media @desktop {
-        border-radius: 8px 8px 0 0;
-      }
+
       @media @mobile {
         border-width: 1px 0;
         padding: 16px;
-      }
-
-      @media @tablet {
-        flex-direction: column;
       }
 
       .headerLeft {
@@ -31,11 +25,6 @@
         padding-inline-end: 12px;
         padding-bottom: 4px;
         padding-inline-start: 0px;
-
-        .shipmentLabelLoader {
-          height: 17px;
-        }
-
         .shipmentNumber {
           font-weight: 600;
           font-size: 14px;
@@ -59,20 +48,11 @@
           }
         }
       }
-
       .deliveryDateWrapper {
         display: flex;
         color: @SuccessText;
         gap: 8px;
         align-items: center;
-
-        .deliveryPromiseLoader {
-          height: 20px;
-        }
-
-        @media @tablet {
-          gap: 6px;
-        }
         .shippingLogo {
           height: 20px;
           width: 20px;
@@ -81,12 +61,6 @@
               fill: @SuccessText;
             }
           }
-        }
-        .foName {
-          color: @TextLabel;
-          font-size: 14px;
-          font-weight: 500;
-          line-height: 140%;
         }
         .deliveryDate {
           font-weight: 600;
@@ -277,12 +251,6 @@
 .parent {
   border: 1px solid var(--dividerStokes);
   padding: 24px;
-  @media @desktop {
-    border-radius: 0px 0px 8px 8px;
-  }
-  @media @tablet-range {
-    padding: 16px;
-  }
   border-top: none;
 
   @media @mobile {
@@ -330,9 +298,5 @@
       padding: 20px 24px;
       font-size: 14px;
     }
-  }
-  .proceedBtn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
   }
 }

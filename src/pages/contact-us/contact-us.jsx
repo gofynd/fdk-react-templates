@@ -73,6 +73,7 @@ function ContactSupport({
 
   const [focusedInput, setFocusedInput] = useState(null);
   const [text, setText] = useState("");
+
   const inputFields = [
     {
       type: "text",
