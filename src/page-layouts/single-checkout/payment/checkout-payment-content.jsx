@@ -2086,7 +2086,7 @@ function CheckoutPaymentContent({
               <div>
                 {upiApps?.length > 0 &&
                   upiApps
-                    .filter((app) => app !== "any")
+                    .filter((app) => ["gpay", "phonepe", "paytm"].includes(app))
                     .map((app) => (
                       <label
                         key={app}
@@ -2122,34 +2122,31 @@ function CheckoutPaymentContent({
                           )}
                       </label>
                     ))}
+                {upiApps?.length > 0 && upiApps?.includes("any") && (
+                  <label
+                    key="any"
+                    onClick={() => {
+                      setSelectedUpiIntentApp("any");
+                      selectedUpiRef.current = "any";
+                      selectMop("UPI", "UPI", "UPI");
+                      removeDialogueError();
+                      setShowUpiRedirectionModal(true);
+                    }}
+                    className={styles.moreApps}
+                  >
+                    <div className={styles.logo}>
+                      <SvgWrapper svgSrc="more-upi-apps" />
+                    </div>
+                    <p className={styles.displayName}>
+                      {upiAppData.any?.displayName}
+                    </p>
+                    <div className={styles.rightArrow}>
+                      <SvgWrapper svgSrc="arrow-right" />
+                    </div>
+                  </label>
+                )}
               </div>
             )}
-            {isTablet &&
-              isChromeOrSafari &&
-              upiApps?.length > 0 &&
-              upiApps?.includes("any") && (
-                <label
-                  key="any"
-                  onClick={() => {
-                    setSelectedUpiIntentApp("any");
-                    selectedUpiRef.current = "any";
-                    selectMop("UPI", "UPI", "UPI");
-                    removeDialogueError();
-                    setShowUpiRedirectionModal(true);
-                  }}
-                  className={styles.moreApps}
-                >
-                  <div className={styles.logo}>
-                    <SvgWrapper svgSrc="more-upi-apps" />
-                  </div>
-                  <p className={styles.displayName}>
-                    {upiAppData.any?.displayName}
-                  </p>
-                  <div className={styles.rightArrow}>
-                    <SvgWrapper svgSrc="arrow-right" />
-                  </div>
-                </label>
-              )}
             {!isTablet && isQrMopPresent && (
               <div>
                 <p className={styles.upiSectionTitle}>
