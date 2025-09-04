@@ -78,6 +78,7 @@ const Wishlist = ({
           {productList.map((product, index) => (
             <WishlistProductCard
               key={product?.uid}
+              index={index}
               {...{
                 product,
                 isBrand,
@@ -131,6 +132,7 @@ const Wishlist = ({
 
 const WishlistProductCard = ({
   product,
+  index,
   isBrand = true,
   isSaleBadge = true,
   isPrice = true,
