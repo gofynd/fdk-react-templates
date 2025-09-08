@@ -42,6 +42,7 @@ const AddToCart = ({
   currentFO = {},
   setCurrentFO = () => {},
   availableFOCount,
+  getDeliveryPromise,
 }) => {
   const fpi = useFPI();
   const { language, countryCode } =
@@ -130,24 +131,6 @@ const AddToCart = ({
       ?.filter((size) => size?.quantity === 0 && !isMto)
       ?.map((size) => size?.value);
   }, [sizes?.sizes]);
-
-  const getDeliveryDate = (deliveryPromise) => {
-    const options = {
-      weekday: "short",
-      month: "short",
-      day: "numeric",
-      timeZone: "UTC",
-    };
-
-    const { max } = deliveryPromise || {};
-
-    if (!max) return false;
-
-    const dateFormatter = new Intl.DateTimeFormat(undefined, options);
-    const maxDate = dateFormatter.format(new Date(max));
-
-    return maxDate;
-  };
 
   return (
     <div className={styles.productDescContainer}>
@@ -327,36 +310,14 @@ const AddToCart = ({
                 <div className={styles.fulfillmentWrapper}>
                   <div className={styles.foList}>
                     {fulfillmentOptions.map((foItem, index) => (
-                      <div
+                      <FullfillmentOption
                         key={index}
-                        className={styles.fulfillmentOption}
-                        onClick={() =>
-                          setCurrentFO(foItem?.fulfillment_option || {})
-                        }
-                      >
-                        {fulfillmentOptions.length === 1 ? (
-                          <TruckIcon className={styles.fulfillmentOption} />
-                        ) : (
-                          <RadioIcon
-                            checked={
-                              foItem?.fulfillment_option?.slug ===
-                              currentFO?.slug
-                            }
-                          />
-                        )}
-
-                        <div className={styles.foDetails}>
-                          {!!getDeliveryDate(foItem?.delivery_promise) && (
-                            <p className={styles.promiseLabel}>
-                              Get it by{" "}
-                              {getDeliveryDate(foItem?.delivery_promise)}
-                            </p>
-                          )}
-                          <p className={styles.foLabel}>
-                            {foItem?.fulfillment_option?.name}
-                          </p>
-                        </div>
-                      </div>
+                        foItem={foItem}
+                        fulfillmentOptions={fulfillmentOptions}
+                        currentFO={currentFO}
+                        setCurrentFO={setCurrentFO}
+                        getDeliveryPromise={getDeliveryPromise}
+                      />
                     ))}
                   </div>
                 </div>
@@ -439,6 +400,37 @@ const AddToCart = ({
             )}
           </div>
         </div>
+      </div>
+    </div>
+  );
+};
+
+const FullfillmentOption = ({
+  foItem,
+  fulfillmentOptions,
+  currentFO,
+  setCurrentFO,
+  getDeliveryPromise,
+}) => {
+  const formattedPromise = getDeliveryPromise(foItem?.delivery_promise);
+  return (
+    <div
+      className={styles.fulfillmentOption}
+      onClick={() => setCurrentFO(foItem?.fulfillment_option || {})}
+    >
+      {fulfillmentOptions.length === 1 ? (
+        <TruckIcon className={styles.fulfillmentOption} />
+      ) : (
+        <RadioIcon
+          checked={foItem?.fulfillment_option?.slug === currentFO?.slug}
+        />
+      )}
+
+      <div className={styles.foDetails}>
+        {!!formattedPromise && (
+          <p className={styles.promiseLabel}>{formattedPromise}</p>
+        )}
+        <p className={styles.foLabel}>{foItem?.fulfillment_option?.name}</p>
       </div>
     </div>
   );
