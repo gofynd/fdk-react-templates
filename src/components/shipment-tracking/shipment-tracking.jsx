@@ -39,9 +39,9 @@ function ShipmentTracking({
   const [showDetailedTracking, setShowDetailedTracking] = useState(false);
   const getTime = (item) => {
     return convertUTCDateToLocalDate(
-      item?.created_ts ? item?.created_ts : item?.time, 
-      "", 
-      formatLocale(locale, countryCode,true)
+      item?.created_ts ? item?.created_ts : item?.time,
+      "",
+      formatLocale(locale, countryCode, true)
     );
   };
 
@@ -113,8 +113,17 @@ function ShipmentTracking({
     <div className={`${styles.shipmentTracking}`}>
       <div className={`${styles.status}`}>
         <div>
-          <div className={`${styles.title} ${styles.boldsm}`}>
-            {t("resource.common.shipment")}: {shipmentInfo?.shipment_id}
+          <div
+            className={`${styles.title} ${styles.shipmentTitle} ${styles.boldsm}`}
+          >
+            <div>
+              {t("resource.common.shipment")}: {shipmentInfo?.shipment_id}
+            </div>
+            {availableFOCount > 1 && shipmentInfo.fulfillment_option?.name && (
+              <div className={styles.foName}>
+                {shipmentInfo.fulfillment_option?.name}
+              </div>
+            )}
           </div>
           {shipmentInfo?.awb_no && (
             <div className={`${styles.awbText} ${styles.lightxxs}`}>
