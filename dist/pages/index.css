@@ -21847,10 +21847,7 @@ h5,
   width: 100%;
 }
 .add-to-cart__productDescContainer___w6xlt .add-to-cart__right___AYndS .add-to-cart__productInfo___AyYit .add-to-cart__product___Hqonr {
-  margin-top: 24px;
-  margin-inline-end: 24px;
-  margin-bottom: 0px;
-  margin-inline-start: 24px;
+  padding: 24px 24px 8px;
   overflow: auto;
 }
 @media only screen and (min-width: 769px) {
@@ -21861,7 +21858,7 @@ h5,
 @media only screen and (max-width: 768px) {
   .add-to-cart__productDescContainer___w6xlt .add-to-cart__right___AYndS .add-to-cart__productInfo___AyYit .add-to-cart__product___Hqonr {
     scrollbar-width: thin;
-    margin: 16px;
+    padding: 16px;
     max-height: 60vh;
   }
 }
