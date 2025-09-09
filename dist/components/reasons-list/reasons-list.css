@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 18px;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 1.5;
+    line-height: 24px;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .reasons-list__caption-medium___gopXY,
 .reasons-list__captionMedium___lDvkO {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .reasons-list__caption-semi-bold___aSKau,
 .reasons-list__captionSemiBold___ZrxjL {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -260,11 +260,11 @@ h5,
 }
 .reasons-list__mr-5___HPIVL,
 .reasons-list__mr5___CQzA9 {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .reasons-list__mr-2___NECNt,
 .reasons-list__mr2___hH4T_ {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .reasons-list__py-5___YURGg,
 .reasons-list__py5___Jv8LT {
@@ -344,7 +344,7 @@ h5,
   cursor: pointer;
 }
 .reasons-list__reasonItem___KEF5V .reasons-list__reason-content___I1Sc6 .reasons-list__text___E5K8T {
-  margin-inline-start: 10px;
+  margin-left: 10px;
 }
 .reasons-list__reasonItem___KEF5V .reasons-list__textarea___yzEVu {
   display: block;
@@ -468,7 +468,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 18px;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -477,7 +477,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 1.5;
+    line-height: 24px;
   }
 }
 h5,
@@ -544,7 +544,7 @@ h5,
 .reason-item__caption-medium___xZiVD,
 .reason-item__captionMedium___qy6tX {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -557,7 +557,7 @@ h5,
 .reason-item__caption-semi-bold___LEpl7,
 .reason-item__captionSemiBold___Jt9oT {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -622,11 +622,11 @@ h5,
 }
 .reason-item__mr-5___l5sqm,
 .reason-item__mr5___VEu5F {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .reason-item__mr-2___jtN_J,
 .reason-item__mr2___PgQFC {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .reason-item__py-5___FB2Mz,
 .reason-item__py5___MRDZz {
@@ -715,11 +715,11 @@ h5,
   flex: 0 0 24px;
 }
 .reason-item__reasonItem___X1uR_ .reason-item__reasonContent___dteU7 .reason-item__text___jS7OJ {
-  margin-inline-start: 10px;
+  margin-left: 10px;
 }
 @media only screen and (max-width: 480px) {
   .reason-item__reasonItem___X1uR_ .reason-item__reasonContent___dteU7 .reason-item__text___jS7OJ {
-    margin-inline-start: 8px;
+    margin-left: 8px;
   }
 }
 .reason-item__reasonItem___X1uR_ .reason-item__reasonContent___dteU7 .reason-item__lightxs___nD5Od {
@@ -740,14 +740,6 @@ h5,
   appearance: none;
   width: 98%;
   resize: none;
-}
-.reason-item__reasonItem___X1uR_ .reason-item__textarea___XwP_2 .reason-item__error___IjRz1 {
-  color: var(--errorText, #ff3333);
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 16.8px;
-  padding-top: 8px;
 }
 .reason-item__regularRadio___zK0sj {
   color: var(--textHeading, #26201a);

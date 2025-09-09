@@ -30,15 +30,15 @@
       color: @TextLabel;
 
       &.tabSizeGuide {
-        margin-inline-start: 1.5rem;
+        margin-left: 1.5rem;
 
         @media @tablet {
-          margin-inline-start: 1rem;
+          margin-left: 1rem;
         }
       }
 
       &.tabMeasure {
-        margin-inline-start: 1.5rem;
+        margin-left: 1.5rem;
       }
     }
   }
@@ -170,7 +170,7 @@
   height: 100%;
   position: fixed;
   top: 0;
-  inset-inline-start: 0;
+  left: 0;
   background-color: rgba(20, 19, 14, 0.6);
   opacity: 0;
   transition: all 0.4s;
@@ -184,52 +184,16 @@
 }
 
 .contactUs {
-  display: flex;
-  height: 44px;
-  padding: 12px 32px;
-  justify-content: center;
-  align-items: center;
-  gap: 14px;
-  border-radius: @ButtonRadius;
-  border: 1px solid @ButtonPrimary;
-  background: @ButtonSecondary;
+  margin: 24px 40px 0;
+  width: calc(100% - 80px);
+  padding: 16px 0;
+  border-radius: 4px;
 }
 
 .notAvailable {
   text-align: center;
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 75vh;
-  max-width: 415px;
-  margin: 0 auto;
-  h3 {
-    color: @TextHeading;
-    text-align: center;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-    letter-spacing: -0.32px;
-    align-self: stretch;
-    margin-bottom: 4px;
-  }
-  p {
-    color: @TextHeading;
-    text-align: center;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 18px;
-    letter-spacing: -0.28px;
-    align-self: stretch;
-    margin-bottom: 16px;
-    max-width: 281px;
-    margin: 0 auto;
-    margin-bottom: 16px;
-  }
+
   @media @mobile {
     max-width: 415px;
   }
@@ -239,9 +203,7 @@
     line-height: 32px;
   }
 }
+
 .leftContainer {
   padding: 1.5rem 1rem;
-  &.paddingTopUnset {
-    padding: 0 1rem;
-  }
 }

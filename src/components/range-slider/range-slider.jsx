@@ -22,7 +22,6 @@ import RangeSlider from "react-range-slider-input";
 import * as styles from "./range-slider.less";
 import FyInput from "../core/fy-input/fy-input";
 import { debounce } from "../../helper/utils";
-import { useGlobalTranslation } from "fdk-core/utils";
 
 function CustomRangeSlider({
   min,
@@ -32,10 +31,8 @@ function CustomRangeSlider({
   selectedMax,
   count,
   currencySymbol = "",
-  postfix = "",
   onSliderUpdate = () => {},
 }) {
-  const { t } = useGlobalTranslation("translation");
   const [startValue, setStartValue] = useState(selectedMin);
   const [endValue, setEndValue] = useState(selectedMax);
   const [rangeMessage, setRangeMessage] = useState("");
@@ -74,11 +71,9 @@ function CustomRangeSlider({
       });
     }
     if (value < min) {
-      setRangeMessage(`${t("resource.product.min_value_should_be")} ${min}`);
+      setRangeMessage(`The minimum value should be ${min}`);
     } else if (value >= endValue) {
-      setRangeMessage(
-        `${t("resource.product.min_value_cannot_exceed")} ${endValue}`
-      );
+      setRangeMessage(`The minimum value cannot exceed ${endValue}`);
     } else setRangeMessage("");
   };
 
@@ -96,11 +91,9 @@ function CustomRangeSlider({
       });
     }
     if (value > max) {
-      setRangeMessage(`${t("resource.product.max_value_should_be")} ${max}`);
+      setRangeMessage(`The maximum value should be ${max}`);
     } else if (value <= startValue) {
-      setRangeMessage(
-        `${t("resource.product.max_value_should_be_greater_than")} ${startValue}`
-      );
+      setRangeMessage(`The maximum value should be greater than ${startValue}`);
     } else setRangeMessage("");
   };
 
@@ -116,8 +109,8 @@ function CustomRangeSlider({
       )}
       <div className={styles.inputContainer}>
         <div>
-          <label className={styles.label} htmlFor={t("resource.facets.from")}>
-            {t("resource.facets.from")}
+          <label className={styles.label} htmlFor="from">
+            From
           </label>
           <div className={styles.flexAlignCenter}>
             {currencySymbol && (
@@ -125,21 +118,18 @@ function CustomRangeSlider({
             )}
             <FyInput
               value={startValue}
-              id={t("resource.facets.from")}
+              id="from"
               type="number"
               onChange={(event) => onMinValueChange(event.target.value)}
               onBlur={(event) => onMinBlurChange(event.target.value)}
               inputClassName={styles.fieldItem}
               min={min}
             />
-            {!currencySymbol && postfix && (
-              <span className={styles.postfix}>{postfix}</span>
-            )}
           </div>
         </div>
         <div>
-          <label className={styles.label} htmlFor={t("resource.facets.to")}>
-            {t("resource.facets.to")}
+          <label className={styles.label} htmlFor="to">
+            To
           </label>
           <div className={styles.flexAlignCenter}>
             {currencySymbol && (
@@ -150,14 +140,11 @@ function CustomRangeSlider({
               value={endValue}
               onChange={(event) => onMaxValueChange(event.target.value)}
               onBlur={(event) => onMaxBlurChange(event.target.value)}
-              id={t("resource.facets.to")}
+              id="to"
               type="number"
               inputClassName={styles.fieldItem}
               max={max}
             />
-            {!currencySymbol && postfix && (
-              <span className={styles.postfix}>{postfix}</span>
-            )}
           </div>
         </div>
       </div>
@@ -172,9 +159,7 @@ function CustomRangeSlider({
         />
 
         {count && (
-          <div className={styles.entityCount}>
-            {count} {t("resource.product.products_found")}
-          </div>
+          <div className={styles.entityCount}>{count} Products Found</div>
         )}
 
         {rangeMessage && <p className={styles.errorMessage}>{rangeMessage}</p>}
