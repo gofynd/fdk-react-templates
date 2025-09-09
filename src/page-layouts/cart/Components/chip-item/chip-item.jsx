@@ -317,7 +317,15 @@ export default function ChipItem({
               isOutOfStock ? styles.outOfStock : ""
             }`}
           >
-            <FDKLink to={`/product/${singleItemDetails?.product?.slug}`}>
+            <FDKLink
+              to={`/product/${singleItemDetails?.product?.slug}`}
+              state={{
+                product: {
+                  ...singleItemDetails,
+                  ...(singleItemDetails?.product || {}),
+                },
+              }}
+            >
               <img src={productImage} alt={singleItemDetails?.product?.name} />
             </FDKLink>
           </div>

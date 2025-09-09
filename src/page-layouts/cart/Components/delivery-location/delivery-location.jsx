@@ -11,6 +11,7 @@ import FyButton from "../../../../components/core/fy-button/fy-button";
 function DeliveryLocation({
   pincode = "",
   deliveryLocation,
+  btnLabel = t("resource.cart.change"),
   pincodeInput,
   error = null,
   isPincodeModalOpen = false,
@@ -87,9 +88,7 @@ function DeliveryLocation({
         </span>
       </div>
       <div className={styles.changePinCodeButton} onClick={onChangeButtonClick}>
-        {deliveryLocation
-          ? t("resource.cart.change")
-          : t("resource.cart.enter_pin_code")}
+        {deliveryLocation ? t("resource.cart.change") : btnLabel}
       </div>
       <Modal
         isOpen={isPincodeModalOpen}
