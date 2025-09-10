@@ -558,6 +558,8 @@ export const getAddressFromComponents = (components, name) => {
 
   const address = [
     name,
+    // Add premise (building name) if present from Google Maps components
+    typeToName["premise"]?.long_name || null,
     typeToName["street_number"]?.long_name || null,
     typeToName["route"]?.long_name || null,
   ]

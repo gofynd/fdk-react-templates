@@ -53,18 +53,56 @@ const GoogleMapAddress = ({
     libraries,
   });
 
-  useEffect(() => {
-    setCurrentLocation(addressItem);
+  const getGeocodeByAddress = async (address) => {
+    if (!address.area_code || !mapApiKey) {
+      return;
+    }
+    try {
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${address.area_code}&key=${mapApiKey}`
+      );
+      const data = await response.json();
+      if (data.results.length > 0) {
+        const location = data.results[0].geometry.location;
+        return {
+          latitude: location.lat,
+          longitude: location.lng,
+        };
+      }
+    } catch (error) {
+      return;
+    }
+  };
+
+  const updateMapLocation = (address) => {
+    setCurrentLocation(address);
     mapCenterRef.current = {
       lat: Number(
-        addressItem?.geo_location?.latitude || countryDetails?.latitude || 0
+        address?.geo_location?.latitude || countryDetails?.latitude || 0
       ),
       lng: Number(
-        addressItem?.geo_location?.longitude || countryDetails?.longitude || 0
+        address?.geo_location?.longitude || countryDetails?.longitude || 0
       ),
     };
     mapRef?.current?.panTo(mapCenterRef.current);
-  }, [countryDetails, addressItem]);
+  };
+
+  useEffect(() => {
+    if (!addressItem?.geo_location && addressItem?.area_code) {
+      getGeocodeByAddress(addressItem).then((location) => {
+        if (location) {
+          updateMapLocation({ ...addressItem, geo_location: location });
+        }
+      });
+    }
+    updateMapLocation(addressItem);
+  }, [
+    countryDetails?.latitude,
+    countryDetails?.longitude,
+    addressItem?.area_code,
+    addressItem?.geo_location?.latitude,
+    addressItem?.geo_location?.longitude,
+  ]);
 
   const locateUser = () => {
     if (!navigator?.geolocation || !mapRef.current) return;

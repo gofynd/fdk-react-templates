@@ -87,8 +87,13 @@ function DeliveryLocation({
           {deliveryLocation}
         </span>
       </div>
-      <div className={styles.changePinCodeButton} onClick={onChangeButtonClick}>
-        {deliveryLocation ? t("resource.cart.change") : btnLabel}
+      <div>
+        <button
+          className={styles.changePinCodeButton}
+          onClick={onChangeButtonClick}
+        >
+          {deliveryLocation ? t("resource.cart.change") : btnLabel}
+        </button>
       </div>
       <Modal
         isOpen={isPincodeModalOpen}
