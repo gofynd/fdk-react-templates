@@ -8,6 +8,8 @@ import { useGlobalTranslation } from "fdk-core/utils";
 import { translateDynamicLabel } from "../../../../helper/utils";
 import FyButton from "../../../../components/core/fy-button/fy-button";
 
+const { t } = useGlobalTranslation("translation");
+
 function DeliveryLocation({
   pincode = "",
   deliveryLocation,
@@ -41,7 +43,7 @@ function DeliveryLocation({
   countryDetails,
   isGuestUser = false,
 }) {
-  const { t } = useGlobalTranslation("translation");
+  // const { t } = useGlobalTranslation("translation"); // Already declared above
   const {
     handleSubmit,
     register,

@@ -1389,15 +1389,9 @@ function CheckoutPaymentContent({
     }, []);
   };
 
-  function cancelUPIPayment() { 
+  function cancelUPIPayment() {
     setshowUPIModal(false);
-    try {
-      stopPolling();
-    } catch (e) {
-      // Optionally log error if needed
-    } finally {
-      setIsLoading(false);
-    }
+    stopPolling();
   }
 
   function getPayLaterBorder(payLater) {
@@ -1476,8 +1470,6 @@ function CheckoutPaymentContent({
       }
     } catch (err) {
       console.log("Payment cancellation failed");
-    } finally {
-      setIsLoading(false);
     }
   };
   const codCharges =
