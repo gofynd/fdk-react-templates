@@ -8,12 +8,10 @@ import { useGlobalTranslation } from "fdk-core/utils";
 import { translateDynamicLabel } from "../../../../helper/utils";
 import FyButton from "../../../../components/core/fy-button/fy-button";
 
-const { t } = useGlobalTranslation("translation");
-
 function DeliveryLocation({
   pincode = "",
   deliveryLocation,
-  btnLabel = t("resource.cart.change"),
+  btnLabel,
   pincodeInput,
   error = null,
   isPincodeModalOpen = false,
@@ -43,7 +41,8 @@ function DeliveryLocation({
   countryDetails,
   isGuestUser = false,
 }) {
-  // const { t } = useGlobalTranslation("translation"); // Already declared above
+  const { t } = useGlobalTranslation("translation");
+  const computedBtnLabel = btnLabel || t("resource.cart.change");
   const {
     handleSubmit,
     register,
@@ -94,7 +93,7 @@ function DeliveryLocation({
           className={styles.changePinCodeButton}
           onClick={onChangeButtonClick}
         >
-          {deliveryLocation ? t("resource.cart.change") : btnLabel}
+          {deliveryLocation ? t("resource.cart.change") : computedBtnLabel}
         </button>
       </div>
       <Modal
