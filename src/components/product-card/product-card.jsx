@@ -64,7 +64,10 @@ const ProductCard = ({
   isWishlistIcon = true,
   isImageFill = false,
   showImageOnHover = false,
+  customImageContainerClass = "",
   imageBackgroundColor = "",
+  customeProductDescContainerClass = "",
+
   imagePlaceholder = "",
   columnCount = { desktop: 4, tablet: 3, mobile: 1 },
   WishlistIconComponent = () => <SvgWrapper svgSrc="wishlist-plp" />,
@@ -269,7 +272,7 @@ const ProductCard = ({
       } ${styles.animate} ${gridClass} ${isSlider ? styles.sliderCard : ""}`}
       onClick={onClick}
     >
-      <div className={styles.imageContainer}>
+      <div className={`${styles.imageContainer} ${customImageContainerClass}`}>
         {!isMobile && showImageOnHover && imageData.hoverUrl && (
           <FyImage
             src={imageData.hoverUrl}
@@ -332,7 +335,9 @@ const ProductCard = ({
           </div>
         ) : null}
       </div>
-      <div className={styles.productDescContainer}>
+      <div
+        className={`${styles.productDescContainer} ${customeProductDescContainerClass}`}
+      >
         <div className={styles.productDesc}>
           {isBrand && product.brand && (
             <h3 className={styles.productBrand}>{product.brand.name}</h3>
