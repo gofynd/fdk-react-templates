@@ -22,13 +22,9 @@ import FyImage from "../core/fy-image/fy-image";
 import HTMLContent from "../core/html-content/html-content";
 import BlogTabs from "../blog-tabs/blog-tabs";
 import BlogFooter from "../blog-footer/blog-footer";
-import { convertUTCDateToLocalDate, formatLocale, isRunningOnClient } from "../../helper/utils";
+import { convertUTCDateToLocalDate } from "../../helper/utils";
 import { useLocation } from "react-router-dom";
-import {
-  useGlobalStore,
-  useFPI,
-  useGlobalTranslation
-} from "fdk-core/utils";
+import { isRunningOnClient } from "../../helper/utils";
 import Shimmer from "../shimmer/shimmer";
 
 function BlogPage({
@@ -40,11 +36,6 @@ function BlogPage({
   isBlogDetailsLoading,
   SocailMedia = () => {},
 }) {
-  const { t } = useGlobalTranslation("translation");
-  const fpi = useFPI();
-  const i18nDetails = useGlobalStore(fpi?.getters?.i18N_DETAILS) || {};
-  const locale = i18nDetails?.language?.locale || "en";
-  const countryCode = i18nDetails?.countryCode || "IN";
   const params = useParams();
   const location = useLocation();
   useEffect(() => {
@@ -94,7 +85,7 @@ function BlogPage({
 
   const getFormattedDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
-    return convertUTCDateToLocalDate(dateString, options, formatLocale(locale, countryCode));
+    return convertUTCDateToLocalDate(dateString, options);
   };
 
   const {
@@ -134,14 +125,14 @@ function BlogPage({
           <div className={`${styles.blogPost__header}`}>
             <div className={`${styles.breadcrumb}`}>
               <FDKLink to="/">
-                <span className={`${styles.breadcrumb__label}`}>{t("resource.common.breadcrumb.home")}</span>
+                <span className={`${styles.breadcrumb__label}`}>Home</span>
               </FDKLink>
               <SvgWrapper
                 className={`${styles.breadcrumb__icon}`}
                 svgSrc="breadcrumb-angle"
               />
               <FDKLink to="/blog">
-                <span className={`${styles.breadcrumb__label}`}>{t("resource.common.breadcrumb.blog")}</span>
+                <span className={`${styles.breadcrumb__label}`}>Blog</span>
               </FDKLink>
               <SvgWrapper
                 className={`${styles.breadcrumb__icon}`}
@@ -160,14 +151,14 @@ function BlogPage({
             <div className={`${styles.blogPost__meta}`}>
               <div>
                 <div className={`${styles.author}`}>
-                  <span className={`${styles.author__label}`}>{t("resource.common.by")} </span>
+                  <span className={`${styles.author__label}`}>By </span>
                   <span className={`${styles.author__label}`}>
                     {blogDetails?.author?.name}
                   </span>
                 </div>
                 <div className={`${styles.publishDate}`}>
                   <span className={`${styles.publishDate__label}`}>
-                    {t("resource.blog.published")}{" "}
+                    Published{" "}
                   </span>
                   <span className={`${styles.publishDate__label}`}>
                     {getFormattedDate(blogDetails?.publish_date)}
@@ -176,7 +167,7 @@ function BlogPage({
               </div>
               {socialLinks?.length > 0 && (
                 <div className={`${styles.social}`}>
-                  <div className={`${styles.social__label}`}>{t("resource.blog.follow_us")}</div>
+                  <div className={`${styles.social__label}`}>Follow us </div>
                   <SocailMedia social_links={contactInfo?.social_links} />
                 </div>
               )}
@@ -208,9 +199,9 @@ function BlogPage({
               />
             )}
           </div>
-        </div >
+        </div>
         <BlogTabs className={`${styles.rightCol}`} {...sliderProps}></BlogTabs>
-      </div >
+      </div>
       <BlogFooter {...footerProps}></BlogFooter>
     </>
   );
