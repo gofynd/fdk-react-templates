@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 18px;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 1.5;
+    line-height: 24px;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .fy-input__caption-medium___ypzRG,
 .fy-input__captionMedium___cFBcK {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .fy-input__caption-semi-bold___WmtaG,
 .fy-input__captionSemiBold___UuNTY {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -260,11 +260,11 @@ h5,
 }
 .fy-input__mr-5___v4vQm,
 .fy-input__mr5___FnOZz {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .fy-input__mr-2___u3YuI,
 .fy-input__mr2___EOVYz {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .fy-input__py-5___QoQ9q,
 .fy-input__py5___q5mpm {
@@ -340,7 +340,7 @@ h5,
   position: relative;
 }
 .fy-input__inputContainer___Du9V3 .fy-input__error___wplxk {
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
   padding-top: 5px;
   font-weight: 400;
   font-size: 12px;
@@ -351,10 +351,10 @@ h5,
   line-height: 21px;
 }
 .fy-input__label___YQgmr span {
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
 }
 .fy-input__required___MaAlL {
-  color: var(--errorText, #ff3333);
+  color: var(--errorText, #b24141);
 }
 .fy-input__floating___jgtoq {
   position: absolute;
@@ -401,7 +401,7 @@ h5,
   border-color: var(--buttonPrimary, #4e3f09);
 }
 .fy-input__inputError___KsMkv {
-  border-color: var(--errorText, #ff3333) !important;
+  border-color: var(--errorText, #b24141) !important;
 }
 .fy-input__no-border____9qYF {
   border: none;
@@ -444,6 +444,19 @@ h5,
   display: flex;
   align-items: center;
   position: relative;
+}
+.fy-input__adornmentContainer___MtgI6 .fy-input__startAdornment___SVGGG,
+.fy-input__adornmentContainer___MtgI6 .fy-input__endAdornment___ce3Ta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.5rem;
+}
+.fy-input__adornmentContainer___MtgI6 .fy-input__startAdornment___SVGGG {
+  margin-right: 0.5rem;
+}
+.fy-input__adornmentContainer___MtgI6 .fy-input__endAdornment___ce3Ta {
+  margin-left: 0.5rem;
 }
 .fy-input__adornmentContainer___MtgI6 input {
   flex: 1;
