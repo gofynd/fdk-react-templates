@@ -50,9 +50,14 @@ const GoogleMapAddress = ({
   const [pincode, setPincode] = useState("");
   const [locality, setLocality] = useState("");
   const [premise, setPremise] = useState("");
-  const [country, setCountry] = useState("India");
+  const [country, setCountry] = useState(
+    countryDetails?.display_name || "India"
+  );
   const inputRef = useRef(null);
   const mapRef = useRef(null);
+  const hasInitialGeocodeRef = useRef(false);
+  const lastGeocodeKeyRef = useRef(null);
+  const isNewAddress = !addressItem;
 
   const { isLoaded: isMapLoaded } = useJsApiLoader({
     googleMapsApiKey: mapApiKey,
@@ -80,13 +85,12 @@ const GoogleMapAddress = ({
   function stateReset() {
     setPincode("");
     setCity("");
-    setCountry("India");
     setLocality("");
     setState("");
   }
 
-  function selectAddress() {
-    onAddressSelect({
+  function selectAddress(payload) {
+    const data = payload || {
       city: city,
       area_code: pincode,
       state: state,
@@ -97,7 +101,8 @@ const GoogleMapAddress = ({
         latitude: selectedPlace?.lat,
         longitude: selectedPlace?.lng,
       },
-    });
+    };
+    onAddressSelect(data);
   }
 
   const handlePlaceSelect = useCallback((place) => {
@@ -127,21 +132,26 @@ const GoogleMapAddress = ({
       const addressComponents = data.results[0].address_components;
       stateReset();
       let subLocalities = [];
+      let localPremise = "";
+      let localCountry = country || "";
+      let localCity = "";
+      let localState = "";
+      let localPincode = "";
       addressComponents.forEach((component) => {
         if (component.types.includes("plus_code")) {
-          setPremise(component.long_name);
+          localPremise = component.long_name;
         } else if (component.types.includes("premise")) {
-          setPremise(component.long_name);
+          localPremise = component.long_name;
         } else if (component.types.includes("street_number")) {
-          setPremise((prev) => (prev += component.long_name));
+          localPremise = `${localPremise}${component.long_name}`;
         } else if (component.types.includes("country")) {
-          setCountry(component.long_name);
+          localCountry = component.long_name;
         } else if (component.types.includes("locality")) {
-          setCity(component.long_name);
+          localCity = component.long_name;
         } else if (component.types.includes("administrative_area_level_1")) {
-          setState(component.long_name);
+          localState = component.long_name;
         } else if (component.types.includes("postal_code")) {
-          setPincode(component.long_name);
+          localPincode = component.long_name;
         } else if (
           component.types.includes("sublocality") ||
           component.types.includes("sublocality_level_1") ||
@@ -149,8 +159,22 @@ const GoogleMapAddress = ({
         ) {
           subLocalities.push(component.long_name);
         }
-
-        setLocality(subLocalities.join(", "));
+      });
+      const localLocality = subLocalities.join(", ");
+      setPremise(localPremise);
+      setCountry(localCountry);
+      setCity(localCity);
+      setState(localState);
+      setPincode(localPincode);
+      setLocality(localLocality);
+      selectAddress({
+        city: localCity,
+        area_code: localPincode,
+        state: localState,
+        area: localLocality,
+        address: localPremise,
+        country: localCountry,
+        geo_location: { latitude: lat, longitude: lng },
       });
     } catch (error) {
       console.error("Error fetching city and state:", error);
@@ -159,6 +183,10 @@ const GoogleMapAddress = ({
 
   const getAddressFromLatLng = async (lat, lng) => {
     try {
+      const key = `${Number(lat).toFixed(6)},${Number(lng).toFixed(6)}`;
+      if (lastGeocodeKeyRef.current === key) {
+        return;
+      }
       const response = await fetch(
         `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${mapApiKey}`
       );
@@ -167,29 +195,35 @@ const GoogleMapAddress = ({
       if (data.results && data.results.length > 0) {
         const place = data.results[0];
         setAddress(place.formatted_address);
-
+        let outLat = lat;
+        let outLng = lng;
         if (place?.geometry) {
           const location = place?.geometry?.location;
-          const lat = location.lat;
-          const lng = location.lng;
-          setSelectedPlace({ lat, lng });
+          outLat = location.lat;
+          outLng = location.lng;
+          setSelectedPlace({ lat: outLat, lng: outLng });
         }
         // Extract city, state, and pincode from the place
+        let localPremise = "";
+        let localCountry = country || "";
+        let localCity = "";
+        let localState = "";
+        let localPincode = "";
         place.address_components.forEach((component) => {
           if (component.types.includes("premise")) {
-            setPremise(component.long_name);
+            localPremise = component.long_name;
           }
           if (component.types.includes("country")) {
-            setCountry(component.long_name);
+            localCountry = component.long_name;
           }
           if (component.types.includes("locality")) {
-            setCity(component.long_name);
+            localCity = component.long_name;
           }
           if (component.types.includes("administrative_area_level_1")) {
-            setState(component.long_name);
+            localState = component.long_name;
           }
           if (component.types.includes("postal_code")) {
-            setPincode(component.long_name);
+            localPincode = component.long_name;
           }
           if (
             component.types.includes("sublocality") ||
@@ -198,9 +232,24 @@ const GoogleMapAddress = ({
           ) {
             subLocalities.push(component.long_name);
           }
-
-          setLocality(subLocalities.join(", "));
         });
+        const localLocality = subLocalities.join(", ");
+        setPremise(localPremise);
+        setCountry(localCountry);
+        setCity(localCity);
+        setState(localState);
+        setPincode(localPincode);
+        setLocality(localLocality);
+        selectAddress({
+          city: localCity,
+          area_code: localPincode,
+          state: localState,
+          area: localLocality,
+          address: localPremise,
+          country: localCountry,
+          geo_location: { latitude: outLat, longitude: outLng },
+        });
+        lastGeocodeKeyRef.current = key;
       }
     } catch (error) {
       console.error("Error fetching address:", error);
@@ -234,7 +283,7 @@ const GoogleMapAddress = ({
       handleLocationError(false);
     }
   };
-  const handleLocationError = (browserHasGeolocation, pos) => {
+  const handleLocationError = (browserHasGeolocation) => {
     console.error(
       browserHasGeolocation
         ? "Error: The Geolocation service failed."
@@ -246,6 +295,17 @@ const GoogleMapAddress = ({
     mapRef.current = map;
     onLoad(map);
   };
+
+  useEffect(() => {
+    // Auto-populate address and notify parent on initial load only for new address; guard double-invoke in StrictMode
+    if (!isMapLoaded) return;
+    if (!isNewAddress) return;
+    if (hasInitialGeocodeRef.current) return;
+    hasInitialGeocodeRef.current = true;
+    if (selectedPlace?.lat && selectedPlace?.lng) {
+      getAddressFromLatLng(selectedPlace.lat, selectedPlace.lng);
+    }
+  }, [isMapLoaded]);
 
   return (
     <div className={styles.mapAddress}>
@@ -313,9 +373,6 @@ const GoogleMapAddress = ({
       {address && (
         <div className={styles.addressSelect}>
           <p>{address}</p>
-          <button onClick={selectAddress}>
-            {t("resource.common.use_this")}
-          </button>
         </div>
       )}
     </div>

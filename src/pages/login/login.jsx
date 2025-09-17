@@ -7,6 +7,9 @@ import LoginModeButton from "../../page-layouts/login/component/login-mode-butto
 import LoginRegisterToggle from "../../page-layouts/auth/login-register-toggle/login-register-toggle";
 import TermPrivacy from "../../page-layouts/login/component/term-privacy/term-privacy";
 import { useGlobalTranslation } from "fdk-core/utils";
+import GoogleLoginButton from "../../page-layouts/login/component/soacial-login-button/google-login-button";
+import FacebookLogin from "../../page-layouts/login/component/soacial-login-button/facebook-login-button";
+import AppleLoginButton from "../../page-layouts/login/component/soacial-login-button/apple-login-button";
 
 function Login({
   logo = {},
@@ -36,6 +39,16 @@ function Login({
   passwordError,
   onForgotPasswordClick,
   getOtpLoading,
+  googleClientId,
+  onGoogleCredential,
+  handleGoogleError,
+  social,
+  facebookAppId,
+  appleId,
+  appleRedirectURI,
+  loginWithFacebookMutation,
+  application_id,
+  onAppleCredential,
 }) {
   const { t } = useGlobalTranslation("translation");
   return (
@@ -112,6 +125,28 @@ function Login({
               {showLoginToggleButton && (
                 <LoginModeButton {...{ onLoginToggleClick, isOtp }} />
               )}
+              {social?.google && (
+                <GoogleLoginButton
+                  googleClientId={googleClientId}
+                  onGoogleCredential={onGoogleCredential}
+                  onError={handleGoogleError}
+                />
+              )}
+              {social?.facebook && (
+                <FacebookLogin
+                  facebookAppId={facebookAppId}
+                  loginWithFacebookMutation={loginWithFacebookMutation}
+                  application_id={application_id}
+                />
+              )}
+              {/* {social?.apple && (
+                <AppleLoginButton
+                  appleClientId={appleId}
+                  onAppleCredential={onAppleCredential}
+                  redirectURI={appleRedirectURI}
+                  onError={handleGoogleError}
+                />
+              )} */}
               {isRegisterEnabled && (
                 <LoginRegisterToggle
                   label={
