@@ -2264,7 +2264,7 @@ h5,
   }
 }
 .compare__compare___q_g43 .compare__compareContainer___rLugL .compare__flexCompareWrapper___vCqQc .compare__leftStickySection___xpQ9g .compare__tableHeadersSection___gGfJp .compare__attributeGroup___CcMuo .compare__attributeHeader___fBe2I {
-  height: 51px;
+  min-height: 51px;
   padding: 16px;
   font-size: 16px;
   font-weight: 600;
@@ -2276,6 +2276,8 @@ h5,
   border-left: 1px solid #d4d1d1;
   border-bottom: 1px solid #d4d1d1;
   border-right: 6px solid rgba(0, 0, 0, 0.08);
+  align-items: center;
+  word-wrap: break-word;
 }
 .compare__compare___q_g43 .compare__compareContainer___rLugL .compare__flexCompareWrapper___vCqQc .compare__leftStickySection___xpQ9g .compare__tableHeadersSection___gGfJp .compare__attributeGroup___CcMuo .compare__attributeHeader___fBe2I:first-child {
   border-top: 1px solid #d4d1d1;
@@ -2502,7 +2504,7 @@ h5,
   width: max-content;
   min-width: max-content;
   border-bottom: 1px solid #d4d1d1;
-  height: 51px;
+  height: auto;
   min-height: 51px;
 }
 .compare__compare___q_g43 .compare__compareContainer___rLugL .compare__flexCompareWrapper___vCqQc .compare__rightScrollableSection___UOvg2 .compare__attributeValuesSection___qKcim .compare__attributeGroup___CcMuo .compare__attributeValuesRow___FRV87:first-child {
@@ -2512,7 +2514,9 @@ h5,
   flex-shrink: 0;
   width: 271px;
   max-width: 271px;
-  height: 51px;
+  height: auto;
+  min-height: 51px;
+  align-items: center;
   padding: 16px;
   font-size: 14px;
   color: var(--textBody, #3c3131);

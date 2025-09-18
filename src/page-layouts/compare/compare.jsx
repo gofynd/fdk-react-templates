@@ -55,6 +55,10 @@ function Compare({
   const [isMobileOrTablet, setIsMobileOrTablet] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
+  // Refs for height synchronization
+  const headerRefs = useRef({});
+  const valueRefs = useRef({});
+
   const toggleShowProductModal = () => {
     setShowProductModal((showProduct) => !showProduct);
   };
@@ -73,9 +77,48 @@ function Compare({
     setShowProductModal(false);
   };
 
+  // Function to synchronize heights
+  const synchronizeHeights = () => {
+    if (!attributes || !products || products.length === 0) return;
+
+    setTimeout(() => {
+      attributes.forEach((attributesMetadata, groupIndex) => {
+        attributesMetadata.details.forEach((attribute, attrIndex) => {
+          const headerKey = `header-${groupIndex}-${attrIndex}`;
+          const valueKey = `values-${groupIndex}-${attrIndex}`;
+          
+          const headerElement = headerRefs.current[headerKey];
+          const valueElement = valueRefs.current[valueKey];
+          
+          if (headerElement && valueElement) {
+            // Reset heights
+            headerElement.style.height = 'auto';
+            valueElement.style.height = 'auto';
+            
+            // Get natural heights
+            const headerHeight = headerElement.offsetHeight;
+            const valueHeight = valueElement.offsetHeight;
+            
+            // Set both to the maximum height
+            const maxHeight = Math.max(headerHeight, valueHeight);
+            headerElement.style.height = `${maxHeight}px`;
+            valueElement.style.height = `${maxHeight}px`;
+          }
+        });
+      });
+    }, 100);
+  };
+
+  // Synchronize heights when data changes
+  useEffect(() => {
+    synchronizeHeights();
+  }, [products, attributes]);
+
+  // Synchronize heights on window resize
   useEffect(() => {
     const handleResize = () => {
       setIsMobileOrTablet(window.innerWidth <= 1023);
+      synchronizeHeights();
     };
 
     handleResize();
@@ -201,25 +244,6 @@ function Compare({
                         </div>
                       </div>
 
-                      {/* TODO - remove this comment once API is ready to show diff */}
-                      {/* Show difference checkbox only when we have 2+ products */}
-                      {/* {products?.length >= 2 && (
-                          <div className={styles.showDiffContainer}>
-                            <label className={styles.checkboxWrapper}>
-                              <input
-                                type="checkbox"
-                                className={styles.checkbox}
-                                checked={isChecked}
-                                onChange={(e) => setIsChecked(e.target.checked)}
-                              />
-                              <span className={styles.customCheckbox}></span>
-                              <span className={styles.labelText}>
-                                Only show difference
-                              </span>
-                            </label>
-                          </div>
-                        )} */}
-
                       {/* Table Headers */}
                       {products?.length > 0 && (
                         <div className={styles.tableHeadersSection}>
@@ -229,6 +253,9 @@ function Compare({
                                 (attribute, aid) => (
                                   <div
                                     key={`header-${id}-${aid}`}
+                                    ref={(el) => {
+                                      headerRefs.current[`header-${id}-${aid}`] = el;
+                                    }}
                                     className={`${styles.attributeHeader} ${
                                       isDifferentAttr(attribute)
                                         ? styles.differ
@@ -301,6 +328,9 @@ function Compare({
                                 (attribute, aid) => (
                                   <div
                                     key={`values-${id}-${aid}`}
+                                    ref={(el) => {
+                                      valueRefs.current[`values-${id}-${aid}`] = el;
+                                    }}
                                     className={styles.attributeValuesRow}
                                   >
                                     {products.map((cProduct, idx) =>

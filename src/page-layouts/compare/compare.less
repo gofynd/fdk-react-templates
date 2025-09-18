@@ -149,7 +149,7 @@
         .tableHeadersSection {
           .attributeGroup {
             .attributeHeader {
-              height: 51px;
+              min-height: 51px;
               padding: 16px;
               font-size: 16px;
               font-weight: 600;
@@ -161,6 +161,8 @@
               border-left: 1px solid #d4d1d1;
               border-bottom: 1px solid #d4d1d1;
               border-right: 6px solid rgba(0, 0, 0, 0.08);
+              align-items: center;
+              word-wrap: break-word;
 
               &:first-child {
                 border-top: 1px solid #d4d1d1;
@@ -372,7 +374,7 @@
               width: max-content;
               min-width: max-content;
               border-bottom: 1px solid #d4d1d1;
-              height: 51px;
+              height: auto;
               min-height: 51px;
 
               &:first-child {
@@ -383,7 +385,9 @@
                 flex-shrink: 0;
                 width: 271px;
                 max-width: 271px;
-                height: 51px;
+                height: auto;
+                min-height: 51px;
+                align-items: center;
                 padding: 16px;
                 font-size: 14px;
                 color: @TextBody;
@@ -581,7 +585,7 @@
 }
 
 .customeProductDescContainerClass {
-  h3{
+  h3 {
     margin-top: 8px !important;
   }
   display: flex;
