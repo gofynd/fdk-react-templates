@@ -9,6 +9,7 @@ import { useViewport } from "../../../helper/hooks";
 // import UktModal from "./ukt-modal";
 import StickyPayNow from "./sticky-pay-now/sticky-pay-now";
 import CreditNote from "./credit-note/credit-note";
+import NoPaymentOptionSvg from "../../../assets/images/no-payment-option.svg";
 import {
   priceFormatCurrencySymbol,
   translateDynamicLabel,
@@ -1389,7 +1390,7 @@ function CheckoutPaymentContent({
     }, []);
   };
 
-  function cancelUPIPayment() { 
+  function cancelUPIPayment() {
     setshowUPIModal(false);
     try {
       stopPolling();
@@ -1482,6 +1483,22 @@ function CheckoutPaymentContent({
   };
   const codCharges =
     breakUpValues?.filter((value) => value.key === "cod_charge")[0]?.value ?? 0;
+
+  if (!isLoading && paymentOption?.payment_option?.length < 1) {
+    return (
+      <div className={styles.noOptionContainer}>
+        <NoPaymentOptionSvg />
+        <div className={styles.noOptionText}>
+          <h3 className="fontHeader">
+            {t("resource.checkout.no_payment_methods_available_heading")}
+          </h3>
+          <p className="fontBody">
+            {t("resource.checkout.no_payment_methods_available_desc")}
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   const navigationTab = () => {
     switch (selectedTab) {
