@@ -4,6 +4,7 @@ import {
   formatLocale,
   getAddressStr,
   numberWithCommas,
+  priceFormatCurrencySymbol,
   translateDynamicLabel,
 } from "../../helper/utils";
 import * as styles from "./order-status.less";
@@ -127,25 +128,37 @@ function OrderStatus({
                     <div className={styles["mode"]}>{t("resource.common.payment_mode")}</div>
                     {orderData?.shipments?.[0]?.payment_info?.length > 0 &&
                       orderData?.shipments?.[0]?.payment_info?.map(
-                        (paymentInfo) => (
-                          <div
-                            key={paymentInfo?.display_name}
-                            className={styles["mode-data"]}
-                          >
-                            <span>
-                              <img
-                                src={
-                                  paymentInfo?.logo ||
-                                  "https://cdn.iconscout.com/icon/premium/png-512-thumb/debit-card-10-742447.png?f=webp&w=256"
-                                }
-                                alt={paymentInfo?.mode}
-                              />
-                            </span>
-                            <span className={styles["mode-name"]}>
-                              {translateDynamicLabel(paymentInfo?.display_name, t) || t("resource.order.cod")}
-                            </span>
-                          </div>
-                        )
+                        (paymentInfo) => {
+                          return (
+                            <div
+                              key={paymentInfo?.display_name}
+                              className={styles["mode-data"]}
+                              style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}
+                            >
+                              <span style={{ display: "flex", alignItems: "center" }}>
+                                <img
+                                  src={
+                                    paymentInfo?.logo ||
+                                    "https://cdn.iconscout.com/icon/premium/png-512-thumb/debit-card-10-742447.png?f=webp&w=256"
+                                  }
+                                  alt={paymentInfo?.mode}
+                                />
+                                <span className={styles["mode-name"]} style={{ marginLeft: 12, marginTop: 6 }}>
+                                  {translateDynamicLabel(paymentInfo?.display_name, t) || t("resource.order.cod")}
+                                </span>
+                              </span>
+                              <span className={styles["mode-amount"]}>
+                                {paymentInfo?.amount !== undefined && paymentInfo?.amount !== null
+                                  ? priceFormatCurrencySymbol(
+                                      paymentInfo?.currency_symbol ||
+                                        orderData?.breakup_values?.[0]?.currency_symbol,
+                                      paymentInfo?.amount
+                                    )
+                                  : null}
+                              </span>
+                            </div>
+                          );
+                        }
                       )}
                   </div >
                   <div className={styles["delivery-wrapper"]}>
