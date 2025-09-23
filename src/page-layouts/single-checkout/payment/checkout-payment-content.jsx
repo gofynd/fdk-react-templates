@@ -9,7 +9,6 @@ import { useViewport } from "../../../helper/hooks";
 // import UktModal from "./ukt-modal";
 import StickyPayNow from "./sticky-pay-now/sticky-pay-now";
 import CreditNote from "./credit-note/credit-note";
-import NoPaymentOptionSvg from "../../../assets/images/no-payment-option.svg";
 import {
   priceFormatCurrencySymbol,
   translateDynamicLabel,
@@ -21,6 +20,7 @@ import {
   useNavigate,
 } from "fdk-core/utils";
 import Spinner from "../../../components/spinner/spinner";
+import NoPaymentOptionSvg from "../../../assets/images/no-payment-option.svg";
 
 const upiDisplayWrapperStyle = {
   padding: "24px",
