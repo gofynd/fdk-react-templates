@@ -4,8 +4,8 @@ import {
   formatLocale,
   getAddressStr,
   numberWithCommas,
-  translateDynamicLabel,
   priceFormatCurrencySymbol,
+  translateDynamicLabel,
 } from "../../helper/utils";
 import * as styles from "./order-status.less";
 import PriceBreakup from "../../components/price-breakup/price-breakup";
@@ -74,25 +74,17 @@ function OrderStatus({
             <div>
               <TrueCheckIcon />
             </div>
-            <div className={styles.orderConfirmed}>
-              {t("resource.order.order_confirmed_caps")}
-            </div>
+            <div className={styles.orderConfirmed}>{t("resource.order.order_confirmed_caps")}</div>
             <div className={styles.successMsg}>
               {t("resource.order.order_success")}
             </div>
             <div className={styles.orderId}>
-              {t("resource.order.order_id_caps")}:{" "}
-              <span>{orderData.order_id}</span>
+              {t("resource.order.order_id_caps")}: <span>{orderData.order_id}</span>
             </div>
             <div className={styles.orderTime}>
               {t("resource.order.placed_on")}:
-              <span>
-                {" "}
-                {convertDate(
-                  orderData.order_created_time,
-                  formatLocale(locale, countryCode, true)
-                )}
-              </span>
+              <span> {convertDate(orderData.order_created_time, formatLocale(locale, countryCode,true)
+              )}</span>
             </div>
             <div className={styles.trackOrderBtn}>
               <a href={getOrderLink()} style={{ display: "inline-block" }}>
@@ -100,10 +92,7 @@ function OrderStatus({
                   {t("resource.order.track_order_caps")}
                 </FyButton>
               </a>
-              <a
-                className={styles.continueBtn}
-                href={locale && locale !== "en" ? `/${locale}` : "/"}
-              >
+              <a className={styles.continueBtn} href={locale && locale !== "en" ? `/${locale}`: '/'}>
                 <FyButton variant="contained" color="primary" type="button">
                   {t("resource.common.continue_shopping")}
                 </FyButton>
@@ -136,9 +125,7 @@ function OrderStatus({
               {isLoggedIn && (
                 <div className={`${styles["payment-address"]} fontBody`}>
                   <div className={styles["payment-wrapper"]}>
-                    <div className={styles["mode"]}>
-                      {t("resource.common.payment_mode")}
-                    </div>
+                    <div className={styles["mode"]}>{t("resource.common.payment_mode")}</div>
                     {orderData?.shipments?.[0]?.payment_info?.length > 0 &&
                       orderData?.shipments?.[0]?.payment_info?.map(
                         (paymentInfo) => {
@@ -146,42 +133,25 @@ function OrderStatus({
                             <div
                               key={paymentInfo?.display_name}
                               className={styles["mode-data"]}
-                              style={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "space-between",
-                              }}
+                              style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}
                             >
-                              <span
-                                style={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                }}
-                              >
+                              <span style={{ display: "flex", alignItems: "center" }}>
                                 <img
                                   src={
                                     paymentInfo?.logo ||
-                                    "https://cdn.fynd.com/v2/falling-surf-7c8bb8/fyndnp/wrkr/x5/payments/original/t8XMizL2k-cod.png"
+                                    "https://cdn.iconscout.com/icon/premium/png-512-thumb/debit-card-10-742447.png?f=webp&w=256"
                                   }
                                   alt={paymentInfo?.mode}
                                 />
-                                <span
-                                  className={styles["mode-name"]}
-                                  style={{ marginLeft: 12, marginTop: 6 }}
-                                >
-                                  {translateDynamicLabel(
-                                    paymentInfo?.display_name,
-                                    t
-                                  ) || t("resource.order.cod")}
+                                <span className={styles["mode-name"]} style={{ marginLeft: 12, marginTop: 6 }}>
+                                  {translateDynamicLabel(paymentInfo?.display_name, t) || t("resource.order.cod")}
                                 </span>
                               </span>
                               <span className={styles["mode-amount"]}>
-                                {paymentInfo?.amount !== undefined &&
-                                paymentInfo?.amount !== null
+                                {paymentInfo?.amount !== undefined && paymentInfo?.amount !== null
                                   ? priceFormatCurrencySymbol(
                                       paymentInfo?.currency_symbol ||
-                                        orderData?.breakup_values?.[0]
-                                          ?.currency_symbol,
+                                        orderData?.breakup_values?.[0]?.currency_symbol,
                                       paymentInfo?.amount
                                     )
                                   : null}
@@ -190,7 +160,7 @@ function OrderStatus({
                           );
                         }
                       )}
-                  </div>
+                  </div >
                   <div className={styles["delivery-wrapper"]}>
                     <div className={styles["delivery-header"]}>
                       {t("resource.order.delivery_address")}
@@ -201,13 +171,10 @@ function OrderStatus({
                           {getAddressData?.name}
                         </div>
                         <div className={styles["label"]}>
-                          {translateDynamicLabel(
-                            getAddressData?.address_type
-                              ?.charAt(0)
-                              ?.toUpperCase() +
-                              getAddressData?.address_type.slice(1),
-                            t
-                          )}
+                          {translateDynamicLabel(getAddressData?.address_type
+                            ?.charAt(0)
+                            ?.toUpperCase() +
+                            getAddressData?.address_type.slice(1), t)}
                         </div>
                       </div>
                       <div className={styles["address-phone"]}>
@@ -232,12 +199,8 @@ function OrderStatus({
           <Modal isOpen={true} hideHeader={true}>
             <div className={styles.orderStatusModal}>
               <div className={styles.loader}></div>
-              <p className={styles.title}>
-                {t("resource.order.fetching_order_details")}
-              </p>
-              <p className={styles.message}>
-                {t("resource.order.please_do_not_press_back_button")}
-              </p>
+              <p className={styles.title}>{t("resource.order.fetching_order_details")}</p>
+              <p className={styles.message}>{t("resource.order.please_do_not_press_back_button")}</p>
             </div>
           </Modal>
         </div>
@@ -249,9 +212,7 @@ function OrderStatus({
         <img src={orderFailImg} alt={orderFailImg} />
         <div className={styles.cartErrorText}>
           <span>{t(orderFailurePageInfo.text)}</span>
-          <span className={styles.subtext}>
-            {t(orderFailurePageInfo.subText)}
-          </span>
+          <span className={styles.subtext}>{t(orderFailurePageInfo.subText)}</span>
           <button
             className={`${styles.commonBtn} ${styles.linkBtn} ${styles.boldSm}`}
             onClick={onOrderFailure}

@@ -29,6 +29,7 @@
  * @param {boolean} [props.showAddToCart=false] - Flag to display the add to cart button.
  * @param {Function} [props.onClick=() => {}] - Callback function for card click.
  * @param {boolean} [props.showBadge=true] - Flag to display product badges.
+ * @param {boolean} [props.showColorVariants=false] - Flag to display color variant dots.
  * @param {boolean} [props.isSlider=false] - Flag to indicate if card is used in a slider.
  *
  * @returns {JSX.Element} The rendered product card component.
@@ -67,6 +68,7 @@ const ProductCard = ({
   customImageContainerClass = "",
   imageBackgroundColor = "",
   customeProductDescContainerClass = "",
+
   imagePlaceholder = "",
   columnCount = { desktop: 4, tablet: 3, mobile: 1 },
   WishlistIconComponent = () => <SvgWrapper svgSrc="wishlist-plp" />,
@@ -82,6 +84,7 @@ const ProductCard = ({
   centerAlign = false,
   showAddToCart = false,
   showBadge = true,
+  showColorVariants = false,
   isSlider = false,
   onClick = () => {},
 }) => {
@@ -376,7 +379,7 @@ const ProductCard = ({
           )}
 
           {/* OPTIMIZED COLOR VARIANTS SECTION */}
-          {colorVariants.hasVariants && (
+          {colorVariants.hasVariants && showColorVariants && (
             <div className={styles.productVariants}>
               <div className={styles.colorVariants}>
                 {orderedVariants.slice(0, 4).map((variant) => {

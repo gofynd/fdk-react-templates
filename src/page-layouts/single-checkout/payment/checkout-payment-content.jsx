@@ -9,6 +9,7 @@ import { useViewport } from "../../../helper/hooks";
 // import UktModal from "./ukt-modal";
 import StickyPayNow from "./sticky-pay-now/sticky-pay-now";
 import CreditNote from "./credit-note/credit-note";
+import NoPaymentOptionSvg from "../../../assets/images/no-payment-option.svg";
 import {
   priceFormatCurrencySymbol,
   translateDynamicLabel,
@@ -20,7 +21,6 @@ import {
   useNavigate,
 } from "fdk-core/utils";
 import Spinner from "../../../components/spinner/spinner";
-import NoPaymentOptionSvg from "../../../assets/images/no-payment-option.svg";
 
 const upiDisplayWrapperStyle = {
   padding: "24px",
@@ -150,6 +150,10 @@ function CheckoutPaymentContent({
   setCancelQrPayment,
   isCouponApplied,
   juspayErrorMessage,
+  setMopPayload,
+  isCouponValid,
+  setIsCouponValid,
+  inValidCouponData,
 }) {
   const fpi = useFPI();
   const { language } = useGlobalStore(fpi.getters.i18N_DETAILS);
@@ -422,10 +426,10 @@ function CheckoutPaymentContent({
   }, [cardDetailsData?.card_brand]);
 
   useEffect(() => {
-    if (isCouponApplied || isCouponAppliedSuccess["isCouponApplied"]) {
+    if (isCouponApplied) {
       selectMop("CARD", "CARD", "CARD");
     }
-  }, [isJuspayCouponApplied, isCouponAppliedSuccess]);
+  }, [isJuspayCouponApplied, isCouponApplied]);
 
   const resetCardValidationErrors = () => {
     setCardNumberError("");
@@ -641,6 +645,7 @@ function CheckoutPaymentContent({
   };
 
   const checkCouponValidity = async (payload) => {
+    if (getTotalValue() === 0) return true;
     const res = await validateCoupon(payload);
     const { coupon_validity } = res.data.validateCoupon || {};
     return coupon_validity;
@@ -750,7 +755,7 @@ function CheckoutPaymentContent({
         merchantCode: subMopData?.merchant_code,
       };
     }
-
+    setMopPayload(payload);
     let isValid = true;
 
     if (isCouponApplied) {
@@ -1396,8 +1401,6 @@ function CheckoutPaymentContent({
       stopPolling();
     } catch (e) {
       // Optionally log error if needed
-    } finally {
-      setIsLoading(false);
     }
   }
 
@@ -1477,12 +1480,26 @@ function CheckoutPaymentContent({
       }
     } catch (err) {
       console.log("Payment cancellation failed");
-    } finally {
-      setIsLoading(false);
     }
   };
   const codCharges =
     breakUpValues?.filter((value) => value.key === "cod_charge")[0]?.value ?? 0;
+
+  const unsetSelectedSubMop = () => {
+    setSelectedOtherPayment({});
+    setSelectedNB("");
+    setSelectedWallet("");
+    setSelectedCardless("");
+    setSelectedPayLater("");
+    setSelectedUpiIntentApp("");
+    setSelectedCard("");
+    setSavedUPISelect("");
+    cancelQrPayment();
+    setSubMop("");
+    setMop("");
+    setCardNumberError("");
+    setCardNumber("");
+  };
 
   if (!isLoading && paymentOption?.payment_option?.length < 1) {
     return (
@@ -3112,6 +3129,7 @@ function CheckoutPaymentContent({
               setCardExpiryDate("");
               setCvvNumber("");
               hideNewCard();
+              setvpa("");
               setLastValidatedBin("");
             }
           }}
@@ -3222,26 +3240,32 @@ function CheckoutPaymentContent({
           </div>
         </Modal>
       )}
-      {showCouponValidityModal && (
+      {(!isCouponValid || showCouponValidityModal) && (
         <Modal
           customClassName={styles.couponValidityModal}
-          isOpen={showCouponValidityModal}
-          title={couponValidity.title}
+          isOpen={showCouponValidityModal || !isCouponValid}
+          title={couponValidity.title || inValidCouponData?.title}
+          notCloseOnclickOutside={true}
           closeDialog={() => {
             if (mop === "CARD" && subMop === "newCARD") {
               hideNewCard();
             }
             setShowCouponValidityModal(false);
+            setIsCouponValid(true);
+            unsetSelectedSubMop();
           }}
         >
           <div className={styles.couponValidity}>
-            <p className={styles.message}>{couponValidity.message}</p>
+            <p className={styles.message}>
+              {couponValidity.message || inValidCouponData?.message}
+            </p>
             <div className={styles.select}>
               <div
                 className={`${styles.commonBtn} ${styles.yesBtn}`}
                 onClick={() => {
                   removeCoupon();
                   setShowCouponValidityModal(false);
+                  setIsCouponValid(true);
                 }}
               >
                 {t("resource.common.yes")}
@@ -3253,6 +3277,8 @@ function CheckoutPaymentContent({
                     hideNewCard();
                   }
                   setShowCouponValidityModal(false);
+                  setIsCouponValid(true);
+                  unsetSelectedSubMop();
                 }}
               >
                 {t("resource.common.no")}
