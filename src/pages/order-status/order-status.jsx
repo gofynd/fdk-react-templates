@@ -19,7 +19,7 @@ import {
   useGlobalTranslation
 } from "fdk-core/utils";
 import TrueCheckIcon from "../../assets/images/true-check.svg";
-
+import Accordion from "../../components/accordion/accordion";
 const orderFailurePageInfo = {
   link: "",
   linktext: "resource.common.retry_caps",
@@ -283,6 +283,22 @@ function ProductItem({ product, orderLink = "" }) {
   const { t } = useGlobalTranslation("translation");
   const markedPriceCheck = product?.prices?.price_marked;
   const effectivePriceCheck = product?.prices?.price_effective;
+  const customizationOptions = product?.meta?._custom_json?._display || [];
+
+  const [items, setItems] = React.useState([
+    { title: "Customization", content: customizationOptions, open: false },
+  ]);
+
+  const handleItemClick = (index) => {
+    setItems((prevItems) => {
+      const updatedItems = [...prevItems];
+      updatedItems[index] = {
+        ...updatedItems[index],
+        open: !updatedItems[index].open,
+      };
+      return updatedItems;
+    });
+  };
 
   const getMarkedPrice = (item) => numberWithCommas(item?.prices?.price_marked);
   const getEffectivePrice = (item) =>
@@ -334,6 +350,17 @@ function ProductItem({ product, orderLink = "" }) {
                   </div>
                 )}
             </div>
+            {customizationOptions.length > 0 && (
+              <div
+                className={styles.productCustomizationContainer}
+              >
+                <Accordion
+                  key={`${product.shipment_id}`}
+                  items={items}
+                  onItemClick={handleItemClick}
+                />
+              </div>
+            )}
 
             {/* Gift Wrap Display UI */}
             {product?.meta?.gift_card?.is_gift_applied && (
