@@ -21,6 +21,8 @@ import {
   useNavigate,
 } from "fdk-core/utils";
 import Spinner from "../../../components/spinner/spinner";
+import FyButton from "../../../components/core/fy-button/fy-button";
+import { FDKLink } from "fdk-core/components";
 
 const upiDisplayWrapperStyle = {
   padding: "24px",
@@ -1512,6 +1514,11 @@ function CheckoutPaymentContent({
           <p className="fontBody">
             {t("resource.checkout.no_payment_methods_available_desc")}
           </p>
+          <FDKLink to="/contact-us" target="_blank">
+            <FyButton className={styles.contact_us}>
+              {t("resource.common.contact_us")}
+            </FyButton>
+          </FDKLink>
         </div>
       </div>
     );

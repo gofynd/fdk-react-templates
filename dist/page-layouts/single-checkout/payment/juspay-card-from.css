@@ -2230,15 +2230,11 @@ h5,
 }
 .checkout-payment-content__noOptionContainer___uCGHg .checkout-payment-content__noOptionText___zceGG {
   display: flex;
-  width: 580px;
+  max-width: 580px;
+  width: 100%;
   flex-direction: column;
   align-items: center;
   gap: 8px;
-}
-@media only screen and (max-width: 768px) {
-  .checkout-payment-content__noOptionContainer___uCGHg .checkout-payment-content__noOptionText___zceGG {
-    width: 100%;
-  }
 }
 .checkout-payment-content__noOptionContainer___uCGHg .checkout-payment-content__noOptionText___zceGG h3 {
   color: var(--textHeading, #26201a);
@@ -2267,6 +2263,9 @@ h5,
   .checkout-payment-content__noOptionContainer___uCGHg .checkout-payment-content__noOptionText___zceGG p {
     font-size: 12px;
   }
+}
+.checkout-payment-content__noOptionContainer___uCGHg .checkout-payment-content__noOptionText___zceGG .checkout-payment-content__contact_us___KWS91 {
+  margin-top: 12px;
 }
 
 /**color by character**/
