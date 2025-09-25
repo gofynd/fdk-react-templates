@@ -10,16 +10,31 @@
   border: 1px solid var(--Overlay-Popup-Divider-Stroke, #e0e0e0);
   background: var(--Theme-Page-Background, #fff);
 
+  @media @mobile {
+    padding: 8px;
+    gap: 8px !important;
+  }
+
   .cardImageContainer {
     width: 107px;
     gap: 4px;
     border-radius: 12px;
+
+    @media @mobile {
+      width: 76px !important;
+      height: 100% !important;
+    }
 
     img {
       width: 107px;
       height: 100%;
       object-fit: cover;
       border-radius: 12px;
+
+      @media @mobile {
+        width: 76px;
+        height: 100% !important;
+      }
     }
   }
 
@@ -41,11 +56,21 @@
     flex-direction: column;
     gap: 4px;
 
+    @media @mobile {
+      gap: 8px;
+    }
+
     h5 {
       color: @TextBody;
       font-size: 14px;
       font-weight: 600;
       letter-spacing: -0.28px;
+
+      @media @mobile {
+        font-size: 12px;
+        font-weight: 400;
+        letter-spacing: -0.24px;
+      }
     }
 
     .category {
@@ -60,11 +85,25 @@
       gap: 8px;
       align-items: center;
 
+      @media @mobile {
+        gap: 0 !important;
+        align-items: normal;
+        flex-direction: column;
+      }
+
       h4 {
         color: @TextHeading;
         font-size: 16px;
         font-weight: 600;
         letter-spacing: -0.32px;
+      }
+
+      .priceContainer {
+        display: flex;
+        gap: 8px;
+        @media @mobile {
+          // flex-direction: column;
+        }
       }
 
       .actualPrice {
@@ -101,6 +140,18 @@
     font-size: 14px;
     font-weight: 500;
     letter-spacing: -0.28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @media @mobile {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: -0.24px;
+      padding: 6.795px 18.12px;
+      height: 32px;
+      margin-top: 8px;
+    }
   }
 }
 
@@ -114,12 +165,19 @@
     gap: 12px;
     border: 1px solid var(--Overlay-Popup-Divider-Stroke, #e0e0e0);
     background: var(--Theme-Page-Background, #fff);
+    @media @mobile {
+      gap: 8px !important;
+    }
   }
 
   .imageShimmer {
     width: 110px !important;
-    height: 128px !important;
+    height: 100% !important;
     border-radius: 12px;
+
+    @media @mobile {
+      width: 76px !important;
+    }
   }
 
   .lineShimmer {

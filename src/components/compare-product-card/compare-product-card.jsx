@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import * as styles from "./compare-product-card.less";
 import { currencyFormat, formatLocale } from "../../helper/utils";
 import Shimmer from "../shimmer/shimmer";
+import { useMobile } from "../../helper/hooks";
 
 const CompareProductCard = ({
   productItem,
@@ -10,6 +11,7 @@ const CompareProductCard = ({
 }) => {
   const locale = "en";
   const countryCode = "IN";
+  const isMobile = useMobile(480);
 
   const getScreenSize = () => {
     const width = typeof window !== "undefined" ? window.innerWidth : 1200;
@@ -31,7 +33,10 @@ const CompareProductCard = ({
     return text.length > limit ? `${text.slice(0, limit)}...` : text;
   };
 
-  let productName = truncateText(productItem?.name, 78);
+  const productName =
+    isMobile
+      ? truncateText(productItem?.name, 46)
+      : productItem?.name || "";
   console.log(productName, "productName", productName.length);
   const formatPrice = (value, symbol) => {
     const localeCode = formatLocale(locale, countryCode, true);
@@ -104,25 +109,31 @@ const CompareProductCard = ({
         <div className={styles.cardDetailContainer}>
           <div className={styles.priceBtnSection}>
             <h5>{productName}</h5>
-            <span className={styles.category}>{productItem?.brand?.name}</span>
+            {!isMobile && (
+              <span className={styles.category}>
+                {productItem?.brand?.name}
+              </span>
+            )}
             <div className={styles.priceInfo}>
               <h4>{price}</h4>
-              <span className={styles.actualPrice}>{actualPrice}</span>
-              <span className={styles.discount}>
-                {productItem?.discount && (
-                  <span className={styles.discount}>
-                    ({productItem.discount})
-                  </span>
-                )}
-              </span>
+              <div className={styles.priceContainer}>
+                <span className={styles.actualPrice}>{actualPrice}</span>
+                <span className={styles.discount}>
+                  {productItem?.discount && (
+                    <span className={styles.discount}>
+                      ({productItem.discount})
+                    </span>
+                  )}
+                </span>
+              </div>
             </div>
           </div>
 
-          <div className={styles.actionsWrapper}>
-            <button className={styles.addToCartBtnSection} onClick={addProduct}>
-              ADD TO COMPARE
-            </button>
-          </div>
+          {/* <div className={styles.actionsWrapper}> */}
+          <button className={styles.addToCartBtnSection} onClick={addProduct}>
+            ADD TO COMPARE
+          </button>
+          {/* </div> */}
         </div>
       </div>
     </div>

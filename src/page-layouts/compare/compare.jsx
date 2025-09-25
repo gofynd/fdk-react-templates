@@ -86,19 +86,19 @@ function Compare({
         attributesMetadata.details.forEach((attribute, attrIndex) => {
           const headerKey = `header-${groupIndex}-${attrIndex}`;
           const valueKey = `values-${groupIndex}-${attrIndex}`;
-          
+
           const headerElement = headerRefs.current[headerKey];
           const valueElement = valueRefs.current[valueKey];
-          
+
           if (headerElement && valueElement) {
             // Reset heights
-            headerElement.style.height = 'auto';
-            valueElement.style.height = 'auto';
-            
+            headerElement.style.height = "auto";
+            valueElement.style.height = "auto";
+
             // Get natural heights
             const headerHeight = headerElement.offsetHeight;
             const valueHeight = valueElement.offsetHeight;
-            
+
             // Set both to the maximum height
             const maxHeight = Math.max(headerHeight, valueHeight);
             headerElement.style.height = `${maxHeight}px`;
@@ -254,7 +254,9 @@ function Compare({
                                   <div
                                     key={`header-${id}-${aid}`}
                                     ref={(el) => {
-                                      headerRefs.current[`header-${id}-${aid}`] = el;
+                                      headerRefs.current[
+                                        `header-${id}-${aid}`
+                                      ] = el;
                                     }}
                                     className={`${styles.attributeHeader} ${
                                       isDifferentAttr(attribute)
@@ -329,7 +331,8 @@ function Compare({
                                   <div
                                     key={`values-${id}-${aid}`}
                                     ref={(el) => {
-                                      valueRefs.current[`values-${id}-${aid}`] = el;
+                                      valueRefs.current[`values-${id}-${aid}`] =
+                                        el;
                                     }}
                                     className={styles.attributeValuesRow}
                                   >
@@ -399,7 +402,9 @@ function Compare({
               <input
                 type="text"
                 value={searchText}
-                onChange={(e) => handleInputChange(e?.target?.value)}
+                onChange={(e) => {
+                  setSearchText(e?.target?.value || "");
+                }}
                 placeholder={t("resource.compare.search_product_here")}
               />
             </div>
