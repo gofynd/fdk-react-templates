@@ -38,6 +38,10 @@ function Checkout({
   isGuestUser = false,
   isCartValid = true,
   redirectPaymentOptions,
+  setMopPayload,
+  isCouponValid,
+  setIsCouponValid,
+  inValidCouponData,
 }) {
   const [cancelQrPayment, setCancelQrPayment] = useState(null);
   const [searchParams] = useSearchParams();
@@ -102,6 +106,7 @@ function Checkout({
           )}
           onPriceDetailsClick={onPriceDetailsClick}
           isCartValid={isCartValid}
+          redirectPaymentOptions={redirectPaymentOptions}
         ></SinglePageShipment>
         <CheckoutPayment
           payment={payment}
@@ -114,6 +119,10 @@ function Checkout({
           onFailedGetCartShipmentDetails={onFailedGetCartShipmentDetails}
           isCouponApplied={successCoupon?.is_applied}
           redirectPaymentOptions={redirectPaymentOptions}
+          setMopPayload={setMopPayload}
+          isCouponValid={isCouponValid}
+          setIsCouponValid={setIsCouponValid}
+          inValidCouponData={inValidCouponData}
         ></CheckoutPayment>
       </div>
       <div className={styles.rightContainer}>

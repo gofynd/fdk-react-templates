@@ -27,6 +27,7 @@ function SinglePageShipment({
   isCartValid,
   payment,
   getDeliveryPromise,
+  redirectPaymentOptions,
 }) {
   const { t } = useGlobalTranslation("translation");
   const navigate = useNavigate();
@@ -71,9 +72,12 @@ function SinglePageShipment({
               <div
                 className={styles.proceedPay}
                 onClick={() => {
-                  getTotalValue?.() === 0
-                    ? proceedToPay("PP", {})
-                    : showPaymentOptions();
+                  if (getTotalValue?.() === 0) {
+                    proceedToPay("PP", {});
+                  } else {
+                    redirectPaymentOptions();
+                    showPaymentOptions();
+                  }
                 }}
                 style={{
                   opacity: isLoading ? 0.5 : 1,
@@ -97,6 +101,7 @@ function SinglePageShipment({
             proceedToPay={proceedToPay}
             isLoading={isLoading}
             getDeliveryPromise={getDeliveryPromise}
+            redirectPaymentOptions={redirectPaymentOptions}
           ></SingleShipmentContent>
           <StickyPayNow
             btnTitle={
@@ -111,6 +116,7 @@ function SinglePageShipment({
               if (getTotalValue?.() === 0) {
                 proceedToPay("PP", {});
               } else {
+                redirectPaymentOptions();
                 showPaymentOptions();
                 window?.scrollTo({
                   top: 0,

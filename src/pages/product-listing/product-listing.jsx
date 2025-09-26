@@ -65,6 +65,7 @@ const ProductListing = ({
   listingPrice = "range",
   banner = {},
   showAddToCart = false,
+  showColorVariants = false,
   actionButtonText,
   stickyFilterTopOffset = 0,
   onColumnCountUpdate = () => {},
@@ -310,6 +311,7 @@ const ProductListing = ({
                         followedIdList,
                         listingPrice,
                         showAddToCart,
+                        showColorVariants,
                         actionButtonText:
                           actionButtonText ?? t("resource.common.add_to_cart"),
                         onWishlistClick,
@@ -338,6 +340,7 @@ const ProductListing = ({
                       followedIdList,
                       listingPrice,
                       showAddToCart,
+                      showColorVariants,
                       actionButtonText:
                         actionButtonText ?? t("resource.common.add_to_cart"),
                       onWishlistClick,
@@ -458,6 +461,7 @@ function ProductGridItem({
   isImageFill = false,
   showImageOnHover = false,
   showAddToCart = false,
+  showColorVariants = false,
   actionButtonText,
   imageBackgroundColor = "",
   imagePlaceholder = "",
@@ -523,6 +527,7 @@ function ProductGridItem({
         WishlistIconComponent={WishlistIconComponent}
         followedIdList={followedIdList}
         showAddToCart={showAddToCart}
+        showColorVariants={showColorVariants}
         actionButtonText={actionButtonText ?? t("resource.common.add_to_cart")}
         onWishlistClick={onWishlistClick}
         isImageFill={isImageFill}
