@@ -7,9 +7,9 @@ import LoginModeButton from "../../page-layouts/login/component/login-mode-butto
 import LoginRegisterToggle from "../../page-layouts/auth/login-register-toggle/login-register-toggle";
 import TermPrivacy from "../../page-layouts/login/component/term-privacy/term-privacy";
 import { useGlobalTranslation } from "fdk-core/utils";
-import GoogleLoginButton from "../../page-layouts/login/component/soacial-login-button/google-login-button";
-import FacebookLogin from "../../page-layouts/login/component/soacial-login-button/facebook-login-button";
-import AppleLoginButton from "../../page-layouts/login/component/soacial-login-button/apple-login-button";
+import GoogleLoginButton from "../../page-layouts/login/component/social-login-button/google-login-button";
+import FacebookLogin from "../../page-layouts/login/component/social-login-button/facebook-login-button";
+import AppleLoginButton from "../../page-layouts/login/component/social-login-button/apple-login-button";
 
 function Login({
   logo = {},

@@ -50,9 +50,7 @@ const GoogleMapAddress = ({
   const [pincode, setPincode] = useState("");
   const [locality, setLocality] = useState("");
   const [premise, setPremise] = useState("");
-  const [country, setCountry] = useState(
-    countryDetails?.display_name || "India"
-  );
+  const [country, setCountry] = useState(countryDetails?.display_name || "India");
   const inputRef = useRef(null);
   const mapRef = useRef(null);
   const hasInitialGeocodeRef = useRef(false);
@@ -90,18 +88,19 @@ const GoogleMapAddress = ({
   }
 
   function selectAddress(payload) {
-    const data = payload || {
-      city: city,
-      area_code: pincode,
-      state: state,
-      area: locality,
-      address: premise,
-      country: country,
-      geo_location: {
-        latitude: selectedPlace?.lat,
-        longitude: selectedPlace?.lng,
-      },
-    };
+    const data =
+      payload || {
+        city: city,
+        area_code: pincode,
+        state: state,
+        area: locality,
+        address: premise,
+        country: country,
+        geo_location: {
+          latitude: selectedPlace?.lat,
+          longitude: selectedPlace?.lng,
+        },
+      };
     onAddressSelect(data);
   }
 

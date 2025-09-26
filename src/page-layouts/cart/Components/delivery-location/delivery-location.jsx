@@ -11,7 +11,7 @@ import FyButton from "../../../../components/core/fy-button/fy-button";
 function DeliveryLocation({
   pincode = "",
   deliveryLocation,
-  btnLabel,
+  btnLabel = t("resource.cart.change"),
   pincodeInput,
   error = null,
   isPincodeModalOpen = false,
@@ -42,7 +42,6 @@ function DeliveryLocation({
   isGuestUser = false,
 }) {
   const { t } = useGlobalTranslation("translation");
-  const computedBtnLabel = btnLabel || t("resource.cart.change");
   const {
     handleSubmit,
     register,
@@ -93,7 +92,7 @@ function DeliveryLocation({
           className={styles.changePinCodeButton}
           onClick={onChangeButtonClick}
         >
-          {deliveryLocation ? t("resource.cart.change") : computedBtnLabel}
+          {deliveryLocation ? t("resource.cart.change") : btnLabel}
         </button>
       </div>
       <Modal
