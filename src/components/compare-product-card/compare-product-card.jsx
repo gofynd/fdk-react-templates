@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import * as styles from "./compare-product-card.less";
 import { currencyFormat, formatLocale } from "../../helper/utils";
 import Shimmer from "../shimmer/shimmer";
+import { FDKLink } from "fdk-core/components";
 import { useMobile } from "../../helper/hooks";
 
 const CompareProductCard = ({
@@ -33,10 +34,12 @@ const CompareProductCard = ({
     return text.length > limit ? `${text.slice(0, limit)}...` : text;
   };
 
-  const productName =
-    isMobile
-      ? truncateText(productItem?.name, 46)
-      : productItem?.name || "";
+  const rawName = productItem?.name || "";
+  const productName = truncateText(
+    rawName,
+    screenSize === "desktop" ? 80 : screenSize === "tablet" ? 100 : 66
+  );
+  const titleAttr = rawName;
   console.log(productName, "productName", productName.length);
   const formatPrice = (value, symbol) => {
     const localeCode = formatLocale(locale, countryCode, true);
@@ -107,33 +110,43 @@ const CompareProductCard = ({
 
       <div className={styles.cardDetailWrapper}>
         <div className={styles.cardDetailContainer}>
-          <div className={styles.priceBtnSection}>
-            <h5>{productName}</h5>
-            {!isMobile && (
-              <span className={styles.category}>
-                {productItem?.brand?.name}
-              </span>
-            )}
-            <div className={styles.priceInfo}>
-              <h4>{price}</h4>
-              <div className={styles.priceContainer}>
-                <span className={styles.actualPrice}>{actualPrice}</span>
-                <span className={styles.discount}>
-                  {productItem?.discount && (
-                    <span className={styles.discount}>
-                      ({productItem.discount})
-                    </span>
-                  )}
+          <FDKLink
+            to={`/product/${productItem?.slug}`}
+            target="_blank"
+            style={{
+              display: "block",
+              width: "100%",
+              height: "100%",
+              textDecoration: "none",
+              cursor: "pointer",
+            }}
+          >
+            <div className={styles.priceBtnSection}>
+              <h5 title={titleAttr}>{productName}</h5>
+              {!isMobile && (
+                <span className={styles.category}>
+                  {productItem?.brand?.name}
                 </span>
+              )}
+              <div className={styles.priceInfo}>
+                <h4>{price}</h4>
+                <div className={styles.priceContainer}>
+                  <span className={styles.actualPrice}>{actualPrice}</span>
+                  <span className={styles.discount}>
+                    {productItem?.discount && (
+                      <span className={styles.discount}>
+                        ({productItem.discount})
+                      </span>
+                    )}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
+          </FDKLink>
 
-          {/* <div className={styles.actionsWrapper}> */}
           <button className={styles.addToCartBtnSection} onClick={addProduct}>
             ADD TO COMPARE
           </button>
-          {/* </div> */}
         </div>
       </div>
     </div>

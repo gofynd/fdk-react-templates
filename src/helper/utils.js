@@ -577,3 +577,69 @@ export const getAddressFromComponents = (components, name) => {
     country_iso_code: typeToName["country"]?.short_name || null,
   };
 };
+
+/**
+ * Extract user's full name from user object
+ * @param {Object} user - User object
+ * @returns {string} Full name or empty string
+ */
+export const getUserFullName = (user) => {
+  if (!user) return "";
+
+  const { first_name, last_name } = user;
+  if (first_name && last_name) {
+    return `${first_name} ${last_name}`.trim();
+  }
+  return first_name || last_name || "";
+};
+
+/**
+ * Extract primary phone number from user object
+ * @param {Object} user - User object
+ * @returns {Object} Phone object with mobile and countryCode or null
+ */
+export const getUserPrimaryPhone = (user) => {
+  if (!user || !user.phone_numbers || !Array.isArray(user.phone_numbers)) {
+    return null;
+  }
+
+  const primaryPhone = user.phone_numbers.find((phone) => phone.primary);
+  if (!primaryPhone) return null;
+
+  return {
+    mobile: primaryPhone.phone || "",
+    countryCode: primaryPhone.country_code?.toString() || "91",
+  };
+};
+
+/**
+ * Extract primary email from user object
+ * @param {Object} user - User object
+ * @returns {string} Primary email or empty string
+ */
+export const getUserPrimaryEmail = (user) => {
+  if (!user || !user.emails || !Array.isArray(user.emails)) {
+    return "";
+  }
+
+  const primaryEmail = user.emails.find((email) => email.primary);
+  return primaryEmail?.email || "";
+};
+
+/**
+ * Extract all user data needed for address form autofill
+ * @param {Object} user - User object
+ * @param {boolean} isGuestUser - Whether user is guest
+ * @returns {Object} Autofill data or empty object
+ */
+export const getUserAutofillData = (user, isGuestUser = false) => {
+  if (!user || isGuestUser) {
+    return {};
+  }
+
+  return {
+    name: getUserFullName(user),
+    phone: getUserPrimaryPhone(user),
+    email: getUserPrimaryEmail(user),
+  };
+};

@@ -40,6 +40,7 @@ function DeliveryLocation({
   selectedCountry,
   countryDetails,
   isGuestUser = false,
+  user,
 }) {
   const { t } = useGlobalTranslation("translation");
   const computedBtnLabel = btnLabel || t("resource.cart.change");
@@ -215,6 +216,7 @@ function DeliveryLocation({
           countryDetails={countryDetails}
           isGuestUser={isGuestUser}
           onClose={onCloseModalClick}
+          user={user}
         ></AddressForm>
       </Modal>
     </div>
