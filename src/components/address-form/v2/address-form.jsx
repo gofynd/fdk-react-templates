@@ -217,11 +217,29 @@ const defaultFormSchema = [
         required: true,
         fullWidth: false,
         validation: {
-          required: "resource.common.mobile_number_required",
-          pattern: {
-            value: /^[6-9]\d{9}$/,
-            message: "resource.common.invalid_mobile_number",
-          },
+          required: "Mobile number is required",
+          validate: (value) => {
+            if (!value) return "Mobile number is required";
+            
+            // Always expect an object from MobileNumber component
+            if (typeof value === 'object') {
+              // Trust the component's validation if available
+              if (value.isValidNumber === true) return true;
+              
+              // If no validation flag, validate the mobile number
+              if (value.mobile) {
+                const mobileNumber = value.mobile.toString().replace(/[\s\-+]/g, '');
+                if (mobileNumber.length !== 10) return "Mobile number must be 10 digits";
+                return /^[6-9]\d{9}$/.test(mobileNumber) || "Invalid mobile number format";
+              }
+              return "Invalid mobile number";
+            }
+            
+            // Convert any string input to proper format
+            const mobileNumber = value.toString().replace(/[\s\-+]/g, '');
+            if (mobileNumber.length !== 10) return "Mobile number must be 10 digits";
+            return /^[6-9]\d{9}$/.test(mobileNumber) || "Invalid mobile number format";
+          }
         },
       },
       {
@@ -362,8 +380,12 @@ const AddressForm = ({
       if (userAutofillData.name) {
         setValue("name", userAutofillData.name);
       }
-      if (userAutofillData.phone) {
-        setValue("phone", userAutofillData.phone);
+      if (userAutofillData.phone && userAutofillData.phone.mobile) {
+        setValue("phone", {
+          mobile: userAutofillData.phone.mobile,
+          countryCode: userAutofillData.phone.countryCode || "91",
+          isValidNumber: true // Trust the autofilled data
+        });
       }
       if (userAutofillData.email) {
         setValue("email", userAutofillData.email);

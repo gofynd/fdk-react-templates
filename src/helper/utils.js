@@ -606,9 +606,12 @@ export const getUserPrimaryPhone = (user) => {
   const primaryPhone = user.phone_numbers.find((phone) => phone.primary);
   if (!primaryPhone) return null;
 
+  const countryCode = primaryPhone.country_code?.toString() || "91";
+  const mobile = primaryPhone.phone || "";
+
   return {
-    mobile: primaryPhone.phone || "",
-    countryCode: primaryPhone.country_code?.toString() || "91",
+    mobile,
+    countryCode
   };
 };
 
