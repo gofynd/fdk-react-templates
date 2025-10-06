@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FDKLink } from "fdk-core/components";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
 import ProductCard from "../../components/product-card/product-card";
@@ -51,14 +51,13 @@ function Compare({
   const [showProductModal, setShowProductModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [localProducts, setLocalProducts] = useState(products || []);
+
   const [isMobileOrTablet, setIsMobileOrTablet] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
   // Refs for height synchronization
   const headerRefs = useRef({});
   const valueRefs = useRef({});
-  const resizeTimeoutRef = useRef(null);
-  const isResizingRef = useRef(false);
 
   const toggleShowProductModal = () => {
     setShowProductModal((showProduct) => !showProduct);
@@ -78,125 +77,54 @@ function Compare({
     setShowProductModal(false);
   };
 
-  const synchronizeHeights = useCallback(() => {
+  // Function to synchronize heights
+  const synchronizeHeights = () => {
     if (!attributes || !products || products.length === 0) return;
 
-    if (resizeTimeoutRef.current) {
-      clearTimeout(resizeTimeoutRef.current);
-    }
+    setTimeout(() => {
+      attributes.forEach((attributesMetadata, groupIndex) => {
+        attributesMetadata.details.forEach((attribute, attrIndex) => {
+          const headerKey = `header-${groupIndex}-${attrIndex}`;
+          const valueKey = `values-${groupIndex}-${attrIndex}`;
 
-    // Use requestAnimationFrame for better performance
-    requestAnimationFrame(() => {
-      try {
-        attributes.forEach((attributesMetadata, groupIndex) => {
-          attributesMetadata.details.forEach((attribute, attrIndex) => {
-            const headerKey = `header-${groupIndex}-${attrIndex}`;
-            const valueKey = `values-${groupIndex}-${attrIndex}`;
+          const headerElement = headerRefs.current[headerKey];
+          const valueElement = valueRefs.current[valueKey];
 
-            const headerElement = headerRefs.current[headerKey];
-            const valueElement = valueRefs.current[valueKey];
+          if (headerElement && valueElement) {
+            // Reset heights
+            headerElement.style.height = "auto";
+            valueElement.style.height = "auto";
 
-            if (headerElement && valueElement) {
-              // Reset heights to auto first
-              headerElement.style.height = "auto";
-              valueElement.style.height = "auto";
+            // Get natural heights
+            const headerHeight = headerElement.offsetHeight;
+            const valueHeight = valueElement.offsetHeight;
 
-              // Force reflow to get accurate measurements
-              headerElement.offsetHeight;
-              valueElement.offsetHeight;
-
-              // Get computed styles to account for padding, margins, etc.
-              const headerComputedStyle =
-                window.getComputedStyle(headerElement);
-              const valueComputedStyle = window.getComputedStyle(valueElement);
-
-              // Get natural heights including all content
-              const headerHeight = headerElement.scrollHeight;
-              const valueHeight = valueElement.scrollHeight;
-
-              const maxHeight = Math.max(headerHeight, valueHeight);
-
-              if (maxHeight > 0) {
-                headerElement.style.height = `${maxHeight}px`;
-                valueElement.style.height = `${maxHeight}px`;
-              }
-            }
-          });
+            // Set both to the maximum height
+            const maxHeight = Math.max(headerHeight, valueHeight);
+            headerElement.style.height = `${maxHeight}px`;
+            valueElement.style.height = `${maxHeight}px`;
+          }
         });
-      } catch (error) {
-        console.warn("Error synchronizing heights:", error);
-      }
-    });
+      });
+    }, 100);
+  };
+
+  // Synchronize heights when data changes
+  useEffect(() => {
+    synchronizeHeights();
   }, [products, attributes]);
 
-  // Debounced resize handler
-  const handleResize = useCallback(() => {
-    const newIsMobileOrTablet = window.innerWidth <= 1023;
-    setIsMobileOrTablet(newIsMobileOrTablet);
-
-    isResizingRef.current = true;
-
-    if (resizeTimeoutRef.current) {
-      clearTimeout(resizeTimeoutRef.current);
-    }
-
-    resizeTimeoutRef.current = setTimeout(() => {
-      isResizingRef.current = false;
-      synchronizeHeights();
-    }, 150);
-  }, [synchronizeHeights]);
-
+  // Synchronize heights on window resize
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
+    const handleResize = () => {
+      setIsMobileOrTablet(window.innerWidth <= 1023);
       synchronizeHeights();
-    }, 50);
+    };
 
-    return () => clearTimeout(timeoutId);
-  }, [products, attributes, synchronizeHeights]);
-
-  useEffect(() => {
     handleResize();
-
-    window.addEventListener("resize", handleResize, { passive: true });
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      if (resizeTimeoutRef.current) {
-        clearTimeout(resizeTimeoutRef.current);
-      }
-    };
-  }, [handleResize]);
-
-  useEffect(() => {
-    const handleOrientationChange = () => {
-      setTimeout(() => {
-        synchronizeHeights();
-      }, 300);
-    };
-
-    window.addEventListener("orientationchange", handleOrientationChange);
-
-    return () => {
-      window.removeEventListener("orientationchange", handleOrientationChange);
-    };
-  }, [synchronizeHeights]);
-
-  const createRefCallback = useCallback(
-    (refKey) => {
-      return (el) => {
-        if (refKey.includes("header")) {
-          headerRefs.current[refKey] = el;
-        } else {
-          valueRefs.current[refKey] = el;
-        }
-
-        if (el && !isResizingRef.current) {
-          setTimeout(() => synchronizeHeights(), 10);
-        }
-      };
-    },
-    [synchronizeHeights]
-  );
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const getAddContainerCount = () => {
     const remaining = 4 - products.length;
@@ -245,9 +173,9 @@ function Compare({
             <CompareProductCard
               key={index}
               productItem={item}
-              addProduct={async () => {
-                const ok = await handleAdd(item.slug);
-                if (ok) setShowProductModal(false);
+              addProduct={() => {
+                handleAdd(item.slug);
+                setShowProductModal(false);
               }}
               isLoading={false}
             />
@@ -325,9 +253,11 @@ function Compare({
                                 (attribute, aid) => (
                                   <div
                                     key={`header-${id}-${aid}`}
-                                    ref={createRefCallback(
-                                      `header-${id}-${aid}`
-                                    )}
+                                    ref={(el) => {
+                                      headerRefs.current[
+                                        `header-${id}-${aid}`
+                                      ] = el;
+                                    }}
                                     className={`${styles.attributeHeader} ${
                                       isDifferentAttr(attribute)
                                         ? styles.differ
@@ -400,9 +330,10 @@ function Compare({
                                 (attribute, aid) => (
                                   <div
                                     key={`values-${id}-${aid}`}
-                                    ref={createRefCallback(
-                                      `values-${id}-${aid}`
-                                    )}
+                                    ref={(el) => {
+                                      valueRefs.current[`values-${id}-${aid}`] =
+                                        el;
+                                    }}
                                     className={styles.attributeValuesRow}
                                   >
                                     {products.map((cProduct, idx) =>

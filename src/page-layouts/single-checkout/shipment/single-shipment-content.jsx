@@ -24,7 +24,6 @@ function SingleShipmentContent({
   proceedToPay,
   isLoading = false,
   getDeliveryPromise,
-  redirectPaymentOptions,
 }) {
   const { t } = useGlobalTranslation("translation");
   const getShipmentItems = (shipment) => {
@@ -302,12 +301,9 @@ function SingleShipmentContent({
             <button
               className={styles.proceedBtn}
               onClick={() => {
-                if (getTotalValue?.() === 0) {
-                  proceedToPay("PP", {});
-                } else {
-                  redirectPaymentOptions();
-                  showPaymentOptions();
-                }
+                getTotalValue?.() === 0
+                  ? proceedToPay("PP", {})
+                  : showPaymentOptions();
               }}
               disabled={isLoading}
             >

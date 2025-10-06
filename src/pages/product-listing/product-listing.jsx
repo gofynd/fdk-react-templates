@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "../../styles/product-listing.less";
 import InfiniteLoader from "../../components/core/infinite-loader/infinite-loader";
@@ -20,6 +20,7 @@ import Modal from "../../components/core/modal/modal";
 import AddToCart from "../../page-layouts/plp/Components/add-to-cart/add-to-cart";
 import { useViewport } from "../../helper/hooks";
 import SizeGuide from "../../page-layouts/plp/Components/size-guide/size-guide";
+import SaveToWishlistModal from "../../components/wishlist-modals/save-to-wishlist-modal";
 import FilterIcon from "../../assets/images/filter.svg";
 import SortIcon from "../../assets/images/sort.svg";
 import TwoGridIcon from "../../assets/images/grid-two.svg";
@@ -27,6 +28,7 @@ import FourGridIcon from "../../assets/images/grid-four.svg";
 import TwoGridMobIcon from "../../assets/images/grid-two-mob.svg";
 import OneGridMobIcon from "../../assets/images/grid-one-mob.svg";
 import { useGlobalTranslation } from "fdk-core/utils";
+import CreateRenameWishlistModal from "../../components/wishlist-modals/create-wishlist-modal";
 
 const ProductListing = ({
   breadcrumb = [],
@@ -65,9 +67,12 @@ const ProductListing = ({
   listingPrice = "range",
   banner = {},
   showAddToCart = false,
-  showColorVariants = false,
   actionButtonText,
   stickyFilterTopOffset = 0,
+  showQuantityController = false,
+  showBuyNowButton = false,
+  showMoq = false,
+  productsInWishlist = [],
   onColumnCountUpdate = () => {},
   onResetFiltersClick = () => {},
   onFilterUpdate = () => {},
@@ -79,16 +84,117 @@ const ProductListing = ({
   onLoadMoreProducts = () => {},
   onProductNavigation = () => {},
   EmptyStateComponent,
+  isProductInWishlist = () => {},
+  getProductsInWishlist = () => {},
 }) => {
   const { t } = useGlobalTranslation("translation");
   const isTablet = useViewport(0, 768);
+  const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
+  const [showCreateWishlist, setShowCreateWishlist] = useState(false);
+  const [isCreateWishlistError, setIsCreateWishlistError] = useState(false);
+  const [createWishlistErrorMessage, setCreateWishlistErrorMessage] =
+    useState("");
+
+  const [selectedProductForWishlist, setSelectedProductForWishlist] =
+    useState(null);
+  const [selectedWishlistIds, setSelectedWishlistIds] = useState([]);
+  const [productData, setProductData] = useState(null);
+
   const {
     handleAddToCart,
     isOpen: isAddToCartOpen,
     showSizeGuide,
     handleCloseSizeGuide,
+    fetchAllWishlists,
+    showSnackbarMessage,
+    handleSaveToWishlist,
+    handleGetWishlistBySlug,
     ...restAddToModalProps
   } = addToCartModalProps;
+
+  useEffect(() => {
+    if (isRunningOnClient()) {
+      const savedPosition = sessionStorage.getItem("plpScrollPosition");
+      if (savedPosition) {
+        window.scrollTo(0, parseInt(savedPosition));
+        sessionStorage.removeItem("plpScrollPosition");
+      }
+      const handleBeforeUnload = () => {
+        sessionStorage.setItem("plpScrollPosition", window.scrollY.toString());
+      };
+
+      window.addEventListener("beforeunload", handleBeforeUnload);
+      return () => {
+        window.removeEventListener("beforeunload", handleBeforeUnload);
+      };
+    }
+  }, []);
+
+  useEffect(() => {
+    setSelectedProductForWishlist(restAddToModalProps?.productDataWishlist);
+  }, [restAddToModalProps?.productData]);
+
+  const handleWishlistIconClick = async (product) => {
+    await restAddToModalProps?.handleFetchProductDataWishlist(product?.slug);
+    const wishlistIds = await handleGetWishlistBySlug("", product?.slug, "");
+    setSelectedWishlistIds(wishlistIds);
+    setProductData(product);
+    setIsWishlistModalOpen(true);
+  };
+
+  const handleWishlistModalClose = () => {
+    setIsWishlistModalOpen(false);
+    setSelectedProductForWishlist(null);
+    setSelectedWishlistIds([]);
+  };
+
+  const handleWishlistSave = async (product, productPrice, selectedIds) => {
+    try {
+      if (handleSaveToWishlist) {
+        await handleSaveToWishlist(product, productPrice, selectedIds);
+      }
+
+      onWishlistClick(productData);
+      if (typeof getProductsInWishlist === "function") {
+        await getProductsInWishlist();
+      } else {
+        console.error(
+          "❌ getProductsInWishlist is not a function:",
+          getProductsInWishlist
+        );
+      }
+    } catch (error) {
+      console.error("❌ Error in handleWishlistSave:", error);
+    }
+
+    handleWishlistModalClose();
+  };
+
+  const handleWishlistClick = (wishlistId, selectedIds) => {
+    setSelectedWishlistIds(selectedIds);
+  };
+
+  const createWishlist = async (wishlistName) => {
+    if (wishlistName?.trim()) {
+      const response = await restAddToModalProps.handleCreateWishlist(
+        wishlistName.trim()
+      );
+      if (response.success) {
+        setShowCreateWishlist(false);
+        if (productData) {
+          setSelectedProductForWishlist(productData);
+          setIsWishlistModalOpen(true);
+        }
+        const newWishlistId = response.data._id;
+        setSelectedWishlistIds([newWishlistId]);
+        setIsCreateWishlistError(false);
+        setCreateWishlistErrorMessage("");
+      } else {
+        setIsCreateWishlistError(true);
+        setCreateWishlistErrorMessage(response.message);
+      }
+    }
+  };
 
   return (
     <div className={styles.plpWrapper}>
@@ -311,10 +417,9 @@ const ProductListing = ({
                         followedIdList,
                         listingPrice,
                         showAddToCart,
-                        showColorVariants,
                         actionButtonText:
                           actionButtonText ?? t("resource.common.add_to_cart"),
-                        onWishlistClick,
+                        onWishlistClick: handleWishlistIconClick,
                         isImageFill,
                         showImageOnHover,
                         imageBackgroundColor,
@@ -322,6 +427,9 @@ const ProductListing = ({
                         handleAddToCart,
                         imgSrcSet,
                         onProductNavigation,
+                        globalConfig,
+                        productsInWishlist,
+                        getProductsInWishlist,
                       }}
                     />
                   </InfiniteLoader>
@@ -340,10 +448,9 @@ const ProductListing = ({
                       followedIdList,
                       listingPrice,
                       showAddToCart,
-                      showColorVariants,
                       actionButtonText:
                         actionButtonText ?? t("resource.common.add_to_cart"),
-                      onWishlistClick,
+                      onWishlistClick: handleWishlistIconClick,
                       isImageFill,
                       showImageOnHover,
                       imageBackgroundColor,
@@ -352,6 +459,9 @@ const ProductListing = ({
                       handleAddToCart,
                       imgSrcSet,
                       onProductNavigation,
+                      globalConfig,
+                      productsInWishlist,
+                      getProductsInWishlist,
                     }}
                   />
                 )}
@@ -399,8 +509,11 @@ const ProductListing = ({
                   closeDialog={restAddToModalProps?.handleClose}
                 >
                   <AddToCart
-                    {...restAddToModalProps}
-                    globalConfig={globalConfig}
+                   {...restAddToModalProps}
+                   globalConfig={globalConfig}
+                   showQuantityController={showQuantityController}
+                   showBuyNowButton={showBuyNowButton}
+                   showMoq={showMoq}
                   />
                 </Modal>
               )}
@@ -410,6 +523,34 @@ const ProductListing = ({
                 productMeta={restAddToModalProps?.productData?.product?.sizes}
               />
             </>
+          )}
+
+          {isWishlistModalOpen && restAddToModalProps?.productDataWishlist && (
+            <SaveToWishlistModal
+              isOpen={isWishlistModalOpen}
+              onClose={handleWishlistModalClose}
+              onSuccess={handleWishlistSave}
+              handleWishlistClick={handleWishlistClick}
+              fetchAllWishlists={fetchAllWishlists}
+              showSnackbarMessage={showSnackbarMessage}
+              selectedWishlistIds={selectedWishlistIds}
+              setSelectedWishlistIds={setSelectedWishlistIds}
+              productDataWishlist={restAddToModalProps?.productDataWishlist}
+              handleOpenCreateWishlistModal={() => setShowCreateWishlist(true)}
+            />
+          )}
+
+          {showCreateWishlist && (
+            <CreateRenameWishlistModal
+              isOpen={showCreateWishlist}
+              onClose={() => setShowCreateWishlist(false)}
+              title="Create Wishlist"
+              textAreaTitle="Enter Name"
+              textAreaPlaceholder="Enter Your Wishlist Name..."
+              onSubmit={createWishlist}
+              isError={isCreateWishlistError}
+              errorMessage={createWishlistErrorMessage}
+            />
           )}
         </>
       )}
@@ -424,6 +565,12 @@ function ProductGrid({
   productList = [],
   ...restProps
 }) {
+  const handleProductClick = (e, product) => {
+    if (isRunningOnClient()) {
+      sessionStorage.setItem("plpScrollPosition", window.scrollY.toString());
+    }
+  };
+
   return (
     <div
       className={styles.productContainer}
@@ -461,7 +608,6 @@ function ProductGridItem({
   isImageFill = false,
   showImageOnHover = false,
   showAddToCart = false,
-  showColorVariants = false,
   actionButtonText,
   imageBackgroundColor = "",
   imagePlaceholder = "",
@@ -527,7 +673,6 @@ function ProductGridItem({
         WishlistIconComponent={WishlistIconComponent}
         followedIdList={followedIdList}
         showAddToCart={showAddToCart}
-        showColorVariants={showColorVariants}
         actionButtonText={actionButtonText ?? t("resource.common.add_to_cart")}
         onWishlistClick={onWishlistClick}
         isImageFill={isImageFill}

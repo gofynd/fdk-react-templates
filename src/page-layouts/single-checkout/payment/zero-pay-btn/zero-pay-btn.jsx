@@ -12,32 +12,28 @@ function ZeroPayButton({ payment, showPayment, onPriceDetailsClick }) {
       {showPayment && getTotalValue?.() === 0 && (
         <div>
           {" "}
-          {
-            isMobile && (
-              // (
-              //   <button
-              //     className={`${styles.commonBtn} ${styles.payBtn}`}
-              //     onClick={() => proceedToPay("PP", {})}
-              //     disabled={isLoading}
-              //   >
-              //     PLACE ORDER
-              //   </button>
-              // ) : (
-              <StickyPayNow
-                value={priceFormatCurrencySymbol(
-                  getCurrencySymbol,
-                  getTotalValue()
-                )}
-                disabled={isLoading}
-                onPriceDetailsClick={onPriceDetailsClick}
-                proceedToPay={() => {
-                  proceedToPay("PP", {});
-                }}
-                btnTitle="PLACE ORDER"
-              />
-            )
-            // )
-          }
+          {!isMobile ? (
+            <button
+              className={`${styles.commonBtn} ${styles.payBtn}`}
+              onClick={() => proceedToPay("PP", {})}
+              disabled={isLoading}
+            >
+              PLACE ORDER
+            </button>
+          ) : (
+            <StickyPayNow
+              value={priceFormatCurrencySymbol(
+                getCurrencySymbol,
+                getTotalValue()
+              )}
+              disabled={isLoading}
+              onPriceDetailsClick={onPriceDetailsClick}
+              proceedToPay={() => {
+                proceedToPay("PP", {});
+              }}
+              btnTitle="PLACE ORDER"
+            />
+          )}
         </div>
       )}
     </>
