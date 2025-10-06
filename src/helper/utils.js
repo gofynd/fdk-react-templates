@@ -101,51 +101,51 @@ export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
       minute: "numeric",
       hour12: true,
     };
-    console.log("ℹ️ No format provided. Using default format →", format);
+    // console.log("ℹ️ No format provided. Using default format →", format);
   }
 
   let parsedDate;
 
   try {
     if (typeof date === "string") {
-      console.log("🔍 Input is a string. Checking for partial format...");
+      // console.log("🔍 Input is a string. Checking for partial format...");
 
       if (date.match(/^[A-Za-z]{3},\s+\d{1,2}\s+[A-Za-z]{3}$/)) {
         const currentYear = new Date().getFullYear();
-        console.log("📆 Detected partial format. Using current year:", currentYear);
+        // console.log("📆 Detected partial format. Using current year:", currentYear);
         parsedDate = new Date(`${date} ${currentYear}`);
-        console.log("📆 Parsed partial date →", parsedDate.toISOString());
+        // console.log("📆 Parsed partial date →", parsedDate.toISOString());
       } else {
         parsedDate = new Date(date);
-        console.log("📆 Parsed ISO/standard string date →", parsedDate.toISOString());
+        // console.log("📆 Parsed ISO/standard string date →", parsedDate.toISOString());
       }
     } else {
       parsedDate = new Date(date);
-      console.log("📆 Parsed Date object or timestamp →", parsedDate.toISOString());
+      // console.log("📆 Parsed Date object or timestamp →", parsedDate.toISOString());
     }
 
     if (isNaN(parsedDate.getTime())) {
-      console.error("❌ Invalid date after parsing →", parsedDate);
+      // console.error("❌ Invalid date after parsing →", parsedDate);
       return "Invalid date";
     }
 
     const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    console.log("🌐 Detected browser time zone →", browserTimezone);
+    // console.log("🌐 Detected browser time zone →", browserTimezone);
 
     const options = {
       ...format,
       timeZone: browserTimezone,
     };
-    console.log("🛠️ Formatting options →", options);
+    // console.log("🛠️ Formatting options →", options);
 
     const formattedDate = parsedDate
       .toLocaleString(locale, options)
       .replace(" at ", ", ");
 
-    console.log("✅ Final formatted date →", formattedDate);
+    // console.log("✅ Final formatted date →", formattedDate);
     return formattedDate;
   } catch (error) {
-    console.error("❗ Error formatting date:", error, "Original input →", date);
+    // console.error("❗ Error formatting date:", error, "Original input →", date);
     return "Invalid date";
   }
 };

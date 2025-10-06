@@ -20,6 +20,7 @@ import {
   useGlobalTranslation,
   useNavigate,
 } from "fdk-core/utils";
+import ChipImage from "./chip-image";
 
 export default function ChipItem({
   isCartUpdating,
@@ -27,7 +28,8 @@ export default function ChipItem({
   onUpdateCartItems,
   currentSize,
   isDeliveryPromise = true,
-  productImage,
+  imageWidth,
+  globalConfig,
   itemIndex,
   sizeModalItemValue,
   currentSizeModalSize,
@@ -326,7 +328,12 @@ export default function ChipItem({
                 },
               }}
             >
-              <img src={productImage} alt={singleItemDetails?.product?.name} />
+              <ChipImage
+                product={singleItemDetails?.product}
+                type={singleItemDetails?.item_type}
+                imageWidth={imageWidth}
+                globalConfig={globalConfig}
+              />
             </FDKLink>
           </div>
           <div className={styles.eachItemDetailsContainer}>
@@ -797,13 +804,19 @@ export default function ChipItem({
         <div className={styles.foModalBody}>
           <div className={styles.foModalWrapper}>
             <div className={styles.foModalImage}>
+              <ChipImage
+                product={singleItemDetails?.product}
+                type={singleItemDetails?.item_type}
+                imageWidth={imageWidth}
+                globalConfig={globalConfig}
+              />
               {/* <FyImage
                 src={productImage}
                 aspectRatio={0.8}
                 mobileAspectRatio={0.8}
                 customClass={styles.productImg}
               /> */}
-              <img src={productImage} />
+              {/* <img src={productImage} /> */}
             </div>
             <div className={styles.foModalContent}>
               <div className={styles.foModalBrand}>
