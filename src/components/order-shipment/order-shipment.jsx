@@ -176,7 +176,6 @@ function OrderShipment({
   const [isOpen, setIsOpen] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [selectedShipment, setSelectedShipment] = useState("");
-  const [openAccordions, setOpenAccordions] = useState({});
   const navigate = useNavigate();
   const params = useParams();
 
@@ -206,24 +205,6 @@ function OrderShipment({
     }
     navigate(link);
   };
-
-  const getCustomizationOptions = (orderInfo) => {
-    if (!orderInfo?.shipments) return [];
-    return orderInfo.shipments
-      .flatMap((shipment) =>
-        shipment.bags
-          ?.map((bag) => bag.meta?._custom_json?._display || [])
-          .flat()
-      )
-      .filter(Boolean);
-  };
-
-  // const handleShipmentAccordionClick = (shipmentId) => {
-  //   setOpenAccordions((prev) => ({
-  //     ...prev,
-  //     [shipmentId]: !prev[shipmentId],
-  //   }));
-  // };
 
   return (
     <div className={`${styles.orderItem}`} key={orderInfo?.order_id}>
