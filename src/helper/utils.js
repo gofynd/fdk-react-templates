@@ -10,6 +10,27 @@ export const debounce = (func, wait) => {
   };
 };
 
+export const formatDate = (isoString, dateOnly = false) => {
+  const date = new Date(isoString);
+
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = date.toLocaleString("en-US", { month: "short" });
+  const year = date.getFullYear();
+
+  let hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const ampm = hours >= 12 ? "PM" : "AM";
+
+  hours %= 12;
+  hours = hours || 12; // 0 becomes 12
+
+  if (dateOnly) {
+    return `${day} ${month}, ${year}`;
+  }
+
+  return `${day} ${month}, ${year}, ${hours}:${minutes} ${ampm}`;
+};
+
 export const getGlobalConfigValue = (globalConfig, id) =>
   globalConfig?.props?.[id] ?? "";
 
@@ -112,16 +133,25 @@ export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
 
       if (date.match(/^[A-Za-z]{3},\s+\d{1,2}\s+[A-Za-z]{3}$/)) {
         const currentYear = new Date().getFullYear();
-        console.log("📆 Detected partial format. Using current year:", currentYear);
+        console.log(
+          "📆 Detected partial format. Using current year:",
+          currentYear
+        );
         parsedDate = new Date(`${date} ${currentYear}`);
         console.log("📆 Parsed partial date →", parsedDate.toISOString());
       } else {
         parsedDate = new Date(date);
-        console.log("📆 Parsed ISO/standard string date →", parsedDate.toISOString());
+        console.log(
+          "📆 Parsed ISO/standard string date →",
+          parsedDate.toISOString()
+        );
       }
     } else {
       parsedDate = new Date(date);
-      console.log("📆 Parsed Date object or timestamp →", parsedDate.toISOString());
+      console.log(
+        "📆 Parsed Date object or timestamp →",
+        parsedDate.toISOString()
+      );
     }
 
     if (isNaN(parsedDate.getTime())) {
@@ -149,7 +179,6 @@ export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
     return "Invalid date";
   }
 };
-
 
 export function validateEmailField(value) {
   const emailPattern =
@@ -184,7 +213,11 @@ export const transformImage = (url, key, width) => {
   let updatedUrl = url;
   if (key && width) {
     const str = `/${key}/`;
-    updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
+    if (url.includes("/wrkr/")) {
+      updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
+    } else {
+      updatedUrl = url.replace(new RegExp(str), `/t.resize(w:${width})/`);
+    }
   }
   try {
     const parsedUrl = new URL(updatedUrl);
@@ -278,7 +311,6 @@ export const currencyFormat = (value, currencySymbol, locale = "en-IN") => {
 
   return "";
 };
-
 
 export const getReviewRatingData = function (customMeta) {
   const data = {};
@@ -448,7 +480,9 @@ export const formatLocale = (locale, countryCode, isCurrencyLocale = false) => {
   if (locale === "en" || !locale) {
     return DEFAULT_UTC_LOCALE;
   }
-  const finalLocale = locale.includes("-") ? locale : `${locale}${countryCode ? "-" + countryCode : ""}`;
+  const finalLocale = locale.includes("-")
+    ? locale
+    : `${locale}${countryCode ? "-" + countryCode : ""}`;
 
   return isValidLocale(finalLocale) ? finalLocale : DEFAULT_UTC_LOCALE;
 };
@@ -459,10 +493,7 @@ export const translateValidationMessages = (validationObject, t) => {
   Object.keys(updatedValidation).forEach((key) => {
     const rule = updatedValidation[key];
 
-    if (
-      typeof rule === "object" &&
-      rule.message
-    ) {
+    if (typeof rule === "object" && rule.message) {
       rule.message = translateDynamicLabel(rule.message, t);
     } else if (typeof rule === "string") {
       updatedValidation[key] = translateDynamicLabel(rule, t);
@@ -513,15 +544,15 @@ export function isEmptyOrNull(obj) {
 export function translateDynamicLabel(input, t) {
   const safeInput = input
     .toLowerCase()
-    .replace(/\//g, '_') // replace slashes with underscores
-    .replace(/[^a-z0-9_\s]/g, '') // remove special characters except underscores and spaces
+    .replace(/\//g, "_") // replace slashes with underscores
+    .replace(/[^a-z0-9_\s]/g, "") // remove special characters except underscores and spaces
     .trim()
-    .replace(/\s+/g, '_'); // replace spaces with underscores
+    .replace(/\s+/g, "_"); // replace spaces with underscores
 
   const translationKey = `resource.dynamic_label.${safeInput}`;
   const translated = t(translationKey);
 
-  return translated.split('.').pop() === safeInput ? input : translated;
+  return translated.split(".").pop() === safeInput ? input : translated;
 }
 
 export function getLocaleDirection(fpi) {

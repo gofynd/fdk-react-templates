@@ -29,7 +29,6 @@
  * @param {boolean} [props.showAddToCart=false] - Flag to display the add to cart button.
  * @param {Function} [props.onClick=() => {}] - Callback function for card click.
  * @param {boolean} [props.showBadge=true] - Flag to display product badges.
- * @param {boolean} [props.showColorVariants=false] - Flag to display color variant dots.
  * @param {boolean} [props.isSlider=false] - Flag to indicate if card is used in a slider.
  *
  * @returns {JSX.Element} The rendered product card component.
@@ -46,6 +45,197 @@ import * as styles from "./product-card.less";
 import FyButton from "../core/fy-button/fy-button";
 import { useGlobalStore, useFPI, useGlobalTranslation } from "fdk-core/utils";
 import ForcedLtr from "../forced-ltr/forced-ltr";
+import Tooltip from "../tool-tip/tool-tip";
+import { useNavigate } from "react-router-dom";
+
+const DefaultProductPrice = ({
+  loggedIn,
+  product,
+  centerAlign,
+  getListingPrice,
+  hasDiscount,
+  showMarkedPriceForGuest,
+  showDiscountForGuest,
+  showLoginOption,
+  showDiscountForNonKyc,
+  showKycCompletionBadge,
+  isKycKeyPresent,
+  isMerchantKycApproved,
+  kycBadgeText,
+}) => {
+  const navigate = useNavigate();
+
+  const handleNavigateToLogin = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    const currentUrl = window.location.pathname + window.location.search;
+    navigate(`/auth/login?redirectUrl=${encodeURIComponent(currentUrl)}`);
+  };
+
+  //? Guest user Settings
+  if (!loggedIn) {
+    //? if none of the three conditions are met, then show empty fragment
+    if (!showMarkedPriceForGuest && !showDiscountForGuest && !showLoginOption) {
+      return <></>;
+    }
+
+    //? if only login option is enabled
+    if (showLoginOption && !showMarkedPriceForGuest && !showDiscountForGuest) {
+      return (
+        <FyButton
+          variant="outlined"
+          className={styles.loginToViewPricing}
+          onClick={handleNavigateToLogin}
+          startIcon={<SvgWrapper svgSrc="lock-icon" />}
+        >
+          Login to view pricing
+        </FyButton>
+      );
+    }
+    //? If marked Price option is enabled, and discount is disabled
+    if (showMarkedPriceForGuest && !showDiscountForGuest && !loggedIn) {
+      return (
+        <>
+          <div
+            className={`${styles.productPrice} ${centerAlign ? styles.center : ""}`}
+          >
+            <span className={`${styles["productPrice--sale"]} ${styles.h4}`}>
+              {getListingPrice("marked")}
+            </span>
+          </div>
+          {showLoginOption && (
+            <FyButton
+              variant="outlined"
+              className={styles.loginToViewPricing}
+              onClick={handleNavigateToLogin}
+              startIcon={<SvgWrapper svgSrc="lock-icon" />}
+            >
+              Login to view offers
+            </FyButton>
+          )}
+        </>
+      );
+    }
+  }
+
+  //? Non-KYC user Settings
+  if (loggedIn && !isMerchantKycApproved) {
+    //? Only show marked price for non KYC
+    if (!showDiscountForNonKyc) {
+      return (
+        <>
+          <div
+            className={`${styles.productPrice} ${centerAlign ? styles.center : ""}`}
+          >
+            <span className={`${styles["productPrice--sale"]} ${styles.h4}`}>
+              <ForcedLtr text={getListingPrice("marked")} />
+            </span>
+          </div>
+
+          {showKycCompletionBadge && !isKycKeyPresent && (
+            <div className={styles.kycCompletionBadge}>
+              <span className={styles.kycCompletionBadgeIcon}>
+                <SvgWrapper svgSrc="info-white" />
+              </span>
+              <span className={styles.kycCompletionBadgeText}>
+                {kycBadgeText}
+              </span>
+            </div>
+          )}
+        </>
+      );
+    }
+
+    return (
+      <>
+        <div
+          className={`${styles.productPrice} ${centerAlign ? styles.center : ""}`}
+        >
+          {product?.price?.effective && (
+            <span className={`${styles["productPrice--sale"]} ${styles.h4}`}>
+              <ForcedLtr text={getListingPrice("effective")} />
+            </span>
+          )}
+          {hasDiscount && (
+            <span
+              className={`${styles["productPrice--regular"]} ${styles.captionNormal}`}
+            >
+              <ForcedLtr text={getListingPrice("marked")} />
+            </span>
+          )}
+          {product.discount && (
+            <span
+              className={`${styles["productPrice--discount"]} ${styles.captionNormal} `}
+            >
+              ({product.discount?.toString().toLowerCase()})
+            </span>
+          )}
+        </div>
+        {showKycCompletionBadge && !isKycKeyPresent && (
+          <div className={styles.kycCompletionBadge}>
+            <span className={styles.kycCompletionBadgeIcon}>
+              <SvgWrapper svgSrc="info-white" />
+            </span>
+            <span className={styles.kycCompletionBadgeText}>
+              {kycBadgeText}
+            </span>
+          </div>
+        )}
+      </>
+    );
+  }
+
+  return (
+    <div
+      className={`${styles.productPrice} ${centerAlign ? styles.center : ""}`}
+    >
+      {product?.price?.effective && (
+        <span className={`${styles["productPrice--sale"]} ${styles.h4}`}>
+          <ForcedLtr text={getListingPrice("effective")} />
+        </span>
+      )}
+      {hasDiscount && (
+        <span
+          className={`${styles["productPrice--regular"]} ${styles.captionNormal}`}
+        >
+          <ForcedLtr text={getListingPrice("marked")} />
+        </span>
+      )}
+      {product.discount && (
+        <span
+          className={`${styles["productPrice--discount"]} ${styles.captionNormal} `}
+        >
+          ({product.discount?.toString().toLowerCase()})
+        </span>
+      )}
+    </div>
+  );
+};
+
+const AvailableOfferButton = ({
+  handleB2bAvailableOfferClick,
+  showDiscountForNonKyc,
+  showAvailableOfferButton,
+  isMerchantKycApproved,
+}) => {
+  if (!isMerchantKycApproved && !showDiscountForNonKyc) {
+    return <></>;
+  }
+
+  return (
+    <>
+      {showAvailableOfferButton && (
+        <FyButton
+          variant="outlined"
+          className={styles.addToCart}
+          onClick={handleB2bAvailableOfferClick}
+        >
+          Available Offers
+        </FyButton>
+      )}
+    </>
+  );
+};
 
 const ProductCard = ({
   product,
@@ -83,9 +273,10 @@ const ProductCard = ({
   centerAlign = false,
   showAddToCart = false,
   showBadge = true,
-  showColorVariants = false,
   isSlider = false,
   onClick = () => {},
+  globalConfig = {},
+  productsInWishlist = [],
 }) => {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -93,6 +284,44 @@ const ProductCard = ({
   const locale = i18nDetails?.language?.locale || "en";
   const countryCode = i18nDetails?.countryCode || "IN";
   const isMobile = useMobile();
+
+  const loggedIn = useGlobalStore(fpi.getters.LOGGED_IN);
+  const { merchant_data } = useGlobalStore(fpi?.getters?.CUSTOM_VALUE);
+
+  const keyName = "kyc_status";
+  const isKycKeyPresent = merchant_data?.[keyName] !== undefined;
+
+  const isMerchantKycApproved = () => {
+    return merchant_data?.[keyName] === "approved";
+  };
+
+  const wishlistStatus = useMemo(() => {
+    if (!productsInWishlist || !product?.slug) {
+      return { isInWishlist: false, wishlistCount: 0 };
+    }
+
+    const matchingSlug = Object.keys(productsInWishlist).find((key) =>
+      key.startsWith(product.slug)
+    );
+
+    const count = matchingSlug ? productsInWishlist[matchingSlug].length : 0;
+
+    return {
+      isInWishlist: count > 0,
+      wishlistCount: count,
+      matchingSlug,
+    };
+  }, [productsInWishlist, product?.slug]);
+
+  const {
+    show_available_offer_button,
+    show_marked_price_guest,
+    show_discount_guest,
+    show_login_for_guest,
+    show_discount_non_kyc,
+    show_kyc_completion_badge,
+    kyc_badge_text,
+  } = globalConfig;
 
   const getListingPrice = (key) => {
     if (!product.price) return "";
@@ -229,7 +458,7 @@ const ProductCard = ({
   const handleWishlistClick = (e) => {
     e.stopPropagation();
     e.preventDefault();
-    onWishlistClick({ product, isFollowed });
+    onWishlistClick(product);
   };
 
   const handleRemoveClick = (e) => {
@@ -248,6 +477,15 @@ const ProductCard = ({
     event?.preventDefault();
     event?.stopPropagation();
     handleAddToCart(product?.slug);
+  };
+
+  const handleB2bAvailableOfferClick = (event) => {
+    event?.preventDefault();
+    event?.stopPropagation();
+    fpi.custom.setValue("b2bAvailableOffers", {
+      slug: product?.slug,
+      isModalOpen: true,
+    });
   };
 
   // Optimized variant click handler with useCallback
@@ -298,13 +536,13 @@ const ProductCard = ({
           sources={imgSrcSet}
           defer={false}
         />
-        {isWishlistIcon && (
+        {isWishlistIcon && loggedIn && isMerchantKycApproved() && (
           <button
-            className={`${styles.wishlistBtn} ${isFollowed ? styles.active : ""}`}
+            className={`${styles.wishlistBtn} ${wishlistStatus.isInWishlist ? styles.active : ""}`}
             onClick={handleWishlistClick}
             title={t("resource.product.wishlist_icon")}
           >
-            <WishlistIconComponent isFollowed={isFollowed} />
+            <WishlistIconComponent isFollowed={wishlistStatus.isInWishlist} />
           </button>
         )}
         {isRemoveIcon && (
@@ -350,35 +588,101 @@ const ProductCard = ({
             {product.name}
           </h5>
           {isPrice && (
-            <div
-              className={`${styles.productPrice} ${centerAlign ? styles.center : ""}`}
-            >
-              {product?.price?.effective && (
-                <span
-                  className={`${styles["productPrice--sale"]} ${styles.h4}`}
-                >
-                  <ForcedLtr text={getListingPrice("effective")} />
-                </span>
+            <>
+              {product?.contract || product?.quotation ? (
+                <>
+                  {product.contract && (
+                    <Tooltip
+                      position="bottom"
+                      title={
+                        <>
+                          Contract applied -{" "}
+                          {product?.contract?.used_count === 0 ? (
+                            <>{product?.contract?.total_count} qty available</>
+                          ) : (
+                            <>
+                              {product?.contract?.total_count -
+                                product?.contract?.used_count}
+                              /{product?.contract?.total_count} qty available
+                            </>
+                          )}
+                        </>
+                      }
+                    >
+                      <div className={styles.badge_section}>
+                        <div className={styles.badge}>
+                          <span>Contract Price</span>
+                          <span className={styles.info_icon}>
+                            <SvgWrapper svgSrc="info-white" />
+                          </span>
+                        </div>
+                      </div>
+                    </Tooltip>
+                  )}
+
+                  {product?.quotation && (
+                    <Tooltip
+                      position="bottom"
+                      title={
+                        <>
+                          Quote Price -{" "}
+                          {product?.quotation?.used_count === 0 ? (
+                            <>{product?.quotation?.total_count} qty available</>
+                          ) : (
+                            <>
+                              {product?.quotation?.total_count -
+                                product?.quotation?.used_count}
+                              /{product?.quotation?.total_count} qty available
+                            </>
+                          )}
+                        </>
+                      }
+                    >
+                      <div className={styles.badge_section}>
+                        <div className={styles.badge}>
+                          <span>Quoted Price</span>
+                          <span className={styles.info_icon}>
+                            <SvgWrapper svgSrc="info-white" />
+                          </span>
+                        </div>
+                      </div>
+                    </Tooltip>
+                  )}
+                  <div
+                    className={`${styles.productPrice} ${centerAlign ? styles.center : ""}`}
+                  >
+                    <span
+                      className={`${styles["productPrice--sale"]} ${styles.h4}`}
+                    >
+                      {currencyFormat(
+                        product.best_price.price,
+                        product.best_price.currency_symbol
+                      )}
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <DefaultProductPrice
+                  loggedIn={loggedIn}
+                  product={product}
+                  centerAlign={centerAlign}
+                  hasDiscount={hasDiscount}
+                  getListingPrice={getListingPrice}
+                  showMarkedPriceForGuest={show_marked_price_guest}
+                  showDiscountForGuest={show_discount_guest}
+                  showLoginOption={show_login_for_guest}
+                  showDiscountForNonKyc={show_discount_non_kyc}
+                  showKycCompletionBadge={show_kyc_completion_badge}
+                  isKycKeyPresent={isKycKeyPresent}
+                  isMerchantKycApproved={isMerchantKycApproved()}
+                  kycBadgeText={kyc_badge_text}
+                />
               )}
-              {hasDiscount && (
-                <span
-                  className={`${styles["productPrice--regular"]} ${styles.captionNormal}`}
-                >
-                  <ForcedLtr text={getListingPrice("marked")} />
-                </span>
-              )}
-              {product.discount && (
-                <span
-                  className={`${styles["productPrice--discount"]} ${styles.captionNormal}   ${centerAlign ? styles["productPrice--textCenter"] : ""}`}
-                >
-                  ({product.discount})
-                </span>
-              )}
-            </div>
+            </>
           )}
 
           {/* OPTIMIZED COLOR VARIANTS SECTION */}
-          {colorVariants.hasVariants && showColorVariants && (
+          {colorVariants.hasVariants && (
             <div className={styles.productVariants}>
               <div className={styles.colorVariants}>
                 {orderedVariants.slice(0, 4).map((variant) => {
@@ -408,15 +712,35 @@ const ProductCard = ({
           )}
         </div>
 
-        {showAddToCart && (
-          <FyButton
-            variant="outlined"
-            className={styles.addToCart}
-            onClick={handleAddToCartClick}
-          >
-            {actionButtonText ?? t("resource.common.add_to_cart")}
-          </FyButton>
-        )}
+        {showAddToCart &&
+          ((!loggedIn && show_discount_guest) ||
+            (loggedIn && isMerchantKycApproved()) ||
+            (loggedIn &&
+              !isMerchantKycApproved() &&
+              show_discount_non_kyc)) && (
+            <FyButton
+              variant="outlined"
+              className={styles.addToCart}
+              onClick={handleAddToCartClick}
+            >
+              {actionButtonText ?? t("resource.common.add_to_cart")}
+            </FyButton>
+          )}
+
+        {show_available_offer_button &&
+          ((!loggedIn && show_discount_guest) ||
+            (loggedIn && isMerchantKycApproved()) ||
+            (loggedIn &&
+              !isMerchantKycApproved() &&
+              show_discount_non_kyc)) && (
+            <AvailableOfferButton
+              handleB2bAvailableOfferClick={handleB2bAvailableOfferClick}
+              showDiscountForNonKyc={show_discount_non_kyc}
+              showAvailableOfferButton={show_available_offer_button}
+              isKycKeyPresent={isKycKeyPresent}
+              isMerchantKycApproved={isMerchantKycApproved()}
+            />
+          )}
       </div>
     </div>
   );

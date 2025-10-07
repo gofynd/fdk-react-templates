@@ -72,6 +72,7 @@ export default function ChipItem({
   const couponText = singleItemDetails?.coupon_message || "";
   const moq = singleItemDetails?.moq;
   const incrementDecrementUnit = moq?.increment_unit ?? 1;
+
   const customizationOptions =
     singleItemDetails?.article?._custom_json?._display || [];
 

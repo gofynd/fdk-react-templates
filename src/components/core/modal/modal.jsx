@@ -47,7 +47,6 @@ function Modal({
   containerClassName,
   ignoreClickOutsideForClass,
   customClassName,
-  notCloseOnclickOutside,
 }) {
   const modalRef = useRef(null);
   const modalContainerRef = useRef(null);
@@ -61,7 +60,6 @@ function Modal({
   }, [isOpen, childHandleFocus]);
 
   const handleClickOutside = (event) => {
-    if (notCloseOnclickOutside) return;
     if (
       isCancellable &&
       modalContainerRef.current &&
@@ -78,7 +76,7 @@ function Modal({
   };
 
   useEffect(() => {
-    if (!isRunningOnClient()) return;
+    if(!isRunningOnClient()) return;
     const openModals = document.querySelectorAll(`.${styles.modalContainer}`);
 
     if (isOpen) {
@@ -129,7 +127,7 @@ function Modal({
   //     exit: { opacity: 0, x: isRunningOnClient() && document.dir === "rtl" ? "-100%" : "100%", transition: { duration: 0.5 } },
   //   }),
   //   []
-  // );
+  // ); 
 
   // const mobileAnimationVariants = useMemo(
   //   () => ({

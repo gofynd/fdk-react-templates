@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import * as styles from "./compare-product-card.less";
 import { currencyFormat, formatLocale } from "../../helper/utils";
 import Shimmer from "../shimmer/shimmer";
-import { FDKLink } from "fdk-core/components";
 import { useMobile } from "../../helper/hooks";
 
 const CompareProductCard = ({
@@ -34,31 +33,11 @@ const CompareProductCard = ({
     return text.length > limit ? `${text.slice(0, limit)}...` : text;
   };
 
-  const getDeviceType = (width = 1200) => {
-    if (width <= 480) return "mobile";
-    if (width <= 786) return "tablet";
-    return "desktop";
-  };
-
-  const [deviceType, setDeviceType] = useState(() => {
-    if (typeof window !== "undefined") {
-      return getDeviceType(window.innerWidth);
-    }
-    return "desktop";
-  });
-
-  useEffect(() => {
-    const handleResize = () => setDeviceType(getDeviceType(window.innerWidth));
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const rawName = productItem?.name || "";
-  const productName = truncateText(
-    rawName,
-    deviceType === "desktop" ? 66 : deviceType === "tablet" ? 80 : 66
-  );
-  const titleAttr = rawName;
+  const productName =
+    isMobile
+      ? truncateText(productItem?.name, 46)
+      : productItem?.name || "";
+  console.log(productName, "productName", productName.length);
   const formatPrice = (value, symbol) => {
     const localeCode = formatLocale(locale, countryCode, true);
     return currencyFormat(value, symbol, localeCode);
@@ -128,43 +107,33 @@ const CompareProductCard = ({
 
       <div className={styles.cardDetailWrapper}>
         <div className={styles.cardDetailContainer}>
-          <FDKLink
-            to={`/product/${productItem?.slug}`}
-            target="_blank"
-            style={{
-              display: "block",
-              width: "100%",
-              height: "100%",
-              textDecoration: "none",
-              cursor: "pointer",
-            }}
-          >
-            <div className={styles.priceBtnSection}>
-              <h5 title={titleAttr}>{productName}</h5>
-              {!isMobile && (
-                <span className={styles.category}>
-                  {productItem?.brand?.name}
+          <div className={styles.priceBtnSection}>
+            <h5>{productName}</h5>
+            {!isMobile && (
+              <span className={styles.category}>
+                {productItem?.brand?.name}
+              </span>
+            )}
+            <div className={styles.priceInfo}>
+              <h4>{price}</h4>
+              <div className={styles.priceContainer}>
+                <span className={styles.actualPrice}>{actualPrice}</span>
+                <span className={styles.discount}>
+                  {productItem?.discount && (
+                    <span className={styles.discount}>
+                      ({productItem.discount})
+                    </span>
+                  )}
                 </span>
-              )}
-              <div className={styles.priceInfo}>
-                <h4>{price}</h4>
-                <div className={styles.priceContainer}>
-                  <span className={styles.actualPrice}>{actualPrice}</span>
-                  <span className={styles.discount}>
-                    {productItem?.discount && (
-                      <span className={styles.discount}>
-                        ({productItem.discount})
-                      </span>
-                    )}
-                  </span>
-                </div>
               </div>
             </div>
-          </FDKLink>
+          </div>
 
+          {/* <div className={styles.actionsWrapper}> */}
           <button className={styles.addToCartBtnSection} onClick={addProduct}>
             ADD TO COMPARE
           </button>
+          {/* </div> */}
         </div>
       </div>
     </div>

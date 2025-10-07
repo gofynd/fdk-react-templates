@@ -12,7 +12,7 @@ function ZeroPayButton({ payment, showPayment, onPriceDetailsClick }) {
       {showPayment && getTotalValue?.() === 0 && (
         <div>
           {" "}
-          {/* {!isMobile ? (
+          {!isMobile ? (
             <button
               className={`${styles.commonBtn} ${styles.payBtn}`}
               onClick={() => proceedToPay("PP", {})}
@@ -20,8 +20,7 @@ function ZeroPayButton({ payment, showPayment, onPriceDetailsClick }) {
             >
               PLACE ORDER
             </button>
-          ) : ( */}
-          {isMobile && (
+          ) : (
             <StickyPayNow
               value={priceFormatCurrencySymbol(
                 getCurrencySymbol,
@@ -35,7 +34,6 @@ function ZeroPayButton({ payment, showPayment, onPriceDetailsClick }) {
               btnTitle="PLACE ORDER"
             />
           )}
-          {/* )} */}
         </div>
       )}
     </>
