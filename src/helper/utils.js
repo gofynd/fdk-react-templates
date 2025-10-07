@@ -101,51 +101,51 @@ export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
       minute: "numeric",
       hour12: true,
     };
-    // console.log("ℹ️ No format provided. Using default format →", format);
+    console.log("ℹ️ No format provided. Using default format →", format);
   }
 
   let parsedDate;
 
   try {
     if (typeof date === "string") {
-      // console.log("🔍 Input is a string. Checking for partial format...");
+      console.log("🔍 Input is a string. Checking for partial format...");
 
       if (date.match(/^[A-Za-z]{3},\s+\d{1,2}\s+[A-Za-z]{3}$/)) {
         const currentYear = new Date().getFullYear();
-        // console.log("📆 Detected partial format. Using current year:", currentYear);
+        console.log("📆 Detected partial format. Using current year:", currentYear);
         parsedDate = new Date(`${date} ${currentYear}`);
-        // console.log("📆 Parsed partial date →", parsedDate.toISOString());
+        console.log("📆 Parsed partial date →", parsedDate.toISOString());
       } else {
         parsedDate = new Date(date);
-        // console.log("📆 Parsed ISO/standard string date →", parsedDate.toISOString());
+        console.log("📆 Parsed ISO/standard string date →", parsedDate.toISOString());
       }
     } else {
       parsedDate = new Date(date);
-      // console.log("📆 Parsed Date object or timestamp →", parsedDate.toISOString());
+      console.log("📆 Parsed Date object or timestamp →", parsedDate.toISOString());
     }
 
     if (isNaN(parsedDate.getTime())) {
-      // console.error("❌ Invalid date after parsing →", parsedDate);
+      console.error("❌ Invalid date after parsing →", parsedDate);
       return "Invalid date";
     }
 
     const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    // console.log("🌐 Detected browser time zone →", browserTimezone);
+    console.log("🌐 Detected browser time zone →", browserTimezone);
 
     const options = {
       ...format,
       timeZone: browserTimezone,
     };
-    // console.log("🛠️ Formatting options →", options);
+    console.log("🛠️ Formatting options →", options);
 
     const formattedDate = parsedDate
       .toLocaleString(locale, options)
       .replace(" at ", ", ");
 
-    // console.log("✅ Final formatted date →", formattedDate);
+    console.log("✅ Final formatted date →", formattedDate);
     return formattedDate;
   } catch (error) {
-    // console.error("❗ Error formatting date:", error, "Original input →", date);
+    console.error("❗ Error formatting date:", error, "Original input →", date);
     return "Invalid date";
   }
 };
@@ -575,74 +575,5 @@ export const getAddressFromComponents = (components, name) => {
     area_code: typeToName["postal_code"]?.long_name || null,
     country: typeToName["country"]?.long_name || null,
     country_iso_code: typeToName["country"]?.short_name || null,
-  };
-};
-
-/**
- * Extract user's full name from user object
- * @param {Object} user - User object
- * @returns {string} Full name or empty string
- */
-export const getUserFullName = (user) => {
-  if (!user) return "";
-
-  const { first_name, last_name } = user;
-  if (first_name && last_name) {
-    return `${first_name} ${last_name}`.trim();
-  }
-  return first_name || last_name || "";
-};
-
-/**
- * Extract primary phone number from user object
- * @param {Object} user - User object
- * @returns {Object} Phone object with mobile and countryCode or null
- */
-export const getUserPrimaryPhone = (user) => {
-  if (!user || !user.phone_numbers || !Array.isArray(user.phone_numbers)) {
-    return null;
-  }
-
-  const primaryPhone = user.phone_numbers.find((phone) => phone.primary);
-  if (!primaryPhone) return null;
-
-  const countryCode = primaryPhone.country_code?.toString() || "91";
-  const mobile = primaryPhone.phone || "";
-
-  return {
-    mobile,
-    countryCode
-  };
-};
-
-/**
- * Extract primary email from user object
- * @param {Object} user - User object
- * @returns {string} Primary email or empty string
- */
-export const getUserPrimaryEmail = (user) => {
-  if (!user || !user.emails || !Array.isArray(user.emails)) {
-    return "";
-  }
-
-  const primaryEmail = user.emails.find((email) => email.primary);
-  return primaryEmail?.email || "";
-};
-
-/**
- * Extract all user data needed for address form autofill
- * @param {Object} user - User object
- * @param {boolean} isGuestUser - Whether user is guest
- * @returns {Object} Autofill data or empty object
- */
-export const getUserAutofillData = (user, isGuestUser = false) => {
-  if (!user || isGuestUser) {
-    return {};
-  }
-
-  return {
-    name: getUserFullName(user),
-    phone: getUserPrimaryPhone(user),
-    email: getUserPrimaryEmail(user),
   };
 };

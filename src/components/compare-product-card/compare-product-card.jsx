@@ -34,13 +34,31 @@ const CompareProductCard = ({
     return text.length > limit ? `${text.slice(0, limit)}...` : text;
   };
 
+  const getDeviceType = (width = 1200) => {
+    if (width <= 480) return "mobile";
+    if (width <= 786) return "tablet";
+    return "desktop";
+  };
+
+  const [deviceType, setDeviceType] = useState(() => {
+    if (typeof window !== "undefined") {
+      return getDeviceType(window.innerWidth);
+    }
+    return "desktop";
+  });
+
+  useEffect(() => {
+    const handleResize = () => setDeviceType(getDeviceType(window.innerWidth));
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const rawName = productItem?.name || "";
   const productName = truncateText(
     rawName,
-    screenSize === "desktop" ? 80 : screenSize === "tablet" ? 100 : 66
+    deviceType === "desktop" ? 66 : deviceType === "tablet" ? 80 : 66
   );
   const titleAttr = rawName;
-  console.log(productName, "productName", productName.length);
   const formatPrice = (value, symbol) => {
     const localeCode = formatLocale(locale, countryCode, true);
     return currencyFormat(value, symbol, localeCode);
