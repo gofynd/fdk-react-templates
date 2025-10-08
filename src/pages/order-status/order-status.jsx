@@ -4,8 +4,9 @@ import {
   formatLocale,
   getAddressStr,
   numberWithCommas,
-  translateDynamicLabel,
   priceFormatCurrencySymbol,
+  translateDynamicLabel,
+  getProductImgAspectRatio,
 } from "../../helper/utils";
 import * as styles from "./order-status.less";
 import PriceBreakup from "../../components/price-breakup/price-breakup";
@@ -13,12 +14,10 @@ import CartGiftItem from "./components/cart-gift-item/cart-gift-item";
 import FyButton from "../../components/core/fy-button/fy-button";
 import Modal from "../../components/core/modal/modal";
 import { FDKLink } from "fdk-core/components";
-import {
-  useGlobalStore,
-  useFPI,
-  useGlobalTranslation
-} from "fdk-core/utils";
+import { useGlobalStore, useFPI, useGlobalTranslation } from "fdk-core/utils";
 import TrueCheckIcon from "../../assets/images/true-check.svg";
+import { BagImage, BundleBagImage } from "../../components/bag/bag";
+import Accordion from "../../components/accordion/accordion";
 
 const orderFailurePageInfo = {
   link: "",
@@ -37,13 +36,17 @@ function OrderStatus({
   showPolling = false,
   pollingComp = null,
   loader,
+  getGroupedShipmentBags,
+  globalConfig,
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
   const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
-  const locale = language?.locale
+  const locale = language?.locale;
   function getOrderLink() {
-    const basePath = isLoggedIn ? "/profile/orders/" : `/order-tracking/${orderData?.order_id}`;
+    const basePath = isLoggedIn
+      ? "/profile/orders/"
+      : `/order-tracking/${orderData?.order_id}`;
     return locale && locale !== "en" ? `/${locale}${basePath}` : basePath;
   }
 
@@ -87,7 +90,6 @@ function OrderStatus({
             <div className={styles.orderTime}>
               {t("resource.order.placed_on")}:
               <span>
-                {" "}
                 {convertDate(
                   orderData.order_created_time,
                   formatLocale(locale, countryCode, true)
@@ -119,6 +121,8 @@ function OrderStatus({
                     index={index}
                     shipmentLength={orderData?.shipments?.length}
                     orderLink={getOrderLink()}
+                    getGroupedShipmentBags={getGroupedShipmentBags}
+                    globalConfig={globalConfig}
                   />
                 ))}
               </div>
@@ -146,42 +150,25 @@ function OrderStatus({
                             <div
                               key={paymentInfo?.display_name}
                               className={styles["mode-data"]}
-                              style={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "space-between",
-                              }}
+                              style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}
                             >
-                              <span
-                                style={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                }}
-                              >
+                              <span style={{ display: "flex", alignItems: "center" }}>
                                 <img
                                   src={
                                     paymentInfo?.logo ||
-                                    "https://cdn.fynd.com/v2/falling-surf-7c8bb8/fyndnp/wrkr/x5/payments/original/t8XMizL2k-cod.png"
+                                    "https://cdn.iconscout.com/icon/premium/png-512-thumb/debit-card-10-742447.png?f=webp&w=256"
                                   }
                                   alt={paymentInfo?.mode}
                                 />
-                                <span
-                                  className={styles["mode-name"]}
-                                  style={{ marginLeft: 12, marginTop: 6 }}
-                                >
-                                  {translateDynamicLabel(
-                                    paymentInfo?.display_name,
-                                    t
-                                  ) || t("resource.order.cod")}
+                                <span className={styles["mode-name"]} style={{ marginLeft: 12, marginTop: 6 }}>
+                                  {translateDynamicLabel(paymentInfo?.display_name, t) || t("resource.order.cod")}
                                 </span>
                               </span>
                               <span className={styles["mode-amount"]}>
-                                {paymentInfo?.amount !== undefined &&
-                                paymentInfo?.amount !== null
+                                {paymentInfo?.amount !== undefined && paymentInfo?.amount !== null
                                   ? priceFormatCurrencySymbol(
                                       paymentInfo?.currency_symbol ||
-                                        orderData?.breakup_values?.[0]
-                                          ?.currency_symbol,
+                                        orderData?.breakup_values?.[0]?.currency_symbol,
                                       paymentInfo?.amount
                                     )
                                   : null}
@@ -266,13 +253,23 @@ function OrderStatus({
 
 export default OrderStatus;
 
-function ShipmentItem({ shipment, index, shipmentLength, orderLink = "" }) {
+function ShipmentItem({
+  shipment,
+  index,
+  shipmentLength,
+  orderLink = "",
+  getGroupedShipmentBags,
+  globalConfig,
+}) {
   const { t } = useGlobalTranslation("translation");
-  const getBags = (bags) => {
-    return bags.filter(
-      (bag) => Object.keys(bag?.parent_promo_bags)?.length === 0
-    );
-  };
+  const {
+    bags: getBags,
+    bundleGroups,
+    bundleGroupArticles,
+  } = useMemo(
+    () => getGroupedShipmentBags(shipment?.bags, { includePromoBags: false }),
+    [shipment?.bags]
+  );
 
   const isShipmentCancelled = shipment?.shipment_status?.value === "cancelled";
 
@@ -280,8 +277,11 @@ function ShipmentItem({ shipment, index, shipmentLength, orderLink = "" }) {
     <div className={styles.shipmentItem} key={index}>
       <div className={styles.shipmentItemHead}>
         <div>
-          <p className={styles.shipmentNumber}>{`${t("resource.common.shipment")} ${index + 1
-            } / ${shipmentLength}`}</p>
+          <p
+            className={styles.shipmentNumber}
+          >{`${t("resource.common.shipment")} ${
+            index + 1
+          } / ${shipmentLength}`}</p>
           <h5 style={{ marginTop: "8px" }}>{shipment?.shipment_id}</h5>
         </div>
         <div
@@ -293,7 +293,8 @@ function ShipmentItem({ shipment, index, shipmentLength, orderLink = "" }) {
             }),
           }}
         >
-          {t("resource.order.status")}: <span>{shipment?.shipment_status?.title}</span>
+          {t("resource.order.status")}:{" "}
+          <span>{shipment?.shipment_status?.title}</span>
         </div>
         <div
           className={styles.statusWrapperMobile}
@@ -308,9 +309,16 @@ function ShipmentItem({ shipment, index, shipmentLength, orderLink = "" }) {
         </div>
       </div>
       <div className={styles.shipmentItemItemsData}>
-        {getBags(shipment?.bags)?.map((item, index) => (
+        {getBags?.map((item, index) => (
           <div className={styles.shipmentProdItemWrapper}>
-            <ProductItem product={item} key={index} orderLink={orderLink} />
+            <ProductItem
+              key={index}
+              product={item}
+              orderLink={orderLink}
+              bundleGroups={bundleGroups}
+              bundleGroupArticles={bundleGroupArticles}
+              globalConfig={globalConfig}
+            />
           </div>
         ))}
       </div>
@@ -318,61 +326,130 @@ function ShipmentItem({ shipment, index, shipmentLength, orderLink = "" }) {
   );
 }
 
-function ProductItem({ product, orderLink = "" }) {
+function ProductItem({
+  product,
+  orderLink = "",
+  bundleGroups,
+  bundleGroupArticles,
+  globalConfig,
+}) {
   const { t } = useGlobalTranslation("translation");
+  const bundleGroupId = product?.bundle_details?.bundle_group_id;
+  const aspectRatio = getProductImgAspectRatio(globalConfig);
+  const isBundleItem =
+    product?.bundle_details?.bundle_group_id &&
+    bundleGroups &&
+    bundleGroups[product?.bundle_details?.bundle_group_id]?.length > 0;
   const markedPriceCheck = product?.prices?.price_marked;
   const effectivePriceCheck = product?.prices?.price_effective;
+  const customizationOptions = product?.meta?._custom_json?._display || [];
+
+  const [items, setItems] = React.useState([
+    { title: "Customization", content: customizationOptions, open: false },
+  ]);
+
+  const handleItemClick = (index) => {
+    setItems((prevItems) => {
+      const updatedItems = [...prevItems];
+      updatedItems[index] = {
+        ...updatedItems[index],
+        open: !updatedItems[index].open,
+      };
+      return updatedItems;
+    });
+  };
 
   const getMarkedPrice = (item) => numberWithCommas(item?.prices?.price_marked);
   const getEffectivePrice = (item) =>
     numberWithCommas(item?.prices?.price_effective);
 
-  function getItem(bag) {
-    let bagItem = { ...bag };
+  const { name, brand, size, itemQty, markedPrice, effectivePrice } =
+    useMemo(() => {
+      if (isBundleItem) {
+        return {
+          name: product?.bundle_details?.name,
+          brand: "",
+          size: "",
+          itemQty: product?.bundle_details?.bundle_count,
+          markedPrice: product?.bundle_details?.price_marked,
+          effectivePrice: product?.bundle_details?.price_effective,
+        };
+      }
+      return {
+        name: product?.item?.name,
+        brand: product?.item?.brand?.name,
+        size: product?.item?.size,
+        itemQty: product?.quantity,
+        markedPrice: product?.prices?.price_marked,
+        effectivePrice: product?.prices?.price_effective,
+      };
+    }, [product, isBundleItem]);
+
+  const getGiftItem = useMemo(() => {
+    let bagItem = { ...product };
     if (bagItem.applied_promos) {
       bagItem.promotions_applied = bagItem.applied_promos;
       delete bagItem.applied_promos;
     }
     return bagItem;
-  }
+  }, [product]);
 
   return (
     <FDKLink to={orderLink}>
       <div className={styles.shipmentProdItem}>
         <div className={styles.prodImg}>
-          <img src={product.item.image[0]} alt={product?.item?.name} />
+          {isBundleItem ? (
+            <BundleBagImage
+              item={product?.item}
+              bundleGroupId={bundleGroupId}
+              bundleGroupArticles={bundleGroupArticles}
+              aspectRatio={aspectRatio}
+            />
+          ) : (
+            <BagImage item={product?.item} aspectRatio={aspectRatio} />
+          )}
         </div>
         <div className={styles.prodItemData}>
           <div className={styles.productDetails}>
-            <div className={styles.brandName}>{product?.item?.brand?.name}</div>
-            <div className={styles.productName}>{product?.item?.name}</div>
+            {brand && <div className={styles.brandName}>{brand}</div>}
+            <div className={styles.productName}>{name}</div>
             <div className={styles.sizeInfo}>
               <div className={styles.sizeQuantity}>
-                <div className={styles.size}>
-                  {t("resource.common.size")}: &nbsp;
-                  {product?.item?.size}
-                </div>
+                {size && (
+                  <div className={styles.size}>
+                    {t("resource.common.size")}: &nbsp;
+                    {size}
+                  </div>
+                )}
                 <div className={styles.sizeQuantity}>
-                {t("resource.common.qty")}:&nbsp;
-                  {product?.quantity}
+                  {t("resource.common.qty")}:&nbsp;
+                  {itemQty}
                 </div>
               </div>
             </div>
             <div className={styles.paymentInfo}>
-              {effectivePriceCheck > 0 && (
+              {effectivePrice > 0 && (
                 <div className={styles.effectivePrice}>
-                  {`${product?.prices?.currency_symbol}${getEffectivePrice(
-                    product
-                  )}`}
+                  {`${product?.prices?.currency_symbol}${numberWithCommas(effectivePrice)}`}
                 </div>
               )}
-              {markedPriceCheck > 0 &&
-                effectivePriceCheck !== markedPriceCheck && (
-                  <div className={styles.markedPrice}>
-                    {`${product?.prices?.currency_symbol}${getMarkedPrice(product)}`}
-                  </div>
-                )}
+              {markedPrice > 0 && effectivePrice !== markedPrice && (
+                <div className={styles.markedPrice}>
+                  {`${product?.prices?.currency_symbol}${numberWithCommas(markedPrice)}`}
+                </div>
+              )}
             </div>
+            {customizationOptions.length > 0 && (
+              <div
+                className={styles.productCustomizationContainer}
+              >
+                <Accordion
+                  key={`${product.shipment_id}`}
+                  items={items}
+                  onItemClick={handleItemClick}
+                />
+              </div>
+            )}
 
             {/* Gift Wrap Display UI */}
             {product?.meta?.gift_card?.is_gift_applied && (
@@ -383,22 +460,24 @@ function ProductItem({ product, orderLink = "" }) {
                   disabled={product}
                   checked={product?.meta?.gift_card?.is_gift_applied}
                 />
-                <label htmlFor={product?.id}>{t("resource.order.gift_wrap_added")}</label>
+                <label htmlFor={product?.id}>
+                  {t("resource.order.gift_wrap_added")}
+                </label>
               </div>
             )}
             {/* Show Free Gifts  Desktop */}
-            {getItem(product)?.promotions_applied?.length > 0 && (
+            {getGiftItem?.promotions_applied?.length > 0 && (
               <div className={styles["desktop-free-gift"]}>
-                <CartGiftItem bagItem={getItem(product)}></CartGiftItem>
+                <CartGiftItem bagItem={getGiftItem}></CartGiftItem>
               </div>
             )}
           </div>
         </div>
       </div>
       {/* Show Free Gifts  Mobile */}
-      {getItem(product)?.promotions_applied?.length > 0 && (
+      {getGiftItem?.promotions_applied?.length > 0 && (
         <div className={styles["mobile-free-gift"]}>
-          <CartGiftItem bagItem={getItem(product)}></CartGiftItem>
+          <CartGiftItem bagItem={getGiftItem}></CartGiftItem>
         </div>
       )}
     </FDKLink>

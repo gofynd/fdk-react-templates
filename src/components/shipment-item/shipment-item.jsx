@@ -14,7 +14,7 @@
  *
  */
 
-import React from "react";
+import React, { useMemo } from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./shipment-item.less";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
@@ -23,8 +23,19 @@ import {
   priceFormatCurrencySymbol,
 } from "../../helper/utils";
 import { useGlobalTranslation } from "fdk-core/utils";
+import { BagImage, BundleBagImage } from "../../components/bag/bag";
+import { getProductImgAspectRatio } from "../../helper/utils";
 
-function ShipmentItem({ bag, initial, selectId, onChangeValue, type }) {
+function ShipmentItem({
+  bag,
+  bundleGroups,
+  bundleGroupArticles,
+  initial,
+  selectId,
+  onChangeValue,
+  type,
+  globalConfig,
+}) {
   const { t } = useGlobalTranslation("translation");
   const getPriceValue = (item) => {
     return numberWithCommas(item);
@@ -35,6 +46,29 @@ function ShipmentItem({ bag, initial, selectId, onChangeValue, type }) {
   const onChange = (id) => {
     onChangeValue(id);
   };
+
+  const isBundleItem =
+    bag?.bundle_details?.bundle_group_id &&
+    bundleGroups &&
+    bundleGroups[bag?.bundle_details?.bundle_group_id]?.length > 0;
+
+  const { name, size, quantity, price } = useMemo(() => {
+    if (isBundleItem) {
+      return {
+        name: bag?.bundle_details?.name,
+        size: bag?.bundle_details?.size,
+        quantity: bag?.bundle_details?.bundle_count,
+        price: bag?.bundle_details?.price_effective,
+      };
+    }
+    return {
+      name: bag?.item?.name,
+      size: bag?.item?.size,
+      quantity: bag?.quantity,
+      price: bag?.prices?.price_effective,
+    };
+  }, [bag]);
+
   return (
     <div className={`${styles.bagItem}`}>
       <div className={`${styles.label}`}>
@@ -64,46 +98,83 @@ function ShipmentItem({ bag, initial, selectId, onChangeValue, type }) {
               )}
             </div>
           )}
-        {type === "tracking" && (
-          <FDKLink className={`${styles.bagImg}`}>
-            <img src={bag?.item?.image[0]} alt={bag?.item.name} />
-          </FDKLink>
-        )}
-        {type !== "tracking" && (
-          <FDKLink
-            to={`/product/${bag?.item?.slug_key}`}
-            className={`${styles.bagImg}`}
-          >
-            <img src={bag?.item?.image[0]} alt={bag?.item?.name} />
-          </FDKLink>
-        )}
+        <ShipmentImage
+          bag={bag}
+          type={type}
+          isBundleItem={isBundleItem}
+          bundleGroupId={bag?.bundle_details?.bundle_group_id}
+          bundleGroups={bundleGroups}
+          bundleGroupArticles={bundleGroupArticles}
+          globalConfig={globalConfig}
+        />
         <div className={`${styles.bagInfo}`}>
-          <div className={`${styles.brand}`}>{bag?.item?.brand.name}</div>
-
+          <div className={`${styles.brand}`}>{name}</div>
           <div className={`${styles.bagDetails}`}>
             <div className={`${styles.chip} ${styles.regularxxs}`}>
-              <span className={`${styles.itemSize}`}>{bag?.item?.size}</span>
-              <span className={styles.itemSeparator}>{` | `}</span>
+              <span className={`${styles.itemSize}`}>{size}</span>
+              {size && quantity && (
+                <span className={styles.itemSeparator}>{` | `}</span>
+              )}
               <span className={`${styles.itemQty}`}>
-                {bag?.quantity} {bag?.quantity === 1 ? t("resource.common.single_piece") : t("resource.common.multiple_piece")}
+                {quantity}{" "}
+                {quantity === 1
+                  ? t("resource.common.single_piece")
+                  : t("resource.common.multiple_piece")}
               </span>
             </div>
-            {bag?.prices?.currency_symbol !== null &&
-              bag?.prices?.price_effective !== null && (
-                <div className={`${styles.effectivePrice}`}>
-                  <span className={`${styles.effectivePrice}`}>
-                    {getPriceCurrencyFormat(
-                      bag?.prices?.currency_symbol,
-                      getPriceValue(bag?.prices?.price_effective)
-                    )}
-                  </span>
-                </div>
-              )}
+            {bag?.prices?.currency_symbol !== null && price !== null && (
+              <div className={`${styles.effectivePrice}`}>
+                <span className={`${styles.effectivePrice}`}>
+                  {getPriceCurrencyFormat(
+                    bag?.prices?.currency_symbol,
+                    getPriceValue(price)
+                  )}
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </div>
     </div>
   );
 }
+
+const ShipmentImage = ({
+  bag,
+  type,
+  bundleGroupId,
+  isBundleItem,
+  bundleGroupArticles,
+  globalConfig,
+}) => {
+  const getItemImage = () => {
+    const aspectRatio = getProductImgAspectRatio(globalConfig);
+
+    if (isBundleItem) {
+      return (
+        <BundleBagImage
+          item={bag?.item}
+          bundleGroupId={bundleGroupId}
+          bundleGroupArticles={bundleGroupArticles}
+          aspectRatio={aspectRatio}
+        />
+      );
+    }
+    return <BagImage item={bag?.item} aspectRatio={aspectRatio} />;
+  };
+
+  if (type === "tracking") {
+    return getItemImage();
+  }
+
+  return (
+    <FDKLink
+      to={`/product/${isBundleItem ? bag?.bundle_details?.slug : bag?.item?.slug_key}`}
+      className={`${styles.bagImg}`}
+    >
+      {getItemImage()}
+    </FDKLink>
+  );
+};
 
 export default ShipmentItem;

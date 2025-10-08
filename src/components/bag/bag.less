@@ -1,0 +1,45 @@
+@import "../../styles/main.less";
+
+.bagImg {
+  min-width: 80px;
+  object-fit: cover;
+  border-radius: @ButtonRadius;
+  overflow: hidden;
+  img {
+    object-fit: cover;
+  }
+}
+.bundleImg {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  padding: 4px;
+  gap: 4px;
+  aspect-ratio: var(--aspectRatio);
+  border: 1px solid @DividerStokes;
+  border-radius: @ButtonRadius;
+
+  .bundleImgItem {
+    display: flex;
+    border-radius: calc(@ButtonRadius / 2);
+    overflow: hidden;
+    position: relative;
+
+    .itemImg {
+      display: flex;
+    }
+
+    .bundleCount {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFF;
+      background-color: #1F1F1FA3;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 140%;
+    }
+  }
+}
