@@ -10,8 +10,8 @@
  * @returns {JSX.Element} A React component that renders the shipment details of an order.
  */
 
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useMemo } from "react";
+// import { useParams } from "react-router-dom";
 import * as styles from "./order-shipment.less";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
 import { convertUTCDateToLocalDate, formatLocale } from "../../helper/utils";
@@ -22,6 +22,8 @@ import {
   useFPI,
   useGlobalTranslation,
 } from "fdk-core/utils";
+import { BundleBagImage, BagImage } from "../bag/bag";
+import { getProductImgAspectRatio } from "../../helper/utils";
 
 /**
  * Helper: Get all bags with customization (_custom_json._display)
@@ -67,7 +69,9 @@ const getCustomizationOptions = (orderInfo) => {
 
 const ShipmentDetails = ({
   item,
-  isOpen,
+  bundleGroups,
+  bundleGroupArticles,
+  aspectRatio,
   naivgateToShipment,
   isAdmin,
   t,
@@ -93,6 +97,11 @@ const ShipmentDetails = ({
       [shipmentId]: !prev[shipmentId],
     }));
   };
+  const bagItem = item?.bags?.[0];
+  const bundleGroupId = bagItem?.bundle_details?.bundle_group_id;
+  const isBundleItem =
+    bundleGroupId && bundleGroups && bundleGroups[bundleGroupId]?.length > 0;
+
   return (
     <>
       <div
@@ -101,11 +110,16 @@ const ShipmentDetails = ({
         onClick={() => naivgateToShipment(item)}
       >
         <div className={styles.shipmentLeft}>
-          <img
-            className={isOpen ? styles.filterArrowUp : styles.filterArrowdown}
-            src={item?.bags?.[0]?.item?.image?.[0]}
-            alt={item?.shipment_images?.[0]}
-          />
+          {isBundleItem ? (
+            <BundleBagImage
+              item={item?.bags?.[0]?.item}
+              bundleGroupId={bundleGroupId}
+              bundleGroupArticles={bundleGroupArticles}
+              aspectRatio={aspectRatio}
+            />
+          ) : (
+            <BagImage item={item?.bags?.[0]?.item} aspectRatio={aspectRatio} />
+          )}
           {item?.bags?.length > 1 && (
             <div id="total-item">
               +{item?.bags?.length - 1 + " "}
@@ -165,6 +179,8 @@ const ShipmentDetails = ({
 
 function OrderShipment({
   orderInfo,
+  getGroupedShipmentBags,
+  globalConfig,
   onBuyAgainClick = () => {},
   isBuyAgainEligible,
   availableFOCount,
@@ -175,15 +191,19 @@ function OrderShipment({
   const locale = language?.locale;
   const [isOpen, setIsOpen] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [selectedShipment, setSelectedShipment] = useState("");
+  // const [selectedShipment, setSelectedShipment] = useState("");
   const navigate = useNavigate();
-  const params = useParams();
+  // const params = useParams();
+  const aspectRatio = useMemo(
+    () => getProductImgAspectRatio(globalConfig),
+    [globalConfig]
+  );
 
-  useEffect(() => {
-    if (params?.orderId) {
-      setSelectedShipment(orderInfo?.shipments[0]?.shipment_id);
-    }
-  }, [params?.orderId, orderInfo?.shipments]);
+  // useEffect(() => {
+  //   if (params?.orderId) {
+  //     setSelectedShipment(orderInfo?.shipments[0]?.shipment_id);
+  //   }
+  // }, [params?.orderId, orderInfo?.shipments]);
 
   const getTime = (time) => {
     return convertUTCDateToLocalDate(
@@ -197,7 +217,7 @@ function OrderShipment({
   };
   const naivgateToShipment = (item) => {
     let link = "";
-    setSelectedShipment(item?.shipment_id);
+    // setSelectedShipment(item?.shipment_id);
     if (isBuyAgainEligible) {
       link = `/profile/orders/shipment/${item?.shipment_id}`;
     } else {
@@ -228,7 +248,9 @@ function OrderShipment({
           orderInfo?.shipments?.length !== 0 &&
           orderInfo?.shipments?.map((item) => {
             // Main: if bagsWithCustomization exist, render them individually. Else, render the shipment
-            const bagsWithCustomization = getBagsWithCustomization(item.bags);
+            const { bags, bundleGroups, bundleGroupArticles } =
+              getGroupedShipmentBags(item.bags);
+            const bagsWithCustomization = getBagsWithCustomization(bags);
 
             return (
               <React.Fragment key={item.shipment_id}>
@@ -240,7 +262,9 @@ function OrderShipment({
                         ...item,
                         bags: [el], // Only show this bag
                       }}
-                      isOpen={isOpen}
+                      bundleGroups={bundleGroups}
+                      bundleGroupArticles={bundleGroupArticles}
+                      aspectRatio={aspectRatio}
                       naivgateToShipment={naivgateToShipment}
                       isAdmin={isAdmin}
                       t={t}
@@ -252,8 +276,13 @@ function OrderShipment({
                 ) : (
                   <ShipmentDetails
                     key={item.shipment_id}
-                    item={item}
-                    isOpen={isOpen}
+                    item={{
+                      ...item,
+                      bags,
+                    }}
+                    bundleGroups={bundleGroups}
+                    bundleGroupArticles={bundleGroupArticles}
+                    aspectRatio={aspectRatio}
                     naivgateToShipment={naivgateToShipment}
                     isAdmin={isAdmin}
                     t={t}

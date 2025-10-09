@@ -37,7 +37,7 @@
  * Note: Color variants are now clickable and will change the product image using optimized state management.
  */
 
-import React, { useMemo, useState, useCallback } from "react";
+import React, { useMemo, useState, useCallback, useEffect } from "react";
 import { currencyFormat, formatLocale } from "../../helper/utils";
 import { useMobile } from "../../helper/hooks";
 import FyImage from "../core/fy-image/fy-image";
@@ -94,6 +94,16 @@ const ProductCard = ({
   const locale = i18nDetails?.language?.locale || "en";
   const countryCode = i18nDetails?.countryCode || "IN";
   const isMobile = useMobile();
+
+  const [isMobileView, setIsMobileView] = useState(false);
+  useEffect(() => {
+    const checkMobileView = () => {
+      setIsMobileView(window.innerWidth <= 1024);
+    };
+    checkMobileView();
+    window.addEventListener("resize", checkMobileView);
+    return () => window.removeEventListener("resize", checkMobileView);
+  }, []);
 
   const getListingPrice = (key) => {
     if (!product.price) return "";
@@ -326,7 +336,9 @@ const ProductCard = ({
         ) : product.teaser_tag && showBadge ? (
           <div className={styles.badge}>
             <span className={`${styles.text} ${styles.captionNormal}`}>
-              {product?.teaser_tag?.substring(0, 14)}
+              {isMobileView
+                ? `${product?.teaser_tag?.substring(0, 8)}...`
+                : product?.teaser_tag?.substring(0, 14)}
             </span>
           </div>
         ) : isSaleBadge && showBadge && product.discount && product.sellable ? (
