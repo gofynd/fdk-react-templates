@@ -9,14 +9,9 @@ export default function ChipImage({ product, type, imageWidth, globalConfig }) {
     ?.map((image) => image?.url)
     ?.slice(0, 4);
 
-  if (type === "virtual_bundle") {
+  if (type === "virtual_bundle" && productImages?.length > 1) {
     return (
-      <div
-        className={styles.bundleChipImages}
-        style={{
-          "--aspectRatio": `${aspectRatio}`,
-        }}
-      >
+      <div className={styles.bundleChipImages}>
         {productImages?.map((image, index) => (
           <FyImage
             key={index}
