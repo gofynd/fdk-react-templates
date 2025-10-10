@@ -36,13 +36,11 @@ const getBagsWithCustomization = (bags = []) => {
   );
 };
 
-function getProductsName(bags) {
-  let items = bags.map((it) => it.item).filter(Boolean);
-  if (items && items.length) {
-    const productNames = items.map((it) => it.name);
-    return [...new Set(productNames)];
+function getProductsName({ bag, isBundleItem }) {
+  if (isBundleItem) {
+    return bag?.bundle_details?.name;
   }
-  return [];
+  return bag?.item?.name;
 }
 
 function getTotalItems(items, t) {
@@ -102,6 +100,8 @@ const ShipmentDetails = ({
   const isBundleItem =
     bundleGroupId && bundleGroups && bundleGroups[bundleGroupId]?.length > 0;
 
+  const productName = getProductsName({ bag: item?.bags?.[0], isBundleItem });
+
   return (
     <>
       <div
@@ -131,11 +131,11 @@ const ShipmentDetails = ({
           <div className={styles.uktLinks}>
             {item?.bags?.length > 1 && customizationOptions.length < 1 ? (
               <div>
-                {getProductsName(item?.bags)?.[0]} +{item.bags.length - 1 + " "}
+                {productName} +{item.bags.length - 1 + " "}
                 {t("resource.facets.more")}
               </div>
             ) : (
-              <div>{getProductsName(item?.bags)?.[0]}</div>
+              <div>{productName}</div>
             )}
           </div>
           <div
