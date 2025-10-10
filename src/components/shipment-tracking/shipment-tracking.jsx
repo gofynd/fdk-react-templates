@@ -86,8 +86,20 @@ function ShipmentTracking({
 
   const update = (item) => {
     if (["CANCEL", "RETURN"].includes(item?.text)) {
-      if (bagLength === 1) {
-        const bagId = shipmentInfo?.bags?.[0]?.id;
+      const firstBag = shipmentInfo?.bags?.[0];
+      const isBundleItem = firstBag?.bundle_details?.bundle_group_id;
+      const isPartialReturnBundle = 
+        isBundleItem && 
+        firstBag?.bundle_details?.return_config?.allow_partial_return;
+      
+      // Direct navigate if: single bag OR bundle with allow_partial_return: false
+      if (bagLength === 1 || (isBundleItem && !isPartialReturnBundle)) {
+        // Find the base bag for bundles, otherwise use first bag
+        const selectedBag = isBundleItem 
+          ? shipmentInfo.bags.find((bag) => bag?.bundle_details?.is_base === true) || firstBag
+          : firstBag;
+        
+        const bagId = selectedBag?.id;
         const querParams = new URLSearchParams(location.search);
         if (bagId) {
           querParams.set("selectedBagId", bagId);
@@ -98,6 +110,7 @@ function ShipmentTracking({
             (querParams?.toString() ? `?${querParams.toString()}` : "")
         );
       } else {
+        // Multiple bags OR bundle with allow_partial_return: true - show selection UI
         changeinit({
           ...item,
           link: `/profile/orders/shipment/update/${shipmentInfo?.shipment_id}/${updateType()?.toLowerCase()}`,
