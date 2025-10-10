@@ -93,7 +93,7 @@ function ShipmentTracking({
         firstBag?.bundle_details?.return_config?.allow_partial_return;
       
       // Direct navigate if: single bag OR bundle with allow_partial_return: false
-      if (bagLength === 1 || (isBundleItem && !isPartialReturnBundle)) {
+      if (bagLength === 1 && (!isBundleItem || !isPartialReturnBundle)) {
         // Find the base bag for bundles, otherwise use first bag
         const selectedBag = isBundleItem 
           ? shipmentInfo.bags.find((bag) => bag?.bundle_details?.is_base === true) || firstBag
