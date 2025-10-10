@@ -143,40 +143,69 @@ function OrderStatus({
                     <div className={styles["mode"]}>
                       {t("resource.common.payment_mode")}
                     </div>
-                    {orderData?.shipments?.[0]?.payment_info?.length > 0 &&
-                      orderData?.shipments?.[0]?.payment_info?.map(
-                        (paymentInfo) => {
-                          return (
-                            <div
-                              key={paymentInfo?.display_name}
-                              className={styles["mode-data"]}
-                              style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}
-                            >
-                              <span style={{ display: "flex", alignItems: "center" }}>
-                                <img
-                                  src={
-                                    paymentInfo?.logo ||
-                                    "https://cdn.iconscout.com/icon/premium/png-512-thumb/debit-card-10-742447.png?f=webp&w=256"
-                                  }
-                                  alt={paymentInfo?.mode}
-                                />
-                                <span className={styles["mode-name"]} style={{ marginLeft: 12, marginTop: 6 }}>
-                                  {translateDynamicLabel(paymentInfo?.display_name, t) || t("resource.order.cod")}
-                                </span>
-                              </span>
-                              <span className={styles["mode-amount"]}>
-                                {paymentInfo?.amount !== undefined && paymentInfo?.amount !== null
-                                  ? priceFormatCurrencySymbol(
-                                      paymentInfo?.currency_symbol ||
-                                        orderData?.breakup_values?.[0]?.currency_symbol,
-                                      paymentInfo?.amount
-                                    )
-                                  : null}
-                              </span>
-                            </div>
-                          );
+                    {(() => {
+                      // Aggregate paymentInfos by mode (using a map)
+                      const paymentInfos = (orderData?.shipments || [])
+                        .flatMap(shipment => shipment?.payment_info || [])
+                        .filter(Boolean);
+
+                      // We'll group by unique "mode" (or fallback to display_name)
+                      const paymentModeMap = {};
+
+                      paymentInfos.forEach((paymentInfo) => {
+                        // Use a composite key in case display_name is duplicated but mode differs
+                        const modeKey = paymentInfo?.mode || paymentInfo?.display_name || "OTHER";
+                        if (!paymentModeMap[modeKey]) {
+                          paymentModeMap[modeKey] = {
+                            ...paymentInfo,
+                            amount: Number(paymentInfo?.amount) || 0,
+                          };
+                        } else {
+                          // Sum up the amount
+                          paymentModeMap[modeKey].amount += Number(paymentInfo?.amount) || 0;
                         }
-                      )}
+                      });
+
+                      const mergedPaymentInfos = Object.values(paymentModeMap);
+
+                      if (mergedPaymentInfos.length > 0) {
+                        return mergedPaymentInfos.map((paymentInfo, idx) => (
+                          <div
+                            key={`${paymentInfo?.display_name || paymentInfo?.mode}-${idx}`}
+                            className={styles["mode-data"]}
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between"
+                            }}
+                          >
+                            <span style={{ display: "flex", alignItems: "center" }}>
+                              <img
+                                src={
+                                  paymentInfo?.logo ||
+                                  "https://cdn.iconscout.com/icon/premium/png-512-thumb/debit-card-10-742447.png?f=webp&w=256"
+                                }
+                                alt={paymentInfo?.mode}
+                              />
+                              <span className={styles["mode-name"]} style={{ marginLeft: 12, marginTop: 6 }}>
+                                {translateDynamicLabel(paymentInfo?.display_name, t) || t("resource.order.cod")}
+                              </span>
+                            </span>
+                            <span className={styles["mode-amount"]}>
+                              {paymentInfo?.amount !== undefined && paymentInfo?.amount !== null
+                                ? priceFormatCurrencySymbol(
+                                    paymentInfo?.currency_symbol ||
+                                      orderData?.breakup_values?.[0]?.currency_symbol,
+                                    paymentInfo?.amount
+                                  )
+                                : null}
+                            </span>
+                          </div>
+                        ));
+                      }
+                      // If paymentInfos is empty, render nothing
+                      return null;
+                    })()}
                   </div>
                   <div className={styles["delivery-wrapper"]}>
                     <div className={styles["delivery-header"]}>
