@@ -9,7 +9,10 @@ export default function ChipImage({ product, type, imageWidth, globalConfig }) {
     ?.map((image) => image?.url)
     ?.slice(0, 4);
 
-  if (type === "virtual_bundle" && productImages?.length > 1) {
+  if (
+    (type === "virtual_bundle" || type === "physical_bundle") &&
+    productImages?.length > 1
+  ) {
     return (
       <div className={styles.bundleChipImages}>
         {productImages?.map((image, index) => (
