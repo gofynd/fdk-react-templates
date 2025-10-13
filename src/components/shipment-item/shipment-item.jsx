@@ -47,18 +47,37 @@ function ShipmentItem({
     onChangeValue(id);
   };
 
+  const bundleGroupId = bag?.bundle_details?.bundle_group_id;
   const isBundleItem =
-    bag?.bundle_details?.bundle_group_id &&
+    bundleGroupId &&
     bundleGroups &&
-    bundleGroups[bag?.bundle_details?.bundle_group_id]?.length > 0;
+    bundleGroups[bundleGroupId]?.length > 0;
 
   const { name, size, quantity, price } = useMemo(() => {
     if (isBundleItem) {
+      // For bundles, sum all individual bag prices from the bundleGroups
+      // This avoids the mutation issue where getGroupedShipmentBags modifies bundle_details
+      const bundleBags = bundleGroups[bundleGroupId] || [];
+      
+      // Sum the ORIGINAL individual bag prices (not the modified base bag price)
+      const totalEffectivePrice = bundleBags.reduce((sum, bundleBag) => {
+        // If base bag has been aggregated by getGroupedShipmentBags, use financial_breakup instead
+        const isAggregated = bundleBag?.bundle_details?.is_base && 
+                             bundleBag?.prices?.price_effective > (bundleBag?.financial_breakup?.[0]?.price_effective || bundleBag?.prices?.price_effective);
+        
+        if (isAggregated) {
+          // Use financial_breakup which contains the original individual bag price
+          return sum + (bundleBag?.financial_breakup?.[0]?.price_effective || 0);
+        }
+        
+        return sum + (bundleBag?.prices?.price_effective || 0);
+      }, 0);
+      
       return {
         name: bag?.bundle_details?.name,
         size: bag?.bundle_details?.size,
         quantity: bag?.bundle_details?.bundle_count,
-        price: bag?.bundle_details?.price_effective,
+        price: totalEffectivePrice,
       };
     }
     return {
@@ -67,7 +86,7 @@ function ShipmentItem({
       quantity: bag?.quantity,
       price: bag?.prices?.price_effective,
     };
-  }, [bag]);
+  }, [bag, bundleGroups, bundleGroupId, isBundleItem]);
 
   return (
     <div className={`${styles.bagItem}`}>

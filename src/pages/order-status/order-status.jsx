@@ -395,13 +395,41 @@ function ProductItem({
   const { name, brand, size, itemQty, markedPrice, effectivePrice } =
     useMemo(() => {
       if (isBundleItem) {
+        // For bundles, sum all individual bag prices from the bundleGroups
+        // This avoids the mutation issue where getGroupedShipmentBags modifies bundle_details
+        const bundleBags = bundleGroups[bundleGroupId] || [];
+        
+        // Sum the ORIGINAL individual bag prices (not the modified base bag prices)
+        const totalEffectivePrice = bundleBags.reduce((sum, bag) => {
+          // If base bag has been aggregated by getGroupedShipmentBags, use financial_breakup instead
+          const isAggregated = bag?.bundle_details?.is_base && 
+                               bag?.prices?.price_effective > (bag?.financial_breakup?.[0]?.price_effective || bag?.prices?.price_effective);
+          
+          if (isAggregated) {
+            return sum + (bag?.financial_breakup?.[0]?.price_effective || 0);
+          }
+          
+          return sum + (bag?.prices?.price_effective || 0);
+        }, 0);
+        
+        const totalMarkedPrice = bundleBags.reduce((sum, bag) => {
+          const isAggregated = bag?.bundle_details?.is_base && 
+                               bag?.prices?.price_marked > (bag?.financial_breakup?.[0]?.price_marked || bag?.prices?.price_marked);
+          
+          if (isAggregated) {
+            return sum + (bag?.financial_breakup?.[0]?.price_marked || 0);
+          }
+          
+          return sum + (bag?.prices?.price_marked || 0);
+        }, 0);
+        
         return {
           name: product?.bundle_details?.name,
           brand: "",
           size: "",
           itemQty: product?.bundle_details?.bundle_count,
-          markedPrice: product?.bundle_details?.price_marked,
-          effectivePrice: product?.bundle_details?.price_effective,
+          markedPrice: totalMarkedPrice,
+          effectivePrice: totalEffectivePrice,
         };
       }
       return {
@@ -412,7 +440,7 @@ function ProductItem({
         markedPrice: product?.prices?.price_marked,
         effectivePrice: product?.prices?.price_effective,
       };
-    }, [product, isBundleItem]);
+    }, [product, isBundleItem, bundleGroups, bundleGroupId]);
 
   const getGiftItem = useMemo(() => {
     let bagItem = { ...product };
