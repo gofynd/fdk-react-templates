@@ -13,17 +13,12 @@
       margin-bottom: 20px;
     }
   }
+
   .postfix {
     margin-left: 4px;
     font-size: 14px;
     color: @TextBody;
   }
-
-    .postfix {
-      margin-left: 4px;
-      font-size: 14px;
-      color: @TextBody;
-    }
 
   .inputContainer {
     display: flex;
@@ -58,27 +53,51 @@
   }
 
   .sliderWrapper {
-    min-height: 12px;
+    min-height: 16px;
+    padding: 0 8px;
   }
+
   .errorMessage {
     font-size: 10px;
     font-weight: 500;
     margin-top: 4px;
     color: @ErrorText;
   }
+
   .rangeSlider {
     height: 4px;
-    background: @ButtonPrimaryL3;
-    :global(.range-slider__thumb) {
-      width: 16px;
-      height: 16px;
+    position: relative;
+
+    :global(.rc-slider-handle) {
+      height: 16px !important;
+      width: 16px !important;
       border-radius: 50%;
-      background-color: #fff;
-      box-shadow: 0.5px 0.5px 2px 1px rgba(0, 0, 0, 0.32);
-      border: 1px solid @ButtonPrimary;
+      margin-top: -6px !important;
+      background-color: #fff !important;
+      box-shadow: 0.5px 0.5px 2px 1px rgba(0, 0, 0, 0.32) !important;
+      border: 1px solid @ButtonPrimary !important;
+      opacity: 1 !important;
+      cursor: pointer;
     }
-    :global(.range-slider__range) {
-      background: @ButtonPrimary;
+
+    :global(.rc-slider-handle:active),
+    :global(.rc-slider-handle-dragging) {
+      box-shadow: 0.5px 0.5px 2px 1px rgba(0, 0, 0, 0.32);
+      border-color: @ButtonPrimary !important;
+    }
+
+    :global(.rc-slider-rail) {
+      background-color: @ButtonPrimaryL3 !important;
+      height: 4px !important;
+    }
+
+    :global(.rc-slider-track) {
+      background: @ButtonPrimary !important;
+      height: 4px !important;
+    }
+
+    :global(.rc-slider-tracks) {
+      background: @ButtonPrimary !important;
     }
   }
 }

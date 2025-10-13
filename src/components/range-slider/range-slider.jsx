@@ -18,7 +18,8 @@
  */
 
 import React, { useState, useEffect, useCallback } from "react";
-import RangeSlider from "react-range-slider-input";
+import Slider from "rc-slider";
+import "rc-slider/assets/index.css";
 import * as styles from "./range-slider.less";
 import FyInput from "../core/fy-input/fy-input";
 import { debounce } from "../../helper/utils";
@@ -48,64 +49,84 @@ function CustomRangeSlider({
     setEndValue(selectedMax);
   }, [selectedMax]);
 
-  const setValue = () => {
-    onSliderUpdate({ minValue: startValue, maxValue: endValue });
+  const setValue = (values) => {
+    const [minValue, maxValue] = values;
+    onSliderUpdate({ minValue, maxValue });
   };
 
-  const onSliderInput = (event) => {
-    const [startValue, endValue] = event;
-    setStartValue(startValue);
-    setEndValue(endValue);
+  const onSliderInput = (values) => {
+    const [newStartValue, newEndValue] = values;
+    setStartValue(newStartValue);
+    setEndValue(newEndValue);
+    setRangeMessage(""); 
   };
 
   const debouncedSliderUpdate = useCallback(
     debounce(({ minValue, maxValue }) => {
       onSliderUpdate({ minValue, maxValue });
     }, 800),
-    []
+    [onSliderUpdate]
   );
 
   const onMinValueChange = (value) => {
-    setStartValue(value);
-    if (value >= min && value < endValue) {
+    const numValue = value === "" ? min : Number(value);
+    setStartValue(numValue);
+    
+    if (numValue >= min && numValue < endValue) {
       debouncedSliderUpdate({
-        minValue: value < min ? min : value,
+        minValue: numValue < min ? min : numValue,
         maxValue: endValue,
       });
-    }
-    if (value < min) {
+      setRangeMessage("");
+    } else if (numValue < min) {
       setRangeMessage(`${t("resource.product.min_value_should_be")} ${min}`);
-    } else if (value >= endValue) {
+    } else if (numValue >= endValue) {
       setRangeMessage(
         `${t("resource.product.min_value_cannot_exceed")} ${endValue}`
       );
-    } else setRangeMessage("");
+    }
   };
 
   const onMinBlurChange = (value) => {
-    if (value < min) setStartValue(min);
+    const numValue = value === "" ? min : Number(value);
+    if (numValue < min) {
+      setStartValue(min);
+      onSliderUpdate({ minValue: min, maxValue: endValue });
+    } else if (numValue >= endValue) {
+      setStartValue(endValue - 1);
+      onSliderUpdate({ minValue: endValue - 1, maxValue: endValue });
+    }
     setRangeMessage("");
   };
 
-  const onMaxValueChange = async (value) => {
-    setEndValue(value);
-    if (value <= max && value > startValue) {
+  const onMaxValueChange = (value) => {
+    const numValue = value === "" ? max : Number(value);
+    setEndValue(numValue);
+    
+    if (numValue <= max && numValue > startValue) {
       debouncedSliderUpdate({
         minValue: startValue,
-        maxValue: value > max ? max : value,
+        maxValue: numValue > max ? max : numValue,
       });
-    }
-    if (value > max) {
+      setRangeMessage("");
+    } else if (numValue > max) {
       setRangeMessage(`${t("resource.product.max_value_should_be")} ${max}`);
-    } else if (value <= startValue) {
+    } else if (numValue <= startValue) {
       setRangeMessage(
         `${t("resource.product.max_value_should_be_greater_than")} ${startValue}`
       );
-    } else setRangeMessage("");
+    }
   };
 
   const onMaxBlurChange = (value) => {
-    if (value > max) setEndValue(max);
+    const numValue = value === "" ? max : Number(value);
+    if (numValue > max) {
+      setEndValue(max);
+      onSliderUpdate({ minValue: startValue, maxValue: max });
+    } else if (numValue <= startValue) {
+      setEndValue(startValue + 1);
+      onSliderUpdate({ minValue: startValue, maxValue: startValue + 1 });
+    }
     setRangeMessage("");
   };
 
@@ -162,13 +183,15 @@ function CustomRangeSlider({
         </div>
       </div>
       <div className={styles.sliderWrapper}>
-        <RangeSlider
+        <Slider
+          range
           className={styles.rangeSlider}
+          allowCross={false}
           min={min}
           max={max}
           value={[startValue, endValue]}
-          onInput={onSliderInput}
-          onThumbDragEnd={setValue}
+          onChange={onSliderInput}
+          onChangeComplete={setValue}
         />
 
         {count && (
