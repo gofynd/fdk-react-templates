@@ -14,27 +14,19 @@
  *
  */
 
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import * as styles from "./shipments-update-item.less";
 import QuantityCtrl from "./quantity-ctrl/quantity-ctrl";
 import { numberWithCommas } from "../../helper/utils";
-import { useGlobalTranslation } from "fdk-core/utils";
-import { getProductImgAspectRatio } from "../../helper/utils";
-import { BagImage, BundleBagImage } from "../bag/bag";
 
 function ShipmentUpdateItem({
-  quantity = 1,
   selectedBagId,
   item,
-  bundleGroups,
-  bundleGroupArticles,
-  globalConfig,
   updatedQuantity = () => {},
 }) {
-  const { t } = useGlobalTranslation("translation");
   const [showQuantityError, setShowQuantityError] = useState(false);
   const [showQuantity, setshowQuantity] = useState(true);
-  const [currQuantity, setcurrQuantity] = useState(quantity);
+  const [currQuantity, setcurrQuantity] = useState(item.quantity);
 
   const priceFormatCurrencySymbol = (symbol, price) => {
     const hasAlphabeticCurrency = /^[A-Za-z]+$/.test(symbol);
@@ -59,10 +51,7 @@ function ShipmentUpdateItem({
   };
 
   const changeQuantity = (total) => {
-    const itemQuantity = isBundleItem
-      ? item?.bundle_details?.bundle_count
-      : item.quantity;
-    if (total > itemQuantity) {
+    if (total > item.quantity) {
       setShowQuantityError(true);
     } else if (total < 0) {
       setShowQuantityError(true);
@@ -73,74 +62,26 @@ function ShipmentUpdateItem({
     }
   };
 
-  const bundleGroupId = item?.bundle_details?.bundle_group_id;
-  const isBundleItem =
-    bundleGroupId &&
-    bundleGroups &&
-    bundleGroups[bundleGroupId]?.length > 0;
-
-  const { name, brand, size, itemQty, price } = useMemo(() => {
-    if (isBundleItem) {
-      // For bundles, sum all individual bag prices from the bundleGroups
-      // This avoids the mutation issue where getGroupedShipmentBags modifies bundle_details
-      const bundleBags = bundleGroups[bundleGroupId] || [];
-      
-      // Sum the ORIGINAL individual bag prices (not the modified base bag price)
-      const totalEffectivePrice = bundleBags.reduce((sum, bundleBag) => {
-        // If base bag has been aggregated by getGroupedShipmentBags, use financial_breakup instead
-        const isAggregated = bundleBag?.bundle_details?.is_base && 
-                             bundleBag?.prices?.price_effective > (bundleBag?.financial_breakup?.[0]?.price_effective || bundleBag?.prices?.price_effective);
-        
-        if (isAggregated) {
-          // Use financial_breakup which contains the original individual bag price
-          return sum + (bundleBag?.financial_breakup?.[0]?.price_effective || 0);
-        }
-        
-        return sum + (bundleBag?.prices?.price_effective || 0);
-      }, 0);
-      
-      return {
-        name: item?.bundle_details?.name,
-        brand: "",
-        size: item?.bundle_details?.size,
-        itemQty: item?.bundle_details?.bundle_count,
-        price: totalEffectivePrice,
-      };
-    }
-    return {
-      name: item?.item?.name,
-      brand: item?.item?.brand?.name,
-      size: item?.item?.size,
-      itemQty: item?.quantity,
-      price: item?.prices?.price_effective,
-    };
-  }, [item, bundleGroups, bundleGroupId, isBundleItem]);
-
   return (
     <>
       {item?.bag_ids?.includes(selectedBagId) && (
         <div className={`${styles.updateItem}`}>
-          <ShipmentImage
-            bag={item}
-            isBundleItem={isBundleItem}
-            bundleGroupId={item?.bundle_details?.bundle_group_id}
-            bundleGroups={bundleGroups}
-            bundleGroupArticles={bundleGroupArticles}
-            globalConfig={globalConfig}
-          />
+          <div className={`${styles.bagImg}`}>
+            {item?.item?.image[0] && (
+              <img src={item?.item?.image[0]} alt={item?.item?.name} />
+            )}
+          </div>
           <div className={`${styles.bagInfo}`}>
             <div>
               <div className={`${styles.brandName} ${styles.boldxxxs}`}>
-                {brand}
+                {item?.item?.brand?.name}
               </div>
-              <div className={`${styles.lightxxxs}`}>{name}</div>
+              <div className={`${styles.lightxxxs}`}>{item?.item?.name}</div>
             </div>
             <div className={`${styles.sizeQuantityContainer}`}>
-              {size && (
-                <div className={`${styles.sizeContainer} ${styles.regularxxs}`}>
-                  <span className={`${styles.boldxxs}`}>{size}</span>
-                </div>
-              )}
+              <div className={`${styles.sizeContainer} ${styles.regularxxs}`}>
+                <span className={`${styles.boldxxs}`}>{item.item.size}</span>
+              </div>
               {showQuantity && (
                 <div className={`${styles.qtyCtrl}`}>
                   <QuantityCtrl
@@ -152,30 +93,26 @@ function ShipmentUpdateItem({
                   {showQuantityError && (
                     <div className={`${styles.maxAvail} ${styles.regularxxxs}`}>
                       {currQuantity > 0 && (
-                        <span>
-                          {t("resource.common.max_quantity")}: {currQuantity}
-                        </span>
+                        <span>Max quantity: {currQuantity}</span>
                       )}
-                      {currQuantity === 0 && (
-                        <span>{t("resource.common.min_quantity")}: 0</span>
-                      )}
+                      {currQuantity === 0 && <span>Min quantity: 0</span>}
                     </div>
                   )}
                 </div>
               )}
             </div>
             <div
-              className={`${styles.priceContainer}`}
+              className={`${styles.priceContainer}  ${showQuantityError ? styles.marginTopOnErrPrice : ""}`}
             >
               <span className={`${styles.darklg}`}>
-                {getPriceFormat(getCurrencySymbol(item), getItemValue(price))}
+                {getPriceFormat(
+                  getCurrencySymbol(item),
+                  getItemValue(item?.prices.price_effective)
+                )}
               </span>
               <span className={`${styles.lightxxs}`}>
-                ({itemQty}{" "}
-                {itemQty === 1
-                  ? t("resource.common.single_piece")
-                  : t("resource.common.multiple_piece")}
-                )
+                {" "}
+                ({item?.quantity} {item?.quantity === 1 ? "Piece" : "Pieces"})
               </span>
             </div>
           </div>
@@ -184,30 +121,5 @@ function ShipmentUpdateItem({
     </>
   );
 }
-
-const ShipmentImage = ({
-  bag,
-  bundleGroupId,
-  isBundleItem,
-  bundleGroupArticles,
-  globalConfig,
-}) => {
-  const aspectRatio = getProductImgAspectRatio(globalConfig);
-
-  return (
-    <div className={styles.bagImg}>
-      {isBundleItem ? (
-        <BundleBagImage
-          item={bag?.item}
-          bundleGroupId={bundleGroupId}
-          bundleGroupArticles={bundleGroupArticles}
-          aspectRatio={aspectRatio}
-        />
-      ) : (
-        <BagImage item={bag?.item} aspectRatio={aspectRatio} />
-      )}
-    </div>
-  );
-};
 
 export default ShipmentUpdateItem;

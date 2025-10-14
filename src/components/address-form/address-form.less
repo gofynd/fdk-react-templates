@@ -55,13 +55,13 @@
     color: var(--buttonPrimary);
     transition: 0.1s ease-out;
     box-sizing: border-box;
-    margin-inline-end: 10px;
+    margin-right: 10px;
   }
 
   .formCheckboxLabel {
     font-size: 0.8rem;
     position: absolute;
-    inset-inline-start: 11px;
+    left: 11px;
     top: 0px;
     color: var(--textLabel);
     padding: 0 0.3rem;
@@ -75,7 +75,7 @@
   .formLabel {
     position: absolute;
     font-size: 0.8rem;
-    inset-inline-start: 0;
+    left: 0;
     top: 50%;
     transform: translateY(-50%);
     background-color: #fff;
@@ -114,9 +114,9 @@
     }
 
     .formItemDiv:nth-child(odd) {
-      margin-inline-end: 8px;
+      margin-right: 8px;
       @media @tablet {
-        margin-inline-end: 0;
+        margin-right: 0;
       }
     }
   }
@@ -146,7 +146,7 @@
       row-gap: 16px;
     }
     .typeIcon {
-      margin-inline-end: 4px;
+      margin-right: 4px;
     }
     .typeBtn {
       display: flex;
@@ -155,7 +155,7 @@
       padding: 8px;
       white-space: nowrap;
       border-radius: 6px;
-      margin-inline-end: 16px;
+      margin-right: 16px;
       border: 1px solid var(--dividerStokes);
       color: @TextHeading;
 
@@ -208,8 +208,8 @@
       }
 
       input[type="radio"] {
-        margin-inline-start: 0;
-        margin-inline-end: 10px;
+        margin-left: 0;
+        margin-right: 10px;
       }
 
       label {
@@ -281,7 +281,7 @@
 }
 
 .deliveryInfo {
-  margin-inline-start: 24px;
+  margin-left: 24px;
   font-weight: 600;
   font-size: 12px;
   margin-top: 24px;
@@ -326,14 +326,14 @@
   .dropdownIcon {
     margin-top: 10px;
     position: absolute;
-    inset-inline-end: 2px;
+    right: 2px;
     top: 0;
     width: 0;
     height: 0;
-    border-inline-start: 5px solid transparent;
-    border-inline-end: 5px solid transparent;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
     border-top: 5px solid #333;
-    margin-inline-start: 5px;
+    margin-left: 5px;
     transition: transform 0.2s ease;
   }
 
@@ -346,7 +346,7 @@
     width: 100%;
     position: absolute;
     top: 100%;
-    inset-inline-start: 0;
+    left: 0;
     margin-top: 5px;
     list-style: none;
     padding: 0;
