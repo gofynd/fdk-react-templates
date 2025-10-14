@@ -199,6 +199,48 @@ function OrderShipment({
     [globalConfig]
   );
 
+  // Safe wrapper for getGroupedShipmentBags with fallback for non-bundle items
+  const safeGetGroupedShipmentBags = (bags) => {
+    // If the function is provided, use it
+    if (getGroupedShipmentBags && typeof getGroupedShipmentBags === 'function') {
+      return getGroupedShipmentBags(bags);
+    }
+    
+    // Fallback: handle both bundle and non-bundle items
+    if (!bags || !Array.isArray(bags)) {
+      return { bags: [], bundleGroups: {}, bundleGroupArticles: {} };
+    }
+    
+    const bundleGroups = {};
+    const bundleGroupArticles = {};
+    
+    // Process each bag - works for both bundle and non-bundle items
+    bags.forEach((bag) => {
+      const bundleGroupId = bag?.bundle_details?.bundle_group_id;
+      if (bundleGroupId) {
+        // This is a bundle item
+        if (!bundleGroups[bundleGroupId]) {
+          bundleGroups[bundleGroupId] = [];
+        }
+        bundleGroups[bundleGroupId].push(bag);
+        
+        if (bag?.article) {
+          if (!bundleGroupArticles[bundleGroupId]) {
+            bundleGroupArticles[bundleGroupId] = [];
+          }
+          bundleGroupArticles[bundleGroupId].push(bag.article);
+        }
+      }
+      // For non-bundle items, they just stay in the bags array as-is
+    });
+    
+    // Return the same structure expected by the component
+    // - bags: original array (works for both bundle and non-bundle items)
+    // - bundleGroups: grouped bundles (empty object for non-bundle items)
+    // - bundleGroupArticles: bundle articles (empty object for non-bundle items)
+    return { bags, bundleGroups, bundleGroupArticles };
+  };
+
   // useEffect(() => {
   //   if (params?.orderId) {
   //     setSelectedShipment(orderInfo?.shipments[0]?.shipment_id);
@@ -249,7 +291,7 @@ function OrderShipment({
           orderInfo?.shipments?.map((item) => {
             // Main: if bagsWithCustomization exist, render them individually. Else, render the shipment
             const { bags, bundleGroups, bundleGroupArticles } =
-              getGroupedShipmentBags(item.bags);
+              safeGetGroupedShipmentBags(item.bags);
             const bagsWithCustomization = getBagsWithCustomization(bags);
 
             return (
