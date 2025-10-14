@@ -12,18 +12,9 @@
 import React, { useMemo } from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./chip-review-item.less";
-import { currencyFormat, formatLocale, numberWithCommas } from "../../helper/utils";
-import {
-  useGlobalStore,
-  useFPI,
-  useGlobalTranslation
-} from "fdk-core/utils";
+import { currencyFormat, numberWithCommas } from "../../helper/utils";
 
 export default function ChipReviewItem({ item, articles }) {
-  const { t } = useGlobalTranslation("translation");
-  const fpi = useFPI();
-  const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
-  const locale = language?.locale;
   const getProductPath = useMemo(() => `/product/${item.product.slug}`, [item]);
 
   const getProductImage = useMemo(() => {
@@ -49,8 +40,7 @@ export default function ChipReviewItem({ item, articles }) {
     );
     return currencyFormat(
       numberWithCommas(total),
-      articles?.[0]?.price?.converted?.currency_symbol || "₹",
-      formatLocale(locale, countryCode, true)
+      articles?.[0]?.price?.converted?.currency_symbol || "₹"
     );
   }, [articles]);
 
@@ -73,7 +63,7 @@ export default function ChipReviewItem({ item, articles }) {
           <div className={styles.bagBrand}>{item.product.brand.name}</div>
           <div className={styles.bagName}>{item.product.name}</div>
           <div className={styles.soldBy}>
-            {t("resource.common.sold_by")}: {item.article.store.name + ","}
+            Sold by: {item.article.store.name + ","}
             {item.article.seller.name}
           </div>
 
@@ -84,10 +74,10 @@ export default function ChipReviewItem({ item, articles }) {
           {/* Extension Slot : above_shipment_item_price */}
 
           <div className={styles.bagName}>
-            <span className={styles.itemTotal}> {`${t("resource.common.total")}: ${getTotal}`}</span>
+            <span className={styles.itemTotal}> {`Total: ${getTotal}`}</span>
             &nbsp;
             <span className={styles.quantityLabel}>
-              {`( ${articles.length} ${t("resource.common.size")}, ${getPieces} ${getPieces > 1 ? t("resource.common.multiple_piece") : t("resource.common.single_piece")} )`}
+              {`( ${articles.length} Size, ${getPieces} ${getPieces > 1 ? "Pieces" : "Piece"} )`}
             </span>
           </div>
 
@@ -102,10 +92,6 @@ export default function ChipReviewItem({ item, articles }) {
 }
 
 const ChipMeta = ({ item }) => {
-  const { t } = useGlobalTranslation("translation");
-  const fpi = useFPI();
-  const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
-  const locale = language?.locale;
   return (
     <div className={styles.bagItem}>
       <div className={styles.chip}>
@@ -118,38 +104,34 @@ const ChipMeta = ({ item }) => {
             <span className={styles.effectivePrice}>
               {item?.is_set && item?.price_per_unit?.converted
                 ? `${currencyFormat(
-                  numberWithCommas(
-                    item?.price_per_unit?.converted?.effective
-                  ),
-                  item?.price_per_unit?.converted?.currency_symbol || "₹",
-                  formatLocale(locale, countryCode, true)
-                )}/${t("resource.common.pcs")}`
+                    numberWithCommas(
+                      item?.price_per_unit?.converted?.effective
+                    ),
+                    item?.price_per_unit?.converted?.currency_symbol || "₹"
+                  )}/Pcs`
                 : item?.price?.converted
                   ? currencyFormat(
-                    numberWithCommas(item?.price?.converted?.effective),
-                    item?.price?.converted?.currency_symbol || "₹",
-                    formatLocale(locale, countryCode, true)
-                  )
+                      numberWithCommas(item?.price?.converted?.effective),
+                      item?.price?.converted?.currency_symbol || "₹"
+                    )
                   : ""}
             </span>
             {item?.price?.converted?.effective !==
               item?.price?.converted?.marked && (
-                <span className={styles.markedPrice}>
-                  {item.is_set && item?.price_per_unit?.converted
-                    ? `${currencyFormat(
+              <span className={styles.markedPrice}>
+                {item.is_set && item?.price_per_unit?.converted
+                  ? `${currencyFormat(
                       numberWithCommas(item?.price_per_unit?.converted?.marked),
-                      item?.price_per_unit?.converted?.currency_symbol || "₹",
-                      formatLocale(locale, countryCode, true)
-                    )}/${t("resource.common.pcs")}`
-                    : item?.price?.converted
-                      ? currencyFormat(
+                      item?.price_per_unit?.converted?.currency_symbol || "₹"
+                    )}/Pcs`
+                  : item?.price?.converted
+                    ? currencyFormat(
                         numberWithCommas(item?.price?.converted?.marked),
-                        item?.price?.converted?.currency_symbol || "₹",
-                        formatLocale(locale, countryCode, true)
+                        item?.price?.converted?.currency_symbol || "₹"
                       )
-                      : ""}
-                </span>
-              )}
+                    : ""}
+              </span>
+            )}
           </div>
           <div className={styles.discountCntr}>
             <span className={styles.discount}>{item.article.discount}</span>
@@ -159,7 +141,7 @@ const ChipMeta = ({ item }) => {
         <div className={styles.rightItems}>
           <div className={styles.quantity}>
             <span>
-              {`${item?.quantity} ${item.quantity > 1 ? t("resource.common.multiple_piece") : t("resource.common.single_piece")}`}
+              {`${item?.quantity} ${item.quantity > 1 ? "Pieces" : "Piece"}`}
             </span>
           </div>
         </div>

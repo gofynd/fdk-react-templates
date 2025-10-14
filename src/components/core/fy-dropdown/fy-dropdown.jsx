@@ -29,7 +29,6 @@ import React, {
 } from "react";
 import * as styles from "./fy-dropdown.less";
 import SvgWrapper from "../svgWrapper/SvgWrapper";
-import { isRunningOnClient } from "../../../helper/utils";
 
 const FyDropdown = ({
   options = [],
@@ -96,7 +95,6 @@ const FyDropdown = ({
   }, []);
 
   const adjustDropdownMenuPosition = useCallback(() => {
-    if (!isRunningOnClient()) return;
     const dropdownButtonElement = dropdownButton?.current;
     const dropdownListElement = dropdownList?.current;
 
@@ -130,7 +128,6 @@ const FyDropdown = ({
   );
 
   useEffect(() => {
-    if (!isRunningOnClient()) return;
     const clearEventListeners = () => {
       window.removeEventListener("click", handleClickOutside);
       window.removeEventListener("scroll", adjustDropdownMenuPosition);
