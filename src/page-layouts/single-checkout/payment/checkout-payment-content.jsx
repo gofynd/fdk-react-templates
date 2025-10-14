@@ -716,7 +716,6 @@ function CheckoutPaymentContent({
 
   const selectMop = async (tab, mop, subMop) => {
     if (!mop) return;
-
     setTab(tab);
     setMop(mop);
     setSubMop(subMop);
@@ -730,7 +729,7 @@ function CheckoutPaymentContent({
           addressId: address_id,
           paymentMode: mop,
           aggregatorName: mopData?.aggregator_name,
-          iin: cardNumber.replace(/[^0-9]/g, "").slice(0, 6),
+          iin: cardNumber?.replace(/[^0-9]/g, "")?.slice(0, 6),
         };
       } else {
         payload = {
@@ -757,9 +756,10 @@ function CheckoutPaymentContent({
         merchantCode: subMopData?.merchant_code,
       };
     }
-    setMopPayload(payload);
+    if (!enableLinkPaymentOption) {
+      setMopPayload(payload);
+    }
     let isValid = true;
-
     if (isCouponApplied) {
       const { code, title, display_message_en, valid } =
         !enableLinkPaymentOption && (await checkCouponValidity(payload));
