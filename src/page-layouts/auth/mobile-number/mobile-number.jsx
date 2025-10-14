@@ -3,7 +3,6 @@ import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 import * as styles from "./mobile-number.less";
 import { PhoneNumberUtil } from "google-libphonenumber";
-import { useGlobalTranslation } from "fdk-core/utils";
 
 function MobileNumber({
   name = "",
@@ -11,14 +10,13 @@ function MobileNumber({
   countryCode = "91",
   disable = false,
   isShowLabel = true,
-  isRequired,
+  isRequired = "required",
   allowDropdown = true,
   isFocused = false,
   placeholder = "",
   label = "",
   error,
   onChange,
-  handleKeyDown = () => {},
   inputClassName,
   containerClassName,
   labelClassName,
@@ -31,7 +29,6 @@ function MobileNumber({
   countryIso,
   ...rest
 }) {
-  const { t } = useGlobalTranslation("translation");
   const inputId = useId();
   const phoneInputRef = useRef(null);
 
@@ -79,9 +76,9 @@ function MobileNumber({
           className={`${styles.inputTitle} ${labelClassName || ""}`}
           htmlFor={inputId}
         >
-          {label || t("resource.common.mobile")}
+          {label || "Mobile "}
           {isRequired === "optional" ? (
-            ` (${t("resource.common.optional_lower")})`
+            " (optional)"
           ) : (
             <span className={styles.required}> * </span>
           )}
@@ -117,7 +114,6 @@ function MobileNumber({
           buttonStyle: {
             padding: "0 8px",
           },
-          buttonClassName: `${styles.countryButton}`,
           dropdownStyleProps: {
             style: {
               zIndex: 999,
@@ -129,7 +125,6 @@ function MobileNumber({
         inputClassName={`${styles.mobileNumberInput} ${inputClassName || ""}`}
         inputProps={{
           id: inputId,
-          onKeyDown: handleKeyDown,
           autoComplete: "tel",
           ...inputProps,
         }}

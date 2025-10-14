@@ -14,20 +14,6 @@
     border: 1px solid @DividerStokes;
   }
 
-  .shipmentTitle {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    align-items: center;
-
-    .foName {
-      color: @TextLabel;
-      font-size: 14px;
-      font-weight: 500;
-      line-height: 140%;
-    }
-  }
-
   .boldsm {
     font-weight: 700;
     font-size: 16px;
@@ -65,7 +51,7 @@
 
     .info {
       position: absolute;
-      inset-inline-end: 20px;
+      right: 20px;
       text-align: center;
       color: @White;
       padding: 10px;
@@ -84,7 +70,7 @@
     opacity: 0.5;
 
     .trackInfo {
-      margin-inline-start: 20px;
+      margin-left: 20px;
       .boldsm {
         font-weight: 700;
         font-size: 14px;
@@ -109,7 +95,7 @@
       width: 100%;
     }
     .dropdownArrow {
-      margin-inline-start: auto;
+      margin-left: auto;
     }
   }
   .title {
@@ -161,11 +147,11 @@
       font-size: 12px;
       font-weight: 500;
       line-height: 140%;
-      border-inline-end: 1px solid @DividerStokes;
+      border-right: 1px solid @DividerStokes;
       color: @ButtonLink;
 
       &:last-child {
-        border-inline-end: none;
+        border-right: none;
       }
 
       &:hover {
