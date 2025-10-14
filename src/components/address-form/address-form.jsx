@@ -13,13 +13,6 @@
  * @param {function} onAddAddress - Callback function to handle adding a new address.
  * @param {function} onUpdateAddress - Callback function to handle updating an existing address.
  * @param {function} onGetLocality - Callback function to fetch locality information based on the address.
- * @param {boolean} isGuestUser - Indicates if the user is a guest user.
- * @param {object} user - User object containing profile information for auto-filling fields.
- * @param {string} user.firstName - User's first name.
- * @param {string} user.lastName - User's last name.
- * @param {string} user.email - User's email address.
- * @param {object} user.phone - User's phone information.
- * @param {string} user.phone.mobile - User's mobile number.
  * @param {component} customFooter - Custom React component for rendering the footer of the form, typically a submit button.
  *
  * Default Props:
@@ -50,19 +43,16 @@
  *
  */
 
-import React, { useEffect, useRef, useState, useMemo } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as styles from "./address-form.less";
 import GoogleMapAddress from "../google-map/google-map";
 import FormInputSelector from "./form-input-selector";
 import FyDropdown from "../core/fy-dropdown/fy-dropdown";
-import { useGlobalTranslation } from "fdk-core/utils";
 import HomeIcon from "../../assets/images/home-type.svg";
 import OfficeIcon from "../../assets/images/office-type.svg";
 import FriendsFamilyIcon from "../../assets/images/friends-family.svg";
 import OtherIcon from "../../assets/images/other-type.svg";
-import { isRunningOnClient } from "../../helper/utils";
-import { useAddressAutofill } from "../../helper/hooks";
 
 const defaultFormSchema = [
   {
@@ -81,7 +71,7 @@ const defaultFormSchema = [
           pattern: {
             value: /^[A-Za-z0-9,./\s-]+$/,
             message:
-            "House No can only contain letters, numbers, comma, period, hyphen, and slash",
+              "House No can only contain letters, numbers, comma, period, hyphen, and slash",
           },
           maxLength: {
             value: 80,
@@ -101,7 +91,7 @@ const defaultFormSchema = [
           pattern: {
             value: /^[A-Za-z0-9,./\s-]+$/,
             message:
-              "address can only contain letters, numbers, comma, period, hyphen, and slash"
+              "address can only contain letters, numbers, comma, period, hyphen, and slash",
           },
           maxLength: {
             value: 80,
@@ -212,33 +202,15 @@ const defaultFormSchema = [
       {
         key: "phone",
         display: "Mobile Number",
-        type: "mobile",
+        type: "text",
         required: true,
         fullWidth: false,
         validation: {
           required: "Mobile number is required",
-          validate: (value) => {
-            if (!value) return "Mobile number is required";
-            
-            // Always expect an object from MobileNumber component
-            if (typeof value === 'object') {
-              // Trust the component's validation if available
-              if (value.isValidNumber === true) return true;
-              
-              // If no validation flag, validate the mobile number
-              if (value.mobile) {
-                const mobileNumber = value.mobile.toString().replace(/[\s\-+]/g, '');
-                if (mobileNumber.length !== 10) return "Mobile number must be 10 digits";
-                return /^[6-9]\d{9}$/.test(mobileNumber) || "Invalid mobile number format";
-              }
-              return "Invalid mobile number";
-            }
-            
-            // Convert any string input to proper format
-            const mobileNumber = value.toString().replace(/[\s\-+]/g, '');
-            if (mobileNumber.length !== 10) return "Mobile number must be 10 digits";
-            return /^[6-9]\d{9}$/.test(mobileNumber) || "Invalid mobile number format";
-          }
+          pattern: {
+            value: /^[6-9]\d{9}$/,
+            message: "Invalid mobile number",
+          },
         },
       },
       {
@@ -263,22 +235,22 @@ const defaultFormSchema = [
 
 const addressTypes = [
   {
-    label: "resource.common.breadcrumb.home",
+    label: "Home",
     value: "Home",
     icon: <HomeIcon className={styles.typeIcon} />,
   },
   {
-    label: "resource.common.work",
+    label: "Work",
     value: "Work",
     icon: <OfficeIcon className={styles.typeIcon} />,
   },
   {
-    label: "resource.common.friends_&_family",
+    label: "Friends & Family",
     value: "Friends & Family",
     icon: <FriendsFamilyIcon className={styles.typeIcon} />,
   },
   {
-    label: "resource.common.other",
+    label: "Other",
     value: "Other",
     icon: <OtherIcon className={styles.typeIcon} />,
   },
@@ -297,24 +269,23 @@ const AddressForm = ({
   onUpdateAddress = () => {},
   onGetLocality = () => {},
   isGuestUser = false,
-  user = null,
-  customFooter,
+  customFooter = (
+    <button
+      className={`${styles.commonBtn} ${styles.deliverBtn}`}
+      type="submit"
+    >
+      {isNewAddress ? "Add Address" : "Update Address"}
+    </button>
+  ),
   setI18nDetails,
   handleCountrySearch,
   getFilteredCountries,
   selectedCountry,
   countryDetails,
 }) => {
-  const { t } = useGlobalTranslation("translation");
   const isOtherAddressType = !["Home", "Work", "Friends & Family"].includes(
     addressItem?.address_type
   );
-    // Use custom hook for optimized autofill data
-    const { autofillData: userAutofillData } = useAddressAutofill(
-      user,
-      isGuestUser
-    );
-
   const {
     control,
     register,
@@ -337,9 +308,7 @@ const AddressForm = ({
       otherAddressType:
         addressItem && isOtherAddressType ? addressItem?.address_type : "",
       geo_location: { latitude: "", longitude: "" },
-      country: selectedCountry || t("resource.localization.india"),
-      // Auto-fill user data using memoized utility function
-      ...userAutofillData,
+      country: selectedCountry || "India",
       // area_code: addressItem?.area_code || defaultPincode || "",
     },
   });
@@ -365,22 +334,8 @@ const AddressForm = ({
     } else {
       setValue("is_default_address", true);
       setValue("address_type", "Home");
-      // Auto-fill user data when creating new address using memoized data
-      if (userAutofillData.name) {
-        setValue("name", userAutofillData.name);
-      }
-      if (userAutofillData.phone && userAutofillData.phone.mobile) {
-        setValue("phone", {
-          mobile: userAutofillData.phone.mobile,
-          countryCode: userAutofillData.phone.countryCode || "91",
-          isValidNumber: userAutofillData.phone.isValidNumber
-        });
-      }
-      if (userAutofillData.email) {
-        setValue("email", userAutofillData.email);
-      }
     }
-  }, [addressItem, reset, userAutofillData]);
+  }, [addressItem, reset]);
 
   useEffect(() => {
     setShowOtherText(address_type === "Other");
@@ -393,7 +348,6 @@ const AddressForm = ({
   }, [sector]);
 
   useEffect(() => {
-    if (!isRunningOnClient()) return;
     if (formContainerRef?.current) {
       let levelChecked = 0;
       const maxLevel = 20;
@@ -445,10 +399,7 @@ const AddressForm = ({
     setTimeout(() => {
       formSchema?.forEach((group) =>
         group?.fields?.forEach(({ key }) => {
-          // Don't clear user auto-filled fields when country changes
-          if (key !== "name" && key !== "phone" && key !== "email") {
-            setValue(key, "");
-          }
+          setValue(key, "");
         })
       );
     }, 0);
@@ -489,8 +440,8 @@ const AddressForm = ({
               optionValue="display_name"
               optionLabel="display_name"
               showDropdownIcon
-              label={t("resource.localization.country")}
-              placeholder={t("resource.localization.select_country")}
+              label="Country"
+              placeholder="Select country"
               containerClassName={styles.customClass}
             />
           </div>
@@ -513,9 +464,7 @@ const AddressForm = ({
           </div>
         ))}
         <div className={styles.addressTypeContainer}>
-          <label className={styles.addressTypeHeader}>
-            {t("resource.common.save_as")}{" "}
-          </label>
+          <label className={styles.addressTypeHeader}>SAVE AS </label>
           <div className={styles.typeWrap}>
             {addressTypes?.map((type) => (
               <button
@@ -525,7 +474,7 @@ const AddressForm = ({
                 className={`${styles.typeBtn} ${watch("address_type") === type.value ? styles.selected : ""}`}
               >
                 {type.icon}
-                <span>{t(type.label)}</span>
+                <span>{type.label}</span>
               </button>
             ))}
           </div>
@@ -534,39 +483,37 @@ const AddressForm = ({
             {...register("address_type", { required: true })}
           />
           {errors.address_type && (
-            <span className={`${styles.formError}`}>{t("resource.common.field_required")}</span>
+            <span className={`${styles.formError}`}>Field is required</span>
           )}
-        </div >
+        </div>
         {showOtherText && (
           <div className={styles.formItemDiv}>
             <label
               className={styles.formLabel}
               style={{ backgroundColor: currBgColor }}
             >
-              {t("resource.localization.other_address_type")} <span className={`${styles.formReq}`}>*</span>
-            </label >
+              Other Address Type <span className={`${styles.formReq}`}>*</span>
+            </label>
             <input
               {...register("otherAddressType", {
                 validate: (value) => {
                   if (!value.trim()) {
-                    return `${t("resource.common.address.address_type")} ${t("resource.common.address.is_required")}`;
+                    return "Address Type is required";
                   }
                   if (value.length < 1 || value.length > 30) {
-                    return t("resource.common.validation_length", { min: 1 || 0, max: 30 });
+                    return "Length must be between 1 and 30";
                   }
                   return true;
                 },
               })}
               className={`${styles.formInputBox} ${styles.otherInput}`}
             />
-            {
-              errors.otherAddressType && (
-                <div className={`${styles.formError}`}>
-                  {errors.otherAddressType.message}
-                </div>
-              )
-            }
-          </div >
+            {errors.otherAddressType && (
+              <div className={`${styles.formError}`}>
+                {errors.otherAddressType.message}
+              </div>
+            )}
+          </div>
         )}
         {!isGuestUser && (
           <div className={styles.defaultAddressContainer}>
@@ -577,20 +524,11 @@ const AddressForm = ({
               {...register("is_default_address")}
             />
             <label className={styles.label} htmlFor="is_default_address">
-             {t("resource.common.address.make_this_my_default_address")}
+              Make this my default address
             </label>
           </div>
         )}
-        <div>
-          {customFooter ? 
-            customFooter : 
-            <button
-              className={`${styles.commonBtn} ${styles.deliverBtn}`}
-              type="submit"
-            >
-              {isNewAddress ? t("resource.common.address.add_address") : t("resource.common.address.update_address")}
-          </button>}
-      </div>
+        <div>{customFooter}</div>
       </form>
     </div>
   );
