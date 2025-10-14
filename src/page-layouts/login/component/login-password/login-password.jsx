@@ -1,10 +1,6 @@
 import React, { useState, useId, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
-import {
-  checkIfNumber,
-  translateDynamicLabel,
-  validatePasswordField,
-} from "../../../../helper/utils";
+import { checkIfNumber, translateDynamicLabel, validatePasswordField } from "../../../../helper/utils";
 import * as styles from "./login-password.less";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import MobileNumber from "../../../auth/mobile-number/mobile-number";
@@ -14,8 +10,8 @@ function loginPassword({
   loginButtonText,
   error = null,
   isForgotPassword = true,
-  onForgotPasswordClick = () => {},
-  onLoginFormSubmit = () => {},
+  onForgotPasswordClick = () => { },
+  onLoginFormSubmit = () => { },
 }) {
   const { t } = useGlobalTranslation("translation");
   const usernameInputId = useId();
@@ -40,12 +36,10 @@ function loginPassword({
     register,
     setValue,
     control,
-    getValues,
     watch,
     setError,
     clearErrors,
     reset,
-    setFocus,
     formState: { errors, isValid },
   } = useForm({
     defaultValues: {
@@ -92,22 +86,6 @@ function loginPassword({
     onLoginFormSubmit(data);
   };
 
-  useEffect(() => {
-    if (!showInputNumber) {
-      setFocus("username");
-    }
-  }, [showInputNumber]);
-
-  const handleKeyDown = (e) => {
-    if (e.key.length !== 1) return;
-    if (/[a-zA-Z!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?`~ ]/.test(e.key)) {
-      const { mobile } = getValues("phone") || {};
-      e.preventDefault();
-      setShowInputNumber(false);
-      setValue("username", mobile + e.key);
-    }
-  };
-
   return (
     <form
       className={styles.loginInputWrapper}
@@ -143,8 +121,7 @@ function loginPassword({
                     return true;
                   }
                   return (
-                    value.isValidNumber ||
-                    t("resource.common.enter_valid_phone_number")
+                    value.isValidNumber || t("resource.common.enter_valid_phone_number")
                   );
                 },
               }}
@@ -155,7 +132,6 @@ function loginPassword({
                   mobile={field.value.mobile}
                   countryCode={field.value.countryCode}
                   error={error}
-                  handleKeyDown={handleKeyDown}
                   onChange={(value) => {
                     field.onChange(value);
                   }}
@@ -189,11 +165,7 @@ function loginPassword({
               <button
                 className={styles.passwordToggle}
                 onClick={togglePasswordDisplay}
-                aria-label={
-                  !isPasswordShow
-                    ? t("resource.auth.login.show_password")
-                    : t("resource.auth.login.hide_password")
-                }
+                aria-label={!isPasswordShow ? t("resource.auth.login.show_password") : t("resource.auth.login.hide_password")}
               >
                 <SvgWrapper
                   svgSrc={!isPasswordShow ? "show-password" : "hide-password"}
@@ -221,8 +193,7 @@ function loginPassword({
       </div>
 
       <button className={styles.loginButton} type="submit">
-        {translateDynamicLabel(loginButtonText, t) ||
-          t("resource.auth.login.login_caps")}
+        {translateDynamicLabel(loginButtonText, t) || t("resource.auth.login.login_caps")}
       </button>
     </form>
   );
