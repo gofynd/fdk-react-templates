@@ -716,7 +716,6 @@ function CheckoutPaymentContent({
 
   const selectMop = async (tab, mop, subMop) => {
     if (!mop) return;
-
     setTab(tab);
     setMop(mop);
     setSubMop(subMop);
@@ -730,7 +729,7 @@ function CheckoutPaymentContent({
           addressId: address_id,
           paymentMode: mop,
           aggregatorName: mopData?.aggregator_name,
-          iin: cardNumber.replace(/[^0-9]/g, "").slice(0, 6),
+          iin: cardNumber?.replace(/[^0-9]/g, "")?.slice(0, 6),
         };
       } else {
         payload = {
@@ -757,9 +756,10 @@ function CheckoutPaymentContent({
         merchantCode: subMopData?.merchant_code,
       };
     }
-    setMopPayload(payload);
+    if (!enableLinkPaymentOption) {
+      setMopPayload(payload);
+    }
     let isValid = true;
-
     if (isCouponApplied) {
       const { code, title, display_message_en, valid } =
         !enableLinkPaymentOption && (await checkCouponValidity(payload));
@@ -3247,53 +3247,54 @@ function CheckoutPaymentContent({
           </div>
         </Modal>
       )}
-      {(!isCouponValid || showCouponValidityModal) && (
-        <Modal
-          customClassName={styles.couponValidityModal}
-          isOpen={showCouponValidityModal || !isCouponValid}
-          title={couponValidity.title || inValidCouponData?.title}
-          notCloseOnclickOutside={true}
-          closeDialog={() => {
-            if (mop === "CARD" && subMop === "newCARD") {
-              hideNewCard();
-            }
-            setShowCouponValidityModal(false);
-            setIsCouponValid(true);
-            unsetSelectedSubMop();
-          }}
-        >
-          <div className={styles.couponValidity}>
-            <p className={styles.message}>
-              {couponValidity.message || inValidCouponData?.message}
-            </p>
-            <div className={styles.select}>
-              <div
-                className={`${styles.commonBtn} ${styles.yesBtn}`}
-                onClick={() => {
-                  removeCoupon();
-                  setShowCouponValidityModal(false);
-                  setIsCouponValid(true);
-                }}
-              >
-                {t("resource.common.yes")}
-              </div>
-              <div
-                className={`${styles.commonBtn} ${styles.noBtn}`}
-                onClick={() => {
-                  if (mop === "CARD" && subMop === "newCARD") {
-                    hideNewCard();
-                  }
-                  setShowCouponValidityModal(false);
-                  setIsCouponValid(true);
-                  unsetSelectedSubMop();
-                }}
-              >
-                {t("resource.common.no")}
+      {!enableLinkPaymentOption &&
+        (!isCouponValid || showCouponValidityModal) && (
+          <Modal
+            customClassName={styles.couponValidityModal}
+            isOpen={showCouponValidityModal || !isCouponValid}
+            title={couponValidity.title || inValidCouponData?.title}
+            notCloseOnclickOutside={true}
+            closeDialog={() => {
+              if (mop === "CARD" && subMop === "newCARD") {
+                hideNewCard();
+              }
+              setShowCouponValidityModal(false);
+              setIsCouponValid(true);
+              unsetSelectedSubMop();
+            }}
+          >
+            <div className={styles.couponValidity}>
+              <p className={styles.message}>
+                {couponValidity.message || inValidCouponData?.message}
+              </p>
+              <div className={styles.select}>
+                <div
+                  className={`${styles.commonBtn} ${styles.yesBtn}`}
+                  onClick={() => {
+                    removeCoupon();
+                    setShowCouponValidityModal(false);
+                    setIsCouponValid(true);
+                  }}
+                >
+                  {t("resource.common.yes")}
+                </div>
+                <div
+                  className={`${styles.commonBtn} ${styles.noBtn}`}
+                  onClick={() => {
+                    if (mop === "CARD" && subMop === "newCARD") {
+                      hideNewCard();
+                    }
+                    setShowCouponValidityModal(false);
+                    setIsCouponValid(true);
+                    unsetSelectedSubMop();
+                  }}
+                >
+                  {t("resource.common.no")}
+                </div>
               </div>
             </div>
-          </div>
-        </Modal>
-      )}
+          </Modal>
+        )}
       {showUpiRedirectionModal && (
         <Modal isOpen={showUpiRedirectionModal} hideHeader={true}>
           <div className={styles.upiRedirectionModal}>

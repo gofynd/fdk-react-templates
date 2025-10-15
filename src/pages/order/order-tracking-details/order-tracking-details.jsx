@@ -6,7 +6,7 @@ import OrderShipment from "../../../components/order-shipment/order-shipment";
 import ShipmentItem from "../../../components/shipment-item/shipment-item";
 import ShipmentTracking from "../../../components/shipment-tracking/shipment-tracking";
 import ShipmentBreakup from "../../../components/shipment-breakup/shipment-breakup";
-import { useGlobalTranslation, useNavigate, useFPI } from "fdk-core/utils";
+import { useGlobalTranslation, useNavigate } from "fdk-core/utils";
 import FyButton from "../../../components/core/fy-button/fy-button";
 import FyInput from "../../../components/core/fy-input/fy-input";
 import Loader from "../../../components/loader/loader";
@@ -24,7 +24,6 @@ function OrderTrackingDetails({
   availableFOCount,
 }) {
   const { t } = useGlobalTranslation("translation");
-  const fpi = useFPI();
   const params = useParams();
   const [orderId, setOrderId] = useState(params.orderId);
   const [showError, setShowError] = useState(false);
