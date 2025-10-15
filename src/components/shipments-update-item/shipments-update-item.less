@@ -1,16 +1,24 @@
 @import "../../styles//main.less";
-@SizeQuantityHeight: 32px;
 
 .updateItem {
   display: flex;
-  gap: 16px;
 
   @media @tablet {
     padding: 0 16px;
   }
 
   .bagImg {
-    flex: 0 0 80px;
+    margin: 0px 20px 20px 0;
+    @media @mobile {
+      margin: 0px 16px 16px 0;
+    }
+    img {
+      width: 80px;
+      height: 120px;
+      max-width: 100px;
+      max-height: 120px;
+      cursor: pointer;
+    }
   }
   .bagInfo {
     display: flex;
@@ -41,15 +49,15 @@
     }
     .sizeQuantityContainer {
       display: flex;
-      gap: 5px;
       width: 100%;
       // justify-content: space-between;
       background: @PageBackground;
+      align-items: center;
       padding: 5px 0;
+      height: 50px;
       box-sizing: border-box;
       // margin-top: 20px;
       .sizeContainer {
-        height: @SizeQuantityHeight;
         background: white;
         padding: 8px;
         border: 1px solid @DividerStokes;
@@ -80,9 +88,9 @@
       font-weight: 600;
       color: @TextHeading;
       font-size: 14px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
+      &.marginTopOnErrPrice {
+        margin-top: 5px;
+      }
     }
     .darkLg {
       font-weight: 500;
@@ -100,13 +108,14 @@
     }
   }
   .qtyCtrl {
+    margin-left: 5px;
     position: relative;
     // @media @mobile {
-    //   margin-inline-start: 16px;
+    //   margin-left: 16px;
     // }
     .maxAvail {
+      text-align: center;
       color: @ErrorText;
-      margin-block-start: 4px;
     }
     .regularxxxs {
       font-weight: 400;
@@ -124,5 +133,9 @@
   }
 }
 .modifyQtyController {
-  height: @SizeQuantityHeight;
+  height: 32px;
+  align-items: center;
+  &.marginTopOnErr {
+    margin-top: 14px;
+  }
 }

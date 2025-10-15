@@ -1,19 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
-import { currencyFormat, formatLocale, numberWithCommas, translateDynamicLabel } from "../../../../helper/utils";
+import { currencyFormat, numberWithCommas } from "../../../../helper/utils";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./coupon.less";
 import Modal from "../../../../components/core/modal/modal";
-import {
-  useGlobalStore,
-  useFPI,
-  useGlobalTranslation
-} from "fdk-core/utils";
-import ForcedLtr from "../../../../components/forced-ltr/forced-ltr";
 
 function Coupon({
-  title,
-  subtitle,
+  title = "COUPONS",
+  subtitle = "View all offers",
   couponId = "",
   couponCode = "",
   couponValue = 0,
@@ -31,19 +25,12 @@ function Coupon({
   onApplyCouponClick = () => {},
   onRemoveCouponClick = () => {},
   handleRemoveQr = null,
-  currentStepIdx,
-  setShowPayment = () => {},
-  getTotalValue = () => {},
 }) {
-  const { t } = useGlobalTranslation("translation");
-  const fpi = useFPI();
-  const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
-  const locale = language?.locale;
   const couponTitleText = useMemo(() => {
     if (hasCancel) {
-      return `${couponCode} ${t("resource.common.applied_caps")}`;
+      return `${couponCode} APPLIED`;
     }
-    return t("resource.cart.apply_coupons");
+    return "Apply Coupons";
   }, [hasCancel, couponCode]);
 
   const handleRemoveCoupon = (e) => {
@@ -87,41 +74,29 @@ function Coupon({
   return (
     <>
       <div className={styles.couponBoxContainer}>
-        <div className={styles.couponBoxTitle}>
-          {title || t("resource.cart.coupons_title")}
-        </div>
+        <div className={styles.couponBoxTitle}>{title}</div>
         <div className={styles.couponApplyBox} onClick={onCouponBoxClick}>
           <SvgWrapper className={styles.couponIcon} svgSrc="coupon-icon" />
           <div className={styles.couponApplyTitle}>
             <div className={styles.applyTxt}>{couponTitleText}</div>
             {couponValue > 0 ? (
               <div className={styles.couponAppliedSubtitles}>
-                <span>{t("resource.cart.you_have_saved")} </span>
+                <span>You've saved </span>
                 <span>
-                  <ForcedLtr text={currencyFormat(
+                  {currencyFormat(
                     numberWithCommas(couponValue),
-                    currencySymbol,
-                    formatLocale(locale, countryCode, true)
-                  )} />
+                    currencySymbol
+                  )}
                 </span>
               </div>
             ) : (
-              <div className={styles.couponMetaDesc}>
-                {subtitle || t("resource.cart.view_all_offers")}
-              </div>
+              <div className={styles.couponMetaDesc}>{subtitle}</div>
             )}
           </div>
           <button
             className={hasCancel ? styles.removeIcon : styles.arrowIcon}
-            aria-label={
-              hasCancel
-                ? t("resource.cart.remove_coupon")
-                : t("resource.cart.open_coupon_drawer")
-            }
+            aria-label={hasCancel ? "Remove coupon" : "Open coupon drawer"}
             onClick={(e) => {
-              if (currentStepIdx === 1 && getTotalValue() === 0) {
-                setShowPayment(false);
-              }
               hasCancel ? handleRemoveCoupon(e) : onCouponBoxClick(e);
             }}
           >
@@ -139,7 +114,7 @@ function Coupon({
         }}
         modalType="right-modal"
         headerClassName={styles.modalHeader}
-        title={t("resource.cart.apply_coupon")}
+        title="Apply Coupon"
         titleClassName={styles.modalTitle}
       >
         <div className={styles.modalContent}>
@@ -148,7 +123,7 @@ function Coupon({
               <div className={styles.cartErrorContainer}>
                 <SvgWrapper svgSrc="error-info-icon" />
                 <div className={styles.colorErrorNormal}>
-                  {translateDynamicLabel(errors?.root?.message, t)}
+                  {errors?.root?.message}
                 </div>
               </div>
             )}
@@ -158,7 +133,7 @@ function Coupon({
             >
               <input
                 type="text"
-                placeholder={t("resource.cart.enter_coupon_code")}
+                placeholder="Enter Coupon Code"
                 {...register("couponInput")}
               />
               <button
@@ -166,13 +141,13 @@ function Coupon({
                 className={styles.checkBtn}
                 type="submit"
               >
-                {t("resource.facets.apply_caps")}
+                APPLY
               </button>
             </form>
             {availableCouponList?.length > 0 ? (
               <div>
                 <div className={styles.couponListTitle}>
-                  {t("resource.cart.select_applicable_coupons")}
+                  Select from Applicable Coupons
                 </div>
                 <div className={styles.couponList}>
                   {availableCouponList?.map((coupon) => (
@@ -209,7 +184,6 @@ function CouponItem({
   is_applicable: isApplicable,
   applyCoupon,
 }) {
-  const { t } = useGlobalTranslation("translation");
   return (
     <div
       className={`${styles.couponItem} ${
@@ -229,7 +203,7 @@ function CouponItem({
             applyCoupon(couponCode);
           }}
         >
-          {t("resource.facets.apply_caps")}
+          APPLY
         </button>
       )}
     </div>
@@ -243,10 +217,6 @@ function CouponSuccessModal({
   couponSuccessGif = "",
   closeDialog = () => {},
 }) {
-  const { t } = useGlobalTranslation("translation");
-  const fpi = useFPI();
-  const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
-  const locale = language?.locale;
   return (
     <Modal
       hideHeader={true}
@@ -259,7 +229,7 @@ function CouponSuccessModal({
         <img
           className={styles.couponSuccessGif}
           src={couponSuccessGif}
-          alt={t("resource.cart.coupon_success")}
+          alt="coupon-success"
         />
         <div className={styles.couponSuccessIcon}>
           <span>
@@ -270,21 +240,17 @@ function CouponSuccessModal({
           <div className={styles.modalBody}>
             <div>
               <div className={styles.couponHeading}>
-                '{coupon?.code}' {t("resource.common.applied")}
+                '{coupon?.code}' Applied
               </div>
               <div className={styles.couponValue}>
-                {currencyFormat(
-                  numberWithCommas(coupon.value),
-                  currencySymbol,
-                  formatLocale(locale, countryCode, true)
-                )}
+                {currencyFormat(numberWithCommas(coupon.value), currencySymbol)}
               </div>
               <div className={styles.couponValueSubheading}>
-                {t("resource.cart.savings_with_this_coupon")}
+                savings with this coupon
               </div>
             </div>
             <button className={styles.bodyFooterBtn} onClick={closeDialog}>
-              {t("resource.cart.wohooo")}!!
+              WOHOOO!!
             </button>
           </div>
         )}
@@ -294,18 +260,15 @@ function CouponSuccessModal({
 }
 
 function NoCouponsAvailable() {
-  const { t } = useGlobalTranslation("translation");
   return (
     <div className={styles.noCouponsAvailable}>
       <div className={styles.iconContainer}>
         <SvgWrapper svgSrc="NoCoupons" />
       </div>
       <div className={styles.textContainer}>
-        <h3 className={styles.fontHeader}>
-          {t("resource.cart.no_coupons_available")}
-        </h3>
+        <h3 className={styles.fontHeader}>No coupons available</h3>
         <p className={styles.fontBody}>
-          {t("resource.cart.coupon_code_prompt")}
+          If you have a coupon code try typing it in the coupon code box above
         </p>
       </div>
     </div>
