@@ -455,16 +455,11 @@ function ProductItem({
     <FDKLink to={orderLink}>
       <div className={styles.shipmentProdItem}>
         <div className={styles.prodImg}>
-          {isBundleItem ? (
-            <BundleBagImage
-              item={product?.item}
-              bundleGroupId={bundleGroupId}
-              bundleGroupArticles={bundleGroupArticles}
-              aspectRatio={aspectRatio}
-            />
-          ) : (
-            <BagImage item={product?.item} aspectRatio={aspectRatio} />
-          )}
+          <BagImage
+            bag={product}
+            isBundle={isBundleItem}
+            aspectRatio={aspectRatio}
+          />
         </div>
         <div className={styles.prodItemData}>
           <div className={styles.productDetails}>
@@ -497,9 +492,7 @@ function ProductItem({
               )}
             </div>
             {customizationOptions.length > 0 && (
-              <div
-                className={styles.productCustomizationContainer}
-              >
+              <div className={styles.productCustomizationContainer}>
                 <Accordion
                   key={`${product.shipment_id}`}
                   items={items}

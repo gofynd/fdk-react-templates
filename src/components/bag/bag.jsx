@@ -2,13 +2,17 @@ import React, { useMemo } from "react";
 import * as styles from "./bag.less";
 import FyImage from "../core/fy-image/fy-image";
 
-export function BagImage({ item, aspectRatio }) {
+export function BagImage({ bag, isBundle, width = 80, aspectRatio }) {
+  const src = isBundle
+    ? bag?.bundle_details?.images?.[0]
+    : bag?.item?.image?.[0];
+  const name = isBundle ? bag?.bundle_details?.name : bag?.item?.name;
   return (
     <FyImage
       customClass={styles.bagImg}
-      src={item?.image?.[0]}
-      alt={item?.name}
-      sources={[{ width: 80 }]}
+      src={src}
+      alt={name}
+      sources={[{ width }]}
       aspectRatio={aspectRatio}
       isImageFill
     />

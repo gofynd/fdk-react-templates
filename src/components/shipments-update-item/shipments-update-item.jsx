@@ -196,16 +196,7 @@ const ShipmentImage = ({
 
   return (
     <div className={styles.bagImg}>
-      {isBundleItem ? (
-        <BundleBagImage
-          item={bag?.item}
-          bundleGroupId={bundleGroupId}
-          bundleGroupArticles={bundleGroupArticles}
-          aspectRatio={aspectRatio}
-        />
-      ) : (
-        <BagImage item={bag?.item} aspectRatio={aspectRatio} />
-      )}
+      <BagImage bag={bag} isBundle={isBundleItem} aspectRatio={aspectRatio} />
     </div>
   );
 };

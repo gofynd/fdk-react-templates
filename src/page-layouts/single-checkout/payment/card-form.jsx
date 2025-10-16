@@ -172,7 +172,6 @@ function CardForm({
             onBlur={validateCardNumber}
             value={cardNumber}
             dir="ltr"
-            value={cardNumber}
           />
           {(cardNumber || cardNumberError) && (
             <span

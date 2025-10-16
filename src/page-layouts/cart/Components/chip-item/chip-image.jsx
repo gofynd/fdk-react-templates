@@ -9,26 +9,26 @@ export default function ChipImage({ product, type, imageWidth, globalConfig }) {
     ?.map((image) => image?.url)
     ?.slice(0, 4);
 
-  if (
-    (type === "virtual_bundle" || type === "physical_bundle") &&
-    productImages?.length > 1
-  ) {
-    return (
-      <div className={styles.bundleChipImages}>
-        {productImages?.map((image, index) => (
-          <FyImage
-            key={index}
-            customClass={styles.itemImg}
-            src={image}
-            alt={`${product?.name} - ${index + 1}`}
-            sources={[{ width: imageWidth }]}
-            aspectRatio={aspectRatio}
-            isImageFill
-          />
-        ))}
-      </div>
-    );
-  }
+  // if (
+  //   (type === "virtual_bundle" || type === "physical_bundle") &&
+  //   productImages?.length > 1
+  // ) {
+  //   return (
+  //     <div className={styles.bundleChipImages}>
+  //       {productImages?.map((image, index) => (
+  //         <FyImage
+  //           key={index}
+  //           customClass={styles.itemImg}
+  //           src={image}
+  //           alt={`${product?.name} - ${index + 1}`}
+  //           sources={[{ width: imageWidth }]}
+  //           aspectRatio={aspectRatio}
+  //           isImageFill
+  //         />
+  //       ))}
+  //     </div>
+  //   );
+  // }
 
   return (
     <FyImage

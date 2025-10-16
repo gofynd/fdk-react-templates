@@ -88,7 +88,12 @@ function FilterList({
     return groupedFilterValues;
   };
 
-  const showViewMore = isCollapsedView && filter.values.length > MAX_ITEM_COUNT;
+ const allFilteredItems = getFilteredItems(searchText);
+  const showViewMore =
+    isCollapsedView &&
+    filter.values.length > MAX_ITEM_COUNT &&
+    allFilteredItems.length > 0;
+
   const showSearch = ["category", "brand", "department"].includes(
     filter?.key?.name
   );

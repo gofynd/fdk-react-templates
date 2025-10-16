@@ -192,6 +192,52 @@ export default function ChipItem({
     return [sellerName, storeName].filter(Boolean).join(", ") || "";
   }, [singleItemDetails]);
 
+  const isMaxQuantityAddedInCart = useMemo(() => {
+    let productUid = singleItemDetails.product?.uid;
+    let articleSize = singleItemDetails.article?.size;
+
+    const filteredItems =
+      Object.values(cartItems)?.filter(
+        (item) =>
+          item?.product?.uid === productUid &&
+          item?.article?.size === articleSize
+      ) || [];
+
+    if (!filteredItems.length) {
+      return false;
+    }
+
+    let totalQuantity = 0;
+    let maxQuantity = 0;
+
+    if (isSellerBuyBoxListing) {
+      const sellerUid = singleItemDetails?.article?.seller?.uid;
+      totalQuantity = filteredItems
+        .filter((item) => item?.article?.seller?.uid === sellerUid)
+        .reduce((sum, item) => sum + item.quantity, 0);
+      maxQuantity = singleItemDetails?.max_quantity?.item_seller || 0;
+    } else if (isStoreBuyboxListing) {
+      const storeUid = singleItemDetails?.article?.store?.uid;
+      totalQuantity = filteredItems
+        .filter((item) => item?.article?.store?.uid === storeUid)
+        .reduce((sum, item) => sum + item.quantity, 0);
+      maxQuantity = singleItemDetails?.max_quantity?.item_store || 0;
+    } else {
+      totalQuantity = filteredItems.reduce(
+        (sum, item) => sum + item.quantity,
+        0
+      );
+      maxQuantity = singleItemDetails?.max_quantity?.item || 0;
+    }
+
+    return totalQuantity >= maxQuantity;
+  }, [
+    singleItemDetails,
+    cartItems,
+    isSellerBuyBoxListing,
+    isStoreBuyboxListing,
+  ]);
+
   useEffect(() => {
     if (sellerStoreName) {
       setFOSellerStoreName(sellerStoreName);
@@ -422,6 +468,7 @@ export default function ChipItem({
                     }
                     maxCartQuantity={maxCartQuantity}
                     minCartQuantity={minCartQuantity}
+                    isIncrDisabled={isMaxQuantityAddedInCart}
                   />
                 )}
                 {isOutOfStock && (

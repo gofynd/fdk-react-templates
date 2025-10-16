@@ -166,20 +166,11 @@ const ShipmentImage = ({
   bundleGroupArticles,
   globalConfig,
 }) => {
+  const aspectRatio = getProductImgAspectRatio(globalConfig);
   const getItemImage = () => {
-    const aspectRatio = getProductImgAspectRatio(globalConfig);
-
-    if (isBundleItem) {
-      return (
-        <BundleBagImage
-          item={bag?.item}
-          bundleGroupId={bundleGroupId}
-          bundleGroupArticles={bundleGroupArticles}
-          aspectRatio={aspectRatio}
-        />
-      );
-    }
-    return <BagImage item={bag?.item} aspectRatio={aspectRatio} />;
+    return (
+      <BagImage bag={bag} isBundle={isBundleItem} aspectRatio={aspectRatio} />
+    );
   };
 
   if (type === "tracking") {

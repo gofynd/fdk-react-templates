@@ -110,16 +110,11 @@ const ShipmentDetails = ({
         onClick={() => naivgateToShipment(item)}
       >
         <div className={styles.shipmentLeft}>
-          {isBundleItem ? (
-            <BundleBagImage
-              item={item?.bags?.[0]?.item}
-              bundleGroupId={bundleGroupId}
-              bundleGroupArticles={bundleGroupArticles}
-              aspectRatio={aspectRatio}
-            />
-          ) : (
-            <BagImage item={item?.bags?.[0]?.item} aspectRatio={aspectRatio} />
-          )}
+          <BagImage
+            bag={item?.bags?.[0]}
+            isBundle={isBundleItem}
+            aspectRatio={aspectRatio}
+          />
           {item?.bags?.length > 1 && (
             <div id="total-item">
               +{item?.bags?.length - 1 + " "}
