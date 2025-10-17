@@ -23,32 +23,6 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
-
-    // Firefox-specific alt text fix - Enhanced approach
-    &.firefoxAltFix {
-      @-moz-document url-prefix() {
-        // Higher specificity selectors instead of !important
-        .imageWrapper .fyImg.firefoxAltFix[alt=""] {
-          font-size: 0;
-          text-indent: -9999px;
-          color: transparent;
-          line-height: 0;
-          letter-spacing: -1000px;
-          -webkit-text-fill-color: transparent;
-          text-shadow: none;
-        }
-        .imageWrapper .fyImg.firefoxAltFix[alt=""]::before,
-        .imageWrapper .fyImg.firefoxAltFix[alt=""]::after {
-          display: none;
-          content: none;
-        }
-
-        // Smooth image appearance
-        .imageWrapper .fyImg.firefoxAltFix {
-          transition: opacity 0.2s ease-in-out;
-        }
-      }
-    }
   }
   &.fill {
     .fyImg {

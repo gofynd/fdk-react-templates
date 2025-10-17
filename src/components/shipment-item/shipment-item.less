@@ -14,7 +14,16 @@
   }
 
   .bagImg {
-    flex: 0 0 80px;
+    display: flex;
+
+    img {
+      width: 80px;
+      object-fit: cover;
+      cursor: pointer;
+      @media @mobile {
+        height: 100px;
+      }
+    }
   }
 
   .label {
@@ -88,7 +97,7 @@
 
     .margin {
       color: @ErrorText;
-      margin-inline-start: 10px;
+      margin-left: 10px;
     }
 
     .total {
@@ -97,11 +106,11 @@
 
       .amt {
         color: @Mako;
-        margin-inline-end: 10px;
+        margin-right: 10px;
       }
 
       .delivery-at {
-        margin-inline-start: 5px;
+        margin-left: 5px;
       }
     }
 

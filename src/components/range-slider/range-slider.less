@@ -3,21 +3,12 @@
 .CustomRangeSlider {
   .price-Container--title {
     font-size: small;
-    margin-top: 0;
-    margin-inline-end: 0px;
-    margin-bottom: 12px;
-    margin-inline-start: 0px;
+    margin: 0px 0px 12px 0px;
     display: none;
     @media @mobile {
       display: block;
       margin-bottom: 20px;
     }
-  }
-
-  .postfix {
-    margin-left: 4px;
-    font-size: 14px;
-    color: @TextBody;
   }
 
   .inputContainer {
@@ -40,7 +31,7 @@
       font-size: 12px;
       line-height: 14px;
       color: @TextSecondary;
-      margin-inline-end: 8px;
+      margin-right: 8px;
     }
 
     .fieldItem {
@@ -53,50 +44,27 @@
   }
 
   .sliderWrapper {
-    min-height: 16px;
-    padding: 0 8px;
+    min-height: 12px;
   }
-
   .errorMessage {
     font-size: 10px;
     font-weight: 500;
     margin-top: 4px;
     color: @ErrorText;
   }
-
   .rangeSlider {
     height: 4px;
-    position: relative;
-
-    :global(.rc-slider-handle) {
-      height: 16px !important;
-      width: 16px !important;
+    background: @ButtonPrimaryL3;
+    :global(.range-slider__thumb) {
+      width: 16px;
+      height: 16px;
       border-radius: 50%;
-      margin-top: -6px !important;
-      background-color: #fff !important;
-      border: 1px solid @ButtonPrimary !important;
-      opacity: 1 !important;
-      cursor: pointer;
+      background-color: #fff;
+      box-shadow: 0.5px 0.5px 2px 1px rgba(0, 0, 0, 0.32);
+      border: 1px solid @ButtonPrimary;
     }
-
-    :global(.rc-slider-handle:active),
-    :global(.rc-slider-handle-dragging) {
-      box-shadow: none;
-      outline: none;
-    }
-
-    :global(.rc-slider-rail) {
-      background-color: @ButtonPrimaryL3 !important;
-      height: 4px !important;
-    }
-
-    :global(.rc-slider-track) {
-      background: @ButtonPrimary !important;
-      height: 4px !important;
-    }
-
-    :global(.rc-slider-tracks) {
-      background: @ButtonPrimary !important;
+    :global(.range-slider__range) {
+      background: @ButtonPrimary;
     }
   }
 }

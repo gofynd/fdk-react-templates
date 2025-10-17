@@ -2,61 +2,7 @@
 
 .orderTrackingDetails {
   padding: 16px 0;
-  margin: 0 auto;
-  .linkMainBox {
-    @media @desktop {
-      width: 381px;
-    }
-    margin: auto;
-    .paymentSuccessIconBox {
-      display: flex;
-      height: 274px;
-      padding: 16px;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 8px;
-      .successText {
-        color: @TextHeading;
-        text-align: center;
-        font-size: 16px;
-        font-style: normal;
-        font-weight: 700;
-        line-height: 140%;
-        align-self: stretch;
-      }
-    }
-    .orderInfo {
-      display: flex;
-      padding: 16px;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
-      gap: 12px;
-      .linkOrderId {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        align-self: stretch;
-        .orderIdText {
-          color: @TextHeading;
-          font-size: 14px;
-          font-style: normal;
-          font-weight: 400;
-          line-height: 140%;
-          flex: 1 0 0;
-        }
-        .orderIdValue {
-          color: @TextHeading;
-          font-size: 14px;
-          font-style: normal;
-          font-weight: 600;
-          line-height: 140%;
-        }
-      }
-    }
-  }
+
   @media @desktop {
     padding: 40px;
   }
@@ -64,11 +10,13 @@
   .trackOrder {
     padding: 24px 0;
     display: flex;
+    // align-items: center;
     gap: 16px;
 
     @media @tablet {
       padding: 16px;
     }
+
     @media @mobile {
       flex-direction: column;
       width: 100%;
@@ -158,14 +106,14 @@
     }
     .shipmentDetails {
       padding: 0 24px;
-      border-inline-start: 1px solid @DividerStokes;
+      border-left: 1px solid @DividerStokes;
       min-width: 352px;
 
       @media @tablet {
         width: 100%;
         padding: 0;
         min-width: unset;
-        border-inline-start: none;
+        border-left: none;
       }
     }
 
@@ -183,7 +131,7 @@
     }
     .view {
       text-align: center;
-      padding-inline-end: 30px;
+      padding-right: 30px;
       padding-top: 5px;
       cursor: pointer;
     }
