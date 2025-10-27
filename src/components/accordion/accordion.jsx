@@ -31,14 +31,9 @@ const Accordion = ({ items, onItemClick }) => {
             className={styles.accordionItem}
             key={index}
             onClick={(e) => {
-              e.preventDefault();
               e.stopPropagation();
               onItemClick(index);
               setActiveIndex("");
-            }}
-            onMouseDown={(e) => { 
-              e.preventDefault();
-              e.stopPropagation();
             }}
           >
             <div className={styles.accordionRow}>

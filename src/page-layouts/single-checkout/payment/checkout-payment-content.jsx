@@ -9,7 +9,6 @@ import { useViewport } from "../../../helper/hooks";
 // import UktModal from "./ukt-modal";
 import StickyPayNow from "./sticky-pay-now/sticky-pay-now";
 import CreditNote from "./credit-note/credit-note";
-import NoPaymentOptionSvg from "../../../assets/images/no-payment-option.svg";
 import {
   priceFormatCurrencySymbol,
   translateDynamicLabel,
@@ -21,6 +20,7 @@ import {
   useNavigate,
 } from "fdk-core/utils";
 import Spinner from "../../../components/spinner/spinner";
+import NoPaymentOptionSvg from "../../../assets/images/no-payment-option.svg";
 import FyButton from "../../../components/core/fy-button/fy-button";
 import { FDKLink } from "fdk-core/components";
 
@@ -431,7 +431,7 @@ function CheckoutPaymentContent({
     if (isCouponApplied) {
       selectMop("CARD", "CARD", "CARD");
     }
-  }, [isJuspayCouponApplied, isCouponApplied]);
+  }, [isJuspayCouponApplied, isCouponAppliedSuccess]);
 
   const resetCardValidationErrors = () => {
     setCardNumberError("");
@@ -716,6 +716,7 @@ function CheckoutPaymentContent({
 
   const selectMop = async (tab, mop, subMop) => {
     if (!mop) return;
+
     setTab(tab);
     setMop(mop);
     setSubMop(subMop);
@@ -729,7 +730,7 @@ function CheckoutPaymentContent({
           addressId: address_id,
           paymentMode: mop,
           aggregatorName: mopData?.aggregator_name,
-          iin: cardNumber?.replace(/[^0-9]/g, "")?.slice(0, 6),
+          iin: cardNumber.replace(/[^0-9]/g, "").slice(0, 6),
         };
       } else {
         payload = {
@@ -756,10 +757,9 @@ function CheckoutPaymentContent({
         merchantCode: subMopData?.merchant_code,
       };
     }
-    if (!enableLinkPaymentOption) {
-      setMopPayload(payload);
-    }
+    setMopPayload(payload);
     let isValid = true;
+
     if (isCouponApplied) {
       const { code, title, display_message_en, valid } =
         !enableLinkPaymentOption && (await checkCouponValidity(payload));
@@ -3247,54 +3247,53 @@ function CheckoutPaymentContent({
           </div>
         </Modal>
       )}
-      {!enableLinkPaymentOption &&
-        (!isCouponValid || showCouponValidityModal) && (
-          <Modal
-            customClassName={styles.couponValidityModal}
-            isOpen={showCouponValidityModal || !isCouponValid}
-            title={couponValidity.title || inValidCouponData?.title}
-            notCloseOnclickOutside={true}
-            closeDialog={() => {
-              if (mop === "CARD" && subMop === "newCARD") {
-                hideNewCard();
-              }
-              setShowCouponValidityModal(false);
-              setIsCouponValid(true);
-              unsetSelectedSubMop();
-            }}
-          >
-            <div className={styles.couponValidity}>
-              <p className={styles.message}>
-                {couponValidity.message || inValidCouponData?.message}
-              </p>
-              <div className={styles.select}>
-                <div
-                  className={`${styles.commonBtn} ${styles.yesBtn}`}
-                  onClick={() => {
-                    removeCoupon();
-                    setShowCouponValidityModal(false);
-                    setIsCouponValid(true);
-                  }}
-                >
-                  {t("resource.common.yes")}
-                </div>
-                <div
-                  className={`${styles.commonBtn} ${styles.noBtn}`}
-                  onClick={() => {
-                    if (mop === "CARD" && subMop === "newCARD") {
-                      hideNewCard();
-                    }
-                    setShowCouponValidityModal(false);
-                    setIsCouponValid(true);
-                    unsetSelectedSubMop();
-                  }}
-                >
-                  {t("resource.common.no")}
-                </div>
+      {(!isCouponValid || showCouponValidityModal) && (
+        <Modal
+          customClassName={styles.couponValidityModal}
+          isOpen={showCouponValidityModal || !isCouponValid}
+          title={couponValidity.title || inValidCouponData?.title}
+          notCloseOnclickOutside={true}
+          closeDialog={() => {
+            if (mop === "CARD" && subMop === "newCARD") {
+              hideNewCard();
+            }
+            setShowCouponValidityModal(false);
+            setIsCouponValid(true);
+            unsetSelectedSubMop();
+          }}
+        >
+          <div className={styles.couponValidity}>
+            <p className={styles.message}>
+              {couponValidity.message || inValidCouponData?.message}
+            </p>
+            <div className={styles.select}>
+              <div
+                className={`${styles.commonBtn} ${styles.yesBtn}`}
+                onClick={() => {
+                  removeCoupon();
+                  setShowCouponValidityModal(false);
+                  setIsCouponValid(true);
+                }}
+              >
+                {t("resource.common.yes")}
+              </div>
+              <div
+                className={`${styles.commonBtn} ${styles.noBtn}`}
+                onClick={() => {
+                  if (mop === "CARD" && subMop === "newCARD") {
+                    hideNewCard();
+                  }
+                  setShowCouponValidityModal(false);
+                  setIsCouponValid(true);
+                  unsetSelectedSubMop();
+                }}
+              >
+                {t("resource.common.no")}
               </div>
             </div>
-          </Modal>
-        )}
+          </div>
+        </Modal>
+      )}
       {showUpiRedirectionModal && (
         <Modal isOpen={showUpiRedirectionModal} hideHeader={true}>
           <div className={styles.upiRedirectionModal}>

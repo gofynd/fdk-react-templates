@@ -18,7 +18,6 @@ function MobileNumber({
   label = "",
   error,
   onChange,
-  handleKeyDown = () => {},
   inputClassName,
   containerClassName,
   labelClassName,
@@ -129,7 +128,6 @@ function MobileNumber({
         inputClassName={`${styles.mobileNumberInput} ${inputClassName || ""}`}
         inputProps={{
           id: inputId,
-          onKeyDown: handleKeyDown,
           autoComplete: "tel",
           ...inputProps,
         }}

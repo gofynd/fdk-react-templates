@@ -28,7 +28,6 @@ function QuantityControl({
   minCartQuantity = 0,
   containerClassName = "",
   inputClassName = "",
-  isIncrDisabled = false,
 }) {
   const [quantity, setQuantity] = useState(count);
 
@@ -113,9 +112,7 @@ function QuantityControl({
         />
       </div>
       <button
-        disabled={
-          isCartUpdating || quantity === maxCartQuantity || isIncrDisabled
-        }
+        disabled={isCartUpdating || quantity === maxCartQuantity}
         className={styles.increaseCount}
         onClick={handleIncrement}
       >

@@ -142,23 +142,20 @@ function BlogList({
       ? show_top_blog
       : true;
   const [windowWidth, setWindowWidth] = useState(0);
-  const slideInterval = Number(sliderProps?.slide_interval) || 3;
-  const transitionDuration = 600;
   const [config, setConfig] = useState({
     dots: false,
-    speed: transitionDuration,
-    autoplaySpeed: slideInterval * 1000 + transitionDuration,
+    speed: Number(sliderProps?.slide_interval * 1000),
     slidesToShow: 1,
     slidesToScroll: 1,
     swipeToSlide: false,
     autoplay: sliderProps?.autoplay,
     pauseOnHover: true,
-    cssEase: "ease-in-out",
+    cssEase: "linear",
     centerPadding: "75px",
     arrows: true,
     nextArrow: <SliderNextArrow nextArrowStyles={styles.nextArrowStyles} />,
     prevArrow: <SliderPrevArrow prevArrowStyles={styles.prevArrowStyles} />,
-    infinite: sliderBlogs?.items?.length > 1,
+    infinite: sliderBlogs?.tems?.length > 1,
     rtl: isRTL,
     responsive: [
       {
