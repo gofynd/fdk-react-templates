@@ -25,7 +25,6 @@ function SingleShipmentContent({
   isLoading = false,
   getDeliveryPromise,
   redirectPaymentOptions,
-  isPaymentLoading = false,
 }) {
   const { t } = useGlobalTranslation("translation");
   const getShipmentItems = (shipment) => {
@@ -310,7 +309,7 @@ function SingleShipmentContent({
                   showPaymentOptions();
                 }
               }}
-              disabled={isPaymentLoading}
+              disabled={isLoading}
             >
               {getTotalValue?.() === 0 ? "PLACE ORDER" : "Proceed To Pay"}
             </button>

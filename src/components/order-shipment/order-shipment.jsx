@@ -255,8 +255,7 @@ function OrderShipment({
   const naivgateToShipment = (item) => {
     let link = "";
     // setSelectedShipment(item?.shipment_id);
-    const isOrderTrackingPage = window.location.pathname.includes("order-tracking")
-    if (isBuyAgainEligible || isOrderTrackingPage) {
+    if (isBuyAgainEligible) {
       link = `/profile/orders/shipment/${item?.shipment_id}`;
     } else {
       link = `/order-tracking/${item?.order_id}/${item?.shipment_id}`;

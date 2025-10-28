@@ -4,14 +4,8 @@ import StickyPayNow from "../sticky-pay-now/sticky-pay-now";
 import * as styles from "./zero-pay-btn.less";
 import { priceFormatCurrencySymbol } from "../../../../helper/utils";
 
-function ZeroPayButton({ payment, showPayment, onPriceDetailsClick, loader }) {
-  const {
-    proceedToPay,
-    getTotalValue,
-    getCurrencySymbol,
-    isLoading,
-    isPaymentLoading,
-  } = payment;
+function ZeroPayButton({ payment, showPayment, onPriceDetailsClick }) {
+  const { proceedToPay, getTotalValue, getCurrencySymbol, isLoading } = payment;
   const isMobile = useMobile();
   return (
     <>
@@ -36,8 +30,6 @@ function ZeroPayButton({ payment, showPayment, onPriceDetailsClick, loader }) {
                 )}
                 disabled={isLoading}
                 onPriceDetailsClick={onPriceDetailsClick}
-                isPaymentLoading={isPaymentLoading}
-                loader={loader}
                 proceedToPay={() => {
                   proceedToPay("PP", {});
                 }}
