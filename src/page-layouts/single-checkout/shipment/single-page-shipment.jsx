@@ -31,7 +31,7 @@ function SinglePageShipment({
 }) {
   const { t } = useGlobalTranslation("translation");
   const navigate = useNavigate();
-  const { proceedToPay, getTotalValue, isLoading } = payment;
+  const { proceedToPay, getTotalValue, isLoading, isPaymentLoading } = payment;
   const getShipmentCount = shipments?.length || 0;
 
   const editShipment = () => {
@@ -80,8 +80,8 @@ function SinglePageShipment({
                   }
                 }}
                 style={{
-                  opacity: isLoading ? 0.5 : 1,
-                  pointerEvents: isLoading ? "none" : "auto",
+                  opacity: isPaymentLoading ? 0.5 : 1,
+                  pointerEvents: isPaymentLoading ? "none" : "auto",
                 }}
               >
                 {getTotalValue?.() === 0
@@ -102,6 +102,8 @@ function SinglePageShipment({
             isLoading={isLoading}
             getDeliveryPromise={getDeliveryPromise}
             redirectPaymentOptions={redirectPaymentOptions}
+            loader={loader}
+            isPaymentLoading={isPaymentLoading}
           ></SingleShipmentContent>
           <StickyPayNow
             btnTitle={
@@ -111,7 +113,9 @@ function SinglePageShipment({
             }
             onPriceDetailsClick={onPriceDetailsClick}
             value={totalValue}
-            disabled={isLoading || !isCartValid}
+            disabled={isPaymentLoading || !isCartValid}
+            loader={loader}
+            isPaymentLoading={isPaymentLoading}
             proceedToPay={() => {
               if (getTotalValue?.() === 0) {
                 proceedToPay("PP", {});

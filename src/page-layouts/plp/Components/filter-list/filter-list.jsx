@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import * as styles from "./filter-list.less";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
@@ -9,13 +9,14 @@ import { useGlobalTranslation } from "fdk-core/utils";
 function FilterList({
   filter,
   isCollapsedView = true,
-  onFilterUpdate = () => { },
+  onFilterUpdate = () => {},
 }) {
   const { t } = useGlobalTranslation("translation");
   const [searchText, setSearchText] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const location = useLocation();
+  const popupContentRef = useRef(null);
   const MAX_ITEM_COUNT = 7;
 
   const searchParams = isRunningOnClient()
@@ -87,13 +88,18 @@ function FilterList({
     return groupedFilterValues;
   };
 
-  const showViewMore = isCollapsedView && filter.values.length > MAX_ITEM_COUNT;
+ const allFilteredItems = getFilteredItems(searchText);
+  const showViewMore =
+    isCollapsedView &&
+    filter.values.length > MAX_ITEM_COUNT &&
+    allFilteredItems.length > 0;
+
   const showSearch = ["category", "brand", "department"].includes(
     filter?.key?.name
   );
 
-  // const filteredValues = getFilteredItems(searchText);
   const groupedValues = getGroupedValues();
+  console.log(groupedValues, "groupedValues");
 
   const isEmptyResult = useMemo(() => {
     const filteredResult = Object.values(groupedValues).filter(
@@ -132,6 +138,37 @@ function FilterList({
   const isFilterSelected = (filterItem) =>
     searchParams?.getAll(filter.key.name).includes(filterItem?.value) ||
     filterItem?.is_selected;
+
+  // Handle alphabet click with smooth scroll
+  const handleAlphabetClick = (e, alphabet) => {
+    e.preventDefault();
+
+    if (groupedValues[alphabet].length === 0) return;
+
+    setTimeout(() => {
+      const targetElement = document.getElementById(`alpha-${alphabet}`);
+      const scrollContainer = popupContentRef.current;
+
+      if (!targetElement || !scrollContainer) {
+        console.log("Element not found:", { targetElement, scrollContainer });
+        return;
+      }
+
+      const containerRect = scrollContainer.getBoundingClientRect();
+      const targetRect = targetElement.getBoundingClientRect();
+
+      // Calculate the scroll position needed
+      const scrollLeft =
+        scrollContainer.scrollLeft +
+        (targetRect.left - containerRect.left) -
+        20;
+
+      scrollContainer.scrollTo({
+        left: scrollLeft,
+        behavior: "smooth",
+      });
+    }, 0);
+  };
 
   return (
     <div
@@ -311,9 +348,13 @@ function FilterList({
         </div>
       )}
 
-      {/* Filter popup */}
+      {showPopup && <div className={styles.overlay} onClick={closePopup}></div>}
+
       {showPopup && (
-        <div className={styles["filter__popup"]}>
+        <div
+          className={styles["filter__popup"]}
+          onClick={(e) => e.stopPropagation()}
+        >
           <div
             className={`${styles["filter__popup--header"]} ${styles.flexAlignCenter}`}
           >
@@ -332,8 +373,15 @@ function FilterList({
                   className={`${
                     groupedValues[alphabet].length === 0 ? styles.disabled : ""
                   }`}
+                  style={{
+                    cursor:
+                      groupedValues[alphabet].length === 0
+                        ? "not-allowed"
+                        : "pointer",
+                  }}
+                  onClick={(e) => handleAlphabetClick(e, alphabet)}
                 >
-                  <a href={`#${alphabet}`}>{alphabet}</a>
+                  {alphabet}
                 </li>
               ))}
             </ul>
@@ -342,13 +390,17 @@ function FilterList({
             </span>
           </div>
           <ul
+            ref={popupContentRef}
             className={`${styles["filter__popup--content"]} ${isEmptyResult ? styles.emptyPopupContent : ""}`}
           >
             {!isEmptyResult ? (
               Object.keys(groupedValues).map((alphabet) => (
                 <React.Fragment key={alphabet}>
                   {groupedValues[alphabet].length !== 0 && (
-                    <li id={alphabet} className={styles["alphabet-label"]}>
+                    <li
+                      id={`alpha-${alphabet}`}
+                      className={styles["alphabet-label"]}
+                    >
                       <h4>{alphabet}</h4>
                     </li>
                   )}
@@ -360,9 +412,15 @@ function FilterList({
                       <fdk-link link={filterItem.url}>
                         <div
                           className={`${styles["filter__item"]} ${styles.flexAlignCenter} ${styles["caption-normal"]}`}
-                          onClick={() => filterClicked(filterItem)}
                         >
-                          <div>
+                          <div
+                            style={{ display: "flex", alignItems: "center" }}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              filterClicked(filterItem);
+                            }}
+                          >
                             <SvgWrapper
                               className={`${styles.icon} ${styles["checkbox-icon"]}`}
                               svgSrc={
@@ -378,6 +436,11 @@ function FilterList({
                             } ${
                               isFilterSelected(filterItem) ? styles.active : ""
                             }`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              filterClicked(filterItem);
+                            }}
                           >
                             {filterItem.display}
                           </div>
@@ -400,9 +463,6 @@ function FilterList({
           </ul>
         </div>
       )}
-
-      {/* Overlay */}
-      {showPopup && <div className={styles.overlay} onClick={closePopup}></div>}
     </div>
   );
 }

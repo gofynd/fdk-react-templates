@@ -4,6 +4,7 @@ import Modal from "../../../components/core/modal/modal";
 import SingleAddressContent from "./single-address-content";
 import SinglesAddressHeader from "./single-address-header";
 import * as styles from "./single-address-header.less";
+import { useGlobalStore, useFPI } from "fdk-core/utils";
 
 function SingleAddress({
   address,
@@ -19,6 +20,8 @@ function SingleAddress({
   getTotalValue,
   showPaymentOptions,
 }) {
+  const fpi = useFPI();
+  const userDetails = useGlobalStore(fpi.getters.USER_DATA);
   const {
     allAddresses = [],
     isAddressLoading = false,
@@ -92,6 +95,7 @@ function SingleAddress({
             selectedCountry={selectedCountry?.display_name ?? ""}
             countryDetails={countryDetails}
             isGuestUser={isGuestUser}
+            user={userDetails}
             onClose={resetAddressState}
           />
         </Modal>

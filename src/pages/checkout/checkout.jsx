@@ -47,7 +47,7 @@ function Checkout({
   const [searchParams] = useSearchParams();
   const cart_id = searchParams.get("id");
   const address_id = searchParams.get("address_id");
-  const { isLoading } = payment;
+  const { isLoading, isPaymentLoading = false } = payment;
   const handlePlaceOrder = async () => {
     if (payment?.storeCreditApplied?.isFullyApplied) {
       const { merchant_code, code, aggregator_name } =
@@ -107,6 +107,7 @@ function Checkout({
           onPriceDetailsClick={onPriceDetailsClick}
           isCartValid={isCartValid}
           redirectPaymentOptions={redirectPaymentOptions}
+          loader={loader}
         ></SinglePageShipment>
         <CheckoutPayment
           payment={payment}
@@ -152,6 +153,7 @@ function Checkout({
         <ZeroPayButton
           payment={payment}
           showPayment={showPayment}
+          loader={loader}
           onPriceDetailsClick={onPriceDetailsClick}
         />
         {payment?.storeCreditApplied?.isFullyApplied &&
@@ -162,7 +164,7 @@ function Checkout({
               className={styles.placeOrderBtn}
               fullWidth
             >
-              PLACE ORDER
+              {!isPaymentLoading ? "PLACE ORDER" : loader}
             </FyButton>
           )}
       </div>
