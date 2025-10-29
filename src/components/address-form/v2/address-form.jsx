@@ -13,13 +13,6 @@
  * @param {function} onAddAddress - Callback function to handle adding a new address.
  * @param {function} onUpdateAddress - Callback function to handle updating an existing address.
  * @param {function} onGetLocality - Callback function to fetch locality information based on the address.
- * @param {boolean} isGuestUser - Indicates if the user is a guest user.
- * @param {object} user - User object containing profile information for auto-filling fields.
- * @param {string} user.firstName - User's first name.
- * @param {string} user.lastName - User's last name.
- * @param {string} user.email - User's email address.
- * @param {object} user.phone - User's phone information.
- * @param {string} user.phone.mobile - User's mobile number.
  * @param {component} customFooter - Custom React component for rendering the footer of the form, typically a submit button.
  *
  * Default Props:
@@ -62,7 +55,6 @@ import OfficeIcon from "../../../assets/images/office-type.svg";
 import FriendsFamilyIcon from "../../../assets/images/friends-family.svg";
 import OtherIcon from "../../../assets/images/other-type.svg";
 import { isRunningOnClient } from "../../../helper/utils";
-import { useAddressAutofill } from "../../../helper/hooks";
 import CloseIcon from "../../../assets/images/close.svg";
 import BackIcon from "../../../assets/images/back.svg";
 import LocationPinIcon from "../../../assets/images/location-pin.svg";
@@ -213,33 +205,15 @@ const defaultFormSchema = [
       {
         key: "phone",
         display: "resource.common.mobile_number",
-        type: "mobile",
+        type: "text",
         required: true,
         fullWidth: false,
         validation: {
-          required: "Mobile number is required",
-          validate: (value) => {
-            if (!value) return "Mobile number is required";
-            
-            // Always expect an object from MobileNumber component
-            if (typeof value === 'object') {
-              // Trust the component's validation if available
-              if (value.isValidNumber === true) return true;
-              
-              // If no validation flag, validate the mobile number
-              if (value.mobile) {
-                const mobileNumber = value.mobile.toString().replace(/[\s\-+]/g, '');
-                if (mobileNumber.length !== 10) return "Mobile number must be 10 digits";
-                return /^[6-9]\d{9}$/.test(mobileNumber) || "Invalid mobile number format";
-              }
-              return "Invalid mobile number";
-            }
-            
-            // Convert any string input to proper format
-            const mobileNumber = value.toString().replace(/[\s\-+]/g, '');
-            if (mobileNumber.length !== 10) return "Mobile number must be 10 digits";
-            return /^[6-9]\d{9}$/.test(mobileNumber) || "Invalid mobile number format";
-          }
+          required: "resource.common.mobile_number_required",
+          pattern: {
+            value: /^[6-9]\d{9}$/,
+            message: "resource.common.invalid_mobile_number",
+          },
         },
       },
       {
@@ -297,7 +271,6 @@ const AddressForm = ({
   onUpdateAddress = () => {},
   onGetLocality = () => {},
   isGuestUser = false,
-  user = null,
   customFooter,
   setI18nDetails,
   handleCountrySearch,
@@ -310,12 +283,6 @@ const AddressForm = ({
   const isOtherAddressType = !["Home", "Work", "Friends & Family"].includes(
     addressItem?.address_type
   );
-
-  const { autofillData: userAutofillData } = useAddressAutofill(
-    user,
-    isGuestUser
-  );
-  
   const {
     control,
     register,
@@ -339,8 +306,6 @@ const AddressForm = ({
         addressItem && isOtherAddressType ? addressItem?.address_type : "",
       geo_location: { latitude: "", longitude: "" },
       country: selectedCountry || t("resource.localization.india"),
-      // Auto-fill user data using memoized utility function
-      ...userAutofillData,
       // area_code: addressItem?.area_code || defaultPincode || "",
     },
   });
@@ -376,22 +341,8 @@ const AddressForm = ({
     } else {
       setValue("is_default_address", true);
       setValue("address_type", "Home");
-      // Auto-fill user data when creating new address using memoized data
-      if (userAutofillData.name) {
-        setValue("name", userAutofillData.name);
-      }
-      if (userAutofillData.phone && userAutofillData.phone.mobile) {
-        setValue("phone", {
-          mobile: userAutofillData.phone.mobile,
-          countryCode: userAutofillData.phone.countryCode || "91",
-          isValidNumber: true // Trust the autofilled data
-        });
-      }
-      if (userAutofillData.email) {
-        setValue("email", userAutofillData.email);
-      }
     }
-  }, [addressItem, reset, userAutofillData]);
+  }, [addressItem, reset]);
 
   useEffect(() => {
     setShowOtherText(address_type === "Other");
@@ -456,10 +407,7 @@ const AddressForm = ({
     setTimeout(() => {
       formSchema?.forEach((group) =>
         group?.fields?.forEach(({ key }) => {
-          // Don't clear user auto-filled fields when country changes
-          if (key !== "name" && key !== "phone" && key !== "email") {
-            setValue(key, "");
-          }
+          setValue(key, "");
         })
       );
     }, 0);

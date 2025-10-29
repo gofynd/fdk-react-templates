@@ -170,7 +170,6 @@ function CardForm({
             onChange={validateCardNumber}
             onPaste={handleCardNumberPaste}
             onBlur={validateCardNumber}
-            value={cardNumber}
             dir="ltr"
             value={cardNumber}
           />

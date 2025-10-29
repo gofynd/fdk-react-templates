@@ -98,6 +98,7 @@ const Wishlist = ({
                 showAddToCart,
                 onRemoveClick,
                 handleAddToCart,
+                globalConfig,
               }}
             />
           ))}

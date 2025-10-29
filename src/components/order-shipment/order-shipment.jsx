@@ -10,8 +10,8 @@
  * @returns {JSX.Element} A React component that renders the shipment details of an order.
  */
 
-import React, { useState, useMemo } from "react";
-// import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import * as styles from "./order-shipment.less";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
 import { convertUTCDateToLocalDate, formatLocale } from "../../helper/utils";
@@ -22,8 +22,6 @@ import {
   useFPI,
   useGlobalTranslation,
 } from "fdk-core/utils";
-import { BundleBagImage, BagImage } from "../bag/bag";
-import { getProductImgAspectRatio } from "../../helper/utils";
 
 /**
  * Helper: Get all bags with customization (_custom_json._display)
@@ -36,11 +34,13 @@ const getBagsWithCustomization = (bags = []) => {
   );
 };
 
-function getProductsName({ bag, isBundleItem }) {
-  if (isBundleItem) {
-    return bag?.bundle_details?.name;
+function getProductsName(bags) {
+  let items = bags.map((it) => it.item).filter(Boolean);
+  if (items && items.length) {
+    const productNames = items.map((it) => it.name);
+    return [...new Set(productNames)];
   }
-  return bag?.item?.name;
+  return [];
 }
 
 function getTotalItems(items, t) {
@@ -67,9 +67,7 @@ const getCustomizationOptions = (orderInfo) => {
 
 const ShipmentDetails = ({
   item,
-  bundleGroups,
-  bundleGroupArticles,
-  aspectRatio,
+  isOpen,
   naivgateToShipment,
   isAdmin,
   t,
@@ -95,13 +93,6 @@ const ShipmentDetails = ({
       [shipmentId]: !prev[shipmentId],
     }));
   };
-  const bagItem = item?.bags?.[0];
-  const bundleGroupId = bagItem?.bundle_details?.bundle_group_id;
-  const isBundleItem =
-    bundleGroupId && bundleGroups && bundleGroups[bundleGroupId]?.length > 0;
-
-  const productName = getProductsName({ bag: item?.bags?.[0], isBundleItem });
-
   return (
     <>
       <div
@@ -110,10 +101,10 @@ const ShipmentDetails = ({
         onClick={() => naivgateToShipment(item)}
       >
         <div className={styles.shipmentLeft}>
-          <BagImage
-            bag={item?.bags?.[0]}
-            isBundle={isBundleItem}
-            aspectRatio={aspectRatio}
+          <img
+            className={isOpen ? styles.filterArrowUp : styles.filterArrowdown}
+            src={item?.bags?.[0]?.item?.image?.[0]}
+            alt={item?.shipment_images?.[0]}
           />
           {item?.bags?.length > 1 && (
             <div id="total-item">
@@ -126,11 +117,11 @@ const ShipmentDetails = ({
           <div className={styles.uktLinks}>
             {item?.bags?.length > 1 && customizationOptions.length < 1 ? (
               <div>
-                {productName} +{item.bags.length - 1 + " "}
+                {getProductsName(item?.bags)?.[0]} +{item.bags.length - 1 + " "}
                 {t("resource.facets.more")}
               </div>
             ) : (
-              <div>{productName}</div>
+              <div>{getProductsName(item?.bags)?.[0]}</div>
             )}
           </div>
           <div
@@ -174,8 +165,6 @@ const ShipmentDetails = ({
 
 function OrderShipment({
   orderInfo,
-  getGroupedShipmentBags,
-  globalConfig,
   onBuyAgainClick = () => {},
   isBuyAgainEligible,
   availableFOCount,
@@ -186,61 +175,16 @@ function OrderShipment({
   const locale = language?.locale;
   const [isOpen, setIsOpen] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
-  // const [selectedShipment, setSelectedShipment] = useState("");
+  const [selectedShipment, setSelectedShipment] = useState("");
+  const [openAccordions, setOpenAccordions] = useState({});
   const navigate = useNavigate();
-  // const params = useParams();
-  const aspectRatio = useMemo(
-    () => getProductImgAspectRatio(globalConfig),
-    [globalConfig]
-  );
+  const params = useParams();
 
-  // Safe wrapper for getGroupedShipmentBags with fallback for non-bundle items
-  const safeGetGroupedShipmentBags = (bags) => {
-    // If the function is provided, use it
-    if (getGroupedShipmentBags && typeof getGroupedShipmentBags === 'function') {
-      return getGroupedShipmentBags(bags);
+  useEffect(() => {
+    if (params?.orderId) {
+      setSelectedShipment(orderInfo?.shipments[0]?.shipment_id);
     }
-    
-    // Fallback: handle both bundle and non-bundle items
-    if (!bags || !Array.isArray(bags)) {
-      return { bags: [], bundleGroups: {}, bundleGroupArticles: {} };
-    }
-    
-    const bundleGroups = {};
-    const bundleGroupArticles = {};
-    
-    // Process each bag - works for both bundle and non-bundle items
-    bags.forEach((bag) => {
-      const bundleGroupId = bag?.bundle_details?.bundle_group_id;
-      if (bundleGroupId) {
-        // This is a bundle item
-        if (!bundleGroups[bundleGroupId]) {
-          bundleGroups[bundleGroupId] = [];
-        }
-        bundleGroups[bundleGroupId].push(bag);
-        
-        if (bag?.article) {
-          if (!bundleGroupArticles[bundleGroupId]) {
-            bundleGroupArticles[bundleGroupId] = [];
-          }
-          bundleGroupArticles[bundleGroupId].push(bag.article);
-        }
-      }
-      // For non-bundle items, they just stay in the bags array as-is
-    });
-    
-    // Return the same structure expected by the component
-    // - bags: original array (works for both bundle and non-bundle items)
-    // - bundleGroups: grouped bundles (empty object for non-bundle items)
-    // - bundleGroupArticles: bundle articles (empty object for non-bundle items)
-    return { bags, bundleGroups, bundleGroupArticles };
-  };
-
-  // useEffect(() => {
-  //   if (params?.orderId) {
-  //     setSelectedShipment(orderInfo?.shipments[0]?.shipment_id);
-  //   }
-  // }, [params?.orderId, orderInfo?.shipments]);
+  }, [params?.orderId, orderInfo?.shipments]);
 
   const getTime = (time) => {
     return convertUTCDateToLocalDate(
@@ -254,7 +198,7 @@ function OrderShipment({
   };
   const naivgateToShipment = (item) => {
     let link = "";
-    // setSelectedShipment(item?.shipment_id);
+    setSelectedShipment(item?.shipment_id);
     if (isBuyAgainEligible) {
       link = `/profile/orders/shipment/${item?.shipment_id}`;
     } else {
@@ -262,6 +206,24 @@ function OrderShipment({
     }
     navigate(link);
   };
+
+  const getCustomizationOptions = (orderInfo) => {
+    if (!orderInfo?.shipments) return [];
+    return orderInfo.shipments
+      .flatMap((shipment) =>
+        shipment.bags
+          ?.map((bag) => bag.meta?._custom_json?._display || [])
+          .flat()
+      )
+      .filter(Boolean);
+  };
+
+  // const handleShipmentAccordionClick = (shipmentId) => {
+  //   setOpenAccordions((prev) => ({
+  //     ...prev,
+  //     [shipmentId]: !prev[shipmentId],
+  //   }));
+  // };
 
   return (
     <div className={`${styles.orderItem}`} key={orderInfo?.order_id}>
@@ -285,9 +247,7 @@ function OrderShipment({
           orderInfo?.shipments?.length !== 0 &&
           orderInfo?.shipments?.map((item) => {
             // Main: if bagsWithCustomization exist, render them individually. Else, render the shipment
-            const { bags, bundleGroups, bundleGroupArticles } =
-              safeGetGroupedShipmentBags(item.bags);
-            const bagsWithCustomization = getBagsWithCustomization(bags);
+            const bagsWithCustomization = getBagsWithCustomization(item.bags);
 
             return (
               <React.Fragment key={item.shipment_id}>
@@ -299,9 +259,7 @@ function OrderShipment({
                         ...item,
                         bags: [el], // Only show this bag
                       }}
-                      bundleGroups={bundleGroups}
-                      bundleGroupArticles={bundleGroupArticles}
-                      aspectRatio={aspectRatio}
+                      isOpen={isOpen}
                       naivgateToShipment={naivgateToShipment}
                       isAdmin={isAdmin}
                       t={t}
@@ -313,13 +271,8 @@ function OrderShipment({
                 ) : (
                   <ShipmentDetails
                     key={item.shipment_id}
-                    item={{
-                      ...item,
-                      bags,
-                    }}
-                    bundleGroups={bundleGroups}
-                    bundleGroupArticles={bundleGroupArticles}
-                    aspectRatio={aspectRatio}
+                    item={item}
+                    isOpen={isOpen}
                     naivgateToShipment={naivgateToShipment}
                     isAdmin={isAdmin}
                     t={t}
