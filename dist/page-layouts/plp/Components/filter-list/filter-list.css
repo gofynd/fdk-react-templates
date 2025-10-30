@@ -894,11 +894,6 @@ h5,
   font-size: 14px;
   color: var(--textBody, #3c3131);
 }
-.range-slider__CustomRangeSlider___Uo_rw .range-slider__postfix___lbLy1 {
-  margin-left: 4px;
-  font-size: 14px;
-  color: var(--textBody, #3c3131);
-}
 .range-slider__CustomRangeSlider___Uo_rw .range-slider__inputContainer___pyXpE {
   display: flex;
   justify-content: space-between;
@@ -928,7 +923,8 @@ h5,
   height: auto;
 }
 .range-slider__CustomRangeSlider___Uo_rw .range-slider__sliderWrapper___mpdbX {
-  min-height: 12px;
+  min-height: 16px;
+  padding: 0 8px;
 }
 .range-slider__CustomRangeSlider___Uo_rw .range-slider__errorMessage___rABCa {
   font-size: 10px;
@@ -938,17 +934,33 @@ h5,
 }
 .range-slider__CustomRangeSlider___Uo_rw .range-slider__rangeSlider___fC17Q {
   height: 4px;
-  background: var(--buttonPrimaryL3, #b8b29d);
+  position: relative;
 }
-.range-slider__CustomRangeSlider___Uo_rw .range-slider__rangeSlider___fC17Q .range-slider__thumb {
-  width: 16px;
-  height: 16px;
+.range-slider__CustomRangeSlider___Uo_rw .range-slider__rangeSlider___fC17Q .rc-slider-handle {
+  height: 16px !important;
+  width: 16px !important;
   border-radius: 50%;
-  background-color: #fff;
-  border: 1px solid var(--buttonPrimary, #4e3f09);
+  margin-top: -6px !important;
+  background-color: #fff !important;
+  border: 1px solid var(--buttonPrimary, #4e3f09) !important;
+  opacity: 1 !important;
+  cursor: pointer;
 }
-.range-slider__CustomRangeSlider___Uo_rw .range-slider__rangeSlider___fC17Q .range-slider__range {
-  background: var(--buttonPrimary, #4e3f09);
+.range-slider__CustomRangeSlider___Uo_rw .range-slider__rangeSlider___fC17Q .rc-slider-handle:active,
+.range-slider__CustomRangeSlider___Uo_rw .range-slider__rangeSlider___fC17Q .rc-slider-handle-dragging {
+  box-shadow: none;
+  outline: none;
+}
+.range-slider__CustomRangeSlider___Uo_rw .range-slider__rangeSlider___fC17Q .rc-slider-rail {
+  background-color: var(--buttonPrimaryL3, #b8b29d) !important;
+  height: 4px !important;
+}
+.range-slider__CustomRangeSlider___Uo_rw .range-slider__rangeSlider___fC17Q .rc-slider-track {
+  background: var(--buttonPrimary, #4e3f09) !important;
+  height: 4px !important;
+}
+.range-slider__CustomRangeSlider___Uo_rw .range-slider__rangeSlider___fC17Q .rc-slider-tracks {
+  background: var(--buttonPrimary, #4e3f09) !important;
 }
 
 /**color by character**/

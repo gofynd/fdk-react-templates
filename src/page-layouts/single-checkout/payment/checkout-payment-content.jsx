@@ -9,6 +9,7 @@ import { useViewport } from "../../../helper/hooks";
 // import UktModal from "./ukt-modal";
 import StickyPayNow from "./sticky-pay-now/sticky-pay-now";
 import CreditNote from "./credit-note/credit-note";
+import NoPaymentOptionSvg from "../../../assets/images/no-payment-option.svg";
 import {
   priceFormatCurrencySymbol,
   translateDynamicLabel,
@@ -20,7 +21,6 @@ import {
   useNavigate,
 } from "fdk-core/utils";
 import Spinner from "../../../components/spinner/spinner";
-import NoPaymentOptionSvg from "../../../assets/images/no-payment-option.svg";
 import FyButton from "../../../components/core/fy-button/fy-button";
 import { FDKLink } from "fdk-core/components";
 
@@ -191,6 +191,7 @@ function CheckoutPaymentContent({
     partialPaymentOption,
     updateStoreCredits,
     creditUpdating,
+    isPaymentLoading,
   } = payment;
 
   useEffect(() => {
@@ -431,7 +432,7 @@ function CheckoutPaymentContent({
     if (isCouponApplied) {
       selectMop("CARD", "CARD", "CARD");
     }
-  }, [isJuspayCouponApplied, isCouponAppliedSuccess]);
+  }, [isJuspayCouponApplied, isCouponApplied]);
 
   const resetCardValidationErrors = () => {
     setCardNumberError("");
@@ -716,7 +717,6 @@ function CheckoutPaymentContent({
 
   const selectMop = async (tab, mop, subMop) => {
     if (!mop) return;
-
     setTab(tab);
     setMop(mop);
     setSubMop(subMop);
@@ -730,7 +730,7 @@ function CheckoutPaymentContent({
           addressId: address_id,
           paymentMode: mop,
           aggregatorName: mopData?.aggregator_name,
-          iin: cardNumber.replace(/[^0-9]/g, "").slice(0, 6),
+          iin: cardNumber?.replace(/[^0-9]/g, "")?.slice(0, 6),
         };
       } else {
         payload = {
@@ -757,9 +757,10 @@ function CheckoutPaymentContent({
         merchantCode: subMopData?.merchant_code,
       };
     }
-    setMopPayload(payload);
+    if (!enableLinkPaymentOption) {
+      setMopPayload(payload);
+    }
     let isValid = true;
-
     if (isCouponApplied) {
       const { code, title, display_message_en, valid } =
         !enableLinkPaymentOption && (await checkCouponValidity(payload));
@@ -1682,6 +1683,8 @@ function CheckoutPaymentContent({
                                   enableLinkPaymentOption={
                                     enableLinkPaymentOption
                                   }
+                                  isPaymentLoading={isPaymentLoading}
+                                  loader={loader}
                                   proceedToPay={() => {
                                     proceedToPay("CARD", {
                                       ...selectedPaymentPayload,
@@ -1705,10 +1708,16 @@ function CheckoutPaymentContent({
                                       acceptOrder();
                                     }}
                                   >
-                                    {t("resource.common.pay_caps")}{" "}
-                                    {priceFormatCurrencySymbol(
-                                      getCurrencySymbol,
-                                      getTotalValue()
+                                    {!isPaymentLoading ? (
+                                      <>
+                                        {t("resource.common.pay_caps")}{" "}
+                                        {priceFormatCurrencySymbol(
+                                          getCurrencySymbol,
+                                          getTotalValue()
+                                        )}
+                                      </>
+                                    ) : (
+                                      loader
                                     )}
                                   </button>
                                 )
@@ -1826,6 +1835,8 @@ function CheckoutPaymentContent({
                       cardDetails={cardDetails}
                       selectMop={selectMop}
                       setIsJuspayCouponApplied={setIsJuspayCouponApplied}
+                      loader={loader}
+                      isPaymentLoading={isPaymentLoading}
                     />
                   </div>
                 )}
@@ -1889,6 +1900,8 @@ function CheckoutPaymentContent({
                   cardDetails={cardDetails}
                   selectMop={selectMop}
                   setIsJuspayCouponApplied={setIsJuspayCouponApplied}
+                  isPaymentLoading={isPaymentLoading}
+                  loader={loader}
                 />
               </div>
             )}
@@ -1954,6 +1967,8 @@ function CheckoutPaymentContent({
                     cardDetails={cardDetails}
                     selectMop={selectMop}
                     setIsJuspayCouponApplied={setIsJuspayCouponApplied}
+                    loader={loader}
+                    isPaymentLoading={isPaymentLoading}
                   />
                 </div>
               </Modal>
@@ -2016,6 +2031,8 @@ function CheckoutPaymentContent({
                     onPriceDetailsClick={onPriceDetailsClick}
                     disabled={!selectedWallet.code}
                     enableLinkPaymentOption={enableLinkPaymentOption}
+                    isPaymentLoading={isPaymentLoading}
+                    loader={loader}
                     proceedToPay={() => {
                       proceedToPay("WL", selectedPaymentPayload);
                       acceptOrder();
@@ -2034,10 +2051,16 @@ function CheckoutPaymentContent({
                         }
                       }}
                     >
-                      {t("resource.common.pay_caps")}{" "}
-                      {priceFormatCurrencySymbol(
-                        getCurrencySymbol,
-                        getTotalValue()
+                      {!isPaymentLoading ? (
+                        <>
+                          {t("resource.common.pay_caps")}{" "}
+                          {priceFormatCurrencySymbol(
+                            getCurrencySymbol,
+                            getTotalValue()
+                          )}
+                        </>
+                      ) : (
+                        loader
                       )}
                     </button>
                   )
@@ -2365,10 +2388,16 @@ function CheckoutPaymentContent({
                                   }}
                                   disabled={savedUPISelect && isUPIError}
                                 >
-                                  {t("resource.common.pay_caps")}{" "}
-                                  {priceFormatCurrencySymbol(
-                                    getCurrencySymbol,
-                                    getTotalValue()
+                                  {!isPaymentLoading ? (
+                                    <>
+                                      {t("resource.common.pay_caps")}{" "}
+                                      {priceFormatCurrencySymbol(
+                                        getCurrencySymbol,
+                                        getTotalValue()
+                                      )}
+                                    </>
+                                  ) : (
+                                    loader
                                   )}
                                 </button>
                               </div>
@@ -2509,6 +2538,8 @@ function CheckoutPaymentContent({
                     )}
                     onPriceDetailsClick={onPriceDetailsClick}
                     enableLinkPaymentOption={enableLinkPaymentOption}
+                    isPaymentLoading={isPaymentLoading}
+                    loader={loader}
                     proceedToPay={() => {
                       if (disbaleCheckout?.message) {
                         acceptOrder();
@@ -2533,10 +2564,16 @@ function CheckoutPaymentContent({
                         !(isUpiSuffixSelected || !!selectedUpiIntentApp)
                       }
                     >
-                      {t("resource.common.pay_caps")}{" "}
-                      {priceFormatCurrencySymbol(
-                        getCurrencySymbol,
-                        getTotalValue()
+                      {!isPaymentLoading ? (
+                        <>
+                          {t("resource.common.pay_caps")}{" "}
+                          {priceFormatCurrencySymbol(
+                            getCurrencySymbol,
+                            getTotalValue()
+                          )}
+                        </>
+                      ) : (
+                        loader
                       )}
                     </button>
                   )
@@ -2597,6 +2634,8 @@ function CheckoutPaymentContent({
                     onPriceDetailsClick={onPriceDetailsClick}
                     disabled={!selectedNB.code}
                     enableLinkPaymentOption={enableLinkPaymentOption}
+                    isPaymentLoading={isPaymentLoading}
+                    loader={loader}
                     proceedToPay={() => {
                       proceedToPay("NB", selectedPaymentPayload);
                       acceptOrder();
@@ -2615,10 +2654,16 @@ function CheckoutPaymentContent({
                         }
                       }}
                     >
-                      {t("resource.common.pay_caps")}{" "}
-                      {priceFormatCurrencySymbol(
-                        getCurrencySymbol,
-                        getTotalValue()
+                      {!isPaymentLoading ? (
+                        <>
+                          {t("resource.common.pay_caps")}{" "}
+                          {priceFormatCurrencySymbol(
+                            getCurrencySymbol,
+                            getTotalValue()
+                          )}
+                        </>
+                      ) : (
+                        <span>{loader}</span>
                       )}
                     </button>
                   )
@@ -2734,7 +2779,9 @@ function CheckoutPaymentContent({
                     className={`${styles.commonBtn} ${styles.payBtn}`}
                     onClick={() => proceedToPay("COD", selectedPaymentPayload)}
                   >
-                    {t("resource.checkout.place_order")}
+                    {!isPaymentLoading
+                      ? t("resource.checkout.place_order")
+                      : loader}
                   </button>
                 </div>
               </div>
@@ -2807,6 +2854,8 @@ function CheckoutPaymentContent({
                             onPriceDetailsClick={onPriceDetailsClick}
                             disabled={!selectedPayLater.code}
                             enableLinkPaymentOption={enableLinkPaymentOption}
+                            isPaymentLoading={isPaymentLoading}
+                            loader={loader}
                             proceedToPay={() => {
                               proceedToPay("PL", selectedPaymentPayload);
                               acceptOrder();
@@ -2822,10 +2871,16 @@ function CheckoutPaymentContent({
                                 acceptOrder();
                               }}
                             >
-                              {t("resource.common.pay_caps")}{" "}
-                              {priceFormatCurrencySymbol(
-                                getCurrencySymbol,
-                                getTotalValue()
+                              {!isPaymentLoading ? (
+                                <>
+                                  {t("resource.common.pay_caps")}{" "}
+                                  {priceFormatCurrencySymbol(
+                                    getCurrencySymbol,
+                                    getTotalValue()
+                                  )}
+                                </>
+                              ) : (
+                                loader
                               )}
                             </button>
                           )
@@ -2890,6 +2945,8 @@ function CheckoutPaymentContent({
                             )}
                             onPriceDetailsClick={onPriceDetailsClick}
                             enableLinkPaymentOption={enableLinkPaymentOption}
+                            isPaymentLoading={isPaymentLoading}
+                            loader={loader}
                             proceedToPay={() => {
                               proceedToPay(
                                 "CARDLESS_EMI",
@@ -2909,10 +2966,16 @@ function CheckoutPaymentContent({
                               acceptOrder();
                             }}
                           >
-                            {t("resource.common.pay_caps")}{" "}
-                            {priceFormatCurrencySymbol(
-                              getCurrencySymbol,
-                              getTotalValue()
+                            {!isPaymentLoading ? (
+                              <>
+                                {t("resource.common.pay_caps")}{" "}
+                                {priceFormatCurrencySymbol(
+                                  getCurrencySymbol,
+                                  getTotalValue()
+                                )}
+                              </>
+                            ) : (
+                              loader
                             )}
                           </button>
                         )}
@@ -2980,6 +3043,8 @@ function CheckoutPaymentContent({
                     onPriceDetailsClick={onPriceDetailsClick}
                     disabled={!selectedOtherPayment?.code}
                     enableLinkPaymentOption={enableLinkPaymentOption}
+                    isPaymentLoading={isPaymentLoading}
+                    loader={loader}
                     proceedToPay={() => {
                       proceedToPay("Other", selectedPaymentPayload);
                       acceptOrder();
@@ -2995,10 +3060,16 @@ function CheckoutPaymentContent({
                         acceptOrder();
                       }}
                     >
-                      {t("resource.common.pay_caps")}{" "}
-                      {priceFormatCurrencySymbol(
-                        getCurrencySymbol,
-                        getTotalValue()
+                      {!isPaymentLoading ? (
+                        <>
+                          {t("resource.common.pay_caps")}{" "}
+                          {priceFormatCurrencySymbol(
+                            getCurrencySymbol,
+                            getTotalValue()
+                          )}
+                        </>
+                      ) : (
+                        loader
                       )}
                     </button>
                   )
@@ -3078,6 +3149,8 @@ function CheckoutPaymentContent({
                             )}
                             onPriceDetailsClick={onPriceDetailsClick}
                             enableLinkPaymentOption={enableLinkPaymentOption}
+                            isPaymentLoading={isPaymentLoading}
+                            loader={loader}
                             proceedToPay={() => {
                               proceedToPay("Other", selectedPaymentPayload);
                               acceptOrder();
@@ -3091,10 +3164,16 @@ function CheckoutPaymentContent({
                               acceptOrder();
                             }}
                           >
-                            {t("resource.common.pay_caps")}{" "}
-                            {priceFormatCurrencySymbol(
-                              getCurrencySymbol,
-                              getTotalValue()
+                            {!isPaymentLoading ? (
+                              <>
+                                {t("resource.common.pay_caps")}{" "}
+                                {priceFormatCurrencySymbol(
+                                  getCurrencySymbol,
+                                  getTotalValue()
+                                )}
+                              </>
+                            ) : (
+                              loader
                             )}
                           </button>
                         )}
@@ -3247,53 +3326,54 @@ function CheckoutPaymentContent({
           </div>
         </Modal>
       )}
-      {(!isCouponValid || showCouponValidityModal) && (
-        <Modal
-          customClassName={styles.couponValidityModal}
-          isOpen={showCouponValidityModal || !isCouponValid}
-          title={couponValidity.title || inValidCouponData?.title}
-          notCloseOnclickOutside={true}
-          closeDialog={() => {
-            if (mop === "CARD" && subMop === "newCARD") {
-              hideNewCard();
-            }
-            setShowCouponValidityModal(false);
-            setIsCouponValid(true);
-            unsetSelectedSubMop();
-          }}
-        >
-          <div className={styles.couponValidity}>
-            <p className={styles.message}>
-              {couponValidity.message || inValidCouponData?.message}
-            </p>
-            <div className={styles.select}>
-              <div
-                className={`${styles.commonBtn} ${styles.yesBtn}`}
-                onClick={() => {
-                  removeCoupon();
-                  setShowCouponValidityModal(false);
-                  setIsCouponValid(true);
-                }}
-              >
-                {t("resource.common.yes")}
-              </div>
-              <div
-                className={`${styles.commonBtn} ${styles.noBtn}`}
-                onClick={() => {
-                  if (mop === "CARD" && subMop === "newCARD") {
-                    hideNewCard();
-                  }
-                  setShowCouponValidityModal(false);
-                  setIsCouponValid(true);
-                  unsetSelectedSubMop();
-                }}
-              >
-                {t("resource.common.no")}
+      {!enableLinkPaymentOption &&
+        (!isCouponValid || showCouponValidityModal) && (
+          <Modal
+            customClassName={styles.couponValidityModal}
+            isOpen={showCouponValidityModal || !isCouponValid}
+            title={couponValidity.title || inValidCouponData?.title}
+            notCloseOnclickOutside={true}
+            closeDialog={() => {
+              if (mop === "CARD" && subMop === "newCARD") {
+                hideNewCard();
+              }
+              setShowCouponValidityModal(false);
+              setIsCouponValid(true);
+              unsetSelectedSubMop();
+            }}
+          >
+            <div className={styles.couponValidity}>
+              <p className={styles.message}>
+                {couponValidity.message || inValidCouponData?.message}
+              </p>
+              <div className={styles.select}>
+                <div
+                  className={`${styles.commonBtn} ${styles.yesBtn}`}
+                  onClick={() => {
+                    removeCoupon();
+                    setShowCouponValidityModal(false);
+                    setIsCouponValid(true);
+                  }}
+                >
+                  {t("resource.common.yes")}
+                </div>
+                <div
+                  className={`${styles.commonBtn} ${styles.noBtn}`}
+                  onClick={() => {
+                    if (mop === "CARD" && subMop === "newCARD") {
+                      hideNewCard();
+                    }
+                    setShowCouponValidityModal(false);
+                    setIsCouponValid(true);
+                    unsetSelectedSubMop();
+                  }}
+                >
+                  {t("resource.common.no")}
+                </div>
               </div>
             </div>
-          </div>
-        </Modal>
-      )}
+          </Modal>
+        )}
       {showUpiRedirectionModal && (
         <Modal isOpen={showUpiRedirectionModal} hideHeader={true}>
           <div className={styles.upiRedirectionModal}>
@@ -3355,8 +3435,17 @@ function CheckoutPaymentContent({
               className={`${styles.commonBtn} ${styles.payBtn}`}
               onClick={() => proceedToPay("COD", selectedPaymentPayload)}
             >
-              {t("resource.checkout.continue_with_cod")}{" "}
-              {priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue())}
+              {!isPaymentLoading ? (
+                <>
+                  {t("resource.checkout.continue_with_cod")}{" "}
+                  {priceFormatCurrencySymbol(
+                    getCurrencySymbol,
+                    getTotalValue()
+                  )}
+                </>
+              ) : (
+                loader
+              )}
             </button>
           </div>
         </Modal>

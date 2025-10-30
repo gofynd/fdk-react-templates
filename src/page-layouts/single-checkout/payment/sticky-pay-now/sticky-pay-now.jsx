@@ -12,9 +12,10 @@ const StickyPayNow = ({
   customClassName,
   enableLinkPaymentOption = false,
   isJuspay = false,
+  isPaymentLoading = false,
+  loader,
 }) => {
   const { t } = useGlobalTranslation("translation");
-
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -40,9 +41,17 @@ const StickyPayNow = ({
           {!isJuspay ? (
             <button
               className={`${styles.cartCheckoutBtn} ${styles.checkoutButton}`}
-              onClick={proceedToPay}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                proceedToPay();
+              }}
             >
-              {btnTitle || t("resource.cart.pay_now")}
+              {!isPaymentLoading ? (
+                <>{btnTitle || t("resource.cart.pay_now")}</>
+              ) : (
+                loader
+              )}
             </button>
           ) : (
             <button
@@ -51,7 +60,11 @@ const StickyPayNow = ({
               className={`${styles.cartCheckoutBtn} ${styles.checkoutButton}`}
               disabled={disabled}
             >
-              {t("resource.common.pay_caps")}{" "}
+              {!isPaymentLoading ? (
+                <>{t("resource.common.pay_caps")}</>
+              ) : (
+                loader
+              )}
             </button>
           )}
         </div>

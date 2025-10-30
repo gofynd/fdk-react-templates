@@ -59,6 +59,8 @@ function CardForm({
   cardDetails,
   selectMop,
   setIsJuspayCouponApplied,
+  isPaymentLoading = false,
+  loader = <div></div>,
 }) {
   const { t } = useGlobalTranslation("translation");
   const isFormatterSet = useRef(false);
@@ -170,8 +172,8 @@ function CardForm({
             onChange={validateCardNumber}
             onPaste={handleCardNumberPaste}
             onBlur={validateCardNumber}
-            dir="ltr"
             value={cardNumber}
+            dir="ltr"
           />
           {(cardNumber || cardNumberError) && (
             <span
@@ -368,6 +370,8 @@ function CardForm({
             enableLinkPaymentOption={enableLinkPaymentOption}
             onPriceDetailsClick={onPriceDetailsClick}
             proceedToPay={() => payUsingCard()}
+            loader={loader}
+            isPaymentLoading={isPaymentLoading}
           />
         ) : (
           <button
@@ -375,8 +379,14 @@ function CardForm({
             onClick={() => payUsingCard()}
             disabled={!isCardValid()}
           >
-            {t("resource.common.pay_caps")}{" "}
-            {priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue())}
+            {!isPaymentLoading ? (
+              <>
+                {t("resource.common.pay_caps")}{" "}
+                {priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue())}
+              </>
+            ) : (
+              loader
+            )}
           </button>
         )}
       </div>

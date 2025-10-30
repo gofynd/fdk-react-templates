@@ -28,7 +28,6 @@ function ShipmentTracking({
   shipmentInfo = {},
   changeinit,
   invoiceDetails,
-  customNeedHelpLink,
   availableFOCount,
   bagLength = 0,
 }) {
@@ -61,25 +60,19 @@ function ShipmentTracking({
         link: shipmentInfo?.track_url ? shipmentInfo?.track_url : "",
       });
     }
-    // if (shipmentInfo?.need_help_url) {
-    //   arrLinks.push({
-    //     type: "internal",
-    //     text: t("resource.common.need_help"),
-    //     link: "/faq/" || shipmentInfo?.need_help_url,
-    //   });
-    // }
+    if (shipmentInfo?.need_help_url) {
+      arrLinks.push({
+        type: "internal",
+        text: t("resource.common.need_help"),
+        link: "/faq/" || shipmentInfo?.need_help_url,
+      });
+    }
     if (invoiceDetails?.success) {
       arrLinks.push({
         text: t("resource.common.download_invoice"),
         link: invoiceDetails?.presigned_url,
       });
     }
-    arrLinks.push({
-      type: "internal",
-      text: t("resource.common.need_help"),
-      newTab: !!customNeedHelpLink?.value,
-      link: customNeedHelpLink?.value || "/faq/",
-    });
     return arrLinks;
   };
 
@@ -93,8 +86,20 @@ function ShipmentTracking({
 
   const update = (item) => {
     if (["CANCEL", "RETURN"].includes(item?.text)) {
-      if (bagLength === 1) {
-        const bagId = shipmentInfo?.bags?.[0]?.id;
+      const firstBag = shipmentInfo?.bags?.[0];
+      const isBundleItem = firstBag?.bundle_details?.bundle_group_id;
+      const isPartialReturnBundle = 
+        isBundleItem && 
+        firstBag?.bundle_details?.return_config?.allow_partial_return;
+      
+      // Direct navigate if: single bag OR bundle with allow_partial_return: false
+      if (bagLength === 1 && (!isBundleItem || !isPartialReturnBundle)) {
+        // Find the base bag for bundles, otherwise use first bag
+        const selectedBag = isBundleItem 
+          ? shipmentInfo.bags.find((bag) => bag?.bundle_details?.is_base === true) || firstBag
+          : firstBag;
+        
+        const bagId = selectedBag?.id;
         const querParams = new URLSearchParams(location.search);
         if (bagId) {
           querParams.set("selectedBagId", bagId);
@@ -105,6 +110,7 @@ function ShipmentTracking({
             (querParams?.toString() ? `?${querParams.toString()}` : "")
         );
       } else {
+        // Multiple bags OR bundle with allow_partial_return: true - show selection UI
         changeinit({
           ...item,
           link: `/profile/orders/shipment/update/${shipmentInfo?.shipment_id}/${updateType()?.toLowerCase()}`,
@@ -112,11 +118,7 @@ function ShipmentTracking({
       }
       window.scrollTo(0, 0);
     } else {
-      if (item?.newTab) {
-        window.open(item?.link, "_blank");
-      } else {
-        navigate(item?.link);
-      }
+      navigate(item?.link);
     }
   };
 
