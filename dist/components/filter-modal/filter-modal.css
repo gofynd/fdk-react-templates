@@ -1389,6 +1389,8 @@ h5,
 .range-slider__CustomRangeSlider___Uo_rw .range-slider__rangeSlider___fC17Q {
   height: 4px;
   position: relative;
+  padding: 5px 0;
+  border-radius: 6px;
 }
 .range-slider__CustomRangeSlider___Uo_rw .range-slider__rangeSlider___fC17Q .rc-slider-handle {
   height: 16px !important;
@@ -1399,6 +1401,7 @@ h5,
   border: 1px solid var(--buttonPrimary, #4e3f09) !important;
   opacity: 1 !important;
   cursor: pointer;
+  position: absolute;
 }
 .range-slider__CustomRangeSlider___Uo_rw .range-slider__rangeSlider___fC17Q .rc-slider-handle:active,
 .range-slider__CustomRangeSlider___Uo_rw .range-slider__rangeSlider___fC17Q .rc-slider-handle-dragging {
@@ -1408,10 +1411,14 @@ h5,
 .range-slider__CustomRangeSlider___Uo_rw .range-slider__rangeSlider___fC17Q .rc-slider-rail {
   background-color: var(--buttonPrimaryL3, #b8b29d) !important;
   height: 4px !important;
+  position: absolute;
+  width: 100%;
+  border-radius: 6px;
 }
 .range-slider__CustomRangeSlider___Uo_rw .range-slider__rangeSlider___fC17Q .rc-slider-track {
   background: var(--buttonPrimary, #4e3f09) !important;
   height: 4px !important;
+  position: absolute;
 }
 .range-slider__CustomRangeSlider___Uo_rw .range-slider__rangeSlider___fC17Q .rc-slider-tracks {
   background: var(--buttonPrimary, #4e3f09) !important;

@@ -67,7 +67,8 @@
   .rangeSlider {
     height: 4px;
     position: relative;
-
+    padding: 5px 0;
+    border-radius: 6px;
     :global(.rc-slider-handle) {
       height: 16px !important;
       width: 16px !important;
@@ -77,6 +78,7 @@
       border: 1px solid @ButtonPrimary !important;
       opacity: 1 !important;
       cursor: pointer;
+      position: absolute;
     }
 
     :global(.rc-slider-handle:active),
@@ -88,11 +90,15 @@
     :global(.rc-slider-rail) {
       background-color: @ButtonPrimaryL3 !important;
       height: 4px !important;
+      position: absolute;
+      width: 100%;
+      border-radius: 6px;
     }
 
     :global(.rc-slider-track) {
       background: @ButtonPrimary !important;
       height: 4px !important;
+      position: absolute;
     }
 
     :global(.rc-slider-tracks) {
