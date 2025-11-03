@@ -77,6 +77,17 @@ function CardForm({
     }
   }, []);
 
+  const handleCardNumberKeyPress = (e) => {
+    // Allow control keys (Backspace, Delete, Tab, Arrow keys, etc.)
+    if (e.key.length > 1 || e.ctrlKey || e.metaKey) {
+      return;
+    }
+    // Only allow numeric characters
+    if (!/^[0-9]$/.test(e.key)) {
+      e.preventDefault();
+    }
+  };
+
   const starPlaceholder = (
     <>
       {t("resource.checkout.expiry_date")}
@@ -166,14 +177,18 @@ function CardForm({
       >
         <div className={`${styles.cardInputWrapper} ${styles.cardNumberBox}`}>
           <input
+            type="text"
+            inputMode="numeric"
             placeholder={`${t("resource.checkout.card_number")}*`}
             className={`${cardNumberError ? styles.error : ""} ${styles.cardNumber}`}
             id="card-number"
-            onChange={validateCardNumber}
+            onChange={handleCardNumberInput}
+            onKeyPress={handleCardNumberKeyPress}
             onPaste={handleCardNumberPaste}
             onBlur={validateCardNumber}
             value={cardNumber}
             dir="ltr"
+            autoComplete="cc-number"
           />
           {(cardNumber || cardNumberError) && (
             <span
