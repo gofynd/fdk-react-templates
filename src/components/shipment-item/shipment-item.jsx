@@ -173,9 +173,9 @@ const ShipmentImage = ({
     );
   };
 
-  if (type === "tracking") {
-    return getItemImage();
-  }
+  // if (type === "tracking") {
+  //   return getItemImage();
+  // }
 
   return (
     <FDKLink

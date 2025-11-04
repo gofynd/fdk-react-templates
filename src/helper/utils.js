@@ -511,6 +511,11 @@ export function isEmptyOrNull(obj) {
 }
 
 export function translateDynamicLabel(input, t) {
+  // Handle null, undefined, or empty input
+  if (!input || typeof input !== 'string') {
+    return input || '';
+  }
+
   const safeInput = input
     .toLowerCase()
     .replace(/\//g, '_') // replace slashes with underscores
