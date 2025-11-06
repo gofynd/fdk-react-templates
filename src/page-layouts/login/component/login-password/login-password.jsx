@@ -163,11 +163,6 @@ function loginPassword({
               )}
             />
           )}
-          {/* {(errors?.username || errors?.phone) && (
-            <p className={styles.loginAlert}>
-              {errors?.phone?.message || errors?.username?.message}
-            </p>
-          )} */}
         </div>
         <div
           className={`${styles.loginInputGroup} ${errors?.password || errors?.root ? styles.error : ""}`}

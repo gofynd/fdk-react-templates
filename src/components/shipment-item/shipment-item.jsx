@@ -173,10 +173,6 @@ const ShipmentImage = ({
     );
   };
 
-  // if (type === "tracking") {
-  //   return getItemImage();
-  // }
-
   return (
     <FDKLink
       to={`/product/${isBundleItem ? bag?.bundle_details?.slug : bag?.item?.slug_key}`}
