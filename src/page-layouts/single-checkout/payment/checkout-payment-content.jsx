@@ -730,7 +730,12 @@ function CheckoutPaymentContent({
           addressId: address_id,
           paymentMode: mop,
           aggregatorName: mopData?.aggregator_name,
-          iin: cardNumber?.replace(/[^0-9]/g, "")?.slice(0, 6),
+          cardId: cardDetailsData?.id,
+          iin: cardDetailsData?.card_object,
+          paymentIdentifier: cardDetailsData?.bank_code,
+          merchant_code: cardDetailsData?.bank_code,
+          type: cardDetailsData?.type || "debit",
+          network: cardDetailsData?.card_brand || subMopData?.card_brand,
         };
       } else {
         payload = {
@@ -741,10 +746,12 @@ function CheckoutPaymentContent({
             subMopData?.aggregator_name ||
             mopData?.aggregator_name ||
             "Razorpay",
-          cardId: subMopData?.card_id,
-          paymentIdentifier: subMopData?.card_id,
-          type: subMopData?.card_type || "debit",
-          network: subMopData?.card_brand || cardDetailsData?.card_brand,
+          cardId: cardDetailsData?.id,
+          iin: cardDetailsData?.card_object,
+          paymentIdentifier: cardDetailsData?.bank_code,
+          merchant_code: cardDetailsData?.bank_code,
+          type: cardDetailsData?.type || "debit",
+          network: cardDetailsData?.card_brand || subMopData?.card_brand,
         };
       }
     } else {
