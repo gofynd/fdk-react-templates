@@ -765,10 +765,14 @@ function CheckoutPaymentContent({
       };
     }
     if (!enableLinkPaymentOption) {
-      setMopPayload(payload);
+      if (selectedTab === tab) {
+        setMopPayload(payload);
+      } else {
+        setMopPayload(null);
+      }
     }
     let isValid = true;
-    if (isCouponApplied) {
+    if (isCouponApplied && selectedTab === tab) {
       const { code, title, display_message_en, valid } =
         !enableLinkPaymentOption && (await checkCouponValidity(payload));
       isValid = !code || (code && valid);
@@ -3208,8 +3212,10 @@ function CheckoutPaymentContent({
             if (isTablet) {
               handleScrollToTop(index);
               setSelectedTab((prev) => (prev === opt.name ? "" : opt.name));
+              setTab(opt.name);
             } else {
               setSelectedTab(opt.name);
+              setTab(opt.name);
             }
             removeDialogueError();
             setTab(opt.name);
@@ -3224,6 +3230,7 @@ function CheckoutPaymentContent({
               hideNewCard();
               setvpa("");
               setLastValidatedBin("");
+              unsetSelectedSubMop();
             }
           }}
         >
