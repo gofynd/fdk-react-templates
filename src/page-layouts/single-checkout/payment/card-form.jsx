@@ -392,7 +392,7 @@ function CardForm({
           <button
             className={styles.saveNewCard}
             onClick={() => payUsingCard()}
-            disabled={!isCardValid()}
+            disabled={!isCardValid() || isPaymentLoading}
           >
             {!isPaymentLoading ? (
               <>

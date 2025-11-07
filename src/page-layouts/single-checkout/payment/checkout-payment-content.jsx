@@ -1718,6 +1718,7 @@ function CheckoutPaymentContent({
                                       });
                                       acceptOrder();
                                     }}
+                                    disabled={isPaymentLoading}
                                   >
                                     {!isPaymentLoading ? (
                                       <>
@@ -2061,6 +2062,7 @@ function CheckoutPaymentContent({
                           acceptOrder();
                         }
                       }}
+                      disabled={isPaymentLoading}
                     >
                       {!isPaymentLoading ? (
                         <>
@@ -2397,7 +2399,7 @@ function CheckoutPaymentContent({
                                     cancelQrPayment();
                                     selectMop("UPI", "UPI", "UPI");
                                   }}
-                                  disabled={savedUPISelect && isUPIError}
+                                  disabled={(savedUPISelect && isUPIError) || isPaymentLoading}
                                 >
                                   {!isPaymentLoading ? (
                                     <>
@@ -2572,7 +2574,7 @@ function CheckoutPaymentContent({
                         cancelQrPayment();
                       }}
                       disabled={
-                        !(isUpiSuffixSelected || !!selectedUpiIntentApp)
+                        !(isUpiSuffixSelected || !!selectedUpiIntentApp) || isPaymentLoading
                       }
                     >
                       {!isPaymentLoading ? (
@@ -2664,6 +2666,7 @@ function CheckoutPaymentContent({
                           acceptOrder();
                         }
                       }}
+                      disabled={isPaymentLoading}
                     >
                       {!isPaymentLoading ? (
                         <>
@@ -2789,6 +2792,7 @@ function CheckoutPaymentContent({
                   <button
                     className={`${styles.commonBtn} ${styles.payBtn}`}
                     onClick={() => proceedToPay("COD", selectedPaymentPayload)}
+                    disabled={isPaymentLoading}
                   >
                     {!isPaymentLoading
                       ? t("resource.checkout.place_order")
@@ -2881,6 +2885,7 @@ function CheckoutPaymentContent({
                                 proceedToPay("PL", selectedPaymentPayload);
                                 acceptOrder();
                               }}
+                              disabled={isPaymentLoading}
                             >
                               {!isPaymentLoading ? (
                                 <>
@@ -2976,6 +2981,7 @@ function CheckoutPaymentContent({
                               );
                               acceptOrder();
                             }}
+                            disabled={isPaymentLoading}
                           >
                             {!isPaymentLoading ? (
                               <>
@@ -3070,6 +3076,7 @@ function CheckoutPaymentContent({
                         proceedToPay("Other", selectedPaymentPayload);
                         acceptOrder();
                       }}
+                      disabled={isPaymentLoading}
                     >
                       {!isPaymentLoading ? (
                         <>
@@ -3174,6 +3181,7 @@ function CheckoutPaymentContent({
                               proceedToPay("Other", selectedPaymentPayload);
                               acceptOrder();
                             }}
+                            disabled={isPaymentLoading}
                           >
                             {!isPaymentLoading ? (
                               <>
@@ -3448,6 +3456,7 @@ function CheckoutPaymentContent({
             <button
               className={`${styles.commonBtn} ${styles.payBtn}`}
               onClick={() => proceedToPay("COD", selectedPaymentPayload)}
+              disabled={isPaymentLoading}
             >
               {!isPaymentLoading ? (
                 <>

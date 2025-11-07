@@ -46,6 +46,7 @@ const StickyPayNow = ({
                 e.stopPropagation();
                 proceedToPay();
               }}
+              disabled={isPaymentLoading}
             >
               {!isPaymentLoading ? (
                 <>{btnTitle || t("resource.cart.pay_now")}</>
@@ -58,7 +59,7 @@ const StickyPayNow = ({
               type="submit"
               id="common_pay_btn"
               className={`${styles.cartCheckoutBtn} ${styles.checkoutButton}`}
-              disabled={disabled}
+              disabled={disabled || isPaymentLoading}
             >
               {!isPaymentLoading ? (
                 <>{t("resource.common.pay_caps")}</>
