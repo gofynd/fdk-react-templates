@@ -177,6 +177,25 @@ const ShipmentImage = ({
     <FDKLink
       to={`/product/${isBundleItem ? bag?.bundle_details?.slug : bag?.item?.slug_key}`}
       className={`${styles.bagImg}`}
+      state={{
+        product: isBundleItem
+          ? {
+              ...bag?.bundle_details,
+              media:
+                bag?.bundle_details?.images?.map((i) => ({
+                  url: i,
+                  type: "image",
+                })) || [],
+            }
+          : {
+              ...bag?.item,
+              media:
+                bag?.item?.image?.map((i) => ({
+                  url: i,
+                  type: "image",
+                })) || [],
+            },
+      }}
     >
       {getItemImage()}
     </FDKLink>

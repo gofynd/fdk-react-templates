@@ -370,6 +370,11 @@ export default function ChipItem({
               state={{
                 product: {
                   ...singleItemDetails,
+                  media:
+                    singleItemDetails?.product?.images?.map((i) => ({
+                      ...i,
+                      type: "image",
+                    })) || [],
                   ...(singleItemDetails?.product || {}),
                 },
               }}

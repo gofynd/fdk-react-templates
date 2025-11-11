@@ -68,6 +68,7 @@ const ProductCard = ({
   customImageContainerClass = "",
   imageBackgroundColor = "",
   customeProductDescContainerClass = "",
+
   imagePlaceholder = "",
   columnCount = { desktop: 4, tablet: 3, mobile: 1 },
   WishlistIconComponent = () => <SvgWrapper svgSrc="wishlist-plp" />,
