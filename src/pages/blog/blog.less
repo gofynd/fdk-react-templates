@@ -1,11 +1,4 @@
 @import "../../styles/main.less";
-.nextArrowStyles {
-  right: 20px;
-  inset-inline-start: "unset";
-}
-.prevArrowStyles {
-  left: 20px;
-}
 
 .loader {
   position: relative;
@@ -130,18 +123,15 @@
 }
 .sliderWrapper {
   padding-bottom: 60px;
-  :global {
-    .slick-track {
-      display: flex !important;
+  .carouselBtn {
+    &[disabled] {
+      display: none;
     }
-    .slick-slide {
-      height: inherit !important;
-      & > div,
-      & > div > div {
-        height: 100%;
-      }
+    @media @tablet {
+      display: none;
     }
   }
+  
   .blogItem {
     @media @tablet {
       height: 100%;

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef  } from "react";
 import { useLocation } from "react-router-dom";
-import Slider from "react-slick";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./blog.less";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
@@ -19,18 +18,21 @@ import {
 
 import {
   isRunningOnClient,
-  throttle,
   convertUTCDateToLocalDate,
   formatLocale,
   translateDynamicLabel,
 } from "../../helper/utils";
 import Shimmer from "../../components/shimmer/shimmer";
-import {
-  SliderNextArrow,
-  SliderPrevArrow,
-} from "../../components/slider-arrow/slider-arrow";
 import useLocaleDirection from "../../helper/hooks/useLocaleDirection";
 import { debounce } from "../../helper/utils";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+} from "../../components/carousel/carousel";
+import Autoplay from "embla-carousel-autoplay";
 
 function MemoizedSlide({ blog, index, sliderProps, getBlogTitle }) {
   const { t } = useGlobalTranslation("translation");
@@ -114,7 +116,7 @@ function BlogList({
   ssrSearch,
   ssrFilters,
 }) {
-  const { isRTL } = useLocaleDirection();
+  const { direction } = useLocaleDirection();
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
   const i18nDetails = useGlobalStore(fpi?.getters?.i18N_DETAILS) || {};
@@ -142,80 +144,33 @@ function BlogList({
     typeof show_top_blog === "boolean" || show_top_blog === ""
       ? show_top_blog
       : true;
-  const [windowWidth, setWindowWidth] = useState(0);
-  const slideInterval = Number(sliderProps?.slide_interval) || 3;
-  const transitionDuration = 600;
-  const [config, setConfig] = useState({
-    dots: false,
-    speed: transitionDuration,
-    autoplaySpeed: slideInterval * 1000 + transitionDuration,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    swipeToSlide: false,
-    autoplay: sliderProps?.autoplay,
-    pauseOnHover: true,
-    cssEase: "ease-in-out",
-    centerPadding: "75px",
-    arrows: true,
-    nextArrow: <SliderNextArrow nextArrowStyles={styles.nextArrowStyles} />,
-    prevArrow: <SliderPrevArrow prevArrowStyles={styles.prevArrowStyles} />,
-    infinite: sliderBlogs?.items?.length > 1,
-    rtl: isRTL,
-    responsive: [
-      {
-        breakpoint: 768,
-        settings: {
-          arrows: false,
-          centerPadding: "32px",
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          arrows: false,
-          centerPadding: "20px",
-        },
-      },
-    ],
-  });
 
-  useEffect(() => {
-    setConfig((prevConfig) => ({
-      ...prevConfig,
-      infinite: sliderBlogs?.items?.length > 1,
-    }));
-  }, [sliderBlogs]);
+  const carouselProps = useMemo(() => {
+    const opts = {
+      loop: sliderBlogs?.items?.length > 1,
+      skipSnaps: true,
+      direction,
+    };
+    const plugins = [];
+    if (sliderProps?.autoplay) {
+      plugins.push(
+        Autoplay({
+          stopOnMouseEnter: true,
+          stopOnInteraction: false,
+          delay: Number(sliderProps?.slide_interval || 3) * 1000,
+        })
+      );
+    }
+    return { opts, plugins };
+  }, [
+    sliderBlogs?.items?.length,
+    sliderProps?.autoplay,
+    sliderProps?.slide_interval,
+  ]);
 
   useEffect(() => {
     setBlogCount(totalBlogsList?.page?.item_total);
   }, [totalBlogsList]);
-
-  useEffect(() => {
-    if (sliderProps?.autoplay) {
-      setConfig((prevConfig) => ({
-        ...prevConfig,
-        autoplay: sliderProps.autoplay,
-        speed: Number(sliderProps.slide_interval * 1000),
-      }));
-    }
-  }, [sliderProps.autoplay, sliderProps.slide_interval]);
-
-  useEffect(() => {
-    const handleResize = throttle(() => {
-      setWindowWidth(isRunningOnClient() ? window.innerWidth : 0);
-    }, 500);
-
-    if (isRunningOnClient()) {
-      window.addEventListener("resize", handleResize);
-      handleResize();
-    }
-
-    return () => {
-      if (isRunningOnClient()) {
-        window.removeEventListener("resize", handleResize);
-      }
-    };
-  }, []);
 
   useEffect(() => {
     const searchParams = isRunningOnClient()
@@ -432,40 +387,22 @@ function BlogList({
           )}
         {showBlogSlideShow && (
           <div className={styles.sliderWrapper}>
-            <Slider
-              {...config}
-              initialSlide={0}
-              className={`${styles.hideOnMobile}
-                ${sliderBlogs?.length <= 3 || windowWidth <= 480 ? "no-nav" : ""}
-              `}
-            >
-              {sliderBlogs?.items?.map((blog, index) => (
-                <MemoizedSlide
-                  key={index}
-                  blog={blog}
-                  index={index}
-                  getBlogTitle={getBlogTitle}
-                  sliderProps={sliderProps}
-                />
-              ))}
-            </Slider>
-            <Slider
-              {...config}
-              initialSlide={0}
-              className={`${styles.hideOnDesktop}
-                ${sliderBlogs?.length <= 3 || windowWidth <= 480 ? "no-nav" : ""}
-              `}
-            >
-              {sliderBlogs?.items?.map((blog, index) => (
-                <MemoizedSlide
-                  key={index}
-                  blog={blog}
-                  index={index}
-                  getBlogTitle={getBlogTitle}
-                  sliderProps={sliderProps}
-                />
-              ))}
-            </Slider>
+            <Carousel {...carouselProps}>
+              <CarouselContent>
+                {sliderBlogs?.items?.map((blog, index) => (
+                  <CarouselItem key={index}>
+                    <MemoizedSlide
+                      blog={blog}
+                      index={index}
+                      getBlogTitle={getBlogTitle}
+                      sliderProps={sliderProps}
+                    />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className={styles.carouselBtn} />
+              <CarouselNext className={styles.carouselBtn} />
+            </Carousel>
           </div>
         )}
         <div className={styles.filterWrapper}>
