@@ -15,6 +15,7 @@ const FormInputSelector = ({
   isSingleField = false,
   mobileNumberProps = {},
   labelClassName = "",
+  showAsOptional,
   formMethods = {},
 }) => {
   const { t } = useGlobalTranslation("translation");
@@ -93,6 +94,7 @@ const FormInputSelector = ({
             disabled={disabled}
             inputProps={{ readOnly }}
             countryIso={countryIso}
+            showAsOptional={showAsOptional}
             onChange={(value) => {
               field?.onChange(value);
               onChange(value, formMethods);
