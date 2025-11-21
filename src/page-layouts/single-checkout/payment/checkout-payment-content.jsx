@@ -23,6 +23,7 @@ import {
 import Spinner from "../../../components/spinner/spinner";
 import FyButton from "../../../components/core/fy-button/fy-button";
 import { FDKLink } from "fdk-core/components";
+import UploadSvg from "../../../assets/images/cloud_upload.svg";
 
 const upiDisplayWrapperStyle = {
   padding: "24px",
@@ -2883,9 +2884,12 @@ function CheckoutPaymentContent({
                         key={detail.label}
                         className={styles.neftBeneficiaryRow}
                       >
-                        <span className={styles.neftBeneficiaryLabel}>
-                          {detail.label}
-                        </span>
+                        <div className={styles.neftBeneficiaryLabelWrapper}>
+                          <span className={styles.neftBeneficiaryLabel}>
+                            {detail.label}
+                          </span>
+                          <span className={styles.neftLabelSeparator}>:</span>
+                        </div>
                         <div className={styles.neftBeneficiaryValue}>
                           <span>{detail.value}</span>
                           {detail.isCopyEnabled && (
@@ -2905,61 +2909,67 @@ function CheckoutPaymentContent({
                   </div>
                 </section>
 
-                <section className={styles.neftSection}>
-                  <p className={styles.neftSectionTitle}>{transactionTitle}</p>
-                  <div className={styles.neftFieldGroup}>
-                    <label
-                      className={styles.neftFieldLabel}
-                      htmlFor="utrNumber"
-                    >
-                      {utrLabel} <span>*</span>
-                    </label>
-                    <input
-                      id="utrNumber"
-                      type="text"
-                      value={utrNumber}
-                      onChange={handleUtrInputChange}
-                      placeholder={utrLabel}
-                      className={`${styles.neftInput} ${
-                        utrError ? styles.neftInputError : ""
-                      }`}
-                    />
-                    {utrError && (
-                      <p className={styles.neftError}>
-                        {t("resource.common.field_required")}
-                      </p>
-                    )}
-                  </div>
-                  <p className={styles.neftHelperText}>{utrDescription}</p>
-                </section>
-
-                <section className={styles.neftUploadSection}>
-                  <div className={styles.neftUploadBox}>
-                    <div className={styles.neftUploadIcon} aria-hidden="true">
-                      +
+                <div className={styles.neftFormBlock}>
+                  <section className={styles.neftSection}>
+                    <p className={styles.neftSectionTitle}>
+                      {transactionTitle}
+                    </p>
+                    <div className={styles.neftFieldGroup}>
+                      <label
+                        className={styles.neftFieldLabel}
+                        htmlFor="utrNumber"
+                      >
+                        {utrLabel} <span>*</span>
+                      </label>
+                      <input
+                        id="utrNumber"
+                        type="text"
+                        value={utrNumber}
+                        onChange={handleUtrInputChange}
+                        placeholder={utrLabel}
+                        className={`${styles.neftInput} ${
+                          utrError ? styles.neftInputError : ""
+                        }`}
+                      />
+                      {utrError && (
+                        <p className={styles.neftError}>
+                          {t("resource.common.field_required")}
+                        </p>
+                      )}
                     </div>
-                    <button
-                      type="button"
-                      className={styles.neftUploadButton}
-                      disabled
-                    >
-                      {uploadCta}
-                    </button>
-                    <p className={styles.neftUploadTitle}>{uploadHeading}</p>
-                    <p className={styles.neftUploadHelper}>{uploadHelper}</p>
-                  </div>
-                </section>
+                    <p className={styles.neftHelperText}>{utrDescription}</p>
+                  </section>
 
-                <div className={styles.neftActionBar}>
-                  <button
-                    className={styles.neftPlaceOrderBtn}
-                    onClick={handleNeftPlaceOrder}
-                    disabled={isNeftPlaceOrderDisabled}
+                  <section
+                    className={`${styles.neftSection} ${styles.neftUploadSection}`}
                   >
-                    {!isPaymentLoading
-                      ? t("resource.checkout.place_order")
-                      : loader}
-                  </button>
+                    <div className={styles.neftUploadBox}>
+                      <div className={styles.neftUploadIcon} aria-hidden="true">
+                        <UploadSvg />
+                      </div>
+                      <button
+                        type="button"
+                        className={styles.neftUploadButton}
+                        disabled
+                      >
+                        {uploadCta}
+                      </button>
+                      <p className={styles.neftUploadTitle}>{uploadHeading}</p>
+                      <p className={styles.neftUploadHelper}>{uploadHelper}</p>
+                    </div>
+                  </section>
+
+                  <div className={styles.neftActionBar}>
+                    <button
+                      className={styles.neftPlaceOrderBtn}
+                      onClick={handleNeftPlaceOrder}
+                      disabled={isNeftPlaceOrderDisabled}
+                    >
+                      {!isPaymentLoading
+                        ? t("resource.checkout.place_order")
+                        : loader}
+                    </button>
+                  </div>
                 </div>
               </div>
             ) : (
