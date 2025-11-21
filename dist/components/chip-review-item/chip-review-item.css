@@ -1,0 +1,524 @@
+/**color by character**/
+/** Font family **/
+/** Font weight **/
+.chip-review-item__display-block___Y0sTS {
+  display: block;
+}
+.chip-review-item__inline-block___oc1qH,
+.chip-review-item__inlineBlock___X_f5d {
+  display: inline-block;
+}
+.chip-review-item__flex-row___GKLcY {
+  display: flex;
+}
+.chip-review-item__flex-column___xMwYU,
+.chip-review-item__flexColumn___L786c {
+  display: flex;
+  flex-direction: column;
+}
+.chip-review-item__flex-align-center___MbWJQ,
+.chip-review-item__flexAlignCenter___mUUXG {
+  display: flex;
+  align-items: center;
+}
+.chip-review-item__flex-justify-center___pJOvK,
+.chip-review-item__flexJustifyCenter___sKJ77 {
+  display: flex;
+  justify-content: center;
+}
+.chip-review-item__flex-center___wQtVD,
+.chip-review-item__flexCenter___EV9vr {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.chip-review-item__justify-start___Z_OE4,
+.chip-review-item__justifyStart___OhYxc {
+  justify-content: flex-start;
+}
+.chip-review-item__justify-end___wLXdv,
+.chip-review-item__justifyEnd___p2uLL {
+  justify-content: flex-end;
+}
+.chip-review-item__justify-between___PFM2W,
+.chip-review-item__justifyBetween___eGfrW {
+  justify-content: space-between;
+}
+.chip-review-item__justify-around___A3rig,
+.chip-review-item__justifyAround___Dpbky {
+  justify-content: space-around;
+}
+.chip-review-item__justify-evenly___JCHvg,
+.chip-review-item__justifyEvenly___YQj2j {
+  justify-content: space-evenly;
+}
+h1,
+.chip-review-item__h1___ePfLu {
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 42px;
+  letter-spacing: -0.03em;
+  color: var(--textHeading, #26201a);
+}
+@media only screen and (min-width: 769px) {
+  h1,
+  .chip-review-item__h1___ePfLu {
+    font-size: 36px;
+    line-height: 48px;
+  }
+}
+h2,
+.chip-review-item__h2___gFZ3p {
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 36px;
+  letter-spacing: -0.03em;
+  color: var(--textHeading, #26201a);
+}
+@media only screen and (min-width: 769px) {
+  h2,
+  .chip-review-item__h2___gFZ3p {
+    font-size: 32px;
+    line-height: 42px;
+  }
+}
+h3,
+.chip-review-item__h3___icIDe {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--textHeading, #26201a);
+  font-size: 24px;
+  line-height: 32px;
+}
+@media only screen and (min-width: 769px) {
+  h3,
+  .chip-review-item__h3___icIDe {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--textHeading, #26201a);
+    font-size: 28px;
+    line-height: 36px;
+  }
+}
+h4,
+.chip-review-item__h4___qywpP {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--textHeading, #26201a);
+  font-size: 16px;
+  line-height: 1.5;
+}
+@media only screen and (min-width: 769px) {
+  h4,
+  .chip-review-item__h4___qywpP {
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--textHeading, #26201a);
+    font-size: 20px;
+    line-height: 1.5;
+  }
+}
+h5,
+.chip-review-item__h5___S5F7c {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: -0.02em;
+  color: var(--textHeading, #26201a);
+}
+@media only screen and (min-width: 769px) {
+  h5,
+  .chip-review-item__h5___S5F7c {
+    font-size: 16px;
+    line-height: 18px;
+  }
+}
+.chip-review-item__b1___ch3Nd {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  letter-spacing: -0.02em;
+  color: var(--textBody, #3c3131);
+}
+@media only screen and (min-width: 769px) {
+  .chip-review-item__b1___ch3Nd {
+    font-size: 16px;
+    line-height: 20px;
+  }
+}
+.chip-review-item__b-small___VyIfN,
+.chip-review-item__bSmall___efA4G,
+.chip-review-item__b2___uOtXF {
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--textBody, #3c3131);
+  font-size: 12px;
+  line-height: 16px;
+}
+@media only screen and (min-width: 769px) {
+  .chip-review-item__b-small___VyIfN,
+  .chip-review-item__bSmall___efA4G,
+  .chip-review-item__b2___uOtXF {
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--textBody, #3c3131);
+    font-size: 14px;
+    line-height: 18px;
+  }
+}
+.chip-review-item__d1___DiU5a {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 48px;
+  letter-spacing: -0.02em;
+}
+@media only screen and (min-width: 769px) {
+  .chip-review-item__d1___DiU5a {
+    font-size: 64px;
+    line-height: 85px;
+    letter-spacing: -0.03em;
+  }
+}
+.chip-review-item__caption-medium___TahcP,
+.chip-review-item__captionMedium___TqlGQ {
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  font-weight: 500;
+}
+@media only screen and (max-width: 480px) {
+  .chip-review-item__caption-medium___TahcP,
+  .chip-review-item__captionMedium___TqlGQ {
+    font-size: 11px;
+  }
+}
+.chip-review-item__caption-semi-bold___AG3ci,
+.chip-review-item__captionSemiBold___azy1h {
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .chip-review-item__caption-semi-bold___AG3ci,
+  .chip-review-item__captionSemiBold___azy1h {
+    font-size: 11px;
+  }
+}
+.chip-review-item__btn-link___Iclpz,
+.chip-review-item__btnLink___srPw_ {
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  font-size: 12px;
+  line-height: 14px;
+  border-radius: var(--buttonRadius, 0px);
+  cursor: pointer;
+  color: var(--buttonLink, #b1655b);
+  text-decoration: underline;
+  background: none;
+  border: none;
+}
+@media only screen and (min-width: 769px) {
+  .chip-review-item__btn-link___Iclpz,
+  .chip-review-item__btnLink___srPw_ {
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    font-size: 14px;
+    line-height: 16px;
+  }
+}
+.chip-review-item__btn-link___Iclpz:hover,
+.chip-review-item__btnLink___srPw_:hover {
+  color: var(--buttonLinkL1, #c1847c);
+}
+.chip-review-item__btn-link___Iclpz:disabled,
+.chip-review-item__btnLink___srPw_:disabled {
+  color: var(--buttonLinkL2, #d0a39d);
+}
+.chip-review-item__btn-link___Iclpz:active,
+.chip-review-item__btnLink___srPw_:active {
+  opacity: 0.8;
+}
+.chip-review-item__user-select-none___L4bg7,
+.chip-review-item__userSelectNone___wGDfP {
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+.chip-review-item__margin-0-auto___pPJap,
+.chip-review-item__margin0auto___IB3vF {
+  margin: 0 auto;
+}
+.chip-review-item__base-page-container___AzTeB,
+.chip-review-item__basePageContainer___RCeGw {
+  max-width: 1440px !important;
+}
+.chip-review-item__remove-scroll___hyJdu,
+.chip-review-item__removeScroll___bcWzo {
+  overflow-y: hidden !important;
+}
+.chip-review-item__mr-5___giiGG,
+.chip-review-item__mr5___hfNxR {
+  margin-inline-end: 30px !important;
+}
+.chip-review-item__mr-2___tFXxQ,
+.chip-review-item__mr2___LanD1 {
+  margin-inline-end: 5px !important;
+}
+.chip-review-item__py-5___kcqhz,
+.chip-review-item__py5___P3nAb {
+  padding-top: 1.875rem !important;
+  padding-bottom: 1.875rem !important;
+}
+.chip-review-item__view-all-text___EXana,
+.chip-review-item__viewAllText___eZyS9 {
+  font-size: 20px;
+  font-weight: 400;
+  text-transform: lowercase;
+  text-decoration: underline;
+}
+.chip-review-item__view-all-mobile___ZyB3T,
+.chip-review-item__viewAllMobile___kcUEm {
+  display: none;
+}
+@media only screen and (max-width: 768px) {
+  .chip-review-item__view-all-mobile___ZyB3T,
+  .chip-review-item__viewAllMobile___kcUEm {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 40px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .chip-review-item__view-all-mobile___ZyB3T,
+  .chip-review-item__viewAllMobile___kcUEm {
+    margin-top: 24px;
+  }
+}
+.chip-review-item__accent-btn___dU5sG,
+.chip-review-item__accentBtn___FKK1_ {
+  background-color: var(--accentColor);
+  color: #fff;
+}
+.chip-review-item__no-scroll___OXPKC,
+.chip-review-item__noScroll___mBM22 {
+  overflow-y: hidden;
+}
+.chip-review-item__hide-overflow___c4wNd,
+.chip-review-item__hideOverflow___GDBya {
+  overflow: hidden;
+}
+.chip-review-item__markdown-body___y72tz h6 {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+@media only screen and (max-width: 480px) {
+  .chip-review-item__markdown-body___y72tz {
+    font-size: 12px !important;
+    padding: 5px !important;
+  }
+}
+.chip-review-item__view3d-canvas___f0rWx {
+  width: 100%;
+  height: 100%;
+}
+@media only screen and (max-width: 480px) {
+  .chip-review-item__view-mobile-up___KLlMV {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .chip-review-item__view-mobile___BNq6M {
+    display: none !important;
+  }
+}
+.chip-review-item__outofStock___bQ4UI {
+  opacity: 0.3;
+}
+.chip-review-item__bag___EdkMm {
+  border-bottom: 1px solid #eee;
+  width: 100%;
+}
+.chip-review-item__bag___EdkMm:last-child {
+  border-bottom: none;
+}
+.chip-review-item__bag___EdkMm .chip-review-item__itemContainer___yE5kO {
+  display: flex;
+  padding: 10px;
+}
+@media only screen and (max-width: 768px) {
+  .chip-review-item__bag___EdkMm .chip-review-item__itemContainer___yE5kO {
+    flex-wrap: wrap;
+  }
+}
+.chip-review-item__bag___EdkMm .chip-review-item__itemContainer___yE5kO .chip-review-item__bagLeft___UWOTi {
+  flex: 0 0 125px;
+  width: 125px;
+}
+.chip-review-item__bag___EdkMm .chip-review-item__itemContainer___yE5kO .chip-review-item__bagLeft___UWOTi a {
+  display: block;
+}
+.chip-review-item__bag___EdkMm .chip-review-item__itemContainer___yE5kO .chip-review-item__bagLeft___UWOTi img {
+  max-width: 110px;
+  max-height: 180px;
+  cursor: pointer;
+}
+.chip-review-item__bag___EdkMm .chip-review-item__itemContainer___yE5kO .chip-review-item__bagRight___ALFog {
+  flex: 1;
+  color: #41434c;
+}
+.chip-review-item__bag___EdkMm .chip-review-item__itemContainer___yE5kO .chip-review-item__bagRight___ALFog .chip-review-item__bagBrand___gljD7 {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 16px;
+}
+.chip-review-item__bag___EdkMm .chip-review-item__itemContainer___yE5kO .chip-review-item__bagRight___ALFog .chip-review-item__bagName____7WDg,
+.chip-review-item__bag___EdkMm .chip-review-item__itemContainer___yE5kO .chip-review-item__bagRight___ALFog .chip-review-item__soldBy___JoZJy {
+  color: #41434c;
+  margin: 10px 0px;
+  text-transform: capitalize;
+  font-weight: 300;
+  font-size: 14px;
+}
+.chip-review-item__bag___EdkMm .chip-review-item__itemContainer___yE5kO .chip-review-item__bagRight___ALFog .chip-review-item__soldBy___JoZJy {
+  color: #ccc;
+  line-height: 20px;
+}
+.chip-review-item__bag___EdkMm .chip-review-item__itemContainer___yE5kO .chip-review-item__bagRight___ALFog .chip-review-item__itemTotal___eRZfk {
+  font-weight: 700;
+  font-size: 14px;
+}
+@media only screen and (max-width: 768px) {
+  .chip-review-item__bag___EdkMm .chip-review-item__itemContainer___yE5kO .chip-review-item__bagRight___ALFog .chip-review-item__itemTotal___eRZfk {
+    font-size: 13px;
+  }
+}
+.chip-review-item__bag___EdkMm .chip-review-item__itemContainer___yE5kO .chip-review-item__bagRight___ALFog .chip-review-item__quantityLabel___nx1c1 {
+  font-weight: 300;
+  font-size: 14px;
+}
+@media only screen and (max-width: 768px) {
+  .chip-review-item__bag___EdkMm .chip-review-item__itemContainer___yE5kO .chip-review-item__bagRight___ALFog .chip-review-item__quantityLabel___nx1c1 {
+    font-size: 13px;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .chip-review-item__bag___EdkMm .chip-review-item__chipMetaDesktop___TuCyf {
+    display: none;
+  }
+}
+.chip-review-item__bag___EdkMm .chip-review-item__chipMetaMobile___bx_iw {
+  display: none;
+}
+@media only screen and (max-width: 768px) {
+  .chip-review-item__bag___EdkMm .chip-review-item__chipMetaMobile___bx_iw {
+    display: block;
+    flex-basis: 100%;
+  }
+}
+.chip-review-item__bagItem___Zi5qJ {
+  position: relative;
+  width: 100%;
+  background-color: #f8f8f8;
+  margin: 10px 0px;
+  padding-bottom: 10px;
+  max-width: 450px;
+}
+.chip-review-item__outOfStock___VS1jr {
+  font-weight: 400;
+  font-size: 13px;
+  color: #ee485d;
+}
+.chip-review-item__customSelect___oNYXu {
+  width: 80px;
+  margin-inline-end: 10px;
+}
+.chip-review-item__offersContainer___y4Eas {
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  padding: 10px 10px 0;
+  font-weight: 400;
+  font-size: 13px;
+}
+.chip-review-item__offersContainer___y4Eas .chip-review-item__offerApplied___QJoCx {
+  color: #20ce81;
+}
+.chip-review-item__maxAvail___ZGQx2 {
+  text-align: start;
+  color: #ee485d;
+}
+.chip-review-item__chip___MPqlt {
+  padding: 10px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  padding-bottom: 0;
+}
+@media only screen and (max-width: 480px) {
+  .chip-review-item__chip___MPqlt {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+.chip-review-item__chip___MPqlt .chip-review-item__productMetas___nU57E {
+  display: flex;
+  align-items: center;
+}
+@media only screen and (max-width: 480px) {
+  .chip-review-item__chip___MPqlt .chip-review-item__productMetas___nU57E {
+    flex-wrap: column;
+    align-items: center;
+  }
+}
+.chip-review-item__chip___MPqlt .chip-review-item__productMetas___nU57E .chip-review-item__priceCntr___o6_FD {
+  margin-top: 0px;
+  margin-inline-end: 0px;
+  margin-bottom: 0px;
+  margin-inline-start: 5px;
+}
+@media only screen and (max-width: 480px) {
+  .chip-review-item__chip___MPqlt .chip-review-item__productMetas___nU57E .chip-review-item__priceCntr___o6_FD {
+    margin: 0px;
+  }
+}
+.chip-review-item__chip___MPqlt .chip-review-item__productMetas___nU57E span {
+  margin: 0px 2px;
+}
+.chip-review-item__chip___MPqlt .chip-review-item__productMetas___nU57E .chip-review-item__itemSize___khtyw {
+  color: #41434c;
+  font-weight: 700;
+  font-size: 13px;
+}
+.chip-review-item__chip___MPqlt .chip-review-item__productMetas___nU57E .chip-review-item__effectivePrice___yRH5E {
+  font-weight: 700;
+  font-size: 13px;
+  color: #41434c;
+  line-height: inherit;
+}
+.chip-review-item__chip___MPqlt .chip-review-item__productMetas___nU57E .chip-review-item__markedPrice___OswIf {
+  font-size: 12px;
+  text-decoration: line-through;
+  color: #41434c;
+}
+.chip-review-item__chip___MPqlt .chip-review-item__productMetas___nU57E .chip-review-item__discount___JPGBO {
+  font-size: 12px;
+  color: #ee485d;
+}
+.chip-review-item__chip___MPqlt .chip-review-item__rightItems___xD6ri {
+  display: flex;
+  margin-inline-start: auto;
+  align-content: center;
+}
+@media only screen and (max-width: 480px) {
+  .chip-review-item__chip___MPqlt .chip-review-item__rightItems___xD6ri {
+    margin-inline-start: 0;
+  }
+}
+.chip-review-item__chip___MPqlt .chip-review-item__rightItems___xD6ri .chip-review-item__quantity___B_WUz {
+  font-weight: 300;
+  font-size: 13px;
+}
+

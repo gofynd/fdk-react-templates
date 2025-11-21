@@ -24,7 +24,7 @@ import Spinner from "../../../components/spinner/spinner";
 import FyButton from "../../../components/core/fy-button/fy-button";
 import { FDKLink } from "fdk-core/components";
 import UploadSvg from "../../../assets/images/cloud_upload.svg";
-import CopyToClipboardSvg from "../../../assets/images/copy-to-clipboard.svg";
+import CopyToClipboardSvg from "../../../assets/images/copy-to-clip.svg";
 
 const upiDisplayWrapperStyle = {
   padding: "24px",
@@ -711,18 +711,32 @@ function CheckoutPaymentContent({
     // File size validation (5MB max)
     const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
     if (file.size > maxSizeInBytes) {
-      alert(t("resource.dynamic_label.file_size_exceeded") || "File size must not exceed 5MB");
+      alert(
+        t("resource.dynamic_label.file_size_exceeded") ||
+          "File size must not exceed 5MB"
+      );
       event.target.value = ""; // Reset input
       return;
     }
 
     // File type validation (PDF and images only)
-    const allowedTypes = ["application/pdf", "image/png", "image/jpeg", "image/jpg"];
+    const allowedTypes = [
+      "application/pdf",
+      "image/png",
+      "image/jpeg",
+      "image/jpg",
+    ];
     const fileExtension = file.name.split(".").pop().toLowerCase();
     const allowedExtensions = ["pdf", "png", "jpg", "jpeg"];
 
-    if (!allowedTypes.includes(file.type) || !allowedExtensions.includes(fileExtension)) {
-      alert(t("resource.dynamic_label.invalid_file_type") || "Only PDF and image files (PNG, JPG, JPEG) are allowed");
+    if (
+      !allowedTypes.includes(file.type) ||
+      !allowedExtensions.includes(fileExtension)
+    ) {
+      alert(
+        t("resource.dynamic_label.invalid_file_type") ||
+          "Only PDF and image files (PNG, JPG, JPEG) are allowed"
+      );
       event.target.value = ""; // Reset input
       return;
     }
@@ -3003,7 +3017,8 @@ function CheckoutPaymentContent({
                         disabled={fileUpload?.state?.isUploading}
                       >
                         {fileUpload?.state?.isUploading
-                          ? t("resource.dynamic_label.uploading") || "Uploading..."
+                          ? t("resource.dynamic_label.uploading") ||
+                            "Uploading..."
                           : uploadCta}
                       </button>
                       <p className={styles.neftUploadTitle}>{uploadHeading}</p>
@@ -3011,21 +3026,26 @@ function CheckoutPaymentContent({
 
                       {fileUpload?.state?.isUploading && (
                         <p className={styles.neftUploadProgress}>
-                          {t("resource.dynamic_label.upload_progress") || "Upload Progress"}: {fileUpload?.state?.uploadProgress}%
+                          {t("resource.dynamic_label.upload_progress") ||
+                            "Upload Progress"}
+                          : {fileUpload?.state?.uploadProgress}%
                         </p>
                       )}
 
-                      {fileUpload?.state?.fileUploaded && fileUpload?.state?.fileUploadedName && (
-                        <p className={styles.neftSelectedFile}>
-                          ✓ {fileUpload.state.fileUploadedName}
-                        </p>
-                      )}
+                      {fileUpload?.state?.fileUploaded &&
+                        fileUpload?.state?.fileUploadedName && (
+                          <p className={styles.neftSelectedFile}>
+                            ✓ {fileUpload.state.fileUploadedName}
+                          </p>
+                        )}
 
-                      {!fileUpload?.state?.fileUploaded && selectedProofFile && !fileUpload?.state?.isUploading && (
-                        <p className={styles.neftSelectedFile}>
-                          {selectedProofFile.name}
-                        </p>
-                      )}
+                      {!fileUpload?.state?.fileUploaded &&
+                        selectedProofFile &&
+                        !fileUpload?.state?.isUploading && (
+                          <p className={styles.neftSelectedFile}>
+                            {selectedProofFile.name}
+                          </p>
+                        )}
 
                       {fileUpload?.state?.fileUploadError && (
                         <p className={styles.neftError}>
