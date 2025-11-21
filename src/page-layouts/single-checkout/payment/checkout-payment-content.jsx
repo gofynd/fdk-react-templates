@@ -284,10 +284,34 @@ function CheckoutPaymentContent({
 
   const intervalRef = useRef(null);
   const [isQrMopPresent, setIsQrMopPresent] = useState(false);
+  const [utrNumber, setUtrNumber] = useState("");
+  const [utrError, setUtrError] = useState(false);
 
   const [cardNumber, setCardNumber] = useState("");
   const [nameOnCard, setNameOnCard] = useState("");
   const [cardDetailsData, setCardDetailsData] = useState({});
+
+  const neftDisplayConfig = useMemo(
+    () => ({
+      beneficiaryTitle: "Beneficiary Bank Details",
+      transactionTitle: "Transaction Details",
+      utrLabel: "Enter unique transaction number",
+      utrDescription:
+        "UTR is a unique alphanumeric code assigned by a bank to track a specific financial transaction",
+      uploadHeading: "Drag and drop your files here",
+      uploadCta: "UPLOAD FILE",
+      uploadHelper: "Supported Format: PDF, XLSX, CSV, PNG, JPEG (5MB)",
+      beneficiaryDetails: [
+        { label: "Account Number", value: "123456789012", isCopyEnabled: true },
+        { label: "Customer Name", value: "Delta Fashion Pvt" },
+        { label: "Account Type", value: "Current" },
+        { label: "Bank Name", value: "SBI" },
+        { label: "Branch", value: "Mumbai" },
+        { label: "IFSC", value: "SBIN0070001", isCopyEnabled: true },
+      ],
+    }),
+    []
+  );
 
   const [tab, setTab] = useState("");
   const [mop, setMop] = useState("");
@@ -646,6 +670,32 @@ function CheckoutPaymentContent({
       subMopData,
     };
   };
+
+  const handleCopyToClipboard = (value) => {
+    if (!value) return;
+    try {
+      navigator?.clipboard?.writeText?.(value);
+    } catch (error) {
+      console.log("Copy to clipboard failed", error);
+    }
+  };
+
+  const handleUtrInputChange = (event) => {
+    if (utrError) {
+      setUtrError(false);
+    }
+    setUtrNumber(event.target.value);
+  };
+
+  const handleNeftPlaceOrder = () => {
+    if (!utrNumber.trim()) {
+      setUtrError(true);
+      return;
+    }
+    proceedToPay("COD", selectedPaymentPayload);
+  };
+
+  const isNeftPlaceOrderDisabled = !utrNumber.trim() || isPaymentLoading;
 
   const checkCouponValidity = async (payload) => {
     if (getTotalValue() === 0) return true;
@@ -2399,7 +2449,10 @@ function CheckoutPaymentContent({
                                     cancelQrPayment();
                                     selectMop("UPI", "UPI", "UPI");
                                   }}
-                                  disabled={(savedUPISelect && isUPIError) || isPaymentLoading}
+                                  disabled={
+                                    (savedUPISelect && isUPIError) ||
+                                    isPaymentLoading
+                                  }
                                 >
                                   {!isPaymentLoading ? (
                                     <>
@@ -2574,7 +2627,8 @@ function CheckoutPaymentContent({
                         cancelQrPayment();
                       }}
                       disabled={
-                        !(isUpiSuffixSelected || !!selectedUpiIntentApp) || isPaymentLoading
+                        !(isUpiSuffixSelected || !!selectedUpiIntentApp) ||
+                        isPaymentLoading
                       }
                     >
                       {!isPaymentLoading ? (
@@ -2769,30 +2823,138 @@ function CheckoutPaymentContent({
             </div>
           </div>
         );
-      case "COD":
+      // case "COD":
+      //   return (
+      //     <div>
+      //       {!isTablet ? (
+      //         <div>
+      //           <div
+      //             className={`${styles.codHeader} ${styles["view-mobile-up"]}`}
+      //           >
+      //             {t("resource.checkout.cash_on_delivery")}
+      //           </div>
+      //           <p className={styles.codTitle}>
+      //             {t("resource.checkout.pay_on_delivery")}
+      //           </p>
+      //           {codCharges > 0 && (
+      //             <div className={styles.codInfo}>
+      //               +{priceFormatCurrencySymbol(getCurrencySymbol, codCharges)}{" "}
+      //               {t("resource.checkout.cod_extra_charge")}
+      //             </div>
+      //           )}
+      //           <div className={styles.codPay}>
+      //             <button
+      //               className={`${styles.commonBtn} ${styles.payBtn}`}
+      //               onClick={() => proceedToPay("COD", selectedPaymentPayload)}
+      //               disabled={isPaymentLoading}
+      //             >
+      //               {!isPaymentLoading
+      //                 ? t("resource.checkout.place_order")
+      //                 : loader}
+      //             </button>
+      //           </div>
+      //         </div>
+      //       ) : (
+      //         <Spinner />
+      //       )}
+      //     </div>
+      //   );
+
+      case "COD": {
+        const {
+          beneficiaryDetails,
+          beneficiaryTitle,
+          transactionTitle,
+          utrLabel,
+          utrDescription,
+          uploadHeading,
+          uploadCta,
+          uploadHelper,
+        } = neftDisplayConfig;
         return (
           <div>
             {!isTablet ? (
-              <div>
-                <div
-                  className={`${styles.codHeader} ${styles["view-mobile-up"]}`}
-                >
-                  {t("resource.checkout.cash_on_delivery")}
-                </div>
-                <p className={styles.codTitle}>
-                  {t("resource.checkout.pay_on_delivery")}
-                </p>
-                {codCharges > 0 && (
-                  <div className={styles.codInfo}>
-                    +{priceFormatCurrencySymbol(getCurrencySymbol, codCharges)}{" "}
-                    {t("resource.checkout.cod_extra_charge")}
+              <div className={styles.neftWrapper}>
+                <section className={styles.neftSection}>
+                  <p className={styles.neftSectionTitle}>{beneficiaryTitle}</p>
+                  <div className={styles.neftBeneficiaryCard}>
+                    {beneficiaryDetails.map((detail) => (
+                      <div
+                        key={detail.label}
+                        className={styles.neftBeneficiaryRow}
+                      >
+                        <span className={styles.neftBeneficiaryLabel}>
+                          {detail.label}
+                        </span>
+                        <div className={styles.neftBeneficiaryValue}>
+                          <span>{detail.value}</span>
+                          {detail.isCopyEnabled && (
+                            <button
+                              type="button"
+                              className={styles.neftCopyButton}
+                              onClick={() =>
+                                handleCopyToClipboard(detail.value)
+                              }
+                            >
+                              Copy
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                )}
-                <div className={styles.codPay}>
+                </section>
+
+                <section className={styles.neftSection}>
+                  <p className={styles.neftSectionTitle}>{transactionTitle}</p>
+                  <div className={styles.neftFieldGroup}>
+                    <label
+                      className={styles.neftFieldLabel}
+                      htmlFor="utrNumber"
+                    >
+                      {utrLabel} <span>*</span>
+                    </label>
+                    <input
+                      id="utrNumber"
+                      type="text"
+                      value={utrNumber}
+                      onChange={handleUtrInputChange}
+                      placeholder={utrLabel}
+                      className={`${styles.neftInput} ${
+                        utrError ? styles.neftInputError : ""
+                      }`}
+                    />
+                    {utrError && (
+                      <p className={styles.neftError}>
+                        {t("resource.common.field_required")}
+                      </p>
+                    )}
+                  </div>
+                  <p className={styles.neftHelperText}>{utrDescription}</p>
+                </section>
+
+                <section className={styles.neftUploadSection}>
+                  <div className={styles.neftUploadBox}>
+                    <div className={styles.neftUploadIcon} aria-hidden="true">
+                      +
+                    </div>
+                    <button
+                      type="button"
+                      className={styles.neftUploadButton}
+                      disabled
+                    >
+                      {uploadCta}
+                    </button>
+                    <p className={styles.neftUploadTitle}>{uploadHeading}</p>
+                    <p className={styles.neftUploadHelper}>{uploadHelper}</p>
+                  </div>
+                </section>
+
+                <div className={styles.neftActionBar}>
                   <button
-                    className={`${styles.commonBtn} ${styles.payBtn}`}
-                    onClick={() => proceedToPay("COD", selectedPaymentPayload)}
-                    disabled={isPaymentLoading}
+                    className={styles.neftPlaceOrderBtn}
+                    onClick={handleNeftPlaceOrder}
+                    disabled={isNeftPlaceOrderDisabled}
                   >
                     {!isPaymentLoading
                       ? t("resource.checkout.place_order")
@@ -2805,6 +2967,7 @@ function CheckoutPaymentContent({
             )}
           </div>
         );
+      }
       case "PL":
         return (
           <div>

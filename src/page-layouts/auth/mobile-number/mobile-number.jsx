@@ -12,7 +12,6 @@ function MobileNumber({
   disable = false,
   isShowLabel = true,
   isRequired,
-  showAsOptional = true,
   allowDropdown = true,
   isFocused = false,
   placeholder = "",
@@ -77,24 +76,12 @@ function MobileNumber({
     >
       {isShowLabel && (
         <label
-          className={`${styles.inputTitle} ${labelClassName || ""}
-          ${styles.additionalLableClasses}
-          `}
+          className={`${styles.inputTitle} ${labelClassName || ""}`}
           htmlFor={inputId}
-          style={{
-            fontSize: "12px",
-            fontStyle: "normal",
-            fontWeight: "400",
-            color: "var(--textLabel , #7d7676)" 
-          }}
         >
           {label || t("resource.common.mobile")}
           {isRequired === "optional" ? (
-            !showAsOptional ? (
-              ""
-            ) : (
-              ` (${t("resource.common.optional_lower")})`
-            )
+            ` (${t("resource.common.optional_lower")})`
           ) : (
             <span className={styles.required}> * </span>
           )}
@@ -110,7 +97,6 @@ function MobileNumber({
         ref={phoneInputRef}
         style={{
           "--react-international-phone-height": height,
-          "--react-international-phone-width": "100%",
           "--react-international-phone-text-color": textColor,
           "--react-international-phone-border-radius": "4px",
           "--react-international-phone-border-color": `${error ? "var(--errorText, #b24141)" : "var(--dividerStokes, #d4d1d1)"}`,
@@ -146,9 +132,6 @@ function MobileNumber({
           onKeyDown: handleKeyDown,
           autoComplete: "tel",
           ...inputProps,
-          style :{
-            width: "100%"
-          }
         }}
         placeholder={placeholder}
         hideDropdown={!allowDropdown}

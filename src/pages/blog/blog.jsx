@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef  } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import Slider from "react-slick";
 import { FDKLink } from "fdk-core/components";
@@ -30,7 +30,6 @@ import {
   SliderPrevArrow,
 } from "../../components/slider-arrow/slider-arrow";
 import useLocaleDirection from "../../helper/hooks/useLocaleDirection";
-import { debounce } from "../../helper/utils";
 
 function MemoizedSlide({ blog, index, sliderProps, getBlogTitle }) {
   const { t } = useGlobalTranslation("translation");
@@ -230,7 +229,18 @@ function BlogList({
       key: item?.toLowerCase(),
     }));
 
-    setBlogFilter([...(tagBlogFilters || [])]);
+    setBlogFilter([
+      ...(tagBlogFilters || []),
+      ...(search
+        ? [
+            {
+              display: search,
+              pretext: "text",
+              key: "search_text",
+            },
+          ]
+        : []),
+    ]);
   }, [location?.search]);
 
   const removeFilter = (filter) => {
@@ -249,33 +259,26 @@ function BlogList({
       search: searchParams?.toString(),
     });
   };
-
-  const debouncedSearchRef = useRef(
-    debounce((value, pathname, search, navigateFn) => {
-      const searchParams = isRunningOnClient()
-        ? new URLSearchParams(search)
-        : null;
-      searchParams?.delete("page_no");
-      if (value) {
-        searchParams?.set("search", value);
-      } else {
-        searchParams?.delete("search");
-      }
-      navigateFn?.({
-        pathname: pathname,
-        search: searchParams?.toString(),
-      });
-    }, 500)
-  ).current;
-
   const searchTextUpdate = (value) => {
     if (value.length > 90) {
       value = value.substring(0, 80);
     }
     setSearchText(value);
-    debouncedSearchRef(value, location?.pathname, location?.search, navigate);
-  };
 
+    const searchParams = isRunningOnClient()
+      ? new URLSearchParams(location?.search)
+      : null;
+    searchParams?.delete("page_no");
+    if (value) {
+      searchParams?.set("search", value);
+    } else {
+      searchParams?.delete("search");
+    }
+    navigate?.({
+      pathname: location?.pathname,
+      search: searchParams?.toString(),
+    });
+  };
   const resetFilters = () => {
     setSearchText("");
     navigate?.({
@@ -425,11 +428,9 @@ function BlogList({
   return (
     <div>
       <div className={styles.blogContainer}>
-        {blogFilter?.length === 0 &&
-          blogs?.page?.item_total === 0 &&
-          !searchText && (
-            <EmptyState title={t("resource.blog.no_blogs_found")}></EmptyState>
-          )}
+        {blogFilter?.length === 0 && blogs?.page?.item_total === 0 && (
+          <EmptyState title={t("resource.blog.no_blogs_found")}></EmptyState>
+        )}
         {showBlogSlideShow && (
           <div className={styles.sliderWrapper}>
             <Slider
@@ -541,13 +542,12 @@ function BlogList({
               </div>
             )}
 
-            {(blogFilter?.length > 0 || searchText) &&
-              blogs?.page?.item_total === 0 && (
-                <EmptyState
-                  title={t("resource.blog.no_blogs_found")}
-                  customClassName={styles.emptyBlog}
-                ></EmptyState>
-              )}
+            {blogFilter?.length > 0 && blogs?.page?.item_total === 0 && (
+              <EmptyState
+                title={t("resource.blog.no_blogs_found")}
+                customClassName={styles.emptyBlog}
+              ></EmptyState>
+            )}
             <div className={`${styles.blogContainer__grid}`}>
               {sliderProps?.loadingOption === "infinite" ? (
                 <InfiniteLoader
