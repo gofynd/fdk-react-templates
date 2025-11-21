@@ -41306,7 +41306,7 @@ h5,
 .checkout-payment-content__container___HusGh .checkout-payment-content__neftUploadBox___lN_AQ {
   border: 1px dashed var(--dividerStokes, #d4d1d1);
   border-radius: 12px;
-  padding: 32px 16px;
+  padding: 41px 20px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -41314,30 +41314,20 @@ h5,
   background-color: var(--themeAccentL5, #fff);
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__neftUploadIcon___lEIdv {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: 1px solid var(--dividerStokes, #d4d1d1);
-  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #ffffff;
-}
-.checkout-payment-content__container___HusGh .checkout-payment-content__neftUploadIcon___lEIdv svg {
-  width: 24px;
-  height: 24px;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__neftUploadButton____P9YX {
-  width: 160px;
+  width: max-content;
   align-self: center;
-  padding: 10px 16px;
+  padding: 12px;
   border-radius: 8px;
   border: 1px solid var(--buttonPrimary, #4e3f09);
-  background-color: transparent;
+  color: var(--buttonPrimary, #4e3f09);
+  background-color: var(--themeAccentL5, #fff);
   font-weight: 600;
   font-size: 14px;
-  cursor: not-allowed;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__neftUploadTitle___jjKhS {
   font-size: 16px;
@@ -41350,9 +41340,6 @@ h5,
   font-weight: 400;
   color: var(--textSecondary, #9c9c9c);
   margin: 0;
-}
-.checkout-payment-content__container___HusGh .checkout-payment-content__neftActionBar___oUwfa {
-  margin-top: 8px;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__neftPlaceOrderBtn___K0crW {
   width: 100%;
@@ -41378,16 +41365,11 @@ h5,
 .checkout-payment-content__container___HusGh .checkout-payment-content__neftFormBlock___QNGBp {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  padding: 32px;
-  border: 1px solid var(--dividerStokes, #d4d1d1);
-  border-radius: 12px;
-  background-color: #ffffff;
+  gap: 20px;
 }
 @media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__neftFormBlock___QNGBp {
     padding: 24px 16px;
-    gap: 20px;
   }
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__otherOption___DjTzG {
@@ -41799,12 +41781,6 @@ h5,
 @media only screen and (max-width: 768px) {
   .checkout-payment-content__otherBorder___ARrf8 {
     border: none;
-  }
-}
-@media only screen and (min-width: 769px) {
-  .checkout-payment-content__modeItemLogo___mixsN .checkout-payment-content__moreWlIcon___xHrT7 {
-    width: 24px;
-    height: 24px;
   }
 }
 @media only screen and (max-width: 768px) {

@@ -1530,7 +1530,7 @@
   .neftUploadBox {
     border: 1px dashed @DividerStokes;
     border-radius: 12px;
-    padding: 32px 16px;
+    padding: 41px 20px;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -1539,32 +1539,21 @@
   }
 
   .neftUploadIcon {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    border: 1px solid @DividerStokes;
-    margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: @White;
-
-    svg {
-      width: 24px;
-      height: 24px;
-    }
   }
 
   .neftUploadButton {
-    width: 160px;
+    width: max-content;
     align-self: center;
-    padding: 10px 16px;
+    padding: 12px;
     border-radius: 8px;
     border: 1px solid @ButtonPrimary;
-    background-color: transparent;
+    color: @ButtonPrimary;
+    background-color: @ThemeAccentL5;
     font-weight: 600;
     font-size: 14px;
-    cursor: not-allowed;
   }
 
   .neftUploadTitle {
@@ -1579,10 +1568,6 @@
     font-weight: 400;
     color: @TextSecondary;
     margin: 0;
-  }
-
-  .neftActionBar {
-    margin-top: 8px;
   }
 
   .neftPlaceOrderBtn {
@@ -1612,15 +1597,10 @@
   .neftFormBlock {
     display: flex;
     flex-direction: column;
-    gap: 24px;
-    padding: 32px;
-    border: 1px solid @DividerStokes;
-    border-radius: 12px;
-    background-color: @White;
+    gap: 20px;
 
     @media @tablet {
       padding: 24px 16px;
-      gap: 20px;
     }
   }
 
@@ -2057,12 +2037,6 @@
   }
 }
 .modeItemLogo {
-  @media @desktop {
-    .moreWlIcon {
-      width: 24px;
-      height: 24px;
-    }
-  }
   @media @tablet {
     span {
       border: 1px solid @DividerStokes;

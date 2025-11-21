@@ -2915,12 +2915,12 @@ function CheckoutPaymentContent({
                       {transactionTitle}
                     </p>
                     <div className={styles.neftFieldGroup}>
-                      <label
+                      {/* <label
                         className={styles.neftFieldLabel}
                         htmlFor="utrNumber"
                       >
                         {utrLabel} <span>*</span>
-                      </label>
+                      </label> */}
                       <input
                         id="utrNumber"
                         type="text"
@@ -2959,7 +2959,7 @@ function CheckoutPaymentContent({
                     </div>
                   </section>
 
-                  <div className={styles.neftActionBar}>
+                  <div>
                     <button
                       className={styles.neftPlaceOrderBtn}
                       onClick={handleNeftPlaceOrder}
