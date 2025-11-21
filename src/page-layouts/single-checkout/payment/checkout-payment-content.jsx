@@ -24,6 +24,7 @@ import Spinner from "../../../components/spinner/spinner";
 import FyButton from "../../../components/core/fy-button/fy-button";
 import { FDKLink } from "fdk-core/components";
 import UploadSvg from "../../../assets/images/cloud_upload.svg";
+import CopyToClipboardSvg from "../../../assets/images/copy-to-clipboard.svg";
 
 const upiDisplayWrapperStyle = {
   padding: "24px",
@@ -157,6 +158,7 @@ function CheckoutPaymentContent({
   isCouponValid,
   setIsCouponValid,
   inValidCouponData,
+  fileUpload = { state: {}, upload: () => {} },
 }) {
   const fpi = useFPI();
   const { language } = useGlobalStore(fpi.getters.i18N_DETAILS);
@@ -232,6 +234,7 @@ function CheckoutPaymentContent({
   const nameRef = useRef(null);
   const cardNumberRef = useRef(null);
   const expirationDateRef = useRef(null);
+  const uploadInputRef = useRef(null);
   const [filteredUPISuggestions, setFilteredUPISuggestions] = useState([]);
 
   const [selectedCard, setSelectedCard] = useState(null);
@@ -301,7 +304,7 @@ function CheckoutPaymentContent({
         "UTR is a unique alphanumeric code assigned by a bank to track a specific financial transaction",
       uploadHeading: "Drag and drop your files here",
       uploadCta: "UPLOAD FILE",
-      uploadHelper: "Supported Format: PDF, XLSX, CSV, PNG, JPEG (5MB)",
+      uploadHelper: "Supported Format: PDF, PNG, JPEG (5MB)",
       beneficiaryDetails: [
         { label: "Account Number", value: "123456789012", isCopyEnabled: true },
         { label: "Customer Name", value: "Delta Fashion Pvt" },
@@ -321,6 +324,7 @@ function CheckoutPaymentContent({
   const selectedUpiRef = useRef(null);
   const [savedUpi, setSavedUpi] = useState([]);
   const [savedCards, setSavedCards] = useState([]);
+  const [selectedProofFile, setSelectedProofFile] = useState(null);
   const [isUpiSuffixSelected, setIsUpiSuffixSelected] = useState(false);
   const [navigationTitleName, setNavigationTitleName] = useState("");
   const [isCvvNotNeededModal, setIsCvvNotNeededModal] = useState(false);
@@ -694,6 +698,41 @@ function CheckoutPaymentContent({
       return;
     }
     proceedToPay("COD", selectedPaymentPayload);
+  };
+
+  const handleUploadButtonClick = () => {
+    uploadInputRef.current?.click();
+  };
+
+  const handleFileInputChange = async (event) => {
+    const file = event?.target?.files?.[0];
+    if (!file) return;
+
+    // File size validation (5MB max)
+    const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSizeInBytes) {
+      alert(t("resource.dynamic_label.file_size_exceeded") || "File size must not exceed 5MB");
+      event.target.value = ""; // Reset input
+      return;
+    }
+
+    // File type validation (PDF and images only)
+    const allowedTypes = ["application/pdf", "image/png", "image/jpeg", "image/jpg"];
+    const fileExtension = file.name.split(".").pop().toLowerCase();
+    const allowedExtensions = ["pdf", "png", "jpg", "jpeg"];
+
+    if (!allowedTypes.includes(file.type) || !allowedExtensions.includes(fileExtension)) {
+      alert(t("resource.dynamic_label.invalid_file_type") || "Only PDF and image files (PNG, JPG, JPEG) are allowed");
+      event.target.value = ""; // Reset input
+      return;
+    }
+
+    setSelectedProofFile(file);
+
+    // Upload file to server using the fileUpload prop
+    if (fileUpload?.upload) {
+      await fileUpload.upload(file);
+    }
   };
 
   const isNeftPlaceOrderDisabled = !utrNumber.trim() || isPaymentLoading;
@@ -2900,7 +2939,7 @@ function CheckoutPaymentContent({
                                 handleCopyToClipboard(detail.value)
                               }
                             >
-                              Copy
+                              <CopyToClipboardSvg />
                             </button>
                           )}
                         </div>
@@ -2910,52 +2949,89 @@ function CheckoutPaymentContent({
                 </section>
 
                 <div className={styles.neftFormBlock}>
-                  <section className={styles.neftSection}>
-                    <p className={styles.neftSectionTitle}>
-                      {transactionTitle}
-                    </p>
-                    <div className={styles.neftFieldGroup}>
-                      {/* <label
+                  <div className={styles.neftFormBlockInner}>
+                    <section className={styles.neftSection}>
+                      <p className={styles.neftSectionTitle}>
+                        {transactionTitle}
+                      </p>
+                      <div className={styles.neftFieldGroup}>
+                        {/* <label
                         className={styles.neftFieldLabel}
                         htmlFor="utrNumber"
                       >
                         {utrLabel} <span>*</span>
                       </label> */}
-                      <input
-                        id="utrNumber"
-                        type="text"
-                        value={utrNumber}
-                        onChange={handleUtrInputChange}
-                        placeholder={utrLabel}
-                        className={`${styles.neftInput} ${
-                          utrError ? styles.neftInputError : ""
-                        }`}
-                      />
-                      {utrError && (
-                        <p className={styles.neftError}>
-                          {t("resource.common.field_required")}
-                        </p>
-                      )}
-                    </div>
+                        <input
+                          id="utrNumber"
+                          type="text"
+                          value={utrNumber}
+                          onChange={handleUtrInputChange}
+                          placeholder={utrLabel}
+                          className={`${styles.neftInput} ${
+                            utrError ? styles.neftInputError : ""
+                          }`}
+                        />
+                        {utrError && (
+                          <p className={styles.neftError}>
+                            {t("resource.common.field_required")}
+                          </p>
+                        )}
+                      </div>
+                    </section>
                     <p className={styles.neftHelperText}>{utrDescription}</p>
-                  </section>
+                  </div>
 
                   <section
                     className={`${styles.neftSection} ${styles.neftUploadSection}`}
                   >
                     <div className={styles.neftUploadBox}>
+                      <input
+                        type="file"
+                        accept=".pdf,.png,.jpg,.jpeg"
+                        ref={uploadInputRef}
+                        className={styles.neftHiddenInput}
+                        onChange={handleFileInputChange}
+                        disabled={fileUpload?.state?.isUploading}
+                      />
                       <div className={styles.neftUploadIcon} aria-hidden="true">
                         <UploadSvg />
                       </div>
                       <button
                         type="button"
                         className={styles.neftUploadButton}
-                        disabled
+                        onClick={handleUploadButtonClick}
+                        disabled={fileUpload?.state?.isUploading}
                       >
-                        {uploadCta}
+                        {fileUpload?.state?.isUploading
+                          ? t("resource.dynamic_label.uploading") || "Uploading..."
+                          : uploadCta}
                       </button>
                       <p className={styles.neftUploadTitle}>{uploadHeading}</p>
                       <p className={styles.neftUploadHelper}>{uploadHelper}</p>
+
+                      {fileUpload?.state?.isUploading && (
+                        <p className={styles.neftUploadProgress}>
+                          {t("resource.dynamic_label.upload_progress") || "Upload Progress"}: {fileUpload?.state?.uploadProgress}%
+                        </p>
+                      )}
+
+                      {fileUpload?.state?.fileUploaded && fileUpload?.state?.fileUploadedName && (
+                        <p className={styles.neftSelectedFile}>
+                          ✓ {fileUpload.state.fileUploadedName}
+                        </p>
+                      )}
+
+                      {!fileUpload?.state?.fileUploaded && selectedProofFile && !fileUpload?.state?.isUploading && (
+                        <p className={styles.neftSelectedFile}>
+                          {selectedProofFile.name}
+                        </p>
+                      )}
+
+                      {fileUpload?.state?.fileUploadError && (
+                        <p className={styles.neftError}>
+                          {fileUpload.state.fileUploadError}
+                        </p>
+                      )}
                     </div>
                   </section>
 
