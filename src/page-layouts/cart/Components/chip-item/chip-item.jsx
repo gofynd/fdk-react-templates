@@ -1,26 +1,12 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./chip-item.less";
-import {
-  currencyFormat,
-  formatLocale,
-  numberWithCommas,
-  translateDynamicLabel,
-} from "../../../../helper/utils";
+import { currencyFormat, numberWithCommas } from "../../../../helper/utils";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import QuantityControl from "../../../../components/quantity-control/quantity-control";
 import Modal from "../../../../components/core/modal/modal";
 import { useMobile } from "../../../../helper/hooks";
 import FreeGiftItem from "../free-gift-item/free-gift-item";
-import RadioIcon from "../../../../assets/images/radio";
-import Accordion from "../../../../components/accordion/accordion";
-import {
-  useGlobalStore,
-  useFPI,
-  useGlobalTranslation,
-  useNavigate,
-} from "fdk-core/utils";
-import ChipImage from "./chip-image";
 
 export default function ChipItem({
   isCartUpdating,
@@ -28,8 +14,7 @@ export default function ChipItem({
   onUpdateCartItems,
   currentSize,
   isDeliveryPromise = true,
-  imageWidth,
-  globalConfig,
+  productImage,
   itemIndex,
   sizeModalItemValue,
   currentSizeModalSize,
@@ -40,33 +25,18 @@ export default function ChipItem({
   cartItemsWithActualIndex,
   singleItem,
   buybox,
-  availableFOCount,
   isPromoModalOpen,
   isSoldBy = false,
   onRemoveIconClick = () => {},
   onOpenPromoModal,
   onClosePromoModal,
-  getFulfillmentOptions,
-  pincode,
-  getDeliveryPromise,
+  hurryUpThreshold = 10,
 }) {
-  const { t } = useGlobalTranslation("translation");
-  const fpi = useFPI();
-  const navigate = useNavigate();
-  const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
-  const locale = language?.locale;
   const isMobile = useMobile();
   const [showQuantityError, setShowQuantityError] = useState(false);
-  const [showFOModal, setShowFOModal] = useState(false);
   const [sizeModalErr, setSizeModalErr] = useState(null);
   const [activePromoIndex, setActivePromoIndex] = useState(null);
   const [clickedPromoIndex, setClickedPromoIndex] = useState(null);
-  const [fulfillmentOptions, setFulfillmentOptions] = useState([]);
-  const [selectedFO, setSelectedFO] = useState(
-    singleItemDetails?.article?.fulfillment_option
-  );
-  const [foSellerStoreName, setFOSellerStoreName] = useState("");
-
   const isOutOfStock = singleItemDetails?.availability?.out_of_stock || false;
   const isServiceable = singleItemDetails?.availability?.deliverable;
   const isCustomOrder =
@@ -74,13 +44,6 @@ export default function ChipItem({
   const couponText = singleItemDetails?.coupon_message || "";
   const moq = singleItemDetails?.moq;
   const incrementDecrementUnit = moq?.increment_unit ?? 1;
-
-  const customizationOptions =
-    singleItemDetails?.article?._custom_json?._display || [];
-
-  const [items, setItems] = useState([
-    { title: "Customization", content: customizationOptions, open: false },
-  ]);
 
   const isSellerBuyBoxListing = useMemo(() => {
     return (
@@ -127,7 +90,7 @@ export default function ChipItem({
   ) => {
     let totalQuantity = (itemDetails?.quantity || 0) + quantity;
 
-    if (operation === "edit_item" || isSizeUpdate) {
+    if (operation === "edit_item") {
       totalQuantity = quantity;
     }
 
@@ -151,8 +114,7 @@ export default function ChipItem({
 
     if (
       itemDetails?.quantity !== totalQuantity ||
-      operation === "remove_item" ||
-      isSizeUpdate
+      operation === "remove_item"
     ) {
       const cartUpdateResponse = await onUpdateCartItems(
         event,
@@ -172,7 +134,7 @@ export default function ChipItem({
           setSizeModalErr(null);
         } else {
           setSizeModal(currentSizeModalSize);
-          setSizeModalErr(t("resource.cart.size_is_out_of_stock"));
+          setSizeModalErr("Size is out of stock");
         }
       }
     }
@@ -180,9 +142,8 @@ export default function ChipItem({
 
   const promoTitle = useMemo(() => {
     const totalPromo = singleItemDetails?.promotions_applied?.length || 0;
-    if (totalPromo === 1) return t("resource.cart.one_offer");
-    else if (totalPromo > 1)
-      return `${totalPromo} ${t("resource.common.offers")}`;
+    if (totalPromo === 1) return "1 Offer";
+    else if (totalPromo > 1) return `${totalPromo} Offers`;
     else return "";
   }, [singleItemDetails]);
 
@@ -193,135 +154,10 @@ export default function ChipItem({
     return [sellerName, storeName].filter(Boolean).join(", ") || "";
   }, [singleItemDetails]);
 
-  const isMaxQuantityAddedInCart = useMemo(() => {
-    let productUid = singleItemDetails.product?.uid;
-    let articleSize = singleItemDetails.article?.size;
-
-    const filteredItems =
-      Object.values(cartItems)?.filter(
-        (item) =>
-          item?.product?.uid === productUid &&
-          item?.article?.size === articleSize
-      ) || [];
-
-    if (!filteredItems.length) {
-      return false;
-    }
-
-    let totalQuantity = 0;
-    let maxQuantity = 0;
-
-    if (isSellerBuyBoxListing) {
-      const sellerUid = singleItemDetails?.article?.seller?.uid;
-      totalQuantity = filteredItems
-        .filter((item) => item?.article?.seller?.uid === sellerUid)
-        .reduce((sum, item) => sum + item.quantity, 0);
-      maxQuantity = singleItemDetails?.max_quantity?.item_seller || 0;
-    } else if (isStoreBuyboxListing) {
-      const storeUid = singleItemDetails?.article?.store?.uid;
-      totalQuantity = filteredItems
-        .filter((item) => item?.article?.store?.uid === storeUid)
-        .reduce((sum, item) => sum + item.quantity, 0);
-      maxQuantity = singleItemDetails?.max_quantity?.item_store || 0;
-    } else {
-      totalQuantity = filteredItems.reduce(
-        (sum, item) => sum + item.quantity,
-        0
-      );
-      maxQuantity = singleItemDetails?.max_quantity?.item || 0;
-    }
-
-    return totalQuantity >= maxQuantity;
-  }, [
-    singleItemDetails,
-    cartItems,
-    isSellerBuyBoxListing,
-    isStoreBuyboxListing,
-  ]);
-
-  useEffect(() => {
-    if (sellerStoreName) {
-      setFOSellerStoreName(sellerStoreName);
-    }
-  }, [sellerStoreName]);
-
   const toggleActivePromo = (e, index) => {
     e.stopPropagation();
     if (activePromoIndex === index) setActivePromoIndex(null);
     else setActivePromoIndex(index);
-  };
-
-  const toggleFOModal = () => {
-    setShowFOModal((modal) => !modal);
-  };
-
-  const openFOModal = async () => {
-    setFulfillmentOptions([]);
-    toggleFOModal();
-
-    let foItems = await getFulfillmentOptions(
-      singleItemDetails?.product?.slug,
-      currentSize,
-      pincode
-    );
-
-    setFulfillmentOptions(foItems);
-  };
-
-  const onFOSelection = async (foItem) => {
-    setSelectedFO(foItem?.fulfillment_option || {});
-
-    const sellerName = foItem?.seller?.name;
-    const storeName = foItem?.store?.name;
-
-    const sellerStoreLabel =
-      [sellerName, storeName].filter(Boolean).join(", ") || "";
-
-    setFOSellerStoreName(sellerStoreLabel);
-  };
-
-  const onFOUpdate = async (e) => {
-    await onUpdateCartItems(
-      e,
-      singleItemDetails,
-      currentSize,
-      singleItemDetails?.quantity,
-      itemIndex,
-      "update_item",
-      false,
-      false,
-      selectedFO?.slug
-    );
-
-    toggleFOModal();
-  };
-
-  const getDeliveryDate = (deliveryPromise) => {
-    const options = {
-      weekday: "short",
-      month: "short",
-      day: "numeric",
-    };
-
-    const { max } = deliveryPromise || {};
-
-    if (!max) return false;
-
-    const dateFormatter = new Intl.DateTimeFormat(undefined, options);
-    const maxDate = dateFormatter.format(new Date(max));
-
-    return maxDate;
-  };
-
-  const handleItemClick = (index) => {
-    setItems((prevItems) => {
-      const updatedItems = [...prevItems];
-      updatedItems[index] = {
-        ...updatedItems[index],
-        open: !updatedItems[index].open,
-      };
-      return updatedItems;
-    });
   };
   return (
     <>
@@ -330,28 +166,23 @@ export default function ChipItem({
           <div
             className={`${styles["out-of-stock-chip"]} ${styles["new-cart-red-color"]}`}
           >
-            <span>
-              {translateDynamicLabel(singleItemDetails?.message, t) ||
-                t("resource.common.out_of_stock")}
+            <span>{singleItemDetails?.message || "Out Of Stock"}</span>
+            <span
+              className={styles.removeAction}
+              onClick={(e) =>
+                cartUpdateHandler(
+                  e,
+                  singleItemDetails,
+                  currentSize,
+                  0,
+                  itemIndex,
+                  "remove_item"
+                )
+              }
+            >
+              {" "}
+              REMOVE
             </span>
-            {isOutOfStock && (
-              <span
-                className={styles.removeAction}
-                onClick={(e) =>
-                  cartUpdateHandler(
-                    e,
-                    singleItemDetails,
-                    currentSize,
-                    0,
-                    itemIndex,
-                    "remove_item"
-                  )
-                }
-              >
-                {" "}
-                {t("resource.facets.remove_caps")}
-              </span>
-            )}
           </div>
         )}
         {couponText.length > 0 && (
@@ -366,39 +197,26 @@ export default function ChipItem({
               isOutOfStock ? styles.outOfStock : ""
             }`}
           >
-            <FDKLink
-              to={`/product/${singleItemDetails?.product?.slug}`}
-              state={{
-                product: {
-                  ...singleItemDetails,
-                  ...(singleItemDetails?.product || {}),
-                },
-              }}
-            >
-              <ChipImage
-                product={singleItemDetails?.product}
-                type={singleItemDetails?.item_type}
-                imageWidth={imageWidth}
-                globalConfig={globalConfig}
-              />
+            <FDKLink to={`/product/${singleItemDetails?.product?.slug}`}>
+              <img src={productImage} alt={singleItemDetails?.product?.name} />
             </FDKLink>
           </div>
           <div className={styles.eachItemDetailsContainer}>
-            <button
-              className={styles.removeItemSvgContainer}
-              onClick={() =>
-                onRemoveIconClick({
-                  item: singleItemDetails,
-                  size: currentSize,
-                  index: itemIndex,
-                })
-              }
-            >
-              <SvgWrapper
-                svgSrc="item-close"
-                className={styles.itemRemoveIcon}
-              />
-            </button>
+              <button
+                className={styles.removeItemSvgContainer}
+                onClick={() =>
+                  onRemoveIconClick({
+                    item: singleItemDetails,
+                    size: currentSize,
+                    index: itemIndex,
+                  })
+                }
+              >
+                <SvgWrapper
+                  svgSrc="item-close"
+                  className={styles.itemRemoveIcon}
+                />
+              </button>
             <div className={styles.itemBrand}>
               {singleItemDetails?.product?.brand?.name}
             </div>
@@ -411,7 +229,7 @@ export default function ChipItem({
             </div>
             {isSoldBy && !isOutOfStock && (
               <div className={styles.itemSellerName}>
-                {`${t("resource.common.sold_by")}: ${sellerStoreName}`}
+                {`Sold by: ${sellerStoreName}`}
               </div>
             )}
             <div className={styles.itemSizeQuantityContainer}>
@@ -424,7 +242,7 @@ export default function ChipItem({
                   }}
                 >
                   <div className={styles.sizeName}>
-                    {`${t("resource.common.size")}: ${currentSize}`}
+                    {`Size: ${currentSize}`}
                   </div>
                   <span className={styles.itemSvg}>
                     <SvgWrapper
@@ -469,17 +287,14 @@ export default function ChipItem({
                     }
                     maxCartQuantity={maxCartQuantity}
                     minCartQuantity={minCartQuantity}
-                    isIncrDisabled={isMaxQuantityAddedInCart}
                   />
                 )}
                 {isOutOfStock && (
-                  <div className={styles.outOfStockChip}>
-                    {t("resource.common.out_of_stock")}
-                  </div>
+                  <div className={styles.outOfStockChip}>Out Of Stock</div>
                 )}
                 {!isServiceable && (
                   <div className={styles.outOfStockChip}>
-                    {t("resource.cart.item_not_deliverable")}
+                    Item Not Deliverable
                   </div>
                 )}
               </div>
@@ -488,20 +303,18 @@ export default function ChipItem({
                 !isOutOfStock &&
                 isServiceable && (
                   <div className={styles.limitedQtyBox}>
-                    {` ${t("resource.common.max_quantity")}: ${maxCartQuantity}`}
+                    {` Max Quantity: ${maxCartQuantity}`}
                   </div>
                 )}
 
               {getMaxQuantity(singleItemDetails) > 0 &&
-                getMaxQuantity(singleItemDetails) < 11 &&
+                getMaxQuantity(singleItemDetails) <= hurryUpThreshold &&
                 !isOutOfStock &&
                 isServiceable &&
                 !isCustomOrder &&
                 !buybox?.is_seller_buybox_enabled && (
                   <div className={styles.limitedQtyBox}>
-                    {t("resource.common.hurry_only_left", {
-                      quantity: getMaxQuantity(singleItemDetails),
-                    })}
+                    {` Hurry! Only ${getMaxQuantity(singleItemDetails)} Left`}
                   </div>
                 )}
             </div>
@@ -518,8 +331,7 @@ export default function ChipItem({
                         singleItemDetails?.price?.base?.effective
                     ),
                     singleItemDetails?.price?.converted?.currency_symbol ??
-                      singleItemDetails?.price?.base?.currency_symbol,
-                    formatLocale(locale, countryCode, true)
+                      singleItemDetails?.price?.base?.currency_symbol
                   )}
                 </span>
                 {singleItemDetails?.price?.converted?.effective <
@@ -531,8 +343,7 @@ export default function ChipItem({
                           singleItemDetails?.price?.base?.marked
                       ),
                       singleItemDetails?.price?.converted?.currency_symbol ??
-                        singleItemDetails?.price?.base?.currency_symbol,
-                      formatLocale(locale, countryCode, true)
+                        singleItemDetails?.price?.base?.currency_symbol
                     )}
                   </span>
                 )}
@@ -543,28 +354,14 @@ export default function ChipItem({
               {isDeliveryPromise &&
                 !isOutOfStock &&
                 isServiceable &&
-                singleItemDetails?.delivery_promise?.iso?.max && (
-                  <div
-                    className={`${styles.deliveryDateWrapper} ${styles["deliveryDateWrapper--desktop"]}`}
-                  >
+                singleItemDetails?.delivery_promise?.formatted?.max && (
+                  <div className={styles.deliveryDateWrapper}>
                     <div className={styles.shippingLogo}>
                       <SvgWrapper svgSrc="truck" />
                     </div>
                     <div className={styles.deliveryDate}>
-                      {getDeliveryPromise?.(
-                        singleItemDetails?.delivery_promise
-                      )}
+                      {`Delivery by ${singleItemDetails?.delivery_promise?.formatted?.max}`}
                     </div>
-                    {availableFOCount > 1 && (
-                      <div className={styles.selectedFO}>
-                        {singleItemDetails?.article?.fulfillment_option?.name}
-                      </div>
-                    )}
-                    {/* 
-                    <div className={styles.changeFO} onClick={openFOModal}>
-                      CHANGE
-                    </div> 
-                    */}
                   </div>
                 )}
             </div>
@@ -579,16 +376,12 @@ export default function ChipItem({
                     setClickedPromoIndex(itemIndex);
                   }}
                 >
-                  <span>{`${promoTitle} ${t("resource.common.applied")}`}</span>
+                  <span>{`${promoTitle} Applied`}</span>
                   <SvgWrapper svgSrc="applied-promo" className={styles.ml6} />
                 </div>
               )}
-            {customizationOptions.length > 0 && (
-              <div className={styles.productCustomizationContainer}>
-                <Accordion items={items} onItemClick={handleItemClick} />
-              </div>
-            )}
           </div>
+
           <FreeGiftItem
             item={singleItemDetails}
             currencySymbol={
@@ -597,33 +390,6 @@ export default function ChipItem({
             }
           />
         </div>
-
-        {isDeliveryPromise &&
-          !isOutOfStock &&
-          isServiceable &&
-          singleItemDetails?.delivery_promise?.iso?.max && (
-            <div
-              className={`${styles.deliveryDateWrapper} ${styles["deliveryDateWrapper--mobile"]}`}
-            >
-              <div className={styles.shippingLogo}>
-                <SvgWrapper svgSrc="truck" />
-              </div>
-              <div className={styles.deliveryDate}>
-                {getDeliveryPromise?.(singleItemDetails?.delivery_promise)}
-              </div>
-              {availableFOCount > 1 && (
-                <div className={styles.selectedFO}>
-                  {singleItemDetails?.article?.fulfillment_option?.name}
-                </div>
-              )}
-              {/* 
-              <div className={styles.changeFO} onClick={openFOModal}>
-                CHANGE
-              </div> 
-              */}
-            </div>
-          )}
-
         {isPromoModalOpen && clickedPromoIndex === itemIndex && (
           <Modal
             isOpen={isPromoModalOpen}
@@ -632,7 +398,7 @@ export default function ChipItem({
               setClickedPromoIndex(null);
             }}
             modalType={isMobile ? "right-modal" : "center-modal"}
-            title={`${promoTitle} ${t("resource.common.applied")}`}
+            title={`${promoTitle} Applied`}
             isCancellable={false}
             containerClassName={styles.chipModal}
           >
@@ -663,7 +429,7 @@ export default function ChipItem({
                                 toggleActivePromo(e, index);
                               }}
                             >
-                              {t("resource.cart.t&c")}
+                              T&C
                             </div>
                           )}
                         </div>
@@ -734,8 +500,7 @@ export default function ChipItem({
                     ),
                     sizeModalItemValue?.article?.price?.converted
                       ?.currency_symbol ??
-                      sizeModalItemValue?.article?.price?.base?.effective,
-                    formatLocale(locale, countryCode, true)
+                      sizeModalItemValue?.article?.price?.base?.effective
                   )}
                 </div>
               </div>
@@ -746,8 +511,8 @@ export default function ChipItem({
         <div className={styles.sizeModalBody}>
           <div className={styles.sizeSelectHeading}>
             {sizeModalItemValue?.availability?.available_sizes?.length > 0
-              ? t("resource.common.select_size")
-              : t("resource.cart.product_not_available")}
+              ? "Select Size"
+              : "This Product is not available"}
           </div>
           <div className={styles.sizeHorizontalList}>
             {sizeModalItemValue?.availability?.available_sizes?.length > 0 &&
@@ -813,7 +578,7 @@ export default function ChipItem({
             let itemIndex;
             for (let j = 0; j < cartItemsWithActualIndex.length; j += 1) {
               if (
-                `${cartItemsWithActualIndex[j]?.key}_${cartItemsWithActualIndex[j]?.article?.store?.uid}_${cartItemsWithActualIndex[j]?.article?.item_index}` ===
+                `${cartItemsWithActualIndex[j]?.key}_${cartItemsWithActualIndex[j]?.article?.store?.uid}` ===
                 sizeModal
               ) {
                 itemIndex = j;
@@ -832,88 +597,6 @@ export default function ChipItem({
               true
             );
           }}
-        >
-          <div className={styles.updateSizeButton}>
-            {t("resource.facets.update")}
-          </div>
-        </button>
-      </Modal>
-
-      <Modal
-        isOpen={showFOModal}
-        closeDialog={toggleFOModal}
-        isCancellable={false}
-        headerClassName={styles.foModalHeader}
-        containerClassName={styles.foModalContainer}
-        title={
-          <div className={styles.foModalTitle}>Change Delivery Options</div>
-        }
-      >
-        <div className={styles.foModalBody}>
-          <div className={styles.foModalWrapper}>
-            <div className={styles.foModalImage}>
-              <ChipImage
-                product={singleItemDetails?.product}
-                type={singleItemDetails?.item_type}
-                imageWidth={imageWidth}
-                globalConfig={globalConfig}
-              />
-              {/* <FyImage
-                src={productImage}
-                aspectRatio={0.8}
-                mobileAspectRatio={0.8}
-                customClass={styles.productImg}
-              /> */}
-              {/* <img src={productImage} /> */}
-            </div>
-            <div className={styles.foModalContent}>
-              <div className={styles.foModalBrand}>
-                {singleItemDetails?.product?.brand?.name}
-              </div>
-              <div className={styles.foModalName}>
-                {singleItemDetails?.product?.name}
-              </div>
-              <div className={styles.foSellerName}>
-                {`Sold by: ${foSellerStoreName}`}
-              </div>
-            </div>
-          </div>
-          <div className={styles.foModalOption}>
-            <div className={styles.deliveryLabel}>Delivery Options</div>
-            <div className={styles.foList}>
-              {fulfillmentOptions.map((foItem, index) => (
-                <div
-                  key={index}
-                  className={styles.fulfillmentOption}
-                  onClick={() => onFOSelection(foItem)}
-                >
-                  <RadioIcon
-                    checked={
-                      foItem?.fulfillment_option?.slug === selectedFO?.slug
-                    }
-                  />
-                  <div className={styles.foDetails}>
-                    <p className={styles.promiseLabel}>
-                      Get it by {getDeliveryDate(foItem?.delivery_promise)}
-                    </p>
-                    <p className={styles.foLabel}>
-                      {foItem?.fulfillment_option?.name}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-        <button
-          className={`${styles.foModalFooter} ${singleItemDetails?.article?.fulfillment_option?.slug === selectedFO?.slug ? styles.disableBtn : ""}`}
-          onClick={(e) => {
-            onFOUpdate(e);
-          }}
-          disabled={
-            singleItemDetails?.article?.fulfillment_option?.slug ===
-            selectedFO?.slug
-          }
         >
           <div className={styles.updateSizeButton}>UPDATE</div>
         </button>

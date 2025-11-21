@@ -1,5 +1,3 @@
-import { DEFAULT_CURRENCY_LOCALE, DEFAULT_UTC_LOCALE } from "./constant";
-
 export const debounce = (func, wait) => {
   let timeout;
   return function (...args) {
@@ -8,27 +6,6 @@ export const debounce = (func, wait) => {
       func.apply(this, args);
     }, wait);
   };
-};
-
-export const formatDate = (isoString, dateOnly = false) => {
-  const date = new Date(isoString);
-
-  const day = date.getDate().toString().padStart(2, "0");
-  const month = date.toLocaleString("en-US", { month: "short" });
-  const year = date.getFullYear();
-
-  let hours = date.getHours();
-  const minutes = date.getMinutes().toString().padStart(2, "0");
-  const ampm = hours >= 12 ? "PM" : "AM";
-
-  hours %= 12;
-  hours = hours || 12; // 0 becomes 12
-
-  if (dateOnly) {
-    return `${day} ${month}, ${year}`;
-  }
-
-  return `${day} ${month}, ${year}, ${hours}:${minutes} ${ampm}`;
 };
 
 export const getGlobalConfigValue = (globalConfig, id) =>
@@ -83,7 +60,7 @@ export function isRunningOnClient() {
   return false;
 }
 
-export function convertDate(dateString, locale = "en-US") {
+export function convertDate(dateString) {
   const date = new Date(dateString);
 
   const options = {
@@ -96,7 +73,7 @@ export function convertDate(dateString, locale = "en-US") {
     timeZone: "UTC",
   };
 
-  const formatter = new Intl.DateTimeFormat(locale, options);
+  const formatter = new Intl.DateTimeFormat("en-US", options);
   const formattedDate = formatter.format(date);
 
   return formattedDate;
@@ -107,11 +84,7 @@ export function validateName(name) {
   return regexp.test(String(name).toLowerCase().trim());
 }
 
-export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
-  if (!date) {
-    return "Invalid date";
-  }
-
+export const convertUTCDateToLocalDate = (date, format) => {
   if (!format) {
     format = {
       weekday: "long",
@@ -122,53 +95,19 @@ export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
       minute: "numeric",
       hour12: true,
     };
-    // console.log("ℹ️ No format provided. Using default format →", format);
   }
-
-  let parsedDate;
-
-  try {
-    if (typeof date === "string") {
-      // console.log("🔍 Input is a string. Checking for partial format...");
-
-      if (date.match(/^[A-Za-z]{3},\s+\d{1,2}\s+[A-Za-z]{3}$/)) {
-        const currentYear = new Date().getFullYear();
-        // console.log("📆 Detected partial format. Using current year:", currentYear);
-        parsedDate = new Date(`${date} ${currentYear}`);
-        // console.log("📆 Parsed partial date →", parsedDate.toISOString());
-      } else {
-        parsedDate = new Date(date);
-        // console.log("📆 Parsed ISO/standard string date →", parsedDate.toISOString());
-      }
-    } else {
-      parsedDate = new Date(date);
-      // console.log("📆 Parsed Date object or timestamp →", parsedDate.toISOString());
-    }
-
-    if (isNaN(parsedDate.getTime())) {
-      // console.error("❌ Invalid date after parsing →", parsedDate);
-      return "Invalid date";
-    }
-
-    const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    // console.log("🌐 Detected browser time zone →", browserTimezone);
-
-    const options = {
-      ...format,
-      timeZone: browserTimezone,
-    };
-    // console.log("🛠️ Formatting options →", options);
-
-    const formattedDate = parsedDate
-      .toLocaleString(locale, options)
-      .replace(" at ", ", ");
-
-    // console.log("✅ Final formatted date →", formattedDate);
-    return formattedDate;
-  } catch (error) {
-    // console.error("❗ Error formatting date:", error, "Original input →", date);
-    return "Invalid date";
-  }
+  const utcDate = new Date(date);
+  // Convert the UTC date to the local date using toLocaleString() with specific time zone
+  const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const options = {
+    ...format,
+    timeZone: browserTimezone,
+  };
+  // Convert the UTC date and time to the desired format
+  const formattedDate = utcDate
+    .toLocaleString("en-US", options)
+    .replace(" at ", ", ");
+  return formattedDate;
 };
 
 export function validateEmailField(value) {
@@ -204,11 +143,7 @@ export const transformImage = (url, key, width) => {
   let updatedUrl = url;
   if (key && width) {
     const str = `/${key}/`;
-    if (url.includes("/wrkr/")) {
-      updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
-    } else {
-      updatedUrl = url.replace(new RegExp(str), `/t.resize(w:${width})/`);
-    }
+    updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
   }
   try {
     const parsedUrl = new URL(updatedUrl);
@@ -283,24 +218,14 @@ export const getProductImgAspectRatio = function (
   return defaultAspectRatio;
 };
 
-export const currencyFormat = (value, currencySymbol, locale = "en-IN") => {
-  const formattingLocale = `${locale}-u-nu-latn`;
-
-  if (value != null) {
-    const formattedValue = value.toLocaleString(formattingLocale);
-
-    if (currencySymbol && /^[A-Z]+$/.test(currencySymbol)) {
-      return `${currencySymbol} ${formattedValue}`;
+export const currencyFormat = (value, currencySymbol) => {
+  if (currencySymbol && (value || value === 0)) {
+    if (/^[A-Z]+$/.test(currencySymbol)) {
+      return `${currencySymbol} ${value?.toLocaleString("en-IN")}`;
     }
-
-    if (currencySymbol) {
-      return `${currencySymbol}${formattedValue}`;
-    }
-
-    return formattedValue;
+    return `${currencySymbol}${value?.toLocaleString("en-IN")}`;
   }
-
-  return "";
+  return `${value?.toLocaleString("en-IN")}`;
 };
 
 export const getReviewRatingData = function (customMeta) {
@@ -455,44 +380,6 @@ export function isFreeNavigation(e) {
   return false;
 }
 
-const isValidLocale = (tag) => {
-  try {
-    new Intl.Locale(tag);
-    return true;
-  } catch {
-    return false;
-  }
-};
-
-export const formatLocale = (locale, countryCode, isCurrencyLocale = false) => {
-  if ((locale === "en" || !locale) && isCurrencyLocale) {
-    return DEFAULT_CURRENCY_LOCALE;
-  }
-  if (locale === "en" || !locale) {
-    return DEFAULT_UTC_LOCALE;
-  }
-  const finalLocale = locale.includes("-")
-    ? locale
-    : `${locale}${countryCode ? "-" + countryCode : ""}`;
-
-  return isValidLocale(finalLocale) ? finalLocale : DEFAULT_UTC_LOCALE;
-};
-
-export const translateValidationMessages = (validationObject, t) => {
-  const updatedValidation = { ...validationObject };
-
-  Object.keys(updatedValidation).forEach((key) => {
-    const rule = updatedValidation[key];
-
-    if (typeof rule === "object" && rule.message) {
-      rule.message = translateDynamicLabel(rule.message, t);
-    } else if (typeof rule === "string") {
-      updatedValidation[key] = translateDynamicLabel(rule, t);
-    }
-  });
-
-  return updatedValidation;
-};
 export const getAddressStr = (item, isAddressTypeAvailable) => {
   if (!item || typeof item !== "object") {
     return "";
@@ -531,145 +418,3 @@ export function isEmptyOrNull(obj) {
     (typeof obj === "object" && Object.keys(obj).length === 0)
   );
 }
-
-export function translateDynamicLabel(input, t) {
-  // Handle null, undefined, or empty input
-  if (!input || typeof input !== "string") {
-    return input || "";
-  }
-
-  const safeInput = input
-    .toLowerCase()
-    .replace(/\//g, "_") // replace slashes with underscores
-    .replace(/[^a-z0-9_\s]/g, "") // remove special characters except underscores and spaces
-    .trim()
-    .replace(/\s+/g, "_"); // replace spaces with underscores
-
-  const translationKey = `resource.dynamic_label.${safeInput}`;
-  const translated = t(translationKey);
-
-  return translated.split(".").pop() === safeInput ? input : translated;
-}
-
-export function getLocaleDirection(fpi) {
-  const dir = fpi?.store?.getState()?.custom?.currentLocaleDetails?.direction;
-  return dir || "ltr";
-}
-export function injectScript(script) {
-  let scriptObject = {
-    src: script,
-  };
-
-  return new Promise((resolve, reject) => {
-    const script = document.createElement("script");
-    script.src = scriptObject.src;
-
-    // Resolve promise when script is loaded
-    script.onload = () => {
-      resolve();
-    };
-    script.onerror = () => {
-      reject(new Error(`Failed to load script: ${script.src}`));
-    };
-
-    document.body.appendChild(script);
-  });
-}
-
-export const getAddressFromComponents = (components, name) => {
-  const typeToName = Object.fromEntries(
-    components.flatMap(({ long_name, short_name, types }) =>
-      types.map((type) => [type, { short_name, long_name }])
-    )
-  );
-
-  const address = [
-    name,
-    // Add premise (building name) if present from Google Maps components
-    typeToName["premise"]?.long_name || null,
-    typeToName["street_number"]?.long_name || null,
-    typeToName["route"]?.long_name || null,
-  ]
-    .filter(Boolean)
-    .join(", ");
-
-  return {
-    address: address || null,
-    area: typeToName["sublocality_level_2"]?.long_name || null,
-    landmark: typeToName["sublocality_level_1"]?.long_name || null,
-    city: typeToName["locality"]?.long_name || null,
-    state: typeToName["administrative_area_level_1"]?.long_name || null,
-    area_code: typeToName["postal_code"]?.long_name || null,
-    country: typeToName["country"]?.long_name || null,
-    country_iso_code: typeToName["country"]?.short_name || null,
-  };
-};
-
-/**
- * Extract user's full name from user object
- * @param {Object} user - User object
- * @returns {string} Full name or empty string
- */
-export const getUserFullName = (user) => {
-  if (!user) return "";
-
-  const { first_name, last_name } = user;
-  if (first_name && last_name) {
-    return `${first_name} ${last_name}`.trim();
-  }
-  return first_name || last_name || "";
-};
-
-/**
- * Extract primary phone number from user object
- * @param {Object} user - User object
- * @returns {Object} Phone object with mobile and countryCode or null
- */
-export const getUserPrimaryPhone = (user) => {
-  if (!user || !user.phone_numbers || !Array.isArray(user.phone_numbers)) {
-    return null;
-  }
-
-  const primaryPhone = user.phone_numbers.find((phone) => phone.primary);
-  if (!primaryPhone) return null;
-
-  const countryCode = primaryPhone.country_code?.toString() || "91";
-  const mobile = primaryPhone.phone || "";
-
-  return {
-    mobile,
-    countryCode,
-  };
-};
-
-/**
- * Extract primary email from user object
- * @param {Object} user - User object
- * @returns {string} Primary email or empty string
- */
-export const getUserPrimaryEmail = (user) => {
-  if (!user || !user.emails || !Array.isArray(user.emails)) {
-    return "";
-  }
-
-  const primaryEmail = user.emails.find((email) => email.primary);
-  return primaryEmail?.email || "";
-};
-
-/**
- * Extract all user data needed for address form autofill
- * @param {Object} user - User object
- * @param {boolean} isGuestUser - Whether user is guest
- * @returns {Object} Autofill data or empty object
- */
-export const getUserAutofillData = (user, isGuestUser = false) => {
-  if (!user || isGuestUser) {
-    return {};
-  }
-
-  return {
-    name: getUserFullName(user),
-    phone: getUserPrimaryPhone(user),
-    email: getUserPrimaryEmail(user),
-  };
-};

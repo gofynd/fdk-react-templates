@@ -1,10 +1,9 @@
-import React, { useMemo } from "react";
+import React from "react";
 import * as styles from "./wishlist.less";
 import { FDKLink } from "fdk-core/components";
 import InfiniteLoader from "../../components/core/infinite-loader/infinite-loader";
 import Breadcrumb from "../../components/breadcrumb/breadcrumb";
 import ProductCard from "../../components/product-card/product-card";
-import { useGlobalTranslation } from "fdk-core/utils";
 import Modal from "../../components/core/modal/modal";
 import AddToCart from "../../page-layouts/plp/Components/add-to-cart/add-to-cart";
 import SizeGuide from "../../page-layouts/plp/Components/size-guide/size-guide";
@@ -12,7 +11,7 @@ import { useViewport } from "../../helper/hooks";
 
 const Wishlist = ({
   breadcrumb = [],
-  title,
+  title = "Wishlist",
   productList = [],
   totalCount = 0,
   isBrand = true,
@@ -34,12 +33,9 @@ const Wishlist = ({
   imagePlaceholder = "",
   addToCartModalProps = {},
   showAddToCart = false,
-  actionButtonText,
   globalConfig = {},
 }) => {
-  const { t } = useGlobalTranslation("translation");
-  const countLabel =
-    totalCount > 1 ? `${totalCount} ${t("resource.common.items")}` : "";
+  const countLabel = totalCount > 1 ? `${totalCount} items` : "";
 
   const followedIdList = productList.map((m) => m.uid);
   const isTablet = useViewport(0, 768);
@@ -61,9 +57,7 @@ const Wishlist = ({
         <Breadcrumb breadcrumb={breadcrumb} />
       </div>
       <div className={styles.titleWrapper}>
-        <h1 className={styles.title}>
-          {title || t("resource.common.breadcrumb.wishlist")}
-        </h1>
+        <h1 className={styles.title}>{title}</h1>
         {countLabel && (
           <span className={styles.wishlistCount}>{countLabel}</span>
         )}
@@ -76,31 +70,34 @@ const Wishlist = ({
       >
         <div className={styles.productGrid}>
           {productList.map((product, index) => (
-            <WishlistProductCard
+            <FDKLink
+              className={styles.productWrapper}
+              to={`/product/${product?.slug}`}
               key={product?.uid}
-              index={index}
-              {...{
-                product,
-                isBrand,
-                isSaleBadge,
-                isPrice,
-                imgSrcSet,
-                aspectRatio,
-                isProductOpenInNewTab,
-                showImageOnHover,
-                listingPrice,
-                RemoveIconComponent,
-                isImageFill,
-                imageBackgroundColor,
-                followedIdList,
-                imagePlaceholder,
-                actionButtonText,
-                showAddToCart,
-                onRemoveClick,
-                handleAddToCart,
-                globalConfig,
-              }}
-            />
+              target={isProductOpenInNewTab ? "_blank" : "_self"}
+            >
+              <ProductCard
+                product={product}
+                listingPrice={listingPrice}
+                imgSrcSet={imgSrcSet}
+                aspectRatio={aspectRatio}
+                isBrand={isBrand}
+                isPrice={isPrice}
+                isSaleBadge={isSaleBadge}
+                isWishlistIcon={false}
+                isRemoveIcon={true}
+                RemoveIconComponent={RemoveIconComponent}
+                onRemoveClick={(event) => onRemoveClick(event, index)}
+                followedIdList={followedIdList}
+                isImageFill={isImageFill}
+                imageBackgroundColor={imageBackgroundColor}
+                showImageOnHover={showImageOnHover}
+                imagePlaceholder={imagePlaceholder}
+                columnCount={{ desktop: 4, tablet: 3, mobile: 2 }}
+                showAddToCart={showAddToCart}
+                handleAddToCart={handleAddToCart}
+              />
+            </FDKLink>
           ))}
         </div>
       </InfiniteLoader>
@@ -128,82 +125,6 @@ const Wishlist = ({
         </>
       )}
     </div>
-  );
-};
-
-const WishlistProductCard = ({
-  product,
-  index,
-  isBrand = true,
-  isSaleBadge = true,
-  isPrice = true,
-  imgSrcSet,
-  aspectRatio,
-  isProductOpenInNewTab = false,
-  showImageOnHover = false,
-  listingPrice = "range",
-  RemoveIconComponent,
-  isImageFill,
-  imageBackgroundColor,
-  followedIdList,
-  imagePlaceholder,
-  actionButtonText,
-  showAddToCart,
-  onRemoveClick = () => {},
-  handleAddToCart,
-}) => {
-  const { t } = useGlobalTranslation("translation");
-
-  const getProductAction = useMemo(() => {
-    const isMto = product?.custom_order?.is_custom_order || false;
-    const firstAvailableSize = product?.sizes?.sizes?.find(
-      (sizeOption) => sizeOption.quantity > 0 || isMto
-    );
-
-    return {
-      ...product.action,
-      page: {
-        ...product.action.page,
-        query: {
-          ...product.action.page.query,
-          ...(firstAvailableSize && { size: firstAvailableSize.value }),
-        },
-      },
-    };
-  }, [product]);
-
-  return (
-    <FDKLink
-      className={styles.productWrapper}
-      action={getProductAction}
-      state={{
-        product: product,
-      }}
-      target={isProductOpenInNewTab ? "_blank" : "_self"}
-    >
-      <ProductCard
-        product={product}
-        listingPrice={listingPrice}
-        imgSrcSet={imgSrcSet}
-        aspectRatio={aspectRatio}
-        isBrand={isBrand}
-        isPrice={isPrice}
-        isSaleBadge={isSaleBadge}
-        isWishlistIcon={false}
-        isRemoveIcon={true}
-        RemoveIconComponent={RemoveIconComponent}
-        onRemoveClick={(event) => onRemoveClick(event, index)}
-        followedIdList={followedIdList}
-        isImageFill={isImageFill}
-        imageBackgroundColor={imageBackgroundColor}
-        showImageOnHover={showImageOnHover}
-        imagePlaceholder={imagePlaceholder}
-        columnCount={{ desktop: 4, tablet: 3, mobile: 2 }}
-        showAddToCart={showAddToCart}
-        actionButtonText={actionButtonText ?? t("resource.common.add_to_cart")}
-        handleAddToCart={handleAddToCart}
-      />
-    </FDKLink>
   );
 };
 
