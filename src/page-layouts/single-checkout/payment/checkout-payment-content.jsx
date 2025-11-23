@@ -325,6 +325,7 @@ function CheckoutPaymentContent({
   const [savedUpi, setSavedUpi] = useState([]);
   const [savedCards, setSavedCards] = useState([]);
   const [selectedProofFile, setSelectedProofFile] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
   const [isUpiSuffixSelected, setIsUpiSuffixSelected] = useState(false);
   const [navigationTitleName, setNavigationTitleName] = useState("");
   const [isCvvNotNeededModal, setIsCvvNotNeededModal] = useState(false);
@@ -693,15 +694,44 @@ function CheckoutPaymentContent({
   };
 
   const handleNeftPlaceOrder = () => {
-    if (!utrNumber.trim()) {
-      setUtrError(true);
-      return;
-    }
+    // Both UTR and file upload are optional - either one or both can be provided
+    // No validation needed as per requirement
     proceedToPay("COD", selectedPaymentPayload);
   };
 
   const handleUploadButtonClick = () => {
     uploadInputRef.current?.click();
+  };
+
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!isDragging) setIsDragging(true);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const fakeEvent = {
+        target: { files: e.dataTransfer.files, value: "" },
+      };
+      handleFileInputChange(fakeEvent);
+    }
   };
 
   const handleFileInputChange = async (event) => {
@@ -749,7 +779,7 @@ function CheckoutPaymentContent({
     }
   };
 
-  const isNeftPlaceOrderDisabled = !utrNumber.trim() || isPaymentLoading;
+  const isNeftPlaceOrderDisabled = isPaymentLoading;
 
   const checkCouponValidity = async (payload) => {
     if (getTotalValue() === 0) return true;
@@ -2998,7 +3028,13 @@ function CheckoutPaymentContent({
                   <section
                     className={`${styles.neftSection} ${styles.neftUploadSection}`}
                   >
-                    <div className={styles.neftUploadBox}>
+                    <div
+                      className={`${styles.neftUploadBox} ${isDragging ? styles.neftUploadBoxDragging : ""}`}
+                      onDragEnter={handleDragEnter}
+                      onDragOver={handleDragOver}
+                      onDragLeave={handleDragLeave}
+                      onDrop={handleDrop}
+                    >
                       <input
                         type="file"
                         accept=".pdf,.png,.jpg,.jpeg"
@@ -3016,43 +3052,57 @@ function CheckoutPaymentContent({
                         onClick={handleUploadButtonClick}
                         disabled={fileUpload?.state?.isUploading}
                       >
-                        {fileUpload?.state?.isUploading
-                          ? t("resource.dynamic_label.uploading") ||
-                            "Uploading..."
-                          : uploadCta}
+                        {uploadCta}
                       </button>
                       <p className={styles.neftUploadTitle}>{uploadHeading}</p>
                       <p className={styles.neftUploadHelper}>{uploadHelper}</p>
-
-                      {fileUpload?.state?.isUploading && (
-                        <p className={styles.neftUploadProgress}>
-                          {t("resource.dynamic_label.upload_progress") ||
-                            "Upload Progress"}
-                          : {fileUpload?.state?.uploadProgress}%
-                        </p>
-                      )}
-
-                      {fileUpload?.state?.fileUploaded &&
-                        fileUpload?.state?.fileUploadedName && (
-                          <p className={styles.neftSelectedFile}>
-                            ✓ {fileUpload.state.fileUploadedName}
-                          </p>
-                        )}
-
-                      {!fileUpload?.state?.fileUploaded &&
-                        selectedProofFile &&
-                        !fileUpload?.state?.isUploading && (
-                          <p className={styles.neftSelectedFile}>
-                            {selectedProofFile.name}
-                          </p>
-                        )}
-
-                      {fileUpload?.state?.fileUploadError && (
-                        <p className={styles.neftError}>
-                          {fileUpload.state.fileUploadError}
-                        </p>
-                      )}
                     </div>
+
+                    {(selectedProofFile || fileUpload?.state?.fileUploaded) && (
+                      <div className={styles.neftFileCard}>
+                        <div className={styles.neftFileCardContent}>
+                          <div className={styles.neftFileInfo}>
+                            <div className={styles.neftFileIcon}>📄</div>
+                            <div className={styles.neftFileDetails}>
+                              <span className={styles.neftFileName}>
+                                {selectedProofFile?.name ||
+                                  fileUpload?.state?.fileUploadedName}
+                                {fileUpload?.state?.fileUploaded && (
+                                  <span className={styles.neftSuccessIndicator}>
+                                    {" "}
+                                    ✓
+                                  </span>
+                                )}
+                              </span>
+
+                              {fileUpload?.state?.isUploading && (
+                                <div className={styles.neftProgressContainer}>
+                                  <div
+                                    className={styles.neftProgressBarContainer}
+                                  >
+                                    <div
+                                      className={styles.neftProgressBar}
+                                      style={{
+                                        width: `${fileUpload?.state?.uploadProgress}%`,
+                                      }}
+                                    />
+                                  </div>
+                                  <span className={styles.neftProgressText}>
+                                    {fileUpload?.state?.uploadProgress}%
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {fileUpload?.state?.fileUploadError && (
+                      <div className={styles.neftUploadError}>
+                        {fileUpload.state.fileUploadError}
+                      </div>
+                    )}
                   </section>
 
                   <div>

@@ -1477,14 +1477,11 @@
   }
 
   .neftCopyButton {
-    border: 1px solid @DividerStokes;
-    border-radius: 20px;
-    background-color: transparent;
-    font-size: 12px;
-    font-weight: 500;
-    padding: 4px 12px;
     cursor: pointer;
-    line-height: 1;
+    svg {
+      height: 14px;
+      width: 14px;
+    }
   }
 
   .neftFieldGroup {
@@ -1544,6 +1541,7 @@
 
   .neftFormBlockInner {
     display: flex;
+    flex-direction: column;
     gap: 8px;
   }
 
@@ -1608,6 +1606,98 @@
     font-size: 12px;
     color: @ErrorText;
     margin: 0;
+  }
+
+  .neftUploadBoxDragging {
+    border-color: @ButtonPrimary;
+    background-color: @ThemeAccentL5;
+  }
+
+  .neftProgressContainer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .neftProgressBarContainer {
+    flex: 1;
+    height: 8px;
+    background-color: @DividerStokes;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .neftProgressBar {
+    height: 100%;
+    background-color: @ButtonPrimary;
+    transition: width 0.3s ease;
+    border-radius: 4px;
+  }
+
+  .neftProgressText {
+    font-size: 12px;
+    font-weight: 600;
+    color: @TextHeading;
+    flex-shrink: 0;
+    min-width: 40px;
+    text-align: right;
+  }
+
+  // File card styles (displayed outside upload box)
+  .neftFileCard {
+    margin-top: 16px;
+    border: 1px solid @DividerStokes;
+    border-radius: 8px;
+    padding: 16px;
+    background-color: @ThemeAccentL5;
+  }
+
+  .neftFileCardContent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .neftFileInfo {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    flex: 1;
+  }
+
+  .neftFileIcon {
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+
+  .neftFileDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+  }
+
+  .neftFileName {
+    font-size: 14px;
+    font-weight: 500;
+    color: @TextHeading;
+    word-break: break-word;
+  }
+
+  .neftSuccessIndicator {
+    color: @SuccessText;
+    font-weight: 600;
+  }
+
+  .neftUploadError {
+    margin-top: 12px;
+    padding: 12px;
+    background-color: @ErrorBackground;
+    border-left: 3px solid @ErrorText;
+    border-radius: 4px;
+    font-size: 14px;
+    color: @ErrorText;
   }
 
   .neftFormBlock {
