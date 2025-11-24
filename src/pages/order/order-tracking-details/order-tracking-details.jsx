@@ -25,7 +25,7 @@ function OrderTrackingDetails({
 }) {
   const { t } = useGlobalTranslation("translation");
   const params = useParams();
-  const [orderId, setOrderId] = useState(params.orderId);
+  const [orderId, setOrderId] = useState(params.orderId ?? "");
   const [showError, setShowError] = useState(false);
   const [show, setShow] = useState(false);
   const [selectedShipmentBag, setSelectedShipmentBag] =
@@ -41,6 +41,14 @@ function OrderTrackingDetails({
     }
     navigate(`/order-tracking/${orderId}`);
   };
+
+  useEffect(() => {
+    if (params?.orderId === ":orderId") {
+      console.log("navigating to order tracking");
+
+      navigate(`/order-tracking`);
+    }
+  }, []);
 
   const toggelInit = (item) => {
     navigate(`/profile/orders/shipment/${selectedShipmentBag?.shipment_id}`);
