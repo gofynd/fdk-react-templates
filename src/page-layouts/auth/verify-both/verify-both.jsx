@@ -13,10 +13,10 @@ function VerifyBoth({
   submittedEmail = "",
   emailOtpResendTime = 0,
   emailFormError = null,
-  onVerifyMobileSubmit = () => { },
-  onResendMobileOtpClick = () => { },
-  onVerifyEmailSubmit = () => { },
-  onResendEmailOtpClick = () => { },
+  onVerifyMobileSubmit = () => {},
+  onResendMobileOtpClick = () => {},
+  onVerifyEmailSubmit = () => {},
+  onResendEmailOtpClick = () => {},
 }) {
   return (
     <div className={styles.verifyBoth}>
@@ -52,8 +52,8 @@ function VerifyMobile({
   submittedMobile = "",
   mobileOtpResendTime = 0,
   error = null,
-  onVerifyMobileSubmit = () => { },
-  onResendMobileOtpClick = () => { },
+  onVerifyMobileSubmit = () => {},
+  onResendMobileOtpClick = () => {},
 }) {
   const { t } = useGlobalTranslation("translation");
   const {
@@ -93,9 +93,10 @@ function VerifyMobile({
         onSubmit={handleSubmit(onVerifyMobileSubmit)}
       >
         <div>
-          <p
-            className={styles.otpSentMessage}
-          >{`${t("resource.common.otp_sent_to")}`}{<ForcedLtr text={submittedMobile}/>}</p>
+          <p className={styles.otpSentMessage}>
+            {`${t("resource.common.otp_sent_to")}`}{" "}
+            {<ForcedLtr text={submittedMobile} />}
+          </p>
           <div className={styles.inputGroup}>
             <label className={styles.label} htmlFor={mobileOtpId}>
               {t("resource.common.enter_otp")}
@@ -144,8 +145,8 @@ function VerifyEmail({
   submittedEmail = "",
   emailOtpResendTime = 0,
   error = null,
-  onVerifyEmailSubmit = () => { },
-  onResendEmailOtpClick = () => { },
+  onVerifyEmailSubmit = () => {},
+  onResendEmailOtpClick = () => {},
 }) {
   const { t } = useGlobalTranslation("translation");
   const {
@@ -208,7 +209,8 @@ function VerifyEmail({
               }}
               {...register("otp", {
                 validate: (value) =>
-                  /^[0-9]{4}$/.test(value) || t("resource.common.enter_valid_otp"),
+                  /^[0-9]{4}$/.test(value) ||
+                  t("resource.common.enter_valid_otp"),
               })}
             />
             {errors?.otp && (
