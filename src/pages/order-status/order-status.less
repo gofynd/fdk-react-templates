@@ -75,9 +75,18 @@
           height: 41px;
         }
       }
-
       .continueBtn {
-        padding-inline-start: 0;
+        display: inline-block;
+        padding-left: 12px;
+        &:nth-child(2) {
+          @media (max-width: 399px) {
+            padding-top: 12px;
+            padding-left: 0;
+          }
+          @media (min-width: 379px) and (max-width: 399px) {
+            padding-left: 12px;
+          }
+        }
       }
     }
   }

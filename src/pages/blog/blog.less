@@ -1,4 +1,11 @@
 @import "../../styles/main.less";
+.nextArrowStyles {
+  right: 20px;
+  inset-inline-start: "unset";
+}
+.prevArrowStyles {
+  left: 20px;
+}
 
 .loader {
   position: relative;
@@ -123,15 +130,18 @@
 }
 .sliderWrapper {
   padding-bottom: 60px;
-  .carouselBtn {
-    &[disabled] {
-      display: none;
+  :global {
+    .slick-track {
+      display: flex !important;
     }
-    @media @tablet {
-      display: none;
+    .slick-slide {
+      height: inherit !important;
+      & > div,
+      & > div > div {
+        height: 100%;
+      }
     }
   }
-  
   .blogItem {
     @media @tablet {
       height: 100%;
@@ -356,7 +366,6 @@
       inset-inline-end: 8px;
       transform: translateY(-50%);
       fill: @ButtonSecondary;
-      cursor: pointer;
     }
   }
 }
