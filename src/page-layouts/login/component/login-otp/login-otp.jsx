@@ -155,8 +155,7 @@ function OtpForm({
           {t("resource.localization.verify_account")}
         </h3>
         <p className={styles.otpSentMsg}>
-          {`${t("resource.common.otp_sent_to")}`}{" "}
-          <ForcedLtr text={submittedMobile} />
+          {`${t("resource.common.otp_sent_to")}`} <ForcedLtr text={submittedMobile}/>
           <button
             type="button"
             className={styles.changeBtn}
