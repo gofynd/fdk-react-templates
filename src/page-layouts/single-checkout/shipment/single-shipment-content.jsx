@@ -207,7 +207,21 @@ function SingleShipmentContent({
                             )}
                             <div className={styles.itemWrapper}>
                               <div className={styles.leftImg}>
-                                <FDKLink to={getProductPath(product?.item)}>
+                                <FDKLink
+                                  to={getProductPath(product?.item)}
+                                  state={{
+                                    product: {
+                                      ...product?.item?.product,
+                                      media:
+                                        product?.item?.product?.images?.map(
+                                          (i) => ({
+                                            ...i,
+                                            type: "image",
+                                          })
+                                        ) || [],
+                                    },
+                                  }}
+                                >
                                   <img
                                     src={getProductImage(product?.item)}
                                     alt={product?.item?.product?.name}
