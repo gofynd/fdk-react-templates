@@ -8,6 +8,29 @@ import { useGlobalTranslation } from "fdk-core/utils";
 import { translateDynamicLabel } from "../../../../helper/utils";
 import FyButton from "../../../../components/core/fy-button/fy-button";
 
+function AddressRight({
+  selectedAddressId,
+  addressItem,
+  updateAddress,
+  removeAddress,
+}) {
+  const { t } = useGlobalTranslation("translation");
+  return (
+    <div className={styles.buttonsContainer}>
+      <span className={styles.edit} onClick={() => updateAddress(addressItem)}>
+        {t("resource.common.edit_lower")}
+      </span>
+      <span className={styles.buttonDivider}>|</span>
+      <span
+        className={styles.remove}
+        onClick={() => removeAddress(addressItem?.id)}
+      >
+        {t("resource.facets.remove")}
+      </span>
+    </div>
+  );
+}
+
 function DeliveryLocation({
   pincode = "",
   deliveryLocation,
@@ -41,6 +64,9 @@ function DeliveryLocation({
   countryDetails,
   isGuestUser = false,
   user,
+  isNewAddress,
+  updateAddress,
+  removeAddress,
 }) {
   const { t } = useGlobalTranslation("translation");
   const computedBtnLabel = btnLabel || t("resource.cart.change");
@@ -158,7 +184,19 @@ function DeliveryLocation({
                   onAddressSelect={setSelectedAddressId}
                   showAddressSelectionCheckbox={true}
                   selectedAddressId={selectedAddressId}
-                  belowAddressSlot={<AddrErrorDiv id={item?.id} />}
+                  belowAddressSlot={
+                    <>
+                      <AddrErrorDiv id={item?.id} />
+                      <div className={styles.addressActions}>
+                        <AddressRight
+                          selectedAddressId={selectedAddressId}
+                          addressItem={item}
+                          updateAddress={updateAddress}
+                          removeAddress={removeAddress}
+                        />
+                      </div>
+                    </>
+                  }
                 ></AddressItem>
               ))}
               {otherAddresses.map((item, index) => (
@@ -169,7 +207,19 @@ function DeliveryLocation({
                   onAddressSelect={setSelectedAddressId}
                   showAddressSelectionCheckbox={true}
                   selectedAddressId={selectedAddressId}
-                  belowAddressSlot={<AddrErrorDiv id={item?.id} />}
+                  belowAddressSlot={
+                    <>
+                      <AddrErrorDiv id={item?.id} />
+                      <div className={styles.addressActions}>
+                        <AddressRight
+                          selectedAddressId={selectedAddressId}
+                          addressItem={item}
+                          updateAddress={updateAddress}
+                          removeAddress={removeAddress}
+                        />
+                      </div>
+                    </>
+                  }
                 ></AddressItem>
               ))}
             </div>
@@ -203,7 +253,7 @@ function DeliveryLocation({
           internationalShipping={isInternationalShippingEnabled}
           addressItem={addressItem}
           formSchema={addressFormSchema}
-          isNewAddress={true}
+          isNewAddress={isNewAddress}
           onAddAddress={addAddress}
           isMap={showGoogleMap}
           mapApiKey={mapApiKey}
@@ -216,6 +266,7 @@ function DeliveryLocation({
           countryDetails={countryDetails}
           isGuestUser={isGuestUser}
           onClose={onCloseModalClick}
+          onUpdateAddress={addAddress}
           user={user}
         ></AddressForm>
       </Modal>

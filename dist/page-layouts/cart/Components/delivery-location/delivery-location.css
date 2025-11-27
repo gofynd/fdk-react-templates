@@ -773,6 +773,27 @@ button {
   width: 100%;
   height: 100%;
 }
+.delivery-location__buttonsContainer___lXjUz {
+  margin-inline-start: 25px;
+  margin-top: 8px;
+}
+.delivery-location__buttonsContainer___lXjUz .delivery-location__buttonDivider___ospHS {
+  padding: 0px 8px;
+}
+.delivery-location__buttonsContainer___lXjUz .delivery-location__edit___xzpcm,
+.delivery-location__buttonsContainer___lXjUz .delivery-location__remove___DLNKF {
+  padding: 4px;
+  border: none;
+  color: var(--buttonLink, #b1655b);
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  text-align: center;
+  text-transform: uppercase;
+  line-height: 140%;
+  background: var(--pageBackground, #f8f8f8);
+  cursor: pointer;
+}
 .delivery-location__cartPincodeContainer____lhBS {
   border: 1px solid var(--dividerStokes, #d4d1d1);
   line-height: 140%;
