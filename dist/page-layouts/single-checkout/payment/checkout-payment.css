@@ -6370,8 +6370,10 @@ h5,
     display: none !important;
   }
 }
-.checkout-payment__paymentContainer___1UBn5 {
-  margin-top: 20px;
+@media only screen and (max-width: 768px) {
+  .checkout-payment__paymentContainer___1UBn5 {
+    margin-top: 20px;
+  }
 }
 .checkout-payment__paymentContainer___1UBn5.checkout-payment__disabledPayment___xwflL {
   pointer-events: none;
