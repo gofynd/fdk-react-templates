@@ -74,7 +74,6 @@ function SingleAddress({
           title={modalTitle}
           hideHeader
           isOpen={openModal}
-          modalType="center-modal"
           closeDialog={resetAddressState}
           containerClassName={styles.addressModalContainer}
           bodyClassName={styles.addressModalBody}

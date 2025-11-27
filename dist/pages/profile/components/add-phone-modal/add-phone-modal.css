@@ -2295,7 +2295,6 @@ h5,
   box-sizing: border-box;
   width: 100%;
   background-color: transparent;
-  font-weight: 500;
 }
 @media only screen and (max-width: 480px) {
   .fy-input__fyInput___S4Mtu {
@@ -2315,9 +2314,7 @@ h5,
   outline: none;
 }
 .fy-input__fyInput___S4Mtu:disabled {
-  color: var(--textSecondary, #9c9c9c);
-  border-color: var(--overlaypopupdividerstroke, #e0e0e0);
-  font-weight: 400;
+  color: var(--textSecondary);
 }
 .fy-input__fyInput___S4Mtu:focus {
   border-color: var(--buttonPrimary, #4e3f09);
@@ -2338,11 +2335,8 @@ h5,
   height: 48px;
 }
 .fy-input__outlined___CEaKm.fy-input__inputDisable___M8Zn2 {
-  border: 1px solid var(--overlaypopupdividerstroke, #e0e0e0);
+  border: 1px solid #cccccc;
   cursor: not-allowed;
-  pointer-events: auto;
-}
-.fy-input__outlined___CEaKm.fy-input__inputDisable___M8Zn2 input {
   pointer-events: none;
 }
 .fy-input__outlined___CEaKm.fy-input__medium___L3QsD {
@@ -2709,13 +2703,6 @@ h5,
   .mobile-number__view-mobile___eoXeR {
     display: none !important;
   }
-}
-.mobile-number__additionalLableClasses___ceKOA {
-  background-color: var(--pageBackground, #f8f8f8);
-  color: var(--textLabel, #7d7676);
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 400;
 }
 .mobile-number__mobileInputWrapper___Na12n {
   display: flex;
