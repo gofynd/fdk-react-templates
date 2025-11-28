@@ -203,7 +203,7 @@ const AddToCart = ({
     if (quotation?.is_applicable) {
       const remainingCount = quotation.total_count - quotation.used_count;
       if (
-        currentQuantity > 0 &&
+        currentQuantity >= 0 &&
         currentQuantity <= remainingCount &&
         bestPrice?.price
       ) {
@@ -221,7 +221,7 @@ const AddToCart = ({
     if (contract?.is_applicable) {
       const remainingCount = contract.total_count - contract.used_count;
       if (
-        currentQuantity > 0 &&
+        currentQuantity >= 0 &&
         currentQuantity <= remainingCount &&
         bestPrice?.price
       ) {
