@@ -5989,6 +5989,9 @@ h5,
   color: var(--buttonSecondary);
   cursor: pointer;
 }
+.single-address-content__addressContentConitainer___CupPn .single-address-content__actionContainer___vCQh2 .single-address-content__deliverToThis___tRzNQ:disabled {
+  opacity: 0.6;
+}
 @media only screen and (max-width: 480px) {
   .single-address-content__addressContentConitainer___CupPn .single-address-content__actionContainer___vCQh2 .single-address-content__deliverToThis___tRzNQ {
     padding: 20px 24px;
@@ -6874,6 +6877,9 @@ h5,
   display: flex;
   align-items: center;
   gap: 4px;
+}
+.single-address-header__addressHeaderContainer___uHzhP .single-address-header__buttonWrapper___eGnIf .single-address-header__addBtn___H24AA:disabled {
+  opacity: 0.6;
 }
 @media only screen and (max-width: 480px) {
   .single-address-header__addressHeaderContainer___uHzhP .single-address-header__buttonWrapper___eGnIf .single-address-header__addBtn___H24AA {
