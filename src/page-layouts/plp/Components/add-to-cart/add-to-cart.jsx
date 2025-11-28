@@ -285,13 +285,14 @@ const AddToCart = ({
     }
 
     // Default: return regular marked price
-    return getProductPrice("marked");
+    return getProductPrice("effective");
   };
 
   console.log(
-    getMarkedPrice,
+    getMarkedPrice(),
     "getMarkedPrice",
-    getProductPrice("effective") !== getMarkedPrice()
+    getProductPrice("effective") !== getMarkedPrice(),
+    getMarkedPrice("effective")
   );
 
   const isSizeGuideAvailable = () => {
@@ -513,11 +514,11 @@ const AddToCart = ({
             {show_price && sizes?.sellable && (
               <div className={styles.product__price}>
                 <h4 className={styles["product__price--effective"]}>
-                  {getProductPrice("effective")}
+                  {getMarkedPrice()}
                 </h4>
-                {getProductPrice("effective") !== getMarkedPrice() && (
+                {getProductPrice("effective") !== getProductPrice("marked") && (
                   <span className={styles["product__price--marked"]}>
-                    {getMarkedPrice()}
+                    {getProductPrice("marked")}
                   </span>
                 )}
                 {sizes?.discount && (
