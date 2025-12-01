@@ -242,41 +242,17 @@ const AddToCart = ({
       );
 
       if (activeSlabs.length > 0) {
-        // Sort slabs by min_qty to find the matching one
-        const sortedSlabs = [...activeSlabs].sort(
-          (a, b) => (a.min_qty || 0) - (b.min_qty || 0)
+        const applicableSlab = activeSlabs.find(
+          (slab) =>
+            currentQuantity >= (slab?.min_qty || 0) &&
+            (slab?.max_qty === null ||
+              slab?.max_qty === undefined ||
+              currentQuantity <= slab?.max_qty)
         );
 
-        // Find the slab that matches the current quantity
-        let matchingSlab = null;
-        for (let i = sortedSlabs.length - 1; i >= 0; i--) {
-          const slab = sortedSlabs[i];
-          const minQty = slab.min_qty || 0;
-          const maxQty =
-            slab.max_qty !== null && slab.max_qty !== undefined
-              ? slab.max_qty
-              : Infinity;
-
-          if (currentQuantity >= minQty && currentQuantity <= maxQty) {
-            matchingSlab = slab;
-            break;
-          }
-        }
-
-        // If no exact match, use the highest applicable slab (where quantity >= min_qty)
-        if (!matchingSlab) {
-          for (let i = sortedSlabs.length - 1; i >= 0; i--) {
-            const slab = sortedSlabs[i];
-            if (currentQuantity >= (slab.min_qty || 0)) {
-              matchingSlab = slab;
-              break;
-            }
-          }
-        }
-
-        if (matchingSlab?.offer_price) {
+        if (applicableSlab?.offer_price) {
           return currencyFormat(
-            matchingSlab.offer_price,
+            applicableSlab.offer_price,
             productPrice?.price?.currency_symbol || "",
             formatLocale(locale, countryCode, true)
           );
