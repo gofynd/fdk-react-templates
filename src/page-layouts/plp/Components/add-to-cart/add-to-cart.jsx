@@ -79,7 +79,9 @@ const AddToCart = ({
   };
 
   useEffect(() => {
-    onSizeSelection(selectedSize);
+    console.log("inside onsize selection useeffect 1");
+    // onSizeSelection(selectedSize);
+    console.log("inside onsize selection useeffect 2");
   }, [selectedSize, productData?.product?.slug]);
 
   const cartQuantity = useMemo(() => {
@@ -178,98 +180,6 @@ const AddToCart = ({
           ) || "";
     }
   };
-
-  // Function to get marked price based on pricing type (quotation, contract, ladder, pricing_tier)
-  const getMarkedPrice = () => {
-    const currentQuantity = productData?.selectedQuantity || quantity || 0;
-    const quotation = product?.quotation;
-    const contract = product?.contract;
-    const ladder = product?.ladder;
-    const pricingTier = product?.pricing_tier;
-    const bestPrice = product?.best_price;
-
-    // Check for pricing_tier - show best_price.price
-    if (pricingTier?.is_applicable && bestPrice?.price) {
-      return currencyFormat(
-        bestPrice.price,
-        bestPrice?.currency_symbol ||
-          productPrice?.price?.currency_symbol ||
-          "",
-        formatLocale(locale, countryCode, true)
-      );
-    }
-
-    // Check for quotation
-    if (quotation?.is_applicable) {
-      const remainingCount = quotation.total_count - quotation.used_count;
-      if (
-        currentQuantity >= 0 &&
-        currentQuantity <= remainingCount &&
-        bestPrice?.price
-      ) {
-        return currencyFormat(
-          bestPrice.price,
-          bestPrice?.currency_symbol ||
-            productPrice?.price?.currency_symbol ||
-            "",
-          formatLocale(locale, countryCode, true)
-        );
-      }
-    }
-
-    // Check for contract
-    if (contract?.is_applicable) {
-      const remainingCount = contract.total_count - contract.used_count;
-      if (
-        currentQuantity >= 0 &&
-        currentQuantity <= remainingCount &&
-        bestPrice?.price
-      ) {
-        return currencyFormat(
-          bestPrice.price,
-          bestPrice?.currency_symbol ||
-            productPrice?.price?.currency_symbol ||
-            "",
-          formatLocale(locale, countryCode, true)
-        );
-      }
-    }
-
-    // Check for ladder - find matching slab based on quantity
-    if (ladder?.is_applicable && ladder?.price_slabs?.length > 0) {
-      const activeSlabs = ladder.price_slabs.filter(
-        (slab) => slab.is_active && slab.status === "success"
-      );
-
-      if (activeSlabs.length > 0) {
-        const applicableSlab = activeSlabs.find(
-          (slab) =>
-            currentQuantity >= (slab?.min_qty || 0) &&
-            (slab?.max_qty === null ||
-              slab?.max_qty === undefined ||
-              currentQuantity <= slab?.max_qty)
-        );
-
-        if (applicableSlab?.offer_price) {
-          return currencyFormat(
-            applicableSlab.offer_price,
-            productPrice?.price?.currency_symbol || "",
-            formatLocale(locale, countryCode, true)
-          );
-        }
-      }
-    }
-
-    // Default: return regular marked price
-    return getProductPrice("effective");
-  };
-
-  console.log(
-    getMarkedPrice(),
-    "getMarkedPrice",
-    getProductPrice("effective") !== getMarkedPrice(),
-    getMarkedPrice("effective")
-  );
 
   const isSizeGuideAvailable = () => {
     const sizeChartHeader = sizes?.size_chart?.headers || {};
@@ -490,7 +400,7 @@ const AddToCart = ({
             {show_price && sizes?.sellable && (
               <div className={styles.product__price}>
                 <h4 className={styles["product__price--effective"]}>
-                  {getMarkedPrice()}
+                  {getProductPrice("effective")}
                 </h4>
                 {getProductPrice("effective") !== getProductPrice("marked") && (
                   <span className={styles["product__price--marked"]}>

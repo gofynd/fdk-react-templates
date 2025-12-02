@@ -622,9 +622,7 @@ const ProductCard = ({
           </h5>
           {isPrice && (
             <>
-              {product?.contract ||
-              product?.quotation ||
-              product?.pricing_tier ? (
+              {product?.contract || product?.quotation ? (
                 <>
                   {product.contract && (
                     <Tooltip

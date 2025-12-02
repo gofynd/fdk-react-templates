@@ -204,12 +204,11 @@ export const transformImage = (url, key, width) => {
   let updatedUrl = url;
   if (key && width) {
     const str = `/${key}/`;
-    updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
-    // if (url.includes("/wrkr/")) {
-    //   updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
-    // } else {
-    //   updatedUrl = url.replace(new RegExp(str), `/t.resize(w:${width})/`);
-    // }
+    if (url.includes("/wrkr/")) {
+      updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
+    } else {
+      updatedUrl = url.replace(new RegExp(str), `/t.resize(w:${width})/`);
+    }
   }
   try {
     const parsedUrl = new URL(updatedUrl);

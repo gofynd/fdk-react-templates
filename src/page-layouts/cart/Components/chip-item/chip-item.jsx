@@ -514,8 +514,8 @@ export default function ChipItem({
                 >
                   {currencyFormat(
                     numberWithCommas(
-                      singleItemDetails?.price?.converted?.final_price ??
-                        singleItemDetails?.price?.base?.final_price
+                      singleItemDetails?.price?.converted?.effective ??
+                        singleItemDetails?.price?.base?.effective
                     ),
                     singleItemDetails?.price?.converted?.currency_symbol ??
                       singleItemDetails?.price?.base?.currency_symbol,
