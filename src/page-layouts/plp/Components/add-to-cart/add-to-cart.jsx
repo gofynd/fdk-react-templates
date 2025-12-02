@@ -78,11 +78,9 @@ const AddToCart = ({
     return merchant_data?.[keyName] === "approved";
   };
 
-  useEffect(() => {
-    console.log("inside onsize selection useeffect 1");
-    // onSizeSelection(selectedSize);
-    console.log("inside onsize selection useeffect 2");
-  }, [selectedSize, productData?.product?.slug]);
+  // useEffect(() => {
+  // onSizeSelection(selectedSize);
+  // }, [selectedSize, productData?.product?.slug]);
 
   const cartQuantity = useMemo(() => {
     return productData?.selectedQuantity;

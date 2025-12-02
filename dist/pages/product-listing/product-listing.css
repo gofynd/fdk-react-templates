@@ -17526,6 +17526,11 @@ h5,
   border: 1px solid var(--buttonPrimary, #4e3f09);
   color: var(--buttonPrimary, #4e3f09);
 }
+@media only screen and (min-width: 769px) {
+  .create-wishlist-modal__createWishlistModal___FdjVS .create-wishlist-modal__button___KjhXt.create-wishlist-modal__cancelButton___jhtto {
+    width: fit-content;
+  }
+}
 .create-wishlist-modal__createWishlistModal___FdjVS .create-wishlist-modal__button___KjhXt.create-wishlist-modal__createButton____7aA3 {
   background-color: var(--buttonPrimary, #4e3f09);
   border: 1px solid var(--buttonPrimary, #4e3f09);
