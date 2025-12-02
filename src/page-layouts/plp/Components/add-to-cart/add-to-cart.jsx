@@ -397,18 +397,33 @@ const AddToCart = ({
             {/* ---------- Product Price ---------- */}
             {show_price && sizes?.sellable && (
               <div className={styles.product__price}>
-                <h4 className={styles["product__price--effective"]}>
-                  {getProductPrice("effective")}
-                </h4>
-                {getProductPrice("effective") !== getProductPrice("marked") && (
-                  <span className={styles["product__price--marked"]}>
-                    {getProductPrice("marked")}
-                  </span>
-                )}
-                {sizes?.discount && (
-                  <span className={styles["product__price--discount"]}>
-                    ({sizes?.discount})
-                  </span>
+                {productData?.product?.quotation?.is_applicable ||
+                productData?.product?.contract?.is_applicable ||
+                productData?.product?.pricing_tier?.is_applicable ? (
+                  <h4 className={styles["product__price--effective"]}>
+                    {currencyFormat(
+                      productData?.product?.best_price?.price,
+                      productData?.productPrice?.price?.currency_symbol,
+                      formatLocale(locale, countryCode, true)
+                    )}
+                  </h4>
+                ) : (
+                  <>
+                    <h4 className={styles["product__price--effective"]}>
+                      {getProductPrice("effective")}
+                    </h4>
+                    {getProductPrice("effective") !==
+                      getProductPrice("marked") && (
+                      <span className={styles["product__price--marked"]}>
+                        {getProductPrice("marked")}
+                      </span>
+                    )}
+                    {sizes?.discount && (
+                      <span className={styles["product__price--discount"]}>
+                        ({sizes?.discount})
+                      </span>
+                    )}
+                  </>
                 )}
               </div>
             )}
