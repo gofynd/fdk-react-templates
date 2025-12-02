@@ -35,6 +35,7 @@ const B2bBestPriceWrapper = ({
         {!isBestPriceLoading &&
           bestPriceDetailsData?.product?.best_price?.is_applicable &&
           !bestPriceDetailsData?.product?.contract?.is_applicable &&
+          !bestPriceDetailsData?.product?.pricing_tier?.is_applicable &&
           !bestPriceDetailsData?.product?.quotation?.is_applicable && (
             <div className={`${styles.bestPriceContainer} ${className}`}>
               <span className={styles.bestPriceContainer__text}>
