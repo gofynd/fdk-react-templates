@@ -10,6 +10,27 @@ export const debounce = (func, wait) => {
   };
 };
 
+export const formatDate = (isoString, dateOnly = false) => {
+  const date = new Date(isoString);
+
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = date.toLocaleString("en-US", { month: "short" });
+  const year = date.getFullYear();
+
+  let hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const ampm = hours >= 12 ? "PM" : "AM";
+
+  hours %= 12;
+  hours = hours || 12; // 0 becomes 12
+
+  if (dateOnly) {
+    return `${day} ${month}, ${year}`;
+  }
+
+  return `${day} ${month}, ${year}, ${hours}:${minutes} ${ampm}`;
+};
+
 export const getGlobalConfigValue = (globalConfig, id) =>
   globalConfig?.props?.[id] ?? "";
 
@@ -150,7 +171,6 @@ export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
   }
 };
 
-
 export function validateEmailField(value) {
   const emailPattern =
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -184,7 +204,12 @@ export const transformImage = (url, key, width) => {
   let updatedUrl = url;
   if (key && width) {
     const str = `/${key}/`;
-    updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
+    // updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
+    if (url.includes("/b2b-commerce/")) {
+      updatedUrl = url.replace(new RegExp(str), `/t.resize(w:${width})/`);
+    } else {
+      updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
+    }
   }
   try {
     const parsedUrl = new URL(updatedUrl);
@@ -278,7 +303,6 @@ export const currencyFormat = (value, currencySymbol, locale = "en-IN") => {
 
   return "";
 };
-
 
 export const getReviewRatingData = function (customMeta) {
   const data = {};
@@ -448,7 +472,9 @@ export const formatLocale = (locale, countryCode, isCurrencyLocale = false) => {
   if (locale === "en" || !locale) {
     return DEFAULT_UTC_LOCALE;
   }
-  const finalLocale = locale.includes("-") ? locale : `${locale}${countryCode ? "-" + countryCode : ""}`;
+  const finalLocale = locale.includes("-")
+    ? locale
+    : `${locale}${countryCode ? "-" + countryCode : ""}`;
 
   return isValidLocale(finalLocale) ? finalLocale : DEFAULT_UTC_LOCALE;
 };
@@ -459,10 +485,7 @@ export const translateValidationMessages = (validationObject, t) => {
   Object.keys(updatedValidation).forEach((key) => {
     const rule = updatedValidation[key];
 
-    if (
-      typeof rule === "object" &&
-      rule.message
-    ) {
+    if (typeof rule === "object" && rule.message) {
       rule.message = translateDynamicLabel(rule.message, t);
     } else if (typeof rule === "string") {
       updatedValidation[key] = translateDynamicLabel(rule, t);
@@ -512,21 +535,21 @@ export function isEmptyOrNull(obj) {
 
 export function translateDynamicLabel(input, t) {
   // Handle null, undefined, or empty input
-  if (!input || typeof input !== 'string') {
-    return input || '';
+  if (!input || typeof input !== "string") {
+    return input || "";
   }
 
   const safeInput = input
     .toLowerCase()
-    .replace(/\//g, '_') // replace slashes with underscores
-    .replace(/[^a-z0-9_\s]/g, '') // remove special characters except underscores and spaces
+    .replace(/\//g, "_") // replace slashes with underscores
+    .replace(/[^a-z0-9_\s]/g, "") // remove special characters except underscores and spaces
     .trim()
-    .replace(/\s+/g, '_'); // replace spaces with underscores
+    .replace(/\s+/g, "_"); // replace spaces with underscores
 
   const translationKey = `resource.dynamic_label.${safeInput}`;
   const translated = t(translationKey);
 
-  return translated.split('.').pop() === safeInput ? input : translated;
+  return translated.split(".").pop() === safeInput ? input : translated;
 }
 
 export function getLocaleDirection(fpi) {
@@ -616,7 +639,7 @@ export const getUserPrimaryPhone = (user) => {
 
   return {
     mobile,
-    countryCode
+    countryCode,
   };
 };
 

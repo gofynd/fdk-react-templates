@@ -4,9 +4,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  .disableCursor {
-    filter: invert(1);
-  }
+
   .removeIcon {
     path {
       fill: @TextBody !important;
@@ -117,6 +115,16 @@
     .extension {
       position: absolute;
     }
+
+    .b2bAvailableOffer {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      background-color: @ThemeAccentD5;
+      border-radius: 4px;
+    }
   }
   .productDescContainer {
     display: flex;
@@ -130,7 +138,7 @@
     }
 
     .productDesc {
-      min-width: 0;
+      width: 100%;
       .productBrand {
         margin-bottom: 4px;
         .text-line-clamp();
@@ -148,6 +156,7 @@
           text-align: center;
         }
       }
+
       .productPrice {
         display: flex;
         flex-wrap: wrap;
@@ -235,6 +244,29 @@
           }
         }
       }
+
+      .badge_section {
+        display: flex;
+        align-items: center;
+        margin-bottom: 4px;
+
+        .badge {
+          display: flex;
+          align-items: center;
+          padding: 4px 8px;
+          border-radius: 4px;
+          background-color: @SuccessText;
+          color: #fff;
+          font-size: 12px;
+          font-weight: 400 !important;
+          gap: 4px;
+
+          .info_icon {
+            display: flex;
+            align-items: center;
+          }
+        }
+      }
     }
 
     .addToCart {
@@ -247,6 +279,55 @@
       height: 40px;
       font-size: 12px;
       white-space: nowrap;
+    }
+
+    .b2bAvailableOffers {
+      background: @ButtonSecondary;
+      font-weight: 500;
+      line-height: 16px;
+      letter-spacing: -0.24px;
+      text-transform: uppercase;
+      padding: 12px 16px;
+      height: 40px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .loginToViewPricing {
+      background: @ButtonSecondary;
+      font-size: 14px;
+      line-height: 18px;
+      letter-spacing: -0.28px;
+      border-radius: 4px;
+      padding: 8px;
+      height: 32px;
+      white-space: nowrap;
+      margin-top: 8px;
+      width: 100%;
+    }
+
+    .kycCompletionBadge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px;
+      margin: 8px 0px;
+      background-color: #fff5d6;
+      border-radius: 4px;
+      color: @TextHeading;
+
+      .kycCompletionBadgeIcon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 16px;
+        height: 16px;
+        color: #f5a300;
+      }
+
+      .kycCompletionBadgeText {
+        font-size: 12px;
+      }
     }
   }
   @media @mobile {
@@ -266,6 +347,10 @@
         }
         .extension {
           inset-inline-start: 16px;
+          bottom: 16px;
+        }
+        .b2bAvailableOffer {
+          left: 16px;
           bottom: 16px;
         }
       }
@@ -289,6 +374,15 @@
         .addToCart {
           width: 100%;
         }
+
+        .loginToViewPricing {
+          width: 100%;
+          font-size: 12px;
+        }
+
+        .b2bAvailableOffers {
+          width: 100%;
+        }
       }
       .imageContainer {
         .wishlistBtn {
@@ -307,12 +401,24 @@
           inset-inline-start: 8px;
           bottom: 8px;
         }
+        .b2bAvailableOffer {
+          left: 8px;
+          bottom: 8px;
+        }
       }
     }
   }
   @media @mobile-up {
     &.tablet-grid-2-card {
       .addToCart {
+        width: 104px;
+      }
+
+      .loginToViewPricing {
+        width: 100%;
+      }
+
+      .b2bAvailableOffers {
         width: 104px;
       }
 
@@ -333,6 +439,10 @@
           inset-inline-start: 24px;
           bottom: 24px;
         }
+        .b2bAvailableOffer {
+          left: 24px;
+          bottom: 24px;
+        }
       }
       .productDesc {
         .productName {
@@ -342,6 +452,14 @@
     }
     &.tablet-grid-3-card {
       .addToCart {
+        width: 104px;
+      }
+
+      .loginToViewPricing {
+        width: 100%;
+      }
+
+      .b2bAvailableOffers {
         width: 104px;
       }
 
@@ -362,6 +480,10 @@
           inset-inline-start: 12px;
           bottom: 12px;
         }
+        .b2bAvailableOffer {
+          left: 12px;
+          bottom: 12px;
+        }
       }
       .productDesc {
         .product-name {
@@ -375,6 +497,15 @@
       .addToCart {
         width: 144px;
       }
+
+      .loginToViewPricing {
+        width: 100%;
+      }
+
+      .b2bAvailableOffers {
+        width: 144px;
+      }
+
       .imageContainer {
         .wishlistBtn {
           top: 24px;
@@ -392,6 +523,10 @@
           inset-inline-start: 24px;
           bottom: 24px;
         }
+        .b2bAvailableOffer {
+          left: 24px;
+          bottom: 24px;
+        }
       }
       .productDesc {
         .productName {
@@ -404,6 +539,14 @@
         flex-direction: column;
 
         .addToCart {
+          width: 100%;
+        }
+
+        .loginToViewPricing {
+          width: 100%;
+        }
+
+        .b2bAvailableOffers {
           width: 100%;
         }
 
@@ -429,6 +572,10 @@
         }
         .extension {
           inset-inline-start: 12px;
+          bottom: 12px;
+        }
+        .b2bAvailableOffer {
+          left: 12px;
           bottom: 12px;
         }
       }
