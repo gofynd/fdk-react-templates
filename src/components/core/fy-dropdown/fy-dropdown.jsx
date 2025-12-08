@@ -69,11 +69,11 @@ const FyDropdown = ({
   }, [options]);
 
   useEffect(() => {
-    setQuery(value || "");
+    setQuery(value);
     setSelectedValue(
-      value ? options?.find((option) => option?.[dataKey] === value) : null
+      filteredOptions?.find((option) => option?.[dataKey] === value)
     );
-  }, [value, options]);
+  }, [value, filteredOptions]);
 
   const customLabelClassName = useMemo(
     () => `${styles.label} ${labelClassName ?? ""}`,
@@ -123,7 +123,6 @@ const FyDropdown = ({
     (option) => {
       setQuery(option.display);
       setSelectedValue(option);
-      setIskeyPressed(0);
       onChange?.(option?.[dataKey]);
       toggleDropdown();
     },

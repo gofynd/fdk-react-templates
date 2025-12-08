@@ -351,9 +351,6 @@ h5,
   display: flex;
   gap: 16px;
 }
-.shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G {
-  flex: 1;
-}
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__regularxxs___nZRqX {
   font-weight: 400;
   font-size: 13px;
@@ -423,7 +420,7 @@ h5,
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__margin___aoRFj {
   color: var(--errorText, #ff3333);
-  margin-left: 10px;
+  margin-inline-start: 10px;
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__total___j4dLu {
   display: flex;
@@ -431,60 +428,16 @@ h5,
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__total___j4dLu .shipment-item__amt___LG95E {
   color: #41434c;
-  margin-right: 10px;
+  margin-inline-end: 10px;
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__total___j4dLu .shipment-item__delivery-at___ZUUCz {
-  margin-left: 5px;
+  margin-inline-start: 5px;
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__effectivePrice___Kqia8 {
   color: var(--textHeading, #26201a);
   font-size: 14px;
   font-weight: 600;
   line-height: 140%;
-}
-.shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__requestReattempt___iY8FT {
-  width: 163px;
-  padding-top: 16px;
-}
-.shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__requestReattempt___iY8FT button {
-  width: 100%;
-  padding: 8px 12px;
-  background: #3d555f;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 700;
-  color: #fff;
-}
-.shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__requestReattempt___iY8FT .shipment-item__scheduleIconContainer___pf6wq {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-  color: var(--textHeading, #26201a);
-  font-size: 14px;
-  font-weight: 500;
-}
-.shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__requestReattempt___iY8FT .shipment-item__scheduleIconContainer___pf6wq .shipment-item__scheduleIcon___SP0H9 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__requestReattempt___iY8FT .shipment-item__scheduleIconContainer___pf6wq .shipment-item__scheduleIconText___bDG9R {
-  min-width: 100%;
-}
-.shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__deliveryReattemptRequested___gtd_c {
-  min-width: 100%;
-}
-.shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__status___erGur {
-  border-radius: 4px;
-  background: var(--successBackground, #c2dbc9);
-  padding: 4px;
-  color: var(--successText, #1c958f);
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 140%;
-  width: fit-content;
 }
 .shipment-item__regularRadio___OLxqz g > circle {
   stroke: var(--textHeading, #26201a);

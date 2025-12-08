@@ -334,52 +334,6 @@ h5,
     display: none !important;
   }
 }
-.order-shipment__scheduleIconContainer___dfvUS {
-  margin-top: auto;
-  padding: 4px 0 4px 0;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-  color: var(--textHeading, #26201a);
-  font-size: 14px;
-  font-weight: 500;
-}
-.order-shipment__scheduleIconContainer___dfvUS .order-shipment__scheduleIcon___ClVa2 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.order-shipment__scheduleIconContainer___dfvUS .order-shipment__scheduleIconText____unaJ {
-  flex: 1;
-}
-.order-shipment__scheduleIconContainer___dfvUS .order-shipment__scheduleIconText____unaJ .order-shipment__windowClosedText___m0KN0 {
-  color: var(--textLabel, #7d7676);
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-}
-.order-shipment__scheduleIconContainer___dfvUS .order-shipment__scheduleIconText____unaJ .order-shipment__windowClosedText___m0KN0 span {
-  font-weight: 500;
-}
-.order-shipment__overlay___XKR9k {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-@media only screen and (max-width: 480px) {
-  .order-shipment__overlay___XKR9k {
-    align-items: flex-end;
-  }
-}
 .order-shipment__orderItem____zenT {
   color: #41434c;
   background-color: var(--highlightColor, #a7a7f8);
@@ -395,11 +349,11 @@ h5,
   inset-inline-end: 0px;
 }
 .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__filterArrowUp___g46yt {
-  margin-left: auto;
+  margin-inline-start: auto;
   transform: rotate(180deg);
 }
 .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__filterArrowDown___XfgoC {
-  margin-left: auto;
+  margin-inline-start: auto;
 }
 .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__orderId___LUgiY {
   color: var(--textHeading, #26201a);
@@ -426,20 +380,16 @@ h5,
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentLeft___o0Q0q {
   display: table-cell;
-}
-.order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentLeft___o0Q0q img {
-  width: 80px;
-  height: 100px;
-  object-fit: cover;
+  flex-basis: 80px;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentLeft___o0Q0q #order-shipment__total-item___SOgWJ {
   text-align: center;
   position: relative;
-  float: right;
+  float: inline-end;
   background: #4242ad;
   color: white;
   top: -40px;
-  left: -10px;
+  inset-inline-start: -10px;
   border-radius: 50%;
   width: 35px;
   height: 35px;
@@ -466,9 +416,8 @@ h5,
   }
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
+  display: table-cell;
+  vertical-align: top;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__shipmentId___Ussac {
   margin: 4px 0px;
@@ -492,37 +441,7 @@ h5,
   line-height: 140%;
   /* 16.8px */
 }
-.order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__buttonContainer___zt9IZ {
-  display: flex;
-  padding-top: 8px;
-}
-@media only screen and (max-width: 480px) {
-  .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__buttonContainer___zt9IZ {
-    padding-top: 8px;
-  }
-}
-.order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__buttonContainer___zt9IZ .order-shipment__requestReattempt___gnE_B {
-  min-width: 100%;
-}
-.order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__buttonContainer___zt9IZ .order-shipment__requestReattempt___gnE_B button {
-  margin-top: auto;
-  width: auto;
-  padding: 4px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--user-alert-button-link, #1B6163);
-}
-.order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__buttonContainer___zt9IZ .order-shipment__deliveryReattemptRequested___DUqqz {
-  min-width: 100%;
-}
-.order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__shipmentBrands___QyjCM {
-  margin: 8px 0px;
-}
-.order-shipment__orderItem____zenT .order-shipment__shipmentThird___ETcwO {
-  margin: 0;
-}
-.order-shipment__orderItem____zenT .order-shipment__shipmentThird___ETcwO .order-shipment__status___ws6ge {
+.order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__status___ws6ge {
   border-radius: 4px;
   background: var(--successBackground, #c2dbc9);
   padding: 4px;
@@ -532,23 +451,8 @@ h5,
   line-height: 140%;
   width: fit-content;
 }
-.order-shipment__orderItem____zenT .order-shipment__shipmentThird___ETcwO .order-shipment__error___hNSAF {
-  border-radius: 4px;
-  background-color: var(--errorBackground, #e6d5d5);
-  padding: 4px;
-  color: var(--errorText, #ff3333);
-  font-size: 12px;
-  font-weight: 500;
-  width: fit-content;
-}
-.order-shipment__orderItem____zenT .order-shipment__shipmentThird___ETcwO .order-shipment__info___fFhdr {
-  border-radius: 4px;
-  background-color: var(--useralertsinfobackground, #FFF0E4);
-  padding: 4px;
-  color: var(--useralertsinfotext, #D4803C);
-  font-size: 12px;
-  font-weight: 500;
-  width: fit-content;
+.order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__shipmentBrands___QyjCM {
+  margin: 8px 0px;
 }
 .order-shipment__orderItem____zenT .order-shipment__buttons___vYAo_ {
   display: flex;
@@ -569,7 +473,7 @@ h5,
   cursor: pointer;
 }
 .order-shipment__orderItem____zenT .order-shipment__buttons___vYAo_ .order-shipment__ordercheckout___m3RkW .order-shipment__reorderIcon___gHoWM {
-  margin-right: 10px;
+  margin-inline-end: 10px;
   position: relative;
   top: -2px;
 }
@@ -578,24 +482,6 @@ h5,
 }
 .order-shipment__orderItem____zenT .order-shipment__hideAccordionBody___IOXsZ {
   display: none;
-}
-.order-shipment__error___hNSAF {
-  border-radius: 4px;
-  background-color: var(--errorBackground, #e6d5d5);
-  padding: 4px;
-  color: var(--errorText, #ff3333);
-  font-size: 12px;
-  font-weight: 500;
-  width: fit-content;
-}
-.order-shipment__info___fFhdr {
-  border-radius: 4px;
-  background-color: var(--useralertsinfobackground, #FFF0E4);
-  padding: 4px;
-  color: var(--useralertsinfotext, #D4803C);
-  font-size: 12px;
-  font-weight: 500;
-  width: fit-content;
 }
 .order-shipment__productCustomizationContainer___TAPyU {
   margin-bottom: 16px;

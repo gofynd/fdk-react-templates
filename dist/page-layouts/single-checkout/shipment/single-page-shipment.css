@@ -340,15 +340,11 @@ h5,
   border: 1px solid var(--dividerStokes);
   border-radius: 8px;
   opacity: 0.5;
+  margin-top: 20px;
 }
 @media only screen and (min-width: 769px) and (max-width: 1024px) {
   .single-page-shipment__reviewHeaderUnselect___mNmXU {
     padding: 16px;
-  }
-}
-@media only screen and (max-width: 768px) {
-  .single-page-shipment__reviewHeaderUnselect___mNmXU {
-    margin-top: 20px;
   }
 }
 @media only screen and (max-width: 480px) {
@@ -370,15 +366,11 @@ h5,
 }
 .single-page-shipment__addressSelectedHeaderContainer___SVaIw {
   padding: 24px;
+  margin-top: 20px;
   display: flex;
   justify-content: space-between;
   border: 1px solid var(--dividerStokes);
   border-radius: 8px;
-}
-@media only screen and (max-width: 768px) {
-  .single-page-shipment__addressSelectedHeaderContainer___SVaIw {
-    margin-top: 20px;
-  }
 }
 @media only screen and (min-width: 769px) and (max-width: 1024px) {
   .single-page-shipment__addressSelectedHeaderContainer___SVaIw {
@@ -429,6 +421,7 @@ h5,
   display: flex;
   justify-content: space-between;
   border: 1px solid var(--dividerStokes);
+  margin-top: 20px;
 }
 @media only screen and (min-width: 769px) {
   .single-page-shipment__reviewHeaderSelect___bNgMy {
@@ -438,11 +431,6 @@ h5,
 @media only screen and (min-width: 769px) and (max-width: 1024px) {
   .single-page-shipment__reviewHeaderSelect___bNgMy {
     padding: 16px;
-  }
-}
-@media only screen and (max-width: 768px) {
-  .single-page-shipment__reviewHeaderSelect___bNgMy {
-    margin-top: 20px;
   }
 }
 @media only screen and (max-width: 480px) {
