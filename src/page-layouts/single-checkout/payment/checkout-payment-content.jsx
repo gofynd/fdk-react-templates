@@ -359,6 +359,7 @@ function CheckoutPaymentContent({
   const [cvvValues, setCvvValues] = useState({});
   const [isCvvInfo, setIsCvvInfo] = useState(false);
   const [isCodModalOpen, setIsCodModalOpen] = useState(false);
+  const [isCodDropdownOpen, setIsCodDropdownOpen] = useState(false);
   const [isCardNumberValid, setIsCardNumberValid] = useState(false);
   const [activeMop, setActiveMop] = useState(null);
   const [userOrderId, setUserOrderId] = useState(null);
@@ -3046,84 +3047,115 @@ function CheckoutPaymentContent({
 
         return (
           <div>
-            <div className={`${styles.nbHeader} ${styles["view-mobile-up"]}`}>
-              {t("resource.checkout.select_bank")}
-            </div>
-            <div className={styles.modeOption}>
-              {topBanks1?.map((nb, index) => (
-                <NbItem1 nb={nb} key={`nb-${index}`} />
-              ))}
-
-              {selectedTabData?.list?.length > initialVisibleBankCount1 && (
-                <div
-                  className={`${styles.modeItemWrapper} ${styles.otherBorder}`}
-                  onClick={() => {
-                    removeDialogueError();
-                    setOpenMoreNbModal(true);
-                  }}
-                >
-                  <div className={styles.modeItem}>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "8px",
-                      }}
-                    >
-                      <div className={styles.modeItemLogo}>
-                        <span>
-                          <SvgWrapper
-                            svgSrc="other-banks"
-                            className={styles.svgColor}
-                          />
-                        </span>
-                      </div>
-                      <div className={styles.moreModeName}>
-                        {t("resource.checkout.other_banks")}
-                      </div>
-                    </div>
-                    <span className={styles.moreModeIcon}>
-                      <SvgWrapper svgSrc="accordion-arrow" />
-                    </span>
+            <div
+              className={`${styles.modeItemWrapper} ${isCodDropdownOpen ? styles.selectedBorder : styles.otherBorder}`}
+              onClick={() => setIsCodDropdownOpen((prev) => !prev)}
+            >
+              <div className={styles.modeItem}>
+                <div className={styles.logoNameContainer}>
+                  <div className={styles.modeItemLogo}>
+                    <SvgWrapper svgSrc="cod-icon" className={styles.svgColor} />
+                  </div>
+                  <div className={styles.modeItemName}>
+                    {t("resource.checkout.cash_on_delivery")}
                   </div>
                 </div>
-              )}
-
-              <Modal
-                containerClassName={styles.moreOptionContainer}
-                isOpen={openMoreNbModal}
-                headerClassName={styles.modalHeader}
-                bodyClassName={`${styles.modalBody} ${styles.bodyContainer}`}
-                closeDialog={() => {
-                  setOpenMoreNbModal(false);
-                  setNbSearchText("");
-                }}
-                title={t("resource.checkout.select_bank")}
-              >
-                <div className={styles.searchBox}>
-                  <SvgWrapper svgSrc="search" className={styles.searchIcon} />
-                  <input
-                    type="text"
-                    defaultValue={nbSearchText}
-                    onChange={(e) => setNbSearchText(e?.target?.value)}
-                    placeholder={t("resource.checkout.search_for_banks")}
+                <span className={styles.moreModeIcon}>
+                  <SvgWrapper
+                    svgSrc="accordion-arrow"
+                    className={isCodDropdownOpen ? styles.upsideDown : ""}
                   />
-                </div>
-                {filteredBanks1?.length === 0 ? (
-                  <p className={styles.noResultFound}>
-                    {t("resource.common.empty_state")}
-                  </p>
-                ) : (
-                  filteredBanks1?.map((nb, index) => (
-                    <NbItem1
-                      nb={nb}
-                      openMoreNbModal={openMoreNbModal}
-                      key={`mi-${index}`}
-                    />
-                  ))
-                )}
-              </Modal>
+                </span>
+              </div>
             </div>
+
+            {isCodDropdownOpen && (
+              <>
+                <div
+                  className={`${styles.nbHeader} ${styles["view-mobile-up"]}`}
+                >
+                  {t("resource.checkout.select_bank")}
+                </div>
+                <div className={styles.modeOption}>
+                  {topBanks1?.map((nb, index) => (
+                    <NbItem1 nb={nb} key={`nb-${index}`} />
+                  ))}
+
+                  {selectedTabData?.list?.length > initialVisibleBankCount1 && (
+                    <div
+                      className={`${styles.modeItemWrapper} ${styles.otherBorder}`}
+                      onClick={() => {
+                        removeDialogueError();
+                        setOpenMoreNbModal(true);
+                      }}
+                    >
+                      <div className={styles.modeItem}>
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "8px",
+                          }}
+                        >
+                          <div className={styles.modeItemLogo}>
+                            <span>
+                              <SvgWrapper
+                                svgSrc="other-banks"
+                                className={styles.svgColor}
+                              />
+                            </span>
+                          </div>
+                          <div className={styles.moreModeName}>
+                            {t("resource.checkout.other_banks")}
+                          </div>
+                        </div>
+                        <span className={styles.moreModeIcon}>
+                          <SvgWrapper svgSrc="accordion-arrow" />
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
+                  <Modal
+                    containerClassName={styles.moreOptionContainer}
+                    isOpen={openMoreNbModal}
+                    headerClassName={styles.modalHeader}
+                    bodyClassName={`${styles.modalBody} ${styles.bodyContainer}`}
+                    closeDialog={() => {
+                      setOpenMoreNbModal(false);
+                      setNbSearchText("");
+                    }}
+                    title={t("resource.checkout.select_bank")}
+                  >
+                    <div className={styles.searchBox}>
+                      <SvgWrapper
+                        svgSrc="search"
+                        className={styles.searchIcon}
+                      />
+                      <input
+                        type="text"
+                        defaultValue={nbSearchText}
+                        onChange={(e) => setNbSearchText(e?.target?.value)}
+                        placeholder={t("resource.checkout.search_for_banks")}
+                      />
+                    </div>
+                    {filteredBanks1?.length === 0 ? (
+                      <p className={styles.noResultFound}>
+                        {t("resource.common.empty_state")}
+                      </p>
+                    ) : (
+                      filteredBanks1?.map((nb, index) => (
+                        <NbItem1
+                          nb={nb}
+                          openMoreNbModal={openMoreNbModal}
+                          key={`mi-${index}`}
+                        />
+                      ))
+                    )}
+                  </Modal>
+                </div>
+              </>
+            )}
           </div>
         );
 
