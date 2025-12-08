@@ -106,6 +106,7 @@ const ProductListing = ({
         </div>
       ) : (
         <>
+        {!title && <h1 className={styles.visuallyHidden}>{t("resource.common.breadcrumb.products") }</h1>}
           <div className={styles.mobileHeader}>
             <div className={styles.headerLeft}>
               {filterList.length > 0 && (

@@ -49,12 +49,15 @@ export default function ChipItem({
   getFulfillmentOptions,
   pincode,
   getDeliveryPromise,
+  isLimitedStock,
+  limitedStockLabel,
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
   const navigate = useNavigate();
   const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
   const locale = language?.locale;
+  const { limited_stock_quantity: limitedStockQuantity = 11 } = globalConfig;
   const isMobile = useMobile();
   const [showQuantityError, setShowQuantityError] = useState(false);
   const [showFOModal, setShowFOModal] = useState(false);
@@ -496,16 +499,18 @@ export default function ChipItem({
                   </div>
                 )}
 
-              {getMaxQuantity(singleItemDetails) > 0 &&
-                getMaxQuantity(singleItemDetails) < 11 &&
+              {isLimitedStock &&
+                getMaxQuantity(singleItemDetails) > 0 &&
+                getMaxQuantity(singleItemDetails) <= limitedStockQuantity &&
                 !isOutOfStock &&
                 isServiceable &&
                 !isCustomOrder &&
                 !buybox?.is_seller_buybox_enabled && (
                   <div className={styles.limitedQtyBox}>
-                    {t("resource.common.hurry_only_left", {
-                      quantity: getMaxQuantity(singleItemDetails),
-                    })}
+                    {limitedStockLabel.replace(
+                      /\{\{qty\}\}/g,
+                      getMaxQuantity(singleItemDetails)
+                    )}
                   </div>
                 )}
             </div>
