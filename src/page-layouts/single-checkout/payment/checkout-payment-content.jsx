@@ -3856,7 +3856,7 @@ function CheckoutPaymentContent({
           </div>
         </Modal>
       )}
-      {isCodModalOpen && isTablet && (
+      {/* {isCodModalOpen && isTablet && (
         <Modal
           isOpen={isCodModalOpen}
           hideHeader={true}
@@ -3910,7 +3910,7 @@ function CheckoutPaymentContent({
             </button>
           </div>
         </Modal>
-      )}
+      )} */}
 
       {/* {isCodModalOpen && isTablet && (
         <Modal
