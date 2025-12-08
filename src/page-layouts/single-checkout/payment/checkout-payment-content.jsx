@@ -359,7 +359,6 @@ function CheckoutPaymentContent({
   const [cvvValues, setCvvValues] = useState({});
   const [isCvvInfo, setIsCvvInfo] = useState(false);
   const [isCodModalOpen, setIsCodModalOpen] = useState(false);
-  const [isCodMobileExpanded, setIsCodMobileExpanded] = useState(false);
   const [isCardNumberValid, setIsCardNumberValid] = useState(false);
   const [activeMop, setActiveMop] = useState(null);
   const [userOrderId, setUserOrderId] = useState(null);
@@ -2951,6 +2950,181 @@ function CheckoutPaymentContent({
           </div>
         );
 
+      case "COD":
+        const initialVisibleBankCount1 = 4;
+        const topBanks1 =
+          selectedTabData?.list?.slice(0, initialVisibleBankCount1) ?? [];
+        const restBanks1 =
+          selectedTabData?.list?.slice(initialVisibleBankCount1) ?? [];
+        const filteredBanks1 = restBanks1?.filter((nb) =>
+          nb.display_name?.toLowerCase().includes(nbSearchText?.toLowerCase())
+        );
+
+        const NbItem1 = ({ nb, key, openMoreNbModal = false }) => {
+          return (
+            <div
+              key={nb.display_name}
+              className={`${styles.modeItemWrapper} ${getNBBorder(nb)}`}
+              onClick={() => {
+                removeDialogueError();
+                selectMop("NB", "NB", nb.code);
+              }}
+            >
+              <label>
+                <div className={styles.modeItem}>
+                  <div className={styles.logoNameContainer}>
+                    <div className={styles.modeItemLogo}>
+                      <img src={nb.logo_url.small} alt={nb?.display_name} />
+                    </div>
+                    <div className={styles.modeItemName}>
+                      {translateDynamicLabel(nb?.display_name ?? "", t)}
+                    </div>
+                  </div>
+
+                  <div className={`${styles.nbLeft} ${styles.onMobileView}`}>
+                    {(!selectedNB || selectedNB.code !== nb.code) && (
+                      <SvgWrapper svgSrc={"radio"}></SvgWrapper>
+                    )}
+                    {selectedNB && selectedNB.code === nb.code && (
+                      <SvgWrapper svgSrc="radio-selected" />
+                    )}
+                  </div>
+                </div>
+              </label>
+              <div className={styles.modePay}>
+                {!openMoreNbModal && isTablet ? (
+                  <StickyPayNow
+                    customClassName={styles.visibleOnTab}
+                    value={priceFormatCurrencySymbol(
+                      getCurrencySymbol,
+                      getTotalValue()
+                    )}
+                    onPriceDetailsClick={onPriceDetailsClick}
+                    disabled={!selectedNB.code}
+                    enableLinkPaymentOption={enableLinkPaymentOption}
+                    isPaymentLoading={isPaymentLoading}
+                    loader={loader}
+                    proceedToPay={() => {
+                      proceedToPay("NB", selectedPaymentPayload);
+                      acceptOrder();
+                    }}
+                  />
+                ) : (
+                  selectedNB.code &&
+                  selectedNB.code === nb.code && (
+                    <button
+                      className={`${styles.commonBtn} ${styles.payBtn}`}
+                      onClick={() => {
+                        proceedToPay("NB", selectedPaymentPayload);
+                        if (disbaleCheckout?.message) {
+                          setOpenMoreNbModal(false);
+                          acceptOrder();
+                        }
+                      }}
+                      disabled={isPaymentLoading}
+                    >
+                      {!isPaymentLoading ? (
+                        <>
+                          {t("resource.common.pay_caps")}{" "}
+                          {priceFormatCurrencySymbol(
+                            getCurrencySymbol,
+                            getTotalValue()
+                          )}
+                        </>
+                      ) : (
+                        <span>{loader}</span>
+                      )}
+                    </button>
+                  )
+                )}
+              </div>
+            </div>
+          );
+        };
+
+        return (
+          <div>
+            <div className={`${styles.nbHeader} ${styles["view-mobile-up"]}`}>
+              {t("resource.checkout.select_bank")}
+            </div>
+            <div className={styles.modeOption}>
+              {topBanks1?.map((nb, index) => (
+                <NbItem1 nb={nb} key={`nb-${index}`} />
+              ))}
+
+              {selectedTabData?.list?.length > initialVisibleBankCount1 && (
+                <div
+                  className={`${styles.modeItemWrapper} ${styles.otherBorder}`}
+                  onClick={() => {
+                    removeDialogueError();
+                    setOpenMoreNbModal(true);
+                  }}
+                >
+                  <div className={styles.modeItem}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                      }}
+                    >
+                      <div className={styles.modeItemLogo}>
+                        <span>
+                          <SvgWrapper
+                            svgSrc="other-banks"
+                            className={styles.svgColor}
+                          />
+                        </span>
+                      </div>
+                      <div className={styles.moreModeName}>
+                        {t("resource.checkout.other_banks")}
+                      </div>
+                    </div>
+                    <span className={styles.moreModeIcon}>
+                      <SvgWrapper svgSrc="accordion-arrow" />
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              <Modal
+                containerClassName={styles.moreOptionContainer}
+                isOpen={openMoreNbModal}
+                headerClassName={styles.modalHeader}
+                bodyClassName={`${styles.modalBody} ${styles.bodyContainer}`}
+                closeDialog={() => {
+                  setOpenMoreNbModal(false);
+                  setNbSearchText("");
+                }}
+                title={t("resource.checkout.select_bank")}
+              >
+                <div className={styles.searchBox}>
+                  <SvgWrapper svgSrc="search" className={styles.searchIcon} />
+                  <input
+                    type="text"
+                    defaultValue={nbSearchText}
+                    onChange={(e) => setNbSearchText(e?.target?.value)}
+                    placeholder={t("resource.checkout.search_for_banks")}
+                  />
+                </div>
+                {filteredBanks1?.length === 0 ? (
+                  <p className={styles.noResultFound}>
+                    {t("resource.common.empty_state")}
+                  </p>
+                ) : (
+                  filteredBanks1?.map((nb, index) => (
+                    <NbItem1
+                      nb={nb}
+                      openMoreNbModal={openMoreNbModal}
+                      key={`mi-${index}`}
+                    />
+                  ))
+                )}
+              </Modal>
+            </div>
+          </div>
+        );
+
       // case "COD":
       //   return (
       //     <div>
@@ -2988,261 +3162,212 @@ function CheckoutPaymentContent({
       //     </div>
       //   );
 
-      case "COD": {
-        const {
-          beneficiaryDetails,
-          beneficiaryTitle,
-          transactionTitle,
-          utrLabel,
-          utrDescription,
-          uploadHeading,
-          uploadCta,
-          uploadHelper,
-        } = neftDisplayConfig;
-        return (
-          <div>
-            {!isTablet ? (
-              <div className={styles.neftWrapper}>
-                {/* Dropdown Header - Similar to NB mobile pattern */}
-                <div
-                  className={`${styles.modeItemWrapper} ${isCodMobileExpanded ? styles.selectedBorder : styles.otherBorder}`}
-                  onClick={() => setIsCodMobileExpanded(!isCodMobileExpanded)}
-                >
-                  <div className={styles.modeItem}>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "8px",
-                      }}
-                    >
-                      <div className={styles.modeItemLogo}>
-                        <SvgWrapper
-                          svgSrc="cod-icon"
-                          className={styles.svgColor}
-                        />
-                      </div>
-                      <div className={styles.moreModeName}>
-                        {t("resource.checkout.cash_on_delivery")}
-                      </div>
-                    </div>
-                    <span className={styles.moreModeIcon}>
-                      <SvgWrapper
-                        svgSrc="accordion-arrow"
-                        className={isCodMobileExpanded ? styles.upsideDown : ""}
-                      />
-                    </span>
-                  </div>
-                </div>
+      // case "COD": {
+      //   const {
+      //     beneficiaryDetails,
+      //     beneficiaryTitle,
+      //     transactionTitle,
+      //     utrLabel,
+      //     utrDescription,
+      //     uploadHeading,
+      //     uploadCta,
+      //     uploadHelper,
+      //   } = neftDisplayConfig;
+      //   return (
+      //     <div>
+      //       {!isTablet ? (
+      //         <div className={styles.neftWrapper}>
+      //           <section className={styles.neftSection}>
+      //             <p className={styles.neftSectionTitle}>{beneficiaryTitle}</p>
+      //             <div className={styles.neftBeneficiaryCard}>
+      //               {beneficiaryDetails.map((detail) => (
+      //                 <div
+      //                   key={detail.label}
+      //                   className={styles.neftBeneficiaryRow}
+      //                 >
+      //                   <div className={styles.neftBeneficiaryLabelWrapper}>
+      //                     <span className={styles.neftBeneficiaryLabel}>
+      //                       {detail.label}
+      //                     </span>
+      //                     <span className={styles.neftLabelSeparator}>:</span>
+      //                   </div>
+      //                   <div className={styles.neftBeneficiaryValue}>
+      //                     <span>{detail.value}</span>
+      //                     {detail.isCopyEnabled && (
+      //                       <button
+      //                         type="button"
+      //                         className={styles.neftCopyButton}
+      //                         onClick={() =>
+      //                           handleCopyToClipboard(detail.value)
+      //                         }
+      //                       >
+      //                         {copiedValue === detail.value ? (
+      //                           <TickBlackActiveSvg />
+      //                         ) : (
+      //                           <CopyToClipboardSvg />
+      //                         )}
+      //                       </button>
+      //                     )}
+      //                   </div>
+      //                 </div>
+      //               ))}
+      //             </div>
+      //           </section>
 
-                {/* Dropdown Content - Shows when expanded */}
-                {isCodMobileExpanded && (
-                  <div className={styles.neftDropdownContent}>
-                    <section className={styles.neftSection}>
-                      <p className={styles.neftSectionTitle}>
-                        {beneficiaryTitle}
-                      </p>
-                      <div className={styles.neftBeneficiaryCard}>
-                        {beneficiaryDetails.map((detail) => (
-                          <div
-                            key={detail.label}
-                            className={styles.neftBeneficiaryRow}
-                          >
-                            <div className={styles.neftBeneficiaryLabelWrapper}>
-                              <span className={styles.neftBeneficiaryLabel}>
-                                {detail.label}
-                              </span>
-                              <span className={styles.neftLabelSeparator}>
-                                :
-                              </span>
-                            </div>
-                            <div className={styles.neftBeneficiaryValue}>
-                              <span>{detail.value}</span>
-                              {detail.isCopyEnabled && (
-                                <button
-                                  type="button"
-                                  className={styles.neftCopyButton}
-                                  onClick={() =>
-                                    handleCopyToClipboard(detail.value)
-                                  }
-                                >
-                                  {copiedValue === detail.value ? (
-                                    <TickBlackActiveSvg />
-                                  ) : (
-                                    <CopyToClipboardSvg />
-                                  )}
-                                </button>
-                              )}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </section>
+      //           <div className={styles.neftFormBlock}>
+      //             <div className={styles.neftFormBlockInner}>
+      //               <section className={styles.neftSection}>
+      //                 <p className={styles.neftSectionTitle}>
+      //                   {transactionTitle}
+      //                 </p>
+      //                 <div className={styles.neftFieldGroup}>
+      //                   {/* <label
+      //                   className={styles.neftFieldLabel}
+      //                   htmlFor="utrNumber"
+      //                 >
+      //                   {utrLabel} <span>*</span>
+      //                 </label> */}
+      //                   <input
+      //                     id="utrNumber"
+      //                     type="text"
+      //                     value={utrNumber}
+      //                     onChange={handleUtrInputChange}
+      //                     placeholder={utrLabel}
+      //                     className={`${styles.neftInput} ${
+      //                       utrError ? styles.neftInputError : ""
+      //                     }`}
+      //                   />
+      //                   {utrError && (
+      //                     <p className={styles.neftError}>
+      //                       {t("resource.common.field_required")}
+      //                     </p>
+      //                   )}
+      //                 </div>
+      //               </section>
+      //               <p className={styles.neftHelperText}>{utrDescription}</p>
+      //             </div>
 
-                    <div className={styles.neftFormBlock}>
-                      <div className={styles.neftFormBlockInner}>
-                        <section className={styles.neftSection}>
-                          <p className={styles.neftSectionTitle}>
-                            {transactionTitle}
-                          </p>
-                          <div className={styles.neftFieldGroup}>
-                            <input
-                              id="utrNumber"
-                              type="text"
-                              value={utrNumber}
-                              onChange={handleUtrInputChange}
-                              placeholder={utrLabel}
-                              className={`${styles.neftInput} ${
-                                utrError ? styles.neftInputError : ""
-                              }`}
-                            />
-                            {utrError && (
-                              <p className={styles.neftError}>
-                                {t("resource.common.field_required")}
-                              </p>
-                            )}
-                          </div>
-                        </section>
-                        <p className={styles.neftHelperText}>
-                          {utrDescription}
-                        </p>
-                      </div>
+      //             <section
+      //               className={`${styles.neftSection} ${styles.neftUploadSection}`}
+      //             >
+      //               <div
+      //                 className={`${styles.neftUploadBox} ${isDragging ? styles.neftUploadBoxDragging : ""}`}
+      //                 onDragEnter={handleDragEnter}
+      //                 onDragOver={handleDragOver}
+      //                 onDragLeave={handleDragLeave}
+      //                 onDrop={handleDrop}
+      //               >
+      //                 <input
+      //                   type="file"
+      //                   accept=".pdf,.png,.jpg,.jpeg"
+      //                   ref={uploadInputRef}
+      //                   className={styles.neftHiddenInput}
+      //                   onChange={handleFileInputChange}
+      //                   disabled={fileUpload?.state?.isUploading}
+      //                 />
+      //                 <div className={styles.neftUploadIcon} aria-hidden="true">
+      //                   <UploadSvg />
+      //                 </div>
+      //                 <button
+      //                   type="button"
+      //                   className={styles.neftUploadButton}
+      //                   onClick={handleUploadButtonClick}
+      //                   disabled={fileUpload?.state?.isUploading}
+      //                 >
+      //                   {uploadCta}
+      //                 </button>
+      //                 <p className={styles.neftUploadTitle}>{uploadHeading}</p>
+      //                 <p className={styles.neftUploadHelper}>{uploadHelper}</p>
+      //               </div>
 
-                      <section
-                        className={`${styles.neftSection} ${styles.neftUploadSection}`}
-                      >
-                        <div
-                          className={`${styles.neftUploadBox} ${isDragging ? styles.neftUploadBoxDragging : ""}`}
-                          onDragEnter={handleDragEnter}
-                          onDragOver={handleDragOver}
-                          onDragLeave={handleDragLeave}
-                          onDrop={handleDrop}
-                        >
-                          <input
-                            type="file"
-                            accept=".pdf,.png,.jpg,.jpeg"
-                            ref={uploadInputRef}
-                            className={styles.neftHiddenInput}
-                            onChange={handleFileInputChange}
-                            disabled={fileUpload?.state?.isUploading}
-                          />
-                          <div
-                            className={styles.neftUploadIcon}
-                            aria-hidden="true"
-                          >
-                            <UploadSvg />
-                          </div>
-                          <button
-                            type="button"
-                            className={styles.neftUploadButton}
-                            onClick={handleUploadButtonClick}
-                            disabled={fileUpload?.state?.isUploading}
-                          >
-                            {uploadCta}
-                          </button>
-                          <p className={styles.neftUploadTitle}>
-                            {uploadHeading}
-                          </p>
-                          <p className={styles.neftUploadHelper}>
-                            {uploadHelper}
-                          </p>
-                        </div>
+      //               {(selectedProofFile || fileUpload?.state?.fileUploaded) && (
+      //                 <div className={styles.neftFileCard}>
+      //                   <div className={styles.neftFileCardContent}>
+      //                     <div className={styles.neftFileInfo}>
+      //                       <div className={styles.neftFileIcon}>
+      //                         <FileSvg className={styles.fileIcon} />
+      //                       </div>
+      //                       <div className={styles.neftFileDetails}>
+      //                         <span className={styles.neftFileName}>
+      //                           {selectedProofFile?.name ||
+      //                             fileUpload?.state?.fileUploadedName}
+      //                           {fileUpload?.state?.fileUploaded && (
+      //                             <SvgCheck
+      //                               className={styles.neftSuccessIndicator}
+      //                             />
+      //                           )}
+      //                         </span>
 
-                        {(selectedProofFile ||
-                          fileUpload?.state?.fileUploaded) && (
-                          <div className={styles.neftFileCard}>
-                            <div className={styles.neftFileCardContent}>
-                              <div className={styles.neftFileInfo}>
-                                <div className={styles.neftFileIcon}>
-                                  <FileSvg className={styles.fileIcon} />
-                                </div>
-                                <div className={styles.neftFileDetails}>
-                                  <span className={styles.neftFileName}>
-                                    {selectedProofFile?.name ||
-                                      fileUpload?.state?.fileUploadedName}
-                                    {fileUpload?.state?.fileUploaded && (
-                                      <SvgCheck
-                                        className={styles.neftSuccessIndicator}
-                                      />
-                                    )}
-                                  </span>
+      //                         {fileUpload?.state?.fileUploaded &&
+      //                           selectedProofFile && (
+      //                             <span className={styles.neftFileSize}>
+      //                               {formatFileSize(selectedProofFile.size)}
+      //                             </span>
+      //                           )}
 
-                                  {fileUpload?.state?.fileUploaded &&
-                                    selectedProofFile && (
-                                      <span className={styles.neftFileSize}>
-                                        {formatFileSize(selectedProofFile.size)}
-                                      </span>
-                                    )}
+      //                         {fileUpload?.state?.isUploading && (
+      //                           <div className={styles.neftProgressContainer}>
+      //                             <div
+      //                               className={styles.neftProgressBarContainer}
+      //                             >
+      //                               <div
+      //                                 className={styles.neftProgressBar}
+      //                                 style={{
+      //                                   width: `${fileUpload?.state?.uploadProgress}%`,
+      //                                 }}
+      //                               />
+      //                             </div>
+      //                             <span className={styles.neftProgressText}>
+      //                               {fileUpload?.state?.uploadProgress}%
+      //                             </span>
+      //                           </div>
+      //                         )}
+      //                       </div>
 
-                                  {fileUpload?.state?.isUploading && (
-                                    <div
-                                      className={styles.neftProgressContainer}
-                                    >
-                                      <div
-                                        className={
-                                          styles.neftProgressBarContainer
-                                        }
-                                      >
-                                        <div
-                                          className={styles.neftProgressBar}
-                                          style={{
-                                            width: `${fileUpload?.state?.uploadProgress}%`,
-                                          }}
-                                        />
-                                      </div>
-                                      <span className={styles.neftProgressText}>
-                                        {fileUpload?.state?.uploadProgress}%
-                                      </span>
-                                    </div>
-                                  )}
-                                </div>
+      //                       <div className={styles.neftFileActions}>
+      //                         {fileUpload?.state?.fileUploaded && (
+      //                           <button
+      //                             className={styles.neftFileActionBtn}
+      //                             onClick={handleFileRemove}
+      //                             aria-label="Remove file"
+      //                           >
+      //                             <DeleteSvg
+      //                               className={styles.neftDeleteIcon}
+      //                             />
+      //                           </button>
+      //                         )}
+      //                       </div>
+      //                     </div>
+      //                   </div>
+      //                 </div>
+      //               )}
 
-                                <div className={styles.neftFileActions}>
-                                  {fileUpload?.state?.fileUploaded && (
-                                    <button
-                                      className={styles.neftFileActionBtn}
-                                      onClick={handleFileRemove}
-                                      aria-label="Remove file"
-                                    >
-                                      <DeleteSvg
-                                        className={styles.neftDeleteIcon}
-                                      />
-                                    </button>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        )}
+      //               {fileUpload?.state?.fileUploadError && (
+      //                 <div className={styles.neftUploadError}>
+      //                   {fileUpload.state.fileUploadError}
+      //                 </div>
+      //               )}
+      //             </section>
 
-                        {fileUpload?.state?.fileUploadError && (
-                          <div className={styles.neftUploadError}>
-                            {fileUpload.state.fileUploadError}
-                          </div>
-                        )}
-                      </section>
-
-                      <div>
-                        <button
-                          className={styles.neftPlaceOrderBtn}
-                          onClick={handleNeftPlaceOrder}
-                          disabled={isNeftPlaceOrderDisabled}
-                        >
-                          {!isPaymentLoading
-                            ? t("resource.checkout.place_order")
-                            : loader}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <Spinner />
-            )}
-          </div>
-        );
-      }
+      //             <div>
+      //               <button
+      //                 className={styles.neftPlaceOrderBtn}
+      //                 onClick={handleNeftPlaceOrder}
+      //                 disabled={isNeftPlaceOrderDisabled}
+      //               >
+      //                 {!isPaymentLoading
+      //                   ? t("resource.checkout.place_order")
+      //                   : loader}
+      //               </button>
+      //             </div>
+      //           </div>
+      //         </div>
+      //       ) : (
+      //         <Spinner />
+      //       )}
+      //     </div>
+      //   );
+      // }
       case "PL":
         return (
           <div>
@@ -3856,61 +3981,6 @@ function CheckoutPaymentContent({
           </div>
         </Modal>
       )}
-      {/* {isCodModalOpen && isTablet && (
-        <Modal
-          isOpen={isCodModalOpen}
-          hideHeader={true}
-          closeDialog={() => {
-            setIsCodModalOpen(false);
-            setTab("");
-            setSelectedTab("");
-          }}
-        >
-          <div className={styles.codModal}>
-            <div className={styles.codIconsContainer}>
-              <SvgWrapper svgSrc="cod-icon"></SvgWrapper>
-              <span
-                className={styles.closeCodModal}
-                onClick={() => {
-                  setIsCodModalOpen(false);
-                  setTab("");
-                  setSelectedTab("");
-                }}
-              >
-                <SvgWrapper svgSrc="closeBold"></SvgWrapper>
-              </span>
-            </div>
-            <div>
-              <p className={styles.message}>
-                {t("resource.checkout.confirm_cod")}
-              </p>
-              {codCharges > 0 && (
-                <p className={styles.codCharges}>
-                  +{priceFormatCurrencySymbol(getCurrencySymbol, codCharges)}{" "}
-                  {t("resource.checkout.extra_charges")}
-                </p>
-              )}
-            </div>
-            <button
-              className={`${styles.commonBtn} ${styles.payBtn}`}
-              onClick={() => proceedToPay("COD", selectedPaymentPayload)}
-              disabled={isPaymentLoading}
-            >
-              {!isPaymentLoading ? (
-                <>
-                  {t("resource.checkout.continue_with_cod")}{" "}
-                  {priceFormatCurrencySymbol(
-                    getCurrencySymbol,
-                    getTotalValue()
-                  )}
-                </>
-              ) : (
-                loader
-              )}
-            </button>
-          </div>
-        </Modal>
-      )} */}
 
       {/* {isCodModalOpen && isTablet && (
         <Modal
