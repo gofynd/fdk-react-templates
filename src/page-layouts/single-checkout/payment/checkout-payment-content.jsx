@@ -2974,7 +2974,9 @@ function CheckoutPaymentContent({
                 <div className={styles.modeItem}>
                   <div className={styles.logoNameContainer}>
                     <div className={styles.modeItemLogo}>
-                      <img src={nb.logo_url.small} alt={nb?.display_name} />
+                      {nb?.logo_url?.small ? (
+                        <img src={nb.logo_url.small} alt={nb?.display_name} />
+                      ) : null}
                     </div>
                     <div className={styles.modeItemName}>
                       {translateDynamicLabel(nb?.display_name ?? "", t)}
