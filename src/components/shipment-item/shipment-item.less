@@ -24,6 +24,7 @@
   }
 
   .bagInfo {
+    flex: 1;
     .regularxxs {
       font-weight: 400;
       font-size: 13px;
@@ -89,7 +90,7 @@
 
     .margin {
       color: @ErrorText;
-      margin-inline-start: 10px;
+      margin-left: 10px;
     }
 
     .total {
@@ -98,11 +99,11 @@
 
       .amt {
         color: @Mako;
-        margin-inline-end: 10px;
+        margin-right: 10px;
       }
 
       .delivery-at {
-        margin-inline-start: 5px;
+        margin-left: 5px;
       }
     }
 
@@ -111,6 +112,54 @@
       font-size: 14px;
       font-weight: 600;
       line-height: 140%;
+    }
+
+    .requestReattempt {
+      width: 163px;
+      padding-top: 16px;
+
+      button {
+        width: 100%;
+        padding: 8px 12px;
+        background: #3d555f;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #fff;
+      }
+
+      .scheduleIconContainer {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 4px;
+        color: @TextHeading;
+        font-size: 14px;
+        font-weight: 500;
+        .scheduleIcon {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        .scheduleIconText {
+          min-width: 100%;
+        }
+      }
+    }
+
+    .deliveryReattemptRequested {
+      min-width: 100%;
+    }
+    .status {
+      border-radius: 4px;
+      background: @SuccessBackground;
+      padding: 4px;
+      color: @SuccessText;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 140%;
+      width: fit-content;
     }
   }
 }
@@ -127,3 +176,4 @@
     fill: @ButtonPrimary;
   }
 }
+

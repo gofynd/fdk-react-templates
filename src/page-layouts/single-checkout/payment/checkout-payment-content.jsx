@@ -23,12 +23,6 @@ import {
 import Spinner from "../../../components/spinner/spinner";
 import FyButton from "../../../components/core/fy-button/fy-button";
 import { FDKLink } from "fdk-core/components";
-import UploadSvg from "../../../assets/images/cloud_upload.svg";
-import CopyToClipboardSvg from "../../../assets/images/copy-to-clip.svg";
-import FileSvg from "../../../assets/images/file.svg";
-import SvgCheck from "../../../assets/images/checkmark-filled-small.svg";
-import DeleteSvg from "../../../assets/images/delete2.svg";
-import TickBlackActiveSvg from "../../../assets/images/tick-black-active.svg";
 
 const upiDisplayWrapperStyle = {
   padding: "24px",
@@ -94,7 +88,6 @@ const UPI_INVALID_VPA_ERROR = "resource.checkout.please_enter_correct_upi_id";
 import CardForm from "./card-form";
 import Shimmer from "../../../components/shimmer/shimmer";
 import CheckoutPaymentSkeleton from "./checkout-payment-skeleton";
-import { style } from "framer-motion/client";
 
 export const CREDIT_CARD_MASK = [
   {
@@ -163,24 +156,9 @@ function CheckoutPaymentContent({
   isCouponValid,
   setIsCouponValid,
   inValidCouponData,
-  fileUpload = { state: {}, upload: () => {}, reset: () => {} },
 }) {
   const fpi = useFPI();
   const { language } = useGlobalStore(fpi.getters.i18N_DETAILS);
-  const THEME = useGlobalStore(fpi.getters.THEME);
-  const neftDisplayConfig1 =
-    THEME?.config?.list?.[0]?.global_config?.custom?.props;
-  console.log(neftDisplayConfig1, "neftDisplayConfig1");
-
-  const {
-    bank_account_number_text,
-    bank_account_type,
-    bank_branch_name_text,
-    bank_customer_name_text,
-    bank_ifsc_code_text,
-    bank_name_text,
-  } = neftDisplayConfig1;
-
   const locale = language?.locale;
   const { t } = useGlobalTranslation("translation");
   const {
@@ -234,8 +212,6 @@ function CheckoutPaymentContent({
     (ele) => ele.name === "UPI"
   )?.suggested_list || ["okhdfcbank", "okicici", "oksbi"];
 
-  console.log(fileUpload, "fileUploaded");
-
   //card
   const [addNewCard, setAddNewCard] = useState(false);
   const [cardExpiryDate, setCardExpiryDate] = useState("");
@@ -255,7 +231,6 @@ function CheckoutPaymentContent({
   const nameRef = useRef(null);
   const cardNumberRef = useRef(null);
   const expirationDateRef = useRef(null);
-  const uploadInputRef = useRef(null);
   const [filteredUPISuggestions, setFilteredUPISuggestions] = useState([]);
 
   const [selectedCard, setSelectedCard] = useState(null);
@@ -309,39 +284,10 @@ function CheckoutPaymentContent({
 
   const intervalRef = useRef(null);
   const [isQrMopPresent, setIsQrMopPresent] = useState(false);
-  const [utrNumber, setUtrNumber] = useState("");
-  const [utrError, setUtrError] = useState(false);
-  const [copiedValue, setCopiedValue] = useState(null);
 
   const [cardNumber, setCardNumber] = useState("");
   const [nameOnCard, setNameOnCard] = useState("");
   const [cardDetailsData, setCardDetailsData] = useState({});
-
-  const neftDisplayConfig = useMemo(
-    () => ({
-      beneficiaryTitle: "Beneficiary Bank Details",
-      transactionTitle: "Transaction Details",
-      utrLabel: "Enter unique transaction number",
-      utrDescription:
-        "UTR is a unique alphanumeric code assigned by a bank to track a specific financial transaction",
-      uploadHeading: "Drag and drop your files here",
-      uploadCta: "UPLOAD FILE",
-      uploadHelper: "Supported Format: PDF, PNG, JPEG (5MB)",
-      beneficiaryDetails: [
-        {
-          label: "Account Number",
-          value: bank_account_number_text,
-          isCopyEnabled: true,
-        },
-        { label: "Customer Name", value: bank_customer_name_text },
-        { label: "Account Type", value: bank_account_type },
-        { label: "Bank Name", value: bank_branch_name_text },
-        { label: "Branch", value: bank_name_text },
-        { label: "IFSC", value: bank_ifsc_code_text, isCopyEnabled: true },
-      ],
-    }),
-    []
-  );
 
   const [tab, setTab] = useState("");
   const [mop, setMop] = useState("");
@@ -350,8 +296,6 @@ function CheckoutPaymentContent({
   const selectedUpiRef = useRef(null);
   const [savedUpi, setSavedUpi] = useState([]);
   const [savedCards, setSavedCards] = useState([]);
-  const [selectedProofFile, setSelectedProofFile] = useState(null);
-  const [isDragging, setIsDragging] = useState(false);
   const [isUpiSuffixSelected, setIsUpiSuffixSelected] = useState(false);
   const [navigationTitleName, setNavigationTitleName] = useState("");
   const [isCvvNotNeededModal, setIsCvvNotNeededModal] = useState(false);
@@ -359,7 +303,6 @@ function CheckoutPaymentContent({
   const [cvvValues, setCvvValues] = useState({});
   const [isCvvInfo, setIsCvvInfo] = useState(false);
   const [isCodModalOpen, setIsCodModalOpen] = useState(false);
-  const [isCodDropdownOpen, setIsCodDropdownOpen] = useState(false);
   const [isCardNumberValid, setIsCardNumberValid] = useState(false);
   const [activeMop, setActiveMop] = useState(null);
   const [userOrderId, setUserOrderId] = useState(null);
@@ -703,126 +646,6 @@ function CheckoutPaymentContent({
       subMopData,
     };
   };
-
-  const handleCopyToClipboard = (value) => {
-    if (!value) return;
-    try {
-      navigator?.clipboard?.writeText?.(value);
-      setCopiedValue(value);
-      setTimeout(() => {
-        setCopiedValue(null);
-      }, 4000);
-    } catch (error) {
-      console.log("Copy to clipboard failed", error);
-    }
-  };
-
-  const handleUtrInputChange = (event) => {
-    if (utrError) {
-      setUtrError(false);
-    }
-    setUtrNumber(event.target.value);
-  };
-
-  const handleNeftPlaceOrder = () => {
-    // Both UTR and file upload are optional - either one or both can be provided
-    // No validation needed as per requirement
-    proceedToPay("COD", selectedPaymentPayload);
-  };
-
-  const handleUploadButtonClick = () => {
-    uploadInputRef.current?.click();
-  };
-
-  const handleDragEnter = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!isDragging) setIsDragging(true);
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-
-    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      const fakeEvent = {
-        target: { files: e.dataTransfer.files, value: "" },
-      };
-      handleFileInputChange(fakeEvent);
-    }
-  };
-
-  const formatFileSize = (bytes) => {
-    const kb = bytes / 1024;
-    return `${kb.toFixed(2)} kb`;
-  };
-
-  const handleFileRemove = () => {
-    setSelectedProofFile(null);
-    if (uploadInputRef.current) {
-      uploadInputRef.current.value = "";
-    }
-    if (fileUpload?.reset) {
-      fileUpload.reset();
-    }
-  };
-
-  const handleFileInputChange = async (event) => {
-    const file = event?.target?.files?.[0];
-    if (!file) return;
-
-    const maxSizeInBytes = 5 * 1024 * 1024;
-    if (file.size > maxSizeInBytes) {
-      alert(
-        t("resource.dynamic_label.file_size_exceeded") ||
-          "File size must not exceed 5MB"
-      );
-      event.target.value = "";
-      return;
-    }
-
-    const allowedTypes = [
-      "application/pdf",
-      "image/png",
-      "image/jpeg",
-      "image/jpg",
-    ];
-    const fileExtension = file.name.split(".").pop().toLowerCase();
-    const allowedExtensions = ["pdf", "png", "jpg", "jpeg"];
-
-    if (
-      !allowedTypes.includes(file.type) ||
-      !allowedExtensions.includes(fileExtension)
-    ) {
-      alert(
-        t("resource.dynamic_label.invalid_file_type") ||
-          "Only PDF and image files (PNG, JPG, JPEG) are allowed"
-      );
-      event.target.value = "";
-      return;
-    }
-
-    setSelectedProofFile(file);
-
-    if (fileUpload?.upload) {
-      await fileUpload.upload(file);
-    }
-  };
-
-  const isNeftPlaceOrderDisabled = isPaymentLoading;
 
   const checkCouponValidity = async (payload) => {
     if (getTotalValue() === 0) return true;
@@ -2576,10 +2399,7 @@ function CheckoutPaymentContent({
                                     cancelQrPayment();
                                     selectMop("UPI", "UPI", "UPI");
                                   }}
-                                  disabled={
-                                    (savedUPISelect && isUPIError) ||
-                                    isPaymentLoading
-                                  }
+                                  disabled={(savedUPISelect && isUPIError) || isPaymentLoading}
                                 >
                                   {!isPaymentLoading ? (
                                     <>
@@ -2754,8 +2574,7 @@ function CheckoutPaymentContent({
                         cancelQrPayment();
                       }}
                       disabled={
-                        !(isUpiSuffixSelected || !!selectedUpiIntentApp) ||
-                        isPaymentLoading
+                        !(isUpiSuffixSelected || !!selectedUpiIntentApp) || isPaymentLoading
                       }
                     >
                       {!isPaymentLoading ? (
@@ -2950,458 +2769,42 @@ function CheckoutPaymentContent({
             </div>
           </div>
         );
-
       case "COD":
-        const initialVisibleBankCount1 = 4;
-        const topBanks1 =
-          selectedTabData?.list?.slice(0, initialVisibleBankCount1) ?? [];
-        const restBanks1 =
-          selectedTabData?.list?.slice(initialVisibleBankCount1) ?? [];
-        const filteredBanks1 = restBanks1?.filter((nb) =>
-          nb.display_name?.toLowerCase().includes(nbSearchText?.toLowerCase())
-        );
-
-        const NbItem1 = ({ nb, key, openMoreNbModal = false }) => {
-          return (
-            <div
-              key={nb.display_name}
-              className={`${styles.modeItemWrapper} ${getNBBorder(nb)}`}
-              onClick={() => {
-                removeDialogueError();
-                selectMop("NB", "NB", nb.code);
-              }}
-            >
-              <label>
-                <div className={styles.modeItem}>
-                  <div className={styles.logoNameContainer}>
-                    <div className={styles.modeItemLogo}>
-                      {nb?.logo_url?.small ? (
-                        <img src={nb.logo_url.small} alt={nb?.display_name} />
-                      ) : null}
-                    </div>
-                    <div className={styles.modeItemName}>
-                      {translateDynamicLabel(nb?.display_name ?? "", t)}
-                    </div>
-                  </div>
-
-                  <div className={`${styles.nbLeft} ${styles.onMobileView}`}>
-                    {(!selectedNB || selectedNB.code !== nb.code) && (
-                      <SvgWrapper svgSrc={"radio"}></SvgWrapper>
-                    )}
-                    {selectedNB && selectedNB.code === nb.code && (
-                      <SvgWrapper svgSrc="radio-selected" />
-                    )}
-                  </div>
-                </div>
-              </label>
-              <div className={styles.modePay}>
-                {!openMoreNbModal && isTablet ? (
-                  <StickyPayNow
-                    customClassName={styles.visibleOnTab}
-                    value={priceFormatCurrencySymbol(
-                      getCurrencySymbol,
-                      getTotalValue()
-                    )}
-                    onPriceDetailsClick={onPriceDetailsClick}
-                    disabled={!selectedNB.code}
-                    enableLinkPaymentOption={enableLinkPaymentOption}
-                    isPaymentLoading={isPaymentLoading}
-                    loader={loader}
-                    proceedToPay={() => {
-                      proceedToPay("NB", selectedPaymentPayload);
-                      acceptOrder();
-                    }}
-                  />
-                ) : (
-                  selectedNB.code &&
-                  selectedNB.code === nb.code && (
-                    <button
-                      className={`${styles.commonBtn} ${styles.payBtn}`}
-                      onClick={() => {
-                        proceedToPay("NB", selectedPaymentPayload);
-                        if (disbaleCheckout?.message) {
-                          setOpenMoreNbModal(false);
-                          acceptOrder();
-                        }
-                      }}
-                      disabled={isPaymentLoading}
-                    >
-                      {!isPaymentLoading ? (
-                        <>
-                          {t("resource.common.pay_caps")}{" "}
-                          {priceFormatCurrencySymbol(
-                            getCurrencySymbol,
-                            getTotalValue()
-                          )}
-                        </>
-                      ) : (
-                        <span>{loader}</span>
-                      )}
-                    </button>
-                  )
-                )}
-              </div>
-            </div>
-          );
-        };
-
         return (
           <div>
-            <div
-              className={`${styles.modeItemWrapper} ${isCodDropdownOpen ? styles.selectedBorder : styles.otherBorder}`}
-              onClick={() => setIsCodDropdownOpen((prev) => !prev)}
-            >
-              <div className={styles.modeItem}>
-                <div className={styles.logoNameContainer}>
-                  <div className={styles.modeItemLogo}>
-                    <SvgWrapper svgSrc="cod-icon" className={styles.svgColor} />
-                  </div>
-                  <div className={styles.modeItemName}>
-                    {t("resource.checkout.cash_on_delivery")}
-                  </div>
-                </div>
-                <span className={styles.moreModeIcon}>
-                  <SvgWrapper
-                    svgSrc="accordion-arrow"
-                    className={isCodDropdownOpen ? styles.upsideDown : ""}
-                  />
-                </span>
-              </div>
-            </div>
-
-            {isCodDropdownOpen && (
-              <>
+            {!isTablet ? (
+              <div>
                 <div
-                  className={`${styles.nbHeader} ${styles["view-mobile-up"]}`}
+                  className={`${styles.codHeader} ${styles["view-mobile-up"]}`}
                 >
-                  {t("resource.checkout.select_bank")}
+                  {t("resource.checkout.cash_on_delivery")}
                 </div>
-                <div className={styles.modeOption}>
-                  {topBanks1?.map((nb, index) => (
-                    <NbItem1 nb={nb} key={`nb-${index}`} />
-                  ))}
-
-                  {selectedTabData?.list?.length > initialVisibleBankCount1 && (
-                    <div
-                      className={`${styles.modeItemWrapper} ${styles.otherBorder}`}
-                      onClick={() => {
-                        removeDialogueError();
-                        setOpenMoreNbModal(true);
-                      }}
-                    >
-                      <div className={styles.modeItem}>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "8px",
-                          }}
-                        >
-                          <div className={styles.modeItemLogo}>
-                            <span>
-                              <SvgWrapper
-                                svgSrc="other-banks"
-                                className={styles.svgColor}
-                              />
-                            </span>
-                          </div>
-                          <div className={styles.moreModeName}>
-                            {t("resource.checkout.other_banks")}
-                          </div>
-                        </div>
-                        <span className={styles.moreModeIcon}>
-                          <SvgWrapper svgSrc="accordion-arrow" />
-                        </span>
-                      </div>
-                    </div>
-                  )}
-
-                  <Modal
-                    containerClassName={styles.moreOptionContainer}
-                    isOpen={openMoreNbModal}
-                    headerClassName={styles.modalHeader}
-                    bodyClassName={`${styles.modalBody} ${styles.bodyContainer}`}
-                    closeDialog={() => {
-                      setOpenMoreNbModal(false);
-                      setNbSearchText("");
-                    }}
-                    title={t("resource.checkout.select_bank")}
+                <p className={styles.codTitle}>
+                  {t("resource.checkout.pay_on_delivery")}
+                </p>
+                {codCharges > 0 && (
+                  <div className={styles.codInfo}>
+                    +{priceFormatCurrencySymbol(getCurrencySymbol, codCharges)}{" "}
+                    {t("resource.checkout.cod_extra_charge")}
+                  </div>
+                )}
+                <div className={styles.codPay}>
+                  <button
+                    className={`${styles.commonBtn} ${styles.payBtn}`}
+                    onClick={() => proceedToPay("COD", selectedPaymentPayload)}
+                    disabled={isPaymentLoading}
                   >
-                    <div className={styles.searchBox}>
-                      <SvgWrapper
-                        svgSrc="search"
-                        className={styles.searchIcon}
-                      />
-                      <input
-                        type="text"
-                        defaultValue={nbSearchText}
-                        onChange={(e) => setNbSearchText(e?.target?.value)}
-                        placeholder={t("resource.checkout.search_for_banks")}
-                      />
-                    </div>
-                    {filteredBanks1?.length === 0 ? (
-                      <p className={styles.noResultFound}>
-                        {t("resource.common.empty_state")}
-                      </p>
-                    ) : (
-                      filteredBanks1?.map((nb, index) => (
-                        <NbItem1
-                          nb={nb}
-                          openMoreNbModal={openMoreNbModal}
-                          key={`mi-${index}`}
-                        />
-                      ))
-                    )}
-                  </Modal>
+                    {!isPaymentLoading
+                      ? t("resource.checkout.place_order")
+                      : loader}
+                  </button>
                 </div>
-              </>
+              </div>
+            ) : (
+              <Spinner />
             )}
           </div>
         );
-
-      // case "COD":
-      //   return (
-      //     <div>
-      //       {!isTablet ? (
-      //         <div>
-      //           <div
-      //             className={`${styles.codHeader} ${styles["view-mobile-up"]}`}
-      //           >
-      //             {t("resource.checkout.cash_on_delivery")}
-      //           </div>
-      //           <p className={styles.codTitle}>
-      //             {t("resource.checkout.pay_on_delivery")}
-      //           </p>
-      //           {codCharges > 0 && (
-      //             <div className={styles.codInfo}>
-      //               +{priceFormatCurrencySymbol(getCurrencySymbol, codCharges)}{" "}
-      //               {t("resource.checkout.cod_extra_charge")}
-      //             </div>
-      //           )}
-      //           <div className={styles.codPay}>
-      //             <button
-      //               className={`${styles.commonBtn} ${styles.payBtn}`}
-      //               onClick={() => proceedToPay("COD", selectedPaymentPayload)}
-      //               disabled={isPaymentLoading}
-      //             >
-      //               {!isPaymentLoading
-      //                 ? t("resource.checkout.place_order")
-      //                 : loader}
-      //             </button>
-      //           </div>
-      //         </div>
-      //       ) : (
-      //         <Spinner />
-      //       )}
-      //     </div>
-      //   );
-
-      // case "COD": {
-      //   const {
-      //     beneficiaryDetails,
-      //     beneficiaryTitle,
-      //     transactionTitle,
-      //     utrLabel,
-      //     utrDescription,
-      //     uploadHeading,
-      //     uploadCta,
-      //     uploadHelper,
-      //   } = neftDisplayConfig;
-      //   return (
-      //     <div>
-      //       {!isTablet ? (
-      //         <div className={styles.neftWrapper}>
-      //           <section className={styles.neftSection}>
-      //             <p className={styles.neftSectionTitle}>{beneficiaryTitle}</p>
-      //             <div className={styles.neftBeneficiaryCard}>
-      //               {beneficiaryDetails.map((detail) => (
-      //                 <div
-      //                   key={detail.label}
-      //                   className={styles.neftBeneficiaryRow}
-      //                 >
-      //                   <div className={styles.neftBeneficiaryLabelWrapper}>
-      //                     <span className={styles.neftBeneficiaryLabel}>
-      //                       {detail.label}
-      //                     </span>
-      //                     <span className={styles.neftLabelSeparator}>:</span>
-      //                   </div>
-      //                   <div className={styles.neftBeneficiaryValue}>
-      //                     <span>{detail.value}</span>
-      //                     {detail.isCopyEnabled && (
-      //                       <button
-      //                         type="button"
-      //                         className={styles.neftCopyButton}
-      //                         onClick={() =>
-      //                           handleCopyToClipboard(detail.value)
-      //                         }
-      //                       >
-      //                         {copiedValue === detail.value ? (
-      //                           <TickBlackActiveSvg />
-      //                         ) : (
-      //                           <CopyToClipboardSvg />
-      //                         )}
-      //                       </button>
-      //                     )}
-      //                   </div>
-      //                 </div>
-      //               ))}
-      //             </div>
-      //           </section>
-
-      //           <div className={styles.neftFormBlock}>
-      //             <div className={styles.neftFormBlockInner}>
-      //               <section className={styles.neftSection}>
-      //                 <p className={styles.neftSectionTitle}>
-      //                   {transactionTitle}
-      //                 </p>
-      //                 <div className={styles.neftFieldGroup}>
-      //                   {/* <label
-      //                   className={styles.neftFieldLabel}
-      //                   htmlFor="utrNumber"
-      //                 >
-      //                   {utrLabel} <span>*</span>
-      //                 </label> */}
-      //                   <input
-      //                     id="utrNumber"
-      //                     type="text"
-      //                     value={utrNumber}
-      //                     onChange={handleUtrInputChange}
-      //                     placeholder={utrLabel}
-      //                     className={`${styles.neftInput} ${
-      //                       utrError ? styles.neftInputError : ""
-      //                     }`}
-      //                   />
-      //                   {utrError && (
-      //                     <p className={styles.neftError}>
-      //                       {t("resource.common.field_required")}
-      //                     </p>
-      //                   )}
-      //                 </div>
-      //               </section>
-      //               <p className={styles.neftHelperText}>{utrDescription}</p>
-      //             </div>
-
-      //             <section
-      //               className={`${styles.neftSection} ${styles.neftUploadSection}`}
-      //             >
-      //               <div
-      //                 className={`${styles.neftUploadBox} ${isDragging ? styles.neftUploadBoxDragging : ""}`}
-      //                 onDragEnter={handleDragEnter}
-      //                 onDragOver={handleDragOver}
-      //                 onDragLeave={handleDragLeave}
-      //                 onDrop={handleDrop}
-      //               >
-      //                 <input
-      //                   type="file"
-      //                   accept=".pdf,.png,.jpg,.jpeg"
-      //                   ref={uploadInputRef}
-      //                   className={styles.neftHiddenInput}
-      //                   onChange={handleFileInputChange}
-      //                   disabled={fileUpload?.state?.isUploading}
-      //                 />
-      //                 <div className={styles.neftUploadIcon} aria-hidden="true">
-      //                   <UploadSvg />
-      //                 </div>
-      //                 <button
-      //                   type="button"
-      //                   className={styles.neftUploadButton}
-      //                   onClick={handleUploadButtonClick}
-      //                   disabled={fileUpload?.state?.isUploading}
-      //                 >
-      //                   {uploadCta}
-      //                 </button>
-      //                 <p className={styles.neftUploadTitle}>{uploadHeading}</p>
-      //                 <p className={styles.neftUploadHelper}>{uploadHelper}</p>
-      //               </div>
-
-      //               {(selectedProofFile || fileUpload?.state?.fileUploaded) && (
-      //                 <div className={styles.neftFileCard}>
-      //                   <div className={styles.neftFileCardContent}>
-      //                     <div className={styles.neftFileInfo}>
-      //                       <div className={styles.neftFileIcon}>
-      //                         <FileSvg className={styles.fileIcon} />
-      //                       </div>
-      //                       <div className={styles.neftFileDetails}>
-      //                         <span className={styles.neftFileName}>
-      //                           {selectedProofFile?.name ||
-      //                             fileUpload?.state?.fileUploadedName}
-      //                           {fileUpload?.state?.fileUploaded && (
-      //                             <SvgCheck
-      //                               className={styles.neftSuccessIndicator}
-      //                             />
-      //                           )}
-      //                         </span>
-
-      //                         {fileUpload?.state?.fileUploaded &&
-      //                           selectedProofFile && (
-      //                             <span className={styles.neftFileSize}>
-      //                               {formatFileSize(selectedProofFile.size)}
-      //                             </span>
-      //                           )}
-
-      //                         {fileUpload?.state?.isUploading && (
-      //                           <div className={styles.neftProgressContainer}>
-      //                             <div
-      //                               className={styles.neftProgressBarContainer}
-      //                             >
-      //                               <div
-      //                                 className={styles.neftProgressBar}
-      //                                 style={{
-      //                                   width: `${fileUpload?.state?.uploadProgress}%`,
-      //                                 }}
-      //                               />
-      //                             </div>
-      //                             <span className={styles.neftProgressText}>
-      //                               {fileUpload?.state?.uploadProgress}%
-      //                             </span>
-      //                           </div>
-      //                         )}
-      //                       </div>
-
-      //                       <div className={styles.neftFileActions}>
-      //                         {fileUpload?.state?.fileUploaded && (
-      //                           <button
-      //                             className={styles.neftFileActionBtn}
-      //                             onClick={handleFileRemove}
-      //                             aria-label="Remove file"
-      //                           >
-      //                             <DeleteSvg
-      //                               className={styles.neftDeleteIcon}
-      //                             />
-      //                           </button>
-      //                         )}
-      //                       </div>
-      //                     </div>
-      //                   </div>
-      //                 </div>
-      //               )}
-
-      //               {fileUpload?.state?.fileUploadError && (
-      //                 <div className={styles.neftUploadError}>
-      //                   {fileUpload.state.fileUploadError}
-      //                 </div>
-      //               )}
-      //             </section>
-
-      //             <div>
-      //               <button
-      //                 className={styles.neftPlaceOrderBtn}
-      //                 onClick={handleNeftPlaceOrder}
-      //                 disabled={isNeftPlaceOrderDisabled}
-      //               >
-      //                 {!isPaymentLoading
-      //                   ? t("resource.checkout.place_order")
-      //                   : loader}
-      //               </button>
-      //             </div>
-      //           </div>
-      //         </div>
-      //       ) : (
-      //         <Spinner />
-      //       )}
-      //     </div>
-      //   );
-      // }
       case "PL":
         return (
           <div>
@@ -4015,8 +3418,7 @@ function CheckoutPaymentContent({
           </div>
         </Modal>
       )}
-
-      {/* {isCodModalOpen && isTablet && (
+      {isCodModalOpen && isTablet && (
         <Modal
           isOpen={isCodModalOpen}
           hideHeader={true}
@@ -4070,8 +3472,7 @@ function CheckoutPaymentContent({
             </button>
           </div>
         </Modal>
-      )} */}
-
+      )}
       {isCvvNotNeededModal && isTablet && (
         <Modal
           isOpen={isCvvNotNeededModal}
