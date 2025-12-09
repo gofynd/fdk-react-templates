@@ -29,7 +29,7 @@ function FilterList({
     }
     return filter.values.filter((item) => {
       return (
-        (item.display || "").toLowerCase().indexOf(searchText.toLowerCase()) !== -1
+        item.display.toLowerCase().indexOf(searchText.toLowerCase()) !== -1
       );
     });
   };
@@ -224,7 +224,7 @@ function FilterList({
                         <div
                           className={`
                   ${styles["filter__item--color"]} ${
-                    (filterItem.value || "").toLowerCase() === "none"
+                    filterItem.value.toLowerCase() === "none"
                       ? styles.multiIcon
                       : ""
                   }
@@ -239,13 +239,11 @@ function FilterList({
                       >
                         {filterItem.display}
                       </div>
-                      {filterItem.count != null && (
-                        <div
-                          className={`${styles["filter__item--count"]} ${styles["caption-normal"]}`}
-                        >
-                          ({filterItem.count})
-                        </div>
-                      )}
+                      <div
+                        className={`${styles["filter__item--count"]} ${styles["caption-normal"]}`}
+                      >
+                        ({filterItem.count || 0})
+                      </div>
                     </div>
                   </li>
                 ))
@@ -339,13 +337,11 @@ function FilterList({
                 >
                   {filter.values[0].display}
                 </div>
-                {filter.values[0].count != null && (
-                  <div
-                    className={`${styles["filter__item--count"]} ${styles["caption-normal"]} `}
-                  >
-                    ({filter.values[0].count})
-                  </div>
-                )}
+                <div
+                  className={`${styles["filter__item--count"]} ${styles["caption-normal"]} `}
+                >
+                  ({filter.values[0].count || 0})
+                </div>
               </div>
             </div>
           </div>
@@ -448,13 +444,11 @@ function FilterList({
                           >
                             {filterItem.display}
                           </div>
-                          {filterItem.count != null && (
-                            <div
-                              className={`${styles["filter__item--count"]} ${styles["caption-normal"]}`}
-                            >
-                              ({filterItem.count})
-                            </div>
-                          )}
+                          <div
+                            className={`${styles["filter__item--count"]} ${styles["caption-normal"]}`}
+                          >
+                            ({filterItem.count || 0})
+                          </div>
                         </div>
                       </fdk-link>
                     </li>

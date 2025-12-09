@@ -1,56 +1,11 @@
 @import "../../styles/main.less";
 
-.scheduleIconContainer {
-  margin-top: auto;
-  padding: 4px 0 4px 0;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-  color: @TextHeading;
-  font-size: 14px;
-  font-weight: 500;
-  .scheduleIcon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .scheduleIconText {
-    flex: 1;
-
-    .windowClosedText {
-      color: @TextLabel;
-      font-size: 14px;
-      font-style: normal;
-      font-weight: 400;
-      span {
-        font-weight: 500;
-      }
-    }
-  }
-}
-
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-  @media @mobile {
-    align-items: flex-end;
-  }
-}
 .orderItem {
   color: @Mako;
   background-color: @HighlightColor;
   padding: 16px;
   border-radius: 4px;
+
   .orderHeader {
     cursor: pointer;
     position: relative;
@@ -60,11 +15,11 @@
       inset-inline-end: 0px;
     }
     .filterArrowUp {
-      margin-left: auto;
+      margin-inline-start: auto;
       transform: rotate(180deg);
     }
     .filterArrowDown {
-      margin-left: auto;
+      margin-inline-start: auto;
     }
 
     .orderId {
@@ -95,21 +50,16 @@
 
     .shipmentLeft {
       display: table-cell;
-
-      img {
-        width: 80px;
-        height: 100px;
-        object-fit: cover;
-      }
+      flex-basis: 80px;
 
       #total-item {
         text-align: center;
         position: relative;
-        float: right;
+        float: inline-end;
         background: @Mako2;
         color: white;
         top: -40px;
-        left: -10px;
+        inset-inline-start: -10px;
         border-radius: 50%;
         width: 35px;
         height: 35px;
@@ -134,9 +84,9 @@
     }
 
     .shipmentRight {
-      display: flex;
-      flex-direction: column;
-      flex: 1;
+      display: table-cell;
+      vertical-align: top;
+
       .shipmentId {
         margin: 4px 0px;
       }
@@ -158,30 +108,15 @@
         font-weight: 500;
         line-height: 140%; /* 16.8px */
       }
-      .buttonContainer {
-        display: flex;
-        padding-top: 8px;
-
-        @media @mobile {
-          padding-top: 8px;
-        }
-
-        .requestReattempt {
-          min-width: 100%;
-
-          button {
-            margin-top: auto;
-            width: auto;
-            padding: 4px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 700;
-            color: @UserAlertButtonLink;
-          }
-        }
-        .deliveryReattemptRequested {
-          min-width: 100%;
-        }
+      .status {
+        border-radius: 4px;
+        background: @SuccessBackground;
+        padding: 4px;
+        color: @SuccessText;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 140%;
+        width: fit-content;
       }
       .shipmentBrands {
         margin: 8px 0px;
@@ -189,37 +124,6 @@
     }
   }
 
-  .shipmentThird {
-    margin: 0;
-    .status {
-      border-radius: 4px;
-      background: @SuccessBackground;
-      padding: 4px;
-      color: @SuccessText;
-      font-size: 12px;
-      font-weight: 500;
-      line-height: 140%;
-      width: fit-content;
-    }
-    .error {
-      border-radius: 4px;
-      background-color: @ErrorBackground;
-      padding: 4px;
-      color: @ErrorText;
-      font-size: 12px;
-      font-weight: 500;
-      width: fit-content;
-    }
-    .info {
-      border-radius: 4px;
-      background-color: @UserAlertsInfoBackground;
-      padding: 4px;
-      color: @UserAlertsInfoText;
-      font-size: 12px;
-      font-weight: 500;
-      width: fit-content;
-    }
-  }
   .buttons {
     display: flex;
     .ordercheckout {
@@ -237,7 +141,7 @@
       color: @ThemeAccentL5;
       cursor: pointer;
       .reorderIcon {
-        margin-right: 10px;
+        margin-inline-end: 10px;
         position: relative;
         top: -2px;
       }
@@ -253,25 +157,6 @@
   }
 }
 
-.error {
-  border-radius: 4px;
-  background-color: @ErrorBackground;
-  padding: 4px;
-  color: @ErrorText;
-  font-size: 12px;
-  font-weight: 500;
-  width: fit-content;
-}
-
-.info {
-  border-radius: 4px;
-  background-color: @UserAlertsInfoBackground;
-  padding: 4px;
-  color: @UserAlertsInfoText;
-  font-size: 12px;
-  font-weight: 500;
-  width: fit-content;
-}
 .productCustomizationContainer {
   margin-bottom: 16px;
 }
