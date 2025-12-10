@@ -156,9 +156,7 @@
       text-align: center;
       color: var(--buttonSecondary);
       cursor: pointer;
-      &:disabled {
-        opacity: 0.6;
-      }
+
       @media @mobile {
         padding: 20px 24px;
       }
@@ -212,49 +210,5 @@
     text-transform: uppercase;
     color: @ErrorText;
     cursor: pointer;
-  }
-}
-
-.showMoreBtnContainer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 4px;
-  .showOtherAddresses {
-    cursor: pointer;
-    display: flex;
-    gap: 8px;
-
-    @media @mobile {
-      font-size: 12px;
-      margin: 8px 0px !important;
-    }
-
-    span {
-      color: @ButtonPrimary;
-      font-size: 14px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 4px;
-      font-weight: 500;
-      align-self: stretch;
-
-      @media @mobile {
-        font-size: 12px;
-      }
-    }
-
-    /* ✅ FIX → These must NOT be inside "span { }" */
-    .rotateDown {
-      transform: rotate(90deg);
-      transition: transform 0.2s ease;
-    }
-
-    .rotateUp {
-      transform: rotate(-90deg);
-      transition: transform 0.2s ease;
-    }
   }
 }

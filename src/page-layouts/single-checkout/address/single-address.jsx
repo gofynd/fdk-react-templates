@@ -19,7 +19,6 @@ function SingleAddress({
   isApiLoading = false,
   getTotalValue,
   showPaymentOptions,
-  acceptOrder,
 }) {
   const fpi = useFPI();
   const userDetails = useGlobalStore(fpi.getters.USER_DATA);
@@ -70,13 +69,11 @@ function SingleAddress({
           showPayment={showPayment}
           showShipment={showShipment}
           backToEdit={backToEdit}
-          acceptOrder={acceptOrder}
         ></SinglesAddressHeader>
         <Modal
           title={modalTitle}
           hideHeader
           isOpen={openModal}
-          modalType="center-modal"
           closeDialog={resetAddressState}
           containerClassName={styles.addressModalContainer}
           bodyClassName={styles.addressModalBody}
