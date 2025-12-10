@@ -7,48 +7,17 @@
     margin-inline-end: 10px;
     margin-bottom: 10px;
     margin-inline-start: 5px;
-    color: #979797;
+    color: @DustyGray;
     font-weight: 500;
   }
   .title {
     font-size: 20px;
-    color: #41434c;
+    color: @Mako;
     font-weight: 700;
     margin-top: 10px;
     margin-inline-end: 10px;
     margin-bottom: 10px;
     margin-inline-start: 20px;
-  }
-
-  .shareBtnContainer {
-    display: flex;
-    border-top: 1px solid #eee;
-    padding: 10px;
-    @media @tablet {
-      flex-direction: column;
-    }
-    .shareBtn {
-      display: inline-block;
-      padding: 5px 13px;
-      border: none;
-      border-radius: 3px;
-      flex: 1;
-      margin: 0 5px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 16px;
-      text-align: center;
-      color: #fff;
-      background-color: @ButtonPrimary;
-      @media @mobile {
-        flex: inherit;
-      }
-      @media @tablet {
-        + .shareBtn {
-          margin-top: 10px;
-        }
-      }
-    }
   }
   .sharedCart {
     position: relative;
@@ -78,11 +47,43 @@
   }
 }
 
+/* Keep button styles usable when rendered outside sharedCartContainer (e.g. breakup section) */
+.shareBtnContainer {
+  display: flex;
+  border-top: 1px solid @LightGray;
+  padding: 10px;
+  @media @tablet {
+    flex-direction: column;
+  }
+  .shareBtn {
+    display: inline-block;
+    padding: 5px 13px;
+    border: none;
+    border-radius: 3px;
+    flex: 1;
+    margin: 0 5px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 16px;
+    text-align: center;
+    color: @White;
+    background-color: @ButtonPrimary;
+    @media @mobile {
+      flex: inherit;
+    }
+    @media @tablet {
+      + .shareBtn {
+        margin-top: 10px;
+      }
+    }
+  }
+}
+
 .list {
   display: flex;
   cursor: pointer;
   padding: 5px 10px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid @LightGray;
   .icons {
     display: flex;
     align-items: center;
@@ -92,7 +93,7 @@
   .offer {
     display: block;
     width: 100%;
-    color: #41434c;
+    color: @Mako;
     padding: 10px;
     .desc {
       text-transform: uppercase;
@@ -105,7 +106,7 @@
       font-size: 12px;
     }
     .couponApplied {
-      color: #20ce81;
+      color: @Profit;
     }
   }
 }
@@ -130,18 +131,18 @@
     margin-inline-end: 10px;
     margin-bottom: 10px;
     margin-inline-start: 5px;
-    color: #979797;
+    color: @DustyGray;
     padding: 5px 10px;
     font-weight: 400;
   }
   .title {
     font-size: 20px;
-    color: #41434c;
+    color: @Mako;
     font-weight: 700;
     margin-top: 10px;
     margin-inline-end: 10px;
     margin-bottom: 10px;
     margin-inline-start: 20px;
-    border-top: 1px solid #eee;
+    border-top: 1px solid @LightGray;
   }
 }

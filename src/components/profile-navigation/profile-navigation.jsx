@@ -8,6 +8,10 @@
  * @param {Function} props.signOut - A function to handle user sign-out.
  * @param {string} props.userProfilePicUrl - The URL of the user's profile picture.
  * @param {string} props.userName - The name of the user.
+ * @param {Array} props.leftSections - Array of sections to render in the left panel (children area).
+ * @param {Array} props.rightSections - Array of sections to render in the right panel (navigation area).
+ * @param {Object} props.fpi - Fynd Platform Interface object.
+ * @param {Object} props.globalConfig - Global configuration object.
  *
  * @returns {JSX.Element} The rendered profile navigation component.
  *
@@ -15,13 +19,18 @@
 
 import React, { useMemo } from "react";
 import { useLocation } from "react-router-dom";
-import { ALL_PROFILE_MENU } from "../../helper/constant";
-import { FDKLink } from "fdk-core/components";
+import { SectionRenderer } from "fdk-core/components";
 import * as styles from "./profile-navigation.less";
 import { useMobile } from "../../helper/hooks/useMobile";
 import { useGlobalTranslation, useGlobalStore } from "fdk-core/utils";
 
-function ProfileNavigation({ children, signOut, userProfilePicUrl, userName }) {
+function ProfileNavigation({
+  children,
+  leftSections = [],
+  rightSections = [],
+  fpi,
+  globalConfig,
+}) {
   const { t } = useGlobalTranslation("translation");
   const isMobile = useMobile();
   const { pathname } = useLocation();
@@ -37,8 +46,31 @@ function ProfileNavigation({ children, signOut, userProfilePicUrl, userName }) {
     [isMobile, pathname]
   );
 
-  const handleSignOut = () => {
-    signOut();
+  // Render left content (children or left sections)
+  const renderLeftContent = () => {
+    if (leftSections.length > 0 && fpi && globalConfig) {
+      return (
+        <SectionRenderer
+          sections={leftSections}
+          fpi={fpi}
+          globalConfig={globalConfig}
+        />
+      );
+    }
+    return children;
+  };
+
+  // Render right content (navigation or right sections)
+  const renderRightContent = () => {
+    if (rightSections.length > 0 && fpi && globalConfig) {
+      return (
+        <SectionRenderer
+          sections={rightSections}
+          fpi={fpi}
+          globalConfig={globalConfig}
+        />
+      );
+    }
   };
 
   return (
@@ -47,52 +79,10 @@ function ProfileNavigation({ children, signOut, userProfilePicUrl, userName }) {
     >
       <div className={styles.mainView}>
         {!hideProfileContent && (
-          <div className={styles.profileContent}>{children}</div>
+          <div className={styles.profileContent}>{renderLeftContent()}</div>
         )}
         {!hideNavBar && (
-          <div className={styles.navContainer}>
-            <div className={styles.userData}>
-              <div className={`${styles.defaultImage} ${styles.flexCenter}`}>
-                <img
-                  className={styles.accountIcon}
-                  src={userProfilePicUrl}
-                  alt={t("resource.common.user_alt")}
-                />
-              </div>
-              <div className={styles.nameContainer}>
-                <p title={userName} className={styles.name}>
-                  {userName}
-                </p>
-                <FDKLink
-                  className={styles.flexAlignCenter}
-                  to="/profile/details"
-                >
-                  <p className={styles.editLink}>{t("resource.profile.edit_profile")}</p>
-                </FDKLink>
-              </div>
-            </div>
-            <div className={styles.accountHeader}>{t("resource.profile.my_account")}</div>
-            <ul>
-              {ALL_PROFILE_MENU.map(({ key, display, link, Icon }) => (
-                <li
-                  className={`${styles.nav} ${pathname === link ? styles.selected : ""}`}
-                  key={key}
-                >
-                  <FDKLink className={styles.flexAlignCenter} to={link}>
-                    <span className={styles.menuIcon}>
-                      <Icon />
-                    </span>
-                    <span className={styles.itemTitle}>{t(display)}</span>
-                  </FDKLink>
-                </li>
-              ))}
-            </ul>
-            <div className={styles.versionContainer}>
-              <div className={styles.signOut} onClick={handleSignOut}>
-                {t("resource.profile.sign_out")}
-              </div>
-            </div>
-          </div>
+          <div className={styles.navContainer}>{renderRightContent()}</div>
         )}
       </div>
     </div>
