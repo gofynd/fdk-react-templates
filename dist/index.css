@@ -43191,11 +43191,23 @@ h5,
   flex-direction: column;
   gap: 16px;
 }
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__neftSection___XyY5_ {
+    gap: 12px;
+  }
+}
 .checkout-payment-content__container___HusGh .checkout-payment-content__neftSectionTitle___wYFRT {
   font-size: 16px;
   font-weight: 600;
   color: var(--textHeading, #26201a);
+  font-family: var(--font-header, "WorkSans");
   margin: 0;
+}
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__neftSectionTitle___wYFRT {
+    font-size: 12px;
+    letter-spacing: -0.24px;
+  }
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__neftBeneficiaryCard___v9vqB {
   border: 1px solid var(--dividerStokes, #d4d1d1);
@@ -43212,6 +43224,11 @@ h5,
   align-items: center;
   padding-bottom: 12px;
 }
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__neftBeneficiaryRow___B67RO {
+    padding-bottom: 10px;
+  }
+}
 .checkout-payment-content__container___HusGh .checkout-payment-content__neftBeneficiaryRow___B67RO:last-child {
   border-bottom: none;
   padding-bottom: 0;
@@ -43225,20 +43242,46 @@ h5,
   font-size: 14px;
   font-weight: 500;
   color: var(--textHeading, #26201a);
+  font-family: var(--font-header, "WorkSans");
+}
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__neftBeneficiaryLabel___IxLDp {
+    color: var(--textHeading, #26201a);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: -0.24px;
+  }
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__neftLabelSeparator___nM7q5 {
   font-weight: 600;
   color: var(--textHeading, #26201a);
+  font-family: var(--font-header, "WorkSans");
+}
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__neftLabelSeparator___nM7q5 {
+    font-size: 12px;
+    letter-spacing: -0.24px;
+  }
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__neftBeneficiaryValue___VSKtC {
   display: flex;
   align-items: center;
   gap: 12px;
   font-size: 14px;
+  font-family: var(--font-body, "WorkSans");
   color: var(--textBody, #3c3131);
+}
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__neftBeneficiaryValue___VSKtC {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16.8px;
+  }
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__neftCopyButton___wWiC2 {
   cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__neftCopyButton___wWiC2 svg {
   height: 14px;
@@ -43273,6 +43316,12 @@ h5,
   font-weight: 400;
   color: var(--textSecondary, #9c9c9c);
   margin: 0;
+  font-family: var(--font-body, "WorkSans");
+}
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__neftHelperText___d6yek {
+    line-height: 16.8px;
+  }
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__neftUploadSection___yftvA {
   width: 100%;
@@ -43310,18 +43359,42 @@ h5,
   background-color: var(--themeAccentL5, #fff);
   font-weight: 600;
   font-size: 14px;
+  text-transform: uppercase;
+  font-family: var(--font-header, "WorkSans");
+}
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__neftUploadButton____P9YX {
+    text-align: center;
+    font-size: 12px;
+    line-height: 16.8px;
+  }
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__neftUploadTitle___jjKhS {
   font-size: 16px;
   font-weight: 600;
   color: var(--textHeading, #26201a);
   margin: 0;
+  font-family: var(--font-header, "WorkSans");
+}
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__neftUploadTitle___jjKhS {
+    color: var(--buttonPrimary, #4e3f09);
+    letter-spacing: -0.32px;
+  }
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__neftUploadHelper___VdgwE {
   font-size: 12px;
   font-weight: 400;
   color: var(--textSecondary, #9c9c9c);
   margin: 0;
+  font-family: var(--font-body, "WorkSans");
+}
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__neftUploadHelper___VdgwE {
+    color: var(--textBody, #3c3131);
+    text-align: center;
+    letter-spacing: -0.24px;
+  }
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__neftSelectedFile___dN_Dl {
   font-size: 12px;
@@ -43463,7 +43536,7 @@ h5,
 }
 @media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__neftFormBlock___QNGBp {
-    padding: 24px 16px;
+    padding: 0px;
   }
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__otherOption___DjTzG {

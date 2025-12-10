@@ -1420,13 +1420,23 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
+
+    @media @tablet {
+      gap: 12px;
+    }
   }
 
   .neftSectionTitle {
     font-size: 16px;
     font-weight: 600;
     color: @TextHeading;
+    font-family: var(--font-header, "WorkSans");
     margin: 0;
+
+    @media @tablet {
+      font-size: 12px;
+      letter-spacing: -0.24px;
+    }
   }
 
   .neftBeneficiaryCard {
@@ -1445,6 +1455,10 @@
     align-items: center;
     padding-bottom: 12px;
 
+    @media @tablet {
+      padding-bottom: 10px;
+    }
+
     &:last-child {
       border-bottom: none;
       padding-bottom: 0;
@@ -1461,11 +1475,25 @@
     font-size: 14px;
     font-weight: 500;
     color: @TextHeading;
+    font-family: var(--font-header, "WorkSans");
+
+    @media @tablet {
+      color: @TextHeading;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: -0.24px;
+    }
   }
 
   .neftLabelSeparator {
     font-weight: 600;
     color: @TextHeading;
+    font-family: var(--font-header, "WorkSans");
+
+    @media @tablet {
+      font-size: 12px;
+      letter-spacing: -0.24px;
+    }
   }
 
   .neftBeneficiaryValue {
@@ -1473,11 +1501,21 @@
     align-items: center;
     gap: 12px;
     font-size: 14px;
+    font-family: var(--font-body, "WorkSans");
     color: @TextBody;
+
+    @media @tablet {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 16.8px;
+    }
   }
 
   .neftCopyButton {
     cursor: pointer;
+    display: flex;
+    align-items: center;
+
     svg {
       height: 14px;
       width: 14px;
@@ -1518,6 +1556,11 @@
     font-weight: 400;
     color: @TextSecondary;
     margin: 0;
+    font-family: var(--font-body, "WorkSans");
+
+    @media @tablet {
+      line-height: 16.8px;
+    }
   }
 
   .neftUploadSection {
@@ -1561,6 +1604,14 @@
     background-color: @ThemeAccentL5;
     font-weight: 600;
     font-size: 14px;
+    text-transform: uppercase;
+    font-family: var(--font-header, "WorkSans");
+
+    @media @tablet {
+      text-align: center;
+      font-size: 12px;
+      line-height: 16.8px;
+    }
   }
 
   .neftUploadTitle {
@@ -1568,6 +1619,12 @@
     font-weight: 600;
     color: @TextHeading;
     margin: 0;
+    font-family: var(--font-header, "WorkSans");
+
+    @media @tablet {
+      color: @ButtonPrimary;
+      letter-spacing: -0.32px;
+    }
   }
 
   .neftUploadHelper {
@@ -1575,6 +1632,13 @@
     font-weight: 400;
     color: @TextSecondary;
     margin: 0;
+    font-family: var(--font-body, "WorkSans");
+
+    @media @tablet {
+      color: @TextBody;
+      text-align: center;
+      letter-spacing: -0.24px;
+    }
   }
 
   .neftSelectedFile {
@@ -1741,7 +1805,8 @@
     gap: 20px;
 
     @media @tablet {
-      padding: 24px 16px;
+      // padding: 24px 16px;
+      padding: 0px;
     }
   }
 
