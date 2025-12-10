@@ -38,8 +38,6 @@ function Coupon({
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
-  const [lastSubmittedCoupon, setLastSubmittedCoupon] = useState("");
-
   const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
   const locale = language?.locale;
   const couponTitleText = useMemo(() => {
@@ -76,21 +74,8 @@ function Coupon({
   }, [successCoupon?.is_applied]);
 
   function handleCouponCodeSubmit({ couponInput }) {
-    const trimmedInput = couponInput.trim();
-
-    if (errors?.root && lastSubmittedCoupon === trimmedInput) {
-      return;
-    }
-
-    setLastSubmittedCoupon(trimmedInput);
     onApplyCouponClick(couponInput);
   }
-
-  useEffect(() => {
-    if (!error) {
-      setLastSubmittedCoupon("");
-    }
-  }, [error]);
 
   useEffect(() => {
     if (error) {
@@ -99,16 +84,6 @@ function Coupon({
       clearErrors("root");
     }
   }, [error]);
-
-  useEffect(() => {
-    const subscription = watch((value, { name }) => {
-      if (name === "couponInput" && errors?.root) {
-        console.log("clear");
-        clearErrors("root");
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [watch, errors?.root, clearErrors]);
 
   return (
     <>
@@ -172,36 +147,33 @@ function Coupon({
       >
         <div className={styles.modalContent}>
           <div className={styles.modalBody}>
+            {errors?.root && (
+              <div className={styles.cartErrorContainer}>
+                <SvgWrapper svgSrc="error-info-icon" />
+                <div className={styles.colorErrorNormal}>
+                  {successCoupon?.message
+                    ? successCoupon?.message
+                    : translateDynamicLabel(errors?.root?.message, t)}
+                </div>
+              </div>
+            )}
             <form
-              className={`${styles.couponInputBox}`}
+              className={styles.couponInputBox}
               onSubmit={handleSubmit(handleCouponCodeSubmit)}
             >
               <input
                 type="text"
                 placeholder={t("resource.cart.enter_coupon_code")}
                 {...register("couponInput")}
-                className={`${errors?.root ? styles.hasError : ""}`}
               />
               <button
-                disabled={
-                  !watch("couponInput") ||
-                  (errors?.root && lastSubmittedCoupon === watch("couponInput"))
-                }
+                disabled={!watch("couponInput")}
                 className={styles.checkBtn}
                 type="submit"
               >
                 {t("resource.facets.apply_caps")}
               </button>
             </form>
-            {errors?.root && (
-              <div className={styles.errorContainer}>
-                <span className={styles.errorText}>
-                  {successCoupon?.message
-                    ? successCoupon?.message
-                    : translateDynamicLabel(errors?.root?.message, t)}
-                </span>
-              </div>
-            )}
             {availableCouponList?.length > 0 ? (
               <div>
                 <div className={styles.couponListTitle}>
