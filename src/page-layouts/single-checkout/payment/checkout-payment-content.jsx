@@ -867,7 +867,7 @@ function CheckoutPaymentContent({
 
     if (tab === "COD") {
       setSelectedTab(tab);
-      // setIsCodModalOpen(true);
+      setIsCodModalOpen(true);
     } else if (tab === "NEFT") {
       setSelectedTab(tab);
     } else if (tab === "CARD") {
@@ -1007,7 +1007,7 @@ function CheckoutPaymentContent({
       });
 
       setSelectedTab(tab);
-      // setIsCodModalOpen(true);
+      setIsCodModalOpen(true);
     } else if (tab === "NEFT") {
       selectPaymentMode(paymentModePayload).then(() => {
         console.log("Payment mode selected");
@@ -2957,254 +2957,255 @@ function CheckoutPaymentContent({
           </div>
         );
 
-      // case "COD":
-      //   return (
-      //     <div>
-      //       {!isTablet ? (
-      //         <div>
-      //           <div
-      //             className={`${styles.codHeader} ${styles["view-mobile-up"]}`}
-      //           >
-      //             {t("resource.checkout.cash_on_delivery")}
-      //           </div>
-      //           <p className={styles.codTitle}>
-      //             {t("resource.checkout.pay_on_delivery")}
-      //           </p>
-      //           {codCharges > 0 && (
-      //             <div className={styles.codInfo}>
-      //               +{priceFormatCurrencySymbol(getCurrencySymbol, codCharges)}{" "}
-      //               {t("resource.checkout.cod_extra_charge")}
-      //             </div>
-      //           )}
-      //           <div className={styles.codPay}>
-      //             <button
-      //               className={`${styles.commonBtn} ${styles.payBtn}`}
-      //               onClick={() => proceedToPay("COD", selectedPaymentPayload)}
-      //               disabled={isPaymentLoading}
-      //             >
-      //               {!isPaymentLoading
-      //                 ? t("resource.checkout.place_order")
-      //                 : loader}
-      //             </button>
-      //           </div>
-      //         </div>
-      //       ) : (
-      //         <Spinner />
-      //       )}
-      //     </div>
-      //   );
-
-      case "COD": {
-        const {
-          beneficiaryDetails,
-          beneficiaryTitle,
-          transactionTitle,
-          utrLabel,
-          utrDescription,
-          uploadHeading,
-          uploadCta,
-          uploadHelper,
-        } = neftDisplayConfig;
+      case "COD":
         return (
           <div>
-            <div className={styles.neftWrapper}>
-              <section className={styles.neftSection}>
-                <p className={styles.neftSectionTitle}>{beneficiaryTitle}</p>
-                <div className={styles.neftBeneficiaryCard}>
-                  {beneficiaryDetails.map((detail) => (
-                    <div
-                      key={detail.label}
-                      className={styles.neftBeneficiaryRow}
-                    >
-                      <div className={styles.neftBeneficiaryLabelWrapper}>
-                        <span className={styles.neftBeneficiaryLabel}>
-                          {detail.label}
-                        </span>
-                        <span className={styles.neftLabelSeparator}>:</span>
-                      </div>
-                      <div className={styles.neftBeneficiaryValue}>
-                        <span>{detail.value}</span>
-                        {detail.isCopyEnabled && (
-                          <button
-                            type="button"
-                            className={styles.neftCopyButton}
-                            onClick={() => handleCopyToClipboard(detail.value)}
-                          >
-                            {copiedValue === detail.value ? (
-                              <TickBlackActiveSvg />
-                            ) : (
-                              <CopyToClipboardSvg />
-                            )}
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </section>
-
-              <div className={styles.neftFormBlock}>
-                <div className={styles.neftFormBlockInner}>
-                  <section className={styles.neftSection}>
-                    <p className={styles.neftSectionTitle}>
-                      {transactionTitle}
-                    </p>
-                    <div className={styles.neftFieldGroup}>
-                      <input
-                        id="neftUtrNumber"
-                        type="text"
-                        value={utrNumber}
-                        onChange={handleUtrInputChange}
-                        placeholder={utrLabel}
-                        className={`${styles.neftInput} ${
-                          utrError ? styles.neftInputError : ""
-                        }`}
-                      />
-                      {utrError && (
-                        <p className={styles.neftError}>
-                          {t("resource.common.field_required")}
-                        </p>
-                      )}
-                    </div>
-                  </section>
-                  <p className={styles.neftHelperText}>{utrDescription}</p>
-                </div>
-
-                <section
-                  className={`${styles.neftSection} ${styles.neftUploadSection}`}
+            {!isTablet ? (
+              <div>
+                <div
+                  className={`${styles.codHeader} ${styles["view-mobile-up"]}`}
                 >
-                  <div
-                    className={`${styles.neftUploadBox} ${isDragging ? styles.neftUploadBoxDragging : ""}`}
-                    onDragEnter={handleDragEnter}
-                    onDragOver={handleDragOver}
-                    onDragLeave={handleDragLeave}
-                    onDrop={handleDrop}
-                  >
-                    <input
-                      type="file"
-                      accept=".pdf,.png,.jpg,.jpeg"
-                      ref={uploadInputRef}
-                      className={styles.neftHiddenInput}
-                      onChange={handleFileInputChange}
-                      disabled={fileUpload?.state?.isUploading}
-                    />
-                    <div className={styles.neftUploadIcon} aria-hidden="true">
-                      <UploadSvg />
-                    </div>
-                    <button
-                      type="button"
-                      className={styles.neftUploadButton}
-                      onClick={handleUploadButtonClick}
-                      disabled={fileUpload?.state?.isUploading}
-                    >
-                      {uploadCta}
-                    </button>
-                    <p className={styles.neftUploadTitle}>{uploadHeading}</p>
-                    <p className={styles.neftUploadHelper}>{uploadHelper}</p>
+                  {t("resource.checkout.cash_on_delivery")}
+                </div>
+                <p className={styles.codTitle}>
+                  {t("resource.checkout.pay_on_delivery")}
+                </p>
+                {codCharges > 0 && (
+                  <div className={styles.codInfo}>
+                    +{priceFormatCurrencySymbol(getCurrencySymbol, codCharges)}{" "}
+                    {t("resource.checkout.cod_extra_charge")}
                   </div>
-
-                  {(selectedProofFile || fileUpload?.state?.fileUploaded) && (
-                    <div className={styles.neftFileCard}>
-                      <div className={styles.neftFileCardContent}>
-                        <div className={styles.neftFileInfo}>
-                          <div className={styles.neftFileIcon}>
-                            <FileSvg className={styles.fileIcon} />
-                          </div>
-                          <div className={styles.neftFileDetails}>
-                            <span className={styles.neftFileName}>
-                              {selectedProofFile?.name ||
-                                fileUpload?.state?.fileUploadedName}
-                              {fileUpload?.state?.fileUploaded && (
-                                <SvgCheck
-                                  className={styles.neftSuccessIndicator}
-                                />
-                              )}
-                            </span>
-
-                            {fileUpload?.state?.fileUploaded &&
-                              selectedProofFile && (
-                                <span className={styles.neftFileSize}>
-                                  {formatFileSize(selectedProofFile.size)}
-                                </span>
-                              )}
-
-                            {fileUpload?.state?.isUploading && (
-                              <div className={styles.neftProgressContainer}>
-                                <div
-                                  className={styles.neftProgressBarContainer}
-                                >
-                                  <div
-                                    className={styles.neftProgressBar}
-                                    style={{
-                                      width: `${fileUpload?.state?.uploadProgress}%`,
-                                    }}
-                                  />
-                                </div>
-                                <span className={styles.neftProgressText}>
-                                  {fileUpload?.state?.uploadProgress}%
-                                </span>
-                              </div>
-                            )}
-                          </div>
-
-                          <div className={styles.neftFileActions}>
-                            {fileUpload?.state?.fileUploaded && (
-                              <button
-                                className={styles.neftFileActionBtn}
-                                onClick={handleFileRemove}
-                                aria-label="Remove file"
-                              >
-                                <DeleteSvg className={styles.neftDeleteIcon} />
-                              </button>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {fileUpload?.state?.fileUploadError && (
-                    <div className={styles.neftUploadError}>
-                      {fileUpload.state.fileUploadError}
-                    </div>
-                  )}
-                </section>
-
-                <div>
-                  {isTablet ? (
-                    <StickyPayNow
-                      customClassName={styles.visibleOnTab}
-                      value={priceFormatCurrencySymbol(
-                        getCurrencySymbol,
-                        getTotalValue()
-                      )}
-                      onPriceDetailsClick={onPriceDetailsClick}
-                      disabled={isNeftPlaceOrderDisabled}
-                      enableLinkPaymentOption={enableLinkPaymentOption}
-                      isPaymentLoading={isPaymentLoading}
-                      loader={loader}
-                      proceedToPay={() => {
-                        handleNeftPlaceOrder();
-                        acceptOrder();
-                      }}
-                    />
-                  ) : (
-                    <button
-                      className={styles.neftPlaceOrderBtn}
-                      onClick={handleNeftPlaceOrder}
-                      disabled={isNeftPlaceOrderDisabled}
-                    >
-                      {!isPaymentLoading
-                        ? t("resource.checkout.place_order")
-                        : loader}
-                    </button>
-                  )}
+                )}
+                <div className={styles.codPay}>
+                  <button
+                    className={`${styles.commonBtn} ${styles.payBtn}`}
+                    onClick={() => proceedToPay("COD", selectedPaymentPayload)}
+                    disabled={isPaymentLoading}
+                  >
+                    {!isPaymentLoading
+                      ? t("resource.checkout.place_order")
+                      : loader}
+                  </button>
                 </div>
               </div>
-            </div>
+            ) : (
+              <Spinner />
+            )}
           </div>
         );
-      }
+
+      // case "COD": {
+      //   const {
+      //     beneficiaryDetails,
+      //     beneficiaryTitle,
+      //     transactionTitle,
+      //     utrLabel,
+      //     utrDescription,
+      //     uploadHeading,
+      //     uploadCta,
+      //     uploadHelper,
+      //   } = neftDisplayConfig;
+      //   return (
+      //     <div>
+      //       <div className={styles.neftWrapper}>
+      //         <section className={styles.neftSection}>
+      //           <p className={styles.neftSectionTitle}>{beneficiaryTitle}</p>
+      //           <div className={styles.neftBeneficiaryCard}>
+      //             {beneficiaryDetails.map((detail) => (
+      //               <div
+      //                 key={detail.label}
+      //                 className={styles.neftBeneficiaryRow}
+      //               >
+      //                 <div className={styles.neftBeneficiaryLabelWrapper}>
+      //                   <span className={styles.neftBeneficiaryLabel}>
+      //                     {detail.label}
+      //                   </span>
+      //                   <span className={styles.neftLabelSeparator}>:</span>
+      //                 </div>
+      //                 <div className={styles.neftBeneficiaryValue}>
+      //                   <span>{detail.value}</span>
+      //                   {detail.isCopyEnabled && (
+      //                     <button
+      //                       type="button"
+      //                       className={styles.neftCopyButton}
+      //                       onClick={() => handleCopyToClipboard(detail.value)}
+      //                     >
+      //                       {copiedValue === detail.value ? (
+      //                         <TickBlackActiveSvg />
+      //                       ) : (
+      //                         <CopyToClipboardSvg />
+      //                       )}
+      //                     </button>
+      //                   )}
+      //                 </div>
+      //               </div>
+      //             ))}
+      //           </div>
+      //         </section>
+
+      //         <div className={styles.neftFormBlock}>
+      //           <div className={styles.neftFormBlockInner}>
+      //             <section className={styles.neftSection}>
+      //               <p className={styles.neftSectionTitle}>
+      //                 {transactionTitle}
+      //               </p>
+      //               <div className={styles.neftFieldGroup}>
+      //                 <input
+      //                   id="neftUtrNumber"
+      //                   type="text"
+      //                   value={utrNumber}
+      //                   onChange={handleUtrInputChange}
+      //                   placeholder={utrLabel}
+      //                   className={`${styles.neftInput} ${
+      //                     utrError ? styles.neftInputError : ""
+      //                   }`}
+      //                 />
+      //                 {utrError && (
+      //                   <p className={styles.neftError}>
+      //                     {t("resource.common.field_required")}
+      //                   </p>
+      //                 )}
+      //               </div>
+      //             </section>
+      //             <p className={styles.neftHelperText}>{utrDescription}</p>
+      //           </div>
+
+      //           <section
+      //             className={`${styles.neftSection} ${styles.neftUploadSection}`}
+      //           >
+      //             <div
+      //               className={`${styles.neftUploadBox} ${isDragging ? styles.neftUploadBoxDragging : ""}`}
+      //               onDragEnter={handleDragEnter}
+      //               onDragOver={handleDragOver}
+      //               onDragLeave={handleDragLeave}
+      //               onDrop={handleDrop}
+      //             >
+      //               <input
+      //                 type="file"
+      //                 accept=".pdf,.png,.jpg,.jpeg"
+      //                 ref={uploadInputRef}
+      //                 className={styles.neftHiddenInput}
+      //                 onChange={handleFileInputChange}
+      //                 disabled={fileUpload?.state?.isUploading}
+      //               />
+      //               <div className={styles.neftUploadIcon} aria-hidden="true">
+      //                 <UploadSvg />
+      //               </div>
+      //               <button
+      //                 type="button"
+      //                 className={styles.neftUploadButton}
+      //                 onClick={handleUploadButtonClick}
+      //                 disabled={fileUpload?.state?.isUploading}
+      //               >
+      //                 {uploadCta}
+      //               </button>
+      //               <p className={styles.neftUploadTitle}>{uploadHeading}</p>
+      //               <p className={styles.neftUploadHelper}>{uploadHelper}</p>
+      //             </div>
+
+      //             {(selectedProofFile || fileUpload?.state?.fileUploaded) && (
+      //               <div className={styles.neftFileCard}>
+      //                 <div className={styles.neftFileCardContent}>
+      //                   <div className={styles.neftFileInfo}>
+      //                     <div className={styles.neftFileIcon}>
+      //                       <FileSvg className={styles.fileIcon} />
+      //                     </div>
+      //                     <div className={styles.neftFileDetails}>
+      //                       <span className={styles.neftFileName}>
+      //                         {selectedProofFile?.name ||
+      //                           fileUpload?.state?.fileUploadedName}
+      //                         {fileUpload?.state?.fileUploaded && (
+      //                           <SvgCheck
+      //                             className={styles.neftSuccessIndicator}
+      //                           />
+      //                         )}
+      //                       </span>
+
+      //                       {fileUpload?.state?.fileUploaded &&
+      //                         selectedProofFile && (
+      //                           <span className={styles.neftFileSize}>
+      //                             {formatFileSize(selectedProofFile.size)}
+      //                           </span>
+      //                         )}
+
+      //                       {fileUpload?.state?.isUploading && (
+      //                         <div className={styles.neftProgressContainer}>
+      //                           <div
+      //                             className={styles.neftProgressBarContainer}
+      //                           >
+      //                             <div
+      //                               className={styles.neftProgressBar}
+      //                               style={{
+      //                                 width: `${fileUpload?.state?.uploadProgress}%`,
+      //                               }}
+      //                             />
+      //                           </div>
+      //                           <span className={styles.neftProgressText}>
+      //                             {fileUpload?.state?.uploadProgress}%
+      //                           </span>
+      //                         </div>
+      //                       )}
+      //                     </div>
+
+      //                     <div className={styles.neftFileActions}>
+      //                       {fileUpload?.state?.fileUploaded && (
+      //                         <button
+      //                           className={styles.neftFileActionBtn}
+      //                           onClick={handleFileRemove}
+      //                           aria-label="Remove file"
+      //                         >
+      //                           <DeleteSvg className={styles.neftDeleteIcon} />
+      //                         </button>
+      //                       )}
+      //                     </div>
+      //                   </div>
+      //                 </div>
+      //               </div>
+      //             )}
+
+      //             {fileUpload?.state?.fileUploadError && (
+      //               <div className={styles.neftUploadError}>
+      //                 {fileUpload.state.fileUploadError}
+      //               </div>
+      //             )}
+      //           </section>
+
+      //           <div>
+      //             {isTablet ? (
+      //               <StickyPayNow
+      //                 customClassName={styles.visibleOnTab}
+      //                 value={priceFormatCurrencySymbol(
+      //                   getCurrencySymbol,
+      //                   getTotalValue()
+      //                 )}
+      //                 onPriceDetailsClick={onPriceDetailsClick}
+      //                 disabled={isNeftPlaceOrderDisabled}
+      //                 enableLinkPaymentOption={enableLinkPaymentOption}
+      //                 isPaymentLoading={isPaymentLoading}
+      //                 loader={loader}
+      //                 proceedToPay={() => {
+      //                   handleNeftPlaceOrder();
+      //                   acceptOrder();
+      //                 }}
+      //               />
+      //             ) : (
+      //               <button
+      //                 className={styles.neftPlaceOrderBtn}
+      //                 onClick={handleNeftPlaceOrder}
+      //                 disabled={isNeftPlaceOrderDisabled}
+      //               >
+      //                 {!isPaymentLoading
+      //                   ? t("resource.checkout.place_order")
+      //                   : loader}
+      //               </button>
+      //             )}
+      //           </div>
+      //         </div>
+      //       </div>
+      //     </div>
+      //   );
+      // }
+
       case "NEFT": {
         const {
           beneficiaryDetails,
@@ -4180,44 +4181,15 @@ function CheckoutPaymentContent({
                         <div
                           className={`${styles.linkWrapper} ${selectedTab === codOption.name && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === codOption.name && isTablet ? styles.headerHightlight : ""}`}
                           key={codOption?.display_name ?? ""}
+                          onClick={() => {
+                            selectMop(
+                              codOption.name,
+                              codOption.name,
+                              codOption.name
+                            );
+                          }}
                         >
-                          <div
-                            className={styles["linkWrapper-row1"]}
-                            onClick={() => {
-                              if (isTablet) {
-                                handleScrollToTop(
-                                  paymentOptions.length +
-                                    (otherPaymentOptions?.length > 0 ? 1 : 0)
-                                );
-                                setSelectedTab((prev) =>
-                                  prev === codOption.name ? "" : codOption.name
-                                );
-                                setTab(codOption.name);
-                              } else {
-                                setSelectedTab(codOption.name);
-                                setTab(codOption.name);
-                              }
-                              removeDialogueError();
-                              toggleMop(codOption.name);
-                              if (selectedTab !== codOption.name) {
-                                if (isTablet) {
-                                  setSelectedPaymentPayload({});
-                                }
-                                setNameOnCard("");
-                                setCardExpiryDate("");
-                                setCvvNumber("");
-                                hideNewCard();
-                                setvpa("");
-                                setLastValidatedBin("");
-                                unsetSelectedSubMop();
-                                selectMop(
-                                  codOption.name,
-                                  codOption.name,
-                                  codOption.name
-                                );
-                              }
-                            }}
-                          >
+                          <div className={styles["linkWrapper-row1"]}>
                             <div
                               className={` ${selectedTab === codOption.name ? styles.indicator : ""} ${styles.onDesktopView}`}
                             >
@@ -4259,18 +4231,10 @@ function CheckoutPaymentContent({
                             <div
                               className={`${styles.arrowContainer} ${styles.activeIconColor} ${styles.codIconContainer}`}
                             >
-                              <SvgWrapper
-                                className={
-                                  selectedTab === codOption.name &&
-                                  activeMop === codOption.name
-                                    ? styles.upsideDown
-                                    : ""
-                                }
-                                svgSrc="accordion-arrow"
-                              />
+                              <SvgWrapper svgSrc="accordion-arrow" />
                             </div>
                           </div>
-                          {isTablet && activeMop === codOption.name && (
+                          {isTablet && (
                             <div>
                               {selectedTab === codOption.name &&
                                 navigationTab()}
