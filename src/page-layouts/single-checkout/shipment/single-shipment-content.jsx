@@ -5,7 +5,7 @@ import {
 } from "../../../helper/utils";
 import * as styles from "./single-shipment-content.less";
 import { FDKLink } from "fdk-core/components";
-import { useGlobalTranslation } from "fdk-core/utils";
+import { useGlobalTranslation, useNavigate } from "fdk-core/utils";
 import FreeGiftItem from "../../cart/Components/free-gift-item/free-gift-item";
 import Shimmer from "../../../components/shimmer/shimmer";
 import AppliedCouponIcon from "../../../assets/images/applied-coupon-small.svg";
@@ -28,6 +28,7 @@ function SingleShipmentContent({
   isPaymentLoading = false,
 }) {
   const { t } = useGlobalTranslation("translation");
+  const navigate = useNavigate();
   const getShipmentItems = (shipment) => {
     let grpBySameSellerAndProduct = shipment?.items?.reduce((result, item) => {
       result[
@@ -163,15 +164,27 @@ function SingleShipmentContent({
                     <div className={styles.shipmentWrapper}>
                       <div className={styles.shipmentHeading}>
                         <div className={styles.headerLeft}>
-                          <div className={styles.shipmentNumber}>
-                            {t("resource.common.shipment")} {index + 1}/
-                            {shipments.length}
+                          <div className={styles.shipmentLabelBox}>
+                            <div className={styles.shipmentNumber}>
+                              {t("resource.common.shipment")} {index + 1}/
+                              {shipments.length}
+                            </div>
+                            <div className={styles.itemCount}>
+                              (
+                              {`${shipmentItems.length} ${shipmentItems.length > 1 ? t("resource.common.item_simple_text_plural") : t("resource.common.item_simple_text")}`}
+                              )
+                            </div>
                           </div>
-                          <div className={styles.itemCount}>
-                            (
-                            {`${shipmentItems.length} ${shipmentItems.length > 1 ? t("resource.common.item_simple_text_plural") : t("resource.common.item_simple_text")}`}
-                            )
-                          </div>
+                          {index === 0 && (
+                            <button
+                              className={styles.mobileEditCartBtn}
+                              onClick={() => {
+                                navigate("/cart/bag");
+                              }}
+                            >
+                              {t("resource.checkout.edit_cart_lower")}
+                            </button>
+                          )}
                         </div>
                         {item?.promise && (
                           <div className={styles.deliveryDateWrapper}>
@@ -207,7 +220,21 @@ function SingleShipmentContent({
                             )}
                             <div className={styles.itemWrapper}>
                               <div className={styles.leftImg}>
-                                <FDKLink to={getProductPath(product?.item)}>
+                                <FDKLink
+                                  to={getProductPath(product?.item)}
+                                  state={{
+                                    product: {
+                                      ...product?.item?.product,
+                                      media:
+                                        product?.item?.product?.images?.map(
+                                          (i) => ({
+                                            ...i,
+                                            type: "image",
+                                          })
+                                        ) || [],
+                                    },
+                                  }}
+                                >
                                   <img
                                     src={getProductImage(product?.item)}
                                     alt={product?.item?.product?.name}

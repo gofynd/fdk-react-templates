@@ -1,11 +1,11 @@
 @import "../../../../styles/main.less";
 
 .header {
-  align-items: unset;
-  padding: 24px;
+  align-items: unset !important;
+  padding: 24px !important;
 
   @media @tablet {
-    padding: 16px;
+    padding: 16px !important;
   }
 }
 
@@ -19,6 +19,8 @@
 }
 
 .removeModalBody {
+  min-height: 190px;
+  max-width: 572px;
   line-height: 140%;
   padding: 24px;
 
