@@ -4180,15 +4180,44 @@ function CheckoutPaymentContent({
                         <div
                           className={`${styles.linkWrapper} ${selectedTab === codOption.name && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === codOption.name && isTablet ? styles.headerHightlight : ""}`}
                           key={codOption?.display_name ?? ""}
-                          onClick={() => {
-                            selectMop(
-                              codOption.name,
-                              codOption.name,
-                              codOption.name
-                            );
-                          }}
                         >
-                          <div className={styles["linkWrapper-row1"]}>
+                          <div
+                            className={styles["linkWrapper-row1"]}
+                            onClick={() => {
+                              if (isTablet) {
+                                handleScrollToTop(
+                                  paymentOptions.length +
+                                    (otherPaymentOptions?.length > 0 ? 1 : 0)
+                                );
+                                setSelectedTab((prev) =>
+                                  prev === codOption.name ? "" : codOption.name
+                                );
+                                setTab(codOption.name);
+                              } else {
+                                setSelectedTab(codOption.name);
+                                setTab(codOption.name);
+                              }
+                              removeDialogueError();
+                              toggleMop(codOption.name);
+                              if (selectedTab !== codOption.name) {
+                                if (isTablet) {
+                                  setSelectedPaymentPayload({});
+                                }
+                                setNameOnCard("");
+                                setCardExpiryDate("");
+                                setCvvNumber("");
+                                hideNewCard();
+                                setvpa("");
+                                setLastValidatedBin("");
+                                unsetSelectedSubMop();
+                                selectMop(
+                                  codOption.name,
+                                  codOption.name,
+                                  codOption.name
+                                );
+                              }
+                            }}
+                          >
                             <div
                               className={` ${selectedTab === codOption.name ? styles.indicator : ""} ${styles.onDesktopView}`}
                             >
@@ -4230,10 +4259,18 @@ function CheckoutPaymentContent({
                             <div
                               className={`${styles.arrowContainer} ${styles.activeIconColor} ${styles.codIconContainer}`}
                             >
-                              <SvgWrapper svgSrc="accordion-arrow" />
+                              <SvgWrapper
+                                className={
+                                  selectedTab === codOption.name &&
+                                  activeMop === codOption.name
+                                    ? styles.upsideDown
+                                    : ""
+                                }
+                                svgSrc="accordion-arrow"
+                              />
                             </div>
                           </div>
-                          {isTablet && (
+                          {isTablet && activeMop === codOption.name && (
                             <div>
                               {selectedTab === codOption.name &&
                                 navigationTab()}
