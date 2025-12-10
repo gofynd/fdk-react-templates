@@ -132,7 +132,7 @@ export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
       return "Invalid date";
     }
 
-    const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
     // console.log("🌐 Detected browser time zone →", browserTimezone);
 
     const options = {
@@ -653,46 +653,4 @@ export const getUserAutofillData = (user, isGuestUser = false) => {
     phone: getUserPrimaryPhone(user),
     email: getUserPrimaryEmail(user),
   };
-};
-
-export const getConfigFromProps = (props) => {
-  if (!props || typeof props !== "object") {
-    return {};
-  }
-
-  // Handle array of prop objects with type and value
-  if (Array.isArray(props)) {
-    const config = {};
-    props.forEach((prop) => {
-      if (
-        prop &&
-        typeof prop === "object" &&
-        prop.id &&
-        prop.value !== undefined
-      ) {
-        config[prop.id] = prop.value;
-      }
-    });
-    return config;
-  }
-
-  // Handle object with nested props structure (like blogConfig)
-  if (props && typeof props === "object") {
-    const config = {};
-    Object.keys(props).forEach((key) => {
-      const prop = props[key];
-      if (prop && typeof prop === "object" && prop.value !== undefined) {
-        config[key] = prop.value;
-      } else if (prop && typeof prop === "object" && prop.type !== undefined) {
-        // Handle case where prop has type but no value
-        config[key] = prop.value || prop;
-      } else if (prop !== undefined) {
-        config[key] = prop;
-      }
-    });
-    return config;
-  }
-
-  // Handle direct object props
-  return props;
 };
