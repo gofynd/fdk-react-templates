@@ -867,7 +867,7 @@ function CheckoutPaymentContent({
 
     if (tab === "COD") {
       setSelectedTab(tab);
-      setIsCodModalOpen(true);
+      // setIsCodModalOpen(true);
     } else if (tab === "NEFT") {
       setSelectedTab(tab);
     } else if (tab === "CARD") {
@@ -1007,7 +1007,7 @@ function CheckoutPaymentContent({
       });
 
       setSelectedTab(tab);
-      setIsCodModalOpen(true);
+      // setIsCodModalOpen(true);
     } else if (tab === "NEFT") {
       selectPaymentMode(paymentModePayload).then(() => {
         console.log("Payment mode selected");
