@@ -153,7 +153,7 @@ export default function VerifyMobile({
           className={`${styles.loginInputGroup} ${errors?.password || errors?.root ? styles.error : ""}`}
         >
           <label className={styles.loginInputTitle} htmlFor={passwordId}>
-            {t("resource.auth.login.password")}
+            {t("resource.auth.new_password")}
             <span className={styles.required}> *</span>
           </label>
           <div
