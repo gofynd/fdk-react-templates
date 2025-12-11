@@ -2787,6 +2787,9 @@ h5,
 .sticky-pay-now__checkoutButton___mtO42 {
   gap: 12px;
 }
+.sticky-pay-now__checkoutButton___mtO42.sticky-pay-now__linkPayBtn___CY0FQ {
+  width: 100%;
+}
 .sticky-pay-now__buttonWidth___nKraw {
   width: 100%;
 }
@@ -8493,7 +8496,7 @@ h5,
 .single-address-content__showMoreBtnContainer___K9Zyg .single-address-content__showOtherAddresses___sE7EG {
   cursor: pointer;
   display: flex;
-  gap: 8px;
+  gap: 6px;
   /* ✅ FIX → These must NOT be inside "span { }" */
 }
 @media only screen and (max-width: 480px) {
@@ -8517,13 +8520,26 @@ h5,
     font-size: 12px;
   }
 }
+.single-address-content__showMoreBtnContainer___K9Zyg .single-address-content__showOtherAddresses___sE7EG .single-address-content__arrow___ONIp7 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.single-address-content__showMoreBtnContainer___K9Zyg .single-address-content__showOtherAddresses___sE7EG .single-address-content__arrow___ONIp7 svg {
+  width: 100%;
+  height: 100%;
+}
 .single-address-content__showMoreBtnContainer___K9Zyg .single-address-content__showOtherAddresses___sE7EG .single-address-content__rotateDown___xUhKw {
-  transform: rotate(90deg);
+  transform: rotate(0deg);
   transition: transform 0.2s ease;
+  width: 22px;
 }
 .single-address-content__showMoreBtnContainer___K9Zyg .single-address-content__showOtherAddresses___sE7EG .single-address-content__rotateUp___QT5Zr {
-  transform: rotate(-90deg);
+  transform: rotate(180deg);
   transition: transform 0.2s ease;
+  width: 22px;
 }
 
 /**color by character**/

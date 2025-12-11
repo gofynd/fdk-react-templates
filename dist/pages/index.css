@@ -14525,6 +14525,40 @@ h5,
   margin-bottom: 10px;
   margin-inline-start: 20px;
 }
+.shared-cart__sharedCartContainer___xlmtr .shared-cart__shareBtnContainer___HeEja {
+  display: flex;
+  border-top: 1px solid #eee;
+  padding: 10px;
+}
+@media only screen and (max-width: 768px) {
+  .shared-cart__sharedCartContainer___xlmtr .shared-cart__shareBtnContainer___HeEja {
+    flex-direction: column;
+  }
+}
+.shared-cart__sharedCartContainer___xlmtr .shared-cart__shareBtnContainer___HeEja .shared-cart__shareBtn___i3_Qx {
+  display: inline-block;
+  padding: 5px 13px;
+  border: none;
+  border-radius: 3px;
+  flex: 1;
+  margin: 0 5px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  text-align: center;
+  color: #fff;
+  background-color: var(--buttonPrimary, #4e3f09);
+}
+@media only screen and (max-width: 480px) {
+  .shared-cart__sharedCartContainer___xlmtr .shared-cart__shareBtnContainer___HeEja .shared-cart__shareBtn___i3_Qx {
+    flex: inherit;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .shared-cart__sharedCartContainer___xlmtr .shared-cart__shareBtnContainer___HeEja .shared-cart__shareBtn___i3_Qx + .shared-cart__shareBtn___i3_Qx {
+    margin-top: 10px;
+  }
+}
 .shared-cart__sharedCartContainer___xlmtr .shared-cart__sharedCart___znMz6 {
   position: relative;
   display: flex;
@@ -14551,41 +14585,6 @@ h5,
 }
 .shared-cart__sharedCartContainer___xlmtr .shared-cart__sharedCart___znMz6 .shared-cart__breakUpContainer___iN8yo .shared-cart__couponContainer___GzVMk {
   pointer-events: none;
-}
-/* Keep button styles usable when rendered outside sharedCartContainer (e.g. breakup section) */
-.shared-cart__shareBtnContainer___HeEja {
-  display: flex;
-  border-top: 1px solid #eeeeee;
-  padding: 10px;
-}
-@media only screen and (max-width: 768px) {
-  .shared-cart__shareBtnContainer___HeEja {
-    flex-direction: column;
-  }
-}
-.shared-cart__shareBtnContainer___HeEja .shared-cart__shareBtn___i3_Qx {
-  display: inline-block;
-  padding: 5px 13px;
-  border: none;
-  border-radius: 3px;
-  flex: 1;
-  margin: 0 5px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 16px;
-  text-align: center;
-  color: #ffffff;
-  background-color: var(--buttonPrimary, #4e3f09);
-}
-@media only screen and (max-width: 480px) {
-  .shared-cart__shareBtnContainer___HeEja .shared-cart__shareBtn___i3_Qx {
-    flex: inherit;
-  }
-}
-@media only screen and (max-width: 768px) {
-  .shared-cart__shareBtnContainer___HeEja .shared-cart__shareBtn___i3_Qx + .shared-cart__shareBtn___i3_Qx {
-    margin-top: 10px;
-  }
 }
 .shared-cart__list___FMzzZ {
   display: flex;
@@ -35738,6 +35737,9 @@ h5,
 .sticky-pay-now__checkoutButton___mtO42 {
   gap: 12px;
 }
+.sticky-pay-now__checkoutButton___mtO42.sticky-pay-now__linkPayBtn___CY0FQ {
+  width: 100%;
+}
 .sticky-pay-now__buttonWidth___nKraw {
   width: 100%;
 }
@@ -36300,7 +36302,7 @@ h5,
 .single-address-content__showMoreBtnContainer___K9Zyg .single-address-content__showOtherAddresses___sE7EG {
   cursor: pointer;
   display: flex;
-  gap: 8px;
+  gap: 6px;
   /* ✅ FIX → These must NOT be inside "span { }" */
 }
 @media only screen and (max-width: 480px) {
@@ -36324,13 +36326,26 @@ h5,
     font-size: 12px;
   }
 }
+.single-address-content__showMoreBtnContainer___K9Zyg .single-address-content__showOtherAddresses___sE7EG .single-address-content__arrow___ONIp7 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.single-address-content__showMoreBtnContainer___K9Zyg .single-address-content__showOtherAddresses___sE7EG .single-address-content__arrow___ONIp7 svg {
+  width: 100%;
+  height: 100%;
+}
 .single-address-content__showMoreBtnContainer___K9Zyg .single-address-content__showOtherAddresses___sE7EG .single-address-content__rotateDown___xUhKw {
-  transform: rotate(90deg);
+  transform: rotate(0deg);
   transition: transform 0.2s ease;
+  width: 22px;
 }
 .single-address-content__showMoreBtnContainer___K9Zyg .single-address-content__showOtherAddresses___sE7EG .single-address-content__rotateUp___QT5Zr {
-  transform: rotate(-90deg);
+  transform: rotate(180deg);
   transition: transform 0.2s ease;
+  width: 22px;
 }
 
 /**color by character**/

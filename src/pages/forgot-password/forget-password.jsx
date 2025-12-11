@@ -116,7 +116,7 @@ function ForgetPassword({
         }`}
       >
         <label className={styles.inputTitle} htmlFor={passwordId}>
-          {t("resource.auth.new_password")}
+          {t("resource.auth.login.password")}
           <span className={styles.required}> *</span>
         </label>
         <div className={styles.passwordInputWrapper}>
@@ -258,6 +258,7 @@ function ForgetPassword({
                 setIsFormSubmitSuccess={setIsFormSubmitSuccess}
                 setShowInputNumber={setShowInputNumber}
                 reset={reset}
+                isNewPassword={true}
               />
             </>
           )}

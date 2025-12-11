@@ -107,6 +107,7 @@ const ProductListing = ({
       ) : (
         <>
         {!title && <h1 className={styles.visuallyHidden}>{t("resource.common.breadcrumb.products") }</h1>}
+        {title && <h1 className={styles.visuallyHidden}>{title}</h1>}
           <div className={styles.mobileHeader}>
             <div className={styles.headerLeft}>
               {filterList.length > 0 && (
@@ -211,7 +212,7 @@ const ProductListing = ({
             <div className={styles.right}>
               <div className={styles.rightHeader}>
                 <div className={styles.headerLeft}>
-                  {title && <h1 className={styles.title}>{title}</h1>}
+                  {title && <h2 className={styles.title}>{title}</h2>}
                   {isProductCountDisplayed && (
                     <span className={styles.productCount}>
                       {`${productCount} ${productCount > 1 ? t("resource.common.items") : t("resource.common.item")}`}

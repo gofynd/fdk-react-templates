@@ -723,6 +723,7 @@ export default function ChipItem({
                         )
                       : undefined
                   }
+                  alt={sizeModalItemValue?.product?.name || t("resource.common.product_image")}
                 />
               </div>
               <div className={styles.sizeModalContent}>
