@@ -1924,14 +1924,6 @@ h5,
   position: relative;
   cursor: pointer;
 }
-.accordion__accordionContentImageItem____FBCe .accordion__itemCount____YDv4 {
-  color: var(--textSecondary, #9c9c9c);
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 140%;
-  padding-left: 2px;
-}
 .accordion__accordionContentImageItem____FBCe .accordion__imagePreview___FOjGs {
   position: absolute;
   left: -155%;
@@ -3868,6 +3860,18 @@ h5,
 .shipment-breakup__billing___FTdqB :last-child .shipment-breakup__totalValContainer___wFKSr :nth-last-child(2) {
   font-size: 14px;
   font-weight: 600;
+}
+.shipment-breakup__priceWithStrikethrough___u_7cC {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.shipment-breakup__strikethroughPrice___c5iwh {
+  text-decoration: line-through;
+  color: var(--textLabel, #7d7676);
+}
+.shipment-breakup__discountedPrice___fNP8D {
+  color: var(--successText, #1c958f);
 }
 
 /**color by character**/

@@ -238,7 +238,7 @@ function SingleAddressContent({
                           : styles.rotateDown
                       }`}
                     >
-                      <SvgWrapper svgSrc="arrow-down" />
+                      &gt;
                     </span>
                   </button>
                 </div>

@@ -2291,11 +2291,7 @@ function CheckoutPaymentContent({
                       <SvgWrapper svgSrc="qr-code" className={styles.blurred} />
                     )}
                     {isQrCodeVisible && (
-                      <img
-                        src={qrCodeImage}
-                        className={styles.qrCode}
-                        alt={t("resource.checkout.qr_code_image")}
-                      />
+                      <img src={qrCodeImage} className={styles.qrCode} />
                     )}
                     {!isQrCodeVisible && isQrCodeLoading && (
                       <div className={styles.qrLoader}></div>

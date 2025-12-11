@@ -427,4 +427,16 @@ h5,
   font-size: 14px;
   font-weight: 600;
 }
+.shipment-breakup__priceWithStrikethrough___u_7cC {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.shipment-breakup__strikethroughPrice___c5iwh {
+  text-decoration: line-through;
+  color: var(--textLabel, #7d7676);
+}
+.shipment-breakup__discountedPrice___fNP8D {
+  color: var(--successText, #1c958f);
+}
 

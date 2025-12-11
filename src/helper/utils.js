@@ -65,9 +65,6 @@ export function isRunningOnClient() {
 export function convertDate(dateString, locale = "en-US") {
   const date = new Date(dateString);
 
-  // Use browser's local timezone with fallback to UTC
-  const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
-
   const options = {
     month: "long",
     day: "numeric",
@@ -75,7 +72,7 @@ export function convertDate(dateString, locale = "en-US") {
     hour: "numeric",
     minute: "numeric",
     hour12: true,
-    timeZone: browserTimezone,
+    timeZone: "UTC",
   };
 
   const formatter = new Intl.DateTimeFormat(locale, options);
@@ -132,7 +129,7 @@ export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
       return "Invalid date";
     }
 
-    const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+    const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     // console.log("🌐 Detected browser time zone →", browserTimezone);
 
     const options = {

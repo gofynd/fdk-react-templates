@@ -492,6 +492,18 @@ h5,
 .price-breakup__discount___wyR7w {
   color: var(--successText, #1c958f);
 }
+.price-breakup__priceWithStrikethrough___h73a0 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.price-breakup__strikethroughPrice____bj0f {
+  text-decoration: line-through;
+  color: var(--textLabel, #7d7676);
+}
+.price-breakup__discountedPrice___N6UIq {
+  color: var(--successText, #1c958f);
+}
 
 /**color by character**/
 /** Font family **/
@@ -14845,14 +14857,6 @@ h5,
   position: relative;
   cursor: pointer;
 }
-.accordion__accordionContentImageItem____FBCe .accordion__itemCount____YDv4 {
-  color: var(--textSecondary, #9c9c9c);
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 140%;
-  padding-left: 2px;
-}
 .accordion__accordionContentImageItem____FBCe .accordion__imagePreview___FOjGs {
   position: absolute;
   left: -155%;
@@ -17589,18 +17593,6 @@ h5,
   .product-listing__view-mobile___PwOYG {
     display: none !important;
   }
-}
-.product-listing__visuallyHidden___OqFGP {
-  position: absolute !important;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  border: 0;
-  white-space: nowrap;
 }
 @media only screen and (min-width: 1024px) {
   .product-listing__addToCartContainer___tmh8F {
@@ -37816,9 +37808,6 @@ h5,
 .sticky-pay-now__checkoutButton___mtO42 {
   gap: 12px;
 }
-.sticky-pay-now__checkoutButton___mtO42.sticky-pay-now__linkPayBtn___CY0FQ {
-  width: 100%;
-}
 .sticky-pay-now__buttonWidth___nKraw {
   width: 100%;
 }
@@ -38381,7 +38370,7 @@ h5,
 .single-address-content__showMoreBtnContainer___K9Zyg .single-address-content__showOtherAddresses___sE7EG {
   cursor: pointer;
   display: flex;
-  gap: 6px;
+  gap: 8px;
   /* ✅ FIX → These must NOT be inside "span { }" */
 }
 @media only screen and (max-width: 480px) {
@@ -38405,26 +38394,13 @@ h5,
     font-size: 12px;
   }
 }
-.single-address-content__showMoreBtnContainer___K9Zyg .single-address-content__showOtherAddresses___sE7EG .single-address-content__arrow___ONIp7 {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-  flex-shrink: 0;
-}
-.single-address-content__showMoreBtnContainer___K9Zyg .single-address-content__showOtherAddresses___sE7EG .single-address-content__arrow___ONIp7 svg {
-  width: 100%;
-  height: 100%;
-}
 .single-address-content__showMoreBtnContainer___K9Zyg .single-address-content__showOtherAddresses___sE7EG .single-address-content__rotateDown___xUhKw {
-  transform: rotate(0deg);
+  transform: rotate(90deg);
   transition: transform 0.2s ease;
-  width: 22px;
 }
 .single-address-content__showMoreBtnContainer___K9Zyg .single-address-content__showOtherAddresses___sE7EG .single-address-content__rotateUp___QT5Zr {
-  transform: rotate(180deg);
+  transform: rotate(-90deg);
   transition: transform 0.2s ease;
-  width: 22px;
 }
 
 /**color by character**/

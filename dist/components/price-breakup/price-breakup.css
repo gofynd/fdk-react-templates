@@ -492,6 +492,18 @@ h5,
 .price-breakup__discount___wyR7w {
   color: var(--successText, #1c958f);
 }
+.price-breakup__priceWithStrikethrough___h73a0 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.price-breakup__strikethroughPrice____bj0f {
+  text-decoration: line-through;
+  color: var(--textLabel, #7d7676);
+}
+.price-breakup__discountedPrice___N6UIq {
+  color: var(--successText, #1c958f);
+}
 
 /**color by character**/
 /** Font family **/

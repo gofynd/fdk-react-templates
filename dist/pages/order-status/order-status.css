@@ -1308,6 +1308,18 @@ h5,
 .price-breakup__discount___wyR7w {
   color: var(--successText, #1c958f);
 }
+.price-breakup__priceWithStrikethrough___h73a0 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.price-breakup__strikethroughPrice____bj0f {
+  text-decoration: line-through;
+  color: var(--textLabel, #7d7676);
+}
+.price-breakup__discountedPrice___N6UIq {
+  color: var(--successText, #1c958f);
+}
 
 /**color by character**/
 /** Font family **/
@@ -4440,14 +4452,6 @@ h5,
   align-items: center;
   position: relative;
   cursor: pointer;
-}
-.accordion__accordionContentImageItem____FBCe .accordion__itemCount____YDv4 {
-  color: var(--textSecondary, #9c9c9c);
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 140%;
-  padding-left: 2px;
 }
 .accordion__accordionContentImageItem____FBCe .accordion__imagePreview___FOjGs {
   position: absolute;
