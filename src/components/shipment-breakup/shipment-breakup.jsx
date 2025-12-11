@@ -22,7 +22,7 @@ function ShipmentBreakup({ breakup }) {
   const breakupValues = useMemo(() => {
     const totalVal = breakup?.filter((item) => item.name === "total") || [];
     const restVal =
-      breakup?.filter((item) => item.name !== "total" && (item.value !== 0 || item.strikethrough_value)) ||
+      breakup?.filter((item) => item.name !== "total" && item.value !== 0) ||
       [];
     return restVal.concat(totalVal);
   }, [breakup]);
@@ -39,23 +39,11 @@ function ShipmentBreakup({ breakup }) {
                 {index !== breakup.length - 1 && (
                   <span className={styles.totalValContainer}>
                     <span className={styles.label}>{translateDynamicLabel(item.display, t)}</span>
-                    <span className={`${styles.values} ${item.strikethrough_value ? styles.priceWithStrikethrough : ""}`}>
-                      {item.strikethrough_value && (
-                        <span className={styles.strikethroughPrice}>
-                          {getPriceFormat(
-                            item.currency_symbol,
-                            Number(item.strikethrough_value.toString().replace(/,/g, ""))
-                          )}
-                        </span>
+                    <span className={`${styles.values}`}>
+                      {getPriceFormat(
+                        item.currency_symbol,
+                        Number(item.value.toString().replace(/,/g, ""))
                       )}
-                      <span className={item.strikethrough_value ? styles.discountedPrice : ""}>
-                        {typeof item.value === "string" && isNaN(Number(item.value))
-                          ? item.value
-                          : getPriceFormat(
-                              item.currency_symbol,
-                              Number(item.value.toString().replace(/,/g, ""))
-                            )}
-                      </span>
                     </span>
                   </span>
                 )}
@@ -63,12 +51,10 @@ function ShipmentBreakup({ breakup }) {
                   <span className={styles.totalValContainer}>
                     <span className={styles.label}>{translateDynamicLabel(item.display, t)}</span>
                     <span className={`${styles.values}`}>
-                      {typeof item.value === "string" && isNaN(Number(item.value))
-                        ? item.value
-                        : getPriceFormat(
-                            item.currency_symbol,
-                            Number(item.value.toString().replace(/,/g, ""))
-                          )}
+                      {getPriceFormat(
+                        item.currency_symbol,
+                        Number(item.value.toString().replace(/,/g, ""))
+                      )}
                     </span>
                   </span>
                 )}

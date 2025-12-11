@@ -90,7 +90,7 @@ function PriceBreakup({
       (f) =>
         f?.key !== "total" &&
         f?.name !== "total" &&
-        (includeZeroValues || f?.value !== 0 || f?.strikethrough_value)
+        (includeZeroValues || f?.value !== 0)
     );
 
     return [...restVal, ...totalVal];
@@ -161,36 +161,22 @@ function PriceBreakup({
                 <>
                   <div>{translateDynamicLabel(item?.display, t)}</div>
                   <div
-                    className={`${Number(item.value) < 0 ? styles.discount : ""} ${item?.strikethrough_value ? styles.priceWithStrikethrough : ""}`}
+                    className={Number(item.value) < 0 ? styles.discount : ""}
                   >
-                    {item?.strikethrough_value && (
-                      <span className={styles.strikethroughPrice}>
-                        {priceFormatCurrencySymbol(
-                          item?.currency_symbol,
-                          item?.strikethrough_value
-                        )}
-                      </span>
+                    {priceFormatCurrencySymbol(
+                      item?.currency_symbol,
+                      item?.value
                     )}
-                    <span className={item?.strikethrough_value ? styles.discountedPrice : ""}>
-                      {typeof item?.value === "string" && isNaN(Number(item?.value))
-                        ? item?.value
-                        : priceFormatCurrencySymbol(
-                            item?.currency_symbol,
-                            item?.value
-                          )}
-                    </span>
                   </div>
                 </>
               ) : (
                 <>
                   <div>{translateDynamicLabel(item?.display, t)}</div>
                   <div>
-                    {typeof item?.value === "string" && isNaN(Number(item?.value))
-                      ? item?.value
-                      : priceFormatCurrencySymbol(
-                          item?.currency_symbol,
-                          item?.value
-                        )}
+                    {priceFormatCurrencySymbol(
+                      item?.currency_symbol,
+                      item?.value
+                    )}
                   </div>
                 </>
               )}

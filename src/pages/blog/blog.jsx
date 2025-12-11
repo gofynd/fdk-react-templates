@@ -73,12 +73,12 @@ function MemoizedSlide({ blog, index, sliderProps, getBlogTitle }) {
             {getFormattedDate(blog?.publish_date)}
           </span>
         </div>
-        <h1 className={`${styles.blogItem__title} ${styles.titleMobile}`}>
+        <h2 className={`${styles.blogItem__title} ${styles.titleMobile}`}>
           {getBlogTitle(blog?.title)}
-        </h1>
-        <h1 className={`${styles.blogItem__title} ${styles.titleDesktop}`}>
+        </h2>
+        <h2 className={`${styles.blogItem__title} ${styles.titleDesktop}`}>
           {blog?.title}
-        </h1>
+        </h2>
         {blog?.summary && (
           <p className={`${styles.blogItem__content}`}>{blog?.summary}</p>
         )}
