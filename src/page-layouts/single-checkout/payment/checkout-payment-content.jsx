@@ -3876,6 +3876,11 @@ function CheckoutPaymentContent({
               setvpa("");
               setLastValidatedBin("");
               unsetSelectedSubMop();
+
+              // Call selectMop for NEFT to register payment mode
+              if (opt.name === "NEFT") {
+                selectMop("NEFT", "NEFT", "");
+              }
             }
           }}
         >
