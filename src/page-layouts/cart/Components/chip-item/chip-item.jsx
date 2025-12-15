@@ -49,15 +49,12 @@ export default function ChipItem({
   getFulfillmentOptions,
   pincode,
   getDeliveryPromise,
-  isLimitedStock,
-  limitedStockLabel,
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
   const navigate = useNavigate();
   const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
   const locale = language?.locale;
-  const { limited_stock_quantity: limitedStockQuantity = 11 } = globalConfig;
   const isMobile = useMobile();
   const [showQuantityError, setShowQuantityError] = useState(false);
   const [showFOModal, setShowFOModal] = useState(false);
@@ -77,6 +74,7 @@ export default function ChipItem({
   const couponText = singleItemDetails?.coupon_message || "";
   const moq = singleItemDetails?.moq;
   const incrementDecrementUnit = moq?.increment_unit ?? 1;
+
   const customizationOptions =
     singleItemDetails?.article?._custom_json?._display || [];
 
@@ -373,11 +371,6 @@ export default function ChipItem({
               state={{
                 product: {
                   ...singleItemDetails,
-                  media:
-                    singleItemDetails?.product?.images?.map((i) => ({
-                      ...i,
-                      type: "image",
-                    })) || [],
                   ...(singleItemDetails?.product || {}),
                 },
               }}
@@ -499,18 +492,16 @@ export default function ChipItem({
                   </div>
                 )}
 
-              {isLimitedStock &&
-                getMaxQuantity(singleItemDetails) > 0 &&
-                getMaxQuantity(singleItemDetails) <= limitedStockQuantity &&
+              {getMaxQuantity(singleItemDetails) > 0 &&
+                getMaxQuantity(singleItemDetails) < 11 &&
                 !isOutOfStock &&
                 isServiceable &&
                 !isCustomOrder &&
                 !buybox?.is_seller_buybox_enabled && (
                   <div className={styles.limitedQtyBox}>
-                    {limitedStockLabel.replace(
-                      /\{\{qty\}\}/g,
-                      getMaxQuantity(singleItemDetails)
-                    )}
+                    {t("resource.common.hurry_only_left", {
+                      quantity: getMaxQuantity(singleItemDetails),
+                    })}
                   </div>
                 )}
             </div>
@@ -523,8 +514,8 @@ export default function ChipItem({
                 >
                   {currencyFormat(
                     numberWithCommas(
-                      singleItemDetails?.price?.converted?.effective ??
-                        singleItemDetails?.price?.base?.effective
+                      singleItemDetails?.price?.converted?.final_price ??
+                        singleItemDetails?.price?.base?.final_price
                     ),
                     singleItemDetails?.price?.converted?.currency_symbol ??
                       singleItemDetails?.price?.base?.currency_symbol,
@@ -723,7 +714,6 @@ export default function ChipItem({
                         )
                       : undefined
                   }
-                  alt={sizeModalItemValue?.product?.name || t("resource.common.product_image")}
                 />
               </div>
               <div className={styles.sizeModalContent}>

@@ -28,6 +28,7 @@ function ShipmentTracking({
   shipmentInfo = {},
   changeinit,
   invoiceDetails,
+  customNeedHelpLink,
   availableFOCount,
   bagLength = 0,
 }) {
@@ -60,19 +61,25 @@ function ShipmentTracking({
         link: shipmentInfo?.track_url ? shipmentInfo?.track_url : "",
       });
     }
-    if (shipmentInfo?.need_help_url) {
-      arrLinks.push({
-        type: "internal",
-        text: t("resource.common.need_help"),
-        link: "/faq/" || shipmentInfo?.need_help_url,
-      });
-    }
+    // if (shipmentInfo?.need_help_url) {
+    //   arrLinks.push({
+    //     type: "internal",
+    //     text: t("resource.common.need_help"),
+    //     link: "/faq/" || shipmentInfo?.need_help_url,
+    //   });
+    // }
     if (invoiceDetails?.success) {
       arrLinks.push({
         text: t("resource.common.download_invoice"),
         link: invoiceDetails?.presigned_url,
       });
     }
+    arrLinks.push({
+      type: "internal",
+      text: t("resource.common.need_help"),
+      newTab: !!customNeedHelpLink?.value,
+      link: customNeedHelpLink?.value || "/faq/",
+    });
     return arrLinks;
   };
 
@@ -88,19 +95,17 @@ function ShipmentTracking({
     if (["CANCEL", "RETURN"].includes(item?.text)) {
       const firstBag = shipmentInfo?.bags?.[0];
       const isBundleItem = firstBag?.bundle_details?.bundle_group_id;
-      const isPartialReturnBundle =
-        isBundleItem &&
+      const isPartialReturnBundle = 
+        isBundleItem && 
         firstBag?.bundle_details?.return_config?.allow_partial_return;
-
+      
       // Direct navigate if: single bag OR bundle with allow_partial_return: false
       if (bagLength === 1 && (!isBundleItem || !isPartialReturnBundle)) {
         // Find the base bag for bundles, otherwise use first bag
-        const selectedBag = isBundleItem
-          ? shipmentInfo.bags.find(
-              (bag) => bag?.bundle_details?.is_base === true
-            ) || firstBag
+        const selectedBag = isBundleItem 
+          ? shipmentInfo.bags.find((bag) => bag?.bundle_details?.is_base === true) || firstBag
           : firstBag;
-
+        
         const bagId = selectedBag?.id;
         const querParams = new URLSearchParams(location.search);
         if (bagId) {
@@ -120,7 +125,11 @@ function ShipmentTracking({
       }
       window.scrollTo(0, 0);
     } else {
-      navigate(item?.link);
+      if (item?.newTab) {
+        window.open(item?.link, "_blank");
+      } else {
+        navigate(item?.link);
+      }
     }
   };
 
@@ -216,24 +225,17 @@ function ShipmentTracking({
         {getLinks()?.map((item, index) => (
           <Fragment key={`${item?.text}_${index}`}>
             {item?.type === "internal" ? (
-              <>
-                {index === 0 && (
-                  <div
-                    className={`${styles.productExchangeBox} productExchangeContainer`}
-                  ></div>
-                )}
-                <div
-                  key={index}
-                  onClick={() => update(item)}
-                  className={`${styles.regularsm}`}
-                >
-                  {item?.text === "RETURN"
-                    ? t("resource.facets.return_caps")
-                    : item?.text === "CANCEL"
-                      ? t("resource.facets.cancel_caps")
-                      : item?.text}
-                </div>
-              </>
+              <div
+                key={index}
+                onClick={() => update(item)}
+                className={`${styles.regularsm}`}
+              >
+                {item?.text === "RETURN"
+                  ? t("resource.facets.return_caps")
+                  : item?.text === "CANCEL"
+                    ? t("resource.facets.cancel_caps")
+                    : item?.text}
+              </div>
             ) : (
               <a
                 key={index}

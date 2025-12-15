@@ -139,14 +139,14 @@ function Login({
                   application_id={application_id}
                 />
               )}
-              {social?.apple && (
+              {/* {social?.apple && (
                 <AppleLoginButton
                   appleClientId={appleId}
                   onAppleCredential={onAppleCredential}
                   redirectURI={appleRedirectURI}
                   onError={handleGoogleError}
                 />
-              )}
+              )} */}
               {isRegisterEnabled && (
                 <LoginRegisterToggle
                   label={

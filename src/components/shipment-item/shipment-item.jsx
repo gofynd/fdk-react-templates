@@ -23,7 +23,6 @@ import {
   priceFormatCurrencySymbol,
 } from "../../helper/utils";
 import { useGlobalTranslation } from "fdk-core/utils";
-import ScheduleIcon from "../../assets/images/schedule.svg";
 import { BagImage, BundleBagImage } from "../../components/bag/bag";
 import { getProductImgAspectRatio } from "../../helper/utils";
 
@@ -34,7 +33,7 @@ function ShipmentItem({
   initial,
   selectId,
   onChangeValue,
-  type,shipmentDetails,
+  type,
   globalConfig,
 }) {
   const { t } = useGlobalTranslation("translation");
@@ -47,40 +46,6 @@ function ShipmentItem({
   const onChange = (id) => {
     onChangeValue(id);
   };
-
-    function formatUTCToDateString(utcString) {
-    if (!utcString) return "";
-
-    const date = new Date(utcString);
-
-    // Use browser's local timezone with fallback to UTC
-    //const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
-
-    const options = {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-      timeZone: "UTC",
-      //timeZone: browserTimezone,
-    };
-
-    return date
-      .toLocaleDateString("en-GB", options)
-      .replace(" ", " ")
-      .replace(",", ",");
-  }
-
-  const ndrWindowExhausted = () => {
-    const endDateStr =
-      shipmentDetails?.ndr_details?.allowed_delivery_window?.end_date;
-    if (!endDateStr) return false;
-
-    const endDate = new Date(endDateStr);
-    const now = new Date();
-
-    return endDate < now;
-  };
-
 
   const bundleGroupId = bag?.bundle_details?.bundle_group_id;
   const isBundleItem =
@@ -162,31 +127,7 @@ function ShipmentItem({
           globalConfig={globalConfig}
         />
         <div className={`${styles.bagInfo}`}>
-          <FDKLink
-            to={`/product/${isBundleItem ? bag?.bundle_details?.slug : bag?.item?.slug_key}`}
-            className={`${styles.bagImg}`}
-            state={{
-              product: isBundleItem
-                ? {
-                    ...bag?.bundle_details,
-                    media:
-                      bag?.bundle_details?.images?.map((i) => ({
-                        url: i,
-                        type: "image",
-                      })) || [],
-                  }
-                : {
-                    ...bag?.item,
-                    media:
-                      bag?.item?.image?.map((i) => ({
-                        url: i,
-                        type: "image",
-                      })) || [],
-                  },
-            }}
-          >
-            <div className={`${styles.brand}`}>{name}</div>{" "}
-          </FDKLink>
+          <div className={`${styles.brand}`}>{name}</div>
           <div className={`${styles.bagDetails}`}>
             <div className={`${styles.chip} ${styles.regularxxs}`}>
               <span className={`${styles.itemSize}`}>{size}</span>
@@ -210,18 +151,6 @@ function ShipmentItem({
                 </span>
               </div>
             )}
-          </div>
-            <div className={styles.buttonContainer}>
-            <div
-              className={`${styles.requestReattempt} ${
-                shipmentDetails?.shipment_status?.value ===
-                "delivery_reattempt_requested"
-                  ? styles.deliveryReattemptRequested
-                  : ""
-              }`}
-            >
-          
-            </div>
           </div>
         </div>
       </div>
@@ -248,25 +177,6 @@ const ShipmentImage = ({
     <FDKLink
       to={`/product/${isBundleItem ? bag?.bundle_details?.slug : bag?.item?.slug_key}`}
       className={`${styles.bagImg}`}
-      state={{
-        product: isBundleItem
-          ? {
-              ...bag?.bundle_details,
-              media:
-                bag?.bundle_details?.images?.map((i) => ({
-                  url: i,
-                  type: "image",
-                })) || [],
-            }
-          : {
-              ...bag?.item,
-              media:
-                bag?.item?.image?.map((i) => ({
-                  url: i,
-                  type: "image",
-                })) || [],
-            },
-      }}
     >
       {getItemImage()}
     </FDKLink>
