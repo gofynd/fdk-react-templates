@@ -226,8 +226,6 @@ function CheckoutPaymentContent({
     (ele) => ele.name === "UPI"
   )?.suggested_list || ["okhdfcbank", "okicici", "oksbi"];
 
-  console.log(fileUpload, "fileUploaded");
-
   //card
   const [addNewCard, setAddNewCard] = useState(false);
   const [cardExpiryDate, setCardExpiryDate] = useState("");
