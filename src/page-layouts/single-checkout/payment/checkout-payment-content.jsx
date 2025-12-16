@@ -229,7 +229,9 @@ function CheckoutPaymentContent({
   let paymentOptions = PaymentOptionsList();
   let codOption = paymentOptions?.filter((opt) => opt.name === "COD")[0];
   let neftOption = paymentOptions?.filter((opt) => opt.name === "NEFT")[0];
-  paymentOptions = paymentOptions?.filter((opt) => opt.name !== "COD" && opt.name !== "NEFT");
+  paymentOptions = paymentOptions?.filter(
+    (opt) => opt.name !== "COD" && opt.name !== "NEFT"
+  );
   const otherPaymentOptions = useMemo(() => otherOptions(), [paymentOption]);
   let upiSuggestions = paymentOption?.payment_option?.find?.(
     (ele) => ele.name === "UPI"
@@ -4220,6 +4222,72 @@ function CheckoutPaymentContent({
                         )}
                       </div>
                     )}
+                    {neftOption && (
+                      <div>
+                        <div
+                          className={`${styles.linkWrapper} ${selectedTab === neftOption.name && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === neftOption.name && isTablet ? styles.headerHightlight : ""}`}
+                          key={neftOption?.display_name ?? ""}
+                          onClick={() => {
+                            const neftPaymentData =
+                              paymentOption?.payment_option?.find(
+                                (option) => option.name === "NEFT"
+                              );
+                            const neftSubMop = neftPaymentData?.list?.[0];
+                            if (neftSubMop) {
+                              selectMop(
+                                neftOption.name,
+                                neftOption.name,
+                                neftSubMop.code || ""
+                              );
+                            }
+                          }}
+                        >
+                          <div className={styles["linkWrapper-row1"]}>
+                            <div
+                              className={` ${selectedTab === neftOption.name ? styles.indicator : ""} ${styles.onDesktopView}`}
+                            >
+                              &nbsp;
+                            </div>
+                            <div className={styles.link}>
+                              <div className={styles.icon}>
+                                <SvgWrapper
+                                  svgSrc={neftOption.svg}
+                                ></SvgWrapper>
+                              </div>
+                              <div>
+                                <div
+                                  className={`${styles.modeName} ${selectedTab === neftOption.name ? styles.selectedModeName : ""}`}
+                                >
+                                  {translateDynamicLabel(
+                                    neftOption?.display_name ?? "",
+                                    t
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                            {neftOption?.image_src && (
+                              <div className={styles["payment-icons"]}>
+                                <img
+                                  src={neftOption?.image_src}
+                                  alt={neftOption?.svg}
+                                />
+                              </div>
+                            )}
+                            <div
+                              className={`${styles.arrowContainer} ${styles.activeIconColor} ${styles.codIconContainer}`}
+                            >
+                              <SvgWrapper svgSrc="accordion-arrow" />
+                            </div>
+                          </div>
+                          {isTablet && (
+                            <div>
+                              {selectedTab === neftOption.name &&
+                                navigationTab()}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
                     {codOption && (
                       <div style={{ display: "flex", flex: "1" }}>
                         <div
@@ -4281,69 +4349,6 @@ function CheckoutPaymentContent({
                           {isTablet && (
                             <div>
                               {selectedTab === codOption.name &&
-                                navigationTab()}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                    {neftOption && (
-                      <div style={{ display: "flex", flex: "1" }}>
-                        <div
-                          className={`${styles.linkWrapper} ${selectedTab === neftOption.name && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === neftOption.name && isTablet ? styles.headerHightlight : ""}`}
-                          key={neftOption?.display_name ?? ""}
-                          onClick={() => {
-                            const neftPaymentData = paymentOption?.payment_option?.find(
-                              (option) => option.name === "NEFT"
-                            );
-                            const neftSubMop = neftPaymentData?.list?.[0];
-                            if (neftSubMop) {
-                              selectMop(
-                                neftOption.name,
-                                neftOption.name,
-                                neftSubMop.code || ""
-                              );
-                            }
-                          }}
-                        >
-                          <div className={styles["linkWrapper-row1"]}>
-                            <div
-                              className={` ${selectedTab === neftOption.name ? styles.indicator : ""} ${styles.onDesktopView}`}
-                            >
-                              &nbsp;
-                            </div>
-                            <div className={styles.link}>
-                              <div className={styles.icon}>
-                                <SvgWrapper svgSrc={neftOption.svg}></SvgWrapper>
-                              </div>
-                              <div>
-                                <div
-                                  className={`${styles.modeName} ${selectedTab === neftOption.name ? styles.selectedModeName : ""}`}
-                                >
-                                  {translateDynamicLabel(
-                                    neftOption?.display_name ?? "",
-                                    t
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                            {neftOption?.image_src && (
-                              <div className={styles["payment-icons"]}>
-                                <img
-                                  src={neftOption?.image_src}
-                                  alt={neftOption?.svg}
-                                />
-                              </div>
-                            )}
-                            <div
-                              className={`${styles.arrowContainer} ${styles.activeIconColor} ${styles.codIconContainer}`}
-                            >
-                              <SvgWrapper svgSrc="accordion-arrow" />
-                            </div>
-                          </div>
-                          {isTablet && (
-                            <div>
-                              {selectedTab === neftOption.name &&
                                 navigationTab()}
                             </div>
                           )}
