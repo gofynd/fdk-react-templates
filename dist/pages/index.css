@@ -41506,6 +41506,7 @@ h5,
   text-align: right;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__neftFileCard___MdKnL {
+  margin-top: 10px;
   border: 1px solid var(--dividerStokes, #d4d1d1);
   border-radius: 8px;
   padding: 16px;
@@ -42138,6 +42139,10 @@ h5,
 .checkout-payment-content__fs-12___pEtqR {
   font-size: 12px;
 }
+.checkout-payment-content__neftUploadingFilesWrapper___floCy,
+.checkout-payment-content__neftUploadedFilesWrapper___JAZGJ {
+  margin-top: 10px;
+}
 .checkout-payment-content__field___BlHFM {
   position: relative;
 }
@@ -42146,7 +42151,6 @@ h5,
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 0;
     width: 100%;
   }
 }
