@@ -22,8 +22,11 @@ import {
   useFPI,
   useGlobalTranslation,
 } from "fdk-core/utils";
+import { useMobile } from "../../helper/hooks/useMobile";
+import ScheduleIcon from "../../assets/images/schedule.svg";
 import { BundleBagImage, BagImage } from "../bag/bag";
 import { getProductImgAspectRatio } from "../../helper/utils";
+import EllipseIcon from "../../assets/images/ellipse.svg";
 
 /**
  * Helper: Get all bags with customization (_custom_json._display)
@@ -76,6 +79,10 @@ const ShipmentDetails = ({
   availableFOCount,
   getTotalItems,
   getTotalPieces,
+  isMobile,
+  handleModalChange,
+  ndrWindowExhausted,
+  formatUTCToDateString,
 }) => {
   const [openAccordions, setOpenAccordions] = useState({});
   const customizationOptions = getCustomizationOptions({
@@ -101,6 +108,24 @@ const ShipmentDetails = ({
     bundleGroupId && bundleGroups && bundleGroups[bundleGroupId]?.length > 0;
 
   const productName = getProductsName({ bag: item?.bags?.[0], isBundleItem });
+
+  const reattemptEndDate = item?.ndr_details?.allowed_delivery_window?.end_date
+    ? (() => {
+        const endDate = new Date(
+          item.ndr_details.allowed_delivery_window.end_date
+        );
+        const now = new Date();
+
+        // Normalize both to midnight so time differences don't affect results
+        endDate.setHours(0, 0, 0, 0);
+        now.setHours(0, 0, 0, 0);
+
+        const diffTime = now - endDate; // positive if endDate is in the past
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+        return diffDays + 1; // e.g. yesterday -> 1, today -> 0, tomorrow -> -1
+      })()
+    : "";
 
   return (
     <>
@@ -150,7 +175,85 @@ const ShipmentDetails = ({
             <span>{` | `}</span>
             <span>{getTotalPieces(item?.bags, t)}</span>
           </div>
-          <div className={styles.status}>{item?.shipment_status?.title}</div>
+          {/* <div className={styles.status}>{item?.shipment_status?.title}</div> */}
+          {isMobile && (
+            <div className={`${styles.shipmentThird}`}>
+              <div
+                className={
+                  item?.shipment_status?.value === "delivery_attempt_failed"
+                    ? styles.error
+                    : item?.shipment_status?.value ===
+                        "delivery_reattempt_requested"
+                      ? styles.info
+                      : styles.status
+                }
+              >
+                {item?.shipment_status?.title}
+              </div>
+            </div>
+          )}
+
+          <div className={styles.buttonContainer}>
+            <div
+              className={`${styles.requestReattempt} ${
+                item?.shipment_status?.value === "delivery_reattempt_requested"
+                  ? styles.deliveryReattemptRequested
+                  : ""
+              }`}
+            >
+              {item?.shipment_status?.value == "delivery_attempt_failed" &&
+                item?.ndr_details?.show_ndr_form == true &&
+                item?.ndr_details?.allowed_delivery_window?.start_date &&
+                item?.ndr_details?.allowed_delivery_window?.end_date &&
+                !ndrWindowExhausted(item) && (
+                  <div>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleModalChange({
+                          isOpen: true,
+                          shipmentId: item?.shipment_id,
+                        });
+                      }}
+                    >
+                      REQUEST REATTEMPT
+                    </button>
+                  </div>
+                )}
+
+              {item?.shipment_status?.value == "delivery_attempt_failed" &&
+                item?.ndr_details?.show_ndr_form == true &&
+                ndrWindowExhausted(item) && (
+                  <div className={styles.scheduleIconContainer}>
+                    <div className={styles.scheduleIcon}>
+                      <EllipseIcon />
+                    </div>
+                    <div className={styles.scheduleIconText}>
+                      <div className={styles.windowClosedText}>
+                        Reattempt window closed{" "}
+                        <span>{reattemptEndDate} day ago </span>{" "}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              {item?.shipment_status?.value ==
+                "delivery_reattempt_requested" && (
+                <div className={styles.scheduleIconContainer}>
+                  <div className={styles.scheduleIcon}>
+                    <ScheduleIcon />
+                  </div>
+                  <div className={styles.scheduleIconText}>
+                    {item?.ndr_details?.delivery_scheduled_date &&
+                      `Delivery Reattempt On ${
+                        formatUTCToDateString(
+                          item?.ndr_details?.delivery_scheduled_date
+                        ) || ""
+                      }`}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
           {isAdmin && (
             <div className={`${styles.shipmentBrands} ${styles.uktLinks}`}>
               <span className={styles.bold}>{t("resource.common.brand")}</span>:
@@ -158,6 +261,22 @@ const ShipmentDetails = ({
             </div>
           )}
         </div>
+        {!isMobile && (
+          <div className={`${styles.shipmentThird}`}>
+            <div
+              className={
+                item?.shipment_status?.value === "delivery_attempt_failed"
+                  ? styles.error
+                  : item?.shipment_status?.value ===
+                      "delivery_reattempt_requested"
+                    ? styles.info
+                    : styles.status
+              }
+            >
+              {item?.shipment_status?.title}
+            </div>
+          </div>
+        )}
       </div>
       {customizationOptions.length > 0 && (
         <div className={styles.productCustomizationContainer}>
@@ -179,6 +298,7 @@ function OrderShipment({
   onBuyAgainClick = () => {},
   isBuyAgainEligible,
   availableFOCount,
+  handleModalChange,
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -188,6 +308,7 @@ function OrderShipment({
   const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
   // const params = useParams();
+  const isMobile = useMobile();
   const aspectRatio = useMemo(
     () => getProductImgAspectRatio(globalConfig),
     [globalConfig]
@@ -196,18 +317,21 @@ function OrderShipment({
   // Safe wrapper for getGroupedShipmentBags with fallback for non-bundle items
   const safeGetGroupedShipmentBags = (bags) => {
     // If the function is provided, use it
-    if (getGroupedShipmentBags && typeof getGroupedShipmentBags === 'function') {
+    if (
+      getGroupedShipmentBags &&
+      typeof getGroupedShipmentBags === "function"
+    ) {
       return getGroupedShipmentBags(bags);
     }
-    
+
     // Fallback: handle both bundle and non-bundle items
     if (!bags || !Array.isArray(bags)) {
       return { bags: [], bundleGroups: {}, bundleGroupArticles: {} };
     }
-    
+
     const bundleGroups = {};
     const bundleGroupArticles = {};
-    
+
     // Process each bag - works for both bundle and non-bundle items
     bags.forEach((bag) => {
       const bundleGroupId = bag?.bundle_details?.bundle_group_id;
@@ -217,7 +341,7 @@ function OrderShipment({
           bundleGroups[bundleGroupId] = [];
         }
         bundleGroups[bundleGroupId].push(bag);
-        
+
         if (bag?.article) {
           if (!bundleGroupArticles[bundleGroupId]) {
             bundleGroupArticles[bundleGroupId] = [];
@@ -227,7 +351,7 @@ function OrderShipment({
       }
       // For non-bundle items, they just stay in the bags array as-is
     });
-    
+
     // Return the same structure expected by the component
     // - bags: original array (works for both bundle and non-bundle items)
     // - bundleGroups: grouped bundles (empty object for non-bundle items)
@@ -254,7 +378,8 @@ function OrderShipment({
   const naivgateToShipment = (item) => {
     let link = "";
     // setSelectedShipment(item?.shipment_id);
-    const isOrderTrackingPage = window.location.pathname.includes("order-tracking")
+    const isOrderTrackingPage =
+      window.location.pathname.includes("order-tracking");
     if (isBuyAgainEligible || isOrderTrackingPage) {
       link = `/profile/orders/shipment/${item?.shipment_id}`;
     } else {
@@ -263,23 +388,39 @@ function OrderShipment({
     navigate(link);
   };
 
-  const getCustomizationOptions = (orderInfo) => {
-    if (!orderInfo?.shipments) return [];
-    return orderInfo.shipments
-      .flatMap((shipment) =>
-        shipment.bags
-          ?.map((bag) => bag.meta?._custom_json?._display || [])
-          .flat()
-      )
-      .filter(Boolean);
+  function formatUTCToDateString(utcString) {
+    if (!utcString) return "";
+
+    const date = new Date(utcString);
+
+    const options = {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    };
+
+    return date
+      .toLocaleDateString("en-GB", options)
+      .replace(" ", " ")
+      .replace(",", ",");
+  }
+
+  const handleShipmentAccordionClick = (shipmentId) => {
+    setOpenAccordions((prev) => ({
+      ...prev,
+      [shipmentId]: !prev[shipmentId],
+    }));
   };
 
-  // const handleShipmentAccordionClick = (shipmentId) => {
-  //   setOpenAccordions((prev) => ({
-  //     ...prev,
-  //     [shipmentId]: !prev[shipmentId],
-  //   }));
-  // };
+  const ndrWindowExhausted = (item) => {
+    const endDateStr = item?.ndr_details?.allowed_delivery_window?.end_date;
+    if (!endDateStr) return false;
+
+    const endDate = new Date(endDateStr);
+    const now = new Date();
+
+    return endDate < now;
+  };
 
   return (
     <div className={`${styles.orderItem}`} key={orderInfo?.order_id}>
@@ -326,6 +467,10 @@ function OrderShipment({
                       availableFOCount={availableFOCount}
                       getTotalItems={getTotalItems}
                       getTotalPieces={getTotalPieces}
+                      isMobile={isMobile}
+                      handleModalChange={handleModalChange}
+                      ndrWindowExhausted={ndrWindowExhausted}
+                      formatUTCToDateString={formatUTCToDateString}
                     />
                   ))
                 ) : (
@@ -344,6 +489,10 @@ function OrderShipment({
                     availableFOCount={availableFOCount}
                     getTotalItems={getTotalItems}
                     getTotalPieces={getTotalPieces}
+                    isMobile={isMobile}
+                    handleModalChange={handleModalChange}
+                    ndrWindowExhausted={ndrWindowExhausted}
+                    formatUTCToDateString={formatUTCToDateString}
                   />
                 )}
               </React.Fragment>

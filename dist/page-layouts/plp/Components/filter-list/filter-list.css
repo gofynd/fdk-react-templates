@@ -1353,6 +1353,7 @@ h5,
   box-sizing: border-box;
   width: 100%;
   background-color: transparent;
+  font-weight: 500;
 }
 @media only screen and (max-width: 480px) {
   .fy-input__fyInput___S4Mtu {
@@ -1372,7 +1373,9 @@ h5,
   outline: none;
 }
 .fy-input__fyInput___S4Mtu:disabled {
-  color: var(--textSecondary);
+  color: var(--textSecondary, #9c9c9c);
+  border-color: var(--overlaypopupdividerstroke, #e0e0e0);
+  font-weight: 400;
 }
 .fy-input__fyInput___S4Mtu:focus {
   border-color: var(--buttonPrimary, #4e3f09);
@@ -1393,8 +1396,11 @@ h5,
   height: 48px;
 }
 .fy-input__outlined___CEaKm.fy-input__inputDisable___M8Zn2 {
-  border: 1px solid #cccccc;
+  border: 1px solid var(--overlaypopupdividerstroke, #e0e0e0);
   cursor: not-allowed;
+  pointer-events: auto;
+}
+.fy-input__outlined___CEaKm.fy-input__inputDisable___M8Zn2 input {
   pointer-events: none;
 }
 .fy-input__outlined___CEaKm.fy-input__medium___L3QsD {
