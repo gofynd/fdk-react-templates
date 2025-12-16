@@ -46,6 +46,7 @@
   box-sizing: border-box;
   width: 100%;
   background-color: transparent;
+  font-weight: 500;
   // To be removed once viewport meta is updated
   @media @mobile {
     font-size: 1rem;
@@ -66,7 +67,9 @@
   }
 
   &:disabled {
-    color: @TextDisabled;
+    color: @TextSecondary;
+    border-color: @OverlayPopupDividerStroke;
+    font-weight: 400;
   }
 
   &:focus {
@@ -93,9 +96,12 @@
   height: 48px;
 
   &.inputDisable {
-    border: 1px solid @Gray;
+     border: 1px solid @OverlayPopupDividerStroke;
     cursor: not-allowed;
-    pointer-events: none;
+    pointer-events: auto;
+    input {
+      pointer-events: none; // Prevent input interaction but allow cursor display
+    }
   }
 
   &.medium {

@@ -91,7 +91,7 @@ function OrderStatus({
               {t("resource.order.placed_on")}:
               <span>
                 {convertDate(
-                  orderData.order_created_time,
+                  orderData.order_created_ts,
                   formatLocale(locale, countryCode, true)
                 )}
               </span>
