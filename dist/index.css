@@ -41958,19 +41958,23 @@ h5,
     border: none;
   }
 }
-.checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK:last-child {
+.checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK:last-child,
+.checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK.checkout-payment-content__lastChild___esW6B {
   border-bottom: none;
   flex: 1;
 }
-.checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK:last-child .checkout-payment-content__linkWrapper-row1___NJqkx {
+.checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK:last-child .checkout-payment-content__linkWrapper-row1___NJqkx,
+.checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK.checkout-payment-content__lastChild___esW6B .checkout-payment-content__linkWrapper-row1___NJqkx {
   border-bottom: 1px solid var(--dividerStokes);
 }
 @media only screen and (max-width: 768px) {
-  .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK:last-child .checkout-payment-content__linkWrapper-row1___NJqkx {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK:last-child .checkout-payment-content__linkWrapper-row1___NJqkx,
+  .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK.checkout-payment-content__lastChild___esW6B .checkout-payment-content__linkWrapper-row1___NJqkx {
     border-bottom: unset;
   }
 }
-.checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK:last-child .checkout-payment-content__indicator___tucmm {
+.checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK:last-child .checkout-payment-content__indicator___tucmm,
+.checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK.checkout-payment-content__lastChild___esW6B .checkout-payment-content__indicator___tucmm {
   border-radius: 0px 0px 0px 4px !important;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK:first-child .checkout-payment-content__indicator___tucmm {

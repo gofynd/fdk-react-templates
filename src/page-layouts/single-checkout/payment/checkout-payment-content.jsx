@@ -4223,26 +4223,56 @@ function CheckoutPaymentContent({
                       </div>
                     )}
                     {neftOption && (
-                      <div>
+                      <div style={{ display: "flex", flex: "1" }}>
                         <div
-                          className={`${styles.linkWrapper} ${selectedTab === neftOption.name && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === neftOption.name && isTablet ? styles.headerHightlight : ""}`}
+                          className={`${styles.linkWrapper} ${selectedTab === neftOption.name && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === neftOption.name && isTablet ? styles.headerHightlight : ""} ${!codOption ? styles.lastChild : ""}`}
                           key={neftOption?.display_name ?? ""}
-                          onClick={() => {
-                            const neftPaymentData =
-                              paymentOption?.payment_option?.find(
-                                (option) => option.name === "NEFT"
-                              );
-                            const neftSubMop = neftPaymentData?.list?.[0];
-                            if (neftSubMop) {
-                              selectMop(
-                                neftOption.name,
-                                neftOption.name,
-                                neftSubMop.code || ""
-                              );
-                            }
-                          }}
+                          id={`nav-title-neft`}
                         >
-                          <div className={styles["linkWrapper-row1"]}>
+                          <div
+                            className={styles["linkWrapper-row1"]}
+                            onClick={() => {
+                              if (isTablet) {
+                                setSelectedTab((prev) =>
+                                  prev === neftOption.name
+                                    ? ""
+                                    : neftOption.name
+                                );
+                                setTab(neftOption.name);
+                              } else {
+                                setSelectedTab(neftOption.name);
+                                setTab(neftOption.name);
+                              }
+                              removeDialogueError();
+                              toggleMop(neftOption.name);
+                              if (selectedTab !== neftOption.name) {
+                                if (isTablet) {
+                                  setSelectedPaymentPayload({});
+                                }
+                                setNameOnCard("");
+                                setCardExpiryDate("");
+                                setCvvNumber("");
+                                hideNewCard();
+                                setvpa("");
+                                setLastValidatedBin("");
+                                unsetSelectedSubMop();
+
+                                // Call selectMop for NEFT to register payment mode
+                                const neftPaymentData =
+                                  paymentOption?.payment_option?.find(
+                                    (option) => option.name === "NEFT"
+                                  );
+                                const neftSubMop = neftPaymentData?.list?.[0];
+                                if (neftSubMop) {
+                                  selectMop(
+                                    neftOption.name,
+                                    neftOption.name,
+                                    neftSubMop.code || ""
+                                  );
+                                }
+                              }
+                            }}
+                          >
                             <div
                               className={` ${selectedTab === neftOption.name ? styles.indicator : ""} ${styles.onDesktopView}`}
                             >
@@ -4276,10 +4306,18 @@ function CheckoutPaymentContent({
                             <div
                               className={`${styles.arrowContainer} ${styles.activeIconColor} ${styles.codIconContainer}`}
                             >
-                              <SvgWrapper svgSrc="accordion-arrow" />
+                              <SvgWrapper
+                                className={
+                                  selectedTab === neftOption.name &&
+                                  activeMop === neftOption.name
+                                    ? styles.upsideDown
+                                    : ""
+                                }
+                                svgSrc="accordion-arrow"
+                              />
                             </div>
                           </div>
-                          {isTablet && (
+                          {isTablet && activeMop === neftOption.name && (
                             <div>
                               {selectedTab === neftOption.name &&
                                 navigationTab()}
