@@ -314,6 +314,11 @@ function CheckoutPaymentContent({
   const [nameOnCard, setNameOnCard] = useState("");
   const [cardDetailsData, setCardDetailsData] = useState({});
 
+  // Dynamically select file upload based on selected tab
+  const fileUpload = useMemo(() => {
+    return selectedTab === "RTGS" ? rtgsFileUpload : neftFileUpload;
+  }, [selectedTab, rtgsFileUpload, neftFileUpload]);
+
   const neftDisplayConfig = useMemo(() => {
     // Helper function to extract value from API response
     const extractValue = (fieldData) => {
@@ -326,7 +331,7 @@ function CheckoutPaymentContent({
     };
 
     // Get config from fileUpload prop (API response) or fallback to theme config
-    const configSource = fileUpload?.neftRtgsConfig || {};
+    const configSource = neftFileUpload?.neftRtgsConfig || {};
 
     // Build beneficiary details dynamically from API response
     const beneficiaryDetails = [];
@@ -374,7 +379,7 @@ function CheckoutPaymentContent({
       isUtrFieldRequired,
       isUploadFieldRequired,
     };
-  }, [fileUpload?.neftRtgsConfig]);
+  }, [neftFileUpload?.neftRtgsConfig]);
 
   const rtgsDisplayConfig = useMemo(() => {
     // Helper function to extract value from API response
@@ -387,8 +392,8 @@ function CheckoutPaymentContent({
       return fieldData.value || "";
     };
 
-    // Get config from fileUpload prop (API response) or fallback to theme config
-    const configSource = fileUpload?.neftRtgsConfig || {};
+    // Get config from rtgsFileUpload prop (API response) or fallback to theme config
+    const configSource = rtgsFileUpload?.neftRtgsConfig || {};
 
     // Build beneficiary details dynamically from API response
     const beneficiaryDetails = [];
@@ -436,7 +441,7 @@ function CheckoutPaymentContent({
       isUtrFieldRequired,
       isUploadFieldRequired,
     };
-  }, [fileUpload?.neftRtgsConfig]);
+  }, [rtgsFileUpload?.neftRtgsConfig]);
 
   const [tab, setTab] = useState("");
   const [mop, setMop] = useState("");
@@ -464,9 +469,6 @@ function CheckoutPaymentContent({
   const isCouponAppliedSuccess =
     useGlobalStore(fpi?.getters?.CUSTOM_VALUE) ?? {};
   const lastJuspayInitializationRef = useRef(null);
-
-  // Dynamically select file upload based on selected tab
-  const fileUpload = selectedTab === 'RTGS' ? rtgsFileUpload : neftFileUpload;
 
   const toggleMop = (mop) => {
     setActiveMop((prev) => (prev === mop ? null : mop));
@@ -839,7 +841,10 @@ function CheckoutPaymentContent({
           setUtrError(true);
           hasError = true;
         }
-        if (!fileUpload?.state?.fileUploaded || fileUpload?.state?.uploadedFileUrl?.length === 0) {
+        if (
+          !neftFileUpload?.state?.fileUploaded ||
+          neftFileUpload?.state?.uploadedFileUrl?.length === 0
+        ) {
           setFileUploadError(true);
           hasError = true;
         }
@@ -851,7 +856,10 @@ function CheckoutPaymentContent({
         }
       } else if (isUploadFieldRequired) {
         // Only file upload is required
-        if (!fileUpload?.state?.fileUploaded || fileUpload?.state?.uploadedFileUrl?.length === 0) {
+        if (
+          !neftFileUpload?.state?.fileUploaded ||
+          neftFileUpload?.state?.uploadedFileUrl?.length === 0
+        ) {
           setFileUploadError(true);
           hasError = true;
         }
@@ -863,7 +871,7 @@ function CheckoutPaymentContent({
       const updatedNeftPayment = {
         ...selectedNeftPayment,
         offline_utr: utrNumber || "",
-        receipt_urls: fileUpload?.state?.uploadedFileUrl || [],
+        receipt_urls: neftFileUpload?.state?.uploadedFileUrl || [],
       };
 
       proceedToPay("NEFT", {
@@ -893,7 +901,10 @@ function CheckoutPaymentContent({
           setUtrError(true);
           hasError = true;
         }
-        if (!fileUpload?.state?.fileUploaded || fileUpload?.state?.uploadedFileUrl?.length === 0) {
+        if (
+          !rtgsFileUpload?.state?.fileUploaded ||
+          rtgsFileUpload?.state?.uploadedFileUrl?.length === 0
+        ) {
           setFileUploadError(true);
           hasError = true;
         }
@@ -905,7 +916,10 @@ function CheckoutPaymentContent({
         }
       } else if (isUploadFieldRequired) {
         // Only file upload is required
-        if (!fileUpload?.state?.fileUploaded || fileUpload?.state?.uploadedFileUrl?.length === 0) {
+        if (
+          !rtgsFileUpload?.state?.fileUploaded ||
+          rtgsFileUpload?.state?.uploadedFileUrl?.length === 0
+        ) {
           setFileUploadError(true);
           hasError = true;
         }
@@ -917,7 +931,7 @@ function CheckoutPaymentContent({
       const updatedRtgsPayment = {
         ...selectedRtgsPayment,
         offline_utr: utrNumber || "",
-        receipt_urls: fileUpload?.state?.uploadedFileUrl || [],
+        receipt_urls: rtgsFileUpload?.state?.uploadedFileUrl || [],
       };
 
       proceedToPay("RTGS", {
@@ -3583,41 +3597,52 @@ function CheckoutPaymentContent({
                   </div>
 
                   {/* Display uploading files with progress */}
-                  {fileUpload?.state?.uploadingFiles?.map((uploadingFile, index) => (
-                    <div key={uploadingFile.id} className={styles.neftFileCard}>
-                      <div className={styles.neftFileCardContent}>
-                        <div className={styles.neftFileInfo}>
-                          <div className={styles.neftFileIcon}>
-                            <FileSvg className={styles.fileIcon} />
-                          </div>
-                          <div className={styles.neftFileDetails}>
-                            <span className={styles.neftFileName}>
-                              {uploadingFile.name}
-                            </span>
-                            <div className={styles.neftProgressContainer}>
-                              <div className={styles.neftProgressBarContainer}>
-                                <div
-                                  className={styles.neftProgressBar}
-                                  style={{
-                                    width: `${uploadingFile.progress}%`,
-                                  }}
-                                />
-                              </div>
-                              <span className={styles.neftProgressText}>
-                                {uploadingFile.progress}%
+                  {fileUpload?.state?.uploadingFiles?.map(
+                    (uploadingFile, index) => (
+                      <div
+                        key={uploadingFile.id}
+                        className={styles.neftFileCard}
+                      >
+                        <div className={styles.neftFileCardContent}>
+                          <div className={styles.neftFileInfo}>
+                            <div className={styles.neftFileIcon}>
+                              <FileSvg className={styles.fileIcon} />
+                            </div>
+                            <div className={styles.neftFileDetails}>
+                              <span className={styles.neftFileName}>
+                                {uploadingFile.name}
                               </span>
+                              <div className={styles.neftProgressContainer}>
+                                <div
+                                  className={styles.neftProgressBarContainer}
+                                >
+                                  <div
+                                    className={styles.neftProgressBar}
+                                    style={{
+                                      width: `${uploadingFile.progress}%`,
+                                    }}
+                                  />
+                                </div>
+                                <span className={styles.neftProgressText}>
+                                  {uploadingFile.progress}%
+                                </span>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    )
+                  )}
 
                   {/* Display uploaded files */}
                   {selectedProofFiles?.map((file, index) => {
-                    const isUploaded = index < fileUpload?.state?.fileUploadedName?.length;
+                    const isUploaded =
+                      index < fileUpload?.state?.fileUploadedName?.length;
                     return (
-                      <div key={`file-${index}`} className={styles.neftFileCard}>
+                      <div
+                        key={`file-${index}`}
+                        className={styles.neftFileCard}
+                      >
                         <div className={styles.neftFileCardContent}>
                           <div className={styles.neftFileInfo}>
                             <div className={styles.neftFileIcon}>
@@ -3646,7 +3671,9 @@ function CheckoutPaymentContent({
                                   onClick={() => handleFileRemove(index)}
                                   aria-label="Remove file"
                                 >
-                                  <DeleteSvg className={styles.neftDeleteIcon} />
+                                  <DeleteSvg
+                                    className={styles.neftDeleteIcon}
+                                  />
                                 </button>
                               )}
                             </div>
@@ -3852,41 +3879,52 @@ function CheckoutPaymentContent({
                   </div>
 
                   {/* Display uploading files with progress */}
-                  {fileUpload?.state?.uploadingFiles?.map((uploadingFile, index) => (
-                    <div key={uploadingFile.id} className={styles.neftFileCard}>
-                      <div className={styles.neftFileCardContent}>
-                        <div className={styles.neftFileInfo}>
-                          <div className={styles.neftFileIcon}>
-                            <FileSvg className={styles.fileIcon} />
-                          </div>
-                          <div className={styles.neftFileDetails}>
-                            <span className={styles.neftFileName}>
-                              {uploadingFile.name}
-                            </span>
-                            <div className={styles.neftProgressContainer}>
-                              <div className={styles.neftProgressBarContainer}>
-                                <div
-                                  className={styles.neftProgressBar}
-                                  style={{
-                                    width: `${uploadingFile.progress}%`,
-                                  }}
-                                />
-                              </div>
-                              <span className={styles.neftProgressText}>
-                                {uploadingFile.progress}%
+                  {fileUpload?.state?.uploadingFiles?.map(
+                    (uploadingFile, index) => (
+                      <div
+                        key={uploadingFile.id}
+                        className={styles.neftFileCard}
+                      >
+                        <div className={styles.neftFileCardContent}>
+                          <div className={styles.neftFileInfo}>
+                            <div className={styles.neftFileIcon}>
+                              <FileSvg className={styles.fileIcon} />
+                            </div>
+                            <div className={styles.neftFileDetails}>
+                              <span className={styles.neftFileName}>
+                                {uploadingFile.name}
                               </span>
+                              <div className={styles.neftProgressContainer}>
+                                <div
+                                  className={styles.neftProgressBarContainer}
+                                >
+                                  <div
+                                    className={styles.neftProgressBar}
+                                    style={{
+                                      width: `${uploadingFile.progress}%`,
+                                    }}
+                                  />
+                                </div>
+                                <span className={styles.neftProgressText}>
+                                  {uploadingFile.progress}%
+                                </span>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    )
+                  )}
 
                   {/* Display uploaded files */}
                   {selectedProofFiles?.map((file, index) => {
-                    const isUploaded = index < fileUpload?.state?.fileUploadedName?.length;
+                    const isUploaded =
+                      index < fileUpload?.state?.fileUploadedName?.length;
                     return (
-                      <div key={`file-${index}`} className={styles.neftFileCard}>
+                      <div
+                        key={`file-${index}`}
+                        className={styles.neftFileCard}
+                      >
                         <div className={styles.neftFileCardContent}>
                           <div className={styles.neftFileInfo}>
                             <div className={styles.neftFileIcon}>
@@ -3915,7 +3953,9 @@ function CheckoutPaymentContent({
                                   onClick={() => handleFileRemove(index)}
                                   aria-label="Remove file"
                                 >
-                                  <DeleteSvg className={styles.neftDeleteIcon} />
+                                  <DeleteSvg
+                                    className={styles.neftDeleteIcon}
+                                  />
                                 </button>
                               )}
                             </div>
