@@ -302,9 +302,19 @@ function CheckoutPaymentContent({
 
   const intervalRef = useRef(null);
   const [isQrMopPresent, setIsQrMopPresent] = useState(false);
-  const [utrNumber, setUtrNumber] = useState("");
-  const [utrError, setUtrError] = useState(false);
-  const [fileUploadError, setFileUploadError] = useState(false);
+
+  // Separate state for NEFT
+  const [neftUtrNumber, setNeftUtrNumber] = useState("");
+  const [neftUtrError, setNeftUtrError] = useState(false);
+  const [neftFileUploadError, setNeftFileUploadError] = useState(false);
+  const [neftProofFiles, setNeftProofFiles] = useState([]);
+
+  // Separate state for RTGS
+  const [rtgsUtrNumber, setRtgsUtrNumber] = useState("");
+  const [rtgsUtrError, setRtgsUtrError] = useState(false);
+  const [rtgsFileUploadError, setRtgsFileUploadError] = useState(false);
+  const [rtgsProofFiles, setRtgsProofFiles] = useState([]);
+
   const [copiedValue, setCopiedValue] = useState(null);
   const [utrCopiedValue, setUtrCopiedValue] = useState(null);
 
@@ -448,7 +458,6 @@ function CheckoutPaymentContent({
   const selectedUpiRef = useRef(null);
   const [savedUpi, setSavedUpi] = useState([]);
   const [savedCards, setSavedCards] = useState([]);
-  const [selectedProofFiles, setSelectedProofFiles] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
   const [isUpiSuffixSelected, setIsUpiSuffixSelected] = useState(false);
   const [navigationTitleName, setNavigationTitleName] = useState("");
@@ -813,18 +822,25 @@ function CheckoutPaymentContent({
   };
 
   const handleUtrInputChange = (event) => {
-    if (utrError) {
-      setUtrError(false);
+    if (selectedTab === "NEFT") {
+      if (neftUtrError) {
+        setNeftUtrError(false);
+      }
+      setNeftUtrNumber(event.target.value);
+    } else if (selectedTab === "RTGS") {
+      if (rtgsUtrError) {
+        setRtgsUtrError(false);
+      }
+      setRtgsUtrNumber(event.target.value);
     }
-    setUtrNumber(event.target.value);
   };
 
   const handleNeftPlaceOrder = () => {
     const { isUtrFieldRequired, isUploadFieldRequired } = neftDisplayConfig;
 
     // Reset errors
-    setUtrError(false);
-    setFileUploadError(false);
+    setNeftUtrError(false);
+    setNeftFileUploadError(false);
 
     let hasError = false;
 
@@ -835,21 +851,21 @@ function CheckoutPaymentContent({
       // Check if both are required
       if (isUtrFieldRequired && isUploadFieldRequired) {
         // Both fields must be filled
-        if (!utrNumber?.trim()) {
-          setUtrError(true);
+        if (!neftUtrNumber?.trim()) {
+          setNeftUtrError(true);
           hasError = true;
         }
         if (
           !neftFileUpload?.state?.fileUploaded ||
           neftFileUpload?.state?.uploadedFileUrl?.length === 0
         ) {
-          setFileUploadError(true);
+          setNeftFileUploadError(true);
           hasError = true;
         }
       } else if (isUtrFieldRequired) {
         // Only UTR is required
-        if (!utrNumber?.trim()) {
-          setUtrError(true);
+        if (!neftUtrNumber?.trim()) {
+          setNeftUtrError(true);
           hasError = true;
         }
       } else if (isUploadFieldRequired) {
@@ -858,7 +874,7 @@ function CheckoutPaymentContent({
           !neftFileUpload?.state?.fileUploaded ||
           neftFileUpload?.state?.uploadedFileUrl?.length === 0
         ) {
-          setFileUploadError(true);
+          setNeftFileUploadError(true);
           hasError = true;
         }
       }
@@ -868,7 +884,7 @@ function CheckoutPaymentContent({
       // Update selectedNeftPayment with UTR and file URLs
       const updatedNeftPayment = {
         ...selectedNeftPayment,
-        offline_utr: utrNumber || "",
+        offline_utr: neftUtrNumber || "",
         receipt_urls: neftFileUpload?.state?.uploadedFileUrl || [],
       };
 
@@ -883,8 +899,8 @@ function CheckoutPaymentContent({
     const { isUtrFieldRequired, isUploadFieldRequired } = rtgsDisplayConfig;
 
     // Reset errors
-    setUtrError(false);
-    setFileUploadError(false);
+    setRtgsUtrError(false);
+    setRtgsFileUploadError(false);
 
     let hasError = false;
 
@@ -895,21 +911,21 @@ function CheckoutPaymentContent({
       // Check if both are required
       if (isUtrFieldRequired && isUploadFieldRequired) {
         // Both fields must be filled
-        if (!utrNumber?.trim()) {
-          setUtrError(true);
+        if (!rtgsUtrNumber?.trim()) {
+          setRtgsUtrError(true);
           hasError = true;
         }
         if (
           !rtgsFileUpload?.state?.fileUploaded ||
           rtgsFileUpload?.state?.uploadedFileUrl?.length === 0
         ) {
-          setFileUploadError(true);
+          setRtgsFileUploadError(true);
           hasError = true;
         }
       } else if (isUtrFieldRequired) {
         // Only UTR is required
-        if (!utrNumber?.trim()) {
-          setUtrError(true);
+        if (!rtgsUtrNumber?.trim()) {
+          setRtgsUtrError(true);
           hasError = true;
         }
       } else if (isUploadFieldRequired) {
@@ -918,7 +934,7 @@ function CheckoutPaymentContent({
           !rtgsFileUpload?.state?.fileUploaded ||
           rtgsFileUpload?.state?.uploadedFileUrl?.length === 0
         ) {
-          setFileUploadError(true);
+          setRtgsFileUploadError(true);
           hasError = true;
         }
       }
@@ -928,7 +944,7 @@ function CheckoutPaymentContent({
       // Update selectedRtgsPayment with UTR and file URLs
       const updatedRtgsPayment = {
         ...selectedRtgsPayment,
-        offline_utr: utrNumber || "",
+        offline_utr: rtgsUtrNumber || "",
         receipt_urls: rtgsFileUpload?.state?.uploadedFileUrl || [],
       };
 
@@ -980,7 +996,11 @@ function CheckoutPaymentContent({
   };
 
   const handleFileRemove = (fileIndex) => {
-    setSelectedProofFiles((prev) => prev.filter((_, i) => i !== fileIndex));
+    if (selectedTab === "NEFT") {
+      setNeftProofFiles((prev) => prev.filter((_, i) => i !== fileIndex));
+    } else if (selectedTab === "RTGS") {
+      setRtgsProofFiles((prev) => prev.filter((_, i) => i !== fileIndex));
+    }
     if (uploadInputRef.current) {
       uploadInputRef.current.value = "";
     }
@@ -1028,10 +1048,16 @@ function CheckoutPaymentContent({
       }
     }
 
-    setSelectedProofFiles((prev) => [...prev, ...files]);
-
-    if (fileUploadError) {
-      setFileUploadError(false);
+    if (selectedTab === "NEFT") {
+      setNeftProofFiles((prev) => [...prev, ...files]);
+      if (neftFileUploadError) {
+        setNeftFileUploadError(false);
+      }
+    } else if (selectedTab === "RTGS") {
+      setRtgsProofFiles((prev) => [...prev, ...files]);
+      if (rtgsFileUploadError) {
+        setRtgsFileUploadError(false);
+      }
     }
 
     if (fileUpload?.upload) {
@@ -3522,26 +3548,26 @@ function CheckoutPaymentContent({
                         inputClassName={styles["fs-12"]}
                         containerClassName={styles["field-input-container"]}
                         type="text"
-                        value={utrNumber}
+                        value={neftUtrNumber}
                         onChange={handleUtrInputChange}
                         endAdornment={
                           <div
                             className={styles.copyIcon}
                             onClick={() =>
                               handleCopyToClipboard(
-                                utrNumber,
+                                neftUtrNumber,
                                 setUtrCopiedValue
                               )
                             }
                           >
-                            {utrCopiedValue === utrNumber ? (
+                            {utrCopiedValue === neftUtrNumber ? (
                               <TickBlackActiveSvg />
                             ) : (
                               <CopyToClipboardSvg />
                             )}
                           </div>
                         }
-                        error={utrError}
+                        error={neftUtrError}
                         errorMessage={t("resource.common.field_required")}
                       />
                     </div>
@@ -3633,7 +3659,7 @@ function CheckoutPaymentContent({
                   )}
 
                   {/* Display uploaded files */}
-                  {selectedProofFiles?.map((file, index) => {
+                  {neftProofFiles?.map((file, index) => {
                     const isUploaded =
                       index < fileUpload?.state?.fileUploadedName?.length;
                     return (
@@ -3681,10 +3707,11 @@ function CheckoutPaymentContent({
                     );
                   })}
 
-                  {(fileUpload?.state?.fileUploadError || fileUploadError) && (
+                  {(fileUpload?.state?.fileUploadError ||
+                    neftFileUploadError) && (
                     <div className={styles.neftUploadError}>
                       {fileUpload?.state?.fileUploadError ||
-                        (fileUploadError &&
+                        (neftFileUploadError &&
                           t("resource.common.field_required"))}
                     </div>
                   )}
@@ -3804,26 +3831,26 @@ function CheckoutPaymentContent({
                         inputClassName={styles["fs-12"]}
                         containerClassName={styles["field-input-container"]}
                         type="text"
-                        value={utrNumber}
+                        value={rtgsUtrNumber}
                         onChange={handleUtrInputChange}
                         endAdornment={
                           <div
                             className={styles.copyIcon}
                             onClick={() =>
                               handleCopyToClipboard(
-                                utrNumber,
+                                rtgsUtrNumber,
                                 setUtrCopiedValue
                               )
                             }
                           >
-                            {utrCopiedValue === utrNumber ? (
+                            {utrCopiedValue === rtgsUtrNumber ? (
                               <TickBlackActiveSvg />
                             ) : (
                               <CopyToClipboardSvg />
                             )}
                           </div>
                         }
-                        error={utrError}
+                        error={rtgsUtrError}
                         errorMessage={t("resource.common.field_required")}
                       />
                     </div>
@@ -3915,7 +3942,7 @@ function CheckoutPaymentContent({
                   )}
 
                   {/* Display uploaded files */}
-                  {selectedProofFiles?.map((file, index) => {
+                  {rtgsProofFiles?.map((file, index) => {
                     const isUploaded =
                       index < fileUpload?.state?.fileUploadedName?.length;
                     return (
@@ -3963,10 +3990,11 @@ function CheckoutPaymentContent({
                     );
                   })}
 
-                  {(fileUpload?.state?.fileUploadError || fileUploadError) && (
+                  {(fileUpload?.state?.fileUploadError ||
+                    rtgsFileUploadError) && (
                     <div className={styles.neftUploadError}>
                       {fileUpload?.state?.fileUploadError ||
-                        (fileUploadError &&
+                        (rtgsFileUploadError &&
                           t("resource.common.field_required"))}
                     </div>
                   )}
