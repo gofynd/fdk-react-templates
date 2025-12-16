@@ -163,7 +163,8 @@ function CheckoutPaymentContent({
   isCouponValid,
   setIsCouponValid,
   inValidCouponData,
-  fileUpload = { state: {}, upload: () => {}, reset: () => {} },
+  neftFileUpload = { state: {}, upload: () => {}, reset: () => {} },
+  rtgsFileUpload = { state: {}, upload: () => {}, reset: () => {} },
 }) {
   const fpi = useFPI();
   const { language } = useGlobalStore(fpi.getters.i18N_DETAILS);
@@ -463,6 +464,9 @@ function CheckoutPaymentContent({
   const isCouponAppliedSuccess =
     useGlobalStore(fpi?.getters?.CUSTOM_VALUE) ?? {};
   const lastJuspayInitializationRef = useRef(null);
+
+  // Dynamically select file upload based on selected tab
+  const fileUpload = selectedTab === 'RTGS' ? rtgsFileUpload : neftFileUpload;
 
   const toggleMop = (mop) => {
     setActiveMop((prev) => (prev === mop ? null : mop));

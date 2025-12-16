@@ -24,7 +24,8 @@ function CheckoutPayment({
   isCouponValid,
   setIsCouponValid,
   inValidCouponData,
-  fileUpload = () => {},
+  neftFileUpload = () => {},
+  rtgsFileUpload = () => {},
 }) {
   const { t } = useGlobalTranslation("translation");
   const [showFailedMessage, setShowFailedMessage] = useState(false);
@@ -165,7 +166,8 @@ function CheckoutPayment({
               isCouponValid={isCouponValid}
               setIsCouponValid={setIsCouponValid}
               inValidCouponData={inValidCouponData}
-              fileUpload={fileUpload}
+              neftFileUpload={neftFileUpload}
+              rtgsFileUpload={rtgsFileUpload}
             ></CheckoutPaymentContent>
           </>
         ) : (
