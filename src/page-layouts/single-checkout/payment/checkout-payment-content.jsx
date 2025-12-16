@@ -371,18 +371,26 @@ function CheckoutPaymentContent({
     const isUploadFieldRequired = configSource.payment_receipt?.value ?? true;
 
     return {
-      beneficiaryTitle: "Beneficiary Bank Details",
-      transactionTitle: "Transaction Details",
+      beneficiaryTitle:
+        t("resource.dynamic_label.beneficiary_bank_details") ||
+        "Beneficiary Bank Details",
+      transactionTitle:
+        t("resource.dynamic_label.transaction_details") ||
+        "Transaction Details",
       utrLabel:
         configSource.transaction_id?.display_name ||
         "Enter unique transaction number",
       utrDescription:
+        t("resource.dynamic_label.utr_helper") ||
         "UTR is a unique alphanumeric code assigned by a bank to track a specific financial transaction",
       uploadHeading:
+        t("resource.dynamic_label.ask_user_to_upload_payment_receipt") ||
         configSource.payment_receipt?.display_name ||
         "Drag and drop your files here",
-      uploadCta: "UPLOAD FILE",
-      uploadHelper: "Supported Format: PDF, PNG, JPEG (5MB)",
+      uploadCta: t("resource.dynamic_label.upload_file") || "UPLOAD FILE",
+      uploadHelper:
+        `${t("resource.dynamic_label.supported_format")}: PDF, PNG, JPEG (5MB)` ||
+        "Supported Format: PDF, PNG, JPEG (5MB)",
       beneficiaryDetails,
       isUtrFieldRequired,
       isUploadFieldRequired,
@@ -433,18 +441,26 @@ function CheckoutPaymentContent({
     const isUploadFieldRequired = configSource.payment_receipt?.value ?? true;
 
     return {
-      beneficiaryTitle: "Beneficiary Bank Details",
-      transactionTitle: "Transaction Details",
+      beneficiaryTitle:
+        t("resource.dynamic_label.beneficiary_bank_details") ||
+        "Beneficiary Bank Details",
+      transactionTitle:
+        t("resource.dynamic_label.transaction_details") ||
+        "Transaction Details",
       utrLabel:
         configSource.transaction_id?.display_name ||
         "Enter unique transaction number",
       utrDescription:
+        t("resource.dynamic_label.utr_helper") ||
         "UTR is a unique alphanumeric code assigned by a bank to track a specific financial transaction",
       uploadHeading:
+        t("resource.dynamic_label.ask_user_to_upload_payment_receipt") ||
         configSource.payment_receipt?.display_name ||
         "Drag and drop your files here",
-      uploadCta: "UPLOAD FILE",
-      uploadHelper: "Supported Format: PDF, PNG, JPEG (5MB)",
+      uploadCta: t("resource.dynamic_label.upload_file") || "UPLOAD FILE",
+      uploadHelper:
+        `${t("resource.dynamic_label.supported_format")}: PDF, PNG, JPEG (5MB)` ||
+        "Supported Format: PDF, PNG, JPEG (5MB)",
       beneficiaryDetails,
       isUtrFieldRequired,
       isUploadFieldRequired,
@@ -3484,6 +3500,9 @@ function CheckoutPaymentContent({
           isUploadFieldRequired,
         } = neftDisplayConfig;
 
+        const utrFieldSet =
+          t("resource.dynamic_label.utr_number") || "UTR Number";
+
         console.log(beneficiaryDetails, "beneficiaryDetails");
         return (
           <div>
@@ -3541,7 +3560,7 @@ function CheckoutPaymentContent({
                     <div className={styles.field}>
                       <FyInput
                         id="utrNumber"
-                        label={`UTR Number${isUtrFieldRequired ? "*" : ""}`}
+                        label={`${utrFieldSet}${isUtrFieldRequired ? "*" : ""}`}
                         showAsterik={isUtrFieldRequired}
                         labelVariant="floating"
                         inputVariant="outlined"
@@ -3694,9 +3713,7 @@ function CheckoutPaymentContent({
                                 onClick={() => handleFileRemove(index)}
                                 aria-label="Remove file"
                               >
-                                <DeleteSvg
-                                  className={styles.neftDeleteIcon}
-                                />
+                                <DeleteSvg className={styles.neftDeleteIcon} />
                               </button>
                             </div>
                           </div>
@@ -3765,6 +3782,9 @@ function CheckoutPaymentContent({
           isUploadFieldRequired,
         } = rtgsDisplayConfig;
 
+        const utrFieldSet =
+          t("resource.dynamic_label.utr_number") || "UTR Number";
+
         console.log(beneficiaryDetails, "beneficiaryDetails of RTGS");
         return (
           <div>
@@ -3822,7 +3842,7 @@ function CheckoutPaymentContent({
                     <div className={styles.field}>
                       <FyInput
                         id="utrNumber"
-                        label={`UTR Number${isUtrFieldRequired ? "*" : ""}`}
+                        label={`${utrFieldSet}${isUtrFieldRequired ? "*" : ""}`}
                         showAsterik={isUtrFieldRequired}
                         labelVariant="floating"
                         inputVariant="outlined"
@@ -3975,9 +3995,7 @@ function CheckoutPaymentContent({
                                 onClick={() => handleFileRemove(index)}
                                 aria-label="Remove file"
                               >
-                                <DeleteSvg
-                                  className={styles.neftDeleteIcon}
-                                />
+                                <DeleteSvg className={styles.neftDeleteIcon} />
                               </button>
                             </div>
                           </div>
