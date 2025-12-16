@@ -444,7 +444,7 @@ function CheckoutPaymentContent({
   const selectedUpiRef = useRef(null);
   const [savedUpi, setSavedUpi] = useState([]);
   const [savedCards, setSavedCards] = useState([]);
-  const [selectedProofFile, setSelectedProofFile] = useState(null);
+  const [selectedProofFiles, setSelectedProofFiles] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
   const [isUpiSuffixSelected, setIsUpiSuffixSelected] = useState(false);
   const [navigationTitleName, setNavigationTitleName] = useState("");
@@ -835,7 +835,7 @@ function CheckoutPaymentContent({
           setUtrError(true);
           hasError = true;
         }
-        if (!fileUpload?.state?.fileUploaded) {
+        if (!fileUpload?.state?.fileUploaded || fileUpload?.state?.uploadedFileUrl?.length === 0) {
           setFileUploadError(true);
           hasError = true;
         }
@@ -847,7 +847,7 @@ function CheckoutPaymentContent({
         }
       } else if (isUploadFieldRequired) {
         // Only file upload is required
-        if (!fileUpload?.state?.fileUploaded) {
+        if (!fileUpload?.state?.fileUploaded || fileUpload?.state?.uploadedFileUrl?.length === 0) {
           setFileUploadError(true);
           hasError = true;
         }
@@ -879,7 +879,7 @@ function CheckoutPaymentContent({
           setUtrError(true);
           hasError = true;
         }
-        if (!fileUpload?.state?.fileUploaded) {
+        if (!fileUpload?.state?.fileUploaded || fileUpload?.state?.uploadedFileUrl?.length === 0) {
           setFileUploadError(true);
           hasError = true;
         }
@@ -891,7 +891,7 @@ function CheckoutPaymentContent({
         }
       } else if (isUploadFieldRequired) {
         // Only file upload is required
-        if (!fileUpload?.state?.fileUploaded) {
+        if (!fileUpload?.state?.fileUploaded || fileUpload?.state?.uploadedFileUrl?.length === 0) {
           setFileUploadError(true);
           hasError = true;
         }
@@ -943,59 +943,65 @@ function CheckoutPaymentContent({
     return `${kb.toFixed(2)} kb`;
   };
 
-  const handleFileRemove = () => {
-    setSelectedProofFile(null);
+  const handleFileRemove = (fileIndex) => {
+    setSelectedProofFiles((prev) => prev.filter((_, i) => i !== fileIndex));
     if (uploadInputRef.current) {
       uploadInputRef.current.value = "";
     }
     if (fileUpload?.reset) {
-      fileUpload.reset();
+      fileUpload.reset(fileIndex);
     }
   };
 
   const handleFileInputChange = async (event) => {
-    const file = event?.target?.files?.[0];
-    if (!file) return;
+    const files = Array.from(event?.target?.files || []);
+    if (files.length === 0) return;
 
     const maxSizeInBytes = 5 * 1024 * 1024;
-    if (file.size > maxSizeInBytes) {
-      alert(
-        t("resource.dynamic_label.file_size_exceeded") ||
-          "File size must not exceed 5MB"
-      );
-      event.target.value = "";
-      return;
-    }
-
     const allowedTypes = [
       "application/pdf",
       "image/png",
       "image/jpeg",
       "image/jpg",
     ];
-    const fileExtension = file.name.split(".").pop().toLowerCase();
     const allowedExtensions = ["pdf", "png", "jpg", "jpeg"];
 
-    if (
-      !allowedTypes.includes(file.type) ||
-      !allowedExtensions.includes(fileExtension)
-    ) {
-      alert(
-        t("resource.dynamic_label.invalid_file_type") ||
-          "Only PDF and image files (PNG, JPG, JPEG) are allowed"
-      );
-      event.target.value = "";
-      return;
+    // Validate all files
+    for (const file of files) {
+      if (file.size > maxSizeInBytes) {
+        alert(
+          t("resource.dynamic_label.file_size_exceeded") ||
+            `File ${file.name} size must not exceed 5MB`
+        );
+        event.target.value = "";
+        return;
+      }
+
+      const fileExtension = file.name.split(".").pop().toLowerCase();
+
+      if (
+        !allowedTypes.includes(file.type) ||
+        !allowedExtensions.includes(fileExtension)
+      ) {
+        alert(
+          t("resource.dynamic_label.invalid_file_type") ||
+            `Only PDF and image files (PNG, JPG, JPEG) are allowed for ${file.name}`
+        );
+        event.target.value = "";
+        return;
+      }
     }
 
-    setSelectedProofFile(file);
+    setSelectedProofFiles((prev) => [...prev, ...files]);
 
     if (fileUploadError) {
       setFileUploadError(false);
     }
 
     if (fileUpload?.upload) {
-      await fileUpload.upload(file);
+      for (const file of files) {
+        await fileUpload.upload(file);
+      }
     }
   };
 
@@ -3525,6 +3531,7 @@ function CheckoutPaymentContent({
                         className={styles.neftHiddenInput}
                         onChange={handleFileInputChange}
                         disabled={fileUpload?.state?.isUploading}
+                        multiple
                       />
                       <div className={styles.neftUploadIcon} aria-hidden="true">
                         <UploadSvg />
@@ -3551,8 +3558,9 @@ function CheckoutPaymentContent({
                     </div>
                   </div>
 
-                  {(selectedProofFile || fileUpload?.state?.fileUploaded) && (
-                    <div className={styles.neftFileCard}>
+                  {/* Display uploading files with progress */}
+                  {fileUpload?.state?.uploadingFiles?.map((uploadingFile, index) => (
+                    <div key={uploadingFile.id} className={styles.neftFileCard}>
                       <div className={styles.neftFileCardContent}>
                         <div className={styles.neftFileInfo}>
                           <div className={styles.neftFileIcon}>
@@ -3560,56 +3568,69 @@ function CheckoutPaymentContent({
                           </div>
                           <div className={styles.neftFileDetails}>
                             <span className={styles.neftFileName}>
-                              {selectedProofFile?.name ||
-                                fileUpload?.state?.fileUploadedName}
-                              {fileUpload?.state?.fileUploaded && (
-                                <SvgCheck
-                                  className={styles.neftSuccessIndicator}
-                                />
-                              )}
+                              {uploadingFile.name}
                             </span>
-
-                            {fileUpload?.state?.fileUploaded &&
-                              selectedProofFile && (
-                                <span className={styles.neftFileSize}>
-                                  {formatFileSize(selectedProofFile.size)}
-                                </span>
-                              )}
-
-                            {fileUpload?.state?.isUploading && (
-                              <div className={styles.neftProgressContainer}>
+                            <div className={styles.neftProgressContainer}>
+                              <div className={styles.neftProgressBarContainer}>
                                 <div
-                                  className={styles.neftProgressBarContainer}
-                                >
-                                  <div
-                                    className={styles.neftProgressBar}
-                                    style={{
-                                      width: `${fileUpload?.state?.uploadProgress}%`,
-                                    }}
-                                  />
-                                </div>
-                                <span className={styles.neftProgressText}>
-                                  {fileUpload?.state?.uploadProgress}%
-                                </span>
+                                  className={styles.neftProgressBar}
+                                  style={{
+                                    width: `${uploadingFile.progress}%`,
+                                  }}
+                                />
                               </div>
-                            )}
-                          </div>
-
-                          <div className={styles.neftFileActions}>
-                            {fileUpload?.state?.fileUploaded && (
-                              <button
-                                className={styles.neftFileActionBtn}
-                                onClick={handleFileRemove}
-                                aria-label="Remove file"
-                              >
-                                <DeleteSvg className={styles.neftDeleteIcon} />
-                              </button>
-                            )}
+                              <span className={styles.neftProgressText}>
+                                {uploadingFile.progress}%
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  )}
+                  ))}
+
+                  {/* Display uploaded files */}
+                  {selectedProofFiles?.map((file, index) => {
+                    const isUploaded = index < fileUpload?.state?.fileUploadedName?.length;
+                    return (
+                      <div key={`file-${index}`} className={styles.neftFileCard}>
+                        <div className={styles.neftFileCardContent}>
+                          <div className={styles.neftFileInfo}>
+                            <div className={styles.neftFileIcon}>
+                              <FileSvg className={styles.fileIcon} />
+                            </div>
+                            <div className={styles.neftFileDetails}>
+                              <span className={styles.neftFileName}>
+                                {file.name}
+                                {isUploaded && (
+                                  <SvgCheck
+                                    className={styles.neftSuccessIndicator}
+                                  />
+                                )}
+                              </span>
+                              {isUploaded && (
+                                <span className={styles.neftFileSize}>
+                                  {formatFileSize(file.size)}
+                                </span>
+                              )}
+                            </div>
+
+                            <div className={styles.neftFileActions}>
+                              {isUploaded && (
+                                <button
+                                  className={styles.neftFileActionBtn}
+                                  onClick={() => handleFileRemove(index)}
+                                  aria-label="Remove file"
+                                >
+                                  <DeleteSvg className={styles.neftDeleteIcon} />
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
 
                   {(fileUpload?.state?.fileUploadError || fileUploadError) && (
                     <div className={styles.neftUploadError}>
@@ -3779,6 +3800,7 @@ function CheckoutPaymentContent({
                         className={styles.neftHiddenInput}
                         onChange={handleFileInputChange}
                         disabled={fileUpload?.state?.isUploading}
+                        multiple
                       />
                       <div className={styles.neftUploadIcon} aria-hidden="true">
                         <UploadSvg />
@@ -3805,8 +3827,9 @@ function CheckoutPaymentContent({
                     </div>
                   </div>
 
-                  {(selectedProofFile || fileUpload?.state?.fileUploaded) && (
-                    <div className={styles.neftFileCard}>
+                  {/* Display uploading files with progress */}
+                  {fileUpload?.state?.uploadingFiles?.map((uploadingFile, index) => (
+                    <div key={uploadingFile.id} className={styles.neftFileCard}>
                       <div className={styles.neftFileCardContent}>
                         <div className={styles.neftFileInfo}>
                           <div className={styles.neftFileIcon}>
@@ -3814,56 +3837,69 @@ function CheckoutPaymentContent({
                           </div>
                           <div className={styles.neftFileDetails}>
                             <span className={styles.neftFileName}>
-                              {selectedProofFile?.name ||
-                                fileUpload?.state?.fileUploadedName}
-                              {fileUpload?.state?.fileUploaded && (
-                                <SvgCheck
-                                  className={styles.neftSuccessIndicator}
-                                />
-                              )}
+                              {uploadingFile.name}
                             </span>
-
-                            {fileUpload?.state?.fileUploaded &&
-                              selectedProofFile && (
-                                <span className={styles.neftFileSize}>
-                                  {formatFileSize(selectedProofFile.size)}
-                                </span>
-                              )}
-
-                            {fileUpload?.state?.isUploading && (
-                              <div className={styles.neftProgressContainer}>
+                            <div className={styles.neftProgressContainer}>
+                              <div className={styles.neftProgressBarContainer}>
                                 <div
-                                  className={styles.neftProgressBarContainer}
-                                >
-                                  <div
-                                    className={styles.neftProgressBar}
-                                    style={{
-                                      width: `${fileUpload?.state?.uploadProgress}%`,
-                                    }}
-                                  />
-                                </div>
-                                <span className={styles.neftProgressText}>
-                                  {fileUpload?.state?.uploadProgress}%
-                                </span>
+                                  className={styles.neftProgressBar}
+                                  style={{
+                                    width: `${uploadingFile.progress}%`,
+                                  }}
+                                />
                               </div>
-                            )}
-                          </div>
-
-                          <div className={styles.neftFileActions}>
-                            {fileUpload?.state?.fileUploaded && (
-                              <button
-                                className={styles.neftFileActionBtn}
-                                onClick={handleFileRemove}
-                                aria-label="Remove file"
-                              >
-                                <DeleteSvg className={styles.neftDeleteIcon} />
-                              </button>
-                            )}
+                              <span className={styles.neftProgressText}>
+                                {uploadingFile.progress}%
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  )}
+                  ))}
+
+                  {/* Display uploaded files */}
+                  {selectedProofFiles?.map((file, index) => {
+                    const isUploaded = index < fileUpload?.state?.fileUploadedName?.length;
+                    return (
+                      <div key={`file-${index}`} className={styles.neftFileCard}>
+                        <div className={styles.neftFileCardContent}>
+                          <div className={styles.neftFileInfo}>
+                            <div className={styles.neftFileIcon}>
+                              <FileSvg className={styles.fileIcon} />
+                            </div>
+                            <div className={styles.neftFileDetails}>
+                              <span className={styles.neftFileName}>
+                                {file.name}
+                                {isUploaded && (
+                                  <SvgCheck
+                                    className={styles.neftSuccessIndicator}
+                                  />
+                                )}
+                              </span>
+                              {isUploaded && (
+                                <span className={styles.neftFileSize}>
+                                  {formatFileSize(file.size)}
+                                </span>
+                              )}
+                            </div>
+
+                            <div className={styles.neftFileActions}>
+                              {isUploaded && (
+                                <button
+                                  className={styles.neftFileActionBtn}
+                                  onClick={() => handleFileRemove(index)}
+                                  aria-label="Remove file"
+                                >
+                                  <DeleteSvg className={styles.neftDeleteIcon} />
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
 
                   {(fileUpload?.state?.fileUploadError || fileUploadError) && (
                     <div className={styles.neftUploadError}>
