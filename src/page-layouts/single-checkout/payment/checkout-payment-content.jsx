@@ -855,7 +855,17 @@ function CheckoutPaymentContent({
     }
 
     if (!hasError) {
-      proceedToPay("NEFT", selectedPaymentPayload);
+      // Update selectedNeftPayment with UTR and file URLs
+      const updatedNeftPayment = {
+        ...selectedNeftPayment,
+        offline_utr: utrNumber || "",
+        receipt_urls: fileUpload?.state?.uploadedFileUrl || [],
+      };
+
+      proceedToPay("NEFT", {
+        ...selectedPaymentPayload,
+        selectedNeftPayment: updatedNeftPayment,
+      });
     }
   };
 
@@ -899,7 +909,17 @@ function CheckoutPaymentContent({
     }
 
     if (!hasError) {
-      proceedToPay("RTGS", selectedPaymentPayload);
+      // Update selectedRtgsPayment with UTR and file URLs
+      const updatedRtgsPayment = {
+        ...selectedRtgsPayment,
+        offline_utr: utrNumber || "",
+        receipt_urls: fileUpload?.state?.uploadedFileUrl || [],
+      };
+
+      proceedToPay("RTGS", {
+        ...selectedPaymentPayload,
+        selectedRtgsPayment: updatedRtgsPayment,
+      });
     }
   };
 
