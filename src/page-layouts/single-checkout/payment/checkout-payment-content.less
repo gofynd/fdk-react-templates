@@ -1585,6 +1585,7 @@
 
   .neftUploadSection {
     width: 100%;
+    gap: 0px !important;
   }
 
   .neftUploadBox {
@@ -1810,12 +1811,8 @@
   }
 
   .neftUploadError {
-    margin-top: 12px;
-    padding: 12px;
-    background-color: @ErrorBackground;
-    border-left: 3px solid @ErrorText;
-    border-radius: 4px;
     font-size: 14px;
+    padding-top: 10px;
     color: @ErrorText;
   }
 
@@ -2454,4 +2451,8 @@
     height: 18px;
     width: 18px;
   }
+}
+
+.neftBorderBottom {
+  border-bottom: 1px solid @DividerStokes;
 }

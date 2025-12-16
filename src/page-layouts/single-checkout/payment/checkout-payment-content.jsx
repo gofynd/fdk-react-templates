@@ -4305,7 +4305,10 @@ function CheckoutPaymentContent({
                       </div>
                     )}
                     {neftOption && (
-                      <div style={{ display: "flex", flex: "1" }}>
+                      <div
+                        style={{ display: "flex", flex: "1" }}
+                        className={styles.neftBorderBottom}
+                      >
                         <div
                           className={`${styles.linkWrapper} ${selectedTab === neftOption.name && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === neftOption.name && isTablet ? styles.headerHightlight : ""} ${!codOption ? styles.lastChild : ""}`}
                           key={neftOption?.display_name ?? ""}

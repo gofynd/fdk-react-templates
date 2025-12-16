@@ -43347,6 +43347,7 @@ h5,
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__neftUploadSection___yftvA {
   width: 100%;
+  gap: 0px !important;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__neftUploadBox___lN_AQ {
   border: 1px dashed var(--dividerStokes, #d4d1d1);
@@ -43543,12 +43544,8 @@ h5,
   color: var(--errorText, #ff3333);
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__neftUploadError___smMI_ {
-  margin-top: 12px;
-  padding: 12px;
-  background-color: var(--errorBackground, #e6d5d5);
-  border-left: 3px solid var(--errorText, #ff3333);
-  border-radius: 4px;
   font-size: 14px;
+  padding-top: 10px;
   color: var(--errorText, #ff3333);
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__neftFormBlock___QNGBp {
@@ -44156,6 +44153,9 @@ h5,
 .checkout-payment-content__copyIcon___ggWRH svg {
   height: 18px;
   width: 18px;
+}
+.checkout-payment-content__neftBorderBottom___vUhV0 {
+  border-bottom: 1px solid var(--dividerStokes, #d4d1d1);
 }
 
 /**color by character**/
