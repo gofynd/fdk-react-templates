@@ -3294,46 +3294,52 @@ function CheckoutPaymentContent({
           isUtrFieldRequired,
           isUploadFieldRequired,
         } = neftDisplayConfig;
+
+        console.log(beneficiaryDetails, "beneficiaryDetails");
         return (
           <div>
             <div className={styles.neftWrapper}>
               <section className={styles.neftSection}>
                 <p className={styles.neftSectionTitle}>{beneficiaryTitle}</p>
                 <div className={styles.neftBeneficiaryCard}>
-                  {beneficiaryDetails.map((detail) => (
-                    <div
-                      key={detail.label}
-                      className={styles.neftBeneficiaryRow}
-                    >
-                      <div className={styles.neftBeneficiaryLabelWrapper}>
-                        <span className={styles.neftBeneficiaryLabel}>
-                          {detail.label}
-                        </span>
-                        <span className={styles.neftLabelSeparator}>:</span>
+                  {beneficiaryDetails
+                    .filter(
+                      (detail) => detail.value && detail.value.trim() !== ""
+                    )
+                    .map((detail) => (
+                      <div
+                        key={detail.label}
+                        className={styles.neftBeneficiaryRow}
+                      >
+                        <div className={styles.neftBeneficiaryLabelWrapper}>
+                          <span className={styles.neftBeneficiaryLabel}>
+                            {detail.label}
+                          </span>
+                          <span className={styles.neftLabelSeparator}>:</span>
+                        </div>
+                        <div className={styles.neftBeneficiaryValue}>
+                          <span>{detail.value}</span>
+                          {detail.isCopyEnabled && (
+                            <button
+                              type="button"
+                              className={styles.neftCopyButton}
+                              onClick={() =>
+                                handleCopyToClipboard(
+                                  detail.value,
+                                  setCopiedValue
+                                )
+                              }
+                            >
+                              {copiedValue === detail.value ? (
+                                <TickBlackActiveSvg />
+                              ) : (
+                                <CopyToClipboardSvg />
+                              )}
+                            </button>
+                          )}
+                        </div>
                       </div>
-                      <div className={styles.neftBeneficiaryValue}>
-                        <span>{detail.value}</span>
-                        {detail.isCopyEnabled && (
-                          <button
-                            type="button"
-                            className={styles.neftCopyButton}
-                            onClick={() =>
-                              handleCopyToClipboard(
-                                detail.value,
-                                setCopiedValue
-                              )
-                            }
-                          >
-                            {copiedValue === detail.value ? (
-                              <TickBlackActiveSvg />
-                            ) : (
-                              <CopyToClipboardSvg />
-                            )}
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  ))}
+                    ))}
                 </div>
               </section>
 
@@ -3487,7 +3493,8 @@ function CheckoutPaymentContent({
                   {(fileUpload?.state?.fileUploadError || fileUploadError) && (
                     <div className={styles.neftUploadError}>
                       {fileUpload?.state?.fileUploadError ||
-                        (fileUploadError && t("resource.common.field_required"))}
+                        (fileUploadError &&
+                          t("resource.common.field_required"))}
                     </div>
                   )}
                 </section>
