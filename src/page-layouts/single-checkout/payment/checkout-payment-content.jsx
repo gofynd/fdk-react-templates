@@ -3662,6 +3662,10 @@ function CheckoutPaymentContent({
                   {neftProofFiles?.map((file, index) => {
                     const isUploaded =
                       index < fileUpload?.state?.fileUploadedName?.length;
+
+                    // Only render files that have been successfully uploaded
+                    if (!isUploaded) return null;
+
                     return (
                       <div
                         key={`file-${index}`}
@@ -3675,31 +3679,25 @@ function CheckoutPaymentContent({
                             <div className={styles.neftFileDetails}>
                               <span className={styles.neftFileName}>
                                 {file.name}
-                                {isUploaded && (
-                                  <SvgCheck
-                                    className={styles.neftSuccessIndicator}
-                                  />
-                                )}
+                                <SvgCheck
+                                  className={styles.neftSuccessIndicator}
+                                />
                               </span>
-                              {isUploaded && (
-                                <span className={styles.neftFileSize}>
-                                  {formatFileSize(file.size)}
-                                </span>
-                              )}
+                              <span className={styles.neftFileSize}>
+                                {formatFileSize(file.size)}
+                              </span>
                             </div>
 
                             <div className={styles.neftFileActions}>
-                              {isUploaded && (
-                                <button
-                                  className={styles.neftFileActionBtn}
-                                  onClick={() => handleFileRemove(index)}
-                                  aria-label="Remove file"
-                                >
-                                  <DeleteSvg
-                                    className={styles.neftDeleteIcon}
-                                  />
-                                </button>
-                              )}
+                              <button
+                                className={styles.neftFileActionBtn}
+                                onClick={() => handleFileRemove(index)}
+                                aria-label="Remove file"
+                              >
+                                <DeleteSvg
+                                  className={styles.neftDeleteIcon}
+                                />
+                              </button>
                             </div>
                           </div>
                         </div>
@@ -3945,6 +3943,10 @@ function CheckoutPaymentContent({
                   {rtgsProofFiles?.map((file, index) => {
                     const isUploaded =
                       index < fileUpload?.state?.fileUploadedName?.length;
+
+                    // Only render files that have been successfully uploaded
+                    if (!isUploaded) return null;
+
                     return (
                       <div
                         key={`file-${index}`}
@@ -3958,31 +3960,25 @@ function CheckoutPaymentContent({
                             <div className={styles.neftFileDetails}>
                               <span className={styles.neftFileName}>
                                 {file.name}
-                                {isUploaded && (
-                                  <SvgCheck
-                                    className={styles.neftSuccessIndicator}
-                                  />
-                                )}
+                                <SvgCheck
+                                  className={styles.neftSuccessIndicator}
+                                />
                               </span>
-                              {isUploaded && (
-                                <span className={styles.neftFileSize}>
-                                  {formatFileSize(file.size)}
-                                </span>
-                              )}
+                              <span className={styles.neftFileSize}>
+                                {formatFileSize(file.size)}
+                              </span>
                             </div>
 
                             <div className={styles.neftFileActions}>
-                              {isUploaded && (
-                                <button
-                                  className={styles.neftFileActionBtn}
-                                  onClick={() => handleFileRemove(index)}
-                                  aria-label="Remove file"
-                                >
-                                  <DeleteSvg
-                                    className={styles.neftDeleteIcon}
-                                  />
-                                </button>
-                              )}
+                              <button
+                                className={styles.neftFileActionBtn}
+                                onClick={() => handleFileRemove(index)}
+                                aria-label="Remove file"
+                              >
+                                <DeleteSvg
+                                  className={styles.neftDeleteIcon}
+                                />
+                              </button>
                             </div>
                           </div>
                         </div>
