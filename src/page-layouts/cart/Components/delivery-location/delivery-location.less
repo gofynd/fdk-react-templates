@@ -1,27 +1,6 @@
 @import "../../../../styles/main.less";
 @import "../../../../styles/base.global.less";
-.buttonsContainer {
-  margin-inline-start: 25px;
-  margin-top: 8px;
 
-  .buttonDivider {
-    padding: 0px 8px;
-  }
-  .edit,
-  .remove {
-    padding: 4px;
-    border: none;
-    color: @ButtonLink;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 12px;
-    text-align: center;
-    text-transform: uppercase;
-    line-height: 140%;
-    background: @PageBackground;
-    cursor: pointer;
-  }
-}
 .cartPincodeContainer {
   border: 1px solid @DividerStokes;
   line-height: 140%;
@@ -71,9 +50,6 @@
     height: 100%;
     text-transform: uppercase;
     line-height: 140%;
-    &:disabled {
-      opacity: 0.6;
-    }
     @media @mobile {
       padding: 9px;
     }
@@ -167,6 +143,7 @@
     }
   }
 }
+
 
 .addAddressModalBody {
   display: grid;

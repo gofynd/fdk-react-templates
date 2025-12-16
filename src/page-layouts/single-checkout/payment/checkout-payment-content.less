@@ -167,7 +167,8 @@
       border: none;
     }
 
-    .linkWrapper:last-child {
+    .linkWrapper:last-child,
+    .linkWrapper.lastChild {
       .linkWrapper-row1 {
         border-bottom: 1px solid var(--dividerStokes);
         @media @tablet {
@@ -1410,6 +1411,425 @@
     text-align: center;
   }
 
+  .neftWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .neftSection {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    @media @tablet {
+      gap: 12px;
+    }
+  }
+
+  .neftUploadButtonWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .neftUploadHelperWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .neftSectionTitle {
+    font-size: 16px;
+    font-weight: 600;
+    color: @TextHeading;
+    font-family: var(--font-header, "WorkSans");
+    margin: 0;
+
+    @media @tablet {
+      font-size: 12px;
+      letter-spacing: -0.24px;
+    }
+  }
+
+  .neftBeneficiaryCard {
+    border: 1px solid @DividerStokes;
+    border-radius: 12px;
+    background-color: @ThemeAccentL4;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .neftBeneficiaryRow {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: center;
+    padding-bottom: 12px;
+
+    @media @tablet {
+      padding-bottom: 10px;
+    }
+
+    &:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+  }
+
+  .neftBeneficiaryLabelWrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .neftBeneficiaryLabel {
+    font-size: 14px;
+    font-weight: 500;
+    color: @TextHeading;
+    font-family: var(--font-header, "WorkSans");
+
+    @media @tablet {
+      color: @TextHeading;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: -0.24px;
+    }
+  }
+
+  .neftLabelSeparator {
+    font-weight: 600;
+    color: @TextHeading;
+    font-family: var(--font-header, "WorkSans");
+
+    @media @tablet {
+      font-size: 12px;
+      letter-spacing: -0.24px;
+    }
+  }
+
+  .neftBeneficiaryValue {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    font-family: var(--font-body, "WorkSans");
+    color: @TextBody;
+
+    @media @tablet {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 16.8px;
+    }
+  }
+
+  .neftCopyButton {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    svg {
+      height: 14px;
+      width: 14px;
+    }
+  }
+
+  .neftFieldGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .neftFieldLabel {
+    font-size: 14px;
+    font-weight: 500;
+    color: @TextHeading;
+
+    span {
+      color: @ErrorText;
+    }
+  }
+
+  .neftInput {
+    height: 48px;
+    border: 1px solid @DividerStokes;
+    border-radius: 8px;
+    padding: 0 16px;
+    outline: none;
+    font-size: 14px;
+    font-family: var(--font-body, "WorkSans");
+
+    @media @tablet {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 16.8px;
+    }
+  }
+
+  .neftInputError {
+    border-color: @ErrorText;
+  }
+
+  .neftHelperText {
+    font-size: 12px;
+    font-weight: 400;
+    color: @TextSecondary;
+    margin: 0;
+    font-family: var(--font-body, "WorkSans");
+
+    @media @tablet {
+      line-height: 16.8px;
+    }
+  }
+
+  .neftUploadSection {
+    width: 100%;
+  }
+
+  .neftUploadBox {
+    border: 1px dashed @DividerStokes;
+    border-radius: 12px;
+    padding: 41px 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background-color: @ThemeAccentL5;
+  }
+
+  .neftHiddenInput {
+    display: none;
+  }
+
+  .neftFormBlockInner {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .neftUploadIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .neftUploadButton {
+    width: max-content;
+    align-self: center;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid @ButtonPrimary;
+    color: @ButtonPrimary;
+    background-color: @ThemeAccentL5;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-family: var(--font-header, "WorkSans");
+
+    @media @tablet {
+      text-align: center;
+      font-size: 12px;
+      line-height: 16.8px;
+    }
+  }
+
+  .neftUploadTitle {
+    font-size: 16px;
+    font-weight: 600;
+    color: @TextHeading;
+    margin: 0;
+    font-family: var(--font-header, "WorkSans");
+
+    @media @tablet {
+      color: @ButtonPrimary;
+      letter-spacing: -0.32px;
+    }
+  }
+
+  .neftUploadHelper {
+    font-size: 12px;
+    font-weight: 400;
+    color: @TextSecondary;
+    margin: 0;
+    font-family: var(--font-body, "WorkSans");
+
+    @media @tablet {
+      color: @TextBody;
+      text-align: center;
+      letter-spacing: -0.24px;
+    }
+  }
+
+  .neftSelectedFile {
+    font-size: 12px;
+    font-weight: 500;
+    color: @TextHeading;
+    margin: 0;
+  }
+
+  .neftPlaceOrderBtn {
+    width: 100%;
+    padding: 14px;
+    border-radius: @ButtonRadius;
+    border: none;
+    background-color: @ButtonPrimary;
+    color: @ThemeAccentL5;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .neftPlaceOrderBtn[disabled] {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .neftError {
+    font-size: 12px;
+    color: @ErrorText;
+    margin: 0;
+  }
+
+  .neftUploadBoxDragging {
+    border-color: @ButtonPrimary;
+    background-color: @ThemeAccentL5;
+  }
+
+  .neftProgressContainer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .neftProgressBarContainer {
+    flex: 1;
+    height: 8px;
+    background-color: @DividerStokes;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .neftProgressBar {
+    height: 100%;
+    background-color: @ButtonPrimary;
+    transition: width 0.3s ease;
+    border-radius: 4px;
+  }
+
+  .neftProgressText {
+    font-size: 12px;
+    font-weight: 600;
+    color: @TextHeading;
+    flex-shrink: 0;
+    min-width: 40px;
+    text-align: right;
+  }
+
+  .neftFileCard {
+    border: 1px solid @DividerStokes;
+    border-radius: 8px;
+    padding: 16px;
+    background-color: @ThemeAccentL4;
+  }
+
+  .neftFileCardContent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .neftFileInfo {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    flex: 1;
+  }
+
+  .neftFileIcon {
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+
+  .neftFileDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+  }
+
+  .neftFileName {
+    font-size: 14px;
+    font-weight: 500;
+    color: @TextHeading;
+    word-break: break-word;
+    display: flex;
+    align-items: center;
+  }
+
+  .neftSuccessIndicator {
+    color: @SuccessText;
+    font-weight: 600;
+    margin-left: 4px;
+  }
+
+  .neftFileSize {
+    font-size: 12px;
+    font-weight: 400;
+    color: @TextSecondary;
+    display: block;
+  }
+
+  .neftFileActions {
+    display: flex;
+    align-items: center;
+  }
+
+  .neftFileActionBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    // padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: @DividerStokes;
+    }
+  }
+
+  .neftDeleteIcon {
+    // width: 20px;
+    // height: 20px;
+    color: @ErrorText;
+  }
+
+  .neftUploadError {
+    margin-top: 12px;
+    padding: 12px;
+    background-color: @ErrorBackground;
+    border-left: 3px solid @ErrorText;
+    border-radius: 4px;
+    font-size: 14px;
+    color: @ErrorText;
+  }
+
+  .neftFormBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    @media @tablet {
+      // padding: 24px 16px;
+      padding: 0px;
+    }
+  }
+
   .otherOption {
     display: flex;
     flex-wrap: wrap;
@@ -1843,12 +2263,6 @@
   }
 }
 .modeItemLogo {
-  @media @desktop {
-    .moreWlIcon {
-      width: 24px;
-      height: 24px;
-    }
-  }
   @media @tablet {
     span {
       border: 1px solid @DividerStokes;
@@ -1982,5 +2396,62 @@
     .contact_us {
       margin-top: 12px;
     }
+  }
+}
+
+.fileIcon {
+  // margin-right: 12px;
+  color: var(--buttonPrimary);
+}
+
+.fs-12 {
+  font-size: 12px;
+}
+
+.field {
+  @media @desktop {
+    // flex: 0 0 30%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    width: 100%;
+  }
+
+  @media @mobile {
+    width: 100%;
+    padding: 1rem 0;
+    padding-right: 0;
+    padding-bottom: 5px;
+  }
+
+  .field-input-container {
+    flex: 1;
+    padding-right: 10px;
+
+    @media @mobile {
+      margin-bottom: 16px;
+      padding-right: 0;
+    }
+  }
+
+  input {
+    &:disabled {
+      background-color: transparent !important;
+      border: none !important;
+      cursor: not-allowed !important;
+    }
+    @media @mobile {
+      font-size: 14px;
+    }
+  }
+
+  position: relative;
+}
+
+.copyIcon {
+  svg {
+    height: 18px;
+    width: 18px;
   }
 }

@@ -25,7 +25,7 @@ function OrderTrackingDetails({
 }) {
   const { t } = useGlobalTranslation("translation");
   const params = useParams();
-  const [orderId, setOrderId] = useState(params.orderId ?? "");
+  const [orderId, setOrderId] = useState(params.orderId);
   const [showError, setShowError] = useState(false);
   const [show, setShow] = useState(false);
   const [selectedShipmentBag, setSelectedShipmentBag] =
@@ -41,14 +41,6 @@ function OrderTrackingDetails({
     }
     navigate(`/order-tracking/${orderId}`);
   };
-
-  useEffect(() => {
-    if (params?.orderId === ":orderId") {
-      console.log("navigating to order tracking");
-
-      navigate(`/order-tracking`);
-    }
-  }, []);
 
   const toggelInit = (item) => {
     navigate(`/profile/orders/shipment/${selectedShipmentBag?.shipment_id}`);
@@ -195,49 +187,36 @@ function OrderTrackingDetails({
             )}
         </div>
       ) : (
-        <>
-          {!isLoading && (
-            <div className={styles.linkMainBox}>
-              {linkOrderDetails?.data ? (
-                <>
-                  <div className={styles.paymentSuccessIconBox}>
-                    <PaymentLinkSuccess />
-                    <h2 className={`${styles.successText} fontHeader`}>
-                      {t("resource.payment_link.success_text")}
-                    </h2>
-                  </div>
-                  <div className={styles.orderInfo}>
-                    <div className={styles.linkOrderId}>
-                      <p className={`${styles.orderIdText} fontHeader`}>
-                        {" "}
-                        {t("resource.payment_link.order_id")}
-                      </p>
-                      <h2 className={`${styles.orderIdValue} fontHeader`}>
-                        {linkOrderDetails?.orderId}
-                      </h2>
-                    </div>
-                    <div className={styles.linkOrderId}>
-                      <p className={`${styles.orderIdText} fontHeader`}>
-                        {t("resource.common.amount")}
-                      </p>
-                      <h2 className={`${styles.orderIdValue} fontHeader`}>
-                        {linkOrderDetails?.amount?.value &&
-                          priceFormatCurrencySymbol(
-                            linkOrderDetails?.amount?.currency_symbol,
-                            linkOrderDetails?.amount?.value
-                          )}
-                      </h2>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <div className={`${styles.error}`}>
-                  <EmptyState title={linkOrderDetails?.error}></EmptyState>
-                </div>
-              )}
+        <div className={styles.linkMainBox}>
+          <div className={styles.paymentSuccessIconBox}>
+            <PaymentLinkSuccess />
+            <h2 className={`${styles.successText} fontHeader`}>
+              {t("resource.payment_link.success_text")}
+            </h2>
+          </div>
+          <div className={styles.orderInfo}>
+            <div className={styles.linkOrderId}>
+              <p className={`${styles.orderIdText} fontHeader`}>
+                {" "}
+                {t("resource.payment_link.order_id")}
+              </p>
+              <h2 className={`${styles.orderIdValue} fontHeader`}>
+                {linkOrderDetails?.orderId}
+              </h2>
             </div>
-          )}
-        </>
+            <div className={styles.linkOrderId}>
+              <p className={`${styles.orderIdText} fontHeader`}>
+                {t("resource.common.amount")}
+              </p>
+              <h2 className={`${styles.orderIdValue} fontHeader`}>
+                {priceFormatCurrencySymbol(
+                  linkOrderDetails?.amount?.currency_symbol,
+                  linkOrderDetails?.amount?.value
+                )}
+              </h2>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

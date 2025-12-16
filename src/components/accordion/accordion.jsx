@@ -90,9 +90,6 @@ const Accordion = ({ items, onItemClick }) => {
                                                 styles.accordionContentImg
                                               }
                                             />
-                                            {typeof imageObj.itemCount !== "undefined" && (
-                                              <span className={styles.itemCount}>x {imageObj.itemCount}</span>
-                                            )}
                                             <ImagePreview
                                               data={{
                                                 img: imageObj.imageUrl,

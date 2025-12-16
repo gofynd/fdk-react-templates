@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useMemo, useRef  } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useLocation } from "react-router-dom";
+import Slider from "react-slick";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./blog.less";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
@@ -18,22 +19,17 @@ import {
 
 import {
   isRunningOnClient,
+  throttle,
   convertUTCDateToLocalDate,
   formatLocale,
   translateDynamicLabel,
 } from "../../helper/utils";
 import Shimmer from "../../components/shimmer/shimmer";
-import useLocaleDirection from "../../helper/hooks/useLocaleDirection";
-import { debounce } from "../../helper/utils";
 import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselPrevious,
-  CarouselNext,
-  CarouselDots,
-} from "../../components/carousel/carousel";
-import Autoplay from "embla-carousel-autoplay";
+  SliderNextArrow,
+  SliderPrevArrow,
+} from "../../components/slider-arrow/slider-arrow";
+import useLocaleDirection from "../../helper/hooks/useLocaleDirection";
 
 function MemoizedSlide({ blog, index, sliderProps, getBlogTitle }) {
   const { t } = useGlobalTranslation("translation");
@@ -74,12 +70,12 @@ function MemoizedSlide({ blog, index, sliderProps, getBlogTitle }) {
             {getFormattedDate(blog?.publish_date)}
           </span>
         </div>
-        <h2 className={`${styles.blogItem__title} ${styles.titleMobile}`}>
+        <h1 className={`${styles.blogItem__title} ${styles.titleMobile}`}>
           {getBlogTitle(blog?.title)}
-        </h2>
-        <h2 className={`${styles.blogItem__title} ${styles.titleDesktop}`}>
+        </h1>
+        <h1 className={`${styles.blogItem__title} ${styles.titleDesktop}`}>
           {blog?.title}
-        </h2>
+        </h1>
         {blog?.summary && (
           <p className={`${styles.blogItem__content}`}>{blog?.summary}</p>
         )}
@@ -117,7 +113,7 @@ function BlogList({
   ssrSearch,
   ssrFilters,
 }) {
-  const { direction } = useLocaleDirection();
+  const { isRTL } = useLocaleDirection();
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
   const i18nDetails = useGlobalStore(fpi?.getters?.i18N_DETAILS) || {};
@@ -145,33 +141,80 @@ function BlogList({
     typeof show_top_blog === "boolean" || show_top_blog === ""
       ? show_top_blog
       : true;
+  const [windowWidth, setWindowWidth] = useState(0);
+  const slideInterval = Number(sliderProps?.slide_interval) || 3;
+  const transitionDuration = 600;
+  const [config, setConfig] = useState({
+    dots: false,
+    speed: transitionDuration,
+    autoplaySpeed: slideInterval * 1000 + transitionDuration,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    swipeToSlide: false,
+    autoplay: sliderProps?.autoplay,
+    pauseOnHover: true,
+    cssEase: "ease-in-out",
+    centerPadding: "75px",
+    arrows: true,
+    nextArrow: <SliderNextArrow nextArrowStyles={styles.nextArrowStyles} />,
+    prevArrow: <SliderPrevArrow prevArrowStyles={styles.prevArrowStyles} />,
+    infinite: sliderBlogs?.items?.length > 1,
+    rtl: isRTL,
+    responsive: [
+      {
+        breakpoint: 768,
+        settings: {
+          arrows: false,
+          centerPadding: "32px",
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          arrows: false,
+          centerPadding: "20px",
+        },
+      },
+    ],
+  });
 
-  const carouselProps = useMemo(() => {
-    const opts = {
-      loop: sliderBlogs?.items?.length > 1,
-      skipSnaps: true,
-      direction,
-    };
-    const plugins = [];
-    if (sliderProps?.autoplay) {
-      plugins.push(
-        Autoplay({
-          stopOnMouseEnter: true,
-          stopOnInteraction: false,
-          delay: Number(sliderProps?.slide_interval || 3) * 1000,
-        })
-      );
-    }
-    return { opts, plugins };
-  }, [
-    sliderBlogs?.items?.length,
-    sliderProps?.autoplay,
-    sliderProps?.slide_interval,
-  ]);
+  useEffect(() => {
+    setConfig((prevConfig) => ({
+      ...prevConfig,
+      infinite: sliderBlogs?.items?.length > 1,
+    }));
+  }, [sliderBlogs]);
 
   useEffect(() => {
     setBlogCount(totalBlogsList?.page?.item_total);
   }, [totalBlogsList]);
+
+  useEffect(() => {
+    if (sliderProps?.autoplay) {
+      setConfig((prevConfig) => ({
+        ...prevConfig,
+        autoplay: sliderProps.autoplay,
+        speed: Number(sliderProps.slide_interval * 1000),
+      }));
+    }
+  }, [sliderProps.autoplay, sliderProps.slide_interval]);
+
+  useEffect(() => {
+    const handleResize = throttle(() => {
+      setWindowWidth(isRunningOnClient() ? window.innerWidth : 0);
+    }, 500);
+
+    if (isRunningOnClient()) {
+      window.addEventListener("resize", handleResize);
+      handleResize();
+    }
+
+    return () => {
+      if (isRunningOnClient()) {
+        window.removeEventListener("resize", handleResize);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const searchParams = isRunningOnClient()
@@ -186,7 +229,18 @@ function BlogList({
       key: item?.toLowerCase(),
     }));
 
-    setBlogFilter([...(tagBlogFilters || [])]);
+    setBlogFilter([
+      ...(tagBlogFilters || []),
+      ...(search
+        ? [
+            {
+              display: search,
+              pretext: "text",
+              key: "search_text",
+            },
+          ]
+        : []),
+    ]);
   }, [location?.search]);
 
   const removeFilter = (filter) => {
@@ -205,33 +259,26 @@ function BlogList({
       search: searchParams?.toString(),
     });
   };
-
-  const debouncedSearchRef = useRef(
-    debounce((value, pathname, search, navigateFn) => {
-      const searchParams = isRunningOnClient()
-        ? new URLSearchParams(search)
-        : null;
-      searchParams?.delete("page_no");
-      if (value) {
-        searchParams?.set("search", value);
-      } else {
-        searchParams?.delete("search");
-      }
-      navigateFn?.({
-        pathname: pathname,
-        search: searchParams?.toString(),
-      });
-    }, 500)
-  ).current;
-
   const searchTextUpdate = (value) => {
     if (value.length > 90) {
       value = value.substring(0, 80);
     }
     setSearchText(value);
-    debouncedSearchRef(value, location?.pathname, location?.search, navigate);
-  };
 
+    const searchParams = isRunningOnClient()
+      ? new URLSearchParams(location?.search)
+      : null;
+    searchParams?.delete("page_no");
+    if (value) {
+      searchParams?.set("search", value);
+    } else {
+      searchParams?.delete("search");
+    }
+    navigate?.({
+      pathname: location?.pathname,
+      search: searchParams?.toString(),
+    });
+  };
   const resetFilters = () => {
     setSearchText("");
     navigate?.({
@@ -381,31 +428,45 @@ function BlogList({
   return (
     <div>
       <div className={styles.blogContainer}>
-        {blogFilter?.length === 0 &&
-          blogs?.page?.item_total === 0 &&
-          !searchText && (
-            <EmptyState title={t("resource.blog.no_blogs_found")}></EmptyState>
-          )}
+        {blogFilter?.length === 0 && blogs?.page?.item_total === 0 && (
+          <EmptyState title={t("resource.blog.no_blogs_found")}></EmptyState>
+        )}
         {showBlogSlideShow && (
           <div className={styles.sliderWrapper}>
-            <Carousel {...carouselProps}>
-              <CarouselContent>
-                {sliderBlogs?.items?.map((blog, index) => (
-                  <CarouselItem key={index}>
-                    <MemoizedSlide
-                      blog={blog}
-                      index={index}
-                      getBlogTitle={getBlogTitle}
-                      sliderProps={sliderProps}
-                    />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className={styles.carouselBtn} />
-              {/* NOTE:  Enable if dots are required to be added in carousel */}
-              {/* <CarouselDots/> */}
-              <CarouselNext className={styles.carouselBtn} />
-            </Carousel>
+            <Slider
+              {...config}
+              initialSlide={0}
+              className={`${styles.hideOnMobile}
+                ${sliderBlogs?.length <= 3 || windowWidth <= 480 ? "no-nav" : ""}
+              `}
+            >
+              {sliderBlogs?.items?.map((blog, index) => (
+                <MemoizedSlide
+                  key={index}
+                  blog={blog}
+                  index={index}
+                  getBlogTitle={getBlogTitle}
+                  sliderProps={sliderProps}
+                />
+              ))}
+            </Slider>
+            <Slider
+              {...config}
+              initialSlide={0}
+              className={`${styles.hideOnDesktop}
+                ${sliderBlogs?.length <= 3 || windowWidth <= 480 ? "no-nav" : ""}
+              `}
+            >
+              {sliderBlogs?.items?.map((blog, index) => (
+                <MemoizedSlide
+                  key={index}
+                  blog={blog}
+                  index={index}
+                  getBlogTitle={getBlogTitle}
+                  sliderProps={sliderProps}
+                />
+              ))}
+            </Slider>
           </div>
         )}
         <div className={styles.filterWrapper}>
@@ -481,13 +542,12 @@ function BlogList({
               </div>
             )}
 
-            {(blogFilter?.length > 0 || searchText) &&
-              blogs?.page?.item_total === 0 && (
-                <EmptyState
-                  title={t("resource.blog.no_blogs_found")}
-                  customClassName={styles.emptyBlog}
-                ></EmptyState>
-              )}
+            {blogFilter?.length > 0 && blogs?.page?.item_total === 0 && (
+              <EmptyState
+                title={t("resource.blog.no_blogs_found")}
+                customClassName={styles.emptyBlog}
+              ></EmptyState>
+            )}
             <div className={`${styles.blogContainer__grid}`}>
               {sliderProps?.loadingOption === "infinite" ? (
                 <InfiniteLoader
