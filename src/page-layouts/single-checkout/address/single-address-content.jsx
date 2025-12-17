@@ -1,12 +1,8 @@
-import React, { useState, useMemo } from "react";
+import React from "react";
 import AddressItem from "../../../components/address-item/address-item";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./single-address-content.less";
-import {
-  useNavigate,
-  useGlobalTranslation,
-  useGlobalStore,
-} from "fdk-core/utils";
+import { useNavigate, useGlobalTranslation } from "fdk-core/utils";
 import Skeleton from "../../../components/core/skeletons/skeleton";
 
 function AddressRight({
@@ -44,15 +40,12 @@ function DeliverBtn({
   showPaymentOptions,
 }) {
   const { t } = useGlobalTranslation("translation");
-  const { app_features } = useGlobalStore(fpi.getters.CONFIGURATION) || {};
-  const { order = {} } = app_features || {};
   return (
     <>
       {selectedAddressId === id && (
         <div className={styles.actionContainer}>
           <button
             className={styles.deliverToThis}
-            disabled={!order?.enabled}
             onClick={() => {
               if (getTotalValue?.() === 0) {
                 showPaymentOptions();
@@ -114,18 +107,9 @@ function SingleAddressContent({
   getTotalValue,
 }) {
   const { t } = useGlobalTranslation("translation");
-  const [showAllOtherAddresses, setShowAllOtherAddresses] = useState(false);
   function selectAdd(id) {
     setSelectedAddressId(id);
   }
-
-  const displayedOtherAddresses = useMemo(() => {
-    if (showAllOtherAddresses || getOtherAddress.length <= 3) {
-      return getOtherAddress;
-    }
-    return getOtherAddress.slice(0, 3);
-  }, [showAllOtherAddresses, getOtherAddress]);
-
   return (
     <>
       {allAddresses &&
@@ -182,7 +166,7 @@ function SingleAddressContent({
               <div className={styles.heading}>
                 {t("resource.common.address.other_address")}
               </div>
-              {displayedOtherAddresses.map((item, index) => {
+              {getOtherAddress.map((item, index) => {
                 return (
                   <AddressItem
                     containerClassName={styles.customAddressItem}
@@ -219,30 +203,6 @@ function SingleAddressContent({
                   ></AddressItem>
                 );
               })}
-
-              {getOtherAddress.length > 3 && (
-                <div className={styles.showMoreBtnContainer}>
-                  <button
-                    className={styles.showOtherAddresses}
-                    onClick={() => setShowAllOtherAddresses((prev) => !prev)}
-                  >
-                    <span>
-                      {showAllOtherAddresses
-                        ? t("resource.common.show_fewer_addresses")
-                        : t("resource.common.show_more_addresses")}
-                    </span>
-                    <span
-                      className={`${styles.arrow} ${
-                        showAllOtherAddresses
-                          ? styles.rotateUp
-                          : styles.rotateDown
-                      }`}
-                    >
-                      <SvgWrapper svgSrc="arrow-down" />
-                    </span>
-                  </button>
-                </div>
-              )}
             </div>
           ) : null}
         </div>

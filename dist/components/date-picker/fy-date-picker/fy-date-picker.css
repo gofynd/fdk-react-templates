@@ -503,26 +503,6 @@ h5,
   font-weight: 600;
   color: var(--textHeading, #26201a);
 }
-.fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__calendarPopup___cA9su .fy-date-picker__calendarHeader___R20ub .fy-date-picker__controlContainer___cfI7T .fy-date-picker__monthYearSelect___hHzRC {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  justify-content: center;
-}
-.fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__calendarPopup___cA9su .fy-date-picker__calendarHeader___R20ub .fy-date-picker__controlContainer___cfI7T .fy-date-picker__monthYearSelect___hHzRC select {
-  padding: 6px 10px;
-  border-radius: 4px;
-  border: 1px solid var(--overlaypopupdividerstroke, #e0e0e0);
-  background: var(--buttonSecondary, #fff);
-  color: var(--textHeading, #26201a);
-  font-weight: 600;
-  cursor: pointer;
-  min-width: 120px;
-}
-.fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__calendarPopup___cA9su .fy-date-picker__calendarHeader___R20ub .fy-date-picker__controlContainer___cfI7T .fy-date-picker__monthYearSelect___hHzRC select:focus {
-  outline: 1px solid var(--buttonPrimary, #4e3f09);
-}
 .fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__calendarPopup___cA9su .fy-date-picker__calendarGrid___LILc2 {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
