@@ -22,7 +22,7 @@ import { useLocation } from "react-router-dom";
 import { SectionRenderer } from "fdk-core/components";
 import * as styles from "./profile-navigation.less";
 import { useMobile } from "../../helper/hooks/useMobile";
-import { useGlobalTranslation, useGlobalStore, useFPI } from "fdk-core/utils";
+import { useGlobalTranslation, useGlobalStore } from "fdk-core/utils";
 
 function ProfileNavigation({
   children,
@@ -32,7 +32,6 @@ function ProfileNavigation({
   globalConfig,
 }) {
   const { t } = useGlobalTranslation("translation");
-  const fpi = useFPI();
   const isMobile = useMobile();
   const { pathname } = useLocation();
   const { language } = useGlobalStore(fpi.getters.i18N_DETAILS);
