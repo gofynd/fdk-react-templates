@@ -28,7 +28,6 @@ function ShipmentTracking({
   shipmentInfo = {},
   changeinit,
   invoiceDetails,
-  customNeedHelpLink,
   availableFOCount,
   bagLength = 0,
 }) {
@@ -61,25 +60,19 @@ function ShipmentTracking({
         link: shipmentInfo?.track_url ? shipmentInfo?.track_url : "",
       });
     }
-    // if (shipmentInfo?.need_help_url) {
-    //   arrLinks.push({
-    //     type: "internal",
-    //     text: t("resource.common.need_help"),
-    //     link: "/faq/" || shipmentInfo?.need_help_url,
-    //   });
-    // }
+    if (shipmentInfo?.need_help_url) {
+      arrLinks.push({
+        type: "internal",
+        text: t("resource.common.need_help"),
+        link: "/faq/" || shipmentInfo?.need_help_url,
+      });
+    }
     if (invoiceDetails?.success) {
       arrLinks.push({
         text: t("resource.common.download_invoice"),
         link: invoiceDetails?.presigned_url,
       });
     }
-    arrLinks.push({
-      type: "internal",
-      text: t("resource.common.need_help"),
-      newTab: !!customNeedHelpLink?.value,
-      link: customNeedHelpLink?.value || "/faq/",
-    });
     return arrLinks;
   };
 
@@ -127,11 +120,7 @@ function ShipmentTracking({
       }
       window.scrollTo(0, 0);
     } else {
-      if (item?.newTab) {
-        window.open(item?.link, "_blank");
-      } else {
-        navigate(item?.link);
-      }
+      navigate(item?.link);
     }
   };
 
