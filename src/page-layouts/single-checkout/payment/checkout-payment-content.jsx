@@ -306,12 +306,14 @@ function CheckoutPaymentContent({
   // Separate state for NEFT
   const [neftUtrNumber, setNeftUtrNumber] = useState("");
   const [neftUtrError, setNeftUtrError] = useState(false);
+  const [neftUtrMinError, setNeftUtrMinError] = useState(false);
   const [neftFileUploadError, setNeftFileUploadError] = useState(false);
   const [neftProofFiles, setNeftProofFiles] = useState([]);
 
   // Separate state for RTGS
   const [rtgsUtrNumber, setRtgsUtrNumber] = useState("");
   const [rtgsUtrError, setRtgsUtrError] = useState(false);
+  const [rtgsUtrMinError, setRtgsUtrMinError] = useState(false);
   const [rtgsFileUploadError, setRtgsFileUploadError] = useState(false);
   const [rtgsProofFiles, setRtgsProofFiles] = useState([]);
 
@@ -384,7 +386,6 @@ function CheckoutPaymentContent({
         t("resource.dynamic_label.utr_helper") ||
         "UTR is a unique alphanumeric code assigned by a bank to track a specific financial transaction",
       uploadHeading:
-        translateDynamicLabel(configSource.payment_receipt?.display_name, t) ||
         t("resource.dynamic_label.upload_payment_receipt") ||
         configSource.payment_receipt?.display_name ||
         "Drag and drop your files here",
@@ -455,7 +456,7 @@ function CheckoutPaymentContent({
         t("resource.dynamic_label.utr_helper") ||
         "UTR is a unique alphanumeric code assigned by a bank to track a specific financial transaction",
       uploadHeading:
-        t("resource.dynamic_label.ask_user_to_upload_payment_receipt") ||
+        t("resource.dynamic_label.upload_payment_receipt") ||
         configSource.payment_receipt?.display_name ||
         "Drag and drop your files here",
       uploadCta: t("resource.dynamic_label.upload_file") || "UPLOAD FILE",
@@ -839,16 +840,20 @@ function CheckoutPaymentContent({
   };
 
   const handleUtrInputChange = (event) => {
+    const value = event.target.value.toUpperCase();
+
     if (selectedTab === "NEFT") {
       if (neftUtrError) {
         setNeftUtrError(false);
+        setNeftUtrMinError(false);
       }
-      setNeftUtrNumber(event.target.value);
+      setNeftUtrNumber(value);
     } else if (selectedTab === "RTGS") {
       if (rtgsUtrError) {
         setRtgsUtrError(false);
+        setRtgsUtrMinError(false);
       }
-      setRtgsUtrNumber(event.target.value.toUpperCase());
+      setRtgsUtrNumber(value);
     }
   };
 
@@ -858,6 +863,7 @@ function CheckoutPaymentContent({
     // Reset errors
     setNeftUtrError(false);
     setNeftFileUploadError(false);
+    setNeftUtrMinError(false);
 
     let hasError = false;
 
@@ -870,6 +876,9 @@ function CheckoutPaymentContent({
         // Both fields must be filled
         if (!neftUtrNumber?.trim()) {
           setNeftUtrError(true);
+          hasError = true;
+        } else if (neftUtrNumber?.trim()?.length < 16) {
+          setNeftUtrMinError(true);
           hasError = true;
         }
         if (
@@ -884,6 +893,9 @@ function CheckoutPaymentContent({
         if (!neftUtrNumber?.trim()) {
           setNeftUtrError(true);
           hasError = true;
+        } else if (neftUtrNumber?.trim()?.length < 16) {
+          setNeftUtrMinError(true);
+          hasError = true;
         }
       } else if (isUploadFieldRequired) {
         // Only file upload is required
@@ -895,6 +907,16 @@ function CheckoutPaymentContent({
           hasError = true;
         }
       }
+    }
+
+    // Validate min length even when field is not required but has value
+    if (
+      !isUtrFieldRequired &&
+      neftUtrNumber?.trim() &&
+      neftUtrNumber?.trim()?.length < 16
+    ) {
+      setNeftUtrMinError(true);
+      hasError = true;
     }
 
     if (!hasError) {
@@ -918,6 +940,7 @@ function CheckoutPaymentContent({
     // Reset errors
     setRtgsUtrError(false);
     setRtgsFileUploadError(false);
+    setRtgsUtrMinError(false);
 
     let hasError = false;
 
@@ -930,6 +953,9 @@ function CheckoutPaymentContent({
         // Both fields must be filled
         if (!rtgsUtrNumber?.trim()) {
           setRtgsUtrError(true);
+          hasError = true;
+        } else if (rtgsUtrNumber?.trim()?.length < 16) {
+          setRtgsUtrMinError(true);
           hasError = true;
         }
         if (
@@ -944,6 +970,9 @@ function CheckoutPaymentContent({
         if (!rtgsUtrNumber?.trim()) {
           setRtgsUtrError(true);
           hasError = true;
+        } else if (rtgsUtrNumber?.trim()?.length < 16) {
+          setRtgsUtrMinError(true);
+          hasError = true;
         }
       } else if (isUploadFieldRequired) {
         // Only file upload is required
@@ -955,6 +984,16 @@ function CheckoutPaymentContent({
           hasError = true;
         }
       }
+    }
+
+    // Validate min length even when field is not required but has value
+    if (
+      !isUtrFieldRequired &&
+      rtgsUtrNumber?.trim() &&
+      rtgsUtrNumber?.trim()?.length < 16
+    ) {
+      setRtgsUtrMinError(true);
+      hasError = true;
     }
 
     if (!hasError) {
@@ -3567,6 +3606,8 @@ function CheckoutPaymentContent({
                         inputVariant="outlined"
                         inputClassName={styles["fs-12"]}
                         containerClassName={styles["field-input-container"]}
+                        minLength={16}
+                        maxLength={22}
                         type="text"
                         value={neftUtrNumber}
                         onChange={handleUtrInputChange}
@@ -3587,8 +3628,14 @@ function CheckoutPaymentContent({
                         //     )}
                         //   </div>
                         // }
-                        error={neftUtrError}
-                        errorMessage={t("resource.common.field_required")}
+                        error={neftUtrError || neftUtrMinError}
+                        errorMessage={
+                          neftUtrError
+                            ? t("resource.common.field_required")
+                            : neftUtrMinError
+                              ? t("resource.dynamic_label.utr_min_length")
+                              : ""
+                        }
                       />
                     </div>
                   </section>
@@ -3886,8 +3933,14 @@ function CheckoutPaymentContent({
                         //     )}
                         //   </div>
                         // }
-                        error={rtgsUtrError}
-                        errorMessage={t("resource.common.field_required")}
+                        error={rtgsUtrError || rtgsUtrMinError}
+                        errorMessage={
+                          rtgsUtrError
+                            ? t("resource.common.field_required")
+                            : rtgsUtrMinError
+                              ? t("resource.dynamic_label.utr_min_length")
+                              : ""
+                        }
                       />
                     </div>
                   </section>
