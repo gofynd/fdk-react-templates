@@ -371,7 +371,6 @@ function ContactSupport({
             <FyImage
               customClass={styles.imageWrapper}
               src={pageConfig?.image_desktop}
-              alt={pageConfig?.title || t("resource.contact_us.hero_image")}
               aspectRatio={3 / 4}
               showOverlay={true}
               overlayColor="#000000"

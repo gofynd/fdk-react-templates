@@ -915,23 +915,6 @@ h5,
   padding-inline-end: 12px;
   padding-bottom: 4px;
   padding-inline-start: 0px;
-  justify-content: space-between;
-}
-.single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF .single-shipment-content__headerLeft___ffG20 .single-shipment-content__shipmentLabelBox___zPT_T {
-  display: flex;
-  align-items: center;
-}
-.single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF .single-shipment-content__headerLeft___ffG20 .single-shipment-content__mobileEditCartBtn___RhOYe {
-  display: none;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--buttonLink, #b1655b);
-  text-decoration: underline;
-}
-@media only screen and (max-width: 480px) {
-  .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF .single-shipment-content__headerLeft___ffG20 .single-shipment-content__mobileEditCartBtn___RhOYe {
-    display: block;
-  }
 }
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF .single-shipment-content__headerLeft___ffG20 .single-shipment-content__shipmentLabelLoader___jYWWp {
   height: 17px;
@@ -2786,9 +2769,6 @@ h5,
 }
 .sticky-pay-now__checkoutButton___mtO42 {
   gap: 12px;
-}
-.sticky-pay-now__checkoutButton___mtO42.sticky-pay-now__linkPayBtn___CY0FQ {
-  width: 100%;
 }
 .sticky-pay-now__buttonWidth___nKraw {
   width: 100%;
