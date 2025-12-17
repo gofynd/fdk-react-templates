@@ -30,6 +30,7 @@ import SvgCheck from "../../../assets/images/checkmark-filled-small.svg";
 import DeleteSvg from "../../../assets/images/delete2.svg";
 import TickBlackActiveSvg from "../../../assets/images/tick-black-active.svg";
 import FyInput from "../../../components/core/fy-input/fy-input";
+import DangerInfoIcon from "../../../assets/images/danger-info.svg";
 
 const upiDisplayWrapperStyle = {
   padding: "24px",
@@ -3543,6 +3544,12 @@ function CheckoutPaymentContent({
         const utrFieldSet =
           t("resource.dynamic_label.utr_number") || "UTR Number";
 
+        const currency = getCurrencySymbol;
+
+        const totalValue = Math.ceil(getTotalValue());
+
+        const mop = "NEFT";
+
         console.log(beneficiaryDetails, "beneficiaryDetails");
         return (
           <div>
@@ -3590,6 +3597,19 @@ function CheckoutPaymentContent({
                     ))}
                 </div>
               </section>
+
+              <div className={styles.infoAlert}>
+                <div className={styles.infoAlertIcon}>
+                  <DangerInfoIcon />
+                </div>
+                <span>
+                  {t("resource.dynamic_label.please_pay_for_mop_payment", {
+                    currency,
+                    totalValue,
+                    mop,
+                  })}
+                </span>
+              </div>
 
               <div className={styles.neftFormBlock}>
                 <div className={styles.neftFormBlockInner}>
@@ -3848,6 +3868,12 @@ function CheckoutPaymentContent({
         const utrFieldSet =
           t("resource.dynamic_label.utr_number") || "UTR Number";
 
+        const currency = getCurrencySymbol;
+
+        const totalValue = Math.ceil(getTotalValue());
+
+        const mop = "RTGS";
+
         console.log(beneficiaryDetails, "beneficiaryDetails of RTGS");
         return (
           <div>
@@ -3895,6 +3921,19 @@ function CheckoutPaymentContent({
                     ))}
                 </div>
               </section>
+
+              <div className={styles.infoAlert}>
+                <div className={styles.infoAlertIcon}>
+                  <DangerInfoIcon />
+                </div>
+                <span>
+                  {t("resource.dynamic_label.please_pay_for_mop_payment", {
+                    currency,
+                    totalValue,
+                    mop,
+                  })}
+                </span>
+              </div>
 
               <div className={styles.neftFormBlock}>
                 <div className={styles.neftFormBlockInner}>

@@ -2456,3 +2456,33 @@
 .neftBorderBottom {
   border-bottom: 1px solid @DividerStokes;
 }
+
+.infoAlert {
+  .flex-align-center();
+  background: @InformationBackground;
+  border-radius: 6px;
+  .padding(8px,12px);
+  .margin-bottom(24px);
+  color: @InformationText;
+  text-align: right;
+  font-family: var(--font-body, "WorkSans");
+  .font-size(12px);
+  .font-weight(600);
+  line-height: 16.8px;
+
+  @media @mobile {
+    text-align: left;
+    .font-size(12px);
+    .font-weight(400);
+    line-height: 16px;
+    letter-spacing: -0.24px;
+  }
+
+  svg {
+    margin-right: 8px;
+  }
+
+  .infoAlertIcon {
+    .flex-align-center();
+  }
+}
