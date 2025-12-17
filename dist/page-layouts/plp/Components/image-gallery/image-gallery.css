@@ -3274,10 +3274,10 @@ h5,
 .carousel__carouselTrack___aUjv6 {
   display: flex;
 }
-carouselTrackHorizontal {
+.carousel__carouselTrackHorizontal___ONZUX {
   margin-left: -1rem;
 }
-carouselTrackVertical {
+.carousel__carouselTrackVertical___YV4u7 {
   flex-direction: column;
   margin-top: -1rem;
 }
@@ -3285,10 +3285,10 @@ carouselTrackVertical {
   min-width: 0;
   flex: 0 0 100%;
 }
-carouselItemHorizontal {
+.carousel__carouselItemHorizontal___leSmZ {
   padding-left: 1rem;
 }
-carouselItemVertical {
+.carousel__carouselItemVertical___Cy2Kq {
   padding-top: 1rem;
 }
 .carousel__carouselBtn___Z49nh {
@@ -3331,6 +3331,31 @@ carouselItemVertical {
   bottom: -36px;
   left: 50%;
   transform: translateX(-50%) rotate(-90deg);
+}
+.carousel__carouselDots___mSWrY {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 16px;
+}
+.carousel__carouselDot___qmUA7 {
+  width: 12px;
+  height: 12px;
+  border-radius: 25px;
+  background-color: var(--textSecondary, #6b6b6b);
+  color: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.carousel__carouselDotActive___PgH1d {
+  background-color: var(--textHeading, #222222);
+}
+.carousel__carouselDotInactive___fZ7Pq {
+  background-color: var(--textSecondary, #6b6b6b);
 }
 .carousel__srOnly___Q1z_4 {
   position: absolute;
