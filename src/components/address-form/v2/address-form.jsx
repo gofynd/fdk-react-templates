@@ -518,9 +518,9 @@ const AddressForm = ({
           </button>
         )}
         <h2 className={styles.formHeaderTitle}>
-          {isNewAddress
-            ? t("resource.common.address.add_new_address")
-            : t("resource.common.address.edit_address")}
+          {isMapAvailable
+            ? t("resource.common.address.enter_address")
+            : t("resource.common.address.add_new_address")}
         </h2>
         <button className={styles.closeIcon} onClick={onClose}>
           <CloseIcon />

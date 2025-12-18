@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import * as styles from "./remove-cart-item.less";
 import Modal from "../../../../components/core/modal/modal";
 import { useGlobalTranslation } from "fdk-core/utils";
@@ -11,7 +11,6 @@ function RemoveCartItem({
   onCloseDialogClick = () => { },
 }) {
   const { t } = useGlobalTranslation("translation");
-  const [isImageReady, setIsImageReady] = useState(false);
   const getProductImage = useMemo(() => {
     if (
       cartItem?.product?.images?.length > 0 &&
@@ -21,32 +20,10 @@ function RemoveCartItem({
     }
   }, [cartItem]);
 
-  useEffect(() => {
-    setIsImageReady(false);
-
-    if (!isOpen) return;
-    if (!getProductImage) {
-      setIsImageReady(true);
-      return;
-    }
-
-    const img = new Image();
-    img.src = getProductImage;
-
-    const markReady = () => setIsImageReady(true);
-    img.addEventListener("load", markReady);
-    img.addEventListener("error", markReady);
-
-    return () => {
-      img.removeEventListener("load", markReady);
-      img.removeEventListener("error", markReady);
-    };
-  }, [isOpen, getProductImage]);
-
   return (
     <Modal
       title={t("resource.cart.remove_item")}
-      isOpen={isOpen && isImageReady}
+      isOpen={isOpen}
       closeDialog={onCloseDialogClick}
       headerClassName={styles.header}
       subTitleClassName={styles.subTitle}

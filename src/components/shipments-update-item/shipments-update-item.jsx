@@ -137,7 +137,7 @@ function ShipmentUpdateItem({
             </div>
             <div className={`${styles.sizeQuantityContainer}`}>
               {size && (
-              <div className={`${styles.sizeContainer} ${styles.regularxxs} ${showQuantityError? styles.addPaddingToContainer : ''}`}>
+                <div className={`${styles.sizeContainer} ${styles.regularxxs}`}>
                   <span className={`${styles.boldxxs}`}>{size}</span>
                 </div>
               )}
