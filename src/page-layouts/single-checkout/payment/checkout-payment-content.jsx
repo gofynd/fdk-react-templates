@@ -333,8 +333,6 @@ function CheckoutPaymentContent({
   }, [selectedTab, rtgsFileUpload, neftFileUpload]);
 
   const neftDisplayConfig = useMemo(() => {
-    console.log(neftFileUpload, "neftFileUpload");
-
     // Helper function to extract value from API response
     const extractValue = (fieldData) => {
       if (!fieldData) return "";
@@ -405,7 +403,6 @@ function CheckoutPaymentContent({
   }, [neftFileUpload?.neftRtgsConfig]);
 
   const rtgsDisplayConfig = useMemo(() => {
-    console.log(rtgsFileUpload, "rtgsFileUpload");
     // Helper function to extract value from API response
     const extractValue = (fieldData) => {
       if (!fieldData) return "";
@@ -841,7 +838,7 @@ function CheckoutPaymentContent({
       setValue(value);
       setTimeout(() => setValue(null), 4000);
     } catch (error) {
-      console.log("Copy to clipboard failed", error);
+      console.error("Copy to clipboard failed", error);
     }
   };
 
@@ -857,6 +854,9 @@ function CheckoutPaymentContent({
       // Clear other errors
       if (neftUtrError) {
         setNeftUtrError(false);
+      }
+
+      if (value.trim().length >= 16) {
         setNeftUtrMinError(false);
       }
 
@@ -872,6 +872,9 @@ function CheckoutPaymentContent({
       // Clear other errors
       if (rtgsUtrError) {
         setRtgsUtrError(false);
+      }
+
+      if (value.trim().length >= 16) {
         setRtgsUtrMinError(false);
       }
 
@@ -922,12 +925,6 @@ function CheckoutPaymentContent({
 
   const handleNeftPlaceOrder = () => {
     const { isUtrFieldRequired, isUploadFieldRequired } = neftDisplayConfig;
-
-    // Debug: Check config values
-    console.log("NEFT - isUtrFieldRequired:", isUtrFieldRequired);
-    console.log("NEFT - isUploadFieldRequired:", isUploadFieldRequired);
-    console.log("NEFT - neftDisplayConfig:", neftDisplayConfig);
-
     // Reset file upload error
     setNeftFileUploadError(false);
 
@@ -971,11 +968,6 @@ function CheckoutPaymentContent({
 
   const handleRtgsPlaceOrder = () => {
     const { isUtrFieldRequired, isUploadFieldRequired } = rtgsDisplayConfig;
-
-    // Debug: Check config values
-    console.log("RTGS - isUtrFieldRequired:", isUtrFieldRequired);
-    console.log("RTGS - isUploadFieldRequired:", isUploadFieldRequired);
-    console.log("RTGS - rtgsDisplayConfig:", rtgsDisplayConfig);
 
     // Reset file upload error
     setRtgsFileUploadError(false);
@@ -3556,7 +3548,6 @@ function CheckoutPaymentContent({
 
         const mop = "NEFT";
 
-        console.log(beneficiaryDetails, "beneficiaryDetails");
         return (
           <div>
             <div className={styles.neftWrapper}>
@@ -3888,7 +3879,6 @@ function CheckoutPaymentContent({
 
         const mop = "RTGS";
 
-        console.log(beneficiaryDetails, "beneficiaryDetails of RTGS");
         return (
           <div>
             <div className={styles.neftWrapper}>
