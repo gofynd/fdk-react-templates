@@ -3110,7 +3110,7 @@ function CheckoutPaymentContent({
             <div
               className={`${styles.otherHeader} ${styles["view-mobile-up"]}`}
             >
-              {t("resource.checkout.select_payment_option")}
+              {t("resource.common.select_payment_option")}
             </div>
             <div className={styles.modeOption}>
               {otherPaymentOptions?.length &&
