@@ -31,7 +31,21 @@
         padding-inline-end: 12px;
         padding-bottom: 4px;
         padding-inline-start: 0px;
-
+        justify-content: space-between;
+        .shipmentLabelBox {
+          display: flex;
+          align-items: center;
+        }
+        .mobileEditCartBtn {
+          display: none;
+          font-size: 12px;
+          font-weight: 500;
+          color: @ButtonLink;
+          text-decoration: underline;
+          @media @mobile {
+            display: block;
+          }
+        }
         .shipmentLabelLoader {
           height: 17px;
         }
