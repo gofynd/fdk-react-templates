@@ -5012,7 +5012,9 @@ function CheckoutPaymentContent({
                               &nbsp;
                             </div>
                             <div className={styles.link}>
-                              <div className={styles.icon}>
+                              <div
+                                className={`${styles.icon} ${styles.flexCenter}`}
+                              >
                                 <SvgWrapper
                                   svgSrc={neftOption.svg}
                                 ></SvgWrapper>
@@ -5119,7 +5121,9 @@ function CheckoutPaymentContent({
                               &nbsp;
                             </div>
                             <div className={styles.link}>
-                              <div className={styles.icon}>
+                              <div
+                                className={`${styles.icon} ${styles.flexCenter}`}
+                              >
                                 <SvgWrapper
                                   svgSrc={rtgsOption.svg}
                                 ></SvgWrapper>
