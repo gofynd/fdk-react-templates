@@ -3919,20 +3919,20 @@ function CheckoutPaymentContent({
                       </div>
                     ))}
                 </div>
-              </section>
 
-              <div className={styles.infoAlert}>
-                <div className={styles.infoAlertIcon}>
-                  <DangerInfoIcon />
+                <div className={styles.infoAlert}>
+                  <div className={styles.infoAlertIcon}>
+                    <DangerInfoIcon />
+                  </div>
+                  <span>
+                    {t("resource.dynamic_label.please_pay_for_mop_payment", {
+                      currency,
+                      totalValue,
+                      mop,
+                    })}
+                  </span>
                 </div>
-                <span>
-                  {t("resource.dynamic_label.please_pay_for_mop_payment", {
-                    currency,
-                    totalValue,
-                    mop,
-                  })}
-                </span>
-              </div>
+              </section>
 
               <div className={styles.neftFormBlock}>
                 <div className={styles.neftFormBlockInner}>
