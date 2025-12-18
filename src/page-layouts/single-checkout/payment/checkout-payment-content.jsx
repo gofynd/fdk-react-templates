@@ -4030,94 +4030,103 @@ function CheckoutPaymentContent({
                     </div>
                   </div>
 
-                  <div className={styles.neftUploadingFilesWrapper}>
-                    {/* Display uploading files with progress */}
-                    {fileUpload?.state?.uploadingFiles?.map(
-                      (uploadingFile, index) => (
-                        <div
-                          key={uploadingFile.id}
-                          className={styles.neftFileCard}
-                        >
-                          <div className={styles.neftFileCardContent}>
-                            <div className={styles.neftFileInfo}>
-                              <div className={styles.neftFileIcon}>
-                                <FileSvg className={styles.fileIcon} />
-                              </div>
-                              <div className={styles.neftFileDetails}>
-                                <span className={styles.neftFileName}>
-                                  {uploadingFile.name}
-                                </span>
-                                <div className={styles.neftProgressContainer}>
-                                  <div
-                                    className={styles.neftProgressBarContainer}
-                                  >
-                                    <div
-                                      className={styles.neftProgressBar}
-                                      style={{
-                                        width: `${uploadingFile.progress}%`,
-                                      }}
-                                    />
-                                  </div>
-                                  <span className={styles.neftProgressText}>
-                                    {uploadingFile.progress}%
+                  {fileUpload?.state?.uploadingFiles?.length > 0 && (
+                    <div className={styles.neftUploadingFilesWrapper}>
+                      {/* Display uploading files with progress */}
+                      {fileUpload?.state?.uploadingFiles?.map(
+                        (uploadingFile, index) => (
+                          <div
+                            key={uploadingFile.id}
+                            className={styles.neftFileCard}
+                          >
+                            <div className={styles.neftFileCardContent}>
+                              <div className={styles.neftFileInfo}>
+                                <div className={styles.neftFileIcon}>
+                                  <FileSvg className={styles.fileIcon} />
+                                </div>
+                                <div className={styles.neftFileDetails}>
+                                  <span className={styles.neftFileName}>
+                                    {uploadingFile.name}
                                   </span>
+                                  <div className={styles.neftProgressContainer}>
+                                    <div
+                                      className={
+                                        styles.neftProgressBarContainer
+                                      }
+                                    >
+                                      <div
+                                        className={styles.neftProgressBar}
+                                        style={{
+                                          width: `${uploadingFile.progress}%`,
+                                        }}
+                                      />
+                                    </div>
+                                    <span className={styles.neftProgressText}>
+                                      {uploadingFile.progress}%
+                                    </span>
+                                  </div>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      )
-                    )}
-                  </div>
+                        )
+                      )}
+                    </div>
+                  )}
 
-                  <div className={styles.neftUploadedFilesWrapper}>
-                    {/* Display uploaded files */}
-                    {rtgsProofFiles?.map((file, index) => {
-                      const isUploaded =
-                        index < fileUpload?.state?.fileUploadedName?.length;
+                  {rtgsProofFiles?.some(
+                    (file, index) =>
+                      index < fileUpload?.state?.fileUploadedName?.length
+                  ) && (
+                    <div className={styles.neftUploadedFilesWrapper}>
+                      {/* Display uploaded files */}
+                      {rtgsProofFiles?.map((file, index) => {
+                        const isUploaded =
+                          index < fileUpload?.state?.fileUploadedName?.length;
 
-                      // Only render files that have been successfully uploaded
-                      if (!isUploaded) return null;
+                        // Only render files that have been successfully uploaded
+                        if (!isUploaded) return null;
 
-                      return (
-                        <div
-                          key={`file-${index}`}
-                          className={styles.neftFileCard}
-                        >
-                          <div className={styles.neftFileCardContent}>
-                            <div className={styles.neftFileInfo}>
-                              <div className={styles.neftFileIcon}>
-                                <FileSvg className={styles.fileIcon} />
-                              </div>
-                              <div className={styles.neftFileDetails}>
-                                <span className={styles.neftFileName}>
-                                  {file.name}
-                                  <SvgCheck
-                                    className={styles.neftSuccessIndicator}
-                                  />
-                                </span>
-                                <span className={styles.neftFileSize}>
-                                  {formatFileSize(file.size)}
-                                </span>
-                              </div>
+                        return (
+                          <div
+                            key={`file-${index}`}
+                            className={styles.neftFileCard}
+                          >
+                            <div className={styles.neftFileCardContent}>
+                              <div className={styles.neftFileInfo}>
+                                <div className={styles.neftFileIcon}>
+                                  <FileSvg className={styles.fileIcon} />
+                                </div>
+                                <div className={styles.neftFileDetails}>
+                                  <span className={styles.neftFileName}>
+                                    {file.name}
+                                    <SvgCheck
+                                      className={styles.neftSuccessIndicator}
+                                    />
+                                  </span>
+                                  <span className={styles.neftFileSize}>
+                                    {formatFileSize(file.size)}
+                                  </span>
+                                </div>
 
-                              <div className={styles.neftFileActions}>
-                                <button
-                                  className={styles.neftFileActionBtn}
-                                  onClick={() => handleFileRemove(index)}
-                                  aria-label="Remove file"
-                                >
-                                  <DeleteSvg
-                                    className={styles.neftDeleteIcon}
-                                  />
-                                </button>
+                                <div className={styles.neftFileActions}>
+                                  <button
+                                    className={styles.neftFileActionBtn}
+                                    onClick={() => handleFileRemove(index)}
+                                    aria-label="Remove file"
+                                  >
+                                    <DeleteSvg
+                                      className={styles.neftDeleteIcon}
+                                    />
+                                  </button>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      );
-                    })}
-                  </div>
+                        );
+                      })}
+                    </div>
+                  )}
 
                   {(fileUpload?.state?.fileUploadError ||
                     rtgsFileUploadError) && (
