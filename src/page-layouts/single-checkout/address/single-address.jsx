@@ -19,7 +19,6 @@ function SingleAddress({
   isApiLoading = false,
   getTotalValue,
   showPaymentOptions,
-  acceptOrder,
 }) {
   const fpi = useFPI();
   const userDetails = useGlobalStore(fpi.getters.USER_DATA);
@@ -70,7 +69,6 @@ function SingleAddress({
           showPayment={showPayment}
           showShipment={showShipment}
           backToEdit={backToEdit}
-          acceptOrder={acceptOrder}
         ></SinglesAddressHeader>
         <Modal
           title={modalTitle}
