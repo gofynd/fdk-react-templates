@@ -1706,6 +1706,16 @@ h5,
   border-radius: var(--imageRadius, 0px);
   -webkit-mask-image: -webkit-radial-gradient(white, black);
 }
+.product-card__productCard___VMIjd .product-card__imageContainer___lRTmc.product-card__outOfStockContainer___s20ch .product-card__productImage___Cd89M {
+  filter: grayscale(100%);
+  opacity: 0.7;
+}
+@media only screen and (min-width: 860px) {
+  .product-card__productCard___VMIjd .product-card__imageContainer___lRTmc.product-card__outOfStockContainer___s20ch:hover .product-card__productImage___Cd89M {
+    filter: grayscale(100%);
+    opacity: 0.7;
+  }
+}
 .product-card__productCard___VMIjd .product-card__imageContainer___lRTmc .product-card__wishlistBtn___Hg2wZ {
   display: flex;
   align-items: center;

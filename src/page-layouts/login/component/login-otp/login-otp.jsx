@@ -206,13 +206,18 @@ function OtpForm({
           {t("resource.common.continue")}
         </button>
       </form>
-      <button
-        className={styles.resendOtpBtn}
-        onClick={resendOtp}
-        disabled={isResendBtnDisabled}
-      >
-        {`${t("resource.common.resend_otp")}${isResendBtnDisabled ? ` (${otpResendTime}S)` : ""}`}
-      </button>
+      <div className={styles.resendOtpWrapper}>
+        <span className={styles.didntReceiveText}>
+          {t("resource.common.didnt_receive_otp")}
+        </span>
+        <button
+          className={styles.resendOtpBtn}
+          onClick={resendOtp}
+          disabled={isResendBtnDisabled}
+        >
+          {`${t("resource.common.resend_otp")}${isResendBtnDisabled ? ` (${otpResendTime}S)` : ""}`}
+        </button>
+      </div>
     </>
   );
 }

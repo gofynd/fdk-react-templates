@@ -14525,40 +14525,6 @@ h5,
   margin-bottom: 10px;
   margin-inline-start: 20px;
 }
-.shared-cart__sharedCartContainer___xlmtr .shared-cart__shareBtnContainer___HeEja {
-  display: flex;
-  border-top: 1px solid #eee;
-  padding: 10px;
-}
-@media only screen and (max-width: 768px) {
-  .shared-cart__sharedCartContainer___xlmtr .shared-cart__shareBtnContainer___HeEja {
-    flex-direction: column;
-  }
-}
-.shared-cart__sharedCartContainer___xlmtr .shared-cart__shareBtnContainer___HeEja .shared-cart__shareBtn___i3_Qx {
-  display: inline-block;
-  padding: 5px 13px;
-  border: none;
-  border-radius: 3px;
-  flex: 1;
-  margin: 0 5px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 16px;
-  text-align: center;
-  color: #fff;
-  background-color: var(--buttonPrimary, #4e3f09);
-}
-@media only screen and (max-width: 480px) {
-  .shared-cart__sharedCartContainer___xlmtr .shared-cart__shareBtnContainer___HeEja .shared-cart__shareBtn___i3_Qx {
-    flex: inherit;
-  }
-}
-@media only screen and (max-width: 768px) {
-  .shared-cart__sharedCartContainer___xlmtr .shared-cart__shareBtnContainer___HeEja .shared-cart__shareBtn___i3_Qx + .shared-cart__shareBtn___i3_Qx {
-    margin-top: 10px;
-  }
-}
 .shared-cart__sharedCartContainer___xlmtr .shared-cart__sharedCart___znMz6 {
   position: relative;
   display: flex;
@@ -14585,6 +14551,41 @@ h5,
 }
 .shared-cart__sharedCartContainer___xlmtr .shared-cart__sharedCart___znMz6 .shared-cart__breakUpContainer___iN8yo .shared-cart__couponContainer___GzVMk {
   pointer-events: none;
+}
+/* Keep button styles usable when rendered outside sharedCartContainer (e.g. breakup section) */
+.shared-cart__shareBtnContainer___HeEja {
+  display: flex;
+  border-top: 1px solid #eeeeee;
+  padding: 10px;
+}
+@media only screen and (max-width: 768px) {
+  .shared-cart__shareBtnContainer___HeEja {
+    flex-direction: column;
+  }
+}
+.shared-cart__shareBtnContainer___HeEja .shared-cart__shareBtn___i3_Qx {
+  display: inline-block;
+  padding: 5px 13px;
+  border: none;
+  border-radius: 3px;
+  flex: 1;
+  margin: 0 5px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  text-align: center;
+  color: #ffffff;
+  background-color: var(--buttonPrimary, #4e3f09);
+}
+@media only screen and (max-width: 480px) {
+  .shared-cart__shareBtnContainer___HeEja .shared-cart__shareBtn___i3_Qx {
+    flex: inherit;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .shared-cart__shareBtnContainer___HeEja .shared-cart__shareBtn___i3_Qx + .shared-cart__shareBtn___i3_Qx {
+    margin-top: 10px;
+  }
 }
 .shared-cart__list___FMzzZ {
   display: flex;
@@ -16826,6 +16827,16 @@ h5,
   position: relative;
   border-radius: var(--imageRadius, 0px);
   -webkit-mask-image: -webkit-radial-gradient(white, black);
+}
+.product-card__productCard___VMIjd .product-card__imageContainer___lRTmc.product-card__outOfStockContainer___s20ch .product-card__productImage___Cd89M {
+  filter: grayscale(100%);
+  opacity: 0.7;
+}
+@media only screen and (min-width: 860px) {
+  .product-card__productCard___VMIjd .product-card__imageContainer___lRTmc.product-card__outOfStockContainer___s20ch:hover .product-card__productImage___Cd89M {
+    filter: grayscale(100%);
+    opacity: 0.7;
+  }
 }
 .product-card__productCard___VMIjd .product-card__imageContainer___lRTmc .product-card__wishlistBtn___Hg2wZ {
   display: flex;
@@ -28527,7 +28538,17 @@ h5,
 .verify-both__resendOtpWrapper___Mq8mf {
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 24px;
   margin-top: 32px;
+  flex-wrap: nowrap;
+}
+.verify-both__resendOtpWrapper___Mq8mf .verify-both__didntReceiveText___pPOue {
+  color: var(--textBody, #3c3131);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 19.6px;
 }
 .verify-both__resendOtpWrapper___Mq8mf .verify-both__resendOtpBtn___B4cLV {
   color: var(--textSecondary, #9c9c9c);
@@ -31123,11 +31144,22 @@ h5,
 .login-otp__sendOtpBtn___m6A1L {
   margin-top: 24px;
 }
-.login-otp__resendOtpBtn___dLIn7 {
+.login-otp__resendOtpWrapper___cfK_D {
   display: flex;
-  justify-content: center;
-  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
   margin-top: 32px;
+  flex-wrap: nowrap;
+}
+.login-otp__didntReceiveText___d2BiD {
+  color: var(--textBody, #3c3131);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 19.6px;
+}
+.login-otp__resendOtpBtn___dLIn7 {
   color: var(--textSecondary, #9c9c9c);
   font-size: 14px;
   font-style: normal;
