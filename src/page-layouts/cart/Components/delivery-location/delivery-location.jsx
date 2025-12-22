@@ -4,7 +4,7 @@ import * as styles from "./delivery-location.less";
 import Modal from "../../../../components/core/modal/modal";
 import AddressItem from "../../../../components/address-item/address-item";
 import AddressForm from "../../../../components/address-form/v2/address-form";
-import { useGlobalTranslation } from "fdk-core/utils";
+import { useGlobalTranslation, useGlobalStore, useFPI } from "fdk-core/utils";
 import { translateDynamicLabel } from "../../../../helper/utils";
 import FyButton from "../../../../components/core/fy-button/fy-button";
 
@@ -70,6 +70,10 @@ function DeliveryLocation({
   acceptOrder,
 }) {
   const { t } = useGlobalTranslation("translation");
+  const fpi = useFPI();
+  // Fetch user data internally if not provided via props (similar to checkout page)
+  const userDetails = useGlobalStore(fpi?.getters?.USER_DATA);
+  const userData = user || userDetails;
   const computedBtnLabel = btnLabel || t("resource.cart.change");
   const {
     handleSubmit,
@@ -270,7 +274,7 @@ function DeliveryLocation({
           isGuestUser={isGuestUser}
           onClose={onCloseModalClick}
           onUpdateAddress={addAddress}
-          user={user}
+          user={userData}
         ></AddressForm>
       </Modal>
     </div>
