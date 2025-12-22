@@ -521,6 +521,10 @@ h5,
 .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponItem___EgDig.coupon__opacity02___kxhhP {
   opacity: 0.2;
 }
+.coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponItem___EgDig.coupon__selectedCoupon___C4AkQ {
+  border-color: var(--successText, #1c958f);
+  border-width: 1px;
+}
 .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponItem___EgDig .coupon__couponCode___v03ce {
   background-color: var(--successBackground, #c2dbc9);
   border: 1px solid var(--successText, #1c958f);
@@ -574,6 +578,20 @@ h5,
   margin-top: 4px;
 }
 .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponItem___EgDig .coupon__couponApplyBtn___KQhd7 {
+  border: 1px solid var(--buttonPrimary, #4e3f09);
+  border-radius: var(--buttonRadius, 0px);
+  color: var(--buttonPrimary, #4e3f09);
+  height: 100%;
+  text-transform: uppercase;
+  background: var(--buttonSecondary, #fff);
+  display: inline-block;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-inline-start: auto;
+}
+.coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponItem___EgDig .coupon__couponRemoveBtn___swA6X {
   border: 1px solid var(--buttonPrimary, #4e3f09);
   border-radius: var(--buttonRadius, 0px);
   color: var(--buttonPrimary, #4e3f09);

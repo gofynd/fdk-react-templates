@@ -217,6 +217,9 @@ function Coupon({
                     <CouponItem
                       {...coupon}
                       applyCoupon={onApplyCouponClick}
+                      removeCoupon={onRemoveCouponClick}
+                      selectedCouponCode={couponCode}
+                      selectedCouponId={couponId}
                       key={coupon?.coupon_code}
                     />
                   ))}
@@ -246,13 +249,18 @@ function CouponItem({
   expires_on: expiresOn,
   is_applicable: isApplicable,
   applyCoupon,
+  removeCoupon,
+  selectedCouponCode = "",
+  selectedCouponId = "",
 }) {
   const { t } = useGlobalTranslation("translation");
+  const isSelected = couponCode === selectedCouponCode && selectedCouponCode !== "";
+  
   return (
     <div
       className={`${styles.couponItem} ${
         !isApplicable ? styles.opacity02 : ""
-      }`}
+      } ${isSelected ? styles.selectedCoupon : ""}`}
     >
       <div>
         <div className={styles.couponCode}>{couponCode}</div>
@@ -261,14 +269,25 @@ function CouponItem({
         <div className={styles.couponExpire}>{expiresOn}</div>
       </div>
       {isApplicable && (
-        <button
-          className={styles.couponApplyBtn}
-          onClick={() => {
-            applyCoupon(couponCode);
-          }}
-        >
-          {t("resource.facets.apply_caps")}
-        </button>
+        isSelected ? (
+          <button
+            className={styles.couponRemoveBtn}
+            onClick={() => {
+              removeCoupon(selectedCouponId);
+            }}
+          >
+            {t("resource.cart.remove_coupon")}
+          </button>
+        ) : (
+          <button
+            className={styles.couponApplyBtn}
+            onClick={() => {
+              applyCoupon(couponCode);
+            }}
+          >
+            {t("resource.facets.apply_caps")}
+          </button>
+        )
       )}
     </div>
   );
