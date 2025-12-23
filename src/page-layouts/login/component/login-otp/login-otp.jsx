@@ -22,6 +22,7 @@ function LoginOtp({
   onResendOtpClick = () => {},
   onClearOtpError = () => {},
   getOtpLoading,
+  isTermsAccepted = false,
 }) {
   const { t } = useGlobalTranslation("translation");
   const { handleSubmit, control, getValues, reset, setValue, clearErrors } =
@@ -71,7 +72,7 @@ function LoginOtp({
           <button
             className={`btnPrimary ${styles.sendOtpBtn}`}
             type="submit"
-            disabled={getOtpLoading}
+            disabled={getOtpLoading || !isTermsAccepted}
           >
             {t("resource.auth.login.get_otp")}
           </button>
