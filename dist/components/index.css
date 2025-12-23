@@ -4498,7 +4498,6 @@ button {
   background: var(--buttonSecondary, #fff);
   color: var(--buttonPrimary, #4e3f09);
   height: 100%;
-  text-transform: uppercase;
   line-height: 140%;
 }
 @media only screen and (min-width: 769px) {
@@ -4620,7 +4619,6 @@ button {
   border-radius: var(--buttonRadius, 0px);
   color: var(--buttonSecondary, #fff);
   height: 100%;
-  text-transform: uppercase;
   cursor: pointer;
   text-align: center;
 }
