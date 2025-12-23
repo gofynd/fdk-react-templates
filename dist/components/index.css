@@ -4277,16 +4277,16 @@ h5,
     line-height: 16px;
   }
 }
+.delivery-location__btn-primary___GwOmP:disabled,
+.delivery-location__btnPrimary___GgszE:disabled {
+  border-color: var(--buttonPrimaryL3, #b8b29d);
+  background-color: var(--buttonPrimaryL3, #b8b29d);
+}
 @media only screen and (min-width: 769px) {
   .delivery-location__btn-primary___GwOmP:hover,
   .delivery-location__btnPrimary___GgszE:hover {
     border-color: var(--buttonPrimaryL1, #71653a);
     background-color: var(--buttonPrimaryL1, #71653a);
-  }
-  .delivery-location__btn-primary___GwOmP:disabled,
-  .delivery-location__btnPrimary___GgszE:disabled {
-    border-color: var(--buttonPrimaryL3, #b8b29d);
-    background-color: var(--buttonPrimaryL3, #b8b29d);
   }
 }
 .delivery-location__btn-primary___GwOmP:active,

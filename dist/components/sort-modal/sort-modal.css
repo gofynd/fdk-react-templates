@@ -421,14 +421,14 @@ h5,
     line-height: 16px;
   }
 }
+.sort-modal__modalFooter___QQqoF .sort-modal__applyBtn___UdLmv:disabled {
+  border-color: var(--buttonPrimaryL3, #b8b29d);
+  background-color: var(--buttonPrimaryL3, #b8b29d);
+}
 @media only screen and (min-width: 769px) {
   .sort-modal__modalFooter___QQqoF .sort-modal__applyBtn___UdLmv:hover {
     border-color: var(--buttonPrimaryL1, #71653a);
     background-color: var(--buttonPrimaryL1, #71653a);
-  }
-  .sort-modal__modalFooter___QQqoF .sort-modal__applyBtn___UdLmv:disabled {
-    border-color: var(--buttonPrimaryL3, #b8b29d);
-    background-color: var(--buttonPrimaryL3, #b8b29d);
   }
 }
 .sort-modal__modalFooter___QQqoF .sort-modal__applyBtn___UdLmv:active,
