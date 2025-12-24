@@ -20,12 +20,14 @@
 
 .removeModalBody {
   min-height: 190px;
-  max-width: 572px;
+  width: 572px;
+  max-width: 100%;
   line-height: 140%;
   padding: 24px;
 
   @media @tablet {
     padding: 16px;
+    width: 100%;
   }
 
   .itemDetails {
@@ -33,17 +35,21 @@
     gap: 16px;
     .itemImg {
       border-radius: 4px;
-      flex: 0 0 18%;
-      width: 18%;
-      display: flex;
+      flex: 0 0 100px;
+      width: 100px;
+      height: 133px;
+      overflow: hidden;
+      background-color: @DividerStokes;
 
       @media @mobile {
-        flex: 0 0 25%;
-        width: 25%;
+        flex: 0 0 80px;
+        width: 80px;
+        height: 107px;
       }
       img {
         width: 100%;
-        height: auto;
+        height: 100%;
+        object-fit: cover;
       }
     }
 
