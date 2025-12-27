@@ -34,6 +34,7 @@ function AddressRight({
 function DeliveryLocation({
   pincode = "",
   deliveryLocation,
+  addressTags = [],
   btnLabel,
   pincodeInput,
   error = null,
@@ -87,7 +88,7 @@ function DeliveryLocation({
       pincode,
     },
   });
-  const { displayName, maxLength, validatePincode } = pincodeInput;
+  const { displayName, maxLength, validatePincode } = pincodeInput || {};
 
   useEffect(() => {
     if (error) {
@@ -110,15 +111,27 @@ function DeliveryLocation({
   return (
     <div className={styles.cartPincodeContainer}>
       <div className={styles.pinCodeDetailsContainer}>
-        <span className={styles.pincodeHeading}>
-          {deliveryLocation
-            ? `${t("resource.common.deliver_to")}:`
-            : t("resource.cart.check_delivery_time_services")}
-        </span>
-        <span className={styles.pinCode}>
-          &nbsp;
-          {deliveryLocation}
-        </span>
+        <div className={styles.deliveryHeader}>
+          <span className={styles.pincodeHeading}>
+            {deliveryLocation
+              ? `${t("resource.common.deliver_to")}:`
+              : t("resource.cart.check_delivery_time_services")}
+          </span>
+          {deliveryLocation && (
+            <span className={styles.pinCode}>{deliveryLocation}</span>
+          )}
+          {addressTags && addressTags.length > 0 && (
+            <div className={styles.addressTagsContainer}>
+              {addressTags
+                .filter((tag) => tag != null && tag !== "")
+                .map((tag, index) => (
+                  <span key={index} className={styles.addressTag}>
+                    {tag}
+                  </span>
+                ))}
+            </div>
+          )}
+        </div>
       </div>
       <div>
         <button
@@ -132,7 +145,7 @@ function DeliveryLocation({
       <Modal
         isOpen={isPincodeModalOpen}
         closeDialog={onCloseModalClick}
-        title={`${t("resource.common.delivery")} ${displayName}`}
+        title={`${t("resource.common.delivery")} ${displayName || ""}`}
         containerClassName={styles.pincodeModal}
         bodyClassName={styles.modalBody}
         headerClassName={styles.modalHeader}
@@ -144,11 +157,11 @@ function DeliveryLocation({
           <div className={styles.modalPincodeInput}>
             <input
               type="text"
-              placeholder={`${t("resource.common.enter")} ${displayName}`}
+              placeholder={`${t("resource.common.enter")} ${displayName || ""}`}
               {...register("pincode", {
                 validate: validatePincode,
               })}
-              maxLength={maxLength}
+              maxLength={maxLength || undefined}
             />
           </div>
           <button className={styles.modalChangePinCodeButton} type="submit">
