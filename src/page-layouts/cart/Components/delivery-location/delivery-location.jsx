@@ -203,6 +203,7 @@ function DeliveryLocation({
                   onAddressSelect={setSelectedAddressId}
                   showAddressSelectionCheckbox={true}
                   selectedAddressId={selectedAddressId}
+                  isDefault={true}
                   belowAddressSlot={
                     <>
                       <AddrErrorDiv id={item?.id} />
