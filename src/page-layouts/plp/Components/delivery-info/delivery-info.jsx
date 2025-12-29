@@ -1,10 +1,9 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./delivery-info.less";
 import FyButton from "../../../../components/core/fy-button/fy-button";
 import FyInput from "../../../../components/core/fy-input/fy-input";
 import { useGlobalTranslation } from "fdk-core/utils";
-import Skeleton from "../../../../components/core/skeletons/skeleton";
 
 function DeliveryInfo({
   pincode,
@@ -16,11 +15,10 @@ function DeliveryInfo({
   checkPincode,
   fulfillmentOptions,
   availableFOCount,
-  setFoLoading,
 }) {
   const { t } = useGlobalTranslation("translation");
   const numberRegex = /^\d*$/;
-  const [pincodeLoading, setPincodeLoading] = useState(false);
+
   const changePostCode = (event) => {
     const value = event?.target?.value;
     if (numberRegex.test(Number(value))) {
@@ -31,19 +29,8 @@ function DeliveryInfo({
   };
 
   const handleDeliveryAction = async () => {
-    setPincodeErrorMessage("");
-    setPincodeLoading(true);
-    if (setFoLoading) {
-      setFoLoading(true); 
-    }
-    try {
-      await checkPincode(pincode);
-    } finally {
-      setPincodeLoading(false);
-      if (setFoLoading) {
-        setFoLoading(false); 
-      }
-    }
+    await checkPincode(pincode);
+    //setPincodeChecked(true);
   };
 
   const foCount = useMemo(() => {
@@ -86,22 +73,17 @@ function DeliveryInfo({
 
       {!pincodeErrorMessage && availableFOCount === 1 && (
         <div className={`${styles.deliveryDate} ${styles.dateInfoContainer}`}>
-          {pincodeLoading ? (
-            <Skeleton height={16} width={158} />
-          ) : (
-            tatMessage?.length > 0 && (
-              <>
-                <SvgWrapper
-                  svgSrc="delivery"
-                  className={`${styles.deliveryIcon}`}
-                />
-                <p className={styles.captionNormal}>{tatMessage}</p>
-              </>
-            )
+          {tatMessage?.length > 0 && (
+            <>
+              <SvgWrapper
+                svgSrc="delivery"
+                className={`${styles.deliveryIcon}`}
+              />
+              <p className={`${styles.captionNormal}`}>{tatMessage}</p>
+            </>
           )}
         </div>
       )}
-
       {pincodeErrorMessage && (
         <div className={`${styles.captionNormal} ${styles.emptyPincode}`}>
           {pincodeErrorMessage}

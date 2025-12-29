@@ -336,15 +336,6 @@ h5,
 }
 .shipment-breakup__title___MNnnU {
   color: #41434c;
-  margin-bottom: 16px;
-}
-@media only screen and (max-width: 480px), only screen and (max-width: 768px) {
-  .shipment-breakup__title___MNnnU {
-    margin-bottom: 8px;
-  }
-}
-.shipment-breakup__shipmentBreakupContainerPadding___rfO1X {
-  padding: 16px !important;
 }
 .shipment-breakup__lightsm___a0yal {
   font-weight: 300;
@@ -367,7 +358,6 @@ h5,
 @media only screen and (max-width: 768px) {
   .shipment-breakup__boldsm___N65_p {
     font-size: 14px;
-    font-weight: 600;
   }
 }
 @media only screen and (max-width: 480px) {
@@ -375,59 +365,35 @@ h5,
     font-size: 14px;
   }
 }
-.shipment-breakup__billing___FTdqB div {
-  margin-bottom: 12px;
+.shipment-breakup__billing___FTdqB {
+  padding: 16px;
+  position: relative;
 }
-@media only screen and (max-width: 480px), only screen and (max-width: 768px) {
-  .shipment-breakup__billing___FTdqB div {
-    margin-bottom: 8px;
-  }
+.shipment-breakup__billing___FTdqB div {
+  margin-bottom: 8px;
 }
 .shipment-breakup__billing___FTdqB div:last-child {
   margin-bottom: 0px;
 }
 .shipment-breakup__billing___FTdqB .shipment-breakup__label___SHy4X {
   color: var(--textBody, #3c3131);
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 400;
   line-height: 140%;
-}
-@media only screen and (max-width: 480px), only screen and (max-width: 768px) {
-  .shipment-breakup__billing___FTdqB .shipment-breakup__label___SHy4X {
-    font-size: 12px !important;
-  }
 }
 .shipment-breakup__billing___FTdqB .shipment-breakup__values___Ji3lV {
+  position: absolute;
+  inset-inline-end: 16px;
   color: var(--textBody, #3c3131);
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 400;
   line-height: 140%;
-}
-@media only screen and (max-width: 480px), only screen and (max-width: 768px) {
-  .shipment-breakup__billing___FTdqB .shipment-breakup__values___Ji3lV {
-    font-size: 12px !important;
-  }
 }
 .shipment-breakup__billing___FTdqB .shipment-breakup__total___X7nmQ {
   padding-top: 10px;
   border-top: 1px solid #eeeeee;
   font-weight: bold;
   color: #41434c;
-}
-.shipment-breakup__billing___FTdqB .shipment-breakup__totalValContainer___wFKSr {
-  display: flex;
-  justify-content: space-between;
-}
-.shipment-breakup__billing___FTdqB .shipment-breakup__totalValContainer___wFKSr .shipment-breakup__label___SHy4X,
-.shipment-breakup__billing___FTdqB .shipment-breakup__totalValContainer___wFKSr .shipment-breakup__values___Ji3lV {
-  font-size: 14px;
-  font-weight: 400;
-}
-@media only screen and (max-width: 480px), only screen and (max-width: 768px) {
-  .shipment-breakup__billing___FTdqB .shipment-breakup__totalValContainer___wFKSr .shipment-breakup__label___SHy4X,
-  .shipment-breakup__billing___FTdqB .shipment-breakup__totalValContainer___wFKSr .shipment-breakup__values___Ji3lV {
-    font-size: 12px !important;
-  }
 }
 .shipment-breakup__paymentDetails___IT5XS {
   display: flex;
@@ -445,42 +411,20 @@ h5,
   margin-inline-end: 10px;
   inset-inline-end: 0px;
 }
-.shipment-breakup__grandTotal___DtudN {
-  font-size: 16px;
-  font-weight: 700;
+.shipment-breakup__billing___FTdqB :last-child .shipment-breakup__totalValContainer___wFKSr :last-child {
+  font-size: 14px;
+  font-weight: 600;
 }
-@media only screen and (max-width: 768px), only screen and (max-width: 480px) {
-  .shipment-breakup__grandTotal___DtudN {
-    font-size: 14px;
-    font-weight: 600;
-  }
+.shipment-breakup__billing___FTdqB :last-child .shipment-breakup__totalValContainer___wFKSr :nth-last-child(2) {
+  font-size: 14px;
+  font-weight: 600;
 }
-.shipment-breakup__horizontalLine___B6QKp {
-  margin: 16px 0 !important;
-  height: 1px;
-  background: var(--dividerStokes, #d4d1d1);
+.shipment-breakup__billing___FTdqB :last-child .shipment-breakup__totalValContainer___wFKSr :last-child {
+  font-size: 14px;
+  font-weight: 600;
 }
-@media only screen and (max-width: 480px) {
-  .shipment-breakup__horizontalLine___B6QKp {
-    margin: 8px 0 !important;
-  }
-}
-@media only screen and (max-width: 768px) {
-  .shipment-breakup__horizontalLine___B6QKp {
-    margin: 8px 0 !important;
-  }
-}
-.shipment-breakup__grandTotal___DtudN {
-  font-size: 16px !important;
-  font-weight: 700 !important;
-}
-@media only screen and (max-width: 768px), only screen and (max-width: 480px) {
-  .shipment-breakup__grandTotal___DtudN {
-    font-size: 14px !important;
-    font-weight: 600 !important;
-  }
-}
-.shipment-breakup__noPadding___P7z5g {
-  padding: 0 !important;
+.shipment-breakup__billing___FTdqB :last-child .shipment-breakup__totalValContainer___wFKSr :nth-last-child(2) {
+  font-size: 14px;
+  font-weight: 600;
 }
 

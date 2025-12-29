@@ -6,13 +6,11 @@ import { useGlobalTranslation } from "fdk-core/utils";
 function RemoveCartItem({
   isOpen = false,
   cartItem = null,
-  isRemoving = false,
   onRemoveButtonClick = () => { },
   onWishlistButtonClick = () => { },
   onCloseDialogClick = () => { },
 }) {
   const { t } = useGlobalTranslation("translation");
-
   const getProductImage = useMemo(() => {
     if (
       cartItem?.product?.images?.length > 0 &&
@@ -49,7 +47,7 @@ function RemoveCartItem({
       </div>
       <div className={styles.removeModalFooter}>
         <div className={styles.removeBtn} onClick={onRemoveButtonClick}>
-          {isRemoving ? "Removing..." : t("resource.facets.remove_caps")}
+          {t("resource.facets.remove_caps")}
         </div>
         <div className={styles.wishlistBtn} onClick={onWishlistButtonClick}>
           {t("resource.cart.move_to_wishlist")}
