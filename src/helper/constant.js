@@ -61,7 +61,7 @@ export const DATE_FILTERS = [
     is_selected: false,
   },
   {
-    display: "Last 30 days",
+    display: "Last 90 days",
     value: 90,
     is_selected: true,
   },
