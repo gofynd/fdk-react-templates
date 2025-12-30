@@ -632,16 +632,16 @@ h5,
     line-height: 16px;
   }
 }
+.delivery-location__btn-primary___GwOmP:disabled,
+.delivery-location__btnPrimary___GgszE:disabled {
+  border-color: var(--buttonPrimaryL3, #b8b29d);
+  background-color: var(--buttonPrimaryL3, #b8b29d);
+}
 @media only screen and (min-width: 769px) {
   .delivery-location__btn-primary___GwOmP:hover,
   .delivery-location__btnPrimary___GgszE:hover {
     border-color: var(--buttonPrimaryL1, #71653a);
     background-color: var(--buttonPrimaryL1, #71653a);
-  }
-  .delivery-location__btn-primary___GwOmP:disabled,
-  .delivery-location__btnPrimary___GgszE:disabled {
-    border-color: var(--buttonPrimaryL3, #b8b29d);
-    background-color: var(--buttonPrimaryL3, #b8b29d);
   }
 }
 .delivery-location__btn-primary___GwOmP:active,
@@ -773,6 +773,27 @@ button {
   width: 100%;
   height: 100%;
 }
+.delivery-location__buttonsContainer___lXjUz {
+  margin-inline-start: 25px;
+  margin-top: 8px;
+}
+.delivery-location__buttonsContainer___lXjUz .delivery-location__buttonDivider___ospHS {
+  padding: 0px 8px;
+}
+.delivery-location__buttonsContainer___lXjUz .delivery-location__edit___xzpcm,
+.delivery-location__buttonsContainer___lXjUz .delivery-location__remove___DLNKF {
+  padding: 4px;
+  border: none;
+  color: var(--buttonLink, #b1655b);
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  text-align: center;
+  text-transform: uppercase;
+  line-height: 140%;
+  background: var(--pageBackground, #f8f8f8);
+  cursor: pointer;
+}
 .delivery-location__cartPincodeContainer____lhBS {
   border: 1px solid var(--dividerStokes, #d4d1d1);
   line-height: 140%;
@@ -812,10 +833,44 @@ button {
   font-size: 14px;
   font-weight: 600;
   color: var(--textHeading, #26201a);
+  display: inline;
 }
 @media only screen and (max-width: 768px) {
   .delivery-location__cartPincodeContainer____lhBS .delivery-location__pinCodeDetailsContainer___fgQRm .delivery-location__pinCode___Zq4V9 {
     font-size: 12px;
+  }
+}
+.delivery-location__cartPincodeContainer____lhBS .delivery-location__pinCodeDetailsContainer___fgQRm .delivery-location__deliveryHeader___k9N88 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.delivery-location__cartPincodeContainer____lhBS .delivery-location__pinCodeDetailsContainer___fgQRm .delivery-location__addressTagsContainer___QLSqM {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.delivery-location__cartPincodeContainer____lhBS .delivery-location__pinCodeDetailsContainer___fgQRm .delivery-location__addressTag___MeDJK {
+  background-color: #eeeeee;
+  border: none;
+  border-radius: 12px;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--textBody, #3c3131);
+  text-transform: capitalize;
+  line-height: 140%;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+}
+@media only screen and (max-width: 480px) {
+  .delivery-location__cartPincodeContainer____lhBS .delivery-location__pinCodeDetailsContainer___fgQRm .delivery-location__addressTag___MeDJK {
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 10px;
   }
 }
 .delivery-location__cartPincodeContainer____lhBS .delivery-location__changePinCodeButton___bPqSJ {
@@ -832,7 +887,6 @@ button {
   background: var(--buttonSecondary, #fff);
   color: var(--buttonPrimary, #4e3f09);
   height: 100%;
-  text-transform: uppercase;
   line-height: 140%;
 }
 @media only screen and (min-width: 769px) {
@@ -873,6 +927,9 @@ button {
 .delivery-location__cartPincodeContainer____lhBS .delivery-location__changePinCodeButton___bPqSJ:focusvisible {
   box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0.25);
   border: 1px solid var(--buttonPrimary, #4e3f09);
+}
+.delivery-location__cartPincodeContainer____lhBS .delivery-location__changePinCodeButton___bPqSJ:disabled {
+  opacity: 0.6;
 }
 @media only screen and (max-width: 480px) {
   .delivery-location__cartPincodeContainer____lhBS .delivery-location__changePinCodeButton___bPqSJ {
@@ -951,7 +1008,6 @@ button {
   border-radius: var(--buttonRadius, 0px);
   color: var(--buttonSecondary, #fff);
   height: 100%;
-  text-transform: uppercase;
   cursor: pointer;
   text-align: center;
 }

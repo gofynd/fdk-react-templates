@@ -42,13 +42,12 @@ function Checkout({
   isCouponValid,
   setIsCouponValid,
   inValidCouponData,
-  fileUpload = () => {},
 }) {
   const [cancelQrPayment, setCancelQrPayment] = useState(null);
   const [searchParams] = useSearchParams();
   const cart_id = searchParams.get("id");
   const address_id = searchParams.get("address_id");
-  const { isLoading, isPaymentLoading = false } = payment;
+  const { isLoading, isCreditNoteApplied, isPaymentLoading = false } = payment;
   const handlePlaceOrder = async () => {
     if (payment?.storeCreditApplied?.isFullyApplied) {
       const { merchant_code, code, aggregator_name } =
@@ -87,6 +86,7 @@ function Checkout({
           isGuestUser={isGuestUser}
           getTotalValue={payment?.getTotalValue}
           showPaymentOptions={showPaymentOptions}
+          isCreditNoteApplied={isCreditNoteApplied}
         ></SingleAddress>
         <SinglePageShipment
           customClassName={styles.customStylesShipment}
@@ -125,7 +125,6 @@ function Checkout({
           isCouponValid={isCouponValid}
           setIsCouponValid={setIsCouponValid}
           inValidCouponData={inValidCouponData}
-          fileUpload={fileUpload}
         ></CheckoutPayment>
       </div>
       <div className={styles.rightContainer}>
@@ -135,6 +134,7 @@ function Checkout({
           {...restCouponProps}
           currencySymbol={currencySymbol}
           handleRemoveQr={cancelQrPayment}
+          isCreditNoteApplied={isCreditNoteApplied}
         />
         {/* {!!availableCouponList?.length && (
           <Coupon
@@ -152,7 +152,7 @@ function Checkout({
           cartItemCount={cartItemsCount}
           currencySymbol={currencySymbol}
         />
-        <ZeroPayButton
+        {/* <ZeroPayButton
           payment={payment}
           showPayment={showPayment}
           loader={loader}
@@ -168,7 +168,7 @@ function Checkout({
             >
               {!isPaymentLoading ? "PLACE ORDER" : loader}
             </FyButton>
-          )}
+          )} */}
       </div>
     </div>
   );
