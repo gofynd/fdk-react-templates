@@ -53,6 +53,7 @@ function DeliveryLocation({
   onAddButtonClick = () => {},
   onPincodeSubmit = () => {},
   onCloseModalClick = () => {},
+  onBackFromAddAddress = null,
   setSelectedAddressId = () => {},
   addAddress = () => {},
   isInternationalShippingEnabled = false,
@@ -267,6 +268,7 @@ function DeliveryLocation({
         closeDialog={onCloseModalClick}
         ignoreClickOutsideForClass="pac"
         hideHeader
+        customClassName={styles.addAddressModalWrapper}
         containerClassName={styles.addAddressModalContainer}
         bodyClassName={styles.addAddressModalBody}
       >
@@ -287,6 +289,7 @@ function DeliveryLocation({
           countryDetails={countryDetails}
           isGuestUser={isGuestUser}
           onClose={onCloseModalClick}
+          onBack={onBackFromAddAddress}
           onUpdateAddress={addAddress}
           user={userData}
         ></AddressForm>

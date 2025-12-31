@@ -204,15 +204,14 @@
 }
 
 .addAddressModalBody {
-  display: grid;
-  grid-template-columns: 450px;
-  grid-template-rows: 1fr;
+  display: flex;
+  flex-direction: column;
   min-height: 84.26vh;
   max-height: 84.26vh;
   overflow: hidden;
+  width: 100%;
 
   @media @tablet {
-    grid-template-columns: 1fr;
     max-height: unset;
     height: 100dvh;
   }
@@ -290,8 +289,35 @@
   }
 }
 
+// Override centerModal alignment for edge-to-edge on mobile
+.centerModal {
+  &.addAddressModalWrapper {
+    @media @tablet {
+      align-items: flex-end !important;
+    }
+  }
+}
+
 .addAddressModalContainer {
   display: block;
+  width: 100% !important;
+  max-height: unset;
+  height: 100dvh;
+  padding: 0;
+  max-width: unset !important;
+  
+  @media @tablet {
+    border-radius: 0 !important;
+    border-start-start-radius: 8px;
+    border-start-end-radius: 8px;
+    width: 100% !important;
+  }
+
+  @media @desktop {
+    max-width: 450px !important;
+    max-height: 84.26dvh;
+    width: 450px !important;
+  }
 }
 .heading {
   margin: 32px 0 12px;
