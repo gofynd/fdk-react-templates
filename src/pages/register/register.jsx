@@ -60,7 +60,7 @@ function Register({
       firstName: "",
       lastName: "",
       gender: "male",
-      consent: false,
+      consent: true,
       email: "",
       phone: {
         ...mobileInfo,

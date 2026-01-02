@@ -78,7 +78,6 @@ function AddressItem({
   belowNameSlot = <></>,
   belowAddressSlot = <></>,
   containerClassName = "",
-  isDefault = false,
   ...restProps
 }) {
   const { t } = useGlobalTranslation("translation");
@@ -86,19 +85,11 @@ function AddressItem({
     () => getAddressStr(addressItem, false),
     [addressItem]
   );
-  const handleAddressClick = () => {
-    const selection = window?.getSelection?.();
-    if (selection && selection.type === "Range" && selection.toString()) {
-      // Skip selecting the address when the user is highlighting text
-      return;
-    }
-    onAddressSelect(addressItem?.id);
-  };
 
   return (
     <div
       className={`${styles.addressContent} ${containerClassName}`}
-      onClick={handleAddressClick}
+      onClick={() => onAddressSelect(addressItem?.id)}
       style={
         selectedAddressId !== addressItem.id
           ? { border: "1px solid var(--dividerStokes)" }
@@ -118,12 +109,7 @@ function AddressItem({
             </>
           )}
           <span className={styles.addressName}>{addressItem.name}</span>
-          {isDefault && (
-            <span className={styles.addressType}>
-              {translateDynamicLabel("Default", t)}
-            </span>
-          )}
-          {showAddressType && addressItem.address_type && (
+          {showAddressType && (
             <span className={styles.addressType}>
               {translateDynamicLabel(addressItem.address_type, t)}
             </span>

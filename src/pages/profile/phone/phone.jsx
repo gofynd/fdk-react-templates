@@ -74,7 +74,7 @@ function Phone({
   return (
     <>
       <div className={styles.main}>
-        {/* <div className={styles.header}>{t("resource.common.phone_number")}</div> */}
+        <div className={styles.header}>{t("resource.common.phone_number")}</div>
         {phoneNumbers?.length > 0 && (
           <div className={styles.formContainer}>
             <div className={styles.formItem}>

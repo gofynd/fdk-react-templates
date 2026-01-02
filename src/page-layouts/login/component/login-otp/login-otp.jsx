@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useLayoutEffect, useRef } from "react";
+import React, { useEffect, useId, useLayoutEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import * as styles from "./login-otp.less";
 import MobileNumber from "../../../auth/mobile-number/mobile-number";
@@ -20,19 +20,16 @@ function LoginOtp({
   onLoginFormSubmit = () => {},
   onOtpSubmit = () => {},
   onResendOtpClick = () => {},
-  onClearOtpError = () => {},
   getOtpLoading,
-  isTermsAccepted = false,
 }) {
   const { t } = useGlobalTranslation("translation");
-  const { handleSubmit, control, getValues, reset, setValue, clearErrors } =
-    useForm({
-      mode: "onChange",
-      defaultValues: {
-        phone: mobileInfo,
-      },
-      reValidateMode: "onChange",
-    });
+  const { handleSubmit, control, getValues, reset, setValue } = useForm({
+    mode: "onChange",
+    defaultValues: {
+      phone: mobileInfo,
+    },
+    reValidateMode: "onChange",
+  });
 
   const onChangeButton = () => {
     reset();
@@ -64,7 +61,6 @@ function LoginOtp({
                 isFocused={error?.message}
                 onChange={(value) => {
                   setValue("phone", value);
-                  clearErrors("phone");
                 }}
               />
             )}
@@ -72,7 +68,7 @@ function LoginOtp({
           <button
             className={`btnPrimary ${styles.sendOtpBtn}`}
             type="submit"
-            disabled={getOtpLoading || !isTermsAccepted}
+            disabled={getOtpLoading}
           >
             {t("resource.auth.login.get_otp")}
           </button>
@@ -86,7 +82,6 @@ function LoginOtp({
           onOtpSubmit={onOtpSubmit}
           onResendOtpClick={onResendOtpClick}
           onChangeButton={onChangeButton}
-          onClearOtpError={onClearOtpError}
         />
       )}
     </div>
@@ -103,11 +98,9 @@ function OtpForm({
   onOtpSubmit = () => {},
   onResendOtpClick = () => {},
   onChangeButton = () => {},
-  onClearOtpError = () => {},
 }) {
   const { t } = useGlobalTranslation("translation");
   const otpInputId = useId();
-  const isFirstRender = useRef(true);
 
   const {
     handleSubmit,
@@ -128,16 +121,10 @@ function OtpForm({
     }
   }, []);
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
-    if (mobileOtp !== undefined && mobileOtp !== null) {
+    if (mobileOtp && mobileOtp.length < 4) {
       clearErrors("root");
-      clearErrors("mobileOtp");
-      onClearOtpError();
     }
-  }, [mobileOtp, clearErrors, onClearOtpError]);
+  }, [mobileOtp]);
 
   useEffect(() => {
     if (error) {
@@ -219,18 +206,13 @@ function OtpForm({
           {t("resource.common.continue")}
         </button>
       </form>
-      <div className={styles.resendOtpWrapper}>
-        <span className={styles.didntReceiveText}>
-          {t("resource.common.didnt_receive_otp")}
-        </span>
-        <button
-          className={styles.resendOtpBtn}
-          onClick={resendOtp}
-          disabled={isResendBtnDisabled}
-        >
-          {`${t("resource.common.resend_otp")}${isResendBtnDisabled ? ` (${otpResendTime}S)` : ""}`}
-        </button>
-      </div>
+      <button
+        className={styles.resendOtpBtn}
+        onClick={resendOtp}
+        disabled={isResendBtnDisabled}
+      >
+        {`${t("resource.common.resend_otp")}${isResendBtnDisabled ? ` (${otpResendTime}S)` : ""}`}
+      </button>
     </>
   );
 }
