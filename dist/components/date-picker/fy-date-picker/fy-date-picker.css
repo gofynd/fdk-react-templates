@@ -338,8 +338,8 @@ h5,
   padding: 16px;
 }
 .fy-date-picker__selectedAndActive___z3HnR {
-  background-color: var(--buttonPrimary, #4e3f09);
-  color: var(--buttonSecondary, #fff);
+  background-color: var(--buttonSecondary, #fff);
+  color: var(--buttonPrimary, #4e3f09);
   font-weight: bold;
 }
 .fy-date-picker__calendarWrapper___J5Y4d {
@@ -386,7 +386,6 @@ h5,
   padding: 16px;
   border-radius: 6px;
   border: 1px solid var(--overlaypopupdividerstroke, #e0e0e0);
-  background: var(--buttonSecondary, #fff);
 }
 .fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__inputWrapper___zh7iz input {
   border: none;
@@ -550,8 +549,8 @@ h5,
   height: 100%;
 }
 .fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__calendarPopup___cA9su .fy-date-picker__calendarGrid___LILc2 .fy-date-picker__dayCell___vK_vH:hover {
-  background-color: var(--buttonPrimary, #4e3f09);
-  opacity: 0.85;
+  background-color: var(--buttonSecondary, #fff);
+  color: var(--buttonPrimary, #4e3f09);
 }
 @media only screen and (max-width: 480px) {
   .fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__calendarPopup___cA9su .fy-date-picker__calendarGrid___LILc2 .fy-date-picker__dayCell___vK_vH {
@@ -583,7 +582,9 @@ h5,
 }
 .fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__calendarPopup___cA9su .fy-date-picker__confirmButton___CCmqD {
   display: none;
-  background-color: var(--buttonPrimary, #4e3f09);
+  background-color: var(--buttonSecondary, #fff);
+  color: var(--buttonPrimary, #4e3f09);
+  border-radius: 100px !important;
 }
 @media only screen and (max-width: 480px) {
   .fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__calendarPopup___cA9su .fy-date-picker__confirmButton___CCmqD {
@@ -595,13 +596,14 @@ h5,
   }
   .fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__calendarPopup___cA9su .fy-date-picker__confirmButton___CCmqD button {
     display: flex;
-    color: var(--buttonSecondary, #fff);
     padding: 16px 24px;
     justify-content: center;
     align-items: center;
     font-size: 16px;
     font-weight: 600;
     width: 100%;
+    border-radius: 100px !important;
+    color: var(--textHeading, #26201a) !important;
   }
   .fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__calendarPopup___cA9su .fy-date-picker__confirmButton___CCmqD:hover {
     opacity: 0.85;

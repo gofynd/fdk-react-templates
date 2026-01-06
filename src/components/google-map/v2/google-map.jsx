@@ -35,16 +35,36 @@ const GoogleMapAddress = ({
   onLoad = () => {},
 }) => {
   const { t } = useGlobalTranslation("translation");
+  
+  // Get last used location from localStorage
+  const getLastUsedLocation = () => {
+    try {
+      const saved = localStorage.getItem('lastMapLocation');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  };
+  
   const [isLocationError, setIsLocationError] = useState(false);
   const [currentLocation, setCurrentLocation, currentLocationRef] =
     useStateRef(addressItem);
   const mapRef = useRef(null);
+  
+  // Priority: addressItem geo_location > last used location > country details
+  const lastUsedLocation = getLastUsedLocation();
   const mapCenterRef = useRef({
     lat: Number(
-      currentLocation?.geo_location?.latitude || countryDetails?.latitude || 0
+      currentLocation?.geo_location?.latitude || 
+      lastUsedLocation?.lat || 
+      countryDetails?.latitude || 
+      0
     ),
     lng: Number(
-      currentLocation?.geo_location?.longitude || countryDetails?.longitude || 0
+      currentLocation?.geo_location?.longitude || 
+      lastUsedLocation?.lng || 
+      countryDetails?.longitude || 
+      0
     ),
   });
 
@@ -69,19 +89,28 @@ const GoogleMapAddress = ({
           longitude: location.lng,
         };
       }
-    } catch (error) {
+    } catch {
       return;
     }
   };
 
   const updateMapLocation = (address) => {
     setCurrentLocation(address);
+    
+    // Priority: address geo_location > last used location > country details
+    const lastUsedLoc = getLastUsedLocation();
     mapCenterRef.current = {
       lat: Number(
-        address?.geo_location?.latitude || countryDetails?.latitude || 0
+        address?.geo_location?.latitude || 
+        lastUsedLoc?.lat || 
+        countryDetails?.latitude || 
+        0
       ),
       lng: Number(
-        address?.geo_location?.longitude || countryDetails?.longitude || 0
+        address?.geo_location?.longitude || 
+        lastUsedLoc?.lng || 
+        countryDetails?.longitude || 
+        0
       ),
     };
     mapRef?.current?.panTo(mapCenterRef.current);
@@ -109,12 +138,19 @@ const GoogleMapAddress = ({
 
     navigator.geolocation.getCurrentPosition(
       async (position) => {
-        mapRef.current.panTo({
+        const userLocation = {
           lat: position.coords.latitude,
           lng: position.coords.longitude,
-        });
+        };
+        // Save user's current location for future use
+        try {
+          localStorage.setItem('lastMapLocation', JSON.stringify(userLocation));
+        } catch (error) {
+          console.error('Failed to save location:', error);
+        }
+        mapRef.current.panTo(userLocation);
       },
-      (err) => {
+      () => {
         setIsLocationError(true);
       }
     );
@@ -125,10 +161,17 @@ const GoogleMapAddress = ({
       onPlaceSelected: (place) => {
         if (place?.geometry) {
           const location = place?.geometry?.location;
-          mapRef.current?.panTo({
+          const selectedLocation = {
             lat: location.lat(),
             lng: location.lng(),
-          });
+          };
+          // Save the searched location for future use
+          try {
+            localStorage.setItem('lastMapLocation', JSON.stringify(selectedLocation));
+          } catch (error) {
+            console.error('Failed to save location:', error);
+          }
+          mapRef.current?.panTo(selectedLocation);
           setIsLocationError(false);
         } else {
           console.error("No geometry available for selected place");
@@ -160,6 +203,12 @@ const GoogleMapAddress = ({
             !currentLocationRef.current
           ) {
             mapCenterRef.current = { lat, lng };
+            // Save the selected location for future use
+            try {
+              localStorage.setItem('lastMapLocation', JSON.stringify({ lat, lng }));
+            } catch (error) {
+              console.error('Failed to save location:', error);
+            }
             const geocoder = new window.google.maps.Geocoder();
             geocoder.geocode({ location: { lat, lng } }, (results, status) => {
               if (status === "OK" && results[0]) {
@@ -246,7 +295,7 @@ const GoogleMapAddress = ({
             </FyButton>
             {isLocationError && (
               <p className={styles.errorText}>
-                We can’t access your location. Please allow access in browser
+                Location access is blocked. Please enable location permissions in your browser settings to use this feature.
               </p>
             )}
             {isMapCountryError && (

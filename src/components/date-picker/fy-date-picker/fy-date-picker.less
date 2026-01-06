@@ -4,8 +4,8 @@
   padding: 16px;
 }
 .selectedAndActive {
-  background-color: @ButtonPrimary;
-  color: @ButtonSecondary;
+  background-color: @ButtonSecondary;
+  color: @ButtonPrimary;
   font-weight: bold;
 }
 .calendarWrapper {
@@ -54,7 +54,7 @@
     padding: 16px;
     border-radius: 6px;
     border: 1px solid @OverlayPopupDividerStroke;
-    background: @ButtonSecondary;
+    // background: @ButtonSecondary;
 
     input {
       border: none;
@@ -238,8 +238,10 @@
         height: 100%;
 
         &:hover {
-          background-color: @ButtonPrimary;
-          opacity: 0.85;
+          // background-color: @ButtonPrimary;
+          // opacity: 0.85;
+           background-color: @ButtonSecondary;
+      color: @ButtonPrimary;
         }
 
         @media @mobile {
@@ -276,7 +278,9 @@
 
     .confirmButton {
       display: none;
-      background-color: @ButtonPrimary;
+      background-color: @ButtonSecondary;
+      color: @ButtonPrimary;
+      border-radius: 100px !important;
       @media @mobile {
         display: block;
         border: none;
@@ -286,13 +290,14 @@
 
         button {
           display: flex;
-          color: @ButtonSecondary;
           padding: 16px 24px;
           justify-content: center;
           align-items: center;
           font-size: 16px;
           font-weight: 600;
           width: 100%;
+            border-radius: 100px !important;
+            color: @TextHeading !important;
         }
         &:hover {
           opacity: 0.85;

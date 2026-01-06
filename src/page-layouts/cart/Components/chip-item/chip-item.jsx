@@ -74,7 +74,6 @@ export default function ChipItem({
   const couponText = singleItemDetails?.coupon_message || "";
   const moq = singleItemDetails?.moq;
   const incrementDecrementUnit = moq?.increment_unit ?? 1;
-
   const customizationOptions =
     singleItemDetails?.article?._custom_json?._display || [];
 
@@ -511,40 +510,135 @@ export default function ChipItem({
                 )}
             </div>
             <div className={styles.itemTotalContainer}>
-              <div className={styles.itemPrice}>
-                <span
-                  className={`${styles.effectivePrice} ${
-                    isOutOfStock ? styles.outOfStock : ""
-                  }`}
-                >
-                  {currencyFormat(
-                    numberWithCommas(
-                      singleItemDetails?.price?.converted?.final_price ??
-                        singleItemDetails?.price?.base?.final_price
-                    ),
-                    singleItemDetails?.price?.converted?.currency_symbol ??
-                      singleItemDetails?.price?.base?.currency_symbol,
-                    formatLocale(locale, countryCode, true)
-                  )}
-                </span>
-                {singleItemDetails?.price?.converted?.effective <
-                  singleItemDetails?.price?.converted?.marked && (
-                  <span className={styles.markedPrice}>
+              {singleItemDetails?.quantity > 1 ? (
+                <div className={styles.priceBreakdownContainer}>
+                  {/* Unit Price Section */}
+                  <div className={styles.priceSection}>
+                    <div className={styles.priceLabel}>
+                      Unit Price:
+                    </div>
+                    <div className={styles.itemPrice}>
+                      <span
+                        className={`${styles.effectivePrice} ${
+                          isOutOfStock ? styles.outOfStock : ""
+                        }`}
+                      >
+                        {currencyFormat(
+                          numberWithCommas(
+                            singleItemDetails?.price_per_unit?.converted?.effective ??
+                              singleItemDetails?.price_per_unit?.base?.effective
+                          ),
+                          singleItemDetails?.price_per_unit?.converted?.currency_symbol ??
+                            singleItemDetails?.price_per_unit?.base?.currency_symbol,
+                          formatLocale(locale, countryCode, true)
+                        )}
+                      </span>
+                      {singleItemDetails?.price_per_unit?.converted?.effective <
+                        singleItemDetails?.price_per_unit?.converted?.marked && (
+                        <span className={styles.markedPrice}>
+                          {currencyFormat(
+                            numberWithCommas(
+                              singleItemDetails?.price_per_unit?.converted?.marked ??
+                                singleItemDetails?.price_per_unit?.base?.marked
+                            ),
+                            singleItemDetails?.price_per_unit?.converted?.currency_symbol ??
+                              singleItemDetails?.price_per_unit?.base?.currency_symbol,
+                            formatLocale(locale, countryCode, true)
+                          )}
+                        </span>
+                      )}
+                      {singleItemDetails?.price_per_unit?.converted?.effective <
+                        singleItemDetails?.price_per_unit?.converted?.marked &&
+                        singleItemDetails?.discount && (
+                        <span className={styles.discount}>
+                          {singleItemDetails?.discount}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  {/* Total Price Section */}
+                  <div className={styles.priceSection}>
+                    <div className={styles.priceLabel}>
+                      {t("resource.cart.total_price") || "Total Price"}:
+                    </div>
+                    <div className={styles.itemPrice}>
+                      <span
+                        className={`${styles.effectivePrice} ${
+                          isOutOfStock ? styles.outOfStock : ""
+                        }`}
+                      >
+                        {currencyFormat(
+                          numberWithCommas(
+                            singleItemDetails?.price?.converted?.effective ??
+                              singleItemDetails?.price?.base?.effective
+                          ),
+                          singleItemDetails?.price?.converted?.currency_symbol ??
+                            singleItemDetails?.price?.base?.currency_symbol,
+                          formatLocale(locale, countryCode, true)
+                        )}
+                      </span>
+                      {singleItemDetails?.price?.converted?.effective <
+                        singleItemDetails?.price?.converted?.marked && (
+                        <span className={styles.markedPrice}>
+                          {currencyFormat(
+                            numberWithCommas(
+                              singleItemDetails?.price?.converted?.marked ??
+                                singleItemDetails?.price?.base?.marked
+                            ),
+                            singleItemDetails?.price?.converted?.currency_symbol ??
+                              singleItemDetails?.price?.base?.currency_symbol,
+                            formatLocale(locale, countryCode, true)
+                          )}
+                        </span>
+                      )}
+                      {singleItemDetails?.price?.converted?.effective <
+                        singleItemDetails?.price?.converted?.marked &&
+                        singleItemDetails?.discount && (
+                        <span className={styles.discount}>
+                          {singleItemDetails?.discount}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className={styles.itemPrice}>
+                  <span
+                    className={`${styles.effectivePrice} ${
+                      isOutOfStock ? styles.outOfStock : ""
+                    }`}
+                  >
                     {currencyFormat(
                       numberWithCommas(
-                        singleItemDetails?.price?.converted?.marked ??
-                          singleItemDetails?.price?.base?.marked
+                        singleItemDetails?.price?.converted?.effective ??
+                          singleItemDetails?.price?.base?.effective
                       ),
                       singleItemDetails?.price?.converted?.currency_symbol ??
                         singleItemDetails?.price?.base?.currency_symbol,
                       formatLocale(locale, countryCode, true)
                     )}
                   </span>
-                )}
-                <span className={styles.discount}>
-                  {singleItemDetails?.discount}
-                </span>
-              </div>
+                  {singleItemDetails?.price?.converted?.effective <
+                    singleItemDetails?.price?.converted?.marked && (
+                    <span className={styles.markedPrice}>
+                      {currencyFormat(
+                        numberWithCommas(
+                          singleItemDetails?.price?.converted?.marked ??
+                            singleItemDetails?.price?.base?.marked
+                        ),
+                        singleItemDetails?.price?.converted?.currency_symbol ??
+                          singleItemDetails?.price?.base?.currency_symbol,
+                        formatLocale(locale, countryCode, true)
+                      )}
+                    </span>
+                  )}
+                  {singleItemDetails?.discount && (
+                    <span className={styles.discount}>
+                      {singleItemDetails?.discount}
+                    </span>
+                  )}
+                </div>
+              )}
               {isDeliveryPromise &&
                 !isOutOfStock &&
                 isServiceable &&
@@ -784,7 +878,17 @@ export default function ChipItem({
                         onClick={(e) => {
                           e.stopPropagation();
                           if (!singleSize?.is_available) return;
-                          if (singleSize?.value && !isEarlierSelectedSize) {
+
+                          const originalSize = sizeModal?.split("_")[1];
+                          const isOriginalSize =
+                            singleSize?.value === originalSize;
+
+                          if (isOriginalSize) {
+                            // Reset to null when original size is re-selected
+                            setSizeModalErr(null);
+                            setCurrentSizeModalSize(null);
+                          } else if (singleSize?.value) {
+                            // Set new size when a different size is selected
                             setSizeModalErr(null);
                             const newSizeModalValue = `${
                               sizeModal?.split("_")[0]
@@ -807,7 +911,7 @@ export default function ChipItem({
           </div>
         </div>
         <div className={styles.sizeModalErrCls}>{sizeModalErr}</div>
-        <button
+       <button
           className={`${styles.sizeModalFooter} ${(!currentSizeModalSize || currentSizeModalSize === sizeModal || sizeModalErr) && styles.disableBtn}`}
           disabled={
             !currentSizeModalSize ||
@@ -815,6 +919,15 @@ export default function ChipItem({
             sizeModalErr
           }
           onClick={(e) => {
+            // Safety check: prevent update if no size change
+            if (
+              !currentSizeModalSize ||
+              currentSizeModalSize === sizeModal ||
+              sizeModalErr
+            ) {
+              return;
+            }
+
             let itemIndex;
             for (let j = 0; j < cartItemsWithActualIndex.length; j += 1) {
               if (
@@ -825,12 +938,19 @@ export default function ChipItem({
                 break;
               }
             }
+
+            const newSize = currentSizeModalSize.split("_")[1];
+            const originalSize = sizeModal?.split("_")[1];
+
+            // Additional safety check: only update if size actually changed
+            if (newSize === originalSize) {
+              return;
+            }
+
             cartUpdateHandler(
               e,
               sizeModalItemValue,
-              currentSizeModalSize
-                ? currentSizeModalSize.split("_")[1]
-                : sizeModal?.split("_")[1],
+              newSize,
               cartItemsWithActualIndex[itemIndex]?.quantity || 0,
               itemIndex,
               "update_item",

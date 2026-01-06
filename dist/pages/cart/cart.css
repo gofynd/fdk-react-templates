@@ -1328,10 +1328,44 @@ button {
   font-size: 14px;
   font-weight: 600;
   color: var(--textHeading, #26201a);
+  display: inline;
 }
 @media only screen and (max-width: 768px) {
   .delivery-location__cartPincodeContainer____lhBS .delivery-location__pinCodeDetailsContainer___fgQRm .delivery-location__pinCode___Zq4V9 {
     font-size: 12px;
+  }
+}
+.delivery-location__cartPincodeContainer____lhBS .delivery-location__pinCodeDetailsContainer___fgQRm .delivery-location__deliveryHeader___k9N88 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.delivery-location__cartPincodeContainer____lhBS .delivery-location__pinCodeDetailsContainer___fgQRm .delivery-location__addressTagsContainer___QLSqM {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.delivery-location__cartPincodeContainer____lhBS .delivery-location__pinCodeDetailsContainer___fgQRm .delivery-location__addressTag___MeDJK {
+  background-color: #eeeeee;
+  border: none;
+  border-radius: 12px;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--textBody, #3c3131);
+  text-transform: capitalize;
+  line-height: 140%;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+}
+@media only screen and (max-width: 480px) {
+  .delivery-location__cartPincodeContainer____lhBS .delivery-location__pinCodeDetailsContainer___fgQRm .delivery-location__addressTag___MeDJK {
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 10px;
   }
 }
 .delivery-location__cartPincodeContainer____lhBS .delivery-location__changePinCodeButton___bPqSJ {
@@ -4134,12 +4168,13 @@ h5,
   color: var(--successText, #1c958f);
 }
 .fy-button__contained___F5O7g {
-  background-color: var(--buttonPrimary, #4e3f09);
-  color: #ffffff;
+  background-color: var(--buttonSecondary, #fff);
+  color: var(--buttonPrimary, #4e3f09);
+  border-radius: 100px;
 }
 .fy-button__contained___F5O7g.fy-button__primary___xKz1S:hover {
-  background-color: var(--buttonPrimaryL1, #71653a);
-  color: #ffffff;
+  background-color: var(--buttonSecondary, #fff);
+  color: var(--buttonPrimary, #4e3f09);
 }
 .fy-button__contained___F5O7g.fy-button__secondary___z_hBB {
   background-color: var(--buttonSecondary, #fff);
@@ -7519,30 +7554,11 @@ h5,
     margin-top: 16px;
   }
 }
-.coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__cartErrorContainer___n1BZa {
-  margin-bottom: 16px;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  padding-inline-start: 24px;
-  display: flex;
-  align-items: center;
-  line-height: 140%;
-  background-color: var(--errorBackground, #e6d5d5);
-  border-radius: 8px;
-  position: sticky;
-  top: 0px;
-  z-index: 4;
-}
-@media only screen and (max-width: 768px) {
-  .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__cartErrorContainer___n1BZa {
-    border-radius: 0;
-  }
-}
-.coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__cartErrorContainer___n1BZa .coupon__colorErrorNormal___EkO_A {
-  font-size: 12px;
-  font-weight: 600;
-  margin-inline-start: 14px;
-  color: var(--errorText, #ff3333);
+.coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__errorContainer___hM5ud .coupon__errorText___AZg1P {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  margin: 0 !important;
+  color: var(--errorText, #ff3333) !important;
 }
 .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponInputBox___mlvGS {
   position: relative;
@@ -7574,6 +7590,9 @@ h5,
 }
 .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponInputBox___mlvGS input::placeholder {
   color: var(--textLabel, #7d7676);
+}
+.coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponInputBox___mlvGS input.coupon__hasError___aplVm {
+  border-color: var(--errorText, #ff3333);
 }
 .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponInputBox___mlvGS .coupon__checkBtn___2vM1S {
   color: var(--buttonPrimary, #4e3f09);
@@ -7626,6 +7645,10 @@ h5,
 }
 .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponItem___EgDig.coupon__opacity02___kxhhP {
   opacity: 0.2;
+}
+.coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponItem___EgDig.coupon__selectedCoupon___C4AkQ {
+  border-color: var(--successText, #1c958f);
+  border-width: 1px;
 }
 .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponItem___EgDig .coupon__couponCode___v03ce {
   background-color: var(--successBackground, #c2dbc9);
@@ -7680,6 +7703,20 @@ h5,
   margin-top: 4px;
 }
 .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponItem___EgDig .coupon__couponApplyBtn___KQhd7 {
+  border: 1px solid var(--buttonPrimary, #4e3f09);
+  border-radius: var(--buttonRadius, 0px);
+  color: var(--buttonPrimary, #4e3f09);
+  height: 100%;
+  text-transform: uppercase;
+  background: var(--buttonSecondary, #fff);
+  display: inline-block;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-inline-start: auto;
+}
+.coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponItem___EgDig .coupon__couponRemoveBtn___swA6X {
   border: 1px solid var(--buttonPrimary, #4e3f09);
   border-radius: var(--buttonRadius, 0px);
   color: var(--buttonPrimary, #4e3f09);
@@ -10012,7 +10049,7 @@ h5,
   }
 }
 .chip-item__cartItemsListContainer___ud9jU {
-  padding: 16px;
+  padding: 24px;
   border: 1px solid var(--dividerStokes, #d4d1d1);
   border-top: 0 solid var(--dividerStokes, #d4d1d1);
 }
@@ -10045,7 +10082,7 @@ h5,
   display: flex;
 }
 .chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__itemImageContainer___kS2D_ a img {
-  width: 85%;
+  width: 100%;
   border-radius: 4px;
 }
 .chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 {
@@ -10155,10 +10192,75 @@ h5,
     align-items: flex-start;
   }
 }
+.chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__priceBreakdownContainer___jUqQh {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 24px;
+  align-items: center;
+  justify-content: space-between;
+}
+@media only screen and (max-width: 480px) {
+  .chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__priceBreakdownContainer___jUqQh {
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__priceBreakdownContainer___jUqQh {
+    gap: 16px;
+  }
+}
+.chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__priceBreakdownContainer___jUqQh .chip-item__priceSection___t0dvH {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 0 1 auto;
+}
+@media only screen and (max-width: 480px) {
+  .chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__priceBreakdownContainer___jUqQh .chip-item__priceSection___t0dvH {
+    flex: 1 1 100%;
+  }
+}
+.chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__priceBreakdownContainer___jUqQh .chip-item__priceSection___t0dvH .chip-item__priceLabel___h_n4R {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--textLabel, #7d7676);
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+.chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__priceBreakdownContainer___jUqQh .chip-item__priceSection___t0dvH .chip-item__itemPrice___bEt2X {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__priceBreakdownContainer___jUqQh .chip-item__priceSection___t0dvH .chip-item__itemPrice___bEt2X .chip-item__effectivePrice___P4Bo9 {
+  color: var(--textHeading, #26201a);
+  font-size: 16px;
+  font-weight: 600;
+  margin-inline-end: 0;
+}
+.chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__priceBreakdownContainer___jUqQh .chip-item__priceSection___t0dvH .chip-item__itemPrice___bEt2X .chip-item__markedPrice___oRR8f {
+  font-size: 12px;
+  text-decoration: line-through;
+  color: var(--textLabel, #7d7676);
+  margin-inline-end: 0;
+}
+.chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__priceBreakdownContainer___jUqQh .chip-item__priceSection___t0dvH .chip-item__itemPrice___bEt2X .chip-item__discount___yyr69 {
+  font-size: 12px;
+  font-weight: 500;
+  margin-inline-end: 0;
+  color: var(--saleDiscountText, #1c958f);
+}
 .chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__itemPrice___bEt2X {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  gap: 8px;
 }
 .chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__itemPrice___bEt2X .chip-item__effectivePrice___P4Bo9 {
   color: var(--textHeading, #26201a);
@@ -11046,7 +11148,7 @@ h5,
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 45px;
+  width: 38px;
   height: 100%;
   border-inline-start: 1px solid var(--dividerStokes, #d4d1d1);
   border-inline-end: 1px solid var(--dividerStokes, #d4d1d1);

@@ -73,7 +73,7 @@ function ProfileNavigation({ children, signOut, userProfilePicUrl, userName }) {
             </div>
             <div className={styles.accountHeader}>{t("resource.profile.my_account")}</div>
             <ul>
-              {ALL_PROFILE_MENU.map(({ key, display, link, Icon }) => (
+              {ALL_PROFILE_MENU?.map(({ key, display, link, Icon }) => (
                 <li
                   className={`${styles.nav} ${pathname === link ? styles.selected : ""}`}
                   key={key}

@@ -78,6 +78,7 @@ function AddressItem({
   belowNameSlot = <></>,
   belowAddressSlot = <></>,
   containerClassName = "",
+  isDefault = false,
   ...restProps
 }) {
   const { t } = useGlobalTranslation("translation");
@@ -109,7 +110,12 @@ function AddressItem({
             </>
           )}
           <span className={styles.addressName}>{addressItem.name}</span>
-          {showAddressType && (
+          {isDefault && (
+            <span className={styles.addressType}>
+              {translateDynamicLabel("Default", t)}
+            </span>
+          )}
+          {showAddressType && addressItem.address_type && (
             <span className={styles.addressType}>
               {translateDynamicLabel(addressItem.address_type, t)}
             </span>

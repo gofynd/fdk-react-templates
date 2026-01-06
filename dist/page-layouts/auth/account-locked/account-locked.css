@@ -825,12 +825,13 @@ h5,
   color: var(--successText, #1c958f);
 }
 .fy-button__contained___F5O7g {
-  background-color: var(--buttonPrimary, #4e3f09);
-  color: #ffffff;
+  background-color: var(--buttonSecondary, #fff);
+  color: var(--buttonPrimary, #4e3f09);
+  border-radius: 100px;
 }
 .fy-button__contained___F5O7g.fy-button__primary___xKz1S:hover {
-  background-color: var(--buttonPrimaryL1, #71653a);
-  color: #ffffff;
+  background-color: var(--buttonSecondary, #fff);
+  color: var(--buttonPrimary, #4e3f09);
 }
 .fy-button__contained___F5O7g.fy-button__secondary___z_hBB {
   background-color: var(--buttonSecondary, #fff);

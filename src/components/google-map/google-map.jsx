@@ -40,9 +40,32 @@ const GoogleMapAddress = ({
   onLoad = () => {},
 }) => {
   const { t } = useGlobalTranslation("translation");
+  
+  // Get last used location from localStorage
+  const getLastUsedLocation = () => {
+    try {
+      const saved = localStorage.getItem('lastMapLocation');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  };
+  
+  // Priority: addressItem geo_location > last used location > country details
+  const lastUsedLocation = getLastUsedLocation();
   const [selectedPlace, setSelectedPlace] = useState({
-    lat: countryDetails?.latitude,
-    lng: countryDetails?.longitude,
+    lat: Number(
+      addressItem?.geo_location?.latitude ||
+      lastUsedLocation?.lat ||
+      countryDetails?.latitude ||
+      0
+    ),
+    lng: Number(
+      addressItem?.geo_location?.longitude ||
+      lastUsedLocation?.lng ||
+      countryDetails?.longitude ||
+      0
+    ),
   });
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
@@ -111,6 +134,12 @@ const GoogleMapAddress = ({
       const lat = location.lat();
       const lng = location.lng();
       setSelectedPlace({ lat, lng });
+      // Save the selected location for future use
+      try {
+        localStorage.setItem('lastMapLocation', JSON.stringify({ lat, lng }));
+      } catch (error) {
+        console.error('Failed to save location:', error);
+      }
       setAddress(place.formatted_address);
       let prem = place?.address_components?.find((m) =>
         m?.types?.includes("premise")
@@ -260,6 +289,12 @@ const GoogleMapAddress = ({
     const lat = event.latLng.lat();
     const lng = event.latLng.lng();
     setSelectedPlace({ lat, lng });
+    // Save the dragged location for future use
+    try {
+      localStorage.setItem('lastMapLocation', JSON.stringify({ lat, lng }));
+    } catch (error) {
+      console.error('Failed to save location:', error);
+    }
     getAddressFromLatLng(lat, lng);
   }, []);
 
@@ -272,6 +307,12 @@ const GoogleMapAddress = ({
             lng: position.coords.longitude,
           };
           setSelectedPlace(pos);
+          // Save user's current location for future use
+          try {
+            localStorage.setItem('lastMapLocation', JSON.stringify(pos));
+          } catch (error) {
+            console.error('Failed to save location:', error);
+          }
           getAddressFromLatLng(pos.lat, pos.lng);
           mapRef?.current?.panTo(pos);
         },
@@ -286,8 +327,8 @@ const GoogleMapAddress = ({
   const handleLocationError = (browserHasGeolocation) => {
     console.error(
       browserHasGeolocation
-        ? "Error: The Geolocation service failed."
-        : "Error: Your browser doesn't support geolocation."
+        ? "Location access is blocked. Please enable location permissions in your browser settings."
+        : "Your browser doesn't support geolocation."
     );
   };
 

@@ -153,6 +153,7 @@ const defaultFormSchema = [
         type: "text",
         required: true,
         fullWidth: false,
+        readOnly: true,
         validation: {
           required: "City is required",
           pattern: {
@@ -392,7 +393,19 @@ const AddressForm = ({
       user,
       isGuestUser
     );
-
+    // Ensure city field is always readonly
+      const processedFormSchema = useMemo(() => {
+        if (!formSchema) return formSchema;
+        return formSchema.map((group) => ({
+          ...group,
+          fields: group.fields.map((field) => {
+            if (field.key === "city") {
+              return { ...field, readOnly: true };
+            }
+            return field;
+          }),
+        }));
+      }, [formSchema]);
   const {
     control,
     register,
@@ -427,11 +440,67 @@ const AddressForm = ({
   const address_type = watch("address_type");
   const sector = watch("sector");
 
+   /**
+   * Transforms phone number from addressItem format to form format
+   * Handles both string and object formats for backward compatibility
+   * @param {string|object|undefined} phone - Phone number from addressItem
+   * @param {string|undefined} countryPhoneCode - Country phone code from addressItem
+   * @returns {object|undefined} Formatted phone object or undefined
+   */
+  const transformPhoneForForm = (phone, countryPhoneCode) => {
+    // Return undefined if phone is not provided
+    if (!phone) {
+      return undefined;
+    }
+
+    // If phone is already in the correct object format with all required fields
+    if (
+      typeof phone === 'object' &&
+      phone.mobile &&
+      phone.countryCode &&
+      phone.isValidNumber !== undefined
+    ) {
+      return phone;
+    }
+
+    // If phone is a string, convert to object format
+    if (typeof phone === 'string') {
+      return {
+        mobile: phone,
+        countryCode: countryPhoneCode || "91",
+        isValidNumber: true // Assume valid if it's from a saved address
+      };
+    }
+
+    // If phone is an object but missing some fields, fill them in
+    if (typeof phone === 'object') {
+      return {
+        mobile: phone.mobile || phone || "",
+        countryCode: phone.countryCode || countryPhoneCode || "91",
+        isValidNumber: phone.isValidNumber !== undefined ? phone.isValidNumber : true
+      };
+    }
+
+    // Fallback: return undefined if phone format is unexpected
+    return undefined;
+  };
+
   useEffect(() => {
     if (addressItem) {
+      const transformedPhone = transformPhoneForForm(
+        addressItem.phone,
+        addressItem.country_phone_code
+      );
+      
+      // Destructure to exclude phone from addressItem spread, then add transformed phone if available
+      // eslint-disable-next-line no-unused-vars
+      const { phone: _, country_phone_code: __, ...addressItemWithoutPhone } = addressItem;
+      
       reset({
         ...getValues(),
-        ...addressItem,
+        ...addressItemWithoutPhone,
+        // Only set phone if transformation was successful, otherwise don't include it
+        ...(transformedPhone && { phone: transformedPhone }),
         address_type: addressItem?.address_type
           ? isOtherAddressType
             ? "Other"
@@ -521,7 +590,7 @@ const AddressForm = ({
     setI18nDetails(event);
     setValue("country", event);
     setTimeout(() => {
-      formSchema?.forEach((group) =>
+      processedFormSchema?.forEach((group) =>
         group?.fields?.forEach(({ key }) => {
           // Don't clear user auto-filled fields when country changes
           if (key !== "name" && key !== "phone" && key !== "email") {
@@ -535,7 +604,7 @@ const AddressForm = ({
   const selectAddress = (data) => {
     //setResetStatus(false);
     reset(data);
-    formSchema?.forEach((group) =>
+    processedFormSchema?.forEach((group) =>
       group?.fields?.forEach(({ type, key }) => {
         if (type === "list") {
           setValue(key, "");
@@ -573,7 +642,7 @@ const AddressForm = ({
             />
           </div>
         )}
-        {formSchema?.map((group, index) => (
+        {processedFormSchema?.map((group, index) => (
           <div key={index} className={styles.formGroup}>
             <div ref={formContainerRef} className={styles.formContainer}>
               {group?.fields?.map((field) => (

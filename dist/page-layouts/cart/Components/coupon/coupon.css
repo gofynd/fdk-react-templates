@@ -429,30 +429,11 @@ h5,
     margin-top: 16px;
   }
 }
-.coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__cartErrorContainer___n1BZa {
-  margin-bottom: 16px;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  padding-inline-start: 24px;
-  display: flex;
-  align-items: center;
-  line-height: 140%;
-  background-color: var(--errorBackground, #e6d5d5);
-  border-radius: 8px;
-  position: sticky;
-  top: 0px;
-  z-index: 4;
-}
-@media only screen and (max-width: 768px) {
-  .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__cartErrorContainer___n1BZa {
-    border-radius: 0;
-  }
-}
-.coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__cartErrorContainer___n1BZa .coupon__colorErrorNormal___EkO_A {
-  font-size: 12px;
-  font-weight: 600;
-  margin-inline-start: 14px;
-  color: var(--errorText, #ff3333);
+.coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__errorContainer___hM5ud .coupon__errorText___AZg1P {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  margin: 0 !important;
+  color: var(--errorText, #ff3333) !important;
 }
 .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponInputBox___mlvGS {
   position: relative;
@@ -484,6 +465,9 @@ h5,
 }
 .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponInputBox___mlvGS input::placeholder {
   color: var(--textLabel, #7d7676);
+}
+.coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponInputBox___mlvGS input.coupon__hasError___aplVm {
+  border-color: var(--errorText, #ff3333);
 }
 .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponInputBox___mlvGS .coupon__checkBtn___2vM1S {
   color: var(--buttonPrimary, #4e3f09);
@@ -536,6 +520,10 @@ h5,
 }
 .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponItem___EgDig.coupon__opacity02___kxhhP {
   opacity: 0.2;
+}
+.coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponItem___EgDig.coupon__selectedCoupon___C4AkQ {
+  border-color: var(--successText, #1c958f);
+  border-width: 1px;
 }
 .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponItem___EgDig .coupon__couponCode___v03ce {
   background-color: var(--successBackground, #c2dbc9);
@@ -590,6 +578,20 @@ h5,
   margin-top: 4px;
 }
 .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponItem___EgDig .coupon__couponApplyBtn___KQhd7 {
+  border: 1px solid var(--buttonPrimary, #4e3f09);
+  border-radius: var(--buttonRadius, 0px);
+  color: var(--buttonPrimary, #4e3f09);
+  height: 100%;
+  text-transform: uppercase;
+  background: var(--buttonSecondary, #fff);
+  display: inline-block;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-inline-start: auto;
+}
+.coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponItem___EgDig .coupon__couponRemoveBtn___swA6X {
   border: 1px solid var(--buttonPrimary, #4e3f09);
   border-radius: var(--buttonRadius, 0px);
   color: var(--buttonPrimary, #4e3f09);

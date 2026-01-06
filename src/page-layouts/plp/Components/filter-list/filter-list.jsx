@@ -409,7 +409,14 @@ function FilterList({
                       key={`${alphabet}${filterItem.value}`}
                       className={styles.filter}
                     >
-                      <fdk-link link={filterItem.url}>
+                     <fdk-link 
+                        link={filterItem.url}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          filterClicked(filterItem);
+                        }}
+                      >
                         <div
                           className={`${styles["filter__item"]} ${styles.flexAlignCenter} ${styles["caption-normal"]}`}
                         >

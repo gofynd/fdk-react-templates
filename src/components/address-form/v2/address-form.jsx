@@ -220,12 +220,12 @@ const defaultFormSchema = [
           required: "Mobile number is required",
           validate: (value) => {
             if (!value) return "Mobile number is required";
-            
+
             // Always expect an object from MobileNumber component
             if (typeof value === 'object') {
               // Trust the component's validation if available
               if (value.isValidNumber === true) return true;
-              
+
               // If no validation flag, validate the mobile number
               if (value.mobile) {
                 const mobileNumber = value.mobile.toString().replace(/[\s\-+]/g, '');
@@ -234,7 +234,7 @@ const defaultFormSchema = [
               }
               return "Invalid mobile number";
             }
-            
+
             // Convert any string input to proper format
             const mobileNumber = value.toString().replace(/[\s\-+]/g, '');
             if (mobileNumber.length !== 10) return "Mobile number must be 10 digits";
@@ -305,6 +305,7 @@ const AddressForm = ({
   selectedCountry,
   countryDetails,
   onClose = () => {},
+   onBack = null,
 }) => {
   const { t } = useGlobalTranslation("translation");
   const isOtherAddressType = !["Home", "Work", "Friends & Family"].includes(
@@ -315,7 +316,21 @@ const AddressForm = ({
     user,
     isGuestUser
   );
-  
+
+  // Ensure city field is always readonly
+  const processedFormSchema = useMemo(() => {
+    if (!formSchema) return formSchema;
+    return formSchema.map((group) => ({
+      ...group,
+      fields: group.fields.map((field) => {
+        if (field.key === "city") {
+          return { ...field, readOnly: true };
+        }
+        return field;
+      }),
+    }));
+  }, [formSchema]);
+
   const {
     control,
     register,
@@ -353,18 +368,73 @@ const AddressForm = ({
     if (!isMapAvailable || !addressItem) return isMapAvailable;
     if (
       addressItem?.geo_location?.latitude &&
-      addressItem?.geo_location?.longitude 
+      addressItem?.geo_location?.longitude
     ) { return false; }
     return true;
   });
   const address_type = watch("address_type");
   const sector = watch("sector");
+  /**
+   * Transforms phone number from addressItem format to form format
+   * Handles both string and object formats for backward compatibility
+   * @param {string|object|undefined} phone - Phone number from addressItem
+   * @param {string|undefined} countryPhoneCode - Country phone code from addressItem
+   * @returns {object|undefined} Formatted phone object or undefined
+   */
+  const transformPhoneForForm = (phone, countryPhoneCode) => {
+    // Return undefined if phone is not provided
+    if (!phone) {
+      return undefined;
+    }
+
+    // If phone is already in the correct object format with all required fields
+    if (
+      typeof phone === 'object' &&
+      phone.mobile &&
+      phone.countryCode &&
+      phone.isValidNumber !== undefined
+    ) {
+      return phone;
+    }
+
+    // If phone is a string, convert to object format
+    if (typeof phone === 'string') {
+      return {
+        mobile: phone,
+        countryCode: countryPhoneCode || "91",
+        isValidNumber: true // Assume valid if it's from a saved address
+      };
+    }
+
+    // If phone is an object but missing some fields, fill them in
+    if (typeof phone === 'object') {
+      return {
+        mobile: phone.mobile || phone || "",
+        countryCode: phone.countryCode || countryPhoneCode || "91",
+        isValidNumber: phone.isValidNumber !== undefined ? phone.isValidNumber : true
+      };
+    }
+
+    // Fallback: return undefined if phone format is unexpected
+    return undefined;
+  };
 
   useEffect(() => {
     if (addressItem) {
+      const transformedPhone = transformPhoneForForm(
+        addressItem.phone,
+        addressItem.country_phone_code
+      );
+      
+      // Destructure to exclude phone from addressItem spread, then add transformed phone if available
+      // eslint-disable-next-line no-unused-vars
+      const { phone: _, country_phone_code: __, ...addressItemWithoutPhone } = addressItem;
+      
       reset({
         ...getValues(),
-        ...addressItem,
+        ...addressItemWithoutPhone,
+        // Only set phone if transformation was successful, otherwise don't include it
+        ...(transformedPhone && { phone: transformedPhone }),
         address_type: addressItem?.address_type
           ? isOtherAddressType
             ? "Other"
@@ -454,7 +524,7 @@ const AddressForm = ({
     setI18nDetails(event);
     setValue("country", event);
     setTimeout(() => {
-      formSchema?.forEach((group) =>
+      processedFormSchema?.forEach((group) =>
         group?.fields?.forEach(({ key }) => {
           // Don't clear user auto-filled fields when country changes
           if (key !== "name" && key !== "phone" && key !== "email") {
@@ -465,9 +535,22 @@ const AddressForm = ({
     }, 0);
   };
 
-  const selectAddress = (data) => {
-    //setResetStatus(false);
-    reset(data);
+   const selectAddress = (data) => {
+    // Preserve user autofill data and address type when selecting from map
+    const currentValues = getValues();
+    
+    reset({
+      ...data,
+      // Preserve autofilled user data - use userAutofillData directly
+      name: currentValues.name || userAutofillData.name || data.name,
+      phone: currentValues.phone || userAutofillData.phone || data.phone,
+      email: currentValues.email || userAutofillData.email || data.email,
+      // Preserve address type selection
+      address_type: currentValues.address_type || "Home",
+      otherAddressType: currentValues.otherAddressType || "",
+      is_default_address: currentValues.is_default_address !== undefined ? currentValues.is_default_address : true,
+    });
+    
     formSchema?.forEach((group) =>
       group?.fields?.forEach(({ type, key }) => {
         if (type === "list") {
@@ -495,12 +578,21 @@ const AddressForm = ({
     };
   }, [getValues()]);
 
-  if (isMapView) {
+ if (isMapView) {
+    const currentFormValues = getValues();
+    // Use current form values if geo_location exists (user has selected from map)
+    // Otherwise use original addressItem to show country defaults
+    const mapAddressItem = 
+      currentFormValues?.geo_location?.latitude && 
+      currentFormValues?.geo_location?.longitude
+        ? currentFormValues
+        : addressItem;
+    
     return (
       <GoogleMapAddress
         mapApiKey={mapApiKey}
         countryDetails={countryDetails}
-        addressItem={addressItem}
+        addressItem={mapAddressItem}
         onAddressSelect={selectAddress}
       />
     );
@@ -509,14 +601,14 @@ const AddressForm = ({
   return (
     <div className={styles.formWrapper}>
       <div className={styles.formHeader}>
-        {isMapAvailable && (
+        {/* {isMapAvailable && ( */}
           <button
             className={styles.backIcon}
-            onClick={() => setIsMapView(true)}
+             onClick={onBack || onClose}
           >
             <BackIcon />
           </button>
-        )}
+        {/* )} */}
         <h2 className={styles.formHeaderTitle}>
           {isMapAvailable
             ? t("resource.common.address.enter_address")
@@ -563,7 +655,7 @@ const AddressForm = ({
               />
             </div>
           )}
-          {formSchema?.map((group, index) => (
+          {processedFormSchema?.map((group, index) => (
             <div key={index} className={styles.formGroup}>
               <div ref={formContainerRef} className={styles.formContainer}>
                 {group?.fields?.map((field) => (

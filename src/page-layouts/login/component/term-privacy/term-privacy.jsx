@@ -23,26 +23,36 @@ function TermPrivacy({ onChange, checked }) {
           />
           <span>
             {t("resource.auth.login.agree_to_the")}&nbsp;
-            <FDKLink to="/terms-and-conditions" target="_blank">
+            <FDKLink to="/sections/terms-and-conditions" target="_blank">
               {t("resource.auth.login.terms_of_service")}
             </FDKLink>
             &nbsp;{t("resource.auth.login.and_symbol")}&nbsp;
-            <FDKLink to="/privacy-policy" target="_blank">
+            <FDKLink to="/sections/privacy-policy" target="_blank">
             {t("resource.auth.login.privacy_policy")}
             </FDKLink>
           </span>
         </div>
       ) : (
-        <span className={styles.byContinuingText}>
-          {t("resource.auth.login.agree_to_terms_prompt")}&nbsp;
-          <FDKLink to="/terms-and-conditions" target="_blank">
-            {t("resource.auth.login.terms_of_service")}
-          </FDKLink>
-          &nbsp;{t("resource.auth.login.and_symbol")}&nbsp;
-          <FDKLink to="/privacy-policy" target="_blank">
-            {t("resource.auth.login.privacy_policy")}
-          </FDKLink>
-        </span>
+        <div className={styles.midLinks}>
+          <input
+            className={styles.checkbox}
+            type="checkbox"
+            onChange={(e) => onChange?.(e.target.checked)}
+            checked={checked || false}
+            aria-required="true"
+            aria-label={t('resource.common.terms_and_privacy')}
+          />
+          <span>
+            {t("resource.auth.login.agree_to_terms_prompt")}&nbsp;
+            <FDKLink to="/sections/terms-and-conditions" target="_blank">
+              {t("resource.auth.login.terms_of_service")}
+            </FDKLink>
+            &nbsp;{t("resource.auth.login.and_symbol")}&nbsp;
+            <FDKLink to="/sections/privacy-policy" target="_blank">
+              {t("resource.auth.login.privacy_policy")}
+            </FDKLink>
+          </span>
+        </div>
       )}
     </>
   );
