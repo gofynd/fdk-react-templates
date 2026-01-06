@@ -4,8 +4,8 @@
   padding: 16px;
 }
 .selectedAndActive {
-  background-color: @ButtonSecondary;
-  color: @ButtonPrimary;
+  background-color: @ButtonPrimary;
+  color: @ButtonSecondary;
   font-weight: bold;
 }
 .calendarWrapper {
@@ -54,7 +54,7 @@
     padding: 16px;
     border-radius: 6px;
     border: 1px solid @OverlayPopupDividerStroke;
-    // background: @ButtonSecondary;
+    background: @ButtonSecondary;
 
     input {
       border: none;
@@ -187,6 +187,29 @@
           font-weight: 600;
           color: @TextHeading;
         }
+
+        .monthYearSelect {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          width: 100%;
+          justify-content: center;
+
+          select {
+            padding: 6px 10px;
+            border-radius: 4px;
+            border: 1px solid @OverlayPopupDividerStroke;
+            background: @ButtonSecondary;
+            color: @TextHeading;
+            font-weight: 600;
+            cursor: pointer;
+            min-width: 120px;
+
+            &:focus {
+              outline: 1px solid @ButtonPrimary;
+            }
+          }
+        }
       }
     }
 
@@ -238,10 +261,8 @@
         height: 100%;
 
         &:hover {
-          // background-color: @ButtonPrimary;
-          // opacity: 0.85;
-           background-color: @ButtonSecondary;
-      color: @ButtonPrimary;
+          background-color: @ButtonPrimary;
+          opacity: 0.85;
         }
 
         @media @mobile {
@@ -278,9 +299,7 @@
 
     .confirmButton {
       display: none;
-      background-color: @ButtonSecondary;
-      color: @ButtonPrimary;
-      border-radius: 100px !important;
+      background-color: @ButtonPrimary;
       @media @mobile {
         display: block;
         border: none;
@@ -290,14 +309,13 @@
 
         button {
           display: flex;
+          color: @ButtonSecondary;
           padding: 16px 24px;
           justify-content: center;
           align-items: center;
           font-size: 16px;
           font-weight: 600;
           width: 100%;
-            border-radius: 100px !important;
-            color: @TextHeading !important;
         }
         &:hover {
           opacity: 0.85;

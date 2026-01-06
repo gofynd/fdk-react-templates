@@ -479,7 +479,7 @@ const FyDatePicker = React.forwardRef(
               {calendarDays}
             </div>
             <div className={styles.confirmButton}>
-              <button onClick={handleConfirm}>Confirm</button>
+              <button onClick={handleConfirm}>CONFIRM</button>
             </div>
           </div>
         );
@@ -494,7 +494,7 @@ const FyDatePicker = React.forwardRef(
               isOpen={showCalendar}
               closeDialog={() => setShowCalendar(false)}
               headerClassName={styles.popupTitle}
-              title="Select Date"
+              title={t("resource.profile.select_reattempt_date")}
             >
               <ChildCalender />
             </Modal>

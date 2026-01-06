@@ -1,6 +1,27 @@
 @import "../../../../styles/main.less";
 @import "../../../../styles/base.global.less";
+.buttonsContainer {
+  margin-inline-start: 25px;
+  margin-top: 8px;
 
+  .buttonDivider {
+    padding: 0px 8px;
+  }
+  .edit,
+  .remove {
+    padding: 4px;
+    border: none;
+    color: @ButtonLink;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    text-align: center;
+    text-transform: uppercase;
+    line-height: 140%;
+    background: @PageBackground;
+    cursor: pointer;
+  }
+}
 .cartPincodeContainer {
   border: 1px solid @DividerStokes;
   line-height: 140%;
@@ -36,7 +57,8 @@
       @media @tablet {
         font-size: 12px;
       }
-    }.deliveryHeader {
+    }
+    .deliveryHeader {
       display: flex;
       align-items: center;
       gap: 8px;
@@ -82,8 +104,11 @@
     background: @ButtonSecondary;
     color: @ButtonPrimary;
     height: 100%;
-    text-transform: uppercase;
+    // text-transform: uppercase;
     line-height: 140%;
+    &:disabled {
+      opacity: 0.6;
+    }
     @media @mobile {
       padding: 9px;
     }
@@ -163,7 +188,7 @@
         border-radius: @ButtonRadius;
         color: @ButtonSecondary;
         height: 100%;
-        text-transform: uppercase;
+        //text-transform: uppercase;
         cursor: pointer;
         text-align: center;
         @media @tablet {
@@ -178,17 +203,15 @@
   }
 }
 
-
 .addAddressModalBody {
-  display: grid;
-  grid-template-columns: 450px;
-  grid-template-rows: 1fr;
+  display: flex;
+  flex-direction: column;
   min-height: 84.26vh;
   max-height: 84.26vh;
   overflow: hidden;
+  width: 100%;
 
   @media @tablet {
-    grid-template-columns: 1fr;
     max-height: unset;
     height: 100dvh;
   }
@@ -266,8 +289,35 @@
   }
 }
 
+// Override centerModal alignment for edge-to-edge on mobile
+.centerModal {
+  &.addAddressModalWrapper {
+    @media @tablet {
+      align-items: flex-end !important;
+    }
+  }
+}
+
 .addAddressModalContainer {
   display: block;
+  width: 100% !important;
+  max-height: unset;
+  height: 100dvh;
+  padding: 0;
+  max-width: unset !important;
+  
+  @media @tablet {
+    border-radius: 0 !important;
+    border-start-start-radius: 8px;
+    border-start-end-radius: 8px;
+    width: 100% !important;
+  }
+
+  @media @desktop {
+    max-width: 450px !important;
+    max-height: 84.26dvh;
+    width: 450px !important;
+  }
 }
 .heading {
   margin: 32px 0 12px;

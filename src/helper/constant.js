@@ -2,7 +2,6 @@ import OrdersIcon from "../assets/images/orders.svg";
 import CallIcon from "../assets/images/call.svg";
 import EmailIcon from "../assets/images/email.svg";
 import AddressIcon from "../assets/images/address.svg";
-import WishlistIcon from  "../assets/images/wishlist.svg";
 
 export const SINGLE_FILTER_VALUES = {
   page_no: true,
@@ -36,13 +35,6 @@ export const ALL_PROFILE_MENU = [
     Icon: AddressIcon,
     display: "resource.common.my_address",
     link: "/profile/address",
-    disabled_cart: false,
-  },
-  {
-    key: "wishlist",
-    Icon: WishlistIcon,
-    display: "My Wishlist",
-    link: "/wishlist",
     disabled_cart: false,
   },
 ];

@@ -382,7 +382,7 @@ h5,
 }
 .order-shipment__orderItem____zenT {
   color: #41434c;
-  background-color: #f5f4ef;
+  background-color: var(--highlightColor, #a7a7f8);
   padding: 16px;
   border-radius: 4px;
 }
@@ -995,6 +995,14 @@ h5,
   align-items: center;
   position: relative;
   cursor: pointer;
+}
+.accordion__accordionContentImageItem____FBCe .accordion__itemCount____YDv4 {
+  color: var(--textSecondary, #9c9c9c);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  padding-left: 2px;
 }
 .accordion__accordionContentImageItem____FBCe .accordion__imagePreview___FOjGs {
   position: absolute;

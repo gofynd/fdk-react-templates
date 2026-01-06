@@ -194,6 +194,7 @@ function CheckoutPaymentContent({
     isPaymentLoading,
   } = payment;
 
+
   useEffect(() => {
     if (enableLinkPaymentOption && selectedTab) {
       setActiveMop(selectedTab);
@@ -514,7 +515,6 @@ function CheckoutPaymentContent({
     return appCodeMap[appCode] || appCode;
   };
   const prevSelectedTabRef = useRef(selectedTab);
-  
   const cancelQrPayment = async () => {
     initializeOrResetQrPayment();
     if (qrPaymentPayload.merchant_order_id) {
@@ -2190,7 +2190,6 @@ function CheckoutPaymentContent({
                     .filter((app) => ["gpay", "google_pay", "phonepe", "paytm"].includes(app))
                     .map((app) => {
                       const svgName = getSvgNameForApp(app);
-                      // Use the normalized SVG name for display lookup (handles both "gpay" and "google_pay")
                       const displayKey = svgName;
                       return (
                         <label
@@ -2259,7 +2258,6 @@ function CheckoutPaymentContent({
                   .filter((app) => ["gpay", "google_pay", "phonepe", "paytm"].includes(app))
                   .map((app) => {
                     const svgName = getSvgNameForApp(app);
-                    // Use the normalized SVG name for display lookup (handles both "gpay" and "google_pay")
                     const displayKey = svgName;
                     return (
                       <label
@@ -2272,28 +2270,28 @@ function CheckoutPaymentContent({
                           setUPIError(false);
                           cancelQrPayment();
                         }}
-                      className={`${styles.upiApp} ${!upiApps?.includes("any") ? styles.notBorderBottom : ""} ${selectedUpiIntentApp === app ? styles.selectedUpiApp : ""}`}
-                    >
+                        className={`${styles.upiApp} ${!upiApps?.includes("any") ? styles.notBorderBottom : ""} ${selectedUpiIntentApp === app ? styles.selectedUpiApp : ""}`}
+                      >
                         <div className={styles.logo}>
                           <SvgWrapper svgSrc={svgName} />
                         </div>
                         <p className={styles.displayName}>
                           {upiAppData[displayKey]?.displayName}
                         </p>
-                      {(!selectedUpiIntentApp ||
-                        selectedUpiIntentApp !== app) && (
-                        <SvgWrapper
-                          svgSrc={"radio"}
-                          className={styles.onMobileView}
-                        />
-                      )}
-                      {selectedUpiIntentApp &&
-                        selectedUpiIntentApp === app && (
+                        {(!selectedUpiIntentApp ||
+                          selectedUpiIntentApp !== app) && (
                           <SvgWrapper
-                            svgSrc={"radio-selected"}
+                            svgSrc={"radio"}
                             className={styles.onMobileView}
                           />
                         )}
+                        {selectedUpiIntentApp &&
+                          selectedUpiIntentApp === app && (
+                            <SvgWrapper
+                              svgSrc={"radio-selected"}
+                              className={styles.onMobileView}
+                            />
+                          )}
                       </label>
                     );
                   })}
@@ -3199,7 +3197,7 @@ function CheckoutPaymentContent({
             <div
               className={`${styles.otherHeader} ${styles["view-mobile-up"]}`}
             >
-              {t("resource.checkout.select_payment_option")}
+              {t("resource.common.select_payment_option")}
             </div>
             <div className={styles.modeOption}>
               {otherPaymentOptions?.length &&
@@ -3592,12 +3590,15 @@ function CheckoutPaymentContent({
         >
           {true ? (
             <>
-              <div className={styles.creditNote}>
-                <CreditNote
-                  data={partialPaymentOption}
-                  updateStoreCredits={updateStoreCredits}
-                />
-              </div>
+              {partialPaymentOption?.list[0]?.balance?.account?.status !==
+                "INACTIVE" && (
+                <div className={styles.creditNote}>
+                  <CreditNote
+                    data={partialPaymentOption}
+                    updateStoreCredits={updateStoreCredits}
+                  />
+                </div>
+              )}
 
               {creditUpdating ? (
                 <CheckoutPaymentSkeleton />

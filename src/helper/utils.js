@@ -65,6 +65,9 @@ export function isRunningOnClient() {
 export function convertDate(dateString, locale = "en-US") {
   const date = new Date(dateString);
 
+  // Use browser's local timezone with fallback to UTC
+  const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+
   const options = {
     month: "long",
     day: "numeric",
@@ -72,54 +75,17 @@ export function convertDate(dateString, locale = "en-US") {
     hour: "numeric",
     minute: "numeric",
     hour12: true,
-    timeZone: "UTC",
+    timeZone: browserTimezone,
   };
 
   const formatter = new Intl.DateTimeFormat(locale, options);
   const formattedDate = formatter.format(date);
-
   return formattedDate;
 }
 
 export function validateName(name) {
   const regexp = /^[a-zA-Z0-9-_'. ]+$/;
   return regexp.test(String(name).toLowerCase().trim());
-}
-// Convert ISO date string to DD-MM-YYYY format
-export function convertISOToDDMMYYYY(isoString) {
-  if (!isoString) return "";
-
-  // Extract date part from ISO string (YYYY-MM-DD) to avoid timezone issues
-  // For DOB, we only care about the date, not the time
-  const datePart = isoString.split("T")[0];
-  if (!datePart) return "";
-
-  const parts = datePart.split("-");
-  if (parts.length !== 3) {
-    // Fallback to Date object parsing if format is unexpected
-    const date = new Date(isoString);
-    if (isNaN(date.getTime())) return "";
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-    return `${day}-${month}-${year}`;
-  }
-
-  // Convert from YYYY-MM-DD to DD-MM-YYYY
-  const [year, month, day] = parts;
-  return `${day}-${month}-${year}`;
-}
-
-// Convert DD-MM-YYYY format to ISO string
-export function convertDDMMYYYYToISO(dateString) {
-  if (!dateString) return "";
-  const parts = dateString.split("-").map(Number);
-  if (parts.length !== 3) return "";
-  // Assuming DD-MM-YYYY format
-  // Use Date.UTC to create date in UTC timezone to avoid timezone shift issues
-  const dateObj = new Date(Date.UTC(parts[2], parts[1] - 1, parts[0]));
-  if (isNaN(dateObj.getTime())) return "";
-  return dateObj.toISOString();
 }
 
 export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
@@ -165,7 +131,7 @@ export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
       return "Invalid date";
     }
 
-    const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
     // console.log("🌐 Detected browser time zone →", browserTimezone);
 
     const options = {
@@ -686,4 +652,46 @@ export const getUserAutofillData = (user, isGuestUser = false) => {
     phone: getUserPrimaryPhone(user),
     email: getUserPrimaryEmail(user),
   };
+};
+
+export const getConfigFromProps = (props) => {
+  if (!props || typeof props !== "object") {
+    return {};
+  }
+
+  // Handle array of prop objects with type and value
+  if (Array.isArray(props)) {
+    const config = {};
+    props.forEach((prop) => {
+      if (
+        prop &&
+        typeof prop === "object" &&
+        prop.id &&
+        prop.value !== undefined
+      ) {
+        config[prop.id] = prop.value;
+      }
+    });
+    return config;
+  }
+
+  // Handle object with nested props structure (like blogConfig)
+  if (props && typeof props === "object") {
+    const config = {};
+    Object.keys(props).forEach((key) => {
+      const prop = props[key];
+      if (prop && typeof prop === "object" && prop.value !== undefined) {
+        config[key] = prop.value;
+      } else if (prop && typeof prop === "object" && prop.type !== undefined) {
+        // Handle case where prop has type but no value
+        config[key] = prop.value || prop;
+      } else if (prop !== undefined) {
+        config[key] = prop;
+      }
+    });
+    return config;
+  }
+
+  // Handle direct object props
+  return props;
 };

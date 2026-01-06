@@ -153,7 +153,6 @@ const defaultFormSchema = [
         type: "text",
         required: true,
         fullWidth: false,
-        readOnly: true,
         validation: {
           required: "City is required",
           pattern: {
@@ -393,19 +392,7 @@ const AddressForm = ({
       user,
       isGuestUser
     );
-    // Ensure city field is always readonly
-      const processedFormSchema = useMemo(() => {
-        if (!formSchema) return formSchema;
-        return formSchema.map((group) => ({
-          ...group,
-          fields: group.fields.map((field) => {
-            if (field.key === "city") {
-              return { ...field, readOnly: true };
-            }
-            return field;
-          }),
-        }));
-      }, [formSchema]);
+
   const {
     control,
     register,
@@ -440,7 +427,7 @@ const AddressForm = ({
   const address_type = watch("address_type");
   const sector = watch("sector");
 
-   /**
+  /**
    * Transforms phone number from addressItem format to form format
    * Handles both string and object formats for backward compatibility
    * @param {string|object|undefined} phone - Phone number from addressItem
@@ -485,49 +472,67 @@ const AddressForm = ({
     return undefined;
   };
 
-  useEffect(() => {
-    if (addressItem) {
-      const transformedPhone = transformPhoneForForm(
-        addressItem.phone,
-        addressItem.country_phone_code
-      );
-      
-      // Destructure to exclude phone from addressItem spread, then add transformed phone if available
-      // eslint-disable-next-line no-unused-vars
-      const { phone: _, country_phone_code: __, ...addressItemWithoutPhone } = addressItem;
-      
-      reset({
-        ...getValues(),
-        ...addressItemWithoutPhone,
-        // Only set phone if transformation was successful, otherwise don't include it
-        ...(transformedPhone && { phone: transformedPhone }),
-        address_type: addressItem?.address_type
-          ? isOtherAddressType
-            ? "Other"
-            : addressItem?.address_type
-          : "Home",
-        otherAddressType:
-          addressItem && isOtherAddressType ? addressItem?.address_type : "",
-      });
-    } else {
-      setValue("is_default_address", true);
-      setValue("address_type", "Home");
-      // Auto-fill user data when creating new address using memoized data
-      if (userAutofillData.name) {
-        setValue("name", userAutofillData.name);
-      }
-      if (userAutofillData.phone && userAutofillData.phone.mobile) {
-        setValue("phone", {
-          mobile: userAutofillData.phone.mobile,
-          countryCode: userAutofillData.phone.countryCode || "91",
-          isValidNumber: userAutofillData.phone.isValidNumber
-        });
-      }
-      if (userAutofillData.email) {
-        setValue("email", userAutofillData.email);
-      }
+useEffect(() => {
+  if (addressItem) {
+    const transformedPhone = transformPhoneForForm(
+      addressItem.phone,
+      addressItem.country_phone_code
+    );
+
+    // Destructure to exclude phone from addressItem spread, then add transformed phone if available
+    // eslint-disable-next-line no-unused-vars
+    const {
+      phone: _,
+      country_phone_code: __,
+      ...addressItemWithoutPhone
+    } = addressItem;
+
+    reset({
+      ...addressItemWithoutPhone,
+      ...(transformedPhone && { phone: transformedPhone }),
+      address_type: addressItem?.address_type
+        ? isOtherAddressType
+          ? "Other"
+          : addressItem?.address_type
+        : "Home",
+      otherAddressType:
+        addressItem && isOtherAddressType ? addressItem?.address_type : "",
+      is_default_address: isNewAddress
+        ? true
+        : (addressItem?.is_default_address ?? false),
+      // ✅ FIXED: Only add geo_location if it exists, don't create new objects
+      ...(addressItem?.geo_location && {
+        geo_location: addressItem.geo_location,
+      }),
+      // ✅ FIXED: Use ternary to avoid creating new values on every render
+      country: addressItem?.country || selectedCountry,
+    });
+  } else {
+    setValue("is_default_address", true);
+    setValue("address_type", "Home");
+    // Auto-fill user data when creating new address using memoized data
+    if (userAutofillData.name) {
+      setValue("name", userAutofillData.name);
     }
-  }, [addressItem, reset, userAutofillData]);
+    if (userAutofillData.phone && userAutofillData.phone.mobile) {
+      setValue("phone", {
+        mobile: userAutofillData.phone.mobile,
+        countryCode: userAutofillData.phone.countryCode || "91",
+        isValidNumber: true,
+      });
+    }
+    if (userAutofillData.email) {
+      setValue("email", userAutofillData.email);
+    }
+  }
+}, [
+  addressItem,
+  reset,
+  userAutofillData,
+  isNewAddress,
+  selectedCountry,
+  isOtherAddressType,
+]);
 
   useEffect(() => {
     setShowOtherText(address_type === "Other");
@@ -590,7 +595,7 @@ const AddressForm = ({
     setI18nDetails(event);
     setValue("country", event);
     setTimeout(() => {
-      processedFormSchema?.forEach((group) =>
+      formSchema?.forEach((group) =>
         group?.fields?.forEach(({ key }) => {
           // Don't clear user auto-filled fields when country changes
           if (key !== "name" && key !== "phone" && key !== "email") {
@@ -603,8 +608,24 @@ const AddressForm = ({
 
   const selectAddress = (data) => {
     //setResetStatus(false);
-    reset(data);
-    processedFormSchema?.forEach((group) =>
+    // Get current form values to preserve name, phone, and email
+    const currentValues = getValues();
+    // Get contact info from addressItem if available (for edit scenario)
+    const addressItemPhone = addressItem?.phone 
+      ? transformPhoneForForm(addressItem.phone, addressItem.country_phone_code)
+      : null;
+    
+    // Merge Google Maps data with existing form values, preserving contact info
+    const mergedData = {
+      ...currentValues,
+      ...data,
+      // Preserve name, phone, and email - prioritize current form, then addressItem, then data
+      name: currentValues.name || addressItem?.name || data.name || userAutofillData?.name || "",
+      phone: currentValues.phone || addressItemPhone || data.phone || userAutofillData?.phone || "",
+      email: currentValues.email || addressItem?.email || data.email || userAutofillData?.email || "",
+    };
+    reset(mergedData);
+    formSchema?.forEach((group) =>
       group?.fields?.forEach(({ type, key }) => {
         if (type === "list") {
           setValue(key, "");
@@ -642,7 +663,7 @@ const AddressForm = ({
             />
           </div>
         )}
-        {processedFormSchema?.map((group, index) => (
+        {formSchema?.map((group, index) => (
           <div key={index} className={styles.formGroup}>
             <div ref={formContainerRef} className={styles.formContainer}>
               {group?.fields?.map((field) => (

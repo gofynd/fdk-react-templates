@@ -22,9 +22,7 @@ function LoginOtp({
   onResendOtpClick = () => {},
   onClearOtpError = () => {},
   getOtpLoading,
-    isTermsAccepted = false,
-
-
+  isTermsAccepted = false,
 }) {
   const { t } = useGlobalTranslation("translation");
   const { handleSubmit, control, getValues, reset, setValue, clearErrors } =
@@ -74,9 +72,7 @@ function LoginOtp({
           <button
             className={`btnPrimary ${styles.sendOtpBtn}`}
             type="submit"
-            // disabled={getOtpLoading}
-                        disabled={getOtpLoading || !isTermsAccepted}
-
+            disabled={getOtpLoading || !isTermsAccepted}
           >
             {t("resource.auth.login.get_otp")}
           </button>
@@ -225,7 +221,7 @@ function OtpForm({
       </form>
       <div className={styles.resendOtpWrapper}>
         <span className={styles.didntReceiveText}>
-           Didn’t receive an OTP? 
+          {t("resource.common.didnt_receive_otp")}
         </span>
         <button
           className={styles.resendOtpBtn}

@@ -35,6 +35,7 @@ function Coupon({
   currentStepIdx,
   setShowPayment = () => {},
   getTotalValue = () => {},
+  isCreditNoteApplied,
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -147,7 +148,11 @@ function Coupon({
                 : t("resource.cart.open_coupon_drawer")
             }
             onClick={(e) => {
-              if (currentStepIdx === 1 && getTotalValue() === 0) {
+              if (
+                currentStepIdx === 1 &&
+                getTotalValue() === 0 &&
+                !isCreditNoteApplied
+              ) {
                 setShowPayment(false);
               }
               hasCancel ? handleRemoveCoupon(e) : onCouponBoxClick(e);

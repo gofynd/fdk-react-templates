@@ -392,10 +392,15 @@ function OrderShipment({
 
     const date = new Date(utcString);
 
+    // Use browser's local timezone with fallback to UTC
+    //const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+
     const options = {
       day: "2-digit",
       month: "short",
       year: "numeric",
+      timeZone: "UTC",
+      // timeZone: browserTimezone,
     };
 
     return date

@@ -30,7 +30,7 @@ function Dropdown({ type, selectedOption, dropdownData }) {
   const replaceQueryParam = (key, value) => {
     const querParams = new URLSearchParams(location.search);
     querParams.set(key, value);
-    navigate("/profile/orders" + (querParams?.toString() ? `?${querParams.toString()}` : ""), { replace: true });
+    navigate("/profile/orders" + (querParams?.toString() ? `?${querParams.toString()}` : ""));
     close();
     getOrderDataWithFilterQuery();
   };

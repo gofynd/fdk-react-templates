@@ -19,6 +19,8 @@ function SingleAddress({
   isApiLoading = false,
   getTotalValue,
   showPaymentOptions,
+  acceptOrder,
+  isCreditNoteApplied,
 }) {
   const fpi = useFPI();
   const userDetails = useGlobalStore(fpi.getters.USER_DATA);
@@ -69,11 +71,13 @@ function SingleAddress({
           showPayment={showPayment}
           showShipment={showShipment}
           backToEdit={backToEdit}
+          acceptOrder={acceptOrder}
         ></SinglesAddressHeader>
         <Modal
           title={modalTitle}
           hideHeader
           isOpen={openModal}
+          modalType="center-modal"
           closeDialog={resetAddressState}
           containerClassName={styles.addressModalContainer}
           bodyClassName={styles.addressModalBody}
@@ -116,6 +120,7 @@ function SingleAddress({
             isApiLoading={isApiLoading}
             showPaymentOptions={showPaymentOptions}
             getTotalValue={getTotalValue}
+            isCreditNoteApplied={isCreditNoteApplied}
           ></SingleAddressContent>
         )}
       </div>
