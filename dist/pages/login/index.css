@@ -1593,22 +1593,11 @@ h5,
 .login-otp__sendOtpBtn___m6A1L {
   margin-top: 24px;
 }
-.login-otp__resendOtpWrapper___cfK_D {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 24px;
-  margin-top: 32px;
-  flex-wrap: nowrap;
-}
-.login-otp__didntReceiveText___d2BiD {
-  color: var(--textBody, #3c3131);
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 19.6px;
-}
 .login-otp__resendOtpBtn___dLIn7 {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 32px;
   color: var(--textSecondary, #9c9c9c);
   font-size: 14px;
   font-style: normal;
@@ -2797,20 +2786,17 @@ h5,
 .term-privacy__midLinks___nJVYw {
   margin-top: 24px;
   color: var(--textSecondary, #9c9c9c);
+  text-align: center;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
   line-height: 16.8px;
   display: flex;
-  align-items: flex-start;
-  justify-content: center;
   gap: 8px;
 }
 .term-privacy__midLinks___nJVYw .term-privacy__checkbox___o5MpQ {
   accent-color: var(--buttonPrimary);
   cursor: pointer;
-  flex-shrink: 0;
-  margin-top: 4px;
 }
 .term-privacy__midLinks___nJVYw a {
   font-weight: 500;
