@@ -996,9 +996,17 @@ h5,
   position: relative;
   cursor: pointer;
 }
+.accordion__accordionContentImageItem____FBCe .accordion__itemCount____YDv4 {
+  color: var(--textSecondary, #9c9c9c);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  padding-left: 2px;
+}
 .accordion__accordionContentImageItem____FBCe .accordion__imagePreview___FOjGs {
   position: absolute;
-  left: -155%;
+  left: 0px;
   top: -100px;
   z-index: 20;
 }
@@ -1021,8 +1029,9 @@ h5,
 }
 .accordion__accordionContentImg___lbTPr {
   border-radius: 50%;
-  width: 16px;
-  height: 16px;
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
   border: 1px solid var(--Text-Secondary, #6d6d6e);
 }
 .accordion__accordionContentKey___qrAGm {

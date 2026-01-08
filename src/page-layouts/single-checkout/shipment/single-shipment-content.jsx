@@ -5,7 +5,7 @@ import {
 } from "../../../helper/utils";
 import * as styles from "./single-shipment-content.less";
 import { FDKLink } from "fdk-core/components";
-import { useGlobalTranslation } from "fdk-core/utils";
+import { useGlobalTranslation, useNavigate } from "fdk-core/utils";
 import FreeGiftItem from "../../cart/Components/free-gift-item/free-gift-item";
 import Shimmer from "../../../components/shimmer/shimmer";
 import AppliedCouponIcon from "../../../assets/images/applied-coupon-small.svg";
@@ -26,8 +26,10 @@ function SingleShipmentContent({
   getDeliveryPromise,
   redirectPaymentOptions,
   isPaymentLoading = false,
+  isCreditNoteApplied,
 }) {
   const { t } = useGlobalTranslation("translation");
+  const navigate = useNavigate();
   const getShipmentItems = (shipment) => {
     let grpBySameSellerAndProduct = shipment?.items?.reduce((result, item) => {
       result[
@@ -163,15 +165,27 @@ function SingleShipmentContent({
                     <div className={styles.shipmentWrapper}>
                       <div className={styles.shipmentHeading}>
                         <div className={styles.headerLeft}>
-                          <div className={styles.shipmentNumber}>
-                            {t("resource.common.shipment")} {index + 1}/
-                            {shipments.length}
+                          <div className={styles.shipmentLabelBox}>
+                            <div className={styles.shipmentNumber}>
+                              {t("resource.common.shipment")} {index + 1}/
+                              {shipments.length}
+                            </div>
+                            <div className={styles.itemCount}>
+                              (
+                              {`${shipmentItems.length} ${shipmentItems.length > 1 ? t("resource.common.item_simple_text_plural") : t("resource.common.item_simple_text")}`}
+                              )
+                            </div>
                           </div>
-                          <div className={styles.itemCount}>
-                            (
-                            {`${shipmentItems.length} ${shipmentItems.length > 1 ? t("resource.common.item_simple_text_plural") : t("resource.common.item_simple_text")}`}
-                            )
-                          </div>
+                          {index === 0 && (
+                            <button
+                              className={styles.mobileEditCartBtn}
+                              onClick={() => {
+                                navigate("/cart/bag");
+                              }}
+                            >
+                              {t("resource.checkout.edit_cart_lower")}
+                            </button>
+                          )}
                         </div>
                         {item?.promise && (
                           <div className={styles.deliveryDateWrapper}>
@@ -317,7 +331,7 @@ function SingleShipmentContent({
             <button
               className={styles.proceedBtn}
               onClick={() => {
-                if (getTotalValue?.() === 0) {
+                if (getTotalValue?.() === 0 && !isCreditNoteApplied) {
                   proceedToPay("PP", {});
                 } else {
                   redirectPaymentOptions();
@@ -326,7 +340,9 @@ function SingleShipmentContent({
               }}
               disabled={isPaymentLoading}
             >
-              {getTotalValue?.() === 0 ? "PLACE ORDER" : "Proceed To Pay"}
+              {getTotalValue?.() === 0 && !isCreditNoteApplied
+                ? t("resource.checkout.place_order")
+                : t("resource.checkout.proceed_to_pay")}
             </button>
           </div>
         </div>

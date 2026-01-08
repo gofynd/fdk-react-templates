@@ -3,6 +3,7 @@ import clsx from "clsx";
 import useEmblaCarousel from "embla-carousel-react";
 import ArrowLeftIcon from "./slide-arrow-left.svg";
 import * as styles from "./carousel.less";
+import { useMobile } from "../../helper/hooks";
 
 const CarouselContext = React.createContext(null);
 
@@ -36,6 +37,8 @@ const Carousel = React.forwardRef(
       },
       plugins
     );
+    const [selectedIndex, setSelectedIndex] = React.useState(0);
+    const [scrollSnaps, setScrollSnaps] = React.useState([]);
     const [canScrollPrev, setCanScrollPrev] = React.useState(false);
     const [canScrollNext, setCanScrollNext] = React.useState(false);
 
@@ -46,6 +49,7 @@ const Carousel = React.forwardRef(
 
       setCanScrollPrev(api.canScrollPrev());
       setCanScrollNext(api.canScrollNext());
+      setSelectedIndex(api.selectedScrollSnap());
     }, []);
 
     const scrollPrev = React.useCallback(() => {
@@ -55,6 +59,13 @@ const Carousel = React.forwardRef(
     const scrollNext = React.useCallback(() => {
       api?.scrollNext();
     }, [api]);
+
+    const scrollTo = React.useCallback(
+      (index) => {
+        api?.scrollTo(index);
+      },
+      [api]
+    );
 
     const handleKeyDown = React.useCallback(
       (event) => {
@@ -82,12 +93,19 @@ const Carousel = React.forwardRef(
         return;
       }
 
+      setScrollSnaps(api.scrollSnapList());
       onSelect(api);
-      api.on("reInit", onSelect);
+      const handleReInit = (emblaApi) => {
+        setScrollSnaps(emblaApi.scrollSnapList());
+        onSelect(emblaApi);
+      };
+
+      api.on("reInit", handleReInit);
       api.on("select", onSelect);
 
       return () => {
         api?.off("select", onSelect);
+        api?.off("reInit", handleReInit);
       };
     }, [api, onSelect]);
 
@@ -101,8 +119,11 @@ const Carousel = React.forwardRef(
             orientation || (opts?.axis === "y" ? "vertical" : "horizontal"),
           scrollPrev,
           scrollNext,
+          scrollTo,
           canScrollPrev,
           canScrollNext,
+          selectedIndex,
+          scrollSnaps,
         }}
       >
         <div
@@ -163,59 +184,124 @@ const CarouselItem = React.forwardRef(({ className, ...props }, ref) => {
 });
 CarouselItem.displayName = "CarouselItem";
 
-const CarouselPrevious = React.forwardRef(({ className, ...props }, ref) => {
-  const { orientation, scrollPrev, canScrollPrev } = useCarousel();
+const CarouselPrevious = React.forwardRef(
+  ({ className, hideOnDisable = true, ...props }, ref) => {
+    const { orientation, scrollPrev, canScrollPrev } = useCarousel();
 
-  return (
-    <button
-      ref={ref}
-      className={clsx(
-        styles.carouselBtn,
-        orientation === "horizontal"
-          ? styles.carouselPrevBtnHorizontal
-          : styles.carouselPrevBtnVertical,
-        className
-      )}
-      disabled={!canScrollPrev}
-      onClick={(e) => {
-        e.stopPropagation();
-        scrollPrev();
-      }}
-      aria-label="Previous slide"
-      {...props}
-    >
-      <ArrowLeftIcon className={styles.carouselBtnIcon} />
-    </button>
-  );
-});
+    return (
+      <button
+        ref={ref}
+        className={clsx(
+          styles.carouselBtn,
+          hideOnDisable && styles.hideBtnDisabled,
+          orientation === "horizontal"
+            ? styles.carouselPrevBtnHorizontal
+            : styles.carouselPrevBtnVertical,
+          className
+        )}
+        disabled={!canScrollPrev}
+        onClick={(e) => {
+          e.stopPropagation();
+          scrollPrev();
+        }}
+        aria-label="Previous slide"
+        {...props}
+      >
+        <ArrowLeftIcon className={styles.carouselBtnIcon} />
+      </button>
+    );
+  }
+);
 CarouselPrevious.displayName = "CarouselPrevious";
 
-const CarouselNext = React.forwardRef(({ className, ...props }, ref) => {
-  const { orientation, scrollNext, canScrollNext } = useCarousel();
+const CarouselNext = React.forwardRef(
+  ({ className, hideOnDisable = true, ...props }, ref) => {
+    const { orientation, scrollNext, canScrollNext } = useCarousel();
 
-  return (
-    <button
-      ref={ref}
-      className={clsx(
-        styles.carouselBtn,
-        orientation === "horizontal"
-          ? styles.carouselNextBtnHorizontal
-          : styles.carouselNextBtnVertical,
-        className
-      )}
-      disabled={!canScrollNext}
-      onClick={(e) => {
-        e.stopPropagation();
-        scrollNext();
-      }}
-      aria-label="Next slide"
-      {...props}
-    >
-      <ArrowLeftIcon className={styles.carouselBtnIcon} />
-    </button>
-  );
-});
+    return (
+      <button
+        ref={ref}
+        className={clsx(
+          styles.carouselBtn,
+          hideOnDisable && styles.hideBtnDisabled,
+          orientation === "horizontal"
+            ? styles.carouselNextBtnHorizontal
+            : styles.carouselNextBtnVertical,
+          className
+        )}
+        disabled={!canScrollNext}
+        onClick={(e) => {
+          e.stopPropagation();
+          scrollNext();
+        }}
+        aria-label="Next slide"
+        {...props}
+      >
+        <ArrowLeftIcon className={styles.carouselBtnIcon} />
+      </button>
+    );
+  }
+);
 CarouselNext.displayName = "CarouselNext";
+
+const CarouselDots = React.forwardRef(
+  (
+    {
+      className,
+      dotClassName,
+      activeDotClassName,
+      inactiveDotClassName,
+      showOnSingleSlide = false,
+      ...props
+    },
+    ref
+  ) => {
+    const isMobile = useMobile(480);
+    const { scrollSnaps, selectedIndex, scrollTo } = useCarousel();
+
+    if (!scrollSnaps.length || (scrollSnaps.length <= 1 && !showOnSingleSlide)) {
+      return null;
+    }
+
+    return (
+      isMobile ?
+      <></>:
+      <div
+        ref={ref}
+        className={clsx(styles.carouselDots, className)}
+        role="tablist"
+        aria-label="Carousel pagination"
+        {...props}
+      >
+        {scrollSnaps.map((_, index) => {
+          const isActive = index === selectedIndex;
+
+          return (
+            <button
+              key={index}
+              type="button"
+              className={clsx(
+                styles.carouselDot,
+                isActive ? styles.carouselDotActive : styles.carouselDotInactive,
+                dotClassName,
+                isActive ? activeDotClassName : inactiveDotClassName
+              )}
+              onClick={(event) => {
+                event.stopPropagation();
+                scrollTo(index);
+              }}
+              aria-label={`Go to slide ${index + 1}`}
+              aria-pressed={isActive}
+              role="tab"
+            />
+          );
+        })}
+
+      </div>
+    );
+  }
+);
+CarouselDots.displayName = "CarouselDots";
 
 export {
   Carousel,
@@ -223,4 +309,5 @@ export {
   CarouselItem,
   CarouselPrevious,
   CarouselNext,
+  CarouselDots,
 };

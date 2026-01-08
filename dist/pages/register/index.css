@@ -491,6 +491,11 @@ h5,
   line-height: 22.4px;
   text-transform: uppercase;
 }
+.register__registerFormWrapper___nCdfI .register__registerBtn___uMz21:disabled {
+  background: var(--dividerStokes, #d4d1d1);
+  color: var(--textLabel, #7d7676);
+  cursor: not-allowed;
+}
 .register__registerFormWrapper___nCdfI .register__errorText___W8444 {
   display: none;
 }
@@ -1407,7 +1412,17 @@ h5,
 .verify-both__resendOtpWrapper___Mq8mf {
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 24px;
   margin-top: 32px;
+  flex-wrap: nowrap;
+}
+.verify-both__resendOtpWrapper___Mq8mf .verify-both__didntReceiveText___pPOue {
+  color: var(--textBody, #3c3131);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 19.6px;
 }
 .verify-both__resendOtpWrapper___Mq8mf .verify-both__resendOtpBtn___B4cLV {
   color: var(--textSecondary, #9c9c9c);
@@ -2130,17 +2145,20 @@ h5,
 .term-privacy__midLinks___nJVYw {
   margin-top: 24px;
   color: var(--textSecondary, #9c9c9c);
-  text-align: center;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
   line-height: 16.8px;
   display: flex;
+  align-items: flex-start;
+  justify-content: center;
   gap: 8px;
 }
 .term-privacy__midLinks___nJVYw .term-privacy__checkbox___o5MpQ {
   accent-color: var(--buttonPrimary);
   cursor: pointer;
+  flex-shrink: 0;
+  margin-top: 4px;
 }
 .term-privacy__midLinks___nJVYw a {
   font-weight: 500;

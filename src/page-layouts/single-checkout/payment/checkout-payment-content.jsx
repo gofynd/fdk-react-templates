@@ -23,14 +23,6 @@ import {
 import Spinner from "../../../components/spinner/spinner";
 import FyButton from "../../../components/core/fy-button/fy-button";
 import { FDKLink } from "fdk-core/components";
-import UploadSvg from "../../../assets/images/cloud_upload.svg";
-import CopyToClipboardSvg from "../../../assets/images/copy-to-clip.svg";
-import FileSvg from "../../../assets/images/file.svg";
-import SvgCheck from "../../../assets/images/checkmark-filled-small.svg";
-import DeleteSvg from "../../../assets/images/delete2.svg";
-import TickBlackActiveSvg from "../../../assets/images/tick-black-active.svg";
-import FyInput from "../../../components/core/fy-input/fy-input";
-import DangerInfoIcon from "../../../assets/images/danger-info.svg";
 
 const upiDisplayWrapperStyle = {
   padding: "24px",
@@ -164,12 +156,9 @@ function CheckoutPaymentContent({
   isCouponValid,
   setIsCouponValid,
   inValidCouponData,
-  neftFileUpload = { state: {}, upload: () => {}, reset: () => {} },
-  rtgsFileUpload = { state: {}, upload: () => {}, reset: () => {} },
 }) {
   const fpi = useFPI();
   const { language } = useGlobalStore(fpi.getters.i18N_DETAILS);
-
   const locale = language?.locale;
   const { t } = useGlobalTranslation("translation");
   const {
@@ -205,6 +194,7 @@ function CheckoutPaymentContent({
     isPaymentLoading,
   } = payment;
 
+
   useEffect(() => {
     if (enableLinkPaymentOption && selectedTab) {
       setActiveMop(selectedTab);
@@ -217,11 +207,7 @@ function CheckoutPaymentContent({
 
   let paymentOptions = PaymentOptionsList();
   let codOption = paymentOptions?.filter((opt) => opt.name === "COD")[0];
-  let neftOption = paymentOptions?.filter((opt) => opt.name === "NEFT")[0];
-  let rtgsOption = paymentOptions?.filter((opt) => opt.name === "RTGS")[0];
-  paymentOptions = paymentOptions?.filter(
-    (opt) => opt.name !== "COD" && opt.name !== "NEFT" && opt.name !== "RTGS"
-  );
+  paymentOptions = paymentOptions?.filter((opt) => opt.name !== "COD");
   const otherPaymentOptions = useMemo(() => otherOptions(), [paymentOption]);
   let upiSuggestions = paymentOption?.payment_option?.find?.(
     (ele) => ele.name === "UPI"
@@ -246,7 +232,6 @@ function CheckoutPaymentContent({
   const nameRef = useRef(null);
   const cardNumberRef = useRef(null);
   const expirationDateRef = useRef(null);
-  const uploadInputRef = useRef(null);
   const [filteredUPISuggestions, setFilteredUPISuggestions] = useState([]);
 
   const [selectedCard, setSelectedCard] = useState(null);
@@ -260,8 +245,6 @@ function CheckoutPaymentContent({
 
   const [selectedCardless, setSelectedCardless] = useState({});
   const [selectedOtherPayment, setSelectedOtherPayment] = useState({});
-  const [selectedNeftPayment, setSelectedNeftPayment] = useState({});
-  const [selectedRtgsPayment, setSelectedRtgsPayment] = useState({});
   const [savedUPISelect, setSavedUPISelect] = useState(false);
   const [showUPILoader, setUPILoader] = useState(false);
   const [selectedPaymentPayload, setSelectedPaymentPayload] = useState({
@@ -274,7 +257,6 @@ function CheckoutPaymentContent({
     vpa: vpa,
     selectedOtherPayment: selectedOtherPayment,
     selectedUpiIntentApp: selectedUpiIntentApp,
-    selectedNeftPayment: selectedNeftPayment,
   });
   const [paymentResponse, setPaymentResponse] = useState(null);
 
@@ -304,173 +286,9 @@ function CheckoutPaymentContent({
   const intervalRef = useRef(null);
   const [isQrMopPresent, setIsQrMopPresent] = useState(false);
 
-  // Separate state for NEFT
-  const [neftUtrNumber, setNeftUtrNumber] = useState("");
-  const [neftUtrError, setNeftUtrError] = useState(false);
-  const [neftUtrMinError, setNeftUtrMinError] = useState(false);
-  const [neftUtrInvalidCharError, setNeftUtrInvalidCharError] = useState(false);
-  const [neftFileUploadError, setNeftFileUploadError] = useState(false);
-  const [neftProofFiles, setNeftProofFiles] = useState([]);
-
-  // Separate state for RTGS
-  const [rtgsUtrNumber, setRtgsUtrNumber] = useState("");
-  const [rtgsUtrError, setRtgsUtrError] = useState(false);
-  const [rtgsUtrMinError, setRtgsUtrMinError] = useState(false);
-  const [rtgsUtrInvalidCharError, setRtgsUtrInvalidCharError] = useState(false);
-  const [rtgsFileUploadError, setRtgsFileUploadError] = useState(false);
-  const [rtgsProofFiles, setRtgsProofFiles] = useState([]);
-
-  const [copiedValue, setCopiedValue] = useState(null);
-  const [utrCopiedValue, setUtrCopiedValue] = useState(null);
-
   const [cardNumber, setCardNumber] = useState("");
   const [nameOnCard, setNameOnCard] = useState("");
   const [cardDetailsData, setCardDetailsData] = useState({});
-
-  // Dynamically select file upload based on selected tab
-  const fileUpload = useMemo(() => {
-    return selectedTab === "RTGS" ? rtgsFileUpload : neftFileUpload;
-  }, [selectedTab, rtgsFileUpload, neftFileUpload]);
-
-  const neftDisplayConfig = useMemo(() => {
-    // Helper function to extract value from API response
-    const extractValue = (fieldData) => {
-      if (!fieldData) return "";
-      // Handle dropdown type where value is an object with label
-      if (typeof fieldData.value === "object" && fieldData.value?.label) {
-        return fieldData.value.label;
-      }
-      return fieldData.value || "";
-    };
-
-    // Get config from fileUpload prop (API response) or fallback to theme config
-    const configSource = neftFileUpload?.neftRtgsConfig || {};
-
-    // Build beneficiary details dynamically from API response
-    const beneficiaryDetails = [];
-
-    // Define which fields should have copy enabled and their order
-    const fieldConfig = {
-      account_number: { copyEnabled: true },
-      account_name: { copyEnabled: false },
-      account_type: { copyEnabled: false },
-      account_bank: { copyEnabled: false },
-      account_ifsc: { copyEnabled: true },
-      account_branch: { copyEnabled: false },
-    };
-
-    // Build beneficiary details array
-    Object.keys(fieldConfig).forEach((key) => {
-      const field = configSource[key];
-      if (field && !field.type?.includes("toggle")) {
-        beneficiaryDetails.push({
-          label: field.display_name,
-          value: extractValue(field),
-          isCopyEnabled: fieldConfig[key].copyEnabled,
-        });
-      }
-    });
-
-    // Check if transaction_id and payment_receipt toggles are enabled
-    const isUtrFieldRequired = configSource.transaction_id?.value ?? true;
-    const isUploadFieldRequired = configSource.payment_receipt?.value ?? true;
-
-    return {
-      beneficiaryTitle:
-        t("resource.dynamic_label.beneficiary_bank_details") ||
-        "Beneficiary Bank Details",
-      transactionTitle:
-        t("resource.dynamic_label.transaction_details") ||
-        "Transaction Details",
-      utrLabel:
-        configSource.transaction_id?.display_name ||
-        "Enter unique transaction number",
-      utrDescription:
-        t("resource.dynamic_label.utr_helper") ||
-        "UTR is a unique alphanumeric code assigned by a bank to track a specific financial transaction",
-      uploadHeading:
-        t("resource.dynamic_label.upload_payment_receipt") ||
-        configSource.payment_receipt?.display_name ||
-        "Drag and drop your files here",
-      uploadCta: t("resource.dynamic_label.upload_file") || "UPLOAD FILE",
-      uploadHelper:
-        `${t("resource.dynamic_label.supported_format")}: PDF, PNG, JPEG (5MB)` ||
-        "Supported Format: PDF, PNG, JPEG (5MB)",
-      beneficiaryDetails,
-      isUtrFieldRequired,
-      isUploadFieldRequired,
-    };
-  }, [neftFileUpload?.neftRtgsConfig]);
-
-  const rtgsDisplayConfig = useMemo(() => {
-    // Helper function to extract value from API response
-    const extractValue = (fieldData) => {
-      if (!fieldData) return "";
-      // Handle dropdown type where value is an object with label
-      if (typeof fieldData.value === "object" && fieldData.value?.label) {
-        return fieldData.value.label;
-      }
-      return fieldData.value || "";
-    };
-
-    // Get config from rtgsFileUpload prop (API response) or fallback to theme config
-    const configSource = rtgsFileUpload?.neftRtgsConfig || {};
-
-    // Build beneficiary details dynamically from API response
-    const beneficiaryDetails = [];
-
-    // Define which fields should have copy enabled and their order
-    const fieldConfig = {
-      account_number: { copyEnabled: true },
-      account_name: { copyEnabled: false },
-      account_type: { copyEnabled: false },
-      account_bank: { copyEnabled: false },
-      account_ifsc: { copyEnabled: true },
-      account_branch: { copyEnabled: false },
-    };
-
-    // Build beneficiary details array
-    Object.keys(fieldConfig).forEach((key) => {
-      const field = configSource[key];
-      if (field && !field.type?.includes("toggle")) {
-        beneficiaryDetails.push({
-          label: field.display_name,
-          value: extractValue(field),
-          isCopyEnabled: fieldConfig[key].copyEnabled,
-        });
-      }
-    });
-
-    // Check if transaction_id and payment_receipt toggles are enabled
-    const isUtrFieldRequired = configSource.transaction_id?.value ?? true;
-    const isUploadFieldRequired = configSource.payment_receipt?.value ?? true;
-
-    return {
-      beneficiaryTitle:
-        t("resource.dynamic_label.beneficiary_bank_details") ||
-        "Beneficiary Bank Details",
-      transactionTitle:
-        t("resource.dynamic_label.transaction_details") ||
-        "Transaction Details",
-      utrLabel:
-        configSource.transaction_id?.display_name ||
-        "Enter unique transaction number",
-      utrDescription:
-        t("resource.dynamic_label.utr_helper") ||
-        "UTR is a unique alphanumeric code assigned by a bank to track a specific financial transaction",
-      uploadHeading:
-        t("resource.dynamic_label.upload_payment_receipt") ||
-        configSource.payment_receipt?.display_name ||
-        "Drag and drop your files here",
-      uploadCta: t("resource.dynamic_label.upload_file") || "UPLOAD FILE",
-      uploadHelper:
-        `${t("resource.dynamic_label.supported_format")}: PDF, PNG, JPEG (5MB)` ||
-        "Supported Format: PDF, PNG, JPEG (5MB)",
-      beneficiaryDetails,
-      isUtrFieldRequired,
-      isUploadFieldRequired,
-    };
-  }, [rtgsFileUpload?.neftRtgsConfig]);
 
   const [tab, setTab] = useState("");
   const [mop, setMop] = useState("");
@@ -479,8 +297,6 @@ function CheckoutPaymentContent({
   const selectedUpiRef = useRef(null);
   const [savedUpi, setSavedUpi] = useState([]);
   const [savedCards, setSavedCards] = useState([]);
-  const [isDragging, setIsDragging] = useState(false);
-  const dragCounterRef = useRef(0);
   const [isUpiSuffixSelected, setIsUpiSuffixSelected] = useState(false);
   const [navigationTitleName, setNavigationTitleName] = useState("");
   const [isCvvNotNeededModal, setIsCvvNotNeededModal] = useState(false);
@@ -687,6 +503,17 @@ function CheckoutPaymentContent({
       displayName: t("resource.checkout.more_apps"),
     },
   };
+
+  // Map API app codes to SVG names
+  const getSvgNameForApp = (appCode) => {
+    const appCodeMap = {
+      "google_pay": "gpay",
+      "gpay": "gpay",
+      "phonepe": "phonepe",
+      "paytm": "paytm",
+    };
+    return appCodeMap[appCode] || appCode;
+  };
   const prevSelectedTabRef = useRef(selectedTab);
   const cancelQrPayment = async () => {
     initializeOrResetQrPayment();
@@ -719,7 +546,11 @@ function CheckoutPaymentContent({
     }
     if (selectedTab === "UPI" && !upiApps?.length) {
       getUPIIntentApps?.()?.then?.((data) => {
-        setUpiApps(data);
+        // Handle case where data might be objects with 'code' property
+        const normalizedData = Array.isArray(data) 
+          ? data.map(item => typeof item === 'object' && item?.code ? item.code : item)
+          : data;
+        setUpiApps(normalizedData);
       });
     }
     if (
@@ -832,337 +663,6 @@ function CheckoutPaymentContent({
     };
   };
 
-  const handleCopyToClipboard = async (value, setValue) => {
-    if (!value) return;
-    try {
-      await navigator?.clipboard?.writeText?.(value);
-      setValue(value);
-      setTimeout(() => setValue(null), 4000);
-    } catch (error) {
-      console.error("Copy to clipboard failed", error);
-    }
-  };
-
-  const handleUtrInputChange = (event) => {
-    const inputValue = event.target.value;
-
-    // Check for invalid characters (anything other than alphanumeric)
-    const hasInvalidChars = /[^A-Za-z0-9]/.test(inputValue);
-
-    const value = inputValue.toUpperCase();
-
-    if (selectedTab === "NEFT") {
-      // Clear other errors
-      if (neftUtrError) {
-        setNeftUtrError(false);
-      }
-
-      if (value.trim().length >= 16) {
-        setNeftUtrMinError(false);
-      }
-
-      // Set or clear invalid character error
-      if (hasInvalidChars) {
-        setNeftUtrInvalidCharError(true);
-      } else {
-        setNeftUtrInvalidCharError(false);
-      }
-
-      setNeftUtrNumber(value);
-    } else if (selectedTab === "RTGS") {
-      // Clear other errors
-      if (rtgsUtrError) {
-        setRtgsUtrError(false);
-      }
-
-      if (value.trim().length >= 16) {
-        setRtgsUtrMinError(false);
-      }
-
-      // Set or clear invalid character error
-      if (hasInvalidChars) {
-        setRtgsUtrInvalidCharError(true);
-      } else {
-        setRtgsUtrInvalidCharError(false);
-      }
-
-      setRtgsUtrNumber(value);
-    }
-  };
-
-  // Centralized UTR validation helper
-  const validateUtr = (
-    utr,
-    { setRequiredError, setInvalidCharError, setMinError, isRequired }
-  ) => {
-    setRequiredError(false);
-    setInvalidCharError(false);
-    setMinError(false);
-
-    const trimmed = utr?.trim() || "";
-
-    if (isRequired && !trimmed) {
-      setRequiredError(true);
-      return false;
-    }
-
-    if (!trimmed) {
-      // Optional and empty: valid
-      return true;
-    }
-
-    if (/[^A-Za-z0-9]/.test(trimmed)) {
-      setInvalidCharError(true);
-      return false;
-    }
-
-    if (trimmed.length < 16) {
-      setMinError(true);
-      return false;
-    }
-
-    return true;
-  };
-
-  const handleNeftPlaceOrder = () => {
-    const { isUtrFieldRequired, isUploadFieldRequired } = neftDisplayConfig;
-    // Reset file upload error
-    setNeftFileUploadError(false);
-
-    let hasError = false;
-
-    // Validate UTR using centralized helper
-    const utrValid = validateUtr(neftUtrNumber, {
-      isRequired: isUtrFieldRequired,
-      setRequiredError: setNeftUtrError,
-      setInvalidCharError: setNeftUtrInvalidCharError,
-      setMinError: setNeftUtrMinError,
-    });
-
-    if (!utrValid) hasError = true;
-
-    // Validate file upload if required
-    if (isUploadFieldRequired) {
-      if (
-        !neftFileUpload?.state?.fileUploaded ||
-        neftFileUpload?.state?.uploadedFileUrl?.length === 0
-      ) {
-        setNeftFileUploadError(true);
-        hasError = true;
-      }
-    }
-
-    if (!hasError) {
-      // Update selectedNeftPayment with UTR and file URLs
-      const updatedNeftPayment = {
-        ...selectedNeftPayment,
-        offline_utr: neftUtrNumber || "",
-        receipt_urls: neftFileUpload?.state?.uploadedFileUrl || [],
-      };
-
-      proceedToPay("NEFT", {
-        ...selectedPaymentPayload,
-        selectedNeftPayment: updatedNeftPayment,
-      });
-    }
-  };
-
-  const handleRtgsPlaceOrder = () => {
-    const { isUtrFieldRequired, isUploadFieldRequired } = rtgsDisplayConfig;
-
-    // Reset file upload error
-    setRtgsFileUploadError(false);
-
-    let hasError = false;
-
-    // Validate UTR using centralized helper
-    const utrValid = validateUtr(rtgsUtrNumber, {
-      isRequired: isUtrFieldRequired,
-      setRequiredError: setRtgsUtrError,
-      setInvalidCharError: setRtgsUtrInvalidCharError,
-      setMinError: setRtgsUtrMinError,
-    });
-
-    if (!utrValid) hasError = true;
-
-    // Validate file upload if required
-    if (isUploadFieldRequired) {
-      if (
-        !rtgsFileUpload?.state?.fileUploaded ||
-        rtgsFileUpload?.state?.uploadedFileUrl?.length === 0
-      ) {
-        setRtgsFileUploadError(true);
-        hasError = true;
-      }
-    }
-
-    if (!hasError) {
-      // Update selectedRtgsPayment with UTR and file URLs
-      const updatedRtgsPayment = {
-        ...selectedRtgsPayment,
-        offline_utr: rtgsUtrNumber || "",
-        receipt_urls: rtgsFileUpload?.state?.uploadedFileUrl || [],
-      };
-
-      proceedToPay("RTGS", {
-        ...selectedPaymentPayload,
-        selectedRtgsPayment: updatedRtgsPayment,
-      });
-    }
-  };
-
-  const handleUploadButtonClick = () => {
-    uploadInputRef.current?.click();
-  };
-
-  const handleDragEnter = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    dragCounterRef.current += 1;
-    if (dragCounterRef.current === 1) {
-      setIsDragging(true);
-    }
-  };
-
-  const handleDragLeave = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    dragCounterRef.current -= 1;
-    // Only set dragging to false when we've completely left the drop zone
-    if (dragCounterRef.current === 0) {
-      setIsDragging(false);
-    }
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    // Keep dragging state true while over the drop zone
-    if (!isDragging) setIsDragging(true);
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    dragCounterRef.current = 0;
-    setIsDragging(false);
-
-    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      // Create a proper event object that mimics a file input event
-      const target = {
-        files: e.dataTransfer.files,
-        value: "",
-      };
-      // Make value settable using a setter
-      let value = "";
-      Object.defineProperty(target, "value", {
-        get: () => value,
-        set: (newValue) => {
-          value = newValue;
-        },
-        enumerable: true,
-        configurable: true,
-      });
-
-      const fakeEvent = {
-        target: target,
-      };
-      handleFileInputChange(fakeEvent);
-    }
-  };
-
-  const formatFileSize = (bytes) => {
-    const kb = bytes / 1024;
-    return `${kb.toFixed(2)} kb`;
-  };
-
-  const handleFileRemove = (fileIndex) => {
-    if (selectedTab === "NEFT") {
-      setNeftProofFiles((prev) => prev.filter((_, i) => i !== fileIndex));
-    } else if (selectedTab === "RTGS") {
-      setRtgsProofFiles((prev) => prev.filter((_, i) => i !== fileIndex));
-    }
-    if (uploadInputRef.current) {
-      uploadInputRef.current.value = "";
-    }
-    if (fileUpload?.reset) {
-      fileUpload.reset(fileIndex);
-    }
-  };
-
-  const handleFileInputChange = async (event) => {
-    const files = Array.from(event?.target?.files || []);
-    if (files.length === 0) return;
-
-    const maxSizeInBytes = 5 * 1024 * 1024;
-    const allowedTypes = [
-      "application/pdf",
-      "image/png",
-      "image/jpeg",
-      "image/jpg",
-    ];
-    const allowedExtensions = ["pdf", "png", "jpg", "jpeg"];
-
-    // Validate all files
-    for (const file of files) {
-      if (file.size > maxSizeInBytes) {
-        alert(
-          t("resource.dynamic_label.file_size_exceeded") ||
-            `File ${file.name} size must not exceed 5MB`
-        );
-        // Only reset value if it's a real file input (has a value property that can be set)
-        if (
-          event?.target?.value !== undefined &&
-          typeof event.target.value === "string"
-        ) {
-          event.target.value = "";
-        }
-        return;
-      }
-
-      const fileExtension = file.name.split(".").pop().toLowerCase();
-
-      if (
-        !allowedTypes.includes(file.type) ||
-        !allowedExtensions.includes(fileExtension)
-      ) {
-        alert(
-          t("resource.dynamic_label.invalid_file_type") ||
-            `Only PDF and image files (PNG, JPG, JPEG) are allowed for ${file.name}`
-        );
-        // Only reset value if it's a real file input (has a value property that can be set)
-        if (
-          event?.target?.value !== undefined &&
-          typeof event.target.value === "string"
-        ) {
-          event.target.value = "";
-        }
-        return;
-      }
-    }
-
-    if (selectedTab === "NEFT") {
-      setNeftProofFiles((prev) => [...prev, ...files]);
-      if (neftFileUploadError) {
-        setNeftFileUploadError(false);
-      }
-    } else if (selectedTab === "RTGS") {
-      setRtgsProofFiles((prev) => [...prev, ...files]);
-      if (rtgsFileUploadError) {
-        setRtgsFileUploadError(false);
-      }
-    }
-
-    if (fileUpload?.upload) {
-      for (const file of files) {
-        await fileUpload.upload(file);
-      }
-    }
-  };
-
-  const isNeftPlaceOrderDisabled = isPaymentLoading;
-  const isRtgsPlaceOrderDisabled = isPaymentLoading;
-
   const checkCouponValidity = async (payload) => {
     if (getTotalValue() === 0) return true;
     const res = await validateCoupon(payload);
@@ -1208,12 +708,6 @@ function CheckoutPaymentContent({
     if (tab === "COD") {
       setSelectedTab(tab);
       setIsCodModalOpen(true);
-    } else if (tab === "NEFT") {
-      setSelectedTab(tab);
-      setSelectedNeftPayment(subMopData);
-    } else if (tab === "RTGS") {
-      setSelectedTab(tab);
-      setSelectedRtgsPayment(subMopData);
     } else if (tab === "CARD") {
       if (subMop !== "newCARD") {
         setSelectedCard(subMopData);
@@ -1352,18 +846,6 @@ function CheckoutPaymentContent({
 
       setSelectedTab(tab);
       setIsCodModalOpen(true);
-    } else if (tab === "NEFT") {
-      selectPaymentMode(paymentModePayload).then(() => {
-        console.log("Payment mode selected");
-      });
-      setSelectedNeftPayment(subMopData);
-      setSelectedTab(tab);
-    } else if (tab === "RTGS") {
-      selectPaymentMode(paymentModePayload).then(() => {
-        console.log("Payment mode selected");
-      });
-      setSelectedRtgsPayment(subMopData);
-      setSelectedTab(tab);
     } else if (tab === "CARD") {
       if (subMop !== "newCARD") {
         setSelectedCard(subMopData);
@@ -1510,8 +992,6 @@ function CheckoutPaymentContent({
       vpa: savedUPISelect || vpa,
       selectedOtherPayment: selectedOtherPayment,
       selectedUpiIntentApp: selectedUpiIntentApp,
-      selectedNeftPayment: selectedNeftPayment,
-      selectedRtgsPayment: selectedRtgsPayment,
     });
   }, [
     selectedCard,
@@ -1522,8 +1002,6 @@ function CheckoutPaymentContent({
     vpa,
     isCardSecure,
     selectedOtherPayment,
-    selectedNeftPayment,
-    selectedRtgsPayment,
     selectedUpiIntentApp,
     savedUPISelect,
     vpa,
@@ -2039,8 +1517,6 @@ function CheckoutPaymentContent({
 
   const unsetSelectedSubMop = () => {
     setSelectedOtherPayment({});
-    setSelectedNeftPayment({});
-    setSelectedRtgsPayment({});
     setSelectedNB("");
     setSelectedWallet("");
     setSelectedCardless("");
@@ -2711,8 +2187,79 @@ function CheckoutPaymentContent({
               <div>
                 {upiApps?.length > 0 &&
                   upiApps
-                    .filter((app) => ["gpay", "phonepe", "paytm"].includes(app))
-                    .map((app) => (
+                    .filter((app) => ["gpay", "google_pay", "phonepe", "paytm"].includes(app))
+                    .map((app) => {
+                      const svgName = getSvgNameForApp(app);
+                      const displayKey = svgName;
+                      return (
+                        <label
+                          key={app}
+                          onClick={() => {
+                            setSelectedUpiIntentApp(app);
+                            selectedUpiRef.current = null;
+                            setvpa("");
+                            setSavedUPISelect("");
+                            setUPIError(false);
+                            cancelQrPayment();
+                          }}
+                          className={`${styles.upiApp} ${!upiApps?.includes("any") ? styles.notBorderBottom : ""} ${selectedUpiIntentApp === app ? styles.selectedUpiApp : ""}`}
+                        >
+                          <div className={styles.logo}>
+                            <SvgWrapper svgSrc={svgName} />
+                          </div>
+                          <p className={styles.displayName}>
+                            {upiAppData[displayKey]?.displayName}
+                          </p>
+                        {(!selectedUpiIntentApp ||
+                          selectedUpiIntentApp !== app) && (
+                          <SvgWrapper
+                            svgSrc={"radio"}
+                            className={styles.onMobileView}
+                          />
+                        )}
+                        {selectedUpiIntentApp &&
+                          selectedUpiIntentApp === app && (
+                            <SvgWrapper
+                              svgSrc={"radio-selected"}
+                              className={styles.onMobileView}
+                            />
+                          )}
+                        </label>
+                      );
+                    })}
+                {upiApps?.length > 0 && upiApps?.includes("any") && (
+                  <label
+                    key="any"
+                    onClick={() => {
+                      setSelectedUpiIntentApp("any");
+                      selectedUpiRef.current = "any";
+                      selectMop("UPI", "UPI", "UPI");
+                      removeDialogueError();
+                      setShowUpiRedirectionModal(true);
+                    }}
+                    className={styles.moreApps}
+                  >
+                    <div className={styles.logo}>
+                      <SvgWrapper svgSrc="more-upi-apps" />
+                    </div>
+                    <p className={styles.displayName}>
+                      {upiAppData.any?.displayName}
+                    </p>
+                    <div className={styles.rightArrow}>
+                      <SvgWrapper svgSrc="arrow-right" />
+                    </div>
+                  </label>
+                )}
+              </div>
+            )}
+            {!isTablet && upiApps?.length > 0 && (
+              <div>
+                {upiApps
+                  .filter((app) => ["gpay", "google_pay", "phonepe", "paytm"].includes(app))
+                  .map((app) => {
+                    const svgName = getSvgNameForApp(app);
+                    const displayKey = svgName;
+                    return (
                       <label
                         key={app}
                         onClick={() => {
@@ -2726,10 +2273,10 @@ function CheckoutPaymentContent({
                         className={`${styles.upiApp} ${!upiApps?.includes("any") ? styles.notBorderBottom : ""} ${selectedUpiIntentApp === app ? styles.selectedUpiApp : ""}`}
                       >
                         <div className={styles.logo}>
-                          <SvgWrapper svgSrc={app} />
+                          <SvgWrapper svgSrc={svgName} />
                         </div>
                         <p className={styles.displayName}>
-                          {upiAppData[app]?.displayName}
+                          {upiAppData[displayKey]?.displayName}
                         </p>
                         {(!selectedUpiIntentApp ||
                           selectedUpiIntentApp !== app) && (
@@ -2746,7 +2293,8 @@ function CheckoutPaymentContent({
                             />
                           )}
                       </label>
-                    ))}
+                    );
+                  })}
                 {upiApps?.length > 0 && upiApps?.includes("any") && (
                   <label
                     key="any"
@@ -2831,7 +2379,11 @@ function CheckoutPaymentContent({
                       <SvgWrapper svgSrc="qr-code" className={styles.blurred} />
                     )}
                     {isQrCodeVisible && (
-                      <img src={qrCodeImage} className={styles.qrCode} />
+                      <img
+                        src={qrCodeImage}
+                        className={styles.qrCode}
+                        alt={t("resource.checkout.qr_code_image")}
+                      />
                     )}
                     {!isQrCodeVisible && isQrCodeLoading && (
                       <div className={styles.qrLoader}></div>
@@ -2859,7 +2411,7 @@ function CheckoutPaymentContent({
             {((isTablet &&
               isChromeOrSafari &&
               (upiApps?.length > 0 || upiApps?.includes("any"))) ||
-              (!isTablet && isQrMopPresent)) && (
+              (!isTablet && (upiApps?.length > 0 || isQrMopPresent))) && (
               <div className={styles.upiOrLine}>
                 <span className={styles.upiOrText}>
                   {t("resource.common.or")}
@@ -3313,7 +2865,6 @@ function CheckoutPaymentContent({
             </div>
           </div>
         );
-
       case "COD":
         return (
           <div>
@@ -3350,881 +2901,6 @@ function CheckoutPaymentContent({
             )}
           </div>
         );
-
-      // case "COD": {
-      //   const {
-      //     beneficiaryDetails,
-      //     beneficiaryTitle,
-      //     transactionTitle,
-      //     utrLabel,
-      //     utrDescription,
-      //     uploadHeading,
-      //     uploadCta,
-      //     uploadHelper,
-      //   } = neftDisplayConfig;
-      //   return (
-      //     <div>
-      //       <div className={styles.neftWrapper}>
-      //         <section className={styles.neftSection}>
-      //           <p className={styles.neftSectionTitle}>{beneficiaryTitle}</p>
-      //           <div className={styles.neftBeneficiaryCard}>
-      //             {beneficiaryDetails.map((detail) => (
-      //               <div
-      //                 key={detail.label}
-      //                 className={styles.neftBeneficiaryRow}
-      //               >
-      //                 <div className={styles.neftBeneficiaryLabelWrapper}>
-      //                   <span className={styles.neftBeneficiaryLabel}>
-      //                     {detail.label}
-      //                   </span>
-      //                   <span className={styles.neftLabelSeparator}>:</span>
-      //                 </div>
-      //                 <div className={styles.neftBeneficiaryValue}>
-      //                   <span>{detail.value}</span>
-      //                   {detail.isCopyEnabled && (
-      //                     <button
-      //                       type="button"
-      //                       className={styles.neftCopyButton}
-      //                       onClick={() => handleCopyToClipboard(detail.value)}
-      //                     >
-      //                       {copiedValue === detail.value ? (
-      //                         <TickBlackActiveSvg />
-      //                       ) : (
-      //                         <CopyToClipboardSvg />
-      //                       )}
-      //                     </button>
-      //                   )}
-      //                 </div>
-      //               </div>
-      //             ))}
-      //           </div>
-      //         </section>
-
-      //         <div className={styles.neftFormBlock}>
-      //           <div className={styles.neftFormBlockInner}>
-      //             <section className={styles.neftSection}>
-      //               <p className={styles.neftSectionTitle}>
-      //                 {transactionTitle}
-      //               </p>
-      //               <div className={styles.neftFieldGroup}>
-      //                 <input
-      //                   id="neftUtrNumber"
-      //                   type="text"
-      //                   value={utrNumber}
-      //                   onChange={handleUtrInputChange}
-      //                   placeholder={utrLabel}
-      //                   className={`${styles.neftInput} ${
-      //                     utrError ? styles.neftInputError : ""
-      //                   }`}
-      //                 />
-      //                 {utrError && (
-      //                   <p className={styles.neftError}>
-      //                     {t("resource.common.field_required")}
-      //                   </p>
-      //                 )}
-      //               </div>
-      //             </section>
-      //             <p className={styles.neftHelperText}>{utrDescription}</p>
-      //           </div>
-
-      //           <section
-      //             className={`${styles.neftSection} ${styles.neftUploadSection}`}
-      //           >
-      //             <div
-      //               className={`${styles.neftUploadBox} ${isDragging ? styles.neftUploadBoxDragging : ""}`}
-      //               onDragEnter={handleDragEnter}
-      //               onDragOver={handleDragOver}
-      //               onDragLeave={handleDragLeave}
-      //               onDrop={handleDrop}
-      //             >
-      //               <input
-      //                 type="file"
-      //                 accept=".pdf,.png,.jpg,.jpeg"
-      //                 ref={uploadInputRef}
-      //                 className={styles.neftHiddenInput}
-      //                 onChange={handleFileInputChange}
-      //                 disabled={fileUpload?.state?.isUploading}
-      //               />
-      //               <div className={styles.neftUploadIcon} aria-hidden="true">
-      //                 <UploadSvg />
-      //               </div>
-      //               <button
-      //                 type="button"
-      //                 className={styles.neftUploadButton}
-      //                 onClick={handleUploadButtonClick}
-      //                 disabled={fileUpload?.state?.isUploading}
-      //               >
-      //                 {uploadCta}
-      //               </button>
-      //               <p className={styles.neftUploadTitle}>{uploadHeading}</p>
-      //               <p className={styles.neftUploadHelper}>{uploadHelper}</p>
-      //             </div>
-
-      //             {(selectedProofFile || fileUpload?.state?.fileUploaded) && (
-      //               <div className={styles.neftFileCard}>
-      //                 <div className={styles.neftFileCardContent}>
-      //                   <div className={styles.neftFileInfo}>
-      //                     <div className={styles.neftFileIcon}>
-      //                       <FileSvg className={styles.fileIcon} />
-      //                     </div>
-      //                     <div className={styles.neftFileDetails}>
-      //                       <span className={styles.neftFileName}>
-      //                         {selectedProofFile?.name ||
-      //                           fileUpload?.state?.fileUploadedName}
-      //                         {fileUpload?.state?.fileUploaded && (
-      //                           <SvgCheck
-      //                             className={styles.neftSuccessIndicator}
-      //                           />
-      //                         )}
-      //                       </span>
-
-      //                       {fileUpload?.state?.fileUploaded &&
-      //                         selectedProofFile && (
-      //                           <span className={styles.neftFileSize}>
-      //                             {formatFileSize(selectedProofFile.size)}
-      //                           </span>
-      //                         )}
-
-      //                       {fileUpload?.state?.isUploading && (
-      //                         <div className={styles.neftProgressContainer}>
-      //                           <div
-      //                             className={styles.neftProgressBarContainer}
-      //                           >
-      //                             <div
-      //                               className={styles.neftProgressBar}
-      //                               style={{
-      //                                 width: `${fileUpload?.state?.uploadProgress}%`,
-      //                               }}
-      //                             />
-      //                           </div>
-      //                           <span className={styles.neftProgressText}>
-      //                             {fileUpload?.state?.uploadProgress}%
-      //                           </span>
-      //                         </div>
-      //                       )}
-      //                     </div>
-
-      //                     <div className={styles.neftFileActions}>
-      //                       {fileUpload?.state?.fileUploaded && (
-      //                         <button
-      //                           className={styles.neftFileActionBtn}
-      //                           onClick={handleFileRemove}
-      //                           aria-label="Remove file"
-      //                         >
-      //                           <DeleteSvg className={styles.neftDeleteIcon} />
-      //                         </button>
-      //                       )}
-      //                     </div>
-      //                   </div>
-      //                 </div>
-      //               </div>
-      //             )}
-
-      //             {fileUpload?.state?.fileUploadError && (
-      //               <div className={styles.neftUploadError}>
-      //                 {fileUpload.state.fileUploadError}
-      //               </div>
-      //             )}
-      //           </section>
-
-      //           <div>
-      //             {isTablet ? (
-      //               <StickyPayNow
-      //                 customClassName={styles.visibleOnTab}
-      //                 value={priceFormatCurrencySymbol(
-      //                   getCurrencySymbol,
-      //                   getTotalValue()
-      //                 )}
-      //                 onPriceDetailsClick={onPriceDetailsClick}
-      //                 disabled={isNeftPlaceOrderDisabled}
-      //                 enableLinkPaymentOption={enableLinkPaymentOption}
-      //                 isPaymentLoading={isPaymentLoading}
-      //                 loader={loader}
-      //                 proceedToPay={() => {
-      //                   handleNeftPlaceOrder();
-      //                   acceptOrder();
-      //                 }}
-      //               />
-      //             ) : (
-      //               <button
-      //                 className={styles.neftPlaceOrderBtn}
-      //                 onClick={handleNeftPlaceOrder}
-      //                 disabled={isNeftPlaceOrderDisabled}
-      //               >
-      //                 {!isPaymentLoading
-      //                   ? t("resource.checkout.place_order")
-      //                   : loader}
-      //               </button>
-      //             )}
-      //           </div>
-      //         </div>
-      //       </div>
-      //     </div>
-      //   );
-      // }
-
-      case "NEFT": {
-        const {
-          beneficiaryDetails,
-          beneficiaryTitle,
-          transactionTitle,
-          utrLabel,
-          utrDescription,
-          uploadHeading,
-          uploadCta,
-          uploadHelper,
-          isUtrFieldRequired,
-          isUploadFieldRequired,
-        } = neftDisplayConfig;
-
-        const utrFieldSet =
-          t("resource.dynamic_label.utr_number") || "UTR Number";
-
-        const currency = getCurrencySymbol;
-
-        const totalValue = Math.ceil(getTotalValue());
-
-        const mop = "NEFT";
-
-        return (
-          <div>
-            <div className={styles.neftWrapper}>
-              <section className={styles.neftSection}>
-                <p className={styles.neftSectionTitle}>{beneficiaryTitle}</p>
-                <div className={styles.neftBeneficiaryCard}>
-                  {beneficiaryDetails
-                    .filter(
-                      (detail) => detail.value && detail.value.trim() !== ""
-                    )
-                    .map((detail) => (
-                      <div
-                        key={detail.label}
-                        className={styles.neftBeneficiaryRow}
-                      >
-                        <div className={styles.neftBeneficiaryLabelWrapper}>
-                          <span className={styles.neftBeneficiaryLabel}>
-                            {detail.label}
-                          </span>
-                          <span className={styles.neftLabelSeparator}>:</span>
-                        </div>
-                        <div className={styles.neftBeneficiaryValue}>
-                          <span>{detail.value}</span>
-                          {detail.isCopyEnabled && (
-                            <button
-                              type="button"
-                              className={styles.neftCopyButton}
-                              onClick={() =>
-                                handleCopyToClipboard(
-                                  detail.value,
-                                  setCopiedValue
-                                )
-                              }
-                            >
-                              {copiedValue === detail.value ? (
-                                <TickBlackActiveSvg />
-                              ) : (
-                                <CopyToClipboardSvg />
-                              )}
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                </div>
-                <div className={styles.infoAlert}>
-                  <div className={styles.infoAlertIcon}>
-                    <DangerInfoIcon />
-                  </div>
-                  <span>
-                    {t("resource.dynamic_label.please_pay_for_mop_payment", {
-                      currency,
-                      totalValue,
-                      mop,
-                    })}
-                  </span>
-                </div>
-              </section>
-
-              <div className={styles.neftFormBlock}>
-                <div className={styles.neftFormBlockInner}>
-                  <section className={styles.neftSection}>
-                    <p className={styles.neftSectionTitle}>
-                      {transactionTitle}
-                    </p>
-                    <div className={styles.field}>
-                      <FyInput
-                        id="utrNumber"
-                        label={`${utrFieldSet}${isUtrFieldRequired ? "*" : ""}`}
-                        showAsterik={isUtrFieldRequired}
-                        labelVariant="floating"
-                        inputVariant="outlined"
-                        inputClassName={styles["fs-12"]}
-                        containerClassName={styles["field-input-container"]}
-                        minLength={16}
-                        maxLength={22}
-                        type="text"
-                        value={neftUtrNumber}
-                        onChange={handleUtrInputChange}
-                        // endAdornment={
-                        //   <div
-                        //     className={styles.copyIcon}
-                        //     onClick={() =>
-                        //       handleCopyToClipboard(
-                        //         neftUtrNumber,
-                        //         setUtrCopiedValue
-                        //       )
-                        //     }
-                        //   >
-                        //     {utrCopiedValue === neftUtrNumber ? (
-                        //       <TickBlackActiveSvg />
-                        //     ) : (
-                        //       <CopyToClipboardSvg />
-                        //     )}
-                        //   </div>
-                        // }
-                        error={
-                          neftUtrError ||
-                          neftUtrMinError ||
-                          neftUtrInvalidCharError
-                        }
-                        errorMessage={
-                          neftUtrError
-                            ? t("resource.common.field_required")
-                            : neftUtrMinError
-                              ? t("resource.dynamic_label.utr_min_length")
-                              : neftUtrInvalidCharError
-                                ? t(
-                                    "resource.dynamic_label.utr_invalid_characters"
-                                  ) ||
-                                  "Only alphanumeric characters are allowed (A-Z, 0-9). No spaces or special characters."
-                                : ""
-                        }
-                      />
-                    </div>
-                  </section>
-                  <p className={styles.neftHelperText}>{utrDescription}</p>
-                </div>
-
-                <section
-                  className={`${styles.neftSection} ${styles.neftUploadSection}`}
-                >
-                  <div
-                    className={`${styles.neftUploadBox} ${isDragging ? styles.neftUploadBoxDragging : ""}`}
-                    onDragEnter={handleDragEnter}
-                    onDragOver={handleDragOver}
-                    onDragLeave={handleDragLeave}
-                    onDrop={handleDrop}
-                  >
-                    <div className={styles.neftUploadButtonWrapper}>
-                      <input
-                        type="file"
-                        accept=".pdf,.png,.jpg,.jpeg"
-                        ref={uploadInputRef}
-                        className={styles.neftHiddenInput}
-                        onChange={handleFileInputChange}
-                        disabled={fileUpload?.state?.isUploading}
-                        multiple
-                      />
-                      <div className={styles.neftUploadIcon} aria-hidden="true">
-                        <UploadSvg />
-                      </div>
-                      <button
-                        type="button"
-                        className={styles.neftUploadButton}
-                        onClick={handleUploadButtonClick}
-                        disabled={fileUpload?.state?.isUploading}
-                      >
-                        {uploadCta}
-                      </button>
-                    </div>
-                    <div className={styles.neftUploadHelperWrapper}>
-                      <p className={styles.neftUploadTitle}>
-                        {uploadHeading}
-                        {isUploadFieldRequired && (
-                          <span style={{ color: "red", marginLeft: "4px" }}>
-                            *
-                          </span>
-                        )}
-                      </p>
-                      <p className={styles.neftUploadHelper}>{uploadHelper}</p>
-                    </div>
-                  </div>
-
-                  {(fileUpload?.state?.fileUploadError ||
-                    neftFileUploadError) && (
-                    <div className={styles.neftUploadError}>
-                      {fileUpload?.state?.fileUploadError ||
-                        (neftFileUploadError &&
-                          t("resource.common.field_required"))}
-                    </div>
-                  )}
-
-                  {fileUpload?.state?.uploadingFiles?.length > 0 && (
-                    <div className={styles.neftUploadingFilesWrapper}>
-                      {/* Display uploading files with progress */}
-                      {fileUpload?.state?.uploadingFiles?.map(
-                        (uploadingFile, index) => (
-                          <div
-                            key={uploadingFile.id}
-                            className={styles.neftFileCard}
-                          >
-                            <div className={styles.neftFileCardContent}>
-                              <div className={styles.neftFileInfo}>
-                                <div className={styles.neftFileIcon}>
-                                  <FileSvg className={styles.fileIcon} />
-                                </div>
-                                <div className={styles.neftFileDetails}>
-                                  <span className={styles.neftFileName}>
-                                    {uploadingFile.name}
-                                  </span>
-                                  <div className={styles.neftProgressContainer}>
-                                    <div
-                                      className={
-                                        styles.neftProgressBarContainer
-                                      }
-                                    >
-                                      <div
-                                        className={styles.neftProgressBar}
-                                        style={{
-                                          width: `${uploadingFile.progress}%`,
-                                        }}
-                                      />
-                                    </div>
-                                    <span className={styles.neftProgressText}>
-                                      {uploadingFile.progress}%
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        )
-                      )}
-                    </div>
-                  )}
-
-                  {neftProofFiles?.some(
-                    (file, index) =>
-                      index < fileUpload?.state?.fileUploadedName?.length
-                  ) && (
-                    <div className={styles.neftUploadedFilesWrapper}>
-                      {/* Display uploaded files */}
-                      {neftProofFiles?.map((file, index) => {
-                        const isUploaded =
-                          index < fileUpload?.state?.fileUploadedName?.length;
-
-                        // Only render files that have been successfully uploaded
-                        if (!isUploaded) return null;
-
-                        return (
-                          <div
-                            key={`file-${index}`}
-                            className={styles.neftFileCard}
-                          >
-                            <div className={styles.neftFileCardContent}>
-                              <div className={styles.neftFileInfo}>
-                                <div className={styles.neftFileIcon}>
-                                  <FileSvg className={styles.fileIcon} />
-                                </div>
-                                <div className={styles.neftFileDetails}>
-                                  <span className={styles.neftFileName}>
-                                    {file.name}
-                                    <SvgCheck
-                                      className={styles.neftSuccessIndicator}
-                                    />
-                                  </span>
-                                  <span className={styles.neftFileSize}>
-                                    {formatFileSize(file.size)}
-                                  </span>
-                                </div>
-
-                                <div className={styles.neftFileActions}>
-                                  <button
-                                    className={styles.neftFileActionBtn}
-                                    onClick={() => handleFileRemove(index)}
-                                    aria-label="Remove file"
-                                  >
-                                    <DeleteSvg
-                                      className={styles.neftDeleteIcon}
-                                    />
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </section>
-
-                <div>
-                  {isTablet ? (
-                    <StickyPayNow
-                      customClassName={styles.visibleOnTab}
-                      value={priceFormatCurrencySymbol(
-                        getCurrencySymbol,
-                        getTotalValue()
-                      )}
-                      onPriceDetailsClick={onPriceDetailsClick}
-                      disabled={isNeftPlaceOrderDisabled}
-                      enableLinkPaymentOption={enableLinkPaymentOption}
-                      isPaymentLoading={isPaymentLoading}
-                      loader={loader}
-                      proceedToPay={() => {
-                        handleNeftPlaceOrder();
-                        acceptOrder();
-                      }}
-                    />
-                  ) : (
-                    <button
-                      className={styles.neftPlaceOrderBtn}
-                      onClick={handleNeftPlaceOrder}
-                      disabled={isNeftPlaceOrderDisabled}
-                    >
-                      {!isPaymentLoading
-                        ? t("resource.checkout.place_order")
-                        : loader}
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      }
-
-      case "RTGS": {
-        const {
-          beneficiaryDetails,
-          beneficiaryTitle,
-          transactionTitle,
-          utrLabel,
-          utrDescription,
-          uploadHeading,
-          uploadCta,
-          uploadHelper,
-          isUtrFieldRequired,
-          isUploadFieldRequired,
-        } = rtgsDisplayConfig;
-
-        const utrFieldSet =
-          t("resource.dynamic_label.utr_number") || "UTR Number";
-
-        const currency = getCurrencySymbol;
-
-        const totalValue = Math.ceil(getTotalValue());
-
-        const mop = "RTGS";
-
-        return (
-          <div>
-            <div className={styles.neftWrapper}>
-              <section className={styles.neftSection}>
-                <p className={styles.neftSectionTitle}>{beneficiaryTitle}</p>
-                <div className={styles.neftBeneficiaryCard}>
-                  {beneficiaryDetails
-                    .filter(
-                      (detail) => detail.value && detail.value.trim() !== ""
-                    )
-                    .map((detail) => (
-                      <div
-                        key={detail.label}
-                        className={styles.neftBeneficiaryRow}
-                      >
-                        <div className={styles.neftBeneficiaryLabelWrapper}>
-                          <span className={styles.neftBeneficiaryLabel}>
-                            {detail.label}
-                          </span>
-                          <span className={styles.neftLabelSeparator}>:</span>
-                        </div>
-                        <div className={styles.neftBeneficiaryValue}>
-                          <span>{detail.value}</span>
-                          {detail.isCopyEnabled && (
-                            <button
-                              type="button"
-                              className={styles.neftCopyButton}
-                              onClick={() =>
-                                handleCopyToClipboard(
-                                  detail.value,
-                                  setCopiedValue
-                                )
-                              }
-                            >
-                              {copiedValue === detail.value ? (
-                                <TickBlackActiveSvg />
-                              ) : (
-                                <CopyToClipboardSvg />
-                              )}
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                </div>
-
-                <div className={styles.infoAlert}>
-                  <div className={styles.infoAlertIcon}>
-                    <DangerInfoIcon />
-                  </div>
-                  <span>
-                    {t("resource.dynamic_label.please_pay_for_mop_payment", {
-                      currency,
-                      totalValue,
-                      mop,
-                    })}
-                  </span>
-                </div>
-              </section>
-
-              <div className={styles.neftFormBlock}>
-                <div className={styles.neftFormBlockInner}>
-                  <section className={styles.neftSection}>
-                    <p className={styles.neftSectionTitle}>
-                      {transactionTitle}
-                    </p>
-                    <div className={styles.field}>
-                      <FyInput
-                        id="utrNumber"
-                        label={`${utrFieldSet}${isUtrFieldRequired ? "*" : ""}`}
-                        showAsterik={isUtrFieldRequired}
-                        labelVariant="floating"
-                        inputVariant="outlined"
-                        inputClassName={styles["fs-12"]}
-                        containerClassName={styles["field-input-container"]}
-                        type="text"
-                        value={rtgsUtrNumber}
-                        onChange={handleUtrInputChange}
-                        minLength={16}
-                        maxLength={22}
-                        // endAdornment={
-                        //   <div
-                        //     className={styles.copyIcon}
-                        //     onClick={() =>
-                        //       handleCopyToClipboard(
-                        //         rtgsUtrNumber,
-                        //         setUtrCopiedValue
-                        //       )
-                        //     }
-                        //   >
-                        //     {utrCopiedValue === rtgsUtrNumber ? (
-                        //       <TickBlackActiveSvg />
-                        //     ) : (
-                        //       <CopyToClipboardSvg />
-                        //     )}
-                        //   </div>
-                        // }
-                        error={
-                          rtgsUtrError ||
-                          rtgsUtrMinError ||
-                          rtgsUtrInvalidCharError
-                        }
-                        errorMessage={
-                          rtgsUtrError
-                            ? t("resource.common.field_required")
-                            : rtgsUtrMinError
-                              ? t("resource.dynamic_label.utr_min_length")
-                              : rtgsUtrInvalidCharError
-                                ? t(
-                                    "resource.dynamic_label.utr_invalid_characters"
-                                  ) ||
-                                  "Only alphanumeric characters are allowed (A-Z, 0-9). No spaces or special characters."
-                                : ""
-                        }
-                      />
-                    </div>
-                  </section>
-                  <p className={styles.neftHelperText}>{utrDescription}</p>
-                </div>
-
-                <section
-                  className={`${styles.neftSection} ${styles.neftUploadSection}`}
-                >
-                  <div
-                    className={`${styles.neftUploadBox} ${isDragging ? styles.neftUploadBoxDragging : ""}`}
-                    onDragEnter={handleDragEnter}
-                    onDragOver={handleDragOver}
-                    onDragLeave={handleDragLeave}
-                    onDrop={handleDrop}
-                  >
-                    <div className={styles.neftUploadButtonWrapper}>
-                      <input
-                        type="file"
-                        accept=".pdf,.png,.jpg,.jpeg"
-                        ref={uploadInputRef}
-                        className={styles.neftHiddenInput}
-                        onChange={handleFileInputChange}
-                        disabled={fileUpload?.state?.isUploading}
-                        multiple
-                      />
-                      <div className={styles.neftUploadIcon} aria-hidden="true">
-                        <UploadSvg />
-                      </div>
-                      <button
-                        type="button"
-                        className={styles.neftUploadButton}
-                        onClick={handleUploadButtonClick}
-                        disabled={fileUpload?.state?.isUploading}
-                      >
-                        {uploadCta}
-                      </button>
-                    </div>
-                    <div className={styles.neftUploadHelperWrapper}>
-                      <p className={styles.neftUploadTitle}>
-                        {uploadHeading}
-                        {isUploadFieldRequired && (
-                          <span style={{ color: "red", marginLeft: "4px" }}>
-                            *
-                          </span>
-                        )}
-                      </p>
-                      <p className={styles.neftUploadHelper}>{uploadHelper}</p>
-                    </div>
-                  </div>
-
-                  {fileUpload?.state?.uploadingFiles?.length > 0 && (
-                    <div className={styles.neftUploadingFilesWrapper}>
-                      {/* Display uploading files with progress */}
-                      {fileUpload?.state?.uploadingFiles?.map(
-                        (uploadingFile, index) => (
-                          <div
-                            key={uploadingFile.id}
-                            className={styles.neftFileCard}
-                          >
-                            <div className={styles.neftFileCardContent}>
-                              <div className={styles.neftFileInfo}>
-                                <div className={styles.neftFileIcon}>
-                                  <FileSvg className={styles.fileIcon} />
-                                </div>
-                                <div className={styles.neftFileDetails}>
-                                  <span className={styles.neftFileName}>
-                                    {uploadingFile.name}
-                                  </span>
-                                  <div className={styles.neftProgressContainer}>
-                                    <div
-                                      className={
-                                        styles.neftProgressBarContainer
-                                      }
-                                    >
-                                      <div
-                                        className={styles.neftProgressBar}
-                                        style={{
-                                          width: `${uploadingFile.progress}%`,
-                                        }}
-                                      />
-                                    </div>
-                                    <span className={styles.neftProgressText}>
-                                      {uploadingFile.progress}%
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        )
-                      )}
-                    </div>
-                  )}
-
-                  {rtgsProofFiles?.some(
-                    (file, index) =>
-                      index < fileUpload?.state?.fileUploadedName?.length
-                  ) && (
-                    <div className={styles.neftUploadedFilesWrapper}>
-                      {/* Display uploaded files */}
-                      {rtgsProofFiles?.map((file, index) => {
-                        const isUploaded =
-                          index < fileUpload?.state?.fileUploadedName?.length;
-
-                        // Only render files that have been successfully uploaded
-                        if (!isUploaded) return null;
-
-                        return (
-                          <div
-                            key={`file-${index}`}
-                            className={styles.neftFileCard}
-                          >
-                            <div className={styles.neftFileCardContent}>
-                              <div className={styles.neftFileInfo}>
-                                <div className={styles.neftFileIcon}>
-                                  <FileSvg className={styles.fileIcon} />
-                                </div>
-                                <div className={styles.neftFileDetails}>
-                                  <span className={styles.neftFileName}>
-                                    {file.name}
-                                    <SvgCheck
-                                      className={styles.neftSuccessIndicator}
-                                    />
-                                  </span>
-                                  <span className={styles.neftFileSize}>
-                                    {formatFileSize(file.size)}
-                                  </span>
-                                </div>
-
-                                <div className={styles.neftFileActions}>
-                                  <button
-                                    className={styles.neftFileActionBtn}
-                                    onClick={() => handleFileRemove(index)}
-                                    aria-label="Remove file"
-                                  >
-                                    <DeleteSvg
-                                      className={styles.neftDeleteIcon}
-                                    />
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-
-                  {(fileUpload?.state?.fileUploadError ||
-                    rtgsFileUploadError) && (
-                    <div className={styles.neftUploadError}>
-                      {fileUpload?.state?.fileUploadError ||
-                        (rtgsFileUploadError &&
-                          t("resource.common.field_required"))}
-                    </div>
-                  )}
-                </section>
-
-                <div>
-                  {isTablet ? (
-                    <StickyPayNow
-                      customClassName={styles.visibleOnTab}
-                      value={priceFormatCurrencySymbol(
-                        getCurrencySymbol,
-                        getTotalValue()
-                      )}
-                      onPriceDetailsClick={onPriceDetailsClick}
-                      disabled={isRtgsPlaceOrderDisabled}
-                      enableLinkPaymentOption={enableLinkPaymentOption}
-                      isPaymentLoading={isPaymentLoading}
-                      loader={loader}
-                      proceedToPay={() => {
-                        handleRtgsPlaceOrder();
-                        acceptOrder();
-                      }}
-                    />
-                  ) : (
-                    <button
-                      className={styles.neftPlaceOrderBtn}
-                      onClick={handleRtgsPlaceOrder}
-                      disabled={isRtgsPlaceOrderDisabled}
-                    >
-                      {!isPaymentLoading
-                        ? t("resource.checkout.place_order")
-                        : loader}
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      }
       case "PL":
         return (
           <div>
@@ -4521,7 +3197,7 @@ function CheckoutPaymentContent({
             <div
               className={`${styles.otherHeader} ${styles["view-mobile-up"]}`}
             >
-              {t("resource.checkout.select_payment_option")}
+              {t("resource.common.select_payment_option")}
             </div>
             <div className={styles.modeOption}>
               {otherPaymentOptions?.length &&
@@ -4659,26 +3335,6 @@ function CheckoutPaymentContent({
               setvpa("");
               setLastValidatedBin("");
               unsetSelectedSubMop();
-
-              // Call selectMop for NEFT to register payment mode
-              if (opt.name === "NEFT") {
-                const neftPaymentData = paymentOption?.payment_option?.find(
-                  (option) => option.name === "NEFT"
-                );
-                const neftSubMop = neftPaymentData?.list?.[0];
-                if (neftSubMop) {
-                  selectMop("NEFT", "NEFT", neftSubMop.code || "");
-                }
-              }
-              if (opt.name === "RTGS") {
-                const rtgsPaymentData = paymentOption?.payment_option?.find(
-                  (option) => option.name === "RTGS"
-                );
-                const rtgsSubMop = rtgsPaymentData?.list?.[0];
-                if (rtgsSubMop) {
-                  selectMop("RTGS", "RTGS", rtgsSubMop.code || "");
-                }
-              }
             }
           }}
         >
@@ -4858,7 +3514,6 @@ function CheckoutPaymentContent({
           </div>
         </Modal>
       )}
-
       {isCodModalOpen && isTablet && (
         <Modal
           isOpen={isCodModalOpen}
@@ -4914,7 +3569,6 @@ function CheckoutPaymentContent({
           </div>
         </Modal>
       )}
-
       {isCvvNotNeededModal && isTablet && (
         <Modal
           isOpen={isCvvNotNeededModal}
@@ -4936,12 +3590,15 @@ function CheckoutPaymentContent({
         >
           {true ? (
             <>
-              <div className={styles.creditNote}>
-                <CreditNote
-                  data={partialPaymentOption}
-                  updateStoreCredits={updateStoreCredits}
-                />
-              </div>
+              {partialPaymentOption?.list[0]?.balance?.account?.status !==
+                "INACTIVE" && (
+                <div className={styles.creditNote}>
+                  <CreditNote
+                    data={partialPaymentOption}
+                    updateStoreCredits={updateStoreCredits}
+                  />
+                </div>
+              )}
 
               {creditUpdating ? (
                 <CheckoutPaymentSkeleton />
@@ -5002,224 +3659,6 @@ function CheckoutPaymentContent({
                             {selectedTab === "Other" && navigationTab()}
                           </div>
                         )}
-                      </div>
-                    )}
-                    {neftOption && (
-                      <div
-                        // style={{ display: "flex", flex: "1" }}
-                        className={styles.neftBorderBottom}
-                      >
-                        <div
-                          className={`${styles.linkWrapper} ${selectedTab === neftOption.name && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === neftOption.name && isTablet ? styles.headerHightlight : ""} ${!codOption ? styles.lastChild : ""}`}
-                          key={neftOption?.display_name ?? ""}
-                          id={`nav-title-neft`}
-                        >
-                          <div
-                            className={styles["linkWrapper-row1"]}
-                            onClick={() => {
-                              if (isTablet) {
-                                setSelectedTab((prev) =>
-                                  prev === neftOption.name
-                                    ? ""
-                                    : neftOption.name
-                                );
-                                setTab(neftOption.name);
-                              } else {
-                                setSelectedTab(neftOption.name);
-                                setTab(neftOption.name);
-                              }
-                              removeDialogueError();
-                              toggleMop(neftOption.name);
-                              if (selectedTab !== neftOption.name) {
-                                if (isTablet) {
-                                  setSelectedPaymentPayload({});
-                                }
-                                setNameOnCard("");
-                                setCardExpiryDate("");
-                                setCvvNumber("");
-                                hideNewCard();
-                                setvpa("");
-                                setLastValidatedBin("");
-                                unsetSelectedSubMop();
-
-                                // Call selectMop for NEFT to register payment mode
-                                const neftPaymentData =
-                                  paymentOption?.payment_option?.find(
-                                    (option) => option.name === "NEFT"
-                                  );
-                                const neftSubMop = neftPaymentData?.list?.[0];
-                                if (neftSubMop) {
-                                  selectMop(
-                                    neftOption.name,
-                                    neftOption.name,
-                                    neftSubMop.code || ""
-                                  );
-                                }
-                              }
-                            }}
-                          >
-                            <div
-                              className={` ${selectedTab === neftOption.name ? styles.indicator : ""} ${styles.onDesktopView}`}
-                            >
-                              &nbsp;
-                            </div>
-                            <div className={styles.link}>
-                              <div
-                                className={`${styles.icon} ${styles.flexCenter}`}
-                              >
-                                <SvgWrapper
-                                  svgSrc={neftOption.svg}
-                                ></SvgWrapper>
-                              </div>
-                              <div>
-                                <div
-                                  className={`${styles.modeName} ${selectedTab === neftOption.name ? styles.selectedModeName : ""}`}
-                                >
-                                  {translateDynamicLabel(
-                                    neftOption?.display_name ?? "",
-                                    t
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                            {neftOption?.image_src && (
-                              <div className={styles["payment-icons"]}>
-                                <img
-                                  src={neftOption?.image_src}
-                                  alt={neftOption?.svg}
-                                />
-                              </div>
-                            )}
-                            <div
-                              className={`${styles.arrowContainer}  ${styles.activeIconColor}`}
-                            >
-                              <SvgWrapper
-                                className={
-                                  selectedTab === neftOption.name &&
-                                  activeMop === neftOption.name
-                                    ? styles.upsideDown
-                                    : ""
-                                }
-                                svgSrc="accordion-arrow"
-                              />
-                            </div>
-                          </div>
-                          {isTablet && activeMop === neftOption.name && (
-                            <div>
-                              {selectedTab === neftOption.name &&
-                                navigationTab()}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                    {rtgsOption && (
-                      <div
-                        // style={{ display: "flex", flex: "1" }}
-                        className={styles.neftBorderBottom}
-                      >
-                        <div
-                          className={`${styles.linkWrapper} ${selectedTab === rtgsOption.name && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === rtgsOption.name && isTablet ? styles.headerHightlight : ""} ${!codOption ? styles.lastChild : ""}`}
-                          key={rtgsOption?.display_name ?? ""}
-                          id={`nav-title-rtgs`}
-                        >
-                          <div
-                            className={styles["linkWrapper-row1"]}
-                            onClick={() => {
-                              if (isTablet) {
-                                setSelectedTab((prev) =>
-                                  prev === rtgsOption.name
-                                    ? ""
-                                    : rtgsOption.name
-                                );
-                                setTab(rtgsOption.name);
-                              } else {
-                                setSelectedTab(rtgsOption.name);
-                                setTab(rtgsOption.name);
-                              }
-                              removeDialogueError();
-                              toggleMop(rtgsOption.name);
-                              if (selectedTab !== rtgsOption.name) {
-                                if (isTablet) {
-                                  setSelectedPaymentPayload({});
-                                }
-                                setNameOnCard("");
-                                setCardExpiryDate("");
-                                setCvvNumber("");
-                                hideNewCard();
-                                setvpa("");
-                                setLastValidatedBin("");
-                                unsetSelectedSubMop();
-
-                                // Call selectMop for RTGS to register payment mode
-                                const rtgsPaymentData =
-                                  paymentOption?.payment_option?.find(
-                                    (option) => option.name === "RTGS"
-                                  );
-                                const rtgsSubMop = rtgsPaymentData?.list?.[0];
-                                if (rtgsSubMop) {
-                                  selectMop(
-                                    rtgsOption.name,
-                                    rtgsOption.name,
-                                    rtgsSubMop.code || ""
-                                  );
-                                }
-                              }
-                            }}
-                          >
-                            <div
-                              className={` ${selectedTab === rtgsOption.name ? styles.indicator : ""} ${styles.onDesktopView}`}
-                            >
-                              &nbsp;
-                            </div>
-                            <div className={styles.link}>
-                              <div
-                                className={`${styles.icon} ${styles.flexCenter}`}
-                              >
-                                <SvgWrapper
-                                  svgSrc={rtgsOption.svg}
-                                ></SvgWrapper>
-                              </div>
-                              <div>
-                                <div
-                                  className={`${styles.modeName} ${selectedTab === rtgsOption.name ? styles.selectedModeName : ""}`}
-                                >
-                                  {translateDynamicLabel(
-                                    rtgsOption?.display_name ?? "",
-                                    t
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                            {rtgsOption?.image_src && (
-                              <div className={styles["payment-icons"]}>
-                                <img
-                                  src={rtgsOption?.image_src}
-                                  alt={rtgsOption?.svg}
-                                />
-                              </div>
-                            )}
-                            <div
-                              className={`${styles.arrowContainer}  ${styles.activeIconColor}`}
-                            >
-                              <SvgWrapper
-                                className={
-                                  selectedTab === rtgsOption.name &&
-                                  activeMop === rtgsOption.name
-                                    ? styles.upsideDown
-                                    : ""
-                                }
-                                svgSrc="accordion-arrow"
-                              />
-                            </div>
-                          </div>
-                          {isTablet && activeMop === rtgsOption.name && (
-                            <div>
-                              {selectedTab === rtgsOption.name &&
-                                navigationTab()}
-                            </div>
-                          )}
-                        </div>
                       </div>
                     )}
                     {codOption && (
