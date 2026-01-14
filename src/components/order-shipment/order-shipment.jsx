@@ -304,8 +304,8 @@ function OrderShipment({
   const fpi = useFPI();
   const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
   const locale = language?.locale;
+  const [isOpen, setIsOpen] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
-  // const [selectedShipment, setSelectedShipment] = useState("");
   const navigate = useNavigate();
   // const params = useParams();
   const isMobile = useMobile();
@@ -372,6 +372,9 @@ function OrderShipment({
       formatLocale(locale, countryCode)
     );
   };
+  const clickopen = () => {
+    setIsOpen(!isOpen);
+  };
   const naivgateToShipment = (item) => {
     let link = "";
     // setSelectedShipment(item?.shipment_id);
@@ -390,15 +393,10 @@ function OrderShipment({
 
     const date = new Date(utcString);
 
-    // Use browser's local timezone with fallback to UTC
-    //const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
-
     const options = {
       day: "2-digit",
       month: "short",
       year: "numeric",
-      timeZone: "UTC",
-      // timeZone: browserTimezone,
     };
 
     return date
@@ -426,14 +424,22 @@ function OrderShipment({
 
   return (
     <div className={`${styles.orderItem}`} key={orderInfo?.order_id}>
-      <div className={`${styles.orderHeader}`}>
+      <div className={`${styles.orderHeader}`} onClick={clickopen}>
+        <span className={`${styles.filter} `}>
+          <SvgWrapper
+            className={`${isOpen ? styles.filterArrowUp : styles.filterArrowdown}`}
+            svgSrc="arrowDropdownBlack"
+          />
+        </span>
         <h3 className={`${styles.orderId}`}>{orderInfo?.order_id}</h3>
         <h4 className={`${styles.orderTime}`}>
           {getTime(orderInfo?.order_created_ts)}
         </h4>
       </div>
 
-      <div className={styles.showAccordionBody}>
+      <div
+        className={isOpen ? styles.showAccordionBody : styles.hideAccordionBody}
+      >
         {Object.keys(orderInfo)?.length !== 0 &&
           orderInfo?.shipments?.length !== 0 &&
           orderInfo?.shipments?.map((item) => {

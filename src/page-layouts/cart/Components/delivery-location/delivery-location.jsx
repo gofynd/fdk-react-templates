@@ -4,37 +4,13 @@ import * as styles from "./delivery-location.less";
 import Modal from "../../../../components/core/modal/modal";
 import AddressItem from "../../../../components/address-item/address-item";
 import AddressForm from "../../../../components/address-form/v2/address-form";
-import { useGlobalTranslation, useGlobalStore, useFPI } from "fdk-core/utils";
+import { useGlobalTranslation } from "fdk-core/utils";
 import { translateDynamicLabel } from "../../../../helper/utils";
 import FyButton from "../../../../components/core/fy-button/fy-button";
-
-function AddressRight({
-  selectedAddressId,
-  addressItem,
-  updateAddress,
-  removeAddress,
-}) {
-  const { t } = useGlobalTranslation("translation");
-  return (
-    <div className={styles.buttonsContainer}>
-      <span className={styles.edit} onClick={() => updateAddress(addressItem)}>
-        {t("resource.common.edit_lower")}
-      </span>
-      <span className={styles.buttonDivider}>|</span>
-      <span
-        className={styles.remove}
-        onClick={() => removeAddress(addressItem?.id)}
-      >
-        {t("resource.facets.remove")}
-      </span>
-    </div>
-  );
-}
 
 function DeliveryLocation({
   pincode = "",
   deliveryLocation,
-  addressTags = [],
   btnLabel,
   pincodeInput,
   error = null,
@@ -53,7 +29,6 @@ function DeliveryLocation({
   onAddButtonClick = () => {},
   onPincodeSubmit = () => {},
   onCloseModalClick = () => {},
-  onBackFromAddAddress = null,
   setSelectedAddressId = () => {},
   addAddress = () => {},
   isInternationalShippingEnabled = false,
@@ -66,16 +41,8 @@ function DeliveryLocation({
   countryDetails,
   isGuestUser = false,
   user,
-  isNewAddress,
-  updateAddress,
-  removeAddress,
-  acceptOrder,
 }) {
   const { t } = useGlobalTranslation("translation");
-  const fpi = useFPI();
-  // Fetch user data internally if not provided via props (similar to checkout page)
-  const userDetails = useGlobalStore(fpi?.getters?.USER_DATA);
-  const userData = user || userDetails;
   const computedBtnLabel = btnLabel || t("resource.cart.change");
   const {
     handleSubmit,
@@ -89,7 +56,7 @@ function DeliveryLocation({
       pincode,
     },
   });
-  const { displayName, maxLength, validatePincode } = pincodeInput || {};
+  const { displayName, maxLength, validatePincode } = pincodeInput;
 
   useEffect(() => {
     if (error) {
@@ -112,33 +79,20 @@ function DeliveryLocation({
   return (
     <div className={styles.cartPincodeContainer}>
       <div className={styles.pinCodeDetailsContainer}>
-        <div className={styles.deliveryHeader}>
-          <span className={styles.pincodeHeading}>
-            {deliveryLocation
-              ? `${t("resource.common.deliver_to")}:`
-              : t("resource.cart.check_delivery_time_services")}
-          </span>
-          {deliveryLocation && (
-            <span className={styles.pinCode}>{deliveryLocation}</span>
-          )}
-          {addressTags && addressTags.length > 0 && (
-            <div className={styles.addressTagsContainer}>
-              {addressTags
-                .filter((tag) => tag != null && tag !== "")
-                .map((tag, index) => (
-                  <span key={index} className={styles.addressTag}>
-                    {tag}
-                  </span>
-                ))}
-            </div>
-          )}
-        </div>
+        <span className={styles.pincodeHeading}>
+          {deliveryLocation
+            ? `${t("resource.common.deliver_to")}:`
+            : t("resource.cart.check_delivery_time_services")}
+        </span>
+        <span className={styles.pinCode}>
+          &nbsp;
+          {deliveryLocation}
+        </span>
       </div>
       <div>
         <button
           className={styles.changePinCodeButton}
           onClick={onChangeButtonClick}
-          disabled={!acceptOrder}
         >
           {deliveryLocation ? t("resource.cart.change") : computedBtnLabel}
         </button>
@@ -146,7 +100,7 @@ function DeliveryLocation({
       <Modal
         isOpen={isPincodeModalOpen}
         closeDialog={onCloseModalClick}
-        title={`${t("resource.common.delivery")} ${displayName || ""}`}
+        title={`${t("resource.common.delivery")} ${displayName}`}
         containerClassName={styles.pincodeModal}
         bodyClassName={styles.modalBody}
         headerClassName={styles.modalHeader}
@@ -158,11 +112,11 @@ function DeliveryLocation({
           <div className={styles.modalPincodeInput}>
             <input
               type="text"
-              placeholder={`${t("resource.common.enter")} ${displayName || ""}`}
+              placeholder={`${t("resource.common.enter")} ${displayName}`}
               {...register("pincode", {
                 validate: validatePincode,
               })}
-              maxLength={maxLength || undefined}
+              maxLength={maxLength}
             />
           </div>
           <button className={styles.modalChangePinCodeButton} type="submit">
@@ -204,20 +158,7 @@ function DeliveryLocation({
                   onAddressSelect={setSelectedAddressId}
                   showAddressSelectionCheckbox={true}
                   selectedAddressId={selectedAddressId}
-                  isDefault={true}
-                  belowAddressSlot={
-                    <>
-                      <AddrErrorDiv id={item?.id} />
-                      <div className={styles.addressActions}>
-                        <AddressRight
-                          selectedAddressId={selectedAddressId}
-                          addressItem={item}
-                          updateAddress={updateAddress}
-                          removeAddress={removeAddress}
-                        />
-                      </div>
-                    </>
-                  }
+                  belowAddressSlot={<AddrErrorDiv id={item?.id} />}
                 ></AddressItem>
               ))}
               {otherAddresses.map((item, index) => (
@@ -228,19 +169,7 @@ function DeliveryLocation({
                   onAddressSelect={setSelectedAddressId}
                   showAddressSelectionCheckbox={true}
                   selectedAddressId={selectedAddressId}
-                  belowAddressSlot={
-                    <>
-                      <AddrErrorDiv id={item?.id} />
-                      <div className={styles.addressActions}>
-                        <AddressRight
-                          selectedAddressId={selectedAddressId}
-                          addressItem={item}
-                          updateAddress={updateAddress}
-                          removeAddress={removeAddress}
-                        />
-                      </div>
-                    </>
-                  }
+                  belowAddressSlot={<AddrErrorDiv id={item?.id} />}
                 ></AddressItem>
               ))}
             </div>
@@ -268,7 +197,6 @@ function DeliveryLocation({
         closeDialog={onCloseModalClick}
         ignoreClickOutsideForClass="pac"
         hideHeader
-        customClassName={styles.addAddressModalWrapper}
         containerClassName={styles.addAddressModalContainer}
         bodyClassName={styles.addAddressModalBody}
       >
@@ -276,7 +204,7 @@ function DeliveryLocation({
           internationalShipping={isInternationalShippingEnabled}
           addressItem={addressItem}
           formSchema={addressFormSchema}
-          isNewAddress={isNewAddress}
+          isNewAddress={true}
           onAddAddress={addAddress}
           isMap={showGoogleMap}
           mapApiKey={mapApiKey}
@@ -285,13 +213,11 @@ function DeliveryLocation({
           setI18nDetails={onCountryChange}
           handleCountrySearch={handleCountrySearch}
           getFilteredCountries={getFilteredCountries}
-          selectedCountry={selectedCountry}
+          selectedCountry={selectedCountry?.display_name ?? ""}
           countryDetails={countryDetails}
           isGuestUser={isGuestUser}
           onClose={onCloseModalClick}
-          onBack={onBackFromAddAddress}
-          onUpdateAddress={addAddress}
-          user={userData}
+          user={user}
         ></AddressForm>
       </Modal>
     </div>

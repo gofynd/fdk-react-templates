@@ -60,7 +60,7 @@ function Register({
       firstName: "",
       lastName: "",
       gender: "male",
-      consent: false,
+      consent: true,
       email: "",
       phone: {
         ...mobileInfo,
@@ -69,8 +69,6 @@ function Register({
       confirmPassword: "",
     },
   });
-
-  const consentAccepted = watch("consent", false);
 
   const isEmailRequired = useMemo(() => {
     if (emailLevel === "soft") {
@@ -365,11 +363,7 @@ function Register({
             />
           </div>
 
-          <button
-            className={styles.registerBtn}
-            type="submit"
-            disabled={!consentAccepted}
-          >
+          <button className={styles.registerBtn} type="submit">
             {t("resource.common.continue")}
           </button>
 
