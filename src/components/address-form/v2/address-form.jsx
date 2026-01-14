@@ -50,13 +50,13 @@
  *
  */
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import * as styles from "./address-form.less";
 import GoogleMapAddress from "../../google-map/v2/google-map";
 import FormInputSelector from "../form-input-selector";
 import FyDropdown from "../../core/fy-dropdown/fy-dropdown";
-import { useGlobalTranslation } from "fdk-core/utils";
+import { useGlobalTranslation, useFPI, useGlobalStore } from "fdk-core/utils";
 import HomeIcon from "../../../assets/images/home-type.svg";
 import OfficeIcon from "../../../assets/images/office-type.svg";
 import FriendsFamilyIcon from "../../../assets/images/friends-family.svg";
@@ -308,14 +308,28 @@ const AddressForm = ({
   onBack = null,
 }) => {
   const { t } = useGlobalTranslation("translation");
+  const fpi = useFPI();
   const isOtherAddressType = !["Home", "Work", "Friends & Family"].includes(
     addressItem?.address_type
   );
+
+  // Get currentCountry from global store (header selection)
+  const customValues = useGlobalStore(fpi?.getters?.CUSTOM_VALUE) || {};
+  const i18nDetails = useGlobalStore(fpi?.getters?.i18N_DETAILS) || {};
+  const { countryCurrencies } = customValues ?? {};
+  
+  // Get currentCountry based on header selection (same logic as useInternational)
+  const currentCountry = useMemo(() => {
+    return countryCurrencies?.find(
+      (country) => country.iso2 === i18nDetails?.countryCode
+    );
+  }, [countryCurrencies, i18nDetails?.countryCode]);
 
   const { autofillData: userAutofillData } = useAddressAutofill(
     user,
     isGuestUser
   );
+  
   
   const {
     control,
@@ -348,6 +362,10 @@ const AddressForm = ({
   const formContainerRef = useRef(null);
   const [currBgColor, setCurrBgColor] = useState("#fff");
   const [showOtherText, setShowOtherText] = useState(false);
+  // Local state to track selected country - this ensures the selection persists
+  const [localSelectedCountry, setLocalSelectedCountry] = useState(
+    selectedCountry || currentCountry
+  );
   const isMapAvailable = isMap && !!mapApiKey;
   const [isMapView, setIsMapView] = useState(() => {
     const isMapAvailable = isMap && !!mapApiKey;
@@ -421,6 +439,8 @@ useEffect(() => {
       ...addressItemWithoutPhone
     } = addressItem;
 
+    const countryValue = addressItem?.country || selectedCountry;
+
     reset({
       ...addressItemWithoutPhone,
       ...(transformedPhone && { phone: transformedPhone }),
@@ -439,7 +459,7 @@ useEffect(() => {
         geo_location: addressItem.geo_location,
       }),
       // ✅ FIXED: Use ternary to avoid creating new values on every render
-      country: addressItem?.country || selectedCountry,
+      country: countryValue,
     });
   } else {
     setValue("is_default_address", true);
@@ -526,6 +546,19 @@ useEffect(() => {
   };
 
   const handleCountryChange = (event) => {
+    // Find the country object from countryCurrencies
+    const selectedCountryObj = countryCurrencies?.find(
+      (country) => country.name === event || country.display_name === event
+    );
+    
+    // Update local state immediately to preserve selection
+    if (selectedCountryObj) {
+      setLocalSelectedCountry(selectedCountryObj);
+    } else if (typeof event === 'string') {
+      // If it's just a string, create a minimal object
+      setLocalSelectedCountry({ name: event, display_name: event });
+    }
+    
     setI18nDetails(event);
     setValue("country", event);
     setTimeout(() => {
@@ -539,6 +572,25 @@ useEffect(() => {
       );
     }, 0);
   };
+  
+  // Update localSelectedCountry when selectedCountry prop changes (from parent)
+  // Only sync from prop, don't reset when currentCountry changes (to preserve user selection)
+  useEffect(() => {
+    if (selectedCountry) {
+      setLocalSelectedCountry(selectedCountry);
+    }
+  }, [selectedCountry]);
+  
+  // Initialize localSelectedCountry on mount only
+  useEffect(() => {
+    if (!localSelectedCountry) {
+      const initialCountry = selectedCountry || currentCountry;
+      if (initialCountry) {
+        setLocalSelectedCountry(initialCountry);
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const selectAddress = (data) => {
     // Get current form values to preserve name, phone, email, and address type
@@ -651,7 +703,20 @@ const displayAddress = {
           {internationalShipping && isNewAddress && (
             <div className={`${styles.formGroup} ${styles.formContainer}`}>
               <FyDropdown
-                value={selectedCountry}
+                value={
+                  localSelectedCountry?.name || 
+                  localSelectedCountry?.display_name || 
+                  localSelectedCountry || 
+                  selectedCountry?.name || 
+                  selectedCountry?.display_name || 
+                  selectedCountry || 
+                  currentCountry?.name ||
+                  currentCountry?.display_name ||
+                  countryDetails?.display_name ||
+                  countryDetails?.name ||
+                  (getFilteredCountries()?.[0]?.key) ||
+                  ""
+                }
                 onChange={handleCountryChange}
                 onSearch={handleCountrySearch}
                 options={getFilteredCountries()}

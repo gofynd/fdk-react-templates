@@ -56,7 +56,7 @@ import * as styles from "./address-form.less";
 import GoogleMapAddress from "../google-map/google-map";
 import FormInputSelector from "./form-input-selector";
 import FyDropdown from "../core/fy-dropdown/fy-dropdown";
-import { useGlobalTranslation } from "fdk-core/utils";
+import { useGlobalTranslation, useFPI, useGlobalStore } from "fdk-core/utils";
 import HomeIcon from "../../assets/images/home-type.svg";
 import OfficeIcon from "../../assets/images/office-type.svg";
 import FriendsFamilyIcon from "../../assets/images/friends-family.svg";
@@ -384,14 +384,28 @@ const AddressForm = ({
   countryDetails,
 }) => {
   const { t } = useGlobalTranslation("translation");
+  const fpi = useFPI();
   const isOtherAddressType = !["Home", "Work", "Friends & Family"].includes(
     addressItem?.address_type
   );
-    // Use custom hook for optimized autofill data
-    const { autofillData: userAutofillData } = useAddressAutofill(
-      user,
-      isGuestUser
+
+  // Get currentCountry from global store (header selection)
+  const customValues = useGlobalStore(fpi?.getters?.CUSTOM_VALUE) || {};
+  const i18nDetails = useGlobalStore(fpi?.getters?.i18N_DETAILS) || {};
+  const { countryCurrencies } = customValues ?? {};
+  
+  // Get currentCountry based on header selection (same logic as useInternational)
+  const currentCountry = useMemo(() => {
+    return countryCurrencies?.find(
+      (country) => country.iso2 === i18nDetails?.countryCode
     );
+  }, [countryCurrencies, i18nDetails?.countryCode]);
+
+  // Use custom hook for optimized autofill data
+  const { autofillData: userAutofillData } = useAddressAutofill(
+    user,
+    isGuestUser
+  );
 
   const {
     control,
@@ -650,7 +664,17 @@ useEffect(() => {
         {internationalShipping && isNewAddress && (
           <div className={`${styles.formGroup} ${styles.formContainer}`}>
             <FyDropdown
-              value={selectedCountry}
+              value={
+                selectedCountry?.name || 
+                selectedCountry?.display_name || 
+                selectedCountry || 
+                currentCountry?.name ||
+                currentCountry?.display_name ||
+                countryDetails?.display_name ||
+                countryDetails?.name ||
+                (getFilteredCountries()?.[0]?.key) ||
+                ""
+              }
               onChange={handleCountryChange}
               onSearch={handleCountrySearch}
               options={getFilteredCountries()}

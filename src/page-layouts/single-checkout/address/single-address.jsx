@@ -96,7 +96,7 @@ function SingleAddress({
             setI18nDetails={setI18nDetails}
             handleCountrySearch={handleCountrySearch}
             getFilteredCountries={getFilteredCountries}
-            selectedCountry={selectedCountry?.display_name ?? ""}
+            selectedCountry={selectedCountry}
             countryDetails={countryDetails}
             isGuestUser={isGuestUser}
             user={userDetails}

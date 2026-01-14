@@ -285,7 +285,7 @@ function DeliveryLocation({
           setI18nDetails={onCountryChange}
           handleCountrySearch={handleCountrySearch}
           getFilteredCountries={getFilteredCountries}
-          selectedCountry={selectedCountry?.display_name ?? ""}
+          selectedCountry={selectedCountry}
           countryDetails={countryDetails}
           isGuestUser={isGuestUser}
           onClose={onCloseModalClick}
