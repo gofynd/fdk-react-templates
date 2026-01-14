@@ -740,8 +740,9 @@ input:focus-visible {
   background: var(--buttonPrimary, #4e3f09);
 }
 .login-password__loginButton___T9F0a[disabled] {
-  background: #dde7e8 !important;
-  color: #b8b29d !important;
+  opacity: 0.5;
+  cursor: default;
+  color: white;
 }
 .login-password__loginMobileInput___JgojZ {
   margin-top: 32px;
