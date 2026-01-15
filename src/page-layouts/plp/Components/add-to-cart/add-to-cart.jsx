@@ -64,6 +64,11 @@ const AddToCart = ({
     return parts[parts.length - 1];
   };
 
+  const isChildDetailsAvailable = useMemo(() => {
+    const childDetails = productData.productPrice?._custom_json?.child_details;
+    return Array.isArray(childDetails) && childDetails.length > 0;
+  }, [productData.productPrice?._custom_json?.child_details]);
+
   const fpi = useFPI();
   const { language, countryCode } =
     useGlobalStore(fpi.getters.i18N_DETAILS) || {};
@@ -478,7 +483,7 @@ const AddToCart = ({
             {/* ---------- Size Container ---------- */}
             {isSizeSelectionBlock && (
               <div className={styles.sizeSelection}>
-                {!isSizeCollapsed && (
+                {(isChildDetailsAvailable || !isSizeCollapsed) && (
                   <div className={styles.sizeHeaderContainer}>
                     <p
                       className={`${styles.b2} ${styles.sizeSelection__label}`}
@@ -509,7 +514,7 @@ const AddToCart = ({
                   </div>
                 )}
 
-                {!isSizeCollapsed && (
+                {(isChildDetailsAvailable || !isSizeCollapsed) && (
                   <div className={styles.sizeSelection__wrapper}>
                     {sizes?.sizes?.map((size) => (
                       <button
@@ -642,7 +647,7 @@ const AddToCart = ({
               <div
                 className={`${styles.sizeCartContainer} ${showQuantityController ? styles.withQuantityWrapper : ""}`}
               >
-                {!isSizeCollapsed && (
+                {(isChildDetailsAvailable || !isSizeCollapsed) && (
                   <FyDropdown
                     options={sizes?.sizes || []}
                     value={selectedSize}
@@ -730,7 +735,7 @@ const AddToCart = ({
                     />
                   </div>
                 )}
-                {!isSizeCollapsed &&
+                {(isChildDetailsAvailable || !isSizeCollapsed) &&
                   pageConfig?.show_size_guide &&
                   // isSizeGuideAvailable() &&
                   sizes?.sellable && (
