@@ -1312,29 +1312,23 @@ h5,
   color: #41434c;
   background-color: var(--highlightColor, #a7a7f8);
   padding: 16px;
-  border-radius: 4px;
+  border-radius: 0px;
+  margin-bottom: 16px;
+}
+.order-shipment__orderItem____zenT:last-child {
+  margin-bottom: 0;
 }
 .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E {
-  cursor: pointer;
-  position: relative;
-}
-.order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__filter___lnsey {
-  position: absolute;
-  inset-inline-end: 0px;
-}
-.order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__filterArrowUp___g46yt {
-  margin-left: auto;
-  transform: rotate(180deg);
-}
-.order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__filterArrowDown___XfgoC {
-  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__orderId___LUgiY {
   color: var(--textHeading, #26201a);
   font-weight: 600;
   line-height: 140%;
-  font-weight: 700;
   font-size: 16px;
+  margin: 0;
 }
 .order-shipment__orderItem____zenT .order-shipment__orderHeader___dBn7E .order-shipment__orderTime___jI_e_ {
   color: var(--textLabel, #7d7676);
@@ -1342,38 +1336,51 @@ h5,
   font-weight: 400;
   line-height: 140%;
   margin-top: 4px;
+  margin-bottom: 0;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 {
   animation: order-shipment__fadeIn___MRLFM 0.5s ease;
   border-top: none;
-  margin: 16px 0;
+  margin: 16px 0 0 0;
   padding: 0;
   cursor: pointer;
   display: flex;
   gap: 16px;
+  transition: opacity 0.2s ease;
+}
+.order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3:hover {
+  opacity: 0.8;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentLeft___o0Q0q {
-  display: table-cell;
+  width: 100px;
+  height: 100px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  overflow: hidden;
+  background: white;
+  position: relative;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentLeft___o0Q0q img {
-  width: 80px;
-  height: 100px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentLeft___o0Q0q #order-shipment__total-item___SOgWJ {
   text-align: center;
-  position: relative;
-  float: right;
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
   background: #4242ad;
   color: white;
-  top: -40px;
-  left: -10px;
   border-radius: 50%;
   width: 35px;
   height: 35px;
   line-height: 13px;
   font-size: 13px;
   padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__bold___YKz_e {
   font-weight: 700;
@@ -1397,28 +1404,38 @@ h5,
   display: flex;
   flex-direction: column;
   flex: 1;
+  gap: 4px;
+  min-width: 0;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__shipmentId___Ussac {
-  margin: 4px 0px;
+  margin: 0;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__boldls___Lwbt_ {
   font-weight: 600;
+  font-size: 14px;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__uktLinks___v7i7G {
   cursor: pointer;
   text-decoration: none;
   color: var(--textHeading, #26201a);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
   line-height: 140%;
+  margin: 0;
+  white-space: pre-wrap;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__shipmentStats___i5laS {
-  margin: 4px 0px;
+  margin: 0;
   color: var(--textLabel, #7d7676);
   font-size: 12px;
   font-weight: 500;
   line-height: 140%;
-  /* 16.8px */
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__shipmentStats___i5laS span:nth-child(2) {
+  margin: 0 4px;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__buttonContainer___zt9IZ {
   display: flex;
@@ -1502,7 +1519,10 @@ h5,
   top: -2px;
 }
 .order-shipment__orderItem____zenT .order-shipment__showAccordionBody___KPdMs {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 16px;
 }
 .order-shipment__orderItem____zenT .order-shipment__hideAccordionBody___IOXsZ {
   display: none;
@@ -1924,9 +1944,17 @@ h5,
   position: relative;
   cursor: pointer;
 }
+.accordion__accordionContentImageItem____FBCe .accordion__itemCount____YDv4 {
+  color: var(--textSecondary, #9c9c9c);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  padding-left: 2px;
+}
 .accordion__accordionContentImageItem____FBCe .accordion__imagePreview___FOjGs {
   position: absolute;
-  left: -155%;
+  left: 0px;
   top: -100px;
   z-index: 20;
 }
@@ -1949,8 +1977,9 @@ h5,
 }
 .accordion__accordionContentImg___lbTPr {
   border-radius: 50%;
-  width: 16px;
-  height: 16px;
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
   border: 1px solid var(--Text-Secondary, #6d6d6e);
 }
 .accordion__accordionContentKey___qrAGm {
@@ -3770,6 +3799,15 @@ h5,
 }
 .shipment-breakup__title___MNnnU {
   color: #41434c;
+  margin-bottom: 16px;
+}
+@media only screen and (max-width: 480px), only screen and (max-width: 768px) {
+  .shipment-breakup__title___MNnnU {
+    margin-bottom: 8px;
+  }
+}
+.shipment-breakup__shipmentBreakupContainerPadding___rfO1X {
+  padding: 16px !important;
 }
 .shipment-breakup__lightsm___a0yal {
   font-weight: 300;
@@ -3792,6 +3830,7 @@ h5,
 @media only screen and (max-width: 768px) {
   .shipment-breakup__boldsm___N65_p {
     font-size: 14px;
+    font-weight: 600;
   }
 }
 @media only screen and (max-width: 480px) {
@@ -3799,35 +3838,59 @@ h5,
     font-size: 14px;
   }
 }
-.shipment-breakup__billing___FTdqB {
-  padding: 16px;
-  position: relative;
-}
 .shipment-breakup__billing___FTdqB div {
-  margin-bottom: 8px;
+  margin-bottom: 12px;
+}
+@media only screen and (max-width: 480px), only screen and (max-width: 768px) {
+  .shipment-breakup__billing___FTdqB div {
+    margin-bottom: 8px;
+  }
 }
 .shipment-breakup__billing___FTdqB div:last-child {
   margin-bottom: 0px;
 }
 .shipment-breakup__billing___FTdqB .shipment-breakup__label___SHy4X {
   color: var(--textBody, #3c3131);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 400;
   line-height: 140%;
 }
+@media only screen and (max-width: 480px), only screen and (max-width: 768px) {
+  .shipment-breakup__billing___FTdqB .shipment-breakup__label___SHy4X {
+    font-size: 12px !important;
+  }
+}
 .shipment-breakup__billing___FTdqB .shipment-breakup__values___Ji3lV {
-  position: absolute;
-  inset-inline-end: 16px;
   color: var(--textBody, #3c3131);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 400;
   line-height: 140%;
+}
+@media only screen and (max-width: 480px), only screen and (max-width: 768px) {
+  .shipment-breakup__billing___FTdqB .shipment-breakup__values___Ji3lV {
+    font-size: 12px !important;
+  }
 }
 .shipment-breakup__billing___FTdqB .shipment-breakup__total___X7nmQ {
   padding-top: 10px;
   border-top: 1px solid #eeeeee;
   font-weight: bold;
   color: #41434c;
+}
+.shipment-breakup__billing___FTdqB .shipment-breakup__totalValContainer___wFKSr {
+  display: flex;
+  justify-content: space-between;
+}
+.shipment-breakup__billing___FTdqB .shipment-breakup__totalValContainer___wFKSr .shipment-breakup__label___SHy4X,
+.shipment-breakup__billing___FTdqB .shipment-breakup__totalValContainer___wFKSr .shipment-breakup__values___Ji3lV {
+  font-size: 14px;
+  font-weight: 400;
+}
+@media only screen and (max-width: 480px), only screen and (max-width: 768px) {
+  .shipment-breakup__billing___FTdqB .shipment-breakup__totalValContainer___wFKSr .shipment-breakup__label___SHy4X,
+  .shipment-breakup__billing___FTdqB .shipment-breakup__totalValContainer___wFKSr .shipment-breakup__values___Ji3lV {
+    font-size: 12px !important;
+  }
 }
 .shipment-breakup__paymentDetails___IT5XS {
   display: flex;
@@ -3845,21 +3908,43 @@ h5,
   margin-inline-end: 10px;
   inset-inline-end: 0px;
 }
-.shipment-breakup__billing___FTdqB :last-child .shipment-breakup__totalValContainer___wFKSr :last-child {
-  font-size: 14px;
-  font-weight: 600;
+.shipment-breakup__grandTotal___DtudN {
+  font-size: 16px;
+  font-weight: 700;
 }
-.shipment-breakup__billing___FTdqB :last-child .shipment-breakup__totalValContainer___wFKSr :nth-last-child(2) {
-  font-size: 14px;
-  font-weight: 600;
+@media only screen and (max-width: 768px), only screen and (max-width: 480px) {
+  .shipment-breakup__grandTotal___DtudN {
+    font-size: 14px;
+    font-weight: 600;
+  }
 }
-.shipment-breakup__billing___FTdqB :last-child .shipment-breakup__totalValContainer___wFKSr :last-child {
-  font-size: 14px;
-  font-weight: 600;
+.shipment-breakup__horizontalLine___B6QKp {
+  margin: 16px 0 !important;
+  height: 1px;
+  background: var(--dividerStokes, #d4d1d1);
 }
-.shipment-breakup__billing___FTdqB :last-child .shipment-breakup__totalValContainer___wFKSr :nth-last-child(2) {
-  font-size: 14px;
-  font-weight: 600;
+@media only screen and (max-width: 480px) {
+  .shipment-breakup__horizontalLine___B6QKp {
+    margin: 8px 0 !important;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .shipment-breakup__horizontalLine___B6QKp {
+    margin: 8px 0 !important;
+  }
+}
+.shipment-breakup__grandTotal___DtudN {
+  font-size: 16px !important;
+  font-weight: 700 !important;
+}
+@media only screen and (max-width: 768px), only screen and (max-width: 480px) {
+  .shipment-breakup__grandTotal___DtudN {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+  }
+}
+.shipment-breakup__noPadding___P7z5g {
+  padding: 0 !important;
 }
 
 /**color by character**/

@@ -287,6 +287,7 @@ const JuspayCardForm = ({
             {cardDetailsData && cardDetailsData.logo && (
               <img
                 src={cardDetailsData.logo}
+                alt={cardDetailsData?.name || t("resource.checkout.card_network_logo")}
                 className={`${styles.juspayCardNetwork}`}
               />
             )}

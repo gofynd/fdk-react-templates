@@ -421,19 +421,7 @@ h5,
   }
 }
 .order-status__orders___N_SnV .order-status__orderStatus___gGK9U .order-status__trackOrderBtn___woN1W .order-status__continueBtn___wKDd1 {
-  display: inline-block;
-  padding-left: 12px;
-}
-@media (max-width: 399px) {
-  .order-status__orders___N_SnV .order-status__orderStatus___gGK9U .order-status__trackOrderBtn___woN1W .order-status__continueBtn___wKDd1:nth-child(2) {
-    padding-top: 12px;
-    padding-left: 0;
-  }
-}
-@media (min-width: 379px) and (max-width: 399px) {
-  .order-status__orders___N_SnV .order-status__orderStatus___gGK9U .order-status__trackOrderBtn___woN1W .order-status__continueBtn___wKDd1:nth-child(2) {
-    padding-left: 12px;
-  }
+  padding-inline-start: 0;
 }
 .order-status__orders___N_SnV .order-status__orderDetail___wNvPW {
   display: flex;
@@ -3562,7 +3550,7 @@ h5,
 }
 .modal__modalBody___peHlJ {
   flex: 1;
-  max-height: 90vh;
+  max-height: 95vh;
   overflow-y: auto;
 }
 .modal__rightModal___acoje {
@@ -4453,9 +4441,17 @@ h5,
   position: relative;
   cursor: pointer;
 }
+.accordion__accordionContentImageItem____FBCe .accordion__itemCount____YDv4 {
+  color: var(--textSecondary, #9c9c9c);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  padding-left: 2px;
+}
 .accordion__accordionContentImageItem____FBCe .accordion__imagePreview___FOjGs {
   position: absolute;
-  left: -155%;
+  left: 0px;
   top: -100px;
   z-index: 20;
 }
@@ -4478,8 +4474,9 @@ h5,
 }
 .accordion__accordionContentImg___lbTPr {
   border-radius: 50%;
-  width: 16px;
-  height: 16px;
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
   border: 1px solid var(--Text-Secondary, #6d6d6e);
 }
 .accordion__accordionContentKey___qrAGm {
