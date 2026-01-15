@@ -476,63 +476,69 @@ const AddToCart = ({
               )}
 
             {/* ---------- Size Container ---------- */}
-            {isSizeSelectionBlock && !isSizeCollapsed && (
+            {isSizeSelectionBlock && (
               <div className={styles.sizeSelection}>
-                <div className={styles.sizeHeaderContainer}>
-                  <p className={`${styles.b2} ${styles.sizeSelection__label}`}>
-                    <span>
-                      {t("resource.product.style")}:{" "}
-                      {Boolean(selectedSize) &&
-                        `${t("resource.common.size")} (${selectedSize})`}
-                    </span>
-                  </p>
-                  {pageConfig?.show_size_guide &&
-                    // isSizeGuideAvailable() &&
-                    sizes?.sellable && (
-                      <FyButton
-                        variant="text"
-                        onClick={handleShowSizeGuide}
-                        className={styles["product__size--guide"]}
-                        endIcon={
-                          <SvgWrapper
-                            svgSrc="scale"
-                            className={styles.scaleIcon}
-                          />
-                        }
-                      >
-                        {t("resource.common.size_guide")}
-                      </FyButton>
-                    )}
-                </div>
-
-                <div className={styles.sizeSelection__wrapper}>
-                  {sizes?.sizes?.map((size) => (
-                    <button
-                      type="button"
-                      key={`${size?.display}`}
-                      className={`${styles.b2} ${styles.sizeSelection__block} ${
-                        size.quantity === 0 &&
-                        !isMto &&
-                        styles["sizeSelection__block--disable"]
-                      } ${
-                        (size?.quantity !== 0 || isMto) &&
-                        styles["sizeSelection__block--selectable"]
-                      } ${
-                        selectedSize === size?.value &&
-                        styles["sizeSelection__block--selected"]
-                      } `}
-                      title={size?.value}
-                      onClick={() => onSizeSelection(size?.value)}
+                {!isSizeCollapsed && (
+                  <div className={styles.sizeHeaderContainer}>
+                    <p
+                      className={`${styles.b2} ${styles.sizeSelection__label}`}
                     >
-                      {size?.display}
-                      {size?.quantity === 0 && !isMto && (
-                        <svg>
-                          <line x1="0" y1="100%" x2="100%" y2="0" />
-                        </svg>
+                      <span>
+                        {t("resource.product.style")}:{" "}
+                        {Boolean(selectedSize) &&
+                          `${t("resource.common.size")} (${selectedSize})`}
+                      </span>
+                    </p>
+                    {pageConfig?.show_size_guide &&
+                      // isSizeGuideAvailable() &&
+                      sizes?.sellable && (
+                        <FyButton
+                          variant="text"
+                          onClick={handleShowSizeGuide}
+                          className={styles["product__size--guide"]}
+                          endIcon={
+                            <SvgWrapper
+                              svgSrc="scale"
+                              className={styles.scaleIcon}
+                            />
+                          }
+                        >
+                          {t("resource.common.size_guide")}
+                        </FyButton>
                       )}
-                    </button>
-                  ))}
-                </div>
+                  </div>
+                )}
+
+                {!isSizeCollapsed && (
+                  <div className={styles.sizeSelection__wrapper}>
+                    {sizes?.sizes?.map((size) => (
+                      <button
+                        type="button"
+                        key={`${size?.display}`}
+                        className={`${styles.b2} ${styles.sizeSelection__block} ${
+                          size.quantity === 0 &&
+                          !isMto &&
+                          styles["sizeSelection__block--disable"]
+                        } ${
+                          (size?.quantity !== 0 || isMto) &&
+                          styles["sizeSelection__block--selectable"]
+                        } ${
+                          selectedSize === size?.value &&
+                          styles["sizeSelection__block--selected"]
+                        } `}
+                        title={size?.value}
+                        onClick={() => onSizeSelection(size?.value)}
+                      >
+                        {size?.display}
+                        {size?.quantity === 0 && !isMto && (
+                          <svg>
+                            <line x1="0" y1="100%" x2="100%" y2="0" />
+                          </svg>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                )}
                 {isSizeSelectionBlock &&
                   productData.productPrice?._custom_json?.child_details &&
                   selectedSize && (
@@ -632,24 +638,26 @@ const AddToCart = ({
               </div>
             )}
             {/* ---------- Size Dropdown And Action Buttons ---------- */}
-            {!isSizeSelectionBlock && !isSizeCollapsed && (
+            {!isSizeSelectionBlock && (
               <div
                 className={`${styles.sizeCartContainer} ${showQuantityController ? styles.withQuantityWrapper : ""}`}
               >
-                <FyDropdown
-                  options={sizes?.sizes || []}
-                  value={selectedSize}
-                  onChange={onSizeSelection}
-                  placeholder={t("resource.common.select_size_caps")}
-                  valuePrefix={`${t("resource.common.size")}:`}
-                  dataKey="value"
-                  containerClassName={styles.dropdownContainer}
-                  dropdownListClassName={styles.dropdown}
-                  valueClassName={styles.sizeValue}
-                  disabledOptions={disabledSizeOptions}
-                  disabledOptionClassName={styles.disabledOption}
-                  disableSearch={true}
-                />
+                {!isSizeCollapsed && (
+                  <FyDropdown
+                    options={sizes?.sizes || []}
+                    value={selectedSize}
+                    onChange={onSizeSelection}
+                    placeholder={t("resource.common.select_size_caps")}
+                    valuePrefix={`${t("resource.common.size")}:`}
+                    dataKey="value"
+                    containerClassName={styles.dropdownContainer}
+                    dropdownListClassName={styles.dropdown}
+                    valueClassName={styles.sizeValue}
+                    disabledOptions={disabledSizeOptions}
+                    disabledOptionClassName={styles.disabledOption}
+                    disableSearch={true}
+                  />
+                )}
                 {showQuantityController && (
                   <div>
                     <B2BSizeQuantityControl
@@ -722,7 +730,8 @@ const AddToCart = ({
                     />
                   </div>
                 )}
-                {pageConfig?.show_size_guide &&
+                {!isSizeCollapsed &&
+                  pageConfig?.show_size_guide &&
                   // isSizeGuideAvailable() &&
                   sizes?.sellable && (
                     <FyButton
