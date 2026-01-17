@@ -57,7 +57,7 @@ export default function ChipItem({
   const navigate = useNavigate();
   const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
   const locale = language?.locale;
-  const { limited_stock_quantity: limitedStockQuantity = 11 } = globalConfig;
+  const { limited_stock_quantity: limitedStockQuantity = 11 } = globalConfig || {};
   const isMobile = useMobile();
   const [showQuantityError, setShowQuantityError] = useState(false);
   const [showFOModal, setShowFOModal] = useState(false);
