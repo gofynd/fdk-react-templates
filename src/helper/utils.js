@@ -495,7 +495,17 @@ export const getAddressStr = (item, isAddressTypeAvailable) => {
       addressStr += ` ${item.area_code}`;
     }
     if (item.country) {
-      addressStr += `, ${item.country}`;
+      // Handle country as object or string
+      const countryStr =
+        typeof item.country === "object"
+          ? item.country.display_name ||
+            item.country.name ||
+            item.country.uid ||
+            ""
+          : item.country;
+      if (countryStr) {
+        addressStr += `, ${countryStr}`;
+      }
     }
     return addressStr;
   } catch (error) {
