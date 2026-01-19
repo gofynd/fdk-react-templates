@@ -11,6 +11,7 @@ import * as styles from "./coupon.less";
 import Modal from "../../../../components/core/modal/modal";
 import { useGlobalStore, useFPI, useGlobalTranslation } from "fdk-core/utils";
 import ForcedLtr from "../../../../components/forced-ltr/forced-ltr";
+import FyHTMLRenderer from "../../../../components/core/fy-html-renderer/fy-html-renderer";
 
 function Coupon({
   title,
@@ -256,6 +257,33 @@ function CouponItem({
   const { t } = useGlobalTranslation("translation");
   const isSelected = couponCode === selectedCouponCode && selectedCouponCode !== "";
   
+  // Check if message contains HTML tags - memoized for performance
+  const hasHTMLTags = useMemo(() => {
+    if (!message || typeof message !== 'string') {
+      return false;
+    }
+    // Check for HTML tags pattern
+    return /<[^>]+>/.test(message);
+  }, [message]);
+  
+  // Memoize the message content rendering
+  const messageContent = useMemo(() => {
+    if (!message) {
+      return null;
+    }
+    
+    if (hasHTMLTags) {
+      return (
+        <FyHTMLRenderer
+          htmlContent={message}
+          customClass={styles.couponMessage}
+        />
+      );
+    }
+    
+    return <div className={styles.couponMessage}>{message}</div>;
+  }, [message, hasHTMLTags]);
+  
   return (
     <div
       className={`${styles.couponItem} ${
@@ -265,7 +293,7 @@ function CouponItem({
       <div>
         <div className={styles.couponCode}>{couponCode}</div>
         <div className={styles.couponTitle}>{title}</div>
-        <div className={styles.couponMessage}>{message}</div>
+        {messageContent}
         <div className={styles.couponExpire}>{expiresOn}</div>
       </div>
       {isApplicable && (
