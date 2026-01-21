@@ -598,6 +598,11 @@ useEffect(() => {
       payload.address_type = payload?.otherAddressType || "Other";
     }
     delete payload?.otherAddressType;
+    // Convert country object to string (uid/id/iso2) if it's an object
+    // Handles: API country objects (with id), countryCurrencies objects (with uid/iso2), and string values
+    if (payload.country && typeof payload.country === "object" && payload.country !== null) {
+      payload.country = payload.country.uid || payload.country.id || payload.country.iso2 || String(payload.country);
+    }
     if (isNewAddress) {
       onAddAddress(removeNullValues(payload));
     } else {
