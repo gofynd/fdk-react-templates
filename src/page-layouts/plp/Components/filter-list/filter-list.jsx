@@ -239,7 +239,7 @@ function FilterList({
                       >
                         {filterItem.display}
                       </div>
-                      {filterItem.count != null && (
+                      {filterItem.count != null && filterItem.count > 0 && (
                         <div
                           className={`${styles["filter__item--count"]} ${styles["caption-normal"]}`}
                         >
@@ -339,7 +339,7 @@ function FilterList({
                 >
                   {filter.values[0].display}
                 </div>
-                {filter.values[0].count != null && (
+                {filter.values[0].count != null && filter.values[0].count > 0 && (
                   <div
                     className={`${styles["filter__item--count"]} ${styles["caption-normal"]} `}
                   >
@@ -448,7 +448,7 @@ function FilterList({
                           >
                             {filterItem.display}
                           </div>
-                          {filterItem.count != null && (
+                          {filterItem.count != null && filterItem.count > 0 && (
                             <div
                               className={`${styles["filter__item--count"]} ${styles["caption-normal"]}`}
                             >
