@@ -96,6 +96,9 @@ const Carousel = React.forwardRef(
       setScrollSnaps(api.scrollSnapList());
       onSelect(api);
       const handleReInit = (emblaApi) => {
+        if (!emblaApi) {
+          return;
+        }
         setScrollSnaps(emblaApi.scrollSnapList());
         onSelect(emblaApi);
       };
