@@ -15,8 +15,7 @@
  * @param {string} [props.themeColor="#1B6163"] - The color used to highlight the selected date in the calendar.
  * @param {string} [props.inputLabel="label"] - The label displayed above the input field.
  * @param {string[]} [props.excludeDates=[]] - Array of date strings (in `dateFormat`) that should be disabled (unselectable).
- * @param {boolean} [props.enableMonthYearSelection=false] - Enables month and year dropdown selectors when true.
- *
+
  * @returns {JSX.Element} The rendered date picker component.
  */
 
@@ -48,8 +47,7 @@ const FyDatePicker = React.forwardRef(
       required,
       error = false,
       errorMessage = "",
-      handleShowCalendarPopup = () => {},
-      enableMonthYearSelection = false,
+      handleShowCalendarPopup =()=>{},
     },
     ref
   ) => {
@@ -98,9 +96,6 @@ const FyDatePicker = React.forwardRef(
     }, [error, errorMessage, selectedDate]);
 
     const daysOfWeek = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
-    const monthsOfYear = Array.from({ length: 12 }, (_, index) =>
-      new Date(0, index).toLocaleString("default", { month: "long" })
-    );
 
     const pad = (n) => (n < 10 ? `0${n}` : `${n}`);
 
@@ -231,31 +226,6 @@ const FyDatePicker = React.forwardRef(
       return null;
     };
 
-    const buildYearOptions = () => {
-      const lowerBoundDate = maxInactiveDate
-        ? parseDateString(maxInactiveDate)
-        : null;
-      const upperBoundDate = minInactiveDate
-        ? parseDateString(minInactiveDate)
-        : null;
-      const currentYear = today.getFullYear();
-      const defaultLowerBound = currentYear - 100;
-      const defaultUpperBound = currentYear;
-
-      const lowerBound =
-        lowerBoundDate && !isNaN(lowerBoundDate)
-          ? Math.max(lowerBoundDate.getFullYear(), defaultLowerBound)
-          : defaultLowerBound;
-      const upperBound =
-        upperBoundDate && !isNaN(upperBoundDate)
-          ? Math.min(upperBoundDate.getFullYear(), defaultUpperBound)
-          : defaultUpperBound;
-      const start = Math.min(lowerBound, upperBound);
-      const end = Math.max(lowerBound, upperBound);
-
-      return Array.from({ length: end - start + 1 }, (_, idx) => start + idx);
-    };
-
     const handleClearDate = () => {
       setSelectedDate("");
       setInlineError(""); // Clear inline error when clearing date
@@ -289,20 +259,6 @@ const FyDatePicker = React.forwardRef(
         setCurrentYear((prev) => prev - 1);
       } else {
         setCurrentMonth((prev) => prev - 1);
-      }
-    };
-
-    const handleMonthSelect = (e) => {
-      const selectedMonth = Number(e.target.value);
-      if (!Number.isNaN(selectedMonth)) {
-        setCurrentMonth(selectedMonth);
-      }
-    };
-
-    const handleYearSelect = (e) => {
-      const selectedYear = Number(e.target.value);
-      if (!Number.isNaN(selectedYear)) {
-        setCurrentYear(selectedYear);
       }
     };
 
@@ -420,7 +376,7 @@ const FyDatePicker = React.forwardRef(
           </div>
         );
       }
-
+      
       const ChildCalender = () => {
         return (
           <div className={styles.calendarPopup}>
@@ -429,42 +385,15 @@ const FyDatePicker = React.forwardRef(
                 <button type="button" onClick={handlePrevMonth}>
                   <ChevronLeft />
                 </button>
-                {enableMonthYearSelection ? (
-                  <div className={styles.monthYearSelect}>
-                    <select
-                      aria-label="Select month"
-                      value={currentMonth}
-                      onChange={handleMonthSelect}
-                    >
-                      {monthsOfYear.map((month, index) => (
-                        <option key={month} value={index}>
-                          {month}
-                        </option>
-                      ))}
-                    </select>
-                    <select
-                      aria-label="Select year"
-                      value={currentYear}
-                      onChange={handleYearSelect}
-                    >
-                      {buildYearOptions().map((yearOption) => (
-                        <option key={yearOption} value={yearOption}>
-                          {yearOption}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                ) : (
-                  <span>
-                    {new Date(currentYear, currentMonth).toLocaleString(
-                      "default",
-                      {
-                        month: "long",
-                      }
-                    )}{" "}
-                    {currentYear}
-                  </span>
-                )}
+                <span>
+                  {new Date(currentYear, currentMonth).toLocaleString(
+                    "default",
+                    {
+                      month: "long",
+                    }
+                  )}{" "}
+                  {currentYear}
+                </span>
                 <button type="button" onClick={handleNextMonth}>
                   <ChevronRight />
                 </button>
@@ -495,7 +424,7 @@ const FyDatePicker = React.forwardRef(
               closeDialog={() => setShowCalendar(false)}
               headerClassName={styles.popupTitle}
               title={t("resource.profile.select_reattempt_date")}
-            >
+              >
               <ChildCalender />
             </Modal>
           )}
@@ -528,23 +457,19 @@ const FyDatePicker = React.forwardRef(
             }}
             onChange={(e) => {
               if (disabled || readOnly) return;
-              const rawValue = e.target.value;
-              const separator = dateFormat.includes("/") ? "/" : "-";
-              const sanitizedValue = rawValue
-                .replace(new RegExp(`[^0-9${separator}]`, "g"), "")
-                .slice(0, dateFormat.length); // keep only digits and separator
-              setSelectedDate(sanitizedValue);
+              const value = e.target.value;
+              setSelectedDate(value);
               setInlineError(""); // Clear inline error when user starts typing
-
+              
               // Validate the date if it's in correct format
-              if (isValidDateString(sanitizedValue)) {
-                const parsed = parseDateString(sanitizedValue);
+              if (isValidDateString(value)) {
+                const parsed = parseDateString(value);
                 if (!isNaN(parsed)) {
                   setCurrentYear(parsed.getFullYear());
                   setCurrentMonth(parsed.getMonth());
-
+                  
                   // Check if the date is inactive and show appropriate error
-                  const inactiveReason = getInactiveReason(sanitizedValue);
+                  const inactiveReason = getInactiveReason(value);
                   if (inactiveReason) {
                     setInlineError(inactiveReason);
                   }
@@ -553,22 +478,6 @@ const FyDatePicker = React.forwardRef(
             }}
             onKeyDown={(e) => {
               if (disabled || readOnly) return;
-              const separator = dateFormat.includes("/") ? "/" : "-";
-              const controlKeys = [
-                "Backspace",
-                "Delete",
-                "ArrowLeft",
-                "ArrowRight",
-                "Tab",
-                "Home",
-                "End",
-              ];
-              const isDigit = /^\d$/.test(e.key);
-              const isSeparator = e.key === separator;
-              if (!isDigit && !isSeparator && !controlKeys.includes(e.key)) {
-                e.preventDefault();
-                return;
-              }
               if (e.key === "Enter") {
                 if (isValidDateString(selectedDate)) {
                   const parsed = parseDateString(selectedDate);
@@ -579,7 +488,7 @@ const FyDatePicker = React.forwardRef(
                       setInlineError(inactiveReason);
                       return;
                     }
-
+                    
                     // If date is valid and active, proceed
                     setCurrentYear(parsed.getFullYear());
                     setCurrentMonth(parsed.getMonth());

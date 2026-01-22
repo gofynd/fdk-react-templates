@@ -42,7 +42,6 @@ function DeliverBtn({
   selectAddress,
   getTotalValue,
   showPaymentOptions,
-  isCreditNoteApplied,
 }) {
   const { t } = useGlobalTranslation("translation");
   const { app_features } = useGlobalStore(fpi.getters.CONFIGURATION) || {};
@@ -55,7 +54,7 @@ function DeliverBtn({
             className={styles.deliverToThis}
             disabled={!order?.enabled}
             onClick={() => {
-              if (getTotalValue?.() === 0 && !isCreditNoteApplied) {
+              if (getTotalValue?.() === 0) {
                 showPaymentOptions();
               }
               selectAddress();
@@ -113,7 +112,6 @@ function SingleAddressContent({
   isApiLoading,
   showPaymentOptions,
   getTotalValue,
-  isCreditNoteApplied,
 }) {
   const { t } = useGlobalTranslation("translation");
   const [showAllOtherAddresses, setShowAllOtherAddresses] = useState(false);
@@ -170,7 +168,6 @@ function SingleAddressContent({
                           selectAddress={selectAddress}
                           getTotalValue={getTotalValue}
                           showPaymentOptions={showPaymentOptions}
-                          isCreditNoteApplied={isCreditNoteApplied}
                         />
                       </>
                     }
@@ -216,7 +213,6 @@ function SingleAddressContent({
                           selectAddress={selectAddress}
                           getTotalValue={getTotalValue}
                           showPaymentOptions={showPaymentOptions}
-                          isCreditNoteApplied={isCreditNoteApplied}
                         />
                       </>
                     }

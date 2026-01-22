@@ -52,12 +52,10 @@ function MobileNumber({
     mobileNumber?.replace(new RegExp(`^\\+${dialCode}`), "");
 
   const handleChange = (phone, { country }) => {
-    const countryIso2 = country?.iso2 || countryIso || "in";
-    const validationResult = isPhoneValid(phone, countryIso2);
     onChange?.({
       mobile: getNumber(phone, country?.dialCode),
       countryCode: country?.dialCode,
-      isValidNumber: validationResult,
+      isValidNumber: isPhoneValid(phone),
     });
   };
 

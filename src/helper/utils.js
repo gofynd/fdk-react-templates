@@ -66,7 +66,7 @@ export function convertDate(dateString, locale = "en-US") {
   const date = new Date(dateString);
 
   // Use browser's local timezone with fallback to UTC
-  const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+  //const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
 
   const options = {
     month: "long",
@@ -75,7 +75,7 @@ export function convertDate(dateString, locale = "en-US") {
     hour: "numeric",
     minute: "numeric",
     hour12: true,
-    timeZone: browserTimezone,
+    timeZone: "UTC",
   };
 
   const formatter = new Intl.DateTimeFormat(locale, options);
@@ -495,17 +495,7 @@ export const getAddressStr = (item, isAddressTypeAvailable) => {
       addressStr += ` ${item.area_code}`;
     }
     if (item.country) {
-      // Handle country as object or string
-      const countryStr =
-        typeof item.country === "object"
-          ? item.country.display_name ||
-            item.country.name ||
-            item.country.uid ||
-            ""
-          : item.country;
-      if (countryStr) {
-        addressStr += `, ${countryStr}`;
-      }
+      addressStr += `, ${item.country}`;
     }
     return addressStr;
   } catch (error) {
@@ -662,46 +652,4 @@ export const getUserAutofillData = (user, isGuestUser = false) => {
     phone: getUserPrimaryPhone(user),
     email: getUserPrimaryEmail(user),
   };
-};
-
-export const getConfigFromProps = (props) => {
-  if (!props || typeof props !== "object") {
-    return {};
-  }
-
-  // Handle array of prop objects with type and value
-  if (Array.isArray(props)) {
-    const config = {};
-    props.forEach((prop) => {
-      if (
-        prop &&
-        typeof prop === "object" &&
-        prop.id &&
-        prop.value !== undefined
-      ) {
-        config[prop.id] = prop.value;
-      }
-    });
-    return config;
-  }
-
-  // Handle object with nested props structure (like blogConfig)
-  if (props && typeof props === "object") {
-    const config = {};
-    Object.keys(props).forEach((key) => {
-      const prop = props[key];
-      if (prop && typeof prop === "object" && prop.value !== undefined) {
-        config[key] = prop.value;
-      } else if (prop && typeof prop === "object" && prop.type !== undefined) {
-        // Handle case where prop has type but no value
-        config[key] = prop.value || prop;
-      } else if (prop !== undefined) {
-        config[key] = prop;
-      }
-    });
-    return config;
-  }
-
-  // Handle direct object props
-  return props;
 };

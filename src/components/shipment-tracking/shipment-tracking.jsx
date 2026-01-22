@@ -7,7 +7,6 @@
  * @param {Object} props.shipmentInfo - Contains details about the shipment, such as whether it can be canceled or returned.
  * @param {Function} props.changeinit - A function to handle changes in the shipment status.
  * @param {Object} props.invoiceDetails - Contains details about the invoice, including a presigned URL for downloading.
- * @param {Function} props.onAddToCart - A function to handle adding product to cart (for Buy Again functionality).
  *
  * @returns {JSX.Element} A React component that renders the shipment tracking interface.
  *
@@ -31,7 +30,6 @@ function ShipmentTracking({
   invoiceDetails,
   availableFOCount,
   bagLength = 0,
-  onAddToCart,
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -66,19 +64,7 @@ function ShipmentTracking({
       arrLinks.push({
         type: "internal",
         text: t("resource.common.need_help"),
-        link: "/contact-us",
-      });
-    }
-    // Buy Again button - always visible
-    const firstBag = shipmentInfo?.bags?.[0];
-    const productSlug = firstBag?.item?.slug_key;
-    if (productSlug) {
-      arrLinks.push({
-        type: "internal",
-        text: t("resource.common.buy_again") || "BUY AGAIN",
-        link: `/product/${productSlug}`,
-        action: "buy_again",
-        productSlug: productSlug,
+        link: "/faq/" || shipmentInfo?.need_help_url,
       });
     }
     if (invoiceDetails?.success) {
@@ -97,14 +83,6 @@ function ShipmentTracking({
   // const updateTypeText = () => {
   //   return shipmentInfo?.can_return ? "resource.facets.return_caps" : "resource.facets.cancel_caps";
   // };
-
-  const handleBuyAgain = async (productSlug) => {
-    if (onAddToCart) {
-      console.log("handleBuyAgain called", { productSlug });
-      // Use provided handler (typically opens add-to-cart modal)
-      onAddToCart(productSlug);
-    }
-  };
 
   const update = (item) => {
     if (["CANCEL", "RETURN"].includes(item?.text)) {
@@ -141,11 +119,6 @@ function ShipmentTracking({
         });
       }
       window.scrollTo(0, 0);
-    } else if (item?.action === "buy_again") {
-      // Handle Buy Again - add to cart instead of navigating
-      if (item?.productSlug) {
-        handleBuyAgain(item.productSlug);
-      }
     } else {
       navigate(item?.link);
     }

@@ -30,22 +30,6 @@
     border-radius: @ImageRadius;
     -webkit-mask-image: -webkit-radial-gradient(white, black); //safari fix
 
-    &.outOfStockContainer {
-      .productImage {
-        filter: grayscale(100%);
-        opacity: 0.7;
-      }
-
-      @media @desktop {
-        &:hover {
-          .productImage {
-            filter: grayscale(100%);
-            opacity: 0.7;
-          }
-        }
-      }
-    }
-
     .wishlistBtn {
       display: flex;
       align-items: center;

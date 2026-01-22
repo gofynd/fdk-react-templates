@@ -760,7 +760,6 @@ h5,
   background-color: var(--buttonPrimary);
   padding: 14px 0;
   text-align: center;
-  cursor: pointer;
 }
 .chip-item__sModalContainer___ARs9G .chip-item__disableBtn___Thin2 {
   opacity: 0.5;
@@ -982,7 +981,6 @@ h5,
   background-color: var(--buttonPrimary, #4e3f09);
   padding: 14px 0;
   text-align: center;
-  cursor: pointer;
 }
 .chip-item__foModalContainer___Ria1W .chip-item__disableBtn___Thin2 {
   opacity: 0.5;
@@ -1812,7 +1810,7 @@ h5,
 }
 .modal__modalBody___peHlJ {
   flex: 1;
-  max-height: 95vh;
+  max-height: 90vh;
   overflow-y: auto;
 }
 .modal__rightModal___acoje {
@@ -2698,7 +2696,7 @@ h5,
 }
 .accordion__accordionContentImageItem____FBCe .accordion__imagePreview___FOjGs {
   position: absolute;
-  left: 0px;
+  left: -155%;
   top: -100px;
   z-index: 20;
 }
@@ -2721,9 +2719,8 @@ h5,
 }
 .accordion__accordionContentImg___lbTPr {
   border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
+  width: 16px;
+  height: 16px;
   border: 1px solid var(--Text-Secondary, #6d6d6e);
 }
 .accordion__accordionContentKey___qrAGm {

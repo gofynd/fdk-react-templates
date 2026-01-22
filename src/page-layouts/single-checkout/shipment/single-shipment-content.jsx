@@ -26,7 +26,6 @@ function SingleShipmentContent({
   getDeliveryPromise,
   redirectPaymentOptions,
   isPaymentLoading = false,
-  isCreditNoteApplied,
 }) {
   const { t } = useGlobalTranslation("translation");
   const navigate = useNavigate();
@@ -331,7 +330,7 @@ function SingleShipmentContent({
             <button
               className={styles.proceedBtn}
               onClick={() => {
-                if (getTotalValue?.() === 0 && !isCreditNoteApplied) {
+                if (getTotalValue?.() === 0) {
                   proceedToPay("PP", {});
                 } else {
                   redirectPaymentOptions();
@@ -340,9 +339,7 @@ function SingleShipmentContent({
               }}
               disabled={isPaymentLoading}
             >
-              {getTotalValue?.() === 0 && !isCreditNoteApplied
-                ? t("resource.checkout.place_order")
-                : t("resource.checkout.proceed_to_pay")}
+              {getTotalValue?.() === 0 ? "PLACE ORDER" : "Proceed To Pay"}
             </button>
           </div>
         </div>

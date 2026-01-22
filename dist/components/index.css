@@ -1849,7 +1849,7 @@ h5,
 }
 .modal__modalBody___peHlJ {
   flex: 1;
-  max-height: 95vh;
+  max-height: 90vh;
   overflow-y: auto;
 }
 .modal__rightModal___acoje {
@@ -4277,16 +4277,16 @@ h5,
     line-height: 16px;
   }
 }
-.delivery-location__btn-primary___GwOmP:disabled,
-.delivery-location__btnPrimary___GgszE:disabled {
-  border-color: var(--buttonPrimaryL3, #b8b29d);
-  background-color: var(--buttonPrimaryL3, #b8b29d);
-}
 @media only screen and (min-width: 769px) {
   .delivery-location__btn-primary___GwOmP:hover,
   .delivery-location__btnPrimary___GgszE:hover {
     border-color: var(--buttonPrimaryL1, #71653a);
     background-color: var(--buttonPrimaryL1, #71653a);
+  }
+  .delivery-location__btn-primary___GwOmP:disabled,
+  .delivery-location__btnPrimary___GgszE:disabled {
+    border-color: var(--buttonPrimaryL3, #b8b29d);
+    background-color: var(--buttonPrimaryL3, #b8b29d);
   }
 }
 .delivery-location__btn-primary___GwOmP:active,
@@ -4478,44 +4478,10 @@ button {
   font-size: 14px;
   font-weight: 600;
   color: var(--textHeading, #26201a);
-  display: inline;
 }
 @media only screen and (max-width: 768px) {
   .delivery-location__cartPincodeContainer____lhBS .delivery-location__pinCodeDetailsContainer___fgQRm .delivery-location__pinCode___Zq4V9 {
     font-size: 12px;
-  }
-}
-.delivery-location__cartPincodeContainer____lhBS .delivery-location__pinCodeDetailsContainer___fgQRm .delivery-location__deliveryHeader___k9N88 {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.delivery-location__cartPincodeContainer____lhBS .delivery-location__pinCodeDetailsContainer___fgQRm .delivery-location__addressTagsContainer___QLSqM {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-.delivery-location__cartPincodeContainer____lhBS .delivery-location__pinCodeDetailsContainer___fgQRm .delivery-location__addressTag___MeDJK {
-  background-color: #eeeeee;
-  border: none;
-  border-radius: 12px;
-  padding: 4px 12px;
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--textBody, #3c3131);
-  text-transform: capitalize;
-  line-height: 140%;
-  white-space: nowrap;
-  display: inline-flex;
-  align-items: center;
-}
-@media only screen and (max-width: 480px) {
-  .delivery-location__cartPincodeContainer____lhBS .delivery-location__pinCodeDetailsContainer___fgQRm .delivery-location__addressTag___MeDJK {
-    font-size: 10px;
-    padding: 3px 10px;
-    border-radius: 10px;
   }
 }
 .delivery-location__cartPincodeContainer____lhBS .delivery-location__changePinCodeButton___bPqSJ {
@@ -4532,6 +4498,7 @@ button {
   background: var(--buttonSecondary, #fff);
   color: var(--buttonPrimary, #4e3f09);
   height: 100%;
+  text-transform: uppercase;
   line-height: 140%;
 }
 @media only screen and (min-width: 769px) {
@@ -4653,6 +4620,7 @@ button {
   border-radius: var(--buttonRadius, 0px);
   color: var(--buttonSecondary, #fff);
   height: 100%;
+  text-transform: uppercase;
   cursor: pointer;
   text-align: center;
 }
@@ -4666,15 +4634,16 @@ button {
   }
 }
 .delivery-location__addAddressModalBody___fK3pF {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 450px;
+  grid-template-rows: 1fr;
   min-height: 84.26vh;
   max-height: 84.26vh;
   overflow: hidden;
-  width: 100%;
 }
 @media only screen and (max-width: 768px) {
   .delivery-location__addAddressModalBody___fK3pF {
+    grid-template-columns: 1fr;
     max-height: unset;
     height: 100dvh;
   }
@@ -4751,33 +4720,8 @@ button {
 .delivery-location__deliveryAddressModal___bufVh .delivery-location__deliveryAddressBody___dZhlE .delivery-location__stickyContainer___tMA4Y .delivery-location__deliveryCta___ywG6_ {
   text-transform: uppercase;
 }
-@media only screen and (max-width: 768px) {
-  .delivery-location__centerModal___MmfWJ.delivery-location__addAddressModalWrapper___qpWU7 {
-    align-items: flex-end !important;
-  }
-}
 .delivery-location__addAddressModalContainer___d5do4 {
   display: block;
-  width: 100% !important;
-  max-height: unset;
-  height: 100dvh;
-  padding: 0;
-  max-width: unset !important;
-}
-@media only screen and (max-width: 768px) {
-  .delivery-location__addAddressModalContainer___d5do4 {
-    border-radius: 0 !important;
-    border-start-start-radius: 8px;
-    border-start-end-radius: 8px;
-    width: 100% !important;
-  }
-}
-@media only screen and (min-width: 769px) {
-  .delivery-location__addAddressModalContainer___d5do4 {
-    max-width: 450px !important;
-    max-height: 84.26dvh;
-    width: 450px !important;
-  }
 }
 .delivery-location__heading___o8Vrb {
   margin: 32px 0 12px;
@@ -6293,40 +6237,6 @@ h5,
   display: flex;
   flex-direction: column;
   height: 100%;
-}
-.google-map__mapHeader___ka4qP {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px;
-  border-bottom: 1px solid var(--dividerStokes, #d4d1d1);
-  background: var(--dialogBackground, #fff);
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-.google-map__mapHeader___ka4qP .google-map__closeIcon___dSY2O {
-  color: var(--textBody, #3c3131);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 4px;
-  margin-left: auto;
-}
-.google-map__mapHeader___ka4qP .google-map__closeIcon___dSY2O:hover {
-  opacity: 0.7;
-}
-.google-map__mapHeader___ka4qP .google-map__mapHeaderTitle___KlMwW {
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 140%;
-  color: var(--textHeading, #26201a);
-  flex: 1;
-  text-align: center;
-  margin: 0;
 }
 .google-map__mapContainer___tvfaj {
   position: relative;
@@ -9888,10 +9798,6 @@ h5,
 .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponItem___EgDig.coupon__opacity02___kxhhP {
   opacity: 0.2;
 }
-.coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponItem___EgDig.coupon__selectedCoupon___C4AkQ {
-  border-color: var(--successText, #1c958f);
-  border-width: 1px;
-}
 .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponItem___EgDig .coupon__couponCode___v03ce {
   background-color: var(--successBackground, #c2dbc9);
   border: 1px solid var(--successText, #1c958f);
@@ -9945,20 +9851,6 @@ h5,
   margin-top: 4px;
 }
 .coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponItem___EgDig .coupon__couponApplyBtn___KQhd7 {
-  border: 1px solid var(--buttonPrimary, #4e3f09);
-  border-radius: var(--buttonRadius, 0px);
-  color: var(--buttonPrimary, #4e3f09);
-  height: 100%;
-  text-transform: uppercase;
-  background: var(--buttonSecondary, #fff);
-  display: inline-block;
-  padding: 12px 16px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-inline-start: auto;
-}
-.coupon__modalContent___BJog_ .coupon__modalBody___vZ3YF .coupon__couponItem___EgDig .coupon__couponRemoveBtn___swA6X {
   border: 1px solid var(--buttonPrimary, #4e3f09);
   border-radius: var(--buttonRadius, 0px);
   color: var(--buttonPrimary, #4e3f09);
@@ -11660,11 +11552,6 @@ h5,
   border-inline-start: 1px solid var(--dividerStokes, #d4d1d1);
   padding: 16px;
   width: 25%;
-}
-@media only screen and (max-width: 480px) {
-  .profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__navContainer___pxEcU {
-    border-radius: 0px;
-  }
 }
 .profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__navContainer___pxEcU .profile-navigation__userData___PSyo0 {
   display: flex;

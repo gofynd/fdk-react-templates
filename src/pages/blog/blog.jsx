@@ -31,7 +31,6 @@ import {
   CarouselItem,
   CarouselPrevious,
   CarouselNext,
-  CarouselDots,
 } from "../../components/carousel/carousel";
 import Autoplay from "embla-carousel-autoplay";
 
@@ -402,8 +401,6 @@ function BlogList({
                 ))}
               </CarouselContent>
               <CarouselPrevious className={styles.carouselBtn} />
-              {/* NOTE:  Enable if dots are required to be added in carousel */}
-              {/* <CarouselDots/> */}
               <CarouselNext className={styles.carouselBtn} />
             </Carousel>
           </div>

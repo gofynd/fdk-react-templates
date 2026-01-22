@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import * as styles from "./add-to-cart.less";
 import ImageGallery from "../image-gallery/image-gallery";
 import ProductVariants from "../product-variants/product-variants";
@@ -17,7 +17,6 @@ import TruckIcon from "../../../../assets/images/truck-icon.svg";
 import CartIcon from "../../../../assets/images/cart.svg";
 import BuyNowIcon from "../../../../assets/images/buy-now.svg";
 import { useGlobalTranslation, useGlobalStore, useFPI } from "fdk-core/utils";
-import Skeleton from "../../../../components/core/skeletons/skeleton";
 
 const AddToCart = ({
   productData = {},
@@ -46,7 +45,6 @@ const AddToCart = ({
   getDeliveryPromise,
 }) => {
   const fpi = useFPI();
-  const [foLoading, setFoLoading] = useState(false);
   const { language, countryCode } =
     useGlobalStore(fpi.getters.i18N_DETAILS) || {};
   const locale = language?.locale ? language?.locale : "en";
@@ -310,7 +308,7 @@ const AddToCart = ({
               </div>
             )}
             {sizes?.sellable && selectedSize && (
-              <DeliveryInfo {...deliverInfoProps} setFoLoading={setFoLoading} />
+              <DeliveryInfo {...deliverInfoProps} />
             )}
 
             {selectedSize &&
@@ -318,41 +316,16 @@ const AddToCart = ({
               availableFOCount > 1 && (
                 <div className={styles.fulfillmentWrapper}>
                   <div className={styles.foList}>
-                    {foLoading
-                      ? fulfillmentOptions.map((_, index) => (
-                          <div
-                            key={`fo-skeleton-${index}`}
-                            className={styles.fulfillmentOption}
-                          >
-                            <div
-                              style={{ width: "20px" }}
-                              className={styles.foIcon}
-                            >
-                              <Skeleton height={18} width={18} />
-                            </div>
-                            <div
-                              style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                gap: "4px",
-                                width: "100%",
-                              }}
-                            >
-                              <Skeleton height={14} width={200} />
-                              <Skeleton height={12} width={120} />
-                            </div>
-                          </div>
-                        ))
-                      : fulfillmentOptions.map((foItem, index) => (
-                          <FullfillmentOption
-                            key={index}
-                            foItem={foItem}
-                            fulfillmentOptions={fulfillmentOptions}
-                            currentFO={currentFO}
-                            setCurrentFO={setCurrentFO}
-                            getDeliveryPromise={getDeliveryPromise}
-                          />
-                        ))}
+                    {fulfillmentOptions.map((foItem, index) => (
+                      <FullfillmentOption
+                        key={index}
+                        foItem={foItem}
+                        fulfillmentOptions={fulfillmentOptions}
+                        currentFO={currentFO}
+                        setCurrentFO={setCurrentFO}
+                        getDeliveryPromise={getDeliveryPromise}
+                      />
+                    ))}
                   </div>
                 </div>
               )}

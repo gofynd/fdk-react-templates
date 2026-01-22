@@ -36,7 +36,6 @@ const Wishlist = ({
   showAddToCart = false,
   actionButtonText,
   globalConfig = {},
-  showHeader = true,
 }) => {
   const { t } = useGlobalTranslation("translation");
   const countLabel =
@@ -59,18 +58,16 @@ const Wishlist = ({
   return (
     <div>
       <div className={styles.breadcrumbWrapper}>
-        {/* <Breadcrumb breadcrumb={breadcrumb} /> */}
+        <Breadcrumb breadcrumb={breadcrumb} />
       </div>
-      {showHeader && (
-        <div className={styles.titleWrapper}>
-          <h1 className={styles.title}>
-            {title || t("resource.common.breadcrumb.wishlist")}
-          </h1>
-          {countLabel && (
-            <span className={styles.wishlistCount}>{countLabel}</span>
-          )}
-        </div>
-      )}
+      <div className={styles.titleWrapper}>
+        <h1 className={styles.title}>
+          {title || t("resource.common.breadcrumb.wishlist")}
+        </h1>
+        {countLabel && (
+          <span className={styles.wishlistCount}>{countLabel}</span>
+        )}
+      </div>
 
       <InfiniteLoader
         hasNext={hasNext}
