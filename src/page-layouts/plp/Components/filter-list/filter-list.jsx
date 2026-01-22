@@ -29,7 +29,8 @@ function FilterList({
     }
     return filter.values.filter((item) => {
       return (
-        (item.display || "").toLowerCase().indexOf(searchText.toLowerCase()) !== -1
+        (item.display || "").toLowerCase().indexOf(searchText.toLowerCase()) !==
+        -1
       );
     });
   };
@@ -88,7 +89,7 @@ function FilterList({
     return groupedFilterValues;
   };
 
- const allFilteredItems = getFilteredItems(searchText);
+  const allFilteredItems = getFilteredItems(searchText);
   const showViewMore =
     isCollapsedView &&
     filter.values.length > MAX_ITEM_COUNT &&
@@ -99,7 +100,6 @@ function FilterList({
   );
 
   const groupedValues = getGroupedValues();
-  console.log(groupedValues, "groupedValues");
 
   const isEmptyResult = useMemo(() => {
     const filteredResult = Object.values(groupedValues).filter(

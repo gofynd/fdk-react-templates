@@ -57,7 +57,7 @@ export default function ChipItem({
   const navigate = useNavigate();
   const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
   const locale = language?.locale;
-  const { limited_stock_quantity: limitedStockQuantity = 11 } = globalConfig;
+  const { limited_stock_quantity: limitedStockQuantity = 11 } = globalConfig || {};
   const isMobile = useMobile();
   const [showQuantityError, setShowQuantityError] = useState(false);
   const [showFOModal, setShowFOModal] = useState(false);
@@ -80,8 +80,81 @@ export default function ChipItem({
   const customizationOptions =
     singleItemDetails?.article?._custom_json?._display || [];
 
+  // Transform customization options into accordion format
+  const transformedCustomizationContent = customizationOptions
+    .map((option) => {
+      const items = [];
+
+      // Handle productCanvas type (nested value object)
+      if (option.type === "productCanvas" && option.value) {
+        const canvasData = option.value;
+
+        if (canvasData.text) {
+          items.push({
+            key: option.key || "Text",
+            value: canvasData.text,
+          });
+        }
+
+        if (canvasData.price || option.price) {
+          items.push({
+            key: "Price",
+            value: `${canvasData.price || option.price}`,
+          });
+        }
+
+        if (canvasData.previewImage) {
+          items.push({
+            key: "Preview",
+            value: canvasData.previewImage,
+            type: "image",
+            alt: option.key || "Customization preview",
+            dimensions: canvasData.textBounds
+              ? {
+                  width: canvasData.textBounds.width,
+                  height: canvasData.textBounds.height,
+                }
+              : undefined,
+          });
+        }
+      }
+      // Handle simple string type
+      else if (option.type === "string" && option.value) {
+        items.push({
+          key: option.alt || option.key,
+          value: option.value,
+        });
+      }
+      // Handle other types with direct text/price/previewImage properties
+      else {
+        if (option.text) {
+          items.push({ key: "Text", value: option.text });
+        }
+
+        if (option.price) {
+          items.push({ key: "Price", value: option.price });
+        }
+
+        if (option.previewImage) {
+          items.push({
+            key: "Preview",
+            value: option.previewImage,
+            type: "image",
+            alt: "Customization preview",
+          });
+        }
+      }
+
+      return items;
+    })
+    .flat();
+
   const [items, setItems] = useState([
-    { title: "Customization", content: customizationOptions, open: false },
+    {
+      title: "Customization",
+      content: transformedCustomizationContent,
+      open: false,
+    },
   ]);
 
   const isSellerBuyBoxListing = useMemo(() => {
@@ -414,7 +487,9 @@ export default function ChipItem({
                 isOutOfStock ? styles.outOfStock : ""
               } `}
             >
-              {singleItemDetails?.product?.name}
+              {singleItemDetails?.product?.name?.length > 24
+                ? `${singleItemDetails.product.name.slice(0, 24)}...`
+                : singleItemDetails?.product?.name}{" "}
             </div>
             {isSoldBy && !isOutOfStock && (
               <div className={styles.itemSellerName}>
@@ -723,7 +798,10 @@ export default function ChipItem({
                         )
                       : undefined
                   }
-                  alt={sizeModalItemValue?.product?.name || t("resource.common.product_image")}
+                  alt={
+                    sizeModalItemValue?.product?.name ||
+                    t("resource.common.product_image")
+                  }
                 />
               </div>
               <div className={styles.sizeModalContent}>
@@ -789,7 +867,17 @@ export default function ChipItem({
                         onClick={(e) => {
                           e.stopPropagation();
                           if (!singleSize?.is_available) return;
-                          if (singleSize?.value && !isEarlierSelectedSize) {
+
+                          const originalSize = sizeModal?.split("_")[1];
+                          const isOriginalSize =
+                            singleSize?.value === originalSize;
+
+                          if (isOriginalSize) {
+                            // Reset to null when original size is re-selected
+                            setSizeModalErr(null);
+                            setCurrentSizeModalSize(null);
+                          } else if (singleSize?.value) {
+                            // Set new size when a different size is selected
                             setSizeModalErr(null);
                             const newSizeModalValue = `${
                               sizeModal?.split("_")[0]
@@ -820,6 +908,15 @@ export default function ChipItem({
             sizeModalErr
           }
           onClick={(e) => {
+            // Safety check: prevent update if no size change
+            if (
+              !currentSizeModalSize ||
+              currentSizeModalSize === sizeModal ||
+              sizeModalErr
+            ) {
+              return;
+            }
+
             let itemIndex;
             for (let j = 0; j < cartItemsWithActualIndex.length; j += 1) {
               if (
@@ -830,12 +927,19 @@ export default function ChipItem({
                 break;
               }
             }
+
+            const newSize = currentSizeModalSize.split("_")[1];
+            const originalSize = sizeModal?.split("_")[1];
+
+            // Additional safety check: only update if size actually changed
+            if (newSize === originalSize) {
+              return;
+            }
+
             cartUpdateHandler(
               e,
               sizeModalItemValue,
-              currentSizeModalSize
-                ? currentSizeModalSize.split("_")[1]
-                : sizeModal?.split("_")[1],
+              newSize,
               cartItemsWithActualIndex[itemIndex]?.quantity || 0,
               itemIndex,
               "update_item",

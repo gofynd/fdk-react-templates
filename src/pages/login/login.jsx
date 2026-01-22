@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./login.less";
 import LoginPassword from "../../page-layouts/login/component/login-password/login-password";
@@ -51,6 +51,8 @@ function Login({
   onAppleCredential,
 }) {
   const { t } = useGlobalTranslation("translation");
+  const [isTermsAccepted, setIsTermsAccepted] = useState(false);
+
   return (
     <div className={styles.loginWrapper}>
       <div>
@@ -98,6 +100,7 @@ function Login({
               isForgotPassword,
               onForgotPasswordClick,
               onLoginFormSubmit,
+              isTermsAccepted,
             }}
           />
         )}
@@ -115,12 +118,16 @@ function Login({
               onResendOtpClick,
               onLoginFormSubmit,
               getOtpLoading,
+              isTermsAccepted,
             }}
           />
         )}
         {!isFormSubmitSuccess && (
           <>
-            <TermPrivacy />
+            <TermPrivacy
+              onChange={setIsTermsAccepted}
+              checked={isTermsAccepted}
+            />
             <div className={styles.loginBtnGroup}>
               {showLoginToggleButton && (
                 <LoginModeButton {...{ onLoginToggleClick, isOtp }} />
@@ -139,14 +146,14 @@ function Login({
                   application_id={application_id}
                 />
               )}
-              {/* {social?.apple && (
+              {social?.apple && (
                 <AppleLoginButton
                   appleClientId={appleId}
                   onAppleCredential={onAppleCredential}
                   redirectURI={appleRedirectURI}
                   onError={handleGoogleError}
                 />
-              )} */}
+              )}
               {isRegisterEnabled && (
                 <LoginRegisterToggle
                   label={

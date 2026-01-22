@@ -194,6 +194,7 @@ function CheckoutPaymentContent({
     isPaymentLoading,
   } = payment;
 
+
   useEffect(() => {
     if (enableLinkPaymentOption && selectedTab) {
       setActiveMop(selectedTab);
@@ -502,6 +503,17 @@ function CheckoutPaymentContent({
       displayName: t("resource.checkout.more_apps"),
     },
   };
+
+  // Map API app codes to SVG names
+  const getSvgNameForApp = (appCode) => {
+    const appCodeMap = {
+      "google_pay": "gpay",
+      "gpay": "gpay",
+      "phonepe": "phonepe",
+      "paytm": "paytm",
+    };
+    return appCodeMap[appCode] || appCode;
+  };
   const prevSelectedTabRef = useRef(selectedTab);
   const cancelQrPayment = async () => {
     initializeOrResetQrPayment();
@@ -534,7 +546,11 @@ function CheckoutPaymentContent({
     }
     if (selectedTab === "UPI" && !upiApps?.length) {
       getUPIIntentApps?.()?.then?.((data) => {
-        setUpiApps(data);
+        // Handle case where data might be objects with 'code' property
+        const normalizedData = Array.isArray(data) 
+          ? data.map(item => typeof item === 'object' && item?.code ? item.code : item)
+          : data;
+        setUpiApps(normalizedData);
       });
     }
     if (
@@ -2171,8 +2187,79 @@ function CheckoutPaymentContent({
               <div>
                 {upiApps?.length > 0 &&
                   upiApps
-                    .filter((app) => ["gpay", "phonepe", "paytm"].includes(app))
-                    .map((app) => (
+                    .filter((app) => ["gpay", "google_pay", "phonepe", "paytm"].includes(app))
+                    .map((app) => {
+                      const svgName = getSvgNameForApp(app);
+                      const displayKey = svgName;
+                      return (
+                        <label
+                          key={app}
+                          onClick={() => {
+                            setSelectedUpiIntentApp(app);
+                            selectedUpiRef.current = null;
+                            setvpa("");
+                            setSavedUPISelect("");
+                            setUPIError(false);
+                            cancelQrPayment();
+                          }}
+                          className={`${styles.upiApp} ${!upiApps?.includes("any") ? styles.notBorderBottom : ""} ${selectedUpiIntentApp === app ? styles.selectedUpiApp : ""}`}
+                        >
+                          <div className={styles.logo}>
+                            <SvgWrapper svgSrc={svgName} />
+                          </div>
+                          <p className={styles.displayName}>
+                            {upiAppData[displayKey]?.displayName}
+                          </p>
+                        {(!selectedUpiIntentApp ||
+                          selectedUpiIntentApp !== app) && (
+                          <SvgWrapper
+                            svgSrc={"radio"}
+                            className={styles.onMobileView}
+                          />
+                        )}
+                        {selectedUpiIntentApp &&
+                          selectedUpiIntentApp === app && (
+                            <SvgWrapper
+                              svgSrc={"radio-selected"}
+                              className={styles.onMobileView}
+                            />
+                          )}
+                        </label>
+                      );
+                    })}
+                {upiApps?.length > 0 && upiApps?.includes("any") && (
+                  <label
+                    key="any"
+                    onClick={() => {
+                      setSelectedUpiIntentApp("any");
+                      selectedUpiRef.current = "any";
+                      selectMop("UPI", "UPI", "UPI");
+                      removeDialogueError();
+                      setShowUpiRedirectionModal(true);
+                    }}
+                    className={styles.moreApps}
+                  >
+                    <div className={styles.logo}>
+                      <SvgWrapper svgSrc="more-upi-apps" />
+                    </div>
+                    <p className={styles.displayName}>
+                      {upiAppData.any?.displayName}
+                    </p>
+                    <div className={styles.rightArrow}>
+                      <SvgWrapper svgSrc="arrow-right" />
+                    </div>
+                  </label>
+                )}
+              </div>
+            )}
+            {!isTablet && upiApps?.length > 0 && (
+              <div>
+                {upiApps
+                  .filter((app) => ["gpay", "google_pay", "phonepe", "paytm"].includes(app))
+                  .map((app) => {
+                    const svgName = getSvgNameForApp(app);
+                    const displayKey = svgName;
+                    return (
                       <label
                         key={app}
                         onClick={() => {
@@ -2186,10 +2273,10 @@ function CheckoutPaymentContent({
                         className={`${styles.upiApp} ${!upiApps?.includes("any") ? styles.notBorderBottom : ""} ${selectedUpiIntentApp === app ? styles.selectedUpiApp : ""}`}
                       >
                         <div className={styles.logo}>
-                          <SvgWrapper svgSrc={app} />
+                          <SvgWrapper svgSrc={svgName} />
                         </div>
                         <p className={styles.displayName}>
-                          {upiAppData[app]?.displayName}
+                          {upiAppData[displayKey]?.displayName}
                         </p>
                         {(!selectedUpiIntentApp ||
                           selectedUpiIntentApp !== app) && (
@@ -2206,7 +2293,8 @@ function CheckoutPaymentContent({
                             />
                           )}
                       </label>
-                    ))}
+                    );
+                  })}
                 {upiApps?.length > 0 && upiApps?.includes("any") && (
                   <label
                     key="any"
@@ -2323,7 +2411,7 @@ function CheckoutPaymentContent({
             {((isTablet &&
               isChromeOrSafari &&
               (upiApps?.length > 0 || upiApps?.includes("any"))) ||
-              (!isTablet && isQrMopPresent)) && (
+              (!isTablet && (upiApps?.length > 0 || isQrMopPresent))) && (
               <div className={styles.upiOrLine}>
                 <span className={styles.upiOrText}>
                   {t("resource.common.or")}
@@ -2403,7 +2491,10 @@ function CheckoutPaymentContent({
                                     cancelQrPayment();
                                     selectMop("UPI", "UPI", "UPI");
                                   }}
-                                  disabled={(savedUPISelect && isUPIError) || isPaymentLoading}
+                                  disabled={
+                                    (savedUPISelect && isUPIError) ||
+                                    isPaymentLoading
+                                  }
                                 >
                                   {!isPaymentLoading ? (
                                     <>
@@ -2578,7 +2669,8 @@ function CheckoutPaymentContent({
                         cancelQrPayment();
                       }}
                       disabled={
-                        !(isUpiSuffixSelected || !!selectedUpiIntentApp) || isPaymentLoading
+                        !(isUpiSuffixSelected || !!selectedUpiIntentApp) ||
+                        isPaymentLoading
                       }
                     >
                       {!isPaymentLoading ? (
@@ -3105,7 +3197,7 @@ function CheckoutPaymentContent({
             <div
               className={`${styles.otherHeader} ${styles["view-mobile-up"]}`}
             >
-              {t("resource.checkout.select_payment_option")}
+              {t("resource.common.select_payment_option")}
             </div>
             <div className={styles.modeOption}>
               {otherPaymentOptions?.length &&
@@ -3498,12 +3590,15 @@ function CheckoutPaymentContent({
         >
           {true ? (
             <>
-              <div className={styles.creditNote}>
-                <CreditNote
-                  data={partialPaymentOption}
-                  updateStoreCredits={updateStoreCredits}
-                />
-              </div>
+              {partialPaymentOption?.list[0]?.balance?.account?.status !==
+                "INACTIVE" && (
+                <div className={styles.creditNote}>
+                  <CreditNote
+                    data={partialPaymentOption}
+                    updateStoreCredits={updateStoreCredits}
+                  />
+                </div>
+              )}
 
               {creditUpdating ? (
                 <CheckoutPaymentSkeleton />

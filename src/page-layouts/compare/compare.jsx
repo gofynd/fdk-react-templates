@@ -214,9 +214,9 @@ function Compare({
       !hasProductIdsInUrl() &&
       !isLoading;
 
-    if (shouldRedirect) {
-      navigate("/products");
-    }
+    // if (shouldRedirect) {
+    //   navigate("/products");
+    // }
   }, [products, location.search, isLoading, navigate]);
 
   const renderSearchShimmer = () => {

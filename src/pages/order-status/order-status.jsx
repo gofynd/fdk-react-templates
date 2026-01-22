@@ -91,7 +91,7 @@ function OrderStatus({
               {t("resource.order.placed_on")}:
               <span>
                 {convertDate(
-                  orderData.order_created_time,
+                  orderData.order_created_ts,
                   formatLocale(locale, countryCode, true)
                 )}
               </span>
@@ -373,6 +373,79 @@ function ProductItem({
   const effectivePriceCheck = product?.prices?.price_effective;
   const customizationOptions = product?.meta?._custom_json?._display || [];
 
+  //uncommment after verification of customization options display in order status page
+  // // Transform customization options into accordion format
+  // const transformedCustomizationContent = customizationOptions.map((option) => {
+  //   const items = [];
+    
+  //   // Handle productCanvas type (nested value object)
+  //   if (option.type === "productCanvas" && option.value) {
+  //     const canvasData = option.value;
+      
+  //     if (canvasData.text) {
+  //       items.push({ 
+  //         key: option.key || "Text", 
+  //         value: canvasData.text 
+  //       });
+  //     }
+      
+  //     if (canvasData.price || option.price) {
+  //       items.push({ 
+  //         key: "Price", 
+  //         value: `${canvasData.price || option.price}` 
+  //       });
+  //     }
+      
+  //     if (canvasData.previewImage) {
+  //       items.push({ 
+  //         key: "Preview", 
+  //         value: canvasData.previewImage, 
+  //         type: "image",
+  //         alt: option.key || "Customization preview",
+  //         dimensions: canvasData.textBounds ? {
+  //           width: canvasData.textBounds.width,
+  //           height: canvasData.textBounds.height
+  //         } : undefined
+  //       });
+  //     }
+  //   } 
+  //   // Handle simple string type
+  //   else if (option.type === "string" && option.value) {
+  //     items.push({ 
+  //       key: option.alt || option.key, 
+  //       value: option.value 
+  //     });
+  //   }
+  //   // Handle other types with direct text/price/previewImage properties
+  //   else {
+  //     if (option.text) {
+  //       items.push({ key: "Text", value: option.text });
+  //     }
+      
+  //     if (option.price) {
+  //       items.push({ key: "Price", value: option.price });
+  //     }
+      
+  //     if (option.previewImage) {
+  //       items.push({ 
+  //         key: "Preview", 
+  //         value: option.previewImage, 
+  //         type: "image",
+  //         alt: "Customization preview" 
+  //       });
+  //     }
+  //   }
+    
+  //   return items;
+  // }).flat();
+
+  // const [items, setItems] = React.useState([
+  //   { 
+  //     title: "Customization", 
+  //     content: transformedCustomizationContent, 
+  //     open: false 
+  //   },
+  // ]);
   const [items, setItems] = React.useState([
     { title: "Customization", content: customizationOptions, open: false },
   ]);

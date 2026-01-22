@@ -36,6 +36,8 @@ function CheckoutPayment({
     setErrorMessage,
     enableLinkPaymentOption,
     getTotalValue,
+    isCreditNoteApplied,
+    isLoading,
   } = payment;
   const isMobile = useMobile();
 
@@ -117,7 +119,7 @@ function CheckoutPayment({
   return (
     <>
       <div
-        className={`${styles.paymentContainer} ${!showPayment ? styles.hidePayment : ""} ${enableLinkPaymentOption ? styles.unsetMarginTop : ""} ${getTotalValue?.() === 0 ? styles.disabledPayment : ""}`}
+        className={`${styles.paymentContainer} ${!showPayment ? styles.hidePayment : ""} ${enableLinkPaymentOption ? styles.unsetMarginTop : ""} ${getTotalValue?.() === 0 && !isCreditNoteApplied && !isLoading ? styles.disabledPayment : ""}`}
       >
         {showPayment ? (
           <>
