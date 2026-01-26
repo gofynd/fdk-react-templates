@@ -222,6 +222,11 @@
     width: 100%;
     max-height: unset;
     height: 100dvh;
+    @media @mobile {
+      border-radius: 0 !important;
+      width: 100% !important;
+      max-width: 100% !important;
+    }
     @media @desktop {
       max-width: 450px;
       max-height: 84.26dvh;
@@ -230,6 +235,9 @@
   .deliveryAddressHeader {
     padding: 24px;
     border-bottom: none;
+    @media @mobile {
+      border-radius: 0 !important;
+    }
   }
 
   .deliveryAddressBody {
@@ -305,6 +313,11 @@
   height: 100dvh;
   padding: 0;
   max-width: unset !important;
+  
+  @media @mobile {
+    border-radius: 0 !important;
+    width: 100% !important;
+  }
   
   @media @tablet {
     border-radius: 0 !important;

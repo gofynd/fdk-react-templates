@@ -1846,6 +1846,11 @@ h5,
     align-items: center;
   }
 }
+@media only screen and (max-width: 480px) {
+  .modal__centerModal___CkbLu {
+    align-items: flex-end;
+  }
+}
 .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 {
   border-radius: 8px;
 }
@@ -1855,8 +1860,20 @@ h5,
     max-width: 720px;
   }
 }
+@media only screen and (max-width: 480px) {
+  .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 0;
+  }
+}
 .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 .modal__modalHeader___xKo1g {
   border-radius: 8px 8px 0px 0px;
+}
+@media only screen and (max-width: 480px) {
+  .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 .modal__modalHeader___xKo1g {
+    border-radius: 0;
+  }
 }
 .modal__modalTitle___yvZQo {
   font-weight: 600;

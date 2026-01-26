@@ -1883,6 +1883,11 @@ h5,
     align-items: center;
   }
 }
+@media only screen and (max-width: 480px) {
+  .modal__centerModal___CkbLu {
+    align-items: flex-end;
+  }
+}
 .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 {
   border-radius: 8px;
 }
@@ -1892,8 +1897,20 @@ h5,
     max-width: 720px;
   }
 }
+@media only screen and (max-width: 480px) {
+  .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 0;
+  }
+}
 .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 .modal__modalHeader___xKo1g {
   border-radius: 8px 8px 0px 0px;
+}
+@media only screen and (max-width: 480px) {
+  .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 .modal__modalHeader___xKo1g {
+    border-radius: 0;
+  }
 }
 .modal__modalTitle___yvZQo {
   font-weight: 600;
@@ -4684,6 +4701,13 @@ button {
   max-height: unset;
   height: 100dvh;
 }
+@media only screen and (max-width: 480px) {
+  .delivery-location__deliveryAddressModal___bufVh .delivery-location__deliverAddressesModalContainer___a40y1 {
+    border-radius: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
 @media only screen and (min-width: 769px) {
   .delivery-location__deliveryAddressModal___bufVh .delivery-location__deliverAddressesModalContainer___a40y1 {
     max-width: 450px;
@@ -4693,6 +4717,11 @@ button {
 .delivery-location__deliveryAddressModal___bufVh .delivery-location__deliveryAddressHeader___jz_o1 {
   padding: 24px;
   border-bottom: none;
+}
+@media only screen and (max-width: 480px) {
+  .delivery-location__deliveryAddressModal___bufVh .delivery-location__deliveryAddressHeader___jz_o1 {
+    border-radius: 0 !important;
+  }
 }
 .delivery-location__deliveryAddressModal___bufVh .delivery-location__deliveryAddressBody___dZhlE {
   display: flex;
@@ -4763,6 +4792,12 @@ button {
   height: 100dvh;
   padding: 0;
   max-width: unset !important;
+}
+@media only screen and (max-width: 480px) {
+  .delivery-location__addAddressModalContainer___d5do4 {
+    border-radius: 0 !important;
+    width: 100% !important;
+  }
 }
 @media only screen and (max-width: 768px) {
   .delivery-location__addAddressModalContainer___d5do4 {

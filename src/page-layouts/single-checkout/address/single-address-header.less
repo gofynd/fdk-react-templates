@@ -222,6 +222,20 @@
 
 .addressModalContainer {
   display: block;
+
+  @media @mobile {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    border-radius: 0 !important;
+  }
+  
+  // Override centerModal tablet styles for full width on mobile devices
+  @media only screen and (max-width: 768px) {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
 }
 
 .addressModalBody {
@@ -235,5 +249,12 @@
     grid-template-columns: 1fr;
     max-height: unset;
     height: 100dvh;
+  }
+
+  @media @mobile {
+    grid-template-columns: 1fr;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    min-height: 100dvh !important;
   }
 }

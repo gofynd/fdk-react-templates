@@ -560,6 +560,21 @@ h5,
 .single-address-header__addressModalContainer___kPuPf {
   display: block;
 }
+@media only screen and (max-width: 480px) {
+  .single-address-header__addressModalContainer___kPuPf {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    border-radius: 0 !important;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .single-address-header__addressModalContainer___kPuPf {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
 .single-address-header__addressModalBody___umHZR {
   display: grid;
   grid-template-columns: 450px;
@@ -572,6 +587,14 @@ h5,
     grid-template-columns: 1fr;
     max-height: unset;
     height: 100dvh;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .single-address-header__addressModalBody___umHZR {
+    grid-template-columns: 1fr;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    min-height: 100dvh !important;
   }
 }
 
