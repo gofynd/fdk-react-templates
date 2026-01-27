@@ -218,10 +218,10 @@ function OrderStatus({
                         </div>
                         <div className={styles["label"]}>
                           {translateDynamicLabel(
-                            getAddressData?.address_type
-                              ?.charAt(0)
-                              ?.toUpperCase() +
-                              getAddressData?.address_type.slice(1),
+                            getAddressData?.address_type && typeof getAddressData.address_type === "string"
+                              ? getAddressData.address_type.charAt(0).toUpperCase() +
+                                getAddressData.address_type.slice(1)
+                              : getAddressData?.address_type || "",
                             t
                           )}
                         </div>
