@@ -523,22 +523,39 @@ export function isEmptyOrNull(obj) {
 }
 
 export function translateDynamicLabel(input, t) {
-  // Handle null, undefined, or empty input
-  if (!input || typeof input !== 'string') {
-    return input || '';
+  // Early return for null, undefined, or non-string types
+  if (input == null || typeof input !== "string") {
+    return "";
   }
 
-  const safeInput = input
-    .toLowerCase()
-    .replace(/\//g, '_') // replace slashes with underscores
-    .replace(/[^a-z0-9_\s]/g, '') // remove special characters except underscores and spaces
-    .trim()
-    .replace(/\s+/g, '_'); // replace spaces with underscores
+  // Handle empty string
+  const trimmedInput = input.trim();
+  if (trimmedInput === "") {
+    return "";
+  }
 
-  const translationKey = `resource.dynamic_label.${safeInput}`;
-  const translated = t(translationKey);
+  try {
+    const safeInput = trimmedInput
+      .toLowerCase()
+      .replace(/\//g, "_") // replace slashes with underscores
+      .replace(/[^a-z0-9_\s]/g, "") // remove special characters except underscores and spaces
+      .trim()
+      .replace(/\s+/g, "_"); // replace spaces with underscores
 
-  return translated.split('.').pop() === safeInput ? input : translated;
+    if (!safeInput) {
+      return trimmedInput;
+    }
+
+    const translationKey = `resource.dynamic_label.${safeInput}`;
+    const translated = t(translationKey);
+
+    return translated.split(".").pop() === safeInput
+      ? trimmedInput
+      : translated;
+  } catch (error) {
+    console.warn("Error in translateDynamicLabel:", error);
+    return typeof input === "string" ? input : "";
+  }
 }
 
 export function getLocaleDirection(fpi) {
