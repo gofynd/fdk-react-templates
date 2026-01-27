@@ -7,18 +7,22 @@ function RemoveCartItem({
   isOpen = false,
   cartItem = null,
   isRemoving = false,
-  onRemoveButtonClick = () => { },
-  onWishlistButtonClick = () => { },
-  onCloseDialogClick = () => { },
+  onRemoveButtonClick = () => {},
+  onWishlistButtonClick = () => {},
+  onCloseDialogClick = () => {},
 }) {
   const { t } = useGlobalTranslation("translation");
+
+  const isGifUrl = (url = "") => /\.gif(\?|#|$)/i.test(String(url || ""));
 
   const getProductImage = useMemo(() => {
     if (
       cartItem?.product?.images?.length > 0 &&
       cartItem?.product?.images?.[0]?.url
     ) {
-      return cartItem.product.images[0].url.replace("original", "resize-w:250");
+      return isGifUrl(cartItem.product.images[0].url)
+        ? cartItem.product.images[0].url
+        : cartItem.product.images[0].url.replace("original", "resize-w:250");
     }
   }, [cartItem]);
 

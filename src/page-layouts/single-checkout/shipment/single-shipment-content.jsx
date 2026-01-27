@@ -57,9 +57,13 @@ function SingleShipmentContent({
     }
     return updateArr;
   };
+
+  const isGifUrl = (url = "") => /\.gif(\?|#|$)/i.test(String(url || ""));
   const getProductImage = (product) => {
     if (product?.product?.images?.[0]?.url) {
-      return product.product.images[0].url.replace("original", "resize-w:110");
+      return isGifUrl(product.product.images[0].url)
+        ? product.product.images[0].url
+        : product.product.images[0].url.replace("original", "resize-w:110");
     }
   };
   const getProductPath = (product) => {
