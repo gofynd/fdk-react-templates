@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "../../styles/product-listing.less";
 import InfiniteLoader from "../../components/core/infinite-loader/infinite-loader";
@@ -68,6 +68,7 @@ const ProductListing = ({
   showColorVariants = false,
   actionButtonText,
   stickyFilterTopOffset = 0,
+  filterToggle = false,
   onColumnCountUpdate = () => {},
   onResetFiltersClick = () => {},
   onFilterUpdate = () => {},
@@ -82,6 +83,11 @@ const ProductListing = ({
 }) => {
   const { t } = useGlobalTranslation("translation");
   const isTablet = useViewport(0, 768);
+  const [isFilterVisible, setIsFilterVisible] = useState(filterToggle);
+
+  useEffect(() => {
+    setIsFilterVisible(filterToggle)
+  }, [filterToggle]);
   const {
     handleAddToCart,
     isOpen: isAddToCartOpen,
@@ -106,8 +112,12 @@ const ProductListing = ({
         </div>
       ) : (
         <>
-        {!title && <h1 className={styles.visuallyHidden}>{t("resource.common.breadcrumb.products") }</h1>}
-        {title && <h1 className={styles.visuallyHidden}>{title}</h1>}
+          {!title && (
+            <h1 className={styles.visuallyHidden}>
+              {t("resource.common.breadcrumb.products")}
+            </h1>
+          )}
+          {title && <h1 className={styles.visuallyHidden}>{title}</h1>}
           <div className={styles.mobileHeader}>
             <div className={styles.headerLeft}>
               {filterList.length > 0 && (
@@ -177,7 +187,7 @@ const ProductListing = ({
           <div className={styles.contentWrapper}>
             {filterList?.length !== 0 && (
               <StickyColumn
-                className={styles.left}
+                className={`${styles.left} ${filterToggle && !isFilterVisible ? styles.hidden : ""}`}
                 topOffset={stickyFilterTopOffset}
               >
                 <div className={styles.filterHeaderContainer}>
@@ -220,6 +230,19 @@ const ProductListing = ({
                   )}
                 </div>
                 <div className={styles.headerRight}>
+                  {filterToggle && filterList?.length > 0 && (
+                    <div
+                      className={`${styles.filterToggleBtn} `}
+                      onClick={() => setIsFilterVisible(!isFilterVisible)}
+                    >
+                      <div className={styles.filterToggleText}>
+                        {isFilterVisible ? t("resource.common.hide_filters") : t("resource.common.show_filters")}
+                      </div>
+                      <div className={`${styles.filterIcon} `}>
+                        <FilterIcon />
+                      </div>
+                    </div>
+                  )}
                   <Sort sortList={sortList} onSortUpdate={onSortUpdate} />
                   <button
                     className={`${styles.colIconBtn} ${

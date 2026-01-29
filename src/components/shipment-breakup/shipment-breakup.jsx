@@ -22,8 +22,8 @@ function ShipmentBreakup({
 }) {
   const { t } = useGlobalTranslation("translation");
 
-  const getPriceFormat = (symbol, price) => {
-    return priceFormatCurrencySymbol(symbol, price);
+  const getPriceFormat = (symbol, price, currencyCode) => {
+    return priceFormatCurrencySymbol(symbol, price, undefined, currencyCode);
   };
 
   const breakupValues = useMemo(() => {
@@ -67,7 +67,8 @@ className={`${styles.billing} ${styles.lightsm} ${customClass} ${
                     >
                       {getPriceFormat(
                         item.currency_symbol,
-                        Number(item.value.toString().replace(/,/g, ""))
+                        Number(item.value.toString().replace(/,/g, "")),
+                        item.currency_code
                       )}
                     </span>
                   </div>

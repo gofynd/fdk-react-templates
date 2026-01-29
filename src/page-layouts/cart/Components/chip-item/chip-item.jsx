@@ -597,26 +597,26 @@ export default function ChipItem({
                   }`}
                 >
                   {currencyFormat(
-                    numberWithCommas(
-                      singleItemDetails?.price?.converted?.effective ??
-                        singleItemDetails?.price?.base?.effective
-                    ),
+                    singleItemDetails?.price?.converted?.effective ??
+                      singleItemDetails?.price?.base?.effective,
                     singleItemDetails?.price?.converted?.currency_symbol ??
                       singleItemDetails?.price?.base?.currency_symbol,
-                    formatLocale(locale, countryCode, true)
+                    formatLocale(locale, countryCode, true),
+                    singleItemDetails?.price?.converted?.currency_code ??
+                      singleItemDetails?.price?.base?.currency_code
                   )}
                 </span>
                 {singleItemDetails?.price?.converted?.effective <
                   singleItemDetails?.price?.converted?.marked && (
                   <span className={styles.markedPrice}>
                     {currencyFormat(
-                      numberWithCommas(
-                        singleItemDetails?.price?.converted?.marked ??
-                          singleItemDetails?.price?.base?.marked
-                      ),
+                      singleItemDetails?.price?.converted?.marked ??
+                        singleItemDetails?.price?.base?.marked,
                       singleItemDetails?.price?.converted?.currency_symbol ??
                         singleItemDetails?.price?.base?.currency_symbol,
-                      formatLocale(locale, countryCode, true)
+                      formatLocale(locale, countryCode, true),
+                      singleItemDetails?.price?.converted?.currency_code ??
+                        singleItemDetails?.price?.base?.currency_code
                     )}
                   </span>
                 )}
@@ -822,8 +822,11 @@ export default function ChipItem({
                     ),
                     sizeModalItemValue?.article?.price?.converted
                       ?.currency_symbol ??
-                      sizeModalItemValue?.article?.price?.base?.effective,
-                    formatLocale(locale, countryCode, true)
+                      sizeModalItemValue?.article?.price?.base?.currency_symbol,
+                    formatLocale(locale, countryCode, true),
+                    sizeModalItemValue?.article?.price?.converted
+                      ?.currency_code ??
+                      sizeModalItemValue?.article?.price?.base?.currency_code
                   )}
                 </div>
               </div>

@@ -73,6 +73,10 @@ function SingleShipmentContent({
     return shipments?.[0]?.items?.[0]?.price?.converted?.currency_symbol || "₹";
   };
 
+  const getCurrencyCode = () => {
+    return shipments?.[0]?.items?.[0]?.price?.converted?.currency_code || null;
+  };
+
   const getMarkedPrice = (articles) => {
     let markedSum = articles.reduce((sum, artcl) => {
       sum += artcl.price.converted.marked;
@@ -82,16 +86,14 @@ function SingleShipmentContent({
       sum += artcl.price.converted.effective;
       return sum;
     }, 0);
-    return markedSum != effective ? numberWithCommas(markedSum) : null;
+    return markedSum != effective ? markedSum : null;
   };
 
   const getEffectivePrice = (articles) => {
-    return numberWithCommas(
-      articles.reduce((sum, artcl) => {
-        sum += artcl.price.converted.effective;
-        return sum;
-      }, 0)
-    );
+    return articles.reduce((sum, artcl) => {
+      sum += artcl.price.converted.effective;
+      return sum;
+    }, 0);
   };
 
   return (
@@ -279,7 +281,9 @@ function SingleShipmentContent({
                                     <div className={styles.effectivePrice}>
                                       {priceFormatCurrencySymbol(
                                         getCurrencySymbol(),
-                                        getEffectivePrice(product?.articles)
+                                        getEffectivePrice(product?.articles),
+                                        undefined,
+                                        getCurrencyCode()
                                       )}
                                     </div>
                                     {!product.item.is_set &&
@@ -288,7 +292,9 @@ function SingleShipmentContent({
                                         <div className={styles.markedPrice}>
                                           {priceFormatCurrencySymbol(
                                             getCurrencySymbol(),
-                                            getMarkedPrice(product?.articles)
+                                            getMarkedPrice(product?.articles),
+                                            undefined,
+                                            getCurrencyCode()
                                           )}
                                         </div>
                                       )}
