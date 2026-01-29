@@ -17,6 +17,7 @@ function loginPassword({
   onForgotPasswordClick = () => {},
   onLoginFormSubmit = () => {},
   isTermsAccepted = false,
+  setShowConsentTooltip = () => {},
 }) {
   const { t } = useGlobalTranslation("translation");
   const usernameInputId = useId();
@@ -85,6 +86,7 @@ function loginPassword({
 
   const handleFormSubmit = ({ username, phone, password }) => {
     if (!isTermsAccepted) {
+      setShowConsentTooltip(true);
       return;
     }
     const data = {
@@ -219,7 +221,7 @@ function loginPassword({
         )}
       </div>
 
-      <button className={styles.loginButton} type="submit" disabled={!isTermsAccepted}>
+      <button className={styles.loginButton} type="submit">
         {translateDynamicLabel(loginButtonText, t) ||
           t("resource.auth.login.login_caps")}
       </button>
