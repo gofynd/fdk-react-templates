@@ -463,6 +463,8 @@ function CouponSuccessModal({
       isOpen={isOpen}
       closeDialog={closeDialog}
       modalType="center-modal"
+      customClassName={styles.couponSuccessModal}
+      customContainerClass = {styles.couponSuccessModalContainerCustom}
       containerClassName={styles.couponSuccessModalContainer}
     >
       <div className={styles.couponSuccessModalContent}>

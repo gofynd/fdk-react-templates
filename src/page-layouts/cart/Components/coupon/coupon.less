@@ -326,8 +326,32 @@
     }
   }
 }
+
+.couponSuccessModalContainerCustom{
+  @media @mobile {
+    width: 272px;
+  } 
+}
+
+.couponSuccessModal {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
 .couponSuccessModalContainer {
   overflow: visible !important;
+  width: 300px ;
+  min-width: 300px ;
+  max-width: 300px ;
+  margin: 0 auto ;
+  
+  @media @mobile {
+    width: 272px !important;
+    min-width: 272px !important;
+    max-width: 272px !important;
+    border-radius: 8px !important;
+  }
 }
 .couponSuccessModalContent {
   position: relative;
@@ -336,14 +360,17 @@
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  @media @desktop {
-    min-width: 400px;
-  }
   background-color: @DialogBackground;
   min-width: 300px;
   border: 1px solid @DividerStokes;
   border-radius: 8px;
   max-height: 720px;
+  
+  @media @mobile {
+    min-width: 272px;
+    width: 272px;
+    max-width: 272px;
+  }
 
   .close-icon {
     position: absolute;
@@ -541,12 +568,10 @@
   .couponDesc {
     width: 100%;
     margin: 0;
-
     font-size: 12px;
     font-weight: 400;
     line-height: 140%;
     color: @TextLabel;
-
     overflow: hidden;
     text-overflow: ellipsis;
   }
@@ -563,7 +588,7 @@
     gap: 12px;
     background-color: @HighlightColor;
     @media @desktop {
-     height: calc(100vh - 210px) !important;
+      height: calc(100vh - 210px) !important;
       overflow-y: auto;
     }
   }
