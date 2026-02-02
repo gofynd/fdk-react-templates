@@ -26,7 +26,7 @@ import TwoGridIcon from "../../assets/images/grid-two.svg";
 import FourGridIcon from "../../assets/images/grid-four.svg";
 import TwoGridMobIcon from "../../assets/images/grid-two-mob.svg";
 import OneGridMobIcon from "../../assets/images/grid-one-mob.svg";
-import { useGlobalTranslation } from "fdk-core/utils";
+import { useGlobalTranslation, useGlobalStore, useFPI } from "fdk-core/utils";
 
 const ProductListing = ({
   breadcrumb = [],
@@ -83,6 +83,8 @@ const ProductListing = ({
 }) => {
   const { t } = useGlobalTranslation("translation");
   const isTablet = useViewport(0, 768);
+  const fpi = useFPI();
+  const { is_serviceable } = useGlobalStore(fpi?.getters?.CUSTOM_VALUE) || {};
   const [isFilterVisible, setIsFilterVisible] = useState(filterToggle);
 
   useEffect(() => {
@@ -347,6 +349,7 @@ const ProductListing = ({
                         handleAddToCart,
                         imgSrcSet,
                         onProductNavigation,
+                        isServiceable: is_serviceable,
                       }}
                     />
                   </InfiniteLoader>
@@ -377,6 +380,7 @@ const ProductListing = ({
                       handleAddToCart,
                       imgSrcSet,
                       onProductNavigation,
+                      isServiceable: is_serviceable,
                     }}
                   />
                 )}
@@ -426,6 +430,7 @@ const ProductListing = ({
                   <AddToCart
                     {...restAddToModalProps}
                     globalConfig={globalConfig}
+                    isServiceable={is_serviceable}
                   />
                 </Modal>
               )}
@@ -493,6 +498,7 @@ function ProductGridItem({
   onWishlistClick = () => {},
   handleAddToCart = () => {},
   onProductNavigation = () => {},
+  isServiceable = true,
 }) {
   const { t } = useGlobalTranslation("translation");
 
@@ -561,6 +567,7 @@ function ProductGridItem({
         imagePlaceholder={imagePlaceholder}
         handleAddToCart={handleAddToCart}
         onClick={onProductNavigation}
+        isServiceable={isServiceable}
       />
     </FDKLink>
   );

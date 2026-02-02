@@ -44,6 +44,7 @@ const AddToCart = ({
   setCurrentFO = () => {},
   availableFOCount,
   getDeliveryPromise,
+  isServiceable = true,
 }) => {
   const fpi = useFPI();
   const [foLoading, setFoLoading] = useState(false);
@@ -406,6 +407,7 @@ const AddToCart = ({
                           addProductForCheckout(event, selectedSize, false)
                         }
                         startIcon={<CartIcon className={styles.cartIcon} />}
+                        disabled={!isServiceable}
                       >
                         {t("resource.cart.add_to_cart_caps")}
                       </FyButton>
@@ -421,6 +423,7 @@ const AddToCart = ({
                       addProductForCheckout(event, selectedSize, true)
                     }
                     startIcon={<BuyNowIcon className={styles.cartIcon} />}
+                    disabled={!isServiceable}
                   >
                     {t("resource.common.buy_now_caps")}
                   </FyButton>

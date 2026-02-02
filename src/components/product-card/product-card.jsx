@@ -68,7 +68,6 @@ const ProductCard = ({
   customImageContainerClass = "",
   imageBackgroundColor = "",
   customeProductDescContainerClass = "",
-
   imagePlaceholder = "",
   columnCount = { desktop: 4, tablet: 3, mobile: 1 },
   WishlistIconComponent = () => <SvgWrapper svgSrc="wishlist-plp" />,
@@ -87,6 +86,7 @@ const ProductCard = ({
   showColorVariants = false,
   isSlider = false,
   onClick = () => {},
+  isServiceable = true,
 }) => {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -426,6 +426,7 @@ const ProductCard = ({
             variant="outlined"
             className={styles.addToCart}
             onClick={handleAddToCartClick}
+            disabled={!isServiceable}
           >
             {actionButtonText ?? t("resource.common.add_to_cart")}
           </FyButton>
