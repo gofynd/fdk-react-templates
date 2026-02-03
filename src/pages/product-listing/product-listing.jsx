@@ -50,6 +50,7 @@ const ProductListing = ({
   isProductOpenInNewTab = false,
   isBrand = true,
   isSaleBadge = true,
+  isCustomBadge = true,
   isPrice = true,
   globalConfig = {},
   imgSrcSet,
@@ -88,7 +89,7 @@ const ProductListing = ({
   const [isFilterVisible, setIsFilterVisible] = useState(filterToggle);
 
   useEffect(() => {
-    setIsFilterVisible(filterToggle)
+    setIsFilterVisible(filterToggle);
   }, [filterToggle]);
   const {
     handleAddToCart,
@@ -238,7 +239,9 @@ const ProductListing = ({
                       onClick={() => setIsFilterVisible(!isFilterVisible)}
                     >
                       <div className={styles.filterToggleText}>
-                        {isFilterVisible ? t("resource.common.hide_filters") : t("resource.common.show_filters")}
+                        {isFilterVisible
+                          ? t("resource.common.hide_filters")
+                          : t("resource.common.show_filters")}
                       </div>
                       <div className={`${styles.filterIcon} `}>
                         <FilterIcon />
@@ -331,6 +334,7 @@ const ProductListing = ({
                         columnCount,
                         isBrand,
                         isSaleBadge,
+                        isCustomBadge,
                         isPrice,
                         aspectRatio,
                         isWishlistIcon,
@@ -361,6 +365,7 @@ const ProductListing = ({
                       columnCount,
                       isBrand,
                       isSaleBadge,
+                      isCustomBadge,
                       isPrice,
                       aspectRatio,
                       isWishlistIcon,
@@ -479,6 +484,7 @@ function ProductGridItem({
   product,
   isBrand = true,
   isSaleBadge = true,
+  isCustomBadge = true,
   isPrice = true,
   isWishlistIcon = true,
   imgSrcSet,
@@ -553,6 +559,7 @@ function ProductGridItem({
         isBrand={isBrand}
         isPrice={isPrice}
         isSaleBadge={isSaleBadge}
+        isCustomBadge={isCustomBadge}
         imgSrcSet={imgSrcSet}
         isWishlistIcon={isWishlistIcon}
         WishlistIconComponent={WishlistIconComponent}
