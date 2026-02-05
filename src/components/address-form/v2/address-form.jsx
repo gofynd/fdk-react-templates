@@ -575,7 +575,12 @@ useEffect(() => {
       setLocalSelectedCountry({ name: event, display_name: event });
     }
     
-    setI18nDetails(event);
+    // Only update header country when adding a new address
+    // When editing, don't change the header country - it should remain as user's preference
+    if (isNewAddress) {
+      setI18nDetails(event);
+    }
+    
     setValue("country", event);
     setTimeout(() => {
       formSchema?.forEach((group) =>
@@ -605,7 +610,7 @@ useEffect(() => {
         setLocalSelectedCountry(initialCountry);
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const selectAddress = (data) => {

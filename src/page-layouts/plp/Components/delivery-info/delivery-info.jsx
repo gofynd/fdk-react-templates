@@ -17,6 +17,7 @@ function DeliveryInfo({
   fulfillmentOptions,
   availableFOCount,
   setFoLoading,
+  mandatoryPincode,
 }) {
   const { t } = useGlobalTranslation("translation");
   const numberRegex = /^\d*$/;
@@ -51,63 +52,71 @@ function DeliveryInfo({
   }, [fulfillmentOptions]);
 
   return (
-    <div className={styles.deliveryInfo}>
-      {!isServiceability && (
-        <>
-          <h4 className={`${styles.deliveryLabel} b2`}>
-            {t("resource.common.address.select_delivery_location")}
-          </h4>
-          <div className={styles.delivery}>
-            <FyInput
-              autoComplete="off"
-              value={pincode}
-              placeholder={t("resource.product.check_delivery_time")}
-              inputClassName={styles.pincodeInput}
-              containerClassName={styles.pincodeInputContainer}
-              maxLength="6"
-              onChange={changePostCode}
-              inputVariant="no-border"
-              type="text"
-            />
-            <FyButton
-              variant="text"
-              className={styles.deliveryAction}
-              onClick={handleDeliveryAction}
-              disabled={pincode?.length !== 6}
-              endIcon={
-                <SvgWrapper svgSrc="delivery" className={styles.deliveryIcon} />
-              }
-            >
-              {t("resource.facets.check")}
-            </FyButton>
-          </div>
-        </>
-      )}
-
-      {!pincodeErrorMessage && availableFOCount === 1 && (
-        <div className={`${styles.deliveryDate} ${styles.dateInfoContainer}`}>
-          {pincodeLoading ? (
-            <Skeleton height={16} width={158} />
-          ) : (
-            tatMessage?.length > 0 && (
-              <>
-                <SvgWrapper
-                  svgSrc="delivery"
-                  className={`${styles.deliveryIcon}`}
+    <>
+      {mandatoryPincode && (
+        <div className={styles.deliveryInfo}>
+          {!isServiceability && (
+            <>
+              <h4 className={`${styles.deliveryLabel} b2`}>
+                {t("resource.common.address.select_delivery_location")}
+              </h4>
+              <div className={styles.delivery}>
+                <FyInput
+                  autoComplete="off"
+                  value={pincode}
+                  placeholder={t("resource.product.check_delivery_time")}
+                  inputClassName={styles.pincodeInput}
+                  containerClassName={styles.pincodeInputContainer}
+                  maxLength="6"
+                  onChange={changePostCode}
+                  inputVariant="no-border"
+                  type="text"
                 />
-                <p className={styles.captionNormal}>{tatMessage}</p>
-              </>
-            )
+                <FyButton
+                  variant="text"
+                  className={styles.deliveryAction}
+                  onClick={handleDeliveryAction}
+                  disabled={pincode?.length !== 6}
+                  endIcon={
+                    <SvgWrapper
+                      svgSrc="delivery"
+                      className={styles.deliveryIcon}
+                    />
+                  }
+                >
+                  {t("resource.facets.check")}
+                </FyButton>
+              </div>
+            </>
+          )}
+
+          {!pincodeErrorMessage && availableFOCount === 1 && (
+            <div
+              className={`${styles.deliveryDate} ${styles.dateInfoContainer}`}
+            >
+              {pincodeLoading ? (
+                <Skeleton height={16} width={158} />
+              ) : (
+                tatMessage?.length > 0 && (
+                  <>
+                    <SvgWrapper
+                      svgSrc="delivery"
+                      className={`${styles.deliveryIcon}`}
+                    />
+                    <p className={styles.captionNormal}>{tatMessage}</p>
+                  </>
+                )
+              )}
+            </div>
+          )}
+          {pincodeErrorMessage && (
+            <div className={`${styles.captionNormal} ${styles.emptyPincode}`}>
+              {pincodeErrorMessage}
+            </div>
           )}
         </div>
       )}
-
-      {pincodeErrorMessage && (
-        <div className={`${styles.captionNormal} ${styles.emptyPincode}`}>
-          {pincodeErrorMessage}
-        </div>
-      )}
-    </div>
+    </>
   );
 }
 

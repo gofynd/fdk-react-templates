@@ -311,7 +311,7 @@ const AddToCart = ({
               </div>
             )}
             {sizes?.sellable && selectedSize && (
-              <DeliveryInfo {...deliverInfoProps} setFoLoading={setFoLoading} />
+              <DeliveryInfo {...deliverInfoProps} setFoLoading={setFoLoading} mandatoryPincode={pageConfig?.mandatory_pincode}  />
             )}
 
             {selectedSize &&

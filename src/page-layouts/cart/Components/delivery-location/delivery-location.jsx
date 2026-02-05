@@ -64,6 +64,7 @@ function DeliveryLocation({
   getFilteredCountries = () => {},
   selectedCountry,
   countryDetails,
+  formKey,
   isGuestUser = false,
   user,
   isNewAddress,
@@ -273,6 +274,7 @@ function DeliveryLocation({
         bodyClassName={styles.addAddressModalBody}
       >
         <AddressForm
+          key={formKey || `${addressItem?.id || 'new'}-${countryDetails?.iso2 || 'default'}`}
           internationalShipping={isInternationalShippingEnabled}
           addressItem={addressItem}
           formSchema={addressFormSchema}
