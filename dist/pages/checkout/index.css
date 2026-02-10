@@ -2727,6 +2727,7 @@ h5,
 @media only screen and (max-width: 480px) {
   .sticky-pay-now__stickyBtnContainer___L7zbD {
     display: block;
+    z-index: 30;
   }
 }
 .sticky-pay-now__stickyBtnContainer1___YFwCC {
@@ -9553,6 +9554,11 @@ h5,
     display: block;
     padding: 0px;
     padding-bottom: 104px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .checkout__mainContainer___sD3Rj {
+    padding-bottom: 100px;
   }
 }
 .checkout__leftContainer___Ov5FK {

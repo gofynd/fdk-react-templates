@@ -295,17 +295,33 @@ export const getLocaleFromCurrency = (currencyCode) => {
  * @returns {string} Formatted currency string
  */
 export const currencyFormat = (value, currencySymbol, locale = "en-IN", currencyCode = null) => {
-  if (value == null || value === "") return "";
+  if (value == null || value === "") {
+    return "";
+  }
 
   // Convert to number if it's a string
-  const num = typeof value === "string" ? parseFloat(value) : value;
-
-  if (Number.isNaN(num)) return "";
+  let num = typeof value === "string" ? parseFloat(value) : value;
+  
+  // Ensure it's a number, not NaN
+  if (Number.isNaN(num)) {
+    return "";
+  }
+  
+  // Convert to number explicitly to handle edge cases
+  num = Number(num);
+  if (Number.isNaN(num)) {
+    return "";
+  }
 
   // If currency code is provided, use it to determine locale
   let finalLocale = locale;
   if (currencyCode) {
     finalLocale = getLocaleFromCurrency(currencyCode);
+  }
+  
+  // Ensure locale is valid, fallback to en-IN if not
+  if (!finalLocale || finalLocale === "en" || finalLocale === "") {
+    finalLocale = "en-IN";
   }
 
   // Determine if we should use Indian numbering system
@@ -338,9 +354,9 @@ export const currencyFormat = (value, currencySymbol, locale = "en-IN", currency
     } else {
       finalResult = formattedValue;
     }
-
+    
     return finalResult;
-  } catch {
+  } catch (error) {
     // Fallback to basic formatting if locale is invalid
     console.warn(
       `Invalid locale "${finalLocale}", falling back to default formatting`
