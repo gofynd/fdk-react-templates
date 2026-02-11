@@ -3123,6 +3123,12 @@ h5,
     z-index: 30;
   }
 }
+@media only screen and (max-width: 768px) {
+  .sticky-pay-now__stickyBtnContainer___L7zbD {
+    display: block;
+    z-index: 30;
+  }
+}
 .sticky-pay-now__stickyBtnContainer1___YFwCC {
   display: flex;
   justify-content: space-between;

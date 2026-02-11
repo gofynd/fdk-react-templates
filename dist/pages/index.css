@@ -523,6 +523,11 @@ h5,
     padding-bottom: 100px;
   }
 }
+@media only screen and (max-width: 768px) {
+  .cart__cartMainContainer___LF2fx .cart__priceBreakupCartWrapper___qmOqm {
+    padding-bottom: 100px;
+  }
+}
 
 /**color by character**/
 /** Font family **/
@@ -7615,10 +7620,10 @@ h5,
   flex-direction: row;
   margin-top: 16px;
   padding: 12px;
+  cursor: pointer;
   background: var(--successBackground, #c2dbc9);
   border-radius: 8px;
   gap: 16px;
-  cursor: pointer;
 }
 .coupon__couponBoxContainer___yJTiZ .coupon__couponApplyBox___HJFgo .coupon__removeIcon___NieyV,
 .coupon__couponBoxContainer___yJTiZ .coupon__couponApplyBox___HJFgo .coupon__arrowIcon___yL8Tb {
@@ -7911,6 +7916,7 @@ h5,
   font-weight: 400;
   line-height: 140%;
 }
+/* ===== Coupon Success Modal ===== */
 @media only screen and (max-width: 480px) {
   .coupon__couponSuccessModalContainerCustom___KGtM7 {
     width: 272px;
@@ -7923,10 +7929,10 @@ h5,
 }
 .coupon__couponSuccessModalContainer___xN3X5 {
   overflow: visible !important;
-  width: 300px ;
-  min-width: 300px ;
-  max-width: 300px ;
-  margin: 0 auto ;
+  width: 300px;
+  min-width: 300px;
+  max-width: 300px;
+  margin: 0 auto;
 }
 @media only screen and (max-width: 480px) {
   .coupon__couponSuccessModalContainer___xN3X5 {
@@ -7937,10 +7943,10 @@ h5,
   }
 }
 .coupon__couponSuccessModalContent___TUDzT {
-  position: relative;
-  padding: 16px 16px 12px 16px;
+  padding-top: 40px;
   display: flex;
   align-items: center;
+  overflow: visible !important;
   flex-direction: column;
   justify-content: center;
   background-color: var(--dialogBackground, #fff);
@@ -7948,6 +7954,7 @@ h5,
   border: 1px solid var(--dividerStokes, #d4d1d1);
   border-radius: 8px;
   max-height: 720px;
+  min-height: 275px;
 }
 @media only screen and (max-width: 480px) {
   .coupon__couponSuccessModalContent___TUDzT {
@@ -7964,16 +7971,29 @@ h5,
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 3;
 }
 .coupon__couponSuccessModalContent___TUDzT .coupon__couponSuccessGif___cMoJ1 {
   position: absolute;
   height: 100%;
   width: 100%;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
 }
 .coupon__couponSuccessModalContent___TUDzT .coupon__couponSuccessIcon___ghwlx {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: absolute;
+  top: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+.coupon__couponSuccessModalContent___TUDzT .coupon__couponSuccessIcon___ghwlx > span {
+  position: relative;
+  display: inline-flex;
 }
 .coupon__couponSuccessModalContent___TUDzT .coupon__modalBody___vZ3YF {
   margin-top: 8px;
@@ -7984,6 +8004,7 @@ h5,
   align-items: center;
   text-align: center;
   gap: 4px;
+  z-index: 1;
 }
 .coupon__couponSuccessModalContent___TUDzT .coupon__modalBody___vZ3YF .coupon__couponValueSubheading___T7m43 {
   color: var(--textBody, #3c3131);
@@ -8009,13 +8030,16 @@ h5,
   font-size: 12px;
   font-weight: 600;
   line-height: 140%;
-  text-transform: uppercase;
-  padding: 4px;
+  font-size: 14px;
   color: var(--buttonLink, #b1655b);
   background: var(--dialogBackground, #fff);
-  text-transform: capitalize;
   cursor: pointer;
   border: none;
+  z-index: 1;
+  text-transform: capitalize;
+  position: relative;
+  padding-top: 20px;
+  margin-top: 20px;
 }
 @media only screen and (max-width: 480px), only screen and (max-width: 768px) {
   .coupon__couponModalContainerOuter___FUSIt {
@@ -13901,7 +13925,14 @@ h5,
 @media only screen and (max-width: 768px) {
   .sticky-footer__stickyFooter___vhgUO {
     display: block;
-    margin-top: 12px;
+    position: fixed;
+    position: -webkit-fixed;
+    bottom: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
+    z-index: 30;
+    box-shadow: 0px -4px 12px 0px rgba(0, 0, 0, 0.06);
+    border-top: 1px solid var(--dividerStokes, #d4d1d1);
   }
 }
 .sticky-footer__stickyFooter___vhgUO .sticky-footer__nccStickyBtn___QWGhh {
@@ -36635,6 +36666,12 @@ h5,
   box-shadow: 0px -4px 12px 0px rgba(0, 0, 0, 0.06);
 }
 @media only screen and (max-width: 480px) {
+  .sticky-pay-now__stickyBtnContainer___L7zbD {
+    display: block;
+    z-index: 30;
+  }
+}
+@media only screen and (max-width: 768px) {
   .sticky-pay-now__stickyBtnContainer___L7zbD {
     display: block;
     z-index: 30;

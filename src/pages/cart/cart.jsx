@@ -141,11 +141,11 @@ const Cart = ({
             <Comment {...cartCommentProps} />
             {isGstInput && <GstCard {...cartGstProps} key={cartData} />}
             <div className={styles.priceBreakupCartWrapper}>
-              <PriceBreakup
-                breakUpValues={breakUpValues?.display || []}
-                cartItemCount={cartItemsArray?.length || 0}
-                currencySymbol={currencySymbol}
-              />
+            <PriceBreakup
+              breakUpValues={breakUpValues?.display || []}
+              cartItemCount={cartItemsArray?.length || 0}
+              currencySymbol={currencySymbol}
+            />
             </div>
             {isPlacingForCustomer && isLoggedIn && (
               <div className={styles.checkoutContainer}>

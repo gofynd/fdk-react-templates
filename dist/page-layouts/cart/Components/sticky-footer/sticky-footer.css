@@ -361,7 +361,14 @@ h5,
 @media only screen and (max-width: 768px) {
   .sticky-footer__stickyFooter___vhgUO {
     display: block;
-    margin-top: 12px;
+    position: fixed;
+    position: -webkit-fixed;
+    bottom: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
+    z-index: 30;
+    box-shadow: 0px -4px 12px 0px rgba(0, 0, 0, 0.06);
+    border-top: 1px solid var(--dividerStokes, #d4d1d1);
   }
 }
 .sticky-footer__stickyFooter___vhgUO .sticky-footer__nccStickyBtn___QWGhh {
