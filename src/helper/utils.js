@@ -66,7 +66,8 @@ export function convertDate(dateString, locale = "en-US") {
   const date = new Date(dateString);
 
   // Use browser's local timezone with fallback to UTC
-  const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+  const browserTimezone =
+    Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
 
   const options = {
     month: "long",
@@ -131,7 +132,8 @@ export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
       return "Invalid date";
     }
 
-    const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+    const browserTimezone =
+      Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
     // console.log("🌐 Detected browser time zone →", browserTimezone);
 
     const options = {
@@ -151,7 +153,6 @@ export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
     return "Invalid date";
   }
 };
-
 
 export function validateEmailField(value) {
   const emailPattern =
@@ -294,19 +295,24 @@ export const getLocaleFromCurrency = (currencyCode) => {
  * @param {string} currencyCode - Currency code (e.g., 'USD', 'AED', 'INR') - used to override locale if provided
  * @returns {string} Formatted currency string
  */
-export const currencyFormat = (value, currencySymbol, locale = "en-IN", currencyCode = null) => {
+export const currencyFormat = (
+  value,
+  currencySymbol,
+  locale = "en-IN",
+  currencyCode = null
+) => {
   if (value == null || value === "") {
     return "";
   }
 
   // Convert to number if it's a string
   let num = typeof value === "string" ? parseFloat(value) : value;
-  
+
   // Ensure it's a number, not NaN
   if (Number.isNaN(num)) {
     return "";
   }
-  
+
   // Convert to number explicitly to handle edge cases
   num = Number(num);
   if (Number.isNaN(num)) {
@@ -318,14 +324,15 @@ export const currencyFormat = (value, currencySymbol, locale = "en-IN", currency
   if (currencyCode) {
     finalLocale = getLocaleFromCurrency(currencyCode);
   }
-  
+
   // Ensure locale is valid, fallback to en-IN if not
   if (!finalLocale || finalLocale === "en" || finalLocale === "") {
     finalLocale = "en-IN";
   }
 
   // Determine if we should use Indian numbering system
-  const isIndianLocale = finalLocale === "en-IN" || finalLocale?.startsWith("en-IN");
+  const isIndianLocale =
+    finalLocale === "en-IN" || finalLocale?.startsWith("en-IN");
 
   try {
     // Use Intl.NumberFormat for locale-aware formatting
@@ -354,7 +361,7 @@ export const currencyFormat = (value, currencySymbol, locale = "en-IN", currency
     } else {
       finalResult = formattedValue;
     }
-    
+
     return finalResult;
   } catch (error) {
     // Fallback to basic formatting if locale is invalid
@@ -371,7 +378,6 @@ export const currencyFormat = (value, currencySymbol, locale = "en-IN", currency
     return formattedValue;
   }
 };
-
 
 export const getReviewRatingData = function (customMeta) {
   const data = {};
@@ -477,7 +483,12 @@ export function deepEqual(obj1, obj2) {
  * @param {string} currencyCode - Currency code (e.g., 'USD', 'AED', 'INR') - used to override locale if provided
  * @returns {string} Formatted price string with currency symbol
  */
-export function priceFormatCurrencySymbol(symbol, price = 0, locale = "en-IN", currencyCode = null) {
+export function priceFormatCurrencySymbol(
+  symbol,
+  price = 0,
+  locale = "en-IN",
+  currencyCode = null
+) {
   if (price == null || price === "") return "";
 
   // Convert to number if it's a string
@@ -495,7 +506,8 @@ export function priceFormatCurrencySymbol(symbol, price = 0, locale = "en-IN", c
   }
 
   // Determine if we should use Indian numbering system
-  const isIndianLocale = finalLocale === "en-IN" || finalLocale?.startsWith("en-IN");
+  const isIndianLocale =
+    finalLocale === "en-IN" || finalLocale?.startsWith("en-IN");
 
   try {
     // Use Intl.NumberFormat for locale-aware formatting
@@ -579,7 +591,9 @@ export const formatLocale = (locale, countryCode, isCurrencyLocale = false) => {
   if (locale === "en" || !locale) {
     return DEFAULT_UTC_LOCALE;
   }
-  const finalLocale = locale.includes("-") ? locale : `${locale}${countryCode ? "-" + countryCode : ""}`;
+  const finalLocale = locale.includes("-")
+    ? locale
+    : `${locale}${countryCode ? "-" + countryCode : ""}`;
 
   return isValidLocale(finalLocale) ? finalLocale : DEFAULT_UTC_LOCALE;
 };
@@ -590,10 +604,7 @@ export const translateValidationMessages = (validationObject, t) => {
   Object.keys(updatedValidation).forEach((key) => {
     const rule = updatedValidation[key];
 
-    if (
-      typeof rule === "object" &&
-      rule.message
-    ) {
+    if (typeof rule === "object" && rule.message) {
       rule.message = translateDynamicLabel(rule.message, t);
     } else if (typeof rule === "string") {
       updatedValidation[key] = translateDynamicLabel(rule, t);
@@ -774,7 +785,7 @@ export const getUserPrimaryPhone = (user) => {
 
   return {
     mobile,
-    countryCode
+    countryCode,
   };
 };
 
@@ -850,4 +861,13 @@ export const getConfigFromProps = (props) => {
 
   // Handle direct object props
   return props;
+};
+
+export const formatDeliveryAddress = (d = {}) => {
+  const line1 = [d.address, d.area].filter(Boolean).join(" ").trim();
+  const line2 = d.landmark?.trim() || "";
+  const line3 = [d.city, [d.state, d.pincode].filter(Boolean).join(" ")].filter(Boolean).join(", ").trim();
+  const line4 = d.country?.trim() || "";
+
+  return [line1, line2, line3, line4].filter(Boolean).join(",\n");
 };
