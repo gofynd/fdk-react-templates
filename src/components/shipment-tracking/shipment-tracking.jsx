@@ -29,6 +29,7 @@ function ShipmentTracking({
   shipmentInfo = {},
   changeinit,
   invoiceDetails,
+  customNeedHelpLink,
   availableFOCount,
   bagLength = 0,
   onAddToCart,
@@ -62,6 +63,13 @@ function ShipmentTracking({
         link: shipmentInfo?.track_url ? shipmentInfo?.track_url : "",
       });
     }
+    // if (shipmentInfo?.need_help_url) {
+    //   arrLinks.push({
+    //     type: "internal",
+    //     text: t("resource.common.need_help"),
+    //     link: "/faq/" || shipmentInfo?.need_help_url,
+    //   });
+    // }
     if (shipmentInfo?.need_help_url) {
       arrLinks.push({
         type: "internal",
@@ -87,6 +95,12 @@ function ShipmentTracking({
         link: invoiceDetails?.presigned_url,
       });
     }
+    arrLinks.push({
+      type: "internal",
+      text: t("resource.common.need_help"),
+      newTab: !!customNeedHelpLink?.value,
+      link: customNeedHelpLink?.value || "/faq/",
+    });
     return arrLinks;
   };
 
@@ -119,8 +133,8 @@ function ShipmentTracking({
         // Find the base bag for bundles, otherwise use first bag
         const selectedBag = isBundleItem
           ? shipmentInfo.bags.find(
-              (bag) => bag?.bundle_details?.is_base === true
-            ) || firstBag
+            (bag) => bag?.bundle_details?.is_base === true
+          ) || firstBag
           : firstBag;
 
         const bagId = selectedBag?.id;
@@ -131,7 +145,7 @@ function ShipmentTracking({
         const finalLink = `/profile/orders/shipment/update/${shipmentInfo?.shipment_id}/${updateType()?.toLowerCase()}`;
         navigate(
           finalLink +
-            (querParams?.toString() ? `?${querParams.toString()}` : "")
+          (querParams?.toString() ? `?${querParams.toString()}` : "")
         );
       } else {
         // Multiple bags OR bundle with allow_partial_return: true - show selection UI
@@ -147,7 +161,11 @@ function ShipmentTracking({
         handleBuyAgain(item.productSlug);
       }
     } else {
-      navigate(item?.link);
+      if (item?.newTab) {
+        window.open(item?.link, "_blank");
+      } else {
+        navigate(item?.link);
+      }
     }
   };
 
@@ -178,9 +196,8 @@ function ShipmentTracking({
         {tracking?.map((item, index) => (
           <div
             key={index}
-            className={`${styles.trackItem} ${item?.is_current || item?.is_passed ? styles.title : ""} ${
-              item?.status === "In Transit" ? styles.detailedTracking : ""
-            }`}
+            className={`${styles.trackItem} ${item?.is_current || item?.is_passed ? styles.title : ""} ${item?.status === "In Transit" ? styles.detailedTracking : ""
+              }`}
           >
             {item?.status === "In Transit" &&
               (item?.is_current?.toString() || item?.is_passed?.toString()) && (
@@ -202,12 +219,12 @@ function ShipmentTracking({
                         (item?.is_current || item?.is_passed) &&
                         showDetailedTracking
                       ) && (
-                        <></>
-                        // <SvgWrapper
-                        //   className={`${styles.dropdownaArow}`}
-                        //   svgSrc="dropdown-arrow"
-                        // />
-                      )}
+                          <></>
+                          // <SvgWrapper
+                          //   className={`${styles.dropdownaArow}`}
+                          //   svgSrc="dropdown-arrow"
+                          // />
+                        )}
                       {(item?.is_current || item?.is_passed) &&
                         showDetailedTracking && (
                           <></>
