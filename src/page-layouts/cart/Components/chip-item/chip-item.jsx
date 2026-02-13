@@ -4,7 +4,6 @@ import * as styles from "./chip-item.less";
 import {
   currencyFormat,
   formatLocale,
-  numberWithCommas,
   translateDynamicLabel,
 } from "../../../../helper/utils";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
@@ -590,29 +589,13 @@ export default function ChipItem({
             </div>
             <div className={styles.itemTotalContainer}>
               <div className={styles.itemPrice}>
-                {(() => {
-                  const rawPrice = singleItemDetails?.price;
-                  const finalPrice =
-                    singleItemDetails?.price?.converted?.final_price ??
-                    singleItemDetails?.price?.base?.final_price;
-                  const afterCommas = numberWithCommas(finalPrice);
-                  console.log("[ChipItem price debug]", {
-                    "singleItemDetails.price (raw from API)": rawPrice,
-                    "final_price (converted ?? base)": finalPrice,
-                    "after numberWithCommas": afterCommas,
-                    "typeof finalPrice": typeof finalPrice,
-                  });
-                  return null;
-                })()}
                 <span
                   className={`${styles.effectivePrice} ${isOutOfStock ? styles.outOfStock : ""
                     }`}
                 >
                   {currencyFormat(
-                    numberWithCommas(
-                      singleItemDetails?.price?.converted?.final_price ??
-                      singleItemDetails?.price?.base?.final_price
-                    ),
+                    singleItemDetails?.price?.converted?.final_price ??
+                    singleItemDetails?.price?.base?.final_price,
                     singleItemDetails?.price?.converted?.currency_symbol ??
                     singleItemDetails?.price?.base?.currency_symbol,
                     formatLocale(locale, countryCode, true),
@@ -829,11 +812,8 @@ export default function ChipItem({
                 </div>
                 <div className={styles.sizeDiscount}>
                   {currencyFormat(
-                    numberWithCommas(
-                      sizeModalItemValue?.article?.price?.converted
-                        ?.effective ??
-                      sizeModalItemValue?.article?.price?.base?.effective
-                    ),
+                    sizeModalItemValue?.article?.price?.converted?.effective ??
+                    sizeModalItemValue?.article?.price?.base?.effective,
                     sizeModalItemValue?.article?.price?.converted
                       ?.currency_symbol ??
                     sizeModalItemValue?.article?.price?.base?.currency_symbol,
