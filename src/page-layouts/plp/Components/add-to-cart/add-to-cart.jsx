@@ -28,7 +28,6 @@ import {
 } from "fdk-core/utils";
 import Skeleton from "../../../../components/core/skeletons/skeleton";
 
-
 const AddToCart = ({
   productData = {},
   globalConfig = {},
@@ -459,88 +458,44 @@ const AddToCart = ({
                 setSlug={handleSlugChange}
               />
             )}
+
             {showMoq && productData?.product?.moq && (
               <B2bMOQWrapper productDetails={productData} />
             )}
+
             {selectedSize &&
               !!fulfillmentOptions.length &&
               availableFOCount > 1 && (
                 <div className={styles.fulfillmentWrapper}>
                   <div className={styles.foList}>
-                    {fulfillmentOptions.map((foItem, index) => (
-                      <FullfillmentOption
-                        key={index}
-                        foItem={foItem}
-                        fulfillmentOptions={fulfillmentOptions}
-                        currentFO={currentFO}
-                        setCurrentFO={setCurrentFO}
-                        getDeliveryPromise={getDeliveryPromise}
-                      />
-                    ))}
+                    {foLoading
+                      ? fulfillmentOptions.map((_, index) => (
+                        <div key={`fo-skeleton-${index}`} className={styles.fulfillmentOption}>
+                          <div style={{ width: "20px" }} className={styles.foIcon}>
+                            <Skeleton height={18} width={18} />
+                          </div>
+                          <div style={{ display: "flex", flexDirection: "column", gap: "4px", width: "100%" }}>
+                            <Skeleton height={14} width={200} />
+                            <Skeleton height={12} width={120} />
+                          </div>
+                        </div>
+                      ))
+                      : fulfillmentOptions.map((foItem, index) => (
+                        <FullfillmentOption
+                          key={index}
+                          foItem={foItem}
+                          fulfillmentOptions={fulfillmentOptions}
+                          currentFO={currentFO}
+                          setCurrentFO={setCurrentFO}
+                          getDeliveryPromise={getDeliveryPromise}
+                        />
+                      ))}
                   </div>
                 </div>
               )}
-          </div>
 
-          {sizeError && (
-            <div className={styles.sizeError}>
-              {t("resource.product.please_select_size")}
-            </div>
-          )}
-          {sizes?.sellable && selectedSize && (
-            <DeliveryInfo {...deliverInfoProps} setFoLoading={setFoLoading} mandatoryPincode={pageConfig?.mandatory_pincode} />
-          )
-          }
-
-          {
-            selectedSize &&
-            !!fulfillmentOptions.length &&
-            availableFOCount > 1 && (
-              <div className={styles.fulfillmentWrapper}>
-                <div className={styles.foList}>
-                  {foLoading
-                    ? fulfillmentOptions.map((_, index) => (
-                      <div
-                        key={`fo-skeleton-${index}`}
-                        className={styles.fulfillmentOption}
-                      >
-                        <div
-                          style={{ width: "20px" }}
-                          className={styles.foIcon}
-                        >
-                          <Skeleton height={18} width={18} />
-                        </div>
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: "4px",
-                            width: "100%",
-                          }}
-                        >
-                          <Skeleton height={14} width={200} />
-                          <Skeleton height={12} width={120} />
-                        </div>
-                      </div>
-                    ))
-                    : fulfillmentOptions.map((foItem, index) => (
-                      <FullfillmentOption
-                        key={index}
-                        foItem={foItem}
-                        fulfillmentOptions={fulfillmentOptions}
-                        currentFO={currentFO}
-                        setCurrentFO={setCurrentFO}
-                        getDeliveryPromise={getDeliveryPromise}
-                      />
-                    ))}
-                </div>
-              </div>
-            )
-          }
-
-          {/* ---------- Size Container ---------- */}
-          {
-            isSizeSelectionBlock && (
+            {/* ---------- Size Container ---------- */}
+            {isSizeSelectionBlock && (
               <div className={styles.sizeSelection}>
                 {(isChildDetailsAvailable || !isSizeCollapsed) && (
                   <div className={styles.sizeHeaderContainer}>
@@ -697,11 +652,9 @@ const AddToCart = ({
                   </div>
                 )}
               </div>
-            )
-          }
-          {/* ---------- Size Dropdown And Action Buttons ---------- */}
-          {
-            !isSizeSelectionBlock && (
+            )}
+            {/* ---------- Size Dropdown And Action Buttons ---------- */}
+            {!isSizeSelectionBlock && (
               <div
                 className={`${styles.sizeCartContainer} ${showQuantityController ? styles.withQuantityWrapper : ""}`}
               >
@@ -812,56 +765,49 @@ const AddToCart = ({
                     </FyButton>
                   )}
               </div>
-            )
-          }
-          {
-            !isSizeSelectionBlock &&
-            productData.productPrice?._custom_json?.child_details &&
-            selectedSize && (
-              <div className={styles.childDetailsContainer}>
-                {productData.productPrice._custom_json.child_details.map(
-                  (child, index) => {
-                    const childSize = extractSizeFromSellerIdentifier(
-                      child.seller_identifier
-                    );
-                    return (
-                      <div key={index} className={styles.childDetailBox}>
-                        <span className={styles.childSize}>{childSize}</span>
-                        <span className={styles.childSeparator}>-</span>
-                        <span className={styles.childQuantity}>
-                          {child.required_quantity} Pcs
-                        </span>
-                      </div>
-                    );
-                  }
-                )}
-              </div>
-            )
-          }
-          {
-            sizeError && (
+            )}
+            {!isSizeSelectionBlock &&
+              productData.productPrice?._custom_json?.child_details &&
+              selectedSize && (
+                <div className={styles.childDetailsContainer}>
+                  {productData.productPrice._custom_json.child_details.map(
+                    (child, index) => {
+                      const childSize = extractSizeFromSellerIdentifier(
+                        child.seller_identifier
+                      );
+                      return (
+                        <div key={index} className={styles.childDetailBox}>
+                          <span className={styles.childSize}>{childSize}</span>
+                          <span className={styles.childSeparator}>-</span>
+                          <span className={styles.childQuantity}>
+                            {child.required_quantity} Pcs
+                          </span>
+                        </div>
+                      );
+                    }
+                  )}
+                </div>
+              )}
+            {sizeError && (
               <div className={styles.sizeError}>
                 {t("resource.product.please_select_size")}
               </div>
-            )
-          }
-          {
-            sizes?.sellable && selectedSize && (
+            )}
+            {sizes?.sellable && selectedSize && (
               <DeliveryInfo {...deliverInfoProps} />
-            )
-          }
+            )}
 
-          <div className={styles.viewMore}>
-            <span onClick={handleViewMore}>
-              {t("resource.product.view_full_details")}
-            </span>
+            <div className={styles.viewMore}>
+              <span onClick={handleViewMore}>
+                {t("resource.product.view_full_details")}
+              </span>
+            </div>
           </div>
-        </div >
-        {/* ---------- Buy Now and Add To Cart ---------- */}
-        < div className={styles.actionButtons} >
-          {!disable_cart && sizes?.sellable && (
-            <>
-              {/* {button_options?.includes("addtocart") && (
+          {/* ---------- Buy Now and Add To Cart ---------- */}
+          <div className={styles.actionButtons}>
+            {!disable_cart && sizes?.sellable && (
+              <>
+                {/* {button_options?.includes("addtocart") && (
                   <>
                     {selectedItemDetails?.quantity && show_quantity_control ? (
                       <QuantityControl
@@ -922,8 +868,6 @@ const AddToCart = ({
                             ? styles.buttonSecondary
                             : styles.fullWidthButton
                         }
-                        startIcon={<CartIcon className={styles.cartIcon} />}
-                        disabled={!isServiceable}
                       >
                         {t("resource.cart.add_to_cart_caps")}
                       </FyButton>
@@ -931,63 +875,61 @@ const AddToCart = ({
                   </>
                 )} */}
 
-              <FyButton
-                variant={showBuyNowButton ? "contained" : "outlined"}
-                size="medium"
-                onClick={() => {
-                  handleClose();
-                  navigate("/cart/bag");
-                }}
-                disabled={productData?.selectedQuantity === 0}
-                startIcon={
-                  <CartIcon
-                    className={`${styles.cartIcon} ${showBuyNowButton ? styles.fillSecondary : ""
-                      }`}
-                  />
-                }
-                className={
-                  !showBuyNowButton
-                    ? styles.fullWidthButton
-                    : styles.buttonSecondary
-                }
-              >
-                {t("resource.b2b.components.size_wrapper.go_to_cart")}
-              </FyButton>
-
-              {showBuyNowButton && button_options?.includes("buynow") && (
                 <FyButton
-                  className={styles.buyNow}
-                  variant="contained"
+                  variant={showBuyNowButton ? "contained" : "outlined"}
                   size="medium"
-                  onClick={(event) =>
-                    addProductForCheckout(
-                      event,
-                      selectedSize,
-                      true,
-                      setIsCartLoading,
-                      showQuantityController
-                        ? productData?.selectedQuantity
-                        : 0
-                    )
+                  onClick={() => {
+                    handleClose();
+                    navigate("/cart/bag");
+                  }}
+                  disabled={productData?.selectedQuantity === 0}
+                  startIcon={
+                    <CartIcon
+                      className={`${styles.cartIcon} ${showBuyNowButton ? styles.fillSecondary : ""
+                        }`}
+                    />
                   }
-                  startIcon={<BuyNowIcon className={styles.cartIcon} />}
-                  disabled={!isServiceable}
+                  className={
+                    !showBuyNowButton
+                      ? styles.fullWidthButton
+                      : styles.buttonSecondary
+                  }
                 >
-                  {t("resource.common.buy_now_caps")}
+                  {t("resource.b2b.components.size_wrapper.go_to_cart")}
                 </FyButton>
-              )}
-            </>
-          )}
-          {
-            !sizes?.sellable && (
+
+                {showBuyNowButton && button_options?.includes("buynow") && (
+                  <FyButton
+                    className={styles.buyNow}
+                    variant="contained"
+                    size="medium"
+                    onClick={(event) =>
+                      addProductForCheckout(
+                        event,
+                        selectedSize,
+                        true,
+                        setIsCartLoading,
+                        showQuantityController
+                          ? productData?.selectedQuantity
+                          : 0
+                      )
+                    }
+                    startIcon={<BuyNowIcon className={styles.cartIcon} />}
+                  >
+                    {t("resource.common.buy_now_caps")}
+                  </FyButton>
+                )}
+              </>
+            )}
+            {!sizes?.sellable && (
               <FyButton variant="outlined" disabled size="medium">
                 {t("resource.common.product_not_available")}
               </FyButton>
-            )
-          }
-        </div >
-      </div >
-    </div >
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
