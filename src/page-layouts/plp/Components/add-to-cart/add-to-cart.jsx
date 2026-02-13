@@ -480,70 +480,8 @@ const AddToCart = ({
                   </div>
                 </div>
               )}
-
-            <div className={styles.sizeSelection__wrapper}>
-              {sizes?.sizes?.map((size) => (
-                <button
-                  type="button"
-                  key={`${size?.display}`}
-                  className={`${styles.b2} ${styles.sizeSelection__block} ${size.quantity === 0 &&
-                    !isMto &&
-                    styles["sizeSelection__block--disable"]
-                    } ${(size?.quantity !== 0 || isMto) &&
-                    styles["sizeSelection__block--selectable"]
-                    } ${selectedSize === size?.value &&
-                    styles["sizeSelection__block--selected"]
-                    } `}
-                  title={size?.value}
-                  onClick={() => onSizeSelection(size?.value)}
-                >
-                  {size?.display}
-                  {size?.quantity === 0 && !isMto && (
-                    <svg>
-                      <line x1="0" y1="100%" x2="100%" y2="0" />
-                    </svg>
-                  )}
-                </button>
-              ))}
-            </div>
           </div>
 
-          {/* ---------- Size Dropdown And Action Buttons ---------- */}
-          {!isSizeSelectionBlock && !isSizeCollapsed && (
-            <div className={styles.sizeCartContainer}>
-              <FyDropdown
-                options={sizes?.sizes || []}
-                value={selectedSize}
-                onChange={onSizeSelection}
-                placeholder={t("resource.common.select_size_caps")}
-                valuePrefix={`${t("resource.common.size")}:`}
-                dataKey="value"
-                containerClassName={styles.dropdownContainer}
-                dropdownListClassName={styles.dropdown}
-                valueClassName={styles.sizeValue}
-                disabledOptions={disabledSizeOptions}
-                disabledOptionClassName={styles.disabledOption}
-                disableSearch={true}
-              />
-              {pageConfig?.show_size_guide &&
-                // isSizeGuideAvailable() &&
-                sizes?.sellable && (
-                  <FyButton
-                    variant="text"
-                    onClick={handleShowSizeGuide}
-                    className={styles["product__size--guide"]}
-                    endIcon={
-                      <SvgWrapper
-                        svgSrc="scale"
-                        className={styles.scaleIcon}
-                      />
-                    }
-                  >
-                    {t("resource.common.size_guide")}
-                  </FyButton>
-                )}
-            </div>
-          )}
           {sizeError && (
             <div className={styles.sizeError}>
               {t("resource.product.please_select_size")}
