@@ -5572,7 +5572,7 @@ h5,
   position: absolute;
   transform: translateY(-50%) scale(0.9);
   z-index: 1;
-  background: #ffffff;
+  background: var(--pageBackground, #f8f8f8);
   padding: 0 0.3rem;
   margin: 0 0.5rem;
   font-size: 0.8rem;
@@ -18966,11 +18966,6 @@ h5,
   font-size: 14px;
   color: var(--textBody, #3c3131);
 }
-.range-slider__CustomRangeSlider___Uo_rw .range-slider__postfix___lbLy1 {
-  margin-left: 4px;
-  font-size: 14px;
-  color: var(--textBody, #3c3131);
-}
 .range-slider__CustomRangeSlider___Uo_rw .range-slider__inputContainer___pyXpE {
   display: flex;
   justify-content: space-between;
@@ -22902,9 +22897,6 @@ h5,
     font-size: 12px;
     letter-spacing: -0.24px;
   }
-}
-.add-to-cart__productDescContainer___w6xlt .add-to-cart__right___AYndS .add-to-cart__productInfo___AyYit .add-to-cart__product___Hqonr .add-to-cart__viewMore___WNyrJ:hover {
-  color: var(--buttonPrimaryL1, #71653a);
 }
 .add-to-cart__productDescContainer___w6xlt .add-to-cart__right___AYndS .add-to-cart__productInfo___AyYit .add-to-cart__product___Hqonr .add-to-cart__viewMore___WNyrJ:hover {
   color: var(--buttonPrimaryL1, #71653a);
@@ -27472,6 +27464,7 @@ h5,
   border: 1px solid var(--dividerStokes, #d4d1d1);
   min-width: 100px;
   vertical-align: middle;
+  color: var(--textBody, #3c3131);
 }
 @media only screen and (max-width: 480px) {
   .size-guide__sizeTable___z4s0f .size-guide__sizeRow___wxDRV .size-guide__sizeCell___dnrbd {
@@ -47196,12 +47189,8 @@ h5,
 .contact-us__flex_item___zn3y0 .contact-us__form_row___pPufV {
   width: 100%;
 }
-.contact-us__flex_item___zn3y0 .contact-us__form_row___pPufV .contact-us__lableText___fZHMc {
-  background-color: var(--pageBackground, #f8f8f8);
-}
 .contact-us__flex_item___zn3y0 .contact-us__form_row___pPufV .contact-us__inputPlaceholder___ZxiQM {
   padding: 16px;
-  background-color: var(--themeAccentL5, #fff);
 }
 .contact-us__flex_item___zn3y0 .contact-us__form_row___pPufV .contact-us__inputPlaceholder___ZxiQM input::placeholder {
   color: var(--textSecondary, #9c9c9c);
