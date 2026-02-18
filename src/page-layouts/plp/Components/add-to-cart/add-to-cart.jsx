@@ -85,12 +85,28 @@ const AddToCart = ({
     return merchant_data?.[keyName] === "approved";
   };
 
+  const shouldDebugQty =
+    typeof window !== "undefined" &&
+    (window.__PLP_QTY_DEBUG__ === true ||
+      window.localStorage?.getItem("plp_qty_debug") === "1");
+  const logQtyDebug = (...args) => {
+    if (shouldDebugQty) {
+      if (
+        typeof window !== "undefined" &&
+        window.localStorage?.getItem("plp_qty_breakpoint") === "1"
+      ) {
+        debugger;
+      }
+      console.log("[PLP_QTY_DEBUG][FirestoneAddToCart]", ...args);
+    }
+  };
+
   // useEffect(() => {
   // onSizeSelection(selectedSize);
   // }, [selectedSize, productData?.product?.slug]);
 
   const cartQuantity = useMemo(() => {
-    return productData?.selectedQuantity;
+    return productData?.selectedQuantity ?? 0;
   }, [productData?.selectedQuantity]);
 
   const totalAvailableQuantity =
@@ -246,6 +262,13 @@ const AddToCart = ({
   };
 
   const updateQuantity = (newQuantity) => {
+    logQtyDebug("updateQuantity", {
+      newQuantity,
+      selectedSize,
+      selectedQuantityFromHook: productData?.selectedQuantity,
+      localQuantityBefore: quantity,
+      cartQuantity,
+    });
     setQuantity(newQuantity);
   };
 
@@ -259,11 +282,30 @@ const AddToCart = ({
     setQuantityError({ hasError: false, message: "" });
     const error = validateQuantity(inputValue);
     setQuantityError(error);
+    logQtyDebug("showWarningForInvalidInput", {
+      inputValue,
+      error,
+      selectedSize,
+      selectedQuantityFromHook: productData?.selectedQuantity,
+      localQuantity: quantity,
+      cartQuantity,
+      pincode: deliverInfoProps?.pincode,
+      pincodeErrorMessage: deliverInfoProps?.pincodeErrorMessage,
+    });
   };
 
   useEffect(() => {
     if (selectedSize) {
+      logQtyDebug("selectedSize_changed_reset_local_qty", {
+        selectedSize,
+        selectedQuantityFromHook: productData?.selectedQuantity,
+        localQuantityBefore: quantity,
+        cartQuantity,
+        pincode: deliverInfoProps?.pincode,
+        pincodeErrorMessage: deliverInfoProps?.pincodeErrorMessage,
+      });
       setQuantity(0);
+      setHasAddedToCart(false);
       // Show out of stock error if product is out of stock
       if (isOutOfStock) {
         setQuantityError({ hasError: true, message: "Out of stock" });
@@ -291,7 +333,34 @@ const AddToCart = ({
     }
   }, [selectedSize]);
 
-  console.log("fulfillmentOptions", fulfillmentOptions);
+  useEffect(() => {
+    logQtyDebug("state_snapshot", {
+      slug,
+      selectedSize,
+      selectedQuantityFromHook: productData?.selectedQuantity,
+      localQuantity: quantity,
+      displayedCount: productData?.selectedQuantity ?? quantity,
+      cartQuantity,
+      pincode: deliverInfoProps?.pincode,
+      pincodeErrorMessage: deliverInfoProps?.pincodeErrorMessage,
+      isOutOfStock,
+      isCartUpdating,
+      isCartLoading,
+    });
+  }, [
+    slug,
+    selectedSize,
+    productData?.selectedQuantity,
+    quantity,
+    cartQuantity,
+    deliverInfoProps?.pincode,
+    deliverInfoProps?.pincodeErrorMessage,
+    isOutOfStock,
+    isCartUpdating,
+    isCartLoading,
+  ]);
+
+  console.log((productData?.selectedQuantity ?? quantity), "Current Quantity")
 
   return (
     <div className={styles.productDescContainer}>
