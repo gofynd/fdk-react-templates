@@ -403,7 +403,6 @@ h5,
   font-size: 14px;
   font-weight: 600;
   line-height: 140%;
-  color: var(--textHeading, #26201a);
 }
 .single-page-shipment__addressSelectedHeaderContainer___SVaIw .single-page-shipment__address___pgW0L {
   font-size: 12px;
@@ -2728,13 +2727,6 @@ h5,
 @media only screen and (max-width: 480px) {
   .sticky-pay-now__stickyBtnContainer___L7zbD {
     display: block;
-    z-index: 30;
-  }
-}
-@media only screen and (max-width: 768px) {
-  .sticky-pay-now__stickyBtnContainer___L7zbD {
-    display: block;
-    z-index: 30;
   }
 }
 .sticky-pay-now__stickyBtnContainer1___YFwCC {
