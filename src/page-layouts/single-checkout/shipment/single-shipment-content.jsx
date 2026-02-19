@@ -30,6 +30,7 @@ function SingleShipmentContent({
 }) {
   const { t } = useGlobalTranslation("translation");
   const navigate = useNavigate();
+
   const getShipmentItems = (shipment) => {
     let grpBySameSellerAndProduct = shipment?.items?.reduce((result, item) => {
       result[
@@ -66,9 +67,11 @@ function SingleShipmentContent({
         : product.product.images[0].url.replace("original", "resize-w:110");
     }
   };
+
   const getProductPath = (product) => {
     return "/product/" + product.product.slug;
   };
+
   const getCurrencySymbol = () => {
     return shipments?.[0]?.items?.[0]?.price?.converted?.currency_symbol || "₹";
   };
@@ -102,8 +105,8 @@ function SingleShipmentContent({
         <div className={styles.parent}>
           {Array(3)
             .fill()
-            .map((_) => (
-              <div className={styles.reviewContentContainer}>
+            .map((_, index) => (
+              <div key={`skeleton-${index}`} className={styles.reviewContentContainer}>
                 <div className={styles.shipmentWrapper}>
                   <div className={styles.shipmentHeading}>
                     <div className={styles.headerLeft}>
@@ -162,181 +165,195 @@ function SingleShipmentContent({
         </div>
       ) : (
         <div className={styles.parent}>
-          {shipments?.length > 0 &&
-            shipments.map((item, index) => {
-              const shipmentItems = getShipmentItems(item);
-              return (
-                <React.Fragment key={index + 2000}>
-                  <div className={styles.reviewContentContainer}>
-                    <div className={styles.shipmentWrapper}>
-                      <div className={styles.shipmentHeading}>
-                        <div className={styles.headerLeft}>
-                          <div className={styles.shipmentLabelBox}>
-                            <div className={styles.shipmentNumber}>
-                              {t("resource.common.shipment")} {index + 1}/
-                              {shipments.length}
+          <div className={styles.scrollArea}>
+            {shipments?.length > 0 &&
+              shipments.map((item, index) => {
+                const shipmentItems = getShipmentItems(item);
+                return (
+                  <React.Fragment key={index + 2000}>
+                    <div className={styles.reviewContentContainer}>
+                      <div className={styles.shipmentWrapper}>
+                        <div className={styles.shipmentHeading}>
+                          <div className={styles.headerLeft}>
+                            <div className={styles.shipmentLabelBox}>
+                              <div className={styles.shipmentNumber}>
+                                {t("resource.common.shipment")} {index + 1}/
+                                {shipments.length}
+                              </div>
+                              <div className={styles.itemCount}>
+                                (
+                                {`${shipmentItems.length} ${
+                                  shipmentItems.length > 1
+                                    ? t(
+                                        "resource.common.item_simple_text_plural"
+                                      )
+                                    : t("resource.common.item_simple_text")
+                                }`}
+                                )
+                              </div>
                             </div>
-                            <div className={styles.itemCount}>
-                              (
-                              {`${shipmentItems.length} ${shipmentItems.length > 1 ? t("resource.common.item_simple_text_plural") : t("resource.common.item_simple_text")}`}
-                              )
-                            </div>
+                            {index === 0 && (
+                              <button
+                                className={styles.mobileEditCartBtn}
+                                onClick={() => {
+                                  navigate("/cart/bag");
+                                }}
+                              >
+                                {t("resource.checkout.edit_cart_lower")}
+                              </button>
+                            )}
                           </div>
-                          {index === 0 && (
-                            <button
-                              className={styles.mobileEditCartBtn}
-                              onClick={() => {
-                                navigate("/cart/bag");
-                              }}
-                            >
-                              {t("resource.checkout.edit_cart_lower")}
-                            </button>
+                          {item?.promise && (
+                            <div className={styles.deliveryDateWrapper}>
+                              <div className={styles.shippingLogo}>
+                                <ShippingLogoIcon />
+                              </div>
+                              <div className={styles.deliveryDate}>
+                                {getDeliveryPromise?.(item?.promise)}
+                              </div>
+                              {availableFOCount > 1 &&
+                                item?.fulfillment_option?.name && (
+                                  <div className={styles.foName}>
+                                    {item?.fulfillment_option?.name}
+                                  </div>
+                                )}
+                            </div>
                           )}
                         </div>
-                        {item?.promise && (
-                          <div className={styles.deliveryDateWrapper}>
-                            <div className={styles.shippingLogo}>
-                              <ShippingLogoIcon />
-                            </div>
 
-                            <div className={styles.deliveryDate}>
-                              {getDeliveryPromise?.(item?.promise)}
-                            </div>
-                            {availableFOCount > 1 &&
-                              item?.fulfillment_option?.name && (
-                                <div className={styles.foName}>
-                                  {item?.fulfillment_option?.name}
+                        <div>
+                          {shipmentItems.map((product, index) => (
+                            <div
+                              className={styles.item}
+                              key={product?.item?.product?.name}
+                            >
+                              {product?.item?.coupon_message.length > 0 && (
+                                <div className={styles.couponRibbon}>
+                                  <AppliedCouponIcon />
+                                  <span className={styles.ribbonMsg}>
+                                    {product?.item?.coupon_message}
+                                  </span>
                                 </div>
                               )}
-                          </div>
-                        )}
-                      </div>
-                      <div>
-                        {shipmentItems.map((product, index) => (
-                          <div
-                            className={styles.item}
-                            key={product?.item?.product?.name}
-                          >
-                            {product?.item?.coupon_message.length > 0 && (
-                              <div className={styles.couponRibbon}>
-                                <AppliedCouponIcon />
-                                <span className={styles.ribbonMsg}>
-                                  {product?.item?.coupon_message}
-                                </span>
-                              </div>
-                            )}
-                            <div className={styles.itemWrapper}>
-                              <div className={styles.leftImg}>
-                                <FDKLink
-                                  to={getProductPath(product?.item)}
-                                  state={{
-                                    product: {
-                                      ...product?.item?.product,
-                                      media:
-                                        product?.item?.product?.images?.map(
-                                          (i) => ({
-                                            ...i,
-                                            type: "image",
-                                          })
-                                        ) || [],
-                                    },
-                                  }}
-                                >
-                                  <img
-                                    src={getProductImage(product?.item)}
-                                    alt={product?.item?.product?.name}
-                                  />
-                                </FDKLink>
-                              </div>
-                              <div className={styles.rightDetails}>
-                                <div className={styles.productDetails}>
-                                  <div>
-                                    <div className={styles.brandName}>
-                                      {product?.item?.product?.brand?.name}
-                                    </div>
-                                    <div className={styles.productName}>
-                                      {product?.item?.product?.name}
-                                    </div>
-                                  </div>
-                                  <div className={styles.sizeInfo}>
-                                    {product?.articles.map((article, index) => (
-                                      <div
-                                        className={styles.sizeQuantity}
-                                        key={article?.article?.size + index}
-                                      >
-                                        <div className={styles.size}>
-                                          {t("resource.common.size")}:{" "}
-                                          {article?.article.size}
-                                        </div>
-                                        <div className={styles.qty}>
-                                          {t("resource.common.qty")}:{" "}
-                                          {article?.quantity}
-                                        </div>
+                              <div className={styles.itemWrapper}>
+                                <div className={styles.leftImg}>
+                                  <FDKLink
+                                    to={getProductPath(product?.item)}
+                                    state={{
+                                      product: {
+                                        ...product?.item?.product,
+                                        media:
+                                          product?.item?.product?.images?.map(
+                                            (i) => ({
+                                              ...i,
+                                              type: "image",
+                                            })
+                                          ) || [],
+                                      },
+                                    }}
+                                  >
+                                    <img
+                                      src={getProductImage(product?.item)}
+                                      alt={product?.item?.product?.name}
+                                    />
+                                  </FDKLink>
+                                </div>
+                                <div className={styles.rightDetails}>
+                                  <div className={styles.productDetails}>
+                                    <div>
+                                      <div className={styles.brandName}>
+                                        {product?.item?.product?.brand?.name}
                                       </div>
-                                    ))}
-                                  </div>
-                                </div>
-                                <div className={styles.paymentInfo}>
-                                  <div className={styles.priceWrapper}>
-                                    <div className={styles.effectivePrice}>
-                                      {priceFormatCurrencySymbol(
-                                        getCurrencySymbol(),
-                                        getEffectivePrice(product?.articles),
-                                        undefined,
-                                        getCurrencyCode()
+                                      <div className={styles.productName}>
+                                        {product?.item?.product?.name}
+                                      </div>
+                                    </div>
+                                    <div className={styles.sizeInfo}>
+                                      {product?.articles.map(
+                                        (article, index) => (
+                                          <div
+                                            className={styles.sizeQuantity}
+                                            key={article?.article?.size + index}
+                                          >
+                                            <div className={styles.size}>
+                                              {t("resource.common.size")}:{" "}
+                                              {article?.article.size}
+                                            </div>
+                                            <div className={styles.qty}>
+                                              {t("resource.common.qty")}:{" "}
+                                              {article?.quantity}
+                                            </div>
+                                          </div>
+                                        )
                                       )}
                                     </div>
-                                    {!product.item.is_set &&
-                                      getMarkedPrice(product?.articles) !==
-                                        null && (
-                                        <div className={styles.markedPrice}>
-                                          {priceFormatCurrencySymbol(
-                                            getCurrencySymbol(),
-                                            getMarkedPrice(product?.articles),
-                                            undefined,
-                                            getCurrencyCode()
-                                          )}
-                                        </div>
-                                      )}
-                                    <div className={styles.discount}>
-                                      {product?.articles?.[0].discount}
+                                  </div>
+
+                                  <div className={styles.paymentInfo}>
+                                    <div className={styles.priceWrapper}>
+                                      <div className={styles.effectivePrice}>
+                                        {priceFormatCurrencySymbol(
+                                          getCurrencySymbol(),
+                                          getEffectivePrice(product?.articles),
+                                          undefined,
+                                          getCurrencyCode()
+                                        )}
+                                      </div>
+                                      {!product.item.is_set &&
+                                        getMarkedPrice(product?.articles) !==
+                                          null && (
+                                          <div className={styles.markedPrice}>
+                                            {priceFormatCurrencySymbol(
+                                              getCurrencySymbol(),
+                                              getMarkedPrice(product?.articles),
+                                              undefined,
+                                              getCurrencyCode()
+                                            )}
+                                          </div>
+                                        )}
+                                      <div className={styles.discount}>
+                                        {product?.articles?.[0].discount}
+                                      </div>
+                                    </div>
+                                    <div className={styles.offersWarning}>
+                                      {product?.item?.article?.quantity < 11 &&
+                                        product?.item?.article?.quantity > 0 &&
+                                        !buybox?.is_seller_buybox_enabled && (
+                                          <div className={styles.limitedQnty}>
+                                            {t(
+                                              "resource.common.hurry_only_left",
+                                              {
+                                                quantity:
+                                                  product?.item?.article
+                                                    ?.quantity,
+                                              }
+                                            )}
+                                          </div>
+                                        )}
                                     </div>
                                   </div>
-                                  <div className={styles.offersWarning}>
-                                    {product?.item?.article?.quantity < 11 &&
-                                      product?.item?.article?.quantity > 0 &&
-                                      !buybox?.is_seller_buybox_enabled && (
-                                        <div className={styles.limitedQnty}>
-                                          {t(
-                                            "resource.common.hurry_only_left",
-                                            {
-                                              quantity:
-                                                product?.item?.article
-                                                  ?.quantity,
-                                            }
-                                          )}
-                                        </div>
-                                      )}
-                                  </div>
+
+                                  <FreeGiftItem
+                                    item={product?.item}
+                                    currencySymbol={
+                                      product?.item?.price?.converted
+                                        ?.currency_symbol ??
+                                      product?.item?.price?.base
+                                        ?.currency_symbol
+                                    }
+                                  />
                                 </div>
                               </div>
-                              <FreeGiftItem
-                                item={product?.item}
-                                currencySymbol={
-                                  product?.item?.price?.converted
-                                    ?.currency_symbol ??
-                                  product?.item?.price?.base?.currency_symbol
-                                }
-                              />
                             </div>
-                          </div>
-                        ))}
+                          ))}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </React.Fragment>
-              );
-            })}
+                  </React.Fragment>
+                );
+              })}
+          </div>
+
           <div className={styles.proceedBtnWrapper}>
             <button
               className={styles.proceedBtn}
@@ -362,6 +379,3 @@ function SingleShipmentContent({
 }
 
 export default SingleShipmentContent;
-
-// className=("[a-z-]+")
-// className={styles[$1]}
