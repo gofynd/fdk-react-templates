@@ -605,7 +605,9 @@ const AddToCart = ({
                           displayCount -
                           (incrementDecrementUnit || minCartQuantity || 1);
                         showWarningForInvalidInput(newQty);
-                        updateQuantity(Math.max(0, newQty));
+                        if (!deliverInfoProps?.pincodeErrorMessage) {
+                          updateQuantity(Math.max(0, newQty));
+                        }
                         cartUpdateHandler(
                           e,
                           -incrementDecrementUnit,
@@ -618,7 +620,9 @@ const AddToCart = ({
                           displayCount +
                           (incrementDecrementUnit || minCartQuantity || 1);
                         showWarningForInvalidInput(newQty);
-                        updateQuantity(newQty);
+                        if (!deliverInfoProps?.pincodeErrorMessage) {
+                          updateQuantity(newQty);
+                        }
                         if (cartQuantity === 0) {
                           addProductForCheckout(
                             e,
@@ -641,7 +645,9 @@ const AddToCart = ({
                           Math.min(currentNum, maxCartQuantity),
                           minCartQuantity
                         );
-                        updateQuantity(clampedQuantity);
+                        if (!deliverInfoProps?.pincodeErrorMessage) {
+                          updateQuantity(clampedQuantity);
+                        }
                         if (cartQuantity === 0) {
                           addProductForCheckout(
                             e,
@@ -703,7 +709,9 @@ const AddToCart = ({
                           displayCount -
                           (incrementDecrementUnit || minCartQuantity || 1);
                         showWarningForInvalidInput(newQty);
-                        updateQuantity(Math.max(0, newQty));
+                        if (!deliverInfoProps?.pincodeErrorMessage) {
+                          updateQuantity(Math.max(0, newQty));
+                        }
                         cartUpdateHandler(
                           e,
                           -incrementDecrementUnit,
@@ -716,7 +724,9 @@ const AddToCart = ({
                           displayCount +
                           (incrementDecrementUnit || minCartQuantity || 1);
                         showWarningForInvalidInput(newQty);
-                        updateQuantity(newQty);
+                        if (!deliverInfoProps?.pincodeErrorMessage) {
+                          updateQuantity(newQty);
+                        }
                         if (cartQuantity === 0) {
                           addProductForCheckout(
                             e,
@@ -739,7 +749,9 @@ const AddToCart = ({
                           Math.min(currentNum, maxCartQuantity),
                           minCartQuantity
                         );
-                        updateQuantity(clampedQuantity);
+                        if (!deliverInfoProps?.pincodeErrorMessage) {
+                          updateQuantity(clampedQuantity);
+                        }
                         if (cartQuantity === 0) {
                           addProductForCheckout(
                             e,
