@@ -464,41 +464,35 @@ function CouponSuccessModal({
       closeDialog={closeDialog}
       modalType="center-modal"
       customClassName={styles.couponSuccessModal}
+      customContainerClass = {styles.couponSuccessModalContainerCustom}
       containerClassName={styles.couponSuccessModalContainer}
     >
       <div className={styles.couponSuccessModalContent}>
-        <img
-          className={styles.couponSuccessGif}
-          src={couponSuccessGif}
-          alt={t("resource.cart.coupon_success")}
-        />
-        <div className={styles.couponSuccessIcon}>
+        <span className={styles["close-icon"]} onClick={closeDialog}>
+          <SvgWrapper svgSrc="close" />
+        </span>
+        <div className={styles.modalHeader}>
           <span>
             <SvgWrapper svgSrc="coupon-success" />
           </span>
         </div>
-        {coupon?.code && coupon?.is_applied && (
-          <div className={styles.modalBody}>
-            <div>
-              <div className={styles.couponHeading}>
-                '{coupon?.code}' {t("resource.common.applied")}
-              </div>
-              <div className={styles.couponValue}>
-                {currencyFormat(
-                  numberWithCommas(coupon.value),
-                  currencySymbol,
-                  formatLocale(locale, countryCode, true)
-                )}
-              </div>
-              <div className={styles.couponValueSubheading}>
-                {t("resource.cart.savings_with_this_coupon")}
-              </div>
-            </div>
-            <button className={styles.bodyFooterBtn} onClick={closeDialog}>
-              {t("resource.cart.wohooo")}!!
-            </button>
+
+        <div className={styles.modalBody}>
+          <div className={styles.couponValueSubheading}>
+            {currencyFormat(
+              numberWithCommas(coupon.value),
+              currencySymbol,
+              formatLocale(locale, countryCode, true)
+            )}{" "}
+            {t("resource.cart.savings_with_this_coupon")}
           </div>
-        )}
+
+          <div className={styles.subTitle}>{coupon?.sub_title}</div>
+        </div>
+
+        <div className={styles.bodyFooterBtn} onClick={closeDialog}>
+          OKAY
+        </div>
       </div>
     </Modal>
   );
