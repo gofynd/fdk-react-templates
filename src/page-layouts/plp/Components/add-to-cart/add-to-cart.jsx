@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect, useRef } from "react";
 import * as styles from "./add-to-cart.less";
 import ImageGallery from "../image-gallery/image-gallery";
 import ProductVariants from "../product-variants/product-variants";
@@ -85,22 +85,6 @@ const AddToCart = ({
     return merchant_data?.[keyName] === "approved";
   };
 
-  const shouldDebugQty =
-    typeof window !== "undefined" &&
-    (window.__PLP_QTY_DEBUG__ === true ||
-      window.localStorage?.getItem("plp_qty_debug") === "1");
-  const logQtyDebug = (...args) => {
-    if (shouldDebugQty) {
-      if (
-        typeof window !== "undefined" &&
-        window.localStorage?.getItem("plp_qty_breakpoint") === "1"
-      ) {
-        debugger;
-      }
-      console.log("[PLP_QTY_DEBUG][FirestoneAddToCart]", ...args);
-    }
-  };
-
   // useEffect(() => {
   // onSizeSelection(selectedSize);
   // }, [selectedSize, productData?.product?.slug]);
@@ -123,6 +107,14 @@ const AddToCart = ({
   const navigate = useNavigate();
 
   const [quantity, setQuantity] = useState(productData?.selectedQuantity ?? 0);
+  const prevSelectedSizeRef = useRef(selectedSize);
+  const sizeJustChanged = prevSelectedSizeRef.current !== selectedSize;
+  if (sizeJustChanged) {
+    prevSelectedSizeRef.current = selectedSize;
+  }
+  const displayCount = sizeJustChanged
+    ? 0
+    : (productData?.selectedQuantity || quantity);
   const [hasAddedToCart, setHasAddedToCart] = useState(false);
   const [quantityError, setQuantityError] = useState(() => {
     if (isOutOfStock) {
@@ -262,13 +254,6 @@ const AddToCart = ({
   };
 
   const updateQuantity = (newQuantity) => {
-    logQtyDebug("updateQuantity", {
-      newQuantity,
-      selectedSize,
-      selectedQuantityFromHook: productData?.selectedQuantity,
-      localQuantityBefore: quantity,
-      cartQuantity,
-    });
     setQuantity(newQuantity);
   };
 
@@ -282,28 +267,10 @@ const AddToCart = ({
     setQuantityError({ hasError: false, message: "" });
     const error = validateQuantity(inputValue);
     setQuantityError(error);
-    logQtyDebug("showWarningForInvalidInput", {
-      inputValue,
-      error,
-      selectedSize,
-      selectedQuantityFromHook: productData?.selectedQuantity,
-      localQuantity: quantity,
-      cartQuantity,
-      pincode: deliverInfoProps?.pincode,
-      pincodeErrorMessage: deliverInfoProps?.pincodeErrorMessage,
-    });
   };
 
   useEffect(() => {
     if (selectedSize) {
-      logQtyDebug("selectedSize_changed_reset_local_qty", {
-        selectedSize,
-        selectedQuantityFromHook: productData?.selectedQuantity,
-        localQuantityBefore: quantity,
-        cartQuantity,
-        pincode: deliverInfoProps?.pincode,
-        pincodeErrorMessage: deliverInfoProps?.pincodeErrorMessage,
-      });
       setQuantity(0);
       setHasAddedToCart(false);
       // Show out of stock error if product is out of stock
@@ -332,35 +299,6 @@ const AddToCart = ({
       setHasAddedToCart(false);
     }
   }, [selectedSize]);
-
-  useEffect(() => {
-    logQtyDebug("state_snapshot", {
-      slug,
-      selectedSize,
-      selectedQuantityFromHook: productData?.selectedQuantity,
-      localQuantity: quantity,
-      displayedCount: productData?.selectedQuantity ?? quantity,
-      cartQuantity,
-      pincode: deliverInfoProps?.pincode,
-      pincodeErrorMessage: deliverInfoProps?.pincodeErrorMessage,
-      isOutOfStock,
-      isCartUpdating,
-      isCartLoading,
-    });
-  }, [
-    slug,
-    selectedSize,
-    productData?.selectedQuantity,
-    quantity,
-    cartQuantity,
-    deliverInfoProps?.pincode,
-    deliverInfoProps?.pincodeErrorMessage,
-    isOutOfStock,
-    isCartUpdating,
-    isCartLoading,
-  ]);
-
-  console.log((productData?.selectedQuantity ?? quantity), "Current Quantity")
 
   return (
     <div className={styles.productDescContainer}>
@@ -652,6 +590,7 @@ const AddToCart = ({
                 {showQuantityController && (
                   <div className={styles.quantityControl}>
                     <B2BSizeQuantityControl
+                      key={selectedSize}
                       minCartQuantity={minCartQuantity}
                       maxCartQuantity={maxCartQuantity}
                       isCartUpdating={isCartUpdating || isCartLoading}
@@ -660,10 +599,10 @@ const AddToCart = ({
                       }
                       pincode={deliverInfoProps?.pincode}
                       placeholder="Qty"
-                      count={(productData?.selectedQuantity ?? quantity)}
+                      count={displayCount}
                       onDecrementClick={(e) => {
                         const newQty =
-                          ((productData?.selectedQuantity ?? quantity)) -
+                          displayCount -
                           (incrementDecrementUnit || minCartQuantity || 1);
                         showWarningForInvalidInput(newQty);
                         updateQuantity(Math.max(0, newQty));
@@ -676,7 +615,7 @@ const AddToCart = ({
                       serviceable={selectedSize && !isOutOfStock}
                       onIncrementClick={(e) => {
                         const newQty =
-                          ((productData?.selectedQuantity ?? quantity)) +
+                          displayCount +
                           (incrementDecrementUnit || minCartQuantity || 1);
                         showWarningForInvalidInput(newQty);
                         updateQuantity(newQty);
@@ -749,6 +688,7 @@ const AddToCart = ({
                 {showQuantityController && (
                   <div>
                     <B2BSizeQuantityControl
+                      key={selectedSize}
                       minCartQuantity={minCartQuantity}
                       maxCartQuantity={maxCartQuantity}
                       isCartUpdating={isCartUpdating || isCartLoading}
@@ -757,10 +697,10 @@ const AddToCart = ({
                         deliverInfoProps?.pincodeErrorMessage
                       }
                       pincode={deliverInfoProps?.pincode}
-                      count={(productData?.selectedQuantity ?? quantity)}
+                      count={displayCount}
                       onDecrementClick={(e) => {
                         const newQty =
-                          ((productData?.selectedQuantity ?? quantity)) -
+                          displayCount -
                           (incrementDecrementUnit || minCartQuantity || 1);
                         showWarningForInvalidInput(newQty);
                         updateQuantity(Math.max(0, newQty));
@@ -773,7 +713,7 @@ const AddToCart = ({
                       serviceable={selectedSize && !isOutOfStock}
                       onIncrementClick={(e) => {
                         const newQty =
-                          ((productData?.selectedQuantity ?? quantity)) +
+                          displayCount +
                           (incrementDecrementUnit || minCartQuantity || 1);
                         showWarningForInvalidInput(newQty);
                         updateQuantity(newQty);
@@ -957,7 +897,7 @@ const AddToCart = ({
                     handleClose();
                     navigate("/cart/bag");
                   }}
-                  disabled={productData?.selectedQuantity === 0}
+                  disabled={displayCount === 0}
                   startIcon={
                     <CartIcon
                       className={`${styles.cartIcon} ${showBuyNowButton ? styles.fillSecondary : ""
@@ -984,9 +924,7 @@ const AddToCart = ({
                         selectedSize,
                         true,
                         setIsCartLoading,
-                        showQuantityController
-                          ? (productData?.selectedQuantity ?? 0)
-                          : 0
+                        showQuantityController ? displayCount : 0
                       )
                     }
                     startIcon={<BuyNowIcon className={styles.cartIcon} />}
