@@ -29,8 +29,8 @@ const Wishlist = ({
   hasNext = false,
   isLoading = false,
   EmptyStateComponent,
-  onLoadMore = () => {},
-  onRemoveClick = () => {},
+  onLoadMore = () => { },
+  onRemoveClick = () => { },
   imagePlaceholder = "",
   addToCartModalProps = {},
   showAddToCart = false,
@@ -103,6 +103,7 @@ const Wishlist = ({
                 showAddToCart,
                 onRemoveClick,
                 handleAddToCart,
+                globalConfig,
                 isServiceable: is_serviceable,
               }}
             />
@@ -158,7 +159,7 @@ const WishlistProductCard = ({
   imagePlaceholder,
   actionButtonText,
   showAddToCart,
-  onRemoveClick = () => {},
+  onRemoveClick = () => { },
   handleAddToCart,
   isServiceable = true,
 }) => {
