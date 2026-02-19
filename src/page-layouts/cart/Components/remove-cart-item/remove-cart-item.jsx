@@ -51,24 +51,14 @@ function RemoveCartItem({
           </div>
         </div>
       </div>
-       <div className={styles.removeModalFooter}>
-  <button
-    type="button"
-    className={styles.removeBtn}
-    onClick={onRemoveButtonClick}
-    disabled={isRemoving}
-  >
-    {isRemoving ? "Removing..." : t("resource.facets.remove_caps")}
-  </button>
-
-  <button
-    type="button"
-   className={`${styles.wishlistBtn} ${isMovingToWishlist ? styles.disabled : ""}`}
-    onClick={onWishlistButtonClick}
-  >
-    {t("resource.cart.move_to_wishlist")}
-  </button>
-</div>
+      <div className={styles.removeModalFooter}>
+        <div className={styles.removeBtn} onClick={onRemoveButtonClick}>
+          {isRemoving ? "Removing..." : t("resource.facets.remove_caps")}
+        </div>
+        <div className={styles.wishlistBtn} onClick={onWishlistButtonClick}>
+          {t("resource.cart.move_to_wishlist")}
+        </div>
+      </div>
     </Modal>
   );
 }

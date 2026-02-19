@@ -894,6 +894,11 @@ h5,
   font-size: 14px;
   color: var(--textBody, #3c3131);
 }
+.range-slider__CustomRangeSlider___Uo_rw .range-slider__postfix___lbLy1 {
+  margin-left: 4px;
+  font-size: 14px;
+  color: var(--textBody, #3c3131);
+}
 .range-slider__CustomRangeSlider___Uo_rw .range-slider__inputContainer___pyXpE {
   display: flex;
   justify-content: space-between;
@@ -1332,7 +1337,7 @@ h5,
   position: absolute;
   transform: translateY(-50%) scale(0.9);
   z-index: 1;
-  background: var(--pageBackground, #f8f8f8);
+  background: #ffffff;
   padding: 0 0.3rem;
   margin: 0 0.5rem;
   font-size: 0.8rem;
