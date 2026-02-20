@@ -127,7 +127,6 @@ function PriceBreakup({
         <>
           {priceBreakupLoaderWidth.map((width, index) => (
             <div
-              key={index}
               className={`${
                 index !== priceBreakupLoaderWidth.length - 1
                   ? styles.priceSummaryItem
