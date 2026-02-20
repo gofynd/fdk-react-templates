@@ -44,205 +44,8 @@ import FyImage from "../core/fy-image/fy-image";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
 import * as styles from "./product-card.less";
 import FyButton from "../core/fy-button/fy-button";
-import {
-  useGlobalStore,
-  useFPI,
-  useGlobalTranslation,
-  useNavigate,
-} from "fdk-core/utils";
+import { useGlobalStore, useFPI, useGlobalTranslation } from "fdk-core/utils";
 import ForcedLtr from "../forced-ltr/forced-ltr";
-import Tooltip from "../tool-tip/tool-tip";
-
-const DefaultProductPrice = ({
-  t,
-  loggedIn,
-  product,
-  centerAlign,
-  getListingPrice,
-  hasDiscount,
-  showMarkedPriceForGuest,
-  showDiscountForGuest,
-  showLoginOption,
-  showDiscountForNonKyc,
-  showKycCompletionBadge,
-  isKycKeyPresent,
-  isMerchantKycApproved,
-  kycBadgeText,
-}) => {
-  const navigate = useNavigate();
-
-  const handleNavigateToLogin = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    const currentUrl = window.location.pathname + window.location.search;
-    navigate(`/auth/login?redirectUrl=${encodeURIComponent(currentUrl)}`);
-  };
-
-  //? Guest user Settings
-  if (!loggedIn) {
-    //? if none of the three conditions are met, then show empty fragment
-    if (!showMarkedPriceForGuest && !showDiscountForGuest && !showLoginOption) {
-      return <></>;
-    }
-
-    //? if only login option is enabled
-    if (showLoginOption && !showMarkedPriceForGuest && !showDiscountForGuest) {
-      return (
-        <FyButton
-          variant="outlined"
-          className={styles.loginToViewPricing}
-          onClick={handleNavigateToLogin}
-          startIcon={<SvgWrapper svgSrc="lock-icon" />}
-        >
-          {t("resource.b2b.components.product_card.login_to_view_pricing")}
-        </FyButton>
-      );
-    }
-    //? If marked Price option is enabled, and discount is disabled
-    if (showMarkedPriceForGuest && !showDiscountForGuest && !loggedIn) {
-      return (
-        <>
-          <div
-            className={`${styles.productPrice} ${centerAlign ? styles.center : ""}`}
-          >
-            <span className={`${styles["productPrice--sale"]} ${styles.h4}`}>
-              {getListingPrice("marked")}
-            </span>
-          </div>
-          {showLoginOption && (
-            <FyButton
-              variant="outlined"
-              className={styles.loginToViewPricing}
-              onClick={handleNavigateToLogin}
-              startIcon={<SvgWrapper svgSrc="lock-icon" />}
-            >
-              {t("resource.b2b.components.product_card.login_to_view_offers")}
-            </FyButton>
-          )}
-        </>
-      );
-    }
-  }
-
-  //? Non-KYC user Settings
-  if (loggedIn && !isMerchantKycApproved) {
-    //? Only show marked price for non KYC
-    if (!showDiscountForNonKyc) {
-      return (
-        <>
-          <div
-            className={`${styles.productPrice} ${centerAlign ? styles.center : ""}`}
-          >
-            <span className={`${styles["productPrice--sale"]} ${styles.h4}`}>
-              <ForcedLtr text={getListingPrice("marked")} />
-            </span>
-          </div>
-
-          {showKycCompletionBadge && !isKycKeyPresent && (
-            <div className={styles.kycCompletionBadge}>
-              <span className={styles.kycCompletionBadgeIcon}>
-                <SvgWrapper svgSrc="info-white" />
-              </span>
-              <span className={styles.kycCompletionBadgeText}>
-                {kycBadgeText}
-              </span>
-            </div>
-          )}
-        </>
-      );
-    }
-
-    return (
-      <>
-        <div
-          className={`${styles.productPrice} ${centerAlign ? styles.center : ""}`}
-        >
-          {product?.price?.effective && (
-            <span className={`${styles["productPrice--sale"]} ${styles.h4}`}>
-              <ForcedLtr text={getListingPrice("effective")} />
-            </span>
-          )}
-          {hasDiscount && (
-            <span
-              className={`${styles["productPrice--regular"]} ${styles.captionNormal}`}
-            >
-              <ForcedLtr text={getListingPrice("marked")} />
-            </span>
-          )}
-          {product.discount && (
-            <span
-              className={`${styles["productPrice--discount"]} ${styles.captionNormal} `}
-            >
-              ({product.discount?.toString().toLowerCase()})
-            </span>
-          )}
-        </div>
-        {showKycCompletionBadge && !isKycKeyPresent && (
-          <div className={styles.kycCompletionBadge}>
-            <span className={styles.kycCompletionBadgeIcon}>
-              <SvgWrapper svgSrc="info-white" />
-            </span>
-            <span className={styles.kycCompletionBadgeText}>
-              {kycBadgeText}
-            </span>
-          </div>
-        )}
-      </>
-    );
-  }
-
-  return (
-    <div
-      className={`${styles.productPrice} ${centerAlign ? styles.center : ""}`}
-    >
-      {product?.price?.effective && (
-        <span className={`${styles["productPrice--sale"]} ${styles.h4}`}>
-          <ForcedLtr text={getListingPrice("effective")} />
-        </span>
-      )}
-      {hasDiscount && (
-        <span
-          className={`${styles["productPrice--regular"]} ${styles.captionNormal}`}
-        >
-          <ForcedLtr text={getListingPrice("marked")} />
-        </span>
-      )}
-      {product.discount && (
-        <span
-          className={`${styles["productPrice--discount"]} ${styles.captionNormal} `}
-        >
-          ({product.discount?.toString().toLowerCase()})
-        </span>
-      )}
-    </div>
-  );
-};
-
-const AvailableOfferButton = ({
-  t,
-  handleB2bAvailableOfferClick,
-  showDiscountForNonKyc,
-  showAvailableOfferButton,
-  isMerchantKycApproved,
-}) => {
-  if (!isMerchantKycApproved && !showDiscountForNonKyc) {
-    return <></>;
-  }
-
-  return (
-    <>
-      {showAvailableOfferButton && (
-        <FyButton
-          variant="outlined"
-          className={styles.addToCart}
-          onClick={handleB2bAvailableOfferClick}
-        >
-          {t("resource.b2b.components.product_card.available_offers")}
-        </FyButton>
-      )}
-    </>
-  );
-};
 
 const ProductCard = ({
   product,
@@ -275,19 +78,17 @@ const ProductCard = ({
   ),
   actionButtonText,
   followedIdList = [],
-  onWishlistClick = () => { },
-  handleAddToCart = () => { },
-  onRemoveClick = () => { },
+  onWishlistClick = () => {},
+  handleAddToCart = () => {},
+  onRemoveClick = () => {},
   centerAlign = false,
   showAddToCart = false,
   showBadge = true,
   showColorVariants = false,
   isSlider = false,
-  onClick = () => { },
-  globalConfig = {},
-  productsInWishlist = [],
-  showSmartWishlist = false,
+  onClick = () => {},
   isServiceable = true,
+  showMultipleImages = false,
 }) => {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -295,44 +96,6 @@ const ProductCard = ({
   const locale = i18nDetails?.language?.locale || "en";
   const countryCode = i18nDetails?.countryCode || "IN";
   const isMobile = useMobile();
-
-  const loggedIn = useGlobalStore(fpi.getters.LOGGED_IN);
-  const { merchant_data } = useGlobalStore(fpi?.getters?.CUSTOM_VALUE);
-
-  const keyName = "kyc_status";
-  const isKycKeyPresent = merchant_data?.[keyName] !== undefined;
-
-  const isMerchantKycApproved = () => {
-    return merchant_data?.[keyName] === "approved";
-  };
-
-  const wishlistStatus = useMemo(() => {
-    if (!productsInWishlist || !product?.slug) {
-      return { isInWishlist: false, wishlistCount: 0 };
-    }
-
-    const matchingSlug = Object.keys(productsInWishlist).find((key) =>
-      key.startsWith(product.slug)
-    );
-
-    const count = matchingSlug ? productsInWishlist[matchingSlug].length : 0;
-
-    return {
-      isInWishlist: count > 0,
-      wishlistCount: count,
-      matchingSlug,
-    };
-  }, [productsInWishlist, product?.slug]);
-
-  const {
-    show_available_offer_button,
-    show_marked_price_guest,
-    show_discount_guest,
-    show_login_for_guest,
-    show_discount_non_kyc,
-    show_kyc_completion_badge,
-    kyc_badge_text,
-  } = globalConfig;
 
   const [isMobileView, setIsMobileView] = useState(false);
   useEffect(() => {
@@ -369,19 +132,19 @@ const ProductCard = ({
         price =
           priceDetails.min !== priceDetails.max
             ? `${currencyFormat(
-              priceDetails.min,
-              priceDetails.currency_symbol,
-              formatLocale(locale, countryCode, true)
-            )} - ${currencyFormat(
-              priceDetails.max,
-              priceDetails.currency_symbol,
-              formatLocale(locale, countryCode, true)
-            )}`
+                priceDetails.min,
+                priceDetails.currency_symbol,
+                formatLocale(locale, countryCode, true)
+              )} - ${currencyFormat(
+                priceDetails.max,
+                priceDetails.currency_symbol,
+                formatLocale(locale, countryCode, true)
+              )}`
             : currencyFormat(
-              priceDetails.min,
-              priceDetails.currency_symbol,
-              formatLocale(locale, countryCode, true)
-            );
+                priceDetails.min,
+                priceDetails.currency_symbol,
+                formatLocale(locale, countryCode, true)
+              );
         break;
       default:
         break;
@@ -479,15 +242,7 @@ const ProductCard = ({
   const handleWishlistClick = (e) => {
     e.stopPropagation();
     e.preventDefault();
-    if (showSmartWishlist) {
-      onWishlistClick(product);
-      fpi.custom.setValue("b2bSmartWishlist", {
-        product: product,
-        isModalOpen: true,
-      });
-    } else {
-      onWishlistClick({ product, isFollowed });
-    }
+    onWishlistClick({ product, isFollowed });
   };
 
   const handleRemoveClick = (e) => {
@@ -508,15 +263,6 @@ const ProductCard = ({
     handleAddToCart(product?.slug);
   };
 
-  const handleB2bAvailableOfferClick = (event) => {
-    event?.preventDefault();
-    event?.stopPropagation();
-    fpi.custom.setValue("b2bAvailableOffers", {
-      slug: product?.slug,
-      isModalOpen: true,
-    });
-  };
-
   // Optimized variant click handler with useCallback
   const handleVariantClick = useCallback(
     (event, variant) => {
@@ -531,49 +277,164 @@ const ProductCard = ({
     [currentShade?.uid]
   );
 
+  // =================== MULTIPLE IMAGES FUNCTIONALITY ===================
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const hoverIntervalRef = React.useRef(null);
+
+  const productImages = useMemo(() => {
+    if (!showMultipleImages) return [];
+
+    // Combine all available images from product media
+    const images =
+      product?.media?.filter((media) => media.type === "image") || [];
+
+    // If no images, fall back to current logic
+    if (images.length === 0) return [];
+
+    return images;
+  }, [product, showMultipleImages]);
+
+  // Desktop Slideshow Logic
+  useEffect(() => {
+    if (!showMultipleImages || isMobile) return;
+
+    if (isHovered && productImages.length > 1) {
+      hoverIntervalRef.current = setInterval(() => {
+        setCurrentImageIndex((prev) => (prev + 1) % productImages.length);
+      }, 1000); // Change image every 1 second
+    } else {
+      setCurrentImageIndex(0);
+      if (hoverIntervalRef.current) {
+        clearInterval(hoverIntervalRef.current);
+      }
+    }
+
+    return () => {
+      if (hoverIntervalRef.current) {
+        clearInterval(hoverIntervalRef.current);
+      }
+    };
+  }, [isHovered, showMultipleImages, isMobile, productImages.length]);
+
+  const handleMouseEnter = () => setIsHovered(true);
+  const handleMouseLeave = () => setIsHovered(false);
+
+  const handleMobileScroll = (e) => {
+    if (!isMobile) return;
+    const scrollLeft = e.target.scrollLeft;
+    const width = e.target.clientWidth;
+    const newIndex = Math.round(scrollLeft / width);
+    setCurrentImageIndex(newIndex);
+  };
+
+  // =================== END MULTIPLE IMAGES FUNCTIONALITY ===================
+
   return (
     <div
-      className={`${styles.productCard} ${!product.sellable ? styles.disableCursor : ""
-        } ${styles[customClass[0]]} ${styles[customClass[1]]} ${styles[customClass[2]]
-        } ${styles.animate} ${gridClass} ${isSlider ? styles.sliderCard : ""}`}
+      className={`${styles.productCard} ${
+        !product.sellable ? styles.disableCursor : ""
+      } ${styles[customClass[0]]} ${styles[customClass[1]]} ${
+        styles[customClass[2]]
+      } ${styles.animate} ${gridClass} ${isSlider ? styles.sliderCard : ""}`}
       onClick={onClick}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
-      <div className={`${styles.imageContainer} ${customImageContainerClass} ${!product.sellable ? styles.outOfStockContainer : ""}`}>
-        {!isMobile && showImageOnHover && imageData.hoverUrl && (
-          <FyImage
-            src={imageData.hoverUrl}
-            alt={imageData.hoverAlt}
-            aspectRatio={aspectRatio}
-            isImageFill={isImageFill}
-            backgroundColor={imageBackgroundColor}
-            isFixedAspectRatio={true}
-            customClass={`${styles.productImage} ${styles.hoverImage}`}
-            sources={imgSrcSet}
-            defer={true}
-          />
+      <div
+        className={`${styles.imageContainer} ${customImageContainerClass} ${
+          !product.sellable ? styles.outOfStockContainer : ""
+        }`}
+      >
+        {/* Mobile View: Horizontal Scroll */}
+        {showMultipleImages && isMobile && productImages.length > 0 ? (
+          <div
+            className={styles.mobileScrollContainer}
+            onScroll={handleMobileScroll}
+          >
+            {productImages.map((img, index) => (
+              <div key={index} className={styles.mobileImageWrapper}>
+                <FyImage
+                  src={img.url}
+                  alt={img.alt || product.name}
+                  aspectRatio={aspectRatio}
+                  isImageFill={isImageFill}
+                  backgroundColor={imageBackgroundColor}
+                  isFixedAspectRatio={true}
+                  customClass={`${styles.mobileImage}`}
+                  sources={imgSrcSet}
+                  defer={index !== 0} // Defer loading for non-first images
+                />
+              </div>
+            ))}
+          </div>
+        ) : (
+          /* Desktop View or Default View */
+          <>
+            {showMultipleImages && !isMobile && productImages.length > 0 ? (
+              <div className={styles.desktopSlideshowContainer}>
+                <div
+                  className={styles.slidesWrapper}
+                  style={{
+                    transform: `translateX(-${currentImageIndex * 100}%)`,
+                  }}
+                >
+                  {productImages.map((img, index) => (
+                    <div key={index} className={styles.slide}>
+                      <FyImage
+                        src={img.url}
+                        alt={img.alt || product.name}
+                        aspectRatio={aspectRatio}
+                        isImageFill={isImageFill}
+                        backgroundColor={imageBackgroundColor}
+                        isFixedAspectRatio={true}
+                        customClass={`${styles.productImage}`}
+                        sources={imgSrcSet}
+                        defer={index > 1}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <>
+                {!isMobile && showImageOnHover && imageData.hoverUrl && (
+                  <FyImage
+                    src={imageData.hoverUrl}
+                    alt={imageData.hoverAlt}
+                    aspectRatio={aspectRatio}
+                    isImageFill={isImageFill}
+                    backgroundColor={imageBackgroundColor}
+                    isFixedAspectRatio={true}
+                    customClass={`${styles.productImage} ${styles.hoverImage}`}
+                    sources={imgSrcSet}
+                    defer={true}
+                  />
+                )}
+                <FyImage
+                  src={imageData.url}
+                  alt={imageData.alt}
+                  aspectRatio={aspectRatio}
+                  isImageFill={isImageFill}
+                  backgroundColor={imageBackgroundColor}
+                  isFixedAspectRatio={true}
+                  customClass={`${styles.productImage} ${styles.mainImage}`}
+                  sources={imgSrcSet}
+                  defer={false}
+                />
+              </>
+            )}
+          </>
         )}
-        <FyImage
-          src={imageData.url}
-          alt={imageData.alt}
-          aspectRatio={aspectRatio}
-          isImageFill={isImageFill}
-          backgroundColor={imageBackgroundColor}
-          isFixedAspectRatio={true}
-          customClass={`${styles.productImage} ${styles.mainImage}`}
-          sources={imgSrcSet}
-          defer={false}
-        />
-        {isWishlistIcon && loggedIn && isMerchantKycApproved() && (
+
+        {isWishlistIcon && (
           <button
-            className={`${styles.wishlistBtn} ${(showSmartWishlist ? wishlistStatus.isInWishlist : isFollowed) ? styles.active : ""}`}
+            className={`${styles.wishlistBtn} ${isFollowed ? styles.active : ""}`}
             onClick={handleWishlistClick}
             title={t("resource.product.wishlist_icon")}
           >
-            <WishlistIconComponent
-              isFollowed={
-                showSmartWishlist ? wishlistStatus.isInWishlist : isFollowed
-              }
-            />
+            <WishlistIconComponent isFollowed={isFollowed} />
           </button>
         )}
         {isRemoveIcon && (
@@ -606,6 +467,20 @@ const ProductCard = ({
             </span>
           </div>
         ) : null}
+
+        {/* Dots Pagination */}
+        {showMultipleImages && productImages.length > 1 && (
+          <div className={styles.dotsContainer}>
+            {productImages.map((_, index) => (
+              <div
+                key={index}
+                className={`${styles.dot} ${
+                  index === currentImageIndex ? styles.activeDot : ""
+                }`}
+              />
+            ))}
+          </div>
+        )}
       </div>
       <div
         className={`${styles.productDescContainer} ${customeProductDescContainerClass}`}
@@ -621,130 +496,31 @@ const ProductCard = ({
             {product.name}
           </h5>
           {isPrice && (
-            <>
-              {product?.contract ||
-                product?.quotation ||
-                product?.pricing_tier ? (
-                <>
-                  {product.contract && (
-                    <Tooltip
-                      position="bottom"
-                      title={
-                        <>
-                          {t(
-                            "resource.b2b.components.product_card.contract_applied"
-                          )}{" "}
-                          -{" "}
-                          {product?.contract?.used_count === 0 ? (
-                            <>
-                              {product?.contract?.total_count}{" "}
-                              {t(
-                                "resource.b2b.components.product_card.contract_applied"
-                              )}
-                            </>
-                          ) : (
-                            <>
-                              {product?.contract?.total_count -
-                                product?.contract?.used_count}
-                              /{product?.contract?.total_count}{" "}
-                              {t(
-                                "resource.b2b.components.product_card.qty_available"
-                              )}
-                            </>
-                          )}
-                        </>
-                      }
-                    >
-                      <div className={styles.badge_section}>
-                        <div className={styles.badge}>
-                          <span>
-                            {t(
-                              "resource.b2b.components.product_card.contract_price"
-                            )}
-                          </span>
-                          <span className={styles.info_icon}>
-                            <SvgWrapper svgSrc="info-white" />
-                          </span>
-                        </div>
-                      </div>
-                    </Tooltip>
-                  )}
-
-                  {product?.quotation && (
-                    <Tooltip
-                      position="bottom"
-                      title={
-                        <>
-                          {t(
-                            "resource.b2b.components.product_card.quote_applied"
-                          )}{" "}
-                          -{" "}
-                          {product?.quotation?.used_count === 0 ? (
-                            <>
-                              {product?.quotation?.total_count}{" "}
-                              {t(
-                                "resource.b2b.components.product_card.qty_available"
-                              )}
-                            </>
-                          ) : (
-                            <>
-                              {product?.quotation?.total_count -
-                                product?.quotation?.used_count}
-                              /{product?.quotation?.total_count}{" "}
-                              {t(
-                                "resource.b2b.components.product_card.qty_available"
-                              )}
-                            </>
-                          )}
-                        </>
-                      }
-                    >
-                      <div className={styles.badge_section}>
-                        <div className={styles.badge}>
-                          <span>
-                            {t(
-                              "resource.b2b.components.product_card.quoted_price"
-                            )}
-                          </span>
-                          <span className={styles.info_icon}>
-                            <SvgWrapper svgSrc="info-white" />
-                          </span>
-                        </div>
-                      </div>
-                    </Tooltip>
-                  )}
-                  <div
-                    className={`${styles.productPrice} ${centerAlign ? styles.center : ""}`}
-                  >
-                    <span
-                      className={`${styles["productPrice--sale"]} ${styles.h4}`}
-                    >
-                      {currencyFormat(
-                        product.best_price.price,
-                        product.best_price.currency_symbol
-                      )}
-                    </span>
-                  </div>
-                </>
-              ) : (
-                <DefaultProductPrice
-                  t={t}
-                  loggedIn={loggedIn}
-                  product={product}
-                  centerAlign={centerAlign}
-                  hasDiscount={hasDiscount}
-                  getListingPrice={getListingPrice}
-                  showMarkedPriceForGuest={show_marked_price_guest}
-                  showDiscountForGuest={show_discount_guest}
-                  showLoginOption={show_login_for_guest}
-                  showDiscountForNonKyc={show_discount_non_kyc}
-                  showKycCompletionBadge={show_kyc_completion_badge}
-                  isKycKeyPresent={isKycKeyPresent}
-                  isMerchantKycApproved={isMerchantKycApproved()}
-                  kycBadgeText={kyc_badge_text}
-                />
+            <div
+              className={`${styles.productPrice} ${centerAlign ? styles.center : ""}`}
+            >
+              {product?.price?.effective && (
+                <span
+                  className={`${styles["productPrice--sale"]} ${styles.h4}`}
+                >
+                  <ForcedLtr text={getListingPrice("effective")} />
+                </span>
               )}
-            </>
+              {hasDiscount && (
+                <span
+                  className={`${styles["productPrice--regular"]} ${styles.captionNormal}`}
+                >
+                  <ForcedLtr text={getListingPrice("marked")} />
+                </span>
+              )}
+              {product.discount && (
+                <span
+                  className={`${styles["productPrice--discount"]} ${styles.captionNormal}   ${centerAlign ? styles["productPrice--textCenter"] : ""}`}
+                >
+                  ({product.discount})
+                </span>
+              )}
+            </div>
           )}
 
           {/* OPTIMIZED COLOR VARIANTS SECTION */}
@@ -778,43 +554,17 @@ const ProductCard = ({
           )}
         </div>
 
-        {
-          showAddToCart &&
-          ((!loggedIn && show_discount_guest) ||
-            (loggedIn && isMerchantKycApproved()) ||
-            (loggedIn &&
-              !isMerchantKycApproved() &&
-              show_discount_non_kyc)) && (
-            <FyButton
-              variant="outlined"
-              className={styles.addToCart}
-              onClick={handleAddToCartClick}
-              disabled={!isServiceable}
-            >
-              {actionButtonText ?? t("resource.common.add_to_cart")}
-            </FyButton>
-          )
-        }
-
-        {
-          show_available_offer_button &&
-          ((!loggedIn && show_discount_guest) ||
-            (loggedIn && isMerchantKycApproved()) ||
-            (loggedIn &&
-              !isMerchantKycApproved() &&
-              show_discount_non_kyc)) && (
-            <AvailableOfferButton
-              t={t}
-              handleB2bAvailableOfferClick={handleB2bAvailableOfferClick}
-              showDiscountForNonKyc={show_discount_non_kyc}
-              showAvailableOfferButton={show_available_offer_button}
-              isKycKeyPresent={isKycKeyPresent}
-              isMerchantKycApproved={isMerchantKycApproved()}
-            />
-          )
-        }
-      </div >
-    </div >
+        {showAddToCart && (
+          <FyButton
+            variant="outlined"
+            className={styles.addToCart}
+            onClick={handleAddToCartClick}
+          >
+            {actionButtonText ?? t("resource.common.add_to_cart")}
+          </FyButton>
+        )}
+      </div>
+    </div>
   );
 };
 
