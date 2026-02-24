@@ -19,15 +19,6 @@
     }
   }
 
-  @keyframes priceShimmerAnim {
-    0% {
-      background-position: -200% 0;
-    }
-    100% {
-      background-position: 200% 0;
-    }
-  }
-
   .left {
     padding: 24px 16px;
     align-self: center;
@@ -720,5 +711,14 @@
     background-size: 200% 100% !important;
     border-radius: 4px;
     animation: priceShimmerAnim 1.5s infinite;
+  }
+}
+
+@keyframes priceShimmerAnim {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
   }
 }

@@ -317,8 +317,6 @@ const AddToCart = ({
             )}
             <h1 className={styles.product__title}>{slug && name}</h1>
 
-            <h1 className={styles.product__title}>{slug && name}</h1>
-
             {/* Tooltip badges (Quoted/Contract Price) + Price: show one shimmer when loading, else show real content */}
             {show_price && sizes?.sellable && (
               <>
@@ -330,9 +328,7 @@ const AddToCart = ({
                   </div>
                 ) : (
                   <>
-                    {(productData?.product?.best_price?.is_applicable ||
-                      productData?.product?.contract?.is_applicable ||
-                      productData?.product?.quotation?.is_applicable) && (
+                    {productData?.product?.best_price?.is_applicable && (
                       <B2bBestPriceWrapper
                         loggedIn={loggedIn}
                         isBestPriceLoading={productData?.isBestPriceLoading}
@@ -410,36 +406,38 @@ const AddToCart = ({
                         </div>
                       </Tooltip>
                     )}
-                    <div className={styles.product__price}>
-                      {productData?.product?.quotation?.is_applicable ||
-                        productData?.product?.contract?.is_applicable ||
-                        productData?.product?.pricing_tier?.is_applicable ? (
-                        <h4 className={styles["product__price--effective"]}>
-                          {currencyFormat(
-                            productData?.product?.best_price?.price,
-                            productData?.productPrice?.price?.currency_symbol,
-                            formatLocale(locale, countryCode, true)
-                          )}
-                        </h4>
-                      ) : (
-                        <>
+                    {show_price && sizes?.sellable && (
+                      <div className={styles.product__price}>
+                        {productData?.product?.quotation?.is_applicable ||
+                          productData?.product?.contract?.is_applicable ||
+                          productData?.product?.pricing_tier?.is_applicable ? (
                           <h4 className={styles["product__price--effective"]}>
-                            {getProductPrice("effective")}
+                            {currencyFormat(
+                              productData?.product?.best_price?.price,
+                              productData?.productPrice?.price?.currency_symbol,
+                              formatLocale(locale, countryCode, true)
+                            )}
                           </h4>
-                          {getProductPrice("effective") !==
-                            getProductPrice("marked") && (
-                            <span className={styles["product__price--marked"]}>
-                              {getProductPrice("marked")}
-                            </span>
-                          )}
-                          {sizes?.discount && (
-                            <span className={styles["product__price--discount"]}>
-                              ({sizes?.discount})
-                            </span>
-                          )}
-                        </>
-                      )}
-                    </div>
+                        ) : (
+                          <>
+                            <h4 className={styles["product__price--effective"]}>
+                              {getProductPrice("effective")}
+                            </h4>
+                            {getProductPrice("effective") !==
+                              getProductPrice("marked") && (
+                                <span className={styles["product__price--marked"]}>
+                                  {getProductPrice("marked")}
+                                </span>
+                              )}
+                            {sizes?.discount && (
+                              <span className={styles["product__price--discount"]}>
+                                ({sizes?.discount})
+                              </span>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    )}
                   </>
                 )}
               </>
