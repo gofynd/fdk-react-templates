@@ -318,7 +318,8 @@ const AddToCart = ({
             )}
             <h1 className={styles.product__title}>{slug && name}</h1>
 
-            {productData?.product?.best_price?.is_applicable && (
+            {(productData?.isBestPriceLoading ||
+              productData?.product?.best_price?.is_applicable) && (
               <B2bBestPriceWrapper
                 loggedIn={loggedIn}
                 isBestPriceLoading={productData?.isBestPriceLoading}
@@ -402,9 +403,14 @@ const AddToCart = ({
             {/* ---------- Product Price ---------- */}
             {show_price && sizes?.sellable && (
               <div className={styles.product__price}>
-                {productData?.product?.quotation?.is_applicable ||
-                productData?.product?.contract?.is_applicable ||
-                productData?.product?.pricing_tier?.is_applicable ? (
+                {productData?.isBestPriceLoading ? (
+                  <div className={styles.priceShimmer}>
+                    <div className={styles.shimmerLine} />
+                    <div className={styles.shimmerLineSecondary} />
+                  </div>
+                ) : productData?.product?.quotation?.is_applicable ||
+                  productData?.product?.contract?.is_applicable ||
+                  productData?.product?.pricing_tier?.is_applicable ? (
                   <h4 className={styles["product__price--effective"]}>
                     {currencyFormat(
                       productData?.product?.best_price?.price,
