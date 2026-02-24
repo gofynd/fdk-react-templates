@@ -35,21 +35,21 @@ const AddToCart = ({
   selectedSize = "",
   deliverInfoProps = {},
   sizeError = false,
-  handleSlugChange = (updatedSlug) => {},
-  onSizeSelection = () => {},
-  handleShowSizeGuide = () => {},
-  addProductForCheckout = () => {},
-  handleViewMore = () => {},
-  handleClose = () => {},
+  handleSlugChange = (updatedSlug) => { },
+  onSizeSelection = () => { },
+  handleShowSizeGuide = () => { },
+  addProductForCheckout = () => { },
+  handleViewMore = () => { },
+  handleClose = () => { },
   selectedItemDetails = {},
   isCartUpdating = false,
-  cartUpdateHandler = () => {},
+  cartUpdateHandler = () => { },
   minCartQuantity = 1,
   maxCartQuantity,
   incrementDecrementUnit,
   fulfillmentOptions = [],
   currentFO = {},
-  setCurrentFO = () => {},
+  setCurrentFO = () => { },
   availableFOCount,
   getDeliveryPromise,
   showQuantityController = false,
@@ -173,14 +173,13 @@ const AddToCart = ({
     }
     if (priceDataDefault) {
       return priceDataDefault?.[key]?.min !== priceDataDefault?.[key]?.max
-        ? `${priceDataDefault?.[key]?.currency_symbol || ""} ${
-            currencyFormat(priceDataDefault?.[key]?.min) || ""
-          } - ${currencyFormat(priceDataDefault?.[key]?.max) || ""}`
+        ? `${priceDataDefault?.[key]?.currency_symbol || ""} ${currencyFormat(priceDataDefault?.[key]?.min) || ""
+        } - ${currencyFormat(priceDataDefault?.[key]?.max) || ""}`
         : currencyFormat(
-            priceDataDefault?.[key]?.max,
-            priceDataDefault?.[key]?.currency_symbol,
-            formatLocale(locale, countryCode, true)
-          ) || "";
+          priceDataDefault?.[key]?.max,
+          priceDataDefault?.[key]?.currency_symbol,
+          formatLocale(locale, countryCode, true)
+        ) || "";
     }
   };
 
@@ -320,14 +319,14 @@ const AddToCart = ({
 
             {(productData?.isBestPriceLoading ||
               productData?.product?.best_price?.is_applicable) && (
-              <B2bBestPriceWrapper
-                loggedIn={loggedIn}
-                isBestPriceLoading={productData?.isBestPriceLoading}
-                bestPriceDetailsData={productData}
-                globalConfig={globalConfig}
-                isMerchantKycApproved={isMerchantKycApproved()}
-              />
-            )}
+                <B2bBestPriceWrapper
+                  loggedIn={loggedIn}
+                  isBestPriceLoading={true || productData?.isBestPriceLoading}
+                  bestPriceDetailsData={productData}
+                  globalConfig={globalConfig}
+                  isMerchantKycApproved={isMerchantKycApproved()}
+                />
+              )}
 
             {productData?.product?.contract?.is_applicable && (
               <Tooltip
@@ -425,10 +424,10 @@ const AddToCart = ({
                     </h4>
                     {getProductPrice("effective") !==
                       getProductPrice("marked") && (
-                      <span className={styles["product__price--marked"]}>
-                        {getProductPrice("marked")}
-                      </span>
-                    )}
+                        <span className={styles["product__price--marked"]}>
+                          {getProductPrice("marked")}
+                        </span>
+                      )}
                     {sizes?.discount && (
                       <span className={styles["product__price--discount"]}>
                         ({sizes?.discount})
@@ -526,17 +525,14 @@ const AddToCart = ({
                       <button
                         type="button"
                         key={`${size?.display}`}
-                        className={`${styles.b2} ${styles.sizeSelection__block} ${
-                          size.quantity === 0 &&
+                        className={`${styles.b2} ${styles.sizeSelection__block} ${size.quantity === 0 &&
                           !isMto &&
                           styles["sizeSelection__block--disable"]
-                        } ${
-                          (size?.quantity !== 0 || isMto) &&
+                          } ${(size?.quantity !== 0 || isMto) &&
                           styles["sizeSelection__block--selectable"]
-                        } ${
-                          selectedSize === size?.value &&
+                          } ${selectedSize === size?.value &&
                           styles["sizeSelection__block--selected"]
-                        } `}
+                          } `}
                         title={size?.value}
                         onClick={() => onSizeSelection(size?.value)}
                       >
@@ -880,9 +876,8 @@ const AddToCart = ({
                   disabled={productData?.selectedQuantity === 0}
                   startIcon={
                     <CartIcon
-                      className={`${styles.cartIcon} ${
-                        showBuyNowButton ? styles.fillSecondary : ""
-                      }`}
+                      className={`${styles.cartIcon} ${showBuyNowButton ? styles.fillSecondary : ""
+                        }`}
                     />
                   }
                   className={
