@@ -317,125 +317,133 @@ const AddToCart = ({
             )}
             <h1 className={styles.product__title}>{slug && name}</h1>
 
-            {(productData?.isBestPriceLoading ||
-              productData?.product?.best_price?.is_applicable) && (
-                <B2bBestPriceWrapper
-                  loggedIn={loggedIn}
-                  isBestPriceLoading={true || productData?.isBestPriceLoading}
-                  bestPriceDetailsData={productData}
-                  globalConfig={globalConfig}
-                  isMerchantKycApproved={isMerchantKycApproved()}
-                />
-              )}
+            <h1 className={styles.product__title}>{slug && name}</h1>
 
-            {productData?.product?.contract?.is_applicable && (
-              <Tooltip
-                position="right"
-                title={
-                  <>
-                    {t("resource.b2b.components.add_to_cart.contract_applied")}{" "}
-                    -{" "}
-                    {productData?.product?.contract?.used_count === 0 ? (
-                      <>
-                        {productData?.product?.contract?.total_count}{" "}
-                        {t("resource.b2b.components.add_to_cart.qty_available")}
-                      </>
-                    ) : (
-                      <>
-                        {productData?.product?.contract?.total_count -
-                          productData?.product?.contract?.used_count}
-                        /{productData?.product?.contract?.total_count}
-                        {t("resource.b2b.components.add_to_cart.qty_available")}
-                      </>
-                    )}
-                  </>
-                }
-              >
-                <div className={styles.badge_section}>
-                  <div className={styles.badge}>
-                    <span>
-                      {t("resource.b2b.components.add_to_cart.contract_price")}
-                    </span>
-                    <span className={styles.info_icon}>
-                      <SvgWrapper svgSrc="info-white" />
-                    </span>
-                  </div>
-                </div>
-              </Tooltip>
-            )}
-
-            {productData?.product?.quotation?.is_applicable && (
-              <Tooltip
-                position="right"
-                title={
-                  <>
-                    {t("resource.b2b.components.add_to_cart.quote_applied")} -{" "}
-                    {productData?.product?.quotation?.used_count === 0 ? (
-                      <>
-                        {productData?.product?.quotation?.total_count}{" "}
-                        {t("resource.b2b.components.add_to_cart.qty_available")}
-                      </>
-                    ) : (
-                      <>
-                        {productData?.product?.quotation?.total_count -
-                          productData?.product?.quotation?.used_count}
-                        /{productData?.product?.quotation?.total_count}
-                        {t("resource.b2b.components.add_to_cart.qty_available")}
-                      </>
-                    )}
-                  </>
-                }
-              >
-                <div className={styles.badge_section}>
-                  <div className={styles.badge}>
-                    <span>
-                      {t("resource.b2b.components.add_to_cart.quoted_price")}
-                    </span>
-                    <span className={styles.info_icon}>
-                      <SvgWrapper svgSrc="info-white" />
-                    </span>
-                  </div>
-                </div>
-              </Tooltip>
-            )}
-
-            {/* ---------- Product Price ---------- */}
+            {/* Tooltip badges (Quoted/Contract Price) + Price: show one shimmer when loading, else show real content */}
             {show_price && sizes?.sellable && (
-              <div className={styles.product__price}>
+              <>
                 {productData?.isBestPriceLoading ? (
-                  <div className={styles.priceShimmer}>
-                    <div className={styles.shimmerLine} />
-                    <div className={styles.shimmerLineSecondary} />
+                  <div className={styles.product__price}>
+                    <div className={styles.priceShimmer}>
+                      <div className={styles.shimmerLine} />
+                      <div className={styles.shimmerLineSecondary} />
+                    </div>
                   </div>
-                ) : productData?.product?.quotation?.is_applicable ||
-                  productData?.product?.contract?.is_applicable ||
-                  productData?.product?.pricing_tier?.is_applicable ? (
-                  <h4 className={styles["product__price--effective"]}>
-                    {currencyFormat(
-                      productData?.product?.best_price?.price,
-                      productData?.productPrice?.price?.currency_symbol,
-                      formatLocale(locale, countryCode, true)
-                    )}
-                  </h4>
                 ) : (
                   <>
-                    <h4 className={styles["product__price--effective"]}>
-                      {getProductPrice("effective")}
-                    </h4>
-                    {getProductPrice("effective") !==
-                      getProductPrice("marked") && (
-                        <span className={styles["product__price--marked"]}>
-                          {getProductPrice("marked")}
-                        </span>
-                      )}
-                    {sizes?.discount && (
-                      <span className={styles["product__price--discount"]}>
-                        ({sizes?.discount})
-                      </span>
+                    {(productData?.product?.best_price?.is_applicable ||
+                      productData?.product?.contract?.is_applicable ||
+                      productData?.product?.quotation?.is_applicable) && (
+                      <B2bBestPriceWrapper
+                        loggedIn={loggedIn}
+                        isBestPriceLoading={productData?.isBestPriceLoading}
+                        bestPriceDetailsData={productData}
+                        globalConfig={globalConfig}
+                        isMerchantKycApproved={isMerchantKycApproved()}
+                      />
                     )}
+                    {productData?.product?.contract?.is_applicable && (
+                      <Tooltip
+                        position="right"
+                        title={
+                          <>
+                            {t("resource.b2b.components.add_to_cart.contract_applied")}{" "}
+                            -{" "}
+                            {productData?.product?.contract?.used_count === 0 ? (
+                              <>
+                                {productData?.product?.contract?.total_count}{" "}
+                                {t("resource.b2b.components.add_to_cart.qty_available")}
+                              </>
+                            ) : (
+                              <>
+                                {productData?.product?.contract?.total_count -
+                                  productData?.product?.contract?.used_count}
+                                /{productData?.product?.contract?.total_count}
+                                {t("resource.b2b.components.add_to_cart.qty_available")}
+                              </>
+                            )}
+                          </>
+                        }
+                      >
+                        <div className={styles.badge_section}>
+                          <div className={styles.badge}>
+                            <span>
+                              {t("resource.b2b.components.add_to_cart.contract_price")}
+                            </span>
+                            <span className={styles.info_icon}>
+                              <SvgWrapper svgSrc="info-white" />
+                            </span>
+                          </div>
+                        </div>
+                      </Tooltip>
+                    )}
+                    {productData?.product?.quotation?.is_applicable && (
+                      <Tooltip
+                        position="right"
+                        title={
+                          <>
+                            {t("resource.b2b.components.add_to_cart.quote_applied")} -{" "}
+                            {productData?.product?.quotation?.used_count === 0 ? (
+                              <>
+                                {productData?.product?.quotation?.total_count}{" "}
+                                {t("resource.b2b.components.add_to_cart.qty_available")}
+                              </>
+                            ) : (
+                              <>
+                                {productData?.product?.quotation?.total_count -
+                                  productData?.product?.quotation?.used_count}
+                                /{productData?.product?.quotation?.total_count}
+                                {t("resource.b2b.components.add_to_cart.qty_available")}
+                              </>
+                            )}
+                          </>
+                        }
+                      >
+                        <div className={styles.badge_section}>
+                          <div className={styles.badge}>
+                            <span>
+                              {t("resource.b2b.components.add_to_cart.quoted_price")}
+                            </span>
+                            <span className={styles.info_icon}>
+                              <SvgWrapper svgSrc="info-white" />
+                            </span>
+                          </div>
+                        </div>
+                      </Tooltip>
+                    )}
+                    <div className={styles.product__price}>
+                      {productData?.product?.quotation?.is_applicable ||
+                        productData?.product?.contract?.is_applicable ||
+                        productData?.product?.pricing_tier?.is_applicable ? (
+                        <h4 className={styles["product__price--effective"]}>
+                          {currencyFormat(
+                            productData?.product?.best_price?.price,
+                            productData?.productPrice?.price?.currency_symbol,
+                            formatLocale(locale, countryCode, true)
+                          )}
+                        </h4>
+                      ) : (
+                        <>
+                          <h4 className={styles["product__price--effective"]}>
+                            {getProductPrice("effective")}
+                          </h4>
+                          {getProductPrice("effective") !==
+                            getProductPrice("marked") && (
+                            <span className={styles["product__price--marked"]}>
+                              {getProductPrice("marked")}
+                            </span>
+                          )}
+                          {sizes?.discount && (
+                            <span className={styles["product__price--discount"]}>
+                              ({sizes?.discount})
+                            </span>
+                          )}
+                        </>
+                      )}
+                    </div>
                   </>
                 )}
-              </div>
+              </>
             )}
             {/* ---------- Product Tax Label ---------- */}
             {pageConfig?.tax_label && show_price && sizes?.sellable && (
