@@ -22744,19 +22744,6 @@ h5,
     width: 100%;
   }
 }
-.add-to-cart__productDescContainer___w6xlt .add-to-cart__priceShimmer___tW_fU {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.add-to-cart__productDescContainer___w6xlt .add-to-cart__priceShimmer___tW_fU .add-to-cart__shimmerLine___cQPqR {
-  height: 20px;
-  width: 30%;
-  background: linear-gradient(90deg, #e8e8e8 25%, #c8c8c8 50%, #e8e8e8 75%);
-  background-size: 200% 100%;
-  border-radius: 4px;
-  animation: add-to-cart__priceShimmerAnim___YPveo 1.5s infinite;
-}
 @keyframes add-to-cart__priceShimmerAnim___YPveo {
   0% {
     background-position: -200% 0;
@@ -23392,6 +23379,21 @@ h5,
   font-weight: 400;
   line-height: normal;
   letter-spacing: -0.24px;
+}
+.add-to-cart__priceShimmer___tW_fU {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 20px;
+}
+.add-to-cart__priceShimmer___tW_fU .add-to-cart__shimmerLine___cQPqR {
+  height: 20px;
+  width: 30%;
+  min-width: 80px;
+  background: linear-gradient(90deg, #d0d0d0 25%, #a0a0a0 50%, #d0d0d0 75%) !important;
+  background-size: 200% 100% !important;
+  border-radius: 4px;
+  animation: add-to-cart__priceShimmerAnim___YPveo 1.5s infinite;
 }
 
 .viewer-3d__viewer3d___c8cT8 {
