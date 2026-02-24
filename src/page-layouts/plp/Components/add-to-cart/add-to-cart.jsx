@@ -326,7 +326,6 @@ const AddToCart = ({
                   <div className={styles.product__price}>
                     <div className={styles.priceShimmer}>
                       <div className={styles.shimmerLine} />
-                      <div className={styles.shimmerLineSecondary} />
                     </div>
                   </div>
                 ) : (
