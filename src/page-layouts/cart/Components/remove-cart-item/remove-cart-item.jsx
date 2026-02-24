@@ -6,24 +6,17 @@ import { useGlobalTranslation } from "fdk-core/utils";
 function RemoveCartItem({
   isOpen = false,
   cartItem = null,
-  isRemoving = false,
-  isMovingToWishlist = false,
-  onRemoveButtonClick = () => {},
-  onWishlistButtonClick = () => {},
-  onCloseDialogClick = () => {},
+  onRemoveButtonClick = () => { },
+  onWishlistButtonClick = () => { },
+  onCloseDialogClick = () => { },
 }) {
   const { t } = useGlobalTranslation("translation");
-
-  const isGifUrl = (url = "") => /\.gif(\?|#|$)/i.test(String(url || ""));
-
   const getProductImage = useMemo(() => {
     if (
       cartItem?.product?.images?.length > 0 &&
       cartItem?.product?.images?.[0]?.url
     ) {
-      return isGifUrl(cartItem.product.images[0].url)
-        ? cartItem.product.images[0].url
-        : cartItem.product.images[0].url.replace("original", "resize-w:250");
+      return cartItem.product.images[0].url.replace("original", "resize-w:250");
     }
   }, [cartItem]);
 
@@ -52,24 +45,14 @@ function RemoveCartItem({
           </div>
         </div>
       </div>
-       <div className={styles.removeModalFooter}>
-  <button
-    type="button"
-    className={styles.removeBtn}
-    onClick={onRemoveButtonClick}
-    disabled={isRemoving}
-  >
-    {isRemoving ? "Removing..." : t("resource.facets.remove_caps")}
-  </button>
-
-  <button
-    type="button"
-   className={`${styles.wishlistBtn} ${isMovingToWishlist ? styles.disabled : ""}`}
-    onClick={onWishlistButtonClick}
-  >
-    {t("resource.cart.move_to_wishlist")}
-  </button>
-</div>
+      <div className={styles.removeModalFooter}>
+        <div className={styles.removeBtn} onClick={onRemoveButtonClick}>
+          {t("resource.facets.remove_caps")}
+        </div>
+        <div className={styles.wishlistBtn} onClick={onWishlistButtonClick}>
+          {t("resource.cart.move_to_wishlist")}
+        </div>
+      </div>
     </Modal>
   );
 }

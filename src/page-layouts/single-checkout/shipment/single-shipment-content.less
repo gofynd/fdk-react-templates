@@ -31,21 +31,7 @@
         padding-inline-end: 12px;
         padding-bottom: 4px;
         padding-inline-start: 0px;
-        justify-content: space-between;
-        .shipmentLabelBox {
-          display: flex;
-          align-items: center;
-        }
-        .mobileEditCartBtn {
-          display: none;
-          font-size: 12px;
-          font-weight: 500;
-          color: @ButtonLink;
-          text-decoration: underline;
-          @media @mobile {
-            display: block;
-          }
-        }
+
         .shipmentLabelLoader {
           height: 17px;
         }
@@ -207,15 +193,11 @@
               }
               .sizeQuantity {
                 display: flex;
-                align-items: baseline;
                 margin-bottom: 4px;
                 line-height: 140%;
                 flex-wrap: wrap;
                 .size {
                   margin-inline-end: 12px;
-                  line-height: 140%;
-                }
-                .qty {
                   line-height: 140%;
                 }
               }
@@ -294,44 +276,29 @@
 
 .parent {
   border: 1px solid var(--dividerStokes);
-  border-top: none;
   padding: 24px;
-
   @media @desktop {
-    max-height: 75vh;
-    overflow-y: auto;
-    position: relative;
     border-radius: 0px 0px 8px 8px;
-
-    &::-webkit-scrollbar {
-      width: 8px;
-    }
-    &::-webkit-scrollbar-track {
-      background: #f1f1f1;
-      border-radius: 4px;
-    }
-    &::-webkit-scrollbar-thumb {
-      background: #888;
-      border-radius: 4px;
-    }
-    &::-webkit-scrollbar-thumb:hover {
-      background: #555;
-    }
-
-    scrollbar-width: thin;
-    scrollbar-color: #888 #f1f1f1;
   }
+  @media @tablet-range {
+    padding: 16px;
+  }
+  border-top: none;
 
   @media @mobile {
-    border-width: 0;
+    border-radius: 0px;
+    border-width: 0 0;
     padding: 0;
     margin-top: 12px;
-    overflow: visible;
   }
-}
 
-.scrollArea {
-  overflow: visible;
+  .shimmer {
+    height: 250px;
+
+    @media @tablet {
+      height: 200px;
+    }
+  }
 }
 
 .proceedBtnWrapper {
@@ -339,8 +306,6 @@
     display: none;
   }
   .proceedBtn {
-    position: sticky;
-    bottom: 0;
     cursor: pointer;
     font-weight: 600;
     font-size: 14px;

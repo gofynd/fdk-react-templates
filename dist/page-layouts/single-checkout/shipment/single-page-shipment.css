@@ -403,7 +403,6 @@ h5,
   font-size: 14px;
   font-weight: 600;
   line-height: 140%;
-  color: var(--textHeading, #26201a);
 }
 .single-page-shipment__addressSelectedHeaderContainer___SVaIw .single-page-shipment__address___pgW0L {
   font-size: 12px;
@@ -485,11 +484,10 @@ h5,
   font-size: 14px;
   font-weight: 600;
   line-height: 140%;
-  color: var(--textHeading, #26201a);
 }
 .single-page-shipment__reviewHeaderSelect___bNgMy .single-page-shipment__headerContainer___Umy4m .single-page-shipment__shipment___xocKT {
   font-size: 12px;
-  color: var(--textBody, #3c3131);
+  color: var(--textHeading);
   font-weight: 400;
   line-height: 140%;
 }
@@ -534,9 +532,6 @@ h5,
   cursor: pointer;
   line-height: 140%;
   margin-left: 24px;
-}
-.single-page-shipment__payBtn___GiWGG.single-page-shipment__commonBtn___rL68_ {
-  min-width: 119.6px;
 }
 .single-page-shipment__payBtn___GiWGG:hover {
   background-color: var(--buttonPrimaryL1, #71653a);
@@ -920,23 +915,6 @@ h5,
   padding-inline-end: 12px;
   padding-bottom: 4px;
   padding-inline-start: 0px;
-  justify-content: space-between;
-}
-.single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF .single-shipment-content__headerLeft___ffG20 .single-shipment-content__shipmentLabelBox___zPT_T {
-  display: flex;
-  align-items: center;
-}
-.single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF .single-shipment-content__headerLeft___ffG20 .single-shipment-content__mobileEditCartBtn___RhOYe {
-  display: none;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--buttonLink, #b1655b);
-  text-decoration: underline;
-}
-@media only screen and (max-width: 480px) {
-  .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF .single-shipment-content__headerLeft___ffG20 .single-shipment-content__mobileEditCartBtn___RhOYe {
-    display: block;
-  }
 }
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF .single-shipment-content__headerLeft___ffG20 .single-shipment-content__shipmentLabelLoader___jYWWp {
   height: 17px;
@@ -1100,16 +1078,12 @@ h5,
 }
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__itemWrapper___Sz3u9 .single-shipment-content__rightDetails___Ll92n .single-shipment-content__productDetails___BshGD .single-shipment-content__sizeInfo___IV1tR .single-shipment-content__sizeQuantity___IbtcK {
   display: flex;
-  align-items: baseline;
   margin-bottom: 4px;
   line-height: 140%;
   flex-wrap: wrap;
 }
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__itemWrapper___Sz3u9 .single-shipment-content__rightDetails___Ll92n .single-shipment-content__productDetails___BshGD .single-shipment-content__sizeInfo___IV1tR .single-shipment-content__sizeQuantity___IbtcK .single-shipment-content__size___t9VZb {
   margin-inline-end: 12px;
-  line-height: 140%;
-}
-.single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__itemWrapper___Sz3u9 .single-shipment-content__rightDetails___Ll92n .single-shipment-content__productDetails___BshGD .single-shipment-content__sizeInfo___IV1tR .single-shipment-content__sizeQuantity___IbtcK .single-shipment-content__qty___OBdAp {
   line-height: 140%;
 }
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__itemWrapper___Sz3u9 .single-shipment-content__rightDetails___Ll92n .single-shipment-content__paymentInfo___lbLQI {
@@ -1173,43 +1147,34 @@ h5,
 }
 .single-shipment-content__parent___NFi_h {
   border: 1px solid var(--dividerStokes);
-  border-top: none;
   padding: 24px;
+  border-top: none;
 }
 @media only screen and (min-width: 769px) {
   .single-shipment-content__parent___NFi_h {
-    max-height: 75vh;
-    overflow-y: auto;
-    position: relative;
     border-radius: 0px 0px 8px 8px;
-    scrollbar-width: thin;
-    scrollbar-color: #888 #f1f1f1;
   }
-  .single-shipment-content__parent___NFi_h::-webkit-scrollbar {
-    width: 8px;
-  }
-  .single-shipment-content__parent___NFi_h::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 4px;
-  }
-  .single-shipment-content__parent___NFi_h::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 4px;
-  }
-  .single-shipment-content__parent___NFi_h::-webkit-scrollbar-thumb:hover {
-    background: #555;
+}
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  .single-shipment-content__parent___NFi_h {
+    padding: 16px;
   }
 }
 @media only screen and (max-width: 480px) {
   .single-shipment-content__parent___NFi_h {
-    border-width: 0;
+    border-radius: 0px;
+    border-width: 0 0;
     padding: 0;
     margin-top: 12px;
-    overflow: visible;
   }
 }
-.single-shipment-content__scrollArea___tzWmh {
-  overflow: visible;
+.single-shipment-content__parent___NFi_h .single-shipment-content__shimmer___kqGfq {
+  height: 250px;
+}
+@media only screen and (max-width: 768px) {
+  .single-shipment-content__parent___NFi_h .single-shipment-content__shimmer___kqGfq {
+    height: 200px;
+  }
 }
 @media only screen and (max-width: 480px) {
   .single-shipment-content__proceedBtnWrapper___r54yh {
@@ -1217,8 +1182,6 @@ h5,
   }
 }
 .single-shipment-content__proceedBtnWrapper___r54yh .single-shipment-content__proceedBtn___csoKN {
-  position: sticky;
-  bottom: 0;
   cursor: pointer;
   font-weight: 600;
   font-size: 14px;
@@ -2740,13 +2703,6 @@ h5,
 @media only screen and (max-width: 480px) {
   .sticky-pay-now__stickyBtnContainer___L7zbD {
     display: block;
-    z-index: 30;
-  }
-}
-@media only screen and (max-width: 768px) {
-  .sticky-pay-now__stickyBtnContainer___L7zbD {
-    display: block;
-    z-index: 30;
   }
 }
 .sticky-pay-now__stickyBtnContainer1___YFwCC {
@@ -2813,9 +2769,6 @@ h5,
 }
 .sticky-pay-now__checkoutButton___mtO42 {
   gap: 12px;
-}
-.sticky-pay-now__checkoutButton___mtO42.sticky-pay-now__linkPayBtn___CY0FQ {
-  width: 100%;
 }
 .sticky-pay-now__buttonWidth___nKraw {
   width: 100%;

@@ -35,8 +35,6 @@ const Cart = ({
   cartCommentProps,
   cartShareProps,
   isRemoveModalOpen = false,
-  isRemoving = false,
-  isMovingToWishlist = false,
   isPromoModalOpen = false,
   onGotoCheckout = () => { },
   onRemoveIconClick = () => { },
@@ -61,13 +59,10 @@ const Cart = ({
   const cartItemsArray = Object.keys(cartItems || {});
   const sizeModalItemValue = cartItems && sizeModal && cartItems[sizeModal];
 
-  const totalPrice = useMemo(() => {
-    if (!breakUpValues?.display) return 0;
-    // Use "total" key which represents the final payable amount after all discounts
-    // This is the amount the user will actually pay
-    const total = breakUpValues.display.find((val) => val.key === "total");
-    return total?.value ?? 0;
-  }, [breakUpValues]);
+  const totalPrice = useMemo(
+    () => breakUpValues?.display?.find((val) => val.key == "total")?.value,
+    [breakUpValues]
+  );
 
   function handleRemoveIconClick(data) {
     setRemoveItemData(data);
@@ -141,13 +136,11 @@ const Cart = ({
             <Coupon {...cartCouponProps} />
             <Comment {...cartCommentProps} />
             {isGstInput && <GstCard {...cartGstProps} key={cartData} />}
-            <div className={styles.priceBreakupCartWrapper}>
             <PriceBreakup
               breakUpValues={breakUpValues?.display || []}
               cartItemCount={cartItemsArray?.length || 0}
               currencySymbol={currencySymbol}
             />
-            </div>
             {isPlacingForCustomer && isLoggedIn && (
               <div className={styles.checkoutContainer}>
                 <SvgWrapper
@@ -209,8 +202,6 @@ const Cart = ({
       <RemoveCartItem
         isOpen={isRemoveModalOpen}
         cartItem={removeItemData?.item}
-        isRemoving={isRemoving}
-        isMovingToWishlist={isMovingToWishlist}
         onRemoveButtonClick={() => onRemoveButtonClick(removeItemData)}
         onWishlistButtonClick={() => onWishlistButtonClick(removeItemData)}
         onCloseDialogClick={onCloseRemoveModalClick}

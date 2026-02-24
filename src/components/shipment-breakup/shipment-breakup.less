@@ -2,16 +2,7 @@
 
 .title {
   color: @Mako;
-  margin-bottom: 16px;
-  @media @mobile, @tablet {
-    margin-bottom: 8px;
-  }
 }
-
-.shipmentBreakupContainerPadding {
-  padding: 16px !important;
-}
-
 .lightsm {
   font-weight: 300;
   font-size: 16px;
@@ -27,43 +18,35 @@
   font-size: 16px;
   @media @tablet {
     font-size: 14px;
-    font-weight: 600;
   }
   @media @mobile {
     font-size: 14px;
   }
 }
 .billing {
+  padding: 16px;
+  position: relative;
+
   div {
-    margin-bottom: 12px;
-    @media @mobile, @tablet {
-      margin-bottom: 8px;
-    }
+    margin-bottom: 8px;
 
     &:last-child {
       margin-bottom: 0px;
     }
   }
-
   .label {
     color: @TextBody;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 400;
     line-height: 140%;
-
-    @media @mobile, @tablet {
-      font-size: 12px !important;
-    }
   }
-
   .values {
+    position: absolute;
+    inset-inline-end: 16px;
     color: @TextBody;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 400;
     line-height: 140%;
-    @media @mobile, @tablet {
-      font-size: 12px !important;
-    }
   }
 
   .total {
@@ -72,22 +55,7 @@
     font-weight: bold;
     color: @Mako;
   }
-
-  .totalValContainer {
-    display: flex;
-    justify-content: space-between;
-
-    .label,
-    .values {
-      font-size: 14px;
-      font-weight: 400;
-      @media @mobile, @tablet {
-        font-size: 12px !important;
-      }
-    }
-  }
 }
-
 .paymentDetails {
   display: flex;
   align-items: center;
@@ -104,39 +72,31 @@
     inset-inline-end: 0px;
   }
 }
-
-.grandTotal {
-  font-size: 16px;
-  font-weight: 700;
-
-  @media @tablet, @mobile {
-    font-size: 14px;
-    font-weight: 600;
+.billing {
+  :last-child {
+    .totalValContainer {
+      :last-child {
+        font-size: 14px;
+        font-weight: 600;
+      }
+      :nth-last-child(2) {
+        font-size: 14px;
+        font-weight: 600;
+      }
+    }
   }
 }
-
-.horizontalLine {
-  margin: 16px 0 !important;
-  height: 1px;
-  background: @DividerStokes;
-  @media @mobile {
-    margin: 8px 0 !important;
+.billing {
+  :last-child {
+    .totalValContainer {
+      :last-child {
+        font-size: 14px;
+        font-weight: 600;
+      }
+      :nth-last-child(2) {
+        font-size: 14px;
+        font-weight: 600;
+      }
+    }
   }
-  @media @tablet {
-    margin: 8px 0 !important;
-  }
-}
-
-.grandTotal {
-  font-size: 16px !important;
-  font-weight: 700 !important;
-
-  @media @tablet, @mobile {
-    font-size: 14px !important;
-    font-weight: 600 !important;
-  }
-}
-
-.noPadding {
-  padding: 0 !important;
 }

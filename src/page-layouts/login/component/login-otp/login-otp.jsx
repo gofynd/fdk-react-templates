@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useLayoutEffect, useRef } from "react";
+import React, { useEffect, useId, useLayoutEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import * as styles from "./login-otp.less";
 import MobileNumber from "../../../auth/mobile-number/mobile-number";
@@ -20,20 +20,16 @@ function LoginOtp({
   onLoginFormSubmit = () => {},
   onOtpSubmit = () => {},
   onResendOtpClick = () => {},
-  onClearOtpError = () => {},
   getOtpLoading,
-  isTermsAccepted = false,
-  setShowConsentTooltip = () => {},
 }) {
   const { t } = useGlobalTranslation("translation");
-  const { handleSubmit, control, getValues, reset, setValue, clearErrors } =
-    useForm({
-      mode: "onChange",
-      defaultValues: {
-        phone: mobileInfo,
-      },
-      reValidateMode: "onChange",
-    });
+  const { handleSubmit, control, getValues, reset, setValue } = useForm({
+    mode: "onChange",
+    defaultValues: {
+      phone: mobileInfo,
+    },
+    reValidateMode: "onChange",
+  });
 
   const onChangeButton = () => {
     reset();
@@ -41,18 +37,10 @@ function LoginOtp({
     setSubmittedMobile("");
   };
 
-  const handleOtpFormSubmit = (data) => {
-    if (!isTermsAccepted) {
-      setShowConsentTooltip(true);
-      return;
-    }
-    onLoginFormSubmit(data);
-  };
-
   return (
     <div className={styles.loginOtpWrapper}>
       {!isFormSubmitSuccess ? (
-        <form onSubmit={handleSubmit(handleOtpFormSubmit)}>
+        <form onSubmit={handleSubmit(onLoginFormSubmit)}>
           <Controller
             name="phone"
             control={control}
@@ -73,7 +61,6 @@ function LoginOtp({
                 isFocused={error?.message}
                 onChange={(value) => {
                   setValue("phone", value);
-                  clearErrors("phone");
                 }}
               />
             )}
@@ -95,7 +82,6 @@ function LoginOtp({
           onOtpSubmit={onOtpSubmit}
           onResendOtpClick={onResendOtpClick}
           onChangeButton={onChangeButton}
-          onClearOtpError={onClearOtpError}
         />
       )}
     </div>
@@ -112,11 +98,9 @@ function OtpForm({
   onOtpSubmit = () => {},
   onResendOtpClick = () => {},
   onChangeButton = () => {},
-  onClearOtpError = () => {},
 }) {
   const { t } = useGlobalTranslation("translation");
   const otpInputId = useId();
-  const isFirstRender = useRef(true);
 
   const {
     handleSubmit,
@@ -137,16 +121,10 @@ function OtpForm({
     }
   }, []);
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
-    if (mobileOtp !== undefined && mobileOtp !== null) {
+    if (mobileOtp && mobileOtp.length < 4) {
       clearErrors("root");
-      clearErrors("mobileOtp");
-      // DO NOT clear root error here - it should persist until submission/resend
     }
-  }, [mobileOtp, clearErrors]);
+  }, [mobileOtp]);
 
   useEffect(() => {
     if (error) {
@@ -164,9 +142,6 @@ function OtpForm({
 
   const resendOtp = () => {
     resetField("mobileOtp");
-    // Clear errors when resending OTP
-    clearErrors("root");
-    onClearOtpError();
     onResendOtpClick(mobileInfo);
   };
 
@@ -174,12 +149,7 @@ function OtpForm({
     <>
       <form
         className={styles.loginInputGroup}
-        onSubmit={handleSubmit((data) => {
-          // Clear errors when submitting a new attempt
-          clearErrors("root");
-          onClearOtpError();
-          onOtpSubmit(data);
-        })}
+        onSubmit={handleSubmit(onOtpSubmit)}
       >
         <h3 className={styles.otpTitle}>
           {t("resource.localization.verify_account")}
@@ -236,18 +206,13 @@ function OtpForm({
           {t("resource.common.continue")}
         </button>
       </form>
-      <div className={styles.resendOtpWrapper}>
-        <span className={styles.didntReceiveText}>
-          {t("resource.common.didnt_receive_otp")}
-        </span>
-        <button
-          className={styles.resendOtpBtn}
-          onClick={resendOtp}
-          disabled={isResendBtnDisabled}
-        >
-          {`${t("resource.common.resend_otp")}${isResendBtnDisabled ? ` (${otpResendTime}S)` : ""}`}
-        </button>
-      </div>
+      <button
+        className={styles.resendOtpBtn}
+        onClick={resendOtp}
+        disabled={isResendBtnDisabled}
+      >
+        {`${t("resource.common.resend_otp")}${isResendBtnDisabled ? ` (${otpResendTime}S)` : ""}`}
+      </button>
     </>
   );
 }
