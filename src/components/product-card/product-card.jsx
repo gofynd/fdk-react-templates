@@ -52,6 +52,7 @@ import {
 } from "fdk-core/utils";
 import ForcedLtr from "../forced-ltr/forced-ltr";
 import Tooltip from "../tool-tip/tool-tip";
+import Skeleton from "../core/skeletons/skeleton";
 
 const DefaultProductPrice = ({
   t,
@@ -68,8 +69,18 @@ const DefaultProductPrice = ({
   isKycKeyPresent,
   isMerchantKycApproved,
   kycBadgeText,
+  showPriceLoader,
 }) => {
   const navigate = useNavigate();
+
+  // Option 1: Show skeleton until auth/KYC state is resolved (avoids flash of "login to view" or KYC badge)
+  if (showPriceLoader) {
+    return (
+      <div className={`${styles.productPrice} ${centerAlign ? styles.center : ""}`}>
+        <Skeleton type="text" width={120} height={20} className={styles.priceSkeleton} />
+      </div>
+    );
+  }
 
   const handleNavigateToLogin = (e) => {
     e.stopPropagation();
@@ -78,8 +89,8 @@ const DefaultProductPrice = ({
     navigate(`/auth/login?redirectUrl=${encodeURIComponent(currentUrl)}`);
   };
 
-  //? Guest user Settings
-  if (!loggedIn) {
+  //? Guest user Settings (Option 2: only when we're sure user is guest — loggedIn === false)
+  if (loggedIn === false) {
     //? if none of the three conditions are met, then show empty fragment
     if (!showMarkedPriceForGuest && !showDiscountForGuest && !showLoginOption) {
       return <></>;
@@ -99,7 +110,7 @@ const DefaultProductPrice = ({
       );
     }
     //? If marked Price option is enabled, and discount is disabled
-    if (showMarkedPriceForGuest && !showDiscountForGuest && !loggedIn) {
+    if (showMarkedPriceForGuest && !showDiscountForGuest && loggedIn === false) {
       return (
         <>
           <div
@@ -124,8 +135,8 @@ const DefaultProductPrice = ({
     }
   }
 
-  //? Non-KYC user Settings
-  if (loggedIn && !isMerchantKycApproved) {
+  //? Non-KYC user Settings (only when we know user is logged in and KYC state is known)
+  if (loggedIn === true && !isMerchantKycApproved) {
     //? Only show marked price for non KYC
     if (!showDiscountForNonKyc) {
       return (
@@ -274,15 +285,15 @@ const ProductCard = ({
   ),
   actionButtonText,
   followedIdList = [],
-  onWishlistClick = () => {},
-  handleAddToCart = () => {},
-  onRemoveClick = () => {},
+  onWishlistClick = () => { },
+  handleAddToCart = () => { },
+  onRemoveClick = () => { },
   centerAlign = false,
   showAddToCart = false,
   showBadge = true,
   showColorVariants = false,
   isSlider = false,
-  onClick = () => {},
+  onClick = () => { },
   globalConfig = {},
   productsInWishlist = [],
   showSmartWishlist = false,
@@ -303,6 +314,11 @@ const ProductCard = ({
   const isMerchantKycApproved = () => {
     return merchant_data?.[keyName] === "approved";
   };
+
+  // Option 2 + 1: Only show guest/KYC UI when state is known; show skeleton while auth/KYC is resolving
+  const isAuthStateReady = loggedIn !== undefined && loggedIn !== null;
+  const isKycStateReady = loggedIn !== true || merchant_data !== undefined;
+  const showPriceLoader = !isAuthStateReady || (loggedIn === true && !isKycStateReady);
 
   const wishlistStatus = useMemo(() => {
     if (!productsInWishlist || !product?.slug) {
@@ -367,19 +383,19 @@ const ProductCard = ({
         price =
           priceDetails.min !== priceDetails.max
             ? `${currencyFormat(
-                priceDetails.min,
-                priceDetails.currency_symbol,
-                formatLocale(locale, countryCode, true)
-              )} - ${currencyFormat(
-                priceDetails.max,
-                priceDetails.currency_symbol,
-                formatLocale(locale, countryCode, true)
-              )}`
+              priceDetails.min,
+              priceDetails.currency_symbol,
+              formatLocale(locale, countryCode, true)
+            )} - ${currencyFormat(
+              priceDetails.max,
+              priceDetails.currency_symbol,
+              formatLocale(locale, countryCode, true)
+            )}`
             : currencyFormat(
-                priceDetails.min,
-                priceDetails.currency_symbol,
-                formatLocale(locale, countryCode, true)
-              );
+              priceDetails.min,
+              priceDetails.currency_symbol,
+              formatLocale(locale, countryCode, true)
+            );
         break;
       default:
         break;
@@ -531,11 +547,9 @@ const ProductCard = ({
 
   return (
     <div
-      className={`${styles.productCard} ${
-        !product.sellable ? styles.disableCursor : ""
-      } ${styles[customClass[0]]} ${styles[customClass[1]]} ${
-        styles[customClass[2]]
-      } ${styles.animate} ${gridClass} ${isSlider ? styles.sliderCard : ""}`}
+      className={`${styles.productCard} ${!product.sellable ? styles.disableCursor : ""
+        } ${styles[customClass[0]]} ${styles[customClass[1]]} ${styles[customClass[2]]
+        } ${styles.animate} ${gridClass} ${isSlider ? styles.sliderCard : ""}`}
       onClick={onClick}
     >
       <div className={`${styles.imageContainer} ${customImageContainerClass}`}>
@@ -563,7 +577,7 @@ const ProductCard = ({
           sources={imgSrcSet}
           defer={false}
         />
-        {isWishlistIcon && loggedIn && isMerchantKycApproved() && (
+        {isWishlistIcon && loggedIn === true && isMerchantKycApproved() && (
           <button
             className={`${styles.wishlistBtn} ${(showSmartWishlist ? wishlistStatus.isInWishlist : isFollowed) ? styles.active : ""}`}
             onClick={handleWishlistClick}
@@ -623,8 +637,8 @@ const ProductCard = ({
           {isPrice && (
             <>
               {product?.contract ||
-              product?.quotation ||
-              product?.pricing_tier ? (
+                product?.quotation ||
+                product?.pricing_tier ? (
                 <>
                   {product.contract && (
                     <Tooltip
@@ -742,6 +756,7 @@ const ProductCard = ({
                   isKycKeyPresent={isKycKeyPresent}
                   isMerchantKycApproved={isMerchantKycApproved()}
                   kycBadgeText={kyc_badge_text}
+                  showPriceLoader={showPriceLoader}
                 />
               )}
             </>
@@ -778,10 +793,11 @@ const ProductCard = ({
           )}
         </div>
 
-        {showAddToCart &&
-          ((!loggedIn && show_discount_guest) ||
-            (loggedIn && isMerchantKycApproved()) ||
-            (loggedIn &&
+        {!showPriceLoader &&
+          showAddToCart &&
+          ((loggedIn === false && show_discount_guest) ||
+            (loggedIn === true && isMerchantKycApproved()) ||
+            (loggedIn === true &&
               !isMerchantKycApproved() &&
               show_discount_non_kyc)) && (
             <FyButton
@@ -793,10 +809,11 @@ const ProductCard = ({
             </FyButton>
           )}
 
-        {show_available_offer_button &&
-          ((!loggedIn && show_discount_guest) ||
-            (loggedIn && isMerchantKycApproved()) ||
-            (loggedIn &&
+        {!showPriceLoader &&
+          show_available_offer_button &&
+          ((loggedIn === false && show_discount_guest) ||
+            (loggedIn === true && isMerchantKycApproved()) ||
+            (loggedIn === true &&
               !isMerchantKycApproved() &&
               show_discount_non_kyc)) && (
             <AvailableOfferButton
