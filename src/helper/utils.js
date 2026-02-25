@@ -10,6 +10,27 @@ export const debounce = (func, wait) => {
   };
 };
 
+export const formatDate = (isoString, dateOnly = false) => {
+  const date = new Date(isoString);
+
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = date.toLocaleString("en-US", { month: "short" });
+  const year = date.getFullYear();
+
+  let hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const ampm = hours >= 12 ? "PM" : "AM";
+
+  hours %= 12;
+  hours = hours || 12; // 0 becomes 12
+
+  if (dateOnly) {
+    return `${day} ${month}, ${year}`;
+  }
+
+  return `${day} ${month}, ${year}, ${hours}:${minutes} ${ampm}`;
+};
+
 export const getGlobalConfigValue = (globalConfig, id) =>
   globalConfig?.props?.[id] ?? "";
 
@@ -187,7 +208,12 @@ export const transformImage = (url, key, width) => {
   let updatedUrl = url;
   if (key && width) {
     const str = `/${key}/`;
-    updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
+    // updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
+    if (url.includes("/b2b-commerce/")) {
+      updatedUrl = url.replace(new RegExp(str), `/t.resize(w:${width})/`);
+    } else {
+      updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
+    }
   }
   try {
     const parsedUrl = new URL(updatedUrl);
@@ -301,33 +327,20 @@ export const currencyFormat = (
   locale = "en-IN",
   currencyCode = null
 ) => {
-  if (value == null || value === "") {
-    return "";
-  }
+  if (value == null || value === "") return "";
 
-  // Convert to number if it's a string
-  let num = typeof value === "string" ? parseFloat(value) : value;
+  // Convert to number if it's a string (strip commas so "1,039.5" parses as 1039.5, not 1)
+  const num =
+    typeof value === "string"
+      ? parseFloat(String(value).replace(/,/g, ""))
+      : value;
 
-  // Ensure it's a number, not NaN
-  if (Number.isNaN(num)) {
-    return "";
-  }
-
-  // Convert to number explicitly to handle edge cases
-  num = Number(num);
-  if (Number.isNaN(num)) {
-    return "";
-  }
+  if (Number.isNaN(num)) return "";
 
   // If currency code is provided, use it to determine locale
   let finalLocale = locale;
   if (currencyCode) {
     finalLocale = getLocaleFromCurrency(currencyCode);
-  }
-
-  // Ensure locale is valid, fallback to en-IN if not
-  if (!finalLocale || finalLocale === "en" || finalLocale === "") {
-    finalLocale = "en-IN";
   }
 
   // Determine if we should use Indian numbering system
@@ -363,7 +376,7 @@ export const currencyFormat = (
     }
 
     return finalResult;
-  } catch (error) {
+  } catch {
     // Fallback to basic formatting if locale is invalid
     console.warn(
       `Invalid locale "${finalLocale}", falling back to default formatting`
@@ -491,8 +504,11 @@ export function priceFormatCurrencySymbol(
 ) {
   if (price == null || price === "") return "";
 
-  // Convert to number if it's a string
-  let num = typeof price === "string" ? parseFloat(price) : price;
+  // Convert to number if it's a string (strip commas so "1,039.5" parses as 1039.5, not 1)
+  let num =
+    typeof price === "string"
+      ? parseFloat(String(price).replace(/,/g, ""))
+      : price;
 
   if (Number.isNaN(num)) return "";
 
@@ -698,83 +714,6 @@ export function translateDynamicLabel(input, t) {
   }
 }
 
-/**
- * Checks if an error message is a generic JavaScript error that shouldn't be shown to users.
- * These are typically internal errors that should be handled gracefully.
- * Only meaningful API/validation errors should be displayed to users.
- *
- * @param {string|null|undefined} errorMessage - The error message to check
- * @returns {boolean} - True if the error is a generic JS error, false otherwise
- */
-export function isGenericJSError(errorMessage) {
-  // Early return for null, undefined, or non-string types
-  if (!errorMessage || typeof errorMessage !== "string") {
-    return false;
-  }
-
-  const errorLower = errorMessage.toLowerCase();
-
-  // Check for common generic JavaScript error patterns
-  const genericErrorPatterns = [
-    "cannot read properties",
-    "reading 'find'",
-    "reading 'map'",
-    "reading 'length'",
-    "reading 'slice'",
-    "reading 'filter'",
-    "reading 'reduce'",
-    "reading 'forEach'",
-    "reading 'push'",
-    "reading 'pop'",
-    "is not a function",
-    "is not defined",
-    "cannot read",
-    "typeerror",
-    "referenceerror",
-    "syntaxerror",
-    "rangeerror",
-    "undefined is not",
-    "null is not",
-  ];
-
-  // Check if error message contains any generic error patterns
-  const hasGenericPattern = genericErrorPatterns.some((pattern) =>
-    errorLower.includes(pattern)
-  );
-
-  // Also check for the specific pattern: "undefined" + "reading"
-  const hasUndefinedReadingPattern =
-    errorLower.includes("undefined") && errorLower.includes("reading");
-
-  return hasGenericPattern || hasUndefinedReadingPattern;
-}
-
-/**
- * Validates if an error message is valid and should be displayed to users.
- * Filters out generic JavaScript errors and empty/invalid messages.
- *
- * @param {string|null|undefined} errorMessage - The error message to validate
- * @returns {boolean} - True if the error message is valid and should be displayed, false otherwise
- */
-export function isValidErrorMessage(errorMessage) {
-  // Must be a non-empty string
-  if (!errorMessage || typeof errorMessage !== "string") {
-    return false;
-  }
-
-  // Must not be empty after trimming
-  if (errorMessage.trim() === "") {
-    return false;
-  }
-
-  // Must not be a generic JavaScript error
-  if (isGenericJSError(errorMessage)) {
-    return false;
-  }
-
-  return true;
-}
-
 export function getLocaleDirection(fpi) {
   const dir = fpi?.store?.getState()?.custom?.currentLocaleDetails?.direction;
   return dir || "ltr";
@@ -938,13 +877,4 @@ export const getConfigFromProps = (props) => {
 
   // Handle direct object props
   return props;
-};
-
-export const formatDeliveryAddress = (d = {}) => {
-  const line1 = [d.address, d.area].filter(Boolean).join(" ").trim();
-  const line2 = d.landmark?.trim() || "";
-  const line3 = [d.city, [d.state, d.pincode].filter(Boolean).join(" ")].filter(Boolean).join(", ").trim();
-  const line4 = d.country?.trim() || "";
-
-  return [line1, line2, line3, line4].filter(Boolean).join(",\n");
 };
