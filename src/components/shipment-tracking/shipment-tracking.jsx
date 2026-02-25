@@ -7,6 +7,7 @@
  * @param {Object} props.shipmentInfo - Contains details about the shipment, such as whether it can be canceled or returned.
  * @param {Function} props.changeinit - A function to handle changes in the shipment status.
  * @param {Object} props.invoiceDetails - Contains details about the invoice, including a presigned URL for downloading.
+ * @param {Function} props.onAddToCart - A function to handle adding product to cart (for Buy Again functionality).
  *
  * @returns {JSX.Element} A React component that renders the shipment tracking interface.
  *
@@ -31,6 +32,7 @@ function ShipmentTracking({
   customNeedHelpLink,
   availableFOCount,
   bagLength = 0,
+  onAddToCart,
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -68,6 +70,25 @@ function ShipmentTracking({
     //     link: "/faq/" || shipmentInfo?.need_help_url,
     //   });
     // }
+    // if (shipmentInfo?.need_help_url) {
+    //   arrLinks.push({
+    //     type: "internal",
+    //     text: t("resource.common.need_help"),
+    //     link: "/contact-us",
+    //   });
+    // }
+    // Buy Again button - always visible
+    const firstBag = shipmentInfo?.bags?.[0];
+    const productSlug = firstBag?.item?.slug_key;
+    if (productSlug) {
+      arrLinks.push({
+        type: "internal",
+        text: t("resource.common.buy_again") || "BUY AGAIN",
+        link: `/product/${productSlug}`,
+        action: "buy_again",
+        productSlug: productSlug,
+      });
+    }
     if (invoiceDetails?.success) {
       arrLinks.push({
         text: t("resource.common.download_invoice"),
@@ -91,6 +112,14 @@ function ShipmentTracking({
   //   return shipmentInfo?.can_return ? "resource.facets.return_caps" : "resource.facets.cancel_caps";
   // };
 
+  const handleBuyAgain = async (productSlug) => {
+    if (onAddToCart) {
+      console.log("handleBuyAgain called", { productSlug });
+      // Use provided handler (typically opens add-to-cart modal)
+      onAddToCart(productSlug);
+    }
+  };
+
   const update = (item) => {
     if (["CANCEL", "RETURN"].includes(item?.text)) {
       const firstBag = shipmentInfo?.bags?.[0];
@@ -104,8 +133,8 @@ function ShipmentTracking({
         // Find the base bag for bundles, otherwise use first bag
         const selectedBag = isBundleItem
           ? shipmentInfo.bags.find(
-              (bag) => bag?.bundle_details?.is_base === true
-            ) || firstBag
+            (bag) => bag?.bundle_details?.is_base === true
+          ) || firstBag
           : firstBag;
 
         const bagId = selectedBag?.id;
@@ -116,7 +145,7 @@ function ShipmentTracking({
         const finalLink = `/profile/orders/shipment/update/${shipmentInfo?.shipment_id}/${updateType()?.toLowerCase()}`;
         navigate(
           finalLink +
-            (querParams?.toString() ? `?${querParams.toString()}` : "")
+          (querParams?.toString() ? `?${querParams.toString()}` : "")
         );
       } else {
         // Multiple bags OR bundle with allow_partial_return: true - show selection UI
@@ -126,6 +155,11 @@ function ShipmentTracking({
         });
       }
       window.scrollTo(0, 0);
+    } else if (item?.action === "buy_again") {
+      // Handle Buy Again - add to cart instead of navigating
+      if (item?.productSlug) {
+        handleBuyAgain(item.productSlug);
+      }
     } else {
       if (item?.newTab) {
         window.open(item?.link, "_blank");
@@ -162,9 +196,8 @@ function ShipmentTracking({
         {tracking?.map((item, index) => (
           <div
             key={index}
-            className={`${styles.trackItem} ${item?.is_current || item?.is_passed ? styles.title : ""} ${
-              item?.status === "In Transit" ? styles.detailedTracking : ""
-            }`}
+            className={`${styles.trackItem} ${item?.is_current || item?.is_passed ? styles.title : ""} ${item?.status === "In Transit" ? styles.detailedTracking : ""
+              }`}
           >
             {item?.status === "In Transit" &&
               (item?.is_current?.toString() || item?.is_passed?.toString()) && (
@@ -186,12 +219,12 @@ function ShipmentTracking({
                         (item?.is_current || item?.is_passed) &&
                         showDetailedTracking
                       ) && (
-                        <></>
-                        // <SvgWrapper
-                        //   className={`${styles.dropdownaArow}`}
-                        //   svgSrc="dropdown-arrow"
-                        // />
-                      )}
+                          <></>
+                          // <SvgWrapper
+                          //   className={`${styles.dropdownaArow}`}
+                          //   svgSrc="dropdown-arrow"
+                          // />
+                        )}
                       {(item?.is_current || item?.is_passed) &&
                         showDetailedTracking && (
                           <></>

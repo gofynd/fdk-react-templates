@@ -5,7 +5,7 @@ import {
 } from "../../../helper/utils";
 import * as styles from "./single-shipment-content.less";
 import { FDKLink } from "fdk-core/components";
-import { useGlobalTranslation } from "fdk-core/utils";
+import { useGlobalTranslation, useNavigate } from "fdk-core/utils";
 import FreeGiftItem from "../../cart/Components/free-gift-item/free-gift-item";
 import Shimmer from "../../../components/shimmer/shimmer";
 import AppliedCouponIcon from "../../../assets/images/applied-coupon-small.svg";
@@ -26,8 +26,10 @@ function SingleShipmentContent({
   getDeliveryPromise,
   redirectPaymentOptions,
   isPaymentLoading = false,
+  isCreditNoteApplied,
 }) {
   const { t } = useGlobalTranslation("translation");
+  const navigate = useNavigate();
   const getShipmentItems = (shipment) => {
     let grpBySameSellerAndProduct = shipment?.items?.reduce((result, item) => {
       result[
@@ -55,9 +57,13 @@ function SingleShipmentContent({
     }
     return updateArr;
   };
+
+  const isGifUrl = (url = "") => /\.gif(\?|#|$)/i.test(String(url || ""));
   const getProductImage = (product) => {
     if (product?.product?.images?.[0]?.url) {
-      return product.product.images[0].url.replace("original", "resize-w:110");
+      return isGifUrl(product.product.images[0].url)
+        ? product.product.images[0].url
+        : product.product.images[0].url.replace("original", "resize-w:110");
     }
   };
   const getProductPath = (product) => {
@@ -65,6 +71,10 @@ function SingleShipmentContent({
   };
   const getCurrencySymbol = () => {
     return shipments?.[0]?.items?.[0]?.price?.converted?.currency_symbol || "₹";
+  };
+
+  const getCurrencyCode = () => {
+    return shipments?.[0]?.items?.[0]?.price?.converted?.currency_code || null;
   };
 
   const getMarkedPrice = (articles) => {
@@ -76,16 +86,14 @@ function SingleShipmentContent({
       sum += artcl.price.converted.effective;
       return sum;
     }, 0);
-    return markedSum != effective ? numberWithCommas(markedSum) : null;
+    return markedSum != effective ? markedSum : null;
   };
 
   const getEffectivePrice = (articles) => {
-    return numberWithCommas(
-      articles.reduce((sum, artcl) => {
-        sum += artcl.price.converted.effective;
-        return sum;
-      }, 0)
-    );
+    return articles.reduce((sum, artcl) => {
+      sum += artcl.price.converted.effective;
+      return sum;
+    }, 0);
   };
 
   return (
@@ -163,15 +171,27 @@ function SingleShipmentContent({
                     <div className={styles.shipmentWrapper}>
                       <div className={styles.shipmentHeading}>
                         <div className={styles.headerLeft}>
-                          <div className={styles.shipmentNumber}>
-                            {t("resource.common.shipment")} {index + 1}/
-                            {shipments.length}
+                          <div className={styles.shipmentLabelBox}>
+                            <div className={styles.shipmentNumber}>
+                              {t("resource.common.shipment")} {index + 1}/
+                              {shipments.length}
+                            </div>
+                            <div className={styles.itemCount}>
+                              (
+                              {`${shipmentItems.length} ${shipmentItems.length > 1 ? t("resource.common.item_simple_text_plural") : t("resource.common.item_simple_text")}`}
+                              )
+                            </div>
                           </div>
-                          <div className={styles.itemCount}>
-                            (
-                            {`${shipmentItems.length} ${shipmentItems.length > 1 ? t("resource.common.item_simple_text_plural") : t("resource.common.item_simple_text")}`}
-                            )
-                          </div>
+                          {index === 0 && (
+                            <button
+                              className={styles.mobileEditCartBtn}
+                              onClick={() => {
+                                navigate("/cart/bag");
+                              }}
+                            >
+                              {t("resource.checkout.edit_cart_lower")}
+                            </button>
+                          )}
                         </div>
                         {item?.promise && (
                           <div className={styles.deliveryDateWrapper}>
@@ -261,7 +281,9 @@ function SingleShipmentContent({
                                     <div className={styles.effectivePrice}>
                                       {priceFormatCurrencySymbol(
                                         getCurrencySymbol(),
-                                        getEffectivePrice(product?.articles)
+                                        getEffectivePrice(product?.articles),
+                                        undefined,
+                                        getCurrencyCode()
                                       )}
                                     </div>
                                     {!product.item.is_set &&
@@ -270,7 +292,9 @@ function SingleShipmentContent({
                                         <div className={styles.markedPrice}>
                                           {priceFormatCurrencySymbol(
                                             getCurrencySymbol(),
-                                            getMarkedPrice(product?.articles)
+                                            getMarkedPrice(product?.articles),
+                                            undefined,
+                                            getCurrencyCode()
                                           )}
                                         </div>
                                       )}
@@ -317,7 +341,7 @@ function SingleShipmentContent({
             <button
               className={styles.proceedBtn}
               onClick={() => {
-                if (getTotalValue?.() === 0) {
+                if (getTotalValue?.() === 0 && !isCreditNoteApplied) {
                   proceedToPay("PP", {});
                 } else {
                   redirectPaymentOptions();
@@ -326,7 +350,9 @@ function SingleShipmentContent({
               }}
               disabled={isPaymentLoading}
             >
-              {getTotalValue?.() === 0 ? "PLACE ORDER" : "Proceed To Pay"}
+              {getTotalValue?.() === 0 && !isCreditNoteApplied
+                ? t("resource.checkout.place_order")
+                : t("resource.checkout.proceed_to_pay")}
             </button>
           </div>
         </div>

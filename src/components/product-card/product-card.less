@@ -4,7 +4,9 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-
+  .disableCursor {
+    filter: invert(1);
+  }
   .removeIcon {
     path {
       fill: @TextBody !important;
@@ -27,6 +29,22 @@
     position: relative;
     border-radius: @ImageRadius;
     -webkit-mask-image: -webkit-radial-gradient(white, black); //safari fix
+
+    &.outOfStockContainer {
+      .productImage {
+        filter: grayscale(100%);
+        opacity: 0.7;
+      }
+
+      @media @desktop {
+        &:hover {
+          .productImage {
+            filter: grayscale(100%);
+            opacity: 0.7;
+          }
+        }
+      }
+    }
 
     .wishlistBtn {
       display: flex;
@@ -183,10 +201,6 @@
         }
         &--textCenter {
           text-align: center;
-        }
-
-        .priceSkeleton {
-          display: block;
         }
       }
       .productVariants {

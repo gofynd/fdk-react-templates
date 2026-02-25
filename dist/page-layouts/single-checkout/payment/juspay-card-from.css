@@ -1442,6 +1442,10 @@ h5,
   height: 38px;
   padding: 8px 4px;
 }
+.checkout-payment-content__container___HusGh .checkout-payment-content__upiApp___M2sjF .checkout-payment-content__logo___jNLmQ > svg {
+  width: 100%;
+  height: 100%;
+}
 .checkout-payment-content__container___HusGh .checkout-payment-content__upiApp___M2sjF .checkout-payment-content__logo___jNLmQ:last-child {
   padding: unset;
 }
@@ -3498,7 +3502,7 @@ h5,
 }
 .modal__modalBody___peHlJ {
   flex: 1;
-  max-height: 90vh;
+  max-height: 95vh;
   overflow-y: auto;
 }
 .modal__rightModal___acoje {
@@ -3532,6 +3536,11 @@ h5,
     align-items: center;
   }
 }
+@media only screen and (max-width: 480px) {
+  .modal__centerModal___CkbLu {
+    align-items: flex-end;
+  }
+}
 .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 {
   border-radius: 8px;
 }
@@ -3541,8 +3550,20 @@ h5,
     max-width: 720px;
   }
 }
+@media only screen and (max-width: 480px) {
+  .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0;
+  }
+}
 .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 .modal__modalHeader___xKo1g {
   border-radius: 8px 8px 0px 0px;
+}
+@media only screen and (max-width: 480px) {
+  .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 .modal__modalHeader___xKo1g {
+    border-radius: 0;
+  }
 }
 .modal__modalTitle___yvZQo {
   font-weight: 600;
@@ -3979,6 +4000,9 @@ h5,
 }
 .sticky-pay-now__checkoutButton___mtO42 {
   gap: 12px;
+}
+.sticky-pay-now__checkoutButton___mtO42.sticky-pay-now__linkPayBtn___CY0FQ {
+  width: 100%;
 }
 .sticky-pay-now__buttonWidth___nKraw {
   width: 100%;

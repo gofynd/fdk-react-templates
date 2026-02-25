@@ -52,7 +52,6 @@ import {
 } from "fdk-core/utils";
 import ForcedLtr from "../forced-ltr/forced-ltr";
 import Tooltip from "../tool-tip/tool-tip";
-import Skeleton from "../core/skeletons/skeleton";
 
 const DefaultProductPrice = ({
   t,
@@ -69,18 +68,8 @@ const DefaultProductPrice = ({
   isKycKeyPresent,
   isMerchantKycApproved,
   kycBadgeText,
-  showPriceLoader,
 }) => {
   const navigate = useNavigate();
-
-  // Option 1: Show skeleton until auth/KYC state is resolved (avoids flash of "login to view" or KYC badge)
-  if (showPriceLoader) {
-    return (
-      <div className={`${styles.productPrice} ${centerAlign ? styles.center : ""}`}>
-        <Skeleton type="text" width={120} height={20} className={styles.priceSkeleton} />
-      </div>
-    );
-  }
 
   const handleNavigateToLogin = (e) => {
     e.stopPropagation();
@@ -89,8 +78,8 @@ const DefaultProductPrice = ({
     navigate(`/auth/login?redirectUrl=${encodeURIComponent(currentUrl)}`);
   };
 
-  //? Guest user Settings (Option 2: only when we're sure user is guest — loggedIn === false)
-  if (loggedIn === false) {
+  //? Guest user Settings
+  if (!loggedIn) {
     //? if none of the three conditions are met, then show empty fragment
     if (!showMarkedPriceForGuest && !showDiscountForGuest && !showLoginOption) {
       return <></>;
@@ -110,7 +99,7 @@ const DefaultProductPrice = ({
       );
     }
     //? If marked Price option is enabled, and discount is disabled
-    if (showMarkedPriceForGuest && !showDiscountForGuest && loggedIn === false) {
+    if (showMarkedPriceForGuest && !showDiscountForGuest && !loggedIn) {
       return (
         <>
           <div
@@ -135,8 +124,8 @@ const DefaultProductPrice = ({
     }
   }
 
-  //? Non-KYC user Settings (only when we know user is logged in and KYC state is known)
-  if (loggedIn === true && !isMerchantKycApproved) {
+  //? Non-KYC user Settings
+  if (loggedIn && !isMerchantKycApproved) {
     //? Only show marked price for non KYC
     if (!showDiscountForNonKyc) {
       return (
@@ -271,6 +260,7 @@ const ProductCard = ({
   isPrice = true,
   isSaleBadge = true,
   isWishlistIcon = true,
+  isCustomBadge = true,
   isImageFill = false,
   showImageOnHover = false,
   customImageContainerClass = "",
@@ -297,6 +287,7 @@ const ProductCard = ({
   globalConfig = {},
   productsInWishlist = [],
   showSmartWishlist = false,
+  isServiceable = true,
 }) => {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -314,11 +305,6 @@ const ProductCard = ({
   const isMerchantKycApproved = () => {
     return merchant_data?.[keyName] === "approved";
   };
-
-  // Option 2 + 1: Only show guest/KYC UI when state is known; show skeleton while auth/KYC is resolving
-  const isAuthStateReady = loggedIn !== undefined && loggedIn !== null;
-  const isKycStateReady = loggedIn !== true || merchant_data !== undefined;
-  const showPriceLoader = !isAuthStateReady || (loggedIn === true && !isKycStateReady);
 
   const wishlistStatus = useMemo(() => {
     if (!productsInWishlist || !product?.slug) {
@@ -552,7 +538,7 @@ const ProductCard = ({
         } ${styles.animate} ${gridClass} ${isSlider ? styles.sliderCard : ""}`}
       onClick={onClick}
     >
-      <div className={`${styles.imageContainer} ${customImageContainerClass}`}>
+      <div className={`${styles.imageContainer} ${customImageContainerClass} ${!product.sellable ? styles.outOfStockContainer : ""}`}>
         {!isMobile && showImageOnHover && imageData.hoverUrl && (
           <FyImage
             src={imageData.hoverUrl}
@@ -577,7 +563,7 @@ const ProductCard = ({
           sources={imgSrcSet}
           defer={false}
         />
-        {isWishlistIcon && loggedIn === true && isMerchantKycApproved() && (
+        {isWishlistIcon && loggedIn && isMerchantKycApproved() && (
           <button
             className={`${styles.wishlistBtn} ${(showSmartWishlist ? wishlistStatus.isInWishlist : isFollowed) ? styles.active : ""}`}
             onClick={handleWishlistClick}
@@ -605,7 +591,7 @@ const ProductCard = ({
               {t("resource.common.out_of_stock")}
             </span>
           </div>
-        ) : product.teaser_tag && showBadge ? (
+        ) : isCustomBadge && product.teaser_tag && showBadge ? (
           <div className={styles.badge}>
             <span className={`${styles.text} ${styles.captionNormal}`}>
               {isMobileView
@@ -756,7 +742,6 @@ const ProductCard = ({
                   isKycKeyPresent={isKycKeyPresent}
                   isMerchantKycApproved={isMerchantKycApproved()}
                   kycBadgeText={kyc_badge_text}
-                  showPriceLoader={showPriceLoader}
                 />
               )}
             </>
@@ -793,27 +778,29 @@ const ProductCard = ({
           )}
         </div>
 
-        {!showPriceLoader &&
+        {
           showAddToCart &&
-          ((loggedIn === false && show_discount_guest) ||
-            (loggedIn === true && isMerchantKycApproved()) ||
-            (loggedIn === true &&
+          ((!loggedIn && show_discount_guest) ||
+            (loggedIn && isMerchantKycApproved()) ||
+            (loggedIn &&
               !isMerchantKycApproved() &&
               show_discount_non_kyc)) && (
             <FyButton
               variant="outlined"
               className={styles.addToCart}
               onClick={handleAddToCartClick}
+              disabled={!isServiceable}
             >
               {actionButtonText ?? t("resource.common.add_to_cart")}
             </FyButton>
-          )}
+          )
+        }
 
-        {!showPriceLoader &&
+        {
           show_available_offer_button &&
-          ((loggedIn === false && show_discount_guest) ||
-            (loggedIn === true && isMerchantKycApproved()) ||
-            (loggedIn === true &&
+          ((!loggedIn && show_discount_guest) ||
+            (loggedIn && isMerchantKycApproved()) ||
+            (loggedIn &&
               !isMerchantKycApproved() &&
               show_discount_non_kyc)) && (
             <AvailableOfferButton
@@ -824,9 +811,10 @@ const ProductCard = ({
               isKycKeyPresent={isKycKeyPresent}
               isMerchantKycApproved={isMerchantKycApproved()}
             />
-          )}
-      </div>
-    </div>
+          )
+        }
+      </div >
+    </div >
   );
 };
 
