@@ -795,9 +795,10 @@ const ProductCard = ({
           )}
         </div>
 
-        {
-          showAddToCart &&
-          ((!loggedIn && show_discount_guest) ||
+        {showAddToCart && (
+          showPriceShimmer ? (
+            <div className={styles.addToCartShimmer} />
+          ) : ((!loggedIn && show_discount_guest) ||
             (loggedIn && isMerchantKycApproved()) ||
             (loggedIn &&
               !isMerchantKycApproved() &&
@@ -810,8 +811,7 @@ const ProductCard = ({
             >
               {actionButtonText ?? t("resource.common.add_to_cart")}
             </FyButton>
-          )
-        }
+          ))}
 
         {
           show_available_offer_button &&

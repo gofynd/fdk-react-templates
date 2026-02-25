@@ -665,6 +665,17 @@ h5,
   font-size: 12px;
   white-space: nowrap;
 }
+.product-card__productCard___VMIjd .product-card__productDescContainer___S8oiv .product-card__addToCartShimmer___rZztm {
+  height: 40px;
+  padding: 12px 16px;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 120px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: product-card__priceShimmerAnim___BCfLI 1.5s ease-in-out infinite;
+}
 .product-card__productCard___VMIjd .product-card__productDescContainer___S8oiv .product-card__b2bAvailableOffers____mEsn {
   background: var(--buttonSecondary, #fff);
   font-weight: 500;
