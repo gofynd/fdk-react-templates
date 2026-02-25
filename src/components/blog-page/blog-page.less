@@ -26,6 +26,7 @@
     }
   }
 }
+
 .blogContainer {
   max-width: 1400px;
   margin-inline-start: auto;
@@ -37,31 +38,39 @@
   display: flex;
   justify-content: center;
   align-items: start;
+
   @media @mobile-up {
     padding: 2rem 1.5rem 4.5rem;
   }
+
   @media @desktop {
     padding: 2rem 2.5rem 4.5rem;
   }
+
   .leftCol {
     width: 100%;
+
     @media @tablet {
       max-width: 800px;
     }
+
     @media @desktop {
       width: 67%;
     }
   }
+
   .rightCol {
     flex: 1;
     position: sticky;
     top: calc(var(--headerHeight) + 32px);
+
     @media @tablet {
       position: static;
       flex: 1 0 100%;
       padding-top: 0;
       margin-top: 48px;
     }
+
     &__content {
       @media @desktop {
         max-width: 330px;
@@ -71,6 +80,7 @@
     }
   }
 }
+
 .blogPost {
   &__tag {
     font-size: 14px;
@@ -78,25 +88,33 @@
     line-height: 15px;
     text-transform: capitalize;
   }
+
   &__header {
     margin-bottom: 20px;
   }
+
   &__breadcrumb {
     padding-top: 2px;
     padding-bottom: 2px;
     margin-bottom: 40px;
   }
+
   &__heading {
     margin-top: 10px;
     margin-bottom: 10px;
     font-size: 38px;
     line-height: 44px;
     font-weight: 700;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    hyphens: auto;
+
     @media @mobile {
       font-size: 28px;
       line-height: 130%;
     }
   }
+
   &__meta {
     display: flex;
     align-items: flex-end;
@@ -112,14 +130,20 @@
       align-items: unset;
     }
   }
+
   &__image {
     margin-bottom: 4px;
     border-radius: @ImageRadius;
+
     @media @mobile-up {
       margin-bottom: 14px;
     }
   }
+
   &__content {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    hyphens: auto;
     :global {
       .warning-banner {
         display: none;
@@ -128,6 +152,7 @@
         max-width: 95vw !important;
       }
     }
+
     @media @tablet {
       iframe {
         max-width: 90vw !important;
@@ -135,6 +160,7 @@
         min-width: unset !important;
       }
     }
+
     color: @TextBody;
     font-family: var(--fontBody);
 
@@ -151,61 +177,76 @@
       h6 {
         font-family: var(--fontHeader);
       }
+
       img {
         height: auto;
       }
+
       figure {
         margin: 0;
       }
     }
+
     &.markdownBody {
       padding: 0 !important;
       background-color: transparent;
     }
   }
 }
+
 .breadcrumb {
   color: @TextSecondary;
   margin-bottom: 40px;
+
   &__icon {
     width: 4px;
     height: 7px;
     margin: 0 5px;
     transform: rotate(180deg);
   }
+
   &__label {
     font-size: 14px;
     font-weight: 400;
     line-height: 15px;
     text-transform: capitalize;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    hyphens: auto;
   }
 
   &__link {
     display: flex;
   }
 }
+
 .author,
 .publishDate {
   gap: 0.31rem;
+
   &__label {
     font-size: 14px;
     font-weight: 400;
     line-height: 20px;
   }
 }
+
 .social {
   gap: 0.5rem;
   flex-wrap: wrap;
   display: flex;
   align-items: center;
+
   @media @desktop {
     gap: 0.75rem;
   }
+
   &__label {
     font-size: 14px;
     font-weight: 400;
     line-height: 20px;
   }
+
   &__icon {
     border-radius: 100%;
     justify-content: center;
@@ -214,16 +255,19 @@
     width: 2rem;
     height: 2rem;
     display: flex;
+
     @media @mobile-up {
       width: 1.5rem;
       height: 1.5rem;
     }
+
     @media @desktop {
       width: 1.875rem;
       height: 1.875rem;
     }
   }
 }
+
 .asideImage {
   max-width: 330px;
   margin: 0 auto 30px;

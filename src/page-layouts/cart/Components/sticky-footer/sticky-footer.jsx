@@ -60,7 +60,7 @@ function StickyFooter({
                 </span>
                 <span className={styles.nccTotalPrice}>
                   {currencyFormat(
-                    numberWithCommas(totalPrice),
+                    totalPrice,
                     currencySymbol,
                     formatLocale(locale, countryCode, true)
                   )}
@@ -90,7 +90,11 @@ function StickyFooter({
             <button
               className={`${styles.cartCheckoutBtn} ${styles.cartCheckoutBtn3}`}
               disabled={
-                !isValid || isOutOfStock || isNotServicable || !order?.enabled
+                !isValid ||
+                isOutOfStock ||
+                isNotServicable ||
+                !order?.enabled ||
+                !fpi?.orderingSource
               }
               onClick={onCheckoutClick}
             >
@@ -106,7 +110,7 @@ function StickyFooter({
           <div className={styles.priceContainerMobile}>
             <div className={styles.totalPrice}>
               {currencyFormat(
-                numberWithCommas(totalPrice),
+                totalPrice,
                 currencySymbol,
                 formatLocale(locale, countryCode, true)
               )}
@@ -121,7 +125,11 @@ function StickyFooter({
           <button
             className={`${styles.cartCheckoutBtn} ${styles.priceContainerMobileCheckoutBtn} ${styles.checkoutButton}`}
             disabled={
-              !isValid || isOutOfStock || isNotServicable || !order?.enabled
+              !isValid ||
+              isOutOfStock ||
+              isNotServicable ||
+              !order?.enabled ||
+              !fpi?.orderingSource
             }
             onClick={onCheckoutClick}
           >
