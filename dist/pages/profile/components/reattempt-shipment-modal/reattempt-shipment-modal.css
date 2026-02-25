@@ -1357,7 +1357,6 @@ h5,
   color: var(--errorText, #ff3333);
 }
 .fy-input__floating___jgtoq {
-  background: var(--pageBackground, #f8f8f8) !important;
   position: absolute;
   transform: translateY(-50%) scale(0.9);
   z-index: 1;
@@ -1376,13 +1375,8 @@ h5,
   transition: 0.1s ease-out;
   box-sizing: border-box;
   width: 100%;
-  background-color: var(--pageBackground, #f8f8f8);
+  background-color: transparent;
   font-weight: 500;
-}
-.fy-input__fyInput___S4Mtu[type="email"],
-.fy-input__fyInput___S4Mtu[type="tel"] {
-  background-color: var(--pageBackground, #f8f8f8);
-  color: var(--textHeading, #26201a);
 }
 @media only screen and (max-width: 480px) {
   .fy-input__fyInput___S4Mtu {
@@ -1459,7 +1453,6 @@ h5,
 }
 .fy-input__adornmentContainer___MtgI6 input {
   flex: 1;
-  background-color: var(--pageBackground, #f8f8f8);
 }
 
 /**color by character**/
@@ -1850,13 +1843,12 @@ h5,
   padding: 16px;
   border-radius: 6px;
   border: 1px solid var(--overlaypopupdividerstroke, #e0e0e0);
-  background: var(--pageBackground, #f8f8f8);
 }
 .fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__inputWrapper___zh7iz input {
   border: none;
   width: 100%;
   background: transparent;
-  color: var(--textHeading, #26201a);
+  color: #41434c;
 }
 .fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__inputWrapper___zh7iz input:focus {
   outline: none;
@@ -1865,13 +1857,13 @@ h5,
 .fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__inputWrapper___zh7iz input .fy-date-picker__disabledInput___jxvmC {
   background-color: #f0f0f0;
   cursor: not-allowed;
-  color: var(--textHeading, #26201a);
+  color: #999;
 }
 .fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__inputWrapper___zh7iz input .fy-date-picker__readOnlyInput___Zv6dy {
-  background-color: var(--pageBackground, #f8f8f8);
-  color: var(--textHeading, #26201a);
+  background-color: #f9f9f9;
+  color: #555;
   cursor: default;
-  border-color: var(--overlaypopupdividerstroke, #e0e0e0);
+  border-color: #cccccc;
 }
 .fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__inputWrapper___zh7iz .fy-date-picker__iconWrapper___TO6K3 {
   cursor: pointer;
@@ -2063,7 +2055,7 @@ h5,
   pointer-events: none;
 }
 .fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__calendarPopup___cA9su .fy-date-picker__calendarGrid___LILc2 .fy-date-picker__empty___Aj0P_ {
-  color: var(--textHeading, #26201a);
+  color: #cccccc;
 }
 .fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__calendarPopup___cA9su .fy-date-picker__confirmButton___CCmqD {
   display: none;

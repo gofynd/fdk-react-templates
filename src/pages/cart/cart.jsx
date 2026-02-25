@@ -36,7 +36,6 @@ const Cart = ({
   cartShareProps,
   isRemoveModalOpen = false,
   isRemoving = false,
-  isMovingToWishlist = false,
   isPromoModalOpen = false,
   onGotoCheckout = () => { },
   onRemoveIconClick = () => { },
@@ -210,7 +209,6 @@ const Cart = ({
         isOpen={isRemoveModalOpen}
         cartItem={removeItemData?.item}
         isRemoving={isRemoving}
-        isMovingToWishlist={isMovingToWishlist}
         onRemoveButtonClick={() => onRemoveButtonClick(removeItemData)}
         onWishlistButtonClick={() => onWishlistButtonClick(removeItemData)}
         onCloseDialogClick={onCloseRemoveModalClick}

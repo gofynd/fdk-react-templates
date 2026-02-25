@@ -428,9 +428,6 @@ h5,
   font-size: 38px;
   line-height: 44px;
   font-weight: 700;
-  overflow-wrap: anywhere;
-  word-break: break-word;
-  hyphens: auto;
 }
 @media only screen and (max-width: 480px) {
   .blog-page__blogPost__heading___A43Bo {
@@ -465,9 +462,6 @@ h5,
   }
 }
 .blog-page__blogPost__content___EP_4I {
-  overflow-wrap: anywhere;
-  word-break: break-word;
-  hyphens: auto;
   color: var(--textBody, #3c3131);
   font-family: var(--fontBody);
 }
@@ -520,9 +514,6 @@ h5,
   font-weight: 400;
   line-height: 15px;
   text-transform: capitalize;
-  overflow-wrap: anywhere;
-  word-break: break-word;
-  hyphens: auto;
 }
 .blog-page__breadcrumb__link___mWfeS {
   display: flex;

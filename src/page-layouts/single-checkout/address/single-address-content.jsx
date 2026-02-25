@@ -6,9 +6,9 @@ import {
   useNavigate,
   useGlobalTranslation,
   useGlobalStore,
-  useFPI,
 } from "fdk-core/utils";
 import Skeleton from "../../../components/core/skeletons/skeleton";
+import { isValidErrorMessage } from "../../../helper/utils";
 
 function AddressRight({
   selectedAddressId,
@@ -23,7 +23,7 @@ function AddressRight({
         <div className={styles.contentTopRight}>
           <span
             className={styles.edit}
-            onClick={() => editAddress?.(addressItem)}
+            onClick={() => editAddress(addressItem)}
           >
             {t("resource.common.edit_lower")}
           </span>
@@ -46,7 +46,6 @@ function DeliverBtn({
   isCreditNoteApplied,
 }) {
   const { t } = useGlobalTranslation("translation");
-  const fpi = useFPI();
   const { app_features } = useGlobalStore(fpi.getters.CONFIGURATION) || {};
   const { order = {} } = app_features || {};
   return (
@@ -74,35 +73,13 @@ function DeliverBtn({
 function InvalidAddress({ errorMessage }) {
   const { t } = useGlobalTranslation("translation");
   const navigate = useNavigate();
-  
-  // Filter out generic JavaScript errors that shouldn't be shown to users
-  // These are typically internal errors that should be handled gracefully
-  // Only show meaningful API/validation errors, not technical JavaScript errors
-  const isGenericJSError = errorMessage && typeof errorMessage === "string" && (
-    errorMessage.includes("Cannot read properties") ||
-    errorMessage.includes("reading 'find'") ||
-    errorMessage.includes("reading 'map'") ||
-    errorMessage.includes("reading 'length'") ||
-    errorMessage.includes("reading 'slice'") ||
-    errorMessage.includes("is not a function") ||
-    errorMessage.includes("is not defined") ||
-    errorMessage.includes("Cannot read") ||
-    errorMessage.includes("TypeError") ||
-    errorMessage.includes("ReferenceError") ||
-    (errorMessage.includes("undefined") && errorMessage.includes("reading"))
-  );
-  
-  // Don't display generic JavaScript errors to users
-  // These should be handled internally, not shown in UI
-  if (isGenericJSError) {
+
+  // Don't display generic JavaScript errors or invalid messages to users
+  // Use utility function to validate error message
+  if (!isValidErrorMessage(errorMessage)) {
     return null;
   }
-  
-  // Also don't show if errorMessage is empty or invalid
-  if (!errorMessage || typeof errorMessage !== "string" || errorMessage.trim() === "") {
-    return null;
-  }
-  
+
   return (
     <div className={styles.invalidAddError}>
       <div className={styles.invalidAddErrorLeft}>
@@ -138,8 +115,8 @@ function SingleAddressContent({
   invalidAddressError,
   selectedAddressId,
   setSelectedAddressId,
-  getOtherAddress = [],
-  getDefaultAddress = [],
+  getOtherAddress,
+  getDefaultAddress,
   loader,
   isApiLoading,
   showPaymentOptions,
@@ -152,16 +129,12 @@ function SingleAddressContent({
     setSelectedAddressId(id);
   }
 
-  // Ensure getOtherAddress and getDefaultAddress are always arrays
-  const safeGetOtherAddress = Array.isArray(getOtherAddress) ? getOtherAddress : [];
-  const safeGetDefaultAddress = Array.isArray(getDefaultAddress) ? getDefaultAddress : [];
-
   const displayedOtherAddresses = useMemo(() => {
-    if (showAllOtherAddresses || safeGetOtherAddress.length <= 3) {
-      return safeGetOtherAddress;
+    if (showAllOtherAddresses || getOtherAddress.length <= 3) {
+      return getOtherAddress;
     }
-    return safeGetOtherAddress.slice(0, 3);
-  }, [showAllOtherAddresses, safeGetOtherAddress]);
+    return getOtherAddress.slice(0, 3);
+  }, [showAllOtherAddresses, getOtherAddress]);
 
   return (
     <>
@@ -169,12 +142,12 @@ function SingleAddressContent({
       allAddresses.length &&
       !(addressLoader || addressLoading || isApiLoading) ? (
         <div className={styles.addressContentConitainer}>
-          {safeGetDefaultAddress.length > 0 ? (
+          {getDefaultAddress.length > 0 ? (
             <div className={styles.address}>
               <div className={styles.heading}>
                 {t("resource.common.address.default_address")}
               </div>
-              {safeGetDefaultAddress.map((item, index) => {
+              {getDefaultAddress.map((item, index) => {
                 return (
                   <AddressItem
                     containerClassName={styles.customAddressItem}
@@ -215,7 +188,7 @@ function SingleAddressContent({
             </div>
           ) : null}
 
-          {safeGetOtherAddress.length > 0 ? (
+          {getOtherAddress.length > 0 ? (
             <div className={styles.address}>
               <div className={styles.heading}>
                 {t("resource.common.address.other_address")}
@@ -259,7 +232,7 @@ function SingleAddressContent({
                 );
               })}
 
-              {safeGetOtherAddress.length > 3 && (
+              {getOtherAddress.length > 3 && (
                 <div className={styles.showMoreBtnContainer}>
                   <button
                     className={styles.showOtherAddresses}

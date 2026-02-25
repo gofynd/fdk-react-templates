@@ -556,6 +556,9 @@ h5,
 .add-to-cart__productDescContainer___w6xlt .add-to-cart__right___AYndS .add-to-cart__productInfo___AyYit .add-to-cart__product___Hqonr .add-to-cart__viewMore___WNyrJ:hover {
   color: var(--buttonPrimaryL1, #71653a);
 }
+.add-to-cart__productDescContainer___w6xlt .add-to-cart__right___AYndS .add-to-cart__productInfo___AyYit .add-to-cart__product___Hqonr .add-to-cart__viewMore___WNyrJ:hover {
+  color: var(--buttonPrimaryL1, #71653a);
+}
 .add-to-cart__productDescContainer___w6xlt .add-to-cart__right___AYndS .add-to-cart__productInfo___AyYit .add-to-cart__product___Hqonr .add-to-cart__viewMore___WNyrJ span {
   cursor: pointer;
 }
@@ -5572,7 +5575,7 @@ h5,
 .delivery-info__delivery___cpAyb {
   display: flex;
   border-radius: var(--buttonRadius, 0px);
-  background-color: var(--pageBackground, #f8f8f8);
+  background-color: var(--themeAccentL4, #f9f6f0);
   align-items: center;
 }
 .delivery-info__delivery___cpAyb .delivery-info__deliveryAction___gGtwy {
@@ -6068,7 +6071,6 @@ h5,
   color: var(--errorText, #ff3333);
 }
 .fy-input__floating___jgtoq {
-  background: var(--pageBackground, #f8f8f8) !important;
   position: absolute;
   transform: translateY(-50%) scale(0.9);
   z-index: 1;
@@ -6087,13 +6089,8 @@ h5,
   transition: 0.1s ease-out;
   box-sizing: border-box;
   width: 100%;
-  background-color: var(--pageBackground, #f8f8f8);
+  background-color: transparent;
   font-weight: 500;
-}
-.fy-input__fyInput___S4Mtu[type="email"],
-.fy-input__fyInput___S4Mtu[type="tel"] {
-  background-color: var(--pageBackground, #f8f8f8);
-  color: var(--textHeading, #26201a);
 }
 @media only screen and (max-width: 480px) {
   .fy-input__fyInput___S4Mtu {
@@ -6170,7 +6167,6 @@ h5,
 }
 .fy-input__adornmentContainer___MtgI6 input {
   flex: 1;
-  background-color: var(--pageBackground, #f8f8f8);
 }
 
 /**color by character**/
