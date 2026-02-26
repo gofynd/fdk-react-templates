@@ -21,6 +21,7 @@ import {
   useNavigate,
 } from "fdk-core/utils";
 import ChipImage from "./chip-image";
+import { transformDisplayToAccordionContent } from "../../../../helper/customization-display";
 
 export default function ChipItem({
   isCartUpdating,
@@ -78,82 +79,15 @@ export default function ChipItem({
   const couponText = singleItemDetails?.coupon_message || "";
   const moq = singleItemDetails?.moq;
   const incrementDecrementUnit = moq?.increment_unit ?? 1;
-  const customizationOptions =
+  const rawCustomizationOptions =
     singleItemDetails?.article?._custom_json?._display || [];
-
-  // Transform customization options into accordion format
-  const transformedCustomizationContent = customizationOptions
-    .map((option) => {
-      const items = [];
-
-      // Handle productCanvas type (nested value object)
-      if (option.type === "productCanvas" && option.value) {
-        const canvasData = option.value;
-
-        if (canvasData.text) {
-          items.push({
-            key: option.key || "Text",
-            value: canvasData.text,
-          });
-        }
-
-        if (canvasData.price || option.price) {
-          items.push({
-            key: "Price",
-            value: `${canvasData.price || option.price}`,
-          });
-        }
-
-        if (canvasData.previewImage) {
-          items.push({
-            key: "Preview",
-            value: canvasData.previewImage,
-            type: "image",
-            alt: option.key || "Customization preview",
-            dimensions: canvasData.textBounds
-              ? {
-                  width: canvasData.textBounds.width,
-                  height: canvasData.textBounds.height,
-                }
-              : undefined,
-          });
-        }
-      }
-      // Handle simple string type
-      else if (option.type === "string" && option.value) {
-        items.push({
-          key: option.alt || option.key,
-          value: option.value,
-        });
-      }
-      // Handle other types with direct text/price/previewImage properties
-      else {
-        if (option.text) {
-          items.push({ key: "Text", value: option.text });
-        }
-
-        if (option.price) {
-          items.push({ key: "Price", value: option.price });
-        }
-
-        if (option.previewImage) {
-          items.push({
-            key: "Preview",
-            value: option.previewImage,
-            type: "image",
-            alt: "Customization preview",
-          });
-        }
-      }
-
-      return items;
-    })
-    .flat();
-
+  const accordionContent = transformDisplayToAccordionContent(
+    rawCustomizationOptions
+  );
   const [items, setItems] = useState([
     {
       title: "Customization",
-      content: transformedCustomizationContent,
+      content: accordionContent,
       open: false,
     },
   ]);
@@ -668,7 +602,7 @@ export default function ChipItem({
                   <SvgWrapper svgSrc="applied-promo" className={styles.ml6} />
                 </div>
               )}
-            {customizationOptions.length > 0 && (
+            {accordionContent.length > 0 && (
               <div className={styles.productCustomizationContainer}>
                 <Accordion items={items} onItemClick={handleItemClick} />
               </div>
