@@ -22,7 +22,6 @@ function OrderTrackingDetails({
   isShipmentLoading,
   linkOrderDetails,
   availableFOCount,
-  globalConfig,
 }) {
   const { t } = useGlobalTranslation("translation");
   const params = useParams();
@@ -92,8 +91,6 @@ function OrderTrackingDetails({
     setShow(false);
   };
 
-  console.log(globalConfig, 'on order tracking details page');
-
   return (
     <div
       className={`basePageContainer margin0auto ${styles.orderTrackingDetails}`}
@@ -159,7 +156,6 @@ function OrderTrackingDetails({
                             track_url: selectedShipmentBag?.track_url,
                           }}
                           type="tracking"
-                          globalConfig={globalConfig}
                         />
                       ))}
                     </div>

@@ -17,6 +17,8 @@ import Autocomplete from "react-google-autocomplete";
 import SearchIcon from "../../assets/images/search.svg";
 import LocateIcon from "../../assets/images/locate.svg";
 import { useGlobalTranslation } from "fdk-core/utils";
+
+const libraries = ["places"];
 const mapContainerStyle = {
   width: "100%",
   height: "300px",
@@ -38,40 +40,9 @@ const GoogleMapAddress = ({
   onLoad = () => {},
 }) => {
   const { t } = useGlobalTranslation("translation");
-  const isNewAddress = !addressItem;
-  // Mumbai coordinates as fallback default
-  const MUMBAI_COORDINATES = { lat: 19.0760, lng: 72.8777 };
-  
-  // Get last used location from localStorage
-  const getLastUsedLocation = () => {
-    try {
-      const saved = localStorage.getItem('lastMapLocation');
-      return saved ? JSON.parse(saved) : null;
-    } catch {
-      return null;
-    }
-  };
-  
-  const lastUsedLocation = getLastUsedLocation();
-  // Priority: addressItem geo_location > last used location > country details > Mumbai
-  const defaultCoordinates = {
-    lat: Number(
-      addressItem?.geo_location?.latitude ||
-      lastUsedLocation?.lat ||
-      countryDetails?.latitude ||
-      MUMBAI_COORDINATES.lat
-    ),
-    lng: Number(
-      addressItem?.geo_location?.longitude ||
-      lastUsedLocation?.lng ||
-      countryDetails?.longitude ||
-      MUMBAI_COORDINATES.lng
-    ),
-  };
-  
   const [selectedPlace, setSelectedPlace] = useState({
-    lat: defaultCoordinates.lat,
-    lng: defaultCoordinates.lng,
+    lat: countryDetails?.latitude,
+    lng: countryDetails?.longitude,
   });
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
@@ -86,11 +57,11 @@ const GoogleMapAddress = ({
   const mapRef = useRef(null);
   const hasInitialGeocodeRef = useRef(false);
   const lastGeocodeKeyRef = useRef(null);
+  const isNewAddress = !addressItem;
 
   const { isLoaded: isMapLoaded } = useJsApiLoader({
     googleMapsApiKey: mapApiKey,
-    id: "google-maps-script",
-    libraries: ["places"],
+    libraries,
   });
 
   useEffect(() => {
@@ -102,17 +73,14 @@ const GoogleMapAddress = ({
       setSelectedPlace(location);
       mapRef?.current?.panTo(location);
     } else {
-      // Use Mumbai coordinates for new addresses, otherwise use countryDetails
-      const location = isNewAddress
-        ? { lat: 19.0760, lng: 72.8777 } // Mumbai coordinates
-        : {
-            lat: Number(countryDetails?.latitude),
-            lng: Number(countryDetails?.longitude),
-          };
+      const location = {
+        lat: Number(countryDetails?.latitude),
+        lng: Number(countryDetails?.longitude),
+      };
       setSelectedPlace(location);
       mapRef?.current?.panTo(location);
     }
-  }, [countryDetails, addressItem, isNewAddress]);
+  }, [countryDetails, addressItem]);
 
   function stateReset() {
     setPincode("");
@@ -143,12 +111,6 @@ const GoogleMapAddress = ({
       const lat = location.lat();
       const lng = location.lng();
       setSelectedPlace({ lat, lng });
-      // Save the selected location for future use
-      try {
-        localStorage.setItem('lastMapLocation', JSON.stringify({ lat, lng }));
-      } catch (error) {
-        console.error('Failed to save location:', error);
-      }
       setAddress(place.formatted_address);
       let prem = place?.address_components?.find((m) =>
         m?.types?.includes("premise")
@@ -272,7 +234,13 @@ const GoogleMapAddress = ({
           }
         });
         const localLocality = subLocalities.join(", ");
-        const addressData = {
+        setPremise(localPremise);
+        setCountry(localCountry);
+        setCity(localCity);
+        setState(localState);
+        setPincode(localPincode);
+        setLocality(localLocality);
+        selectAddress({
           city: localCity,
           area_code: localPincode,
           state: localState,
@@ -280,14 +248,7 @@ const GoogleMapAddress = ({
           address: localPremise,
           country: localCountry,
           geo_location: { latitude: outLat, longitude: outLng },
-        };
-        setPremise(localPremise);
-        setCountry(localCountry);
-        setCity(localCity);
-        setState(localState);
-        setPincode(localPincode);
-        setLocality(localLocality);
-        selectAddress(addressData);
+        });
         lastGeocodeKeyRef.current = key;
       }
     } catch (error) {
@@ -299,12 +260,6 @@ const GoogleMapAddress = ({
     const lat = event.latLng.lat();
     const lng = event.latLng.lng();
     setSelectedPlace({ lat, lng });
-    // Save the dragged location for future use
-    try {
-      localStorage.setItem('lastMapLocation', JSON.stringify({ lat, lng }));
-    } catch (error) {
-      console.error('Failed to save location:', error);
-    }
     getAddressFromLatLng(lat, lng);
   }, []);
 
@@ -317,12 +272,6 @@ const GoogleMapAddress = ({
             lng: position.coords.longitude,
           };
           setSelectedPlace(pos);
-          // Save user's current location for future use
-          try {
-            localStorage.setItem('lastMapLocation', JSON.stringify(pos));
-          } catch (error) {
-            console.error('Failed to save location:', error);
-          }
           getAddressFromLatLng(pos.lat, pos.lng);
           mapRef?.current?.panTo(pos);
         },

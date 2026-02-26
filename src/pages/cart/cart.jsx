@@ -35,18 +35,16 @@ const Cart = ({
   cartCommentProps,
   cartShareProps,
   isRemoveModalOpen = false,
-  isRemoving = false,
-  isMovingToWishlist = false,
   isPromoModalOpen = false,
-  onGotoCheckout = () => {},
-  onRemoveIconClick = () => {},
-  onRemoveButtonClick = () => {},
-  onWishlistButtonClick = () => {},
-  onCloseRemoveModalClick = () => {},
-  onPriceDetailsClick = () => {},
-  updateCartCheckoutMode = () => {},
-  onOpenPromoModal = () => {},
-  onClosePromoModal = () => {},
+  onGotoCheckout = () => { },
+  onRemoveIconClick = () => { },
+  onRemoveButtonClick = () => { },
+  onWishlistButtonClick = () => { },
+  onCloseRemoveModalClick = () => { },
+  onPriceDetailsClick = () => { },
+  updateCartCheckoutMode = () => { },
+  onOpenPromoModal = () => { },
+  onClosePromoModal = () => { },
 }) => {
   const { t } = useGlobalTranslation("translation");
   const [sizeModal, setSizeModal] = useState(null);
@@ -61,13 +59,10 @@ const Cart = ({
   const cartItemsArray = Object.keys(cartItems || {});
   const sizeModalItemValue = cartItems && sizeModal && cartItems[sizeModal];
 
-  const totalPrice = useMemo(() => {
-    if (!breakUpValues?.display) return 0;
-    // Use "total" key which represents the final payable amount after all discounts
-    // This is the amount the user will actually pay
-    const total = breakUpValues.display.find((val) => val.key === "total");
-    return total?.value ?? 0;
-  }, [breakUpValues]);
+  const totalPrice = useMemo(
+    () => breakUpValues?.display?.find((val) => val.key == "total")?.value,
+    [breakUpValues]
+  );
 
   function handleRemoveIconClick(data) {
     setRemoveItemData(data);
@@ -89,9 +84,7 @@ const Cart = ({
           <DeliveryLocation {...deliveryLocationProps} />
           <div className={styles.cartTitleContainer}>
             <div className={styles.bagDetailsContainer}>
-              <span className={styles.bagCountHeading}>
-                {t("resource.section.cart.your_bag")}
-              </span>
+              <span className={styles.bagCountHeading}>{t("resource.section.cart.your_bag")}</span>
               <span className={styles.bagCount}>
                 {cartItemsArray?.length || 0} {t("resource.common.items")}
               </span>
@@ -134,7 +127,6 @@ const Cart = ({
                   isPromoModalOpen={isPromoModalOpen}
                   onOpenPromoModal={onOpenPromoModal}
                   onClosePromoModal={onClosePromoModal}
-                  globalConfig={globalConfig}
                 />
               );
             })}
@@ -144,13 +136,11 @@ const Cart = ({
             <Coupon {...cartCouponProps} />
             <Comment {...cartCommentProps} />
             {isGstInput && <GstCard {...cartGstProps} key={cartData} />}
-            <div className={styles.priceBreakupCartWrapper}>
-              <PriceBreakup
-                breakUpValues={breakUpValues?.display || []}
-                cartItemCount={cartItemsArray?.length || 0}
-                currencySymbol={currencySymbol}
-              />
-            </div>
+            <PriceBreakup
+              breakUpValues={breakUpValues?.display || []}
+              cartItemCount={cartItemsArray?.length || 0}
+              currencySymbol={currencySymbol}
+            />
             {isPlacingForCustomer && isLoggedIn && (
               <div className={styles.checkoutContainer}>
                 <SvgWrapper
@@ -212,8 +202,6 @@ const Cart = ({
       <RemoveCartItem
         isOpen={isRemoveModalOpen}
         cartItem={removeItemData?.item}
-        isRemoving={isRemoving}
-        isMovingToWishlist={isMovingToWishlist}
         onRemoveButtonClick={() => onRemoveButtonClick(removeItemData)}
         onWishlistButtonClick={() => onWishlistButtonClick(removeItemData)}
         onCloseDialogClick={onCloseRemoveModalClick}

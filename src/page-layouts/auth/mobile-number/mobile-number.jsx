@@ -26,7 +26,7 @@ function MobileNumber({
   inputContainerClassName,
   inputProps,
   height = "48px",
-  textColor = "var(--textHeading, #26201a)",
+  textColor = "var(--textBody, #3c3131)",
   backgroundColor = "var(--pageBackground, #f8f8f8)",
   fontSize = "14px",
   countryIso,
@@ -52,12 +52,10 @@ function MobileNumber({
     mobileNumber?.replace(new RegExp(`^\\+${dialCode}`), "");
 
   const handleChange = (phone, { country }) => {
-    const countryIso2 = country?.iso2 || countryIso || "in";
-    const validationResult = isPhoneValid(phone, countryIso2);
     onChange?.({
       mobile: getNumber(phone, country?.dialCode),
       countryCode: country?.dialCode,
-      isValidNumber: validationResult,
+      isValidNumber: isPhoneValid(phone),
     });
   };
 

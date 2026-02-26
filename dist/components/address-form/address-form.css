@@ -1561,11 +1561,10 @@ h5,
   color: var(--errorText, #ff3333);
 }
 .fy-input__floating___jgtoq {
-  background: var(--pageBackground, #f8f8f8) !important;
   position: absolute;
   transform: translateY(-50%) scale(0.9);
   z-index: 1;
-  background: var(--pageBackground, #f8f8f8);
+  background: #ffffff;
   padding: 0 0.3rem;
   margin: 0 0.5rem;
   font-size: 0.8rem;
@@ -1580,13 +1579,8 @@ h5,
   transition: 0.1s ease-out;
   box-sizing: border-box;
   width: 100%;
-  background-color: var(--pageBackground, #f8f8f8);
+  background-color: transparent;
   font-weight: 500;
-}
-.fy-input__fyInput___S4Mtu[type="email"],
-.fy-input__fyInput___S4Mtu[type="tel"] {
-  background-color: var(--pageBackground, #f8f8f8);
-  color: var(--textHeading, #26201a);
 }
 @media only screen and (max-width: 480px) {
   .fy-input__fyInput___S4Mtu {
@@ -1663,7 +1657,6 @@ h5,
 }
 .fy-input__adornmentContainer___MtgI6 input {
   flex: 1;
-  background-color: var(--pageBackground, #f8f8f8);
 }
 
 /**color by character**/

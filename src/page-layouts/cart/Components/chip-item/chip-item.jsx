@@ -21,7 +21,6 @@ import {
   useNavigate,
 } from "fdk-core/utils";
 import ChipImage from "./chip-image";
-import { transformDisplayToAccordionContent } from "../../../../helper/customization-display";
 
 export default function ChipItem({
   isCartUpdating,
@@ -50,16 +49,12 @@ export default function ChipItem({
   getFulfillmentOptions,
   pincode,
   getDeliveryPromise,
-  isLimitedStock,
-  limitedStockLabel,
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
   const navigate = useNavigate();
   const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
   const locale = language?.locale;
-  const { limited_stock_quantity: limitedStockQuantity = 11 } =
-    globalConfig || {};
   const isMobile = useMobile();
   const [showQuantityError, setShowQuantityError] = useState(false);
   const [showFOModal, setShowFOModal] = useState(false);
@@ -79,17 +74,12 @@ export default function ChipItem({
   const couponText = singleItemDetails?.coupon_message || "";
   const moq = singleItemDetails?.moq;
   const incrementDecrementUnit = moq?.increment_unit ?? 1;
-  const rawCustomizationOptions =
+
+  const customizationOptions =
     singleItemDetails?.article?._custom_json?._display || [];
-  const accordionContent = transformDisplayToAccordionContent(
-    rawCustomizationOptions
-  );
+
   const [items, setItems] = useState([
-    {
-      title: "Customization",
-      content: accordionContent,
-      open: false,
-    },
+    { title: "Customization", content: customizationOptions, open: false },
   ]);
 
   const isSellerBuyBoxListing = useMemo(() => {
@@ -422,9 +412,7 @@ export default function ChipItem({
                 isOutOfStock ? styles.outOfStock : ""
               } `}
             >
-              {singleItemDetails?.product?.name?.length > 24
-                ? `${singleItemDetails.product.name.slice(0, 24)}...`
-                : singleItemDetails?.product?.name}{" "}
+              {singleItemDetails?.product?.name}
             </div>
             {isSoldBy && !isOutOfStock && (
               <div className={styles.itemSellerName}>
@@ -509,18 +497,16 @@ export default function ChipItem({
                   </div>
                 )}
 
-              {isLimitedStock &&
-                getMaxQuantity(singleItemDetails) > 0 &&
-                getMaxQuantity(singleItemDetails) <= limitedStockQuantity &&
+              {getMaxQuantity(singleItemDetails) > 0 &&
+                getMaxQuantity(singleItemDetails) < 11 &&
                 !isOutOfStock &&
                 isServiceable &&
                 !isCustomOrder &&
                 !buybox?.is_seller_buybox_enabled && (
                   <div className={styles.limitedQtyBox}>
-                    {limitedStockLabel.replace(
-                      /\{\{qty\}\}/g,
-                      getMaxQuantity(singleItemDetails)
-                    )}
+                    {t("resource.common.hurry_only_left", {
+                      quantity: getMaxQuantity(singleItemDetails),
+                    })}
                   </div>
                 )}
             </div>
@@ -532,26 +518,26 @@ export default function ChipItem({
                   }`}
                 >
                   {currencyFormat(
-                    singleItemDetails?.price?.converted?.effective ??
-                      singleItemDetails?.price?.base?.effective,
+                    numberWithCommas(
+                      singleItemDetails?.price?.converted?.final_price ??
+                        singleItemDetails?.price?.base?.final_price
+                    ),
                     singleItemDetails?.price?.converted?.currency_symbol ??
                       singleItemDetails?.price?.base?.currency_symbol,
-                    formatLocale(locale, countryCode, true),
-                    singleItemDetails?.price?.converted?.currency_code ??
-                      singleItemDetails?.price?.base?.currency_code
+                    formatLocale(locale, countryCode, true)
                   )}
                 </span>
                 {singleItemDetails?.price?.converted?.effective <
                   singleItemDetails?.price?.converted?.marked && (
                   <span className={styles.markedPrice}>
                     {currencyFormat(
-                      singleItemDetails?.price?.converted?.marked ??
-                        singleItemDetails?.price?.base?.marked,
+                      numberWithCommas(
+                        singleItemDetails?.price?.converted?.marked ??
+                          singleItemDetails?.price?.base?.marked
+                      ),
                       singleItemDetails?.price?.converted?.currency_symbol ??
                         singleItemDetails?.price?.base?.currency_symbol,
-                      formatLocale(locale, countryCode, true),
-                      singleItemDetails?.price?.converted?.currency_code ??
-                        singleItemDetails?.price?.base?.currency_code
+                      formatLocale(locale, countryCode, true)
                     )}
                   </span>
                 )}
@@ -602,7 +588,7 @@ export default function ChipItem({
                   <SvgWrapper svgSrc="applied-promo" className={styles.ml6} />
                 </div>
               )}
-            {accordionContent.length > 0 && (
+            {customizationOptions.length > 0 && (
               <div className={styles.productCustomizationContainer}>
                 <Accordion items={items} onItemClick={handleItemClick} />
               </div>
@@ -733,11 +719,6 @@ export default function ChipItem({
                         )
                       : undefined
                   }
-                  alt={
-                    sizeModalItemValue?.product?.name ||
-                    t("resource.common.product_image")
-                  }
-                  className={`${globalConfig?.img_fill ? styles.imgCover : styles.imgContain}`}
                 />
               </div>
               <div className={styles.sizeModalContent}>
@@ -758,11 +739,8 @@ export default function ChipItem({
                     ),
                     sizeModalItemValue?.article?.price?.converted
                       ?.currency_symbol ??
-                      sizeModalItemValue?.article?.price?.base?.currency_symbol,
-                    formatLocale(locale, countryCode, true),
-                    sizeModalItemValue?.article?.price?.converted
-                      ?.currency_code ??
-                      sizeModalItemValue?.article?.price?.base?.currency_code
+                      sizeModalItemValue?.article?.price?.base?.effective,
+                    formatLocale(locale, countryCode, true)
                   )}
                 </div>
               </div>
@@ -806,17 +784,7 @@ export default function ChipItem({
                         onClick={(e) => {
                           e.stopPropagation();
                           if (!singleSize?.is_available) return;
-
-                          const originalSize = sizeModal?.split("_")[1];
-                          const isOriginalSize =
-                            singleSize?.value === originalSize;
-
-                          if (isOriginalSize) {
-                            // Reset to null when original size is re-selected
-                            setSizeModalErr(null);
-                            setCurrentSizeModalSize(null);
-                          } else if (singleSize?.value) {
-                            // Set new size when a different size is selected
+                          if (singleSize?.value && !isEarlierSelectedSize) {
                             setSizeModalErr(null);
                             const newSizeModalValue = `${
                               sizeModal?.split("_")[0]
@@ -847,15 +815,6 @@ export default function ChipItem({
             sizeModalErr
           }
           onClick={(e) => {
-            // Safety check: prevent update if no size change
-            if (
-              !currentSizeModalSize ||
-              currentSizeModalSize === sizeModal ||
-              sizeModalErr
-            ) {
-              return;
-            }
-
             let itemIndex;
             for (let j = 0; j < cartItemsWithActualIndex.length; j += 1) {
               if (
@@ -866,19 +825,12 @@ export default function ChipItem({
                 break;
               }
             }
-
-            const newSize = currentSizeModalSize.split("_")[1];
-            const originalSize = sizeModal?.split("_")[1];
-
-            // Additional safety check: only update if size actually changed
-            if (newSize === originalSize) {
-              return;
-            }
-
             cartUpdateHandler(
               e,
               sizeModalItemValue,
-              newSize,
+              currentSizeModalSize
+                ? currentSizeModalSize.split("_")[1]
+                : sizeModal?.split("_")[1],
               cartItemsWithActualIndex[itemIndex]?.quantity || 0,
               itemIndex,
               "update_item",

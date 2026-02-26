@@ -9,7 +9,6 @@ const CompareProductCard = ({
   productItem,
   addProduct = () => {},
   isLoading = false,
-  globalConfig
 }) => {
   const locale = "en";
   const countryCode = "IN";
@@ -106,7 +105,6 @@ const CompareProductCard = ({
         <img
           src={productItem?.media?.[0]?.url}
           alt={productItem?.media?.[0]?.alt}
-           className={globalConfig?.img_fill? styles.imageCover : styles.imageContain}
         />
       </div>
 
