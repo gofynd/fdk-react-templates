@@ -191,7 +191,7 @@ const FyImage = forwardRef(
 
     return (
       <div
-        className={`${styles.imageWrapper} ${isImageFill ? styles.fill : ""}
+        className={`${styles.imageWrapper} ${isImageFill ? styles.fill : styles.contain}
       ${isFixedAspectRatio ? styles.fixedAspRatio : ""} ${customClass}`}
         style={dynamicStyles}
       >

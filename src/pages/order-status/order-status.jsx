@@ -532,6 +532,7 @@ function ProductItem({
             bag={product}
             isBundle={isBundleItem}
             aspectRatio={aspectRatio}
+            isImageFill={globalConfig?.img_fill}
           />
         </div>
         <div className={styles.prodItemData}>

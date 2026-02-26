@@ -10,27 +10,6 @@ export const debounce = (func, wait) => {
   };
 };
 
-export const formatDate = (isoString, dateOnly = false) => {
-  const date = new Date(isoString);
-
-  const day = date.getDate().toString().padStart(2, "0");
-  const month = date.toLocaleString("en-US", { month: "short" });
-  const year = date.getFullYear();
-
-  let hours = date.getHours();
-  const minutes = date.getMinutes().toString().padStart(2, "0");
-  const ampm = hours >= 12 ? "PM" : "AM";
-
-  hours %= 12;
-  hours = hours || 12; // 0 becomes 12
-
-  if (dateOnly) {
-    return `${day} ${month}, ${year}`;
-  }
-
-  return `${day} ${month}, ${year}, ${hours}:${minutes} ${ampm}`;
-};
-
 export const getGlobalConfigValue = (globalConfig, id) =>
   globalConfig?.props?.[id] ?? "";
 
@@ -208,12 +187,7 @@ export const transformImage = (url, key, width) => {
   let updatedUrl = url;
   if (key && width) {
     const str = `/${key}/`;
-    // updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
-    if (url.includes("/b2b-commerce/")) {
-      updatedUrl = url.replace(new RegExp(str), `/t.resize(w:${width})/`);
-    } else {
-      updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
-    }
+    updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
   }
   try {
     const parsedUrl = new URL(updatedUrl);
@@ -327,20 +301,33 @@ export const currencyFormat = (
   locale = "en-IN",
   currencyCode = null
 ) => {
-  if (value == null || value === "") return "";
+  if (value == null || value === "") {
+    return "";
+  }
 
-  // Convert to number if it's a string (strip commas so "1,039.5" parses as 1039.5, not 1)
-  const num =
-    typeof value === "string"
-      ? parseFloat(String(value).replace(/,/g, ""))
-      : value;
+  // Convert to number if it's a string
+  let num = typeof value === "string" ? parseFloat(value) : value;
 
-  if (Number.isNaN(num)) return "";
+  // Ensure it's a number, not NaN
+  if (Number.isNaN(num)) {
+    return "";
+  }
+
+  // Convert to number explicitly to handle edge cases
+  num = Number(num);
+  if (Number.isNaN(num)) {
+    return "";
+  }
 
   // If currency code is provided, use it to determine locale
   let finalLocale = locale;
   if (currencyCode) {
     finalLocale = getLocaleFromCurrency(currencyCode);
+  }
+
+  // Ensure locale is valid, fallback to en-IN if not
+  if (!finalLocale || finalLocale === "en" || finalLocale === "") {
+    finalLocale = "en-IN";
   }
 
   // Determine if we should use Indian numbering system
@@ -376,7 +363,7 @@ export const currencyFormat = (
     }
 
     return finalResult;
-  } catch {
+  } catch (error) {
     // Fallback to basic formatting if locale is invalid
     console.warn(
       `Invalid locale "${finalLocale}", falling back to default formatting`
@@ -504,11 +491,8 @@ export function priceFormatCurrencySymbol(
 ) {
   if (price == null || price === "") return "";
 
-  // Convert to number if it's a string (strip commas so "1,039.5" parses as 1039.5, not 1)
-  let num =
-    typeof price === "string"
-      ? parseFloat(String(price).replace(/,/g, ""))
-      : price;
+  // Convert to number if it's a string
+  let num = typeof price === "string" ? parseFloat(price) : price;
 
   if (Number.isNaN(num)) return "";
 
@@ -877,4 +861,18 @@ export const getConfigFromProps = (props) => {
 
   // Handle direct object props
   return props;
+};
+
+export const formatDeliveryAddress = (d = {}) => {
+  const line1 = [d.address, d.area].filter(Boolean).join(" ").trim();
+  const line2 = d.landmark?.trim() || "";
+  const line3 = [d.city, [d.state, d.pincode].filter(Boolean).join(" ")].filter(Boolean).join(", ").trim();
+  const line4 = d.country?.trim() || "";
+
+  return [line1, line2, line3, line4].filter(Boolean).join(",\n");
+};
+
+export const truncateName = (name,length) => {
+  if (!name) return "";
+  return name.length > length ? name.slice(0, length) + "..." : name;
 };

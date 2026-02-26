@@ -421,19 +421,7 @@ h5,
   }
 }
 .order-status__orders___N_SnV .order-status__orderStatus___gGK9U .order-status__trackOrderBtn___woN1W .order-status__continueBtn___wKDd1 {
-  display: inline-block;
-  padding-left: 12px;
-}
-@media (max-width: 399px) {
-  .order-status__orders___N_SnV .order-status__orderStatus___gGK9U .order-status__trackOrderBtn___woN1W .order-status__continueBtn___wKDd1:nth-child(2) {
-    padding-top: 12px;
-    padding-left: 0;
-  }
-}
-@media (min-width: 379px) and (max-width: 399px) {
-  .order-status__orders___N_SnV .order-status__orderStatus___gGK9U .order-status__trackOrderBtn___woN1W .order-status__continueBtn___wKDd1:nth-child(2) {
-    padding-left: 12px;
-  }
+  padding-inline-start: 0;
 }
 .order-status__orders___N_SnV .order-status__orderDetail___wNvPW {
   display: flex;
@@ -3980,12 +3968,8 @@ h5,
 }
 .bag__bagImg___F1kfj {
   min-width: 80px;
-  object-fit: cover;
   border-radius: var(--buttonRadius, 0px);
   overflow: hidden;
-}
-.bag__bagImg___F1kfj img {
-  object-fit: cover;
 }
 .bag__bundleImg___TEyPU {
   display: grid;
@@ -4065,6 +4049,9 @@ h5,
 }
 .fy-image__imageWrapper___wKmP2.fy-image__fill___rFWVY .fy-image__fyImg___yIv86 {
   object-fit: cover;
+}
+.fy-image__imageWrapper___wKmP2.fy-image__contain___nRgq8 .fy-image__fyImg___yIv86 {
+  object-fit: contain;
 }
 .fy-image__imageWrapper___wKmP2.fy-image__fixedAspRatio___fyXGS picture {
   aspect-ratio: var(--aspect-ratio-mobile);

@@ -2,14 +2,17 @@ import React, { useMemo } from "react";
 import * as styles from "./remove-cart-item.less";
 import Modal from "../../../../components/core/modal/modal";
 import { useGlobalTranslation } from "fdk-core/utils";
+import { truncateName } from "../../../../helper/utils";
 
 function RemoveCartItem({
   isOpen = false,
   cartItem = null,
   isRemoving = false,
+  isMovingToWishlist = false,
   onRemoveButtonClick = () => {},
   onWishlistButtonClick = () => {},
   onCloseDialogClick = () => {},
+  globalConfig
 }) {
   const { t } = useGlobalTranslation("translation");
 
@@ -26,6 +29,9 @@ function RemoveCartItem({
     }
   }, [cartItem]);
 
+  const brandName = truncateName(cartItem?.product?.brand?.name || "", 40);
+  const productName = truncateName(cartItem?.product?.name || "", 40);
+
   return (
     <Modal
       title={t("resource.cart.remove_item")}
@@ -40,24 +46,35 @@ function RemoveCartItem({
         <div className={styles.itemDetails}>
           {getProductImage && (
             <div className={styles.itemImg}>
-              <img src={getProductImage} alt={cartItem?.product?.name} />
+              <img src={getProductImage} alt={cartItem?.product?.name} 
+              className={`${globalConfig?.img_fill ? styles.imgCover : styles.imgContain}`} />
             </div>
           )}
           <div>
             <div className={styles.itemBrand}>
-              {cartItem?.product?.brand?.name}
+             {brandName}
             </div>
-            <div className={styles.itemName}>{cartItem?.product?.name}</div>
+            <div className={styles.itemName}>{productName}</div>
           </div>
         </div>
       </div>
       <div className={styles.removeModalFooter}>
-        <div className={styles.removeBtn} onClick={onRemoveButtonClick}>
+        <button
+          type="button"
+          className={styles.removeBtn}
+          onClick={onRemoveButtonClick}
+          disabled={isRemoving}
+        >
           {isRemoving ? "Removing..." : t("resource.facets.remove_caps")}
-        </div>
-        <div className={styles.wishlistBtn} onClick={onWishlistButtonClick}>
+        </button>
+
+        <button
+          type="button"
+          className={`${styles.wishlistBtn} ${isMovingToWishlist ? styles.disabled : ""}`}
+          onClick={onWishlistButtonClick}
+        >
           {t("resource.cart.move_to_wishlist")}
-        </div>
+        </button>
       </div>
     </Modal>
   );

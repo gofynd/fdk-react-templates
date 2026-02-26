@@ -335,7 +335,7 @@ h5,
   }
 }
 .chip-item__cartItemsListContainer___ud9jU {
-  padding: 16px;
+  padding: 24px;
   border: 1px solid var(--dividerStokes, #d4d1d1);
   border-top: 0 solid var(--dividerStokes, #d4d1d1);
 }
@@ -368,7 +368,7 @@ h5,
   display: flex;
 }
 .chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__itemImageContainer___kS2D_ a img {
-  width: 85%;
+  width: 100%;
   border-radius: 4px;
 }
 .chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 {
@@ -654,10 +654,13 @@ h5,
 }
 .chip-item__sModalContainer___ARs9G .chip-item__sizeModalTitle___ITUcq .chip-item__sizeModalDiv____Vutd .chip-item__sizeModalImage___tpqo4 {
   flex: 0 0 18%;
+  height: 120px;
 }
 .chip-item__sModalContainer___ARs9G .chip-item__sizeModalTitle___ITUcq .chip-item__sizeModalDiv____Vutd .chip-item__sizeModalImage___tpqo4 img {
   width: 100%;
+  height: 100%;
   border-radius: 4px;
+  object-fit: "cover";
 }
 .chip-item__sModalContainer___ARs9G .chip-item__sizeModalTitle___ITUcq .chip-item__sizeModalDiv____Vutd .chip-item__sizeModalContent___TAnsO {
   color: #1f1f1f;
@@ -764,6 +767,12 @@ h5,
 }
 .chip-item__sModalContainer___ARs9G .chip-item__disableBtn___Thin2 {
   opacity: 0.5;
+}
+.chip-item__imgCover___t24yr {
+  object-fit: cover;
+}
+.chip-item__imgContain___eU1WL {
+  object-fit: contain;
 }
 .chip-item__selected___ctBwP {
   display: flex;
@@ -1371,7 +1380,7 @@ h5,
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 45px;
+  width: 38px;
   height: 100%;
   border-inline-start: 1px solid var(--dividerStokes, #d4d1d1);
   border-inline-end: 1px solid var(--dividerStokes, #d4d1d1);
@@ -2822,6 +2831,9 @@ h5,
 }
 .fy-image__imageWrapper___wKmP2.fy-image__fill___rFWVY .fy-image__fyImg___yIv86 {
   object-fit: cover;
+}
+.fy-image__imageWrapper___wKmP2.fy-image__contain___nRgq8 .fy-image__fyImg___yIv86 {
+  object-fit: contain;
 }
 .fy-image__imageWrapper___wKmP2.fy-image__fixedAspRatio___fyXGS picture {
   aspect-ratio: var(--aspect-ratio-mobile);
