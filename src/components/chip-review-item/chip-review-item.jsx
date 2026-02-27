@@ -50,7 +50,8 @@ export default function ChipReviewItem({ item, articles }) {
     return currencyFormat(
       numberWithCommas(total),
       articles?.[0]?.price?.converted?.currency_symbol || "₹",
-      formatLocale(locale, countryCode, true)
+      formatLocale(locale, countryCode, true),
+      articles?.[0]?.price?.converted?.currency_code
     );
   }, [articles]);
 
@@ -122,13 +123,15 @@ const ChipMeta = ({ item }) => {
                     item?.price_per_unit?.converted?.effective
                   ),
                   item?.price_per_unit?.converted?.currency_symbol || "₹",
-                  formatLocale(locale, countryCode, true)
+                  formatLocale(locale, countryCode, true),
+                  item?.price_per_unit?.converted?.currency_code
                 )}/${t("resource.common.pcs")}`
                 : item?.price?.converted
                   ? currencyFormat(
                     numberWithCommas(item?.price?.converted?.effective),
                     item?.price?.converted?.currency_symbol || "₹",
-                    formatLocale(locale, countryCode, true)
+                    formatLocale(locale, countryCode, true),
+                    item?.price?.converted?.currency_code
                   )
                   : ""}
             </span>
@@ -139,13 +142,15 @@ const ChipMeta = ({ item }) => {
                     ? `${currencyFormat(
                       numberWithCommas(item?.price_per_unit?.converted?.marked),
                       item?.price_per_unit?.converted?.currency_symbol || "₹",
-                      formatLocale(locale, countryCode, true)
+                      formatLocale(locale, countryCode, true),
+                      item?.price_per_unit?.converted?.currency_code
                     )}/${t("resource.common.pcs")}`
                     : item?.price?.converted
                       ? currencyFormat(
                         numberWithCommas(item?.price?.converted?.marked),
                         item?.price?.converted?.currency_symbol || "₹",
-                        formatLocale(locale, countryCode, true)
+                        formatLocale(locale, countryCode, true),
+                        item?.price?.converted?.currency_code
                       )
                       : ""}
                 </span>

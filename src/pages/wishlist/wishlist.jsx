@@ -4,7 +4,7 @@ import { FDKLink } from "fdk-core/components";
 import InfiniteLoader from "../../components/core/infinite-loader/infinite-loader";
 import Breadcrumb from "../../components/breadcrumb/breadcrumb";
 import ProductCard from "../../components/product-card/product-card";
-import { useGlobalTranslation } from "fdk-core/utils";
+import { useGlobalTranslation, useGlobalStore, useFPI } from "fdk-core/utils";
 import Modal from "../../components/core/modal/modal";
 import AddToCart from "../../page-layouts/plp/Components/add-to-cart/add-to-cart";
 import SizeGuide from "../../page-layouts/plp/Components/size-guide/size-guide";
@@ -29,15 +29,20 @@ const Wishlist = ({
   hasNext = false,
   isLoading = false,
   EmptyStateComponent,
-  onLoadMore = () => {},
-  onRemoveClick = () => {},
+  onLoadMore = () => { },
+  onRemoveClick = () => { },
   imagePlaceholder = "",
   addToCartModalProps = {},
   showAddToCart = false,
   actionButtonText,
   globalConfig = {},
+  showHeader = true,
+  showQuantityController = false,
+  showMoq = false,
 }) => {
   const { t } = useGlobalTranslation("translation");
+  const fpi = useFPI();
+  const { is_serviceable } = useGlobalStore(fpi?.getters?.CUSTOM_VALUE) || {};
   const countLabel =
     totalCount > 1 ? `${totalCount} ${t("resource.common.items")}` : "";
 
@@ -58,16 +63,18 @@ const Wishlist = ({
   return (
     <div>
       <div className={styles.breadcrumbWrapper}>
-        <Breadcrumb breadcrumb={breadcrumb} />
+        {/* <Breadcrumb breadcrumb={breadcrumb} /> */}
       </div>
-      <div className={styles.titleWrapper}>
-        <h1 className={styles.title}>
-          {title || t("resource.common.breadcrumb.wishlist")}
-        </h1>
-        {countLabel && (
-          <span className={styles.wishlistCount}>{countLabel}</span>
-        )}
-      </div>
+      {showHeader && (
+        <div className={styles.titleWrapper}>
+          <h1 className={styles.title}>
+            {title || t("resource.common.breadcrumb.wishlist")}
+          </h1>
+          {countLabel && (
+            <span className={styles.wishlistCount}>{countLabel}</span>
+          )}
+        </div>
+      )}
 
       <InfiniteLoader
         hasNext={hasNext}
@@ -99,6 +106,7 @@ const Wishlist = ({
                 onRemoveClick,
                 handleAddToCart,
                 globalConfig,
+                isServiceable: is_serviceable,
               }}
             />
           ))}
@@ -118,7 +126,13 @@ const Wishlist = ({
             }
             closeDialog={restAddToModalProps?.handleClose}
           >
-            <AddToCart {...restAddToModalProps} globalConfig={globalConfig} />
+            <AddToCart
+              {...restAddToModalProps}
+              globalConfig={globalConfig}
+              isServiceable={is_serviceable}
+              showQuantityController={showQuantityController}
+              showMoq={showMoq}
+            />
           </Modal>
           <SizeGuide
             isOpen={showSizeGuide}
@@ -149,8 +163,9 @@ const WishlistProductCard = ({
   imagePlaceholder,
   actionButtonText,
   showAddToCart,
-  onRemoveClick = () => {},
+  onRemoveClick = () => { },
   handleAddToCart,
+  isServiceable = true,
 }) => {
   const { t } = useGlobalTranslation("translation");
 
@@ -202,6 +217,7 @@ const WishlistProductCard = ({
         showAddToCart={showAddToCart}
         actionButtonText={actionButtonText ?? t("resource.common.add_to_cart")}
         handleAddToCart={handleAddToCart}
+        isServiceable={isServiceable}
       />
     </FDKLink>
   );

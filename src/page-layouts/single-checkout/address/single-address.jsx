@@ -19,6 +19,8 @@ function SingleAddress({
   isApiLoading = false,
   getTotalValue,
   showPaymentOptions,
+  acceptOrder,
+  isCreditNoteApplied,
 }) {
   const fpi = useFPI();
   const userDetails = useGlobalStore(fpi.getters.USER_DATA);
@@ -51,6 +53,7 @@ function SingleAddress({
     getFilteredCountries,
     selectedCountry,
     countryDetails,
+    formKey,
   } = address;
 
   function backToEdit() {
@@ -69,6 +72,7 @@ function SingleAddress({
           showPayment={showPayment}
           showShipment={showShipment}
           backToEdit={backToEdit}
+          acceptOrder={acceptOrder}
         ></SinglesAddressHeader>
         <Modal
           title={modalTitle}
@@ -80,6 +84,7 @@ function SingleAddress({
           bodyClassName={styles.addressModalBody}
         >
           <AddressForm
+            key={formKey || `${addressItem?.id || 'new'}-${countryDetails?.iso2 || 'default'}`}
             internationalShipping={isInternationalShippingEnabled}
             formSchema={defaultFormSchema}
             isNewAddress={isNewAddress}
@@ -93,7 +98,7 @@ function SingleAddress({
             setI18nDetails={setI18nDetails}
             handleCountrySearch={handleCountrySearch}
             getFilteredCountries={getFilteredCountries}
-            selectedCountry={selectedCountry?.display_name ?? ""}
+            selectedCountry={selectedCountry}
             countryDetails={countryDetails}
             isGuestUser={isGuestUser}
             user={userDetails}
@@ -117,6 +122,7 @@ function SingleAddress({
             isApiLoading={isApiLoading}
             showPaymentOptions={showPaymentOptions}
             getTotalValue={getTotalValue}
+            isCreditNoteApplied={isCreditNoteApplied}
           ></SingleAddressContent>
         )}
       </div>

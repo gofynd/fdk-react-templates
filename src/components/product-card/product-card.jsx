@@ -31,6 +31,7 @@
  * @param {boolean} [props.showBadge=true] - Flag to display product badges.
  * @param {boolean} [props.showColorVariants=false] - Flag to display color variant dots.
  * @param {boolean} [props.isSlider=false] - Flag to indicate if card is used in a slider.
+ * @param {boolean} [props.isPriceLoading=false] - When true, shows a loader shimmer in the price/tooltip area to prevent layout shift while price is loading.
  *
  * @returns {JSX.Element} The rendered product card component.
  *
@@ -260,6 +261,7 @@ const ProductCard = ({
   isPrice = true,
   isSaleBadge = true,
   isWishlistIcon = true,
+  isCustomBadge = true,
   isImageFill = false,
   showImageOnHover = false,
   customImageContainerClass = "",
@@ -274,18 +276,20 @@ const ProductCard = ({
   ),
   actionButtonText,
   followedIdList = [],
-  onWishlistClick = () => {},
-  handleAddToCart = () => {},
-  onRemoveClick = () => {},
+  onWishlistClick = () => { },
+  handleAddToCart = () => { },
+  onRemoveClick = () => { },
   centerAlign = false,
   showAddToCart = false,
   showBadge = true,
   showColorVariants = false,
   isSlider = false,
-  onClick = () => {},
+  onClick = () => { },
   globalConfig = {},
   productsInWishlist = [],
   showSmartWishlist = false,
+  isServiceable = true,
+  isPriceLoading = false,
 }) => {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -367,19 +371,19 @@ const ProductCard = ({
         price =
           priceDetails.min !== priceDetails.max
             ? `${currencyFormat(
-                priceDetails.min,
-                priceDetails.currency_symbol,
-                formatLocale(locale, countryCode, true)
-              )} - ${currencyFormat(
-                priceDetails.max,
-                priceDetails.currency_symbol,
-                formatLocale(locale, countryCode, true)
-              )}`
+              priceDetails.min,
+              priceDetails.currency_symbol,
+              formatLocale(locale, countryCode, true)
+            )} - ${currencyFormat(
+              priceDetails.max,
+              priceDetails.currency_symbol,
+              formatLocale(locale, countryCode, true)
+            )}`
             : currencyFormat(
-                priceDetails.min,
-                priceDetails.currency_symbol,
-                formatLocale(locale, countryCode, true)
-              );
+              priceDetails.min,
+              priceDetails.currency_symbol,
+              formatLocale(locale, countryCode, true)
+            );
         break;
       default:
         break;
@@ -470,6 +474,14 @@ const ProductCard = ({
   const hasDiscount =
     getListingPrice("effective") !== getListingPrice("marked");
 
+  const hasB2bPricePath =
+    product?.contract || product?.quotation || product?.pricing_tier;
+  const hasPriceContent = hasB2bPricePath
+    ? product?.best_price?.price != null && product?.best_price?.currency_symbol
+    : !!product?.price;
+  const showPriceShimmer =
+    isPrice && (isPriceLoading || !hasPriceContent);
+
   const isFollowed = useMemo(() => {
     return !!followedIdList?.includes(product?.uid);
   }, [followedIdList, product]);
@@ -531,14 +543,12 @@ const ProductCard = ({
 
   return (
     <div
-      className={`${styles.productCard} ${
-        !product.sellable ? styles.disableCursor : ""
-      } ${styles[customClass[0]]} ${styles[customClass[1]]} ${
-        styles[customClass[2]]
-      } ${styles.animate} ${gridClass} ${isSlider ? styles.sliderCard : ""}`}
+      className={`${styles.productCard} ${!product.sellable ? styles.disableCursor : ""
+        } ${styles[customClass[0]]} ${styles[customClass[1]]} ${styles[customClass[2]]
+        } ${styles.animate} ${gridClass} ${isSlider ? styles.sliderCard : ""}`}
       onClick={onClick}
     >
-      <div className={`${styles.imageContainer} ${customImageContainerClass}`}>
+      <div className={`${styles.imageContainer} ${customImageContainerClass} ${!product.sellable ? styles.outOfStockContainer : ""}`}>
         {!isMobile && showImageOnHover && imageData.hoverUrl && (
           <FyImage
             src={imageData.hoverUrl}
@@ -591,7 +601,7 @@ const ProductCard = ({
               {t("resource.common.out_of_stock")}
             </span>
           </div>
-        ) : product.teaser_tag && showBadge ? (
+        ) : isCustomBadge && product.teaser_tag && showBadge ? (
           <div className={styles.badge}>
             <span className={`${styles.text} ${styles.captionNormal}`}>
               {isMobileView
@@ -622,9 +632,16 @@ const ProductCard = ({
           </h5>
           {isPrice && (
             <>
-              {product?.contract ||
-              product?.quotation ||
-              product?.pricing_tier ? (
+              {showPriceShimmer ? (
+                <div className={styles.priceShimmer}>
+                  {(isPriceLoading || hasB2bPricePath) && (
+                    <div className={styles.priceShimmerBadge} />
+                  )}
+                  <div className={styles.priceShimmerLine} />
+                </div>
+              ) : product?.contract ||
+                product?.quotation ||
+                product?.pricing_tier ? (
                 <>
                   {product.contract && (
                     <Tooltip
@@ -778,8 +795,10 @@ const ProductCard = ({
           )}
         </div>
 
-        {showAddToCart &&
-          ((!loggedIn && show_discount_guest) ||
+        {showAddToCart && (
+          showPriceShimmer ? (
+            <div className={styles.addToCartShimmer} />
+          ) : ((!loggedIn && show_discount_guest) ||
             (loggedIn && isMerchantKycApproved()) ||
             (loggedIn &&
               !isMerchantKycApproved() &&
@@ -788,12 +807,14 @@ const ProductCard = ({
               variant="outlined"
               className={styles.addToCart}
               onClick={handleAddToCartClick}
+              disabled={!isServiceable}
             >
               {actionButtonText ?? t("resource.common.add_to_cart")}
             </FyButton>
-          )}
+          ))}
 
-        {show_available_offer_button &&
+        {
+          show_available_offer_button &&
           ((!loggedIn && show_discount_guest) ||
             (loggedIn && isMerchantKycApproved()) ||
             (loggedIn &&
@@ -807,9 +828,10 @@ const ProductCard = ({
               isKycKeyPresent={isKycKeyPresent}
               isMerchantKycApproved={isMerchantKycApproved()}
             />
-          )}
-      </div>
-    </div>
+          )
+        }
+      </div >
+    </div >
   );
 };
 
