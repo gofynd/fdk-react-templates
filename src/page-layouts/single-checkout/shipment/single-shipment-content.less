@@ -166,6 +166,7 @@
           img {
             max-width: 100px;
             max-height: 150px;
+            height: 120px;
             cursor: pointer;
           }
         }
@@ -294,36 +295,59 @@
 
 .parent {
   border: 1px solid var(--dividerStokes);
-  padding: 24px;
-  @media @desktop {
-    border-radius: 0px 0px 8px 8px;
-  }
-  @media @tablet-range {
-    padding: 16px;
-  }
   border-top: none;
+  padding: 24px;
+
+  @media @desktop {
+    max-height: 75vh;
+    overflow-y: auto;
+    position: relative;
+    border-radius: 0px 0px 8px 8px;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+    &::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 4px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 4px;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f1f1f1;
+  }
 
   @media @mobile {
-    border-radius: 0px;
-    border-width: 0 0;
+    border-width: 0;
     padding: 0;
     margin-top: 12px;
-  }
-
-  .shimmer {
-    height: 250px;
-
-    @media @tablet {
-      height: 200px;
-    }
+    overflow: visible;
   }
 }
 
+.scrollArea {
+  overflow: visible;
+}
+.imgCover {
+  object-fit: cover;
+}
+
+.imgContain {
+  object-fit: contain;
+}
 .proceedBtnWrapper {
   @media @mobile {
     display: none;
   }
   .proceedBtn {
+    position: sticky;
+    bottom: 0;
     cursor: pointer;
     font-weight: 600;
     font-size: 14px;

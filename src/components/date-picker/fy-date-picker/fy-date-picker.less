@@ -54,13 +54,13 @@
     padding: 16px;
     border-radius: 6px;
     border: 1px solid @OverlayPopupDividerStroke;
-    background: @ButtonSecondary;
+    background: @PageBackground;
 
     input {
       border: none;
       width: 100%;
       background: transparent;
-      color: @Mako;
+      color: @TextHeading;
       &:focus {
         outline: none;
         border: none;
@@ -69,13 +69,13 @@
       .disabledInput {
         background-color: #f0f0f0;
         cursor: not-allowed;
-        color: #999;
+        color: @TextHeading;
       }
       .readOnlyInput {
-        background-color: #f9f9f9;
-        color: #555;
+        background-color: @PageBackground;
+        color: @TextHeading;
         cursor: default;
-        border-color: @Gray;
+        border-color: @OverlayPopupDividerStroke;
       }
     }
 
@@ -293,7 +293,7 @@
       }
 
       .empty {
-        color: @Gray;
+        color: @TextHeading;
       }
     }
 

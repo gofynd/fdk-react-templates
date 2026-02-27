@@ -4,6 +4,7 @@ import * as styles from "./chip-item.less";
 import {
   currencyFormat,
   formatLocale,
+  numberWithCommas,
   translateDynamicLabel,
 } from "../../../../helper/utils";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
@@ -20,6 +21,7 @@ import {
   useNavigate,
 } from "fdk-core/utils";
 import ChipImage from "./chip-image";
+import { transformDisplayToAccordionContent } from "../../../../helper/customization-display";
 
 export default function ChipItem({
   isCartUpdating,
@@ -42,7 +44,7 @@ export default function ChipItem({
   availableFOCount,
   isPromoModalOpen,
   isSoldBy = false,
-  onRemoveIconClick = () => { },
+  onRemoveIconClick = () => {},
   onOpenPromoModal,
   onClosePromoModal,
   getFulfillmentOptions,
@@ -56,7 +58,8 @@ export default function ChipItem({
   const navigate = useNavigate();
   const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
   const locale = language?.locale;
-  const { limited_stock_quantity: limitedStockQuantity = 11 } = globalConfig || {};
+  const { limited_stock_quantity: limitedStockQuantity = 11 } =
+    globalConfig || {};
   const isMobile = useMobile();
   const [showQuantityError, setShowQuantityError] = useState(false);
   const [showFOModal, setShowFOModal] = useState(false);
@@ -76,83 +79,15 @@ export default function ChipItem({
   const couponText = singleItemDetails?.coupon_message || "";
   const moq = singleItemDetails?.moq;
   const incrementDecrementUnit = moq?.increment_unit ?? 1;
-
-  const customizationOptions =
+  const rawCustomizationOptions =
     singleItemDetails?.article?._custom_json?._display || [];
-
-  // Transform customization options into accordion format
-  const transformedCustomizationContent = customizationOptions
-    .map((option) => {
-      const items = [];
-
-      // Handle productCanvas type (nested value object)
-      if (option.type === "productCanvas" && option.value) {
-        const canvasData = option.value;
-
-        if (canvasData.text) {
-          items.push({
-            key: option.key || "Text",
-            value: canvasData.text,
-          });
-        }
-
-        if (canvasData.price || option.price) {
-          items.push({
-            key: "Price",
-            value: `${canvasData.price || option.price}`,
-          });
-        }
-
-        if (canvasData.previewImage) {
-          items.push({
-            key: "Preview",
-            value: canvasData.previewImage,
-            type: "image",
-            alt: option.key || "Customization preview",
-            dimensions: canvasData.textBounds
-              ? {
-                width: canvasData.textBounds.width,
-                height: canvasData.textBounds.height,
-              }
-              : undefined,
-          });
-        }
-      }
-      // Handle simple string type
-      else if (option.type === "string" && option.value) {
-        items.push({
-          key: option.alt || option.key,
-          value: option.value,
-        });
-      }
-      // Handle other types with direct text/price/previewImage properties
-      else {
-        if (option.text) {
-          items.push({ key: "Text", value: option.text });
-        }
-
-        if (option.price) {
-          items.push({ key: "Price", value: option.price });
-        }
-
-        if (option.previewImage) {
-          items.push({
-            key: "Preview",
-            value: option.previewImage,
-            type: "image",
-            alt: "Customization preview",
-          });
-        }
-      }
-
-      return items;
-    })
-    .flat();
-
+  const accordionContent = transformDisplayToAccordionContent(
+    rawCustomizationOptions
+  );
   const [items, setItems] = useState([
     {
       title: "Customization",
-      content: transformedCustomizationContent,
+      content: accordionContent,
       open: false,
     },
   ]);
@@ -437,8 +372,9 @@ export default function ChipItem({
         )}
         <div className={styles.eachItemContainer}>
           <div
-            className={`${styles.itemImageContainer} ${isOutOfStock ? styles.outOfStock : ""
-              }`}
+            className={`${styles.itemImageContainer} ${
+              isOutOfStock ? styles.outOfStock : ""
+            }`}
           >
             <FDKLink
               to={`/product/${singleItemDetails?.product?.slug}`}
@@ -482,8 +418,9 @@ export default function ChipItem({
               {singleItemDetails?.product?.brand?.name}
             </div>
             <div
-              className={`${styles.itemName} ${isOutOfStock ? styles.outOfStock : ""
-                } `}
+              className={`${styles.itemName} ${
+                isOutOfStock ? styles.outOfStock : ""
+              } `}
             >
               {singleItemDetails?.product?.name?.length > 24
                 ? `${singleItemDetails.product.name.slice(0, 24)}...`
@@ -590,33 +527,34 @@ export default function ChipItem({
             <div className={styles.itemTotalContainer}>
               <div className={styles.itemPrice}>
                 <span
-                  className={`${styles.effectivePrice} ${isOutOfStock ? styles.outOfStock : ""
-                    }`}
+                  className={`${styles.effectivePrice} ${
+                    isOutOfStock ? styles.outOfStock : ""
+                  }`}
                 >
                   {currencyFormat(
-                    singleItemDetails?.price?.converted?.final_price ??
-                    singleItemDetails?.price?.base?.final_price,
+                    singleItemDetails?.price?.converted?.effective ??
+                      singleItemDetails?.price?.base?.effective,
                     singleItemDetails?.price?.converted?.currency_symbol ??
-                    singleItemDetails?.price?.base?.currency_symbol,
+                      singleItemDetails?.price?.base?.currency_symbol,
                     formatLocale(locale, countryCode, true),
                     singleItemDetails?.price?.converted?.currency_code ??
-                    singleItemDetails?.price?.base?.currency_code
+                      singleItemDetails?.price?.base?.currency_code
                   )}
                 </span>
                 {singleItemDetails?.price?.converted?.effective <
                   singleItemDetails?.price?.converted?.marked && (
-                    <span className={styles.markedPrice}>
-                      {currencyFormat(
-                        singleItemDetails?.price?.converted?.marked ??
+                  <span className={styles.markedPrice}>
+                    {currencyFormat(
+                      singleItemDetails?.price?.converted?.marked ??
                         singleItemDetails?.price?.base?.marked,
-                        singleItemDetails?.price?.converted?.currency_symbol ??
+                      singleItemDetails?.price?.converted?.currency_symbol ??
                         singleItemDetails?.price?.base?.currency_symbol,
-                        formatLocale(locale, countryCode, true),
-                        singleItemDetails?.price?.converted?.currency_code ??
+                      formatLocale(locale, countryCode, true),
+                      singleItemDetails?.price?.converted?.currency_code ??
                         singleItemDetails?.price?.base?.currency_code
-                      )}
-                    </span>
-                  )}
+                    )}
+                  </span>
+                )}
                 <span className={styles.discount}>
                   {singleItemDetails?.discount}
                 </span>
@@ -664,7 +602,7 @@ export default function ChipItem({
                   <SvgWrapper svgSrc="applied-promo" className={styles.ml6} />
                 </div>
               )}
-            {customizationOptions.length > 0 && (
+            {accordionContent.length > 0 && (
               <div className={styles.productCustomizationContainer}>
                 <Accordion items={items} onItemClick={handleItemClick} />
               </div>
@@ -790,15 +728,16 @@ export default function ChipItem({
                   src={
                     sizeModalItemValue?.product?.images?.length > 0
                       ? sizeModalItemValue?.product?.images[0]?.url?.replace(
-                        "original",
-                        "resize-w:250"
-                      )
+                          "original",
+                          "resize-w:250"
+                        )
                       : undefined
                   }
                   alt={
                     sizeModalItemValue?.product?.name ||
                     t("resource.common.product_image")
                   }
+                  className={`${globalConfig?.img_fill ? styles.imgCover : styles.imgContain}`}
                 />
               </div>
               <div className={styles.sizeModalContent}>
@@ -812,15 +751,18 @@ export default function ChipItem({
                 </div>
                 <div className={styles.sizeDiscount}>
                   {currencyFormat(
-                    sizeModalItemValue?.article?.price?.converted?.effective ??
-                    sizeModalItemValue?.article?.price?.base?.effective,
+                    numberWithCommas(
+                      sizeModalItemValue?.article?.price?.converted
+                        ?.effective ??
+                        sizeModalItemValue?.article?.price?.base?.effective
+                    ),
                     sizeModalItemValue?.article?.price?.converted
                       ?.currency_symbol ??
-                    sizeModalItemValue?.article?.price?.base?.currency_symbol,
+                      sizeModalItemValue?.article?.price?.base?.currency_symbol,
                     formatLocale(locale, countryCode, true),
                     sizeModalItemValue?.article?.price?.converted
                       ?.currency_code ??
-                    sizeModalItemValue?.article?.price?.base?.currency_code
+                      sizeModalItemValue?.article?.price?.base?.currency_code
                   )}
                 </div>
               </div>
@@ -852,11 +794,13 @@ export default function ChipItem({
                       }}
                     >
                       <div
-                        className={`${styles.singleSizeDetails} ${(isEarlierSelectedSize || isCurrentSelectedSize) &&
+                        className={`${styles.singleSizeDetails} ${
+                          (isEarlierSelectedSize || isCurrentSelectedSize) &&
                           styles.singleSizeSelected
-                          }
-                          ${!singleSize?.is_available &&
-                          styles.sigleSizeDisabled
+                        }
+                          ${
+                            !singleSize?.is_available &&
+                            styles.sigleSizeDisabled
                           }
                           `}
                         onClick={(e) => {
@@ -874,8 +818,9 @@ export default function ChipItem({
                           } else if (singleSize?.value) {
                             // Set new size when a different size is selected
                             setSizeModalErr(null);
-                            const newSizeModalValue = `${sizeModal?.split("_")[0]
-                              }_${singleSize?.value}_${sizeModal?.split("_")[2]}`;
+                            const newSizeModalValue = `${
+                              sizeModal?.split("_")[0]
+                            }_${singleSize?.value}_${sizeModal?.split("_")[2]}`;
                             setCurrentSizeModalSize(newSizeModalValue);
                           }
                         }}

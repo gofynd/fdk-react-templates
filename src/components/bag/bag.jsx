@@ -9,7 +9,7 @@ const toOriginalVariant = (url = "") => {
   return url.replace(/\/\d+x\d+\//, "/original/");
 };
 
-export function BagImage({ bag, isBundle, width = 80, aspectRatio }) {
+export function BagImage({ bag, isBundle, width = 80, aspectRatio,isImageFill=false }) {
   const src = isBundle
     ? bag?.bundle_details?.images?.[0]
     : bag?.item?.image?.[0];
@@ -17,7 +17,7 @@ export function BagImage({ bag, isBundle, width = 80, aspectRatio }) {
   // force original for gifs + skip transforms
   const gif = isGifUrl(src);
   const finalSrc = gif ? toOriginalVariant(src) : src;
-
+console.log(isImageFill,'on bag.jsx');
   return (
     <FyImage
       customClass={styles.bagImg}
@@ -25,7 +25,7 @@ export function BagImage({ bag, isBundle, width = 80, aspectRatio }) {
       alt={name}
       sources={gif ? [] : [{ width }]}
       aspectRatio={aspectRatio}
-      isImageFill
+      isImageFill={isImageFill}
     />
   );
 }
@@ -80,7 +80,7 @@ export function BundleBagImage({
               alt={item?.name}
               sources={gif ? [] : [{ width: 80 }]}
               aspectRatio={aspectRatio}
-              isImageFill
+              isImageFill={isImageFill}
             />
             {index === 3 && uniueBagItems.length > 4 && (
               <div className={`${styles.bundleCount}`}>
