@@ -26,7 +26,7 @@ function MobileNumber({
   inputContainerClassName,
   inputProps,
   height = "48px",
-  textColor = "var(--textHeading, #26201a)",
+  textColor = "var(--textBody, #3c3131)",
   backgroundColor = "var(--pageBackground, #f8f8f8)",
   fontSize = "14px",
   countryIso,

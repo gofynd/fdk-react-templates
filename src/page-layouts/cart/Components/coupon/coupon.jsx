@@ -448,7 +448,7 @@ function CouponItem({
   );
 }
 
-export function CouponSuccessModal({
+function CouponSuccessModal({
   isOpen = false,
   coupon = {},
   currencySymbol = "₹",

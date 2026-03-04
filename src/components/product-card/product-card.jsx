@@ -88,7 +88,6 @@ const ProductCard = ({
   isSlider = false,
   onClick = () => {},
   isServiceable = true,
-  showMultipleImages = false,
 }) => {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -277,60 +276,6 @@ const ProductCard = ({
     [currentShade?.uid]
   );
 
-  // =================== MULTIPLE IMAGES FUNCTIONALITY ===================
-
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
-  const hoverIntervalRef = React.useRef(null);
-
-  const productImages = useMemo(() => {
-    if (!showMultipleImages) return [];
-
-    // Combine all available images from product media
-    const images =
-      product?.media?.filter((media) => media.type === "image") || [];
-
-    // If no images, fall back to current logic
-    if (images.length === 0) return [];
-
-    return images;
-  }, [product, showMultipleImages]);
-
-  // Desktop Slideshow Logic
-  useEffect(() => {
-    if (!showMultipleImages || isMobile) return;
-
-    if (isHovered && productImages.length > 1) {
-      hoverIntervalRef.current = setInterval(() => {
-        setCurrentImageIndex((prev) => (prev + 1) % productImages.length);
-      }, 1000); // Change image every 1 second
-    } else {
-      setCurrentImageIndex(0);
-      if (hoverIntervalRef.current) {
-        clearInterval(hoverIntervalRef.current);
-      }
-    }
-
-    return () => {
-      if (hoverIntervalRef.current) {
-        clearInterval(hoverIntervalRef.current);
-      }
-    };
-  }, [isHovered, showMultipleImages, isMobile, productImages.length]);
-
-  const handleMouseEnter = () => setIsHovered(true);
-  const handleMouseLeave = () => setIsHovered(false);
-
-  const handleMobileScroll = (e) => {
-    if (!isMobile) return;
-    const scrollLeft = e.target.scrollLeft;
-    const width = e.target.clientWidth;
-    const newIndex = Math.round(scrollLeft / width);
-    setCurrentImageIndex(newIndex);
-  };
-
-  // =================== END MULTIPLE IMAGES FUNCTIONALITY ===================
-
   return (
     <div
       className={`${styles.productCard} ${
@@ -339,95 +284,32 @@ const ProductCard = ({
         styles[customClass[2]]
       } ${styles.animate} ${gridClass} ${isSlider ? styles.sliderCard : ""}`}
       onClick={onClick}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
     >
-      <div
-        className={`${styles.imageContainer} ${customImageContainerClass} ${
-          !product.sellable ? styles.outOfStockContainer : ""
-        }`}
-      >
-        {/* Mobile View: Horizontal Scroll */}
-        {showMultipleImages && isMobile && productImages.length > 0 ? (
-          <div
-            className={styles.mobileScrollContainer}
-            onScroll={handleMobileScroll}
-          >
-            {productImages.map((img, index) => (
-              <div key={index} className={styles.mobileImageWrapper}>
-                <FyImage
-                  src={img.url}
-                  alt={img.alt || product.name}
-                  aspectRatio={aspectRatio}
-                  isImageFill={isImageFill}
-                  backgroundColor={imageBackgroundColor}
-                  isFixedAspectRatio={true}
-                  customClass={`${styles.mobileImage}`}
-                  sources={imgSrcSet}
-                  defer={index !== 0} // Defer loading for non-first images
-                />
-              </div>
-            ))}
-          </div>
-        ) : (
-          /* Desktop View or Default View */
-          <>
-            {showMultipleImages && !isMobile && productImages.length > 0 ? (
-              <div className={styles.desktopSlideshowContainer}>
-                <div
-                  className={styles.slidesWrapper}
-                  style={{
-                    transform: `translateX(-${currentImageIndex * 100}%)`,
-                  }}
-                >
-                  {productImages.map((img, index) => (
-                    <div key={index} className={styles.slide}>
-                      <FyImage
-                        src={img.url}
-                        alt={img.alt || product.name}
-                        aspectRatio={aspectRatio}
-                        isImageFill={isImageFill}
-                        backgroundColor={imageBackgroundColor}
-                        isFixedAspectRatio={true}
-                        customClass={`${styles.productImage}`}
-                        sources={imgSrcSet}
-                        defer={index > 1}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <>
-                {!isMobile && showImageOnHover && imageData.hoverUrl && (
-                  <FyImage
-                    src={imageData.hoverUrl}
-                    alt={imageData.hoverAlt}
-                    aspectRatio={aspectRatio}
-                    isImageFill={isImageFill}
-                    backgroundColor={imageBackgroundColor}
-                    isFixedAspectRatio={true}
-                    customClass={`${styles.productImage} ${styles.hoverImage}`}
-                    sources={imgSrcSet}
-                    defer={true}
-                  />
-                )}
-                <FyImage
-                  src={imageData.url}
-                  alt={imageData.alt}
-                  aspectRatio={aspectRatio}
-                  isImageFill={isImageFill}
-                  backgroundColor={imageBackgroundColor}
-                  isFixedAspectRatio={true}
-                  customClass={`${styles.productImage} ${styles.mainImage}`}
-                  sources={imgSrcSet}
-                  defer={false}
-                />
-              </>
-            )}
-          </>
+      <div className={`${styles.imageContainer} ${customImageContainerClass} ${!product.sellable ? styles.outOfStockContainer : ""}`}>
+        {!isMobile && showImageOnHover && imageData.hoverUrl && (
+          <FyImage
+            src={imageData.hoverUrl}
+            alt={imageData.hoverAlt}
+            aspectRatio={aspectRatio}
+            isImageFill={isImageFill}
+            backgroundColor={imageBackgroundColor}
+            isFixedAspectRatio={true}
+            customClass={`${styles.productImage} ${styles.hoverImage}`}
+            sources={imgSrcSet}
+            defer={true}
+          />
         )}
-
+        <FyImage
+          src={imageData.url}
+          alt={imageData.alt}
+          aspectRatio={aspectRatio}
+          isImageFill={isImageFill}
+          backgroundColor={imageBackgroundColor}
+          isFixedAspectRatio={true}
+          customClass={`${styles.productImage} ${styles.mainImage}`}
+          sources={imgSrcSet}
+          defer={false}
+        />
         {isWishlistIcon && (
           <button
             className={`${styles.wishlistBtn} ${isFollowed ? styles.active : ""}`}
@@ -467,20 +349,6 @@ const ProductCard = ({
             </span>
           </div>
         ) : null}
-
-        {/* Dots Pagination */}
-        {showMultipleImages && productImages.length > 1 && (
-          <div className={styles.dotsContainer}>
-            {productImages.map((_, index) => (
-              <div
-                key={index}
-                className={`${styles.dot} ${
-                  index === currentImageIndex ? styles.activeDot : ""
-                }`}
-              />
-            ))}
-          </div>
-        )}
       </div>
       <div
         className={`${styles.productDescContainer} ${customeProductDescContainerClass}`}

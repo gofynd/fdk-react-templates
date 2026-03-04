@@ -29,7 +29,6 @@
     position: relative;
     border-radius: @ImageRadius;
     -webkit-mask-image: -webkit-radial-gradient(white, black); //safari fix
-    mask-image: radial-gradient(white, black);
 
     &.outOfStockContainer {
       .productImage {
@@ -104,7 +103,6 @@
       .text {
         display: -webkit-box;
         -webkit-line-clamp: 2;
-        line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
       }
@@ -134,32 +132,6 @@
 
     .extension {
       position: absolute;
-    }
-
-    .dotsContainer {
-      position: absolute;
-      bottom: 12px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 4px;
-      z-index: 2;
-      pointer-events: none; // Allow clicks to pass through to the image/link
-
-      .dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 25px;
-        background-color: @TextSecondary;
-        transition:
-          background-color 0.2s ease,
-          transform 0.2s ease;
-
-        &.activeDot {
-          background-color: @TextHeading;
-          transform: scale(1.2);
-        }
-      }
     }
   }
   .productDescContainer {
@@ -500,50 +472,3 @@
 // .textCenter {
 //   text-align: center;
 // }
-
-.mobileScrollContainer {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none; // Firefox
-  -ms-overflow-style: none; // IE/Edge
-
-  &::-webkit-scrollbar {
-    display: none; // Chrome/Safari
-  }
-
-  .mobileImageWrapper {
-    min-width: 100%;
-    scroll-snap-align: start;
-    position: relative;
-
-    .mobileImage {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
-}
-
-.desktopSlideshowContainer {
-  overflow: hidden;
-  position: relative;
-  width: 100%;
-  height: 100%;
-
-  .slidesWrapper {
-    display: flex;
-    transition: transform 0.5s ease-in-out;
-    height: 100%;
-    width: 100%;
-    will-change: transform;
-  }
-
-  .slide {
-    flex: 0 0 100%;
-    width: 100%;
-    height: 100%;
-    position: relative;
-  }
-}

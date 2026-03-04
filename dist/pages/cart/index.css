@@ -454,9 +454,6 @@ h5,
   justify-content: center;
   align-items: center;
 }
-.cart__cartMainContainer___LF2fx .cart__cartItemPriceSummaryDetails___pew0G .cart__priceSummaryLoginButton___inxqy[disabled] {
-  cursor: default;
-}
 .cart__cartMainContainer___LF2fx .cart__cartItemPriceSummaryDetails___pew0G .cart__priceSummaryGuestButton___tm4c3 {
   cursor: pointer;
   background: var(--buttonPrimary);
@@ -5572,7 +5569,6 @@ h5,
   color: var(--errorText, #ff3333);
 }
 .fy-input__floating___jgtoq {
-  background: var(--pageBackground, #f8f8f8) !important;
   position: absolute;
   transform: translateY(-50%) scale(0.9);
   z-index: 1;
@@ -5591,13 +5587,8 @@ h5,
   transition: 0.1s ease-out;
   box-sizing: border-box;
   width: 100%;
-  background-color: var(--pageBackground, #f8f8f8);
+  background-color: transparent;
   font-weight: 500;
-}
-.fy-input__fyInput___S4Mtu[type="email"],
-.fy-input__fyInput___S4Mtu[type="tel"] {
-  background-color: var(--pageBackground, #f8f8f8);
-  color: var(--textHeading, #26201a);
 }
 @media only screen and (max-width: 480px) {
   .fy-input__fyInput___S4Mtu {
@@ -5674,7 +5665,6 @@ h5,
 }
 .fy-input__adornmentContainer___MtgI6 input {
   flex: 1;
-  background-color: var(--pageBackground, #f8f8f8);
 }
 
 /**color by character**/
@@ -8072,7 +8062,7 @@ h5,
   line-height: 140%;
   margin: 0;
   text-transform: uppercase;
-  background: var(--textLabel, #7d7676);
+  background-color: var(--overlaypopupdividershighlighter, #edece9);
 }
 .coupon__couponListTitleWrapper___NDeTO .coupon__couponCard___tFTDw {
   padding: 16px 24px;
@@ -12341,20 +12331,6 @@ h5,
   list-style: disc;
   padding-left: 20px;
   margin: 0;
-}
-.accordion__accordionContentLabel___adXV7 {
-  display: block;
-  font-weight: 600;
-  color: var(--Text-Heading, #1f1f1f);
-  margin-bottom: 4px;
-}
-.accordion__accordionContentSublist___GmaMK {
-  list-style: disc;
-  padding-left: 20px;
-  margin: 0 0 8px 0;
-}
-.accordion__accordionContentSubrow___hauoa {
-  margin-bottom: 4px;
 }
 .accordion__accordionContentInner___Wt_I8 {
   display: flex;

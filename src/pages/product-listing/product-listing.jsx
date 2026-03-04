@@ -81,7 +81,6 @@ const ProductListing = ({
   onLoadMoreProducts = () => {},
   onProductNavigation = () => {},
   EmptyStateComponent,
-  showMultipleImages = false,
 }) => {
   const { t } = useGlobalTranslation("translation");
   const isTablet = useViewport(0, 768);
@@ -361,7 +360,6 @@ const ProductListing = ({
                         imgSrcSet,
                         onProductNavigation,
                         isServiceable: is_serviceable,
-                        showMultipleImages,
                       }}
                     />
                   </InfiniteLoader>
@@ -394,7 +392,6 @@ const ProductListing = ({
                       imgSrcSet,
                       onProductNavigation,
                       isServiceable: is_serviceable,
-                      showMultipleImages,
                     }}
                   />
                 )}
@@ -510,7 +507,6 @@ function ProductGridItem({
   handleAddToCart = () => {},
   onProductNavigation = () => {},
   isServiceable = true,
-  showMultipleImages = false,
 }) {
   const { t } = useGlobalTranslation("translation");
 
@@ -581,7 +577,6 @@ function ProductGridItem({
         handleAddToCart={handleAddToCart}
         onClick={onProductNavigation}
         isServiceable={isServiceable}
-        showMultipleImages={showMultipleImages}
       />
     </FDKLink>
   );

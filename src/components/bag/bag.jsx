@@ -9,7 +9,13 @@ const toOriginalVariant = (url = "") => {
   return url.replace(/\/\d+x\d+\//, "/original/");
 };
 
-export function BagImage({ bag, isBundle, width = 80, aspectRatio,isImageFill=false }) {
+export function BagImage({
+  bag,
+  isBundle,
+  width = 80,
+  aspectRatio,
+  isImageFill = false,
+}) {
   const src = isBundle
     ? bag?.bundle_details?.images?.[0]
     : bag?.item?.image?.[0];
@@ -17,7 +23,7 @@ export function BagImage({ bag, isBundle, width = 80, aspectRatio,isImageFill=fa
   // force original for gifs + skip transforms
   const gif = isGifUrl(src);
   const finalSrc = gif ? toOriginalVariant(src) : src;
-console.log(isImageFill,'on bag.jsx');
+
   return (
     <FyImage
       customClass={styles.bagImg}

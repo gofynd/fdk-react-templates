@@ -48,7 +48,6 @@ function Modal({
   ignoreClickOutsideForClass,
   customClassName,
   notCloseOnclickOutside,
-  titleContainerStyles
 }) {
   const modalRef = useRef(null);
   const modalContainerRef = useRef(null);
@@ -169,7 +168,7 @@ function Modal({
           >
             {!hideHeader && (
               <div className={customHeaderClass}>
-                <div style={titleContainerStyles || {}}>
+                <div>
                   <div className={customTitleClass}>{title}</div>
                   {subTitle && (
                     <div className={customSubTitleClass}>{subTitle}</div>

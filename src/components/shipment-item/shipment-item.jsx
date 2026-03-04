@@ -34,7 +34,8 @@ function ShipmentItem({
   initial,
   selectId,
   onChangeValue,
-  type,shipmentDetails,
+  type,
+  shipmentDetails,
   globalConfig,
 }) {
   const { t } = useGlobalTranslation("translation");
@@ -48,34 +49,68 @@ function ShipmentItem({
     onChangeValue(id);
   };
 
+  function formatUTCToDateString(utcString) {
+    if (!utcString) return "";
 
+    const date = new Date(utcString);
+
+    // Use browser's local timezone with fallback to UTC
+    const browserTimezone =
+      Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+
+    const options = {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      timeZone: browserTimezone,
+    };
+
+    return date
+      .toLocaleDateString("en-GB", options)
+      .replace(" ", " ")
+      .replace(",", ",");
+  }
+
+  const ndrWindowExhausted = () => {
+    const endDateStr =
+      shipmentDetails?.ndr_details?.allowed_delivery_window?.end_date;
+    if (!endDateStr) return false;
+
+    const endDate = new Date(endDateStr);
+    const now = new Date();
+
+    return endDate < now;
+  };
 
   const bundleGroupId = bag?.bundle_details?.bundle_group_id;
   const isBundleItem =
-    bundleGroupId &&
-    bundleGroups &&
-    bundleGroups[bundleGroupId]?.length > 0;
+    bundleGroupId && bundleGroups && bundleGroups[bundleGroupId]?.length > 0;
 
   const { name, size, quantity, price } = useMemo(() => {
     if (isBundleItem) {
       // For bundles, sum all individual bag prices from the bundleGroups
       // This avoids the mutation issue where getGroupedShipmentBags modifies bundle_details
       const bundleBags = bundleGroups[bundleGroupId] || [];
-      
+
       // Sum the ORIGINAL individual bag prices (not the modified base bag price)
       const totalEffectivePrice = bundleBags.reduce((sum, bundleBag) => {
         // If base bag has been aggregated by getGroupedShipmentBags, use financial_breakup instead
-        const isAggregated = bundleBag?.bundle_details?.is_base && 
-                             bundleBag?.prices?.price_effective > (bundleBag?.financial_breakup?.[0]?.price_effective || bundleBag?.prices?.price_effective);
-        
+        const isAggregated =
+          bundleBag?.bundle_details?.is_base &&
+          bundleBag?.prices?.price_effective >
+            (bundleBag?.financial_breakup?.[0]?.price_effective ||
+              bundleBag?.prices?.price_effective);
+
         if (isAggregated) {
           // Use financial_breakup which contains the original individual bag price
-          return sum + (bundleBag?.financial_breakup?.[0]?.price_effective || 0);
+          return (
+            sum + (bundleBag?.financial_breakup?.[0]?.price_effective || 0)
+          );
         }
-        
+
         return sum + (bundleBag?.prices?.price_effective || 0);
       }, 0);
-      
+
       return {
         name: bag?.bundle_details?.name,
         size: bag?.bundle_details?.size,
@@ -179,7 +214,7 @@ function ShipmentItem({
               </div>
             )}
           </div>
-            <div className={styles.buttonContainer}>
+          <div className={styles.buttonContainer}>
             <div
               className={`${styles.requestReattempt} ${
                 shipmentDetails?.shipment_status?.value ===
@@ -187,9 +222,7 @@ function ShipmentItem({
                   ? styles.deliveryReattemptRequested
                   : ""
               }`}
-            >
-          
-            </div>
+            ></div>
           </div>
         </div>
       </div>
@@ -208,7 +241,12 @@ const ShipmentImage = ({
   const aspectRatio = getProductImgAspectRatio(globalConfig);
   const getItemImage = () => {
     return (
-      <BagImage bag={bag} isBundle={isBundleItem} aspectRatio={aspectRatio} isImageFill={globalConfig?.img_fill} />
+      <BagImage
+        bag={bag}
+        isBundle={isBundleItem}
+        aspectRatio={aspectRatio}
+        isImageFill={globalConfig?.img_fill}
+      />
     );
   };
 

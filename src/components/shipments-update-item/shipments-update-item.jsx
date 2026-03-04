@@ -196,8 +196,11 @@ const ShipmentImage = ({
 
   return (
     <div className={styles.bagImg}>
-      <BagImage bag={bag} isBundle={isBundleItem} aspectRatio={aspectRatio}
-      isImageFill={globalConfig?.img_fill}
+      <BagImage
+        bag={bag}
+        isBundle={isBundleItem}
+        aspectRatio={aspectRatio}
+        isImageFill={globalConfig?.img_fill}
       />
     </div>
   );
