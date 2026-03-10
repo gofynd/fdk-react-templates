@@ -73,6 +73,7 @@ function Register({
   });
 
   const consentAccepted = watch("consent", false);
+  const phoneValue = watch("phone");
 
   const isEmailRequired = useMemo(() => {
     if (emailLevel === "soft") {
@@ -381,7 +382,15 @@ function Register({
             />
           </div>
 
-          <button className={styles.registerBtn} type="submit">
+          <button
+            className={styles.registerBtn}
+            type="submit"
+            disabled={
+              isMobile &&
+              (isMobileRequired === "required" || phoneValue?.mobile) &&
+              !phoneValue?.isValidNumber
+            }
+          >
             {t("resource.common.continue")}
           </button>
 
