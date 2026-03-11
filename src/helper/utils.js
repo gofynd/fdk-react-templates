@@ -24,6 +24,18 @@ export const singleValuesFilters = {
   sortOn: true,
 };
 
+/**
+ * Validates custom badge (teaser_tag) for display.
+ * Returns false if badge is empty, whitespace-only, single character, or "."
+ * @param {string|null|undefined} teaserTag - The custom badge text
+ * @returns {boolean} - True if badge should be rendered
+ */
+export const isValidCustomBadge = (teaserTag) => {
+  if (teaserTag == null || typeof teaserTag !== "string") return false;
+  const trimmed = teaserTag.trim();
+  return trimmed.length > 1 && trimmed !== ".";
+};
+
 export function roundToDecimals(number, decimalPlaces = 2) {
   const factor = Math.pow(10, decimalPlaces);
   return Math.round(number * factor) / factor;
