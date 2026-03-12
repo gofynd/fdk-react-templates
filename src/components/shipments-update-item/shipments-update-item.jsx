@@ -49,10 +49,6 @@ function ShipmentUpdateItem({
     return item?.prices?.currency_symbol || "₹";
   };
 
-  const getItemValue = (num) => {
-    return numberWithCommas(num);
-  };
-
   const incrDecrQuantity = (val) => {
     const total = currQuantity + val;
     changeQuantity(total);
@@ -168,7 +164,7 @@ function ShipmentUpdateItem({
               className={`${styles.priceContainer}`}
             >
               <span className={`${styles.darklg}`}>
-                {getPriceFormat(getCurrencySymbol(item), getItemValue(price))}
+                {getPriceFormat(getCurrencySymbol(item), price)}
               </span>
               <span className={`${styles.lightxxs}`}>
                 ({itemQty}{" "}
