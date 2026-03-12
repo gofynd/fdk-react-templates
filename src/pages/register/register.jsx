@@ -58,6 +58,7 @@ function Register({
     setError,
     clearErrors,
   } = useForm({
+    mode: "onBlur",
     defaultValues: {
       firstName: "",
       lastName: "",
