@@ -61,6 +61,11 @@ export const DATE_FILTERS = [
     is_selected: false,
   },
   {
+    display: "Last 90 days",
+    value: 90,
+    is_selected: true,
+  },
+  {
     display: "Last 6 months",
     value: 180,
     is_selected: false,
@@ -73,7 +78,7 @@ export const DATE_FILTERS = [
   {
     display: "Last 24 months",
     value: 730,
-    is_selected: true,
+    is_selected: false,
   },
 ];
 
