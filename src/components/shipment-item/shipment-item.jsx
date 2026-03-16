@@ -31,7 +31,8 @@ function ShipmentItem({
   initial,
   selectId,
   onChangeValue,
-  type, shipmentDetails,
+  type,
+  shipmentDetails,
   globalConfig,
 }) {
   const { t } = useGlobalTranslation("translation");
@@ -48,7 +49,8 @@ function ShipmentItem({
     const date = new Date(utcString);
 
     // Use browser's local timezone with fallback to UTC
-    const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+    const browserTimezone =
+      Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
 
     const options = {
       day: "2-digit",
@@ -74,12 +76,9 @@ function ShipmentItem({
     return endDate < now;
   };
 
-
   const bundleGroupId = bag?.bundle_details?.bundle_group_id;
   const isBundleItem =
-    bundleGroupId &&
-    bundleGroups &&
-    bundleGroups[bundleGroupId]?.length > 0;
+    bundleGroupId && bundleGroups && bundleGroups[bundleGroupId]?.length > 0;
 
   const { name, size, quantity, price } = useMemo(() => {
     if (isBundleItem) {
@@ -90,12 +89,17 @@ function ShipmentItem({
       // Sum the ORIGINAL individual bag prices (not the modified base bag price)
       const totalEffectivePrice = bundleBags.reduce((sum, bundleBag) => {
         // If base bag has been aggregated by getGroupedShipmentBags, use financial_breakup instead
-        const isAggregated = bundleBag?.bundle_details?.is_base &&
-          bundleBag?.prices?.price_effective > (bundleBag?.financial_breakup?.[0]?.price_effective || bundleBag?.prices?.price_effective);
+        const isAggregated =
+          bundleBag?.bundle_details?.is_base &&
+          bundleBag?.prices?.price_effective >
+            (bundleBag?.financial_breakup?.[0]?.price_effective ||
+              bundleBag?.prices?.price_effective);
 
         if (isAggregated) {
           // Use financial_breakup which contains the original individual bag price
-          return sum + (bundleBag?.financial_breakup?.[0]?.price_effective || 0);
+          return (
+            sum + (bundleBag?.financial_breakup?.[0]?.price_effective || 0)
+          );
         }
 
         return sum + (bundleBag?.prices?.price_effective || 0);
@@ -161,21 +165,21 @@ function ShipmentItem({
             state={{
               product: isBundleItem
                 ? {
-                  ...bag?.bundle_details,
-                  media:
-                    bag?.bundle_details?.images?.map((i) => ({
-                      url: i,
-                      type: "image",
-                    })) || [],
-                }
+                    ...bag?.bundle_details,
+                    media:
+                      bag?.bundle_details?.images?.map((i) => ({
+                        url: i,
+                        type: "image",
+                      })) || [],
+                  }
                 : {
-                  ...bag?.item,
-                  media:
-                    bag?.item?.image?.map((i) => ({
-                      url: i,
-                      type: "image",
-                    })) || [],
-                },
+                    ...bag?.item,
+                    media:
+                      bag?.item?.image?.map((i) => ({
+                        url: i,
+                        type: "image",
+                      })) || [],
+                  },
             }}
           >
             <div className={`${styles.brand}`}>{name}</div>{" "}
@@ -206,14 +210,13 @@ function ShipmentItem({
           </div>
           <div className={styles.buttonContainer}>
             <div
-              className={`${styles.requestReattempt} ${shipmentDetails?.shipment_status?.value ===
+              className={`${styles.requestReattempt} ${
+                shipmentDetails?.shipment_status?.value ===
                 "delivery_reattempt_requested"
-                ? styles.deliveryReattemptRequested
-                : ""
-                }`}
-            >
-
-            </div>
+                  ? styles.deliveryReattemptRequested
+                  : ""
+              }`}
+            ></div>
           </div>
         </div>
       </div>
@@ -232,7 +235,12 @@ const ShipmentImage = ({
   const aspectRatio = getProductImgAspectRatio(globalConfig);
   const getItemImage = () => {
     return (
-      <BagImage bag={bag} isBundle={isBundleItem} aspectRatio={aspectRatio} />
+      <BagImage
+        bag={bag}
+        isBundle={isBundleItem}
+        aspectRatio={aspectRatio}
+        isImageFill={globalConfig?.img_fill}
+      />
     );
   };
 
@@ -243,21 +251,21 @@ const ShipmentImage = ({
       state={{
         product: isBundleItem
           ? {
-            ...bag?.bundle_details,
-            media:
-              bag?.bundle_details?.images?.map((i) => ({
-                url: i,
-                type: "image",
-              })) || [],
-          }
+              ...bag?.bundle_details,
+              media:
+                bag?.bundle_details?.images?.map((i) => ({
+                  url: i,
+                  type: "image",
+                })) || [],
+            }
           : {
-            ...bag?.item,
-            media:
-              bag?.item?.image?.map((i) => ({
-                url: i,
-                type: "image",
-              })) || [],
-          },
+              ...bag?.item,
+              media:
+                bag?.item?.image?.map((i) => ({
+                  url: i,
+                  type: "image",
+                })) || [],
+            },
       }}
     >
       {getItemImage()}
