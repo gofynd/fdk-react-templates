@@ -398,6 +398,16 @@ export default function ChipItem({
       return updatedItems;
     });
   };
+
+  const normalizedSize = (size) => {
+    return String(size ?? "")
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/\//g, "-")
+      .replace(/[^a-z0-9-]/g, "");
+  }
+
   return (
     <>
       <div className={styles.cartItemsListContainer} key={itemIndex}>
@@ -484,6 +494,7 @@ export default function ChipItem({
             <div
               className={`${styles.itemName} ${isOutOfStock ? styles.outOfStock : ""
                 } `}
+              data-testid={`cart-item-row-${singleItemDetails?.product?.item_code}-${normalizedSize(singleItemDetails?.article?.size)}`}
             >
               {singleItemDetails?.product?.name?.length > 24
                 ? `${singleItemDetails.product.name.slice(0, 24)}...`
