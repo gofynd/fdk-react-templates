@@ -133,6 +133,16 @@
     .extension {
       position: absolute;
     }
+
+    .b2bAvailableOffer {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      background-color: @ThemeAccentD5;
+      border-radius: 4px;
+    }
   }
   .productDescContainer {
     display: flex;
@@ -146,7 +156,7 @@
     }
 
     .productDesc {
-      min-width: 0;
+      width: 100%;
       .productBrand {
         margin-bottom: 4px;
         .text-line-clamp();
@@ -164,6 +174,7 @@
           text-align: center;
         }
       }
+
       .productPrice {
         display: flex;
         flex-wrap: wrap;
@@ -192,6 +203,7 @@
           text-align: center;
         }
       }
+
       .productVariants {
         margin-top: 8px;
 
@@ -251,6 +263,29 @@
           }
         }
       }
+
+      .badge_section {
+        display: flex;
+        align-items: center;
+        margin-bottom: 4px;
+
+        .badge {
+          display: flex;
+          align-items: center;
+          padding: 4px 8px;
+          border-radius: 4px;
+          background-color: @SuccessText;
+          color: #fff;
+          font-size: 12px;
+          font-weight: 400 !important;
+          gap: 4px;
+
+          .info_icon {
+            display: flex;
+            align-items: center;
+          }
+        }
+      }
     }
 
     .addToCart {
@@ -264,14 +299,79 @@
       font-size: 12px;
       white-space: nowrap;
     }
+
+    .addToCartShimmer {
+      height: 40px;
+      padding: 12px 16px;
+      box-sizing: border-box;
+      width: 100%;
+      min-width: 120px;
+      border-radius: 4px;
+      background: linear-gradient(
+        90deg,
+        #f0f0f0 25%,
+        #e8e8e8 50%,
+        #f0f0f0 75%
+      );
+      background-size: 200% 100%;
+      animation: priceShimmerAnim 1.5s ease-in-out infinite;
+    }
+
+    .b2bAvailableOffers {
+      background: @ButtonSecondary;
+      font-weight: 500;
+      line-height: 16px;
+      letter-spacing: -0.24px;
+      text-transform: uppercase;
+      padding: 12px 16px;
+      height: 40px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .loginToViewPricing {
+      background: @ButtonSecondary;
+      font-size: 14px;
+      line-height: 18px;
+      letter-spacing: -0.28px;
+      border-radius: 4px;
+      padding: 8px;
+      height: 32px;
+      white-space: nowrap;
+      margin-top: 8px;
+      width: 100%;
+    }
+
+    .kycCompletionBadge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px;
+      margin: 8px 0px;
+      background-color: #fff5d6;
+      border-radius: 4px;
+      color: @TextHeading;
+
+      .kycCompletionBadgeIcon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 16px;
+        height: 16px;
+        color: #f5a300;
+      }
+
+      .kycCompletionBadgeText {
+        font-size: 12px;
+      }
+    }
   }
   @media @mobile {
     &.mob-grid-1-card {
       .imageContainer {
-        // As per Ankit Jain: fix wishlist icon position on mobile to prevent layout break
         .wishlistBtn {
-          top: 6px !important;
-          inset-inline-end: 6px !important;
+          top: 16px;
+          inset-inline-end: 16px;
         }
         .badge {
           inset-inline-start: 16px;
@@ -283,6 +383,10 @@
         }
         .extension {
           inset-inline-start: 16px;
+          bottom: 16px;
+        }
+        .b2bAvailableOffer {
+          left: 16px;
           bottom: 16px;
         }
       }
@@ -306,12 +410,20 @@
         .addToCart {
           width: 100%;
         }
+
+        .loginToViewPricing {
+          width: 100%;
+          font-size: 12px;
+        }
+
+        .b2bAvailableOffers {
+          width: 100%;
+        }
       }
       .imageContainer {
-        // As per Ankit Jain: fix wishlist icon position on mobile to prevent layout break
         .wishlistBtn {
-          top: 6px !important;
-          inset-inline-end: 6px !important;
+          top: 8px;
+          inset-inline-end: 8px;
         }
         .badge {
           inset-inline-start: 8px;
@@ -325,12 +437,24 @@
           inset-inline-start: 8px;
           bottom: 8px;
         }
+        .b2bAvailableOffer {
+          left: 8px;
+          bottom: 8px;
+        }
       }
     }
   }
   @media @mobile-up {
     &.tablet-grid-2-card {
       .addToCart {
+        width: 104px;
+      }
+
+      .loginToViewPricing {
+        width: 100%;
+      }
+
+      .b2bAvailableOffers {
         width: 104px;
       }
 
@@ -351,6 +475,10 @@
           inset-inline-start: 24px;
           bottom: 24px;
         }
+        .b2bAvailableOffer {
+          left: 24px;
+          bottom: 24px;
+        }
       }
       .productDesc {
         .productName {
@@ -360,6 +488,14 @@
     }
     &.tablet-grid-3-card {
       .addToCart {
+        width: 104px;
+      }
+
+      .loginToViewPricing {
+        width: 100%;
+      }
+
+      .b2bAvailableOffers {
         width: 104px;
       }
 
@@ -380,6 +516,10 @@
           inset-inline-start: 12px;
           bottom: 12px;
         }
+        .b2bAvailableOffer {
+          left: 12px;
+          bottom: 12px;
+        }
       }
       .productDesc {
         .product-name {
@@ -393,6 +533,15 @@
       .addToCart {
         width: 144px;
       }
+
+      .loginToViewPricing {
+        width: 100%;
+      }
+
+      .b2bAvailableOffers {
+        width: 144px;
+      }
+
       .imageContainer {
         .wishlistBtn {
           top: 24px;
@@ -410,6 +559,10 @@
           inset-inline-start: 24px;
           bottom: 24px;
         }
+        .b2bAvailableOffer {
+          left: 24px;
+          bottom: 24px;
+        }
       }
       .productDesc {
         .productName {
@@ -422,6 +575,14 @@
         flex-direction: column;
 
         .addToCart {
+          width: 100%;
+        }
+
+        .loginToViewPricing {
+          width: 100%;
+        }
+
+        .b2bAvailableOffers {
           width: 100%;
         }
 
@@ -449,6 +610,10 @@
           inset-inline-start: 12px;
           bottom: 12px;
         }
+        .b2bAvailableOffer {
+          left: 12px;
+          bottom: 12px;
+        }
       }
     }
   }
@@ -474,3 +639,43 @@
 // .textCenter {
 //   text-align: center;
 // }
+
+/* Price shimmer: same spacing as badge_section + productPrice (8px from name, 4px between badge and price) */
+.priceShimmer {
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+
+  .priceShimmerBadge {
+    height: 26px;
+    width: 100px;
+    max-width: 50%;
+    margin-bottom: 4px;
+    border-radius: 4px;
+    padding: 4px 8px;
+    box-sizing: border-box;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: priceShimmerAnim 1.5s ease-in-out infinite;
+  }
+
+  .priceShimmerLine {
+    height: 20px;
+    width: 40%;
+    min-width: 80px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: priceShimmerAnim 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes priceShimmerAnim {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
