@@ -1,4 +1,4 @@
-import { DEFAULT_CURRENCY_LOCALE, DEFAULT_UTC_LOCALE } from "./constant";
+import { DEFAULT_CURRENCY_LOCALE, DEFAULT_UTC_LOCALE, IMAGE_OPTIMIZATION_CONFIG } from "./constant";
 
 export const debounce = (func, wait) => {
   let timeout;
@@ -188,14 +188,22 @@ export function checkIfNumber(value) {
   return numberPattern.test(value);
 }
 
+/**
+ * Transform image URL with DPR support for better quality on retina displays
+ * @param {string} url - Original image URL
+ * @param {string} key - Image size key to replace
+ * @param {number} width - Target width in pixels
+ * @returns {string} Transformed image URL with DPR parameter
+ */
 export const transformImage = (url, key, width) => {
+  // Detect device pixel ratio (DPR) for retina displays
+  const deviceDPR = isRunningOnClient() ? window.devicePixelRatio || 1 : 1;
+  // Cap DPR using config value to balance quality and performance
   const dpr = Math.min(
-    Math.max(
-      Math.round(isRunningOnClient() ? window.devicePixelRatio || 1 : 1),
-      1
-    ),
-    5
+    Math.max(Math.round(deviceDPR), 1),
+    IMAGE_OPTIMIZATION_CONFIG.MAX_DPR
   );
+  
   let updatedUrl = url;
   if (key && width) {
     const str = `/${key}/`;
@@ -203,7 +211,8 @@ export const transformImage = (url, key, width) => {
   }
   try {
     const parsedUrl = new URL(updatedUrl);
-    parsedUrl.searchParams.append("dpr", 1);
+    // Use .set() instead of .append() to replace existing dpr parameter and avoid duplicates
+    parsedUrl.searchParams.set("dpr", dpr);
     return parsedUrl.toString();
   } catch (error) {
     return updatedUrl;
