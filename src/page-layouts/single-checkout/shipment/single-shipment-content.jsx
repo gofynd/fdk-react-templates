@@ -27,6 +27,7 @@ function SingleShipmentContent({
   redirectPaymentOptions,
   isPaymentLoading = false,
   isCreditNoteApplied,
+  globalConfig,
 }) {
   const { t } = useGlobalTranslation("translation");
   const navigate = useNavigate();
@@ -102,8 +103,11 @@ function SingleShipmentContent({
         <div className={styles.parent}>
           {Array(3)
             .fill()
-            .map((_) => (
-              <div className={styles.reviewContentContainer}>
+            .map((_, index) => (
+              <div
+                key={`skeleton-${index}`}
+                className={styles.reviewContentContainer}
+              >
                 <div className={styles.shipmentWrapper}>
                   <div className={styles.shipmentHeading}>
                     <div className={styles.headerLeft}>
@@ -245,6 +249,7 @@ function SingleShipmentContent({
                                   <img
                                     src={getProductImage(product?.item)}
                                     alt={product?.item?.product?.name}
+                                    className={`${globalConfig?.img_fill ? styles.imgCover : styles.imgContain}`}
                                   />
                                 </FDKLink>
                               </div>

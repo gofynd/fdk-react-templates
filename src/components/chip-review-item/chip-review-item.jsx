@@ -9,7 +9,7 @@
  * @returns {JSX.Element} A JSX element representing the review item.
  */
 
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./chip-review-item.less";
 import { currencyFormat, formatLocale, numberWithCommas } from "../../helper/utils";
@@ -18,6 +18,8 @@ import {
   useFPI,
   useGlobalTranslation
 } from "fdk-core/utils";
+import Accordion from "../accordion/accordion";
+import { transformDisplayToAccordionContent } from "../../helper/customization-display";
 
 export default function ChipReviewItem({ item, articles }) {
   const { t } = useGlobalTranslation("translation");
@@ -30,7 +32,7 @@ export default function ChipReviewItem({ item, articles }) {
     if (item?.product?.images?.length && item?.product?.images?.[0]?.url) {
       return item.product.images[0].url.replace(
         "original",
-        "resize-h:170,w:110"
+        "resize-h:180,w:125"
       );
     }
   }, [item]);
@@ -48,7 +50,7 @@ export default function ChipReviewItem({ item, articles }) {
       0
     );
     return currencyFormat(
-      numberWithCommas(total),
+      total,
       articles?.[0]?.price?.converted?.currency_symbol || "₹",
       formatLocale(locale, countryCode, true),
       articles?.[0]?.price?.converted?.currency_code
@@ -107,6 +109,16 @@ const ChipMeta = ({ item }) => {
   const fpi = useFPI();
   const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
   const locale = language?.locale;
+
+  const rawCustomizationOptions =
+    item?.article?._custom_json?._display || [];
+  const accordionContent = transformDisplayToAccordionContent(
+    rawCustomizationOptions
+  );
+  const [accordionItems, setAccordionItems] = useState([
+    { title: t("resource.cart.customization") || "Customization", content: accordionContent, open: false },
+  ]);
+
   return (
     <div className={styles.bagItem}>
       <div className={styles.chip}>
@@ -119,16 +131,14 @@ const ChipMeta = ({ item }) => {
             <span className={styles.effectivePrice}>
               {item?.is_set && item?.price_per_unit?.converted
                 ? `${currencyFormat(
-                  numberWithCommas(
-                    item?.price_per_unit?.converted?.effective
-                  ),
+                  item?.price_per_unit?.converted?.effective,
                   item?.price_per_unit?.converted?.currency_symbol || "₹",
                   formatLocale(locale, countryCode, true),
                   item?.price_per_unit?.converted?.currency_code
                 )}/${t("resource.common.pcs")}`
                 : item?.price?.converted
                   ? currencyFormat(
-                    numberWithCommas(item?.price?.converted?.effective),
+                    item?.price?.converted?.effective,
                     item?.price?.converted?.currency_symbol || "₹",
                     formatLocale(locale, countryCode, true),
                     item?.price?.converted?.currency_code
@@ -140,14 +150,14 @@ const ChipMeta = ({ item }) => {
                 <span className={styles.markedPrice}>
                   {item.is_set && item?.price_per_unit?.converted
                     ? `${currencyFormat(
-                      numberWithCommas(item?.price_per_unit?.converted?.marked),
+                      item?.price_per_unit?.converted?.marked,
                       item?.price_per_unit?.converted?.currency_symbol || "₹",
                       formatLocale(locale, countryCode, true),
                       item?.price_per_unit?.converted?.currency_code
                     )}/${t("resource.common.pcs")}`
                     : item?.price?.converted
                       ? currencyFormat(
-                        numberWithCommas(item?.price?.converted?.marked),
+                        item?.price?.converted?.marked,
                         item?.price?.converted?.currency_symbol || "₹",
                         formatLocale(locale, countryCode, true),
                         item?.price?.converted?.currency_code
@@ -181,6 +191,18 @@ const ChipMeta = ({ item }) => {
         <div className={styles.offersContainer}>
           <span className={styles.offerApplied}>{item.bulk_message}</span>
         </div>
+      )}
+      {accordionContent.length > 0 && (
+        <Accordion
+          items={accordionItems}
+          onItemClick={(index) =>
+            setAccordionItems((prev) =>
+              prev.map((acc, i) =>
+                i === index ? { ...acc, open: !acc.open } : acc
+              )
+            )
+          }
+        />
       )}
     </div>
   );
