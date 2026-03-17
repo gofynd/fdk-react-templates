@@ -81,7 +81,7 @@ export default function ChipReviewItem({ item, articles }) {
           </div>
 
           <div className={styles.chipMetaDesktop}>
-            <ChipMeta item={item} />
+            <ChipMeta item={item} articles={articles} />
           </div>
 
           {/* Extension Slot : above_shipment_item_price */}
@@ -97,18 +97,21 @@ export default function ChipReviewItem({ item, articles }) {
           {/* Extension Slot : below_shipment_item_price */}
         </div>
         <div className={styles.chipMetaMobile}>
-          <ChipMeta item={item} />
+          <ChipMeta item={item} articles={articles} />
         </div>
       </div>
     </div>
   );
 }
 
-const ChipMeta = ({ item }) => {
+const ChipMeta = ({ item, articles = [] }) => {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
   const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
   const locale = language?.locale;
+  const totalPieces = articles.length > 0
+    ? articles.reduce((sum, a) => sum + (a?.quantity || 0), 0)
+    : item?.quantity || 0;
 
   const rawCustomizationOptions =
     item?.article?._custom_json?._display || [];
@@ -174,7 +177,7 @@ const ChipMeta = ({ item }) => {
         <div className={styles.rightItems}>
           <div className={styles.quantity}>
             <span>
-              {`${item?.quantity} ${item.quantity > 1 ? t("resource.common.multiple_piece") : t("resource.common.single_piece")}`}
+              {`${totalPieces} ${totalPieces > 1 ? t("resource.common.multiple_piece") : t("resource.common.single_piece")}`}
             </span>
           </div>
         </div>
