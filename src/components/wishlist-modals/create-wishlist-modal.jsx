@@ -68,6 +68,7 @@ const CreateRenameWishlistModal = ({
       <div
         className={styles.createWishlistModal}
         onClick={(e) => e.stopPropagation()}
+        data-testid="create-rename-wishlist-modal"
       >
         <div
           className={styles.createWishlistModalHeader}
@@ -87,6 +88,7 @@ const CreateRenameWishlistModal = ({
             className={styles.createWishlistModalClose}
             type="button"
             aria-label="Close modal"
+            data-testid="create-rename-wishlist-close"
           >
             <SvgClose />
           </button>
@@ -121,6 +123,7 @@ const CreateRenameWishlistModal = ({
                 aria-label={textAreaTitle}
                 onClick={(e) => e.stopPropagation()}
                 onMouseDown={(e) => e.stopPropagation()}
+                data-testid="create-rename-wishlist-input"
               />
             </div>
           </fieldset>
@@ -154,6 +157,7 @@ const CreateRenameWishlistModal = ({
               handleClose();
             }}
             type="button"
+            data-testid="create-rename-wishlist-cancel"
           >
             {cancelButtonText}
           </button>
@@ -162,6 +166,7 @@ const CreateRenameWishlistModal = ({
             onClick={handleSubmit}
             disabled={isButtonDisabled}
             type="submit"
+            data-testid="create-rename-wishlist-submit"
           >
             {createButtonText}
           </button>
