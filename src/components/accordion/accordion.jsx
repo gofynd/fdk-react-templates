@@ -168,26 +168,6 @@ const Accordion = ({ items, onItemClick }) => {
                                       typeof val[0] === "object" &&
                                       "imageUrl" in val[0];
                                     
-                                    // Handle lowerText separately without key prefix
-                                    if (child.key?.toLowerCase() === "lowertext") {
-                                      return (
-                                        <li
-                                          key={child.key || j}
-                                          className={
-                                            styles.accordionContentSubrow
-                                          }
-                                        >
-                                          <span
-                                            className={
-                                              styles.accordionContentValue
-                                            }
-                                          >
-                                            {val}
-                                          </span>
-                                        </li>
-                                      );
-                                    }
-                                    
                                     return (
                                       <li
                                         key={child.key || j}

@@ -78,6 +78,11 @@ export default function ChipItem({
   const couponText = singleItemDetails?.coupon_message || "";
   const moq = singleItemDetails?.moq;
   const incrementDecrementUnit = moq?.increment_unit ?? 1;
+  
+  // Use the actual backend item_index from the article, not the UI loop index
+  // This is critical for cart updates to work correctly, especially with customized items
+  const actualItemIndex = singleItemDetails?.article?.item_index ?? itemIndex;
+  
   const rawCustomizationOptions =
     singleItemDetails?.article?._custom_json?._display || [];
   const accordionContent = transformDisplayToAccordionContent(
@@ -317,7 +322,7 @@ export default function ChipItem({
       singleItemDetails,
       currentSize,
       singleItemDetails?.quantity,
-      itemIndex,
+      actualItemIndex,
       "update_item",
       false,
       false,
@@ -374,7 +379,7 @@ export default function ChipItem({
                     singleItemDetails,
                     currentSize,
                     0,
-                    itemIndex,
+                    actualItemIndex,
                     "remove_item"
                   )
                 }
@@ -426,7 +431,7 @@ export default function ChipItem({
                 onRemoveIconClick({
                   item: singleItemDetails,
                   size: currentSize,
-                  index: itemIndex,
+                  index: actualItemIndex,
                 })
               }
             >
@@ -458,6 +463,11 @@ export default function ChipItem({
                   className={styles.sizeContainer}
                   onClick={(e) => {
                     e.stopPropagation();
+                    // Don't allow size change while cart is updating
+                    if (isCartUpdating) {
+                      console.log("Size change blocked: cart is updating");
+                      return;
+                    }
                     setSizeModal(singleItem);
                   }}
                 >
@@ -481,7 +491,7 @@ export default function ChipItem({
                         singleItemDetails,
                         currentSize,
                         -incrementDecrementUnit,
-                        itemIndex,
+                        actualItemIndex,
                         "update_item"
                       )
                     }
@@ -491,7 +501,7 @@ export default function ChipItem({
                         singleItemDetails,
                         currentSize,
                         incrementDecrementUnit,
-                        itemIndex,
+                        actualItemIndex,
                         "update_item"
                       )
                     }
@@ -501,7 +511,7 @@ export default function ChipItem({
                         singleItemDetails,
                         currentSize,
                         currentNum,
-                        itemIndex,
+                        actualItemIndex,
                         "edit_item"
                       )
                     }
@@ -858,13 +868,20 @@ export default function ChipItem({
         </div>
         <div className={styles.sizeModalErrCls}>{sizeModalErr}</div>
         <button
-          className={`${styles.sizeModalFooter} ${(!currentSizeModalSize || currentSizeModalSize === sizeModal || sizeModalErr) && styles.disableBtn}`}
+          className={`${styles.sizeModalFooter} ${(!currentSizeModalSize || currentSizeModalSize === sizeModal || sizeModalErr || isCartUpdating) && styles.disableBtn}`}
           disabled={
             !currentSizeModalSize ||
             currentSizeModalSize === sizeModal ||
-            sizeModalErr
+            sizeModalErr ||
+            isCartUpdating
           }
           onClick={(e) => {
+            // Safety check: prevent update if cart is currently updating
+            if (isCartUpdating) {
+              console.log("Size update blocked: cart is updating");
+              return;
+            }
+            
             // Safety check: prevent update if no size change
             if (
               !currentSizeModalSize ||
@@ -874,15 +891,30 @@ export default function ChipItem({
               return;
             }
 
-            let itemIndex;
-            for (let j = 0; j < cartItemsWithActualIndex.length; j += 1) {
-              if (
-                `${cartItemsWithActualIndex[j]?.key}_${cartItemsWithActualIndex[j]?.article?.store?.uid}_${cartItemsWithActualIndex[j]?.article?.item_index}` ===
-                sizeModal
-              ) {
-                itemIndex = j;
-                break;
+            // First, try to get the item from the current cartItems (handles frozen state)
+            let matchedItem = cartItems[sizeModal];
+            
+            // If not found in cartItems (shouldn't happen but defensive), search in live array
+            if (!matchedItem) {
+              for (let j = 0; j < cartItemsWithActualIndex.length; j += 1) {
+                if (
+                  `${cartItemsWithActualIndex[j]?.key}_${cartItemsWithActualIndex[j]?.article?.store?.uid}_${cartItemsWithActualIndex[j]?.article?.item_index}` ===
+                  sizeModal
+                ) {
+                  matchedItem = cartItemsWithActualIndex[j];
+                  break;
+                }
               }
+            }
+
+            // Safety check: ensure we found the item
+            if (!matchedItem) {
+              console.error("Failed to find cart item for size update", {
+                sizeModal,
+                cartItemsKeys: Object.keys(cartItems),
+                liveItemsCount: cartItemsWithActualIndex.length
+              });
+              return;
             }
 
             const newSize = currentSizeModalSize.split("_")[1];
@@ -893,12 +925,13 @@ export default function ChipItem({
               return;
             }
 
+            // Use the actual article.item_index from the matched item, not the array index
             cartUpdateHandler(
               e,
               sizeModalItemValue,
               newSize,
-              cartItemsWithActualIndex[itemIndex]?.quantity || 0,
-              itemIndex,
+              matchedItem?.quantity || 0,
+              matchedItem?.article?.item_index,
               "update_item",
               true
             );
