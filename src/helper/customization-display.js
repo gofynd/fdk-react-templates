@@ -7,6 +7,7 @@
 const buildCanvasChildren = (val) => {
     const children = [];
     if (val.text != null) children.push({ key: "text", value: val.text });
+    if (val.lowerText != null) children.push({ key: "lowerText", value: val.lowerText });
     if (val.previewImage) {
       children.push({ key: "preview", value: { imageUrl: val.previewImage } });
     }
