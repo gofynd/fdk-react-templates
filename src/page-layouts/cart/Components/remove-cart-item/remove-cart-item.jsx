@@ -7,9 +7,9 @@ function RemoveCartItem({
   isOpen = false,
   cartItem = null,
   isRemoving = false,
-  onRemoveButtonClick = () => {},
-  onWishlistButtonClick = () => {},
-  onCloseDialogClick = () => {},
+  onRemoveButtonClick = () => { },
+  onWishlistButtonClick = () => { },
+  onCloseDialogClick = () => { },
 }) {
   const { t } = useGlobalTranslation("translation");
 
@@ -55,7 +55,7 @@ function RemoveCartItem({
         <div className={styles.removeBtn} onClick={onRemoveButtonClick}>
           {isRemoving ? "Removing..." : t("resource.facets.remove_caps")}
         </div>
-        <div className={styles.wishlistBtn} onClick={onWishlistButtonClick}>
+        <div className={styles.wishlistBtn} onClick={onWishlistButtonClick} data-testid="move-to-wishlist-button">
           {t("resource.cart.move_to_wishlist")}
         </div>
       </div>

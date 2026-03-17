@@ -482,6 +482,7 @@ export default function ChipItem({
                   index: itemIndex,
                 })
               }
+              data-testid="remove-item-button"
             >
               <SvgWrapper
                 svgSrc="item-close"
