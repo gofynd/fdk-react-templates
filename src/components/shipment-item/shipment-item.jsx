@@ -14,7 +14,7 @@
  *
  */
 
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./shipment-item.less";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
@@ -23,6 +23,8 @@ import { useGlobalTranslation } from "fdk-core/utils";
 import ScheduleIcon from "../../assets/images/schedule.svg";
 import { BagImage, BundleBagImage } from "../../components/bag/bag";
 import { getProductImgAspectRatio } from "../../helper/utils";
+import Accordion from "../accordion/accordion";
+import { transformDisplayToAccordionContent } from "../../helper/customization-display";
 
 function ShipmentItem({
   bag,
@@ -75,6 +77,13 @@ function ShipmentItem({
 
     return endDate < now;
   };
+
+  const customizationOptions = transformDisplayToAccordionContent(
+    bag?.meta?._custom_json?._display || []
+  );
+  const [accordionItems, setAccordionItems] = useState([
+    { title: "Customization", content: customizationOptions, open: false },
+  ]);
 
   const bundleGroupId = bag?.bundle_details?.bundle_group_id;
   const isBundleItem =
@@ -208,6 +217,20 @@ function ShipmentItem({
               </div>
             )}
           </div>
+          {customizationOptions.length > 0 && (
+            <div className={styles.productCustomizationContainer}>
+              <Accordion
+                items={accordionItems}
+                onItemClick={(index) =>
+                  setAccordionItems((prev) =>
+                    prev.map((acc, i) =>
+                      i === index ? { ...acc, open: !acc.open } : acc
+                    )
+                  )
+                }
+              />
+            </div>
+          )}
           <div className={styles.buttonContainer}>
             <div
               className={`${styles.requestReattempt} ${
