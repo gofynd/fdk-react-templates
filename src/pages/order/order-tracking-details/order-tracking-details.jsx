@@ -22,7 +22,6 @@ function OrderTrackingDetails({
   isShipmentLoading,
   linkOrderDetails,
   availableFOCount,
-  globalConfig,
 }) {
   const { t } = useGlobalTranslation("translation");
   const params = useParams();
@@ -157,7 +156,6 @@ function OrderTrackingDetails({
                             track_url: selectedShipmentBag?.track_url,
                           }}
                           type="tracking"
-                          globalConfig={globalConfig}
                         />
                       ))}
                     </div>
