@@ -48,6 +48,16 @@ const AddToCart = ({
 }) => {
   const fpi = useFPI();
   const [foLoading, setFoLoading] = useState(false);
+  const [isLoadingCart, setIsLoadingCart] = useState(false);
+
+  const handleCheckout = async (event, isBuyNow) => {
+    setIsLoadingCart(true);
+    try {
+      await addProductForCheckout(event, selectedSize, isBuyNow);
+    } finally {
+      setIsLoadingCart(false);
+    }
+  };
   const { language, countryCode } =
     useGlobalStore(fpi.getters.i18N_DETAILS) || {};
   const locale = language?.locale ? language?.locale : "en";
@@ -410,11 +420,9 @@ const AddToCart = ({
                       <FyButton
                         variant="outlined"
                         size="medium"
-                        onClick={(event) =>
-                          addProductForCheckout(event, selectedSize, false)
-                        }
+                        onClick={(event) => handleCheckout(event, false)}
                         startIcon={<CartIcon className={styles.cartIcon} />}
-                        disabled={!isServiceable}
+                        disabled={isLoadingCart || !isServiceable}
                       >
                         {t("resource.cart.add_to_cart_caps")}
                       </FyButton>
@@ -426,11 +434,9 @@ const AddToCart = ({
                     className={styles.buyNow}
                     variant="contained"
                     size="medium"
-                    onClick={(event) =>
-                      addProductForCheckout(event, selectedSize, true)
-                    }
+                    onClick={(event) => handleCheckout(event, true)}
                     startIcon={<BuyNowIcon className={styles.cartIcon} />}
-                    disabled={!isServiceable}
+                    disabled={isLoadingCart || !isServiceable}
                   >
                     {t("resource.common.buy_now_caps")}
                   </FyButton>
