@@ -5292,6 +5292,7 @@ function CheckoutPaymentContent({
                               codOption.name
                             );
                           }}
+                          data-testid="cod-button"
                         >
                           <div className={styles["linkWrapper-row1"]}>
                             <div
