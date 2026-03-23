@@ -4782,6 +4782,7 @@ function CheckoutPaymentContent({
           )}
           <div
             className={`${styles.arrowContainer} ${styles.activeIconColor} `}
+            data-testid="cod-button"
           >
             <SvgWrapper
               className={
