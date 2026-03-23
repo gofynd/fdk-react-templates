@@ -3392,6 +3392,7 @@ function CheckoutPaymentContent({
                     className={`${styles.commonBtn} ${styles.payBtn}`}
                     onClick={() => proceedToPay("COD", selectedPaymentPayload)}
                     disabled={isPaymentLoading}
+                    data-testid="cod-pay-button"
                   >
                     {!isPaymentLoading
                       ? t("resource.checkout.place_order")
