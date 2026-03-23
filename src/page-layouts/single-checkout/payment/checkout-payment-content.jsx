@@ -4552,6 +4552,7 @@ function CheckoutPaymentContent({
                         acceptOrder();
                       }}
                       disabled={isPaymentLoading}
+                      data-testid="other-payment-button"
                     >
                       {!isPaymentLoading ? (
                         <>
