@@ -18,7 +18,6 @@ import { useGlobalStore, useFPI, useGlobalTranslation } from "fdk-core/utils";
 import TrueCheckIcon from "../../assets/images/true-check.svg";
 import { BagImage, BundleBagImage } from "../../components/bag/bag";
 import Accordion from "../../components/accordion/accordion";
-import { transformDisplayToAccordionContent } from "../../helper/customization-display";
 
 const orderFailurePageInfo = {
   link: "",
@@ -147,7 +146,7 @@ function OrderStatus({
                     {(() => {
                       // Aggregate paymentInfos by mode (using a map)
                       const paymentInfos = (orderData?.shipments || [])
-                        .flatMap((shipment) => shipment?.payment_info || [])
+                        .flatMap(shipment => shipment?.payment_info || [])
                         .filter(Boolean);
 
                       // We'll group by unique "mode" (or fallback to display_name)
@@ -155,10 +154,7 @@ function OrderStatus({
 
                       paymentInfos.forEach((paymentInfo) => {
                         // Use a composite key in case display_name is duplicated but mode differs
-                        const modeKey =
-                          paymentInfo?.mode ||
-                          paymentInfo?.display_name ||
-                          "OTHER";
+                        const modeKey = paymentInfo?.mode || paymentInfo?.display_name || "OTHER";
                         if (!paymentModeMap[modeKey]) {
                           paymentModeMap[modeKey] = {
                             ...paymentInfo,
@@ -166,8 +162,7 @@ function OrderStatus({
                           };
                         } else {
                           // Sum up the amount
-                          paymentModeMap[modeKey].amount +=
-                            Number(paymentInfo?.amount) || 0;
+                          paymentModeMap[modeKey].amount += Number(paymentInfo?.amount) || 0;
                         }
                       });
 
@@ -181,12 +176,10 @@ function OrderStatus({
                             style={{
                               display: "flex",
                               alignItems: "center",
-                              justifyContent: "space-between",
+                              justifyContent: "space-between"
                             }}
                           >
-                            <span
-                              style={{ display: "flex", alignItems: "center" }}
-                            >
+                            <span style={{ display: "flex", alignItems: "center" }}>
                               <img
                                 src={
                                   paymentInfo?.logo ||
@@ -194,23 +187,15 @@ function OrderStatus({
                                 }
                                 alt={paymentInfo?.mode}
                               />
-                              <span
-                                className={styles["mode-name"]}
-                                style={{ marginLeft: 12, marginTop: 6 }}
-                              >
-                                {translateDynamicLabel(
-                                  paymentInfo?.display_name,
-                                  t
-                                ) || t("resource.order.cod")}
+                              <span className={styles["mode-name"]} style={{ marginLeft: 12, marginTop: 6 }}>
+                                {translateDynamicLabel(paymentInfo?.display_name, t) || t("resource.order.cod")}
                               </span>
                             </span>
                             <span className={styles["mode-amount"]}>
-                              {paymentInfo?.amount !== undefined &&
-                              paymentInfo?.amount !== null
+                              {paymentInfo?.amount !== undefined && paymentInfo?.amount !== null
                                 ? priceFormatCurrencySymbol(
                                     paymentInfo?.currency_symbol ||
-                                      orderData?.breakup_values?.[0]
-                                        ?.currency_symbol,
+                                      orderData?.breakup_values?.[0]?.currency_symbol,
                                     paymentInfo?.amount
                                   )
                                 : null}
@@ -233,12 +218,9 @@ function OrderStatus({
                         </div>
                         <div className={styles["label"]}>
                           {translateDynamicLabel(
-                            getAddressData?.address_type &&
-                              typeof getAddressData.address_type === "string"
-                              ? getAddressData.address_type
-                                  .charAt(0)
-                                  .toUpperCase() +
-                                  getAddressData.address_type.slice(1)
+                            getAddressData?.address_type && typeof getAddressData.address_type === "string"
+                              ? getAddressData.address_type.charAt(0).toUpperCase() +
+                                getAddressData.address_type.slice(1)
                               : getAddressData?.address_type || "",
                             t
                           )}
@@ -389,10 +371,81 @@ function ProductItem({
     bundleGroups[product?.bundle_details?.bundle_group_id]?.length > 0;
   const markedPriceCheck = product?.prices?.price_marked;
   const effectivePriceCheck = product?.prices?.price_effective;
-  const customizationOptions = transformDisplayToAccordionContent(
-    product?.meta?._custom_json?._display || []
-  );
+  const customizationOptions = product?.meta?._custom_json?._display || [];
 
+  //uncommment after verification of customization options display in order status page
+  // // Transform customization options into accordion format
+  // const transformedCustomizationContent = customizationOptions.map((option) => {
+  //   const items = [];
+    
+  //   // Handle productCanvas type (nested value object)
+  //   if (option.type === "productCanvas" && option.value) {
+  //     const canvasData = option.value;
+      
+  //     if (canvasData.text) {
+  //       items.push({ 
+  //         key: option.key || "Text", 
+  //         value: canvasData.text 
+  //       });
+  //     }
+      
+  //     if (canvasData.price || option.price) {
+  //       items.push({ 
+  //         key: "Price", 
+  //         value: `${canvasData.price || option.price}` 
+  //       });
+  //     }
+      
+  //     if (canvasData.previewImage) {
+  //       items.push({ 
+  //         key: "Preview", 
+  //         value: canvasData.previewImage, 
+  //         type: "image",
+  //         alt: option.key || "Customization preview",
+  //         dimensions: canvasData.textBounds ? {
+  //           width: canvasData.textBounds.width,
+  //           height: canvasData.textBounds.height
+  //         } : undefined
+  //       });
+  //     }
+  //   } 
+  //   // Handle simple string type
+  //   else if (option.type === "string" && option.value) {
+  //     items.push({ 
+  //       key: option.alt || option.key, 
+  //       value: option.value 
+  //     });
+  //   }
+  //   // Handle other types with direct text/price/previewImage properties
+  //   else {
+  //     if (option.text) {
+  //       items.push({ key: "Text", value: option.text });
+  //     }
+      
+  //     if (option.price) {
+  //       items.push({ key: "Price", value: option.price });
+  //     }
+      
+  //     if (option.previewImage) {
+  //       items.push({ 
+  //         key: "Preview", 
+  //         value: option.previewImage, 
+  //         type: "image",
+  //         alt: "Customization preview" 
+  //       });
+  //     }
+  //   }
+    
+  //   return items;
+  // }).flat();
+
+  // const [items, setItems] = React.useState([
+  //   { 
+  //     title: "Customization", 
+  //     content: transformedCustomizationContent, 
+  //     open: false 
+  //   },
+  // ]);
   const [items, setItems] = React.useState([
     { title: "Customization", content: customizationOptions, open: false },
   ]);
@@ -418,37 +471,31 @@ function ProductItem({
         // For bundles, sum all individual bag prices from the bundleGroups
         // This avoids the mutation issue where getGroupedShipmentBags modifies bundle_details
         const bundleBags = bundleGroups[bundleGroupId] || [];
-
+        
         // Sum the ORIGINAL individual bag prices (not the modified base bag prices)
         const totalEffectivePrice = bundleBags.reduce((sum, bag) => {
           // If base bag has been aggregated by getGroupedShipmentBags, use financial_breakup instead
-          const isAggregated =
-            bag?.bundle_details?.is_base &&
-            bag?.prices?.price_effective >
-              (bag?.financial_breakup?.[0]?.price_effective ||
-                bag?.prices?.price_effective);
-
+          const isAggregated = bag?.bundle_details?.is_base && 
+                               bag?.prices?.price_effective > (bag?.financial_breakup?.[0]?.price_effective || bag?.prices?.price_effective);
+          
           if (isAggregated) {
             return sum + (bag?.financial_breakup?.[0]?.price_effective || 0);
           }
-
+          
           return sum + (bag?.prices?.price_effective || 0);
         }, 0);
-
+        
         const totalMarkedPrice = bundleBags.reduce((sum, bag) => {
-          const isAggregated =
-            bag?.bundle_details?.is_base &&
-            bag?.prices?.price_marked >
-              (bag?.financial_breakup?.[0]?.price_marked ||
-                bag?.prices?.price_marked);
-
+          const isAggregated = bag?.bundle_details?.is_base && 
+                               bag?.prices?.price_marked > (bag?.financial_breakup?.[0]?.price_marked || bag?.prices?.price_marked);
+          
           if (isAggregated) {
             return sum + (bag?.financial_breakup?.[0]?.price_marked || 0);
           }
-
+          
           return sum + (bag?.prices?.price_marked || 0);
         }, 0);
-
+        
         return {
           name: product?.bundle_details?.name,
           brand: "",
@@ -485,7 +532,6 @@ function ProductItem({
             bag={product}
             isBundle={isBundleItem}
             aspectRatio={aspectRatio}
-            isImageFill={globalConfig?.img_fill}
           />
         </div>
         <div className={styles.prodItemData}>
