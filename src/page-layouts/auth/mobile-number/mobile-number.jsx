@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useId } from "react";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 import * as styles from "./mobile-number.less";
-import { PhoneNumberUtil } from "google-libphonenumber";
+import { PhoneNumberUtil, PhoneNumberType } from "google-libphonenumber";
 import { useGlobalTranslation } from "fdk-core/utils";
 
 function MobileNumber({
@@ -40,8 +40,12 @@ function MobileNumber({
 
   const isPhoneValid = (phoneNumber, countryIso2) => {
     try {
-      return phoneUtil.isValidNumber(
-        phoneUtil.parseAndKeepRawInput(phoneNumber, countryIso2)
+      const parsedNumber = phoneUtil.parseAndKeepRawInput(phoneNumber, countryIso2);
+      if (!phoneUtil.isValidNumber(parsedNumber)) return false;
+      const numberType = phoneUtil.getNumberType(parsedNumber);
+      return (
+        numberType === PhoneNumberType.MOBILE ||
+        numberType === PhoneNumberType.FIXED_LINE_OR_MOBILE
       );
     } catch (error) {
       return false;
