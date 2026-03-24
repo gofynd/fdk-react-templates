@@ -18,10 +18,13 @@ function SinglesAddressHeader({
   const selectedAddId = searchParams.get("address_id");
 
   const selectedAddress = useMemo(() => {
-    if (allAddresses?.length) {
-      const item = allAddresses?.find((item) => item.id == selectedAddId);
-      return { name: item?.name, addressStr: getAddressStr(item, false) };
+    if (allAddresses && Array.isArray(allAddresses) && allAddresses.length > 0) {
+      const item = allAddresses.find((item) => item.id == selectedAddId);
+      if (item) {
+        return { name: item?.name, addressStr: getAddressStr(item, false) };
+      }
     }
+    return undefined;
   }, [allAddresses, selectedAddId]);
 
   return (

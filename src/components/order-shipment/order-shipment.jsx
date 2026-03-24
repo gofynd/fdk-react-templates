@@ -16,6 +16,7 @@ import * as styles from "./order-shipment.less";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
 import { convertUTCDateToLocalDate, formatLocale } from "../../helper/utils";
 import Accordion from "../accordion/accordion";
+import { transformDisplayToAccordionContent } from "../../helper/customization-display";
 import {
   useNavigate,
   useGlobalStore,
@@ -39,6 +40,15 @@ const getBagsWithCustomization = (bags = []) => {
   );
 };
 
+const getTransformedCustomizationOptions = (shipments = []) => {
+  const raw = shipments
+    .flatMap((shipment) =>
+      shipment.bags?.map((bag) => bag.meta?._custom_json?._display || []).flat()
+    )
+    .filter(Boolean);
+  return transformDisplayToAccordionContent(raw);
+};
+
 function getProductsName({ bag, isBundleItem }) {
   if (isBundleItem) {
     return bag?.bundle_details?.name;
@@ -59,15 +69,6 @@ function getTotalPieces(pieces, t) {
     : `${total} ${t("resource.common.multiple_piece")}`;
 }
 
-const getCustomizationOptions = (orderInfo) => {
-  if (!orderInfo?.shipments) return [];
-  return orderInfo.shipments
-    .flatMap((shipment) =>
-      shipment.bags?.map((bag) => bag.meta?._custom_json?._display || []).flat()
-    )
-    .filter(Boolean);
-};
-
 const ShipmentDetails = ({
   item,
   bundleGroups,
@@ -85,9 +86,7 @@ const ShipmentDetails = ({
   formatUTCToDateString,
 }) => {
   const [openAccordions, setOpenAccordions] = useState({});
-  const customizationOptions = getCustomizationOptions({
-    shipments: [item],
-  });
+  const customizationOptions = getTransformedCustomizationOptions([item]);
   const shipmentItems = [
     {
       title: "Customization",
@@ -305,6 +304,7 @@ function OrderShipment({
   const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
   const locale = language?.locale;
   const [isAdmin, setIsAdmin] = useState(false);
+  // const [selectedShipment, setSelectedShipment] = useState("");
   const navigate = useNavigate();
   // const params = useParams();
   const isMobile = useMobile();
