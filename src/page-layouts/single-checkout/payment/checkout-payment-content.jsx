@@ -5025,6 +5025,7 @@ function CheckoutPaymentContent({
                             setSelectedTab("Other");
                             toggleMop("Other");
                           }}
+                          data-testid="pay-online-button"
                         >
                           <div
                             className={`${selectedTab === "Other" ? styles.indicator : ""} ${styles.onDesktopView}`}
@@ -5074,6 +5075,7 @@ function CheckoutPaymentContent({
                           className={`${styles.linkWrapper} ${selectedTab === neftOption.name && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === neftOption.name && isTablet ? styles.headerHightlight : ""} ${!codOption ? styles.lastChild : ""}`}
                           key={neftOption?.display_name ?? ""}
                           id={`nav-title-neft`}
+                          data-testid="neft-payment-option"
                         >
                           <div
                             className={styles["linkWrapper-row1"]}
@@ -5183,6 +5185,7 @@ function CheckoutPaymentContent({
                           className={`${styles.linkWrapper} ${selectedTab === rtgsOption.name && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === rtgsOption.name && isTablet ? styles.headerHightlight : ""} ${!codOption ? styles.lastChild : ""}`}
                           key={rtgsOption?.display_name ?? ""}
                           id={`nav-title-rtgs`}
+                          data-testid="rtgs-payment-option"
                         >
                           <div
                             className={styles["linkWrapper-row1"]}
