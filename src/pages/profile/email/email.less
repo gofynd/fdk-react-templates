@@ -64,12 +64,18 @@
         }
 
         .actionContainer {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          flex-wrap: nowrap; 
+          width: auto;
           .verified {
             padding: 0 12px;
             border-radius: 4px;
             height: 100%;
             cursor: unset;
           }
+         
 
           .primary {
             padding: 12px;
@@ -79,6 +85,14 @@
           }
 
           .verifyButton {
+            padding: 0 12px;
+            border-radius: 4px;
+            height: 100%;
+            white-space: nowrap;
+            cursor:pointer;
+          }
+
+          .editButton {
             padding: 0 12px;
             border-radius: 4px;
             height: 100%;

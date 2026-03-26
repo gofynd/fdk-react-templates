@@ -1,4 +1,4 @@
-import { DEFAULT_CURRENCY_LOCALE, DEFAULT_UTC_LOCALE } from "./constant";
+import { DEFAULT_CURRENCY_LOCALE, DEFAULT_UTC_LOCALE, IMAGE_OPTIMIZATION_CONFIG } from "./constant";
 
 export const debounce = (func, wait) => {
   let timeout;
@@ -22,6 +22,18 @@ export function replaceQueryPlaceholders(queryFormat, value1, value2) {
 
 export const singleValuesFilters = {
   sortOn: true,
+};
+
+/**
+ * Validates custom badge (teaser_tag) for display.
+ * Returns false if badge is empty, whitespace-only, single character, or "."
+ * @param {string|null|undefined} teaserTag - The custom badge text
+ * @returns {boolean} - True if badge should be rendered
+ */
+export const isValidCustomBadge = (teaserTag) => {
+  if (teaserTag == null || typeof teaserTag !== "string") return false;
+  const trimmed = teaserTag.trim();
+  return trimmed.length > 1 && trimmed !== ".";
 };
 
 export function roundToDecimals(number, decimalPlaces = 2) {
@@ -85,7 +97,7 @@ export function convertDate(dateString, locale = "en-US") {
 }
 
 export function validateName(name) {
-  const regexp = /^[a-zA-Z0-9-_'. ]+$/;
+  const regexp = /^\p{L}+(?:[' -]\p{L}+)*$/u;
   return regexp.test(String(name).toLowerCase().trim());
 }
 
@@ -176,14 +188,22 @@ export function checkIfNumber(value) {
   return numberPattern.test(value);
 }
 
+/**
+ * Transform image URL with DPR support for better quality on retina displays
+ * @param {string} url - Original image URL
+ * @param {string} key - Image size key to replace
+ * @param {number} width - Target width in pixels
+ * @returns {string} Transformed image URL with DPR parameter
+ */
 export const transformImage = (url, key, width) => {
+  // Detect device pixel ratio (DPR) for retina displays
+  const deviceDPR = isRunningOnClient() ? window.devicePixelRatio || 1 : 1;
+  // Cap DPR using config value to balance quality and performance
   const dpr = Math.min(
-    Math.max(
-      Math.round(isRunningOnClient() ? window.devicePixelRatio || 1 : 1),
-      1
-    ),
-    5
+    Math.max(Math.round(deviceDPR), 1),
+    IMAGE_OPTIMIZATION_CONFIG.MAX_DPR
   );
+  
   let updatedUrl = url;
   if (key && width) {
     const str = `/${key}/`;
@@ -191,7 +211,8 @@ export const transformImage = (url, key, width) => {
   }
   try {
     const parsedUrl = new URL(updatedUrl);
-    parsedUrl.searchParams.append("dpr", 1);
+    // Use .set() instead of .append() to replace existing dpr parameter and avoid duplicates
+    parsedUrl.searchParams.set("dpr", dpr);
     return parsedUrl.toString();
   } catch (error) {
     return updatedUrl;
@@ -305,8 +326,8 @@ export const currencyFormat = (
     return "";
   }
 
-  // Convert to number if it's a string (strip commas first to handle pre-formatted strings like "3,599")
-  let num = typeof value === "string" ? parseFloat(value.replace(/,/g, "")) : value;
+  // Convert to number if it's a string
+  let num = typeof value === "string" ? parseFloat(value) : value;
 
   // Ensure it's a number, not NaN
   if (Number.isNaN(num)) {
@@ -491,8 +512,8 @@ export function priceFormatCurrencySymbol(
 ) {
   if (price == null || price === "") return "";
 
-  // Convert to number if it's a string (strip commas first to handle pre-formatted strings like "3,599")
-  let num = typeof price === "string" ? parseFloat(price.replace(/,/g, "")) : price;
+  // Convert to number if it's a string
+  let num = typeof price === "string" ? parseFloat(price) : price;
 
   if (Number.isNaN(num)) return "";
 
@@ -522,15 +543,16 @@ export function priceFormatCurrencySymbol(
       useGrouping: true,
     });
 
-    const formattedPrice = formatter.format(num);
+    const sign = num < 0 ? "- " : "";
+    const formattedPrice = formatter.format(Math.abs(num));
     const hasAlphabeticCurrency = /^[A-Za-z]+$/.test(symbol);
 
     // Handle currency symbol placement
     let finalResult;
     if (hasAlphabeticCurrency) {
-      finalResult = `${symbol} ${formattedPrice}`;
+      finalResult = `${sign}${symbol} ${formattedPrice}`;
     } else {
-      finalResult = `${symbol}${formattedPrice}`;
+      finalResult = `${sign}${symbol}${formattedPrice}`;
     }
 
     return finalResult;
@@ -631,8 +653,9 @@ export const getAddressStr = (item, isAddressTypeAvailable) => {
       parts.unshift(item.address_type);
     }
     let addressStr = parts.join(", ");
-    if (item.area_code) {
-      addressStr += ` ${item.area_code}`;
+    const postalCode = item.area_code || item.pincode;
+    if (postalCode) {
+      addressStr += ` ${postalCode}`;
     }
     if (item.country) {
       // Handle country as object or string
@@ -696,6 +719,83 @@ export function translateDynamicLabel(input, t) {
     console.warn("Error in translateDynamicLabel:", error);
     return typeof input === "string" ? input : "";
   }
+}
+
+/**
+ * Checks if an error message is a generic JavaScript error that shouldn't be shown to users.
+ * These are typically internal errors that should be handled gracefully.
+ * Only meaningful API/validation errors should be displayed to users.
+ *
+ * @param {string|null|undefined} errorMessage - The error message to check
+ * @returns {boolean} - True if the error is a generic JS error, false otherwise
+ */
+export function isGenericJSError(errorMessage) {
+  // Early return for null, undefined, or non-string types
+  if (!errorMessage || typeof errorMessage !== "string") {
+    return false;
+  }
+
+  const errorLower = errorMessage.toLowerCase();
+
+  // Check for common generic JavaScript error patterns
+  const genericErrorPatterns = [
+    "cannot read properties",
+    "reading 'find'",
+    "reading 'map'",
+    "reading 'length'",
+    "reading 'slice'",
+    "reading 'filter'",
+    "reading 'reduce'",
+    "reading 'forEach'",
+    "reading 'push'",
+    "reading 'pop'",
+    "is not a function",
+    "is not defined",
+    "cannot read",
+    "typeerror",
+    "referenceerror",
+    "syntaxerror",
+    "rangeerror",
+    "undefined is not",
+    "null is not",
+  ];
+
+  // Check if error message contains any generic error patterns
+  const hasGenericPattern = genericErrorPatterns.some((pattern) =>
+    errorLower.includes(pattern)
+  );
+
+  // Also check for the specific pattern: "undefined" + "reading"
+  const hasUndefinedReadingPattern =
+    errorLower.includes("undefined") && errorLower.includes("reading");
+
+  return hasGenericPattern || hasUndefinedReadingPattern;
+}
+
+/**
+ * Validates if an error message is valid and should be displayed to users.
+ * Filters out generic JavaScript errors and empty/invalid messages.
+ *
+ * @param {string|null|undefined} errorMessage - The error message to validate
+ * @returns {boolean} - True if the error message is valid and should be displayed, false otherwise
+ */
+export function isValidErrorMessage(errorMessage) {
+  // Must be a non-empty string
+  if (!errorMessage || typeof errorMessage !== "string") {
+    return false;
+  }
+
+  // Must not be empty after trimming
+  if (errorMessage.trim() === "") {
+    return false;
+  }
+
+  // Must not be a generic JavaScript error
+  if (isGenericJSError(errorMessage)) {
+    return false;
+  }
+
+  return true;
 }
 
 export function getLocaleDirection(fpi) {
@@ -866,8 +966,13 @@ export const getConfigFromProps = (props) => {
 export const formatDeliveryAddress = (d = {}) => {
   const line1 = [d.address, d.area].filter(Boolean).join(" ").trim();
   const line2 = d.landmark?.trim() || "";
-  const line3 = [d.city, [d.state, d.pincode].filter(Boolean).join(" ")].filter(Boolean).join(", ").trim();
+  const line3 = [d.city, [d.state, d.area_code || d.pincode].filter(Boolean).join(" ")].filter(Boolean).join(", ").trim();
   const line4 = d.country?.trim() || "";
 
   return [line1, line2, line3, line4].filter(Boolean).join(",\n");
+};
+
+export const truncateName = (name,length) => {
+  if (!name) return "";
+  return name.length > length ? name.slice(0, length) + "..." : name;
 };

@@ -403,6 +403,7 @@ h5,
   font-size: 14px;
   font-weight: 600;
   line-height: 140%;
+  color: var(--textHeading, #26201a);
 }
 .single-page-shipment__addressSelectedHeaderContainer___SVaIw .single-page-shipment__address___pgW0L {
   font-size: 12px;
@@ -484,10 +485,11 @@ h5,
   font-size: 14px;
   font-weight: 600;
   line-height: 140%;
+  color: var(--textHeading, #26201a);
 }
 .single-page-shipment__reviewHeaderSelect___bNgMy .single-page-shipment__headerContainer___Umy4m .single-page-shipment__shipment___xocKT {
   font-size: 12px;
-  color: var(--textHeading);
+  color: var(--textBody, #3c3131);
   font-weight: 400;
   line-height: 140%;
 }
@@ -1050,6 +1052,7 @@ h5,
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__itemWrapper___Sz3u9 .single-shipment-content__leftImg___jDUbI img {
   max-width: 100px;
   max-height: 150px;
+  height: 120px;
   cursor: pointer;
 }
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__itemWrapper___Sz3u9 .single-shipment-content__rightDetails___Ll92n {
@@ -1165,6 +1168,12 @@ h5,
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__itemWrapper___Sz3u9 .single-shipment-content__rightDetails___Ll92n .single-shipment-content__paymentInfo___lbLQI .single-shipment-content__offersWarning___bo1Rp .single-shipment-content__appliedOffer___I9cuC .single-shipment-content__offerInfoIcon___b6JtJ {
   margin-inline-start: 6px;
   cursor: pointer;
+}
+.single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__imgCover___Enz0o {
+  object-fit: cover;
+}
+.single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__imgContain___WVXG8 {
+  object-fit: contain;
 }
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__proceedBtnWrapper___r54yh .single-shipment-content__viewPriceDetails___by8fc {
   display: none;

@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import {
   currencyFormat,
   formatLocale,
-  numberWithCommas,
   translateDynamicLabel,
 } from "../../../../helper/utils";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
@@ -21,6 +20,7 @@ function Coupon({
   couponValue = 0,
   hasCancel = false,
   currencySymbol = "₹",
+  currencyCode = null,
   error = null,
   successCoupon = {},
   couponSuccessGif = "",
@@ -219,9 +219,10 @@ function Coupon({
                 <span>
                   <ForcedLtr
                     text={currencyFormat(
-                      numberWithCommas(couponValue),
+                      couponValue,
                       currencySymbol,
-                      formatLocale(locale, countryCode, true)
+                      formatLocale(locale, countryCode, true),
+                      currencyCode
                     )}
                   />
                 </span>
@@ -361,6 +362,7 @@ function Coupon({
         isOpen={isCouponSuccessModalOpen}
         coupon={successCoupon}
         currencySymbol={currencySymbol}
+        currencyCode={currencyCode}
         couponSuccessGif={couponSuccessGif}
         closeDialog={onCouponSuccessCloseModalClick}
       />
@@ -450,6 +452,7 @@ function CouponSuccessModal({
   isOpen = false,
   coupon = {},
   currencySymbol = "₹",
+  currencyCode = null,
   couponSuccessGif = "",
   closeDialog = () => {},
 }) {
@@ -485,9 +488,10 @@ function CouponSuccessModal({
               </div>
               <div className={styles.couponValue}>
                 {currencyFormat(
-                  numberWithCommas(coupon.value),
+                  coupon.value,
                   currencySymbol,
-                  formatLocale(locale, countryCode, true)
+                  formatLocale(locale, countryCode, true),
+                  currencyCode
                 )}
               </div>
               <div className={styles.couponValueSubheading}>
