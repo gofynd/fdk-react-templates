@@ -49,7 +49,7 @@ function ReasonItem({
   };
   return (
     <div className={`${styles.reasonItem}`}>
-      <div className={`${styles.reasonContent}`} onClick={() => change(reason)}>
+      <div className={`${styles.reasonContent}`} onClick={() => change(reason)} data-testid="reason-for-cancel">
         <span
           className={`${styles.regularRadio} ${isSelected ? styles.checked : ""}`}
         >
