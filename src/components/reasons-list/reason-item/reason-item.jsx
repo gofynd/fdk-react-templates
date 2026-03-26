@@ -21,6 +21,7 @@ function ReasonItem({
   selectedReason,
   change = () => {},
   otherReason,
+  testId="reason-for-cancel"
 }) {
   const { t } = useGlobalTranslation("translation");
   const [reasonOtherText, setReasonOtherText] = useState("");
@@ -49,7 +50,7 @@ function ReasonItem({
   };
   return (
     <div className={`${styles.reasonItem}`}>
-      <div className={`${styles.reasonContent}`} onClick={() => change(reason)} data-testid="reason-for-cancel">
+      <div className={`${styles.reasonContent}`} onClick={() => change(reason)} data-testid={testId}>
         <span
           className={`${styles.regularRadio} ${isSelected ? styles.checked : ""}`}
         >
