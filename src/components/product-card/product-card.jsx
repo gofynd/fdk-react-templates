@@ -38,11 +38,7 @@
  */
 
 import React, { useMemo, useState, useCallback, useEffect } from "react";
-import {
-  currencyFormat,
-  formatLocale,
-  isValidCustomBadge,
-} from "../../helper/utils";
+import { currencyFormat, formatLocale } from "../../helper/utils";
 import { useMobile } from "../../helper/hooks";
 import FyImage from "../core/fy-image/fy-image";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
@@ -338,7 +334,7 @@ const ProductCard = ({
               {t("resource.common.out_of_stock")}
             </span>
           </div>
-        ) : isCustomBadge && isValidCustomBadge(product.teaser_tag) && showBadge ? (
+        ) : isCustomBadge && product.teaser_tag && showBadge ? (
           <div className={styles.badge}>
             <span className={`${styles.text} ${styles.captionNormal}`}>
               {isMobileView

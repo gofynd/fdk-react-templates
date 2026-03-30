@@ -355,14 +355,11 @@
       gap: 16px;
 
       .sizeModalImage {
-        flex: 0 0 90px;
-        .aspect-ratio(0.8);
+        flex: 0 0 18%;
 
         img {
           width: 100%;
-          height: 100%;
           border-radius: 4px;
-          object-fit: cover;
         }
       }
 
@@ -443,11 +440,8 @@
 
         .sigleSizeDisabled {
           position: relative;
-          color: @TextDisabled;
-          border-color: @DividerStokes;
-          opacity: 0.6;
-          cursor: not-allowed;
-          pointer-events: none;
+          color: var(--ButtonPrimaryL3);
+          border-color: var(--ButtonPrimaryL3);
         }
 
         svg {
@@ -498,14 +492,6 @@
   .disableBtn {
     opacity: 0.5;
   }
-}
-
-.imgCover {
-  object-fit: cover;
-}
-
-.imgContain {
-  object-fit: contain;
 }
 
 .selected {

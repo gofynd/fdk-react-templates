@@ -37,15 +37,15 @@ const Cart = ({
   isRemoveModalOpen = false,
   isRemoving = false,
   isPromoModalOpen = false,
-  onGotoCheckout = () => {},
-  onRemoveIconClick = () => {},
-  onRemoveButtonClick = () => {},
-  onWishlistButtonClick = () => {},
-  onCloseRemoveModalClick = () => {},
-  onPriceDetailsClick = () => {},
-  updateCartCheckoutMode = () => {},
-  onOpenPromoModal = () => {},
-  onClosePromoModal = () => {},
+  onGotoCheckout = () => { },
+  onRemoveIconClick = () => { },
+  onRemoveButtonClick = () => { },
+  onWishlistButtonClick = () => { },
+  onCloseRemoveModalClick = () => { },
+  onPriceDetailsClick = () => { },
+  updateCartCheckoutMode = () => { },
+  onOpenPromoModal = () => { },
+  onClosePromoModal = () => { },
 }) => {
   const { t } = useGlobalTranslation("translation");
   const [sizeModal, setSizeModal] = useState(null);
@@ -88,9 +88,7 @@ const Cart = ({
           <DeliveryLocation {...deliveryLocationProps} />
           <div className={styles.cartTitleContainer}>
             <div className={styles.bagDetailsContainer}>
-              <span className={styles.bagCountHeading}>
-                {t("resource.section.cart.your_bag")}
-              </span>
+              <span className={styles.bagCountHeading}>{t("resource.section.cart.your_bag")}</span>
               <span className={styles.bagCount}>
                 {cartItemsArray?.length || 0} {t("resource.common.items")}
               </span>
@@ -133,7 +131,6 @@ const Cart = ({
                   isPromoModalOpen={isPromoModalOpen}
                   onOpenPromoModal={onOpenPromoModal}
                   onClosePromoModal={onClosePromoModal}
-                  globalConfig={globalConfig}
                 />
               );
             })}
@@ -144,11 +141,11 @@ const Cart = ({
             <Comment {...cartCommentProps} />
             {isGstInput && <GstCard {...cartGstProps} key={cartData} />}
             <div className={styles.priceBreakupCartWrapper}>
-              <PriceBreakup
-                breakUpValues={breakUpValues?.display || []}
-                cartItemCount={cartItemsArray?.length || 0}
-                currencySymbol={currencySymbol}
-              />
+            <PriceBreakup
+              breakUpValues={breakUpValues?.display || []}
+              cartItemCount={cartItemsArray?.length || 0}
+              currencySymbol={currencySymbol}
+            />
             </div>
             {isPlacingForCustomer && isLoggedIn && (
               <div className={styles.checkoutContainer}>

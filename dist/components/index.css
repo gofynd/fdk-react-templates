@@ -7720,7 +7720,7 @@ h5,
   position: absolute;
   transform: translateY(-50%) scale(0.9);
   z-index: 1;
-  background: var(--pageBackground, #f8f8f8);
+  background: #ffffff;
   padding: 0 0.3rem;
   margin: 0 0.5rem;
   font-size: 0.8rem;
@@ -12469,9 +12469,6 @@ h5,
 }
 .fy-image__imageWrapper___wKmP2.fy-image__fill___rFWVY .fy-image__fyImg___yIv86 {
   object-fit: cover;
-}
-.fy-image__imageWrapper___wKmP2.fy-image__contain___nRgq8 .fy-image__fyImg___yIv86 {
-  object-fit: contain;
 }
 .fy-image__imageWrapper___wKmP2.fy-image__fixedAspRatio___fyXGS picture {
   aspect-ratio: var(--aspect-ratio-mobile);
