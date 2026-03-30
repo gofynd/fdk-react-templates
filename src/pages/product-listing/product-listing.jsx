@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "../../styles/product-listing.less";
 import InfiniteLoader from "../../components/core/infinite-loader/infinite-loader";
@@ -26,7 +26,7 @@ import TwoGridIcon from "../../assets/images/grid-two.svg";
 import FourGridIcon from "../../assets/images/grid-four.svg";
 import TwoGridMobIcon from "../../assets/images/grid-two-mob.svg";
 import OneGridMobIcon from "../../assets/images/grid-one-mob.svg";
-import { useGlobalTranslation, useGlobalStore, useFPI } from "fdk-core/utils";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 const ProductListing = ({
   breadcrumb = [],
@@ -50,7 +50,6 @@ const ProductListing = ({
   isProductOpenInNewTab = false,
   isBrand = true,
   isSaleBadge = true,
-  isCustomBadge = true,
   isPrice = true,
   globalConfig = {},
   imgSrcSet,
@@ -69,7 +68,6 @@ const ProductListing = ({
   showColorVariants = false,
   actionButtonText,
   stickyFilterTopOffset = 0,
-  filterToggle = false,
   onColumnCountUpdate = () => {},
   onResetFiltersClick = () => {},
   onFilterUpdate = () => {},
@@ -84,13 +82,6 @@ const ProductListing = ({
 }) => {
   const { t } = useGlobalTranslation("translation");
   const isTablet = useViewport(0, 768);
-  const fpi = useFPI();
-  const { is_serviceable } = useGlobalStore(fpi?.getters?.CUSTOM_VALUE) || {};
-  const [isFilterVisible, setIsFilterVisible] = useState(filterToggle);
-
-  useEffect(() => {
-    setIsFilterVisible(filterToggle);
-  }, [filterToggle]);
   const {
     handleAddToCart,
     isOpen: isAddToCartOpen,
@@ -115,12 +106,8 @@ const ProductListing = ({
         </div>
       ) : (
         <>
-          {!title && (
-            <h1 className={styles.visuallyHidden}>
-              {t("resource.common.breadcrumb.products")}
-            </h1>
-          )}
-          {title && <h1 className={styles.visuallyHidden}>{title}</h1>}
+        {!title && <h1 className={styles.visuallyHidden}>{t("resource.common.breadcrumb.products") }</h1>}
+        {title && <h1 className={styles.visuallyHidden}>{title}</h1>}
           <div className={styles.mobileHeader}>
             <div className={styles.headerLeft}>
               {filterList.length > 0 && (
@@ -190,7 +177,7 @@ const ProductListing = ({
           <div className={styles.contentWrapper}>
             {filterList?.length !== 0 && (
               <StickyColumn
-                className={`${styles.left} ${filterToggle && !isFilterVisible ? styles.hidden : ""}`}
+                className={styles.left}
                 topOffset={stickyFilterTopOffset}
               >
                 <div className={styles.filterHeaderContainer}>
@@ -233,21 +220,6 @@ const ProductListing = ({
                   )}
                 </div>
                 <div className={styles.headerRight}>
-                  {filterToggle && filterList?.length > 0 && (
-                    <div
-                      className={`${styles.filterToggleBtn} `}
-                      onClick={() => setIsFilterVisible(!isFilterVisible)}
-                    >
-                      <div className={styles.filterToggleText}>
-                        {isFilterVisible
-                          ? t("resource.common.hide_filters")
-                          : t("resource.common.show_filters")}
-                      </div>
-                      <div className={`${styles.filterIcon} `}>
-                        <FilterIcon />
-                      </div>
-                    </div>
-                  )}
                   <Sort sortList={sortList} onSortUpdate={onSortUpdate} />
                   <button
                     className={`${styles.colIconBtn} ${
@@ -334,7 +306,6 @@ const ProductListing = ({
                         columnCount,
                         isBrand,
                         isSaleBadge,
-                        isCustomBadge,
                         isPrice,
                         aspectRatio,
                         isWishlistIcon,
@@ -353,7 +324,6 @@ const ProductListing = ({
                         handleAddToCart,
                         imgSrcSet,
                         onProductNavigation,
-                        isServiceable: is_serviceable,
                       }}
                     />
                   </InfiniteLoader>
@@ -365,7 +335,6 @@ const ProductListing = ({
                       columnCount,
                       isBrand,
                       isSaleBadge,
-                      isCustomBadge,
                       isPrice,
                       aspectRatio,
                       isWishlistIcon,
@@ -385,7 +354,6 @@ const ProductListing = ({
                       handleAddToCart,
                       imgSrcSet,
                       onProductNavigation,
-                      isServiceable: is_serviceable,
                     }}
                   />
                 )}
@@ -435,7 +403,6 @@ const ProductListing = ({
                   <AddToCart
                     {...restAddToModalProps}
                     globalConfig={globalConfig}
-                    isServiceable={is_serviceable}
                   />
                 </Modal>
               )}
@@ -484,7 +451,6 @@ function ProductGridItem({
   product,
   isBrand = true,
   isSaleBadge = true,
-  isCustomBadge = true,
   isPrice = true,
   isWishlistIcon = true,
   imgSrcSet,
@@ -504,7 +470,6 @@ function ProductGridItem({
   onWishlistClick = () => {},
   handleAddToCart = () => {},
   onProductNavigation = () => {},
-  isServiceable = true,
 }) {
   const { t } = useGlobalTranslation("translation");
 
@@ -559,7 +524,6 @@ function ProductGridItem({
         isBrand={isBrand}
         isPrice={isPrice}
         isSaleBadge={isSaleBadge}
-        isCustomBadge={isCustomBadge}
         imgSrcSet={imgSrcSet}
         isWishlistIcon={isWishlistIcon}
         WishlistIconComponent={WishlistIconComponent}
@@ -574,7 +538,6 @@ function ProductGridItem({
         imagePlaceholder={imagePlaceholder}
         handleAddToCart={handleAddToCart}
         onClick={onProductNavigation}
-        isServiceable={isServiceable}
       />
     </FDKLink>
   );

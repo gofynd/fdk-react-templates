@@ -53,7 +53,6 @@ function SingleAddress({
     getFilteredCountries,
     selectedCountry,
     countryDetails,
-    formKey,
   } = address;
 
   function backToEdit() {
@@ -84,7 +83,6 @@ function SingleAddress({
           bodyClassName={styles.addressModalBody}
         >
           <AddressForm
-            key={formKey || `${addressItem?.id || 'new'}-${countryDetails?.iso2 || 'default'}`}
             internationalShipping={isInternationalShippingEnabled}
             formSchema={defaultFormSchema}
             isNewAddress={isNewAddress}
@@ -98,7 +96,7 @@ function SingleAddress({
             setI18nDetails={setI18nDetails}
             handleCountrySearch={handleCountrySearch}
             getFilteredCountries={getFilteredCountries}
-            selectedCountry={selectedCountry}
+            selectedCountry={selectedCountry?.display_name ?? ""}
             countryDetails={countryDetails}
             isGuestUser={isGuestUser}
             user={userDetails}

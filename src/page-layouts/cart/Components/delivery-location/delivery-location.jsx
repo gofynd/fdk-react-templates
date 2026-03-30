@@ -34,7 +34,6 @@ function AddressRight({
 function DeliveryLocation({
   pincode = "",
   deliveryLocation,
-  addressTags = [],
   btnLabel,
   pincodeInput,
   error = null,
@@ -53,7 +52,6 @@ function DeliveryLocation({
   onAddButtonClick = () => {},
   onPincodeSubmit = () => {},
   onCloseModalClick = () => {},
-  onBackFromAddAddress = null,
   setSelectedAddressId = () => {},
   addAddress = () => {},
   isInternationalShippingEnabled = false,
@@ -64,7 +62,6 @@ function DeliveryLocation({
   getFilteredCountries = () => {},
   selectedCountry,
   countryDetails,
-  formKey,
   isGuestUser = false,
   user,
   isNewAddress,
@@ -90,7 +87,7 @@ function DeliveryLocation({
       pincode,
     },
   });
-  const { displayName, maxLength, validatePincode } = pincodeInput || {};
+  const { displayName, maxLength, validatePincode } = pincodeInput;
 
   useEffect(() => {
     if (error) {
@@ -113,27 +110,15 @@ function DeliveryLocation({
   return (
     <div className={styles.cartPincodeContainer}>
       <div className={styles.pinCodeDetailsContainer}>
-        <div className={styles.deliveryHeader}>
-          <span className={styles.pincodeHeading}>
-            {deliveryLocation
-              ? `${t("resource.common.deliver_to")}:`
-              : t("resource.cart.check_delivery_time_services")}
-          </span>
-          {deliveryLocation && (
-            <span className={styles.pinCode}>{deliveryLocation}</span>
-          )}
-          {addressTags && addressTags.length > 0 && (
-            <div className={styles.addressTagsContainer}>
-              {addressTags
-                .filter((tag) => tag != null && tag !== "")
-                .map((tag, index) => (
-                  <span key={index} className={styles.addressTag}>
-                    {tag}
-                  </span>
-                ))}
-            </div>
-          )}
-        </div>
+        <span className={styles.pincodeHeading}>
+          {deliveryLocation
+            ? `${t("resource.common.deliver_to")}:`
+            : t("resource.cart.check_delivery_time_services")}
+        </span>
+        <span className={styles.pinCode}>
+          &nbsp;
+          {deliveryLocation}
+        </span>
       </div>
       <div>
         <button
@@ -147,7 +132,7 @@ function DeliveryLocation({
       <Modal
         isOpen={isPincodeModalOpen}
         closeDialog={onCloseModalClick}
-        title={`${t("resource.common.delivery")} ${displayName || ""}`}
+        title={`${t("resource.common.delivery")} ${displayName}`}
         containerClassName={styles.pincodeModal}
         bodyClassName={styles.modalBody}
         headerClassName={styles.modalHeader}
@@ -159,11 +144,11 @@ function DeliveryLocation({
           <div className={styles.modalPincodeInput}>
             <input
               type="text"
-              placeholder={`${t("resource.common.enter")} ${displayName || ""}`}
+              placeholder={`${t("resource.common.enter")} ${displayName}`}
               {...register("pincode", {
                 validate: validatePincode,
               })}
-              maxLength={maxLength || undefined}
+              maxLength={maxLength}
             />
           </div>
           <button className={styles.modalChangePinCodeButton} type="submit">
@@ -205,7 +190,6 @@ function DeliveryLocation({
                   onAddressSelect={setSelectedAddressId}
                   showAddressSelectionCheckbox={true}
                   selectedAddressId={selectedAddressId}
-                  isDefault={true}
                   belowAddressSlot={
                     <>
                       <AddrErrorDiv id={item?.id} />
@@ -269,12 +253,10 @@ function DeliveryLocation({
         closeDialog={onCloseModalClick}
         ignoreClickOutsideForClass="pac"
         hideHeader
-        customClassName={styles.addAddressModalWrapper}
         containerClassName={styles.addAddressModalContainer}
         bodyClassName={styles.addAddressModalBody}
       >
         <AddressForm
-          key={formKey || `${addressItem?.id || 'new'}-${countryDetails?.iso2 || 'default'}`}
           internationalShipping={isInternationalShippingEnabled}
           addressItem={addressItem}
           formSchema={addressFormSchema}
@@ -287,11 +269,10 @@ function DeliveryLocation({
           setI18nDetails={onCountryChange}
           handleCountrySearch={handleCountrySearch}
           getFilteredCountries={getFilteredCountries}
-          selectedCountry={selectedCountry}
+          selectedCountry={selectedCountry?.display_name ?? ""}
           countryDetails={countryDetails}
           isGuestUser={isGuestUser}
           onClose={onCloseModalClick}
-          onBack={onBackFromAddAddress}
           onUpdateAddress={addAddress}
           user={userData}
         ></AddressForm>

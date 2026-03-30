@@ -10,7 +10,6 @@ import { useGlobalTranslation } from "fdk-core/utils";
 import GoogleLoginButton from "../../page-layouts/login/component/soacial-login-button/google-login-button";
 import FacebookLogin from "../../page-layouts/login/component/soacial-login-button/facebook-login-button";
 import AppleLoginButton from "../../page-layouts/login/component/soacial-login-button/apple-login-button";
-import Tooltip from "../../components/tooltip/tooltip";
 
 function Login({
   logo = {},
@@ -53,8 +52,7 @@ function Login({
 }) {
   const { t } = useGlobalTranslation("translation");
   const [isTermsAccepted, setIsTermsAccepted] = useState(false);
-  const [showConsentTooltip, setShowConsentTooltip] = useState(false);
-
+  
   return (
     <div className={styles.loginWrapper}>
       <div>
@@ -102,8 +100,6 @@ function Login({
               isForgotPassword,
               onForgotPasswordClick,
               onLoginFormSubmit,
-              isTermsAccepted,
-              setShowConsentTooltip,
             }}
           />
         )}
@@ -122,24 +118,15 @@ function Login({
               onLoginFormSubmit,
               getOtpLoading,
               isTermsAccepted,
-              setShowConsentTooltip,
             }}
           />
         )}
         {!isFormSubmitSuccess && (
           <>
-            <div className={styles.consentWrapperWithTooltip}>
-              <TermPrivacy
-                onChange={setIsTermsAccepted}
-                checked={isTermsAccepted}
-              />
-              <Tooltip
-                message={t("resource.auth.terms_and_condition")}
-                isVisible={showConsentTooltip}
-                onClose={() => setShowConsentTooltip(false)}
-                position="bottom"
-              />
-            </div>
+            <TermPrivacy 
+              onChange={setIsTermsAccepted}
+              checked={isTermsAccepted}
+            />
             <div className={styles.loginBtnGroup}>
               {showLoginToggleButton && (
                 <LoginModeButton {...{ onLoginToggleClick, isOtp }} />

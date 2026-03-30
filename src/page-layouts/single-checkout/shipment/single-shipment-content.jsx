@@ -57,13 +57,9 @@ function SingleShipmentContent({
     }
     return updateArr;
   };
-
-  const isGifUrl = (url = "") => /\.gif(\?|#|$)/i.test(String(url || ""));
   const getProductImage = (product) => {
     if (product?.product?.images?.[0]?.url) {
-      return isGifUrl(product.product.images[0].url)
-        ? product.product.images[0].url
-        : product.product.images[0].url.replace("original", "resize-w:110");
+      return product.product.images[0].url.replace("original", "resize-w:110");
     }
   };
   const getProductPath = (product) => {
@@ -71,10 +67,6 @@ function SingleShipmentContent({
   };
   const getCurrencySymbol = () => {
     return shipments?.[0]?.items?.[0]?.price?.converted?.currency_symbol || "₹";
-  };
-
-  const getCurrencyCode = () => {
-    return shipments?.[0]?.items?.[0]?.price?.converted?.currency_code || null;
   };
 
   const getMarkedPrice = (articles) => {
@@ -86,14 +78,16 @@ function SingleShipmentContent({
       sum += artcl.price.converted.effective;
       return sum;
     }, 0);
-    return markedSum != effective ? markedSum : null;
+    return markedSum != effective ? numberWithCommas(markedSum) : null;
   };
 
   const getEffectivePrice = (articles) => {
-    return articles.reduce((sum, artcl) => {
-      sum += artcl.price.converted.effective;
-      return sum;
-    }, 0);
+    return numberWithCommas(
+      articles.reduce((sum, artcl) => {
+        sum += artcl.price.converted.effective;
+        return sum;
+      }, 0)
+    );
   };
 
   return (
@@ -281,9 +275,7 @@ function SingleShipmentContent({
                                     <div className={styles.effectivePrice}>
                                       {priceFormatCurrencySymbol(
                                         getCurrencySymbol(),
-                                        getEffectivePrice(product?.articles),
-                                        undefined,
-                                        getCurrencyCode()
+                                        getEffectivePrice(product?.articles)
                                       )}
                                     </div>
                                     {!product.item.is_set &&
@@ -292,9 +284,7 @@ function SingleShipmentContent({
                                         <div className={styles.markedPrice}>
                                           {priceFormatCurrencySymbol(
                                             getCurrencySymbol(),
-                                            getMarkedPrice(product?.articles),
-                                            undefined,
-                                            getCurrencyCode()
+                                            getMarkedPrice(product?.articles)
                                           )}
                                         </div>
                                       )}

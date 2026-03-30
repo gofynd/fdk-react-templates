@@ -63,12 +63,12 @@ const ProductCard = ({
   isPrice = true,
   isSaleBadge = true,
   isWishlistIcon = true,
-  isCustomBadge = true,
   isImageFill = false,
   showImageOnHover = false,
   customImageContainerClass = "",
   imageBackgroundColor = "",
   customeProductDescContainerClass = "",
+
   imagePlaceholder = "",
   columnCount = { desktop: 4, tablet: 3, mobile: 1 },
   WishlistIconComponent = () => <SvgWrapper svgSrc="wishlist-plp" />,
@@ -87,7 +87,6 @@ const ProductCard = ({
   showColorVariants = false,
   isSlider = false,
   onClick = () => {},
-  isServiceable = true,
 }) => {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -334,7 +333,7 @@ const ProductCard = ({
               {t("resource.common.out_of_stock")}
             </span>
           </div>
-        ) : isCustomBadge && product.teaser_tag && showBadge ? (
+        ) : product.teaser_tag && showBadge ? (
           <div className={styles.badge}>
             <span className={`${styles.text} ${styles.captionNormal}`}>
               {isMobileView

@@ -23,7 +23,6 @@ function LoginOtp({
   onClearOtpError = () => {},
   getOtpLoading,
   isTermsAccepted = false,
-  setShowConsentTooltip = () => {},
 }) {
   const { t } = useGlobalTranslation("translation");
   const { handleSubmit, control, getValues, reset, setValue, clearErrors } =
@@ -41,18 +40,10 @@ function LoginOtp({
     setSubmittedMobile("");
   };
 
-  const handleOtpFormSubmit = (data) => {
-    if (!isTermsAccepted) {
-      setShowConsentTooltip(true);
-      return;
-    }
-    onLoginFormSubmit(data);
-  };
-
   return (
     <div className={styles.loginOtpWrapper}>
       {!isFormSubmitSuccess ? (
-        <form onSubmit={handleSubmit(handleOtpFormSubmit)}>
+        <form onSubmit={handleSubmit(onLoginFormSubmit)}>
           <Controller
             name="phone"
             control={control}
@@ -81,7 +72,7 @@ function LoginOtp({
           <button
             className={`btnPrimary ${styles.sendOtpBtn}`}
             type="submit"
-            disabled={getOtpLoading}
+            disabled={getOtpLoading || !isTermsAccepted}
           >
             {t("resource.auth.login.get_otp")}
           </button>
@@ -144,9 +135,9 @@ function OtpForm({
     if (mobileOtp !== undefined && mobileOtp !== null) {
       clearErrors("root");
       clearErrors("mobileOtp");
-      // DO NOT clear root error here - it should persist until submission/resend
+      onClearOtpError();
     }
-  }, [mobileOtp, clearErrors]);
+  }, [mobileOtp, clearErrors, onClearOtpError]);
 
   useEffect(() => {
     if (error) {
@@ -164,9 +155,6 @@ function OtpForm({
 
   const resendOtp = () => {
     resetField("mobileOtp");
-    // Clear errors when resending OTP
-    clearErrors("root");
-    onClearOtpError();
     onResendOtpClick(mobileInfo);
   };
 
@@ -174,12 +162,7 @@ function OtpForm({
     <>
       <form
         className={styles.loginInputGroup}
-        onSubmit={handleSubmit((data) => {
-          // Clear errors when submitting a new attempt
-          clearErrors("root");
-          onClearOtpError();
-          onOtpSubmit(data);
-        })}
+        onSubmit={handleSubmit(onOtpSubmit)}
       >
         <h3 className={styles.otpTitle}>
           {t("resource.localization.verify_account")}

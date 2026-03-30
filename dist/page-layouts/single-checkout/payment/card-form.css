@@ -2688,7 +2688,7 @@ h5,
 }
 .modal__modalBody___peHlJ {
   flex: 1;
-  max-height: 95vh;
+  max-height: 90vh;
   overflow-y: auto;
 }
 .modal__rightModal___acoje {
@@ -2722,11 +2722,6 @@ h5,
     align-items: center;
   }
 }
-@media only screen and (max-width: 480px) {
-  .modal__centerModal___CkbLu {
-    align-items: flex-end;
-  }
-}
 .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 {
   border-radius: 8px;
 }
@@ -2736,20 +2731,8 @@ h5,
     max-width: 720px;
   }
 }
-@media only screen and (max-width: 480px) {
-  .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 {
-    width: 100%;
-    max-width: 100%;
-    border-radius: 0;
-  }
-}
 .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 .modal__modalHeader___xKo1g {
   border-radius: 8px 8px 0px 0px;
-}
-@media only screen and (max-width: 480px) {
-  .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 .modal__modalHeader___xKo1g {
-    border-radius: 0;
-  }
 }
 .modal__modalTitle___yvZQo {
   font-weight: 600;
@@ -3120,13 +3103,6 @@ h5,
 @media only screen and (max-width: 480px) {
   .sticky-pay-now__stickyBtnContainer___L7zbD {
     display: block;
-    z-index: 30;
-  }
-}
-@media only screen and (max-width: 768px) {
-  .sticky-pay-now__stickyBtnContainer___L7zbD {
-    display: block;
-    z-index: 30;
   }
 }
 .sticky-pay-now__stickyBtnContainer1___YFwCC {

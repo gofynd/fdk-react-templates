@@ -16,8 +16,6 @@ function loginPassword({
   isForgotPassword = true,
   onForgotPasswordClick = () => {},
   onLoginFormSubmit = () => {},
-  isTermsAccepted = false,
-  setShowConsentTooltip = () => {},
 }) {
   const { t } = useGlobalTranslation("translation");
   const usernameInputId = useId();
@@ -85,10 +83,6 @@ function loginPassword({
   }, [watch("password"), watch("username"), watch("phone")]);
 
   const handleFormSubmit = ({ username, phone, password }) => {
-    if (!isTermsAccepted) {
-      setShowConsentTooltip(true);
-      return;
-    }
     const data = {
       username: showInputNumber
         ? `${phone.countryCode}${phone.mobile}`

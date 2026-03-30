@@ -164,7 +164,7 @@ function SinglePageShipment({
                 </div>
                 {getTotalValue?.() === 0 && (
                   <button
-                    className={`${styles.payBtn} ${styles.commonBtn}`}
+                    className={`${styles.commonBtn} ${styles.payBtn}`}
                     onClick={() =>
                       proceedToPay(
                         !isCreditNoteApplied ? "PP" : "CREDITNOTE",

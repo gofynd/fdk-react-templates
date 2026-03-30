@@ -18,10 +18,13 @@ import React, { useMemo } from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./shipment-item.less";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
-import { priceFormatCurrencySymbol } from "../../helper/utils";
+import {
+  numberWithCommas,
+  priceFormatCurrencySymbol,
+} from "../../helper/utils";
 import { useGlobalTranslation } from "fdk-core/utils";
 import ScheduleIcon from "../../assets/images/schedule.svg";
-import { BagImage } from "../../components/bag/bag";
+import { BagImage, BundleBagImage } from "../../components/bag/bag";
 import { getProductImgAspectRatio } from "../../helper/utils";
 
 function ShipmentItem({
@@ -35,6 +38,9 @@ function ShipmentItem({
   globalConfig,
 }) {
   const { t } = useGlobalTranslation("translation");
+  const getPriceValue = (item) => {
+    return numberWithCommas(item);
+  };
   const getPriceCurrencyFormat = (symbol, price) => {
     return priceFormatCurrencySymbol(symbol, price);
   };
@@ -48,13 +54,14 @@ function ShipmentItem({
     const date = new Date(utcString);
 
     // Use browser's local timezone with fallback to UTC
-    const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+    //const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
 
     const options = {
       day: "2-digit",
       month: "short",
       year: "numeric",
-      timeZone: browserTimezone,
+      timeZone: "UTC",
+      //timeZone: browserTimezone,
     };
 
     return date
@@ -198,7 +205,7 @@ function ShipmentItem({
                 <span className={`${styles.effectivePrice}`}>
                   {getPriceCurrencyFormat(
                     bag?.prices?.currency_symbol,
-                    price
+                    getPriceValue(price)
                   )}
                 </span>
               </div>
