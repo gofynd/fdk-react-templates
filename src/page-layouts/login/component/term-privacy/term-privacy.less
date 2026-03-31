@@ -19,8 +19,15 @@
   }
 
   a {
-    font-weight: 500;
+    font-weight: 600;
     color: @ButtonLink;
+    text-decoration: underline;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 0.8;
+      text-decoration: underline;
+    }
   }
  
 }
@@ -34,7 +41,14 @@
    margin-top: 24px;
    display: block;
     a {
-        font-weight: 500;
+        font-weight: 600;
         color: @ButtonLink;
+        text-decoration: underline;
+        transition: opacity 0.2s ease;
+
+        &:hover {
+          opacity: 0.8;
+          text-decoration: underline;
+        }
       }
  }

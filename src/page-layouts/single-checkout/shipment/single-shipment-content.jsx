@@ -27,6 +27,7 @@ function SingleShipmentContent({
   redirectPaymentOptions,
   isPaymentLoading = false,
   isCreditNoteApplied,
+  globalConfig,
 }) {
   const { t } = useGlobalTranslation("translation");
   const navigate = useNavigate();
@@ -57,9 +58,13 @@ function SingleShipmentContent({
     }
     return updateArr;
   };
+
+  const isGifUrl = (url = "") => /\.gif(\?|#|$)/i.test(String(url || ""));
   const getProductImage = (product) => {
     if (product?.product?.images?.[0]?.url) {
-      return product.product.images[0].url.replace("original", "resize-w:110");
+      return isGifUrl(product.product.images[0].url)
+        ? product.product.images[0].url
+        : product.product.images[0].url.replace("original", "resize-w:110");
     }
   };
   const getProductPath = (product) => {
@@ -67,6 +72,10 @@ function SingleShipmentContent({
   };
   const getCurrencySymbol = () => {
     return shipments?.[0]?.items?.[0]?.price?.converted?.currency_symbol || "₹";
+  };
+
+  const getCurrencyCode = () => {
+    return shipments?.[0]?.items?.[0]?.price?.converted?.currency_code || null;
   };
 
   const getMarkedPrice = (articles) => {
@@ -78,16 +87,14 @@ function SingleShipmentContent({
       sum += artcl.price.converted.effective;
       return sum;
     }, 0);
-    return markedSum != effective ? numberWithCommas(markedSum) : null;
+    return markedSum != effective ? markedSum : null;
   };
 
   const getEffectivePrice = (articles) => {
-    return numberWithCommas(
-      articles.reduce((sum, artcl) => {
-        sum += artcl.price.converted.effective;
-        return sum;
-      }, 0)
-    );
+    return articles.reduce((sum, artcl) => {
+      sum += artcl.price.converted.effective;
+      return sum;
+    }, 0);
   };
 
   return (
@@ -96,8 +103,11 @@ function SingleShipmentContent({
         <div className={styles.parent}>
           {Array(3)
             .fill()
-            .map((_) => (
-              <div className={styles.reviewContentContainer}>
+            .map((_, index) => (
+              <div
+                key={`skeleton-${index}`}
+                className={styles.reviewContentContainer}
+              >
                 <div className={styles.shipmentWrapper}>
                   <div className={styles.shipmentHeading}>
                     <div className={styles.headerLeft}>
@@ -239,6 +249,7 @@ function SingleShipmentContent({
                                   <img
                                     src={getProductImage(product?.item)}
                                     alt={product?.item?.product?.name}
+                                    className={`${globalConfig?.img_fill ? styles.imgCover : styles.imgContain}`}
                                   />
                                 </FDKLink>
                               </div>
@@ -275,7 +286,9 @@ function SingleShipmentContent({
                                     <div className={styles.effectivePrice}>
                                       {priceFormatCurrencySymbol(
                                         getCurrencySymbol(),
-                                        getEffectivePrice(product?.articles)
+                                        getEffectivePrice(product?.articles),
+                                        undefined,
+                                        getCurrencyCode()
                                       )}
                                     </div>
                                     {!product.item.is_set &&
@@ -284,7 +297,9 @@ function SingleShipmentContent({
                                         <div className={styles.markedPrice}>
                                           {priceFormatCurrencySymbol(
                                             getCurrencySymbol(),
-                                            getMarkedPrice(product?.articles)
+                                            getMarkedPrice(product?.articles),
+                                            undefined,
+                                            getCurrencyCode()
                                           )}
                                         </div>
                                       )}

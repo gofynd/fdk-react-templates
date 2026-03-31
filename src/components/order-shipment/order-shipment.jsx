@@ -16,6 +16,7 @@ import * as styles from "./order-shipment.less";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
 import { convertUTCDateToLocalDate, formatLocale } from "../../helper/utils";
 import Accordion from "../accordion/accordion";
+import { transformDisplayToAccordionContent } from "../../helper/customization-display";
 import {
   useNavigate,
   useGlobalStore,
@@ -39,6 +40,15 @@ const getBagsWithCustomization = (bags = []) => {
   );
 };
 
+const getTransformedCustomizationOptions = (shipments = []) => {
+  const raw = shipments
+    .flatMap((shipment) =>
+      shipment.bags?.map((bag) => bag.meta?._custom_json?._display || []).flat()
+    )
+    .filter(Boolean);
+  return transformDisplayToAccordionContent(raw);
+};
+
 function getProductsName({ bag, isBundleItem }) {
   if (isBundleItem) {
     return bag?.bundle_details?.name;
@@ -59,15 +69,6 @@ function getTotalPieces(pieces, t) {
     : `${total} ${t("resource.common.multiple_piece")}`;
 }
 
-const getCustomizationOptions = (orderInfo) => {
-  if (!orderInfo?.shipments) return [];
-  return orderInfo.shipments
-    .flatMap((shipment) =>
-      shipment.bags?.map((bag) => bag.meta?._custom_json?._display || []).flat()
-    )
-    .filter(Boolean);
-};
-
 const ShipmentDetails = ({
   item,
   bundleGroups,
@@ -85,9 +86,7 @@ const ShipmentDetails = ({
   formatUTCToDateString,
 }) => {
   const [openAccordions, setOpenAccordions] = useState({});
-  const customizationOptions = getCustomizationOptions({
-    shipments: [item],
-  });
+  const customizationOptions = getTransformedCustomizationOptions([item]);
   const shipmentItems = [
     {
       title: "Customization",
@@ -123,7 +122,7 @@ const ShipmentDetails = ({
         const diffTime = now - endDate; // positive if endDate is in the past
         const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-        return diffDays +1; // e.g. yesterday -> 1, today -> 0, tomorrow -> -1
+        return diffDays + 1; // e.g. yesterday -> 1, today -> 0, tomorrow -> -1
       })()
     : "";
 
@@ -203,10 +202,8 @@ const ShipmentDetails = ({
             >
               {item?.shipment_status?.value == "delivery_attempt_failed" &&
                 item?.ndr_details?.show_ndr_form == true &&
-                item?.ndr_details?.allowed_delivery_window
-                    ?.start_date  &&
-                  item?.ndr_details?.allowed_delivery_window
-                    ?.end_date &&
+                item?.ndr_details?.allowed_delivery_window?.start_date &&
+                item?.ndr_details?.allowed_delivery_window?.end_date &&
                 !ndrWindowExhausted(item) && (
                   <div>
                     <button
@@ -231,7 +228,10 @@ const ShipmentDetails = ({
                       <EllipseIcon />
                     </div>
                     <div className={styles.scheduleIconText}>
-                      <div className={styles.windowClosedText}>Reattempt window closed <span>{reattemptEndDate} day ago </span> </div> 
+                      <div className={styles.windowClosedText}>
+                        Reattempt window closed{" "}
+                        <span>{reattemptEndDate} day ago </span>{" "}
+                      </div>
                     </div>
                   </div>
                 )}
@@ -303,7 +303,6 @@ function OrderShipment({
   const fpi = useFPI();
   const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
   const locale = language?.locale;
-  const [isOpen, setIsOpen] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   // const [selectedShipment, setSelectedShipment] = useState("");
   const navigate = useNavigate();
@@ -372,13 +371,11 @@ function OrderShipment({
       formatLocale(locale, countryCode)
     );
   };
-  const clickopen = () => {
-    setIsOpen(!isOpen);
-  };
   const naivgateToShipment = (item) => {
     let link = "";
     // setSelectedShipment(item?.shipment_id);
-    const isOrderTrackingPage = window.location.pathname.includes("order-tracking")
+    const isOrderTrackingPage =
+      window.location.pathname.includes("order-tracking");
     if (isBuyAgainEligible || isOrderTrackingPage) {
       link = `/profile/orders/shipment/${item?.shipment_id}`;
     } else {
@@ -393,14 +390,13 @@ function OrderShipment({
     const date = new Date(utcString);
 
     // Use browser's local timezone with fallback to UTC
-    //const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+    const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
 
     const options = {
       day: "2-digit",
       month: "short",
       year: "numeric",
-      timeZone: "UTC",
-      // timeZone: browserTimezone,
+      timeZone: browserTimezone,
     };
 
     return date
@@ -428,22 +424,14 @@ function OrderShipment({
 
   return (
     <div className={`${styles.orderItem}`} key={orderInfo?.order_id}>
-      <div className={`${styles.orderHeader}`} onClick={clickopen}>
-        <span className={`${styles.filter} `}>
-          <SvgWrapper
-            className={`${isOpen ? styles.filterArrowUp : styles.filterArrowdown}`}
-            svgSrc="arrowDropdownBlack"
-          />
-        </span>
+      <div className={`${styles.orderHeader}`}>
         <h3 className={`${styles.orderId}`}>{orderInfo?.order_id}</h3>
         <h4 className={`${styles.orderTime}`}>
           {getTime(orderInfo?.order_created_ts)}
         </h4>
       </div>
 
-      <div
-        className={isOpen ? styles.showAccordionBody : styles.hideAccordionBody}
-      >
+      <div className={styles.showAccordionBody}>
         {Object.keys(orderInfo)?.length !== 0 &&
           orderInfo?.shipments?.length !== 0 &&
           orderInfo?.shipments?.map((item) => {

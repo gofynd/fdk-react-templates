@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import {
   currencyFormat,
   formatLocale,
-  numberWithCommas,
   translateDynamicLabel,
 } from "../../../../helper/utils";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
@@ -11,6 +10,7 @@ import * as styles from "./coupon.less";
 import Modal from "../../../../components/core/modal/modal";
 import { useGlobalStore, useFPI, useGlobalTranslation } from "fdk-core/utils";
 import ForcedLtr from "../../../../components/forced-ltr/forced-ltr";
+import FyHTMLRenderer from "../../../../components/core/fy-html-renderer/fy-html-renderer";
 
 function Coupon({
   title,
@@ -20,6 +20,7 @@ function Coupon({
   couponValue = 0,
   hasCancel = false,
   currencySymbol = "₹",
+  currencyCode = null,
   error = null,
   successCoupon = {},
   couponSuccessGif = "",
@@ -111,6 +112,97 @@ function Coupon({
     return () => subscription.unsubscribe();
   }, [watch, errors?.root, clearErrors]);
 
+  const OfferCard = ({
+    coupon_code: couponCode,
+    title,
+    subtitle,
+    message,
+    expires_on: expiresOn,
+    is_applicable: isApplicable,
+    applyCoupon,
+    removeCoupon,
+    selectedCouponCode = "",
+    selectedCouponId = "",
+    description,
+  }) => {
+    const { t } = useGlobalTranslation("translation");
+
+    const isSelected =
+      couponCode === selectedCouponCode && selectedCouponCode !== "";
+
+    // Check if message contains HTML tags - memoized for performance
+    const hasHTMLTags = useMemo(() => {
+      if (!message || typeof message !== "string") {
+        return false;
+      }
+      // Check for HTML tags pattern
+      return /<[^>]+>/.test(message);
+    }, [message]);
+
+    // Memoize the message content rendering
+    const messageContent = useMemo(() => {
+      if (!message) {
+        return null;
+      }
+
+      if (hasHTMLTags) {
+        return (
+          <FyHTMLRenderer
+            htmlContent={message}
+            customClass={styles.couponMessage}
+          />
+        );
+      }
+
+      return <div className={styles.couponMessage}>{message}</div>;
+    }, [message, hasHTMLTags]);
+
+    return (
+      <div className={`${styles.couponCard} `}>
+        <div className={styles.couponHeader}>
+          <div className={styles.couponTitle}>
+            <span className={styles.priceDrop}>
+              {couponCode} - {title}
+            </span>
+            <span
+              className={`${styles.moneySave} ${!isApplicable ? styles.maxDiscount : ""}`}
+            >
+              {subtitle}
+            </span>
+          </div>
+
+          {isSelected ? (
+            <button
+              className={styles.couponRemoveBtn}
+              onClick={() => {
+                removeCoupon(selectedCouponId);
+              }}
+            >
+              {t("resource.cart.remove_coupon")}
+            </button>
+          ) : (
+            <button
+              className={styles.applyBtn}
+              disabled={!isApplicable}
+              onClick={() => {
+                applyCoupon(couponCode);
+              }}
+            >
+              {t("resource.facets.apply_caps")}
+            </button>
+          )}
+        </div>
+        {isApplicable && (
+          <>
+            <hr className={styles.divider} />
+
+            <p className={styles.couponDesc}>{expiresOn}</p>
+          </>
+        )}
+      </div>
+    );
+  };
+
   return (
     <>
       <div className={styles.couponBoxContainer}>
@@ -127,9 +219,10 @@ function Coupon({
                 <span>
                   <ForcedLtr
                     text={currencyFormat(
-                      numberWithCommas(couponValue),
+                      couponValue,
                       currencySymbol,
-                      formatLocale(locale, countryCode, true)
+                      formatLocale(locale, countryCode, true),
+                      currencyCode
                     )}
                   />
                 </span>
@@ -174,56 +267,90 @@ function Coupon({
         headerClassName={styles.modalHeader}
         title={t("resource.cart.apply_coupon")}
         titleClassName={styles.modalTitle}
+        customClassName={styles.couponModalWrapper}
+        containerClassName={styles.couponModalContainerOuter}
       >
         <div className={styles.modalContent}>
           <div className={styles.modalBody}>
-            <form
-              className={`${styles.couponInputBox}`}
-              onSubmit={handleSubmit(handleCouponCodeSubmit)}
-            >
-              <input
-                type="text"
-                placeholder={t("resource.cart.enter_coupon_code")}
-                {...register("couponInput")}
-                className={`${errors?.root ? styles.hasError : ""}`}
-              />
-              <button
-                disabled={
-                  !watch("couponInput") ||
-                  (errors?.root && lastSubmittedCoupon === watch("couponInput"))
-                }
-                className={styles.checkBtn}
-                type="submit"
+            <div className={styles.couponInputContainer}>
+              <form
+                className={`${styles.couponInputBox} ${errors?.root ? styles.hasError : ""}`}
+                onSubmit={handleSubmit(handleCouponCodeSubmit)}
               >
-                {t("resource.facets.apply_caps")}
-              </button>
-            </form>
-            {errors?.root && (
-              <div className={styles.errorContainer}>
-                <span className={styles.errorText}>
-                  {successCoupon?.message
-                    ? successCoupon?.message
-                    : translateDynamicLabel(errors?.root?.message, t)}
-                </span>
-              </div>
-            )}
-            {availableCouponList?.length > 0 ? (
-              <div>
-                <div className={styles.couponListTitle}>
-                  {t("resource.cart.select_applicable_coupons")}
+                <input
+                  type="text"
+                  placeholder={t("resource.cart.enter_coupon_code")}
+                  {...register("couponInput")}
+                  className={`${errors?.root ? styles.hasError : ""}`}
+                />
+                <button
+                  disabled={
+                    !watch("couponInput") ||
+                    (errors?.root &&
+                      lastSubmittedCoupon === watch("couponInput"))
+                  }
+                  className={styles.checkBtn}
+                  type="submit"
+                >
+                  {t("resource.facets.apply_caps")}
+                </button>
+              </form>
+              {errors?.root && (
+                <div className={styles.errorContainer}>
+                  <span className={styles.errorText}>
+                    {successCoupon?.message
+                      ? successCoupon?.message
+                      : translateDynamicLabel(errors?.root?.message, t)}
+                  </span>
                 </div>
-                <div className={styles.couponList}>
-                  {availableCouponList?.map((coupon) => (
-                    <CouponItem
-                      {...coupon}
+              )}
+            </div>
+
+            {availableCouponList?.length > 0 ? (
+              <div className={styles.couponListTitleWrapper}>
+                {/* BEST OFFERS */}
+                <h4 className={styles.sectionTitle}>Available Coupons</h4>
+                <div className={styles.bestOfferContainer}>
+                  {availableCouponList.map((coupon) => (
+                    <OfferCard
+                      key={coupon?.coupon_code}
+                      coupon_code={coupon?.coupon_code}
+                      title={coupon?.title}
+                      subtitle={coupon?.sub_title}
+                      message={coupon?.message}
+                      description={coupon?.description}
+                      expires_on={coupon?.expires_on}
                       applyCoupon={onApplyCouponClick}
                       removeCoupon={onRemoveCouponClick}
                       selectedCouponCode={couponCode}
                       selectedCouponId={couponId}
-                      key={coupon?.coupon_code}
+                      is_applicable={coupon?.is_applicable}
                     />
                   ))}
                 </div>
+
+                {/* MORE OFFERS */}
+                {/* <div className={styles.moreOfferContainer}>
+                    <h4 className={styles.sectionTitle}>More Offers</h4>
+
+                    <div className={styles.offerList}>
+                      {moreOffers.map((offer) => (
+                        <OfferCard
+                          key={offer.title}
+                          coupon_code={offer.title}
+                          title={offer.title}
+                          subtitle={offer.subtitle}
+                          description={offer.description}
+                          expires_on={offer.expiresOn}
+                          is_applicable={offer.is_applicable ?? true}
+                          applyCoupon={onApplyCouponClick}
+                          removeCoupon={onRemoveCouponClick}
+                          selectedCouponCode={couponCode}
+                          selectedCouponId={couponId}
+                        />
+                      ))}
+                    </div>
+                  </div> */}
               </div>
             ) : (
               <NoCouponsAvailable />
@@ -235,6 +362,7 @@ function Coupon({
         isOpen={isCouponSuccessModalOpen}
         coupon={successCoupon}
         currencySymbol={currencySymbol}
+        currencyCode={currencyCode}
         couponSuccessGif={couponSuccessGif}
         closeDialog={onCouponSuccessCloseModalClick}
       />
@@ -254,8 +382,36 @@ function CouponItem({
   selectedCouponId = "",
 }) {
   const { t } = useGlobalTranslation("translation");
-  const isSelected = couponCode === selectedCouponCode && selectedCouponCode !== "";
-  
+  const isSelected =
+    couponCode === selectedCouponCode && selectedCouponCode !== "";
+
+  // Check if message contains HTML tags - memoized for performance
+  const hasHTMLTags = useMemo(() => {
+    if (!message || typeof message !== "string") {
+      return false;
+    }
+    // Check for HTML tags pattern
+    return /<[^>]+>/.test(message);
+  }, [message]);
+
+  // Memoize the message content rendering
+  const messageContent = useMemo(() => {
+    if (!message) {
+      return null;
+    }
+
+    if (hasHTMLTags) {
+      return (
+        <FyHTMLRenderer
+          htmlContent={message}
+          customClass={styles.couponMessage}
+        />
+      );
+    }
+
+    return <div className={styles.couponMessage}>{message}</div>;
+  }, [message, hasHTMLTags]);
+
   return (
     <div
       className={`${styles.couponItem} ${
@@ -265,11 +421,11 @@ function CouponItem({
       <div>
         <div className={styles.couponCode}>{couponCode}</div>
         <div className={styles.couponTitle}>{title}</div>
-        <div className={styles.couponMessage}>{message}</div>
+        {messageContent}
         <div className={styles.couponExpire}>{expiresOn}</div>
       </div>
-      {isApplicable && (
-        isSelected ? (
+      {isApplicable &&
+        (isSelected ? (
           <button
             className={styles.couponRemoveBtn}
             onClick={() => {
@@ -287,8 +443,7 @@ function CouponItem({
           >
             {t("resource.facets.apply_caps")}
           </button>
-        )
-      )}
+        ))}
     </div>
   );
 }
@@ -297,6 +452,7 @@ function CouponSuccessModal({
   isOpen = false,
   coupon = {},
   currencySymbol = "₹",
+  currencyCode = null,
   couponSuccessGif = "",
   closeDialog = () => {},
 }) {
@@ -310,6 +466,7 @@ function CouponSuccessModal({
       isOpen={isOpen}
       closeDialog={closeDialog}
       modalType="center-modal"
+      customClassName={styles.couponSuccessModal}
       containerClassName={styles.couponSuccessModalContainer}
     >
       <div className={styles.couponSuccessModalContent}>
@@ -331,9 +488,10 @@ function CouponSuccessModal({
               </div>
               <div className={styles.couponValue}>
                 {currencyFormat(
-                  numberWithCommas(coupon.value),
+                  coupon.value,
                   currencySymbol,
-                  formatLocale(locale, countryCode, true)
+                  formatLocale(locale, countryCode, true),
+                  currencyCode
                 )}
               </div>
               <div className={styles.couponValueSubheading}>

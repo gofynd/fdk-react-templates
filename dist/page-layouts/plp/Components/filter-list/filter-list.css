@@ -413,22 +413,28 @@ h5,
   transform: scale(1, -1);
 }
 .filter-list__filter__list___rtO83 .filter-list__filter__popup___VYTU3 {
-  width: 1023px;
-  height: calc(100vh - var(--headerHeight) - 40px);
+  width: min(1023px, calc(100vw - 32px));
+  height: calc(100vh - var(--headerHeight, 0px) - 40px);
   max-height: 562px;
   border: 1px solid var(--dividerStokes, #d4d1d1);
   background-color: var(--dialogBackground, #fff);
   position: fixed;
-  top: calc(50% + (var(--headerHeight) / 2));
-  inset-inline-start: 50%;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 41;
+  z-index: 9999;
   border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
 }
 [dir="rtl"] .filter-list__filter__list___rtO83 .filter-list__filter__popup___VYTU3 {
+  left: auto;
+  right: 50%;
   transform: translate(50%, -50%);
 }
 .filter-list__filter__list___rtO83 .filter-list__filter__popup--header___zJp3U {
+  flex-shrink: 0;
   padding: 16px 24px;
   border-bottom: 1px solid var(--dividerStokes, #d4d1d1);
 }
@@ -468,9 +474,11 @@ h5,
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
-  height: calc(100% - 87px);
+  flex: 1;
+  min-height: 0;
   padding: 24px 12px;
   overflow-x: auto;
+  overflow-y: auto;
   scroll-behavior: smooth;
   scroll-margin-inline-start: 24px;
 }
@@ -522,12 +530,12 @@ h5,
 .filter-list__filter__list___rtO83 .filter-list__overlay___eY_Dh {
   position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   bottom: 0;
-  inset-inline-start: 0;
-  inset-inline-end: 0;
   background-color: var(--overlay, #14130e);
   opacity: 0.6;
-  z-index: 40;
+  z-index: 9998;
 }
 .filter-list__filter__list___rtO83 .filter-list__overlay___eY_Dh.filter-list__show___shnHP {
   display: block;
@@ -888,6 +896,11 @@ h5,
     display: block;
     margin-bottom: 20px;
   }
+}
+.range-slider__CustomRangeSlider___Uo_rw .range-slider__postfix___lbLy1 {
+  margin-left: 4px;
+  font-size: 14px;
+  color: var(--textBody, #3c3131);
 }
 .range-slider__CustomRangeSlider___Uo_rw .range-slider__postfix___lbLy1 {
   margin-left: 4px;
@@ -1332,7 +1345,7 @@ h5,
   position: absolute;
   transform: translateY(-50%) scale(0.9);
   z-index: 1;
-  background: #ffffff;
+  background: var(--pageBackground, #f8f8f8);
   padding: 0 0.3rem;
   margin: 0 0.5rem;
   font-size: 0.8rem;

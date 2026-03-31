@@ -28,6 +28,7 @@ function SinglePageShipment({
   payment,
   getDeliveryPromise,
   redirectPaymentOptions,
+  globalConfig,
 }) {
   const { t } = useGlobalTranslation("translation");
   const navigate = useNavigate();
@@ -111,6 +112,7 @@ function SinglePageShipment({
             loader={loader}
             isPaymentLoading={isPaymentLoading}
             isCreditNoteApplied={isCreditNoteApplied}
+            globalConfig={globalConfig}
           ></SingleShipmentContent>
           <StickyPayNow
             btnTitle={
@@ -151,10 +153,14 @@ function SinglePageShipment({
                     {t("resource.checkout.order_summary")}
                   </div>
                   <div className={styles.address}>
-                    {getShipmentCount > 1
-                      ? getShipmentCount +
-                        ` ${t("resource.common.shipments_plural")}`
-                      : getShipmentCount + ` ${t("resource.common.shipments")}`}
+                    {isShipmentLoading ? (
+                      <Shimmer height="12px" width="120px" />
+                    ) : (
+                      getShipmentCount > 1
+                        ? getShipmentCount +
+                          ` ${t("resource.common.shipments_plural")}`
+                        : getShipmentCount + ` ${t("resource.common.shipments")}`
+                    )}
                   </div>
                 </div>
               </div>
@@ -164,7 +170,7 @@ function SinglePageShipment({
                 </div>
                 {getTotalValue?.() === 0 && (
                   <button
-                    className={`${styles.commonBtn} ${styles.payBtn}`}
+                    className={`${styles.payBtn} ${styles.commonBtn}`}
                     onClick={() =>
                       proceedToPay(
                         !isCreditNoteApplied ? "PP" : "CREDITNOTE",

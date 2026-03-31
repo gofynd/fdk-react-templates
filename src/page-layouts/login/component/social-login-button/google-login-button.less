@@ -1,0 +1,41 @@
+@import "../../../../styles/main.less";
+.google-login-container {
+  margin-top: 12px;
+  .google-signin-wrapper {
+    width: 100%;
+  }
+  :global {
+    .g_id_signin > div[role="button"] {
+      height: 48px !important;
+      padding: 12px !important;
+      background: transparent !important;
+      border-radius: 4px !important;
+      border: 1px solid var(--dividerStokes) !important;
+      font-size: 14px !important;
+      font-style: normal !important;
+      font-weight: 600 !important;
+      line-height: 19.6px !important;
+      text-transform: uppercase !important;
+      color: var(--textHeading) !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+      display: flex !important;
+      align-items: center !important;
+      cursor: pointer !important;
+    }
+    .g_id_signin svg {
+      flex: 0 0 24px !important;
+    }
+    .g_id_signin span {
+      margin-inline-end: 24px !important;
+      color: @TextHeading !important;
+      font-size: 14px !important;
+      font-style: normal !important;
+      font-weight: 600 !important;
+      line-height: 19.6px !important;
+      text-transform: uppercase !important;
+      width: 100%;
+      font-family: var(--font-body) !important;
+    }
+  }
+}

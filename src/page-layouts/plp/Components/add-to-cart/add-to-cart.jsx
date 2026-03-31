@@ -44,9 +44,20 @@ const AddToCart = ({
   setCurrentFO = () => {},
   availableFOCount,
   getDeliveryPromise,
+  isServiceable,
 }) => {
   const fpi = useFPI();
   const [foLoading, setFoLoading] = useState(false);
+  const [isLoadingCart, setIsLoadingCart] = useState(false);
+
+  const handleCheckout = async (event, isBuyNow) => {
+    setIsLoadingCart(true);
+    try {
+      await addProductForCheckout(event, selectedSize, isBuyNow);
+    } finally {
+      setIsLoadingCart(false);
+    }
+  };
   const { language, countryCode } =
     useGlobalStore(fpi.getters.i18N_DETAILS) || {};
   const locale = language?.locale ? language?.locale : "en";
@@ -127,17 +138,16 @@ const AddToCart = ({
     return Object.keys(sizeChartHeader).length > 0 || sizes?.size_chart?.image;
   };
 
-  // useEffect(() => {
-  //   if (isSizeCollapsed || (preSelectFirstOfMany && sizes !== undefined)) {
-  //     onSizeSelection(sizes?.sizes?.[0]?.value);
-  //   }
-  // }, [isSizeCollapsed, preSelectFirstOfMany, sizes?.sizes]);
-
   const disabledSizeOptions = useMemo(() => {
     return sizes?.sizes
       ?.filter((size) => size?.quantity === 0 && !isMto)
       ?.map((size) => size?.value);
   }, [sizes?.sizes]);
+
+  const mobileTruncatedTitle = useMemo(() => {
+    if (!name) return "";
+    return name.length > 30 ? `${name.slice(0, 30)}...` : name;
+  }, [name]);
 
   return (
     <div className={styles.productDescContainer}>
@@ -160,65 +170,134 @@ const AddToCart = ({
             <div className={styles.crossIcon} onClick={handleClose}>
               <SvgWrapper svgSrc="cross-black" />
             </div>
-
-            {/* ---------- Product Name ----------  */}
-            {!hide_brand_name && (
-              <div className={styles.product__brand}>{brand?.name}</div>
-            )}
-            <h1 className={styles.product__title}>{slug && name}</h1>
-            {/* ---------- Product Price ---------- */}
-            {show_price && sizes?.sellable && (
-              <div className={styles.product__price}>
-                <h4 className={styles["product__price--effective"]}>
-                  {getProductPrice("effective")}
-                </h4>
-                {getProductPrice("effective") !== getProductPrice("marked") && (
-                  <span className={styles["product__price--marked"]}>
-                    {getProductPrice("marked")}
-                  </span>
-                )}
-                {sizes?.discount && (
-                  <span className={styles["product__price--discount"]}>
-                    ({sizes?.discount})
-                  </span>
-                )}
-              </div>
-            )}
-            {/* ---------- Product Tax Label ---------- */}
-            {pageConfig?.tax_label && show_price && sizes?.sellable && (
-              <div className={styles.taxLabel}>({pageConfig?.tax_label})</div>
-            )}
-
-            {/* ---------- Short Description ----------  */}
-            {short_description?.length > 0 && (
-              <p
-                className={`${styles.b2} ${styles.fontBody} ${styles.shortDescription}`}
-              >
-                {slug && short_description}
-              </p>
-            )}
-            {/* ---------- Product Variants ----------  */}
-            {slug && variants?.length > 0 && (
-              <ProductVariants
-                product={product}
-                variants={variants}
-                currentSlug={slug}
-                globalConfig={globalConfig}
-                preventRedirect
-                setSlug={handleSlugChange}
-              />
-            )}
-            {/* ---------- Size Container ---------- */}
-            {isSizeSelectionBlock && !isSizeCollapsed && (
-              <div className={styles.sizeSelection}>
-                <div className={styles.sizeHeaderContainer}>
-                  <p className={`${styles.b2} ${styles.sizeSelection__label}`}>
-                    <span>
-                      {t("resource.product.style")}:{" "}
-                      {Boolean(selectedSize) &&
-                        `${t("resource.common.size")} (${selectedSize})`}
+            <div className={styles.productScrollContent}>
+              {/* ---------- Product Name ----------  */}
+              {!hide_brand_name && (
+                <div className={styles.product__brand}>{brand?.name}</div>
+              )}
+              <h1 className={styles.product__title}>{slug && name}</h1>
+              {/* ---------- Product Price ---------- */}
+              {show_price && sizes?.sellable && (
+                <div className={styles.product__price}>
+                  <h4 className={styles["product__price--effective"]}>
+                    {getProductPrice("effective")}
+                  </h4>
+                  {getProductPrice("effective") !==
+                    getProductPrice("marked") && (
+                    <span className={styles["product__price--marked"]}>
+                      {getProductPrice("marked")}
                     </span>
-                  </p>
+                  )}
+                  {sizes?.discount && (
+                    <span className={styles["product__price--discount"]}>
+                      ({sizes?.discount})
+                    </span>
+                  )}
+                </div>
+              )}
+              {/* ---------- Product Tax Label ---------- */}
+              {pageConfig?.tax_label && show_price && sizes?.sellable && (
+                <div className={styles.taxLabel}>({pageConfig?.tax_label})</div>
+              )}
+
+              {/* ---------- Short Description ----------  */}
+              {short_description?.length > 0 && (
+                <p
+                  className={`${styles.b2} ${styles.fontBody} ${styles.shortDescription}`}
+                >
+                  {slug && short_description}
+                </p>
+              )}
+              {/* ---------- Product Variants ----------  */}
+              {slug && variants?.length > 0 && (
+                <ProductVariants
+                  product={product}
+                  variants={variants}
+                  currentSlug={slug}
+                  globalConfig={globalConfig}
+                  preventRedirect
+                  setSlug={handleSlugChange}
+                />
+              )}
+              {/* ---------- Size Container ---------- */}
+              {isSizeSelectionBlock && !isSizeCollapsed && (
+                <div className={styles.sizeSelection}>
+                  <div className={styles.sizeHeaderContainer}>
+                    <p
+                      className={`${styles.b2} ${styles.sizeSelection__label}`}
+                    >
+                      <span>
+                        {t("resource.product.style")}:{" "}
+                        {Boolean(selectedSize) &&
+                          `${t("resource.common.size")} (${selectedSize})`}
+                      </span>
+                    </p>
+                    {pageConfig?.show_size_guide &&
+                      // isSizeGuideAvailable() &&
+                      sizes?.sellable && (
+                        <FyButton
+                          variant="text"
+                          onClick={handleShowSizeGuide}
+                          className={styles["product__size--guide"]}
+                          endIcon={
+                            <SvgWrapper
+                              svgSrc="scale"
+                              className={styles.scaleIcon}
+                            />
+                          }
+                        >
+                          {t("resource.common.size_guide")}
+                        </FyButton>
+                      )}
+                  </div>
+
+                  <div className={styles.sizeSelection__wrapper}>
+                    {sizes?.sizes?.map((size) => (
+                      <button
+                        type="button"
+                        key={`${size?.display}`}
+                        className={`${styles.b2} ${styles.sizeSelection__block} ${
+                          size.quantity === 0 &&
+                          !isMto &&
+                          styles["sizeSelection__block--disable"]
+                        } ${
+                          (size?.quantity !== 0 || isMto) &&
+                          styles["sizeSelection__block--selectable"]
+                        } ${
+                          selectedSize === size?.value &&
+                          styles["sizeSelection__block--selected"]
+                        } `}
+                        title={size?.value}
+                        onClick={() => onSizeSelection(size?.value)}
+                      >
+                        {size?.display}
+                        {size?.quantity === 0 && !isMto && (
+                          <svg>
+                            <line x1="0" y1="100%" x2="100%" y2="0" />
+                          </svg>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {/* ---------- Size Dropdown And Action Buttons ---------- */}
+              {!isSizeSelectionBlock && !isSizeCollapsed && (
+                <div className={styles.sizeCartContainer}>
+                  <FyDropdown
+                    options={sizes?.sizes || []}
+                    value={selectedSize}
+                    onChange={onSizeSelection}
+                    placeholder={t("resource.common.select_size_caps")}
+                    valuePrefix={`${t("resource.common.size")}:`}
+                    dataKey="value"
+                    containerClassName={styles.dropdownContainer}
+                    dropdownListClassName={styles.dropdown}
+                    valueClassName={styles.sizeValue}
+                    disabledOptions={disabledSizeOptions}
+                    disabledOptionClassName={styles.disabledOption}
+                    disableSearch={true}
+                  />
                   {pageConfig?.show_size_guide &&
                     // isSizeGuideAvailable() &&
                     sizes?.sellable && (
@@ -237,130 +316,69 @@ const AddToCart = ({
                       </FyButton>
                     )}
                 </div>
-
-                <div className={styles.sizeSelection__wrapper}>
-                  {sizes?.sizes?.map((size) => (
-                    <button
-                      type="button"
-                      key={`${size?.display}`}
-                      className={`${styles.b2} ${styles.sizeSelection__block} ${
-                        size.quantity === 0 &&
-                        !isMto &&
-                        styles["sizeSelection__block--disable"]
-                      } ${
-                        (size?.quantity !== 0 || isMto) &&
-                        styles["sizeSelection__block--selectable"]
-                      } ${
-                        selectedSize === size?.value &&
-                        styles["sizeSelection__block--selected"]
-                      } `}
-                      title={size?.value}
-                      onClick={() => onSizeSelection(size?.value)}
-                    >
-                      {size?.display}
-                      {size?.quantity === 0 && !isMto && (
-                        <svg>
-                          <line x1="0" y1="100%" x2="100%" y2="0" />
-                        </svg>
-                      )}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-            {/* ---------- Size Dropdown And Action Buttons ---------- */}
-            {!isSizeSelectionBlock && !isSizeCollapsed && (
-              <div className={styles.sizeCartContainer}>
-                <FyDropdown
-                  options={sizes?.sizes || []}
-                  value={selectedSize}
-                  onChange={onSizeSelection}
-                  placeholder={t("resource.common.select_size_caps")}
-                  valuePrefix={`${t("resource.common.size")}:`}
-                  dataKey="value"
-                  containerClassName={styles.dropdownContainer}
-                  dropdownListClassName={styles.dropdown}
-                  valueClassName={styles.sizeValue}
-                  disabledOptions={disabledSizeOptions}
-                  disabledOptionClassName={styles.disabledOption}
-                  disableSearch={true}
-                />
-                {pageConfig?.show_size_guide &&
-                  // isSizeGuideAvailable() &&
-                  sizes?.sellable && (
-                    <FyButton
-                      variant="text"
-                      onClick={handleShowSizeGuide}
-                      className={styles["product__size--guide"]}
-                      endIcon={
-                        <SvgWrapper
-                          svgSrc="scale"
-                          className={styles.scaleIcon}
-                        />
-                      }
-                    >
-                      {t("resource.common.size_guide")}
-                    </FyButton>
-                  )}
-              </div>
-            )}
-            {sizeError && (
-              <div className={styles.sizeError}>
-                {t("resource.product.please_select_size")}
-              </div>
-            )}
-            {sizes?.sellable && selectedSize && (
-              <DeliveryInfo {...deliverInfoProps} setFoLoading={setFoLoading} />
-            )}
-
-            {selectedSize &&
-              !!fulfillmentOptions.length &&
-              availableFOCount > 1 && (
-                <div className={styles.fulfillmentWrapper}>
-                  <div className={styles.foList}>
-                    {foLoading
-                      ? fulfillmentOptions.map((_, index) => (
-                          <div
-                            key={`fo-skeleton-${index}`}
-                            className={styles.fulfillmentOption}
-                          >
-                            <div
-                              style={{ width: "20px" }}
-                              className={styles.foIcon}
-                            >
-                              <Skeleton height={18} width={18} />
-                            </div>
-                            <div
-                              style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                gap: "4px",
-                                width: "100%",
-                              }}
-                            >
-                              <Skeleton height={14} width={200} />
-                              <Skeleton height={12} width={120} />
-                            </div>
-                          </div>
-                        ))
-                      : fulfillmentOptions.map((foItem, index) => (
-                          <FullfillmentOption
-                            key={index}
-                            foItem={foItem}
-                            fulfillmentOptions={fulfillmentOptions}
-                            currentFO={currentFO}
-                            setCurrentFO={setCurrentFO}
-                            getDeliveryPromise={getDeliveryPromise}
-                          />
-                        ))}
-                  </div>
+              )}
+              {sizeError && (
+                <div className={styles.sizeError}>
+                  {t("resource.product.please_select_size")}
                 </div>
               )}
+              {sizes?.sellable && selectedSize && (
+                <DeliveryInfo
+                  {...deliverInfoProps}
+                  setFoLoading={setFoLoading}
+                  mandatoryPincode={pageConfig?.mandatory_pincode}
+                />
+              )}
 
-            <div className={styles.viewMore}>
-              <span onClick={handleViewMore}>
-                {t("resource.product.view_full_details")}
-              </span>
+              {selectedSize &&
+                !!fulfillmentOptions.length &&
+                availableFOCount > 1 && (
+                  <div className={styles.fulfillmentWrapper}>
+                    <div className={styles.foList}>
+                      {foLoading
+                        ? fulfillmentOptions.map((_, index) => (
+                            <div
+                              key={`fo-skeleton-${index}`}
+                              className={styles.fulfillmentOption}
+                            >
+                              <div
+                                style={{ width: "20px" }}
+                                className={styles.foIcon}
+                              >
+                                <Skeleton height={18} width={18} />
+                              </div>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  gap: "4px",
+                                  width: "100%",
+                                }}
+                              >
+                                <Skeleton height={14} width={200} />
+                                <Skeleton height={12} width={120} />
+                              </div>
+                            </div>
+                          ))
+                        : fulfillmentOptions.map((foItem, index) => (
+                            <FullfillmentOption
+                              key={index}
+                              foItem={foItem}
+                              fulfillmentOptions={fulfillmentOptions}
+                              currentFO={currentFO}
+                              setCurrentFO={setCurrentFO}
+                              getDeliveryPromise={getDeliveryPromise}
+                            />
+                          ))}
+                    </div>
+                  </div>
+                )}
+
+              <div className={styles.viewMore}>
+                <span onClick={handleViewMore}>
+                  {t("resource.product.view_full_details")}
+                </span>
+              </div>
             </div>
           </div>
           {/* ---------- Buy Now and Add To Cart ---------- */}
@@ -402,10 +420,9 @@ const AddToCart = ({
                       <FyButton
                         variant="outlined"
                         size="medium"
-                        onClick={(event) =>
-                          addProductForCheckout(event, selectedSize, false)
-                        }
+                        onClick={(event) => handleCheckout(event, false)}
                         startIcon={<CartIcon className={styles.cartIcon} />}
+                        disabled={isLoadingCart || !isServiceable}
                       >
                         {t("resource.cart.add_to_cart_caps")}
                       </FyButton>
@@ -417,10 +434,9 @@ const AddToCart = ({
                     className={styles.buyNow}
                     variant="contained"
                     size="medium"
-                    onClick={(event) =>
-                      addProductForCheckout(event, selectedSize, true)
-                    }
+                    onClick={(event) => handleCheckout(event, true)}
                     startIcon={<BuyNowIcon className={styles.cartIcon} />}
+                    disabled={isLoadingCart || !isServiceable}
                   >
                     {t("resource.common.buy_now_caps")}
                   </FyButton>

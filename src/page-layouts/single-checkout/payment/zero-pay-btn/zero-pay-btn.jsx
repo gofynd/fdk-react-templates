@@ -2,7 +2,8 @@ import React from "react";
 import { useMobile } from "../../../../helper/hooks/useMobile";
 import StickyPayNow from "../sticky-pay-now/sticky-pay-now";
 import * as styles from "./zero-pay-btn.less";
-import { priceFormatCurrencySymbol } from "../../../../helper/utils";
+import { currencyFormat, formatLocale } from "../../../../helper/utils";
+import { useGlobalStore, useFPI } from "fdk-core/utils";
 
 function ZeroPayButton({ payment, showPayment, onPriceDetailsClick, loader }) {
   const {
@@ -14,6 +15,9 @@ function ZeroPayButton({ payment, showPayment, onPriceDetailsClick, loader }) {
     isCreditNoteApplied,
   } = payment;
   const isMobile = useMobile();
+  const fpi = useFPI();
+  const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
+  const locale = language?.locale;
   return (
     <>
       {showPayment && getTotalValue?.() === 0 && (
@@ -31,9 +35,10 @@ function ZeroPayButton({ payment, showPayment, onPriceDetailsClick, loader }) {
               //   </button>
               // ) : (
               <StickyPayNow
-                value={priceFormatCurrencySymbol(
-                  getCurrencySymbol,
-                  getTotalValue()
+                value={currencyFormat(
+                  getTotalValue() || 0,
+                  getCurrencySymbol || "₹",
+                  formatLocale(locale, countryCode, true)
                 )}
                 disabled={isLoading}
                 onPriceDetailsClick={onPriceDetailsClick}
