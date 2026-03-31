@@ -115,7 +115,7 @@ function CheckoutPayment({
       setTimerId(null);
     }
   };
-
+  console.log("firstone connected");
   return (
     <>
       <div
