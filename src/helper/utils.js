@@ -196,14 +196,11 @@ export function checkIfNumber(value) {
  * @returns {string} Transformed image URL with DPR parameter
  */
 export const transformImage = (url, key, width) => {
-  // Detect device pixel ratio (DPR) for retina displays
-  const deviceDPR = isRunningOnClient() ? window.devicePixelRatio || 1 : 1;
-  // Cap DPR using config value to balance quality and performance
-  const dpr = Math.min(
-    Math.max(Math.round(deviceDPR), 1),
-    IMAGE_OPTIMIZATION_CONFIG.MAX_DPR
-  );
-  
+  // DPR is intentionally fixed at 1 — RESPONSIVE_IMAGE_BREAKPOINTS already bakes
+  // DPR into width values. Auto-detecting window.devicePixelRatio caused SSR/client
+  // URL mismatch (dpr=1 on server, dpr=2 on client) which re-fetched every image on hydration.
+  const dpr = 1;
+
   let updatedUrl = url;
   if (key && width) {
     const str = `/${key}/`;
