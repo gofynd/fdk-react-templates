@@ -18540,14 +18540,13 @@ h5,
 }
 .filter-list__filter__list___rtO83 .filter-list__filter__popup___VYTU3 {
   width: min(1023px, calc(100vw - 32px));
-  height: calc(100vh - var(--headerHeight, 0px) - 40px);
   max-height: 562px;
   border: 1px solid var(--dividerStokes, #d4d1d1);
   background-color: var(--dialogBackground, #fff);
   position: fixed;
-  top: 50%;
+  top: 20px;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   z-index: 9999;
   border-radius: 8px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
@@ -18557,7 +18556,7 @@ h5,
 [dir="rtl"] .filter-list__filter__list___rtO83 .filter-list__filter__popup___VYTU3 {
   left: auto;
   right: 50%;
-  transform: translate(50%, -50%);
+  transform: translateX(50%);
 }
 .filter-list__filter__list___rtO83 .filter-list__filter__popup--header___zJp3U {
   flex-shrink: 0;
