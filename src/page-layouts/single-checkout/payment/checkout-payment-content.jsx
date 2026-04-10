@@ -86,6 +86,8 @@ function CheckoutPaymentContent({
     paymentOptions,
     otherPaymentOptions,
     codOption,
+    neftOption,
+    rtgsOption,
     // for coupon modal (your return uses these)
     showCouponValidityModal,
     setShowCouponValidityModal,
