@@ -348,7 +348,7 @@ export const currencyFormat = (
   if (value == null || value === "") return "";
 
   // Convert to number if it's a string (strip commas so "1,039.5" parses as 1039.5, not 1)
-  const num =
+  let num =
     typeof value === "string"
       ? parseFloat(String(value).replace(/,/g, ""))
       : value;
