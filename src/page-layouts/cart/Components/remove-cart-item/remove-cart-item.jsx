@@ -65,6 +65,7 @@ function RemoveCartItem({
         <div
           className={`${styles.wishlistBtn} ${isMovingToWishlist ? styles.disabled : ""}`}
           onClick={onWishlistButtonClick}
+          data-testid="move-to-wishlist-button"
         >
           {t("resource.cart.move_to_wishlist")}
         </div>

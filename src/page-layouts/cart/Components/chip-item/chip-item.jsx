@@ -57,7 +57,7 @@ export default function ChipItem({
   availableFOCount,
   isPromoModalOpen,
   isSoldBy = false,
-  onRemoveIconClick = () => {},
+  onRemoveIconClick = () => { },
   onOpenPromoModal,
   onClosePromoModal,
   getFulfillmentOptions,
@@ -375,6 +375,16 @@ export default function ChipItem({
       return updatedItems;
     });
   };
+
+  const normalizedSize = (size) => {
+    return String(size ?? "")
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/\//g, "-")
+      .replace(/[^a-z0-9-]/g, "");
+  }
+
   return (
     <>
       <div className={styles.cartItemsListContainer} key={itemIndex}>
@@ -414,9 +424,8 @@ export default function ChipItem({
         )}
         <div className={styles.eachItemContainer}>
           <div
-            className={`${styles.itemImageContainer} ${
-              isOutOfStock ? styles.outOfStock : ""
-            }`}
+            className={`${styles.itemImageContainer} ${isOutOfStock ? styles.outOfStock : ""
+              }`}
           >
             <FDKLink
               to={`/product/${singleItemDetails?.product?.slug}`}
@@ -450,6 +459,7 @@ export default function ChipItem({
                   index: actualItemIndex,
                 })
               }
+              data-testid="remove-item-button"
             >
               <SvgWrapper
                 svgSrc="item-close"
@@ -460,9 +470,9 @@ export default function ChipItem({
               {singleItemDetails?.product?.brand?.name}
             </div>
             <div
-              className={`${styles.itemName} ${
-                isOutOfStock ? styles.outOfStock : ""
-              } `}
+              className={`${styles.itemName} ${isOutOfStock ? styles.outOfStock : ""
+                } `}
+              data-testid={`cart-item-row-${singleItemDetails?.product?.item_code}-${normalizedSize(singleItemDetails?.article?.size)}`}
             >
               {singleItemDetails?.product?.name?.length > 24
                 ? `${singleItemDetails.product.name.slice(0, 24)}...`
@@ -586,34 +596,33 @@ export default function ChipItem({
             <div className={styles.itemTotalContainer}>
               <div className={styles.itemPrice}>
                 <span
-                  className={`${styles.effectivePrice} ${
-                    isOutOfStock ? styles.outOfStock : ""
-                  }`}
+                  className={`${styles.effectivePrice} ${isOutOfStock ? styles.outOfStock : ""
+                    }`}
                 >
                   {currencyFormat(
-                    singleItemDetails?.price?.converted?.effective ??
-                      singleItemDetails?.price?.base?.effective,
+                    singleItemDetails?.price?.converted?.final_price ??
+                    singleItemDetails?.price?.base?.final_price,
                     singleItemDetails?.price?.converted?.currency_symbol ??
-                      singleItemDetails?.price?.base?.currency_symbol,
+                    singleItemDetails?.price?.base?.currency_symbol,
                     formatLocale(locale, countryCode, true),
                     singleItemDetails?.price?.converted?.currency_code ??
-                      singleItemDetails?.price?.base?.currency_code
+                    singleItemDetails?.price?.base?.currency_code
                   )}
                 </span>
                 {singleItemDetails?.price?.converted?.effective <
                   singleItemDetails?.price?.converted?.marked && (
-                  <span className={styles.markedPrice}>
-                    {currencyFormat(
-                      singleItemDetails?.price?.converted?.marked ??
+                    <span className={styles.markedPrice}>
+                      {currencyFormat(
+                        singleItemDetails?.price?.converted?.marked ??
                         singleItemDetails?.price?.base?.marked,
-                      singleItemDetails?.price?.converted?.currency_symbol ??
+                        singleItemDetails?.price?.converted?.currency_symbol ??
                         singleItemDetails?.price?.base?.currency_symbol,
-                      formatLocale(locale, countryCode, true),
-                      singleItemDetails?.price?.converted?.currency_code ??
+                        formatLocale(locale, countryCode, true),
+                        singleItemDetails?.price?.converted?.currency_code ??
                         singleItemDetails?.price?.base?.currency_code
-                    )}
-                  </span>
-                )}
+                      )}
+                    </span>
+                  )}
                 <span className={styles.discount}>
                   {singleItemDetails?.discount}
                 </span>
@@ -788,9 +797,9 @@ export default function ChipItem({
                   src={
                     sizeModalItemValue?.product?.images?.length > 0
                       ? sizeModalItemValue?.product?.images[0]?.url?.replace(
-                          "original",
-                          "resize-w:250"
-                        )
+                        "original",
+                        "resize-w:250"
+                      )
                       : undefined
                   }
                   alt={
@@ -815,11 +824,11 @@ export default function ChipItem({
                       sizeModalItemValue?.article?.price?.base?.effective,
                     sizeModalItemValue?.article?.price?.converted
                       ?.currency_symbol ??
-                      sizeModalItemValue?.article?.price?.base?.currency_symbol,
+                    sizeModalItemValue?.article?.price?.base?.currency_symbol,
                     formatLocale(locale, countryCode, true),
                     sizeModalItemValue?.article?.price?.converted
                       ?.currency_code ??
-                      sizeModalItemValue?.article?.price?.base?.currency_code
+                    sizeModalItemValue?.article?.price?.base?.currency_code
                   )}
                 </div>
               </div>

@@ -304,7 +304,6 @@ function OrderShipment({
   const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
   const locale = language?.locale;
   const [isAdmin, setIsAdmin] = useState(false);
-  // const [selectedShipment, setSelectedShipment] = useState("");
   const navigate = useNavigate();
   // const params = useParams();
   const isMobile = useMobile();
