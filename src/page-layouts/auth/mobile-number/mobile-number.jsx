@@ -75,7 +75,7 @@ function MobileNumber({
     if (countryIso && phoneInputRef?.current?.setCountry) {
       phoneInputRef?.current?.setCountry(countryIso);
     }
-  }, [countryIso, phoneInputRef?.current, mobile]);
+  }, [countryIso]);
 
   return (
     <div
