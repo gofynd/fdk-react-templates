@@ -195,8 +195,14 @@ function Coupon({
         {isApplicable && (
           <>
             <hr className={styles.divider} />
-
-            <p className={styles.couponDesc}>{expiresOn}</p>
+            {description && (
+              <p className={styles.couponDescription}>{description}</p>
+            )}
+            <p
+              className={`${styles.couponDesc} ${description ? styles.couponDescBold : ""}`}
+            >
+              {expiresOn}
+            </p>
           </>
         )}
       </div>
