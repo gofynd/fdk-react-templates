@@ -194,10 +194,10 @@ function Coupon({
         </div>
         {isApplicable && (
           <>
-            <hr className={styles.divider} />
             {description && (
               <p className={styles.couponDescription}>{description}</p>
             )}
+            <hr className={styles.divider} />
             <p
               className={`${styles.couponDesc} ${description ? styles.couponDescBold : ""}`}
             >
