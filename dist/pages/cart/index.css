@@ -8150,9 +8150,8 @@ h5,
   width: 100%;
   height: 1px;
   margin: 12px 0;
-  background: none;
+  background-color: var(--dividerStokes, #d4d1d1);
   border: none;
-  border-top: 1px dashed var(--dividerStokes, #d4d1d1);
 }
 .coupon__couponListTitleWrapper___NDeTO .coupon__couponDesc___MoNuL {
   width: 100%;
@@ -8163,18 +8162,6 @@ h5,
   color: var(--textLabel, #7d7676);
   overflow: hidden;
   text-overflow: ellipsis;
-}
-.coupon__couponListTitleWrapper___NDeTO .coupon__couponDesc___MoNuL.coupon__couponDescBold___PmziP {
-  font-weight: 600;
-}
-.coupon__couponListTitleWrapper___NDeTO .coupon__couponDescription___qYxmm {
-  width: 100%;
-  margin: 12px 0px 0px 0px;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 140%;
-  color: var(--textBody, #3c3131);
-  word-break: break-word;
 }
 .coupon__couponListTitleWrapper___NDeTO .coupon__offerList___btbIe {
   display: flex;
@@ -10401,7 +10388,7 @@ h5,
   }
 }
 .chip-item__cartItemsListContainer___ud9jU {
-  padding: 24px;
+  padding: 16px;
   border: 1px solid var(--dividerStokes, #d4d1d1);
   border-top: 0 solid var(--dividerStokes, #d4d1d1);
 }
@@ -10434,7 +10421,7 @@ h5,
   display: flex;
 }
 .chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__itemImageContainer___kS2D_ a img {
-  width: 100%;
+  width: 85%;
   border-radius: 4px;
 }
 .chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 {
@@ -11461,7 +11448,7 @@ h5,
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
+  width: 45px;
   height: 100%;
   border-inline-start: 1px solid var(--dividerStokes, #d4d1d1);
   border-inline-end: 1px solid var(--dividerStokes, #d4d1d1);
@@ -12345,7 +12332,7 @@ h5,
 }
 .accordion__accordionContentValue___FESOa {
   color: var(--Text-Heading, #1f1f1f);
-  font-family: var(--font-body);
+  font-family: Inter;
   font-size: 12px;
   font-style: normal;
   font-weight: 600;
@@ -14608,7 +14595,7 @@ h5,
   flex: 1 0 0;
   color: var(--buttonSecondary, #fff);
   text-align: center;
-  font-family: var(--font-body);
+  font-family: Inter;
   font-size: 14px;
   font-style: normal;
   font-weight: 600;

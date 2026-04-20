@@ -10,6 +10,27 @@ export const debounce = (func, wait) => {
   };
 };
 
+export const formatDate = (isoString, dateOnly = false) => {
+  const date = new Date(isoString);
+
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = date.toLocaleString("en-US", { month: "short" });
+  const year = date.getFullYear();
+
+  let hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const ampm = hours >= 12 ? "PM" : "AM";
+
+  hours %= 12;
+  hours = hours || 12; // 0 becomes 12
+
+  if (dateOnly) {
+    return `${day} ${month}, ${year}`;
+  }
+
+  return `${day} ${month}, ${year}, ${hours}:${minutes} ${ampm}`;
+};
+
 export const getGlobalConfigValue = (globalConfig, id) =>
   globalConfig?.props?.[id] ?? "";
 
@@ -204,7 +225,12 @@ export const transformImage = (url, key, width) => {
   let updatedUrl = url;
   if (key && width) {
     const str = `/${key}/`;
-    updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
+    // updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
+    if (url.includes("/b2b-commerce/")) {
+      updatedUrl = url.replace(new RegExp(str), `/t.resize(w:${width})/`);
+    } else {
+      updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
+    }
   }
   try {
     const parsedUrl = new URL(updatedUrl);
@@ -319,12 +345,13 @@ export const currencyFormat = (
   locale = "en-IN",
   currencyCode = null
 ) => {
-  if (value == null || value === "") {
-    return "";
-  }
+  if (value == null || value === "") return "";
 
-  // Convert to number if it's a string
-  let num = typeof value === "string" ? parseFloat(value) : value;
+  // Convert to number if it's a string (strip commas so "1,039.5" parses as 1039.5, not 1)
+  let num =
+    typeof value === "string"
+      ? parseFloat(String(value).replace(/,/g, ""))
+      : value;
 
   // Ensure it's a number, not NaN
   if (Number.isNaN(num)) {
@@ -509,8 +536,11 @@ export function priceFormatCurrencySymbol(
 ) {
   if (price == null || price === "") return "";
 
-  // Convert to number if it's a string
-  let num = typeof price === "string" ? parseFloat(price) : price;
+  // Convert to number if it's a string (strip commas so "1,039.5" parses as 1039.5, not 1)
+  let num =
+    typeof price === "string"
+      ? parseFloat(String(price).replace(/,/g, ""))
+      : price;
 
   if (Number.isNaN(num)) return "";
 
@@ -874,15 +904,11 @@ export const getUserPrimaryPhone = (user) => {
     return null;
   }
 
-  const primaryPhone =
-    user.phone_numbers.find((phone) => phone.primary) ||
-    user.phone_numbers.find((phone) => phone.active) ||
-    user.phone_numbers[0];
+  const primaryPhone = user.phone_numbers.find((phone) => phone.primary);
   if (!primaryPhone) return null;
 
   const countryCode = primaryPhone.country_code?.toString() || "91";
   const mobile = primaryPhone.phone || "";
-  if (!mobile) return null;
 
   return {
     mobile,
@@ -976,4 +1002,51 @@ export const formatDeliveryAddress = (d = {}) => {
 export const truncateName = (name,length) => {
   if (!name) return "";
   return name.length > length ? name.slice(0, length) + "..." : name;
+};
+
+export const copyToClipboard = async (value, onSuccess) => {
+  if (!value) return;
+  try {
+    await navigator?.clipboard?.writeText?.(value);
+    onSuccess(value);
+  } catch (error) {
+    console.error("Copy to clipboard failed", error);
+  }
+};
+
+export const formatFileSize = (bytes) => {
+  const kb = bytes / 1024;
+  return `${kb.toFixed(2)} kb`;
+};
+
+/**
+ * Validates a UTR (Unique Transaction Reference) number.
+ * Rules: required check (if isRequired), alphanumeric only, minimum 16 characters.
+ * @returns {boolean} true if valid
+ */
+export const validateUtr = (utr, { setRequiredError, setInvalidCharError, setMinError, isRequired }) => {
+  setRequiredError(false);
+  setInvalidCharError(false);
+  setMinError(false);
+
+  const trimmed = utr?.trim() || "";
+
+  if (isRequired && !trimmed) {
+    setRequiredError(true);
+    return false;
+  }
+
+  if (!trimmed) return true;
+
+  if (/[^A-Za-z0-9]/.test(trimmed)) {
+    setInvalidCharError(true);
+    return false;
+  }
+
+  if (trimmed.length < 16) {
+    setMinError(true);
+    return false;
+  }
+
+  return true;
 };
