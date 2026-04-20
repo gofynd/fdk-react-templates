@@ -12345,7 +12345,7 @@ h5,
 }
 .accordion__accordionContentValue___FESOa {
   color: var(--Text-Heading, #1f1f1f);
-  font-family: Inter;
+  font-family: var(--font-body);
   font-size: 12px;
   font-style: normal;
   font-weight: 600;
@@ -14608,7 +14608,7 @@ h5,
   flex: 1 0 0;
   color: var(--buttonSecondary, #fff);
   text-align: center;
-  font-family: Inter;
+  font-family: var(--font-body);
   font-size: 14px;
   font-style: normal;
   font-weight: 600;
@@ -24912,7 +24912,7 @@ h5,
   background-color: rgba(0, 0, 0, 0.7);
   height: 40px;
   width: 100%;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-body);
   text-align: center;
 }
 .lightbox-image__lbFooter___t3fIw {
