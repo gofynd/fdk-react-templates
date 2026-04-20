@@ -580,10 +580,10 @@ export function useCheckoutPayment({
     } else if (tab === "PL") {
       setSelectedPayLater(subMopData);
     } else if (tab === "NEFT") {
-      setSelectedTab(tab);
+      setSelectedTab("NEFT");
       setSelectedNeftPayment(subMopData);
     } else if (tab === "RTGS") {
-      setSelectedTab(tab);
+      setSelectedTab("RTGS");
       setSelectedRtgsPayment(subMopData);
     } 
   };
@@ -707,18 +707,18 @@ export function useCheckoutPayment({
       setSelectedPayLater(subMopData);
     } else if (tabIn === "Other") {
       setSelectedOtherPayment(subMopData);
-    }else if (tab === "NEFT") {
+    } else if (tabIn === "NEFT") {
       selectPaymentMode(paymentModePayload).then(() => {
         console.log("Payment mode selected");
       });
       setSelectedNeftPayment(subMopData);
-      setSelectedTab(tab);
-    } else if (tab === "RTGS") {
+      setSelectedTab(tabIn);
+    } else if (tabIn === "RTGS") {
       selectPaymentMode(paymentModePayload).then(() => {
         console.log("Payment mode selected");
       });
       setSelectedRtgsPayment(subMopData);
-      setSelectedTab(tab);
+      setSelectedTab(tabIn);
     }
   };
 
