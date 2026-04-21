@@ -14,7 +14,7 @@ import React from "react";
 import * as styles from "./reasons-list.less";
 import ReasonItem from "./reason-item/reason-item";
 
-function ReasonsList({ reasons, selectedReason, change, otherReason,testId=""}) {
+function ReasonsList({ reasons, selectedReason, change, otherReason }) {
   const getPriorityReasons = () => {
     const allreason = reasons?.sort((a, b) => a.priority - b.priority);
     return allreason?.map((it) => {
@@ -32,7 +32,6 @@ function ReasonsList({ reasons, selectedReason, change, otherReason,testId=""}) 
           reason={item}
           change={change}
           otherReason={otherReason}
-          testId={testId}
         ></ReasonItem>
       ))}
     </div>
