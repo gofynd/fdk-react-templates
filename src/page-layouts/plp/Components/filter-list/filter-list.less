@@ -85,17 +85,18 @@
   }
   .filter__popup {
     width: min(1023px, calc(100vw - 32px));
+    height: calc(100vh - var(--headerHeight, 0px) - 40px);
     max-height: 562px;
     border: 1px solid @DividerStokes;
     background-color: @DialogBackground;
     position: fixed;
-    top: 20px;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
     [dir="rtl"] & {
       left: auto;
       right: 50%;
-      transform: translateX(50%);
+      transform: translate(50%, -50%);
     }
     z-index: 9999;
     border-radius: 8px;

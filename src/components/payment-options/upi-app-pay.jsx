@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Modal from "../core/modal/modal";
 import { formatTime } from "../../helper/utils";
 import { useViewport } from "../../helper/hooks";
@@ -37,7 +37,6 @@ function UpiAppPayment({
   disbaleCheckout,
   vpa,
   timeRemaining,
-  selectedTab,
 }) {
   const isTablet = useViewport(0, 768);
 
@@ -100,16 +99,7 @@ function UpiAppPayment({
     textAlign: "center",
     color: "var(--buttonLink)",
   };
-  console.log(isTablet, "isTablet");
-  useEffect(() => {
-    if (selectedTab === "UPI" && isTablet) {
-      setSelectedUpiIntentApp("gpay");
-      selectedUpiRef.current = null;
-      setvpa("");
-      setUPIError(false);
-      cancelQrPayment();
-    }
-  }, [selectedTab, isTablet]);
+
   return (
     <>
       <div className={styles.upiMop}>
