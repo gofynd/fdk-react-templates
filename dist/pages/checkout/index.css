@@ -3191,9 +3191,15 @@ h5,
   box-sizing: border-box;
   width: 100%;
   background-color: transparent;
+  font-weight: 400;
 }
 .address-form__formItemDiv___goDqf .address-form__formInputBox___vnn5S.address-form__otherInput___fTj3R {
   width: 45%;
+}
+@media only screen and (max-width: 480px) {
+  .address-form__formItemDiv___goDqf .address-form__formInputBox___vnn5S {
+    font-weight: 400;
+  }
 }
 .address-form__formItemDiv___goDqf .address-form__formCheckBox___jit3S {
   font-size: 0.8rem;
@@ -3561,6 +3567,9 @@ h5,
 }
 .address-form__addressForm___aVT4x {
   margin-top: 8px;
+}
+.address-form__addressForm___aVT4x input {
+  font-weight: 400 !important;
 }
 .address-form__formBody___iy_8y {
   overflow: auto;
