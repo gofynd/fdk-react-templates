@@ -174,21 +174,21 @@ function ShipmentItem({
             state={{
               product: isBundleItem
                 ? {
-                  ...bag?.bundle_details,
-                  media:
-                    bag?.bundle_details?.images?.map((i) => ({
-                      url: i,
-                      type: "image",
-                    })) || [],
-                }
+                    ...bag?.bundle_details,
+                    media:
+                      bag?.bundle_details?.images?.map((i) => ({
+                        url: i,
+                        type: "image",
+                      })) || [],
+                  }
                 : {
-                  ...bag?.item,
-                  media:
-                    bag?.item?.image?.map((i) => ({
-                      url: i,
-                      type: "image",
-                    })) || [],
-                },
+                    ...bag?.item,
+                    media:
+                      bag?.item?.image?.map((i) => ({
+                        url: i,
+                        type: "image",
+                      })) || [],
+                  },
             }}
           >
             <div className={`${styles.brand}`}>{name}</div>{" "}
@@ -233,7 +233,8 @@ function ShipmentItem({
           )}
           <div className={styles.buttonContainer}>
             <div
-              className={`${styles.requestReattempt} ${shipmentDetails?.shipment_status?.value ===
+              className={`${styles.requestReattempt} ${
+                shipmentDetails?.shipment_status?.value ===
                 "delivery_reattempt_requested"
                   ? styles.deliveryReattemptRequested
                   : ""
@@ -273,21 +274,21 @@ const ShipmentImage = ({
       state={{
         product: isBundleItem
           ? {
-            ...bag?.bundle_details,
-            media:
-              bag?.bundle_details?.images?.map((i) => ({
-                url: i,
-                type: "image",
-              })) || [],
-          }
+              ...bag?.bundle_details,
+              media:
+                bag?.bundle_details?.images?.map((i) => ({
+                  url: i,
+                  type: "image",
+                })) || [],
+            }
           : {
-            ...bag?.item,
-            media:
-              bag?.item?.image?.map((i) => ({
-                url: i,
-                type: "image",
-              })) || [],
-          },
+              ...bag?.item,
+              media:
+                bag?.item?.image?.map((i) => ({
+                  url: i,
+                  type: "image",
+                })) || [],
+            },
       }}
     >
       {getItemImage()}
