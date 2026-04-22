@@ -9,7 +9,7 @@
  * @returns {JSX.Element} A JSX element representing the review item.
  */
 
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./chip-review-item.less";
 import { currencyFormat, formatLocale, numberWithCommas } from "../../helper/utils";
@@ -18,6 +18,8 @@ import {
   useFPI,
   useGlobalTranslation
 } from "fdk-core/utils";
+import Accordion from "../accordion/accordion";
+import { transformDisplayToAccordionContent } from "../../helper/customization-display";
 
 export default function ChipReviewItem({ item, articles }) {
   const { t } = useGlobalTranslation("translation");
@@ -30,7 +32,7 @@ export default function ChipReviewItem({ item, articles }) {
     if (item?.product?.images?.length && item?.product?.images?.[0]?.url) {
       return item.product.images[0].url.replace(
         "original",
-        "resize-h:170,w:110"
+        "resize-h:180,w:125"
       );
     }
   }, [item]);
@@ -79,7 +81,7 @@ export default function ChipReviewItem({ item, articles }) {
           </div>
 
           <div className={styles.chipMetaDesktop}>
-            <ChipMeta item={item} />
+            <ChipMeta item={item} articles={articles} />
           </div>
 
           {/* Extension Slot : above_shipment_item_price */}
@@ -95,18 +97,31 @@ export default function ChipReviewItem({ item, articles }) {
           {/* Extension Slot : below_shipment_item_price */}
         </div>
         <div className={styles.chipMetaMobile}>
-          <ChipMeta item={item} />
+          <ChipMeta item={item} articles={articles} />
         </div>
       </div>
     </div>
   );
 }
 
-const ChipMeta = ({ item }) => {
+const ChipMeta = ({ item, articles = [] }) => {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
   const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
   const locale = language?.locale;
+  const totalPieces = articles.length > 0
+    ? articles.reduce((sum, a) => sum + (a?.quantity || 0), 0)
+    : item?.quantity || 0;
+
+  const rawCustomizationOptions =
+    item?.article?._custom_json?._display || [];
+  const accordionContent = transformDisplayToAccordionContent(
+    rawCustomizationOptions
+  );
+  const [accordionItems, setAccordionItems] = useState([
+    { title: t("resource.cart.customization") || "Customization", content: accordionContent, open: false },
+  ]);
+
   return (
     <div className={styles.bagItem}>
       <div className={styles.chip}>
@@ -162,7 +177,7 @@ const ChipMeta = ({ item }) => {
         <div className={styles.rightItems}>
           <div className={styles.quantity}>
             <span>
-              {`${item?.quantity} ${item.quantity > 1 ? t("resource.common.multiple_piece") : t("resource.common.single_piece")}`}
+              {`${totalPieces} ${totalPieces > 1 ? t("resource.common.multiple_piece") : t("resource.common.single_piece")}`}
             </span>
           </div>
         </div>
@@ -179,6 +194,18 @@ const ChipMeta = ({ item }) => {
         <div className={styles.offersContainer}>
           <span className={styles.offerApplied}>{item.bulk_message}</span>
         </div>
+      )}
+      {accordionContent.length > 0 && (
+        <Accordion
+          items={accordionItems}
+          onItemClick={(index) =>
+            setAccordionItems((prev) =>
+              prev.map((acc, i) =>
+                i === index ? { ...acc, open: !acc.open } : acc
+              )
+            )
+          }
+        />
       )}
     </div>
   );

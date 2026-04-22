@@ -221,7 +221,11 @@ function loginPassword({
         )}
       </div>
 
-      <button className={styles.loginButton} type="submit">
+      <button
+        className={styles.loginButton}
+        type="submit"
+        disabled={showInputNumber && !watch("phone")?.isValidNumber}
+      >
         {translateDynamicLabel(loginButtonText, t) ||
           t("resource.auth.login.login_caps")}
       </button>
