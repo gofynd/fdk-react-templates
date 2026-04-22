@@ -1,17 +1,11 @@
 @import "../../styles/main.less";
-
 .addressFormWrapper {
-  input {
-    font-weight: 400 !important;
-  }
-
   .formContainer {
     display: flex;
     flex-wrap: wrap;
     box-sizing: border-box;
     width: 100%;
     justify-content: space-between;
-
     .labelClassName {
       span {
         color: @ErrorText;
@@ -20,7 +14,6 @@
 
     .formItemDiv:nth-child(odd) {
       margin-inline-end: 8px;
-
       @media @tablet {
         margin-inline-end: 0;
       }
@@ -45,18 +38,15 @@
 
   .addressTypeContainer {
     width: 100%;
-
     .typeWrap {
       display: flex;
       margin-bottom: 16px;
       flex-wrap: wrap;
       row-gap: 16px;
     }
-
     .typeIcon {
       margin-inline-end: 4px;
     }
-
     .typeBtn {
       display: flex;
       background: transparent;
@@ -78,7 +68,6 @@
         color: var(--buttonPrimary);
         border-width: 2px;
         border-color: var(--buttonPrimary);
-
         svg {
           path {
             fill: var(--buttonPrimary);
@@ -86,7 +75,6 @@
         }
       }
     }
-
     .addressTypeHeader {
       font-size: 13px;
       font-weight: 600;
@@ -136,7 +124,6 @@
     }
   }
 }
-
 .mapWrap {
   padding-bottom: 16px;
 }
@@ -145,25 +132,20 @@
   &:not(:first-child) {
     margin-top: 12px;
   }
-
   .groupLabel {
     font-size: 12px;
     margin-bottom: 8px;
     color: var(--textBody);
   }
 }
-
 .formItemDiv {
   position: relative;
   margin-bottom: 24px;
-
   &.fullInput {
     width: 100%;
   }
-
   &.halfInput {
     width: 47%;
-
     @media @tablet {
       width: 100%;
     }
@@ -173,7 +155,6 @@
     &.otherInput {
       width: 45%;
     }
-
     font-size: 0.8rem;
     outline: none;
     border: 1px solid var(--dividerStokes);
@@ -185,11 +166,6 @@
     box-sizing: border-box;
     width: 100%;
     background-color: transparent;
-    font-weight: 400;
-
-    @media @mobile {
-      font-weight: 400;
-    }
   }
 
   .formCheckBox {
@@ -245,11 +221,9 @@
     color: var(--buttonPrimary);
   }
 }
-
 .formItemDiv:has(input[type="hidden"]) {
   margin-bottom: 0;
 }
-
 .addressFormWrapper {
   .formContainer {
     display: flex;
@@ -257,7 +231,6 @@
     box-sizing: border-box;
     width: 100%;
     justify-content: space-between;
-
     .labelClassName {
       span {
         color: @ErrorText;
@@ -266,7 +239,6 @@
 
     .formItemDiv:nth-child(odd) {
       margin-inline-end: 8px;
-
       @media @tablet {
         margin-inline-end: 0;
       }
@@ -291,18 +263,15 @@
 
   .addressTypeContainer {
     width: 100%;
-
     .typeWrap {
       display: flex;
       margin-bottom: 16px;
       flex-wrap: wrap;
       row-gap: 16px;
     }
-
     .typeIcon {
       margin-inline-end: 4px;
     }
-
     .typeBtn {
       display: flex;
       background: transparent;
@@ -324,7 +293,6 @@
         color: var(--buttonPrimary);
         border-width: 2px;
         border-color: var(--buttonPrimary);
-
         svg {
           path {
             fill: var(--buttonPrimary);
@@ -332,7 +300,6 @@
         }
       }
     }
-
     .addressTypeHeader {
       font-size: 13px;
       font-weight: 600;
@@ -397,7 +364,6 @@
   align-items: center;
   gap: 8px;
   margin: 20px 0 10px;
-
   .checkbox {
     accent-color: var(--buttonPrimary);
     height: 13px;
@@ -470,11 +436,9 @@
     margin-top: 15px;
     width: 100%;
   }
-
   .dropdownInput {
     position: relative;
   }
-
   .customDropdown {
     position: relative;
   }
@@ -483,7 +447,6 @@
     width: 100%;
     border-bottom: 1px solid #dcdcdc;
   }
-
   .dropdownIcon {
     margin-top: 10px;
     position: absolute;

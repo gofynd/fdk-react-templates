@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, useEffect } from "react";
+import React, { useState, useMemo, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import * as styles from "./filter-list.less";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
@@ -15,24 +15,9 @@ function FilterList({
   const [searchText, setSearchText] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
-  const [popupStyles, setPopupStyles] = useState({});
   const location = useLocation();
   const popupContentRef = useRef(null);
   const MAX_ITEM_COUNT = 7;
-
-  useEffect(() => {
-    if (showPopup && isRunningOnClient()) {
-      const headerWrapper = document.querySelector(".fdk-theme-header") || document.querySelector("header");
-      const headerHeight = headerWrapper ? headerWrapper.getBoundingClientRect().bottom : 0;
-      const topOffset = Math.max(headerHeight, 0) + 20;
-      const maxHeight = window.innerHeight - topOffset - 20;
-      setPopupStyles({
-        top: `${topOffset}px`,
-        maxHeight: `${Math.min(maxHeight, 562)}px`,
-        height: `${Math.min(maxHeight, 562)}px`,
-      });
-    }
-  }, [showPopup]);
 
   const searchParams = isRunningOnClient()
     ? new URLSearchParams(location?.search)
@@ -372,7 +357,6 @@ function FilterList({
       {showPopup && (
         <div
           className={styles["filter__popup"]}
-          style={popupStyles}
           onClick={(e) => e.stopPropagation()}
         >
           <div
