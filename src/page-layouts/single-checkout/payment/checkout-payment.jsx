@@ -24,8 +24,9 @@ function CheckoutPayment({
   isCouponValid,
   setIsCouponValid,
   inValidCouponData,
-  neftFileUpload = () => {},
-  rtgsFileUpload = () => {},
+  neftFileUpload = { state: {}, upload: () => {}, reset: () => {} },
+  rtgsFileUpload = { state: {}, upload: () => {}, reset: () => {} },
+  fileUpload,
 }) {
   const { t } = useGlobalTranslation("translation");
   const [showFailedMessage, setShowFailedMessage] = useState(false);
@@ -42,6 +43,22 @@ function CheckoutPayment({
     isLoading,
   } = payment;
   const isMobile = useMobile();
+  const resolvedNeftFileUpload =
+    neftFileUpload?.state || neftFileUpload?.upload || neftFileUpload?.reset
+      ? neftFileUpload
+      : fileUpload?.neftFileUpload || fileUpload?.neft || fileUpload || {
+          state: {},
+          upload: () => {},
+          reset: () => {},
+        };
+  const resolvedRtgsFileUpload =
+    rtgsFileUpload?.state || rtgsFileUpload?.upload || rtgsFileUpload?.reset
+      ? rtgsFileUpload
+      : fileUpload?.rtgsFileUpload || fileUpload?.rtgs || fileUpload || {
+          state: {},
+          upload: () => {},
+          reset: () => {},
+        };
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -167,8 +184,8 @@ function CheckoutPayment({
               isCouponValid={isCouponValid}
               setIsCouponValid={setIsCouponValid}
               inValidCouponData={inValidCouponData}
-              neftFileUpload={neftFileUpload}
-              rtgsFileUpload={rtgsFileUpload}
+              neftFileUpload={resolvedNeftFileUpload}
+              rtgsFileUpload={resolvedRtgsFileUpload}
             ></CheckoutPaymentContent>
           </>
         ) : (

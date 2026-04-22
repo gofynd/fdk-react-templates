@@ -156,7 +156,8 @@ function Checkout({
           isCouponValid={isCouponValid}
           setIsCouponValid={setIsCouponValid}
           inValidCouponData={inValidCouponData}
-          fileUpload={fileUpload}
+          neftFileUpload={fileUpload?.neftFileUpload || fileUpload?.neft || fileUpload}
+          rtgsFileUpload={fileUpload?.rtgsFileUpload || fileUpload?.rtgs || fileUpload}
         ></CheckoutPayment>
       </div>
       <div className={styles.rightContainer}>
