@@ -857,7 +857,8 @@ export function useCheckoutPayment({
       selectedOtherPayment,
       selectedUpiIntentApp,
       selectedNeftPayment,
-      selectedRtgsPayment
+      selectedRtgsPayment,
+      selectedCreditPayment,
     });
   }, [
     selectedCard,
@@ -872,6 +873,7 @@ export function useCheckoutPayment({
     savedUPISelect,
     selectedNeftPayment,
     selectedRtgsPayment,
+    selectedCreditPayment,
   ]);
 
   const handleNewCardNumberChange = (value) => {
