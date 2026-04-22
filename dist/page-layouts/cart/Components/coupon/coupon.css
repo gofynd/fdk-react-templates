@@ -896,8 +896,9 @@ h5,
   width: 100%;
   height: 1px;
   margin: 12px 0;
-  background-color: var(--dividerStokes, #d4d1d1);
+  background: none;
   border: none;
+  border-top: 1px dashed var(--dividerStokes, #d4d1d1);
 }
 .coupon__couponListTitleWrapper___NDeTO .coupon__couponDesc___MoNuL {
   width: 100%;
@@ -908,6 +909,9 @@ h5,
   color: var(--textLabel, #7d7676);
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.coupon__couponListTitleWrapper___NDeTO .coupon__couponDesc___MoNuL.coupon__couponDescBold___PmziP {
+  font-weight: 600;
 }
 .coupon__couponListTitleWrapper___NDeTO .coupon__offerList___btbIe {
   display: flex;

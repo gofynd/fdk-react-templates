@@ -233,50 +233,30 @@ const FyDatePicker = React.forwardRef(
       return null;
     };
 
-    // Single source of truth for selectable year range (used by year dropdown and view clamp).
-    const getSelectableYearRange = () => {
-      if (!minInactiveDate && !maxInactiveDate) return null;
+    const buildYearOptions = () => {
       const lowerBoundDate = maxInactiveDate
         ? parseDateString(maxInactiveDate)
         : null;
       const upperBoundDate = minInactiveDate
         ? parseDateString(minInactiveDate)
         : null;
-      const y = today.getFullYear();
-      const lowerYear =
-        lowerBoundDate && !isNaN(lowerBoundDate)
-          ? Math.max(lowerBoundDate.getFullYear(), y - 100)
-          : y - 100;
-      const upperYear =
-        upperBoundDate && !isNaN(upperBoundDate)
-          ? Math.min(upperBoundDate.getFullYear(), y)
-          : y;
-      return {
-        minYear: Math.min(lowerYear, upperYear),
-        maxYear: Math.max(lowerYear, upperYear),
-        upperBoundDate:
-          upperBoundDate && !isNaN(upperBoundDate) ? upperBoundDate : null,
-      };
-    };
+      const currentYear = today.getFullYear();
+      const defaultLowerBound = currentYear - 100;
+      const defaultUpperBound = currentYear;
 
-    const buildYearOptions = () => {
-      const range = getSelectableYearRange();
-      const start = range ? range.minYear : today.getFullYear() - 100;
-      const end = range ? range.maxYear : today.getFullYear();
+      const lowerBound =
+        lowerBoundDate && !isNaN(lowerBoundDate)
+          ? Math.max(lowerBoundDate.getFullYear(), defaultLowerBound)
+          : defaultLowerBound;
+      const upperBound =
+        upperBoundDate && !isNaN(upperBoundDate)
+          ? Math.min(upperBoundDate.getFullYear(), defaultUpperBound)
+          : defaultUpperBound;
+      const start = Math.min(lowerBound, upperBound);
+      const end = Math.max(lowerBound, upperBound);
+
       return Array.from({ length: end - start + 1 }, (_, idx) => start + idx);
     };
-
-    // Clamp calendar view to selectable range when bounds exist (e.g. DOB opens at 2008 not 1926).
-    useEffect(() => {
-      const range = getSelectableYearRange();
-      if (!range) return;
-      const { minYear, maxYear, upperBoundDate } = range;
-      setCurrentYear((prev) => {
-        if (prev >= minYear && prev <= maxYear) return prev;
-        if (upperBoundDate) setCurrentMonth(upperBoundDate.getMonth());
-        return maxYear;
-      });
-    }, [minInactiveDate, maxInactiveDate]);
 
     const handleClearDate = () => {
       setSelectedDate("");

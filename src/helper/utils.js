@@ -1,4 +1,4 @@
-import { DEFAULT_CURRENCY_LOCALE, DEFAULT_UTC_LOCALE, IMAGE_OPTIMIZATION_CONFIG } from "./constant";
+import { DEFAULT_CURRENCY_LOCALE, DEFAULT_UTC_LOCALE } from "./constant";
 
 export const debounce = (func, wait) => {
   let timeout;
@@ -8,27 +8,6 @@ export const debounce = (func, wait) => {
       func.apply(this, args);
     }, wait);
   };
-};
-
-export const formatDate = (isoString, dateOnly = false) => {
-  const date = new Date(isoString);
-
-  const day = date.getDate().toString().padStart(2, "0");
-  const month = date.toLocaleString("en-US", { month: "short" });
-  const year = date.getFullYear();
-
-  let hours = date.getHours();
-  const minutes = date.getMinutes().toString().padStart(2, "0");
-  const ampm = hours >= 12 ? "PM" : "AM";
-
-  hours %= 12;
-  hours = hours || 12; // 0 becomes 12
-
-  if (dateOnly) {
-    return `${day} ${month}, ${year}`;
-  }
-
-  return `${day} ${month}, ${year}, ${hours}:${minutes} ${ampm}`;
 };
 
 export const getGlobalConfigValue = (globalConfig, id) =>
@@ -43,18 +22,6 @@ export function replaceQueryPlaceholders(queryFormat, value1, value2) {
 
 export const singleValuesFilters = {
   sortOn: true,
-};
-
-/**
- * Validates custom badge (teaser_tag) for display.
- * Returns false if badge is empty, whitespace-only, single character, or "."
- * @param {string|null|undefined} teaserTag - The custom badge text
- * @returns {boolean} - True if badge should be rendered
- */
-export const isValidCustomBadge = (teaserTag) => {
-  if (teaserTag == null || typeof teaserTag !== "string") return false;
-  const trimmed = teaserTag.trim();
-  return trimmed.length > 1 && trimmed !== ".";
 };
 
 export function roundToDecimals(number, decimalPlaces = 2) {
@@ -118,7 +85,7 @@ export function convertDate(dateString, locale = "en-US") {
 }
 
 export function validateName(name) {
-  const regexp = /^\p{L}+(?:[' -]\p{L}+)*$/u;
+  const regexp = /^[a-zA-Z0-9-_'. ]+$/;
   return regexp.test(String(name).toLowerCase().trim());
 }
 
@@ -209,33 +176,22 @@ export function checkIfNumber(value) {
   return numberPattern.test(value);
 }
 
-/**
- * Transform image URL with DPR support for better quality on retina displays
- * @param {string} url - Original image URL
- * @param {string} key - Image size key to replace
- * @param {number} width - Target width in pixels
- * @returns {string} Transformed image URL with DPR parameter
- */
 export const transformImage = (url, key, width) => {
-  // DPR is intentionally fixed at 1 — RESPONSIVE_IMAGE_BREAKPOINTS already bakes
-  // DPR into width values. Auto-detecting window.devicePixelRatio caused SSR/client
-  // URL mismatch (dpr=1 on server, dpr=2 on client) which re-fetched every image on hydration.
-  const dpr = 1;
-
+  const dpr = Math.min(
+    Math.max(
+      Math.round(isRunningOnClient() ? window.devicePixelRatio || 1 : 1),
+      1
+    ),
+    5
+  );
   let updatedUrl = url;
   if (key && width) {
     const str = `/${key}/`;
-    // updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
-    if (url.includes("/b2b-commerce/")) {
-      updatedUrl = url.replace(new RegExp(str), `/t.resize(w:${width})/`);
-    } else {
-      updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
-    }
+    updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
   }
   try {
     const parsedUrl = new URL(updatedUrl);
-    // Use .set() instead of .append() to replace existing dpr parameter and avoid duplicates
-    parsedUrl.searchParams.set("dpr", dpr);
+    parsedUrl.searchParams.append("dpr", 1);
     return parsedUrl.toString();
   } catch (error) {
     return updatedUrl;
@@ -345,13 +301,12 @@ export const currencyFormat = (
   locale = "en-IN",
   currencyCode = null
 ) => {
-  if (value == null || value === "") return "";
+  if (value == null || value === "") {
+    return "";
+  }
 
-  // Convert to number if it's a string (strip commas so "1,039.5" parses as 1039.5, not 1)
-  let num =
-    typeof value === "string"
-      ? parseFloat(String(value).replace(/,/g, ""))
-      : value;
+  // Convert to number if it's a string
+  let num = typeof value === "string" ? parseFloat(value) : value;
 
   // Ensure it's a number, not NaN
   if (Number.isNaN(num)) {
@@ -536,11 +491,8 @@ export function priceFormatCurrencySymbol(
 ) {
   if (price == null || price === "") return "";
 
-  // Convert to number if it's a string (strip commas so "1,039.5" parses as 1039.5, not 1)
-  let num =
-    typeof price === "string"
-      ? parseFloat(String(price).replace(/,/g, ""))
-      : price;
+  // Convert to number if it's a string
+  let num = typeof price === "string" ? parseFloat(price) : price;
 
   if (Number.isNaN(num)) return "";
 
@@ -570,16 +522,15 @@ export function priceFormatCurrencySymbol(
       useGrouping: true,
     });
 
-    const sign = num < 0 ? "- " : "";
-    const formattedPrice = formatter.format(Math.abs(num));
+    const formattedPrice = formatter.format(num);
     const hasAlphabeticCurrency = /^[A-Za-z]+$/.test(symbol);
 
     // Handle currency symbol placement
     let finalResult;
     if (hasAlphabeticCurrency) {
-      finalResult = `${sign}${symbol} ${formattedPrice}`;
+      finalResult = `${symbol} ${formattedPrice}`;
     } else {
-      finalResult = `${sign}${symbol}${formattedPrice}`;
+      finalResult = `${symbol}${formattedPrice}`;
     }
 
     return finalResult;
@@ -680,9 +631,8 @@ export const getAddressStr = (item, isAddressTypeAvailable) => {
       parts.unshift(item.address_type);
     }
     let addressStr = parts.join(", ");
-    const postalCode = item.area_code || item.pincode;
-    if (postalCode) {
-      addressStr += ` ${postalCode}`;
+    if (item.area_code) {
+      addressStr += ` ${item.area_code}`;
     }
     if (item.country) {
       // Handle country as object or string
@@ -993,60 +943,8 @@ export const getConfigFromProps = (props) => {
 export const formatDeliveryAddress = (d = {}) => {
   const line1 = [d.address, d.area].filter(Boolean).join(" ").trim();
   const line2 = d.landmark?.trim() || "";
-  const line3 = [d.city, [d.state, d.area_code || d.pincode].filter(Boolean).join(" ")].filter(Boolean).join(", ").trim();
+  const line3 = [d.city, [d.state, d.pincode].filter(Boolean).join(" ")].filter(Boolean).join(", ").trim();
   const line4 = d.country?.trim() || "";
 
   return [line1, line2, line3, line4].filter(Boolean).join(",\n");
-};
-
-export const truncateName = (name,length) => {
-  if (!name) return "";
-  return name.length > length ? name.slice(0, length) + "..." : name;
-};
-
-export const copyToClipboard = async (value, onSuccess) => {
-  if (!value) return;
-  try {
-    await navigator?.clipboard?.writeText?.(value);
-    onSuccess(value);
-  } catch (error) {
-    console.error("Copy to clipboard failed", error);
-  }
-};
-
-export const formatFileSize = (bytes) => {
-  const kb = bytes / 1024;
-  return `${kb.toFixed(2)} kb`;
-};
-
-/**
- * Validates a UTR (Unique Transaction Reference) number.
- * Rules: required check (if isRequired), alphanumeric only, minimum 16 characters.
- * @returns {boolean} true if valid
- */
-export const validateUtr = (utr, { setRequiredError, setInvalidCharError, setMinError, isRequired }) => {
-  setRequiredError(false);
-  setInvalidCharError(false);
-  setMinError(false);
-
-  const trimmed = utr?.trim() || "";
-
-  if (isRequired && !trimmed) {
-    setRequiredError(true);
-    return false;
-  }
-
-  if (!trimmed) return true;
-
-  if (/[^A-Za-z0-9]/.test(trimmed)) {
-    setInvalidCharError(true);
-    return false;
-  }
-
-  if (trimmed.length < 16) {
-    setMinError(true);
-    return false;
-  }
-
-  return true;
 };

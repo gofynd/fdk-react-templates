@@ -43,7 +43,6 @@ function Checkout({
   isCouponValid,
   setIsCouponValid,
   inValidCouponData,
-  fileUpload = () => {},
 }) {
   const [cancelQrPayment, setCancelQrPayment] = useState(null);
   const [searchParams] = useSearchParams();
@@ -156,8 +155,6 @@ function Checkout({
           isCouponValid={isCouponValid}
           setIsCouponValid={setIsCouponValid}
           inValidCouponData={inValidCouponData}
-          neftFileUpload={fileUpload?.neftFileUpload || fileUpload?.neft || fileUpload}
-          rtgsFileUpload={fileUpload?.rtgsFileUpload || fileUpload?.rtgs || fileUpload}
         ></CheckoutPayment>
       </div>
       <div className={styles.rightContainer}>

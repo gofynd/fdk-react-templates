@@ -621,8 +621,9 @@
     width: 100%;
     height: 1px;
     margin: 12px 0;
-    background-color: @DividerStokes;
+    background: none;
     border: none;
+    border-top: 1px dashed @DividerStokes;
   }
 
   .couponDesc {
@@ -634,6 +635,9 @@
     color: @TextLabel;
     overflow: hidden;
     text-overflow: ellipsis;
+    &.couponDescBold {
+      font-weight: 600;
+    }
   }
 
   .offerList {
