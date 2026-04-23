@@ -123,6 +123,10 @@
   @media @desktop {
     gap: 12px;
   }
+
+  @media @tablet {
+    margin-bottom: 16px;
+  }
 }
 
 .infoTag {
@@ -135,17 +139,13 @@
 }
 
 .infoRow {
+  background: @InformationBackground;
+  color: @InformationText;
+  border: 1px solid @DividerStokes;
+  border-radius: 12px;
   display: flex;
   align-items: flex-start;
   gap: 10px;
-
-  @media @desktop {
-    background: @InformationBackground;
-    color: @InformationText;
-    border: 1px solid @DividerStokes;
-    border-radius: 12px;
-    padding: 12px 14px;
-  }
 }
 
 .infoIcon {
@@ -158,18 +158,16 @@
 .infoText {
   margin: 0;
   line-height: 1.5;
-  font-size: 13px;
+  width: 100%;
+  padding: 14px 16px;
+  color: @InformationText;
 
   p {
     margin: 0;
   }
 
   @media @desktop {
-    width: 100%;
     font-size: 14px;
-    color: @InformationText;
-    padding-left: 16px;
-    padding-right: 16px;
   }
 
   @media @mobile {

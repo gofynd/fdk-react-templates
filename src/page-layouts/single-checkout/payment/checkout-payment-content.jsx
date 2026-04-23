@@ -669,7 +669,11 @@ function CheckoutPaymentContent({
           <div className={styles.link}>
             <div className={`${styles.icon} ${styles.mopIcon}`}>
               {/* <img src={opt.svg} alt="" /> */}
-              <SvgWrapper svgSrc={opt.svg}></SvgWrapper>
+              {opt.image_src ? (
+                <img src={opt.image_src} alt={opt?.display_name} />
+              ) : (
+                <SvgWrapper svgSrc={opt.svg}></SvgWrapper>
+              )}
             </div>
             <div
               className={`${styles.modeName} ${selectedTab === opt.name ? styles.selectedModeName : ""}`}

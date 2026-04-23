@@ -441,6 +441,11 @@ h5,
     gap: 12px;
   }
 }
+@media only screen and (max-width: 768px) {
+  .b2b-credit-payment__infoContainer___RpXCM {
+    margin-bottom: 16px;
+  }
+}
 .b2b-credit-payment__infoTag___tP35c {
   font-size: 13px;
   color: var(--textSubHeading, #414340);
@@ -451,18 +456,13 @@ h5,
   }
 }
 .b2b-credit-payment__infoRow___ZEnKH {
+  background: var(--informationBackground, #ebd3bc);
+  color: var(--informationText, #d28f51);
+  border: 1px solid var(--dividerStokes, #d4d1d1);
+  border-radius: 12px;
   display: flex;
   align-items: flex-start;
   gap: 10px;
-}
-@media only screen and (min-width: 769px) {
-  .b2b-credit-payment__infoRow___ZEnKH {
-    background: var(--informationBackground, #ebd3bc);
-    color: var(--informationText, #d28f51);
-    border: 1px solid var(--dividerStokes, #d4d1d1);
-    border-radius: 12px;
-    padding: 12px 14px;
-  }
 }
 .b2b-credit-payment__infoIcon___e1oYe {
   display: flex;
@@ -473,18 +473,16 @@ h5,
 .b2b-credit-payment__infoText___DxYhL {
   margin: 0;
   line-height: 1.5;
-  font-size: 13px;
+  width: 100%;
+  padding: 14px 16px;
+  color: var(--informationText, #d28f51);
 }
 .b2b-credit-payment__infoText___DxYhL p {
   margin: 0;
 }
 @media only screen and (min-width: 769px) {
   .b2b-credit-payment__infoText___DxYhL {
-    width: 100%;
     font-size: 14px;
-    color: var(--informationText, #d28f51);
-    padding-left: 16px;
-    padding-right: 16px;
   }
 }
 @media only screen and (max-width: 480px) {
