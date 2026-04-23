@@ -68,10 +68,7 @@ export function useCheckoutPayment({
 
   let paymentOptions = PaymentOptionsList ? PaymentOptionsList() : [];
   let codOption = paymentOptions?.filter((opt) => opt.name === "COD")[0];
-  // paymentOptions = paymentOptions?.filter((opt) => opt.name !== "COD");
-  let neftOption = paymentOptions?.filter((opt) => opt.name === "NEFT")[0];
-  let rtgsOption = paymentOptions?.filter((opt) => opt.name === "RTGS")[0];
-  paymentOptions = paymentOptions?.filter((opt) => opt.name !== "COD" && opt.name !== "NEFT" && opt.name !== "RTGS");
+  paymentOptions = paymentOptions?.filter((opt) => opt.name !== "COD");
 
   const otherPaymentOptions = useMemo(
     () => (otherOptions ? otherOptions() : []),
@@ -107,9 +104,6 @@ export function useCheckoutPayment({
   const [cardNameError, setCardNameError] = useState(false);
   const [isCardSecure, setIsCardSecure] = useState(true);
   const [isSavedCardSecure, setIsSavedCardSecure] = useState(null);
-  const [selectedRtgsPayment, setSelectedRtgsPayment] = useState({});
-  const [selectedNeftPayment, setSelectedNeftPayment] = useState({});
-
 
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -128,7 +122,6 @@ export function useCheckoutPayment({
   const [selectedPayLater, setSelectedPayLater] = useState({});
   const [selectedCardless, setSelectedCardless] = useState({});
   const [selectedOtherPayment, setSelectedOtherPayment] = useState({});
-  const [selectedCreditPayment, setSelectedCreditPayment] = useState({});
   const [savedUPISelect, setSavedUPISelect] = useState(false);
 
   const [selectedPaymentPayload, setSelectedPaymentPayload] = useState({
@@ -141,9 +134,6 @@ export function useCheckoutPayment({
     vpa: vpa,
     selectedOtherPayment: selectedOtherPayment,
     selectedUpiIntentApp: selectedUpiIntentApp,
-    selectedNeftPayment,
-    selectedRtgsPayment,
-    selectedCreditPayment,
   });
 
   const [paymentResponse, setPaymentResponse] = useState(null);
@@ -581,15 +571,6 @@ export function useCheckoutPayment({
       setSelectedNB(subMopData);
     } else if (tab === "PL") {
       setSelectedPayLater(subMopData);
-    } else if (tab === "NEFT") {
-      setSelectedTab("NEFT");
-      setSelectedNeftPayment(subMopData);
-    } else if (tab === "RTGS") {
-      setSelectedTab("RTGS");
-      setSelectedRtgsPayment(subMopData);
-    } else if (tab === "CREDIT") {
-      setSelectedTab("CREDIT");
-      setSelectedCreditPayment(subMopData);
     }
   };
 
@@ -712,27 +693,10 @@ export function useCheckoutPayment({
       setSelectedPayLater(subMopData);
     } else if (tabIn === "Other") {
       setSelectedOtherPayment(subMopData);
-    } else if (tabIn === "NEFT") {
-      selectPaymentMode(paymentModePayload).then(() => {
-        console.log("Payment mode selected");
-      });
-      setSelectedNeftPayment(subMopData);
-      setSelectedTab(tabIn);
-    } else if (tabIn === "RTGS") {
-      selectPaymentMode(paymentModePayload).then(() => {
-        console.log("Payment mode selected");
-      });
-      setSelectedRtgsPayment(subMopData);
-      setSelectedTab(tabIn);
-    } else if (tabIn === "CREDIT") {
-      selectPaymentMode(paymentModePayload).then(() => {
-        console.log("Payment mode selected");
-      });
-      setSelectedCreditPayment(subMopData);
-      setSelectedTab(tabIn);
     }
   };
 
+  const PRESELECT_TABS = ["NB", "WL", "PL", "CARDLESS_EMI", "Other"];
   useEffect(() => {
     if (!isCouponAppliedSuccess["isCouponApplied"]) {
       if (
@@ -757,6 +721,16 @@ export function useCheckoutPayment({
           selectedTabData?.list[0]?.code ?? ""
         );
       }
+    }
+    if (
+      PRESELECT_TABS.includes(selectedTab) &&
+      selectedTabData?.list?.[0]?.code
+    ) {
+      selectMop(
+        selectedTab,
+        selectedTab === "Other" ? selectedTabData?.name : selectedTab,
+        selectedTabData.list[0].code
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTabData?.list?.[0]?.code, otherPaymentOptions, selectedTab]);
@@ -856,9 +830,6 @@ export function useCheckoutPayment({
       vpa: savedUPISelect || vpa,
       selectedOtherPayment,
       selectedUpiIntentApp,
-      selectedNeftPayment,
-      selectedRtgsPayment,
-      selectedCreditPayment,
     });
   }, [
     selectedCard,
@@ -871,9 +842,6 @@ export function useCheckoutPayment({
     selectedOtherPayment,
     selectedUpiIntentApp,
     savedUPISelect,
-    selectedNeftPayment,
-    selectedRtgsPayment,
-    selectedCreditPayment,
   ]);
 
   const handleNewCardNumberChange = (value) => {
@@ -1179,9 +1147,6 @@ export function useCheckoutPayment({
     setMop("");
     setCardNumberError("");
     setCardNumber("");
-    setSelectedNeftPayment({});
-    setSelectedRtgsPayment({});
-    setSelectedCreditPayment({});
   };
 
   return {
@@ -1192,8 +1157,6 @@ export function useCheckoutPayment({
     paymentOptions,
     otherPaymentOptions,
     codOption,
-    neftOption,
-    rtgsOption,
     // for coupon modal (your return uses these)
     showCouponValidityModal,
     setShowCouponValidityModal,

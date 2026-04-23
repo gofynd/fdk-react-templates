@@ -21,9 +21,6 @@ import OtherPay from "../../../components/payment-options/other-pay";
 import PayLater from "../../../components/payment-options/pay-later";
 import CardLessEmi from "../../../components/payment-options/cardless-emi-pay";
 import { useCheckoutPayment } from "../../payment/useCheckoutPayment";
-import NeftPayment from "../../../components/payment-options/neft-payment";
-import RtgsPayment from "../../../components/payment-options/rtgs-payment";
-import CreditPayment from "../../../components/payment-options/b2b-credit-payment";
 
 function CheckoutPaymentContent({
   payment,
@@ -39,8 +36,6 @@ function CheckoutPaymentContent({
   isCouponValid,
   setIsCouponValid,
   inValidCouponData,
-  neftFileUpload = { state: {}, upload: () => {}, reset: () => {} },
-  rtgsFileUpload = { state: {}, upload: () => {}, reset: () => {} },
 }) {
   const checkoutPayment = useCheckoutPayment({
     payment,
@@ -75,7 +70,6 @@ function CheckoutPaymentContent({
     creditUpdating,
     isPaymentLoading,
     isUPIError,
-    creditPaymentData,
   } = payment;
 
   // destructure exactly what the JSX (and the local prop-bundles) needs
@@ -88,8 +82,6 @@ function CheckoutPaymentContent({
     paymentOptions,
     otherPaymentOptions,
     codOption,
-    neftOption,
-    rtgsOption,
     // for coupon modal (your return uses these)
     showCouponValidityModal,
     setShowCouponValidityModal,
@@ -217,8 +209,6 @@ function CheckoutPaymentContent({
   } = checkoutPayment;
 
   const uiProps = { styles, t, SvgWrapper, StickyPayNow, isTablet };
-
-  console.log("firestone connected");
 
   const amountProps = { getCurrencySymbol, getTotalValue };
 
@@ -362,6 +352,7 @@ function CheckoutPaymentContent({
               acceptOrder={acceptOrder}
               disbaleCheckout={disbaleCheckout}
               vpa={vpa}
+              selectedTab={selectedTab}
             />
 
             <QrCodePaymet
@@ -447,42 +438,6 @@ function CheckoutPaymentContent({
             getCardlessBorder={getCardlessBorder}
             translateDynamicLabel={translateDynamicLabel}
             removeDialogueError={removeDialogueError}
-          />
-        );
-
-      case "NEFT":
-        return (
-          <NeftPayment
-            {...uiProps}
-            {...amountProps}
-            {...paymentFlowProps}
-            neftFileUpload={neftFileUpload}
-            selectedNeftPayment={selectedPaymentPayload?.selectedNeftPayment}
-            priceFormatCurrencySymbol={priceFormatCurrencySymbol}
-          />
-        );
-
-      case "CREDIT":
-        return (
-          <CreditPayment
-            {...uiProps}
-            {...amountProps}
-            {...paymentFlowProps}
-            priceFormatCurrencySymbol={priceFormatCurrencySymbol}
-            availableCredit={creditPaymentData?.availableCredit}
-            lender={creditPaymentData?.lender}
-          />
-        );
-
-      case "RTGS":
-        return (
-          <RtgsPayment
-            {...uiProps}
-            {...amountProps}
-            {...paymentFlowProps}
-            rtgsFileUpload={rtgsFileUpload}
-            selectedRtgsPayment={selectedPaymentPayload?.selectedRtgsPayment}
-            priceFormatCurrencySymbol={priceFormatCurrencySymbol}
           />
         );
 
@@ -627,37 +582,6 @@ function CheckoutPaymentContent({
               setvpa("");
               setLastValidatedBin("");
               unsetSelectedSubMop();
-
-              // Call selectMop for NEFT to register payment mode
-              if (opt.name === "NEFT") {
-                const neftPaymentData = paymentOption?.payment_option?.find(
-                  (option) => option.name === "NEFT"
-                );
-                const neftSubMop = neftPaymentData?.list?.[0];
-                if (neftSubMop) {
-                  selectMop("NEFT", "NEFT", neftSubMop.code || "");
-                }
-              }
-              if (opt.name === "RTGS") {
-                const rtgsPaymentData = paymentOption?.payment_option?.find(
-                  (option) => option.name === "RTGS"
-                );
-                const rtgsSubMop = rtgsPaymentData?.list?.[0];
-                if (rtgsSubMop) {
-                  selectMop("RTGS", "RTGS", rtgsSubMop.code || "");
-                }
-              }
-              // CREDIT is a first-class payment mode (like NEFT/RTGS).
-              // Look it up in paymentOption so we get the real aggregator/code.
-              if (opt.name === "CREDIT") {
-                const creditOptionData = paymentOption?.payment_option?.find(
-                  (option) => option.name === "CREDIT"
-                );
-                const creditSubMop = creditOptionData?.list?.[0];
-                if (creditSubMop) {
-                  selectMop("CREDIT", "CREDIT", creditSubMop.code || "");
-                }
-              }
             }
           }}
         >
@@ -667,12 +591,9 @@ function CheckoutPaymentContent({
             &nbsp;
           </div>
           <div className={styles.link}>
-            <div className={`${styles.icon} ${opt.image_src && opt.name === "CREDIT" ? styles.creditLogoIcon : styles.mopIcon}`}>
-              {opt.image_src && opt.name === "CREDIT" ? (
-                <img src={opt.image_src} alt={opt?.display_name} />
-              ) : (
-                <SvgWrapper svgSrc={opt.svg}></SvgWrapper>
-              )}
+            <div className={`${styles.icon} ${styles.mopIcon}`}>
+              {/* <img src={opt.svg} alt="" /> */}
+              <SvgWrapper svgSrc={opt.svg}></SvgWrapper>
             </div>
             <div
               className={`${styles.modeName} ${selectedTab === opt.name ? styles.selectedModeName : ""}`}
@@ -858,225 +779,6 @@ function CheckoutPaymentContent({
                             {selectedTab === "Other" && navigationTab()}
                           </div>
                         )}
-                      </div>
-                    )}
-
-                    {neftOption && (
-                      <div
-                        // style={{ display: "flex", flex: "1" }}
-                        className={styles.neftBorderBottom}
-                      >
-                        <div
-                          className={`${styles.linkWrapper} ${selectedTab === neftOption.name && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === neftOption.name && isTablet ? styles.headerHightlight : ""} ${!codOption ? styles.lastChild : ""}`}
-                          key={neftOption?.display_name ?? ""}
-                          id={`nav-title-neft`}
-                        >
-                          <div
-                            className={styles["linkWrapper-row1"]}
-                            onClick={() => {
-                              if (isTablet) {
-                                setSelectedTab((prev) =>
-                                  prev === neftOption.name
-                                    ? ""
-                                    : neftOption.name
-                                );
-                                setTab(neftOption.name);
-                              } else {
-                                setSelectedTab(neftOption.name);
-                                setTab(neftOption.name);
-                              }
-                              removeDialogueError();
-                              toggleMop(neftOption.name);
-                              if (selectedTab !== neftOption.name) {
-                                if (isTablet) {
-                                  setSelectedPaymentPayload({});
-                                }
-                                setNameOnCard("");
-                                setCardExpiryDate("");
-                                setCvvNumber("");
-                                hideNewCard();
-                                setvpa("");
-                                setLastValidatedBin("");
-                                unsetSelectedSubMop();
-
-                                // Call selectMop for NEFT to register payment mode
-                                const neftPaymentData =
-                                  paymentOption?.payment_option?.find(
-                                    (option) => option.name === "NEFT"
-                                  );
-                                const neftSubMop = neftPaymentData?.list?.[0];
-                                if (neftSubMop) {
-                                  selectMop(
-                                    neftOption.name,
-                                    neftOption.name,
-                                    neftSubMop.code || ""
-                                  );
-                                }
-                              }
-                            }}
-                          >
-                            <div
-                              className={` ${selectedTab === neftOption.name ? styles.indicator : ""} ${styles.onDesktopView}`}
-                            >
-                              &nbsp;
-                            </div>
-                            <div className={styles.link}>
-                              <div
-                                className={`${styles.icon} ${styles.flexCenter}`}
-                              >
-                                <SvgWrapper
-                                  svgSrc={neftOption.svg}
-                                ></SvgWrapper>
-                              </div>
-                              <div>
-                                <div
-                                  className={`${styles.modeName} ${selectedTab === neftOption.name ? styles.selectedModeName : ""}`}
-                                >
-                                  {translateDynamicLabel(
-                                    neftOption?.display_name ?? "",
-                                    t
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                            {neftOption?.image_src && (
-                              <div className={styles["payment-icons"]}>
-                                <img
-                                  src={neftOption?.image_src}
-                                  alt={neftOption?.svg}
-                                />
-                              </div>
-                            )}
-                            <div
-                              className={`${styles.arrowContainer}  ${styles.activeIconColor}`}
-                            >
-                              <SvgWrapper
-                                className={
-                                  selectedTab === neftOption.name &&
-                                  activeMop === neftOption.name
-                                    ? styles.upsideDown
-                                    : ""
-                                }
-                                svgSrc="accordion-arrow"
-                              />
-                            </div>
-                          </div>
-                          {isTablet && activeMop === neftOption.name && (
-                            <div>
-                              {selectedTab === neftOption.name &&
-                                navigationTab()}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                    {rtgsOption && (
-                      <div
-                        // style={{ display: "flex", flex: "1" }}
-                        className={styles.neftBorderBottom}
-                      >
-                        <div
-                          className={`${styles.linkWrapper} ${selectedTab === rtgsOption.name && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === rtgsOption.name && isTablet ? styles.headerHightlight : ""} ${!codOption ? styles.lastChild : ""}`}
-                          key={rtgsOption?.display_name ?? ""}
-                          id={`nav-title-rtgs`}
-                        >
-                          <div
-                            className={styles["linkWrapper-row1"]}
-                            onClick={() => {
-                              if (isTablet) {
-                                setSelectedTab((prev) =>
-                                  prev === rtgsOption.name
-                                    ? ""
-                                    : rtgsOption.name
-                                );
-                                setTab(rtgsOption.name);
-                              } else {
-                                setSelectedTab(rtgsOption.name);
-                                setTab(rtgsOption.name);
-                              }
-                              removeDialogueError();
-                              toggleMop(rtgsOption.name);
-                              if (selectedTab !== rtgsOption.name) {
-                                if (isTablet) {
-                                  setSelectedPaymentPayload({});
-                                }
-                                setNameOnCard("");
-                                setCardExpiryDate("");
-                                setCvvNumber("");
-                                hideNewCard();
-                                setvpa("");
-                                setLastValidatedBin("");
-                                unsetSelectedSubMop();
-
-                                // Call selectMop for RTGS to register payment mode
-                                const rtgsPaymentData =
-                                  paymentOption?.payment_option?.find(
-                                    (option) => option.name === "RTGS"
-                                  );
-                                const rtgsSubMop = rtgsPaymentData?.list?.[0];
-                                if (rtgsSubMop) {
-                                  selectMop(
-                                    rtgsOption.name,
-                                    rtgsOption.name,
-                                    rtgsSubMop.code || ""
-                                  );
-                                }
-                              }
-                            }}
-                          >
-                            <div
-                              className={` ${selectedTab === rtgsOption.name ? styles.indicator : ""} ${styles.onDesktopView}`}
-                            >
-                              &nbsp;
-                            </div>
-                            <div className={styles.link}>
-                              <div
-                                className={`${styles.icon} ${styles.flexCenter}`}
-                              >
-                                <SvgWrapper
-                                  svgSrc={rtgsOption.svg}
-                                ></SvgWrapper>
-                              </div>
-                              <div>
-                                <div
-                                  className={`${styles.modeName} ${selectedTab === rtgsOption.name ? styles.selectedModeName : ""}`}
-                                >
-                                  {translateDynamicLabel(
-                                    rtgsOption?.display_name ?? "",
-                                    t
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                            {rtgsOption?.image_src && (
-                              <div className={styles["payment-icons"]}>
-                                <img
-                                  src={rtgsOption?.image_src}
-                                  alt={rtgsOption?.svg}
-                                />
-                              </div>
-                            )}
-                            <div
-                              className={`${styles.arrowContainer}  ${styles.activeIconColor}`}
-                            >
-                              <SvgWrapper
-                                className={
-                                  selectedTab === rtgsOption.name &&
-                                  activeMop === rtgsOption.name
-                                    ? styles.upsideDown
-                                    : ""
-                                }
-                                svgSrc="accordion-arrow"
-                              />
-                            </div>
-                          </div>
-                          {isTablet && activeMop === rtgsOption.name && (
-                            <div>
-                              {selectedTab === rtgsOption.name &&
-                                navigationTab()}
-                            </div>
-                          )}
-                        </div>
                       </div>
                     )}
                     {codOption && (

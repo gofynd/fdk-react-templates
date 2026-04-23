@@ -4696,6 +4696,15 @@ button {
     height: 100dvh;
   }
 }
+@media only screen and (max-width: 768px) {
+  [data-mobile-footer="true"] .delivery-location__addAddressModalBody___fK3pF {
+    height: calc(100vh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
+    height: calc(100dvh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
+    max-height: calc(100vh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
+    max-height: calc(100dvh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
+    overflow-y: auto;
+  }
+}
 .delivery-location__deliveryAddressModal___bufVh .delivery-location__deliverAddressesModalContainer___a40y1 {
   width: 100%;
   max-height: unset;
@@ -4712,6 +4721,14 @@ button {
   .delivery-location__deliveryAddressModal___bufVh .delivery-location__deliverAddressesModalContainer___a40y1 {
     max-width: 450px;
     max-height: 84.26dvh;
+  }
+}
+@media only screen and (max-width: 768px) {
+  [data-mobile-footer="true"] .delivery-location__deliveryAddressModal___bufVh .delivery-location__deliverAddressesModalContainer___a40y1 {
+    height: calc(100vh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
+    height: calc(100dvh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
+    max-height: calc(100vh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
+    max-height: calc(100dvh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
   }
 }
 .delivery-location__deliveryAddressModal___bufVh .delivery-location__deliveryAddressHeader___jz_o1 {
@@ -4812,6 +4829,14 @@ button {
     max-width: 450px !important;
     max-height: 84.26dvh;
     width: 450px !important;
+  }
+}
+@media only screen and (max-width: 768px) {
+  [data-mobile-footer="true"] .delivery-location__addAddressModalContainer___d5do4 {
+    height: calc(100vh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px)) !important;
+    height: calc(100dvh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px)) !important;
+    max-height: calc(100vh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px)) !important;
+    max-height: calc(100dvh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px)) !important;
   }
 }
 .delivery-location__heading___o8Vrb {
@@ -5603,9 +5628,15 @@ h5,
   box-sizing: border-box;
   width: 100%;
   background-color: transparent;
+  font-weight: 400;
 }
 .address-form__formItemDiv___goDqf .address-form__formInputBox___vnn5S.address-form__otherInput___fTj3R {
   width: 45%;
+}
+@media only screen and (max-width: 480px) {
+  .address-form__formItemDiv___goDqf .address-form__formInputBox___vnn5S {
+    font-weight: 400;
+  }
 }
 .address-form__formItemDiv___goDqf .address-form__formCheckBox___jit3S {
   font-size: 0.8rem;
@@ -5973,6 +6004,9 @@ h5,
 }
 .address-form__addressForm___aVT4x {
   margin-top: 8px;
+}
+.address-form__addressForm___aVT4x input {
+  font-weight: 400 !important;
 }
 .address-form__formBody___iy_8y {
   overflow: auto;
@@ -10298,8 +10332,9 @@ h5,
   width: 100%;
   height: 1px;
   margin: 12px 0;
-  background-color: var(--dividerStokes, #d4d1d1);
+  background: none;
   border: none;
+  border-top: 1px dashed var(--dividerStokes, #d4d1d1);
 }
 .coupon__couponListTitleWrapper___NDeTO .coupon__couponDesc___MoNuL {
   width: 100%;
@@ -10310,6 +10345,18 @@ h5,
   color: var(--textLabel, #7d7676);
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.coupon__couponListTitleWrapper___NDeTO .coupon__couponDesc___MoNuL.coupon__couponDescBold___PmziP {
+  font-weight: 600;
+}
+.coupon__couponListTitleWrapper___NDeTO .coupon__couponDescription___qYxmm {
+  width: 100%;
+  margin: 12px 0px 0px 0px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 140%;
+  color: var(--textBody, #3c3131);
+  word-break: break-word;
 }
 .coupon__couponListTitleWrapper___NDeTO .coupon__offerList___btbIe {
   display: flex;
@@ -10675,6 +10722,9 @@ h5,
     display: none !important;
   }
 }
+.address-form__addressFormWrapper___M0Ler input {
+  font-weight: 400 !important;
+}
 .address-form__addressFormWrapper___M0Ler .address-form__formContainer___UrnfJ {
   display: flex;
   flex-wrap: wrap;
@@ -10820,9 +10870,15 @@ h5,
   box-sizing: border-box;
   width: 100%;
   background-color: transparent;
+  font-weight: 400;
 }
 .address-form__formItemDiv___ciw5I .address-form__formInputBox___QHRHx.address-form__otherInput___xvlRj {
   width: 45%;
+}
+@media only screen and (max-width: 480px) {
+  .address-form__formItemDiv___ciw5I .address-form__formInputBox___QHRHx {
+    font-weight: 400;
+  }
 }
 .address-form__formItemDiv___ciw5I .address-form__formCheckBox___ifOb0 {
   font-size: 0.8rem;
