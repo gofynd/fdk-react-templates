@@ -667,9 +667,8 @@ function CheckoutPaymentContent({
             &nbsp;
           </div>
           <div className={styles.link}>
-            <div className={`${styles.icon} ${styles.mopIcon}`}>
-              {/* <img src={opt.svg} alt="" /> */}
-              {opt.image_src ? (
+            <div className={`${styles.icon} ${opt.image_src && opt.name === "CREDIT" ? styles.creditLogoIcon : styles.mopIcon}`}>
+              {opt.image_src && opt.name === "CREDIT" ? (
                 <img src={opt.image_src} alt={opt?.display_name} />
               ) : (
                 <SvgWrapper svgSrc={opt.svg}></SvgWrapper>

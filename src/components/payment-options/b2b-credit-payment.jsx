@@ -63,8 +63,6 @@ function CreditPayment({
     <>
       <div className={styles.creditPaymentContainer}>
         <div className={styles.creditWrapper}>
-          {tagline && <div className={styles.tagline}>{tagline}</div>}
-
           <div className={styles.creditCard}>
             <div className={styles.creditCardTopRow}>
               <p className={styles.creditLabel}>Available Credit</p>
