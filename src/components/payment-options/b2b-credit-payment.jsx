@@ -9,6 +9,7 @@ function CreditPayment({
   getTotalValue,
   availableCredit,
   lender,
+  tagline,
   // Payment flow
   proceedToPay,
   acceptOrder,
@@ -55,10 +56,8 @@ function CreditPayment({
     }
   };
 
-  const readyToUseText = lender?.status_text || "Ready to use";
-  const tagline = selectedPaymentPayload?.tagline;
-  const lenderDescription =
-    lender?.description || selectedPaymentPayload?.description || "";
+  const readyToUseText = "Ready to use";
+  const lenderDescription = lender?.description || "";
 
   return (
     <>
@@ -78,7 +77,9 @@ function CreditPayment({
               >
                 <span aria-hidden="true">&bull;</span>
                 <span>
-                  {isInsufficientCredit ? "Insufficient credit" : readyToUseText}
+                  {isInsufficientCredit
+                    ? "Insufficient credit"
+                    : readyToUseText}
                 </span>
               </div>
             </div>

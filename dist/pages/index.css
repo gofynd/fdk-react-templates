@@ -46163,7 +46163,6 @@ h5,
     color: var(--informationText, #d28f51);
     border: 1px solid var(--dividerStokes, #d4d1d1);
     border-radius: 12px;
-    padding: 12px 14px;
   }
 }
 .b2b-credit-payment__infoIcon___e1oYe {
@@ -46185,6 +46184,8 @@ h5,
     width: 100%;
     font-size: 14px;
     color: var(--informationText, #d28f51);
+    padding-left: 16px;
+    padding-right: 16px;
   }
 }
 @media only screen and (max-width: 480px) {
