@@ -471,7 +471,6 @@ function CheckoutPaymentContent({
             priceFormatCurrencySymbol={priceFormatCurrencySymbol}
             availableCredit={creditPaymentData?.availableCredit}
             lender={creditPaymentData?.lender}
-            tagline={creditPaymentData?.tagline}
           />
         );
 

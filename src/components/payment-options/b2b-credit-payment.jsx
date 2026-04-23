@@ -9,7 +9,6 @@ function CreditPayment({
   getTotalValue,
   availableCredit,
   lender,
-  tagline,
   // Payment flow
   proceedToPay,
   acceptOrder,
@@ -57,6 +56,7 @@ function CreditPayment({
   };
 
   const readyToUseText = "Ready to use";
+  const tagline = lender?.tagline || "";
   const lenderDescription = lender?.description || "";
 
   return (
