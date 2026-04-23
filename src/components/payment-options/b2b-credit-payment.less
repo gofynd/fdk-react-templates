@@ -1,9 +1,23 @@
 @import "../../styles/main.less";
 
+.creditPaymentContainer {
+  @media @desktop {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+    padding: 12px;
+  }
+}
+
 .creditWrapper {
   display: flex;
   flex-direction: column;
   gap: 12px;
+
+  @media @desktop {
+    gap: 16px;
+  }
 }
 
 .tagline {
@@ -13,6 +27,8 @@
     margin: 0;
   }
 }
+
+// ── Credit card ──────────────────────────────────────────────────────────────
 
 .creditCard {
   border: 1px solid @DividerStokes;
@@ -49,7 +65,7 @@
   line-height: 1.2;
 
   @media @mobile {
-    font-size: 28px;
+    font-size: 26px;
   }
 }
 
@@ -60,6 +76,7 @@
   border: 1px solid @DividerStokes;
   border-radius: 20px;
   padding: 4px 10px;
+  font-size: 13px;
   flex-shrink: 0;
   background-color: @ThemeAccentL5;
 
@@ -67,6 +84,24 @@
     color: @SuccessText;
   }
 }
+
+.creditReadyBadgeDanger {
+  border-color: @ErrorText;
+  background-color: @ErrorBackground;
+
+  span {
+    color: @ErrorText !important;
+  }
+}
+
+.insufficientCreditMsg {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: @ErrorText;
+  line-height: 1.4;
+}
+
+// ── Order amount row ─────────────────────────────────────────────────────────
 
 .orderAmountRow {
   background-color: @ThemeAccentL4;
@@ -78,11 +113,39 @@
   justify-content: space-between;
 }
 
+// ── Info section ─────────────────────────────────────────────────────────────
+
+.infoContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  @media @desktop {
+    gap: 12px;
+  }
+}
+
+.infoTag {
+  font-size: 13px;
+  color: @TextSubHeading;
+
+  @media @desktop {
+    padding-left: 6px;
+  }
+}
+
 .infoRow {
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  margin-top: 2px;
+
+  @media @desktop {
+    background: @InformationBackground;
+    color: @InformationText;
+    border: 1px solid @DividerStokes;
+    border-radius: 12px;
+    padding: 12px 14px;
+  }
 }
 
 .infoIcon {
@@ -94,14 +157,26 @@
 
 .infoText {
   margin: 0;
-  line-height: 1.4;
+  line-height: 1.5;
+  font-size: 13px;
 
   p {
     margin: 0;
   }
+
+  @media @desktop {
+    width: 100%;
+    font-size: 14px;
+    color: @InformationText;
+  }
+
+  @media @mobile {
+    font-size: 12px;
+  }
 }
 
-// Desktop footer: "You pay" label + amount on left, Pay Now button on right
+// ── Desktop footer ────────────────────────────────────────────────────────────
+
 .creditFooter {
   display: flex;
   align-items: center;
