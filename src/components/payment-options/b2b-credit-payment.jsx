@@ -85,9 +85,7 @@ function CreditPayment({
 
           {(tagline || lenderDescription) && (
             <div className={styles.infoContainer}>
-              {tagline && (
-                <p className={styles.infoTag}>{tagline}</p>
-              )}
+              {tagline && <p className={styles.infoTag}>" {tagline} "</p>}
               {lenderDescription && (
                 <div className={styles.infoRow}>
                   <div className={styles.infoText}>

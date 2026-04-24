@@ -346,12 +346,7 @@ h5,
 .b2b-credit-payment__creditWrapper___hRYQE {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-}
-@media only screen and (min-width: 769px) {
-  .b2b-credit-payment__creditWrapper___hRYQE {
-    gap: 16px;
-  }
+  gap: 30px;
 }
 .b2b-credit-payment__tagline___NcTsa {
   margin: 0;
@@ -438,21 +433,27 @@ h5,
 }
 @media only screen and (min-width: 769px) {
   .b2b-credit-payment__infoContainer___RpXCM {
-    gap: 12px;
+    gap: 20px;
   }
 }
 @media only screen and (max-width: 768px) {
   .b2b-credit-payment__infoContainer___RpXCM {
     margin-bottom: 16px;
+    gap: 15px;
   }
 }
 .b2b-credit-payment__infoTag___tP35c {
-  font-size: 13px;
+  font-size: 16px;
   color: var(--textSubHeading, #414340);
 }
 @media only screen and (min-width: 769px) {
   .b2b-credit-payment__infoTag___tP35c {
-    padding-left: 6px;
+    font-weight: 600;
+    font-size: 18px;
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 .b2b-credit-payment__infoRow___ZEnKH {

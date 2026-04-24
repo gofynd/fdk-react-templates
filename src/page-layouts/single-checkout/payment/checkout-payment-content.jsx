@@ -269,6 +269,7 @@ function CheckoutPaymentContent({
   const [selectedOtherPayment, setSelectedOtherPayment] = useState({});
   const [selectedNeftPayment, setSelectedNeftPayment] = useState({});
   const [selectedRtgsPayment, setSelectedRtgsPayment] = useState({});
+  const [selectedCreditPayment, setSelectedCreditPayment] = useState({});
   const [savedUPISelect, setSavedUPISelect] = useState(false);
   const [showUPILoader, setUPILoader] = useState(false);
   const [selectedPaymentPayload, setSelectedPaymentPayload] = useState({
@@ -282,6 +283,7 @@ function CheckoutPaymentContent({
     selectedOtherPayment: selectedOtherPayment,
     selectedUpiIntentApp: selectedUpiIntentApp,
     selectedNeftPayment: selectedNeftPayment,
+    selectedCreditPayment: selectedCreditPayment,
   });
   const [paymentResponse, setPaymentResponse] = useState(null);
 
@@ -1332,6 +1334,12 @@ function CheckoutPaymentContent({
         console.log("Payment mode selected");
       });
       setSelectedRtgsPayment(subMopData);
+      setSelectedTab(tab);
+    } else if (tab === "CREDIT") {
+      selectPaymentMode(paymentModePayload).then(() => {
+        console.log("Payment mode selected");
+      });
+      setSelectedCreditPayment(subMopData);
       setSelectedTab(tab);
     } else if (tab === "CARD") {
       if (subMop !== "newCARD") {
