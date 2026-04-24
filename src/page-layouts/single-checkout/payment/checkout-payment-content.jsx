@@ -4219,6 +4219,7 @@ function CheckoutPaymentContent({
             isPaymentLoading={isPaymentLoading}
             onPriceDetailsClick={onPriceDetailsClick}
             priceFormatCurrencySymbol={priceFormatCurrencySymbol}
+            loader={loader}
           />
         );
       case "PL":

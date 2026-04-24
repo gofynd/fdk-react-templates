@@ -18,6 +18,7 @@ function CreditPayment({
   isTablet,
   StickyPayNow,
   styles: sharedStyles,
+  loader,
 }) {
   const [isCreditPaymentSubmitting, setIsCreditPaymentSubmitting] =
     useState(false);
