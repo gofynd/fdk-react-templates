@@ -50,24 +50,29 @@
   color: @Mako;
   background-color: @HighlightColor;
   padding: 16px;
-  border-radius: 0px;
-  margin-bottom: 16px;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-
+  border-radius: 4px;
   .orderHeader {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+    cursor: pointer;
+    position: relative;
+
+    .filter {
+      position: absolute;
+      inset-inline-end: 0px;
+    }
+    .filterArrowUp {
+      margin-left: auto;
+      transform: rotate(180deg);
+    }
+    .filterArrowDown {
+      margin-left: auto;
+    }
 
     .orderId {
       color: @TextHeading;
       font-weight: 600;
       line-height: 140%;
+      font-weight: 700;
       font-size: 16px;
-      margin: 0;
     }
 
     .orderTime {
@@ -76,55 +81,41 @@
       font-weight: 400;
       line-height: 140%;
       margin-top: 4px;
-      margin-bottom: 0;
     }
   }
 
   .shipmentData {
     animation: fadeIn 0.5s ease;
     border-top: none;
-    margin: 16px 0 0 0;
+    margin: 16px 0;
     padding: 0;
     cursor: pointer;
     display: flex;
     gap: 16px;
-    transition: opacity 0.2s ease;
-
-    &:hover {
-      opacity: 0.8;
-    }
 
     .shipmentLeft {
-      width: 100px;
-      height: 100px;
-      flex-shrink: 0;
-      border-radius: 4px;
-      overflow: hidden;
-      background: white;
-      position: relative;
+      display: table-cell;
 
       img {
-        width: 100%;
-        height: 100%;
+        width: 80px;
+        height: 100px;
         object-fit: cover;
       }
 
       #total-item {
         text-align: center;
-        position: absolute;
-        bottom: 8px;
-        right: 8px;
+        position: relative;
+        float: right;
         background: @Mako2;
         color: white;
+        top: -40px;
+        left: -10px;
         border-radius: 50%;
         width: 35px;
         height: 35px;
         line-height: 13px;
         font-size: 13px;
         padding: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
       }
     }
     .bold {
@@ -146,39 +137,26 @@
       display: flex;
       flex-direction: column;
       flex: 1;
-      gap: 4px;
-      min-width: 0;
-
       .shipmentId {
-        margin: 0;
+        margin: 4px 0px;
       }
       .boldls {
         font-weight: 600;
-        font-size: 14px;
       }
       .uktLinks {
         cursor: pointer;
         text-decoration: none;
         color: @TextHeading;
-        font-size: 14px;
-        font-weight: 500;
-        line-height: 140%;
-        margin: 0;
-        white-space: pre-wrap;
-      }
-      .shipmentStats {
-        margin: 0;
-        color: @TextLabel;
         font-size: 12px;
         font-weight: 500;
         line-height: 140%;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-
-        span:nth-child(2) {
-          margin: 0 4px;
-        }
+      }
+      .shipmentStats {
+        margin: 4px 0px;
+        color: @TextLabel;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 140%; /* 16.8px */
       }
       .buttonContainer {
         display: flex;
@@ -267,10 +245,7 @@
   }
 
   .showAccordionBody {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    padding-top: 16px;
+    display: block;
   }
 
   .hideAccordionBody {
