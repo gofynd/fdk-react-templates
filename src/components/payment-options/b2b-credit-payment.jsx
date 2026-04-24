@@ -13,7 +13,6 @@ function CreditPayment({
   selectedPaymentPayload,
   enableLinkPaymentOption,
   isPaymentLoading,
-  loader,
   onPriceDetailsClick,
   priceFormatCurrencySymbol,
   isTablet,
@@ -119,8 +118,9 @@ function CreditPayment({
                 className={styles.creditPayBtn}
                 onClick={handlePayNow}
                 disabled={isPayDisabled}
+                isLoading={isCreditPaymentLoading}
               >
-                {!isCreditPaymentLoading ? <>Pay Now &rarr;</> : loader}
+                Pay Now &rarr;
               </FyButton>
             </div>
           )}

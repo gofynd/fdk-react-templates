@@ -4217,7 +4217,6 @@ function CheckoutPaymentContent({
             selectedPaymentPayload={selectedPaymentPayload}
             enableLinkPaymentOption={enableLinkPaymentOption}
             isPaymentLoading={isPaymentLoading}
-            loader={loader}
             onPriceDetailsClick={onPriceDetailsClick}
             priceFormatCurrencySymbol={priceFormatCurrencySymbol}
           />
