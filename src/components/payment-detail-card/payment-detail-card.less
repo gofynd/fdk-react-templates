@@ -35,12 +35,17 @@
     .icon {
       display: inline-block;
       max-width: 32px;
+      height: 32px;
+      width: 32px;
       img {
         max-width: 32px;
       }
     }
     .desc {
-      padding-inline-start: 20px;
+      padding-inline-start: 16px;
+      @media @mobile {
+        padding-inline-start: 8px;
+      }
       .text {
         display: block;
         margin: 5px 0px;

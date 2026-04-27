@@ -22,7 +22,7 @@ function BlogFooter({ title, description, button_text, button_link }) {
   return (
     <div className={`${styles.footer}`}>
       <div className={`${styles.footer__container}`}>
-        <h2 className={`${styles.footer__title}`}>{title}</h2>
+        <h1 className={`${styles.footer__title}`}>{title}</h1>
         <p
           className={`${styles.footer__description} ${styles.textBody} ${styles.breakWords}`}
         >
