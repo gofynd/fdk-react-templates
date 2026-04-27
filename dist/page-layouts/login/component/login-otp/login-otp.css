@@ -356,22 +356,11 @@ h5,
 .login-otp__sendOtpBtn___m6A1L {
   margin-top: 24px;
 }
-.login-otp__resendOtpWrapper___cfK_D {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 24px;
-  margin-top: 32px;
-  flex-wrap: nowrap;
-}
-.login-otp__didntReceiveText___d2BiD {
-  color: var(--textBody, #3c3131);
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 19.6px;
-}
 .login-otp__resendOtpBtn___dLIn7 {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 32px;
   color: var(--textSecondary, #9c9c9c);
   font-size: 14px;
   font-style: normal;

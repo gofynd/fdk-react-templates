@@ -339,10 +339,9 @@ h5,
   justify-content: space-around;
   border: 1px solid var(--dividerStokes, #d4d1d1);
   border-radius: 3px;
-  background: var(--dialogBackground, #fff);
 }
 .quantity-ctrl__qtyControl___LvP42 .quantity-ctrl__operator___HaYJA {
-  background: var(--dialogBackground, #fff) !important;
+  background: var(--pageBackground, #f8f8f8);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -352,13 +351,9 @@ h5,
   padding: 2px;
 }
 .quantity-ctrl__qtyControl___LvP42 .quantity-ctrl__operator___HaYJA .quantity-ctrl__operation___MIuuc {
-  background: var(--dialogBackground, #fff);
   display: flex;
   justify-content: center;
   align-items: center;
-}
-.quantity-ctrl__qtyControl___LvP42 button {
-  background: var(--dialogBackground, #fff);
 }
 .quantity-ctrl__qtyControl___LvP42 button:disabled {
   background-color: var(--pageBackground, #f8f8f8);
@@ -368,10 +363,10 @@ h5,
 .quantity-ctrl__qtyControl___LvP42 .quantity-ctrl__qtyAmount___NVSUc {
   width: 38px;
   height: 100%;
-  border-left: 1px solid var(--dividerStokes, #d4d1d1);
-  border-right: 1px solid var(--dividerStokes, #d4d1d1);
+  border-inline-start: 1px solid var(--dividerStokes, #d4d1d1);
+  border-inline-end: 1px solid var(--dividerStokes, #d4d1d1);
   margin: 0px;
-  background-color: var(--dialogBackground, #fff);
+  background-color: var(--pageBackground, #f8f8f8);
   display: flex;
   align-items: center;
 }
@@ -380,7 +375,7 @@ h5,
   width: 100%;
   vertical-align: middle;
   text-align: center;
-  background-color: var(--dialogBackground, #fff);
+  background-color: var(--pageBackground, #f8f8f8);
   color: var(--textHeading, #26201a);
 }
 .quantity-ctrl__qtyControl___LvP42 .quantity-ctrl__qtyAmount___NVSUc input:focus {
