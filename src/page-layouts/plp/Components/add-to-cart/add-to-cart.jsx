@@ -71,7 +71,7 @@ const AddToCart = ({
     show_quantity_control,
     hide_brand_name,
     is_limited_stock,
-    limited_stock_label,
+    limited_stock_label = t("resource.common.limited_stock_label"),
   } = globalConfig;
 
   const { media, name, short_description, variants, sizes, brand } = product;
@@ -451,16 +451,18 @@ const AddToCart = ({
               </FyButton>
             )}
           </div>
-          {is_limited_stock && limited_stock_label && (
-            <p className={styles.limitedQuantity}>
-              {(() => {
-                const label = limited_stock_label?.startsWith("t:")
-                  ? t(limited_stock_label.slice(2))
-                  : limited_stock_label;
-                return label.replace(/\{\{qty\}\}/g, productPrice?.quantity);
-              })()}
-            </p>
-          )}
+          {is_limited_stock &&
+            limited_stock_label &&
+            productPrice?.quantity < 10 && (
+              <p className={styles.limitedQuantity}>
+                {(() => {
+                  const label = limited_stock_label?.startsWith("t:")
+                    ? t(limited_stock_label.slice(2))
+                    : limited_stock_label;
+                  return label.replace(/\{\{qty\}\}/g, productPrice?.quantity);
+                })()}
+              </p>
+            )}
         </div>
       </div>
     </div>
