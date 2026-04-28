@@ -1,18 +1,6 @@
 @import "./main.less";
 
 @lg-min: 1024px;
-.visuallyHidden {
-  position: absolute !important;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  border: 0;
-  white-space: nowrap;
-}
 
 .addToCartContainer {
   @media @desktop {
@@ -75,23 +63,6 @@
       align-self: flex-start;
       max-height: calc(100dvh - 50px);
       overflow-y: auto;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      opacity: 1;
-      transform: translateX(0);
-
-      &.hidden {
-        opacity: 0;
-        transform: translateX(-20px);
-        max-width: 0;
-        flex: 0 0 0;
-        margin-inline-end: 0;
-        overflow: hidden;
-        pointer-events: none;
-        
-        [dir="rtl"] & {
-          transform: translateX(20px);
-        }
-      }
 
       @media @tablet {
         display: none;
@@ -110,7 +81,6 @@
       display: flex;
       flex-direction: column;
       gap: 24px;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
       @media @tablet {
         gap: 16px;
@@ -474,37 +444,7 @@
     }
   }
 }
-.filterToggleBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  font-size: 16px;
-  font-weight: 400;
-  color: @TextHeading;
-  cursor: pointer;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: all 0.2s ease-in-out;
-  user-select: none;
-  
-  &:active {
-    transform: translateY(0);
-  }
-  
-  .filterToggleText {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: all 0.2s ease-in-out;
-  }
-  .filterIcon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
-  }
-}
+
 .colIconBtn {
   padding: 4px;
   border: 1px solid transparent;

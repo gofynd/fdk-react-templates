@@ -201,7 +201,6 @@ function CardForm({
           {cardDetailsData && cardDetailsData.logo && (
             <img
               src={cardDetailsData.logo}
-              alt={cardDetailsData?.name || t("resource.checkout.card_network_logo")}
               className={`${styles.cardNetwork} ${cardNumberError ? styles.iconPositionOnError : ""}`}
             />
           )}

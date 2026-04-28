@@ -1,7 +1,7 @@
 @import "../../../../styles/main.less";
 
 .cartItemsListContainer {
-  padding: 24px;
+  padding: 16px;
   border: 1px solid @DividerStokes;
   border-top: 0 solid @DividerStokes;
 
@@ -36,7 +36,7 @@
 
       a {
         img {
-          width: 100%;
+          width: 85%;
           border-radius: 4px;
         }
       }
@@ -156,74 +156,6 @@
         @media @tablet {
           flex-direction: column;
           align-items: flex-start;
-        }
-
-        .priceBreakdownContainer {
-          display: flex;
-          flex-wrap: nowrap;
-          gap: 24px;
-          align-items: center;
-          justify-content: space-between;
-
-          @media @mobile {
-            flex-direction: column;
-            flex-wrap: wrap;
-            align-items: flex-start;
-            gap: 12px;
-          }
-
-          @media @tablet {
-            gap: 16px;
-          }
-
-          .priceSection {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            gap: 8px;
-            min-width: 0;
-            flex: 0 1 auto;
-
-            @media @mobile {
-              flex: 1 1 100%;
-            }
-
-            .priceLabel {
-              font-size: 12px;
-              font-weight: 500;
-              color: @TextLabel;
-              margin-bottom: 0;
-              white-space: nowrap;
-            }
-
-            .itemPrice {
-              display: flex;
-              flex-wrap: wrap;
-              align-items: center;
-              gap: 8px;
-
-              .effectivePrice {
-                color: @TextHeading;
-                font-size: 16px;
-                font-weight: 600;
-                margin-inline-end: 0;
-              }
-
-              .markedPrice {
-                font-size: 12px;
-                text-decoration: line-through;
-                color: @TextLabel;
-                margin-inline-end: 0;
-              }
-
-              .discount {
-                font-size: 12px;
-                font-weight: 500;
-                margin-inline-end: 0;
-                color: @SaleDiscountText;
-              }
-            }
-          }
         }
 
         .itemPrice {
@@ -424,13 +356,10 @@
 
       .sizeModalImage {
         flex: 0 0 18%;
-        height: 120px;
 
         img {
           width: 100%;
-          height: 100%;
           border-radius: 4px;
-          object-fit: "cover";
         }
       }
 
@@ -556,21 +485,12 @@
       background-color: var(--buttonPrimary);
       padding: 14px 0;
       text-align: center;
-      cursor: pointer;
     }
   }
 
   .disableBtn {
     opacity: 0.5;
   }
-}
-
-.imgCover {
-  object-fit: cover;
-}
-
-.imgContain {
-  object-fit: contain;
 }
 
 .selected {
@@ -805,7 +725,6 @@
       background-color: @ButtonPrimary;
       padding: 14px 0;
       text-align: center;
-      cursor: pointer;
     }
   }
 
