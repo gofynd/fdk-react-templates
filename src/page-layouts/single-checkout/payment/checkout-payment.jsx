@@ -24,8 +24,6 @@ function CheckoutPayment({
   isCouponValid,
   setIsCouponValid,
   inValidCouponData,
-  neftFileUpload = () => {},
-  rtgsFileUpload = () => {},
 }) {
   const { t } = useGlobalTranslation("translation");
   const [showFailedMessage, setShowFailedMessage] = useState(false);
@@ -38,6 +36,8 @@ function CheckoutPayment({
     setErrorMessage,
     enableLinkPaymentOption,
     getTotalValue,
+    isCreditNoteApplied,
+    isLoading,
   } = payment;
   const isMobile = useMobile();
 
@@ -119,7 +119,7 @@ function CheckoutPayment({
   return (
     <>
       <div
-        className={`${styles.paymentContainer} ${!showPayment ? styles.hidePayment : ""} ${enableLinkPaymentOption ? styles.unsetMarginTop : ""} ${getTotalValue?.() === 0 ? styles.disabledPayment : ""}`}
+        className={`${styles.paymentContainer} ${!showPayment ? styles.hidePayment : ""} ${enableLinkPaymentOption ? styles.unsetMarginTop : ""} ${getTotalValue?.() === 0 && !isCreditNoteApplied && !isLoading ? styles.disabledPayment : ""}`}
       >
         {showPayment ? (
           <>
@@ -166,8 +166,6 @@ function CheckoutPayment({
               isCouponValid={isCouponValid}
               setIsCouponValid={setIsCouponValid}
               inValidCouponData={inValidCouponData}
-              neftFileUpload={neftFileUpload}
-              rtgsFileUpload={rtgsFileUpload}
             ></CheckoutPaymentContent>
           </>
         ) : (

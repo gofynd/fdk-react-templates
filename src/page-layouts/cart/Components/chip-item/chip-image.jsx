@@ -37,7 +37,7 @@ export default function ChipImage({ product, type, imageWidth, globalConfig }) {
       alt={product?.name}
       sources={[{ width: imageWidth }]}
       aspectRatio={aspectRatio}
-      isImageFill
+      isImageFill = {globalConfig?.img_fill}
     />
   );
 };

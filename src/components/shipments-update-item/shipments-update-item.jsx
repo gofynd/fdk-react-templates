@@ -137,7 +137,7 @@ function ShipmentUpdateItem({
             </div>
             <div className={`${styles.sizeQuantityContainer}`}>
               {size && (
-                <div className={`${styles.sizeContainer} ${styles.regularxxs}`}>
+              <div className={`${styles.sizeContainer} ${styles.regularxxs} ${showQuantityError? styles.addPaddingToContainer : ''}`}>
                   <span className={`${styles.boldxxs}`}>{size}</span>
                 </div>
               )}
@@ -196,7 +196,9 @@ const ShipmentImage = ({
 
   return (
     <div className={styles.bagImg}>
-      <BagImage bag={bag} isBundle={isBundleItem} aspectRatio={aspectRatio} />
+      <BagImage bag={bag} isBundle={isBundleItem} aspectRatio={aspectRatio}
+      isImageFill={globalConfig?.img_fill}
+      />
     </div>
   );
 };

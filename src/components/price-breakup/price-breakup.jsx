@@ -60,13 +60,17 @@ function PriceBreakup({
   isInternationalTaxLabel = false,
   customClassName,
   isLoading = false,
+  priceSummaryContainerClass,
 }) {
   const { t } = useGlobalTranslation("translation");
   const cssVar = {
     "--card-border-radius": `${cardBorderRadius}`,
   };
   const priceBreakupLoaderWidth = [60, 50, 45, 90, 34];
-
+  const priceSummaryContainerStyle = useMemo(
+    () => `${styles.priceSummaryContainer} ${priceSummaryContainerClass ?? ""}`,
+    [priceSummaryContainerClass]
+  );
   const totalDiscount = useMemo(() => {
     let totalDis = 0;
     breakUpValues?.forEach((element) => {
@@ -98,7 +102,7 @@ function PriceBreakup({
 
   return (
     <div
-      className={styles.priceSummaryContainer}
+      className={priceSummaryContainerStyle}
       style={cssVar}
       id="price-breakup-container-id"
     >
@@ -127,6 +131,7 @@ function PriceBreakup({
         <>
           {priceBreakupLoaderWidth.map((width, index) => (
             <div
+              key={index}
               className={`${
                 index !== priceBreakupLoaderWidth.length - 1
                   ? styles.priceSummaryItem
@@ -165,7 +170,9 @@ function PriceBreakup({
                   >
                     {priceFormatCurrencySymbol(
                       item?.currency_symbol,
-                      item?.value
+                      item?.value,
+                      undefined,
+                      item?.currency_code
                     )}
                   </div>
                 </>
@@ -175,7 +182,9 @@ function PriceBreakup({
                   <div>
                     {priceFormatCurrencySymbol(
                       item?.currency_symbol,
-                      item?.value
+                      item?.value,
+                      undefined,
+                      item?.currency_code
                     )}
                   </div>
                 </>
@@ -206,7 +215,9 @@ function PriceBreakup({
                 <ForcedLtr
                   text={priceFormatCurrencySymbol(
                     currencySymbol,
-                    totalDiscount
+                    totalDiscount,
+                    undefined,
+                    breakUpValues?.[0]?.currency_code
                   )}
                 />
               </span>

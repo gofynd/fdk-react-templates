@@ -361,6 +361,11 @@ h5,
   padding: 16px;
   width: 25%;
 }
+@media only screen and (max-width: 480px) {
+  .profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__navContainer___pxEcU {
+    border-radius: 0px;
+  }
+}
 .profile-navigation__profilePageContainer___K5iNj .profile-navigation__mainView___N7sRC .profile-navigation__navContainer___pxEcU .profile-navigation__userData___PSyo0 {
   display: flex;
   align-items: center;

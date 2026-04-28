@@ -1,8 +1,13 @@
-import React from "react";
+import React, { useState, useMemo } from "react";
 import AddressItem from "../../../components/address-item/address-item";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./single-address-content.less";
-import { useNavigate, useGlobalTranslation } from "fdk-core/utils";
+import {
+  useNavigate,
+  useGlobalTranslation,
+  useGlobalStore,
+  useFPI,
+} from "fdk-core/utils";
 import Skeleton from "../../../components/core/skeletons/skeleton";
 
 function AddressRight({
@@ -18,7 +23,7 @@ function AddressRight({
         <div className={styles.contentTopRight}>
           <span
             className={styles.edit}
-            onClick={() => editAddress(addressItem)}
+            onClick={() => editAddress?.(addressItem)}
           >
             {t("resource.common.edit_lower")}
           </span>
@@ -38,16 +43,21 @@ function DeliverBtn({
   selectAddress,
   getTotalValue,
   showPaymentOptions,
+  isCreditNoteApplied,
 }) {
   const { t } = useGlobalTranslation("translation");
+  const fpi = useFPI();
+  const { app_features } = useGlobalStore(fpi.getters.CONFIGURATION) || {};
+  const { order = {} } = app_features || {};
   return (
     <>
       {selectedAddressId === id && (
         <div className={styles.actionContainer}>
           <button
             className={styles.deliverToThis}
+            disabled={!order?.enabled}
             onClick={() => {
-              if (getTotalValue?.() === 0) {
+              if (getTotalValue?.() === 0 && !isCreditNoteApplied) {
                 showPaymentOptions();
               }
               selectAddress();
@@ -64,6 +74,35 @@ function DeliverBtn({
 function InvalidAddress({ errorMessage }) {
   const { t } = useGlobalTranslation("translation");
   const navigate = useNavigate();
+  
+  // Filter out generic JavaScript errors that shouldn't be shown to users
+  // These are typically internal errors that should be handled gracefully
+  // Only show meaningful API/validation errors, not technical JavaScript errors
+  const isGenericJSError = errorMessage && typeof errorMessage === "string" && (
+    errorMessage.includes("Cannot read properties") ||
+    errorMessage.includes("reading 'find'") ||
+    errorMessage.includes("reading 'map'") ||
+    errorMessage.includes("reading 'length'") ||
+    errorMessage.includes("reading 'slice'") ||
+    errorMessage.includes("is not a function") ||
+    errorMessage.includes("is not defined") ||
+    errorMessage.includes("Cannot read") ||
+    errorMessage.includes("TypeError") ||
+    errorMessage.includes("ReferenceError") ||
+    (errorMessage.includes("undefined") && errorMessage.includes("reading"))
+  );
+  
+  // Don't display generic JavaScript errors to users
+  // These should be handled internally, not shown in UI
+  if (isGenericJSError) {
+    return null;
+  }
+  
+  // Also don't show if errorMessage is empty or invalid
+  if (!errorMessage || typeof errorMessage !== "string" || errorMessage.trim() === "") {
+    return null;
+  }
+  
   return (
     <div className={styles.invalidAddError}>
       <div className={styles.invalidAddErrorLeft}>
@@ -99,29 +138,43 @@ function SingleAddressContent({
   invalidAddressError,
   selectedAddressId,
   setSelectedAddressId,
-  getOtherAddress,
-  getDefaultAddress,
+  getOtherAddress = [],
+  getDefaultAddress = [],
   loader,
   isApiLoading,
   showPaymentOptions,
   getTotalValue,
+  isCreditNoteApplied,
 }) {
   const { t } = useGlobalTranslation("translation");
+  const [showAllOtherAddresses, setShowAllOtherAddresses] = useState(false);
   function selectAdd(id) {
     setSelectedAddressId(id);
   }
+
+  // Ensure getOtherAddress and getDefaultAddress are always arrays
+  const safeGetOtherAddress = Array.isArray(getOtherAddress) ? getOtherAddress : [];
+  const safeGetDefaultAddress = Array.isArray(getDefaultAddress) ? getDefaultAddress : [];
+
+  const displayedOtherAddresses = useMemo(() => {
+    if (showAllOtherAddresses || safeGetOtherAddress.length <= 3) {
+      return safeGetOtherAddress;
+    }
+    return safeGetOtherAddress.slice(0, 3);
+  }, [showAllOtherAddresses, safeGetOtherAddress]);
+
   return (
     <>
       {allAddresses &&
       allAddresses.length &&
       !(addressLoader || addressLoading || isApiLoading) ? (
         <div className={styles.addressContentConitainer}>
-          {getDefaultAddress.length > 0 ? (
+          {safeGetDefaultAddress.length > 0 ? (
             <div className={styles.address}>
               <div className={styles.heading}>
                 {t("resource.common.address.default_address")}
               </div>
-              {getDefaultAddress.map((item, index) => {
+              {safeGetDefaultAddress.map((item, index) => {
                 return (
                   <AddressItem
                     containerClassName={styles.customAddressItem}
@@ -152,6 +205,7 @@ function SingleAddressContent({
                           selectAddress={selectAddress}
                           getTotalValue={getTotalValue}
                           showPaymentOptions={showPaymentOptions}
+                          isCreditNoteApplied={isCreditNoteApplied}
                         />
                       </>
                     }
@@ -161,12 +215,12 @@ function SingleAddressContent({
             </div>
           ) : null}
 
-          {getOtherAddress.length > 0 ? (
+          {safeGetOtherAddress.length > 0 ? (
             <div className={styles.address}>
               <div className={styles.heading}>
                 {t("resource.common.address.other_address")}
               </div>
-              {getOtherAddress.map((item, index) => {
+              {displayedOtherAddresses.map((item, index) => {
                 return (
                   <AddressItem
                     containerClassName={styles.customAddressItem}
@@ -197,12 +251,37 @@ function SingleAddressContent({
                           selectAddress={selectAddress}
                           getTotalValue={getTotalValue}
                           showPaymentOptions={showPaymentOptions}
+                          isCreditNoteApplied={isCreditNoteApplied}
                         />
                       </>
                     }
                   ></AddressItem>
                 );
               })}
+
+              {safeGetOtherAddress.length > 3 && (
+                <div className={styles.showMoreBtnContainer}>
+                  <button
+                    className={styles.showOtherAddresses}
+                    onClick={() => setShowAllOtherAddresses((prev) => !prev)}
+                  >
+                    <span>
+                      {showAllOtherAddresses
+                        ? t("resource.common.show_fewer_addresses")
+                        : t("resource.common.show_more_addresses")}
+                    </span>
+                    <span
+                      className={`${styles.arrow} ${
+                        showAllOtherAddresses
+                          ? styles.rotateUp
+                          : styles.rotateDown
+                      }`}
+                    >
+                      <SvgWrapper svgSrc="arrow-down" />
+                    </span>
+                  </button>
+                </div>
+              )}
             </div>
           ) : null}
         </div>

@@ -19,7 +19,6 @@ import { FDKLink } from "fdk-core/components";
 import * as styles from "./shipment-item.less";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
 import {
-  numberWithCommas,
   priceFormatCurrencySymbol,
 } from "../../helper/utils";
 import { useGlobalTranslation } from "fdk-core/utils";
@@ -38,9 +37,6 @@ function ShipmentItem({
   globalConfig,
 }) {
   const { t } = useGlobalTranslation("translation");
-  const getPriceValue = (item) => {
-    return numberWithCommas(item);
-  };
   const getPriceCurrencyFormat = (symbol, price) => {
     return priceFormatCurrencySymbol(symbol, price);
   };
@@ -48,33 +44,6 @@ function ShipmentItem({
     onChangeValue(id);
   };
 
-    function formatUTCToDateString(utcString) {
-    if (!utcString) return "";
-
-    const date = new Date(utcString);
-
-    const options = {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    };
-
-    return date
-      .toLocaleDateString("en-GB", options)
-      .replace(" ", " ")
-      .replace(",", ",");
-  }
-
-  const ndrWindowExhausted = () => {
-    const endDateStr =
-      shipmentDetails?.ndr_details?.allowed_delivery_window?.end_date;
-    if (!endDateStr) return false;
-
-    const endDate = new Date(endDateStr);
-    const now = new Date();
-
-    return endDate < now;
-  };
 
 
   const bundleGroupId = bag?.bundle_details?.bundle_group_id;
@@ -200,9 +169,9 @@ function ShipmentItem({
                 <span className={`${styles.effectivePrice}`}>
                   {getPriceCurrencyFormat(
                     bag?.prices?.currency_symbol,
-                    getPriceValue(price)
+                    price
                   )}
-                </span>
+                </span> 
               </div>
             )}
           </div>
@@ -235,7 +204,7 @@ const ShipmentImage = ({
   const aspectRatio = getProductImgAspectRatio(globalConfig);
   const getItemImage = () => {
     return (
-      <BagImage bag={bag} isBundle={isBundleItem} aspectRatio={aspectRatio} />
+      <BagImage bag={bag} isBundle={isBundleItem} aspectRatio={aspectRatio} isImageFill={globalConfig?.img_fill} />
     );
   };
 

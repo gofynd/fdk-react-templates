@@ -86,10 +86,11 @@ const FyImage = forwardRef(
   ) => {
     const [isError, setIsError] = useState(false);
 
+    const bgColor = globalConfig?.img_container_bg || backgroundColor;
     const dynamicStyles = {
       "--aspect-ratio-desktop": `${aspectRatio}`,
       "--aspect-ratio-mobile": `${mobileAspectRatio || aspectRatio}`,
-      "--bg-color": `${globalConfig?.img_container_bg || backgroundColor}`,
+      ...(bgColor && typeof bgColor === "string" && bgColor.trim() ? { "--bg-color": `${bgColor}` } : {}),
       "--overlay-bgcolor": overlayColor,
     };
 
@@ -190,7 +191,7 @@ const FyImage = forwardRef(
 
     return (
       <div
-        className={`${styles.imageWrapper} ${isImageFill ? styles.fill : ""}
+        className={`${styles.imageWrapper} ${isImageFill ? styles.fill : styles.contain}
       ${isFixedAspectRatio ? styles.fixedAspRatio : ""} ${customClass}`}
         style={dynamicStyles}
       >

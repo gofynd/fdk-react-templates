@@ -26,10 +26,11 @@
 }
 
 .floating {
+  background: @PageBackground !important;
   position: absolute;
   transform: translateY(-50%) scale(0.9);
   z-index: 1;
-  background: @White;
+  background: @PageBackground;
   padding: 0 0.3rem;
   margin: 0 0.5rem;
   font-size: 0.8rem;
@@ -45,8 +46,14 @@
   transition: 0.1s ease-out;
   box-sizing: border-box;
   width: 100%;
-  background-color: transparent;
+  background-color: @PageBackground;
   font-weight: 500;
+
+  &[type="email"],
+  &[type="tel"] {
+    background-color: @PageBackground;
+    color: @TextHeading;
+  }
   // To be removed once viewport meta is updated
   @media @mobile {
     font-size: 1rem;
@@ -133,5 +140,6 @@
 
   input {
     flex: 1;
+    background-color: @PageBackground;
   }
 }

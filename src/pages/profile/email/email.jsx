@@ -93,7 +93,7 @@ function Email({
   return (
     <>
       <div className={styles.main}>
-        <div className={styles.header}>{t("resource.common.email_address")}</div>
+        {/* <div className={styles.header}>{t("resource.common.email_address")}</div> */}
         {emails?.length > 0 && (
           <div className={styles.formContainer}>
             <div className={styles.formItem}>
