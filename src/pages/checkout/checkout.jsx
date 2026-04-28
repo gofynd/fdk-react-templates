@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import SinglePageShipment from "../../page-layouts/single-checkout/shipment/single-page-shipment";
 import SingleAddress from "../../page-layouts/single-checkout/address/single-address";
@@ -9,8 +9,7 @@ import Stepper from "../../components/stepper/stepper";
 import Coupon from "../../page-layouts/cart/Components/coupon/coupon";
 import Comment from "../../page-layouts/cart/Components/comment/comment";
 import FyButton from "../../components/core/fy-button/fy-button";
-import { currencyFormat, formatLocale } from "../../helper/utils";
-import { useGlobalStore, useFPI } from "fdk-core/utils";
+import { priceFormatCurrencySymbol } from "../../helper/utils";
 import ZeroPayButton from "../../page-layouts/single-checkout/payment/zero-pay-btn/zero-pay-btn";
 
 function Checkout({
@@ -43,40 +42,13 @@ function Checkout({
   isCouponValid,
   setIsCouponValid,
   inValidCouponData,
+  fileUpload = () => {},
 }) {
   const [cancelQrPayment, setCancelQrPayment] = useState(null);
   const [searchParams] = useSearchParams();
   const cart_id = searchParams.get("id");
   const address_id = searchParams.get("address_id");
-  const { isLoading, isCreditNoteApplied, isPaymentLoading = false } = payment;
-  const fpi = useFPI();
-  const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
-  const locale = language?.locale;
-
-  // Calculate total price from breakupValues (similar to cart page)
-  const totalPrice = useMemo(() => {
-    // Check for breakup_values.display (checkout structure) or display (cart structure)
-    // Also handle case where breakupValues might be the entire cartShipmentDetails object
-    let display = null;
-    
-    if (breakupValues?.breakup_values?.display) {
-      display = breakupValues.breakup_values.display;
-    } else if (breakupValues?.display) {
-      display = breakupValues.display;
-    } else if (breakupValues && Array.isArray(breakupValues)) {
-      // If breakupValues is directly an array
-      display = breakupValues;
-    }
-    
-    if (!display || !Array.isArray(display)) {
-      return 0;
-    }
-    
-    // Use "total" key which represents the final payable amount after all discounts
-    // This is the amount the user will actually pay
-    const total = display.find((val) => val.key === "total");
-    return total?.value ?? 0;
-  }, [breakupValues]);
+  const { isLoading, isPaymentLoading = false } = payment;
   const handlePlaceOrder = async () => {
     if (payment?.storeCreditApplied?.isFullyApplied) {
       const { merchant_code, code, aggregator_name } =
@@ -115,7 +87,6 @@ function Checkout({
           isGuestUser={isGuestUser}
           getTotalValue={payment?.getTotalValue}
           showPaymentOptions={showPaymentOptions}
-          isCreditNoteApplied={isCreditNoteApplied}
         ></SingleAddress>
         <SinglePageShipment
           customClassName={styles.customStylesShipment}
@@ -130,10 +101,9 @@ function Checkout({
           buybox={buybox}
           payment={payment}
           availableFOCount={availableFOCount}
-          totalValue={currencyFormat(
-            totalPrice,
-            currencySymbol,
-            formatLocale(locale, countryCode, true)
+          totalValue={priceFormatCurrencySymbol(
+            payment?.getCurrencySymbol,
+            payment?.getTotalValue()
           )}
           onPriceDetailsClick={onPriceDetailsClick}
           isCartValid={isCartValid}
@@ -155,6 +125,7 @@ function Checkout({
           isCouponValid={isCouponValid}
           setIsCouponValid={setIsCouponValid}
           inValidCouponData={inValidCouponData}
+          fileUpload={fileUpload}
         ></CheckoutPayment>
       </div>
       <div className={styles.rightContainer}>
@@ -164,7 +135,6 @@ function Checkout({
           {...restCouponProps}
           currencySymbol={currencySymbol}
           handleRemoveQr={cancelQrPayment}
-          isCreditNoteApplied={isCreditNoteApplied}
         />
         {/* {!!availableCouponList?.length && (
           <Coupon
@@ -182,7 +152,7 @@ function Checkout({
           cartItemCount={cartItemsCount}
           currencySymbol={currencySymbol}
         />
-        {/* <ZeroPayButton
+        <ZeroPayButton
           payment={payment}
           showPayment={showPayment}
           loader={loader}
@@ -198,7 +168,7 @@ function Checkout({
             >
               {!isPaymentLoading ? "PLACE ORDER" : loader}
             </FyButton>
-          )} */}
+          )}
       </div>
     </div>
   );

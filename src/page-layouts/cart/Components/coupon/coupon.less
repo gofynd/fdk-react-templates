@@ -13,14 +13,12 @@
     padding: 16px;
     border-width: 1px 0;
   }
-
   .couponBoxTitle {
     font-weight: 500;
     font-size: 12px;
     line-height: 140%;
     color: @TextHeading;
   }
-
   .couponApplyBox {
     display: flex;
     align-items: center;
@@ -31,7 +29,7 @@
     background: @SuccessBackground;
     border-radius: 8px;
     gap: 16px;
-
+    cursor: pointer;
     .removeIcon,
     .arrowIcon {
       display: flex;
@@ -42,21 +40,17 @@
       border: none;
       width: 2rem;
       height: 2rem;
-
       [dir="rtl"] & {
         transform: rotate(180deg);
       }
     }
   }
-
   .couponIcon {
     width: 40px;
   }
-
   .couponApplyTitle {
     min-width: 0;
     flex: 1;
-
     .applyTxt {
       line-height: 140%;
       color: @TextHeading;
@@ -64,14 +58,12 @@
       font-size: 14px;
       word-wrap: break-word;
     }
-
     .couponAppliedSubtitles {
       border-radius: 4px;
       color: @TextBody;
       margin-top: 4px;
       font-size: 12px;
     }
-
     .couponMetaDesc {
       color: @TextBody;
       line-height: 140%;
@@ -92,80 +84,83 @@
   .modalBody {
     display: flex;
     flex-direction: column;
-
-    .errorContainer {
-      .errorText {
-        font-size: 12px !important;
-        font-weight: 600 !important;
-        margin: 0 !important;
-        color: @ErrorText !important;
-      }
+    padding: 24px;
+    @media @mobile {
+      padding: 0;
+      margin-top: 16px;
     }
 
-    .couponInputContainer {
+    .cartErrorContainer {
+      margin-bottom: 16px;
+      padding-top: 12px;
+      padding-bottom: 12px;
+      padding-inline-start: 24px;
       display: flex;
-      flex-direction: column;
-      padding: 24px;
-      border-bottom: 1px solid @DividerStokes;
-
-      @media @mobile, @tablet {
-        padding: 16px !important;
+      align-items: center;
+      line-height: 140%;
+      background-color: @ErrorBackground;
+      border-radius: 8px;
+      position: sticky;
+      top: 0px;
+      z-index: 4;
+      @media @tablet {
+        border-radius: 0;
       }
-
-      .couponInputBox {
-        position: relative;
-        border-radius: 12px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 16px;
-        width: 100%;
-
-        @media @mobile {
-          border-radius: 0;
-        }
-
-        input {
-          width: 100%;
-          border: 1px solid @DividerStokes;
-          border-radius: 4px;
-          background: @DialogBackground;
-          color: @TextBody;
-          font-size: 12px;
-          font-weight: 400;
-          padding: 16px;
-          line-height: 140%;
-
-          &:focus-visible {
-            outline: none;
-          }
-
-          &::placeholder {
-            color: @TextLabel;
-          }
-
-          &.hasError {
-            border-color: @ErrorText;
-          }
-        }
-
-        .checkBtn {
-          color: @ButtonPrimary;
-          text-transform: uppercase;
-          font-size: 14px;
-          font-weight: 600;
-          padding: 0px 13px;
-          cursor: pointer;
-          position: absolute;
-          inset-inline-end: 5%;
-        }
-
-        .checkBtn:disabled {
-          opacity: 0.5;
-        }
+      .colorErrorNormal {
+        font-size: 12px;
+        font-weight: 600;
+        margin-inline-start: 14px;
+        color: @ErrorText;
       }
     }
+    .couponInputBox {
+      position: relative;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
 
+      @media @mobile {
+        padding: 16px;
+        border-radius: 0;
+      }
+
+      input {
+        width: 100%;
+        border: 1px solid @DividerStokes;
+        border-radius: 4px;
+        background: @DialogBackground;
+        color: @TextBody;
+        font-size: 12px;
+        font-weight: 400;
+        padding: 16px;
+        line-height: 140%;
+
+        &:focus-visible {
+          outline: none;
+        }
+
+        &::placeholder {
+          color: @TextLabel;
+        }
+      }
+      .checkBtn {
+        // border: 1px solid @ButtonPrimary;
+        // border-radius: @ButtonRadius;
+        color: @ButtonPrimary;
+        text-transform: uppercase;
+        font-size: 14px;
+        font-weight: 600;
+        padding: 0px 13px;
+        cursor: pointer;
+        position: absolute;
+        inset-inline-end: 5%;
+      }
+      .checkBtn:disabled {
+        opacity: 0.5;
+      }
+    }
     .couponListTitle {
       color: @TextLabel;
       line-height: 140%;
@@ -173,14 +168,12 @@
       margin-bottom: 16px;
       font-size: 12px;
       font-weight: 500;
-
       @media @mobile {
         margin-top: 24px;
         margin-bottom: 12px;
         padding-inline-start: 16px;
       }
     }
-
     .couponList {
       display: flex;
       flex-direction: column;
@@ -190,26 +183,17 @@
         gap: 12px;
       }
     }
-
     .couponItem {
       border: 1px solid @DividerStokes;
       border-radius: 12px;
       padding: 24px;
       display: flex;
-
       @media @mobile {
         border-radius: 0;
       }
-
       &.opacity02 {
         opacity: 0.2;
       }
-
-      &.selectedCoupon {
-        border-color: @SuccessText;
-        border-width: 1px;
-      }
-
       .couponCode {
         background-color: @SuccessBackground;
         border: 1px solid @SuccessText;
@@ -220,7 +204,6 @@
         display: inline-block;
         font-size: 12px;
         font-weight: 600;
-
         &:before,
         &:after {
           content: "";
@@ -228,11 +211,9 @@
           top: 50%;
           inset-inline-start: 0;
           transform: translate(-50%, -50%) rotate(45deg);
-
           [dir="rtl"] & {
             transform: translate(50%, -50%) rotate(-45deg);
           }
-
           width: 16px;
           aspect-ratio: 1;
           background: @DialogBackground;
@@ -240,18 +221,15 @@
           border-radius: 50%;
           border-color: @SuccessText @SuccessText transparent transparent;
         }
-
         &:after {
           inset-inline-end: 0;
           inset-inline-start: auto;
           transform: translate(50%, -50%) rotate(-135deg);
-
           [dir="rtl"] & {
             transform: translate(-50%, -50%) rotate(135deg);
           }
         }
       }
-
       .couponTitle {
         line-height: 140%;
         color: @TextHeading;
@@ -259,7 +237,6 @@
         font-weight: 600;
         margin-top: 16px;
       }
-
       .couponMessage,
       .couponExpire {
         line-height: 140%;
@@ -268,7 +245,6 @@
         font-weight: 400;
         margin-top: 4px;
       }
-
       .couponApplyBtn {
         border: 1px solid @ButtonPrimary;
         border-radius: @ButtonRadius;
@@ -283,37 +259,15 @@
         cursor: pointer;
         margin-inline-start: auto;
       }
-
-      .couponRemoveBtn {
-        border: 1px solid @ButtonPrimary;
-        border-radius: @ButtonRadius;
-        color: @ButtonPrimary;
-        height: 100%;
-        text-transform: uppercase;
-        background: @ButtonSecondary;
-        display: inline-block;
-        padding: 12px 16px;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        margin-inline-start: auto;
-      }
     }
-
     .noCouponsAvailable {
       display: flex;
       flex-direction: column;
+      justify-content: center;
       align-items: center;
       padding: 0 16px;
-
-      @media @mobile, @tablet {
-        height: 62vh !important;
-        max-height: 62vh !important;
-      }
-
       .iconContainer {
         padding: 24px 0px;
-
         svg {
           g > path {
             stroke: @ButtonPrimary;
@@ -335,13 +289,11 @@
           }
         }
       }
-
       .textContainer {
         display: flex;
         flex-direction: column;
         text-align: center;
         gap: 8px;
-
         h3 {
           color: @TextHeading;
           font-size: 16px;
@@ -349,7 +301,6 @@
           font-weight: 600;
           line-height: 140%;
         }
-
         p {
           color: @TextLabel;
           font-size: 12px;
@@ -361,308 +312,77 @@
     }
   }
 }
-
-/* ===== Coupon Success Modal ===== */
-
-.couponSuccessModalContainerCustom {
-  @media @mobile {
-    width: 272px;
-  }
-}
-
-.couponSuccessModal {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
 .couponSuccessModalContainer {
   overflow: visible !important;
-  width: 300px;
-  min-width: 300px;
-  max-width: 300px;
-  margin: 0 auto;
-
-  @media @mobile {
-    width: 272px !important;
-    min-width: 272px !important;
-    max-width: 272px !important;
-    border-radius: 8px !important;
-  }
 }
-
 .couponSuccessModalContent {
-  padding-top: 40px;
   display: flex;
   align-items: center;
-  overflow: visible !important;
-  flex-direction: column;
   justify-content: center;
+  @media @desktop {
+    min-width: 400px;
+  }
   background-color: @DialogBackground;
   min-width: 300px;
   border: 1px solid @DividerStokes;
   border-radius: 8px;
-  max-height: 720px;
   min-height: 275px;
-
-  @media @mobile {
-    min-width: 272px;
-    width: 272px;
-    max-width: 272px;
-  }
-
-  .close-icon {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 3;
-  }
-
+  max-height: 720px;
+  // overflow: hidden;
+  // position: relative;
   .couponSuccessGif {
     position: absolute;
     height: 100%;
     width: 100%;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
   }
-
   .couponSuccessIcon {
     display: flex;
     justify-content: center;
     align-items: center;
-
     position: absolute;
-    top: -28px; 
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 2;
-
+    top: 0px;
     & > span {
-      position: relative; 
-      display: inline-flex;
+      position: absolute;
     }
   }
-
   .modalBody {
-    margin-top: 8px;
-    margin-bottom: 16px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    padding-top: 45px;
+    // padding-bottom: 20px;
     text-align: center;
-    gap: 4px;
-    z-index: 1;
-
+    .couponHeading {
+      color: @TextLabel;
+      line-height: 140%;
+      text-transform: capitalize;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+    }
     .couponValueSubheading {
       color: @TextBody;
-      font-size: 16px;
-      font-style: normal;
+      padding-top: 8px;
       font-weight: 600;
-      line-height: 140%;
+      color: @ButtonPrimary;
     }
-
     .couponValue {
       font-size: 42px;
       color: @ButtonPrimary;
       padding-top: 8px;
       font-weight: 700;
     }
-
-    .subTitle {
-      text-align: center;
-      font-size: 12px;
-      font-weight: 400;
-      line-height: 140%;
+    .bodyFooterBtn {
+      color: @ButtonLink;
+      background: @DialogBackground;
+      text-transform: capitalize;
+      border-top: 1px solid @DividerStokes;
+      position: relative;
+      padding-top: 20px;
+      margin-top: 20px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      border: none;
     }
-  }
-
-  .bodyFooterBtn {
-    text-align: center;
-    font-size: 12px;
-    font-weight: 600;
-    line-height: 140%;
-    font-size: 14px;
-    color: @ButtonLink;
-    background: @DialogBackground;
-    cursor: pointer;
-    border: none;
-    z-index: 1;
-    text-transform: capitalize;
-    position: relative;
-    padding-top: 20px;
-    margin-top: 20px;
-  }
-}
-
-.couponModalContainerOuter {
-  @media @mobile, @tablet {
-    max-height: 596px !important;
-    height: auto !important;
-  }
-}
-
-.couponListTitleWrapper {
-  display: flex;
-  flex-direction: column;
-  background: @PageBackground;
-
-  .sectionTitle {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 12px 0;
-    font-size: 12px;
-    font-weight: 600;
-    line-height: 140%;
-    margin: 0;
-    text-transform: uppercase;
-    background: @TextLabel;
-  }
-
-  .couponCard {
-    padding: 16px 24px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: @PageBackground;
-
-    @media @mobile, @tablet {
-      padding: 16px;
-    }
-
-    &.opacity02 {
-      opacity: 0.2;
-    }
-
-    &.selectedCoupon {
-      border: 1px solid @SuccessText;
-      border-radius: 12px;
-    }
-  }
-
-  .couponHeader {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    gap: 12px;
-  }
-
-  .couponTitle {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .priceDrop {
-    color: @TextHeading;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 140%;
-  }
-
-  .moneySave {
-    margin-top: 4px;
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 140%;
-    color: @SuccessText;
-
-    &.maxDiscount {
-      color: @ErrorText;
-    }
-  }
-
-  .applyBtn,
-  .couponRemoveBtn {
-    padding: 4px;
-    font-size: 12px;
-    font-weight: 600;
-    line-height: 140%;
-    text-transform: uppercase;
-    text-align: center;
-    white-space: nowrap;
-    color: @ButtonLink;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-  }
-
-  .couponExpire {
-    width: 100%;
-    margin-top: 8px;
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 140%;
-    color: @TextBody;
-  }
-
-  .couponMessage {
-    width: 100%;
-    margin-top: 8px;
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 140%;
-    color: @TextBody;
-  }
-
-  .divider {
-    width: 100%;
-    height: 1px;
-    margin: 12px 0;
-    background-color: @DividerStokes;
-    border: none;
-  }
-
-  .couponDesc {
-    width: 100%;
-    margin: 0;
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 140%;
-    color: @TextLabel;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .offerList {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .bestOfferContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    background-color: @HighlightColor;
-
-    @media @desktop {
-      height: calc(100vh - 210px) !important;
-      overflow-y: auto;
-    }
-  }
-
-  .moreOfferContainer {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .addMoreItemText {
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 140%;
-    color: @ErrorText;
   }
 }

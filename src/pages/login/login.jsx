@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./login.less";
 import LoginPassword from "../../page-layouts/login/component/login-password/login-password";
@@ -10,7 +10,6 @@ import { useGlobalTranslation } from "fdk-core/utils";
 import GoogleLoginButton from "../../page-layouts/login/component/soacial-login-button/google-login-button";
 import FacebookLogin from "../../page-layouts/login/component/soacial-login-button/facebook-login-button";
 import AppleLoginButton from "../../page-layouts/login/component/soacial-login-button/apple-login-button";
-import Tooltip from "../../components/tooltip/tooltip";
 
 function Login({
   logo = {},
@@ -52,9 +51,6 @@ function Login({
   onAppleCredential,
 }) {
   const { t } = useGlobalTranslation("translation");
-  const [isTermsAccepted, setIsTermsAccepted] = useState(false);
-  const [showConsentTooltip, setShowConsentTooltip] = useState(false);
-
   return (
     <div className={styles.loginWrapper}>
       <div>
@@ -102,8 +98,6 @@ function Login({
               isForgotPassword,
               onForgotPasswordClick,
               onLoginFormSubmit,
-              isTermsAccepted,
-              setShowConsentTooltip,
             }}
           />
         )}
@@ -121,25 +115,12 @@ function Login({
               onResendOtpClick,
               onLoginFormSubmit,
               getOtpLoading,
-              isTermsAccepted,
-              setShowConsentTooltip,
             }}
           />
         )}
         {!isFormSubmitSuccess && (
           <>
-            <div className={styles.consentWrapperWithTooltip}>
-              <TermPrivacy
-                onChange={setIsTermsAccepted}
-                checked={isTermsAccepted}
-              />
-              <Tooltip
-                message={t("resource.auth.terms_and_condition")}
-                isVisible={showConsentTooltip}
-                onClose={() => setShowConsentTooltip(false)}
-                position="bottom"
-              />
-            </div>
+            <TermPrivacy />
             <div className={styles.loginBtnGroup}>
               {showLoginToggleButton && (
                 <LoginModeButton {...{ onLoginToggleClick, isOtp }} />
@@ -158,14 +139,14 @@ function Login({
                   application_id={application_id}
                 />
               )}
-              {social?.apple && (
+              {/* {social?.apple && (
                 <AppleLoginButton
                   appleClientId={appleId}
                   onAppleCredential={onAppleCredential}
                   redirectURI={appleRedirectURI}
                   onError={handleGoogleError}
                 />
-              )}
+              )} */}
               {isRegisterEnabled && (
                 <LoginRegisterToggle
                   label={
