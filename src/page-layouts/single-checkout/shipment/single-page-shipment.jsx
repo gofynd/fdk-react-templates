@@ -28,6 +28,7 @@ function SinglePageShipment({
   payment,
   getDeliveryPromise,
   redirectPaymentOptions,
+  globalConfig,
 }) {
   const { t } = useGlobalTranslation("translation");
   const navigate = useNavigate();
@@ -104,6 +105,7 @@ function SinglePageShipment({
             redirectPaymentOptions={redirectPaymentOptions}
             loader={loader}
             isPaymentLoading={isPaymentLoading}
+            globalConfig={globalConfig}
           ></SingleShipmentContent>
           <StickyPayNow
             btnTitle={
