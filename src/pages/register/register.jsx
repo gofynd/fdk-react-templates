@@ -22,7 +22,7 @@ function Register({
   mobileInfo,
   isEmail = true,
   emailLevel = "hard",
-  // referralCodeDefault = "",
+  referralCodeDefault = "",
   error = null,
   loginButtonLabel,
   onLoginButtonClick = () => { },
@@ -35,7 +35,7 @@ function Register({
   const emailId = useId();
   const passwordId = useId();
   const confirmPasswordId = useId();
-  // const referralCodeId = useId();
+  const referralCodeId = useId();
 
   const [isPasswordShow, setIsPasswordShow] = useState(false);
   const [isConfirmPasswordShow, setIsConfirmPasswordShow] = useState(false);
@@ -69,7 +69,7 @@ function Register({
       },
       password: "",
       confirmPassword: "",
-      // referralCode: referralCodeDefault,
+      referralCode: referralCodeDefault,
     },
   });
 
@@ -337,7 +337,7 @@ function Register({
               )
             }
           </div >
-          {/* <div className={styles.registerNameInput}>
+          <div className={styles.registerNameInput}>
             <label className={styles.inputTitle} htmlFor={referralCodeId}>
               {t("resource.auth.referral_code_label")}{" "}
               <span className={styles.optional}>
@@ -355,7 +355,7 @@ function Register({
             <p className={styles.referralHint}>
               {t("resource.auth.referral_code_hint")}
             </p>
-          </div> */}
+          </div>
 
           {
             errors.root && (
