@@ -78,6 +78,10 @@ export default function ChipItem({
   const customizationOptions =
     singleItemDetails?.article?._custom_json?._display || [];
 
+  const availableSizes = singleItemDetails?.availability?.available_sizes || [];
+  const hideSizeChangeButton =
+    globalConfig?.hide_single_size && availableSizes.length === 1;
+
   const [items, setItems] = useState([
     { title: "Customization", content: customizationOptions, open: false },
   ]);
@@ -421,23 +425,25 @@ export default function ChipItem({
             )}
             <div className={styles.itemSizeQuantityContainer}>
               <div className={styles.itemSizeQuantitySubContainer}>
-                <button
-                  className={styles.sizeContainer}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSizeModal(singleItem);
-                  }}
-                >
-                  <div className={styles.sizeName}>
-                    {`${t("resource.common.size")}: ${currentSize}`}
-                  </div>
-                  <span className={styles.itemSvg}>
-                    <SvgWrapper
-                      svgSrc="arrow-down"
-                      style={{ width: "20px", height: "24px" }}
-                    />
-                  </span>
-                </button>
+                {!hideSizeChangeButton && (
+                  <button
+                    className={styles.sizeContainer}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSizeModal(singleItem);
+                    }}
+                  >
+                    <div className={styles.sizeName}>
+                      {`${t("resource.common.size")}: ${currentSize}`}
+                    </div>
+                    <span className={styles.itemSvg}>
+                      <SvgWrapper
+                        svgSrc="arrow-down"
+                        style={{ width: "20px", height: "24px" }}
+                      />
+                    </span>
+                  </button>
+                )}
                 {!isOutOfStock && isServiceable && (
                   <QuantityControl
                     isCartUpdating={isCartUpdating}

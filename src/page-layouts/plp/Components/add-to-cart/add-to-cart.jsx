@@ -130,7 +130,7 @@ const AddToCart = ({
 
   const isSizeSelectionBlock = pageConfig?.size_selection_style === "block";
   const isSingleSize = sizes?.sizes?.length === 1;
-  const isSizeCollapsed = pageConfig?.hide_single_size && isSingleSize;
+  const isSizeCollapsed = globalConfig?.hide_single_size && isSingleSize;
   const preSelectFirstOfMany = pageConfig?.preselect_size;
 
   const images = [
