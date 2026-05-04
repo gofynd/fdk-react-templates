@@ -1,4 +1,4 @@
-import React, { useId, useState, useMemo, useEffect } from "react";
+import React, { useId, useState, useMemo, useEffect, useRef } from "react";
 import { useForm, Controller } from "react-hook-form";
 import {
   validateName,
@@ -22,7 +22,6 @@ function Register({
   mobileInfo,
   isEmail = true,
   emailLevel = "hard",
-  // referralCodeDefault = "",
   error = null,
   loginButtonLabel,
   onLoginButtonClick = () => { },
@@ -35,7 +34,8 @@ function Register({
   const emailId = useId();
   const passwordId = useId();
   const confirmPasswordId = useId();
-  // const referralCodeId = useId();
+  const referralCodeId = useId();
+  const referralCodeInitialized = useRef(false);
 
   const [isPasswordShow, setIsPasswordShow] = useState(false);
   const [isConfirmPasswordShow, setIsConfirmPasswordShow] = useState(false);
@@ -57,6 +57,7 @@ function Register({
     getValues,
     setError,
     clearErrors,
+    setValue,
   } = useForm({
     defaultValues: {
       firstName: "",
@@ -69,9 +70,29 @@ function Register({
       },
       password: "",
       confirmPassword: "",
-      // referralCode: referralCodeDefault,
+      referralCode: "",
     },
   });
+
+  // Auto-fill referral code from localStorage on mount
+  useEffect(() => {
+    if (referralCodeInitialized.current) return;
+    referralCodeInitialized.current = true;
+    try {
+      const raw = localStorage.getItem("loyalty_referral_code");
+      if (!raw) return;
+      let code = null;
+      try {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed.code === "string") code = parsed.code;
+      } catch {
+        if (typeof raw === "string" && raw.trim()) code = raw.trim();
+      }
+      if (code) setValue("referralCode", code);
+    } catch {
+      // localStorage unavailable — skip silently
+    }
+  }, [setValue]);
 
   const isEmailRequired = useMemo(() => {
     if (emailLevel === "soft") {
@@ -337,9 +358,9 @@ function Register({
               )
             }
           </div >
-          {/* <div className={styles.registerNameInput}>
+          <div className={styles.registerNameInput}>
             <label className={styles.inputTitle} htmlFor={referralCodeId}>
-              {t("resource.auth.referral_code_label")}{" "}
+              {t("resource.auth.referral_code_label", { defaultValue: "Referral Code" })}{" "}
               <span className={styles.optional}>
                 ({t("resource.common.optional")})
               </span>
@@ -353,9 +374,9 @@ function Register({
               })}
             />
             <p className={styles.referralHint}>
-              {t("resource.auth.referral_code_hint")}
+              {t("resource.auth.referral_code_hint", { defaultValue: "Enter a referral code to earn bonus points." })}
             </p>
-          </div> */}
+          </div>
 
           {
             errors.root && (
