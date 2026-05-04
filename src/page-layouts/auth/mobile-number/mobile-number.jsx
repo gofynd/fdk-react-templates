@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useId } from "react";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 import * as styles from "./mobile-number.less";
-import { PhoneNumberUtil, PhoneNumberType } from "google-libphonenumber";
+import { PhoneNumberUtil } from "google-libphonenumber";
 import { useGlobalTranslation } from "fdk-core/utils";
 
 function MobileNumber({
@@ -40,19 +40,8 @@ function MobileNumber({
 
   const isPhoneValid = (phoneNumber, countryIso2) => {
     try {
-      const parsedNumber = phoneUtil.parseAndKeepRawInput(
-        phoneNumber,
-        countryIso2
-      );
-      if (!phoneUtil.isValidNumber(parsedNumber)) return false;
-      // India-specific: libphonenumber misclassifies newer allocations (e.g. Jio 68x); TRAI mandates mobile numbers start with 6-9.
-      if (countryIso2 === "in") {
-        return /^[6-9]\d{9}$/.test(parsedNumber.getNationalNumber().toString());
-      }
-      const numberType = phoneUtil.getNumberType(parsedNumber);
-      return (
-        numberType === PhoneNumberType.MOBILE ||
-        numberType === PhoneNumberType.FIXED_LINE_OR_MOBILE
+      return phoneUtil.isValidNumber(
+        phoneUtil.parseAndKeepRawInput(phoneNumber, countryIso2)
       );
     } catch (error) {
       return false;
@@ -63,15 +52,10 @@ function MobileNumber({
     mobileNumber?.replace(new RegExp(`^\\+${dialCode}`), "");
 
   const handleChange = (phone, { country }) => {
-    const countryIso2 = country?.iso2 || countryIso || "in";
-    const fullPhone = phone.startsWith("+")
-      ? phone
-      : `+${country?.dialCode}${phone}`;
-    const validationResult = isPhoneValid(fullPhone, countryIso2);
     onChange?.({
       mobile: getNumber(phone, country?.dialCode),
       countryCode: country?.dialCode,
-      isValidNumber: validationResult,
+      isValidNumber: isPhoneValid(phone),
     });
   };
 
@@ -82,14 +66,10 @@ function MobileNumber({
   }, [inputId, isFocused]);
 
   useEffect(() => {
-    // Only call setCountry when there is no existing phone value.
-    // react-international-phone's setCountry fires onChange with just the dial code ("+91"),
-    // which clears the mobile number. Skipping it when a value exists preserves the phone.
-    // The PhoneInput value prop ("+${countryCode}${mobile}") already drives the country flag display.
-    if (countryIso && phoneInputRef?.current?.setCountry && !mobile) {
+    if (countryIso && phoneInputRef?.current?.setCountry) {
       phoneInputRef?.current?.setCountry(countryIso);
     }
-  }, [countryIso, mobile]);
+  }, [countryIso, phoneInputRef?.current, mobile]);
 
   return (
     <div
@@ -105,7 +85,7 @@ function MobileNumber({
             fontSize: "12px",
             fontStyle: "normal",
             fontWeight: "400",
-            color: "var(--textLabel , #7d7676)",
+            color: "var(--textLabel , #7d7676)" 
           }}
         >
           {label || t("resource.common.mobile")}
@@ -166,9 +146,9 @@ function MobileNumber({
           onKeyDown: handleKeyDown,
           autoComplete: "tel",
           ...inputProps,
-          style: {
-            width: "100%",
-          },
+          style :{
+            width: "100%"
+          }
         }}
         placeholder={placeholder}
         hideDropdown={!allowDropdown}

@@ -40,7 +40,7 @@ const StickyPayNow = ({
           )}
           {!isJuspay ? (
             <button
-              className={`${styles.cartCheckoutBtn} ${styles.checkoutButton} ${enableLinkPaymentOption ? styles.linkPayBtn : ""}`}
+              className={`${styles.cartCheckoutBtn} ${styles.checkoutButton}`}
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();

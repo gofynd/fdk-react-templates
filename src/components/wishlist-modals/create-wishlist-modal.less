@@ -1,0 +1,211 @@
+@import "../../styles/main.less";
+
+@border-color: @DividerStokes;
+@light-text-color: @TextLabel;
+
+.createWishlistModal {
+  background-color: @ThemeAccentL5;
+
+  .createWishlistModalHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    gap: 10px;
+
+    @media @desktop {
+      padding: 24px;
+    }
+  }
+
+  .createWishlistModalTitle {
+    font-size: 16px;
+    font-weight: 600;
+    width: 100%;
+    color: @TextHeading;
+    font-family: var(--font-body, "WorkSans");
+
+    @media @desktop {
+      font-family: var(--font-body, "WorkSans");
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 22.4px;
+    }
+  }
+
+  .createWishlistModalClose {
+    width: 24px;
+    height: 24px;
+  }
+
+  .noteContainer {
+    padding: 16px;
+    border-top: 1px solid @DividerStokes;
+
+    @media @desktop {
+      min-width: 450px;
+      padding: 24px;
+    }
+
+    .fieldset {
+      padding: 0;
+      margin: 0;
+      position: relative;
+      background-color: @White;
+      border-radius: 8px;
+      border: 1px solid @DividerStokes;
+      background: @ThemeAccentL5;
+    }
+
+    .legend {
+      position: absolute;
+      top: -10px;
+      left: 12px;
+      background: @ThemeAccentL5;
+      padding: 0 8px;
+      color: @TextLabel;
+      font-family: var(--font-body, "WorkSans");
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: -0.24px;
+    }
+
+    .textareaWrapper {
+      display: flex;
+      align-items: flex-end;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .textarea {
+      flex: 1;
+      width: 100%;
+      padding: 13px 16px;
+      border: none;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+      resize: none !important;
+      color: @TextBody;
+      resize: vertical;
+      box-sizing: border-box;
+      font-family: var(--font-body, "WorkSans");
+      background-color: @White;
+      transition: border-color 0.2s ease;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 18px;
+      letter-spacing: -0.28px;
+
+      @media @desktop {
+        padding: 16px;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 18px;
+        letter-spacing: -0.28px;
+      }
+
+      &:focus {
+        outline: none;
+        border-color: @ButtonPrimary;
+      }
+
+      &::placeholder {
+        color: @light-text-color;
+      }
+    }
+  }
+
+  .noteFooter {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 0;
+    padding-top: 8px;
+    gap: 10px;
+
+    &.error {
+      justify-content: space-between;
+    }
+
+    .errorMessage {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: @ErrorText;
+      font-family: var(--font-body, "WorkSans");
+      font-size: 12px;
+      font-weight: 400;
+    }
+  }
+
+  .charCount {
+    font-size: 14px;
+    color: @TextLabel;
+    font-family: var(--font-body, "WorkSans");
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: -0.24px;
+  }
+
+  .buttonContainer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    border-top: 1px solid @DividerStokes;
+
+    @media @desktop {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-left: 24px;
+      padding-right: 24px;
+      padding-bottom: 24px;
+    }
+  }
+
+  .button {
+    padding: 12px 16px;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: var(--font-body, "WorkSans");
+    width: 100%;
+    letter-spacing: -0.24px;
+    text-transform: uppercase;
+
+    @media @desktop {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 18px;
+      letter-spacing: -0.28px;
+      text-transform: uppercase;
+      padding: 12px 16px;
+      width: min-content;
+    }
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    &.cancelButton {
+      background-color: @ButtonSecondary;
+      border: 1px solid @ButtonPrimary;
+      color: @ButtonPrimary;
+
+      @media @desktop {
+        width: fit-content;
+      }
+    }
+
+    &.createButton {
+      background-color: @ButtonPrimary;
+      border: 1px solid @ButtonPrimary;
+      color: @ButtonSecondary;
+    }
+  }
+}
