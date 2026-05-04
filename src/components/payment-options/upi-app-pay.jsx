@@ -38,6 +38,9 @@ function UpiAppPayment({
   vpa,
   timeRemaining,
   selectedTab,
+  handleProceedToPayClick,
+  isCouponApplied,
+  isCouponValid,
 }) {
   const isTablet = useViewport(0, 768);
 
@@ -100,9 +103,9 @@ function UpiAppPayment({
     textAlign: "center",
     color: "var(--buttonLink)",
   };
-  console.log(isTablet, "isTablet");
   useEffect(() => {
-    if (selectedTab === "UPI" && isTablet) {
+    if (!selectedUpiIntentApp && selectedTab === "UPI" && isTablet) {
+      selectMop("UPI", "UPI", "UPI");
       setSelectedUpiIntentApp("gpay");
       selectedUpiRef.current = null;
       setvpa("");
@@ -133,6 +136,7 @@ function UpiAppPayment({
                         setvpa("");
                         setUPIError(false);
                         cancelQrPayment();
+                        selectMop("UPI", "UPI", app);
                       }}
                       className={`${styles.upiApp} ${!upiApps?.includes("any") ? styles.notBorderBottom : ""} ${selectedUpiIntentApp === app ? styles.selectedUpiApp : ""}`}
                     >
@@ -164,9 +168,8 @@ function UpiAppPayment({
                 onClick={() => {
                   setSelectedUpiIntentApp("any");
                   selectedUpiRef.current = "any";
-                  selectMop("UPI", "UPI", "UPI");
+                  selectMop("UPI", "UPI", "any");
                   removeDialogueError();
-                  setShowUpiRedirectionModal(true);
                 }}
                 className={styles.moreApps}
               >
@@ -201,7 +204,7 @@ function UpiAppPayment({
                   if (disbaleCheckout?.message) {
                     acceptOrder();
                   }
-                  selectMop("UPI", "UPI", "UPI");
+                  handleProceedToPayClick();
                 }}
               />
             ) : (

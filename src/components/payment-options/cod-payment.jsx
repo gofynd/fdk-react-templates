@@ -19,6 +19,7 @@ function CodPayment({
   SvgWrapper,
   getTotalValue,
   Spinner,
+  isCouponValid,
 }) {
   const isTablet = useViewport(0, 768);
   return (
@@ -41,7 +42,7 @@ function CodPayment({
             <button
               className={`${styles.commonBtn} ${styles.payBtn}`}
               onClick={() => proceedToPay("COD", selectedPaymentPayload)}
-              disabled={isPaymentLoading}
+              disabled={isPaymentLoading || !isCouponValid}
             >
               {!isPaymentLoading ? t("resource.checkout.place_order") : loader}
             </button>

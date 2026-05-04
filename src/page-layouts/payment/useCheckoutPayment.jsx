@@ -30,7 +30,6 @@ export function useCheckoutPayment({
   setCancelQrPayment,
   isCouponApplied,
   juspayErrorMessage,
-  setMopPayload,
   styles,
 }) {
   const fpi = useFPI();
@@ -56,6 +55,8 @@ export function useCheckoutPayment({
     validateCoupon,
     selectPaymentMode,
     enableLinkPaymentOption,
+    setIsPaymentLoading,
+    setShowUpiRedirectionModal,
   } = payment;
 
   // env / derived
@@ -308,12 +309,12 @@ export function useCheckoutPayment({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cardDetailsData?.card_brand]);
 
-  useEffect(() => {
-    if (isCouponApplied) {
-      selectMop("CARD", "CARD", "CARD");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isJuspayCouponApplied, isCouponApplied]);
+  // useEffect(() => {
+  //   if (isCouponApplied) {
+  //     selectMop("CARD", "CARD", "CARD");
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [isJuspayCouponApplied, isCouponApplied]);
 
   const resetCardValidationErrors = () => {
     setCardNumberError("");
@@ -562,7 +563,7 @@ export function useCheckoutPayment({
       setSelectedCardless(subMopData);
     } else if (tab === "UPI") {
       if (mop === "QR") await showQrCode();
-      else if (mop === "UPI") await handleProceedToPayClick();
+      // else if (mop === "UPI") await handleProceedToPayClick();
     } else if (tab === "Other") {
       setSelectedOtherPayment(subMopData);
     } else if (tab === "WL") {
@@ -579,7 +580,7 @@ export function useCheckoutPayment({
     setTab(tabIn);
     setMop(mopIn);
     setSubMop(subMopIn);
-
+    console.log(tabIn, mopIn, subMopIn, "subMopIn");
     const { mopData, subMopData } = paymentModeDetails(mopIn, subMopIn);
     let payload;
 
@@ -624,14 +625,11 @@ export function useCheckoutPayment({
         merchantCode: subMopData?.merchant_code,
       };
     }
-
     if (!enableLinkPaymentOption) {
-      if (selectedTab === tabIn) setMopPayload(payload);
-      else setMopPayload(null);
+      fpi.custom.setValue("validateCouponPayload", payload);
     }
-
     let isValid = true;
-    if (isCouponApplied && selectedTab === tabIn) {
+    if (isCouponApplied && (selectedTab === tabIn || tabIn === "COD")) {
       const { code, title, display_message_en, valid } =
         !enableLinkPaymentOption && (await checkCouponValidity(payload));
       isValid = !code || (code && valid);
@@ -671,7 +669,6 @@ export function useCheckoutPayment({
         merchant_code: subMopData?.merchant_code,
       };
     }
-
     if (tabIn === "COD") {
       selectPaymentMode(paymentModePayload).then(() =>
         console.log("Payment mode selected")
@@ -684,7 +681,8 @@ export function useCheckoutPayment({
       setSelectedCardless(subMopData);
     } else if (tabIn === "UPI") {
       if (mopIn === "QR") await showQrCode();
-      else if (mopIn === "UPI") await handleProceedToPayClick();
+      else if (mop === "UPI" && subMopIn === "any")
+        await handleProceedToPayClick();
     } else if (tabIn === "WL") {
       setSelectedWallet(subMopData);
     } else if (tabIn === "NB") {
@@ -693,6 +691,29 @@ export function useCheckoutPayment({
       setSelectedPayLater(subMopData);
     } else if (tabIn === "Other") {
       setSelectedOtherPayment(subMopData);
+    }
+  };
+
+  const validateCouponOnCreditNoteApplied = async (mopName, mopCode) => {
+    const { subMopData } = paymentModeDetails(mopName, mopCode);
+
+    const payload = {
+      id: cart_id,
+      address_id,
+      payment_mode: mopName,
+      aggregator_name: subMopData?.aggregator_name,
+      payment_identifier: subMopData?.code ?? "",
+      merchant_code: subMopData?.merchant_code,
+    };
+    fpi.custom.setValue("creditValidateCouponPayload", payload);
+    const { code, title, display_message_en, valid } =
+      !enableLinkPaymentOption && (await checkCouponValidity(payload));
+    const isValid = !code || (code && valid);
+
+    if (!isValid) {
+      setCouponValidity({ title, message: display_message_en, valid });
+      setShowCouponValidityModal(true);
+      return;
     }
   };
 
@@ -975,6 +996,7 @@ export function useCheckoutPayment({
 
   const handleProceedToPayClick = async () => {
     try {
+      setShowUpiRedirectionModal(true);
       let res = await proceedToPay("UPI", {
         ...selectedPaymentPayload,
         selectedUpiIntentApp: selectedUpiRef.current || selectedUpiIntentApp,
@@ -1025,6 +1047,7 @@ export function useCheckoutPayment({
   function cancelUPIPayment() {
     setshowUPIModal(false);
     stopPolling();
+    setIsPaymentLoading(false);
   }
 
   const getCardBorder = (card) => {
@@ -1127,6 +1150,8 @@ export function useCheckoutPayment({
       }
     } catch (err) {
       console.log("Payment cancellation failed");
+    } finally {
+      setIsPaymentLoading(false);
     }
   };
 
@@ -1281,5 +1306,7 @@ export function useCheckoutPayment({
     getOPBorder,
     handleScrollToTop,
     vpa,
+    validateCouponOnCreditNoteApplied,
+    handleProceedToPayClick,
   };
 }
