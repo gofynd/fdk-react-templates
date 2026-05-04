@@ -129,7 +129,7 @@ const AddToCart = ({
   const { price_per_piece } = productPrice;
 
   const isSizeSelectionBlock = pageConfig?.size_selection_style === "block";
-  const isSingleSize = sizes?.sizes?.length === 1;
+  const isSingleSize = !sizes?.multi_size || false;
   const isSizeCollapsed = globalConfig?.hide_single_size && isSingleSize;
   const preSelectFirstOfMany = pageConfig?.preselect_size;
 
