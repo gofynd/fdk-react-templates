@@ -13,13 +13,6 @@
  * @param {function} onAddAddress - Callback function to handle adding a new address.
  * @param {function} onUpdateAddress - Callback function to handle updating an existing address.
  * @param {function} onGetLocality - Callback function to fetch locality information based on the address.
- * @param {boolean} isGuestUser - Indicates if the user is a guest user.
- * @param {object} user - User object containing profile information for auto-filling fields.
- * @param {string} user.firstName - User's first name.
- * @param {string} user.lastName - User's last name.
- * @param {string} user.email - User's email address.
- * @param {object} user.phone - User's phone information.
- * @param {string} user.phone.mobile - User's mobile number.
  * @param {component} customFooter - Custom React component for rendering the footer of the form, typically a submit button.
  *
  * Default Props:
@@ -50,19 +43,16 @@
  *
  */
 
-import React, { useEffect, useRef, useState, useMemo } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as styles from "./address-form.less";
 import GoogleMapAddress from "../google-map/google-map";
 import FormInputSelector from "./form-input-selector";
 import FyDropdown from "../core/fy-dropdown/fy-dropdown";
-import { useGlobalTranslation, useFPI, useGlobalStore } from "fdk-core/utils";
 import HomeIcon from "../../assets/images/home-type.svg";
 import OfficeIcon from "../../assets/images/office-type.svg";
 import FriendsFamilyIcon from "../../assets/images/friends-family.svg";
 import OtherIcon from "../../assets/images/other-type.svg";
-import { isRunningOnClient } from "../../helper/utils";
-import { useAddressAutofill } from "../../helper/hooks";
 
 const defaultFormSchema = [
   {
@@ -81,7 +71,7 @@ const defaultFormSchema = [
           pattern: {
             value: /^[A-Za-z0-9,./\s-]+$/,
             message:
-            "House No can only contain letters, numbers, comma, period, hyphen, and slash",
+              "House No can only contain letters, numbers, comma, period, hyphen, and slash",
           },
           maxLength: {
             value: 80,
@@ -101,7 +91,7 @@ const defaultFormSchema = [
           pattern: {
             value: /^[A-Za-z0-9,./\s-]+$/,
             message:
-              "address can only contain letters, numbers, comma, period, hyphen, and slash"
+              "address can only contain letters, numbers, comma, period, hyphen, and slash",
           },
           maxLength: {
             value: 80,
@@ -212,33 +202,15 @@ const defaultFormSchema = [
       {
         key: "phone",
         display: "Mobile Number",
-        type: "mobile",
+        type: "text",
         required: true,
         fullWidth: false,
         validation: {
           required: "Mobile number is required",
-          validate: (value) => {
-            if (!value) return "Mobile number is required";
-            
-            // Always expect an object from MobileNumber component
-            if (typeof value === 'object') {
-              // Trust the component's validation if available
-              if (value.isValidNumber === true) return true;
-              
-              // If no validation flag, validate the mobile number
-              if (value.mobile) {
-                const mobileNumber = value.mobile.toString().replace(/[\s\-+]/g, '');
-                if (mobileNumber.length !== 10) return "Mobile number must be 10 digits";
-                return /^[6-9]\d{9}$/.test(mobileNumber) || "Invalid mobile number format";
-              }
-              return "Invalid mobile number";
-            }
-            
-            // Convert any string input to proper format
-            const mobileNumber = value.toString().replace(/[\s\-+]/g, '');
-            if (mobileNumber.length !== 10) return "Mobile number must be 10 digits";
-            return /^[6-9]\d{9}$/.test(mobileNumber) || "Invalid mobile number format";
-          }
+          pattern: {
+            value: /^[6-9]\d{9}$/,
+            message: "Invalid mobile number",
+          },
         },
       },
       {
@@ -263,105 +235,27 @@ const defaultFormSchema = [
 
 const addressTypes = [
   {
-    label: "resource.common.breadcrumb.home",
+    label: "Home",
     value: "Home",
     icon: <HomeIcon className={styles.typeIcon} />,
   },
   {
-    label: "resource.common.work",
+    label: "Work",
     value: "Work",
     icon: <OfficeIcon className={styles.typeIcon} />,
   },
   {
-    label: "resource.common.friends_&_family",
+    label: "Friends & Family",
     value: "Friends & Family",
     icon: <FriendsFamilyIcon className={styles.typeIcon} />,
   },
   {
-    label: "resource.common.other",
+    label: "Other",
     value: "Other",
     icon: <OtherIcon className={styles.typeIcon} />,
   },
   // Add more address types as needed
 ];
-
-export const AddressFormInputs = ({
-  formSchema = [],
-  customStyles = {},
-  control = {},
-  formMethods = {},
-  onChange = () => {},
-}) => {
-  const formContainerRef = useRef(null);
-  const [currBgColor, setCurrBgColor] = useState("#fff");
-
-  useEffect(() => {
-    if (!isRunningOnClient()) return;
-    if (formContainerRef?.current) {
-      let levelChecked = 0;
-      const maxLevel = 20;
-
-      let parentEle = formContainerRef?.current?.parentElement;
-      while (parentEle && levelChecked < maxLevel) {
-        levelChecked++;
-        const computedStyle = window.getComputedStyle(parentEle);
-        const backgroundColor = computedStyle?.backgroundColor;
-        if (
-          backgroundColor !== "rgba(0, 0, 0, 0)" &&
-          backgroundColor !== "transparent"
-        ) {
-          setCurrBgColor(backgroundColor);
-          break;
-        }
-        parentEle = parentEle.parentElement;
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    if (onChange && formMethods?.getValues) {
-      const currentValues = formMethods.getValues();
-      onChange(currentValues);
-    }
-  }, [formMethods]);
-
-  return (
-    <div className={styles?.addressFormWrapper}>
-      {formSchema?.map((group, index) => (
-        <div key={index} className={styles.formGroup}>
-          <div
-            ref={formContainerRef}
-            className={
-              typeof customStyles?.formContainer === "string"
-                ? customStyles.formContainer
-                : styles.formContainer
-            }
-            style={
-              typeof customStyles?.formContainer === "object"
-                ? customStyles.formContainer
-                : undefined
-            }
-          >
-            {group?.fields?.map((field) => (
-              <FormInputSelector
-                labelClassName={styles.labelClassName}
-                isSingleField={group?.fields?.length === 1}
-                key={field.key}
-                formData={field}
-                control={control}
-                formMethods={{ ...formMethods }}
-                allowDropdown={false}
-                {...(typeof field.showAsOptional !== "undefined" && {
-                  showAsOptional: field.showAsOptional,
-                })}
-              />
-            ))}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-};
 
 const AddressForm = ({
   internationalShipping,
@@ -375,48 +269,23 @@ const AddressForm = ({
   onUpdateAddress = () => {},
   onGetLocality = () => {},
   isGuestUser = false,
-  user = null,
-  customFooter,
+  customFooter = (
+    <button
+      className={`${styles.commonBtn} ${styles.deliverBtn}`}
+      type="submit"
+    >
+      {isNewAddress ? "Add Address" : "Update Address"}
+    </button>
+  ),
   setI18nDetails,
   handleCountrySearch,
   getFilteredCountries,
   selectedCountry,
   countryDetails,
 }) => {
-  const { t } = useGlobalTranslation("translation");
-  const fpi = useFPI();
   const isOtherAddressType = !["Home", "Work", "Friends & Family"].includes(
     addressItem?.address_type
   );
-
-  // Get currentCountry from global store (header selection)
-  const customValues = useGlobalStore(fpi?.getters?.CUSTOM_VALUE) || {};
-  const i18nDetails = useGlobalStore(fpi?.getters?.i18N_DETAILS) || {};
-  const { countryCurrencies } = customValues ?? {};
-  
-  // Get currentCountry based on header selection (same logic as useInternational)
-  const currentCountry = useMemo(() => {
-    return countryCurrencies?.find(
-      (country) => country.iso2 === i18nDetails?.countryCode
-    );
-  }, [countryCurrencies, i18nDetails?.countryCode]);
-
-  // Use custom hook for optimized autofill data
-  const { autofillData: userAutofillData } = useAddressAutofill(
-    user,
-    isGuestUser
-  );
-
-  // Conditionally exclude phone from autofill data when international shipping is enabled
-  const autofillDataForForm = useMemo(() => {
-    if (internationalShipping && userAutofillData?.phone) {
-      // eslint-disable-next-line no-unused-vars
-      const { phone, ...rest } = userAutofillData;
-      return rest;
-    }
-    return userAutofillData;
-  }, [userAutofillData, internationalShipping]);
-
   const {
     control,
     register,
@@ -439,9 +308,7 @@ const AddressForm = ({
       otherAddressType:
         addressItem && isOtherAddressType ? addressItem?.address_type : "",
       geo_location: { latitude: "", longitude: "" },
-      country: selectedCountry || t("resource.localization.india"),
-      // Auto-fill user data using memoized utility function (excluding phone if international)
-      ...autofillDataForForm,
+      country: selectedCountry || "India",
       // area_code: addressItem?.area_code || defaultPincode || "",
     },
   });
@@ -451,114 +318,24 @@ const AddressForm = ({
   const address_type = watch("address_type");
   const sector = watch("sector");
 
-  /**
-   * Transforms phone number from addressItem format to form format
-   * Handles both string and object formats for backward compatibility
-   * @param {string|object|undefined} phone - Phone number from addressItem
-   * @param {string|undefined} countryPhoneCode - Country phone code from addressItem
-   * @returns {object|undefined} Formatted phone object or undefined
-   */
-  const transformPhoneForForm = (phone, countryPhoneCode) => {
-    // Return undefined if phone is not provided
-    if (!phone) {
-      return undefined;
-    }
-
-    // If phone is already in the correct object format with all required fields
-    if (
-      typeof phone === 'object' &&
-      phone.mobile &&
-      phone.countryCode &&
-      phone.isValidNumber !== undefined
-    ) {
-      return phone;
-    }
-
-    // If phone is a string, convert to object format
-    if (typeof phone === 'string') {
-      return {
-        mobile: phone,
-        countryCode: countryPhoneCode || "91",
-        isValidNumber: true // Assume valid if it's from a saved address
-      };
-    }
-
-    // If phone is an object but missing some fields, fill them in
-    if (typeof phone === 'object') {
-      return {
-        mobile: phone.mobile || phone || "",
-        countryCode: phone.countryCode || countryPhoneCode || "91",
-        isValidNumber: phone.isValidNumber !== undefined ? phone.isValidNumber : true
-      };
-    }
-
-    // Fallback: return undefined if phone format is unexpected
-    return undefined;
-  };
-
-useEffect(() => {
-  if (addressItem) {
-    const transformedPhone = transformPhoneForForm(
-      addressItem.phone,
-      addressItem.country_phone_code
-    );
-
-    // Destructure to exclude phone from addressItem spread, then add transformed phone if available
-    // eslint-disable-next-line no-unused-vars
-    const {
-      phone: _,
-      country_phone_code: __,
-      ...addressItemWithoutPhone
-    } = addressItem;
-
-    reset({
-      ...addressItemWithoutPhone,
-      ...(transformedPhone && { phone: transformedPhone }),
-      address_type: addressItem?.address_type
-        ? isOtherAddressType
-          ? "Other"
-          : addressItem?.address_type
-        : "Home",
-      otherAddressType:
-        addressItem && isOtherAddressType ? addressItem?.address_type : "",
-      is_default_address: isNewAddress
-        ? true
-        : (addressItem?.is_default_address ?? false),
-      // ✅ FIXED: Only add geo_location if it exists, don't create new objects
-      ...(addressItem?.geo_location && {
-        geo_location: addressItem.geo_location,
-      }),
-      // ✅ FIXED: Use ternary to avoid creating new values on every render
-      country: addressItem?.country || selectedCountry,
-    });
-  } else {
-    setValue("is_default_address", true);
-    setValue("address_type", "Home");
-    // Auto-fill user data when creating new address using memoized data
-    if (userAutofillData.name) {
-      setValue("name", userAutofillData.name);
-    }
-    // Don't prefill phone number if international shipping is enabled
-    if (!internationalShipping && userAutofillData.phone && userAutofillData.phone.mobile) {
-      setValue("phone", {
-        mobile: userAutofillData.phone.mobile,
-        countryCode: userAutofillData.phone.countryCode || "91",
-        isValidNumber: true,
+  useEffect(() => {
+    if (addressItem) {
+      reset({
+        ...getValues(),
+        ...addressItem,
+        address_type: addressItem?.address_type
+          ? isOtherAddressType
+            ? "Other"
+            : addressItem?.address_type
+          : "Home",
+        otherAddressType:
+          addressItem && isOtherAddressType ? addressItem?.address_type : "",
       });
+    } else {
+      setValue("is_default_address", true);
+      setValue("address_type", "Home");
     }
-    if (userAutofillData.email) {
-      setValue("email", userAutofillData.email);
-    }
-  }
-}, [
-  addressItem,
-  reset,
-  userAutofillData,
-  internationalShipping,
-  isNewAddress,
-  selectedCountry,
-  isOtherAddressType,
-]);
+  }, [addressItem, reset]);
 
   useEffect(() => {
     setShowOtherText(address_type === "Other");
@@ -571,7 +348,6 @@ useEffect(() => {
   }, [sector]);
 
   useEffect(() => {
-    if (!isRunningOnClient()) return;
     if (formContainerRef?.current) {
       let levelChecked = 0;
       const maxLevel = 20;
@@ -604,59 +380,26 @@ useEffect(() => {
     );
   };
 
-  const onSubmit = async (data) => {
+  const onSubmit = (data) => {
     let payload = { ...data };
     if (payload.address_type === "Other") {
       payload.address_type = payload?.otherAddressType || "Other";
     }
     delete payload?.otherAddressType;
-    // Convert country object to country name string if it's an object
-    // Handles: countryCurrencies objects (with name/display_name/iso2) and API country objects
-    if (payload.country && typeof payload.country === "object" && payload.country !== null) {
-      payload.country = payload.country.display_name || payload.country.name || payload.country.iso2 || String(payload.country);
-    }
     if (isNewAddress) {
-      const result = await Promise.resolve(onAddAddress(removeNullValues(payload)));
-      if (result && !result?.success && result?.errors) {
-        const fieldErrors = result?.errors?.[0]?.extensions?.details?.field_errors;
-        if (fieldErrors && typeof fieldErrors === "object") {
-          for (const [field, messages] of Object.entries(fieldErrors)) {
-            if (Array.isArray(messages) && messages[0]) {
-              setError(field, { type: "manual", message: messages[0] });
-            }
-          }
-        }
-      }
+      onAddAddress(removeNullValues(payload));
     } else {
-      const result = await Promise.resolve(onUpdateAddress(removeNullValues(payload)));
-      if (result && !result?.success && result?.errors) {
-        const fieldErrors = result?.errors?.[0]?.extensions?.details?.field_errors;
-        if (fieldErrors && typeof fieldErrors === "object") {
-          for (const [field, messages] of Object.entries(fieldErrors)) {
-            if (Array.isArray(messages) && messages[0]) {
-              setError(field, { type: "manual", message: messages[0] });
-            }
-          }
-        }
-      }
+      onUpdateAddress(removeNullValues(payload));
     }
   };
 
   const handleCountryChange = (event) => {
-    // Only update header country when adding a new address
-    // When editing, don't change the header country - it should remain as user's preference
-    if (isNewAddress) {
-      setI18nDetails(event);
-    }
-    
+    setI18nDetails(event);
     setValue("country", event);
     setTimeout(() => {
       formSchema?.forEach((group) =>
         group?.fields?.forEach(({ key }) => {
-          // Don't clear user auto-filled fields when country changes
-          if (key !== "name" && key !== "phone" && key !== "email") {
-            setValue(key, "");
-          }
+          setValue(key, "");
         })
       );
     }, 0);
@@ -664,24 +407,7 @@ useEffect(() => {
 
   const selectAddress = (data) => {
     //setResetStatus(false);
-    // Get current form values to preserve name, phone, and email
-    const currentValues = getValues();
-    // Get contact info from addressItem if available (for edit scenario)
-    const addressItemPhone = addressItem?.phone 
-      ? transformPhoneForForm(addressItem.phone, addressItem.country_phone_code)
-      : null;
-    
-    // Merge Google Maps data with existing form values, preserving contact info
-    const mergedData = {
-      ...currentValues,
-      ...data,
-      // Preserve name, phone, and email - prioritize current form, then addressItem, then data
-      name: currentValues.name || addressItem?.name || data.name || userAutofillData?.name || "",
-      // Don't use userAutofillData phone if international shipping is enabled
-      phone: currentValues.phone || addressItemPhone || data.phone || (!internationalShipping ? userAutofillData?.phone : "") || "",
-      email: currentValues.email || addressItem?.email || data.email || userAutofillData?.email || "",
-    };
-    reset(mergedData);
+    reset(data);
     formSchema?.forEach((group) =>
       group?.fields?.forEach(({ type, key }) => {
         if (type === "list") {
@@ -707,25 +433,15 @@ useEffect(() => {
         {internationalShipping && isNewAddress && (
           <div className={`${styles.formGroup} ${styles.formContainer}`}>
             <FyDropdown
-              value={
-                selectedCountry?.name || 
-                selectedCountry?.display_name || 
-                selectedCountry || 
-                currentCountry?.name ||
-                currentCountry?.display_name ||
-                countryDetails?.display_name ||
-                countryDetails?.name ||
-                (getFilteredCountries()?.[0]?.key) ||
-                ""
-              }
+              value={selectedCountry}
               onChange={handleCountryChange}
               onSearch={handleCountrySearch}
               options={getFilteredCountries()}
               optionValue="display_name"
               optionLabel="display_name"
               showDropdownIcon
-              label={t("resource.localization.country")}
-              placeholder={t("resource.localization.select_country")}
+              label="Country"
+              placeholder="Select country"
               containerClassName={styles.customClass}
             />
           </div>
@@ -748,9 +464,7 @@ useEffect(() => {
           </div>
         ))}
         <div className={styles.addressTypeContainer}>
-          <label className={styles.addressTypeHeader}>
-            {t("resource.common.save_as")}{" "}
-          </label>
+          <label className={styles.addressTypeHeader}>SAVE AS </label>
           <div className={styles.typeWrap}>
             {addressTypes?.map((type) => (
               <button
@@ -760,7 +474,7 @@ useEffect(() => {
                 className={`${styles.typeBtn} ${watch("address_type") === type.value ? styles.selected : ""}`}
               >
                 {type.icon}
-                <span>{t(type.label)}</span>
+                <span>{type.label}</span>
               </button>
             ))}
           </div>
@@ -769,39 +483,37 @@ useEffect(() => {
             {...register("address_type", { required: true })}
           />
           {errors.address_type && (
-            <span className={`${styles.formError}`}>{t("resource.common.field_required")}</span>
+            <span className={`${styles.formError}`}>Field is required</span>
           )}
-        </div >
+        </div>
         {showOtherText && (
           <div className={styles.formItemDiv}>
             <label
               className={styles.formLabel}
               style={{ backgroundColor: currBgColor }}
             >
-              {t("resource.localization.other_address_type")} <span className={`${styles.formReq}`}>*</span>
-            </label >
+              Other Address Type <span className={`${styles.formReq}`}>*</span>
+            </label>
             <input
               {...register("otherAddressType", {
                 validate: (value) => {
                   if (!value.trim()) {
-                    return `${t("resource.common.address.address_type")} ${t("resource.common.address.is_required")}`;
+                    return "Address Type is required";
                   }
                   if (value.length < 1 || value.length > 30) {
-                    return t("resource.common.validation_length", { min: 1 || 0, max: 30 });
+                    return "Length must be between 1 and 30";
                   }
                   return true;
                 },
               })}
               className={`${styles.formInputBox} ${styles.otherInput}`}
             />
-            {
-              errors.otherAddressType && (
-                <div className={`${styles.formError}`}>
-                  {errors.otherAddressType.message}
-                </div>
-              )
-            }
-          </div >
+            {errors.otherAddressType && (
+              <div className={`${styles.formError}`}>
+                {errors.otherAddressType.message}
+              </div>
+            )}
+          </div>
         )}
         {!isGuestUser && (
           <div className={styles.defaultAddressContainer}>
@@ -812,20 +524,11 @@ useEffect(() => {
               {...register("is_default_address")}
             />
             <label className={styles.label} htmlFor="is_default_address">
-             {t("resource.common.address.make_this_my_default_address")}
+              Make this my default address
             </label>
           </div>
         )}
-        <div>
-          {customFooter ? 
-            customFooter : 
-            <button
-              className={`${styles.commonBtn} ${styles.deliverBtn}`}
-              type="submit"
-            >
-              {isNewAddress ? t("resource.common.address.add_address") : t("resource.common.address.update_address")}
-          </button>}
-      </div>
+        <div>{customFooter}</div>
       </form>
     </div>
   );

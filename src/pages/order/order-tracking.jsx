@@ -1,11 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import * as styles from "./order-tracking.less";
-import { useNavigate, useGlobalTranslation } from "fdk-core/utils";
 import FyInput from "../../components/core/fy-input/fy-input";
 import FyButton from "../../components/core/fy-button/fy-button";
 
 function OrderTracking({ instMob }) {
-  const { t } = useGlobalTranslation("translation");
   const [showDetails, setShowDetails] = useState(false);
 
   const [orderId, setOrderId] = useState("");
@@ -23,16 +22,16 @@ function OrderTracking({ instMob }) {
   return (
     <div className="basePageContainer margin0auto">
       <div className={`${styles.trackOrderCntr}`}>
-        <h2 className={`${styles.orderTitle}`}>{t("resource.order.where_is_order_id")}?</h2>
+        <h2 className={`${styles.orderTitle}`}>Where is my order?</h2>
         <div className={`${styles.trackOrder}`}>
           <FyInput
-            label={isFocussed || orderId ? t("resource.order.enter_order_id")  : ""}
+            label={isFocussed || orderId ? "Enter Order ID" : ""}
             labelVariant="floating"
             value={orderId}
-            placeholder={!isFocussed ? t("resource.order.enter_order_id") : ""}
+            placeholder={!isFocussed ? "Enter Order ID" : ""}
             maxLength="20"
             error={showError}
-            errorMessage={t("resource.order.invalid_order_id")}
+            errorMessage="Invalid Order Id"
             onChange={(e) => setOrderId(e.target.value)}
             onFocus={() => setIsFocussed(true)}
             onBlur={() => setIsFocussed(false)}
@@ -44,20 +43,20 @@ function OrderTracking({ instMob }) {
             size="medium"
             onClick={trackOrder}
           >
-            {t("resource.order.track_order_caps")}
+            TRACK ORDER
           </FyButton>
           <FyButton
             className={styles.btn}
             variant="text"
             onClick={() => setShowDetails(!showDetails)}
           >
-           {t("resource.order.where_is_order_id")}?
+            WHERE IS ORDER ID?
           </FyButton>
           {showDetails && (
             <div>
               <img
                 src={instMob}
-                alt={`${t("resource.order.where_is_order_id")}?`}
+                alt="where is order id ?"
                 className={`${styles.demoImg}`}
               />
             </div>

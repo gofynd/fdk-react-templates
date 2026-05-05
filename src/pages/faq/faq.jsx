@@ -2,7 +2,6 @@ import React from "react";
 import { FDKLink } from "fdk-core/components";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./faq.less";
-import { useGlobalTranslation } from "fdk-core/utils";
 
 function Faq({
   faqCategories,
@@ -15,7 +14,6 @@ function Faq({
   defaultFaqCategory,
   EmptyStateComponent = () => <></>,
 }) {
-  const { t } = useGlobalTranslation("translation");
   const handleQuestionClick = (index) => {
     setFaqs((preVal) => {
       const updatedFaqs = [...preVal];
@@ -35,7 +33,7 @@ function Faq({
     updateSearchParams(params);
   };
 
-  const navigateToContactUsPage = () => { };
+  const navigateToContactUsPage = () => {};
 
   return (
     <div
@@ -64,14 +62,14 @@ function Faq({
               <h1
                 className={`${styles[hasCatQuery && "hide-on-mobile"]} fontHeader`}
               >
-                {t("resource.faq.frequently_asked_questions")}
+                Frequently Asked Questions
               </h1>
             </div>
             <div className={styles["contact-us"]}>
-              <span>{t("resource.faq.still_need_help")}</span>
+              <span>Still need help?</span>
               <FDKLink to="/contact-us">
                 <button type="button" onClick={navigateToContactUsPage}>
-                {t("resource.common.contact_us_caps")}
+                  CONTACT US
                 </button>
               </FDKLink>
             </div>

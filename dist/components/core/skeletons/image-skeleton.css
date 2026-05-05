@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 18px;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 1.5;
+    line-height: 24px;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .skeletons__caption-medium___Fqp0a,
 .skeletons__captionMedium___m7kLu {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .skeletons__caption-semi-bold___rpF8T,
 .skeletons__captionSemiBold___hZxFt {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -260,11 +260,11 @@ h5,
 }
 .skeletons__mr-5___dJOZi,
 .skeletons__mr5___JOISB {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .skeletons__mr-2___gyXFm,
 .skeletons__mr2___ZAxYg {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .skeletons__py-5___kZ8WX,
 .skeletons__py5___G9_Fm {
@@ -350,9 +350,6 @@ h5,
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
   animation: skeletons__loading___qKZUW 0.8s infinite;
 }
-[dir="rtl"] .skeletons__card___njYyO canvas {
-  transform: translateX(100%);
-}
 @media only screen and (max-width: 768px) {
   .skeletons__card___njYyO canvas {
     display: none;
@@ -369,9 +366,6 @@ h5,
 @keyframes skeletons__loading___qKZUW {
   100% {
     transform: translateX(100%);
-  }
-  [dir="rtl"] 100% {
-    transform: translateX(-100%);
   }
 }
 
