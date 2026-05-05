@@ -27,18 +27,29 @@
  * @param {Function} [props.onRemoveClick=() => {}] - Callback function for remove icon click.
  * @param {boolean} [props.centerAlign=false] - Flag to center align text.
  * @param {boolean} [props.showAddToCart=false] - Flag to display the add to cart button.
+ * @param {Function} [props.onClick=() => {}] - Callback function for card click.
+ * @param {boolean} [props.showBadge=true] - Flag to display product badges.
+ * @param {boolean} [props.showColorVariants=false] - Flag to display color variant dots.
+ * @param {boolean} [props.isSlider=false] - Flag to indicate if card is used in a slider.
  *
  * @returns {JSX.Element} The rendered product card component.
  *
+ * Note: Color variants are now clickable and will change the product image using optimized state management.
  */
 
-import React, { useMemo } from "react";
-import { currencyFormat } from "../../helper/utils";
+import React, { useMemo, useState, useCallback, useEffect } from "react";
+import {
+  currencyFormat,
+  formatLocale,
+  isValidCustomBadge,
+} from "../../helper/utils";
 import { useMobile } from "../../helper/hooks";
 import FyImage from "../core/fy-image/fy-image";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
 import * as styles from "./product-card.less";
 import FyButton from "../core/fy-button/fy-button";
+import { useGlobalStore, useFPI, useGlobalTranslation } from "fdk-core/utils";
+import ForcedLtr from "../forced-ltr/forced-ltr";
 
 const ProductCard = ({
   product,
@@ -56,9 +67,12 @@ const ProductCard = ({
   isPrice = true,
   isSaleBadge = true,
   isWishlistIcon = true,
+  isCustomBadge = true,
   isImageFill = false,
   showImageOnHover = false,
+  customImageContainerClass = "",
   imageBackgroundColor = "",
+  customeProductDescContainerClass = "",
   imagePlaceholder = "",
   columnCount = { desktop: 4, tablet: 3, mobile: 1 },
   WishlistIconComponent = () => <SvgWrapper svgSrc="wishlist-plp" />,
@@ -66,6 +80,7 @@ const ProductCard = ({
   RemoveIconComponent = () => (
     <SvgWrapper svgSrc="item-close" className={styles.removeIcon} />
   ),
+  actionButtonText,
   followedIdList = [],
   onWishlistClick = () => {},
   handleAddToCart = () => {},
@@ -73,9 +88,27 @@ const ProductCard = ({
   centerAlign = false,
   showAddToCart = false,
   showBadge = true,
+  showColorVariants = false,
   isSlider = false,
+  onClick = () => {},
+  isServiceable = true,
 }) => {
+  const { t } = useGlobalTranslation("translation");
+  const fpi = useFPI();
+  const i18nDetails = useGlobalStore(fpi?.getters?.i18N_DETAILS) || {};
+  const locale = i18nDetails?.language?.locale || "en";
+  const countryCode = i18nDetails?.countryCode || "IN";
   const isMobile = useMobile();
+
+  const [isMobileView, setIsMobileView] = useState(false);
+  useEffect(() => {
+    const checkMobileView = () => {
+      setIsMobileView(window.innerWidth <= 1024);
+    };
+    checkMobileView();
+    window.addEventListener("resize", checkMobileView);
+    return () => window.removeEventListener("resize", checkMobileView);
+  }, []);
 
   const getListingPrice = (key) => {
     if (!product.price) return "";
@@ -85,22 +118,36 @@ const ProductCard = ({
 
     switch (listingPrice) {
       case "min":
-        price = currencyFormat(priceDetails.min, priceDetails.currency_symbol);
+        price = currencyFormat(
+          priceDetails.min,
+          priceDetails.currency_symbol,
+          formatLocale(locale, countryCode, true)
+        );
         break;
       case "max":
-        price = currencyFormat(priceDetails.max, priceDetails.currency_symbol);
+        price = currencyFormat(
+          priceDetails.max,
+          priceDetails.currency_symbol,
+          formatLocale(locale, countryCode, true)
+        );
         break;
       case "range":
         price =
           priceDetails.min !== priceDetails.max
             ? `${currencyFormat(
                 priceDetails.min,
-                priceDetails.currency_symbol
+                priceDetails.currency_symbol,
+                formatLocale(locale, countryCode, true)
               )} - ${currencyFormat(
                 priceDetails.max,
-                priceDetails.currency_symbol
+                priceDetails.currency_symbol,
+                formatLocale(locale, countryCode, true)
               )}`
-            : currencyFormat(priceDetails.min, priceDetails.currency_symbol);
+            : currencyFormat(
+                priceDetails.min,
+                priceDetails.currency_symbol,
+                formatLocale(locale, countryCode, true)
+              );
         break;
       default:
         break;
@@ -108,29 +155,85 @@ const ProductCard = ({
     return price;
   };
 
-  const getProductImages = () => {
-    return product?.media?.filter((media) => media.type === "image");
-  };
+  // =================== OPTIMIZED COLOR VARIANT FUNCTIONALITY ===================
 
-  const imageUrl = getProductImages()?.[0]?.url || "";
-  const imageAlt =
-    getProductImages()?.[0]?.alt ||
-    `${product?.brand?.name} | ${product?.name}`;
-  const hoverImageUrl = getProductImages()?.[1]?.url || "";
-  const hoverImageAlt =
-    getProductImages()?.[1]?.alt ||
-    `${product?.brand?.name} | ${product?.name}`;
+  // Memoized variant processing for better performance
+  const colorVariants = useMemo(() => {
+    const variants = product.variants?.find(
+      (variant) =>
+        variant.display_type === "color" || variant.display_type === "image"
+    );
 
-  const shadeVariants = product.variants?.find(
-    (variant) => variant.display_type === "color"
+    if (!variants?.items?.length) {
+      return { items: [], count: 0, defaultVariant: null, hasVariants: false };
+    }
+
+    const defaultVariant = variants.items.find(
+      (variant) => product.slug === variant.slug
+    );
+
+    return {
+      items: variants.items,
+      count: variants.items.length,
+      defaultVariant,
+      hasVariants: true,
+    };
+  }, [product.variants, product.slug]);
+
+  // Optimized state management for selected variant
+  const [selectedVariant, setSelectedVariant] = useState(null);
+
+  // Current active variant with fallback
+  const currentShade = selectedVariant || colorVariants.defaultVariant;
+
+  // Optimized image processing with memoization
+  const getProductImages = useCallback(
+    (variant = null) => {
+      // Priority: variant medias -> product media -> empty array
+      if (variant?.medias?.length) {
+        return variant.medias.filter((media) => media.type === "image");
+      }
+      return product?.media?.filter((media) => media.type === "image") || [];
+    },
+    [product?.media]
   );
-  const shadeVariantsCount = shadeVariants?.items?.length - 1 || 0;
-  const currentShade = shadeVariants?.items?.find(
-    (variant) => product?.slug === variant?.slug
-  );
-  const variants = shadeVariants?.items
-    ?.filter((variant) => variant.slug !== currentShade?.slug)
-    .slice(0, 3);
+
+  // Memoized image data to prevent unnecessary recalculations
+  const imageData = useMemo(() => {
+    const currentImages = getProductImages(currentShade);
+    const fallbackImages = getProductImages();
+
+    return {
+      url: currentImages[0]?.url || fallbackImages[0]?.url || imagePlaceholder,
+      alt:
+        currentImages[0]?.alt ||
+        fallbackImages[0]?.alt ||
+        `${product?.brand?.name} | ${product?.name}`,
+      hoverUrl: currentImages[1]?.url || fallbackImages[1]?.url || "",
+      hoverAlt:
+        currentImages[1]?.alt ||
+        fallbackImages[1]?.alt ||
+        `${product?.brand?.name} | ${product?.name}`,
+    };
+  }, [
+    currentShade,
+    getProductImages,
+    imagePlaceholder,
+    product?.brand?.name,
+    product?.name,
+  ]);
+
+  // Optimized variant display order with memoization
+  const orderedVariants = useMemo(() => {
+    if (!colorVariants.hasVariants) return [];
+
+    const { items, defaultVariant } = colorVariants;
+    const otherVariants = items.filter((v) => v.uid !== defaultVariant?.uid);
+
+    return defaultVariant ? [defaultVariant, ...otherVariants] : items;
+  }, [colorVariants]);
+
+  // =================== END OPTIMIZED VARIANT FUNCTIONALITY ===================
 
   const hasDiscount =
     getListingPrice("effective") !== getListingPrice("marked");
@@ -163,6 +266,20 @@ const ProductCard = ({
     handleAddToCart(product?.slug);
   };
 
+  // Optimized variant click handler with useCallback
+  const handleVariantClick = useCallback(
+    (event, variant) => {
+      event?.preventDefault();
+      event?.stopPropagation();
+
+      // Only update if different variant is selected
+      if (variant.uid !== currentShade?.uid) {
+        setSelectedVariant(variant);
+      }
+    },
+    [currentShade?.uid]
+  );
+
   return (
     <div
       className={`${styles.productCard} ${
@@ -170,12 +287,13 @@ const ProductCard = ({
       } ${styles[customClass[0]]} ${styles[customClass[1]]} ${
         styles[customClass[2]]
       } ${styles.animate} ${gridClass} ${isSlider ? styles.sliderCard : ""}`}
+      onClick={onClick}
     >
-      <div className={styles.imageContainer}>
-        {!isMobile && showImageOnHover && hoverImageUrl && (
+      <div className={`${styles.imageContainer} ${customImageContainerClass} ${!product.sellable ? styles.outOfStockContainer : ""}`}>
+        {!isMobile && showImageOnHover && imageData.hoverUrl && (
           <FyImage
-            src={hoverImageUrl}
-            alt={hoverImageAlt}
+            src={imageData.hoverUrl}
+            alt={imageData.hoverAlt}
             aspectRatio={aspectRatio}
             isImageFill={isImageFill}
             backgroundColor={imageBackgroundColor}
@@ -186,8 +304,8 @@ const ProductCard = ({
           />
         )}
         <FyImage
-          src={imageUrl || imagePlaceholder}
-          alt={imageAlt}
+          src={imageData.url}
+          alt={imageData.alt}
           aspectRatio={aspectRatio}
           isImageFill={isImageFill}
           backgroundColor={imageBackgroundColor}
@@ -200,7 +318,7 @@ const ProductCard = ({
           <button
             className={`${styles.wishlistBtn} ${isFollowed ? styles.active : ""}`}
             onClick={handleWishlistClick}
-            title="Wislist Icon"
+            title={t("resource.product.wishlist_icon")}
           >
             <WishlistIconComponent isFollowed={isFollowed} />
           </button>
@@ -209,7 +327,7 @@ const ProductCard = ({
           <button
             className={`${styles.wishlistBtn} ${isFollowed ? styles.active : ""}`}
             onClick={handleRemoveClick}
-            title="Remove Icon"
+            title={t("resource.product.wishlist_icon")}
           >
             <RemoveIconComponent />
           </button>
@@ -217,24 +335,28 @@ const ProductCard = ({
         {!product.sellable ? (
           <div className={`${styles.badge} ${styles.outOfStock}`}>
             <span className={`${styles.text} ${styles.captionNormal}`}>
-              Out of stock
+              {t("resource.common.out_of_stock")}
             </span>
           </div>
-        ) : product.teaser_tag && showBadge ? (
+        ) : isCustomBadge && isValidCustomBadge(product.teaser_tag) && showBadge ? (
           <div className={styles.badge}>
             <span className={`${styles.text} ${styles.captionNormal}`}>
-              {product?.teaser_tag?.substring(0, 14)}
+              {isMobileView
+                ? `${product?.teaser_tag?.substring(0, 8)}...`
+                : product?.teaser_tag?.substring(0, 14)}
             </span>
           </div>
         ) : isSaleBadge && showBadge && product.discount && product.sellable ? (
           <div className={`${styles.badge} ${styles.sale}`}>
             <span className={`${styles.text} ${styles.captionNormal}`}>
-              Sale
+              {t("resource.common.sale")}
             </span>
           </div>
         ) : null}
       </div>
-      <div className={styles.productDescContainer}>
+      <div
+        className={`${styles.productDescContainer} ${customeProductDescContainerClass}`}
+      >
         <div className={styles.productDesc}>
           {isBrand && product.brand && (
             <h3 className={styles.productBrand}>{product.brand.name}</h3>
@@ -253,48 +375,52 @@ const ProductCard = ({
                 <span
                   className={`${styles["productPrice--sale"]} ${styles.h4}`}
                 >
-                  {getListingPrice("effective")}
+                  <ForcedLtr text={getListingPrice("effective")} />
                 </span>
               )}
               {hasDiscount && (
                 <span
                   className={`${styles["productPrice--regular"]} ${styles.captionNormal}`}
                 >
-                  {getListingPrice("marked")}
+                  <ForcedLtr text={getListingPrice("marked")} />
                 </span>
               )}
               {product.discount && (
                 <span
-                  className={`${styles["productPrice--discount"]} ${styles.captionNormal} `}
+                  className={`${styles["productPrice--discount"]} ${styles.captionNormal}   ${centerAlign ? styles["productPrice--textCenter"] : ""}`}
                 >
-                  ({product.discount?.toString().toLowerCase()})
+                  ({product.discount})
                 </span>
               )}
             </div>
           )}
-          {shadeVariantsCount !== 0 && (
+
+          {/* OPTIMIZED COLOR VARIANTS SECTION */}
+          {colorVariants.hasVariants && showColorVariants && (
             <div className={styles.productVariants}>
-              <div className={`${styles.shade} ${styles.currentShade}`}>
-                <div
-                  className={styles.shadeColor}
-                  style={{ backgroundColor: `#${currentShade?.color}` }}
-                ></div>
-                {currentShade?.color_name && (
-                  <p className={styles.shadeName}>{currentShade?.color_name}</p>
+              <div className={styles.colorVariants}>
+                {orderedVariants.slice(0, 4).map((variant) => {
+                  const isSelected = currentShade?.uid === variant.uid;
+
+                  return (
+                    <div
+                      key={variant.uid}
+                      className={`${styles.colorDot} ${isSelected ? styles.currentColor : ""}`}
+                      style={{ "--color": `#${variant.color}` }}
+                      title={variant.color_name || "Color variant"}
+                      onClick={(e) => handleVariantClick(e, variant)}
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`Select ${variant.color_name || "color variant"}`}
+                    />
+                  );
+                })}
+
+                {colorVariants.count > 4 && (
+                  <span className={styles.moreColors}>
+                    +{colorVariants.count - 4}
+                  </span>
                 )}
-              </div>
-              <div className={`${styles.shade} ${styles.allShades}`}>
-                <div className={styles.variantContainer}>
-                  {variants &&
-                    variants.map((variantItem) => (
-                      <div
-                        key={variantItem.uid}
-                        className={styles.shadeColor}
-                        style={{ backgroundColor: `#${variantItem?.color}` }}
-                      ></div>
-                    ))}
-                </div>
-                <div className={styles.shadeCount}>{shadeVariantsCount}</div>
               </div>
             </div>
           )}
@@ -306,7 +432,7 @@ const ProductCard = ({
             className={styles.addToCart}
             onClick={handleAddToCartClick}
           >
-            ADD TO CART
+            {actionButtonText ?? t("resource.common.add_to_cart")}
           </FyButton>
         )}
       </div>

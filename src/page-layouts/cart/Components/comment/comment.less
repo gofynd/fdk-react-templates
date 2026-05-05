@@ -7,7 +7,12 @@
   display: flex;
   flex-direction: column;
   padding: 24px;
-
+  @media @desktop {
+    border-radius: 8px;
+  }
+  @media @tablet-range {
+    padding: 16px;
+  }
   @media @mobile {
     padding: 16px;
     border-width: 1px 0;
@@ -39,7 +44,7 @@
       display: block;
       font-size: 12px;
       font-weight: 500;
-      margin-right: 8px;
+      margin-inline-end: 8px;
       max-height: 38px;
       width: calc(100% - 40px);
       overflow: hidden;
@@ -66,9 +71,9 @@
       }
     }
     .addBtn {
-      margin-left: auto;
+      margin-inline-start: auto;
       color: @ButtonPrimary;
-      text-align: right;
+      text-align: end;
       width: 40px;
       display: flex;
       justify-content: flex-end;
@@ -94,13 +99,16 @@
       .commentNoteIcon {
         position: absolute;
         top: 50%;
-        left: 10px;
+        inset-inline-start: 10px;
         transform: translateY(-50%);
       }
       input {
         flex: 1;
         background: transparent;
-        padding: 12px 12px 12px 40px;
+        padding-top: 12px;
+        padding-inline-end: 12px;
+        padding-bottom: 12px;
+        padding-inline-start: 40px;
         font-size: 12px;
         font-weight: 400;
         width: 100%;
@@ -124,7 +132,10 @@
       font-weight: 400;
       font-size: 10px;
       color: @ErrorText;
-      padding: 12px 12px 0px 12px;
+      padding-top: 12px;
+      padding-inline-end: 12px;
+      padding-bottom: 0px;
+      padding-inline-start: 12px;
     }
   }
 }
@@ -147,8 +158,8 @@
 }
 .modalContainer {
   @media @tablet {
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
+    border-start-start-radius: 4px;
+    border-start-end-radius: 4px;
   }
 }
 .modalContent {
@@ -189,7 +200,7 @@
     color: @TextLabel;
     font-weight: 400;
     width: max-content;
-    margin-left: auto;
+    margin-inline-start: auto;
     font-size: 12px;
     line-height: 140%; /* 16.8px */
     margin-top: 8px;

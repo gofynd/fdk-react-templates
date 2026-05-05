@@ -12,7 +12,7 @@
     background-color: @PageBackground;
     gap: 24px;
     @media @desktop {
-      margin-top: 40px;
+      margin-block: 40px;
     }
     .profileContent {
       flex: 1;
@@ -20,9 +20,12 @@
     }
 
     .navContainer {
-      border-left: 1px solid @DividerStokes;
+      border-inline-start: 1px solid @DividerStokes;
       padding: 16px;
       width: 25%;
+      @media @mobile {
+        border-radius: 0px;
+      }
 
       .userData {
         display: flex;
@@ -89,7 +92,7 @@
         .menuIcon {
           height: 20px;
           aspect-ratio: 1;
-          margin-right: 12px;
+          margin-inline-end: 12px;
         }
       }
 
@@ -109,7 +112,7 @@
     @media @tablet {
       .navContainer {
         width: 100%;
-        border-left: 0;
+        border-inline-start: 0;
 
         .userData {
           .nameContainer {
@@ -123,7 +126,7 @@
       .accountHeader,
       .nav {
         font-size: 14px;
-        line-height: 14px;
+        line-height: 1.5;
       }
 
       .accountHeader {

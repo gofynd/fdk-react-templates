@@ -21,16 +21,18 @@
 import React from "react";
 import * as styles from "./beneficiary-list-item.less";
 import RadioIcon from "../../../assets/images/radio";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function BeneficiaryItem({ beneficiary, selectedBeneficiary, change }) {
-  const isSelected =
-    selectedBeneficiary?.beneficiary_id === beneficiary?.beneficiary_id;
+  if (!beneficiary) return null;
+  const { t } = useGlobalTranslation("translation");
+  const isSelected = selectedBeneficiary?.id === beneficiary?.id;
   const getTitle = () => {
-    return beneficiary.title;
+    typeof beneficiary?.title ? beneficiary.title : "Unknown";
   };
   const getSubtitle = () => {
     return beneficiary.transfer_mode === "bank"
-      ? `Account Details: ${beneficiary.account_holder} | ${
+      ? `${t("resource.order.account_details")}: ${beneficiary.account_holder} | ${
           beneficiary.account_no
         } ${beneficiary.bank_name ? `| ${beneficiary.bank_name}` : ""}`
       : beneficiary.subtitle;
@@ -63,7 +65,7 @@ function BeneficiaryItem({ beneficiary, selectedBeneficiary, change }) {
               <div
                 className={`${styles.beneficiarySubtitle} ${styles.regularxs}`}
               >
-                IFSC Code : {beneficiary.ifsc_code}
+                {t("resource.common.ifsc_code")} : {beneficiary.ifsc_code}
               </div>
             )}
           </div>

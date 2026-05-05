@@ -6,7 +6,12 @@
   padding: 24px;
   border: 1px solid @DividerStokes;
   line-height: 140%;
-
+  @media @tablet-range {
+    padding: 16px;
+  }
+  @media @desktop {
+    border-radius: 8px;
+  }
   @media @mobile {
     padding: 16px;
     border-width: 1px 0;
@@ -27,7 +32,7 @@
       padding: 0;
       margin: 0;
       background-color: @PageBackground;
-      margin-right: 12px;
+      margin-inline-end: 12px;
     }
   }
   .gstValidationBox {
@@ -65,7 +70,7 @@
     }
     .crossBtn {
       position: absolute;
-      right: 12px;
+      inset-inline-end: 12px;
       cursor: pointer;
     }
   }

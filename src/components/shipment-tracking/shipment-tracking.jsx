@@ -7,28 +7,43 @@
  * @param {Object} props.shipmentInfo - Contains details about the shipment, such as whether it can be canceled or returned.
  * @param {Function} props.changeinit - A function to handle changes in the shipment status.
  * @param {Object} props.invoiceDetails - Contains details about the invoice, including a presigned URL for downloading.
+ * @param {Function} props.onAddToCart - A function to handle adding product to cart (for Buy Again functionality).
  *
  * @returns {JSX.Element} A React component that renders the shipment tracking interface.
  *
  */
 
 import React, { useState, Fragment } from "react";
-import { useNavigate } from "react-router-dom";
 import * as styles from "./shipment-tracking.less";
-import { convertUTCDateToLocalDate } from "../../helper/utils";
+import { convertUTCDateToLocalDate, formatLocale } from "../../helper/utils";
 import TickActiveIcon from "../../assets/images/tick-black-active.svg";
+import {
+  useNavigate,
+  useGlobalStore,
+  useFPI,
+  useGlobalTranslation,
+} from "fdk-core/utils";
 
 function ShipmentTracking({
   tracking,
-  shipmentInfo,
+  shipmentInfo = {},
   changeinit,
   invoiceDetails,
+  availableFOCount,
+  bagLength = 0,
+  onAddToCart,
 }) {
+  const { t } = useGlobalTranslation("translation");
+  const fpi = useFPI();
+  const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
+  const locale = language?.locale;
   const navigate = useNavigate();
   const [showDetailedTracking, setShowDetailedTracking] = useState(false);
   const getTime = (item) => {
     return convertUTCDateToLocalDate(
-      item?.created_ts ? item?.created_ts : item?.time
+      item?.created_ts ? item?.created_ts : item?.time,
+      "",
+      formatLocale(locale, countryCode, true)
     );
   };
 
@@ -43,20 +58,32 @@ function ShipmentTracking({
     }
     if (shipmentInfo?.track_url) {
       arrLinks.push({
-        text: "TRACK",
+        text: t("resource.common.track"),
         link: shipmentInfo?.track_url ? shipmentInfo?.track_url : "",
       });
     }
     if (shipmentInfo?.need_help_url) {
       arrLinks.push({
         type: "internal",
-        text: "NEED HELP",
-        link: "/faq/" || shipmentInfo?.need_help_url,
+        text: t("resource.common.need_help"),
+        link: "/contact-us",
+      });
+    }
+    // Buy Again button - always visible
+    const firstBag = shipmentInfo?.bags?.[0];
+    const productSlug = firstBag?.item?.slug_key;
+    if (productSlug) {
+      arrLinks.push({
+        type: "internal",
+        text: t("resource.common.buy_again") || "BUY AGAIN",
+        link: `/product/${productSlug}`,
+        action: "buy_again",
+        productSlug: productSlug,
       });
     }
     if (invoiceDetails?.success) {
       arrLinks.push({
-        text: "DOWNLOAD INVOICE",
+        text: t("resource.common.download_invoice"),
         link: invoiceDetails?.presigned_url,
       });
     }
@@ -66,27 +93,83 @@ function ShipmentTracking({
   const updateType = () => {
     return shipmentInfo?.can_return ? "RETURN" : "CANCEL";
   };
+
+  // const updateTypeText = () => {
+  //   return shipmentInfo?.can_return ? "resource.facets.return_caps" : "resource.facets.cancel_caps";
+  // };
+
+  const handleBuyAgain = async (productSlug) => {
+    if (onAddToCart) {
+      console.log("handleBuyAgain called", { productSlug });
+      // Use provided handler (typically opens add-to-cart modal)
+      onAddToCart(productSlug);
+    }
+  };
+
   const update = (item) => {
     if (["CANCEL", "RETURN"].includes(item?.text)) {
-      changeinit({
-        ...item,
-        link: `/profile/orders/shipment/update/${shipmentInfo?.shipment_id}/${updateType()?.toLowerCase()}`,
-      });
+      const firstBag = shipmentInfo?.bags?.[0];
+      const isBundleItem = firstBag?.bundle_details?.bundle_group_id;
+      const isPartialReturnBundle =
+        isBundleItem &&
+        firstBag?.bundle_details?.return_config?.allow_partial_return;
+
+      // Direct navigate if: single bag OR bundle with allow_partial_return: false
+      if (bagLength === 1 && (!isBundleItem || !isPartialReturnBundle)) {
+        // Find the base bag for bundles, otherwise use first bag
+        const selectedBag = isBundleItem
+          ? shipmentInfo.bags.find(
+              (bag) => bag?.bundle_details?.is_base === true
+            ) || firstBag
+          : firstBag;
+
+        const bagId = selectedBag?.id;
+        const querParams = new URLSearchParams(location.search);
+        if (bagId) {
+          querParams.set("selectedBagId", bagId);
+        }
+        const finalLink = `/profile/orders/shipment/update/${shipmentInfo?.shipment_id}/${updateType()?.toLowerCase()}`;
+        navigate(
+          finalLink +
+            (querParams?.toString() ? `?${querParams.toString()}` : "")
+        );
+      } else {
+        // Multiple bags OR bundle with allow_partial_return: true - show selection UI
+        changeinit({
+          ...item,
+          link: `/profile/orders/shipment/update/${shipmentInfo?.shipment_id}/${updateType()?.toLowerCase()}`,
+        });
+      }
       window.scrollTo(0, 0);
+    } else if (item?.action === "buy_again") {
+      // Handle Buy Again - add to cart instead of navigating
+      if (item?.productSlug) {
+        handleBuyAgain(item.productSlug);
+      }
     } else {
       navigate(item?.link);
     }
   };
+
   return (
     <div className={`${styles.shipmentTracking}`}>
       <div className={`${styles.status}`}>
         <div>
-          <div className={`${styles.title} ${styles.boldsm}`}>
-            Shipment: {shipmentInfo?.shipment_id}
+          <div
+            className={`${styles.title} ${styles.shipmentTitle} ${styles.boldsm}`}
+          >
+            <div>
+              {t("resource.common.shipment")}: {shipmentInfo?.shipment_id}
+            </div>
+            {availableFOCount > 1 && shipmentInfo.fulfillment_option?.name && (
+              <div className={styles.foName}>
+                {shipmentInfo.fulfillment_option?.name}
+              </div>
+            )}
           </div>
           {shipmentInfo?.awb_no && (
             <div className={`${styles.awbText} ${styles.lightxxs}`}>
-              AWB: {shipmentInfo?.awb_no}
+              {t("resource.common.awb")}: {shipmentInfo?.awb_no}
             </div>
           )}
         </div>
@@ -160,20 +243,35 @@ function ShipmentTracking({
         {getLinks()?.map((item, index) => (
           <Fragment key={`${item?.text}_${index}`}>
             {item?.type === "internal" ? (
-              <div
-                key={index}
-                onClick={() => update(item)}
-                className={`${styles.regularsm}`}
-              >
-                {item?.text}
-              </div>
+              <>
+                {index === 0 && (
+                  <div
+                    className={`${styles.productExchangeBox} productExchangeContainer`}
+                  ></div>
+                )}
+                <div
+                  key={index}
+                  onClick={() => update(item)}
+                  className={`${styles.regularsm}`}
+                >
+                  {item?.text === "RETURN"
+                    ? t("resource.facets.return_caps")
+                    : item?.text === "CANCEL"
+                      ? t("resource.facets.cancel_caps")
+                      : item?.text}
+                </div>
+              </>
             ) : (
               <a
                 key={index}
                 href={`${item?.link}`}
                 className={`${styles.regularsm}`}
               >
-                {item?.text}
+                {item?.text === "RETURN"
+                  ? t("resource.facets.return_caps")
+                  : item?.text === "CANCEL"
+                    ? t("resource.facets.cancel_caps")
+                    : item?.text}
               </a>
             )}
           </Fragment>

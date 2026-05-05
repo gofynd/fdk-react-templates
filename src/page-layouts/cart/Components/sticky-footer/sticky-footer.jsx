@@ -1,7 +1,13 @@
 import React from "react";
-import { numberWithCommas, currencyFormat } from "../../../../helper/utils";
+import {
+  numberWithCommas,
+  currencyFormat,
+  formatLocale,
+  isRunningOnClient,
+} from "../../../../helper/utils";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./sticky-footer.less";
+import { useGlobalStore, useFPI, useGlobalTranslation } from "fdk-core/utils";
 
 function StickyFooter({
   isLoggedIn = false,
@@ -14,7 +20,12 @@ function StickyFooter({
   onLoginClick = () => {},
   onCheckoutClick = () => {},
   onPriceDetailsClick = () => {},
+  order = {},
 }) {
+  const { t } = useGlobalTranslation("translation");
+  const fpi = useFPI();
+  const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
+  const locale = language?.locale;
   const isRewardPoints = false;
   const rewardPoints = 0;
   const isRewardPointsApplied = false;
@@ -34,7 +45,7 @@ function StickyFooter({
 
           <div className={styles.rewardDiv}>
             <span className={styles.rewardPoi}>
-              {`Redeem Rewards Points Worth ${numberWithCommas(rewardPoints)}`}
+              {`${t("resource.cart.redeem_rewards_points_worth")} ${numberWithCommas(rewardPoints)}`}
             </span>
             <SvgWrapper svgSrc="reward-icon-mobile" />
           </div>
@@ -44,9 +55,15 @@ function StickyFooter({
           <div className={`${styles.billContainer} ${styles.billContainer2}`}>
             {totalPrice > 0 && (
               <div className={styles.getTotalPrice}>
-                <span className={styles.nccPrice}>Total Price:</span>
+                <span className={styles.nccPrice}>
+                  {t("resource.cart.total_price")}:
+                </span>
                 <span className={styles.nccTotalPrice}>
-                  {currencyFormat(numberWithCommas(totalPrice), currencySymbol)}
+                  {currencyFormat(
+                    totalPrice,
+                    currencySymbol,
+                    formatLocale(locale, countryCode, true)
+                  )}
                 </span>
               </div>
             )}
@@ -54,7 +71,7 @@ function StickyFooter({
               className={`${styles.viewPriceBtn} ${styles.nccViewBtn}`}
               onClick={onPriceDetailsClick}
             >
-              View Bill
+              {t("resource.cart.view_bill")}
             </div>
           </div>
         )
@@ -66,16 +83,18 @@ function StickyFooter({
             className={`${styles.width40} ${styles.secondaryCheckoutBtn}`}
             onClick={onLoginClick}
           >
-            LOGIN
+            {t("resource.auth.login.login_caps")}
           </button>
 
           {isAnonymous && (
             <button
               className={`${styles.cartCheckoutBtn} ${styles.cartCheckoutBtn3}`}
-              disabled={!isValid || isOutOfStock || isNotServicable}
+              disabled={
+                !isValid || isOutOfStock || isNotServicable || !order?.enabled
+              }
               onClick={onCheckoutClick}
             >
-              Continue as Guest
+              {t("resource.section.cart.continue_as_guest")}
             </button>
           )}
         </div>
@@ -86,22 +105,35 @@ function StickyFooter({
         >
           <div className={styles.priceContainerMobile}>
             <div className={styles.totalPrice}>
-              {currencyFormat(numberWithCommas(totalPrice), currencySymbol)}
+              {currencyFormat(
+                totalPrice,
+                currencySymbol,
+                formatLocale(locale, countryCode, true)
+              )}
             </div>
             <div
               className={`${styles.viewPriceBtn} ${styles.viewPBtn}`}
               onClick={onPriceDetailsClick}
             >
-              View Price Details
+              {t("resource.cart.view_price_details")}
             </div>
           </div>
           <button
             className={`${styles.cartCheckoutBtn} ${styles.priceContainerMobileCheckoutBtn} ${styles.checkoutButton}`}
-            disabled={!isValid || isOutOfStock || isNotServicable}
+            disabled={
+              !isValid || isOutOfStock || isNotServicable || !order?.enabled
+            }
             onClick={onCheckoutClick}
           >
-            CHECKOUT
-            <SvgWrapper svgSrc="angle-right" />
+            {t("resource.section.cart.checkout_button_caps")}
+            <SvgWrapper
+              svgSrc="angle-right"
+              className={
+                isRunningOnClient() && document.dir === "rtl"
+                  ? styles.rotate180
+                  : ""
+              }
+            />
           </button>
         </div>
       )}

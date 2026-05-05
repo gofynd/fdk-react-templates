@@ -1,12 +1,40 @@
 @import "../../../../styles/main.less";
+@import "../../../../styles/base.global.less";
+.buttonsContainer {
+  margin-inline-start: 25px;
+  margin-top: 8px;
 
+  .buttonDivider {
+    padding: 0px 8px;
+  }
+  .edit,
+  .remove {
+    padding: 4px;
+    border: none;
+    color: @ButtonLink;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    text-align: center;
+    text-transform: uppercase;
+    line-height: 140%;
+    background: @PageBackground;
+    cursor: pointer;
+  }
+}
 .cartPincodeContainer {
   border: 1px solid @DividerStokes;
   line-height: 140%;
   padding: 24px;
+  @media @tablet-range {
+    padding: 16px;
+  }
   display: flex;
   justify-content: space-between;
   align-items: center;
+  @media @desktop {
+    border-radius: 8px;
+  }
   @media @mobile {
     padding: 16px;
     margin-top: 18px;
@@ -25,12 +53,48 @@
       font-size: 14px;
       font-weight: 600;
       color: @TextHeading;
+      display: inline;
       @media @tablet {
         font-size: 12px;
       }
     }
+    .deliveryHeader {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .addressTagsContainer {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .addressTag {
+      background-color: @LightGray;
+      border: none;
+      border-radius: 12px;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 500;
+      color: @TextBody;
+      text-transform: capitalize;
+      line-height: 140%;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+
+      @media @mobile {
+        font-size: 10px;
+        padding: 3px 10px;
+        border-radius: 10px;
+      }
+    }
   }
   .changePinCodeButton {
+    .btnSecondary();
     font-size: 12px;
     font-weight: 600;
     padding: 12px 16px;
@@ -40,8 +104,11 @@
     background: @ButtonSecondary;
     color: @ButtonPrimary;
     height: 100%;
-    text-transform: uppercase;
+    // text-transform: uppercase;
     line-height: 140%;
+    &:disabled {
+      opacity: 0.6;
+    }
     @media @mobile {
       padding: 9px;
     }
@@ -53,8 +120,8 @@
 
   @media @tablet {
     width: unset;
-    border-top-left-radius: 4px !important;
-    border-top-right-radius: 4px !important;
+    border-start-start-radius: 4px !important;
+    border-start-end-radius: 4px !important;
   }
 
   .modalHeader {
@@ -69,7 +136,7 @@
     .modalCloseIcon {
       position: absolute;
       top: 24px;
-      right: 24px;
+      inset-inline-end: 24px;
       cursor: pointer;
       span {
         display: flex;
@@ -116,19 +183,19 @@
         font-size: 14px;
         font-weight: 600;
         padding: 14px 24px;
-        margin-left: 16px;
+        margin-inline-start: 16px;
         background: @ButtonPrimary;
         border-radius: @ButtonRadius;
         color: @ButtonSecondary;
         height: 100%;
-        text-transform: uppercase;
+        //text-transform: uppercase;
         cursor: pointer;
         text-align: center;
         @media @tablet {
           order: 2;
           margin-top: 24px;
           width: 100%;
-          margin-left: 0;
+          margin-inline-start: 0;
           box-sizing: border-box;
         }
       }
@@ -136,162 +203,163 @@
   }
 }
 
-.addressModal {
-  .modalHeader {
-    border-bottom: 1px solid @DividerStokes;
-    position: relative;
-    padding: 16px 24px;
-    display: flex;
-    align-items: center;
+.addAddressModalBody {
+  display: flex;
+  flex-direction: column;
+  min-height: 84.26vh;
+  max-height: 84.26vh;
+  overflow: hidden;
+  width: 100%;
 
-    .modalHeading {
-      color: @TextHeading;
-      line-height: 140%;
-      font-size: 16px;
-      font-weight: 600;
+  @media @tablet {
+    max-height: unset;
+    height: 100dvh;
+  }
+
+  // When mobile footer is visible, account for nav bar + safe area to prevent cropping across devices
+  [data-mobile-footer="true"] & {
+    @media @tablet {
+      height: calc(100vh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
+      height: calc(100dvh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
+      max-height: calc(100vh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
+      max-height: calc(100dvh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
+      overflow-y: auto;
     }
-    .modalCloseIcon {
-      position: absolute;
-      top: 24px;
-      right: 24px;
-      cursor: pointer;
-      span {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+  }
+}
+
+.deliveryAddressModal {
+  .deliverAddressesModalContainer {
+    width: 100%;
+    max-height: unset;
+    height: 100dvh;
+    @media @mobile {
+      border-radius: 0 !important;
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+    @media @desktop {
+      max-width: 450px;
+      max-height: 84.26dvh;
+    }
+    // When mobile footer is visible, constrain height to prevent cropping across devices
+    [data-mobile-footer="true"] & {
+      @media @tablet {
+        height: calc(100vh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
+        height: calc(100dvh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
+        max-height: calc(100vh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
+        max-height: calc(100dvh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
       }
     }
   }
-  .modalBody {
+  .deliveryAddressHeader {
+    padding: 24px;
+    border-bottom: none;
+    @media @mobile {
+      border-radius: 0 !important;
+    }
+  }
+
+  .deliveryAddressBody {
     display: flex;
     flex-direction: column;
-    padding: 24px;
-    background: @DialogBackground;
-
-    @media @mobile {
-      padding: 0px;
-    }
-
-    input[type="radio"] {
-      display: none;
-      &:checked {
-        color: @SuccessText;
-      }
-    }
-
-    .pincodeBox {
-      padding: 24px;
+    .deliverAddressesContainer {
+      flex: 1;
       display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      border-radius: 12px;
-      background-color: @PageBackground;
-      .errorText {
-        color: @ErrorText;
-        line-height: 140%;
-        font-size: 12px;
-        font-weight: 400;
-        margin-top: 8px;
-        flex-basis: 100%;
+      flex-direction: column;
+      gap: 1rem;
+      padding-inline: 24px;
+      padding-bottom: 24px;
+      overflow: hidden;
+      .contentHeaderContainer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
       }
-      .modalPincodeInput {
-        flex: 1;
-        input {
-          box-sizing: border-box;
-          border: 1px solid var(--dividerStokes);
-          border-radius: 4px;
-          color: var(--textLabel);
-          padding: 16px;
-          font-size: 14px;
-          font-weight: 400;
-          width: 100%;
-          &:focus-visible {
-            outline: none;
-          }
-        }
-      }
-      .modalChangePinCodeButton {
+      .contentHeader {
         font-size: 14px;
-        font-weight: 600;
-        padding: 14px 24px;
-        margin-left: 16px;
-        background: @ButtonPrimary;
-        border-radius: @ButtonRadius;
-        color: @ButtonSecondary;
-        height: 100%;
+        font-weight: 500;
+        line-height: 140%;
+        color: @TextLabel;
+      }
+      .addCta {
         text-transform: uppercase;
-        text-align: center;
-        box-sizing: border-box;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 140%;
+        color: @ButtonLink;
+        padding: 4px;
+      }
+      .deliveryAddressList {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        overflow-y: auto;
+      }
+      .customAddressItem {
+        margin-bottom: 0;
+        border: none !important;
+        padding: 5px 0;
+      }
+    }
+    .stickyContainer {
+      background-color: @DialogBackground;
+      padding: 24px;
+      box-shadow: 0px -2px 12px 0px rgba(0, 0, 0, 0.06);
+      @media @tablet {
+        padding: 16px;
+      }
+      .deliveryCta {
+        text-transform: uppercase;
       }
     }
   }
-  .addressFormWrapper {
-    @media @mobile {
-      padding: 12px;
-    }
-  }
 }
 
-.addressItemContainer {
-  @media @tablet {
-    padding: 0;
-    border: 1px solid var(--dividerStokes);
-    border-width: 1px 0;
-  }
-
-  .customAddressItem {
-    margin-bottom: 0;
-    padding: 16px !important;
-    border-bottom: none !important;
-
+// Override centerModal alignment for edge-to-edge on mobile
+.centerModal {
+  &.addAddressModalWrapper {
     @media @tablet {
-      border-width: 0 0 1px !important;
+      align-items: flex-end !important;
     }
   }
+}
 
-  .customAddressItem:last-child {
-    border-bottom: 1px solid @DividerStokes !important;
+.addAddressModalContainer {
+  display: block;
+  width: 100% !important;
+  max-height: unset;
+  height: 100dvh;
+  padding: 0;
+  max-width: unset !important;
+  
+  @media @mobile {
+    border-radius: 0 !important;
+    width: 100% !important;
+  }
+  
+  @media @tablet {
+    border-radius: 0 !important;
+    border-start-start-radius: 8px;
+    border-start-end-radius: 8px;
+    width: 100% !important;
+  }
 
+  @media @desktop {
+    max-width: 450px !important;
+    max-height: 84.26dvh;
+    width: 450px !important;
+  }
+
+  // When mobile footer is visible, constrain height to prevent cropping on various handsets
+  [data-mobile-footer="true"] & {
     @media @tablet {
-      border-bottom: none !important;
+      height: calc(100vh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px)) !important;
+      height: calc(100dvh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px)) !important;
+      max-height: calc(100vh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px)) !important;
+      max-height: calc(100dvh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px)) !important;
     }
-  }
-}
-
-.addAddress {
-  margin-top: 32px;
-
-  @media @tablet {
-    margin-top: 24px;
-    padding: 0 16px;
-  }
-
-  .addCta {
-    .btnSecondary();
-    padding: 20px 24px;
-    width: 100%;
-    text-transform: uppercase;
-  }
-}
-
-.stickyContainer {
-  position: sticky;
-  bottom: 0;
-  background-color: @DialogBackground;
-  border-top: 1px solid @DividerStokes;
-  padding: 24px;
-  margin-top: 32px;
-
-  @media @tablet {
-    padding: 16px;
-    margin-top: 24px;
-  }
-
-  .selectCta {
-    .btnPrimary();
-    padding: 20px 24px;
-    width: 100%;
-    text-transform: uppercase;
   }
 }
 .heading {
@@ -306,7 +374,7 @@
   }
 }
 .addrErrText {
-  margin-left: 25px;
+  margin-inline-start: 25px;
   margin-top: 8px;
   color: @ErrorText;
   font-weight: 400;
