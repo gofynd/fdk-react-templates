@@ -153,10 +153,14 @@ function SinglePageShipment({
                     {t("resource.checkout.order_summary")}
                   </div>
                   <div className={styles.address}>
-                    {getShipmentCount > 1
-                      ? getShipmentCount +
-                        ` ${t("resource.common.shipments_plural")}`
-                      : getShipmentCount + ` ${t("resource.common.shipments")}`}
+                    {isShipmentLoading ? (
+                      <Shimmer height="12px" width="120px" />
+                    ) : (
+                      getShipmentCount > 1
+                        ? getShipmentCount +
+                          ` ${t("resource.common.shipments_plural")}`
+                        : getShipmentCount + ` ${t("resource.common.shipments")}`
+                    )}
                   </div>
                 </div>
               </div>

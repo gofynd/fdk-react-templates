@@ -604,21 +604,41 @@ useEffect(() => {
     );
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     let payload = { ...data };
     if (payload.address_type === "Other") {
       payload.address_type = payload?.otherAddressType || "Other";
     }
     delete payload?.otherAddressType;
-    // Convert country object to string (uid/id/iso2) if it's an object
-    // Handles: API country objects (with id), countryCurrencies objects (with uid/iso2), and string values
+    // Convert country object to country name string if it's an object
+    // Handles: countryCurrencies objects (with name/display_name/iso2) and API country objects
     if (payload.country && typeof payload.country === "object" && payload.country !== null) {
-      payload.country = payload.country.uid || payload.country.id || payload.country.iso2 || String(payload.country);
+      payload.country = payload.country.display_name || payload.country.name || payload.country.iso2 || String(payload.country);
     }
     if (isNewAddress) {
-      onAddAddress(removeNullValues(payload));
+      const result = await Promise.resolve(onAddAddress(removeNullValues(payload)));
+      if (result && !result?.success && result?.errors) {
+        const fieldErrors = result?.errors?.[0]?.extensions?.details?.field_errors;
+        if (fieldErrors && typeof fieldErrors === "object") {
+          for (const [field, messages] of Object.entries(fieldErrors)) {
+            if (Array.isArray(messages) && messages[0]) {
+              setError(field, { type: "manual", message: messages[0] });
+            }
+          }
+        }
+      }
     } else {
-      onUpdateAddress(removeNullValues(payload));
+      const result = await Promise.resolve(onUpdateAddress(removeNullValues(payload)));
+      if (result && !result?.success && result?.errors) {
+        const fieldErrors = result?.errors?.[0]?.extensions?.details?.field_errors;
+        if (fieldErrors && typeof fieldErrors === "object") {
+          for (const [field, messages] of Object.entries(fieldErrors)) {
+            if (Array.isArray(messages) && messages[0]) {
+              setError(field, { type: "manual", message: messages[0] });
+            }
+          }
+        }
+      }
     }
   };
 

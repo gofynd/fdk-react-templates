@@ -478,70 +478,6 @@ h5,
     align-items: flex-start;
   }
 }
-.chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__priceBreakdownContainer___jUqQh {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 24px;
-  align-items: center;
-  justify-content: space-between;
-}
-@media only screen and (max-width: 480px) {
-  .chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__priceBreakdownContainer___jUqQh {
-    flex-direction: column;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    gap: 12px;
-  }
-}
-@media only screen and (max-width: 768px) {
-  .chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__priceBreakdownContainer___jUqQh {
-    gap: 16px;
-  }
-}
-.chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__priceBreakdownContainer___jUqQh .chip-item__priceSection___t0dvH {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
-  flex: 0 1 auto;
-}
-@media only screen and (max-width: 480px) {
-  .chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__priceBreakdownContainer___jUqQh .chip-item__priceSection___t0dvH {
-    flex: 1 1 100%;
-  }
-}
-.chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__priceBreakdownContainer___jUqQh .chip-item__priceSection___t0dvH .chip-item__priceLabel___h_n4R {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--textLabel, #7d7676);
-  margin-bottom: 0;
-  white-space: nowrap;
-}
-.chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__priceBreakdownContainer___jUqQh .chip-item__priceSection___t0dvH .chip-item__itemPrice___bEt2X {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-}
-.chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__priceBreakdownContainer___jUqQh .chip-item__priceSection___t0dvH .chip-item__itemPrice___bEt2X .chip-item__effectivePrice___P4Bo9 {
-  color: var(--textHeading, #26201a);
-  font-size: 16px;
-  font-weight: 600;
-  margin-inline-end: 0;
-}
-.chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__priceBreakdownContainer___jUqQh .chip-item__priceSection___t0dvH .chip-item__itemPrice___bEt2X .chip-item__markedPrice___oRR8f {
-  font-size: 12px;
-  text-decoration: line-through;
-  color: var(--textLabel, #7d7676);
-  margin-inline-end: 0;
-}
-.chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__priceBreakdownContainer___jUqQh .chip-item__priceSection___t0dvH .chip-item__itemPrice___bEt2X .chip-item__discount___yyr69 {
-  font-size: 12px;
-  font-weight: 500;
-  margin-inline-end: 0;
-  color: var(--saleDiscountText, #1c958f);
-}
 .chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__itemPrice___bEt2X {
   display: flex;
   flex-wrap: wrap;
@@ -717,14 +653,26 @@ h5,
   gap: 16px;
 }
 .chip-item__sModalContainer___ARs9G .chip-item__sizeModalTitle___ITUcq .chip-item__sizeModalDiv____Vutd .chip-item__sizeModalImage___tpqo4 {
-  flex: 0 0 18%;
-  height: 120px;
+  flex: 0 0 90px;
+  position: relative;
+}
+.chip-item__sModalContainer___ARs9G .chip-item__sizeModalTitle___ITUcq .chip-item__sizeModalDiv____Vutd .chip-item__sizeModalImage___tpqo4 > * {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
+}
+.chip-item__sModalContainer___ARs9G .chip-item__sizeModalTitle___ITUcq .chip-item__sizeModalDiv____Vutd .chip-item__sizeModalImage___tpqo4:before {
+  content: "";
+  display: block;
+  padding-bottom: calc(100% * (1 / 0.8));
 }
 .chip-item__sModalContainer___ARs9G .chip-item__sizeModalTitle___ITUcq .chip-item__sizeModalDiv____Vutd .chip-item__sizeModalImage___tpqo4 img {
   width: 100%;
   height: 100%;
   border-radius: 4px;
-  object-fit: "cover";
+  object-fit: cover;
 }
 .chip-item__sModalContainer___ARs9G .chip-item__sizeModalTitle___ITUcq .chip-item__sizeModalDiv____Vutd .chip-item__sizeModalContent___TAnsO {
   color: #1f1f1f;
@@ -789,8 +737,11 @@ h5,
 }
 .chip-item__sModalContainer___ARs9G .chip-item__sizeModalBody___hpEJF .chip-item__sizeHorizontalList___vfOZf .chip-item__singleSize___wixkk .chip-item__sigleSizeDisabled___jWFvU {
   position: relative;
-  color: var(--ButtonPrimaryL3);
-  border-color: var(--ButtonPrimaryL3);
+  color: var(--textSecondary);
+  border-color: var(--dividerStokes, #d4d1d1);
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 .chip-item__sModalContainer___ARs9G .chip-item__sizeModalBody___hpEJF .chip-item__sizeHorizontalList___vfOZf .chip-item__singleSize___wixkk svg {
   position: absolute;
@@ -3193,7 +3144,7 @@ h5,
 }
 .accordion__accordionContentValue___FESOa {
   color: var(--Text-Heading, #1f1f1f);
-  font-family: Inter;
+  font-family: var(--font-body);
   font-size: 12px;
   font-style: normal;
   font-weight: 600;

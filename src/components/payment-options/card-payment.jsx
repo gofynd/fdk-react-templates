@@ -85,6 +85,7 @@ function CardPayment({
   handleShowFailedMessage,
   cardDetails,
   setIsJuspayCouponApplied,
+  mopSelectionLoading,
 }) {
   const isTablet = useViewport(0, 768);
 
@@ -357,7 +358,9 @@ function CardPayment({
                               customClassName={styles.visibleOnTab}
                               value={totalPayValue}
                               onPriceDetailsClick={onPriceDetailsClick}
-                              disabled={!selectedCard?.card_id}
+                              disabled={
+                                !selectedCard?.card_id || mopSelectionLoading
+                              }
                               enableLinkPaymentOption={enableLinkPaymentOption}
                               isPaymentLoading={isPaymentLoading}
                               loader={loader}
@@ -368,7 +371,9 @@ function CardPayment({
                               <button
                                 className={styles.payBtn}
                                 onClick={payWithSelectedCard}
-                                disabled={isPaymentLoading}
+                                disabled={
+                                  isPaymentLoading || mopSelectionLoading
+                                }
                               >
                                 {!isPaymentLoading ? (
                                   <>
@@ -450,6 +455,7 @@ function CardPayment({
                   {...baseCardFormProps}
                   isTablet={isTablet}
                   onPriceDetailsClick={onPriceDetailsClick}
+                  mopSelectionLoading={mopSelectionLoading}
                 />
               </div>
             )}
@@ -467,7 +473,10 @@ function CardPayment({
               </div>
             </div>
 
-            <CardForm {...baseCardFormProps} />
+            <CardForm
+              {...baseCardFormProps}
+              mopSelectionLoading={mopSelectionLoading}
+            />
           </div>
         )}
 
@@ -487,6 +496,7 @@ function CardPayment({
                 addNewCard={addNewCard}
                 isTablet={isTablet}
                 onPriceDetailsClick={onPriceDetailsClick}
+                mopSelectionLoading={mopSelectionLoading}
               />
             </div>
           </Modal>

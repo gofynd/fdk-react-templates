@@ -36,6 +36,7 @@ function NetBankingPay({
 
   // payload
   selectedPaymentPayload,
+  mopSelectionLoading,
 }) {
   const isTablet = useViewport(0, 768);
 
@@ -88,7 +89,7 @@ function NetBankingPay({
                 getTotalValue()
               )}
               onPriceDetailsClick={onPriceDetailsClick}
-              disabled={!selectedNB?.code}
+              disabled={mopSelectionLoading || !selectedNB?.code}
               enableLinkPaymentOption={enableLinkPaymentOption}
               isPaymentLoading={isPaymentLoading}
               loader={loader}
@@ -108,7 +109,7 @@ function NetBankingPay({
                     acceptOrder();
                   }
                 }}
-                disabled={isPaymentLoading}
+                disabled={mopSelectionLoading || isPaymentLoading}
               >
                 {!isPaymentLoading ? (
                   <>

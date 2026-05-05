@@ -28,6 +28,7 @@ function WalletPayment({
   StickyPayNow,
   getWalletdBorder,
   selectedPaymentPayload,
+  mopSelectionLoading,
 }) {
   const isTablet = useViewport(0, 768);
   const initialVisibleWalletCount = 3;
@@ -79,7 +80,7 @@ function WalletPayment({
                 getTotalValue()
               )}
               onPriceDetailsClick={onPriceDetailsClick}
-              disabled={!selectedWallet.code}
+              disabled={mopSelectionLoading || !selectedWallet.code}
               enableLinkPaymentOption={enableLinkPaymentOption}
               isPaymentLoading={isPaymentLoading}
               loader={loader}
@@ -100,7 +101,7 @@ function WalletPayment({
                     acceptOrder();
                   }
                 }}
-                disabled={isPaymentLoading}
+                disabled={mopSelectionLoading || isPaymentLoading}
               >
                 {!isPaymentLoading ? (
                   <>

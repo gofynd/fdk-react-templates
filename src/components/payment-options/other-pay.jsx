@@ -21,6 +21,7 @@ function OtherPay({
   isPaymentLoading,
   loader,
   onPriceDetailsClick,
+  mopSelectionLoading,
 }) {
   const isTablet = useViewport(0, 768);
 
@@ -76,7 +77,7 @@ function OtherPay({
                 getTotalValue()
               )}
               onPriceDetailsClick={onPriceDetailsClick}
-              disabled={!selectedOtherPayment?.code}
+              disabled={mopSelectionLoading || !selectedOtherPayment?.code}
               enableLinkPaymentOption={enableLinkPaymentOption}
               isPaymentLoading={isPaymentLoading}
               loader={loader}
@@ -94,7 +95,7 @@ function OtherPay({
                   proceedToPay("Other", selectedPaymentPayload);
                   acceptOrder();
                 }}
-                disabled={isPaymentLoading}
+                disabled={mopSelectionLoading || isPaymentLoading}
               >
                 {!isPaymentLoading ? (
                   <>

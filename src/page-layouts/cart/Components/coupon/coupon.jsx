@@ -194,9 +194,15 @@ function Coupon({
         </div>
         {isApplicable && (
           <>
+            {description && (
+              <p className={styles.couponDescription}>{description}</p>
+            )}
             <hr className={styles.divider} />
-
-            <p className={styles.couponDesc}>{expiresOn}</p>
+            <p
+              className={`${styles.couponDesc} ${description ? styles.couponDescBold : ""}`}
+            >
+              {expiresOn}
+            </p>
           </>
         )}
       </div>
@@ -448,7 +454,7 @@ function CouponItem({
   );
 }
 
-export function CouponSuccessModal({
+function CouponSuccessModal({
   isOpen = false,
   coupon = {},
   currencySymbol = "₹",

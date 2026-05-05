@@ -26,6 +26,7 @@
 import React, { useState, useMemo, forwardRef } from "react";
 import * as styles from "./fy-image.less";
 import { transformImage } from "../../../helper/utils";
+import { RESPONSIVE_IMAGE_BREAKPOINTS } from "../../../helper/constant";
 
 const IMAGE_SIZES = [
   "original",
@@ -69,13 +70,8 @@ const FyImage = forwardRef(
       mobileAspectRatio,
       showOverlay = false,
       overlayColor = "#ffffff",
-      sources = [
-        { breakpoint: { min: 780 }, width: 1280 },
-        { breakpoint: { min: 600 }, width: 1100 },
-        { breakpoint: { min: 480 }, width: 1200 },
-        { breakpoint: { min: 361 }, width: 900 },
-        { breakpoint: { max: 360 }, width: 640 },
-      ],
+      // Use optimized breakpoints from config by default
+      sources = RESPONSIVE_IMAGE_BREAKPOINTS,
       customClass,
       globalConfig,
       defer = true,

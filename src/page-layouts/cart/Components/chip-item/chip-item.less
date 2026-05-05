@@ -158,74 +158,6 @@
           align-items: flex-start;
         }
 
-        .priceBreakdownContainer {
-          display: flex;
-          flex-wrap: nowrap;
-          gap: 24px;
-          align-items: center;
-          justify-content: space-between;
-
-          @media @mobile {
-            flex-direction: column;
-            flex-wrap: wrap;
-            align-items: flex-start;
-            gap: 12px;
-          }
-
-          @media @tablet {
-            gap: 16px;
-          }
-
-          .priceSection {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            gap: 8px;
-            min-width: 0;
-            flex: 0 1 auto;
-
-            @media @mobile {
-              flex: 1 1 100%;
-            }
-
-            .priceLabel {
-              font-size: 12px;
-              font-weight: 500;
-              color: @TextLabel;
-              margin-bottom: 0;
-              white-space: nowrap;
-            }
-
-            .itemPrice {
-              display: flex;
-              flex-wrap: wrap;
-              align-items: center;
-              gap: 8px;
-
-              .effectivePrice {
-                color: @TextHeading;
-                font-size: 16px;
-                font-weight: 600;
-                margin-inline-end: 0;
-              }
-
-              .markedPrice {
-                font-size: 12px;
-                text-decoration: line-through;
-                color: @TextLabel;
-                margin-inline-end: 0;
-              }
-
-              .discount {
-                font-size: 12px;
-                font-weight: 500;
-                margin-inline-end: 0;
-                color: @SaleDiscountText;
-              }
-            }
-          }
-        }
-
         .itemPrice {
           display: flex;
           flex-wrap: wrap;
@@ -423,14 +355,14 @@
       gap: 16px;
 
       .sizeModalImage {
-        flex: 0 0 18%;
-        height: 120px;
+        flex: 0 0 90px;
+        .aspect-ratio(0.8);
 
         img {
           width: 100%;
           height: 100%;
           border-radius: 4px;
-          object-fit: "cover";
+          object-fit: cover;
         }
       }
 
@@ -511,8 +443,11 @@
 
         .sigleSizeDisabled {
           position: relative;
-          color: var(--ButtonPrimaryL3);
-          border-color: var(--ButtonPrimaryL3);
+          color: @TextDisabled;
+          border-color: @DividerStokes;
+          opacity: 0.6;
+          cursor: not-allowed;
+          pointer-events: none;
         }
 
         svg {
