@@ -456,9 +456,15 @@ const AddToCart = ({
             productPrice?.quantity <= 10 && (
               <p className={styles.limitedQuantity}>
                 {(() => {
-                  const label = limited_stock_label?.startsWith("t:")
-                    ? t(limited_stock_label.slice(2))
-                    : limited_stock_label;
+                  const fallback = t("resource.common.limited_stock_label");
+                  let label;
+                  if (limited_stock_label?.startsWith("t:")) {
+                    const key = limited_stock_label.slice(2);
+                    const translated = t(key);
+                    label = translated === key ? fallback : translated;
+                  } else {
+                    label = limited_stock_label;
+                  }
                   return label.replace(/\{\{qty\}\}/g, productPrice?.quantity);
                 })()}
               </p>
