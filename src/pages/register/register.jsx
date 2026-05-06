@@ -375,9 +375,6 @@ function Register({
                   setValueAs: (v) => (typeof v === "string" ? v.trim() : v),
                 })}
               />
-              <p className={styles.referralHint}>
-                {t("resource.auth.referral_code_hint", { defaultValue: "Enter a referral code to earn bonus points." })}
-              </p>
             </div>
           )}
 
