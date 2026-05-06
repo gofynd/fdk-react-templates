@@ -165,9 +165,7 @@ function PriceBreakup({
                   >
                     {priceFormatCurrencySymbol(
                       item?.currency_symbol,
-                      item?.value,
-                      undefined,
-                      item?.currency_code
+                      item?.value
                     )}
                   </div>
                 </>
@@ -177,9 +175,7 @@ function PriceBreakup({
                   <div>
                     {priceFormatCurrencySymbol(
                       item?.currency_symbol,
-                      item?.value,
-                      undefined,
-                      item?.currency_code
+                      item?.value
                     )}
                   </div>
                 </>
@@ -210,9 +206,7 @@ function PriceBreakup({
                 <ForcedLtr
                   text={priceFormatCurrencySymbol(
                     currencySymbol,
-                    totalDiscount,
-                    undefined,
-                    breakUpValues?.[0]?.currency_code
+                    totalDiscount
                   )}
                 />
               </span>
