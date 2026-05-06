@@ -22,6 +22,8 @@ function OrderTrackingDetails({
   isShipmentLoading,
   linkOrderDetails,
   availableFOCount,
+  globalConfig,
+  onAddToCart,
 }) {
   const { t } = useGlobalTranslation("translation");
   const params = useParams();
@@ -156,6 +158,7 @@ function OrderTrackingDetails({
                             track_url: selectedShipmentBag?.track_url,
                           }}
                           type="tracking"
+                          globalConfig={globalConfig}
                         />
                       ))}
                     </div>
@@ -179,6 +182,7 @@ function OrderTrackingDetails({
                         shipmentInfo={selectedShipmentBag || {}}
                         changeinit={toggelInit}
                         invoiceDetails={invoiceDetails}
+                        onAddToCart={onAddToCart}
                       ></ShipmentTracking>
                     </div>
                     <div className={`${styles.shipment} ${styles.noPadding}`}>

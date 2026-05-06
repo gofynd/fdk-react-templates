@@ -69,12 +69,20 @@
   align-items: center;
   position: relative;
   cursor: pointer;
+  .itemCount {
+    color: @TextSecondary;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 140%;
+    padding-left: 2px;
+  }
   .imagePreview {
     @media @desktop {
       display: none;
     }
     position: absolute;
-    left: -155%;
+    left: 0px;
     top: -100px;
     z-index: 20;
   }
@@ -94,8 +102,9 @@
 }
 .accordionContentImg {
   border-radius: 50%;
-  width: 16px;
-  height: 16px;
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
   border: 1px solid var(--Text-Secondary, #6d6d6e);
 }
 
@@ -109,7 +118,7 @@
 
 .accordionContentValue {
   color: var(--Text-Heading, #1f1f1f);
-  font-family: Inter;
+  font-family: var(--font-body);
   font-size: 12px;
   font-style: normal;
   font-weight: 600;
@@ -125,6 +134,23 @@
   list-style: disc;
   padding-left: 20px;
   margin: 0;
+}
+
+.accordionContentLabel {
+  display: block;
+  font-weight: 600;
+  color: var(--Text-Heading, #1f1f1f);
+  margin-bottom: 4px;
+}
+
+.accordionContentSublist {
+  list-style: disc;
+  padding-left: 20px;
+  margin: 0 0 8px 0;
+}
+
+.accordionContentSubrow {
+  margin-bottom: 4px;
 }
 
 .accordionContentInner {
