@@ -32,7 +32,6 @@ function PayLater({
   isPaymentLoading,
   loader,
   onPriceDetailsClick,
-  mopSelectionLoading,
 }) {
   const isTablet = useViewport(0, 768);
 
@@ -88,7 +87,7 @@ function PayLater({
                         getTotalValue()
                       )}
                       onPriceDetailsClick={onPriceDetailsClick}
-                      disabled={mopSelectionLoading || !selectedPayLater.code}
+                      disabled={!selectedPayLater.code}
                       enableLinkPaymentOption={enableLinkPaymentOption}
                       isPaymentLoading={isPaymentLoading}
                       loader={loader}
@@ -106,7 +105,7 @@ function PayLater({
                           proceedToPay("PL", selectedPaymentPayload);
                           acceptOrder();
                         }}
-                        disabled={mopSelectionLoading || isPaymentLoading}
+                        disabled={isPaymentLoading}
                       >
                         {!isPaymentLoading ? (
                           <>

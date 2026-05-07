@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import * as styles from "./checkout-payment-content.less";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import Modal from "../../../components/core/modal/modal";
@@ -21,7 +21,6 @@ import OtherPay from "../../../components/payment-options/other-pay";
 import PayLater from "../../../components/payment-options/pay-later";
 import CardLessEmi from "../../../components/payment-options/cardless-emi-pay";
 import { useCheckoutPayment } from "../../payment/useCheckoutPayment";
-import { useFPI } from "fdk-core/utils";
 
 function CheckoutPaymentContent({
   payment,
@@ -33,7 +32,9 @@ function CheckoutPaymentContent({
   setCancelQrPayment,
   isCouponApplied,
   juspayErrorMessage,
+  setMopPayload,
   isCouponValid,
+  setIsCouponValid,
   inValidCouponData,
 }) {
   const checkoutPayment = useCheckoutPayment({
@@ -43,6 +44,7 @@ function CheckoutPaymentContent({
     setCancelQrPayment,
     isCouponApplied,
     juspayErrorMessage,
+    setMopPayload,
     styles,
   });
 
@@ -68,7 +70,6 @@ function CheckoutPaymentContent({
     creditUpdating,
     isPaymentLoading,
     isUPIError,
-    mopSelectionLoading,
   } = payment;
 
   // destructure exactly what the JSX (and the local prop-bundles) needs
@@ -205,12 +206,10 @@ function CheckoutPaymentContent({
     getOPBorder,
     handleScrollToTop,
     vpa,
-    validateCouponOnCreditNoteApplied,
-    handleProceedToPayClick,
   } = checkoutPayment;
 
   const uiProps = { styles, t, SvgWrapper, StickyPayNow, isTablet };
-  const fpi = useFPI();
+
   const amountProps = { getCurrencySymbol, getTotalValue };
 
   const paymentFlowProps = {
@@ -222,7 +221,6 @@ function CheckoutPaymentContent({
     isPaymentLoading,
     loader,
     onPriceDetailsClick,
-    mopSelectionLoading,
   };
 
   // Card specific (keeps the case block small)
@@ -354,10 +352,6 @@ function CheckoutPaymentContent({
               acceptOrder={acceptOrder}
               disbaleCheckout={disbaleCheckout}
               vpa={vpa}
-              selectedTab={selectedTab}
-              handleProceedToPayClick={handleProceedToPayClick}
-              isCouponApplied={isCouponApplied}
-              isCouponValid={isCouponValid}
             />
 
             <QrCodePaymet
@@ -414,8 +408,6 @@ function CheckoutPaymentContent({
             setTab={setTab}
             setSelectedTab={setSelectedTab}
             Spinner={Spinner}
-            isCouponValid={isCouponValid}
-            mopSelectionLoading={mopSelectionLoading}
           />
         );
 
@@ -515,7 +507,6 @@ function CheckoutPaymentContent({
                               getCurrencySymbol,
                               getTotalValue()
                             )}
-                            disabled={mopSelectionLoading}
                             onPriceDetailsClick={onPriceDetailsClick}
                             enableLinkPaymentOption={enableLinkPaymentOption}
                             isPaymentLoading={isPaymentLoading}
@@ -532,7 +523,7 @@ function CheckoutPaymentContent({
                               proceedToPay("Other", selectedPaymentPayload);
                               acceptOrder();
                             }}
-                            disabled={mopSelectionLoading || isPaymentLoading}
+                            disabled={isPaymentLoading}
                           >
                             {!isPaymentLoading ? (
                               <>
@@ -656,6 +647,7 @@ function CheckoutPaymentContent({
       </div>
     );
   };
+
   return (
     <>
       {!enableLinkPaymentOption &&
@@ -670,7 +662,7 @@ function CheckoutPaymentContent({
                 hideNewCard();
               }
               setShowCouponValidityModal(false);
-              fpi.custom.setValue("isCouponValid", true);
+              setIsCouponValid(true);
               unsetSelectedSubMop();
             }}
           >
@@ -684,14 +676,7 @@ function CheckoutPaymentContent({
                   onClick={() => {
                     removeCoupon();
                     setShowCouponValidityModal(false);
-                    fpi.custom.setValue("isCouponValid", true);
-                    if (
-                      !selectedUpiIntentApp &&
-                      selectedTab === "UPI" &&
-                      isTablet
-                    ) {
-                      setSelectedUpiIntentApp("gpay");
-                    }
+                    setIsCouponValid(true);
                   }}
                 >
                   {t("resource.common.yes")}
@@ -703,7 +688,7 @@ function CheckoutPaymentContent({
                       hideNewCard();
                     }
                     setShowCouponValidityModal(false);
-                    fpi.custom.setValue("isCouponValid", true);
+                    setIsCouponValid(true);
                     unsetSelectedSubMop();
                   }}
                 >
@@ -730,10 +715,6 @@ function CheckoutPaymentContent({
                   <CreditNote
                     data={partialPaymentOption}
                     updateStoreCredits={updateStoreCredits}
-                    validateCouponOnCreditNoteApplied={
-                      validateCouponOnCreditNoteApplied
-                    }
-                    isCouponApplied={isCouponApplied}
                   />
                 </div>
               )}

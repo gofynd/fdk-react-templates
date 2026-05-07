@@ -393,76 +393,65 @@ h5,
     display: none !important;
   }
 }
+.product-variants__productVariants___pGXor {
+  margin-top: 52px;
+}
 .product-variants__variantTitle___GlBrN {
-  font-size: 12px;
+  font-size: 16px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  letter-spacing: -0.24px;
+  letter-spacing: 0;
+}
+@media only screen and (max-width: 768px) {
+  .product-variants__variantTitle___GlBrN {
+    font-size: 13px;
+  }
 }
 .product-variants__variantWrapper___cORbU {
-  margin-top: 24px;
+  margin-top: 0;
 }
 @media only screen and (max-width: 768px) {
   .product-variants__variantWrapper___cORbU {
-    margin-top: 16px;
+    margin-top: 0;
   }
 }
 .product-variants__variantContainer___J1jRs {
   display: flex;
   align-items: center;
+  column-gap: 34px;
+  row-gap: 16px;
   flex-wrap: wrap;
-  margin-top: 6px;
-}
-@supports not (gap: 6px 8px) {
-  .product-variants__variantContainer___J1jRs {
-    margin-inline-start: -4px;
-    margin-inline-end: -4px;
-    margin-bottom: -6px;
-  }
-  .product-variants__variantContainer___J1jRs > * {
-    padding-inline-start: 8px / 2;
-    padding-inline-end: 8px / 2;
-    margin-bottom: 6px;
-  }
-}
-@supports (gap: 6px 8px) {
-  .product-variants__variantContainer___J1jRs {
-    gap: 6px 8px;
-  }
+  margin-top: 22px;
 }
 .product-variants__variantContainer___J1jRs::-webkit-scrollbar {
   display: none;
 }
 .product-variants__variantContainer___J1jRs .product-variants__variantItemImage___vLXOQ,
 .product-variants__variantContainer___J1jRs .product-variants__variantItemColor___Lomkf .product-variants__color___rvpbQ {
-  width: 48px;
-  height: 48px;
-  border-radius: 4px;
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
   position: relative;
   overflow: hidden;
 }
 @media only screen and (min-width: 769px) {
   .product-variants__variantContainer___J1jRs .product-variants__variantItemImage___vLXOQ,
   .product-variants__variantContainer___J1jRs .product-variants__variantItemColor___Lomkf .product-variants__color___rvpbQ {
-    width: 56px;
-    height: 56px;
+    width: 18px;
+    height: 18px;
   }
 }
-.product-variants__variantContainer___J1jRs .product-variants__variantItemImage___vLXOQ:not(.product-variants__selected____tPp7) .product-variants__overlay___XGw5m,
-.product-variants__variantContainer___J1jRs .product-variants__variantItemColor___Lomkf .product-variants__color___rvpbQ:not(.product-variants__selected____tPp7) .product-variants__overlay___XGw5m,
-.product-variants__variantContainer___J1jRs .product-variants__variantItemImage___vLXOQ:not(.product-variants__selected____tPp7) .product-variants__selectedIcon___bQB5Q,
-.product-variants__variantContainer___J1jRs .product-variants__variantItemColor___Lomkf .product-variants__color___rvpbQ:not(.product-variants__selected____tPp7) .product-variants__selectedIcon___bQB5Q {
+.product-variants__variantContainer___J1jRs .product-variants__variantItemImage___vLXOQ .product-variants__overlay___XGw5m,
+.product-variants__variantContainer___J1jRs .product-variants__variantItemColor___Lomkf .product-variants__color___rvpbQ .product-variants__overlay___XGw5m,
+.product-variants__variantContainer___J1jRs .product-variants__variantItemImage___vLXOQ .product-variants__selectedIcon___bQB5Q,
+.product-variants__variantContainer___J1jRs .product-variants__variantItemColor___Lomkf .product-variants__color___rvpbQ .product-variants__selectedIcon___bQB5Q {
   display: none;
 }
 .product-variants__variantContainer___J1jRs .product-variants__variantItemImage___vLXOQ:is(.product-variants__unavailable___RVOsF) .product-variants__overlay___XGw5m,
 .product-variants__variantContainer___J1jRs .product-variants__variantItemColor___Lomkf .product-variants__color___rvpbQ:is(.product-variants__unavailable___RVOsF) .product-variants__overlay___XGw5m {
   display: block;
   background: rgba(255, 255, 255, 0.7);
-}
-.product-variants__variantContainer___J1jRs .product-variants__variantItemImage___vLXOQ:hover .product-variants__overlay___XGw5m,
-.product-variants__variantContainer___J1jRs .product-variants__variantItemColor___Lomkf .product-variants__color___rvpbQ:hover .product-variants__overlay___XGw5m {
-  display: block;
 }
 .product-variants__variantContainer___J1jRs .product-variants__variantItemImage___vLXOQ .product-variants__overlay___XGw5m,
 .product-variants__variantContainer___J1jRs .product-variants__variantItemColor___Lomkf .product-variants__color___rvpbQ .product-variants__overlay___XGw5m {
@@ -480,26 +469,30 @@ h5,
 }
 .product-variants__variantContainer___J1jRs .product-variants__variantItemImage___vLXOQ .product-variants__selectedIcon___bQB5Q,
 .product-variants__variantContainer___J1jRs .product-variants__variantItemColor___Lomkf .product-variants__color___rvpbQ .product-variants__selectedIcon___bQB5Q {
-  height: 24px;
-  width: 24px;
-  position: absolute;
-  top: 50%;
-  inset-inline-start: 50%;
-  transform: translate(-50%, -50%);
-  fill: var(--buttonSecondary, #fff);
-}
-[dir="rtl"] .product-variants__variantContainer___J1jRs .product-variants__variantItemImage___vLXOQ .product-variants__selectedIcon___bQB5Q,
-[dir="rtl"] .product-variants__variantContainer___J1jRs .product-variants__variantItemColor___Lomkf .product-variants__color___rvpbQ .product-variants__selectedIcon___bQB5Q {
-  transform: translate(50%, -50%);
+  display: none;
 }
 .product-variants__variantContainer___J1jRs .product-variants__variantItemImage___vLXOQ {
   display: inline-block;
   cursor: pointer;
 }
+.product-variants__variantContainer___J1jRs .product-variants__variantItemColor___Lomkf {
+  position: relative;
+  padding-bottom: 10px;
+}
+.product-variants__variantContainer___J1jRs .product-variants__variantItemColor___Lomkf.product-variants__selected____tPp7::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  bottom: 0;
+  width: 18px;
+  height: 1px;
+  background: var(--textHeading, #26201a);
+}
 .product-variants__variantContainer___J1jRs .product-variants__variantItemColor___Lomkf .product-variants__color___rvpbQ {
-  width: 40px;
-  height: 40px;
+  width: 18px;
+  height: 18px;
   border: 1px solid var(--dividerStokes, #d4d1d1);
+  box-sizing: border-box;
 }
 .product-variants__variantContainer___J1jRs .product-variants__variantItemColor___Lomkf .product-variants__color___rvpbQ.product-variants__unavailable___RVOsF .product-variants__overlay___XGw5m > span {
   position: absolute;

@@ -326,14 +326,7 @@ function SingleShipmentContent({
                                 </div>
                               </div>
                               <FreeGiftItem
-                                item={
-                                  product?.articles?.find((article) =>
-                                    article?.promotions_applied?.some(
-                                      (p) =>
-                                        p?.promotion_type === "free_gift_items"
-                                    )
-                                  ) ?? product?.item
-                                }
+                                item={product?.item}
                                 currencySymbol={
                                   product?.item?.price?.converted
                                     ?.currency_symbol ??

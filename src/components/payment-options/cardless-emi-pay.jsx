@@ -30,7 +30,6 @@ function CardLessEmi({
   isPaymentLoading,
   loader,
   onPriceDetailsClick,
-  mopSelectionLoading,
 }) {
   const isTablet = useViewport(0, 768);
   return (
@@ -76,7 +75,6 @@ function CardLessEmi({
                       getCurrencySymbol,
                       getTotalValue()
                     )}
-                    disabled={mopSelectionLoading}
                     onPriceDetailsClick={onPriceDetailsClick}
                     enableLinkPaymentOption={enableLinkPaymentOption}
                     isPaymentLoading={isPaymentLoading}

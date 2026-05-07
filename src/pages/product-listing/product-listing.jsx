@@ -21,12 +21,39 @@ import AddToCart from "../../page-layouts/plp/Components/add-to-cart/add-to-cart
 import { useViewport } from "../../helper/hooks";
 import SizeGuide from "../../page-layouts/plp/Components/size-guide/size-guide";
 import FilterIcon from "../../assets/images/filter.svg";
-import SortIcon from "../../assets/images/sort.svg";
 import TwoGridIcon from "../../assets/images/grid-two.svg";
 import FourGridIcon from "../../assets/images/grid-four.svg";
 import TwoGridMobIcon from "../../assets/images/grid-two-mob.svg";
 import OneGridMobIcon from "../../assets/images/grid-one-mob.svg";
 import { useGlobalTranslation, useGlobalStore, useFPI } from "fdk-core/utils";
+import dummyProductImage from "../../assets/images/dummy-product.svg";
+
+const DEMO_PRODUCTS = Array.from({ length: 20 }, (_, index) => ({
+  uid: `demo-${index + 1}`,
+  slug: `demo-product-${index + 1}`,
+  name: "Linen blend relaxed fit",
+  brand: { name: "COS" },
+  teaser_tag: index % 3 === 0 ? "NEW" : "",
+  discount: index % 4 === 0 ? "20% OFF" : "",
+  sellable: true,
+  media: [{ type: "image", url: dummyProductImage }],
+  price: {
+    effective: { min: 1290, max: 1290, currency_symbol: "₹" },
+    marked: { min: 1590, max: 1590, currency_symbol: "₹" },
+  },
+}));
+
+const COS_CATEGORY_LINKS = [
+  { label: "CLOTHING", to: "/men/new-arrivals" },
+  { label: "ALL MENSWEAR", to: "/men/view-all" },
+  { label: "LINEN", to: "/men/linen-collection" },
+  { label: "T-SHIRTS", to: "/men/t-shirts" },
+  { label: "SHIRTS", to: "/men/shirts" },
+  { label: "POLO SHIRTS", to: "/men/polo-shirts" },
+  { label: "TROUSERS", to: "/men/trousers" },
+  { label: "JEANS", to: "/men/jeans" },
+  { label: "ACCESSORIES", to: "/men/new-accessories" },
+];
 
 const ProductListing = ({
   breadcrumb = [],
@@ -65,8 +92,8 @@ const ProductListing = ({
   followedIdList = [],
   listingPrice = "range",
   banner = {},
-  showAddToCart = false,
-  showColorVariants = false,
+  showAddToCart = true,
+  showColorVariants = true,
   actionButtonText,
   stickyFilterTopOffset = 0,
   filterToggle = false,
@@ -104,6 +131,20 @@ const ProductListing = ({
       ? `${restAddToModalProps?.productData?.product?.name?.slice(0, 30)}...`
       : restAddToModalProps?.productData?.product?.name || ""
     : "";
+  const shouldShowDemoData =
+    !isPageLoading && (!productList || productList.length === 0);
+  const displayProductList = shouldShowDemoData ? DEMO_PRODUCTS : productList;
+  const loadedProductCount = displayProductList?.length || 0;
+  const totalProductCount = Number(productCount) || 0;
+  const visibleProductCount = totalProductCount
+    ? Math.min(loadedProductCount, totalProductCount)
+    : loadedProductCount;
+  const loadMoreProgress = totalProductCount
+    ? Math.min(100, Math.max(0, (visibleProductCount / totalProductCount) * 100))
+    : 0;
+  const loadMoreLabel = totalProductCount
+    ? `LOAD MORE PRODUCTS (${visibleProductCount}/${totalProductCount})`
+    : "LOAD MORE PRODUCTS";
 
   return (
     <div className={styles.plpWrapper}>
@@ -129,27 +170,46 @@ const ProductListing = ({
           {title && <h1 className={styles.visuallyHidden}>{title}</h1>}
           <div className={styles.mobileHeader}>
             <div className={styles.headerLeft}>
-              {filterList.length > 0 && (
-                <button
-                  className={styles.filterBtn}
-                  onClick={onFilterModalBtnClick}
-                >
-                  <FilterIcon />
-                  <span>{t("resource.common.filter")}</span>
-                </button>
-              )}
-              <button onClick={onSortModalBtnClick}>
-                <SortIcon />
-                <span>{t("resource.facets.sort_by")}</span>
+              <button
+                type="button"
+                className={styles.filterSortBtn}
+                onClick={
+                  filterList.length > 0 ? onFilterModalBtnClick : onSortModalBtnClick
+                }
+                aria-label="Filter and sort products"
+              >
+                <FilterIcon aria-hidden="true" />
+                <span>Filter & sort</span>
               </button>
             </div>
+            <nav className={styles.quickCategoryNav} aria-label="Product categories">
+              {COS_CATEGORY_LINKS.map((item, index) => (
+                <FDKLink
+                  key={item.label}
+                  to={item.to}
+                  className={`${styles.quickCategoryLink} ${
+                    index === 0 ? styles.active : ""
+                  }`}
+                >
+                  {item.label}
+                </FDKLink>
+              ))}
+            </nav>
             <div className={styles.headerRight}>
+              {/* COS Figma match: 4 grid toggle buttons that update the current viewport's column count.
+                  On desktop (>=769px): updates desktop columns (1/2/4/10).
+                  On tablet: updates tablet columns.
+                  On mobile: updates mobile columns. */}
               <button
                 className={`${styles.colIconBtn} ${styles.mobile} ${
-                  columnCount?.mobile === 1 ? styles.active : ""
+                  (isTablet ? columnCount?.mobile === 1 : columnCount?.desktop === 1) ? styles.active : ""
                 }`}
                 onClick={() =>
-                  onColumnCountUpdate({ screen: "mobile", count: 1 })
+                  onColumnCountUpdate(
+                    isTablet
+                      ? { screen: "mobile", count: 1 }
+                      : { screen: "desktop", count: 1 }
+                  )
                 }
                 title={t("resource.product.mobile_grid_one")}
               >
@@ -157,10 +217,14 @@ const ProductListing = ({
               </button>
               <button
                 className={`${styles.colIconBtn} ${styles.mobile} ${
-                  columnCount?.mobile === 2 ? styles.active : ""
+                  (isTablet ? columnCount?.mobile === 2 : columnCount?.desktop === 2) ? styles.active : ""
                 }`}
                 onClick={() =>
-                  onColumnCountUpdate({ screen: "mobile", count: 2 })
+                  onColumnCountUpdate(
+                    isTablet
+                      ? { screen: "mobile", count: 2 }
+                      : { screen: "desktop", count: 2 }
+                  )
                 }
                 title={t("resource.product.mobile_grid_two")}
               >
@@ -168,10 +232,14 @@ const ProductListing = ({
               </button>
               <button
                 className={`${styles.colIconBtn} ${styles.tablet} ${
-                  columnCount?.tablet === 2 ? styles.active : ""
+                  (isTablet ? columnCount?.tablet === 2 : columnCount?.desktop === 4) ? styles.active : ""
                 }`}
                 onClick={() =>
-                  onColumnCountUpdate({ screen: "tablet", count: 2 })
+                  onColumnCountUpdate(
+                    isTablet
+                      ? { screen: "tablet", count: 2 }
+                      : { screen: "desktop", count: 4 }
+                  )
                 }
                 title={t("resource.product.tablet_grid_two")}
               >
@@ -179,12 +247,16 @@ const ProductListing = ({
               </button>
               <button
                 className={`${styles.colIconBtn} ${styles.tablet} ${
-                  columnCount?.tablet === 3 ? styles.active : ""
+                  (isTablet ? columnCount?.tablet === 3 : columnCount?.desktop === 10) ? styles.active : ""
                 }`}
                 onClick={() =>
-                  onColumnCountUpdate({ screen: "tablet", count: 3 })
+                  onColumnCountUpdate(
+                    isTablet
+                      ? { screen: "tablet", count: 3 }
+                      : { screen: "desktop", count: 10 }
+                  )
                 }
-                title={t("resource.product.tablet_grid_four")}
+                title="Mini grid"
               >
                 <FourGridIcon />
               </button>
@@ -327,6 +399,11 @@ const ProductListing = ({
                 </div>
               )}
               <div className={styles["plp-container"]}>
+                {isProductLoading && (
+                  <div className={styles.plpLoaderHeader}>
+                    {t("resource.product.desktop_grid_four") || "Desktop - 4 Column"}
+                  </div>
+                )}
                 {loadingOption === "infinite" ? (
                   <InfiniteLoader
                     hasNext={paginationProps.hasNext}
@@ -336,7 +413,7 @@ const ProductListing = ({
                     <ProductGrid
                       {...{
                         isProductOpenInNewTab,
-                        productList,
+                        productList: displayProductList,
                         columnCount,
                         isBrand,
                         isSaleBadge,
@@ -367,7 +444,7 @@ const ProductListing = ({
                   <ProductGrid
                     {...{
                       isProductOpenInNewTab,
-                      productList,
+                      productList: displayProductList,
                       columnCount,
                       isBrand,
                       isSaleBadge,
@@ -403,12 +480,22 @@ const ProductListing = ({
                 {loadingOption === "view_more" && paginationProps.hasNext && (
                   <div className={styles.viewMoreWrapper}>
                     <button
-                      className={styles.viewMoreBtn}
+                      className={`${styles.viewMoreBtn} ${
+                        isProductLoading ? styles.loading : ""
+                      }`}
                       onClick={onViewMoreClick}
                       tabIndex="0"
                       disabled={isProductLoading}
+                      style={{ "--load-more-progress": `${loadMoreProgress}%` }}
+                      aria-label={loadMoreLabel}
                     >
-                      {t("resource.facets.view_more")}
+                      <span
+                        className={styles.viewMoreProgress}
+                        aria-hidden="true"
+                      />
+                      <span className={styles.viewMoreLabel}>
+                        {loadMoreLabel}
+                      </span>
                     </button>
                   </div>
                 )}
@@ -420,7 +507,15 @@ const ProductListing = ({
             </div>
           </div>
           <SortModal {...sortModalProps} />
-          <FilterModal {...{ isResetFilterDisable, ...filterModalProps }} />
+          <FilterModal
+            {...{
+              isResetFilterDisable,
+              sortList,
+              productCount,
+              onSortUpdate,
+              ...filterModalProps,
+            }}
+          />
           {isScrollTop && <ScrollTop />}
           {showAddToCart && (
             <>
@@ -428,6 +523,8 @@ const ProductListing = ({
                 <Modal
                   isOpen={isAddToCartOpen}
                   hideHeader={!isTablet}
+                  modalType="right-modal"
+                  customClassName={styles.quickShopModal}
                   containerClassName={styles.addToCartContainer}
                   bodyClassName={styles.addToCartBody}
                   titleClassName={styles.addToCartTitle}
@@ -438,6 +535,9 @@ const ProductListing = ({
                     {...restAddToModalProps}
                     globalConfig={globalConfig}
                     isServiceable={is_serviceable}
+                    recommendationProducts={displayProductList}
+                    followedIdList={followedIdList}
+                    onWishlistClick={onWishlistClick}
                   />
                 </Modal>
               )}
@@ -445,6 +545,7 @@ const ProductListing = ({
                 isOpen={showSizeGuide}
                 onCloseDialog={handleCloseSizeGuide}
                 productMeta={restAddToModalProps?.productData?.product?.sizes}
+                selectedSize={restAddToModalProps?.selectedSize}
               />
             </>
           )}
@@ -471,10 +572,15 @@ function ProductGrid({
       }}
     >
       {productList?.length > 0 &&
-        productList.map((product) => (
+        productList.map((product, index) => (
           <ProductGridItem
-            key={product?.uid}
+            key={
+              product?.uid ||
+              product?.slug ||
+              `${product?.name || "product"}-${index}`
+            }
             product={product}
+            columnCount={columnCount}
             {...restProps}
           />
         ))}
@@ -498,8 +604,8 @@ function ProductGridItem({
   listingPrice = "range",
   isImageFill = false,
   showImageOnHover = false,
-  showAddToCart = false,
-  showColorVariants = false,
+  showAddToCart = true,
+  showColorVariants = true,
   actionButtonText,
   imageBackgroundColor = "",
   imagePlaceholder = "",

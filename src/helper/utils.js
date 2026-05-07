@@ -874,15 +874,11 @@ export const getUserPrimaryPhone = (user) => {
     return null;
   }
 
-  const primaryPhone =
-    user.phone_numbers.find((phone) => phone.primary) ||
-    user.phone_numbers.find((phone) => phone.active) ||
-    user.phone_numbers[0];
+  const primaryPhone = user.phone_numbers.find((phone) => phone.primary);
   if (!primaryPhone) return null;
 
   const countryCode = primaryPhone.country_code?.toString() || "91";
   const mobile = primaryPhone.phone || "";
-  if (!mobile) return null;
 
   return {
     mobile,

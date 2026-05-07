@@ -135,6 +135,7 @@ const Wishlist = ({
             isOpen={showSizeGuide}
             onCloseDialog={handleCloseSizeGuide}
             productMeta={restAddToModalProps?.productData?.product?.sizes}
+            selectedSize={restAddToModalProps?.selectedSize}
           />
         </>
       )}

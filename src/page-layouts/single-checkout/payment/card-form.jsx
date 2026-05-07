@@ -61,7 +61,6 @@ function CardForm({
   setIsJuspayCouponApplied,
   isPaymentLoading = false,
   loader = <div></div>,
-  mopSelectionLoading,
 }) {
   const { t } = useGlobalTranslation("translation");
   const isFormatterSet = useRef(false);
@@ -202,10 +201,7 @@ function CardForm({
           {cardDetailsData && cardDetailsData.logo && (
             <img
               src={cardDetailsData.logo}
-              alt={
-                cardDetailsData?.name ||
-                t("resource.checkout.card_network_logo")
-              }
+              alt={cardDetailsData?.name || t("resource.checkout.card_network_logo")}
               className={`${styles.cardNetwork} ${cardNumberError ? styles.iconPositionOnError : ""}`}
             />
           )}
@@ -392,13 +388,12 @@ function CardForm({
             proceedToPay={() => payUsingCard()}
             loader={loader}
             isPaymentLoading={isPaymentLoading}
-            mopSelectionLoading={mopSelectionLoading}
           />
         ) : (
           <button
             className={styles.saveNewCard}
             onClick={() => payUsingCard()}
-            disabled={!isCardValid() || isPaymentLoading || mopSelectionLoading}
+            disabled={!isCardValid() || isPaymentLoading}
           >
             {!isPaymentLoading ? (
               <>

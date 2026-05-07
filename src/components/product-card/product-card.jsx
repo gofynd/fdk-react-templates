@@ -182,46 +182,86 @@ const ProductCard = ({
 
   // Optimized state management for selected variant
   const [selectedVariant, setSelectedVariant] = useState(null);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
 
   // Current active variant with fallback
   const currentShade = selectedVariant || colorVariants.defaultVariant;
+
+  const getImageMedia = useCallback((mediaList = []) => {
+    if (!Array.isArray(mediaList)) return [];
+    return mediaList.filter((media) => media?.type === "image" && media?.url);
+  }, []);
+
+  const getVariantImages = useCallback(
+    (variant = null) => getImageMedia(variant?.medias || variant?.media || []),
+    [getImageMedia]
+  );
 
   // Optimized image processing with memoization
   const getProductImages = useCallback(
     (variant = null) => {
       // Priority: variant medias -> product media -> empty array
-      if (variant?.medias?.length) {
-        return variant.medias.filter((media) => media.type === "image");
-      }
-      return product?.media?.filter((media) => media.type === "image") || [];
+      const variantImages = getVariantImages(variant);
+      if (variantImages.length) return variantImages;
+      return getImageMedia(product?.media || product?.medias || []);
     },
-    [product?.media]
+    [getImageMedia, getVariantImages, product?.media, product?.medias]
   );
 
   // Memoized image data to prevent unnecessary recalculations
   const imageData = useMemo(() => {
     const currentImages = getProductImages(currentShade);
     const fallbackImages = getProductImages();
+    const variantImages = colorVariants.items.flatMap((variant) =>
+      getVariantImages(variant)
+    );
+    const sourceImages = currentImages.length
+      ? [...currentImages, ...fallbackImages, ...variantImages]
+      : [...fallbackImages, ...variantImages];
+    const seenUrls = new Set();
+    const images = sourceImages.reduce((acc, media, index) => {
+      if (!media?.url || seenUrls.has(media.url)) return acc;
+
+      seenUrls.add(media.url);
+      acc.push({
+        url: media.url,
+        alt:
+          media.alt ||
+          `${product?.brand?.name || ""} | ${product?.name || ""} ${index + 1}`.trim(),
+      });
+      return acc;
+    }, []);
+
+    if (!images.length && imagePlaceholder) {
+      images.push({
+        url: imagePlaceholder,
+        alt: `${product?.brand?.name || ""} | ${product?.name || ""}`.trim(),
+      });
+    }
+
+    const activeImage = images[activeImageIndex] || images[0] || {};
 
     return {
-      url: currentImages[0]?.url || fallbackImages[0]?.url || imagePlaceholder,
-      alt:
-        currentImages[0]?.alt ||
-        fallbackImages[0]?.alt ||
-        `${product?.brand?.name} | ${product?.name}`,
-      hoverUrl: currentImages[1]?.url || fallbackImages[1]?.url || "",
-      hoverAlt:
-        currentImages[1]?.alt ||
-        fallbackImages[1]?.alt ||
-        `${product?.brand?.name} | ${product?.name}`,
+      images,
+      url: activeImage.url || imagePlaceholder,
+      alt: activeImage.alt || `${product?.brand?.name} | ${product?.name}`,
+      hoverUrl: images[1]?.url || "",
+      hoverAlt: images[1]?.alt || `${product?.brand?.name} | ${product?.name}`,
     };
   }, [
+    activeImageIndex,
+    colorVariants.items,
     currentShade,
+    getVariantImages,
     getProductImages,
     imagePlaceholder,
     product?.brand?.name,
     product?.name,
   ]);
+
+  useEffect(() => {
+    setActiveImageIndex(0);
+  }, [currentShade?.uid, product?.uid]);
 
   // Optimized variant display order with memoization
   const orderedVariants = useMemo(() => {
@@ -242,6 +282,8 @@ const ProductCard = ({
     return !!followedIdList?.includes(product?.uid);
   }, [followedIdList, product]);
 
+  const isMiniGrid = columnCount?.desktop === 10;
+
   const handleWishlistClick = (e) => {
     e.stopPropagation();
     e.preventDefault();
@@ -256,15 +298,58 @@ const ProductCard = ({
 
   const gridClass = useMemo(
     () =>
-      `${columnCount?.mobile === 2 ? styles["mob-grid-2-card"] : styles["mob-grid-1-card"]} ${columnCount?.tablet === 2 ? styles["tablet-grid-2-card"] : styles["tablet-grid-3-card"]} ${columnCount?.desktop === 2 ? styles["desktop-grid-2-card"] : styles["desktop-grid-4-card"]}`,
+      `${columnCount?.mobile === 2 ? styles["mob-grid-2-card"] : styles["mob-grid-1-card"]} ${columnCount?.tablet === 2 ? styles["tablet-grid-2-card"] : styles["tablet-grid-3-card"]} ${
+        columnCount?.desktop === 1
+          ? styles["desktop-grid-1-card"]
+          : columnCount?.desktop === 2
+          ? styles["desktop-grid-2-card"]
+          : columnCount?.desktop === 10
+            ? styles["desktop-grid-mini-card"]
+            : styles["desktop-grid-4-card"]
+      }`,
     [columnCount?.desktop, columnCount?.tablet, columnCount?.mobile]
   );
 
   const handleAddToCartClick = (event) => {
     event?.preventDefault();
     event?.stopPropagation();
-    handleAddToCart(product?.slug);
+    handleAddToCart(product?.slug, product);
   };
+
+  const hasImageSlider = imageData.images.length > 1;
+  const teaserTagText =
+    typeof product?.teaser_tag === "string" ? product.teaser_tag.trim() : "";
+  const productTags = Array.isArray(product?.tags)
+    ? product.tags
+    : typeof product?.tags === "string"
+      ? product.tags.split(",")
+      : [];
+  const hasNewSignal =
+    productTags.some((tag) => `${tag}`.trim().toLowerCase().includes("new")) ||
+    !!product?.product_online_date;
+  const badgeText = teaserTagText || (hasNewSignal ? "NEW" : "");
+  const isNewBadge = badgeText.toLowerCase() === "new";
+  const shouldShowCustomBadge =
+    !isMiniGrid &&
+    showBadge &&
+    isValidCustomBadge(badgeText) &&
+    (isCustomBadge || isNewBadge);
+  const badgeHeight = Math.max(50, badgeText.length * 8);
+
+  const handleImageSlide = useCallback(
+    (event, direction) => {
+      event?.preventDefault();
+      event?.stopPropagation();
+
+      const total = imageData.images.length;
+      if (total <= 1) return;
+
+      setActiveImageIndex((currentIndex) =>
+        (currentIndex + direction + total) % total
+      );
+    },
+    [imageData.images.length]
+  );
 
   // Optimized variant click handler with useCallback
   const handleVariantClick = useCallback(
@@ -290,7 +375,7 @@ const ProductCard = ({
       onClick={onClick}
     >
       <div className={`${styles.imageContainer} ${customImageContainerClass} ${!product.sellable ? styles.outOfStockContainer : ""}`}>
-        {!isMobile && showImageOnHover && imageData.hoverUrl && (
+        {!isMiniGrid && !hasImageSlider && !isMobile && showImageOnHover && imageData.hoverUrl && (
           <FyImage
             src={imageData.hoverUrl}
             alt={imageData.hoverAlt}
@@ -314,7 +399,41 @@ const ProductCard = ({
           sources={imgSrcSet}
           defer={false}
         />
-        {isWishlistIcon && (
+        {!isMiniGrid && hasImageSlider && (
+          <>
+            <div className={styles.productImageSliderControls}>
+              <button
+                type="button"
+                className={`${styles.productImageSliderBtn} ${styles.productImageSliderPrev}`}
+                aria-label="Previous product image"
+                onClick={(event) => handleImageSlide(event, -1)}
+              />
+              <button
+                type="button"
+                className={`${styles.productImageSliderBtn} ${styles.productImageSliderNext}`}
+                aria-label="Next product image"
+                onClick={(event) => handleImageSlide(event, 1)}
+              />
+            </div>
+            <div
+              className={styles.productImageSliderTrack}
+              style={{
+                gridTemplateColumns: `repeat(${imageData.images.length}, minmax(0, 1fr))`,
+              }}
+              aria-hidden="true"
+            >
+              {imageData.images.map((image, index) => (
+                <span
+                  key={`${image.url}-${index}`}
+                  className={`${styles.productImageSliderSegment} ${
+                    index === activeImageIndex ? styles.active : ""
+                  }`}
+                />
+              ))}
+            </div>
+          </>
+        )}
+        {!isMiniGrid && isWishlistIcon && (
           <button
             className={`${styles.wishlistBtn} ${isFollowed ? styles.active : ""}`}
             onClick={handleWishlistClick}
@@ -323,110 +442,7 @@ const ProductCard = ({
             <WishlistIconComponent isFollowed={isFollowed} />
           </button>
         )}
-        {isRemoveIcon && (
-          <button
-            className={`${styles.wishlistBtn} ${isFollowed ? styles.active : ""}`}
-            onClick={handleRemoveClick}
-            title={t("resource.product.wishlist_icon")}
-          >
-            <RemoveIconComponent />
-          </button>
-        )}
-        {!product.sellable ? (
-          <div className={`${styles.badge} ${styles.outOfStock}`}>
-            <span className={`${styles.text} ${styles.captionNormal}`}>
-              {t("resource.common.out_of_stock")}
-            </span>
-          </div>
-        ) : isCustomBadge && isValidCustomBadge(product.teaser_tag) && showBadge ? (
-          <div className={styles.badge}>
-            <span className={`${styles.text} ${styles.captionNormal}`}>
-              {isMobileView
-                ? `${product?.teaser_tag?.substring(0, 8)}...`
-                : product?.teaser_tag?.substring(0, 14)}
-            </span>
-          </div>
-        ) : isSaleBadge && showBadge && product.discount && product.sellable ? (
-          <div className={`${styles.badge} ${styles.sale}`}>
-            <span className={`${styles.text} ${styles.captionNormal}`}>
-              {t("resource.common.sale")}
-            </span>
-          </div>
-        ) : null}
-      </div>
-      <div
-        className={`${styles.productDescContainer} ${customeProductDescContainerClass}`}
-      >
-        <div className={styles.productDesc}>
-          {isBrand && product.brand && (
-            <h3 className={styles.productBrand}>{product.brand.name}</h3>
-          )}
-          <h5
-            className={`${styles.productName} ${styles.b2} ${centerAlign ? styles.centerAlign : ""}`}
-            title={product.name}
-          >
-            {product.name}
-          </h5>
-          {isPrice && (
-            <div
-              className={`${styles.productPrice} ${centerAlign ? styles.center : ""}`}
-            >
-              {product?.price?.effective && (
-                <span
-                  className={`${styles["productPrice--sale"]} ${styles.h4}`}
-                >
-                  <ForcedLtr text={getListingPrice("effective")} />
-                </span>
-              )}
-              {hasDiscount && (
-                <span
-                  className={`${styles["productPrice--regular"]} ${styles.captionNormal}`}
-                >
-                  <ForcedLtr text={getListingPrice("marked")} />
-                </span>
-              )}
-              {product.discount && (
-                <span
-                  className={`${styles["productPrice--discount"]} ${styles.captionNormal}   ${centerAlign ? styles["productPrice--textCenter"] : ""}`}
-                >
-                  ({product.discount})
-                </span>
-              )}
-            </div>
-          )}
-
-          {/* OPTIMIZED COLOR VARIANTS SECTION */}
-          {colorVariants.hasVariants && showColorVariants && (
-            <div className={styles.productVariants}>
-              <div className={styles.colorVariants}>
-                {orderedVariants.slice(0, 4).map((variant) => {
-                  const isSelected = currentShade?.uid === variant.uid;
-
-                  return (
-                    <div
-                      key={variant.uid}
-                      className={`${styles.colorDot} ${isSelected ? styles.currentColor : ""}`}
-                      style={{ "--color": `#${variant.color}` }}
-                      title={variant.color_name || "Color variant"}
-                      onClick={(e) => handleVariantClick(e, variant)}
-                      role="button"
-                      tabIndex={0}
-                      aria-label={`Select ${variant.color_name || "color variant"}`}
-                    />
-                  );
-                })}
-
-                {colorVariants.count > 4 && (
-                  <span className={styles.moreColors}>
-                    +{colorVariants.count - 4}
-                  </span>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {showAddToCart && (
+        {!isMiniGrid && showAddToCart && (
           <FyButton
             variant="outlined"
             className={styles.addToCart}
@@ -435,7 +451,150 @@ const ProductCard = ({
             {actionButtonText ?? t("resource.common.add_to_cart")}
           </FyButton>
         )}
+        {!isMiniGrid && isRemoveIcon && (
+          <button
+            className={`${styles.wishlistBtn} ${isFollowed ? styles.active : ""}`}
+            onClick={handleRemoveClick}
+            title={t("resource.product.wishlist_icon")}
+          >
+            <RemoveIconComponent />
+          </button>
+        )}
+        {!isMiniGrid && !product.sellable ? (
+          <div className={`${styles.badge} ${styles.outOfStock}`}>
+            <span className={`${styles.text} ${styles.captionNormal}`}>
+              {t("resource.common.out_of_stock")}
+            </span>
+          </div>
+        ) : shouldShowCustomBadge ? (
+          <div
+            className={styles.badge}
+            style={{ "--plp-badge-height": `${badgeHeight}px` }}
+          >
+            <span className={`${styles.text} ${styles.captionNormal}`}>
+              {isMobileView
+                ? `${badgeText.substring(0, 8)}${
+                    badgeText.length > 8 ? "..." : ""
+                  }`
+                : badgeText.substring(0, 14)}
+            </span>
+          </div>
+        ) : !isMiniGrid && isSaleBadge && showBadge && product.discount && product.sellable ? (
+          <div className={`${styles.badge} ${styles.sale}`}>
+            <span className={`${styles.text} ${styles.captionNormal}`}>
+              {t("resource.common.sale")}
+            </span>
+          </div>
+        ) : null}
       </div>
+      {!isMiniGrid && (
+        <div
+          className={`${styles.productDescContainer} ${customeProductDescContainerClass}`}
+        >
+          <div className={styles.productDesc}>
+            {isBrand && product.brand && (
+              <h3 className={styles.productBrand}>{product.brand.name}</h3>
+            )}
+            <h5
+              className={`${styles.productName} ${styles.b2} ${centerAlign ? styles.centerAlign : ""}`}
+              title={product.name}
+            >
+              {product.name}
+            </h5>
+            {isPrice && (
+              <div
+                className={`${styles.productPrice} ${centerAlign ? styles.center : ""}`}
+              >
+                {product?.price?.effective && (
+                  <span
+                    className={`${styles["productPrice--sale"]} ${styles.h4}`}
+                  >
+                    <ForcedLtr text={getListingPrice("effective")} />
+                  </span>
+                )}
+                {hasDiscount && (
+                  <span
+                    className={`${styles["productPrice--regular"]} ${styles.captionNormal}`}
+                  >
+                    <ForcedLtr text={getListingPrice("marked")} />
+                  </span>
+                )}
+                {product.discount && (
+                  <span
+                    className={`${styles["productPrice--discount"]} ${styles.captionNormal}   ${centerAlign ? styles["productPrice--textCenter"] : ""}`}
+                  >
+                    ({product.discount})
+                  </span>
+                )}
+              </div>
+            )}
+
+            {/* OPTIMIZED COLOR VARIANTS SECTION
+                COS Figma match:
+                - When the product has <= 3 variants, show all of them side by side.
+                - When > 3 variants, show 2 visible swatches + "+N" (N = remaining count).
+                Each visible swatch is clickable and selects that variant directly.
+                Clicking "+N" cycles to the next hidden variant. The product image
+                swaps based on the selected variant's medias. */}
+            {colorVariants.hasVariants && showColorVariants && (() => {
+              const total = colorVariants.count;
+              const visibleCount = total <= 3 ? total : 2;
+              const visibleVariants = orderedVariants.slice(0, visibleCount);
+              const hiddenVariants = orderedVariants.slice(visibleCount);
+              const hiddenCount = hiddenVariants.length;
+
+              // "+N" cycles through hidden variants; if the current selection is
+              // already in the hidden pool, advance to the next hidden variant,
+              // otherwise jump to the first hidden variant.
+              const currentIdx = orderedVariants.findIndex(
+                (v) => v.uid === currentShade?.uid
+              );
+              const nextHiddenVariant = (() => {
+                if (hiddenCount === 0) return null;
+                if (currentIdx >= visibleCount) {
+                  const localIdx = currentIdx - visibleCount;
+                  return hiddenVariants[(localIdx + 1) % hiddenCount];
+                }
+                return hiddenVariants[0];
+              })();
+
+              return (
+                <div className={styles.productVariants}>
+                  <div className={styles.colorVariants}>
+                    {visibleVariants.map((variant) => {
+                      const isSelected = currentShade?.uid === variant.uid;
+                      return (
+                        <div
+                          key={variant.uid}
+                          className={`${styles.colorDot} ${isSelected ? styles.currentColor : ""}`}
+                          style={{ "--color": `#${variant.color}` }}
+                          title={variant.color_name || "Color variant"}
+                          onClick={(e) => handleVariantClick(e, variant)}
+                          role="button"
+                          tabIndex={0}
+                          aria-label={`Select ${variant.color_name || "color variant"}`}
+                        />
+                      );
+                    })}
+
+                    {hiddenCount > 0 && nextHiddenVariant && (
+                      <span
+                        className={styles.moreColors}
+                        onClick={(e) => handleVariantClick(e, nextHiddenVariant)}
+                        role="button"
+                        tabIndex={0}
+                        aria-label={`Show ${hiddenCount} more colors`}
+                      >
+                        +{hiddenCount}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              );
+            })()}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

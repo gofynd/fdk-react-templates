@@ -11,6 +11,11 @@ import LightboxImage from "../lightbox-image/lightbox-image";
 import MobileSlider from "../mobile-slider/mobile-slider";
 import { useGlobalTranslation } from "fdk-core/utils";
 
+const QUICK_SHOP_WISHLIST_EMPTY =
+  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAYCAYAAAAPtVbGAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAOdEVYdFNvZnR3YXJlAEZpZ21hnrGWYwAAAOVJREFUeAHtlTEOgzAMAE3VhYkRNkbExAgTKxOfRHwAeAH8AH7AKxhTbClRW1V2qEoXclJEokQ54tiKp3bgRLydG/wBJ7mo5C4tWNcVhmGgfl3XEAQBtG1rxnEcS1vwJ+n7HqqqItGyLNRP09SMi6KAaZpARDHkea66rjPjpmmoacZxpDUc6PC4ivd9H7ZtY39SWiNWfFmWbDjwrrIsAxHuqPM8qyRJ6Htk7j1crETHPQzDl82wH0URzUlYSRC8bC3SgucE+IlEizA82GwFWsJm16eLxmLEhLAFs+uQ5Bvco+Uk5/IA0ejvuYOyhUIAAAAASUVORK5CYII=";
+const QUICK_SHOP_WISHLIST_FILLED =
+  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAYCAYAAAAPtVbGAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAOdEVYdFNvZnR3YXJlAEZpZ21hnrGWYwAAAMpJREFUeAHtlbEOgyAQQM+mg06ubo6Ojm7+AT9J+AHCF/AJfAJfwUg9EppIK0fb2EVeconI6Uu4u9D4DTiRZuMGf6BKLiq5UwnWWlBKhWfGGPR9D0KI53ocRyDxGbTWfhgG37ZtiGmaQsQ1BubkICXLsux++C4wh5I0uYnvug5KcM4d7pETv64rUMzzTOZkj8sYs6tJGriHOT/VBMHCHkmklNTnZRKEc/4iwHclFEtSUakgSrLdlYJDicNY0hAR7K6PJN9QL60qOZcHQfXqFwj9LwgAAAAASUVORK5CYII=";
+
 function ImageGallery({
   images,
   displayThumbnail = true,
@@ -21,6 +26,9 @@ function ImageGallery({
   hiddenDots = false,
   slideTabCentreNone = false,
   hideImagePreview = false,
+  isQuickShopGallery = false,
+  isFollowed = false,
+  onWishlistClick = () => {},
 }) {
   const { t } = useGlobalTranslation("translation");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -91,6 +99,84 @@ function ImageGallery({
   const openGallery = () => {
     setEnableLightBox(true);
   };
+
+  const getQuickShopBadge = () => {
+    if (typeof product?.teaser_tag === "string") {
+      return product.teaser_tag;
+    }
+    return product?.teaser_tag?.name || product?.teaser_tag?.tag || "";
+  };
+
+  if (isQuickShopGallery) {
+    const quickShopImages = images?.filter(
+      (item) => !item?.type || item?.type === "image"
+    );
+    const visibleImages = quickShopImages?.length ? quickShopImages : images;
+    const badgeText = getQuickShopBadge();
+
+    return (
+      <div className={styles.quickShopGallery}>
+        {!!badgeText && (
+          <div className={styles.quickShopBadge}>{badgeText}</div>
+        )}
+        <button
+          type="button"
+          className={`${styles.quickShopWishlist} ${isFollowed ? styles.active : ""}`}
+          aria-label={isFollowed ? "Remove from wishlist" : "Add to wishlist"}
+          onClick={onWishlistClick}
+        >
+          <img
+            className={styles.quickShopWishlistIcon}
+            src={
+              isFollowed
+                ? QUICK_SHOP_WISHLIST_FILLED
+                : QUICK_SHOP_WISHLIST_EMPTY
+            }
+            alt=""
+            aria-hidden="true"
+          />
+        </button>
+        {visibleImages?.map((item, index) => (
+          <button
+            type="button"
+            key={`${item?.url}-${index}`}
+            className={styles.quickShopImageFrame}
+            onClick={() => {
+              setCurrentImageIndex(index);
+              setEnableLightBox(true);
+            }}
+            aria-label={item?.alt || "View product image"}
+          >
+            <FyImage
+              customClass={styles.quickShopImage}
+              src={item?.url}
+              alt={item?.alt || product?.name}
+              aspectRatio={2 / 3}
+              sources={[{ width: 720 }, { width: 540 }]}
+              globalConfig={globalConfig}
+              isImageFill={globalConfig?.img_fill}
+              backgroundColor={
+                globalConfig?.img_container_bg || "oklch(96% 0.006 100)"
+              }
+              defer={index > 0}
+            />
+          </button>
+        ))}
+        {enableLightBox && (
+          <LightboxImage
+            images={images}
+            showCaption={false}
+            showLightBox={enableLightBox}
+            iconColor={iconColor}
+            toggleResumeVideo={() => setResumeVideo((prev) => !prev)}
+            globalConfig={globalConfig}
+            closeGallery={() => setEnableLightBox(false)}
+            currentIndex={currentImageIndex}
+          />
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className={styles.galleryBox}>

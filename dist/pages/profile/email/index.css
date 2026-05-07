@@ -3559,23 +3559,6 @@ h5,
   align-items: center;
   justify-content: center;
 }
-.empty-state__emptyContainer___hXYwb .empty-state__description___kUU3P {
-  display: flex;
-  justify-content: center;
-  max-width: 480px;
-  margin-top: 8px;
-  text-align: center;
-  line-height: 18px;
-  letter-spacing: -0.02em;
-  color: var(--textBody, #3c3131);
-  font-size: 14px;
-  font-weight: 400;
-}
-@media only screen and (max-width: 480px) {
-  .empty-state__emptyContainer___hXYwb .empty-state__description___kUU3P {
-    font-size: 12px;
-  }
-}
 @media only screen and (max-width: 768px) {
   .empty-state__emptyContainer___hXYwb {
     gap: 12px;

@@ -952,7 +952,7 @@ h5,
   font-size: 14px;
   padding: 14px;
   border-radius: var(--buttonRadius, 0px);
-  color: var(--buttonSecondary, #fff);
+  color: var(--buttonPrimary);
   opacity: 0.2;
   border: 1px solid var(--buttonPrimary);
   text-transform: uppercase;
@@ -1185,7 +1185,7 @@ h5,
   font-weight: 600;
   font-size: 14px;
   text-transform: uppercase;
-  color: var(--buttonSecondary, #fff);
+  color: white;
   line-height: 140%;
   opacity: 20%;
   cursor: not-allowed;
@@ -1275,7 +1275,7 @@ h5,
 .checkout-payment-content__container___HusGh .checkout-payment-content__otherPay____c2Rs .checkout-payment-content__payBtn___dgcAp[disabled] {
   padding: 14px;
   border-radius: var(--buttonRadius, 0px);
-  color: var(--buttonSecondary, #fff);
+  color: var(--primaryColor);
   border: 1px solid var(--primaryColor);
   width: 100%;
   margin-top: 24px;
@@ -1687,7 +1687,7 @@ h5,
   margin: 24px 0;
   background-color: var(--primaryColor);
   border: none;
-  color: var(--buttonSecondary, #fff);
+  color: white;
   line-height: 140%;
   opacity: 20%;
   cursor: not-allowed;
@@ -1929,9 +1929,6 @@ h5,
 }
 .checkout-payment-content__couponValidityModal___dm1Lz {
   z-index: 99 !important;
-}
-.checkout-payment-content__inCreasedZindex___ms0Z3 {
-  z-index: 1099 !important;
 }
 .checkout-payment-content__codModal___SSel2 {
   padding: 24px;

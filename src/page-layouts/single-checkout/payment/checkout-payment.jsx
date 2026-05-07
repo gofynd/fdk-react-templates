@@ -20,6 +20,7 @@ function CheckoutPayment({
   customClassName,
   isCouponApplied,
   redirectPaymentOptions,
+  setMopPayload,
   isCouponValid,
   setIsCouponValid,
   inValidCouponData,
@@ -161,6 +162,7 @@ function CheckoutPayment({
               setCancelQrPayment={setCancelQrPayment}
               juspayErrorMessage={juspayErrorMessage}
               isCouponApplied={isCouponApplied}
+              setMopPayload={setMopPayload}
               isCouponValid={isCouponValid}
               setIsCouponValid={setIsCouponValid}
               inValidCouponData={inValidCouponData}
