@@ -539,7 +539,7 @@ const AddToCart = ({
                           styles["sizeSelection__block--selected"]
                           } `}
                         title={size?.value}
-                        onClick={() => { if (selectedSize !== size?.value) onSizeSelection(size?.value); }}
+                        onClick={() => onSizeSelection(size?.value)}
                       >
                         {size?.display}
                         {size?.quantity === 0 && !isMto && (

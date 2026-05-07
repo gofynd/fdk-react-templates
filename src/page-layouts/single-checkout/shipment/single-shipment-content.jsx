@@ -246,7 +246,8 @@ function SingleShipmentContent({
                                         className={styles.sizeQuantity}
                                         key={article?.article?.size + index}
                                       >
-                                        {(!hideSingleSize || (product?.articles?.length ?? 0) > 1) && (
+                                        {(!hideSingleSize || (product?.articles?.length ?? 0) > 1) &&
+                                          article?.article?.size?.toLowerCase() !== "os" && (
                                           <div className={styles.size}>
                                             {t("resource.common.size")}:{" "}
                                             {article?.article.size}
