@@ -1,62 +1,19 @@
 @import "./main.less";
 
 @lg-min: 1024px;
-.visuallyHidden {
-  position: absolute !important;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  border: 0;
-  white-space: nowrap;
-}
 
 .addToCartContainer {
-  width: clamp(720px, 50vw, 1024px) !important;
-  max-width: clamp(720px, 50vw, 1024px) !important;
-  height: 100vh !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
+  @media @desktop {
+    max-width: unset !important;
 
-  @media @tablet {
-    width: 100% !important;
-    max-width: 100% !important;
-    height: auto !important;
-    max-height: 92vh !important;
-  }
-
-  .addToCartBody {
-    max-height: 100vh !important;
-    overflow: hidden;
-
-    @media @tablet {
-      max-height: 92vh !important;
-      overflow-y: auto;
-      overflow-x: hidden;
+    .addToCartBody {
+      overflow-y: hidden;
     }
   }
-
   .addToCartTitle {
     .text-line-clamp();
   }
 }
-
-.quickShopModal {
-  overflow: hidden;
-
-  &:before {
-    background-color: oklch(5% 0.005 95) !important;
-    opacity: 0.48 !important;
-  }
-
-  @media @tablet {
-    overflow-y: auto;
-  }
-}
-
 .productListingPage {
   margin-top: 16px;
 }
@@ -85,23 +42,31 @@
   }
 
   .contentWrapper {
-    padding: 0;
+    padding: 0 16px;
     isolation: isolate;
     @media @tablet-strict {
-      padding: 0;
+      padding: 0 40px;
     }
 
     @media @desktop {
       display: flex;
-      padding: 0;
+      padding: 0 40px;
     }
 
-    // COS Figma match: Hide sidebar on all viewports, use horizontal Filter & Sort pill instead
     .left {
-      display: none !important;
-      flex: 0 0 0;
-      margin-inline-end: 0;
-      max-width: 0;
+      flex: 0 0 259px;
+      margin-inline-end: 16px;
+      z-index: 1;
+      max-width: 259px;
+      position: sticky;
+      top: 0;
+      align-self: flex-start;
+      max-height: calc(100dvh - 50px);
+      overflow-y: auto;
+
+      @media @tablet {
+        display: none;
+      }
 
       .filter {
         &:not(:last-child) {
@@ -115,13 +80,10 @@
       flex-grow: 1;
       display: flex;
       flex-direction: column;
-      gap: 0;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      width: 100%;
-      max-width: 100%;
+      gap: 24px;
 
       @media @tablet {
-        gap: 0;
+        gap: 16px;
       }
 
       .filterTags {
@@ -159,29 +121,6 @@
       }
 
       .plp-container {
-        .plpLoaderHeader {
-          display: inline-flex;
-          align-items: center;
-          justify-content: flex-start;
-          min-width: 210px;
-          height: 28px;
-          background: @TextHeading;
-          color: @PageBackground;
-          font-size: 14px;
-          font-weight: 500;
-          line-height: 1;
-          border-radius: 4px;
-          padding: 0 12px;
-          margin: 0 0 12px;
-
-          @media @mobile {
-            min-width: 164px;
-            font-size: 12px;
-            height: 24px;
-            margin-bottom: 8px;
-          }
-        }
-
         /deep/.list-items {
           background: none;
         }
@@ -193,69 +132,15 @@
         justify-content: center;
         align-items: center;
         margin-top: 24px;
-      }
-
-      .viewMoreWrapper {
-        margin-top: 104px;
-
-        @media @tablet {
-          margin-top: 56px;
-        }
 
         .viewMoreBtn {
-          position: relative;
-          width: min(580px, calc(100vw - 32px));
-          height: 64px;
-          padding: 0 24px;
-          overflow: hidden;
-          border: 1px solid @DividerStokes;
-          border-radius: 0;
-          background: @PageBackground;
-          color: @TextHeading;
-          cursor: pointer;
-          font-size: 18px;
-          font-weight: 700;
-          line-height: 22px;
-          letter-spacing: 0;
+          .btnSecondary();
+          background: transparent;
+          padding: 12px 32px;
           text-transform: uppercase;
-          transition: border-color 0.16s ease-out;
 
           &:hover {
-            border-color: @TextHeading;
-            background: @PageBackground;
-          }
-
-          &:disabled {
-            cursor: default;
-            opacity: 1;
-          }
-
-          @media @tablet {
-            width: calc(100vw - 32px);
-            height: 54px;
-            font-size: 14px;
-            line-height: 18px;
-          }
-
-          .viewMoreProgress {
-            position: absolute;
-            inset-block: 0;
-            inset-inline-start: 0;
-            width: var(--load-more-progress, 0%);
-            background: @TextHeading;
-            transition: width 0.24s ease-out;
-          }
-
-          &.loading .viewMoreProgress {
-            opacity: 0.92;
-          }
-
-          .viewMoreLabel {
-            position: relative;
-            z-index: 1;
-            color: @PageBackground;
-            mix-blend-mode: difference;
-            white-space: nowrap;
+            background-color: @ButtonPrimary;
           }
         }
       }
@@ -452,15 +337,13 @@
   }
 }
 
-// COS Figma match: Hide breadcrumb - not shown in Figma PLP
 .breadcrumbWrapper {
-  display: none;
-  padding: 0;
+  padding: 16px 40px 24px;
   @media @tablet {
-    padding: 0;
+    padding: 67px 40px 24px;
   }
   @media @mobile {
-    padding: 0;
+    padding: 67px 16px 24px;
   }
 }
 
@@ -488,130 +371,52 @@
   }
 }
 
-// COS reference: flat PLP control rail with categories centered between actions.
 .mobileHeader {
-  display: grid;
-  grid-template-columns: minmax(180px, 1fr) minmax(0, auto) minmax(180px, 1fr);
+  display: flex;
   align-items: center;
-  min-height: 64px;
-  padding: 0 24px;
-  box-shadow: none;
-  margin-bottom: 0;
+  justify-content: space-between;
+  padding: 13px 16px;
+  box-shadow: 0px 4px 8px 0px #a6a3a524;
+  margin-bottom: 24px;
   background-color: @PageBackground;
   z-index: 1;
-  position: static;
-  border-bottom: 1px solid @DividerStokes;
-  column-gap: 24px;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
+  position: fixed;
+  top: var(--headerHeight);
 
   @media @desktop {
-    display: grid;
-    position: static;
-    padding: 0 24px;
+    display: none;
   }
-
-  @media @tablet {
-    grid-template-columns: minmax(120px, 1fr) auto;
-    min-height: 56px;
-    padding: 0 16px;
-    column-gap: 12px;
-  }
-
   .headerLeft {
     display: flex;
     align-items: center;
-    justify-self: start;
-
     button {
+      .b1();
       display: flex;
       align-items: center;
-      column-gap: 10px;
+      column-gap: 4px;
       color: @TextHeading;
-      min-height: 64px;
-      padding: 0;
-      border: 0;
-      border-radius: 0;
-      background: @PageBackground;
-      cursor: pointer;
-      font-size: 16px;
-      font-weight: 400;
-      line-height: 20px;
-      letter-spacing: 0;
-      transition: color 0.16s ease-out;
-
-      &:hover {
-        color: @TextBody;
-      }
-
-      &.filterSortBtn {
-        white-space: nowrap;
-      }
-
-      svg {
-        width: 20px;
-        height: 20px;
-        flex: 0 0 auto;
-      }
-
-      @media @tablet {
-        min-height: 56px;
-        column-gap: 8px;
-        font-size: 14px;
-        line-height: 18px;
-
-        svg {
-          width: 18px;
-          height: 18px;
-        }
+      &.filterBtn {
+        padding-inline-end: 16px;
+        border-inline-end: 1px solid @DividerStokes;
+        margin-inline-end: 16px;
       }
     }
   }
   .headerRight {
     display: flex;
     align-items: center;
-    justify-self: end;
   }
 }
 
-.quickCategoryNav {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  gap: 30px;
-  min-width: 0;
-  overflow: hidden;
-
-  @media @desktop {
-    display: flex;
-  }
-}
-
-.quickCategoryLink {
-  color: @TextHeading;
-  font-size: 15px;
-  font-weight: 700;
-  line-height: 20px;
-  letter-spacing: 0;
-  text-decoration: none;
-  white-space: nowrap;
-  text-transform: uppercase;
-
-  &:hover,
-  &.active {
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 4px;
-  }
-}
-
-// COS Figma match: Hide the title/product-count/sort/grid-toggle row - replaced by horizontal pill at top
 .rightHeader {
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 4px;
 
   @media @desktop {
-    display: none;
     padding: 0 8px;
   }
   .headerLeft {
@@ -639,110 +444,43 @@
     }
   }
 }
-.filterToggleBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  font-size: 16px;
-  font-weight: 400;
-  color: @TextHeading;
-  cursor: pointer;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: all 0.2s ease-in-out;
-  user-select: none;
-  
-  &:active {
-    transform: translateY(0);
-  }
-  
-  .filterToggleText {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: all 0.2s ease-in-out;
-  }
-  .filterIcon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
-  }
-}
+
 .colIconBtn {
-  width: 28px;
-  height: 64px;
-  padding: 0;
+  padding: 4px;
   border: 1px solid transparent;
-  border-radius: 0;
+  border-radius: 2px;
   cursor: pointer;
   background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
   color: @TextHeading;
-  opacity: 1;
-
   &:not(:last-child) {
     margin-inline-end: 8px;
   }
   &.active {
-    color: @TextHeading;
-    border-color: transparent;
+    border-color: @DividerStokes;
   }
-
-  svg {
-    width: 16px;
-    height: 16px;
-  }
-
-  @media @tablet {
-    height: 56px;
-
-    &:not(:last-child) {
-      margin-inline-end: 4px;
-    }
-
-    svg {
-      width: 15px;
-      height: 15px;
-    }
-  }
-
-  // COS Figma match: show all 4 grid toggle icons on desktop (per Figma layout toggles)
   &.tablet {
     @media @mobile {
       display: none;
-    }
-    @media @desktop {
-      display: flex;
     }
   }
   &.mobile {
     @media @mobile-up {
       display: none;
     }
-    @media @desktop {
-      display: flex;
-    }
   }
 }
 
-// COS Figma match: grid with zero gap for full-bleed product cards.
-// Column count is driven by the CSS variables set via inline styles by the caller
-// (--desktop-col / --tablet-col / --mobile-col), so the grid layout toggle buttons
-// can dynamically update the column count.
 .productContainer {
-  --item-count: var(--mobile-col, 2);
+  --item-count: var(--mobile-col, 1);
   display: grid;
   grid-auto-rows: auto;
   grid-template-rows: 1fr;
   min-height: 300px;
-  gap: 0;
+  gap: 16px;
   grid-template-columns: repeat(var(--item-count), 1fr);
-  padding: 0;
-
   @media @mobile-up {
     --item-count: var(--tablet-col, 3);
   }

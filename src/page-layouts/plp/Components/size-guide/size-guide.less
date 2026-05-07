@@ -1,439 +1,247 @@
 @import "../../../../styles/main.less";
 
-.sizeGuideModal {
-  overflow: hidden;
-
-  &:before {
-    background-color: oklch(5% 0.005 95) !important;
-    opacity: 0.48 !important;
-  }
-}
-
-.sizeGuideModalContainer {
-  width: min(432px, 100vw) !important;
-  max-width: min(432px, 100vw) !important;
-  height: 100vh !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-
-  @media @tablet {
-    width: 100% !important;
-    max-width: 100% !important;
-    height: 100vh !important;
-  }
+.sidebarHeader {
+  background-color: @ThemeAccent;
 }
 
 .sizeContainer {
-  max-height: 100vh !important;
-  overflow: hidden !important;
-  background: @DialogBackground;
-}
-
-.sizeGuideShell {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  min-height: 0;
-  color: @TextHeading;
-  background: @DialogBackground;
-}
-
-.sizeGuideTopBar {
-  display: flex;
-  align-items: stretch;
-  justify-content: space-between;
-  min-height: 56px;
-  border-bottom: 1px solid @DividerStokes;
-  background: @DialogBackground;
-  flex: 0 0 auto;
-}
-
-.sizeGuideTabBar {
-  display: flex;
-  align-items: stretch;
-  gap: 28px;
-  min-width: 0;
-  padding-inline-start: 28px;
-  overflow-x: auto;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-.sizeGuideMainTab {
-  position: relative;
-  flex: 0 0 auto;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: @TextHeading;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 56px;
-  letter-spacing: 0;
-  white-space: nowrap;
-  cursor: pointer;
-
-  &::after {
-    content: "";
-    position: absolute;
-    inset-inline: 0;
-    bottom: 0;
-    height: 1px;
-    background: transparent;
-  }
-}
-
-.sizeGuideMainTabActive {
-  font-weight: 700;
-
-  &::after {
-    background: @TextHeading;
-  }
-}
-
-.sizeGuideClose {
-  position: relative;
-  flex: 0 0 56px;
-  width: 56px;
-  height: 56px;
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-
-  span,
-  &::before,
-  &::after {
-    position: absolute;
-    content: "";
-    top: 50%;
-    left: 50%;
-    width: 16px;
-    height: 1px;
-    background: @TextHeading;
-    transform-origin: center;
-  }
-
-  &::before {
-    transform: translate(-50%, -50%) rotate(45deg);
-  }
-
-  &::after {
-    transform: translate(-50%, -50%) rotate(-45deg);
-  }
-
-  span {
-    display: none;
-  }
-}
-
-.sizeGuideScrollArea {
-  flex: 1;
-  min-height: 0;
+  box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, 0.2);
   overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-
-  &::-webkit-scrollbar {
-    width: 4px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: @TextHeading;
-  }
-}
-
-.sizeGuideNotice {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 24px 28px 20px;
-  color: @TextHeading;
-
-  p {
-    margin: 0;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1.35;
-    letter-spacing: 0;
-  }
-}
-
-.sizeGuideNoticeIcon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 16px;
-  width: 16px;
-  height: 16px;
-  margin-top: 1px;
-  border: 1px solid @TextHeading;
-  border-radius: 50%;
-  font-size: 10px;
-  font-weight: 400;
-  line-height: 1;
-}
-
-.sizeGuideSelectedSize {
-  padding: 0 28px 22px;
-
-  button {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    min-height: 48px;
-    padding: 0 14px;
-    border: 1px solid @DividerStokes;
-    background: @DialogBackground;
-    color: @TextHeading;
-    text-align: start;
-    cursor: pointer;
-  }
-
-  span,
-  strong {
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1;
-    letter-spacing: 0;
-  }
-
-  strong {
-    margin-inline-start: 8px;
-  }
-}
-
-.sizeGuideSelectChevron {
-  position: relative;
-  flex: 0 0 8px;
-  width: 8px;
-  height: 8px;
-  margin-inline-start: auto;
-
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 1px 0 0;
-    border-inline-end: 1px solid @TextHeading;
-    border-bottom: 1px solid @TextHeading;
-    transform: rotate(45deg);
-  }
-}
-
-.sizeGuideUnitRow {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  padding: 0 28px 10px;
-}
-
-.sizeGuideUnitButton {
-  position: relative;
-  padding: 0 0 9px;
-  border: 0;
-  background: transparent;
-  color: @TextHeading;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1;
-  letter-spacing: 0;
-  text-transform: lowercase;
-  cursor: pointer;
-
-  &::after {
-    content: "";
-    position: absolute;
-    inset-inline: 0;
-    bottom: 0;
-    height: 1px;
-    background: transparent;
-  }
-}
-
-.sizeGuideUnitButtonActive {
-  &::after {
-    background: @TextHeading;
-  }
-}
-
-.sizeGuideTableWrap {
-  width: 100%;
-  overflow-x: auto;
-  border-top: 1px solid @DividerStokes;
-  border-bottom: 1px solid @DividerStokes;
-  -webkit-overflow-scrolling: touch;
-}
-
-.sizeGuideTable {
-  width: 100%;
-  min-width: 540px;
-  border-collapse: collapse;
-  color: @TextHeading;
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 1.2;
-  letter-spacing: 0;
-
-  th,
-  td {
-    min-width: 58px;
-    padding: 15px 12px;
-    border-inline-end: 1px solid @DividerStokes;
-    border-bottom: 1px solid @DividerStokes;
-    background: @DialogBackground;
-    text-align: center;
-    white-space: nowrap;
-    font-weight: 400;
-  }
-
-  th:first-child,
-  td:first-child {
-    position: sticky;
-    inset-inline-start: 0;
-    z-index: 1;
-    min-width: 72px;
-    text-align: start;
-    background: @DialogBackground;
-  }
-
-  th {
-    position: sticky;
-    top: 0;
-    z-index: 2;
-    font-weight: 700;
-  }
-
-  th:first-child {
-    z-index: 3;
-  }
-
-  tr:last-child td {
-    border-bottom: 0;
-  }
-}
-
-.sizeGuideIllustration {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 250px;
-  padding: 18px 0 0;
-  background: @DialogBackground;
-  overflow: hidden;
-}
-
-.sizeGuideBodyDiagram {
-  display: block;
-  width: min(420px, 100%);
-  height: auto;
-  min-height: 250px;
-}
-
-.sizeGuideDiagramText {
-  fill: @TextHeading;
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 1;
-  letter-spacing: 0;
-}
-
-.sizeGuideMeasure {
-  h3 {
-    margin: 0;
-    padding: 20px 28px;
-    border-top: 1px solid @DividerStokes;
-    color: @TextHeading;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1.3;
-    letter-spacing: 0;
-    text-align: center;
-  }
-}
-
-.sizeGuideMeasureList {
   display: flex;
   flex-direction: column;
+  .sizeWrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .sizeTabs {
+    width: 100%;
+    display: flex;
+    background-color: @ThemeAccentL3;
 
-  div {
-    display: grid;
-    grid-template-columns: 104px minmax(0, 1fr);
-    gap: 18px;
-    padding: 18px 28px;
-    border-top: 1px solid @DividerStokes;
+    .active {
+      color: @ButtonPrimary !important;
+      border-bottom: 1px solid @ButtonPrimary;
+    }
+
+    .tab {
+      padding: 0.75rem 0;
+      cursor: pointer;
+      color: @TextLabel;
+
+      &.tabSizeGuide {
+        margin-inline-start: 1.5rem;
+
+        @media @tablet {
+          margin-inline-start: 1rem;
+        }
+      }
+
+      &.tabMeasure {
+        margin-inline-start: 1.5rem;
+      }
+    }
   }
 
-  span,
-  p {
-    margin: 0;
-    color: @TextHeading;
-    font-size: 13px;
-    line-height: 1.35;
-    letter-spacing: 0;
+  .sidebarBody {
+    height: 100%;
+    position: relative;
+    flex: 1;
   }
 
-  span {
-    font-weight: 700;
-  }
+  .rightContainer {
+    padding: 0 24px;
+    flex: 1;
+    height: 100%;
+    align-items: center;
+    @media @tablet {
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
 
-  p {
-    font-weight: 400;
+    .sizeguideImage {
+      @media @tablet {
+        width: 100%;
+      }
+    }
   }
 }
 
-.sizeGuideEmptyState {
+.sizeDesc {
+  /deep/ .inline-html {
+    p {
+      font-size: 14px;
+      line-height: 20px;
+      color: @TextHeading;
+    }
+  }
+}
+
+.sizeInfo {
+  overflow-y: auto;
+  overflow-x: auto;
+  margin: 24px 0;
+
+  &::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    background-color: #ffffff;
+  }
+  /* Track */
+  &::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.4);
+    background-color: #ffffff;
+  }
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    border-radius: 2.5px;
+    background-color: #6b6b6b;
+  }
+
+  @media @tablet {
+    max-height: max-content;
+    overflow-x: auto;
+  }
+  @media @mobile {
+    max-height: max-content;
+    overflow-x: auto;
+  }
+}
+
+.sizeTable {
+  width: 100%;
+  padding: 20px;
+  border: 1px solid @DividerStokes;
+  border-collapse: collapse;
+  .sizeHeader {
+    border: 1px solid @DividerStokes;
+    margin: 5px;
+    text-transform: capitalize;
+    padding: 1rem 0px;
+    vertical-align: middle;
+  }
+
+  .sizeRow {
+    .sizeCell {
+      padding: 1rem 0px;
+      text-align: center;
+      border: 1px solid @DividerStokes;
+      min-width: 100px;
+      vertical-align: middle;
+
+      @media @mobile {
+        min-width: 58px;
+      }
+    }
+  }
+}
+//button css
+.btnGroup {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  min-height: 320px;
-  padding: 48px 28px;
-  color: @TextHeading;
 
-  span {
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1.4;
-    letter-spacing: 0;
+  .btnContainer {
+    display: flex;
+    height: fit-content;
+    border: 1px solid @DividerStokes;
+    border-radius: 4px;
+    .column-gap(3px);
+    padding: 4px 8px;
+  }
+}
+.unitBtn {
+  padding: 2px 7px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: @ButtonPrimary;
+  background: none;
+  border: none;
+
+  &.unitBtnSelected {
+    background-color: @ButtonPrimary;
+    color: @ButtonSecondary;
   }
 }
 
-@media @mobile {
-  .sizeGuideTopBar {
-    min-height: 52px;
+.overlay {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  inset-inline-start: 0;
+  background-color: rgba(20, 19, 14, 0.6);
+  opacity: 0;
+  transition: all 0.4s;
+  z-index: 100;
+  visibility: hidden;
+}
+
+.show {
+  opacity: 0.5;
+  visibility: visible;
+}
+
+.contactUs {
+  display: flex;
+  height: 44px;
+  padding: 12px 32px;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  border-radius: @ButtonRadius;
+  border: 1px solid @ButtonPrimary;
+  background: @ButtonSecondary;
+}
+
+.notAvailable {
+  text-align: center;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 75vh;
+  max-width: 415px;
+  margin: 0 auto;
+  h3 {
+    color: @TextHeading;
+    text-align: center;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -0.32px;
+    align-self: stretch;
+    margin-bottom: 4px;
+  }
+  p {
+    color: @TextHeading;
+    text-align: center;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 18px;
+    letter-spacing: -0.28px;
+    align-self: stretch;
+    margin-bottom: 16px;
+    max-width: 281px;
+    margin: 0 auto;
+    margin-bottom: 16px;
+  }
+  @media @mobile {
+    max-width: 415px;
   }
 
-  .sizeGuideTabBar {
-    gap: 22px;
-    padding-inline-start: 24px;
+  &--label {
+    font-size: 24px;
+    line-height: 32px;
   }
-
-  .sizeGuideMainTab {
-    font-size: 13px;
-    line-height: 52px;
-  }
-
-  .sizeGuideClose {
-    flex-basis: 52px;
-    width: 52px;
-    height: 52px;
-  }
-
-  .sizeGuideNotice,
-  .sizeGuideSelectedSize,
-  .sizeGuideUnitRow,
-  .sizeGuideIllustration,
-  .sizeGuideMeasure h3,
-  .sizeGuideMeasureList div,
-  .sizeGuideEmptyState {
-    padding-inline-start: 24px;
-    padding-inline-end: 24px;
-  }
-
-  .sizeGuideMeasureList div {
-    grid-template-columns: 96px minmax(0, 1fr);
+}
+.leftContainer {
+  padding: 1.5rem 1rem;
+  &.paddingTopUnset {
+    padding: 0 1rem;
   }
 }

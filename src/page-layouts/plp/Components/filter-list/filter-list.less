@@ -84,27 +84,21 @@
     }
   }
   .filter__popup {
-    width: min(1023px, calc(100vw - 32px));
-    height: calc(100vh - var(--headerHeight, 0px) - 40px);
+    width: 1023px;
+    height: calc(100vh - var(--headerHeight) - 40px);
     max-height: 562px;
     border: 1px solid @DividerStokes;
     background-color: @DialogBackground;
     position: fixed;
-    top: 50%;
-    left: 50%;
+    top: calc(50% + (var(--headerHeight) / 2));
+    inset-inline-start: 50%;
     transform: translate(-50%, -50%);
     [dir="rtl"] & {
-      left: auto;
-      right: 50%;
       transform: translate(50%, -50%);
     }
-    z-index: 9999;
+    z-index: 41;
     border-radius: 8px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-    display: flex;
-    flex-direction: column;
     &--header {
-      flex-shrink: 0;
       padding: 16px 24px;
       border-bottom: 1px solid @DividerStokes;
       .search {
@@ -143,11 +137,9 @@
       display: flex;
       flex-wrap: wrap;
       flex-direction: column;
-      flex: 1;
-      min-height: 0;
+      height: calc(100% - 87px);
       padding: 24px 12px;
       overflow-x: auto;
-      overflow-y: auto;
       scroll-behavior: smooth;
       scroll-margin-inline-start: 24px;
       &.emptyPopupContent {
@@ -199,13 +191,10 @@
   }
   .overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    .inset(0);
     background-color: @Overlay;
     opacity: 0.6;
-    z-index: 9998;
+    z-index: 40;
     &.show {
       display: block;
     }

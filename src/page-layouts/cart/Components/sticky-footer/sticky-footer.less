@@ -9,28 +9,9 @@
   z-index: 1;
   bottom: 0;
   box-sizing: border-box;
-  background-color: @PageBackground;
-  @media @mobile {
-    display: block;
-    position: fixed;
-    position: -webkit-fixed;
-    bottom: 0;
-    inset-inline-start: 0;
-    inset-inline-end: 0;
-    z-index: 30; // Lower than modal (@header: 40) so modal appears above
-    box-shadow: 0px -4px 12px 0px rgba(0, 0, 0, 0.06);
-    border-top: 1px solid @DividerStokes;
-  }
   @media @tablet {
     display: block;
-    position: fixed;
-    position: -webkit-fixed;
-    bottom: 0;
-    inset-inline-start: 0;
-    inset-inline-end: 0;
-    z-index: 30; // Lower than modal (@header: 40) so modal appears above
-    box-shadow: 0px -4px 12px 0px rgba(0, 0, 0, 0.06);
-    border-top: 1px solid @DividerStokes;
+    margin-top: 12px;
   }
   .nccStickyBtn {
     display: flex;

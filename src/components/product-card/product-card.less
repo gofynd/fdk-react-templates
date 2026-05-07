@@ -1,493 +1,10 @@
 @import "../../styles/main.less";
 
-@quickShopWishlistEmptyIcon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAYCAYAAAAPtVbGAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAOdEVYdFNvZnR3YXJlAEZpZ21hnrGWYwAAAOVJREFUeAHtlTEOgzAMAE3VhYkRNkbExAgTKxOfRHwAeAH8AH7AKxhTbClRW1V2qEoXclJEokQ54tiKp3bgRLydG/wBJ7mo5C4tWNcVhmGgfl3XEAQBtG1rxnEcS1vwJ+n7HqqqItGyLNRP09SMi6KAaZpARDHkea66rjPjpmmoacZxpDUc6PC4ivd9H7ZtY39SWiNWfFmWbDjwrrIsAxHuqPM8qyRJ6Htk7j1crETHPQzDl82wH0URzUlYSRC8bC3SgucE+IlEizA82GwFWsJm16eLxmLEhLAFs+uQ5Bvco+Uk5/IA0ejvuYOyhUIAAAAASUVORK5CYII=";
-@quickShopWishlistFilledIcon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAYCAYAAAAPtVbGAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAOdEVYdFNvZnR3YXJlAEZpZ21hnrGWYwAAAMpJREFUeAHtlbEOgyAQQM+mg06ubo6Ojm7+AT9J+AHCF/AJfAJfwUg9EppIK0fb2EVeconI6Uu4u9D4DTiRZuMGf6BKLiq5UwnWWlBKhWfGGPR9D0KI53ocRyDxGbTWfhgG37ZtiGmaQsQ1BubkICXLsux++C4wh5I0uYnvug5KcM4d7pETv64rUMzzTOZkj8sYs6tJGriHOT/VBMHCHkmklNTnZRKEc/4iwHclFEtSUakgSrLdlYJDicNY0hAR7K6PJN9QL60qOZcHQfXqFwj9LwgAAAAASUVORK5CYII=";
-@quickShopBagIcon: "data:image/svg+xml;utf8,<svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M6.30775 21.5C5.80258 21.5 5.375 21.325 5.025 20.975C4.675 20.625 4.5 20.1974 4.5 19.6923V8.30775C4.5 7.80258 4.675 7.375 5.025 7.025C5.375 6.675 5.80258 6.5 6.30775 6.5H8.25V6.25C8.25 5.21417 8.616 4.33017 9.348 3.598C10.0802 2.866 10.9642 2.5 12 2.5C13.0358 2.5 13.9198 2.866 14.652 3.598C15.384 4.33017 15.75 5.21417 15.75 6.25V6.5H17.6923C18.1974 6.5 18.625 6.675 18.975 7.025C19.325 7.375 19.5 7.80258 19.5 8.30775V19.6923C19.5 20.1974 19.325 20.625 18.975 20.975C18.625 21.325 18.1974 21.5 17.6923 21.5H6.30775ZM6.30775 20H17.6923C17.7692 20 17.8398 19.9679 17.9038 19.9038C17.9679 19.8398 18 19.7693 18 19.6923V8.30775C18 8.23075 17.9679 8.16025 17.9038 8.09625C17.8398 8.03208 17.7692 8 17.6923 8H15.75V10.25C15.75 10.4628 15.6782 10.641 15.5345 10.7845C15.391 10.9282 15.2128 11 15 11C14.7872 11 14.609 10.9282 14.4655 10.7845C14.3218 10.641 14.25 10.4628 14.25 10.25V8H9.75V10.25C9.75 10.4628 9.67817 10.641 9.5345 10.7845C9.391 10.9282 9.21283 11 9 11C8.78717 11 8.609 10.9282 8.4655 10.7845C8.32183 10.641 8.25 10.4628 8.25 10.25V8H6.30775C6.23075 8 6.16025 8.03208 6.09625 8.09625C6.03208 8.16025 6 8.23075 6 8.30775V19.6923C6 19.7693 6.03208 19.8398 6.09625 19.9038C6.16025 19.9679 6.23075 20 6.30775 20ZM9.75 6.5H14.25V6.25C14.25 5.62317 14.0317 5.09142 13.5953 4.65475C13.1588 4.21825 12.627 4 12 4C11.373 4 10.8413 4.21825 10.4048 4.65475C9.96825 5.09142 9.75 5.62317 9.75 6.25V6.5Z' fill='%231C1B1F'/></svg>";
-
-// COS Figma match: minimalist product card when used inside the PLP product grid.
-// Uses a cross-module parent match via [class*="productContainer"] to scope overrides
-// ONLY to the PLP context, preserving PDP/Cart/Wishlist card styles.
-:global([class*="productContainer"]) {
-  .productCard {
-    .imageContainer {
-      margin-bottom: 0;
-      border-radius: 0;
-
-      .badge {
-        top: 0;
-        inset-inline-start: 0;
-        width: 24px;
-        min-width: 24px;
-        height: var(--plp-badge-height, 50px);
-        max-width: none;
-        padding: 0;
-        border-radius: 0;
-        background: @DialogBackground;
-        color: @TextHeading;
-        display: flex !important;
-        align-items: center;
-        justify-content: center;
-        z-index: 2;
-        overflow: visible;
-
-        &.sale,
-        &.outOfStock {
-          display: none !important;
-        }
-
-        .text {
-          display: block;
-          overflow: visible;
-          color: @TextHeading;
-          font-size: 11px;
-          font-weight: 400;
-          line-height: 12px;
-          letter-spacing: 0;
-          text-transform: uppercase;
-          white-space: nowrap;
-          transform: rotate(90deg);
-          -webkit-line-clamp: unset;
-          -webkit-box-orient: initial;
-        }
-      }
-
-      // Move wishlist icon to bottom-right overlay (subtle pill).
-      // Use double `&.productCard` selector to bump specificity above the per-grid rules
-      // (`.mob-grid-1-card`, `.tablet-grid-3-card`, etc.) that set `top: 6px !important`.
-      .wishlistBtn {
-        top: auto !important;
-        bottom: 8px !important;
-        inset-inline-end: 8px !important;
-        width: 32px !important;
-        height: 32px !important;
-        min-width: 32px !important;
-        padding: 0 !important;
-        background: @DialogBackground;
-        border: 0;
-        border-radius: 0;
-        box-shadow: none;
-        color: @TextHeading;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        svg {
-          display: none !important;
-        }
-
-        &::before {
-          content: "";
-          width: 25px;
-          height: 24px;
-          background: url(@quickShopWishlistEmptyIcon) no-repeat center / contain;
-        }
-
-        &:hover::before,
-        &:focus-visible::before,
-        &.active::before {
-          background-image: url(@quickShopWishlistFilledIcon);
-        }
-      }
-
-      .productImageSliderControls {
-        position: absolute;
-        inset: 0;
-        z-index: 2;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 30px;
-        pointer-events: none;
-        opacity: 1;
-        transition: opacity 0.16s ease-out;
-      }
-
-      .productImageSliderBtn {
-        width: 44px;
-        height: 64px;
-        padding: 0;
-        border: 0;
-        background: transparent;
-        color: @TextHeading;
-        cursor: pointer;
-        pointer-events: auto;
-
-        &::before {
-          content: "";
-          display: block;
-          width: 14px;
-          height: 14px;
-          border-top: 3px solid currentColor;
-          border-left: 3px solid currentColor;
-        }
-      }
-
-      .productImageSliderPrev::before {
-        transform: rotate(-45deg);
-      }
-
-      .productImageSliderNext::before {
-        margin-inline-start: auto;
-        transform: rotate(135deg);
-      }
-
-      .productImageSliderTrack {
-        position: absolute;
-        inset-inline: 0;
-        bottom: 0;
-        z-index: 3;
-        display: grid;
-        height: 3px;
-        background: @DividerStokes;
-      }
-
-      .productImageSliderSegment {
-        background: transparent;
-
-        &.active {
-          background: @TextLabel;
-        }
-      }
-    }
-    // Higher-specificity override for every grid card variant so `top:auto; bottom:8px`
-    // wins over the original `top: 6px !important` rules that target each grid variant.
-    &.mob-grid-1-card,
-    &.mob-grid-2-card,
-    &.tablet-grid-2-card,
-    &.tablet-grid-3-card,
-    &.desktop-grid-1-card,
-    &.desktop-grid-2-card,
-    &.desktop-grid-4-card {
-      .imageContainer .wishlistBtn {
-        top: auto !important;
-        bottom: 8px !important;
-        inset-inline-end: 8px !important;
-      }
-    }
-
-    .productDescContainer {
-      padding: 14px 20px 28px;
-      gap: 0;
-      background: @DialogBackground;
-      flex-direction: column !important;
-
-      @media @mobile {
-        padding: 14px 20px 28px;
-      }
-    }
-
-    .productDesc {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      grid-template-areas:
-        "name name"
-        "price variants";
-      column-gap: 12px;
-      row-gap: 2px;
-      align-items: start;
-    }
-
-    @media @desktop {
-      &.desktop-grid-1-card,
-      &.desktop-grid-2-card {
-        .productDescContainer {
-          padding: 26px 24px 0;
-        }
-
-        .productDesc {
-          row-gap: 8px;
-        }
-
-        .productName {
-          font-size: 24px !important;
-          line-height: 30px !important;
-        }
-
-        .productPrice {
-          font-size: 22px !important;
-          line-height: 28px !important;
-
-          &--sale,
-          &--regular,
-          &--discount {
-            font-size: 22px !important;
-            line-height: 28px !important;
-          }
-        }
-
-        .productVariants {
-          .colorVariants {
-            min-height: 18px;
-
-            .colorDot,
-            .colorDot.currentColor {
-              width: 10px !important;
-              height: 10px !important;
-            }
-          }
-        }
-      }
-
-      &.desktop-grid-mini-card {
-        .productDescContainer,
-        .productDesc,
-        .productName,
-        .productPrice,
-        .productVariants {
-          display: none !important;
-        }
-
-        .imageContainer {
-          .wishlistBtn,
-          .addToCart,
-          .badge,
-          .review,
-          .extension,
-          .productImageSliderControls,
-          .productImageSliderTrack {
-            display: none !important;
-          }
-        }
-      }
-
-      &.desktop-grid-1-card {
-        .productImageSliderControls {
-          opacity: 1;
-          padding: 0 32px;
-        }
-
-        .productImageSliderBtn {
-          color: @TextLabel;
-          pointer-events: auto;
-        }
-      }
-    }
-
-    @media @tablet {
-      &.mob-grid-1-card {
-        .productDescContainer {
-          padding: 14px 20px 28px;
-        }
-
-        .productDesc {
-          row-gap: 2px;
-        }
-
-        .productName {
-          font-size: 16px !important;
-          line-height: 20px !important;
-        }
-
-        .productPrice {
-          font-size: 16px !important;
-          line-height: 20px !important;
-
-          &--sale,
-          &--regular,
-          &--discount {
-            font-size: 16px !important;
-            line-height: 20px !important;
-          }
-        }
-      }
-    }
-
-    .productBrand {
-      display: none !important;
-    }
-
-    // ADD TO CART button as compact image overlay stacked above wishlist.
-    .imageContainer .addToCart {
-      position: absolute;
-      bottom: 48px;
-      inset-inline-end: 8px;
-      width: 32px !important;
-      height: 32px !important;
-      min-width: 32px !important;
-      padding: 0 !important;
-      background: @DialogBackground !important;
-      border: none !important;
-      border-radius: 0;
-      box-shadow: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0 !important; // Hide "ADD TO CART" text
-      line-height: 0 !important;
-      color: transparent !important;
-      z-index: 2;
-      cursor: pointer;
-      overflow: hidden;
-
-      span {
-        display: none !important;
-      }
-
-      // Show the COS-style bag asset without exposing the button text.
-      &::before {
-        content: "";
-        width: 20px;
-        height: 20px;
-        background: url(@quickShopBagIcon) no-repeat center / contain;
-      }
-
-      &:hover {
-        background: @DialogBackground !important;
-      }
-    }
-
-    @media @desktop {
-      .imageContainer .productImageSliderControls {
-        opacity: 0;
-        pointer-events: none;
-      }
-
-      .imageContainer .productImageSliderBtn {
-        pointer-events: none;
-      }
-
-      .imageContainer:hover .productImageSliderControls,
-      .imageContainer:focus-within .productImageSliderControls {
-        opacity: 1;
-      }
-
-      .imageContainer:hover .productImageSliderBtn,
-      .imageContainer:focus-within .productImageSliderBtn {
-        pointer-events: auto;
-      }
-
-      .imageContainer .addToCart {
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.16s ease-out;
-      }
-
-      .imageContainer:hover .addToCart,
-      .imageContainer:focus-within .addToCart {
-        opacity: 1;
-        pointer-events: auto;
-      }
-    }
-
-    .productName {
-      font-size: 16px !important;
-      font-weight: 400 !important;
-      line-height: 20px !important;
-      letter-spacing: 0;
-      margin: 0 !important;
-      color: @TextHeading !important;
-      grid-area: name;
-
-      @media @mobile {
-        font-size: 16px !important;
-        line-height: 20px !important;
-      }
-    }
-
-    .productPrice {
-      display: flex;
-      align-items: baseline;
-      gap: 2px;
-      margin: 0;
-      color: @TextHeading;
-      font-size: 16px !important;
-      line-height: 20px !important;
-      grid-area: price;
-
-      &--sale,
-      &--regular,
-      &--discount {
-        font-size: 16px !important;
-        font-weight: 400 !important;
-        line-height: 20px !important;
-        letter-spacing: 0 !important;
-        margin: 0 !important;
-      }
-
-      &--regular {
-        color: @TextLabel !important;
-        font-size: 16px !important;
-      }
-    }
-
-    // Color swatches under product name - small square swatches per Figma
-    .productVariants {
-      grid-area: variants;
-      align-self: center;
-      margin-top: 0;
-
-      .colorVariants {
-        align-items: flex-end !important;
-        gap: 10px !important;
-        min-height: 18px;
-
-        .colorDot {
-          width: 12px !important;
-          height: 12px !important;
-          border-radius: 0 !important;
-          border: 1px solid rgba(0, 0, 0, 0.08) !important;
-          transform: none !important;
-
-          &.currentColor {
-            width: 12px !important;
-            height: 12px !important;
-            border: 1px solid rgba(0, 0, 0, 0.08) !important;
-            border-radius: 0 !important;
-            background-color: var(--color, #ccc) !important;
-
-            &::before {
-              display: none !important;
-            }
-
-            &::after {
-              content: "";
-              position: absolute;
-              inset-inline-start: 50%;
-              bottom: -5px;
-              width: 16px;
-              height: 1px;
-              background: @TextHeading;
-              transform: translateX(-50%);
-            }
-          }
-        }
-
-        .moreColors {
-          font-size: 16px !important;
-          line-height: 20px !important;
-          letter-spacing: 0 !important;
-          color: @TextBody;
-          cursor: pointer;
-          user-select: none;
-          padding: 0 2px;
-          transition: color 0.15s ease;
-
-          &:hover {
-            color: @TextHeading;
-          }
-        }
-
-        // Also make the (only) visible swatch obviously clickable
-        .colorDot {
-          cursor: pointer;
-        }
-      }
-    }
-  }
-
-  // Ensure productCard itself is relative-positioned so .addToCart can absolute-overlay the image area
-  .productCard {
-    position: relative;
-  }
-}
-
 .productCard {
   display: flex;
   flex-direction: column;
   height: 100%;
-  .disableCursor {
-    filter: invert(1);
-  }
+
   .removeIcon {
     path {
       fill: @TextBody !important;
@@ -511,22 +28,6 @@
     border-radius: @ImageRadius;
     -webkit-mask-image: -webkit-radial-gradient(white, black); //safari fix
 
-    &.outOfStockContainer {
-      .productImage {
-        filter: grayscale(100%);
-        opacity: 0.7;
-      }
-
-      @media @desktop {
-        &:hover {
-          .productImage {
-            filter: grayscale(100%);
-            opacity: 0.7;
-          }
-        }
-      }
-    }
-
     .wishlistBtn {
       display: flex;
       align-items: center;
@@ -544,11 +45,6 @@
       &.active {
         color: @ButtonPrimary;
       }
-    }
-
-    .productImageSliderControls,
-    .productImageSliderTrack {
-      display: none;
     }
 
     .productImage {
@@ -619,6 +115,16 @@
     .extension {
       position: absolute;
     }
+
+    .b2bAvailableOffer {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      background-color: @ThemeAccentD5;
+      border-radius: 4px;
+    }
   }
   .productDescContainer {
     display: flex;
@@ -632,7 +138,7 @@
     }
 
     .productDesc {
-      min-width: 0;
+      width: 100%;
       .productBrand {
         margin-bottom: 4px;
         .text-line-clamp();
@@ -650,6 +156,7 @@
           text-align: center;
         }
       }
+
       .productPrice {
         display: flex;
         flex-wrap: wrap;
@@ -737,6 +244,29 @@
           }
         }
       }
+
+      .badge_section {
+        display: flex;
+        align-items: center;
+        margin-bottom: 4px;
+
+        .badge {
+          display: flex;
+          align-items: center;
+          padding: 4px 8px;
+          border-radius: 4px;
+          background-color: @SuccessText;
+          color: #fff;
+          font-size: 12px;
+          font-weight: 400 !important;
+          gap: 4px;
+
+          .info_icon {
+            display: flex;
+            align-items: center;
+          }
+        }
+      }
     }
 
     .addToCart {
@@ -750,14 +280,62 @@
       font-size: 12px;
       white-space: nowrap;
     }
+
+    .b2bAvailableOffers {
+      background: @ButtonSecondary;
+      font-weight: 500;
+      line-height: 16px;
+      letter-spacing: -0.24px;
+      text-transform: uppercase;
+      padding: 12px 16px;
+      height: 40px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .loginToViewPricing {
+      background: @ButtonSecondary;
+      font-size: 14px;
+      line-height: 18px;
+      letter-spacing: -0.28px;
+      border-radius: 4px;
+      padding: 8px;
+      height: 32px;
+      white-space: nowrap;
+      margin-top: 8px;
+      width: 100%;
+    }
+
+    .kycCompletionBadge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px;
+      margin: 8px 0px;
+      background-color: #fff5d6;
+      border-radius: 4px;
+      color: @TextHeading;
+
+      .kycCompletionBadgeIcon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 16px;
+        height: 16px;
+        color: #f5a300;
+      }
+
+      .kycCompletionBadgeText {
+        font-size: 12px;
+      }
+    }
   }
   @media @mobile {
     &.mob-grid-1-card {
       .imageContainer {
-        // As per Ankit Jain: fix wishlist icon position on mobile to prevent layout break
         .wishlistBtn {
-          top: 6px !important;
-          inset-inline-end: 6px !important;
+          top: 16px;
+          inset-inline-end: 16px;
         }
         .badge {
           inset-inline-start: 16px;
@@ -769,6 +347,10 @@
         }
         .extension {
           inset-inline-start: 16px;
+          bottom: 16px;
+        }
+        .b2bAvailableOffer {
+          left: 16px;
           bottom: 16px;
         }
       }
@@ -792,12 +374,20 @@
         .addToCart {
           width: 100%;
         }
+
+        .loginToViewPricing {
+          width: 100%;
+          font-size: 12px;
+        }
+
+        .b2bAvailableOffers {
+          width: 100%;
+        }
       }
       .imageContainer {
-        // As per Ankit Jain: fix wishlist icon position on mobile to prevent layout break
         .wishlistBtn {
-          top: 6px !important;
-          inset-inline-end: 6px !important;
+          top: 8px;
+          inset-inline-end: 8px;
         }
         .badge {
           inset-inline-start: 8px;
@@ -811,12 +401,24 @@
           inset-inline-start: 8px;
           bottom: 8px;
         }
+        .b2bAvailableOffer {
+          left: 8px;
+          bottom: 8px;
+        }
       }
     }
   }
   @media @mobile-up {
     &.tablet-grid-2-card {
       .addToCart {
+        width: 104px;
+      }
+
+      .loginToViewPricing {
+        width: 100%;
+      }
+
+      .b2bAvailableOffers {
         width: 104px;
       }
 
@@ -837,6 +439,10 @@
           inset-inline-start: 24px;
           bottom: 24px;
         }
+        .b2bAvailableOffer {
+          left: 24px;
+          bottom: 24px;
+        }
       }
       .productDesc {
         .productName {
@@ -846,6 +452,14 @@
     }
     &.tablet-grid-3-card {
       .addToCart {
+        width: 104px;
+      }
+
+      .loginToViewPricing {
+        width: 100%;
+      }
+
+      .b2bAvailableOffers {
         width: 104px;
       }
 
@@ -866,6 +480,10 @@
           inset-inline-start: 12px;
           bottom: 12px;
         }
+        .b2bAvailableOffer {
+          left: 12px;
+          bottom: 12px;
+        }
       }
       .productDesc {
         .product-name {
@@ -875,34 +493,19 @@
     }
   }
   @media @desktop {
-    &.desktop-grid-mini-card {
-      .productDescContainer,
-      .productDesc,
-      .productName,
-      .productPrice,
-      .productVariants {
-        display: none !important;
-      }
-
-      .imageContainer {
-        margin-bottom: 0;
-
-        .wishlistBtn,
-        .addToCart,
-        .badge,
-        .review,
-        .extension,
-        .productImageSliderControls,
-        .productImageSliderTrack {
-          display: none !important;
-        }
-      }
-    }
-
     &.desktop-grid-2-card {
       .addToCart {
         width: 144px;
       }
+
+      .loginToViewPricing {
+        width: 100%;
+      }
+
+      .b2bAvailableOffers {
+        width: 144px;
+      }
+
       .imageContainer {
         .wishlistBtn {
           top: 24px;
@@ -920,6 +523,10 @@
           inset-inline-start: 24px;
           bottom: 24px;
         }
+        .b2bAvailableOffer {
+          left: 24px;
+          bottom: 24px;
+        }
       }
       .productDesc {
         .productName {
@@ -932,6 +539,14 @@
         flex-direction: column;
 
         .addToCart {
+          width: 100%;
+        }
+
+        .loginToViewPricing {
+          width: 100%;
+        }
+
+        .b2bAvailableOffers {
           width: 100%;
         }
 
@@ -957,6 +572,10 @@
         }
         .extension {
           inset-inline-start: 12px;
+          bottom: 12px;
+        }
+        .b2bAvailableOffer {
+          left: 12px;
           bottom: 12px;
         }
       }

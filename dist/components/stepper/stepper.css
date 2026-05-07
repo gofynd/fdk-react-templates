@@ -359,20 +359,6 @@ h5,
 .stepper__stepItem___ysVlh:last-child {
   flex: none;
 }
-.stepper__stepItem___ysVlh.stepper__clickable___MPXPg .stepper__stepContent___MuwVk {
-  cursor: pointer;
-  transition: opacity 0.2s ease-in-out;
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-}
-.stepper__stepItem___ysVlh.stepper__clickable___MPXPg .stepper__stepContent___MuwVk:hover:not(:active) .stepper__stepIndicator___cZlMb.stepper__completed___AYiMi {
-  opacity: 0.8;
-}
-.stepper__stepItem___ysVlh.stepper__clickable___MPXPg .stepper__stepContent___MuwVk:active .stepper__stepIndicator___cZlMb.stepper__completed___AYiMi {
-  opacity: 0.7;
-}
 .stepper__stepItem___ysVlh .stepper__stepContent___MuwVk {
   position: relative;
   display: flex;

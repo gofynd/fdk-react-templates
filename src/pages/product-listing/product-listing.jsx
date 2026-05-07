@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "../../styles/product-listing.less";
 import InfiniteLoader from "../../components/core/infinite-loader/infinite-loader";
@@ -20,40 +20,15 @@ import Modal from "../../components/core/modal/modal";
 import AddToCart from "../../page-layouts/plp/Components/add-to-cart/add-to-cart";
 import { useViewport } from "../../helper/hooks";
 import SizeGuide from "../../page-layouts/plp/Components/size-guide/size-guide";
+import SaveToWishlistModal from "../../components/wishlist-modals/save-to-wishlist-modal";
 import FilterIcon from "../../assets/images/filter.svg";
+import SortIcon from "../../assets/images/sort.svg";
 import TwoGridIcon from "../../assets/images/grid-two.svg";
 import FourGridIcon from "../../assets/images/grid-four.svg";
 import TwoGridMobIcon from "../../assets/images/grid-two-mob.svg";
 import OneGridMobIcon from "../../assets/images/grid-one-mob.svg";
-import { useGlobalTranslation, useGlobalStore, useFPI } from "fdk-core/utils";
-import dummyProductImage from "../../assets/images/dummy-product.svg";
-
-const DEMO_PRODUCTS = Array.from({ length: 20 }, (_, index) => ({
-  uid: `demo-${index + 1}`,
-  slug: `demo-product-${index + 1}`,
-  name: "Linen blend relaxed fit",
-  brand: { name: "COS" },
-  teaser_tag: index % 3 === 0 ? "NEW" : "",
-  discount: index % 4 === 0 ? "20% OFF" : "",
-  sellable: true,
-  media: [{ type: "image", url: dummyProductImage }],
-  price: {
-    effective: { min: 1290, max: 1290, currency_symbol: "₹" },
-    marked: { min: 1590, max: 1590, currency_symbol: "₹" },
-  },
-}));
-
-const COS_CATEGORY_LINKS = [
-  { label: "CLOTHING", to: "/men/new-arrivals" },
-  { label: "ALL MENSWEAR", to: "/men/view-all" },
-  { label: "LINEN", to: "/men/linen-collection" },
-  { label: "T-SHIRTS", to: "/men/t-shirts" },
-  { label: "SHIRTS", to: "/men/shirts" },
-  { label: "POLO SHIRTS", to: "/men/polo-shirts" },
-  { label: "TROUSERS", to: "/men/trousers" },
-  { label: "JEANS", to: "/men/jeans" },
-  { label: "ACCESSORIES", to: "/men/new-accessories" },
-];
+import { useGlobalTranslation } from "fdk-core/utils";
+import CreateRenameWishlistModal from "../../components/wishlist-modals/create-wishlist-modal";
 
 const ProductListing = ({
   breadcrumb = [],
@@ -77,7 +52,6 @@ const ProductListing = ({
   isProductOpenInNewTab = false,
   isBrand = true,
   isSaleBadge = true,
-  isCustomBadge = true,
   isPrice = true,
   globalConfig = {},
   imgSrcSet,
@@ -92,11 +66,15 @@ const ProductListing = ({
   followedIdList = [],
   listingPrice = "range",
   banner = {},
-  showAddToCart = true,
-  showColorVariants = true,
+  showAddToCart = false,
+  showColorVariants = false,
   actionButtonText,
   stickyFilterTopOffset = 0,
-  filterToggle = false,
+  showQuantityController = false,
+  showBuyNowButton = false,
+  showMoq = false,
+  productsInWishlist = [],
+  showSmartWishlist = false,
   onColumnCountUpdate = () => {},
   onResetFiltersClick = () => {},
   onFilterUpdate = () => {},
@@ -108,43 +86,117 @@ const ProductListing = ({
   onLoadMoreProducts = () => {},
   onProductNavigation = () => {},
   EmptyStateComponent,
+  isProductInWishlist = () => {},
+  getProductsInWishlist = () => {},
 }) => {
   const { t } = useGlobalTranslation("translation");
   const isTablet = useViewport(0, 768);
-  const fpi = useFPI();
-  const { is_serviceable } = useGlobalStore(fpi?.getters?.CUSTOM_VALUE) || {};
-  const [isFilterVisible, setIsFilterVisible] = useState(filterToggle);
+  const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
+  const [showCreateWishlist, setShowCreateWishlist] = useState(false);
+  const [isCreateWishlistError, setIsCreateWishlistError] = useState(false);
+  const [createWishlistErrorMessage, setCreateWishlistErrorMessage] =
+    useState("");
 
-  useEffect(() => {
-    setIsFilterVisible(filterToggle);
-  }, [filterToggle]);
+  const [selectedProductForWishlist, setSelectedProductForWishlist] =
+    useState(null);
+  const [selectedWishlistIds, setSelectedWishlistIds] = useState([]);
+  const [productData, setProductData] = useState(null);
+
   const {
     handleAddToCart,
     isOpen: isAddToCartOpen,
     showSizeGuide,
     handleCloseSizeGuide,
+    fetchAllWishlists,
+    showSnackbarMessage,
+    handleSaveToWishlist,
+    handleGetWishlistBySlug,
     ...restAddToModalProps
   } = addToCartModalProps;
 
-  const addToCartModalTitle = isTablet
-    ? restAddToModalProps?.productData?.product?.name?.length > 30
-      ? `${restAddToModalProps?.productData?.product?.name?.slice(0, 30)}...`
-      : restAddToModalProps?.productData?.product?.name || ""
-    : "";
-  const shouldShowDemoData =
-    !isPageLoading && (!productList || productList.length === 0);
-  const displayProductList = shouldShowDemoData ? DEMO_PRODUCTS : productList;
-  const loadedProductCount = displayProductList?.length || 0;
-  const totalProductCount = Number(productCount) || 0;
-  const visibleProductCount = totalProductCount
-    ? Math.min(loadedProductCount, totalProductCount)
-    : loadedProductCount;
-  const loadMoreProgress = totalProductCount
-    ? Math.min(100, Math.max(0, (visibleProductCount / totalProductCount) * 100))
-    : 0;
-  const loadMoreLabel = totalProductCount
-    ? `LOAD MORE PRODUCTS (${visibleProductCount}/${totalProductCount})`
-    : "LOAD MORE PRODUCTS";
+  useEffect(() => {
+    if (isRunningOnClient()) {
+      const savedPosition = sessionStorage.getItem("plpScrollPosition");
+      if (savedPosition) {
+        window.scrollTo(0, parseInt(savedPosition));
+        sessionStorage.removeItem("plpScrollPosition");
+      }
+      const handleBeforeUnload = () => {
+        sessionStorage.setItem("plpScrollPosition", window.scrollY.toString());
+      };
+
+      window.addEventListener("beforeunload", handleBeforeUnload);
+      return () => {
+        window.removeEventListener("beforeunload", handleBeforeUnload);
+      };
+    }
+  }, []);
+
+  useEffect(() => {
+    setSelectedProductForWishlist(restAddToModalProps?.productDataWishlist);
+  }, [restAddToModalProps?.productData]);
+
+  const handleWishlistIconClick = async (product) => {
+    await restAddToModalProps?.handleFetchProductDataWishlist(product?.slug);
+    const wishlistIds = await handleGetWishlistBySlug("", product?.slug, "");
+    setSelectedWishlistIds(wishlistIds);
+    setProductData(product);
+    setIsWishlistModalOpen(true);
+  };
+
+  const handleWishlistModalClose = () => {
+    setIsWishlistModalOpen(false);
+    setSelectedProductForWishlist(null);
+    setSelectedWishlistIds([]);
+  };
+
+  const handleWishlistSave = async (product, productPrice, selectedIds) => {
+    try {
+      if (handleSaveToWishlist) {
+        await handleSaveToWishlist(product, productPrice, selectedIds);
+      }
+
+      onWishlistClick(productData);
+      if (typeof getProductsInWishlist === "function") {
+        await getProductsInWishlist();
+      } else {
+        console.error(
+          "❌ getProductsInWishlist is not a function:",
+          getProductsInWishlist
+        );
+      }
+    } catch (error) {
+      console.error("❌ Error in handleWishlistSave:", error);
+    }
+
+    handleWishlistModalClose();
+  };
+
+  const handleWishlistClick = (wishlistId, selectedIds) => {
+    setSelectedWishlistIds(selectedIds);
+  };
+
+  const createWishlist = async (wishlistName) => {
+    if (wishlistName?.trim()) {
+      const response = await restAddToModalProps.handleCreateWishlist(
+        wishlistName.trim()
+      );
+      if (response.success) {
+        setShowCreateWishlist(false);
+        if (productData) {
+          setSelectedProductForWishlist(productData);
+          setIsWishlistModalOpen(true);
+        }
+        const newWishlistId = response.data._id;
+        setSelectedWishlistIds([newWishlistId]);
+        setIsCreateWishlistError(false);
+        setCreateWishlistErrorMessage("");
+      } else {
+        setIsCreateWishlistError(true);
+        setCreateWishlistErrorMessage(response.message);
+      }
+    }
+  };
 
   return (
     <div className={styles.plpWrapper}>
@@ -162,54 +214,29 @@ const ProductListing = ({
         </div>
       ) : (
         <>
-          {!title && (
-            <h1 className={styles.visuallyHidden}>
-              {t("resource.common.breadcrumb.products")}
-            </h1>
-          )}
-          {title && <h1 className={styles.visuallyHidden}>{title}</h1>}
           <div className={styles.mobileHeader}>
             <div className={styles.headerLeft}>
-              <button
-                type="button"
-                className={styles.filterSortBtn}
-                onClick={
-                  filterList.length > 0 ? onFilterModalBtnClick : onSortModalBtnClick
-                }
-                aria-label="Filter and sort products"
-              >
-                <FilterIcon aria-hidden="true" />
-                <span>Filter & sort</span>
+              {filterList.length > 0 && (
+                <button
+                  className={styles.filterBtn}
+                  onClick={onFilterModalBtnClick}
+                >
+                  <FilterIcon />
+                  <span>{t("resource.common.filter")}</span>
+                </button>
+              )}
+              <button onClick={onSortModalBtnClick}>
+                <SortIcon />
+                <span>{t("resource.facets.sort_by")}</span>
               </button>
             </div>
-            <nav className={styles.quickCategoryNav} aria-label="Product categories">
-              {COS_CATEGORY_LINKS.map((item, index) => (
-                <FDKLink
-                  key={item.label}
-                  to={item.to}
-                  className={`${styles.quickCategoryLink} ${
-                    index === 0 ? styles.active : ""
-                  }`}
-                >
-                  {item.label}
-                </FDKLink>
-              ))}
-            </nav>
             <div className={styles.headerRight}>
-              {/* COS Figma match: 4 grid toggle buttons that update the current viewport's column count.
-                  On desktop (>=769px): updates desktop columns (1/2/4/10).
-                  On tablet: updates tablet columns.
-                  On mobile: updates mobile columns. */}
               <button
                 className={`${styles.colIconBtn} ${styles.mobile} ${
-                  (isTablet ? columnCount?.mobile === 1 : columnCount?.desktop === 1) ? styles.active : ""
+                  columnCount?.mobile === 1 ? styles.active : ""
                 }`}
                 onClick={() =>
-                  onColumnCountUpdate(
-                    isTablet
-                      ? { screen: "mobile", count: 1 }
-                      : { screen: "desktop", count: 1 }
-                  )
+                  onColumnCountUpdate({ screen: "mobile", count: 1 })
                 }
                 title={t("resource.product.mobile_grid_one")}
               >
@@ -217,14 +244,10 @@ const ProductListing = ({
               </button>
               <button
                 className={`${styles.colIconBtn} ${styles.mobile} ${
-                  (isTablet ? columnCount?.mobile === 2 : columnCount?.desktop === 2) ? styles.active : ""
+                  columnCount?.mobile === 2 ? styles.active : ""
                 }`}
                 onClick={() =>
-                  onColumnCountUpdate(
-                    isTablet
-                      ? { screen: "mobile", count: 2 }
-                      : { screen: "desktop", count: 2 }
-                  )
+                  onColumnCountUpdate({ screen: "mobile", count: 2 })
                 }
                 title={t("resource.product.mobile_grid_two")}
               >
@@ -232,14 +255,10 @@ const ProductListing = ({
               </button>
               <button
                 className={`${styles.colIconBtn} ${styles.tablet} ${
-                  (isTablet ? columnCount?.tablet === 2 : columnCount?.desktop === 4) ? styles.active : ""
+                  columnCount?.tablet === 2 ? styles.active : ""
                 }`}
                 onClick={() =>
-                  onColumnCountUpdate(
-                    isTablet
-                      ? { screen: "tablet", count: 2 }
-                      : { screen: "desktop", count: 4 }
-                  )
+                  onColumnCountUpdate({ screen: "tablet", count: 2 })
                 }
                 title={t("resource.product.tablet_grid_two")}
               >
@@ -247,16 +266,12 @@ const ProductListing = ({
               </button>
               <button
                 className={`${styles.colIconBtn} ${styles.tablet} ${
-                  (isTablet ? columnCount?.tablet === 3 : columnCount?.desktop === 10) ? styles.active : ""
+                  columnCount?.tablet === 3 ? styles.active : ""
                 }`}
                 onClick={() =>
-                  onColumnCountUpdate(
-                    isTablet
-                      ? { screen: "tablet", count: 3 }
-                      : { screen: "desktop", count: 10 }
-                  )
+                  onColumnCountUpdate({ screen: "tablet", count: 3 })
                 }
-                title="Mini grid"
+                title={t("resource.product.tablet_grid_four")}
               >
                 <FourGridIcon />
               </button>
@@ -268,7 +283,7 @@ const ProductListing = ({
           <div className={styles.contentWrapper}>
             {filterList?.length !== 0 && (
               <StickyColumn
-                className={`${styles.left} ${filterToggle && !isFilterVisible ? styles.hidden : ""}`}
+                className={styles.left}
                 topOffset={stickyFilterTopOffset}
               >
                 <div className={styles.filterHeaderContainer}>
@@ -303,7 +318,7 @@ const ProductListing = ({
             <div className={styles.right}>
               <div className={styles.rightHeader}>
                 <div className={styles.headerLeft}>
-                  {title && <h2 className={styles.title}>{title}</h2>}
+                  {title && <h1 className={styles.title}>{title}</h1>}
                   {isProductCountDisplayed && (
                     <span className={styles.productCount}>
                       {`${productCount} ${productCount > 1 ? t("resource.common.items") : t("resource.common.item")}`}
@@ -311,21 +326,6 @@ const ProductListing = ({
                   )}
                 </div>
                 <div className={styles.headerRight}>
-                  {filterToggle && filterList?.length > 0 && (
-                    <div
-                      className={`${styles.filterToggleBtn} `}
-                      onClick={() => setIsFilterVisible(!isFilterVisible)}
-                    >
-                      <div className={styles.filterToggleText}>
-                        {isFilterVisible
-                          ? t("resource.common.hide_filters")
-                          : t("resource.common.show_filters")}
-                      </div>
-                      <div className={`${styles.filterIcon} `}>
-                        <FilterIcon />
-                      </div>
-                    </div>
-                  )}
                   <Sort sortList={sortList} onSortUpdate={onSortUpdate} />
                   <button
                     className={`${styles.colIconBtn} ${
@@ -399,11 +399,6 @@ const ProductListing = ({
                 </div>
               )}
               <div className={styles["plp-container"]}>
-                {isProductLoading && (
-                  <div className={styles.plpLoaderHeader}>
-                    {t("resource.product.desktop_grid_four") || "Desktop - 4 Column"}
-                  </div>
-                )}
                 {loadingOption === "infinite" ? (
                   <InfiniteLoader
                     hasNext={paginationProps.hasNext}
@@ -413,11 +408,10 @@ const ProductListing = ({
                     <ProductGrid
                       {...{
                         isProductOpenInNewTab,
-                        productList: displayProductList,
+                        productList,
                         columnCount,
                         isBrand,
                         isSaleBadge,
-                        isCustomBadge,
                         isPrice,
                         aspectRatio,
                         isWishlistIcon,
@@ -428,7 +422,9 @@ const ProductListing = ({
                         showColorVariants,
                         actionButtonText:
                           actionButtonText ?? t("resource.common.add_to_cart"),
-                        onWishlistClick,
+                        onWishlistClick: showSmartWishlist
+                          ? handleWishlistIconClick
+                          : onWishlistClick,
                         isImageFill,
                         showImageOnHover,
                         imageBackgroundColor,
@@ -436,7 +432,10 @@ const ProductListing = ({
                         handleAddToCart,
                         imgSrcSet,
                         onProductNavigation,
-                        isServiceable: is_serviceable,
+                        globalConfig,
+                        productsInWishlist,
+                        getProductsInWishlist,
+                        showSmartWishlist,
                       }}
                     />
                   </InfiniteLoader>
@@ -444,11 +443,10 @@ const ProductListing = ({
                   <ProductGrid
                     {...{
                       isProductOpenInNewTab,
-                      productList: displayProductList,
+                      productList,
                       columnCount,
                       isBrand,
                       isSaleBadge,
-                      isCustomBadge,
                       isPrice,
                       aspectRatio,
                       isWishlistIcon,
@@ -459,7 +457,9 @@ const ProductListing = ({
                       showColorVariants,
                       actionButtonText:
                         actionButtonText ?? t("resource.common.add_to_cart"),
-                      onWishlistClick,
+                      onWishlistClick: showSmartWishlist
+                        ? handleWishlistIconClick
+                        : onWishlistClick,
                       isImageFill,
                       showImageOnHover,
                       imageBackgroundColor,
@@ -468,7 +468,10 @@ const ProductListing = ({
                       handleAddToCart,
                       imgSrcSet,
                       onProductNavigation,
-                      isServiceable: is_serviceable,
+                      globalConfig,
+                      productsInWishlist,
+                      getProductsInWishlist,
+                      showSmartWishlist,
                     }}
                   />
                 )}
@@ -480,22 +483,12 @@ const ProductListing = ({
                 {loadingOption === "view_more" && paginationProps.hasNext && (
                   <div className={styles.viewMoreWrapper}>
                     <button
-                      className={`${styles.viewMoreBtn} ${
-                        isProductLoading ? styles.loading : ""
-                      }`}
+                      className={styles.viewMoreBtn}
                       onClick={onViewMoreClick}
                       tabIndex="0"
                       disabled={isProductLoading}
-                      style={{ "--load-more-progress": `${loadMoreProgress}%` }}
-                      aria-label={loadMoreLabel}
                     >
-                      <span
-                        className={styles.viewMoreProgress}
-                        aria-hidden="true"
-                      />
-                      <span className={styles.viewMoreLabel}>
-                        {loadMoreLabel}
-                      </span>
+                      {t("resource.facets.view_more")}
                     </button>
                   </div>
                 )}
@@ -507,15 +500,7 @@ const ProductListing = ({
             </div>
           </div>
           <SortModal {...sortModalProps} />
-          <FilterModal
-            {...{
-              isResetFilterDisable,
-              sortList,
-              productCount,
-              onSortUpdate,
-              ...filterModalProps,
-            }}
-          />
+          <FilterModal {...{ isResetFilterDisable, ...filterModalProps }} />
           {isScrollTop && <ScrollTop />}
           {showAddToCart && (
             <>
@@ -523,21 +508,22 @@ const ProductListing = ({
                 <Modal
                   isOpen={isAddToCartOpen}
                   hideHeader={!isTablet}
-                  modalType="right-modal"
-                  customClassName={styles.quickShopModal}
                   containerClassName={styles.addToCartContainer}
                   bodyClassName={styles.addToCartBody}
                   titleClassName={styles.addToCartTitle}
-                  title={addToCartModalTitle}
+                  title={
+                    isTablet
+                      ? restAddToModalProps?.productData?.product?.name
+                      : ""
+                  }
                   closeDialog={restAddToModalProps?.handleClose}
                 >
                   <AddToCart
                     {...restAddToModalProps}
                     globalConfig={globalConfig}
-                    isServiceable={is_serviceable}
-                    recommendationProducts={displayProductList}
-                    followedIdList={followedIdList}
-                    onWishlistClick={onWishlistClick}
+                    showQuantityController={showQuantityController}
+                    showBuyNowButton={showBuyNowButton}
+                    showMoq={showMoq}
                   />
                 </Modal>
               )}
@@ -545,9 +531,38 @@ const ProductListing = ({
                 isOpen={showSizeGuide}
                 onCloseDialog={handleCloseSizeGuide}
                 productMeta={restAddToModalProps?.productData?.product?.sizes}
-                selectedSize={restAddToModalProps?.selectedSize}
               />
             </>
+          )}
+
+          {isWishlistModalOpen && restAddToModalProps?.productDataWishlist && (
+            <SaveToWishlistModal
+              isOpen={isWishlistModalOpen}
+              onClose={handleWishlistModalClose}
+              onSuccess={handleWishlistSave}
+              handleWishlistClick={handleWishlistClick}
+              fetchAllWishlists={fetchAllWishlists}
+              showSnackbarMessage={showSnackbarMessage}
+              selectedWishlistIds={selectedWishlistIds}
+              setSelectedWishlistIds={setSelectedWishlistIds}
+              productDataWishlist={restAddToModalProps?.productDataWishlist}
+              handleOpenCreateWishlistModal={() => setShowCreateWishlist(true)}
+            />
+          )}
+
+          {showCreateWishlist && (
+            <CreateRenameWishlistModal
+              isOpen={showCreateWishlist}
+              onClose={() => setShowCreateWishlist(false)}
+              title={t("resource.b2b.wishlist.create_wishlist")}
+              textAreaTitle={t("resource.b2b.wishlist.enter_name")}
+              textAreaPlaceholder={t("resource.b2b.wishlist.enter_your_wishlist_name")}
+              createButtonText={t("resource.b2b.wishlist.create")}
+              cancelButtonText={t("resource.b2b.wishlist.cancel")}
+              onSubmit={createWishlist}
+              isError={isCreateWishlistError}
+              errorMessage={createWishlistErrorMessage}
+            />
           )}
         </>
       )}
@@ -562,6 +577,12 @@ function ProductGrid({
   productList = [],
   ...restProps
 }) {
+  const handleProductClick = (e, product) => {
+    if (isRunningOnClient()) {
+      sessionStorage.setItem("plpScrollPosition", window.scrollY.toString());
+    }
+  };
+
   return (
     <div
       className={styles.productContainer}
@@ -572,15 +593,10 @@ function ProductGrid({
       }}
     >
       {productList?.length > 0 &&
-        productList.map((product, index) => (
+        productList.map((product) => (
           <ProductGridItem
-            key={
-              product?.uid ||
-              product?.slug ||
-              `${product?.name || "product"}-${index}`
-            }
+            key={product?.uid}
             product={product}
-            columnCount={columnCount}
             {...restProps}
           />
         ))}
@@ -592,7 +608,6 @@ function ProductGridItem({
   product,
   isBrand = true,
   isSaleBadge = true,
-  isCustomBadge = true,
   isPrice = true,
   isWishlistIcon = true,
   imgSrcSet,
@@ -604,15 +619,18 @@ function ProductGridItem({
   listingPrice = "range",
   isImageFill = false,
   showImageOnHover = false,
-  showAddToCart = true,
-  showColorVariants = true,
+  showAddToCart = false,
+  showColorVariants = false,
   actionButtonText,
   imageBackgroundColor = "",
   imagePlaceholder = "",
   onWishlistClick = () => {},
   handleAddToCart = () => {},
   onProductNavigation = () => {},
-  isServiceable = true,
+  globalConfig = {},
+  productsInWishlist = [],
+  getProductsInWishlist = () => {},
+  showSmartWishlist = false,
 }) {
   const { t } = useGlobalTranslation("translation");
 
@@ -630,12 +648,7 @@ function ProductGridItem({
       state = {
         product: {
           ...product,
-          sizes: {
-            sellable: product.sellable,
-            sizes: product.sizes.map((s) =>
-              typeof s === "string" ? { display: s, value: s } : s
-            ),
-          },
+          sizes: { sellable: product.sellable, sizes: product.sizes },
         },
       };
     }
@@ -672,7 +685,6 @@ function ProductGridItem({
         isBrand={isBrand}
         isPrice={isPrice}
         isSaleBadge={isSaleBadge}
-        isCustomBadge={isCustomBadge}
         imgSrcSet={imgSrcSet}
         isWishlistIcon={isWishlistIcon}
         WishlistIconComponent={WishlistIconComponent}
@@ -687,7 +699,10 @@ function ProductGridItem({
         imagePlaceholder={imagePlaceholder}
         handleAddToCart={handleAddToCart}
         onClick={onProductNavigation}
-        isServiceable={isServiceable}
+        globalConfig={globalConfig}
+        productsInWishlist={productsInWishlist}
+        getProductsInWishlist={getProductsInWishlist}
+        showSmartWishlist={showSmartWishlist}
       />
     </FDKLink>
   );

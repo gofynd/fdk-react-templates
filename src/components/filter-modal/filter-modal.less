@@ -1,323 +1,68 @@
 @import "../../styles/main.less";
 
-.filterSortModal {
-  align-items: stretch !important;
-  justify-content: flex-end !important;
-
-  &:before {
-    background-color: transparent !important;
-    opacity: 0 !important;
-  }
-}
-
-.filterSortContainer {
-  width: 33.333vw !important;
-  min-width: 408px;
-  max-width: none !important;
-  height: 100% !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-
-  @media only screen and (max-width: 1024px) {
-    width: 100% !important;
-    min-width: 0;
-    max-width: 100% !important;
-  }
-}
-
-.filterSortHeader {
-  min-height: 42px;
-  padding: 0 16px !important;
-  border-bottom: 1px solid @DividerStokes;
-
-  @media @tablet {
-    min-height: 52px;
-    padding: 0 22px !important;
-  }
-
-  :global(.modal__crossIcon),
-  [class*="crossIcon"] {
-    width: 18px !important;
-    height: 18px !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  svg {
-    width: 12px;
-    height: 12px;
-  }
-}
-
-.filterSortTitle {
-  color: @TextHeading;
-  font-size: 12px !important;
-  font-weight: 400 !important;
-  line-height: 16px !important;
-  letter-spacing: 0 !important;
-
-  @media @tablet {
-    font-size: 14px !important;
-    line-height: 18px !important;
-  }
-}
-
-.filterSortBody {
-  max-height: none !important;
-  overflow: hidden !important;
-}
-
 .contentWrapper {
   display: flex;
   flex-direction: column;
   height: 100%;
-  min-height: 0;
-  background: @DialogBackground;
 }
 
 .modalContent {
   flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-}
-
-.sortSection {
-  padding: 20px 18px 48px;
-  border-bottom: 1px solid @DividerStokes;
-
-  @media @tablet {
-    padding: 28px 24px 48px;
-  }
-}
-
-.sectionTitle {
-  margin: 0 0 26px;
-  color: @TextHeading;
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 16px;
-  letter-spacing: 0.02em;
-
-  @media @tablet {
-    margin-bottom: 30px;
-    font-size: 14px;
-    line-height: 18px;
-  }
-}
-
-.sortGrid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: 42px;
-  row-gap: 14px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-
-  @media @mobile {
-    grid-template-columns: 1fr;
-    row-gap: 22px;
-  }
-}
-
-.sortOption {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: @TextHeading;
-  cursor: pointer;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 16px;
-  letter-spacing: 0;
-  text-align: start;
-
-  @media @tablet {
-    font-size: 14px;
-    line-height: 18px;
-  }
-}
-
-.radioMark {
-  width: 8px;
-  height: 8px;
-  border: 1px solid @TextHeading;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 8px;
-
-  &.selected::after {
-    content: "";
-    width: 3px;
-    height: 3px;
-    border-radius: 50%;
-    background: @TextHeading;
-  }
-}
-
-.filterSection {
-  border-bottom: 1px solid @DividerStokes;
-}
-
-.filterNameList {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.filterNameItem {
-  border-bottom: 1px solid @DividerStokes;
-
-  &:last-child {
-    border-bottom: 0;
-  }
-}
-
-.filterNameButton {
-  width: 100%;
-  min-height: 48px;
-  padding: 0 20px 0 18px;
-  border: 0;
-  background: @DialogBackground;
-  color: @TextHeading;
+  overflow: hidden;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-  text-align: start;
 
-  @media @tablet {
-    min-height: 60px;
-    padding: 0 24px;
+  .leftPane {
+    flex: 0 0 122px;
+    overflow-y: auto;
+    border-inline-end: 1px solid @DividerStokes;
+
+    .filterNameItem {
+      padding: 14px 16px;
+      border-bottom: 1px solid @DividerStokes;
+      .filterNameTitle {
+        color: @TextHeading;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 18px;
+        letter-spacing: -0.28px;
+      }
+
+      &.active {
+        border-inline-end: 2px solid @ButtonPrimary;
+        .filterNameTitle {
+          font-weight: 600;
+        }
+      }
+    }
   }
-}
 
-.filterNameTitle {
-  color: @TextHeading;
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 18px;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-
-  @media @tablet {
-    font-size: 14px;
-    line-height: 18px;
-  }
-}
-
-.filterToggleIcon {
-  color: @TextHeading;
-  font-size: 18px;
-  font-weight: 400;
-  line-height: 1;
-
-  @media @tablet {
-    font-size: 20px;
-  }
-}
-
-.filterListPanel {
-  padding: 0 20px 24px 18px;
-
-  @media @tablet {
-    padding: 0 24px 24px;
+  .rightPane {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 8px;
   }
 }
 
 .modalFooter {
-  flex: 0 0 auto;
-  min-height: 40px;
-  border-top: 1px solid @DividerStokes;
-  display: grid;
-  grid-template-columns: 96px minmax(0, 1fr);
-  background: @DialogBackground;
-
-  @media @tablet {
-    min-height: 64px;
-    grid-template-columns: 24% minmax(0, 1fr);
-  }
-
-  .resetBtn,
-  .applyBtn {
-    min-width: 0;
-    height: 100%;
-    border: 0;
-    border-radius: 0;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 16px;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-
-    @media @tablet {
-      font-size: 14px;
-      line-height: 18px;
-    }
-  }
+  padding: 14px 16px;
+  display: flex;
+  column-gap: 16px;
 
   .resetBtn {
-    justify-content: center;
-    gap: 10px;
-    background: @DialogBackground;
-    color: @TextLabel;
-    border-inline-end: 1px solid @DividerStokes;
-
+    .btnSecondary();
     &:disabled {
       cursor: default;
-      color: @TextSecondary;
     }
   }
-
   .applyBtn {
-    justify-content: space-between;
-    padding: 0 20px;
-    background: @TextHeading;
-    color: @DialogBackground;
-
-    @media @tablet {
-      padding: 0 24px;
-    }
+    .btnPrimary();
   }
-}
-
-.resetIcon {
-  width: 12px;
-  height: 12px;
-  border: 1.5px solid currentColor;
-  border-left-color: transparent;
-  border-radius: 50%;
-  position: relative;
-  flex: 0 0 auto;
-
-  &::after {
-    content: "";
-    position: absolute;
-    right: -1px;
-    top: 2px;
-    width: 6px;
-    height: 6px;
-    border-top: 1.5px solid currentColor;
-    border-right: 1.5px solid currentColor;
-    transform: rotate(20deg);
+  .resetBtn,
+  .applyBtn {
+    flex: 1;
+    padding: 15px 28px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 14px;
   }
-}
-
-.applyIcon {
-  width: 9px;
-  height: 9px;
-  border-top: 1.5px solid currentColor;
-  border-right: 1.5px solid currentColor;
-  transform: rotate(45deg);
-  flex: 0 0 auto;
 }

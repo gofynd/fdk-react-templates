@@ -1,10 +1,9 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { FDKLink } from "fdk-core/components";
+import React, { useMemo, useState, useEffect } from "react";
 import * as styles from "./add-to-cart.less";
 import ImageGallery from "../image-gallery/image-gallery";
+import ProductVariants from "../product-variants/product-variants";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import FyButton from "../../../../components/core/fy-button/fy-button";
-import FyImage from "../../../../components/core/fy-image/fy-image";
 import DeliveryInfo from "../delivery-info/delivery-info";
 import QuantityControl from "../../../../components/quantity-control/quantity-control";
 import FyDropdown from "../../../../components/core/fy-dropdown/fy-dropdown";
@@ -16,19 +15,17 @@ import {
 import RadioIcon from "../../../../assets/images/radio";
 import TruckIcon from "../../../../assets/images/truck-icon.svg";
 import CartIcon from "../../../../assets/images/cart.svg";
-import { useGlobalTranslation, useGlobalStore, useFPI } from "fdk-core/utils";
-import Skeleton from "../../../../components/core/skeletons/skeleton";
-
-const QUICK_SHOP_NOTIFICATION_ICON =
-  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAOdEVYdFNvZnR3YXJlAEZpZ21hnrGWYwAAAI5JREFUeAGFTssNAiEUhJcNCZzWDtYOtANKsBQ88DnSgSVoZ7t2oBe4gfMOJrrZZCcZwsy8nxRAznkspdzxteAopXxora/wX8QFtdYbzKcx5ggeWmtvNDjOBn567xciOnMHa+dcVkrNPJy1CCF0scLXI7ED8t6fsH/ZyJaUkh0QWtwwba0Bpj8VY5yZv94HPCAybUMwcpAAAAAASUVORK5CYII=";
-
-const QUICK_SHOP_FALLBACK_IMAGES = [
-  {
-    alt: "image",
-    type: "image",
-    url: "https://hdn-1.fynd.com/company/884/applications/000000000000000000000001/theme/pictures/free/original/theme-image-1623307821127.png",
-  },
-];
+import BuyNowIcon from "../../../../assets/images/buy-now.svg";
+import B2BSizeQuantityControl from "../../../../components/b2b-size-quantity-control/b2b-size-quantity-control";
+import B2bMOQWrapper from "../../../../components/b2b-size-quantity-control/b2b-moq-wrapper";
+import Tooltip from "../../../../components/tool-tip/tool-tip";
+import B2bBestPriceWrapper from "../best-price/best-price";
+import {
+  useGlobalTranslation,
+  useGlobalStore,
+  useFPI,
+  useNavigate,
+} from "fdk-core/utils";
 
 const AddToCart = ({
   productData = {},
@@ -38,58 +35,84 @@ const AddToCart = ({
   selectedSize = "",
   deliverInfoProps = {},
   sizeError = false,
-  handleSlugChange = (updatedSlug) => {},
-  onSizeSelection = () => {},
-  handleShowSizeGuide = () => {},
-  addProductForCheckout = () => {},
-  handleViewMore = () => {},
-  handleClose = () => {},
+  handleSlugChange = (updatedSlug) => { },
+  onSizeSelection = () => { },
+  handleShowSizeGuide = () => { },
+  addProductForCheckout = () => { },
+  handleViewMore = () => { },
+  handleClose = () => { },
   selectedItemDetails = {},
   isCartUpdating = false,
-  cartUpdateHandler = () => {},
-  minCartQuantity,
+  cartUpdateHandler = () => { },
+  minCartQuantity = 1,
   maxCartQuantity,
   incrementDecrementUnit,
   fulfillmentOptions = [],
   currentFO = {},
-  setCurrentFO = () => {},
+  setCurrentFO = () => { },
   availableFOCount,
   getDeliveryPromise,
-  isServiceable,
-  recommendationProducts = [],
-  followedIdList = [],
-  onWishlistClick = () => {},
+  showQuantityController = false,
+  showBuyNowButton = false,
+  showMoq = false,
 }) => {
-  const fpi = useFPI();
-  const [foLoading, setFoLoading] = useState(false);
-  const [isLoadingCart, setIsLoadingCart] = useState(false);
-  const [isNotifyOpen, setIsNotifyOpen] = useState(false);
-  const [isNotifySubmitted, setIsNotifySubmitted] = useState(false);
-  const [notifyActiveTab, setNotifyActiveTab] = useState("notify");
-  const [notifyEmail, setNotifyEmail] = useState("");
-  const [notifyPhone, setNotifyPhone] = useState("");
-  const [notifyConsent, setNotifyConsent] = useState(false);
-  const [notifyAudience, setNotifyAudience] = useState("women");
-  const [wishlistToastToken, setWishlistToastToken] = useState(0);
+  const [isCartLoading, setIsCartLoading] = useState(false);
 
-  useEffect(() => {
-    if (!wishlistToastToken) return undefined;
-    const timer = setTimeout(() => setWishlistToastToken(0), 3200);
-    return () => clearTimeout(timer);
-  }, [wishlistToastToken]);
-
-  const handleCheckout = async (event, isBuyNow) => {
-    setIsLoadingCart(true);
-    try {
-      await addProductForCheckout(event, selectedSize, isBuyNow);
-    } finally {
-      setIsLoadingCart(false);
-    }
+  const extractSizeFromSellerIdentifier = (sellerIdentifier) => {
+    if (!sellerIdentifier) return "";
+    const parts = sellerIdentifier.split("-");
+    return parts[parts.length - 1];
   };
+
+  const isChildDetailsAvailable = useMemo(() => {
+    const childDetails = productData.productPrice?._custom_json?.child_details;
+    return Array.isArray(childDetails) && childDetails.length > 0;
+  }, [productData.productPrice?._custom_json?.child_details]);
+
+  const fpi = useFPI();
   const { language, countryCode } =
     useGlobalStore(fpi.getters.i18N_DETAILS) || {};
   const locale = language?.locale ? language?.locale : "en";
   const { t } = useGlobalTranslation("translation");
+  const loggedIn = useGlobalStore(fpi.getters.LOGGED_IN);
+  const { merchant_data } = useGlobalStore(fpi?.getters?.CUSTOM_VALUE);
+
+  const keyName = "kyc_status";
+  const isKycKeyPresent = merchant_data?.[keyName] !== undefined;
+  const isMerchantKycApproved = () => {
+    return merchant_data?.[keyName] === "approved";
+  };
+
+  // useEffect(() => {
+  // onSizeSelection(selectedSize);
+  // }, [selectedSize, productData?.product?.slug]);
+
+  const cartQuantity = useMemo(() => {
+    return productData?.selectedQuantity;
+  }, [productData?.selectedQuantity]);
+
+  const totalAvailableQuantity =
+    productData?.productPrice?.total_available_quantity;
+
+  const isOutOfStock = useMemo(() => {
+    return (
+      maxCartQuantity < minCartQuantity ||
+      minCartQuantity === 0 ||
+      totalAvailableQuantity === 0
+    );
+  }, [maxCartQuantity, minCartQuantity, totalAvailableQuantity]);
+
+  const navigate = useNavigate();
+
+  const [quantity, setQuantity] = useState(productData?.selectedQuantity || 0);
+  const [hasAddedToCart, setHasAddedToCart] = useState(false);
+  const [quantityError, setQuantityError] = useState(() => {
+    if (isOutOfStock) {
+      return { hasError: true, message: "Out of stock" };
+    }
+    return { hasError: false, message: "" };
+  });
+
   const { product = {}, productPrice = {} } = productData;
 
   const {
@@ -104,44 +127,22 @@ const AddToCart = ({
 
   const isMto = product?.custom_order?.is_custom_order || false;
   const { price_per_piece } = productPrice;
-  const showQuickShopTaxLabel = false;
-  const showQuickShopShortDescription = false;
-  const isQuickShop = true;
-  const hasProductIdentity = !!(product?.uid || product?.slug || slug || name);
-  const sizeOptions = useMemo(() => sizes?.sizes || [], [sizes?.sizes]);
-  const hasAvailableSize = useMemo(
-    () => sizeOptions.some((size) => size?.quantity > 0 || isMto),
-    [sizeOptions, isMto]
-  );
-  const isProductLevelOutOfStock =
-    hasProductIdentity &&
-    !isMto &&
-    (sizes?.sellable === false ||
-      (sizeOptions.length > 0 && !hasAvailableSize) ||
-      (!sizeOptions.length && sizes?.sellable !== true));
-  const displaySizeOptions = useMemo(() => {
-    if (sizeOptions.length) return sizeOptions;
-    if (isProductLevelOutOfStock) {
-      return [
-        {
-          display: "OS",
-          value: "OS",
-          quantity: 0,
-          isSyntheticQuickShopSize: true,
-        },
-      ];
-    }
-    return [];
-  }, [sizeOptions, isProductLevelOutOfStock]);
 
-  const isSizeSelectionBlock =
-    isQuickShop || pageConfig?.size_selection_style === "block";
-  const isSingleSize = displaySizeOptions?.length === 1;
-  const isSizeCollapsed = pageConfig?.hide_single_size && isSingleSize;
+  const isSizeSelectionBlock = pageConfig?.size_selection_style === "block";
+  const isSingleSize = !sizes?.multi_size || false;
+  const isSizeCollapsed = globalConfig?.hide_single_size && isSingleSize;
   const preSelectFirstOfMany = pageConfig?.preselect_size;
 
+  const images = [
+    {
+      alt: "image",
+      type: "image",
+      url: "https://hdn-1.fynd.com/company/884/applications/000000000000000000000001/theme/pictures/free/original/theme-image-1623307821127.png",
+    },
+  ];
+
   const getProductPrice = (key) => {
-    const priceDataDefault = sizes?.price || product?.price;
+    const priceDataDefault = sizes?.price;
     if (selectedSize && !isEmptyOrNull(productPrice?.price)) {
       if (productPrice?.set) {
         return (
@@ -172,14 +173,13 @@ const AddToCart = ({
     }
     if (priceDataDefault) {
       return priceDataDefault?.[key]?.min !== priceDataDefault?.[key]?.max
-        ? `${priceDataDefault?.[key]?.currency_symbol || ""} ${
-            currencyFormat(priceDataDefault?.[key]?.min) || ""
-          } - ${currencyFormat(priceDataDefault?.[key]?.max) || ""}`
+        ? `${priceDataDefault?.[key]?.currency_symbol || ""} ${currencyFormat(priceDataDefault?.[key]?.min) || ""
+        } - ${currencyFormat(priceDataDefault?.[key]?.max) || ""}`
         : currencyFormat(
-            priceDataDefault?.[key]?.max,
-            priceDataDefault?.[key]?.currency_symbol,
-            formatLocale(locale, countryCode, true)
-          ) || "";
+          priceDataDefault?.[key]?.max,
+          priceDataDefault?.[key]?.currency_symbol,
+          formatLocale(locale, countryCode, true)
+        ) || "";
     }
   };
 
@@ -188,139 +188,119 @@ const AddToCart = ({
     return Object.keys(sizeChartHeader).length > 0 || sizes?.size_chart?.image;
   };
 
+  const getFirstAvailableSize = (sizes) => {
+    if (!sizes?.sizes?.length) return null;
+    const availableSize = sizes?.sizes?.find((size) => size?.is_available);
+    return availableSize || sizes?.sizes?.[0];
+  };
+
+  useEffect(() => {
+    if (isSizeCollapsed || (preSelectFirstOfMany && sizes !== undefined)) {
+      const firstAvailableSize = getFirstAvailableSize(sizes);
+
+      if (firstAvailableSize) {
+        const preselectedSizeValue = firstAvailableSize?.value;
+        onSizeSelection(preselectedSizeValue);
+      } else {
+        const preselectedSizeValue = sizes?.sizes?.[0]?.value;
+        onSizeSelection(preselectedSizeValue);
+      }
+    }
+  }, [isSizeCollapsed, preSelectFirstOfMany, sizes?.sizes]);
+
   const disabledSizeOptions = useMemo(() => {
-    return sizeOptions
+    return sizes?.sizes
       ?.filter((size) => size?.quantity === 0 && !isMto)
       ?.map((size) => size?.value);
-  }, [sizeOptions, isMto]);
+  }, [sizes?.sizes]);
 
-  const mobileTruncatedTitle = useMemo(() => {
-    if (!name) return "";
-    return name.length > 30 ? `${name.slice(0, 30)}...` : name;
-  }, [name]);
-  const isFollowed = useMemo(() => {
-    return !!followedIdList?.includes(product?.uid);
-  }, [followedIdList, product?.uid]);
-  const quickShopRecommendations = useMemo(() => {
-    return (recommendationProducts || [])
-      .filter((item) => item?.uid !== product?.uid && item?.slug !== product?.slug)
-      .slice(0, 4);
-  }, [recommendationProducts, product?.uid, product?.slug]);
-  const colorVariant = useMemo(() => {
-    return variants?.find((variant) =>
-      ["color", "image"].includes(variant?.display_type)
-    );
-  }, [variants]);
-  const selectedColorVariant = useMemo(() => {
-    const selectedVariant = colorVariant?.items?.find((variant) =>
-      isSelectedVariant(variant, slug, product?.slug)
-    );
-    return selectedVariant || colorVariant?.items?.[0] || {};
-  }, [colorVariant, slug, product?.slug]);
-  const quickShopGalleryImages = useMemo(() => {
-    const productImages = Array.isArray(media) ? media : [];
-    const selectedVariantImages = Array.isArray(selectedColorVariant?.medias)
-      ? selectedColorVariant.medias
-      : [];
-    const allVariantImages = (colorVariant?.items || []).flatMap((variant) =>
-      Array.isArray(variant?.medias) ? variant.medias : []
-    );
-    const candidateImages = selectedVariantImages.length
-      ? [...selectedVariantImages, ...productImages]
-      : productImages.length
-        ? productImages
-        : allVariantImages;
-    const seenUrls = new Set();
-    const dedupedImages = candidateImages.filter((item) => {
-      if (!item?.url || seenUrls.has(item.url)) return false;
-      seenUrls.add(item.url);
-      return !item?.type || item.type === "image";
-    });
-    return dedupedImages.length
-      ? dedupedImages
-      : QUICK_SHOP_FALLBACK_IMAGES;
-  }, [media, selectedColorVariant, colorVariant]);
-  const quickShopGalleryKey = [
-    slug || product?.slug || "quick-shop",
-    selectedColorVariant?.uid ||
-      selectedColorVariant?.slug ||
-      getVariantLabel(selectedColorVariant),
-    quickShopGalleryImages?.[0]?.url || "",
-  ].join("-");
-  const selectedSizeItem = useMemo(() => {
-    const selectedItem = displaySizeOptions?.find(
-      (size) => size?.value === selectedSize
-    );
-    return (
-      selectedItem ||
-      (isProductLevelOutOfStock ? displaySizeOptions?.[0] : null)
-    );
-  }, [displaySizeOptions, selectedSize, isProductLevelOutOfStock]);
-  const selectedSizeStockMessage = getSizeStockMessage(
-    selectedSizeItem,
-    isMto,
-    true
-  );
-  const isSelectedSizeOutOfStock =
-    !!selectedSizeItem && !isMto && selectedSizeItem?.quantity === 0;
-  const isOutOfStockQuickShop =
-    isSelectedSizeOutOfStock || isProductLevelOutOfStock;
-  const selectedSizeAvailabilityMessage = isOutOfStockQuickShop
-    ? getZeroStockAvailabilityLabel(selectedSizeItem, product)
-    : selectedSizeStockMessage;
-  const effectiveSelectedSize =
-    selectedSize ||
-    (isProductLevelOutOfStock
-      ? selectedSizeItem?.display || selectedSizeItem?.value || ""
-      : "");
-  const notifyPhoneDisplay = notifyPhone?.trim()
-    ? `+44 ${notifyPhone.trim()}`
-    : "+44";
-  const canSubmitNotify = !!(notifyEmail.trim() || notifyPhone.trim()) &&
-    notifyConsent;
-  const handleWishlistClick = (event) => {
-    event?.stopPropagation();
-    event?.preventDefault();
-    if (!isFollowed) {
-      setWishlistToastToken(Date.now());
+  const validateQuantity = (qty) => {
+    if (isOutOfStock) {
+      return {
+        hasError: true,
+        message: "Out of stock",
+      };
     }
-    onWishlistClick({ product, isFollowed });
+
+    if (qty === 0) {
+      return { hasError: false, message: "" };
+    }
+
+    if (qty < minCartQuantity) {
+      return {
+        hasError: true,
+        message: `Minimum quantity is ${minCartQuantity}`,
+      };
+    }
+
+    if (qty >= maxCartQuantity) {
+      return {
+        hasError: true,
+        message: `Maximum quantity is ${maxCartQuantity}`,
+      };
+    }
+
+    return { hasError: false, message: "" };
   };
-  const handleNotifyOpen = () => {
-    setNotifyActiveTab("notify");
-    setIsNotifySubmitted(false);
-    setIsNotifyOpen(true);
+
+  const updateQuantity = (newQuantity) => {
+    setQuantity(newQuantity);
   };
-  const handleNotifyClose = () => {
-    setIsNotifyOpen(false);
-    setIsNotifySubmitted(false);
+
+  const handleQuantityChange = (e, newQuantity) => {
+    const error = validateQuantity(newQuantity);
+    setQuantityError(error);
+    setQuantity(newQuantity);
   };
-  const handleNotifySubmit = () => {
-    if (!canSubmitNotify) return;
-    setIsNotifySubmitted(true);
+
+  const showWarningForInvalidInput = (inputValue) => {
+    setQuantityError({ hasError: false, message: "" });
+    const error = validateQuantity(inputValue);
+    setQuantityError(error);
   };
-  const handleColorSwatchClick = (event, variant, isSelected) => {
-    event?.preventDefault();
-    event?.stopPropagation();
-    if (isSelected || !variant?.slug) return;
-    handleSlugChange(variant.slug, variant);
-  };
+
+  useEffect(() => {
+    if (selectedSize) {
+      setQuantity(0);
+      // Show out of stock error if product is out of stock
+      if (isOutOfStock) {
+        setQuantityError({ hasError: true, message: "Out of stock" });
+      } else {
+        setQuantityError({ hasError: false, message: "" });
+      }
+    }
+  }, [selectedSize, isOutOfStock]);
+
+  useEffect(() => {
+    if (isOutOfStock) {
+      setQuantityError({ hasError: true, message: "Out of stock" });
+    } else if (selectedSize) {
+      setQuantityError({ hasError: false, message: "" });
+    }
+  }, [isOutOfStock, selectedSize]);
+
+  useEffect(() => {
+    setHasAddedToCart(false);
+  }, [slug]);
+
+  useEffect(() => {
+    if (!selectedSize) {
+      setHasAddedToCart(false);
+    }
+  }, [selectedSize]);
 
   return (
     <div className={styles.productDescContainer}>
       <div className={styles.left}>
         <div className={styles.imgWrap}>
           <ImageGallery
-            key={quickShopGalleryKey}
-            images={quickShopGalleryImages}
+            key={slug}
+            images={slug && media?.length ? media : images}
             product={product}
             globalConfig={globalConfig}
             hiddenDots={true}
             slideTabCentreNone={true}
             hideImagePreview={true}
-            isQuickShopGallery={true}
-            isFollowed={isFollowed}
-            onWishlistClick={handleWishlistClick}
           />
         </div>
       </div>
@@ -330,268 +310,353 @@ const AddToCart = ({
             <div className={styles.crossIcon} onClick={handleClose}>
               <SvgWrapper svgSrc="cross-black" />
             </div>
-            {!!wishlistToastToken && (
-              <div
-                className={styles.wishlistToast}
-                role="status"
-                aria-live="polite"
-              >
-                <div className={styles.wishlistToastImage}>
-                  <FyImage
-                    src={getRecommendationImage(product)}
-                    alt={name}
-                    aspectRatio={2 / 3}
-                    sources={[{ width: 140 }]}
-                    globalConfig={globalConfig}
-                    isImageFill={globalConfig?.img_fill}
-                    backgroundColor={
-                      globalConfig?.img_container_bg || "oklch(96% 0.006 100)"
-                    }
-                  />
-                </div>
-                <div className={styles.wishlistToastCopy}>
-                  <strong>ADDED TO WISHLIST</strong>
-                  <FDKLink to="/wishlist" className={styles.wishlistToastLink}>
-                    Wishlist <span aria-hidden="true">›</span>
-                  </FDKLink>
-                </div>
-                <button
-                  type="button"
-                  className={styles.wishlistToastClose}
-                  aria-label="Dismiss wishlist confirmation"
-                  onClick={() => setWishlistToastToken(0)}
-                >
-                  <SvgWrapper svgSrc="cross-black" />
-                </button>
-              </div>
+
+            {/* ---------- Product Name ----------  */}
+            {!hide_brand_name && (
+              <div className={styles.product__brand}>{brand?.name}</div>
             )}
-            <div className={styles.productScrollContent}>
-              {/* ---------- Product Name ----------  */}
-              {!hide_brand_name && (
-                <div className={styles.product__brand}>{brand?.name}</div>
-              )}
-              <h1 className={styles.product__title}>{name}</h1>
-              {/* ---------- Product Price ---------- */}
-              {show_price && (sizes?.sellable || isOutOfStockQuickShop) && (
-                <div className={styles.product__price}>
-                  <h4 className={styles["product__price--effective"]}>
-                    {getProductPrice("effective")}
-                  </h4>
-                  {getProductPrice("effective") !==
-                    getProductPrice("marked") && (
-                    <span className={styles["product__price--marked"]}>
-                      {getProductPrice("marked")}
-                    </span>
-                  )}
-                  {sizes?.discount && (
-                    <span className={styles["product__price--discount"]}>
-                      ({sizes?.discount})
-                    </span>
-                  )}
+            <h1 className={styles.product__title}>{slug && name}</h1>
+
+            {/* Tooltip badges (Quoted/Contract Price) + Price: show one shimmer when loading, else show real content */}
+            {show_price && sizes?.sellable && (
+              <>
+                {productData?.isBestPriceLoading ? (
+                  <div className={styles.product__price}>
+                    <div className={styles.priceShimmer}>
+                      <div className={styles.shimmerLine} />
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    {productData?.product?.best_price?.is_applicable && (
+                      <B2bBestPriceWrapper
+                        loggedIn={loggedIn}
+                        isBestPriceLoading={productData?.isBestPriceLoading}
+                        bestPriceDetailsData={productData}
+                        globalConfig={globalConfig}
+                        isMerchantKycApproved={isMerchantKycApproved()}
+                      />
+                    )}
+                    {productData?.product?.contract?.is_applicable && (
+                      <Tooltip
+                        position="right"
+                        title={
+                          <>
+                            {t("resource.b2b.components.add_to_cart.contract_applied")}{" "}
+                            -{" "}
+                            {productData?.product?.contract?.used_count === 0 ? (
+                              <>
+                                {productData?.product?.contract?.total_count}{" "}
+                                {t("resource.b2b.components.add_to_cart.qty_available")}
+                              </>
+                            ) : (
+                              <>
+                                {productData?.product?.contract?.total_count -
+                                  productData?.product?.contract?.used_count}
+                                /{productData?.product?.contract?.total_count}
+                                {t("resource.b2b.components.add_to_cart.qty_available")}
+                              </>
+                            )}
+                          </>
+                        }
+                      >
+                        <div className={styles.badge_section}>
+                          <div className={styles.badge}>
+                            <span>
+                              {t("resource.b2b.components.add_to_cart.contract_price")}
+                            </span>
+                            <span className={styles.info_icon}>
+                              <SvgWrapper svgSrc="info-white" />
+                            </span>
+                          </div>
+                        </div>
+                      </Tooltip>
+                    )}
+                    {productData?.product?.quotation?.is_applicable && (
+                      <Tooltip
+                        position="right"
+                        title={
+                          <>
+                            {t("resource.b2b.components.add_to_cart.quote_applied")} -{" "}
+                            {productData?.product?.quotation?.used_count === 0 ? (
+                              <>
+                                {productData?.product?.quotation?.total_count}{" "}
+                                {t("resource.b2b.components.add_to_cart.qty_available")}
+                              </>
+                            ) : (
+                              <>
+                                {productData?.product?.quotation?.total_count -
+                                  productData?.product?.quotation?.used_count}
+                                /{productData?.product?.quotation?.total_count}
+                                {t("resource.b2b.components.add_to_cart.qty_available")}
+                              </>
+                            )}
+                          </>
+                        }
+                      >
+                        <div className={styles.badge_section}>
+                          <div className={styles.badge}>
+                            <span>
+                              {t("resource.b2b.components.add_to_cart.quoted_price")}
+                            </span>
+                            <span className={styles.info_icon}>
+                              <SvgWrapper svgSrc="info-white" />
+                            </span>
+                          </div>
+                        </div>
+                      </Tooltip>
+                    )}
+                    {show_price && sizes?.sellable && (
+                      <div className={styles.product__price}>
+                        {productData?.product?.quotation?.is_applicable ||
+                          productData?.product?.contract?.is_applicable ||
+                          productData?.product?.pricing_tier?.is_applicable ? (
+                          <h4 className={styles["product__price--effective"]}>
+                            {currencyFormat(
+                              productData?.product?.best_price?.price,
+                              productData?.productPrice?.price?.currency_symbol,
+                              formatLocale(locale, countryCode, true)
+                            )}
+                          </h4>
+                        ) : (
+                          <>
+                            <h4 className={styles["product__price--effective"]}>
+                              {getProductPrice("effective")}
+                            </h4>
+                            {getProductPrice("effective") !==
+                              getProductPrice("marked") && (
+                                <span className={styles["product__price--marked"]}>
+                                  {getProductPrice("marked")}
+                                </span>
+                              )}
+                            {sizes?.discount && (
+                              <span className={styles["product__price--discount"]}>
+                                ({sizes?.discount})
+                              </span>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    )}
+                  </>
+                )}
+              </>
+            )}
+            {/* ---------- Product Tax Label ---------- */}
+            {pageConfig?.tax_label && show_price && sizes?.sellable && (
+              <div className={styles.taxLabel}>({pageConfig?.tax_label})</div>
+            )}
+
+            {/* ---------- Short Description ----------  */}
+            {short_description?.length > 0 && (
+              <p
+                className={`${styles.b2} ${styles.fontBody} ${styles.shortDescription}`}
+              >
+                {slug && short_description}
+              </p>
+            )}
+            {/* ---------- Product Variants ----------  */}
+            {slug && variants?.length > 0 && (
+              <ProductVariants
+                product={product}
+                variants={variants}
+                currentSlug={slug}
+                globalConfig={globalConfig}
+                preventRedirect
+                setSlug={handleSlugChange}
+              />
+            )}
+
+            {showMoq && productData?.product?.moq && (
+              <B2bMOQWrapper productDetails={productData} />
+            )}
+
+            {selectedSize &&
+              !!fulfillmentOptions.length &&
+              availableFOCount > 1 && (
+                <div className={styles.fulfillmentWrapper}>
+                  <div className={styles.foList}>
+                    {fulfillmentOptions.map((foItem, index) => (
+                      <FullfillmentOption
+                        key={index}
+                        foItem={foItem}
+                        fulfillmentOptions={fulfillmentOptions}
+                        currentFO={currentFO}
+                        setCurrentFO={setCurrentFO}
+                        getDeliveryPromise={getDeliveryPromise}
+                      />
+                    ))}
+                  </div>
                 </div>
-              )}
-              {/* ---------- Product Tax Label ---------- */}
-              {showQuickShopTaxLabel &&
-                pageConfig?.tax_label &&
-                show_price &&
-                (sizes?.sellable || isOutOfStockQuickShop) && (
-                <div className={styles.taxLabel}>({pageConfig?.tax_label})</div>
               )}
 
-              {/* ---------- Short Description ----------  */}
-              {showQuickShopShortDescription && short_description?.length > 0 && (
-                <p
-                  className={`${styles.b2} ${styles.fontBody} ${styles.shortDescription}`}
-                >
-                  {slug && short_description}
-                </p>
-              )}
-              {colorVariant?.items?.length > 0 && (
-                <div className={styles.quickShopColorSection}>
-                  <div className={styles.quickShopColorName}>
-                    {getVariantLabel(selectedColorVariant)}
-                  </div>
-                  <div
-                    className={styles.quickShopSwatches}
-                    role="radiogroup"
-                    aria-label="Colour"
-                  >
-                    {colorVariant.items.map((variant) => {
-                      const isSelected = isSameQuickShopVariant(
-                        variant,
-                        selectedColorVariant
-                      );
-                      return (
-                        <button
-                          type="button"
-                          key={variant?.uid || variant?.slug || variant?.value}
-                          className={`${styles.quickShopSwatch} ${
-                            isSelected ? styles.quickShopSwatchSelected : ""
-                          } ${
-                            variant?.is_available === false
-                              ? styles.quickShopSwatchUnavailable
-                              : ""
-                          }`}
-                          title={getVariantLabel(variant)}
-                          aria-label={getVariantLabel(variant)}
-                          aria-checked={isSelected}
-                          role="radio"
-                          onClick={(event) =>
-                            handleColorSwatchClick(event, variant, isSelected)
-                          }
-                        >
-                          <span
-                            className={styles.quickShopSwatchFill}
-                            style={getVariantSwatchStyle(variant)}
-                          />
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-              {/* ---------- Size Container ---------- */}
-              {isSizeSelectionBlock && !isSizeCollapsed && (
-                <div className={styles.sizeSelection}>
+            {/* ---------- Size Container ---------- */}
+            {isSizeSelectionBlock && (
+              <div className={styles.sizeSelection}>
+                {(isChildDetailsAvailable || !isSizeCollapsed) && (
                   <div className={styles.sizeHeaderContainer}>
                     <p
                       className={`${styles.b2} ${styles.sizeSelection__label}`}
                     >
-                      {isQuickShop && effectiveSelectedSize ? (
-                        <>
-                          <span>Selected size : </span>
-                          <span className={styles.sizeSelection__selectedValue}>
-                            {effectiveSelectedSize}
-                          </span>
-                          {!!selectedSizeAvailabilityMessage && (
-                            <span className={styles.sizeSelection__stockText}>
-                              {selectedSizeAvailabilityMessage}
-                            </span>
-                          )}
-                        </>
-                      ) : (
-                        <span>
-                          {isQuickShop
-                            ? "Select size"
-                            : `${t("resource.product.style")}: `}
-                          {isQuickShop &&
-                            isOutOfStockQuickShop &&
-                            !!selectedSizeAvailabilityMessage && (
-                              <>
-                                <span> : </span>
-                                <span className={styles.sizeSelection__stockText}>
-                                  {selectedSizeAvailabilityMessage}
-                                </span>
-                              </>
-                            )}
-                          {Boolean(selectedSize) &&
-                            !isQuickShop &&
-                            `${t("resource.common.size")} (${selectedSize})`}
-                        </span>
-                      )}
+                      <span>
+                        {t("resource.product.style")}:{" "}
+                        {Boolean(selectedSize) &&
+                          `${t("resource.common.size")} (${selectedSize})`}
+                      </span>
                     </p>
-                    {(isQuickShop || pageConfig?.show_size_guide) &&
-                      (isQuickShop || sizes?.sellable) && (
+                    {pageConfig?.show_size_guide &&
+                      // isSizeGuideAvailable() &&
+                      sizes?.sellable && (
                         <FyButton
                           variant="text"
                           onClick={handleShowSizeGuide}
                           className={styles["product__size--guide"]}
                           endIcon={
-                            <span className={styles.sizeGuideChevron}>›</span>
+                            <SvgWrapper
+                              svgSrc="scale"
+                              className={styles.scaleIcon}
+                            />
                           }
                         >
-                          {isQuickShop
-                            ? "Find my size"
-                            : t("resource.common.size_guide")}
+                          {t("resource.common.size_guide")}
                         </FyButton>
                       )}
                   </div>
+                )}
 
+                {(isChildDetailsAvailable || !isSizeCollapsed) && (
                   <div className={styles.sizeSelection__wrapper}>
-                    {displaySizeOptions?.map((size) => {
-                      const isZeroStockSize = size?.quantity === 0 && !isMto;
-                      const zeroStockStatus = isZeroStockSize
-                        ? getZeroStockAvailabilityLabel(size, product)
-                        : "";
-                      const stockMessage = isZeroStockSize
-                        ? zeroStockStatus
-                        : getSizeStockMessage(size, isMto);
-                      const sizeLabel = stockMessage
-                        ? `${size?.display} - ${stockMessage}`
-                        : size?.display;
-                      const isSyntheticOutOfStockSize =
-                        !!size?.isSyntheticQuickShopSize;
-                      const isSelectedSize =
-                        selectedSize === size?.value ||
-                        (!selectedSize &&
-                          isProductLevelOutOfStock &&
-                          isSyntheticOutOfStockSize);
-
-                      return (
-                        <button
-                          type="button"
-                          key={`${size?.display}`}
-                          className={`${styles.b2} ${styles.sizeSelection__block} ${
-                            size.quantity === 0 &&
-                            !isMto &&
-                            !isQuickShop &&
-                            styles["sizeSelection__block--disable"]
-                          } ${
-                            (size?.quantity !== 0 || isMto || isQuickShop) &&
-                            styles["sizeSelection__block--selectable"]
-                          } ${
-                            isZeroStockSize &&
-                            styles["sizeSelection__block--comingSoon"]
-                          } ${
-                            isSelectedSize &&
-                            styles["sizeSelection__block--selected"]
+                    {sizes?.sizes?.map((size) => (
+                      <button
+                        type="button"
+                        key={`${size?.display}`}
+                        className={`${styles.b2} ${styles.sizeSelection__block} ${size.quantity === 0 &&
+                          !isMto &&
+                          styles["sizeSelection__block--disable"]
+                          } ${(size?.quantity !== 0 || isMto) &&
+                          styles["sizeSelection__block--selectable"]
+                          } ${selectedSize === size?.value &&
+                          styles["sizeSelection__block--selected"]
                           } `}
-                          title={sizeLabel}
-                          aria-label={sizeLabel}
-                          onClick={() => {
-                            if (isSyntheticOutOfStockSize) return;
-                            onSizeSelection(size?.value);
-                          }}
-                        >
-                          <span className={styles.sizeSelection__value}>
-                            {size?.display}
-                            {isZeroStockSize ? (
-                              zeroStockStatus === "Coming soon" ? (
-                                <span
-                                  className={styles.sizeSelection__comingSoonIcon}
-                                  aria-hidden="true"
-                                />
-                              ) : (
-                                <img
-                                  className={styles.sizeSelection__notifyIcon}
-                                  src={QUICK_SHOP_NOTIFICATION_ICON}
-                                  alt=""
-                                  aria-hidden="true"
-                                />
-                              )
-                            ) : !!stockMessage && (
-                              <span
-                                className={styles.sizeSelection__stockDot}
-                                aria-hidden="true"
-                              />
-                            )}
-                          </span>
-                          {size?.quantity === 0 && !isMto && !isQuickShop && (
-                            <svg>
-                              <line x1="0" y1="100%" x2="100%" y2="0" />
-                            </svg>
-                          )}
-                        </button>
-                      );
-                    })}
+                        title={size?.value}
+                        onClick={() => onSizeSelection(size?.value)}
+                      >
+                        {size?.display}
+                        {size?.quantity === 0 && !isMto && (
+                          <svg>
+                            <line x1="0" y1="100%" x2="100%" y2="0" />
+                          </svg>
+                        )}
+                      </button>
+                    ))}
                   </div>
-                </div>
-              )}
-              {/* ---------- Size Dropdown And Action Buttons ---------- */}
-              {!isSizeSelectionBlock && !isSizeCollapsed && (
-                <div className={styles.sizeCartContainer}>
+                )}
+                {isSizeSelectionBlock &&
+                  productData.productPrice?._custom_json?.child_details &&
+                  selectedSize && (
+                    <div className={styles.childDetailsContainer}>
+                      {productData.productPrice._custom_json.child_details.map(
+                        (child, index) => {
+                          const childSize = extractSizeFromSellerIdentifier(
+                            child.seller_identifier
+                          );
+                          return (
+                            <div key={index} className={styles.childDetailBox}>
+                              <span className={styles.childSize}>
+                                {childSize}
+                              </span>
+                              <span className={styles.childSeparator}>-</span>
+                              <span className={styles.childQuantity}>
+                                {child.required_quantity} Pcs
+                              </span>
+                            </div>
+                          );
+                        }
+                      )}
+                    </div>
+                  )}
+                {showQuantityController && (
+                  <div className={styles.quantityControl}>
+                    <B2BSizeQuantityControl
+                      minCartQuantity={minCartQuantity}
+                      maxCartQuantity={maxCartQuantity}
+                      isCartUpdating={isCartUpdating || isCartLoading}
+                      deliveryErrorMessage={
+                        deliverInfoProps?.pincodeErrorMessage
+                      }
+                      pincode={deliverInfoProps?.pincode}
+                      placeholder="Qty"
+                      count={productData?.selectedQuantity || quantity}
+                      onDecrementClick={(e) => {
+                        const newQty =
+                          (productData?.selectedQuantity || quantity) -
+                          (incrementDecrementUnit || minCartQuantity || 1);
+                        showWarningForInvalidInput(newQty);
+                        cartUpdateHandler(
+                          e,
+                          -incrementDecrementUnit,
+                          "update_item"
+                        );
+                      }}
+                      serviceable={selectedSize && !isOutOfStock}
+                      onIncrementClick={(e) => {
+                        const newQty =
+                          (productData?.selectedQuantity || quantity) +
+                          (incrementDecrementUnit || minCartQuantity || 1);
+                        showWarningForInvalidInput(newQty);
+                        if (cartQuantity === 0) {
+                          addProductForCheckout(
+                            e,
+                            selectedSize,
+                            false,
+                            setIsCartLoading,
+                            incrementDecrementUnit || minCartQuantity || 1
+                          );
+                        } else {
+                          cartUpdateHandler(
+                            e,
+                            incrementDecrementUnit,
+                            "update_item"
+                          );
+                        }
+                      }}
+                      onQtyChange={(e, currentNum) => {
+                        showWarningForInvalidInput(e.target.value);
+                        const clampedQuantity = Math.max(
+                          Math.min(currentNum, maxCartQuantity),
+                          minCartQuantity
+                        );
+                        updateQuantity(clampedQuantity);
+                        if (cartQuantity === 0) {
+                          addProductForCheckout(
+                            e,
+                            selectedSize,
+                            false,
+                            setIsCartLoading,
+                            clampedQuantity
+                          );
+                        } else {
+                          cartUpdateHandler(e, clampedQuantity, "edit_item");
+                        }
+                      }}
+                      isSizeWrapperVisible={false}
+                      sizeType="medium"
+                      hasError={quantityError.hasError}
+                      errorMessage={quantityError.message}
+                      incrementDecrementUnit={incrementDecrementUnit}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+            {/* ---------- Size Dropdown And Action Buttons ---------- */}
+            {!isSizeSelectionBlock && (
+              <div
+                className={`${styles.sizeCartContainer} ${showQuantityController ? styles.withQuantityWrapper : ""}`}
+              >
+                {(isChildDetailsAvailable || !isSizeCollapsed) && (
                   <FyDropdown
-                    options={displaySizeOptions || []}
+                    options={sizes?.sizes || []}
                     value={selectedSize}
                     onChange={onSizeSelection}
                     placeholder={t("resource.common.select_size_caps")}
@@ -604,730 +669,263 @@ const AddToCart = ({
                     disabledOptionClassName={styles.disabledOption}
                     disableSearch={true}
                   />
-                  {(isQuickShop || pageConfig?.show_size_guide) &&
-                    (isQuickShop || sizes?.sellable) && (
+                )}
+                {showQuantityController && (
+                  <div>
+                    <B2BSizeQuantityControl
+                      minCartQuantity={minCartQuantity}
+                      maxCartQuantity={maxCartQuantity}
+                      isCartUpdating={isCartUpdating || isCartLoading}
+                      placeholder="Qty"
+                      pincodeErrorMessage={
+                        deliverInfoProps?.pincodeErrorMessage
+                      }
+                      pincode={deliverInfoProps?.pincode}
+                      count={productData?.selectedQuantity || quantity}
+                      onDecrementClick={(e) => {
+                        const newQty =
+                          (productData?.selectedQuantity || quantity) -
+                          (incrementDecrementUnit || minCartQuantity || 1);
+                        showWarningForInvalidInput(newQty);
+                        cartUpdateHandler(
+                          e,
+                          -incrementDecrementUnit,
+                          "update_item"
+                        );
+                      }}
+                      serviceable={selectedSize && !isOutOfStock}
+                      onIncrementClick={(e) => {
+                        const newQty =
+                          (productData?.selectedQuantity || quantity) +
+                          (incrementDecrementUnit || minCartQuantity || 1);
+                        showWarningForInvalidInput(newQty);
+                        if (cartQuantity === 0) {
+                          addProductForCheckout(
+                            e,
+                            selectedSize,
+                            false,
+                            setIsCartLoading,
+                            incrementDecrementUnit || minCartQuantity || 1
+                          );
+                        } else {
+                          cartUpdateHandler(
+                            e,
+                            incrementDecrementUnit,
+                            "update_item"
+                          );
+                        }
+                      }}
+                      onQtyChange={(e, currentNum) => {
+                        showWarningForInvalidInput(e.target.value);
+                        const clampedQuantity = Math.max(
+                          Math.min(currentNum, maxCartQuantity),
+                          minCartQuantity
+                        );
+                        updateQuantity(clampedQuantity);
+                        if (cartQuantity === 0) {
+                          addProductForCheckout(
+                            e,
+                            selectedSize,
+                            false,
+                            setIsCartLoading,
+                            clampedQuantity
+                          );
+                        } else {
+                          cartUpdateHandler(e, clampedQuantity, "edit_item");
+                        }
+                      }}
+                      isSizeWrapperVisible={false}
+                      sizeType="medium"
+                      hasError={quantityError.hasError}
+                      errorMessage={quantityError.message}
+                      incrementDecrementUnit={incrementDecrementUnit}
+                    />
+                  </div>
+                )}
+                {(isChildDetailsAvailable || !isSizeCollapsed) &&
+                  pageConfig?.show_size_guide &&
+                  // isSizeGuideAvailable() &&
+                  sizes?.sellable && (
+                    <FyButton
+                      variant="text"
+                      onClick={handleShowSizeGuide}
+                      className={styles["product__size--guide"]}
+                      endIcon={
+                        <SvgWrapper
+                          svgSrc="scale"
+                          className={styles.scaleIcon}
+                        />
+                      }
+                    >
+                      {t("resource.common.size_guide")}
+                    </FyButton>
+                  )}
+              </div>
+            )}
+            {!isSizeSelectionBlock &&
+              productData.productPrice?._custom_json?.child_details &&
+              selectedSize && (
+                <div className={styles.childDetailsContainer}>
+                  {productData.productPrice._custom_json.child_details.map(
+                    (child, index) => {
+                      const childSize = extractSizeFromSellerIdentifier(
+                        child.seller_identifier
+                      );
+                      return (
+                        <div key={index} className={styles.childDetailBox}>
+                          <span className={styles.childSize}>{childSize}</span>
+                          <span className={styles.childSeparator}>-</span>
+                          <span className={styles.childQuantity}>
+                            {child.required_quantity} Pcs
+                          </span>
+                        </div>
+                      );
+                    }
+                  )}
+                </div>
+              )}
+            {sizeError && (
+              <div className={styles.sizeError}>
+                {t("resource.product.please_select_size")}
+              </div>
+            )}
+            {sizes?.sellable && selectedSize && (
+              <DeliveryInfo {...deliverInfoProps} />
+            )}
+
+            <div className={styles.viewMore}>
+              <span onClick={handleViewMore}>
+                {t("resource.product.view_full_details")}
+              </span>
+            </div>
+          </div>
+          {/* ---------- Buy Now and Add To Cart ---------- */}
+          <div className={styles.actionButtons}>
+            {!disable_cart && sizes?.sellable && (
+              <>
+                {/* {button_options?.includes("addtocart") && (
+                  <>
+                    {selectedItemDetails?.quantity && show_quantity_control ? (
+                      <QuantityControl
+                        isCartUpdating={isCartUpdating}
+                        count={selectedItemDetails?.quantity || 0}
+                        onDecrementClick={(e) =>
+                          cartUpdateHandler(
+                            e,
+                            -incrementDecrementUnit,
+                            "update_item"
+                          )
+                        }
+                        onIncrementClick={(e) =>
+                          cartUpdateHandler(
+                            e,
+                            incrementDecrementUnit,
+                            "update_item"
+                          )
+                        }
+                        onQtyChange={(e, currentNum) =>
+                          cartUpdateHandler(e, currentNum, "edit_item")
+                        }
+                        maxCartQuantity={
+                          selectedItemDetails?.article?.quantity ??
+                          maxCartQuantity
+                        }
+                        minCartQuantity={minCartQuantity}
+                        containerClassName={styles.qtyContainer}
+                        inputClassName={styles.inputContainer}
+                      />
+                    ) : (
                       <FyButton
-                        variant="text"
-                        onClick={handleShowSizeGuide}
-                        className={styles["product__size--guide"]}
-                        endIcon={
-                          <span className={styles.sizeGuideChevron}>›</span>
+                        variant={showViewCartButton ? "contained" : "outlined"}
+                        size="medium"
+                        onClick={(event) => {
+                          setHasAddedToCart(true);
+                          addProductForCheckout(
+                            event,
+                            selectedSize,
+                            false,
+                            showQuantityController ? quantity : 0
+                          );
+                          if (showQuantityController) {
+                            setQuantity(0);
+                            setQuantityError({ hasError: false, message: "" });
+                          }
+                        }}
+                        disabled={showQuantityController && quantity === 0}
+                        startIcon={
+                          <CartIcon
+                            className={`${styles.cartIcon} ${
+                              showViewCartButton ? styles.fillSecondary : ""
+                            }`}
+                          />
+                        }
+                        className={
+                          hasAddedToCart && showViewCartButton
+                            ? styles.buttonSecondary
+                            : styles.fullWidthButton
                         }
                       >
-                        {isQuickShop
-                          ? "Find my size"
-                          : t("resource.common.size_guide")}
+                        {t("resource.cart.add_to_cart_caps")}
                       </FyButton>
                     )}
-                </div>
-              )}
-              {sizeError && (
-                <div className={styles.sizeError}>
-                  {t("resource.product.please_select_size")}
-                </div>
-              )}
-              {sizes?.sellable && selectedSize && !isOutOfStockQuickShop && (
-                <DeliveryInfo
-                  {...deliverInfoProps}
-                  setFoLoading={setFoLoading}
-                  mandatoryPincode={pageConfig?.mandatory_pincode}
-                />
-              )}
+                  </>
+                )} */}
 
-              {selectedSize &&
-                !isOutOfStockQuickShop &&
-                !!fulfillmentOptions.length &&
-                availableFOCount > 1 && (
-                  <div className={styles.fulfillmentWrapper}>
-                    <div className={styles.foList}>
-                      {foLoading
-                        ? fulfillmentOptions.map((_, index) => (
-                            <div
-                              key={`fo-skeleton-${index}`}
-                              className={styles.fulfillmentOption}
-                            >
-                              <div
-                                style={{ width: "20px" }}
-                                className={styles.foIcon}
-                              >
-                                <Skeleton height={18} width={18} />
-                              </div>
-                              <div
-                                style={{
-                                  display: "flex",
-                                  flexDirection: "column",
-                                  gap: "4px",
-                                  width: "100%",
-                                }}
-                              >
-                                <Skeleton height={14} width={200} />
-                                <Skeleton height={12} width={120} />
-                              </div>
-                            </div>
-                          ))
-                        : fulfillmentOptions.map((foItem, index) => (
-                            <FullfillmentOption
-                              key={index}
-                              foItem={foItem}
-                              fulfillmentOptions={fulfillmentOptions}
-                              currentFO={currentFO}
-                              setCurrentFO={setCurrentFO}
-                              getDeliveryPromise={getDeliveryPromise}
-                            />
-                          ))}
-                    </div>
-                  </div>
-                )}
+                <FyButton
+                  variant={showBuyNowButton ? "contained" : "outlined"}
+                  size="medium"
+                  onClick={() => {
+                    handleClose();
+                    navigate("/cart/bag");
+                  }}
+                  disabled={productData?.selectedQuantity === 0}
+                  startIcon={
+                    <CartIcon
+                      className={`${styles.cartIcon} ${showBuyNowButton ? styles.fillSecondary : ""
+                        }`}
+                    />
+                  }
+                  className={
+                    !showBuyNowButton
+                      ? styles.fullWidthButton
+                      : styles.buttonSecondary
+                  }
+                >
+                  {t("resource.b2b.components.size_wrapper.go_to_cart")}
+                </FyButton>
 
-              <div className={styles.actionButtons}>
-                {!disable_cart && isOutOfStockQuickShop && (
+                {showBuyNowButton && button_options?.includes("buynow") && (
                   <FyButton
-                    className={styles.addToBagBtn}
+                    className={styles.buyNow}
                     variant="contained"
                     size="medium"
-                    onClick={handleNotifyOpen}
-                    endIcon={
-                      selectedSizeAvailabilityMessage === "Coming soon" ? (
-                        <span
-                          className={styles.notifyClockIcon}
-                          aria-hidden="true"
-                        />
-                      ) : (
-                        <img
-                          className={styles.notifyBellIcon}
-                          src={QUICK_SHOP_NOTIFICATION_ICON}
-                          alt=""
-                          aria-hidden="true"
-                        />
+                    onClick={(event) =>
+                      addProductForCheckout(
+                        event,
+                        selectedSize,
+                        true,
+                        setIsCartLoading,
+                        showQuantityController
+                          ? productData?.selectedQuantity
+                          : 0
                       )
                     }
+                    startIcon={<BuyNowIcon className={styles.cartIcon} />}
                   >
-                    NOTIFY ME
+                    {t("resource.common.buy_now_caps")}
                   </FyButton>
                 )}
-                {!disable_cart && !isOutOfStockQuickShop && sizes?.sellable && (
-                  <>
-                    {(isQuickShop || button_options?.includes("addtocart")) && (
-                      <>
-                        {selectedItemDetails?.quantity &&
-                        show_quantity_control ? (
-                          <QuantityControl
-                            isCartUpdating={isCartUpdating}
-                            count={selectedItemDetails?.quantity || 0}
-                            onDecrementClick={(e) =>
-                              cartUpdateHandler(
-                                e,
-                                -incrementDecrementUnit,
-                                "update_item"
-                              )
-                            }
-                            onIncrementClick={(e) =>
-                              cartUpdateHandler(
-                                e,
-                                incrementDecrementUnit,
-                                "update_item"
-                              )
-                            }
-                            onQtyChange={(e, currentNum) =>
-                              cartUpdateHandler(e, currentNum, "edit_item")
-                            }
-                            maxCartQuantity={
-                              selectedItemDetails?.article?.quantity ??
-                              maxCartQuantity
-                            }
-                            minCartQuantity={minCartQuantity}
-                            containerClassName={styles.qtyContainer}
-                            inputClassName={styles.inputContainer}
-                          />
-                        ) : (
-                          <FyButton
-                            className={styles.addToBagBtn}
-                            variant="contained"
-                            size="medium"
-                            onClick={(event) => handleCheckout(event, false)}
-                            endIcon={<CartIcon className={styles.cartIcon} />}
-                            disabled={isLoadingCart || isServiceable === false}
-                          >
-                            ADD TO BAG
-                          </FyButton>
-                        )}
-                      </>
-                    )}
-                  </>
-                )}
-                {!isQuickShop && !isOutOfStockQuickShop && !sizes?.sellable && (
-                  <FyButton variant="outlined" disabled size="medium">
-                    {t("resource.common.product_not_available")}
-                  </FyButton>
-                )}
-              </div>
-
-              <div className={styles.viewMore}>
-                <span onClick={handleViewMore}>
-                  {isQuickShop
-                    ? "Product details"
-                    : t("resource.product.view_full_details")}
-                </span>
-              </div>
-
-              {quickShopRecommendations.length > 0 && (
-                <div className={styles.quickShopRecommendations}>
-                  <h2>You might like</h2>
-                  <div className={styles.recommendationGrid}>
-                    {quickShopRecommendations.map((item) => (
-                      <FDKLink
-                        key={item?.uid || item?.slug}
-                        to={`/product/${item?.slug}`}
-                        className={styles.recommendationItem}
-                      >
-                        <FyImage
-                          src={getRecommendationImage(item)}
-                          alt={item?.name}
-                          aspectRatio={2 / 3}
-                          sources={[{ width: 180 }]}
-                          globalConfig={globalConfig}
-                          isImageFill={globalConfig?.img_fill}
-                          backgroundColor={
-                            globalConfig?.img_container_bg ||
-                            "oklch(96% 0.006 100)"
-                          }
-                        />
-                      </FDKLink>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-            {isNotifyOpen && (
-              <QuickShopNotifyPanel
-                product={product}
-                name={name}
-                selectedSize={effectiveSelectedSize}
-                selectedColor={getVariantLabel(selectedColorVariant)}
-                price={getProductPrice("effective")}
-                availabilityStatus={selectedSizeAvailabilityMessage}
-                sizes={displaySizeOptions || []}
-                activeTab={notifyActiveTab}
-                setActiveTab={setNotifyActiveTab}
-                isSubmitted={isNotifySubmitted}
-                email={notifyEmail}
-                phone={notifyPhone}
-                phoneDisplay={notifyPhoneDisplay}
-                consent={notifyConsent}
-                audience={notifyAudience}
-                canSubmit={canSubmitNotify}
-                onEmailChange={setNotifyEmail}
-                onPhoneChange={setNotifyPhone}
-                onConsentChange={setNotifyConsent}
-                onAudienceChange={setNotifyAudience}
-                onSubmit={handleNotifySubmit}
-                onClose={handleNotifyClose}
-                onKeepShopping={handleClose}
-                recommendations={quickShopRecommendations}
-                globalConfig={globalConfig}
-              />
+              </>
+            )}
+            {!sizes?.sellable && (
+              <FyButton variant="outlined" disabled size="medium">
+                {t("resource.common.product_not_available")}
+              </FyButton>
             )}
           </div>
         </div>
       </div>
     </div>
-  );
-};
-
-const getRecommendationImage = (product) => {
-  const media = product?.media || product?.medias || [];
-  return media?.find((item) => item?.type === "image")?.url || media?.[0]?.url || "";
-};
-
-const isSelectedVariant = (variant, currentSlug, productSlug) => {
-  const variantSlug = `${variant?.slug || ""}`.trim();
-  const activeSlug = `${currentSlug || productSlug || ""}`.trim();
-  return !!variantSlug && !!activeSlug && variantSlug === activeSlug;
-};
-
-const isSameQuickShopVariant = (variant = {}, selectedVariant = {}) => {
-  const variantSlug = `${variant?.slug || ""}`.trim();
-  const selectedSlug = `${selectedVariant?.slug || ""}`.trim();
-  if (variantSlug && selectedSlug) return variantSlug === selectedSlug;
-
-  const variantUid = `${variant?.uid || ""}`.trim();
-  const selectedUid = `${selectedVariant?.uid || ""}`.trim();
-  if (variantUid && selectedUid) return variantUid === selectedUid;
-
-  const variantValue = `${variant?.value || getVariantLabel(variant)}`.trim();
-  const selectedValue = `${selectedVariant?.value || getVariantLabel(selectedVariant)}`.trim();
-  return !!variantValue && !!selectedValue && variantValue === selectedValue;
-};
-
-const getVariantLabel = (variant = {}) => {
-  return variant?.color_name || variant?.name || variant?.value || "";
-};
-
-const getVariantImage = (variant = {}) => {
-  const medias = variant?.medias || [];
-  return medias.find((media) => media?.type === "image")?.url || medias[0]?.url || "";
-};
-
-const normalizeSwatchColor = (color = "") => {
-  const normalizedColor = `${color}`.trim();
-  if (!normalizedColor) return "";
-  if (normalizedColor.startsWith("#")) return normalizedColor;
-  if (/^[0-9a-f]{3}([0-9a-f]{3})?$/i.test(normalizedColor)) {
-    return `#${normalizedColor}`;
-  }
-  return normalizedColor;
-};
-
-const getVariantSwatchStyle = (variant = {}) => {
-  const color = normalizeSwatchColor(variant?.color);
-  if (color) {
-    return { backgroundColor: color };
-  }
-
-  const image = getVariantImage(variant);
-  if (image) {
-    return { backgroundImage: `url(${image})` };
-  }
-
-  return { backgroundColor: "oklch(96% 0.006 100)" };
-};
-
-const getSizeStockMessage = (size = {}, isMto = false, isSelectedLabel = false) => {
-  if (isMto || size?.quantity <= 0) return "";
-  if (size.quantity === 1) return isSelectedLabel ? "Last one left" : "One left";
-  if (size.quantity <= 5) return "Few in stock";
-  if (size.quantity <= 10) return "Low in stock";
-  return "";
-};
-
-const getZeroStockAvailabilityLabel = (size = {}, product = {}) => {
-  const statusText = [
-    size?.availability_status,
-    size?.inventory_status,
-    size?.status,
-    size?.label,
-    product?.availability_status,
-    product?.inventory_status,
-    product?.status,
-    product?.teaser_tag,
-    product?.action?.label,
-    product?.action?.type,
-    product?.custom_meta?.coming_soon,
-    product?.custom_meta?.availability,
-  ]
-    .filter(Boolean)
-    .join(" ")
-    .toLowerCase();
-
-  return /coming[\s_-]*soon|pre[\s_-]*launch|launch[\s_-]*soon/.test(statusText)
-    ? "Coming soon"
-    : "Out of stock";
-};
-
-const QuickShopNotifyPanel = ({
-  product = {},
-  name = "",
-  selectedSize = "",
-  selectedColor = "",
-  price = "",
-  availabilityStatus = "Out of stock",
-  sizes = [],
-  activeTab = "notify",
-  setActiveTab = () => {},
-  isSubmitted = false,
-  email = "",
-  phone = "",
-  phoneDisplay = "+44",
-  consent = false,
-  audience = "women",
-  canSubmit = false,
-  onEmailChange = () => {},
-  onPhoneChange = () => {},
-  onConsentChange = () => {},
-  onAudienceChange = () => {},
-  onSubmit = () => {},
-  onClose = () => {},
-  onKeepShopping = () => {},
-  recommendations = [],
-  globalConfig = {},
-}) => {
-  const trendingItems = recommendations.slice(0, 2);
-  const storeRows = getStoreAvailabilityRows(sizes, selectedSize);
-
-  return (
-    <div
-      className={styles.notifyPanel}
-      role="dialog"
-      aria-label="Notify me"
-      aria-modal="false"
-    >
-      <div className={styles.notifyHeader}>
-        <div className={styles.notifyTabs} role="tablist">
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === "notify"}
-            className={`${styles.notifyTab} ${
-              activeTab === "notify" ? styles.notifyTabActive : ""
-            }`}
-            onClick={() => setActiveTab("notify")}
-          >
-            Notify me
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === "store"}
-            className={`${styles.notifyTab} ${
-              activeTab === "store" ? styles.notifyTabActive : ""
-            }`}
-            onClick={() => setActiveTab("store")}
-          >
-            Available in store
-          </button>
-        </div>
-        <button
-          type="button"
-          className={styles.notifyClose}
-          aria-label="Close"
-          onClick={onClose}
-        >
-          <SvgWrapper svgSrc="cross-black" />
-        </button>
-      </div>
-
-      <div className={styles.notifyPanelBody}>
-        {activeTab === "store" ? (
-          <div className={styles.notifyStoreContent}>
-            <div className={styles.notifyStoreIntro}>
-              <p>
-                Size : <span>{selectedSize}</span>
-              </p>
-              <p>
-                This item is currently unavailable online, but in stock at
-                selected stores near you.
-              </p>
-              <div className={styles.storeLegend} aria-label="Store stock key">
-                <span>
-                  <StoreStatusIcon status="in_stock" /> In stock
-                </span>
-                <span>
-                  <StoreStatusIcon status="few_left" /> Few left
-                </span>
-                <span>
-                  <StoreStatusIcon status="out_of_stock" /> Out of stock
-                </span>
-              </div>
-            </div>
-            <div className={styles.storeList}>
-              {DUMMY_STORES.map((store) => (
-                <div className={styles.storeCard} key={store.id}>
-                  <div className={styles.storeCardHeader}>
-                    <h3>{store.name}</h3>
-                    <button type="button" aria-label={`Expand ${store.name}`}>
-                      +
-                    </button>
-                  </div>
-                  <p>{store.address}</p>
-                  <div className={styles.storeSizeList}>
-                    {storeRows.map((size) => (
-                      <span key={`${store.id}-${size.size}`}>
-                        {size.size}
-                        <StoreStatusIcon status={size.status} />
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        ) : isSubmitted ? (
-          <div className={styles.notifyConfirmation}>
-            <p className={styles.notifyIntro}>
-              We'll notify you if this product comes back in stock:
-            </p>
-            <div className={styles.notifySummary}>
-              {!!email && (
-                <div>
-                  <span>Email</span>
-                  <strong>{email}</strong>
-                </div>
-              )}
-              {!!phone && (
-                <div>
-                  <span>Phone number</span>
-                  <strong>{phoneDisplay}</strong>
-                </div>
-              )}
-            </div>
-            <div className={styles.notifyProductCard}>
-              <div className={styles.notifyProductImage}>
-                <FyImage
-                  src={getRecommendationImage(product)}
-                  alt={name}
-                  aspectRatio={2 / 3}
-                  sources={[{ width: 160 }]}
-                  globalConfig={globalConfig}
-                  isImageFill={globalConfig?.img_fill}
-                  backgroundColor={
-                    globalConfig?.img_container_bg || "oklch(96% 0.006 100)"
-                  }
-                />
-              </div>
-              <div className={styles.notifyProductDetails}>
-                <div>
-                  <p>{name}</p>
-                  <span>{availabilityStatus}</span>
-                </div>
-                <dl>
-                  <div>
-                    <dt>Size:</dt>
-                    <dd>{selectedSize}</dd>
-                  </div>
-                  {!!selectedColor && (
-                    <div>
-                      <dt>Colour:</dt>
-                      <dd>{selectedColor}</dd>
-                    </div>
-                  )}
-                </dl>
-              </div>
-              {!!price && <div className={styles.notifyProductPrice}>{price}</div>}
-            </div>
-            <button
-              type="button"
-              className={`${styles.notifyActionButton} ${styles.notifyActionButtonActive}`}
-              onClick={onKeepShopping}
-            >
-              <span>KEEP SHOPPING</span>
-              <span aria-hidden="true">›</span>
-            </button>
-          </div>
-        ) : (
-          <div className={styles.notifyForm}>
-            <p className={styles.notifySizeLine}>
-              Size : <span>{selectedSize}</span>
-            </p>
-            <p className={styles.notifyCopy}>
-              Enter your email or phone number.
-              <br />
-              We'll notify you when this size is back.
-            </p>
-            <div className={styles.notifyFieldGroup}>
-              <label>
-                <span>Email</span>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(event) => onEmailChange(event.target.value)}
-                  placeholder="Email"
-                />
-              </label>
-              <label className={styles.notifyPhoneField}>
-                <span>Phone number</span>
-                <div>
-                  <span className={styles.notifyPhoneCode}>🇬🇧 +44⌄</span>
-                  <input
-                    type="tel"
-                    inputMode="tel"
-                    value={phone}
-                    onChange={(event) => onPhoneChange(event.target.value)}
-                    placeholder="Phone number"
-                  />
-                </div>
-              </label>
-            </div>
-            <label className={styles.notifyConsent}>
-              <input
-                type="checkbox"
-                checked={consent}
-                onChange={(event) => onConsentChange(event.target.checked)}
-              />
-              <span>
-                I would like to receive personalised promotions from COS a
-                brand of the H&M Group via email and text messages. I can
-                withdraw this consent at any time. I confirm that I'm 16 years
-                old or older. I acknowledge that my personal data will be
-                processed by H&M Group in accordance with the{" "}
-                <u>privacy notice</u>.
-              </span>
-            </label>
-            {consent && (
-              <div className={styles.notifyAudienceGroup}>
-                <label>
-                  <input
-                    type="radio"
-                    name="notify-audience"
-                    value="women"
-                    checked={audience === "women"}
-                    onChange={() => onAudienceChange("women")}
-                  />
-                  <span>Women</span>
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="notify-audience"
-                    value="men"
-                    checked={audience === "men"}
-                    onChange={() => onAudienceChange("men")}
-                  />
-                  <span>Men</span>
-                </label>
-              </div>
-            )}
-            <button
-              type="button"
-              className={`${styles.notifyActionButton} ${
-                canSubmit ? styles.notifyActionButtonActive : ""
-              }`}
-              disabled={!canSubmit}
-              onClick={onSubmit}
-            >
-              <span>NOTIFY WHEN AVAILABLE</span>
-              <span aria-hidden="true">›</span>
-            </button>
-          </div>
-        )}
-
-        {trendingItems.length > 0 && (
-          <div className={styles.notifyTrending}>
-            <div className={styles.notifyTrendingHeader}>
-              <h2>Trending</h2>
-              <div aria-hidden="true">
-                <span>‹</span>
-                <span>›</span>
-              </div>
-            </div>
-            <div className={styles.notifyTrendingGrid}>
-              {trendingItems.map((item) => (
-                <FDKLink
-                  key={item?.uid || item?.slug}
-                  to={`/product/${item?.slug}`}
-                  className={styles.notifyTrendingItem}
-                >
-                  {!!item?.teaser_tag && (
-                    <span className={styles.notifyTrendingBadge}>
-                      {item.teaser_tag}
-                    </span>
-                  )}
-                  <FyImage
-                    src={getRecommendationImage(item)}
-                    alt={item?.name}
-                    aspectRatio={2 / 3}
-                    sources={[{ width: 260 }]}
-                    globalConfig={globalConfig}
-                    isImageFill={globalConfig?.img_fill}
-                    backgroundColor={
-                      globalConfig?.img_container_bg || "oklch(96% 0.006 100)"
-                    }
-                  />
-                </FDKLink>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-const DUMMY_STORES = [
-  {
-    id: "east-street-1",
-    name: "EAST STREET",
-    address: (
-      <>
-        45 East Street
-        <br />
-        BN1 1HN Brighton
-      </>
-    ),
-  },
-  {
-    id: "east-street-2",
-    name: "EAST STREET",
-    address: (
-      <>
-        45 East Street
-        <br />
-        BN1 1HN Brighton
-      </>
-    ),
-  },
-  {
-    id: "east-street-3",
-    name: "EAST STREET",
-    address: (
-      <>
-        45 East Street
-        <br />
-        BN1 1HN Brighton
-      </>
-    ),
-  },
-];
-
-const FALLBACK_STORE_SIZES = [
-  { size: "32", status: "in_stock" },
-  { size: "34", status: "in_stock" },
-  { size: "36", status: "out_of_stock" },
-  { size: "38", status: "in_stock" },
-  { size: "40", status: "out_of_stock" },
-  { size: "42", status: "in_stock" },
-  { size: "44", status: "out_of_stock" },
-];
-
-const getStoreAvailabilityRows = (sizes = [], selectedSize = "") => {
-  if (!sizes?.length) return FALLBACK_STORE_SIZES;
-
-  return sizes.map((size, index) => {
-    const sizeValue = size?.display || size?.value || "";
-    let status = "in_stock";
-
-    if (size?.quantity === 0 && size?.value !== selectedSize) {
-      status = "out_of_stock";
-    } else if (size?.quantity > 0 && size?.quantity <= 5) {
-      status = "few_left";
-    }
-
-    if (size?.value === selectedSize) {
-      status = index % 3 === 0 ? "few_left" : "in_stock";
-    }
-
-    return {
-      size: sizeValue,
-      status,
-    };
-  });
-};
-
-const StoreStatusIcon = ({ status = "in_stock" }) => {
-  const labelMap = {
-    in_stock: "In stock",
-    few_left: "Few left",
-    out_of_stock: "Out of stock",
-  };
-  const symbolMap = {
-    in_stock: "✓",
-    few_left: "!",
-    out_of_stock: "×",
-  };
-
-  return (
-    <span
-      className={`${styles.storeStatusIcon} ${
-        status === "few_left"
-          ? styles.storeStatusIconFew
-          : status === "out_of_stock"
-            ? styles.storeStatusIconOut
-            : styles.storeStatusIconIn
-      }`}
-      aria-label={labelMap[status]}
-      role="img"
-    >
-      {symbolMap[status]}
-    </span>
   );
 };
 
