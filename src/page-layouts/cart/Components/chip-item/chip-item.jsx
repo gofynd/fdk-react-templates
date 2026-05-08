@@ -80,7 +80,8 @@ export default function ChipItem({
 
   const availableSizes = singleItemDetails?.availability?.available_sizes || [];
   const hideSizeChangeButton =
-    globalConfig?.hide_single_size && availableSizes.length === 1;
+    globalConfig?.hide_single_size &&
+    (availableSizes.length === 1 || currentSize?.toLowerCase() === "os");
 
   const [items, setItems] = useState([
     { title: "Customization", content: customizationOptions, open: false },
