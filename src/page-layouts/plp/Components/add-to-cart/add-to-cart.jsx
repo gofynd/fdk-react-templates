@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import * as styles from "./add-to-cart.less";
 import ImageGallery from "../image-gallery/image-gallery";
 import ProductVariants from "../product-variants/product-variants";
@@ -7,17 +7,9 @@ import FyButton from "../../../../components/core/fy-button/fy-button";
 import DeliveryInfo from "../delivery-info/delivery-info";
 import QuantityControl from "../../../../components/quantity-control/quantity-control";
 import FyDropdown from "../../../../components/core/fy-dropdown/fy-dropdown";
-import {
-  currencyFormat,
-  isEmptyOrNull,
-  formatLocale,
-} from "../../../../helper/utils";
-import RadioIcon from "../../../../assets/images/radio";
-import TruckIcon from "../../../../assets/images/truck-icon.svg";
+import { currencyFormat, isEmptyOrNull } from "../../../../helper/utils";
 import CartIcon from "../../../../assets/images/cart.svg";
 import BuyNowIcon from "../../../../assets/images/buy-now.svg";
-import { useGlobalTranslation, useGlobalStore, useFPI } from "fdk-core/utils";
-import Skeleton from "../../../../components/core/skeletons/skeleton";
 
 const AddToCart = ({
   productData = {},
@@ -35,44 +27,16 @@ const AddToCart = ({
   handleClose = () => {},
   selectedItemDetails = {},
   isCartUpdating = false,
+  isHyperlocal = false,
   cartUpdateHandler = () => {},
   minCartQuantity,
   maxCartQuantity,
   incrementDecrementUnit,
-  fulfillmentOptions = [],
-  currentFO = {},
-  setCurrentFO = () => {},
-  availableFOCount,
-  getDeliveryPromise,
-  isServiceable,
 }) => {
-  const fpi = useFPI();
-  const [foLoading, setFoLoading] = useState(false);
-  const [isLoadingCart, setIsLoadingCart] = useState(false);
-
-  const handleCheckout = async (event, isBuyNow) => {
-    setIsLoadingCart(true);
-    try {
-      await addProductForCheckout(event, selectedSize, isBuyNow);
-    } finally {
-      setIsLoadingCart(false);
-    }
-  };
-  const { language, countryCode } =
-    useGlobalStore(fpi.getters.i18N_DETAILS) || {};
-  const locale = language?.locale ? language?.locale : "en";
-  const { t } = useGlobalTranslation("translation");
   const { product = {}, productPrice = {} } = productData;
 
-  const {
-    button_options,
-    disable_cart,
-    show_price,
-    show_quantity_control,
-    hide_brand_name,
-    is_limited_stock,
-    limited_stock_label = t("resource.common.limited_stock_label"),
-  } = globalConfig;
+  const { button_options, disable_cart, show_price, show_quantity_control } =
+    globalConfig;
 
   const { media, name, short_description, variants, sizes, brand } = product;
 
@@ -96,29 +60,16 @@ const AddToCart = ({
     const priceDataDefault = sizes?.price;
     if (selectedSize && !isEmptyOrNull(productPrice?.price)) {
       if (productPrice?.set) {
-        return (
-          currencyFormat(
-            price_per_piece[key],
-            productPrice?.price?.currency_symbol || "",
-            formatLocale(locale, countryCode, true)
-          ) || ""
-        );
+        return currencyFormat(price_per_piece[key]) || "";
       }
       const price = productPrice?.price || "";
-      return (
-        currencyFormat(
-          price?.[key],
-          price?.currency_symbol,
-          formatLocale(locale, countryCode, true)
-        ) || ""
-      );
+      return currencyFormat(price?.[key], price?.currency_symbol) || "";
     }
     if (selectedSize && priceDataDefault) {
       return (
         currencyFormat(
           priceDataDefault?.[key]?.min,
-          priceDataDefault?.[key]?.currency_symbol,
-          formatLocale(locale, countryCode, true)
+          priceDataDefault?.[key]?.currency_symbol
         ) || ""
       );
     }
@@ -129,8 +80,7 @@ const AddToCart = ({
           } - ${currencyFormat(priceDataDefault?.[key]?.max) || ""}`
         : currencyFormat(
             priceDataDefault?.[key]?.max,
-            priceDataDefault?.[key]?.currency_symbol,
-            formatLocale(locale, countryCode, true)
+            priceDataDefault?.[key]?.currency_symbol
           ) || "";
     }
   };
@@ -140,16 +90,17 @@ const AddToCart = ({
     return Object.keys(sizeChartHeader).length > 0 || sizes?.size_chart?.image;
   };
 
+  // useEffect(() => {
+  //   if (isSizeCollapsed || (preSelectFirstOfMany && sizes !== undefined)) {
+  //     onSizeSelection(sizes?.sizes?.[0]?.value);
+  //   }
+  // }, [isSizeCollapsed, preSelectFirstOfMany, sizes?.sizes]);
+
   const disabledSizeOptions = useMemo(() => {
     return sizes?.sizes
       ?.filter((size) => size?.quantity === 0 && !isMto)
       ?.map((size) => size?.value);
   }, [sizes?.sizes]);
-
-  const mobileTruncatedTitle = useMemo(() => {
-    if (!name) return "";
-    return name.length > 30 ? `${name.slice(0, 30)}...` : name;
-  }, [name]);
 
   return (
     <div className={styles.productDescContainer}>
@@ -172,136 +123,63 @@ const AddToCart = ({
             <div className={styles.crossIcon} onClick={handleClose}>
               <SvgWrapper svgSrc="cross-black" />
             </div>
-            <div className={styles.productScrollContent}>
-              {/* ---------- Product Name ----------  */}
-              {!hide_brand_name && (
-                <div className={styles.product__brand}>{brand?.name}</div>
-              )}
-              <h1 className={styles.product__title}>{slug && name}</h1>
-              {/* ---------- Product Price ---------- */}
-              {show_price && sizes?.sellable && (
-                <div className={styles.product__price}>
-                  <h4 className={styles["product__price--effective"]}>
-                    {getProductPrice("effective")}
-                  </h4>
-                  {getProductPrice("effective") !==
-                    getProductPrice("marked") && (
-                    <span className={styles["product__price--marked"]}>
-                      {getProductPrice("marked")}
-                    </span>
-                  )}
-                  {sizes?.discount && (
-                    <span className={styles["product__price--discount"]}>
-                      ({sizes?.discount})
-                    </span>
-                  )}
-                </div>
-              )}
-              {/* ---------- Product Tax Label ---------- */}
-              {pageConfig?.tax_label && show_price && sizes?.sellable && (
-                <div className={styles.taxLabel}>({pageConfig?.tax_label})</div>
-              )}
 
-              {/* ---------- Short Description ----------  */}
-              {short_description?.length > 0 && (
-                <p
-                  className={`${styles.b2} ${styles.fontBody} ${styles.shortDescription}`}
-                >
-                  {slug && short_description}
-                </p>
-              )}
-              {/* ---------- Product Variants ----------  */}
-              {slug && variants?.length > 0 && (
-                <ProductVariants
-                  product={product}
-                  variants={variants}
-                  currentSlug={slug}
-                  globalConfig={globalConfig}
-                  preventRedirect
-                  setSlug={handleSlugChange}
-                />
-              )}
-              {/* ---------- Size Container ---------- */}
-              {isSizeSelectionBlock && !isSizeCollapsed && (
-                <div className={styles.sizeSelection}>
-                  <div className={styles.sizeHeaderContainer}>
-                    <p
-                      className={`${styles.b2} ${styles.sizeSelection__label}`}
-                    >
-                      <span>
-                        {t("resource.product.style")}:{" "}
-                        {Boolean(selectedSize) &&
-                          `${t("resource.common.size")} (${selectedSize})`}
-                      </span>
-                    </p>
-                    {pageConfig?.show_size_guide &&
-                      // isSizeGuideAvailable() &&
-                      sizes?.sellable && (
-                        <FyButton
-                          variant="text"
-                          onClick={handleShowSizeGuide}
-                          className={styles["product__size--guide"]}
-                          endIcon={
-                            <SvgWrapper
-                              svgSrc="scale"
-                              className={styles.scaleIcon}
-                            />
-                          }
-                        >
-                          {t("resource.common.size_guide")}
-                        </FyButton>
-                      )}
-                  </div>
+            {/* ---------- Product Name ----------  */}
+            <div className={styles.product__brand}>{brand?.name}</div>
+            <h1 className={styles.product__title}>{slug && name}</h1>
+            {/* ---------- Product Price ---------- */}
+            {show_price && sizes?.sellable && (
+              <div className={styles.product__price}>
+                <h4 className={styles["product__price--effective"]}>
+                  {getProductPrice("effective")}
+                </h4>
+                {getProductPrice("effective") !== getProductPrice("marked") && (
+                  <span className={styles["product__price--marked"]}>
+                    {getProductPrice("marked")}
+                  </span>
+                )}
+                {sizes?.discount && (
+                  <span className={styles["product__price--discount"]}>
+                    ({sizes?.discount})
+                  </span>
+                )}
+              </div>
+            )}
+            {/* ---------- Product Tax Label ---------- */}
+            {pageConfig?.tax_label && show_price && sizes?.sellable && (
+              <div className={styles.taxLabel}>({pageConfig?.tax_label})</div>
+            )}
 
-                  <div className={styles.sizeSelection__wrapper}>
-                    {sizes?.sizes?.map((size) => (
-                      <button
-                        type="button"
-                        key={`${size?.display}`}
-                        className={`${styles.b2} ${styles.sizeSelection__block} ${
-                          size.quantity === 0 &&
-                          !isMto &&
-                          styles["sizeSelection__block--disable"]
-                        } ${
-                          (size?.quantity !== 0 || isMto) &&
-                          styles["sizeSelection__block--selectable"]
-                        } ${
-                          selectedSize === size?.value &&
-                          styles["sizeSelection__block--selected"]
-                        } `}
-                        title={size?.value}
-                        onClick={() => onSizeSelection(size?.value)}
-                      >
-                        {size?.display}
-                        {size?.quantity === 0 && !isMto && (
-                          <svg>
-                            <line x1="0" y1="100%" x2="100%" y2="0" />
-                          </svg>
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-              {/* ---------- Size Dropdown And Action Buttons ---------- */}
-              {!isSizeSelectionBlock && !isSizeCollapsed && (
-                <div className={styles.sizeCartContainer}>
-                  <FyDropdown
-                    options={sizes?.sizes || []}
-                    value={selectedSize}
-                    onChange={onSizeSelection}
-                    placeholder={t("resource.common.select_size_caps")}
-                    valuePrefix={`${t("resource.common.size")}:`}
-                    dataKey="value"
-                    containerClassName={styles.dropdownContainer}
-                    dropdownListClassName={styles.dropdown}
-                    valueClassName={styles.sizeValue}
-                    disabledOptions={disabledSizeOptions}
-                    disabledOptionClassName={styles.disabledOption}
-                    disableSearch={true}
-                  />
+            {/* ---------- Short Description ----------  */}
+            {short_description?.length > 0 && (
+              <p
+                className={`${styles.b2} ${styles.fontBody} ${styles.shortDescription}`}
+              >
+                {slug && short_description}
+              </p>
+            )}
+            {/* ---------- Product Variants ----------  */}
+            {slug && variants?.length > 0 && (
+              <ProductVariants
+                product={product}
+                variants={variants}
+                currentSlug={slug}
+                globalConfig={globalConfig}
+                preventRedirect
+                setSlug={handleSlugChange}
+              />
+            )}
+            {/* ---------- Size Container ---------- */}
+            {isSizeSelectionBlock && !isSizeCollapsed && (
+              <div className={styles.sizeSelection}>
+                <div className={styles.sizeHeaderContainer}>
+                  <p className={`${styles.b2} ${styles.sizeSelection__label}`}>
+                    <span>
+                      Style: {Boolean(selectedSize) && `Size (${selectedSize})`}
+                    </span>
+                  </p>
                   {pageConfig?.show_size_guide &&
-                    // isSizeGuideAvailable() &&
+                    isSizeGuideAvailable() &&
                     sizes?.sellable && (
                       <FyButton
                         variant="text"
@@ -314,73 +192,88 @@ const AddToCart = ({
                           />
                         }
                       >
-                        {t("resource.common.size_guide")}
+                        SIZE GUIDE
                       </FyButton>
                     )}
                 </div>
-              )}
-              {sizeError && (
-                <div className={styles.sizeError}>
-                  {t("resource.product.please_select_size")}
+
+                <div className={styles.sizeSelection__wrapper}>
+                  {sizes?.sizes?.map((size) => (
+                    <button
+                      type="button"
+                      key={`${size?.display}`}
+                      className={`${styles.b2} ${styles.sizeSelection__block} ${
+                        size.quantity === 0 &&
+                        !isMto &&
+                        styles["sizeSelection__block--disable"]
+                      } ${
+                        (size?.quantity !== 0 || isMto) &&
+                        styles["sizeSelection__block--selectable"]
+                      } ${
+                        selectedSize === size?.value &&
+                        styles["sizeSelection__block--selected"]
+                      } `}
+                      title={size?.value}
+                      onClick={() => onSizeSelection(size?.value)}
+                    >
+                      {size?.display}
+                      {size?.quantity === 0 && !isMto && (
+                        <svg>
+                          <line x1="0" y1="100%" x2="100%" y2="0" />
+                        </svg>
+                      )}
+                    </button>
+                  ))}
                 </div>
-              )}
-              {sizes?.sellable && selectedSize && (
-                <DeliveryInfo
-                  {...deliverInfoProps}
-                  setFoLoading={setFoLoading}
-                  mandatoryPincode={pageConfig?.mandatory_pincode}
-                />
-              )}
-
-              {selectedSize &&
-                !!fulfillmentOptions.length &&
-                availableFOCount > 1 && (
-                  <div className={styles.fulfillmentWrapper}>
-                    <div className={styles.foList}>
-                      {foLoading
-                        ? fulfillmentOptions.map((_, index) => (
-                            <div
-                              key={`fo-skeleton-${index}`}
-                              className={styles.fulfillmentOption}
-                            >
-                              <div
-                                style={{ width: "20px" }}
-                                className={styles.foIcon}
-                              >
-                                <Skeleton height={18} width={18} />
-                              </div>
-                              <div
-                                style={{
-                                  display: "flex",
-                                  flexDirection: "column",
-                                  gap: "4px",
-                                  width: "100%",
-                                }}
-                              >
-                                <Skeleton height={14} width={200} />
-                                <Skeleton height={12} width={120} />
-                              </div>
-                            </div>
-                          ))
-                        : fulfillmentOptions.map((foItem, index) => (
-                            <FullfillmentOption
-                              key={index}
-                              foItem={foItem}
-                              fulfillmentOptions={fulfillmentOptions}
-                              currentFO={currentFO}
-                              setCurrentFO={setCurrentFO}
-                              getDeliveryPromise={getDeliveryPromise}
-                            />
-                          ))}
-                    </div>
-                  </div>
-                )}
-
-              <div className={styles.viewMore}>
-                <span onClick={handleViewMore}>
-                  {t("resource.product.view_full_details")}
-                </span>
               </div>
+            )}
+            {/* ---------- Size Dropdown And Action Buttons ---------- */}
+            {!isSizeSelectionBlock && !isSizeCollapsed && (
+              <div className={styles.sizeCartContainer}>
+                <FyDropdown
+                  options={sizes?.sizes || []}
+                  value={selectedSize}
+                  onChange={onSizeSelection}
+                  placeholder="SELECT SIZE"
+                  valuePrefix="Size :"
+                  dataKey="value"
+                  containerClassName={styles.dropdownContainer}
+                  dropdownListClassName={styles.dropdown}
+                  valueClassName={styles.sizeValue}
+                  disabledOptions={disabledSizeOptions}
+                  disabledOptionClassName={styles.disabledOption}
+                  disableSearch={true}
+                />
+                {pageConfig?.show_size_guide &&
+                  isSizeGuideAvailable() &&
+                  sizes?.sellable && (
+                    <FyButton
+                      variant="text"
+                      onClick={handleShowSizeGuide}
+                      className={styles["product__size--guide"]}
+                      endIcon={
+                        <SvgWrapper
+                          svgSrc="scale"
+                          className={styles.scaleIcon}
+                        />
+                      }
+                    >
+                      SIZE GUIDE
+                    </FyButton>
+                  )}
+              </div>
+            )}
+            {sizeError && (
+              <div className={styles.sizeError}>
+                Please select size to continue
+              </div>
+            )}
+            {!isHyperlocal && sizes?.sellable && selectedSize && (
+              <DeliveryInfo {...deliverInfoProps} />
+            )}
+
+            <div className={styles.viewMore}>
+              <span onClick={handleViewMore}>View Full details</span>
             </div>
           </div>
           {/* ---------- Buy Now and Add To Cart ---------- */}
@@ -422,11 +315,12 @@ const AddToCart = ({
                       <FyButton
                         variant="outlined"
                         size="medium"
-                        onClick={(event) => handleCheckout(event, false)}
+                        onClick={(event) =>
+                          addProductForCheckout(event, selectedSize, false)
+                        }
                         startIcon={<CartIcon className={styles.cartIcon} />}
-                        disabled={isLoadingCart || !isServiceable}
                       >
-                        {t("resource.cart.add_to_cart_caps")}
+                        ADD TO CART
                       </FyButton>
                     )}
                   </>
@@ -436,71 +330,23 @@ const AddToCart = ({
                     className={styles.buyNow}
                     variant="contained"
                     size="medium"
-                    onClick={(event) => handleCheckout(event, true)}
+                    onClick={(event) =>
+                      addProductForCheckout(event, selectedSize, true)
+                    }
                     startIcon={<BuyNowIcon className={styles.cartIcon} />}
-                    disabled={isLoadingCart || !isServiceable}
                   >
-                    {t("resource.common.buy_now_caps")}
+                    BUY NOW
                   </FyButton>
                 )}
               </>
             )}
             {!sizes?.sellable && (
               <FyButton variant="outlined" disabled size="medium">
-                {t("resource.common.product_not_available")}
+                PRODUCT NOT AVAILABLE
               </FyButton>
             )}
           </div>
-          {is_limited_stock &&
-            limited_stock_label &&
-            productPrice?.quantity <= 10 && (
-              <p className={styles.limitedQuantity}>
-                {(() => {
-                  const fallback = t("resource.common.limited_stock_label");
-                  let label;
-                  if (limited_stock_label?.startsWith("t:")) {
-                    const key = limited_stock_label.slice(2);
-                    const translated = t(key);
-                    label = translated === key ? fallback : translated;
-                  } else {
-                    label = limited_stock_label;
-                  }
-                  return label.replace(/\{\{qty\}\}/g, productPrice?.quantity);
-                })()}
-              </p>
-            )}
         </div>
-      </div>
-    </div>
-  );
-};
-
-const FullfillmentOption = ({
-  foItem,
-  fulfillmentOptions,
-  currentFO,
-  setCurrentFO,
-  getDeliveryPromise,
-}) => {
-  const formattedPromise = getDeliveryPromise(foItem?.delivery_promise);
-  return (
-    <div
-      className={styles.fulfillmentOption}
-      onClick={() => setCurrentFO(foItem?.fulfillment_option || {})}
-    >
-      {fulfillmentOptions.length === 1 ? (
-        <TruckIcon className={styles.fulfillmentOption} />
-      ) : (
-        <RadioIcon
-          checked={foItem?.fulfillment_option?.slug === currentFO?.slug}
-        />
-      )}
-
-      <div className={styles.foDetails}>
-        {!!formattedPromise && (
-          <p className={styles.promiseLabel}>{formattedPromise}</p>
-        )}
-        <p className={styles.foLabel}>{foItem?.fulfillment_option?.name}</p>
       </div>
     </div>
   );

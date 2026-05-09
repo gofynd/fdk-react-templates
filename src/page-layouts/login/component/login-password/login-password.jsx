@@ -1,25 +1,17 @@
 import React, { useState, useId, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
-import {
-  checkIfNumber,
-  translateDynamicLabel,
-  validatePasswordField,
-} from "../../../../helper/utils";
+import { checkIfNumber, validatePasswordField } from "../../../../helper/utils";
 import * as styles from "./login-password.less";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import MobileNumber from "../../../auth/mobile-number/mobile-number";
-import { useGlobalTranslation } from "fdk-core/utils";
 
 function loginPassword({
-  loginButtonText,
+  loginButtonText = "LOGIN",
   error = null,
   isForgotPassword = true,
   onForgotPasswordClick = () => {},
   onLoginFormSubmit = () => {},
-  isTermsAccepted = false,
-  setShowConsentTooltip = () => {},
 }) {
-  const { t } = useGlobalTranslation("translation");
   const usernameInputId = useId();
   const passwordInputId = useId();
   const [isPasswordShow, setIsPasswordShow] = useState(false);
@@ -42,12 +34,10 @@ function loginPassword({
     register,
     setValue,
     control,
-    getValues,
     watch,
     setError,
     clearErrors,
     reset,
-    setFocus,
     formState: { errors, isValid },
   } = useForm({
     defaultValues: {
@@ -85,10 +75,6 @@ function loginPassword({
   }, [watch("password"), watch("username"), watch("phone")]);
 
   const handleFormSubmit = ({ username, phone, password }) => {
-    if (!isTermsAccepted) {
-      setShowConsentTooltip(true);
-      return;
-    }
     const data = {
       username: showInputNumber
         ? `${phone.countryCode}${phone.mobile}`
@@ -96,22 +82,6 @@ function loginPassword({
       password,
     };
     onLoginFormSubmit(data);
-  };
-
-  useEffect(() => {
-    if (!showInputNumber) {
-      setFocus("username");
-    }
-  }, [showInputNumber]);
-
-  const handleKeyDown = (e) => {
-    if (e.key.length !== 1) return;
-    if (/[a-zA-Z!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?`~ ]/.test(e.key)) {
-      const { mobile } = getValues("phone") || {};
-      e.preventDefault();
-      setShowInputNumber(false);
-      setValue("username", mobile + e.key);
-    }
   };
 
   return (
@@ -124,7 +94,7 @@ function loginPassword({
           className={`${styles.loginInputGroup} ${errors?.username || errors?.phone || errors?.root ? styles.error : ""}`}
         >
           <label className={styles.loginInputTitle} htmlFor={usernameInputId}>
-            {t("resource.auth.login.email_or_phone")}
+            Email or Phone
           </label>
           {!showInputNumber ? (
             <input
@@ -135,7 +105,7 @@ function loginPassword({
                   if (showInputNumber) {
                     return true;
                   }
-                  return !!value || t("resource.common.enter_valid_username");
+                  return !!value || "Please enter valid username";
                 },
               })}
             />
@@ -149,8 +119,7 @@ function loginPassword({
                     return true;
                   }
                   return (
-                    value.isValidNumber ||
-                    t("resource.common.enter_valid_phone_number")
+                    value.isValidNumber || "Please enter valid phone number"
                   );
                 },
               }}
@@ -161,7 +130,6 @@ function loginPassword({
                   mobile={field.value.mobile}
                   countryCode={field.value.countryCode}
                   error={error}
-                  handleKeyDown={handleKeyDown}
                   onChange={(value) => {
                     field.onChange(value);
                   }}
@@ -169,13 +137,18 @@ function loginPassword({
               )}
             />
           )}
+          {(errors?.username || errors?.phone) && (
+            <p className={styles.loginAlert}>
+              {errors?.phone?.message || errors?.username?.message}
+            </p>
+          )}
         </div>
         <div
           className={`${styles.loginInputGroup} ${errors?.password || errors?.root ? styles.error : ""}`}
         >
           <div style={{ position: "relative" }}>
             <label className={styles.loginInputTitle} htmlFor={passwordInputId}>
-              {t("resource.auth.login.password")}
+              Password
             </label>
             <input
               id={passwordInputId}
@@ -183,18 +156,14 @@ function loginPassword({
               {...register("password", {
                 validate: (value) =>
                   validatePasswordField(value) ||
-                  t("resource.common.password_message"),
+                  "Password must be at least 8 characters and contain at least 1 letter, 1 number and 1 special character.",
               })}
             />
             {watch("password") && (
               <button
                 className={styles.passwordToggle}
                 onClick={togglePasswordDisplay}
-                aria-label={
-                  !isPasswordShow
-                    ? t("resource.auth.login.show_password")
-                    : t("resource.auth.login.hide_password")
-                }
+                aria-label={!isPasswordShow ? "Show Password" : "Hide Password"}
               >
                 <SvgWrapper
                   svgSrc={!isPasswordShow ? "show-password" : "hide-password"}
@@ -215,19 +184,14 @@ function loginPassword({
               className={styles.forgotBtn}
               onClick={handleForgotPasswordClick}
             >
-              {t("resource.auth.login.forgot_password")}
+              Forgot Password?
             </button>
           </div>
         )}
       </div>
 
-      <button
-        className={styles.loginButton}
-        type="submit"
-        disabled={showInputNumber && !watch("phone")?.isValidNumber}
-      >
-        {translateDynamicLabel(loginButtonText, t) ||
-          t("resource.auth.login.login_caps")}
+      <button className={styles.loginButton} type="submit">
+        {loginButtonText}
       </button>
     </form>
   );
