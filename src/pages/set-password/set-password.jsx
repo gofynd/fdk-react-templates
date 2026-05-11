@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { validatePasswordField } from "../../helper/utils";
 import * as styles from "./set-password.less";
+import { useGlobalTranslation } from "fdk-core/utils";
 import ShowPasswordIcon from "../../assets/images/show-password.svg";
 import HidePasswordIcon from "../../assets/images/hide-password.svg";
 
-function SetPassword({ error = null, onSetPasswordSubmit = () => {} }) {
+function SetPassword({ error = null, onSetPasswordSubmit = () => { } }) {
+  const { t } = useGlobalTranslation("translation");
   const {
     register,
     handleSubmit,
@@ -44,12 +46,12 @@ function SetPassword({ error = null, onSetPasswordSubmit = () => {} }) {
       className={styles.setWrapper}
       onSubmit={handleSubmit(onSetPasswordSubmit)}
     >
-      <div className={styles.setContentTitle}>Create New Password</div>
+      <div className={styles.setContentTitle}>{t("resource.auth.create_new_password")}</div>
       <div
         className={`${styles.setInputGroup} ${errors?.newPassword || errors?.root ? `${styles.errorInput}` : ""}`}
       >
         <label className={styles.setInputTitle} htmlFor="newPassword">
-          New Password
+          {t("resource.auth.new_password")}
         </label>
         <div className={styles.flexItem}>
           <input
@@ -57,7 +59,7 @@ function SetPassword({ error = null, onSetPasswordSubmit = () => {} }) {
             {...register("newPassword", {
               validate: (value) =>
                 validatePasswordField(value) ||
-                "Password must be at least 8 characters and contain at least 1 letter, 1 number and 1 special character.",
+                t("resource.auth.password_requirements"),
             })}
           />
           {watch("newPassword") && (
@@ -79,7 +81,7 @@ function SetPassword({ error = null, onSetPasswordSubmit = () => {} }) {
         }`}
       >
         <label className={styles.setInputTitle} htmlFor="confirmNewPassword">
-          Confirm New Password
+          {t("resource.auth.confirm_new_password")}
         </label>
         <div className={styles.flexItem}>
           <input
@@ -87,11 +89,11 @@ function SetPassword({ error = null, onSetPasswordSubmit = () => {} }) {
             {...register("confirmNewPassword", {
               required: {
                 value: true,
-                message: "Please enter a valid password",
+                message: t("resource.auth.please_enter_a_valid_password"),
               },
               validate: (value) =>
                 value === getValues("newPassword") ||
-                "Password didn’t match. Try again.",
+                t("resource.auth.password_didnt_match_try_again"),
             })}
           />
           {watch("confirmNewPassword") && (
@@ -112,7 +114,7 @@ function SetPassword({ error = null, onSetPasswordSubmit = () => {} }) {
       </div>
 
       <button className={styles.setSubmitBtn} type="submit">
-        Set Password
+        {t("resource.auth.set_password")}
       </button>
     </form>
   );

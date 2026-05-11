@@ -6,7 +6,7 @@
   height: 100%;
 
   .removeIcon {
-    path{
+    path {
       fill: @TextBody !important;
     }
   }
@@ -115,6 +115,16 @@
     .extension {
       position: absolute;
     }
+
+    .b2bAvailableOffer {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      background-color: @ThemeAccentD5;
+      border-radius: 4px;
+    }
   }
   .productDescContainer {
     display: flex;
@@ -128,7 +138,7 @@
     }
 
     .productDesc {
-      min-width: 0;
+      width: 100%;
       .productBrand {
         margin-bottom: 4px;
         .text-line-clamp();
@@ -146,66 +156,114 @@
           text-align: center;
         }
       }
+
       .productPrice {
         display: flex;
         flex-wrap: wrap;
         align-items: baseline;
-
+        &--textCenter {
+          text-align: center;
+        }
         &.center {
           justify-content: center;
         }
 
         &--sale {
-          margin-right: 8px;
+          margin-inline-end: 8px;
         }
         &--regular {
           text-decoration: line-through;
           color: @TextLabel;
-          margin-right: 4px;
+          margin-inline-end: 4px;
           font-size: 12px;
           line-height: 14px;
         }
         &--discount {
           color: @SaleDiscountText;
         }
+        &--textCenter {
+          text-align: center;
+        }
       }
       .productVariants {
         margin-top: 8px;
 
-        .flex-align-center();
-        gap: 8px;
-        .shade {
+        .colorVariants {
           .flex-align-center();
-          padding: 4px 8px;
-          background-color: @ThemeAccentL5;
-          border: 1px solid @DividerStokes;
-          border-radius: 40px;
-          .shadeColor {
-            width: 12px;
-            height: 12px;
-            border: 1px solid @DividerStokes;
+          gap: 12px;
+
+          .colorDot {
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
+            display: block;
+            cursor: pointer;
+            // transition: all 0.2s ease;
+            text-decoration: none;
+            flex-shrink: 0;
+            position: relative;
+
+            // Default: just the color circle, no border
+            border: none;
+            background-color: var(--color, #ccc);
+
+            &:hover {
+              transform: scale(1.1);
+              z-index: 10;
+            }
+
+            // Only current color gets black outer ring with inner color
+            &.currentColor {
+              border: 1px solid @TextHeading; // Black outer ring
+              background-color: transparent;
+              width: 22px;
+              height: 22px;
+
+              // Inner color circle with spacing for current color only
+              &::before {
+                content: "";
+                position: absolute;
+                top: 2px;
+                left: 2px;
+                right: 2px;
+                bottom: 2px;
+                border-radius: 50%;
+                background-color: var(--color, #ccc);
+                z-index: 1;
+              }
+            }
           }
-          .shadeName,
-          .shadeCount {
-            margin-left: 4px;
-            font-size: 12px;
-            line-height: 14px;
+
+          .moreColors {
             color: @TextBody;
-            text-transform: capitalize;
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 14px;
+            letter-spacing: -0.24px;
+            white-space: nowrap;
           }
         }
-        .allShades {
-          .variantContainer {
+      }
+
+      .badge_section {
+        display: flex;
+        align-items: center;
+        margin-bottom: 4px;
+
+        .badge {
+          display: flex;
+          align-items: center;
+          padding: 4px 8px;
+          border-radius: 4px;
+          background-color: @SuccessText;
+          color: #fff;
+          font-size: 12px;
+          font-weight: 400 !important;
+          gap: 4px;
+
+          .info_icon {
             display: flex;
-            isolation: isolate;
-            .shadeColor:not(:first-child) {
-              margin-left: -4px;
-              z-index: -1;
-            }
-            .shadeColor:last-child {
-              z-index: -2;
-            }
+            align-items: center;
           }
         }
       }
@@ -222,23 +280,76 @@
       font-size: 12px;
       white-space: nowrap;
     }
+
+    .b2bAvailableOffers {
+      background: @ButtonSecondary;
+      font-weight: 500;
+      line-height: 16px;
+      letter-spacing: -0.24px;
+      text-transform: uppercase;
+      padding: 12px 16px;
+      height: 40px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .loginToViewPricing {
+      background: @ButtonSecondary;
+      font-size: 14px;
+      line-height: 18px;
+      letter-spacing: -0.28px;
+      border-radius: 4px;
+      padding: 8px;
+      height: 32px;
+      white-space: nowrap;
+      margin-top: 8px;
+      width: 100%;
+    }
+
+    .kycCompletionBadge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px;
+      margin: 8px 0px;
+      background-color: #fff5d6;
+      border-radius: 4px;
+      color: @TextHeading;
+
+      .kycCompletionBadgeIcon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 16px;
+        height: 16px;
+        color: #f5a300;
+      }
+
+      .kycCompletionBadgeText {
+        font-size: 12px;
+      }
+    }
   }
   @media @mobile {
     &.mob-grid-1-card {
       .imageContainer {
         .wishlistBtn {
           top: 16px;
-          right: 16px;
+          inset-inline-end: 16px;
         }
         .badge {
-          left: 16px;
+          inset-inline-start: 16px;
           top: 16px;
         }
         .review {
-          right: 16px;
+          inset-inline-end: 16px;
           bottom: 16px;
         }
         .extension {
+          inset-inline-start: 16px;
+          bottom: 16px;
+        }
+        .b2bAvailableOffer {
           left: 16px;
           bottom: 16px;
         }
@@ -263,21 +374,34 @@
         .addToCart {
           width: 100%;
         }
+
+        .loginToViewPricing {
+          width: 100%;
+          font-size: 12px;
+        }
+
+        .b2bAvailableOffers {
+          width: 100%;
+        }
       }
       .imageContainer {
         .wishlistBtn {
           top: 8px;
-          right: 8px;
+          inset-inline-end: 8px;
         }
         .badge {
-          left: 8px;
+          inset-inline-start: 8px;
           top: 8px;
         }
         .review {
-          right: 8px;
+          inset-inline-end: 8px;
           bottom: 8px;
         }
         .extension {
+          inset-inline-start: 8px;
+          bottom: 8px;
+        }
+        .b2bAvailableOffer {
           left: 8px;
           bottom: 8px;
         }
@@ -290,20 +414,32 @@
         width: 104px;
       }
 
+      .loginToViewPricing {
+        width: 100%;
+      }
+
+      .b2bAvailableOffers {
+        width: 104px;
+      }
+
       .imageContainer {
         .wishlistBtn {
           top: 24px;
-          right: 24px;
+          inset-inline-end: 24px;
         }
         .badge {
-          left: 24px;
+          inset-inline-start: 24px;
           top: 29px;
         }
         .review {
-          right: 24px;
+          inset-inline-end: 24px;
           bottom: 24px;
         }
         .extension {
+          inset-inline-start: 24px;
+          bottom: 24px;
+        }
+        .b2bAvailableOffer {
           left: 24px;
           bottom: 24px;
         }
@@ -319,20 +455,32 @@
         width: 104px;
       }
 
+      .loginToViewPricing {
+        width: 100%;
+      }
+
+      .b2bAvailableOffers {
+        width: 104px;
+      }
+
       .imageContainer {
         .wishlistBtn {
           top: 12px;
-          right: 12px;
+          inset-inline-end: 12px;
         }
         .badge {
-          left: 12px;
+          inset-inline-start: 12px;
           top: 17px;
         }
         .review {
-          right: 12px;
+          inset-inline-end: 12px;
           bottom: 12px;
         }
         .extension {
+          inset-inline-start: 12px;
+          bottom: 12px;
+        }
+        .b2bAvailableOffer {
           left: 12px;
           bottom: 12px;
         }
@@ -349,20 +497,33 @@
       .addToCart {
         width: 144px;
       }
+
+      .loginToViewPricing {
+        width: 100%;
+      }
+
+      .b2bAvailableOffers {
+        width: 144px;
+      }
+
       .imageContainer {
         .wishlistBtn {
           top: 24px;
-          right: 24px;
+          inset-inline-end: 24px;
         }
         .badge {
-          left: 24px;
+          inset-inline-start: 24px;
           top: 24px;
         }
         .review {
-          right: 24px;
+          inset-inline-end: 24px;
           bottom: 24px;
         }
         .extension {
+          inset-inline-start: 24px;
+          bottom: 24px;
+        }
+        .b2bAvailableOffer {
           left: 24px;
           bottom: 24px;
         }
@@ -381,6 +542,14 @@
           width: 100%;
         }
 
+        .loginToViewPricing {
+          width: 100%;
+        }
+
+        .b2bAvailableOffers {
+          width: 100%;
+        }
+
         .productDesc {
           .productName {
             margin-bottom: 5px;
@@ -391,17 +560,21 @@
       .imageContainer {
         .wishlistBtn {
           top: 12px;
-          right: 12px;
+          inset-inline-end: 12px;
         }
         .badge {
-          left: 12px;
+          inset-inline-start: 12px;
           top: 12px;
         }
         .review {
-          right: 12px;
+          inset-inline-end: 12px;
           bottom: 12px;
         }
         .extension {
+          inset-inline-start: 12px;
+          bottom: 12px;
+        }
+        .b2bAvailableOffer {
           left: 12px;
           bottom: 12px;
         }
@@ -409,7 +582,6 @@
     }
   }
   .captionNormal();
- 
 }
 
 // .animate {
@@ -427,4 +599,7 @@
 //     opacity: 1;
 //     transform: translateY(0);
 //   }
+// }
+// .textCenter {
+//   text-align: center;
 // }

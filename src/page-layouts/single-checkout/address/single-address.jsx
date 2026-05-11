@@ -1,9 +1,10 @@
 import React from "react";
-import AddressForm from "../../../components/address-form/address-form";
+import AddressForm from "../../../components/address-form/v2/address-form";
 import Modal from "../../../components/core/modal/modal";
 import SingleAddressContent from "./single-address-content";
 import SinglesAddressHeader from "./single-address-header";
 import * as styles from "./single-address-header.less";
+import { useGlobalStore, useFPI } from "fdk-core/utils";
 
 function SingleAddress({
   address,
@@ -15,7 +16,12 @@ function SingleAddress({
   showGoogleMap,
   loader,
   isGuestUser = false,
+  isApiLoading = false,
+  getTotalValue,
+  showPaymentOptions,
 }) {
+  const fpi = useFPI();
+  const userDetails = useGlobalStore(fpi.getters.USER_DATA);
   const {
     allAddresses = [],
     isAddressLoading = false,
@@ -66,30 +72,33 @@ function SingleAddress({
         ></SinglesAddressHeader>
         <Modal
           title={modalTitle}
+          hideHeader
           isOpen={openModal}
+          modalType="center-modal"
           closeDialog={resetAddressState}
-          modalType="right-modal"
+          containerClassName={styles.addressModalContainer}
+          bodyClassName={styles.addressModalBody}
         >
-          <div className={styles.addressWrapper}>
-            <AddressForm
-              internationalShipping={isInternationalShippingEnabled}
-              formSchema={defaultFormSchema}
-              isNewAddress={isNewAddress}
-              addressItem={addressItem}
-              onUpdateAddress={updateAddress}
-              onAddAddress={addAddress}
-              mapApiKey={mapApiKey}
-              showGoogleMap={showGoogleMap}
-              openModal={openModal}
-              onGetLocality={getLocality}
-              setI18nDetails={setI18nDetails}
-              handleCountrySearch={handleCountrySearch}
-              getFilteredCountries={getFilteredCountries}
-              selectedCountry={selectedCountry?.display_name ?? ""}
-              countryDetails={countryDetails}
-              isGuestUser={isGuestUser}
-            ></AddressForm>
-          </div>
+          <AddressForm
+            internationalShipping={isInternationalShippingEnabled}
+            formSchema={defaultFormSchema}
+            isNewAddress={isNewAddress}
+            addressItem={addressItem}
+            onUpdateAddress={updateAddress}
+            onAddAddress={addAddress}
+            mapApiKey={mapApiKey}
+            isMap={showGoogleMap}
+            openModal={openModal}
+            onGetLocality={getLocality}
+            setI18nDetails={setI18nDetails}
+            handleCountrySearch={handleCountrySearch}
+            getFilteredCountries={getFilteredCountries}
+            selectedCountry={selectedCountry?.display_name ?? ""}
+            countryDetails={countryDetails}
+            isGuestUser={isGuestUser}
+            user={userDetails}
+            onClose={resetAddressState}
+          />
         </Modal>
         {showShipment || showPayment ? null : (
           <SingleAddressContent
@@ -105,6 +114,9 @@ function SingleAddress({
             getOtherAddress={getOtherAddress}
             getDefaultAddress={getDefaultAddress}
             loader={loader}
+            isApiLoading={isApiLoading}
+            showPaymentOptions={showPaymentOptions}
+            getTotalValue={getTotalValue}
           ></SingleAddressContent>
         )}
       </div>

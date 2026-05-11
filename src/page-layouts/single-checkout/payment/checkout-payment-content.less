@@ -1,13 +1,155 @@
 @import "../../../styles/main.less";
 
+:global {
+  .card_number_div,
+  .card_exp_month_div,
+  .card_exp_year_div,
+  .security_code_div,
+  .name_on_card_div {
+    height: 48px;
+    border: 1px solid var(--dividerStokes);
+    border-radius: 4px;
+    color: @TextBody;
+    overflow: hidden;
+    padding-left: 16px;
+    padding-right: 16px;
+    outline: none;
+    margin-top: 16px;
+  }
+
+  .security_code_div {
+    width: 103px;
+  }
+
+  .card_exp_month_div,
+  .card_exp_year_div {
+    width: 25%;
+  }
+  .security_code_div {
+    width: 50%;
+  }
+
+  @media screen and (max-width: 768px) {
+    .card_number_div,
+    .card_exp_month_div,
+    .card_exp_year_div,
+    .security_code_div,
+    .name_on_card_div {
+      height: 48px;
+    }
+  }
+}
+
+.juspayCardNumberBox {
+  position: relative;
+}
+
+.juspayCardNetwork {
+  cursor: pointer;
+  height: 28px;
+  position: absolute;
+  inset-inline-end: 8px;
+  top: 25px;
+  transform: translateY(-50%);
+
+  @media @desktop {
+    top: 25px;
+    transform: translateY(-50%);
+    height: 32px;
+  }
+}
+
+.cardDateCvvJuspayWrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.checkbox {
+  accent-color: var(--buttonPrimary);
+  height: 13px;
+  width: 13px;
+  cursor: pointer;
+}
+
+.checkboxWrapper {
+  display: flex;
+  justify-content: start;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.rbiGuidelines {
+  @media @mobile {
+    margin-bottom: 24px;
+  }
+
+  input:checked:before {
+    background-color: var(--buttonPrimary);
+  }
+
+  display: flex;
+  align-items: center;
+  margin-top: 16px;
+  .rbiGuidelinesText {
+    display: flex;
+    font-family: inherit;
+    font-weight: 400;
+    font-size: 12px;
+    color: #1f1f1f;
+    margin: 0 8px;
+    align-self: center;
+    line-height: 140%;
+  }
+}
+
+.marginBottom {
+  @media @mobile {
+    margin-bottom: 24px;
+  }
+}
+
 .container {
   background: @PageBackground;
-  @media @mobile-up {
+  &.unsetBorder {
+    border: unset;
+    padding-top: 0;
+  }
+  @media @tablet-range {
+    padding: 16px !important;
+  }
+  @media @desktop {
     display: flex;
     padding: 24px;
     border: 1px solid var(--dividerStokes);
     border-top: none;
     border-radius: 0 0 8px 8px;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .creditNote {
+    display: none;
+    @media @tablet {
+      margin-top: 20px;
+    }
+    @media @mobile-up {
+      display: block;
+    }
+  }
+
+  .paymentOptions {
+    display: flex;
+    &.displayNone {
+      display: none;
+    }
+    &.disable {
+      cursor: not-allowed;
+      pointer-events: none;
+      opacity: 0.5;
+    }
   }
   .navigationLink {
     width: 33.33%;
@@ -17,19 +159,23 @@
     border-style: solid;
     border-color: var(--dividerStokes);
     border-radius: 4px 0px 0px 4px;
-    @media @mobile {
+    @media @tablet-range {
+      width: 42.3%;
+    }
+    @media @tablet {
       width: 100%;
       border: none;
     }
 
-    .linkWrapper:last-child {
+    .linkWrapper:last-child,
+    .linkWrapper.lastChild {
       .linkWrapper-row1 {
         border-bottom: 1px solid var(--dividerStokes);
-        @media @mobile {
+        @media @tablet {
           border-bottom: unset;
         }
       }
-      // @media @mobile {
+      // @media @tablet {
       //   border-bottom: 1px solid var(--dividerStokes);
       // }
       border-bottom: none;
@@ -45,7 +191,7 @@
     }
     .linkWrapper {
       border-bottom: 1px solid var(--dividerStokes);
-      border-right: 1px solid var(--dividerStokes);
+      border-inline-end: 1px solid var(--dividerStokes);
       background-color: #f8f8f8;
       .link {
         .icon {
@@ -62,9 +208,9 @@
           fill: @TextHeading;
         }
       }
-      @media @mobile {
+      @media @tablet {
         background-color: @PageBackground;
-        border-right: none;
+        border-inline-end: none;
         padding: 0 16px;
       }
       cursor: pointer;
@@ -75,12 +221,14 @@
           display: flex;
           flex: 1;
           align-items: center;
-          padding-left: 12px;
-
-          @media @mobile-up {
+          padding-inline-end: 12px;
+          @media @tablet {
+            flex: unset !important;
+            padding-inline-start: 12px;
+          }
+          @media @desktop {
             justify-content: flex-end;
             flex: 1;
-            padding: 0 16px;
           }
 
           .subMopIcon {
@@ -88,7 +236,7 @@
             height: 28px;
             border-radius: 50%;
             border: 1px solid var(--dividerStokes);
-            margin-left: -5.25px;
+            margin-inline-start: -5.25px;
             background-color: #fff;
             object-fit: contain;
             &.upiIcon {
@@ -108,6 +256,9 @@
         width: 4px;
         background-color: var(--primaryColor);
         border: 1px solid var(--primaryColor);
+        @media @tablet {
+          display: none;
+        }
       }
       .link {
         display: flex;
@@ -115,19 +266,20 @@
         overflow: hidden;
         word-break: break-word;
         align-items: center;
-        @media @mobile {
+        @media @tablet {
           padding: 24px 0px;
         }
         .modeName {
           align-self: center;
-          margin-left: 16px;
+          margin-inline-start: 16px;
           color: var(--Text-Body, #4d4d4e);
           font-size: 14px;
           font-weight: 500;
           line-height: 140%;
-          @media @mobile {
+          height: 18px;
+          @media @tablet {
             color: @TextHeading;
-            margin-left: 8px;
+            margin-inline-start: 8px;
           }
         }
         .selectedModeName {
@@ -140,7 +292,7 @@
           color: @ErrorText;
           line-height: 140%;
           border-radius: 4px;
-          @media @mobile {
+          @media @tablet {
             padding-top: 4px;
           }
           text-align: center;
@@ -150,13 +302,16 @@
         display: flex;
         align-items: center;
 
-        @media @mobile-up {
+        @media @desktop {
           justify-content: flex-end;
           flex: 1;
           padding: 0 12px;
         }
       }
       .arrowContainer {
+        @media @desktop {
+          display: none;
+        }
         display: flex;
         align-items: center;
         justify-content: flex-end;
@@ -164,6 +319,9 @@
         &.codIconContainer {
           svg {
             transform: rotate(270deg);
+            [dir="rtl"] & {
+              transform: rotate(90deg);
+            }
           }
         }
         .upsideDown {
@@ -180,7 +338,7 @@
         }
       }
     }
-    border-right: none;
+    border-inline-end: none;
     background-color: @PageBackground;
   }
   .headerHightlight {
@@ -208,17 +366,22 @@
     }
   }
   .linkWrapper.selectedNavigationTab {
-    border-right: none;
+    border-inline-end: none;
     background-color: @PageBackground;
   }
   .navigationTab {
     width: 66.66%;
     padding: 24px;
+    @media @tablet-range {
+      padding: 16px;
+      width: unset;
+      flex: 1 0 0;
+    }
     border-color: var(--dividerStokes);
     border-style: solid;
     border-width: 1px 1px 1px 0;
     border-radius: 0px 4px 4px 0px;
-    @media @mobile {
+    @media @tablet {
       padding: 6px;
     }
   }
@@ -226,12 +389,12 @@
     .modeItemName {
       font-weight: 600 !important;
     }
-    @media @mobile-up {
+    @media @desktop {
       border: 1px solid var(--primaryColor);
     }
   }
   .nonSelectedBorder {
-    @media @mobile-up {
+    @media @desktop {
       border: 1px solid var(--dividerStokes);
     }
   }
@@ -244,14 +407,15 @@
   .addCardHeader,
   .otherHeader {
     font-weight: 600;
-    @media @mobile {
+    @media @tablet {
       font-weight: 500;
+      display: none;
     }
     font-size: 14px;
     color: var(--textHeading);
     margin-bottom: 15px;
     line-height: 140%;
-    @media @mobile {
+    @media @tablet {
       margin-bottom: 6px;
       line-height: 1;
     }
@@ -269,7 +433,7 @@
             font-size: 16px;
           }
         }
-        @media @mobile {
+        @media @tablet {
           margin-bottom: 16px;
         }
         display: flex;
@@ -289,7 +453,7 @@
         font-weight: 400;
         line-height: 19.6px;
         color: var(--primaryColor);
-        margin-right: 8px;
+        margin-inline-end: 8px;
       }
       .why {
         font-size: 14px;
@@ -310,7 +474,7 @@
 
         .cvvIcon {
           position: absolute;
-          right: 16px;
+          inset-inline-end: 16px;
           top: 50%;
           transform: translateY(-50%);
         }
@@ -328,7 +492,10 @@
           }
 
           .desc {
-            margin: 8px 0 16px 0;
+            margin-top: 8px;
+            margin-inline-end: 0;
+            margin-bottom: 16px;
+            margin-inline-start: 0;
             color: var(--textBody);
             font-size: 12px;
           }
@@ -343,7 +510,7 @@
           padding: 16px;
           border-radius: 8px;
           margin-bottom: 15px;
-          @media @mobile {
+          @media @tablet {
             padding: 0px;
           }
           .cardDetailsWrapper {
@@ -354,7 +521,7 @@
             .cardDetailsRow1 {
               display: flex;
               .cardLeft {
-                margin-right: 10px;
+                margin-inline-end: 10px;
               }
               .cardMiddle {
                 display: flex;
@@ -364,7 +531,7 @@
                   .number {
                     font-size: 14px;
                     font-weight: 400;
-                    margin-right: 8px;
+                    margin-inline-end: 8px;
                     align-self: center;
                     line-height: 140%;
                     span {
@@ -388,7 +555,7 @@
                     line-height: 16px;
                     text-transform: capitalize;
                     color: #27ae60;
-                    margin-left: 4px;
+                    margin-inline-start: 4px;
                     line-height: 140%;
                   }
                 }
@@ -397,7 +564,7 @@
 
             .cardDetailsRow2 {
               display: flex;
-              padding-left: 32px;
+              padding-inline-start: 32px;
               height: 48px;
 
               input {
@@ -443,7 +610,7 @@
             text-transform: uppercase;
             line-height: 140%;
             cursor: pointer;
-            @media @mobile {
+            @media @tablet {
               padding: 6px;
               font-size: 12px;
             }
@@ -463,7 +630,7 @@
             text-transform: uppercase;
             line-height: 140%;
             cursor: unset;
-            @media @mobile {
+            @media @tablet {
               padding: 6px;
               font-size: 12px;
             }
@@ -481,7 +648,7 @@
         width: 100%;
         line-height: 140%;
         cursor: pointer;
-        @media @mobile {
+        @media @tablet {
           padding: 6px;
           font-size: 12px;
         }
@@ -500,14 +667,19 @@
         }
         .newCardHeaderText {
           align-self: center;
-          margin-left: 10px;
+          margin-inline-start: 10px;
         }
       }
       .newCard {
         display: flex;
         flex-direction: column;
-        .cardInputWrapper {
+        &.addPaddingBottom {
           @media @mobile {
+            padding-bottom: 24px;
+          }
+        }
+        .cardInputWrapper {
+          @media @tablet {
             &.cardNumberBox {
               margin-top: 0;
             }
@@ -521,16 +693,16 @@
         .cvv {
           cursor: pointer;
           position: absolute;
-          right: 8px;
+          inset-inline-end: 8px;
           top: 50%;
           transform: translateY(-50%);
-          &.cvvError {
+          &.iconPositionOnError {
             top: 35%;
           }
           @media @desktop {
             top: 38%;
             transform: unset;
-            &.cvvError {
+            &.iconPositionOnError {
               top: 25%;
             }
           }
@@ -541,14 +713,14 @@
         .cardInputWrapper.expiryContainer,
         .cardInputWrapper.cvvContainer {
           width: 47%;
-          @media @mobile {
+          @media @tablet {
             width: 100%;
           }
         }
         .cardDateCvvWrapper {
           .upArrowMark {
             position: absolute;
-            left: 50%;
+            inset-inline-start: 50%;
             top: -6px;
             path {
               fill: @DividerStokes;
@@ -561,7 +733,7 @@
             }
           }
           &.marginBottom {
-            @media @mobile {
+            @media @tablet {
               margin-bottom: 24px;
             }
           }
@@ -585,6 +757,7 @@
           border: 1px solid var(--dividerStokes);
           border-radius: 4px;
           color: @TextBody;
+          pointer-events: inherit;
         }
         .error {
           border: 1px solid @ErrorText;
@@ -592,7 +765,7 @@
         .inputName {
           position: absolute;
           top: -8px;
-          left: 16px;
+          inset-inline-start: 16px;
           font-size: 12px;
           font-weight: 400;
           background-color: @PageBackground;
@@ -608,7 +781,7 @@
           color: @ErrorText;
         }
         .rbiGuidelines {
-          @media @mobile {
+          @media @tablet {
             margin-bottom: 24px;
           }
           input:checked:before {
@@ -630,7 +803,7 @@
             line-height: 140%;
           }
           .rbiGuidelinesModal {
-            @media @mobile-up {
+            @media @desktop {
               max-width: 450px;
               padding: 8px;
             }
@@ -638,7 +811,10 @@
           .rbiGuidelinesContent {
             padding: 16px;
             ul {
-              padding: 0 0 0 16px;
+              padding-top: 0;
+              padding-inline-end: 0;
+              padding-bottom: 0;
+              padding-inline-start: 16px;
               li {
                 list-style-type: disc;
                 &:not(:last-child) {
@@ -650,12 +826,12 @@
         }
       }
       .saveNewCard {
-        padding: 8px;
-        border-radius: 5px;
+        padding: 16px;
+        border-radius: @ButtonRadius;
         background-color: var(--primaryColor);
         border: none;
         width: 100%;
-        margin-top: 24px;
+        margin-top: 16px;
         font-weight: 600;
         font-size: 14px;
         text-transform: uppercase;
@@ -664,12 +840,12 @@
         line-height: 140%;
       }
       .saveNewCard[disabled] {
-        padding: 8px;
-        border-radius: 5px;
+        padding: 16px;
+        border-radius: @ButtonRadius;
         background-color: var(--primaryColor);
         border: none;
         width: 100%;
-        margin-top: 24px;
+        margin-top: 16px;
         font-weight: 600;
         font-size: 14px;
         text-transform: uppercase;
@@ -695,7 +871,7 @@
           border-radius: 8px;
           position: absolute;
           z-index: 99;
-          right: -116px;
+          inset-inline-end: -116px;
           transform: unset;
           background: @DialogBackground;
           border: 1px solid @DividerStokes;
@@ -713,7 +889,10 @@
           }
 
           .desc {
-            margin: 8px 0 16px 0;
+            margin-top: 8px;
+            margin-inline-end: 0;
+            margin-bottom: 16px;
+            margin-inline-start: 0;
             color: var(--textBody);
             @media @desktop {
               font-size: 12px;
@@ -723,7 +902,10 @@
       }
     }
     .addNewCardModal {
-      padding: 0px 16px 24px 16px;
+      padding-top: 0px;
+      padding-inline-end: 16px;
+      padding-bottom: 24px;
+      padding-inline-start: 16px;
     }
   }
 
@@ -752,7 +934,6 @@
     .payBtn[disabled] {
       padding: 14px;
       border-radius: @ButtonRadius;
-      background-color: white;
       color: var(--primaryColor);
       border: 1px solid var(--primaryColor);
       width: 100%;
@@ -771,7 +952,7 @@
     flex-wrap: wrap;
     flex-direction: column;
     gap: 16px;
-    @media @mobile {
+    @media @tablet {
       gap: 0px;
     }
     .modeItemWrapper {
@@ -785,7 +966,7 @@
       label {
         cursor: pointer;
       }
-      @media @mobile {
+      @media @tablet {
         padding: 24px 0px;
         &:not(:last-child) {
           border-bottom: 1px solid @DividerStokes;
@@ -818,13 +999,16 @@
           font-size: 14px;
           font-weight: 400;
           line-height: 140%;
-          @media @mobile {
+          @media @tablet {
             color: @TextHeading;
             font-weight: 500;
           }
         }
         .moreModeArrow {
           transform: rotate(270deg);
+          [dir="rtl"] & {
+            transform: rotate(90deg);
+          }
         }
         .otherModeArrow {
           transform: rotate(360deg);
@@ -848,7 +1032,7 @@
       max-height: 70vh;
       min-height: 40vh;
 
-      @media @mobile-up {
+      @media @desktop {
         max-height: 554px;
         min-width: 420px;
         & > div {
@@ -877,12 +1061,9 @@
     }
   }
 
-  .upiBox {
-  }
-
   .upiMop {
     padding-bottom: 24px;
-    @media @mobile {
+    @media @tablet {
       .upiApp {
         &:first-child {
           padding-top: 0;
@@ -915,6 +1096,12 @@
       align-items: center;
       border: 1px solid var(--dividerStokes);
       border-radius: 100px;
+      width: 38px;
+      height: 38px;
+      padding: 8px 4px;
+    }
+    .logo:last-child {
+      padding: unset;
     }
 
     .displayName {
@@ -1134,7 +1321,7 @@
     .inputName {
       position: absolute;
       top: -8px;
-      left: 16px;
+      inset-inline-start: 16px;
       font-size: 12px;
       font-weight: 400;
       background-color: @PageBackground;
@@ -1164,7 +1351,8 @@
       text-transform: uppercase;
       cursor: pointer;
       line-height: 140%;
-      margin: 24px 0;
+      margin-top: 16px;
+      margin-bottom: 24px;
       &:hover {
         background-color: @ButtonPrimaryL1;
         color: @White;
@@ -1220,6 +1408,423 @@
     text-align: center;
   }
 
+  .neftWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .neftSection {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    @media @tablet {
+      gap: 12px;
+    }
+  }
+
+  .neftUploadButtonWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .neftUploadHelperWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .neftSectionTitle {
+    font-size: 16px;
+    font-weight: 600;
+    color: @TextHeading;
+    font-family: var(--font-header, "WorkSans");
+    margin: 0;
+
+    @media @tablet {
+      font-size: 12px;
+      letter-spacing: -0.24px;
+    }
+  }
+
+  .neftBeneficiaryCard {
+    border: 1px solid @DividerStokes;
+    border-radius: 12px;
+    background-color: @ThemeAccentL4;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .neftBeneficiaryRow {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: center;
+    padding-bottom: 12px;
+
+    @media @tablet {
+      padding-bottom: 10px;
+    }
+
+    &:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+  }
+
+  .neftBeneficiaryLabelWrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .neftBeneficiaryLabel {
+    font-size: 14px;
+    font-weight: 500;
+    color: @TextHeading;
+    font-family: var(--font-header, "WorkSans");
+
+    @media @tablet {
+      color: @TextHeading;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: -0.24px;
+    }
+  }
+
+  .neftLabelSeparator {
+    font-weight: 600;
+    color: @TextHeading;
+    font-family: var(--font-header, "WorkSans");
+
+    @media @tablet {
+      font-size: 12px;
+      letter-spacing: -0.24px;
+    }
+  }
+
+  .neftBeneficiaryValue {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    font-family: var(--font-body, "WorkSans");
+    color: @TextBody;
+
+    @media @tablet {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 16.8px;
+    }
+  }
+
+  .neftCopyButton {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    svg {
+      height: 14px;
+      width: 14px;
+    }
+  }
+
+  .neftFieldGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .neftFieldLabel {
+    font-size: 14px;
+    font-weight: 500;
+    color: @TextHeading;
+
+    span {
+      color: @ErrorText;
+    }
+  }
+
+  .neftInput {
+    height: 48px;
+    border: 1px solid @DividerStokes;
+    border-radius: 8px;
+    padding: 0 16px;
+    outline: none;
+    font-size: 14px;
+    font-family: var(--font-body, "WorkSans");
+
+    @media @tablet {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 16.8px;
+    }
+  }
+
+  .neftInputError {
+    border-color: @ErrorText;
+  }
+
+  .neftHelperText {
+    font-size: 12px;
+    font-weight: 400;
+    color: @TextSecondary;
+    margin: 0;
+    font-family: var(--font-body, "WorkSans");
+
+    @media @tablet {
+      line-height: 16.8px;
+    }
+  }
+
+  .neftUploadSection {
+    width: 100%;
+    gap: 0px !important;
+  }
+
+  .neftUploadBox {
+    border: 1px dashed @DividerStokes;
+    border-radius: 12px;
+    padding: 41px 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background-color: @ThemeAccentL5;
+  }
+
+  .neftHiddenInput {
+    display: none;
+  }
+
+  .neftFormBlockInner {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .neftUploadIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .neftUploadButton {
+    width: max-content;
+    align-self: center;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid @ButtonPrimary;
+    color: @ButtonPrimary;
+    background-color: @ThemeAccentL5;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-family: var(--font-header, "WorkSans");
+
+    @media @tablet {
+      text-align: center;
+      font-size: 12px;
+      line-height: 16.8px;
+    }
+  }
+
+  .neftUploadTitle {
+    font-size: 16px;
+    font-weight: 600;
+    color: @TextHeading;
+    margin: 0;
+    font-family: var(--font-header, "WorkSans");
+
+    @media @tablet {
+      color: @ButtonPrimary;
+      letter-spacing: -0.32px;
+    }
+  }
+
+  .neftUploadHelper {
+    font-size: 12px;
+    font-weight: 400;
+    color: @TextSecondary;
+    margin: 0;
+    font-family: var(--font-body, "WorkSans");
+
+    @media @tablet {
+      color: @TextBody;
+      text-align: center;
+      letter-spacing: -0.24px;
+    }
+  }
+
+  .neftSelectedFile {
+    font-size: 12px;
+    font-weight: 500;
+    color: @TextHeading;
+    margin: 0;
+  }
+
+  .neftPlaceOrderBtn {
+    width: 100%;
+    padding: 14px;
+    border-radius: @ButtonRadius;
+    border: none;
+    background-color: @ButtonPrimary;
+    color: @ThemeAccentL5;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .neftPlaceOrderBtn[disabled] {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .neftError {
+    font-size: 12px;
+    color: @ErrorText;
+    margin: 0;
+  }
+
+  .neftUploadBoxDragging {
+    border-color: @ButtonPrimary;
+    background-color: @ThemeAccentL5;
+  }
+
+  .neftProgressContainer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .neftProgressBarContainer {
+    flex: 1;
+    height: 8px;
+    background-color: @DividerStokes;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .neftProgressBar {
+    height: 100%;
+    background-color: @ButtonPrimary;
+    transition: width 0.3s ease;
+    border-radius: 4px;
+  }
+
+  .neftProgressText {
+    font-size: 12px;
+    font-weight: 600;
+    color: @TextHeading;
+    flex-shrink: 0;
+    min-width: 40px;
+    text-align: right;
+  }
+
+  .neftFileCard {
+    margin-top: 10px;
+    border: 1px solid @DividerStokes;
+    border-radius: 8px;
+    padding: 16px;
+    background-color: @ThemeAccentL4;
+  }
+
+  .neftFileCardContent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .neftFileInfo {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    flex: 1;
+  }
+
+  .neftFileIcon {
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+
+  .neftFileDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+  }
+
+  .neftFileName {
+    font-size: 14px;
+    font-weight: 500;
+    color: @TextHeading;
+    word-break: break-word;
+    display: flex;
+    align-items: center;
+  }
+
+  .neftSuccessIndicator {
+    color: @SuccessText;
+    font-weight: 600;
+    margin-left: 4px;
+  }
+
+  .neftFileSize {
+    font-size: 12px;
+    font-weight: 400;
+    color: @TextSecondary;
+    display: block;
+  }
+
+  .neftFileActions {
+    display: flex;
+    align-items: center;
+  }
+
+  .neftFileActionBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    // padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: @DividerStokes;
+    }
+  }
+
+  .neftDeleteIcon {
+    // width: 20px;
+    // height: 20px;
+    color: @ErrorText;
+  }
+
+  .neftUploadError {
+    font-size: 14px;
+    padding-top: 10px;
+    color: @ErrorText;
+  }
+
+  .neftFormBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    @media @tablet {
+      // padding: 24px 16px;
+      padding: 0px;
+    }
+  }
+
   .otherOption {
     display: flex;
     flex-wrap: wrap;
@@ -1236,13 +1841,13 @@
 
       .otherLeft {
         align-self: center;
-        margin-right: 10px;
-        margin-left: 10px;
+        margin-inline-end: 10px;
+        margin-inline-start: 10px;
       }
 
       .otherMiddle {
         align-self: center;
-        margin-right: 10px;
+        margin-inline-end: 10px;
 
         img {
           width: 45px;
@@ -1280,8 +1885,6 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  .upiTabWrapper {
-  }
   .upiHeader {
     font-weight: 600;
     font-size: 14px;
@@ -1360,7 +1963,7 @@
     margin-top: 24px;
 
     .saveForLater {
-      margin-right: 5px;
+      margin-inline-end: 5px;
       accent-color: var(--primaryColor);
     }
     .saveUpiTitle {
@@ -1402,7 +2005,10 @@
     font-weight: 700;
     font-size: 24px;
     line-height: 33.6px;
-    margin: 16px 0 8px 0;
+    margin-top: 16px;
+    margin-inline-end: 0;
+    margin-bottom: 8px;
+    margin-inline-start: 0;
     color: var(--primaryColor);
   }
 
@@ -1461,7 +2067,7 @@
   position: relative;
   .closeCodModal {
     position: absolute;
-    right: 24px;
+    inset-inline-end: 24px;
   }
   .message {
     font-size: 16px;
@@ -1500,7 +2106,7 @@
   position: relative;
   .upArrowMark {
     position: absolute;
-    left: 50%;
+    inset-inline-start: 50%;
     top: -6px;
     path {
       fill: @DividerStokes;
@@ -1520,7 +2126,7 @@
     border-radius: 8px;
     position: absolute;
     z-index: 99;
-    right: -116px;
+    inset-inline-end: -116px;
     transform: unset;
     background: @DialogBackground;
     border: 1px solid @DividerStokes;
@@ -1565,7 +2171,7 @@
         fill: @TextBody;
       }
     }
-    @media @mobile {
+    @media @tablet {
       g > path {
         fill: @TextHeading;
       }
@@ -1579,10 +2185,10 @@
     padding: 8px 4px;
     border-radius: 50%;
     object-fit: contain;
-    @media @mobile {
-      margin-right: 8px;
+    @media @tablet {
+      margin-inline-end: 8px;
     }
-    margin-right: 12px;
+    margin-inline-end: 12px;
   }
 }
 .logoNameContainer {
@@ -1606,7 +2212,7 @@
     width: 420px;
     height: 606px;
   }
-  @media @mobile {
+  @media @tablet {
     height: 434px;
   }
 }
@@ -1615,7 +2221,7 @@
   min-height: unset !important;
   margin-bottom: 16px;
   max-height: unset !important;
-  @media @mobile {
+  @media @tablet {
     .modeItemName {
       color: @TextBody !important;
       font-size: 12px;
@@ -1630,6 +2236,9 @@
 }
 .moreModeIcon {
   transform: rotate(270deg);
+  [dir="rtl"] & {
+    transform: rotate(90deg);
+  }
   display: flex;
   align-items: center;
   svg {
@@ -1642,18 +2251,12 @@
 }
 .otherBorder {
   border: 1px solid @DividerStokes;
-  @media @mobile {
+  @media @tablet {
     border: none;
   }
 }
 .modeItemLogo {
-  @media @desktop {
-    .moreWlIcon {
-      width: 24px;
-      height: 24px;
-    }
-  }
-  @media @mobile {
+  @media @tablet {
     span {
       border: 1px solid @DividerStokes;
       padding: 8px 4px;
@@ -1668,7 +2271,7 @@
   }
 }
 .upiMargin {
-  @media @mobile {
+  @media @tablet {
     &:last-child {
       padding-bottom: 0 !important;
     }
@@ -1676,13 +2279,13 @@
 }
 .cardTab {
   .newCardModalHeader {
-    @media @mobile {
+    @media @tablet {
       padding: 16px !important;
     }
   }
 }
 .newCardBodyModal {
-  @media @mobile {
+  @media @tablet {
     .rbiGuidelines {
       margin-top: 24px !important;
     }
@@ -1704,7 +2307,7 @@
 }
 .crossMobile {
   position: absolute;
-  right: 16px;
+  inset-inline-end: 16px;
 }
 .noResultFound {
   color: var(--Text-Body, #4d4d4e);
@@ -1717,4 +2320,185 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.visibleOnTab {
+  @media @tablet {
+    display: block !important;
+  }
+}
+.onDesktopView {
+  @media @tablet {
+    display: none;
+  }
+}
+.onMobileView {
+  @media @desktop {
+    display: none;
+  }
+}
+.mopIcon {
+  width: 24px;
+  height: 24px;
+}
+.creditLogoIcon {
+  // width: 79px;
+  height: 29px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+  }
+}
+.noOptionContainer {
+  display: flex;
+  padding: 24px;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  align-self: stretch;
+  border: 1px solid var(--dividerStokes);
+  border-top: unset;
+  border-radius: 0 0 8px 8px;
+  background: @PageBackground;
+  @media @tablet {
+    border-radius: 0;
+    border: none;
+  }
+  .noOptionText {
+    display: flex;
+    max-width: 580px;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    h3 {
+      color: @TextHeading;
+      text-align: center;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 700;
+      @media @tablet {
+        font-weight: 600;
+      }
+      line-height: 140%;
+      align-self: stretch;
+    }
+    p {
+      color: @TextBody;
+      text-align: center;
+      font-size: 14px;
+      @media @tablet {
+        font-size: 12px;
+      }
+      font-style: normal;
+      font-weight: 400;
+      line-height: 140%;
+      align-self: stretch;
+    }
+    .contact_us {
+      margin-top: 12px;
+    }
+  }
+}
+
+.fileIcon {
+  // margin-right: 12px;
+  color: var(--buttonPrimary);
+}
+
+.fs-12 {
+  font-size: 12px;
+}
+
+.neftUploadingFilesWrapper,
+.neftUploadedFilesWrapper {
+  margin-top: 10px;
+}
+
+.field {
+  @media @desktop {
+    // flex: 0 0 30%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  @media @mobile {
+    width: 100%;
+    padding: 1rem 0;
+    padding-right: 0;
+    padding-bottom: 5px;
+  }
+
+  .field-input-container {
+    flex: 1;
+    padding-right: 10px;
+
+    @media @mobile {
+      margin-bottom: 16px;
+      padding-right: 0;
+    }
+  }
+
+  input {
+    &:disabled {
+      background-color: transparent !important;
+      border: none !important;
+      cursor: not-allowed !important;
+    }
+    @media @mobile {
+      font-size: 14px;
+    }
+  }
+
+  position: relative;
+}
+
+.copyIcon {
+  svg {
+    height: 18px;
+    width: 18px;
+  }
+}
+
+.neftBorderBottom {
+  border-bottom: 1px solid @DividerStokes;
+}
+
+.infoAlert {
+  .flex-align-center();
+  background: @InformationBackground;
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: @InformationText;
+  text-align: right;
+  font-family: var(--font-body, "WorkSans");
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16.8px;
+
+  @media @mobile {
+    text-align: left;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: -0.24px;
+  }
+
+  svg {
+    margin-right: 8px;
+  }
+
+  .infoAlertIcon {
+    .flex-align-center();
+  }
+}
+
+.flexCenter {
+  .flex-align-center();
 }

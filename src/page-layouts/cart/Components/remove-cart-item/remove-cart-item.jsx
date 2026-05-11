@@ -1,14 +1,16 @@
 import React, { useMemo } from "react";
 import * as styles from "./remove-cart-item.less";
 import Modal from "../../../../components/core/modal/modal";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function RemoveCartItem({
   isOpen = false,
   cartItem = null,
-  onRemoveButtonClick = () => {},
-  onWishlistButtonClick = () => {},
-  onCloseDialogClick = () => {},
+  onRemoveButtonClick = () => { },
+  onWishlistButtonClick = () => { },
+  onCloseDialogClick = () => { },
 }) {
+  const { t } = useGlobalTranslation("translation");
   const getProductImage = useMemo(() => {
     if (
       cartItem?.product?.images?.length > 0 &&
@@ -20,13 +22,13 @@ function RemoveCartItem({
 
   return (
     <Modal
-      title="Remove Item"
+      title={t("resource.cart.remove_item")}
       isOpen={isOpen}
       closeDialog={onCloseDialogClick}
       headerClassName={styles.header}
       subTitleClassName={styles.subTitle}
       containerClassName={styles.modalContainer}
-      subTitle="Are your sure you want to remove this item?"
+      subTitle={t("resource.cart.confirm_item_removal")}
     >
       <div className={styles.removeModalBody}>
         <div className={styles.itemDetails}>
@@ -45,10 +47,10 @@ function RemoveCartItem({
       </div>
       <div className={styles.removeModalFooter}>
         <div className={styles.removeBtn} onClick={onRemoveButtonClick}>
-          REMOVE
+          {t("resource.facets.remove_caps")}
         </div>
         <div className={styles.wishlistBtn} onClick={onWishlistButtonClick}>
-          MOVE TO WISHLIST
+          {t("resource.cart.move_to_wishlist")}
         </div>
       </div>
     </Modal>

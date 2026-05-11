@@ -5,6 +5,8 @@ import Modal from "../../../components/core/modal/modal";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import StickyPayNow from "./sticky-pay-now/sticky-pay-now";
 import { priceFormatCurrencySymbol } from "../../../helper/utils";
+import { useGlobalTranslation } from "fdk-core/utils";
+import JuspayCardForm from "./juspay-card-from";
 
 function CardForm({
   cardNumberRef,
@@ -41,7 +43,7 @@ function CardForm({
   validateCvv,
   isCardValid,
   cardDetailsData,
-  isMobile,
+  isTablet,
   onPriceDetailsClick = () => {},
   addNewCard,
   isCvvInfo,
@@ -49,7 +51,18 @@ function CardForm({
   validateCardDetails,
   setCardValidity,
   resetCardValidationErrors,
+  paymentResponse,
+  paymentOption,
+  isJuspayEnabled,
+  enableLinkPaymentOption,
+  handleShowFailedMessage,
+  cardDetails,
+  selectMop,
+  setIsJuspayCouponApplied,
+  isPaymentLoading = false,
+  loader = <div></div>,
 }) {
+  const { t } = useGlobalTranslation("translation");
   const isFormatterSet = useRef(false);
 
   useEffect(() => {
@@ -64,9 +77,21 @@ function CardForm({
     }
   }, []);
 
+  const handleCardNumberKeyPress = (e) => {
+    // Allow control keys (Backspace, Delete, Tab, Arrow keys, etc.)
+    if (e.key.length > 1 || e.ctrlKey || e.metaKey) {
+      return;
+    }
+    // Only allow numeric characters
+    if (!/^[0-9]$/.test(e.key)) {
+      e.preventDefault();
+    }
+  };
+
   const starPlaceholder = (
     <>
-      Expiry Date<span style={{ color: "red" }}>*</span>
+      {t("resource.checkout.expiry_date")}
+      <span style={{ color: "red" }}>*</span>
     </>
   );
 
@@ -74,7 +99,7 @@ function CardForm({
     return (
       <div className={styles.cvvInfoContainer}>
         <div className={styles.cvvInfo}>
-          {!isMobile && isCvvInfo ? (
+          {!isTablet && isCvvInfo ? (
             <SvgWrapper
               svgSrc="paymentTooltipArrow"
               className={styles.upArrowMark}
@@ -93,9 +118,11 @@ function CardForm({
               (cardDetailsData.card_brand &&
                 cardDetailsData.card_brand !== "American Express")) && (
               <div className={styles.type}>
-                <p className={styles.title}>What is CVV Number?</p>
+                <p className={styles.title}>
+                  {t("resource.checkout.what_is_cvv_number")}
+                </p>
                 <p className={styles.desc}>
-                  It is a 3-digit code on the back of your card.
+                  {t("resource.checkout.cvv_description")}
                 </p>
                 <div className={styles.cvImage}>
                   <SvgWrapper svgSrc="non-amex-card-cvv" />
@@ -107,10 +134,11 @@ function CardForm({
               (cardDetailsData.card_brand &&
                 cardDetailsData.card_brand === "American Express")) && (
               <div className={styles.type}>
-                <p className={styles.title}>Have American Express Card?</p>
+                <p className={styles.title}>
+                  {t("resource.checkout.have_american_express_card")}
+                </p>
                 <p className={styles.desc}>
-                  It is a 4-digit number on the front, just above your credit
-                  card number.
+                  {t("resource.checkout.amex_cvv_description")}
                 </p>
                 <div className={styles.cvImage}>
                   <SvgWrapper svgSrc="amex-card-cvv" />
@@ -122,28 +150,59 @@ function CardForm({
     );
   };
 
+  if (isJuspayEnabled()) {
+    return (
+      <JuspayCardForm
+        paymentResponse={paymentResponse}
+        paymentOption={paymentOption}
+        getCurrencySymbol={getCurrencySymbol}
+        getTotalValue={getTotalValue}
+        loggedIn={loggedIn}
+        setOpenGuidelinesModal={setOpenGuidelinesModal}
+        openGuidelinesModal={openGuidelinesModal}
+        onPriceDetailsClick={onPriceDetailsClick}
+        handleShowFailedMessage={handleShowFailedMessage}
+        cardDetails={cardDetails}
+        selectMop={selectMop}
+        setIsJuspayCouponApplied={setIsJuspayCouponApplied}
+      />
+    );
+  }
+
   return (
     <>
-      <div className={styles.newCard} id="card-validation">
+      <div
+        className={`${styles.newCard} ${enableLinkPaymentOption && loggedIn ? styles.addPaddingBottom : ""}`}
+        id="card-validation"
+      >
         <div className={`${styles.cardInputWrapper} ${styles.cardNumberBox}`}>
           <input
-            placeholder="Card Number*"
+            type="text"
+            inputMode="numeric"
+            placeholder={`${t("resource.checkout.card_number")}*`}
             className={`${cardNumberError ? styles.error : ""} ${styles.cardNumber}`}
             id="card-number"
-            value={cardNumber}
             onChange={handleCardNumberInput}
+            onKeyPress={handleCardNumberKeyPress}
             onPaste={handleCardNumberPaste}
             onBlur={validateCardNumber}
+            value={cardNumber}
+            dir="ltr"
+            autoComplete="cc-number"
           />
           {(cardNumber || cardNumberError) && (
             <span
               className={`${styles.inputName} ${cardNumberError ? styles.errorInputName : ""}`}
             >
-              Card Number<span className={styles.required}>*</span>
+              {t("resource.checkout.card_number")}
+              <span className={styles.required}>*</span>
             </span>
           )}
           {cardDetailsData && cardDetailsData.logo && (
-            <img src={cardDetailsData.logo} className={styles.cardNetwork} />
+            <img
+              src={cardDetailsData.logo}
+              className={`${styles.cardNetwork} ${cardNumberError ? styles.iconPositionOnError : ""}`}
+            />
           )}
           {cardNumberError && (
             <div className={`${styles.formError}`}>{cardNumberError}</div>
@@ -153,7 +212,7 @@ function CardForm({
           <input
             maxLength="20"
             type="text"
-            placeholder="Name on card*"
+            placeholder={`${t("resource.checkout.name_on_card")}*`}
             className={`${cardNameError ? styles.error : ""} ${styles.cardName}`}
             ref={nameRef}
             contentEditable="true"
@@ -165,7 +224,8 @@ function CardForm({
             <span
               className={`${styles.inputName} ${cardNameError ? styles.errorInputName : ""}`}
             >
-              Name on Card<span className={styles.required}>*</span>
+              {t("resource.checkout.name_on_card")}
+              <span className={styles.required}>*</span>
             </span>
           )}
           {cardNameError && (
@@ -198,7 +258,7 @@ function CardForm({
                   mask: "/",
                 },
               }}
-              placeholder="Expiry Date*"
+              placeholder={`${t("resource.checkout.expiry_date")}*`}
               className={`${cardExpiryError ? styles.error : ""} ${styles.cardExpiry}`}
               onBlur={validateCardExpiryDate}
             />
@@ -206,33 +266,34 @@ function CardForm({
               <span
                 className={`${styles.inputName} ${cardExpiryError ? styles.errorInputName : ""}`}
               >
-                Expiry Date<span className={styles.required}>*</span>
+                {t("resource.checkout.expiry_date")}
+                <span className={styles.required}>*</span>
               </span>
             )}
             {cardExpiryError && (
               <div className={styles.formError}>{cardExpiryError}</div>
             )}
           </div>
-          <div className={styles.cardInputWrapper}>
+          <div className={styles.cardInputWrapper} dir="ltr">
             <input
               value={cvvNumber}
               type="password"
               onKeyPress={keypressCvv}
               maxLength="4"
-              placeholder="CVV*"
+              placeholder={`${t("resource.checkout.cvv")}*`}
               className={`${cardCVVError ? styles.error : ""} ${styles.cardCvv}`}
               onChange={handleCvvNumberInput}
               onBlur={validateCvv}
             />
             <div
-              className={`${styles.cvvContainer} ${styles.cvv} ${cardCVVError ? styles.cvvError : ""}`}
+              className={`${styles.cvvContainer} ${styles.cvv} ${cardCVVError || cardExpiryError ? styles.iconPositionOnError : ""}`}
               onMouseEnter={() => {
-                if (!isMobile) {
+                if (!isTablet) {
                   handleCvvInfo(true);
                 }
               }}
               onMouseLeave={() => {
-                if (!isMobile) {
+                if (!isTablet) {
                   handleCvvInfo(false);
                 }
               }}
@@ -242,13 +303,14 @@ function CardForm({
                 className={`${styles.cvv}`}
                 onClick={() => handleCvvInfo(true)}
               />
-              {!isMobile && isCvvInfo && <CvvInfo />}
+              {!isTablet && isCvvInfo && <CvvInfo />}
             </div>
             {(cvvNumber || cardCVVError) && (
               <span
                 className={`${styles.inputName} ${cardCVVError ? styles.errorInputName : ""}`}
               >
-                CVV<span className={styles.required}>*</span>
+                {t("resource.checkout.cvv")}
+                <span className={styles.required}>*</span>
               </span>
             )}
             {cardCVVError && (
@@ -256,7 +318,7 @@ function CardForm({
             )}
           </div>
         </div>
-        {loggedIn && (
+        {loggedIn && !enableLinkPaymentOption && (
           <div className={styles.rbiGuidelines}>
             <label htmlFor="terms">
               <input
@@ -268,7 +330,7 @@ function CardForm({
               />
             </label>
             <div className={styles.rbiGuidelinesText}>
-              Save this card as per RBI Guidelines
+              {t("resource.checkout.save_this_card_rbi_guidelines")}
             </div>
             <span className={styles.infoIcon}>
               <SvgWrapper
@@ -288,8 +350,10 @@ function CardForm({
                 return (
                   <div style={{ display: "flex", padding: "8px" }}>
                     <SvgWrapper svgSrc="card-payment" />
-                    <span style={{ paddingLeft: "8px", fontSize: "14px" }}>
-                      Improve your card security
+                    <span
+                      style={{ paddingInlineStart: "8px", fontSize: "14px" }}
+                    >
+                      {t("resource.checkout.improve_your_card_security")}
                     </span>
                   </div>
                 );
@@ -298,12 +362,10 @@ function CardForm({
               <div className={styles.rbiGuidelinesContent}>
                 <ul>
                   <li className="fontBody">
-                    Your bank/card network will securely save your card info via
-                    tokenization if you give consent for the same.
+                    {t("resource.checkout.card_consent_request_1")}
                   </li>
                   <li className="fontBody">
-                    In case you choose to not tokenize, you will have to enter
-                    the card details every time you pay.
+                    {t("resource.checkout.card_consent_request_2")}
                   </li>
                 </ul>
               </div>
@@ -312,27 +374,38 @@ function CardForm({
         )}
       </div>
       <div>
-        {!addNewCard && isMobile ? (
+        {!addNewCard && isTablet ? (
           <StickyPayNow
+            customClassName={styles.visibleOnTab}
             disabled={!isCardValid()}
             value={priceFormatCurrencySymbol(
               getCurrencySymbol,
               getTotalValue()
             )}
+            enableLinkPaymentOption={enableLinkPaymentOption}
             onPriceDetailsClick={onPriceDetailsClick}
             proceedToPay={() => payUsingCard()}
+            loader={loader}
+            isPaymentLoading={isPaymentLoading}
           />
         ) : (
           <button
             className={styles.saveNewCard}
             onClick={() => payUsingCard()}
-            disabled={!isCardValid()}
+            disabled={!isCardValid() || isPaymentLoading}
           >
-            PAY {priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue())}
+            {!isPaymentLoading ? (
+              <>
+                {t("resource.common.pay_caps")}{" "}
+                {priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue())}
+              </>
+            ) : (
+              loader
+            )}
           </button>
         )}
       </div>
-      {isCvvInfo && isMobile && (
+      {isCvvInfo && isTablet && (
         <Modal isOpen={isCvvInfo} hideHeader={true}>
           <CvvInfo />
         </Modal>

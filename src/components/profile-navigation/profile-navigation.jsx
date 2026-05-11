@@ -19,17 +19,21 @@ import { ALL_PROFILE_MENU } from "../../helper/constant";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./profile-navigation.less";
 import { useMobile } from "../../helper/hooks/useMobile";
+import { useGlobalTranslation, useGlobalStore } from "fdk-core/utils";
 
-function ProfileNavigation({ children, signOut, userProfilePicUrl, userName, profileMenu = ALL_PROFILE_MENU }) {
+function ProfileNavigation({ children, signOut, userProfilePicUrl, userName }) {
+  const { t } = useGlobalTranslation("translation");
   const isMobile = useMobile();
   const { pathname } = useLocation();
+  const { language } = useGlobalStore(fpi.getters.i18N_DETAILS);
+  const locale = language?.locale;
 
   const hideProfileContent = useMemo(
-    () => pathname === "/profile/profile-tabs",
+    () => pathname === "/profile/profile-tabs" && pathname !== `/${locale}/profile/profile-tabs`,
     [pathname]
   );
   const hideNavBar = useMemo(
-    () => isMobile && pathname !== "/profile/profile-tabs",
+    () => isMobile && pathname !== "/profile/profile-tabs" && pathname !== `/${locale}/profile/profile-tabs`,
     [isMobile, pathname]
   );
 
@@ -52,7 +56,7 @@ function ProfileNavigation({ children, signOut, userProfilePicUrl, userName, pro
                 <img
                   className={styles.accountIcon}
                   src={userProfilePicUrl}
-                  alt="user"
+                  alt={t("resource.common.user_alt")}
                 />
               </div>
               <div className={styles.nameContainer}>
@@ -63,13 +67,13 @@ function ProfileNavigation({ children, signOut, userProfilePicUrl, userName, pro
                   className={styles.flexAlignCenter}
                   to="/profile/details"
                 >
-                  <p className={styles.editLink}>Edit Profile</p>
+                  <p className={styles.editLink}>{t("resource.profile.edit_profile")}</p>
                 </FDKLink>
               </div>
             </div>
-            <div className={styles.accountHeader}>My Account</div>
+            <div className={styles.accountHeader}>{t("resource.profile.my_account")}</div>
             <ul>
-              {profileMenu.map(({ key, display, link, Icon }) => (
+              {ALL_PROFILE_MENU.map(({ key, display, link, Icon }) => (
                 <li
                   className={`${styles.nav} ${pathname === link ? styles.selected : ""}`}
                   key={key}
@@ -78,14 +82,14 @@ function ProfileNavigation({ children, signOut, userProfilePicUrl, userName, pro
                     <span className={styles.menuIcon}>
                       <Icon />
                     </span>
-                    <span className={styles.itemTitle}>{display}</span>
+                    <span className={styles.itemTitle}>{t(display)}</span>
                   </FDKLink>
                 </li>
               ))}
             </ul>
             <div className={styles.versionContainer}>
               <div className={styles.signOut} onClick={handleSignOut}>
-                Sign Out
+                {t("resource.profile.sign_out")}
               </div>
             </div>
           </div>
