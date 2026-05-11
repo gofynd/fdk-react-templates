@@ -31,7 +31,21 @@
         padding-inline-end: 12px;
         padding-bottom: 4px;
         padding-inline-start: 0px;
-
+        justify-content: space-between;
+        .shipmentLabelBox {
+          display: flex;
+          align-items: center;
+        }
+        .mobileEditCartBtn {
+          display: none;
+          font-size: 12px;
+          font-weight: 500;
+          color: @ButtonLink;
+          text-decoration: underline;
+          @media @mobile {
+            display: block;
+          }
+        }
         .shipmentLabelLoader {
           height: 17px;
         }
@@ -152,6 +166,7 @@
           img {
             max-width: 100px;
             max-height: 150px;
+            height: 120px;
             cursor: pointer;
           }
         }
@@ -193,11 +208,15 @@
               }
               .sizeQuantity {
                 display: flex;
+                align-items: baseline;
                 margin-bottom: 4px;
                 line-height: 140%;
                 flex-wrap: wrap;
                 .size {
                   margin-inline-end: 12px;
+                  line-height: 140%;
+                }
+                .qty {
                   line-height: 140%;
                 }
               }
@@ -265,6 +284,14 @@
         }
       }
     }
+  }
+
+  .imgCover {
+    object-fit: cover;
+  }
+
+  .imgContain {
+    object-fit: contain;
   }
 
   .proceedBtnWrapper {
