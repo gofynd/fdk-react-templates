@@ -578,7 +578,7 @@ const AddToCart = ({
                           styles["sizeSelection__block--selected"]
                           } `}
                         title={size?.value}
-                        onClick={() => onSizeSelection(size?.value)}
+                         onClick={() => { if (size?.value !== selectedSize) onSizeSelection(size?.value); }}
                       >
                         {size?.display}
                         {size?.quantity === 0 && !isMto && (
@@ -749,7 +749,7 @@ const AddToCart = ({
                   <FyDropdown
                     options={sizes?.sizes || []}
                     value={selectedSize}
-                    onChange={onSizeSelection}
+                    onChange={(value) => { if (value !== selectedSize) onSizeSelection(value); }}
                     placeholder={t("resource.common.select_size_caps")}
                     valuePrefix={`${t("resource.common.size")}:`}
                     dataKey="value"
