@@ -49,6 +49,10 @@ function ShipmentUpdateItem({
     return item?.prices?.currency_symbol || "₹";
   };
 
+  const getItemValue = (num) => {
+    return numberWithCommas(num);
+  };
+
   const incrDecrQuantity = (val) => {
     const total = currQuantity + val;
     changeQuantity(total);
@@ -133,7 +137,7 @@ function ShipmentUpdateItem({
             </div>
             <div className={`${styles.sizeQuantityContainer}`}>
               {size && (
-              <div className={`${styles.sizeContainer} ${styles.regularxxs} ${showQuantityError? styles.addPaddingToContainer : ''}`}>
+                <div className={`${styles.sizeContainer} ${styles.regularxxs}`}>
                   <span className={`${styles.boldxxs}`}>{size}</span>
                 </div>
               )}
@@ -164,7 +168,7 @@ function ShipmentUpdateItem({
               className={`${styles.priceContainer}`}
             >
               <span className={`${styles.darklg}`}>
-                {getPriceFormat(getCurrencySymbol(item), price)}
+                {getPriceFormat(getCurrencySymbol(item), getItemValue(price))}
               </span>
               <span className={`${styles.lightxxs}`}>
                 ({itemQty}{" "}
@@ -192,12 +196,7 @@ const ShipmentImage = ({
 
   return (
     <div className={styles.bagImg}>
-      <BagImage
-        bag={bag}
-        isBundle={isBundleItem}
-        aspectRatio={aspectRatio}
-        isImageFill={globalConfig?.img_fill}
-      />
+      <BagImage bag={bag} isBundle={isBundleItem} aspectRatio={aspectRatio} />
     </div>
   );
 };

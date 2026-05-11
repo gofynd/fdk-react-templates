@@ -1,4 +1,4 @@
-import { DEFAULT_CURRENCY_LOCALE, DEFAULT_UTC_LOCALE, IMAGE_OPTIMIZATION_CONFIG } from "./constant";
+import { DEFAULT_CURRENCY_LOCALE, DEFAULT_UTC_LOCALE } from "./constant";
 
 export const debounce = (func, wait) => {
   let timeout;
@@ -8,6 +8,27 @@ export const debounce = (func, wait) => {
       func.apply(this, args);
     }, wait);
   };
+};
+
+export const formatDate = (isoString, dateOnly = false) => {
+  const date = new Date(isoString);
+
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = date.toLocaleString("en-US", { month: "short" });
+  const year = date.getFullYear();
+
+  let hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const ampm = hours >= 12 ? "PM" : "AM";
+
+  hours %= 12;
+  hours = hours || 12; // 0 becomes 12
+
+  if (dateOnly) {
+    return `${day} ${month}, ${year}`;
+  }
+
+  return `${day} ${month}, ${year}, ${hours}:${minutes} ${ampm}`;
 };
 
 export const getGlobalConfigValue = (globalConfig, id) =>
@@ -22,18 +43,6 @@ export function replaceQueryPlaceholders(queryFormat, value1, value2) {
 
 export const singleValuesFilters = {
   sortOn: true,
-};
-
-/**
- * Validates custom badge (teaser_tag) for display.
- * Returns false if badge is empty, whitespace-only, single character, or "."
- * @param {string|null|undefined} teaserTag - The custom badge text
- * @returns {boolean} - True if badge should be rendered
- */
-export const isValidCustomBadge = (teaserTag) => {
-  if (teaserTag == null || typeof teaserTag !== "string") return false;
-  const trimmed = teaserTag.trim();
-  return trimmed.length > 1 && trimmed !== ".";
 };
 
 export function roundToDecimals(number, decimalPlaces = 2) {
@@ -77,10 +86,6 @@ export function isRunningOnClient() {
 export function convertDate(dateString, locale = "en-US") {
   const date = new Date(dateString);
 
-  // Use browser's local timezone with fallback to UTC
-  const browserTimezone =
-    Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
-
   const options = {
     month: "long",
     day: "numeric",
@@ -88,16 +93,17 @@ export function convertDate(dateString, locale = "en-US") {
     hour: "numeric",
     minute: "numeric",
     hour12: true,
-    timeZone: browserTimezone,
+    timeZone: "UTC",
   };
 
   const formatter = new Intl.DateTimeFormat(locale, options);
   const formattedDate = formatter.format(date);
+
   return formattedDate;
 }
 
 export function validateName(name) {
-  const regexp = /^\p{L}+(?:[' -]\p{L}+)*$/u;
+  const regexp = /^[a-zA-Z0-9-_'. ]+$/;
   return regexp.test(String(name).toLowerCase().trim());
 }
 
@@ -144,8 +150,7 @@ export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
       return "Invalid date";
     }
 
-    const browserTimezone =
-      Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+    const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     // console.log("🌐 Detected browser time zone →", browserTimezone);
 
     const options = {
@@ -188,28 +193,27 @@ export function checkIfNumber(value) {
   return numberPattern.test(value);
 }
 
-/**
- * Transform image URL with DPR support for better quality on retina displays
- * @param {string} url - Original image URL
- * @param {string} key - Image size key to replace
- * @param {number} width - Target width in pixels
- * @returns {string} Transformed image URL with DPR parameter
- */
 export const transformImage = (url, key, width) => {
-  // DPR is intentionally fixed at 1 — RESPONSIVE_IMAGE_BREAKPOINTS already bakes
-  // DPR into width values. Auto-detecting window.devicePixelRatio caused SSR/client
-  // URL mismatch (dpr=1 on server, dpr=2 on client) which re-fetched every image on hydration.
-  const dpr = 1;
-
+  const dpr = Math.min(
+    Math.max(
+      Math.round(isRunningOnClient() ? window.devicePixelRatio || 1 : 1),
+      1
+    ),
+    5
+  );
   let updatedUrl = url;
   if (key && width) {
     const str = `/${key}/`;
-    updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
+    // updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
+    if (url.includes("/b2b-commerce/")) {
+      updatedUrl = url.replace(new RegExp(str), `/t.resize(w:${width})/`);
+    } else {
+      updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
+    }
   }
   try {
     const parsedUrl = new URL(updatedUrl);
-    // Use .set() instead of .append() to replace existing dpr parameter and avoid duplicates
-    parsedUrl.searchParams.set("dpr", dpr);
+    parsedUrl.searchParams.append("dpr", 1);
     return parsedUrl.toString();
   } catch (error) {
     return updatedUrl;
@@ -280,121 +284,24 @@ export const getProductImgAspectRatio = function (
   return defaultAspectRatio;
 };
 
-/**
- * Map currency code to appropriate locale for number formatting
- * @param {string} currencyCode - Currency code (e.g., 'USD', 'AED', 'INR')
- * @returns {string} Locale string appropriate for the currency
- */
-export const getLocaleFromCurrency = (currencyCode) => {
-  if (!currencyCode) return "en-US";
+export const currencyFormat = (value, currencySymbol, locale = "en-IN") => {
+  const formattingLocale = `${locale}-u-nu-latn`;
 
-  // Normalize currency code to uppercase for case-insensitive matching
-  const normalizedCode = currencyCode.toUpperCase();
+  if (value != null) {
+    const formattedValue = value.toLocaleString(formattingLocale);
 
-  const currencyLocaleMap = {
-    USD: "en-US", // United States
-    AED: "en-AE", // United Arab Emirates
-    SAR: "ar-SA", // Saudi Arabia
-    GBP: "en-GB", // United Kingdom
-    EUR: "en-US", // Europe (using en-US as standard international format)
-    INR: "en-IN", // India
-    // Add more currency mappings as needed
-  };
-
-  return currencyLocaleMap[normalizedCode] || "en-US"; // Default to en-US for unknown currencies
-};
-
-/**
- * Format currency value with locale-aware number formatting
- * Uses native Intl.NumberFormat for optimal performance
- * @param {number|string} value - The numeric value to format
- * @param {string} currencySymbol - Currency symbol (e.g., '₹', 'AED', 'USD')
- * @param {string} locale - Locale string (e.g., 'en-IN' for India, 'en-AE' for UAE)
- * @param {string} currencyCode - Currency code (e.g., 'USD', 'AED', 'INR') - used to override locale if provided
- * @returns {string} Formatted currency string
- */
-export const currencyFormat = (
-  value,
-  currencySymbol,
-  locale = "en-IN",
-  currencyCode = null
-) => {
-  if (value == null || value === "") {
-    return "";
-  }
-
-  // Convert to number if it's a string
-  let num = typeof value === "string" ? parseFloat(value) : value;
-
-  // Ensure it's a number, not NaN
-  if (Number.isNaN(num)) {
-    return "";
-  }
-
-  // Convert to number explicitly to handle edge cases
-  num = Number(num);
-  if (Number.isNaN(num)) {
-    return "";
-  }
-
-  // If currency code is provided, use it to determine locale
-  let finalLocale = locale;
-  if (currencyCode) {
-    finalLocale = getLocaleFromCurrency(currencyCode);
-  }
-
-  // Ensure locale is valid, fallback to en-IN if not
-  if (!finalLocale || finalLocale === "en" || finalLocale === "") {
-    finalLocale = "en-IN";
-  }
-
-  // Determine if we should use Indian numbering system
-  const isIndianLocale =
-    finalLocale === "en-IN" || finalLocale?.startsWith("en-IN");
-
-  try {
-    // Use Intl.NumberFormat for locale-aware formatting
-    const numberingSystem = isIndianLocale ? "latn" : undefined;
-    const localeString = numberingSystem
-      ? `${finalLocale}-u-nu-${numberingSystem}`
-      : finalLocale;
-
-    const formatter = new Intl.NumberFormat(localeString, {
-      maximumFractionDigits: 20,
-      useGrouping: true,
-    });
-
-    const formattedValue = formatter.format(num);
-
-    // Handle currency symbol placement
-    let finalResult;
-    if (currencySymbol) {
-      // For alphabetic currency codes (like AED, USD), add space
-      if (/^[A-Z]+$/.test(currencySymbol)) {
-        finalResult = `${currencySymbol} ${formattedValue}`;
-      } else {
-        // For symbol currencies (like ₹), no space
-        finalResult = `${currencySymbol}${formattedValue}`;
-      }
-    } else {
-      finalResult = formattedValue;
-    }
-
-    return finalResult;
-  } catch (error) {
-    // Fallback to basic formatting if locale is invalid
-    console.warn(
-      `Invalid locale "${finalLocale}", falling back to default formatting`
-    );
-    const formattedValue = num.toLocaleString("en-US");
     if (currencySymbol && /^[A-Z]+$/.test(currencySymbol)) {
       return `${currencySymbol} ${formattedValue}`;
     }
+
     if (currencySymbol) {
       return `${currencySymbol}${formattedValue}`;
     }
+
     return formattedValue;
   }
+
+  return "";
 };
 
 export const getReviewRatingData = function (customMeta) {
@@ -492,82 +399,37 @@ export function deepEqual(obj1, obj2) {
   return true;
 }
 
-/**
- * Format price with currency symbol using locale-aware number formatting
- * Uses native Intl.NumberFormat for optimal performance
- * @param {string} symbol - Currency symbol (e.g., '₹', 'AED', 'USD')
- * @param {number|string} price - The price value to format
- * @param {string} locale - Locale string (e.g., 'en-IN' for India, 'en-AE' for UAE)
- * @param {string} currencyCode - Currency code (e.g., 'USD', 'AED', 'INR') - used to override locale if provided
- * @returns {string} Formatted price string with currency symbol
- */
-export function priceFormatCurrencySymbol(
-  symbol,
-  price = 0,
-  locale = "en-IN",
-  currencyCode = null
-) {
-  if (price == null || price === "") return "";
+export function priceFormatCurrencySymbol(symbol, price = 0) {
+  const hasAlphabeticCurrency = /^[A-Za-z]+$/.test(symbol);
+  let sanitizedPrice = price;
+  if (typeof price !== "string") {
+    let num = price;
 
-  // Convert to number if it's a string
-  let num = typeof price === "string" ? parseFloat(price) : price;
+    if (!isNaN(price)) num = roundToDecimals(price);
+    if (num?.toString()[0] === "-") {
+      num = num?.toString()?.substring(1);
+    }
 
-  if (Number.isNaN(num)) return "";
-
-  // Round to 2 decimal places
-  num = roundToDecimals(num, 2);
-
-  // If currency code is provided, use it to determine locale
-  let finalLocale = locale;
-  if (currencyCode) {
-    finalLocale = getLocaleFromCurrency(currencyCode);
-  }
-
-  // Determine if we should use Indian numbering system
-  const isIndianLocale =
-    finalLocale === "en-IN" || finalLocale?.startsWith("en-IN");
-
-  try {
-    // Use Intl.NumberFormat for locale-aware formatting
-    const numberingSystem = isIndianLocale ? "latn" : undefined;
-    const localeString = numberingSystem
-      ? `${finalLocale}-u-nu-${numberingSystem}`
-      : finalLocale;
-
-    const formatter = new Intl.NumberFormat(localeString, {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 2,
-      useGrouping: true,
-    });
-
-    const sign = num < 0 ? "- " : "";
-    const formattedPrice = formatter.format(Math.abs(num));
-    const hasAlphabeticCurrency = /^[A-Za-z]+$/.test(symbol);
-
-    // Handle currency symbol placement
-    let finalResult;
-    if (hasAlphabeticCurrency) {
-      finalResult = `${sign}${symbol} ${formattedPrice}`;
+    if (num) {
+      sanitizedPrice =
+        num?.toString()?.split(".")?.[0].length > 3
+          ? `${num
+              ?.toString()
+              ?.substring(0, num?.toString()?.split(".")?.[0]?.length - 3)
+              ?.replace(/\B(?=(\d{2})+(?!\d))/g, ",")},${num
+              ?.toString()
+              ?.substring(num?.toString()?.split?.(".")?.[0]?.length - 3)}`
+          : num?.toString();
     } else {
-      finalResult = `${sign}${symbol}${formattedPrice}`;
+      sanitizedPrice = 0;
     }
-
-    return finalResult;
-  } catch {
-    // Fallback to basic formatting if locale is invalid
-    console.warn(
-      `Invalid locale "${finalLocale}", falling back to default formatting`
-    );
-    const formattedPrice = num.toLocaleString("en-US", {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 2,
-    });
-    const hasAlphabeticCurrency = /^[A-Za-z]+$/.test(symbol);
-    if (hasAlphabeticCurrency) {
-      return `${symbol} ${formattedPrice}`;
-    }
-    return `${symbol}${formattedPrice}`;
   }
+
+  return `${price.toString()[0] === "-" ? "-" : ""}${
+    hasAlphabeticCurrency
+      ? `${symbol} ${sanitizedPrice}`
+      : `${symbol}${sanitizedPrice}`
+  }`;
 }
 
 export function isNumberKey(e) {
@@ -650,22 +512,11 @@ export const getAddressStr = (item, isAddressTypeAvailable) => {
       parts.unshift(item.address_type);
     }
     let addressStr = parts.join(", ");
-    const postalCode = item.area_code || item.pincode;
-    if (postalCode) {
-      addressStr += ` ${postalCode}`;
+    if (item.area_code) {
+      addressStr += ` ${item.area_code}`;
     }
     if (item.country) {
-      // Handle country as object or string
-      const countryStr =
-        typeof item.country === "object"
-          ? item.country.display_name ||
-            item.country.name ||
-            item.country.uid ||
-            ""
-          : item.country;
-      if (countryStr) {
-        addressStr += `, ${countryStr}`;
-      }
+      addressStr += `, ${item.country}`;
     }
     return addressStr;
   } catch (error) {
@@ -683,116 +534,22 @@ export function isEmptyOrNull(obj) {
 }
 
 export function translateDynamicLabel(input, t) {
-  // Early return for null, undefined, or non-string types
-  if (input == null || typeof input !== "string") {
-    return "";
+  // Handle null, undefined, or empty input
+  if (!input || typeof input !== "string") {
+    return input || "";
   }
 
-  // Handle empty string
-  const trimmedInput = input.trim();
-  if (trimmedInput === "") {
-    return "";
-  }
+  const safeInput = input
+    .toLowerCase()
+    .replace(/\//g, "_") // replace slashes with underscores
+    .replace(/[^a-z0-9_\s]/g, "") // remove special characters except underscores and spaces
+    .trim()
+    .replace(/\s+/g, "_"); // replace spaces with underscores
 
-  try {
-    const safeInput = trimmedInput
-      .toLowerCase()
-      .replace(/\//g, "_") // replace slashes with underscores
-      .replace(/[^a-z0-9_\s]/g, "") // remove special characters except underscores and spaces
-      .trim()
-      .replace(/\s+/g, "_"); // replace spaces with underscores
+  const translationKey = `resource.dynamic_label.${safeInput}`;
+  const translated = t(translationKey);
 
-    if (!safeInput) {
-      return trimmedInput;
-    }
-
-    const translationKey = `resource.dynamic_label.${safeInput}`;
-    const translated = t(translationKey);
-
-    return translated.split(".").pop() === safeInput
-      ? trimmedInput
-      : translated;
-  } catch (error) {
-    console.warn("Error in translateDynamicLabel:", error);
-    return typeof input === "string" ? input : "";
-  }
-}
-
-/**
- * Checks if an error message is a generic JavaScript error that shouldn't be shown to users.
- * These are typically internal errors that should be handled gracefully.
- * Only meaningful API/validation errors should be displayed to users.
- *
- * @param {string|null|undefined} errorMessage - The error message to check
- * @returns {boolean} - True if the error is a generic JS error, false otherwise
- */
-export function isGenericJSError(errorMessage) {
-  // Early return for null, undefined, or non-string types
-  if (!errorMessage || typeof errorMessage !== "string") {
-    return false;
-  }
-
-  const errorLower = errorMessage.toLowerCase();
-
-  // Check for common generic JavaScript error patterns
-  const genericErrorPatterns = [
-    "cannot read properties",
-    "reading 'find'",
-    "reading 'map'",
-    "reading 'length'",
-    "reading 'slice'",
-    "reading 'filter'",
-    "reading 'reduce'",
-    "reading 'forEach'",
-    "reading 'push'",
-    "reading 'pop'",
-    "is not a function",
-    "is not defined",
-    "cannot read",
-    "typeerror",
-    "referenceerror",
-    "syntaxerror",
-    "rangeerror",
-    "undefined is not",
-    "null is not",
-  ];
-
-  // Check if error message contains any generic error patterns
-  const hasGenericPattern = genericErrorPatterns.some((pattern) =>
-    errorLower.includes(pattern)
-  );
-
-  // Also check for the specific pattern: "undefined" + "reading"
-  const hasUndefinedReadingPattern =
-    errorLower.includes("undefined") && errorLower.includes("reading");
-
-  return hasGenericPattern || hasUndefinedReadingPattern;
-}
-
-/**
- * Validates if an error message is valid and should be displayed to users.
- * Filters out generic JavaScript errors and empty/invalid messages.
- *
- * @param {string|null|undefined} errorMessage - The error message to validate
- * @returns {boolean} - True if the error message is valid and should be displayed, false otherwise
- */
-export function isValidErrorMessage(errorMessage) {
-  // Must be a non-empty string
-  if (!errorMessage || typeof errorMessage !== "string") {
-    return false;
-  }
-
-  // Must not be empty after trimming
-  if (errorMessage.trim() === "") {
-    return false;
-  }
-
-  // Must not be a generic JavaScript error
-  if (isGenericJSError(errorMessage)) {
-    return false;
-  }
-
-  return true;
+  return translated.split(".").pop() === safeInput ? input : translated;
 }
 
 export function getLocaleDirection(fpi) {
@@ -874,15 +631,11 @@ export const getUserPrimaryPhone = (user) => {
     return null;
   }
 
-  const primaryPhone =
-    user.phone_numbers.find((phone) => phone.primary) ||
-    user.phone_numbers.find((phone) => phone.active) ||
-    user.phone_numbers[0];
+  const primaryPhone = user.phone_numbers.find((phone) => phone.primary);
   if (!primaryPhone) return null;
 
   const countryCode = primaryPhone.country_code?.toString() || "91";
   const mobile = primaryPhone.phone || "";
-  if (!mobile) return null;
 
   return {
     mobile,
@@ -920,60 +673,4 @@ export const getUserAutofillData = (user, isGuestUser = false) => {
     phone: getUserPrimaryPhone(user),
     email: getUserPrimaryEmail(user),
   };
-};
-
-export const getConfigFromProps = (props) => {
-  if (!props || typeof props !== "object") {
-    return {};
-  }
-
-  // Handle array of prop objects with type and value
-  if (Array.isArray(props)) {
-    const config = {};
-    props.forEach((prop) => {
-      if (
-        prop &&
-        typeof prop === "object" &&
-        prop.id &&
-        prop.value !== undefined
-      ) {
-        config[prop.id] = prop.value;
-      }
-    });
-    return config;
-  }
-
-  // Handle object with nested props structure (like blogConfig)
-  if (props && typeof props === "object") {
-    const config = {};
-    Object.keys(props).forEach((key) => {
-      const prop = props[key];
-      if (prop && typeof prop === "object" && prop.value !== undefined) {
-        config[key] = prop.value;
-      } else if (prop && typeof prop === "object" && prop.type !== undefined) {
-        // Handle case where prop has type but no value
-        config[key] = prop.value || prop;
-      } else if (prop !== undefined) {
-        config[key] = prop;
-      }
-    });
-    return config;
-  }
-
-  // Handle direct object props
-  return props;
-};
-
-export const formatDeliveryAddress = (d = {}) => {
-  const line1 = [d.address, d.area].filter(Boolean).join(" ").trim();
-  const line2 = d.landmark?.trim() || "";
-  const line3 = [d.city, [d.state, d.area_code || d.pincode].filter(Boolean).join(" ")].filter(Boolean).join(", ").trim();
-  const line4 = d.country?.trim() || "";
-
-  return [line1, line2, line3, line4].filter(Boolean).join(",\n");
-};
-
-export const truncateName = (name,length) => {
-  if (!name) return "";
-  return name.length > length ? name.slice(0, length) + "..." : name;
 };
