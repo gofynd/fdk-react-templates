@@ -760,6 +760,7 @@ h5,
   background-color: var(--buttonPrimary);
   padding: 14px 0;
   text-align: center;
+  cursor: pointer;
 }
 .chip-item__sModalContainer___ARs9G .chip-item__disableBtn___Thin2 {
   opacity: 0.5;
@@ -981,6 +982,7 @@ h5,
   background-color: var(--buttonPrimary, #4e3f09);
   padding: 14px 0;
   text-align: center;
+  cursor: pointer;
 }
 .chip-item__foModalContainer___Ria1W .chip-item__disableBtn___Thin2 {
   opacity: 0.5;
@@ -1810,7 +1812,7 @@ h5,
 }
 .modal__modalBody___peHlJ {
   flex: 1;
-  max-height: 90vh;
+  max-height: 95vh;
   overflow-y: auto;
 }
 .modal__rightModal___acoje {
@@ -1844,6 +1846,11 @@ h5,
     align-items: center;
   }
 }
+@media only screen and (max-width: 480px) {
+  .modal__centerModal___CkbLu {
+    align-items: flex-end;
+  }
+}
 .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 {
   border-radius: 8px;
 }
@@ -1853,8 +1860,20 @@ h5,
     max-width: 720px;
   }
 }
+@media only screen and (max-width: 480px) {
+  .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0;
+  }
+}
 .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 .modal__modalHeader___xKo1g {
   border-radius: 8px 8px 0px 0px;
+}
+@media only screen and (max-width: 480px) {
+  .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 .modal__modalHeader___xKo1g {
+    border-radius: 0;
+  }
 }
 .modal__modalTitle___yvZQo {
   font-weight: 600;
@@ -2686,9 +2705,17 @@ h5,
   position: relative;
   cursor: pointer;
 }
+.accordion__accordionContentImageItem____FBCe .accordion__itemCount____YDv4 {
+  color: var(--textSecondary, #9c9c9c);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  padding-left: 2px;
+}
 .accordion__accordionContentImageItem____FBCe .accordion__imagePreview___FOjGs {
   position: absolute;
-  left: -155%;
+  left: 0px;
   top: -100px;
   z-index: 20;
 }
@@ -2711,8 +2738,9 @@ h5,
 }
 .accordion__accordionContentImg___lbTPr {
   border-radius: 50%;
-  width: 16px;
-  height: 16px;
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
   border: 1px solid var(--Text-Secondary, #6d6d6e);
 }
 .accordion__accordionContentKey___qrAGm {

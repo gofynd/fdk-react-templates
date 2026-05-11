@@ -22,6 +22,7 @@
 
   &.small {
     height: 32px;
+    width: max-content;
   }
 
   &.medium {
@@ -43,6 +44,12 @@
 
     @media @mobile {
       width: 50%;
+    }
+
+    &.small {
+      min-width: auto;
+      max-width: 52px;
+      width: auto;
     }
 
     &:hover {
@@ -90,6 +97,12 @@
 
     @media @mobile {
       width: 50%;
+    }
+
+    &.small {
+      width: fit-content !important;
+      min-width: fit-content;
+      max-width: fit-content;
     }
 
     &.removeBorderLeft {

@@ -18,6 +18,7 @@ import SearchIcon from "../../../assets/images/search.svg";
 import LocateIcon from "../../../assets/images/locate.svg";
 import LocationPinIcon from "../../../assets/images/location-pin.svg";
 import MarkerIcon from "../../../assets/images/marker.svg";
+import CloseIcon from "../../../assets/images/close.svg";
 import FyButton from "../../core/fy-button/fy-button";
 import { useGlobalTranslation } from "fdk-core/utils";
 import Shimmer from "../../shimmer/shimmer";
@@ -33,19 +34,47 @@ const GoogleMapAddress = ({
   countryDetails,
   addressItem,
   onLoad = () => {},
+  onClose,
+  showHeader = true,
 }) => {
   const { t } = useGlobalTranslation("translation");
+  const isNewAddress = !addressItem;
+  // Mumbai coordinates as fallback default
+  const MUMBAI_COORDINATES = { lat: 19.0760, lng: 72.8777 };
+  
+  // Get last used location from localStorage
+  const getLastUsedLocation = () => {
+    try {
+      const saved = localStorage.getItem('lastMapLocation');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  };
+  
   const [isLocationError, setIsLocationError] = useState(false);
   const [currentLocation, setCurrentLocation, currentLocationRef] =
     useStateRef(addressItem);
   const mapRef = useRef(null);
+  
+  // Priority: addressItem geo_location > last used location > country details > Mumbai
+  const lastUsedLocation = getLastUsedLocation();
+  const defaultLat = Number(
+    addressItem?.geo_location?.latitude ||
+    lastUsedLocation?.lat ||
+    countryDetails?.latitude ||
+    MUMBAI_COORDINATES.lat
+  );
+  const defaultLng = Number(
+    addressItem?.geo_location?.longitude ||
+    lastUsedLocation?.lng ||
+    countryDetails?.longitude ||
+    MUMBAI_COORDINATES.lng
+  );
+  
   const mapCenterRef = useRef({
-    lat: Number(
-      currentLocation?.geo_location?.latitude || countryDetails?.latitude || 0
-    ),
-    lng: Number(
-      currentLocation?.geo_location?.longitude || countryDetails?.longitude || 0
-    ),
+    lat: defaultLat,
+    lng: defaultLng,
   });
 
   const { isLoaded: isMapLoaded } = useJsApiLoader({
@@ -69,20 +98,32 @@ const GoogleMapAddress = ({
           longitude: location.lng,
         };
       }
-    } catch (error) {
+    } catch {
       return;
     }
   };
 
   const updateMapLocation = (address) => {
     setCurrentLocation(address);
+    
+    // Priority: address geo_location > last used location > country details > Mumbai
+    const lastUsedLoc = getLastUsedLocation();
+    const newLat = Number(
+      address?.geo_location?.latitude ||
+      lastUsedLoc?.lat ||
+      countryDetails?.latitude ||
+      MUMBAI_COORDINATES.lat
+    );
+    const newLng = Number(
+      address?.geo_location?.longitude ||
+      lastUsedLoc?.lng ||
+      countryDetails?.longitude ||
+      MUMBAI_COORDINATES.lng
+    );
+    
     mapCenterRef.current = {
-      lat: Number(
-        address?.geo_location?.latitude || countryDetails?.latitude || 0
-      ),
-      lng: Number(
-        address?.geo_location?.longitude || countryDetails?.longitude || 0
-      ),
+      lat: newLat,
+      lng: newLng,
     };
     mapRef?.current?.panTo(mapCenterRef.current);
   };
@@ -102,6 +143,7 @@ const GoogleMapAddress = ({
     addressItem?.area_code,
     addressItem?.geo_location?.latitude,
     addressItem?.geo_location?.longitude,
+    isNewAddress,
   ]);
 
   const locateUser = () => {
@@ -109,12 +151,19 @@ const GoogleMapAddress = ({
 
     navigator.geolocation.getCurrentPosition(
       async (position) => {
-        mapRef.current.panTo({
+        const userLocation = {
           lat: position.coords.latitude,
           lng: position.coords.longitude,
-        });
+        };
+        // Save user's current location for future use
+        try {
+          localStorage.setItem('lastMapLocation', JSON.stringify(userLocation));
+        } catch (error) {
+          console.error('Failed to save location:', error);
+        }
+        mapRef.current.panTo(userLocation);
       },
-      (err) => {
+      () => {
         setIsLocationError(true);
       }
     );
@@ -125,10 +174,17 @@ const GoogleMapAddress = ({
       onPlaceSelected: (place) => {
         if (place?.geometry) {
           const location = place?.geometry?.location;
-          mapRef.current?.panTo({
+          const selectedLocation = {
             lat: location.lat(),
             lng: location.lng(),
-          });
+          };
+          // Save the searched location for future use
+          try {
+            localStorage.setItem('lastMapLocation', JSON.stringify(selectedLocation));
+          } catch (error) {
+            console.error('Failed to save location:', error);
+          }
+          mapRef.current?.panTo(selectedLocation);
           setIsLocationError(false);
         } else {
           console.error("No geometry available for selected place");
@@ -160,6 +216,12 @@ const GoogleMapAddress = ({
             !currentLocationRef.current
           ) {
             mapCenterRef.current = { lat, lng };
+            // Save the selected location for future use
+            try {
+              localStorage.setItem('lastMapLocation', JSON.stringify({ lat, lng }));
+            } catch (error) {
+              console.error('Failed to save location:', error);
+            }
             const geocoder = new window.google.maps.Geocoder();
             geocoder.geocode({ location: { lat, lng } }, (results, status) => {
               if (status === "OK" && results[0]) {
@@ -210,6 +272,20 @@ const GoogleMapAddress = ({
 
   return (
     <div className={`${styles.mapWrapper} ${className}`}>
+      {showHeader && onClose && (
+        <div className={styles.mapHeader}>
+          <h2 className={styles.mapHeaderTitle}>
+            {t("resource.common.address.select_delivery_location")}
+          </h2>
+          <button
+            className={styles.closeIcon}
+            onClick={onClose}
+            aria-label={t("resource.common.close")}
+          >
+            <CloseIcon />
+          </button>
+        </div>
+      )}
       <div className={styles.mapContainer}>
         {isMapLoaded ? (
           <>

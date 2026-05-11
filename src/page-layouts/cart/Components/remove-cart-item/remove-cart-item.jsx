@@ -6,17 +6,23 @@ import { useGlobalTranslation } from "fdk-core/utils";
 function RemoveCartItem({
   isOpen = false,
   cartItem = null,
+  isRemoving = false,
   onRemoveButtonClick = () => { },
   onWishlistButtonClick = () => { },
   onCloseDialogClick = () => { },
 }) {
   const { t } = useGlobalTranslation("translation");
+
+  const isGifUrl = (url = "") => /\.gif(\?|#|$)/i.test(String(url || ""));
+
   const getProductImage = useMemo(() => {
     if (
       cartItem?.product?.images?.length > 0 &&
       cartItem?.product?.images?.[0]?.url
     ) {
-      return cartItem.product.images[0].url.replace("original", "resize-w:250");
+      return isGifUrl(cartItem.product.images[0].url)
+        ? cartItem.product.images[0].url
+        : cartItem.product.images[0].url.replace("original", "resize-w:250");
     }
   }, [cartItem]);
 
@@ -47,9 +53,9 @@ function RemoveCartItem({
       </div>
       <div className={styles.removeModalFooter}>
         <div className={styles.removeBtn} onClick={onRemoveButtonClick}>
-          {t("resource.facets.remove_caps")}
+          {isRemoving ? "Removing..." : t("resource.facets.remove_caps")}
         </div>
-        <div className={styles.wishlistBtn} onClick={onWishlistButtonClick}>
+        <div className={styles.wishlistBtn} onClick={onWishlistButtonClick} data-testid="move-to-wishlist-button">
           {t("resource.cart.move_to_wishlist")}
         </div>
       </div>

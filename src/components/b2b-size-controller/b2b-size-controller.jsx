@@ -23,9 +23,9 @@ import { useMobile } from "../../helper/hooks/useMobile";
 function B2BSizeQuantityControll({
   isCartUpdating,
   count = 0,
-  onDecrementClick = () => {},
-  onIncrementClick = () => {},
-  onQtyChange = () => {},
+  onDecrementClick = () => { },
+  onIncrementClick = () => { },
+  onQtyChange = () => { },
   maxCartQuantity = 0,
   minCartQuantity = 0,
   containerClassName = "",
@@ -173,9 +173,8 @@ function B2BSizeQuantityControll({
   return (
     <>
       <div
-        className={`${styles.quantityCtrlContainer} ${styles[sizeType]} ${containerClassName} ${
-          serviceable ? "" : styles.notServiceable
-        } ${isSizeWrapperVisible ? "" : styles.borderRadius}`}
+        className={`${styles.quantityCtrlContainer} ${styles[sizeType]} ${containerClassName} ${serviceable ? "" : styles.notServiceable
+          } ${isSizeWrapperVisible ? "" : styles.borderRadius}`}
       >
         {isSizeWrapperVisible && (
           <div
@@ -196,14 +195,14 @@ function B2BSizeQuantityControll({
         )}
 
         <div
-          className={`${styles.quantityControl} ${
-            !isSizeWrapperVisible ? styles.removeBorderLeft : ""
-          }`}
+          className={`${styles.quantityControl} ${!isSizeWrapperVisible ? styles.removeBorderLeft : ""
+            }`}
         >
           <button
             disabled={isCartUpdating || !serviceable || quantity === 0}
             className={styles.decreaseCount}
             onClick={handleDecrement}
+            data-testid="qty-decrement"
           >
             <div className={`${styles.svgContainer} ${styles[sizeType]}`}>
               <SvgWrapper
@@ -231,6 +230,7 @@ function B2BSizeQuantityControll({
                 onBlur={onQtyLostFocus}
                 onKeyDown={handleKeyDown}
                 readOnly={isCartUpdating || !serviceable}
+                data-testid="quantity-input-box"
               />
             )}
           </div>
@@ -240,6 +240,7 @@ function B2BSizeQuantityControll({
             }
             className={styles.increaseCount}
             onClick={handleIncrement}
+            data-testid="qty-increment"
           >
             <span className={`${styles.svgContainer} ${styles[sizeType]}`}>
               <SvgWrapper

@@ -27,8 +27,8 @@ import TwoGridIcon from "../../assets/images/grid-two.svg";
 import FourGridIcon from "../../assets/images/grid-four.svg";
 import TwoGridMobIcon from "../../assets/images/grid-two-mob.svg";
 import OneGridMobIcon from "../../assets/images/grid-one-mob.svg";
-import { useGlobalTranslation } from "fdk-core/utils";
 import CreateRenameWishlistModal from "../../components/wishlist-modals/create-wishlist-modal";
+import { useGlobalTranslation, useGlobalStore, useFPI } from "fdk-core/utils";
 
 const ProductListing = ({
   breadcrumb = [],
@@ -52,6 +52,7 @@ const ProductListing = ({
   isProductOpenInNewTab = false,
   isBrand = true,
   isSaleBadge = true,
+  isCustomBadge = true,
   isPrice = true,
   globalConfig = {},
   imgSrcSet,
@@ -75,19 +76,20 @@ const ProductListing = ({
   showMoq = false,
   productsInWishlist = [],
   showSmartWishlist = false,
-  onColumnCountUpdate = () => {},
-  onResetFiltersClick = () => {},
-  onFilterUpdate = () => {},
-  onSortUpdate = () => {},
-  onFilterModalBtnClick = () => {},
-  onSortModalBtnClick = () => {},
-  onWishlistClick = () => {},
-  onViewMoreClick = () => {},
-  onLoadMoreProducts = () => {},
-  onProductNavigation = () => {},
+  filterToggle = false,
+  onColumnCountUpdate = () => { },
+  onResetFiltersClick = () => { },
+  onFilterUpdate = () => { },
+  onSortUpdate = () => { },
+  onFilterModalBtnClick = () => { },
+  onSortModalBtnClick = () => { },
+  onWishlistClick = () => { },
+  onViewMoreClick = () => { },
+  onLoadMoreProducts = () => { },
+  onProductNavigation = () => { },
   EmptyStateComponent,
-  isProductInWishlist = () => {},
-  getProductsInWishlist = () => {},
+  isProductInWishlist = () => { },
+  getProductsInWishlist = () => { },
 }) => {
   const { t } = useGlobalTranslation("translation");
   const isTablet = useViewport(0, 768);
@@ -101,6 +103,14 @@ const ProductListing = ({
     useState(null);
   const [selectedWishlistIds, setSelectedWishlistIds] = useState([]);
   const [productData, setProductData] = useState(null);
+
+  const fpi = useFPI();
+  const { is_serviceable } = useGlobalStore(fpi?.getters?.CUSTOM_VALUE) || {};
+  const [isFilterVisible, setIsFilterVisible] = useState(filterToggle);
+
+  useEffect(() => {
+    setIsFilterVisible(filterToggle);
+  }, [filterToggle]);
 
   const {
     handleAddToCart,
@@ -214,6 +224,12 @@ const ProductListing = ({
         </div>
       ) : (
         <>
+          {!title && (
+            <h1 className={styles.visuallyHidden}>
+              {t("resource.common.breadcrumb.products")}
+            </h1>
+          )}
+          {title && <h1 className={styles.visuallyHidden}>{title}</h1>}
           <div className={styles.mobileHeader}>
             <div className={styles.headerLeft}>
               {filterList.length > 0 && (
@@ -232,9 +248,8 @@ const ProductListing = ({
             </div>
             <div className={styles.headerRight}>
               <button
-                className={`${styles.colIconBtn} ${styles.mobile} ${
-                  columnCount?.mobile === 1 ? styles.active : ""
-                }`}
+                className={`${styles.colIconBtn} ${styles.mobile} ${columnCount?.mobile === 1 ? styles.active : ""
+                  }`}
                 onClick={() =>
                   onColumnCountUpdate({ screen: "mobile", count: 1 })
                 }
@@ -243,9 +258,8 @@ const ProductListing = ({
                 <OneGridMobIcon />
               </button>
               <button
-                className={`${styles.colIconBtn} ${styles.mobile} ${
-                  columnCount?.mobile === 2 ? styles.active : ""
-                }`}
+                className={`${styles.colIconBtn} ${styles.mobile} ${columnCount?.mobile === 2 ? styles.active : ""
+                  }`}
                 onClick={() =>
                   onColumnCountUpdate({ screen: "mobile", count: 2 })
                 }
@@ -254,9 +268,8 @@ const ProductListing = ({
                 <TwoGridMobIcon />
               </button>
               <button
-                className={`${styles.colIconBtn} ${styles.tablet} ${
-                  columnCount?.tablet === 2 ? styles.active : ""
-                }`}
+                className={`${styles.colIconBtn} ${styles.tablet} ${columnCount?.tablet === 2 ? styles.active : ""
+                  }`}
                 onClick={() =>
                   onColumnCountUpdate({ screen: "tablet", count: 2 })
                 }
@@ -265,9 +278,8 @@ const ProductListing = ({
                 <TwoGridIcon />
               </button>
               <button
-                className={`${styles.colIconBtn} ${styles.tablet} ${
-                  columnCount?.tablet === 3 ? styles.active : ""
-                }`}
+                className={`${styles.colIconBtn} ${styles.tablet} ${columnCount?.tablet === 3 ? styles.active : ""
+                  }`}
                 onClick={() =>
                   onColumnCountUpdate({ screen: "tablet", count: 3 })
                 }
@@ -283,7 +295,7 @@ const ProductListing = ({
           <div className={styles.contentWrapper}>
             {filterList?.length !== 0 && (
               <StickyColumn
-                className={styles.left}
+                className={`${styles.left} ${filterToggle && !isFilterVisible ? styles.hidden : ""}`}
                 topOffset={stickyFilterTopOffset}
               >
                 <div className={styles.filterHeaderContainer}>
@@ -318,7 +330,7 @@ const ProductListing = ({
             <div className={styles.right}>
               <div className={styles.rightHeader}>
                 <div className={styles.headerLeft}>
-                  {title && <h1 className={styles.title}>{title}</h1>}
+                  {title && <h2 className={styles.title}>{title}</h2>}
                   {isProductCountDisplayed && (
                     <span className={styles.productCount}>
                       {`${productCount} ${productCount > 1 ? t("resource.common.items") : t("resource.common.item")}`}
@@ -326,11 +338,25 @@ const ProductListing = ({
                   )}
                 </div>
                 <div className={styles.headerRight}>
+                  {filterToggle && filterList?.length > 0 && (
+                    <div
+                      className={`${styles.filterToggleBtn} `}
+                      onClick={() => setIsFilterVisible(!isFilterVisible)}
+                    >
+                      <div className={styles.filterToggleText}>
+                        {isFilterVisible
+                          ? t("resource.common.hide_filters")
+                          : t("resource.common.show_filters")}
+                      </div>
+                      <div className={`${styles.filterIcon} `}>
+                        <FilterIcon />
+                      </div>
+                    </div>
+                  )}
                   <Sort sortList={sortList} onSortUpdate={onSortUpdate} />
                   <button
-                    className={`${styles.colIconBtn} ${
-                      columnCount?.desktop === 2 ? styles.active : ""
-                    }`}
+                    className={`${styles.colIconBtn} ${columnCount?.desktop === 2 ? styles.active : ""
+                      }`}
                     onClick={() =>
                       onColumnCountUpdate({ screen: "desktop", count: 2 })
                     }
@@ -339,9 +365,8 @@ const ProductListing = ({
                     <TwoGridIcon />
                   </button>
                   <button
-                    className={`${styles.colIconBtn} ${
-                      columnCount?.desktop === 4 ? styles.active : ""
-                    }`}
+                    className={`${styles.colIconBtn} ${columnCount?.desktop === 4 ? styles.active : ""
+                      }`}
                     onClick={() =>
                       onColumnCountUpdate({ screen: "desktop", count: 4 })
                     }
@@ -412,6 +437,7 @@ const ProductListing = ({
                         columnCount,
                         isBrand,
                         isSaleBadge,
+                        isCustomBadge,
                         isPrice,
                         aspectRatio,
                         isWishlistIcon,
@@ -436,6 +462,7 @@ const ProductListing = ({
                         productsInWishlist,
                         getProductsInWishlist,
                         showSmartWishlist,
+                        isServiceable: is_serviceable,
                       }}
                     />
                   </InfiniteLoader>
@@ -447,6 +474,7 @@ const ProductListing = ({
                       columnCount,
                       isBrand,
                       isSaleBadge,
+                      isCustomBadge,
                       isPrice,
                       aspectRatio,
                       isWishlistIcon,
@@ -472,6 +500,7 @@ const ProductListing = ({
                       productsInWishlist,
                       getProductsInWishlist,
                       showSmartWishlist,
+                      isServiceable: is_serviceable,
                     }}
                   />
                 )}
@@ -524,6 +553,7 @@ const ProductListing = ({
                     showQuantityController={showQuantityController}
                     showBuyNowButton={showBuyNowButton}
                     showMoq={showMoq}
+                    isServiceable={is_serviceable}
                   />
                 </Modal>
               )}
@@ -608,6 +638,7 @@ function ProductGridItem({
   product,
   isBrand = true,
   isSaleBadge = true,
+  isCustomBadge = true,
   isPrice = true,
   isWishlistIcon = true,
   imgSrcSet,
@@ -624,13 +655,14 @@ function ProductGridItem({
   actionButtonText,
   imageBackgroundColor = "",
   imagePlaceholder = "",
-  onWishlistClick = () => {},
-  handleAddToCart = () => {},
-  onProductNavigation = () => {},
+  onWishlistClick = () => { },
+  handleAddToCart = () => { },
+  onProductNavigation = () => { },
   globalConfig = {},
   productsInWishlist = [],
-  getProductsInWishlist = () => {},
+  getProductsInWishlist = () => { },
   showSmartWishlist = false,
+  isServiceable = true,
 }) {
   const { t } = useGlobalTranslation("translation");
 
@@ -685,6 +717,7 @@ function ProductGridItem({
         isBrand={isBrand}
         isPrice={isPrice}
         isSaleBadge={isSaleBadge}
+        isCustomBadge={isCustomBadge}
         imgSrcSet={imgSrcSet}
         isWishlistIcon={isWishlistIcon}
         WishlistIconComponent={WishlistIconComponent}
@@ -703,6 +736,7 @@ function ProductGridItem({
         productsInWishlist={productsInWishlist}
         getProductsInWishlist={getProductsInWishlist}
         showSmartWishlist={showSmartWishlist}
+        isServiceable={isServiceable}
       />
     </FDKLink>
   );

@@ -96,7 +96,6 @@ const UPI_INVALID_VPA_ERROR = "resource.checkout.please_enter_correct_upi_id";
 import CardForm from "./card-form";
 import Shimmer from "../../../components/shimmer/shimmer";
 import CheckoutPaymentSkeleton from "./checkout-payment-skeleton";
-import CreditPayment from "../../../components/b2b-credit-payment/b2b-credit-payment";
 
 export const CREDIT_CARD_MASK = [
   {
@@ -204,8 +203,8 @@ function CheckoutPaymentContent({
     updateStoreCredits,
     creditUpdating,
     isPaymentLoading,
-    creditPaymentData,
   } = payment;
+
 
   useEffect(() => {
     if (enableLinkPaymentOption && selectedTab) {
@@ -221,13 +220,8 @@ function CheckoutPaymentContent({
   let codOption = paymentOptions?.filter((opt) => opt.name === "COD")[0];
   let neftOption = paymentOptions?.filter((opt) => opt.name === "NEFT")[0];
   let rtgsOption = paymentOptions?.filter((opt) => opt.name === "RTGS")[0];
-  let creditOption = paymentOptions?.filter((opt) => opt.name === "CREDIT")[0];
   paymentOptions = paymentOptions?.filter(
-    (opt) =>
-      opt.name !== "COD" &&
-      opt.name !== "NEFT" &&
-      opt.name !== "RTGS" &&
-      opt.name !== "CREDIT"
+    (opt) => opt.name !== "COD" && opt.name !== "NEFT" && opt.name !== "RTGS"
   );
   const otherPaymentOptions = useMemo(() => otherOptions(), [paymentOption]);
   let upiSuggestions = paymentOption?.payment_option?.find?.(
@@ -269,7 +263,6 @@ function CheckoutPaymentContent({
   const [selectedOtherPayment, setSelectedOtherPayment] = useState({});
   const [selectedNeftPayment, setSelectedNeftPayment] = useState({});
   const [selectedRtgsPayment, setSelectedRtgsPayment] = useState({});
-  const [selectedCreditPayment, setSelectedCreditPayment] = useState({});
   const [savedUPISelect, setSavedUPISelect] = useState(false);
   const [showUPILoader, setUPILoader] = useState(false);
   const [selectedPaymentPayload, setSelectedPaymentPayload] = useState({
@@ -283,7 +276,6 @@ function CheckoutPaymentContent({
     selectedOtherPayment: selectedOtherPayment,
     selectedUpiIntentApp: selectedUpiIntentApp,
     selectedNeftPayment: selectedNeftPayment,
-    selectedCreditPayment: selectedCreditPayment,
   });
   const [paymentResponse, setPaymentResponse] = useState(null);
 
@@ -695,6 +687,17 @@ function CheckoutPaymentContent({
       displayName: t("resource.checkout.more_apps"),
     },
   };
+
+  // Map API app codes to SVG names
+  const getSvgNameForApp = (appCode) => {
+    const appCodeMap = {
+      "google_pay": "gpay",
+      "gpay": "gpay",
+      "phonepe": "phonepe",
+      "paytm": "paytm",
+    };
+    return appCodeMap[appCode] || appCode;
+  };
   const prevSelectedTabRef = useRef(selectedTab);
   const cancelQrPayment = async () => {
     initializeOrResetQrPayment();
@@ -727,7 +730,11 @@ function CheckoutPaymentContent({
     }
     if (selectedTab === "UPI" && !upiApps?.length) {
       getUPIIntentApps?.()?.then?.((data) => {
-        setUpiApps(data);
+        // Handle case where data might be objects with 'code' property
+        const normalizedData = Array.isArray(data) 
+          ? data.map(item => typeof item === 'object' && item?.code ? item.code : item)
+          : data;
+        setUpiApps(normalizedData);
       });
     }
     if (
@@ -1334,12 +1341,6 @@ function CheckoutPaymentContent({
         console.log("Payment mode selected");
       });
       setSelectedRtgsPayment(subMopData);
-      setSelectedTab(tab);
-    } else if (tab === "CREDIT") {
-      selectPaymentMode(paymentModePayload).then(() => {
-        console.log("Payment mode selected");
-      });
-      setSelectedCreditPayment(subMopData);
       setSelectedTab(tab);
     } else if (tab === "CARD") {
       if (subMop !== "newCARD") {
@@ -2525,6 +2526,7 @@ function CheckoutPaymentContent({
                 removeDialogueError();
                 selectMop("WL", "WL", wlt?.code);
               }}
+              data-testid="wallet-banks"
             >
               <label>
                 <div className={styles.modeItem}>
@@ -2580,6 +2582,7 @@ function CheckoutPaymentContent({
                         }
                       }}
                       disabled={isPaymentLoading}
+                      data-testid="wallet-payment-button"
                     >
                       {!isPaymentLoading ? (
                         <>
@@ -2688,8 +2691,79 @@ function CheckoutPaymentContent({
               <div>
                 {upiApps?.length > 0 &&
                   upiApps
-                    .filter((app) => ["gpay", "phonepe", "paytm"].includes(app))
-                    .map((app) => (
+                    .filter((app) => ["gpay", "google_pay", "phonepe", "paytm"].includes(app))
+                    .map((app) => {
+                      const svgName = getSvgNameForApp(app);
+                      const displayKey = svgName;
+                      return (
+                        <label
+                          key={app}
+                          onClick={() => {
+                            setSelectedUpiIntentApp(app);
+                            selectedUpiRef.current = null;
+                            setvpa("");
+                            setSavedUPISelect("");
+                            setUPIError(false);
+                            cancelQrPayment();
+                          }}
+                          className={`${styles.upiApp} ${!upiApps?.includes("any") ? styles.notBorderBottom : ""} ${selectedUpiIntentApp === app ? styles.selectedUpiApp : ""}`}
+                        >
+                          <div className={styles.logo}>
+                            <SvgWrapper svgSrc={svgName} />
+                          </div>
+                          <p className={styles.displayName}>
+                            {upiAppData[displayKey]?.displayName}
+                          </p>
+                        {(!selectedUpiIntentApp ||
+                          selectedUpiIntentApp !== app) && (
+                          <SvgWrapper
+                            svgSrc={"radio"}
+                            className={styles.onMobileView}
+                          />
+                        )}
+                        {selectedUpiIntentApp &&
+                          selectedUpiIntentApp === app && (
+                            <SvgWrapper
+                              svgSrc={"radio-selected"}
+                              className={styles.onMobileView}
+                            />
+                          )}
+                        </label>
+                      );
+                    })}
+                {upiApps?.length > 0 && upiApps?.includes("any") && (
+                  <label
+                    key="any"
+                    onClick={() => {
+                      setSelectedUpiIntentApp("any");
+                      selectedUpiRef.current = "any";
+                      selectMop("UPI", "UPI", "UPI");
+                      removeDialogueError();
+                      setShowUpiRedirectionModal(true);
+                    }}
+                    className={styles.moreApps}
+                  >
+                    <div className={styles.logo}>
+                      <SvgWrapper svgSrc="more-upi-apps" />
+                    </div>
+                    <p className={styles.displayName}>
+                      {upiAppData.any?.displayName}
+                    </p>
+                    <div className={styles.rightArrow}>
+                      <SvgWrapper svgSrc="arrow-right" />
+                    </div>
+                  </label>
+                )}
+              </div>
+            )}
+            {!isTablet && upiApps?.length > 0 && (
+              <div>
+                {upiApps
+                  .filter((app) => ["gpay", "google_pay", "phonepe", "paytm"].includes(app))
+                  .map((app) => {
+                    const svgName = getSvgNameForApp(app);
+                    const displayKey = svgName;
+                    return (
                       <label
                         key={app}
                         onClick={() => {
@@ -2703,10 +2777,10 @@ function CheckoutPaymentContent({
                         className={`${styles.upiApp} ${!upiApps?.includes("any") ? styles.notBorderBottom : ""} ${selectedUpiIntentApp === app ? styles.selectedUpiApp : ""}`}
                       >
                         <div className={styles.logo}>
-                          <SvgWrapper svgSrc={app} />
+                          <SvgWrapper svgSrc={svgName} />
                         </div>
                         <p className={styles.displayName}>
-                          {upiAppData[app]?.displayName}
+                          {upiAppData[displayKey]?.displayName}
                         </p>
                         {(!selectedUpiIntentApp ||
                           selectedUpiIntentApp !== app) && (
@@ -2723,7 +2797,8 @@ function CheckoutPaymentContent({
                             />
                           )}
                       </label>
-                    ))}
+                    );
+                  })}
                 {upiApps?.length > 0 && upiApps?.includes("any") && (
                   <label
                     key="any"
@@ -2808,7 +2883,11 @@ function CheckoutPaymentContent({
                       <SvgWrapper svgSrc="qr-code" className={styles.blurred} />
                     )}
                     {isQrCodeVisible && (
-                      <img src={qrCodeImage} className={styles.qrCode} />
+                      <img
+                        src={qrCodeImage}
+                        className={styles.qrCode}
+                        alt={t("resource.checkout.qr_code_image")}
+                      />
                     )}
                     {!isQrCodeVisible && isQrCodeLoading && (
                       <div className={styles.qrLoader}></div>
@@ -2836,7 +2915,7 @@ function CheckoutPaymentContent({
             {((isTablet &&
               isChromeOrSafari &&
               (upiApps?.length > 0 || upiApps?.includes("any"))) ||
-              (!isTablet && isQrMopPresent)) && (
+              (!isTablet && (upiApps?.length > 0 || isQrMopPresent))) && (
               <div className={styles.upiOrLine}>
                 <span className={styles.upiOrText}>
                   {t("resource.common.or")}
@@ -2964,6 +3043,7 @@ function CheckoutPaymentContent({
                   maxLength="55"
                   value={vpa}
                   onChange={handleUPIChange}
+                  data-testid="upi-id-input"
                 />
                 {(vpa || (vpa && isUPIError)) && (
                   <span
@@ -3097,6 +3177,7 @@ function CheckoutPaymentContent({
                         !(isUpiSuffixSelected || !!selectedUpiIntentApp) ||
                         isPaymentLoading
                       }
+                      data-testid="upi-payment-button"
                     >
                       {!isPaymentLoading ? (
                         <>
@@ -3135,6 +3216,7 @@ function CheckoutPaymentContent({
                 removeDialogueError();
                 selectMop("NB", "NB", nb.code);
               }}
+              data-testid="net-banking-banks"
             >
               <label>
                 <div className={styles.modeItem}>
@@ -3188,6 +3270,7 @@ function CheckoutPaymentContent({
                         }
                       }}
                       disabled={isPaymentLoading}
+                      data-testid="netbanking-payment-button"
                     >
                       {!isPaymentLoading ? (
                         <>
@@ -3315,6 +3398,7 @@ function CheckoutPaymentContent({
                     className={`${styles.commonBtn} ${styles.payBtn}`}
                     onClick={() => proceedToPay("COD", selectedPaymentPayload)}
                     disabled={isPaymentLoading}
+                    data-testid="cod-pay-button"
                   >
                     {!isPaymentLoading
                       ? t("resource.checkout.place_order")
@@ -3858,6 +3942,7 @@ function CheckoutPaymentContent({
                       className={styles.neftPlaceOrderBtn}
                       onClick={handleNeftPlaceOrder}
                       disabled={isNeftPlaceOrderDisabled}
+                      data-testid="neft-payment-button"
                     >
                       {!isPaymentLoading
                         ? t("resource.checkout.place_order")
@@ -4190,6 +4275,7 @@ function CheckoutPaymentContent({
                       className={styles.neftPlaceOrderBtn}
                       onClick={handleRtgsPlaceOrder}
                       disabled={isRtgsPlaceOrderDisabled}
+                      data-testid="rtgs-payment-button"
                     >
                       {!isPaymentLoading
                         ? t("resource.checkout.place_order")
@@ -4202,26 +4288,6 @@ function CheckoutPaymentContent({
           </div>
         );
       }
-      case "CREDIT":
-        return (
-          <CreditPayment
-            styles={styles}
-            StickyPayNow={StickyPayNow}
-            isTablet={isTablet}
-            getCurrencySymbol={getCurrencySymbol}
-            getTotalValue={getTotalValue}
-            availableCredit={creditPaymentData?.availableCredit}
-            lender={creditPaymentData?.lender}
-            proceedToPay={proceedToPay}
-            acceptOrder={acceptOrder}
-            selectedPaymentPayload={selectedPaymentPayload}
-            enableLinkPaymentOption={enableLinkPaymentOption}
-            isPaymentLoading={isPaymentLoading}
-            onPriceDetailsClick={onPriceDetailsClick}
-            priceFormatCurrencySymbol={priceFormatCurrencySymbol}
-            loader={loader}
-          />
-        );
       case "PL":
         return (
           <div>
@@ -4494,6 +4560,7 @@ function CheckoutPaymentContent({
                         acceptOrder();
                       }}
                       disabled={isPaymentLoading}
+                      data-testid="other-payment-button"
                     >
                       {!isPaymentLoading ? (
                         <>
@@ -4518,7 +4585,7 @@ function CheckoutPaymentContent({
             <div
               className={`${styles.otherHeader} ${styles["view-mobile-up"]}`}
             >
-              {t("resource.checkout.select_payment_option")}
+              {t("resource.common.select_payment_option")}
             </div>
             <div className={styles.modeOption}>
               {otherPaymentOptions?.length &&
@@ -4630,6 +4697,7 @@ function CheckoutPaymentContent({
         className={`${styles.linkWrapper} ${selectedTab === opt.name && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === opt.name && isTablet ? styles.headerHightlight : ""}`}
         key={opt?.display_name}
         id={`nav-title-${index}`}
+        data-testid={`nav-title-${opt?.display_name}`}
       >
         <div
           className={styles["linkWrapper-row1"]}
@@ -4676,15 +4744,6 @@ function CheckoutPaymentContent({
                   selectMop("RTGS", "RTGS", rtgsSubMop.code || "");
                 }
               }
-              if (opt.name === "CREDIT") {
-                const creditOptionData = paymentOption?.payment_option?.find(
-                  (option) => option.name === "CREDIT"
-                );
-                const creditSubMop = creditOptionData?.list?.[0];
-                if (creditSubMop) {
-                  selectMop("CREDIT", "CREDIT", creditSubMop.code || "");
-                }
-              }
             }
           }}
         >
@@ -4694,19 +4753,14 @@ function CheckoutPaymentContent({
             &nbsp;
           </div>
           <div className={styles.link}>
-            <div className={`${styles.icon} ${opt.image_src && opt.name === "CREDIT" ? styles.creditLogoIcon : styles.mopIcon}`}>
-              {opt.image_src && opt.name === "CREDIT" ? (
-                <img src={opt.image_src} alt={opt?.display_name} />
-              ) : (
-                <SvgWrapper svgSrc={opt.svg}></SvgWrapper>
-              )}
+            <div className={`${styles.icon} ${styles.mopIcon}`}>
+              {/* <img src={opt.svg} alt="" /> */}
+              <SvgWrapper svgSrc={opt.svg}></SvgWrapper>
             </div>
             <div
               className={`${styles.modeName} ${selectedTab === opt.name ? styles.selectedModeName : ""}`}
             >
-              {opt.name === "CREDIT" && creditPaymentData?.lender?.brandName
-                ? creditPaymentData.lender.brandName
-                : translateDynamicLabel(opt?.display_name ?? "", t)}
+              {translateDynamicLabel(opt?.display_name ?? "", t)}
             </div>
           </div>
           {opt.subMopIcons && (
@@ -4739,6 +4793,7 @@ function CheckoutPaymentContent({
           )}
           <div
             className={`${styles.arrowContainer} ${styles.activeIconColor} `}
+            data-testid="cod-button"
           >
             <SvgWrapper
               className={
@@ -4909,6 +4964,7 @@ function CheckoutPaymentContent({
               className={`${styles.commonBtn} ${styles.payBtn}`}
               onClick={() => proceedToPay("COD", selectedPaymentPayload)}
               disabled={isPaymentLoading}
+              data-testid="final-pay-button"
             >
               {!isPaymentLoading ? (
                 <>
@@ -4947,12 +5003,15 @@ function CheckoutPaymentContent({
         >
           {true ? (
             <>
-              <div className={styles.creditNote}>
-                <CreditNote
-                  data={partialPaymentOption}
-                  updateStoreCredits={updateStoreCredits}
-                />
-              </div>
+              {partialPaymentOption?.list[0]?.balance?.account?.status !==
+                "INACTIVE" && (
+                <div className={styles.creditNote}>
+                  <CreditNote
+                    data={partialPaymentOption}
+                    updateStoreCredits={updateStoreCredits}
+                  />
+                </div>
+              )}
 
               {creditUpdating ? (
                 <CheckoutPaymentSkeleton />
@@ -4975,6 +5034,7 @@ function CheckoutPaymentContent({
                             setSelectedTab("Other");
                             toggleMop("Other");
                           }}
+                          data-testid="pay-online-button"
                         >
                           <div
                             className={`${selectedTab === "Other" ? styles.indicator : ""} ${styles.onDesktopView}`}
@@ -5024,6 +5084,7 @@ function CheckoutPaymentContent({
                           className={`${styles.linkWrapper} ${selectedTab === neftOption.name && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === neftOption.name && isTablet ? styles.headerHightlight : ""} ${!codOption ? styles.lastChild : ""}`}
                           key={neftOption?.display_name ?? ""}
                           id={`nav-title-neft`}
+                          data-testid="neft-payment-option"
                         >
                           <div
                             className={styles["linkWrapper-row1"]}
@@ -5133,6 +5194,7 @@ function CheckoutPaymentContent({
                           className={`${styles.linkWrapper} ${selectedTab === rtgsOption.name && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === rtgsOption.name && isTablet ? styles.headerHightlight : ""} ${!codOption ? styles.lastChild : ""}`}
                           key={rtgsOption?.display_name ?? ""}
                           id={`nav-title-rtgs`}
+                          data-testid="rtgs-payment-option"
                         >
                           <div
                             className={styles["linkWrapper-row1"]}
@@ -5233,110 +5295,6 @@ function CheckoutPaymentContent({
                         </div>
                       </div>
                     )}
-                    {creditOption && (
-                      <div className={styles.neftBorderBottom}>
-                        <div
-                          className={`${styles.linkWrapper} ${selectedTab === creditOption.name && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === creditOption.name && isTablet ? styles.headerHightlight : ""} ${!codOption ? styles.lastChild : ""}`}
-                          key={creditOption?.display_name ?? ""}
-                          id="nav-title-credit"
-                        >
-                          <div
-                            className={styles["linkWrapper-row1"]}
-                            onClick={() => {
-                              if (isTablet) {
-                                setSelectedTab((prev) =>
-                                  prev === creditOption.name
-                                    ? ""
-                                    : creditOption.name
-                                );
-                                setTab(creditOption.name);
-                              } else {
-                                setSelectedTab(creditOption.name);
-                                setTab(creditOption.name);
-                              }
-                              removeDialogueError();
-                              toggleMop(creditOption.name);
-                              if (selectedTab !== creditOption.name) {
-                                if (isTablet) {
-                                  setSelectedPaymentPayload({});
-                                }
-                                setNameOnCard("");
-                                setCardExpiryDate("");
-                                setCvvNumber("");
-                                hideNewCard();
-                                setvpa("");
-                                setLastValidatedBin("");
-                                unsetSelectedSubMop();
-
-                                const creditOptionData =
-                                  paymentOption?.payment_option?.find(
-                                    (option) => option.name === "CREDIT"
-                                  );
-                                const creditSubMop = creditOptionData?.list?.[0];
-                                if (creditSubMop) {
-                                  selectMop(
-                                    creditOption.name,
-                                    creditOption.name,
-                                    creditSubMop.code || ""
-                                  );
-                                }
-                              }
-                            }}
-                          >
-                            <div
-                              className={`${selectedTab === creditOption.name ? styles.indicator : ""} ${styles.onDesktopView}`}
-                            >
-                              &nbsp;
-                            </div>
-                            <div className={styles.link}>
-                              <div
-                                className={`${styles.icon} ${creditOption.image_src ? styles.creditLogoIcon : styles.flexCenter}`}
-                              >
-                                {creditOption.image_src ? (
-                                  <img
-                                    src={creditOption.image_src}
-                                    alt={creditOption?.display_name}
-                                  />
-                                ) : (
-                                  <SvgWrapper svgSrc="credit" />
-                                )}
-                              </div>
-                              <div>
-                                <div
-                                  className={`${styles.modeName} ${selectedTab === creditOption.name ? styles.selectedModeName : ""}`}
-                                >
-                                  {creditPaymentData?.lender?.brandName
-                                    ? creditPaymentData.lender.brandName
-                                    : translateDynamicLabel(
-                                        creditOption?.display_name ?? "",
-                                        t
-                                      )}
-                                </div>
-                              </div>
-                            </div>
-                            <div
-                              className={`${styles.arrowContainer} ${styles.activeIconColor}`}
-                            >
-                              <SvgWrapper
-                                className={
-                                  selectedTab === creditOption.name &&
-                                  activeMop === creditOption.name
-                                    ? styles.upsideDown
-                                    : ""
-                                }
-                                svgSrc="accordion-arrow"
-                              />
-                            </div>
-                          </div>
-                          {isTablet && activeMop === creditOption.name && (
-                            <div>
-                              {selectedTab === creditOption.name &&
-                                navigationTab()}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
                     {codOption && (
                       <div style={{ display: "flex", flex: "1" }}>
                         <div
@@ -5349,6 +5307,7 @@ function CheckoutPaymentContent({
                               codOption.name
                             );
                           }}
+                          data-testid="cod-button"
                         >
                           <div className={styles["linkWrapper-row1"]}>
                             <div

@@ -69,12 +69,20 @@
   align-items: center;
   position: relative;
   cursor: pointer;
+  .itemCount {
+    color: @TextSecondary;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 140%;
+    padding-left: 2px;
+  }
   .imagePreview {
     @media @desktop {
       display: none;
     }
     position: absolute;
-    left: -155%;
+    left: 0px;
     top: -100px;
     z-index: 20;
   }
@@ -94,8 +102,9 @@
 }
 .accordionContentImg {
   border-radius: 50%;
-  width: 16px;
-  height: 16px;
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
   border: 1px solid var(--Text-Secondary, #6d6d6e);
 }
 

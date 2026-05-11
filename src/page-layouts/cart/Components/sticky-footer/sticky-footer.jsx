@@ -1,12 +1,13 @@
 import React from "react";
-import { numberWithCommas, currencyFormat, formatLocale, isRunningOnClient } from "../../../../helper/utils";
+import {
+  numberWithCommas,
+  currencyFormat,
+  formatLocale,
+  isRunningOnClient,
+} from "../../../../helper/utils";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./sticky-footer.less";
-import {
-  useGlobalStore,
-  useFPI,
-  useGlobalTranslation
-} from "fdk-core/utils";
+import { useGlobalStore, useFPI, useGlobalTranslation } from "fdk-core/utils";
 
 function StickyFooter({
   isLoggedIn = false,
@@ -16,9 +17,10 @@ function StickyFooter({
   isAnonymous = true,
   totalPrice = 0,
   currencySymbol = "₹",
-  onLoginClick = () => { },
-  onCheckoutClick = () => { },
-  onPriceDetailsClick = () => { },
+  onLoginClick = () => {},
+  onCheckoutClick = () => {},
+  onPriceDetailsClick = () => {},
+  order = {},
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -27,7 +29,7 @@ function StickyFooter({
   const isRewardPoints = false;
   const rewardPoints = 0;
   const isRewardPointsApplied = false;
-  const updateRewardPoints = () => { };
+  const updateRewardPoints = () => {};
 
   return (
     <div className={styles.stickyFooter}>
@@ -53,12 +55,15 @@ function StickyFooter({
           <div className={`${styles.billContainer} ${styles.billContainer2}`}>
             {totalPrice > 0 && (
               <div className={styles.getTotalPrice}>
-                <span className={styles.nccPrice}>{t("resource.cart.total_price")}:</span>
+                <span className={styles.nccPrice}>
+                  {t("resource.cart.total_price")}:
+                </span>
                 <span className={styles.nccTotalPrice}>
                   {currencyFormat(
-                    numberWithCommas(totalPrice), 
-                    currencySymbol, 
-                    formatLocale(locale, countryCode, true))}
+                    numberWithCommas(totalPrice),
+                    currencySymbol,
+                    formatLocale(locale, countryCode, true)
+                  )}
                 </span>
               </div>
             )}
@@ -84,7 +89,9 @@ function StickyFooter({
           {isAnonymous && (
             <button
               className={`${styles.cartCheckoutBtn} ${styles.cartCheckoutBtn3}`}
-              disabled={!isValid || isOutOfStock || isNotServicable}
+              disabled={
+                !isValid || isOutOfStock || isNotServicable || !order?.enabled
+              }
               onClick={onCheckoutClick}
             >
               {t("resource.section.cart.continue_as_guest")}
@@ -99,9 +106,10 @@ function StickyFooter({
           <div className={styles.priceContainerMobile}>
             <div className={styles.totalPrice}>
               {currencyFormat(
-                numberWithCommas(totalPrice), 
-                currencySymbol, 
-                formatLocale(locale, countryCode, true))}
+                numberWithCommas(totalPrice),
+                currencySymbol,
+                formatLocale(locale, countryCode, true)
+              )}
             </div>
             <div
               className={`${styles.viewPriceBtn} ${styles.viewPBtn}`}
@@ -112,11 +120,20 @@ function StickyFooter({
           </div>
           <button
             className={`${styles.cartCheckoutBtn} ${styles.priceContainerMobileCheckoutBtn} ${styles.checkoutButton}`}
-            disabled={!isValid || isOutOfStock || isNotServicable}
+            disabled={
+              !isValid || isOutOfStock || isNotServicable || !order?.enabled
+            }
             onClick={onCheckoutClick}
           >
             {t("resource.section.cart.checkout_button_caps")}
-            <SvgWrapper svgSrc="angle-right" className={isRunningOnClient() && document.dir === 'rtl' ?  styles.rotate180 : ""} />
+            <SvgWrapper
+              svgSrc="angle-right"
+              className={
+                isRunningOnClient() && document.dir === "rtl"
+                  ? styles.rotate180
+                  : ""
+              }
+            />
           </button>
         </div>
       )}

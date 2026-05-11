@@ -4,7 +4,9 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-
+  .disableCursor {
+    filter: invert(1);
+  }
   .removeIcon {
     path {
       fill: @TextBody !important;
@@ -27,6 +29,22 @@
     position: relative;
     border-radius: @ImageRadius;
     -webkit-mask-image: -webkit-radial-gradient(white, black); //safari fix
+
+    &.outOfStockContainer {
+      .productImage {
+        filter: grayscale(100%);
+        opacity: 0.7;
+      }
+
+      @media @desktop {
+        &:hover {
+          .productImage {
+            filter: grayscale(100%);
+            opacity: 0.7;
+          }
+        }
+      }
+    }
 
     .wishlistBtn {
       display: flex;
@@ -185,6 +203,7 @@
           text-align: center;
         }
       }
+
       .productVariants {
         margin-top: 8px;
 
@@ -279,6 +298,23 @@
       height: 40px;
       font-size: 12px;
       white-space: nowrap;
+    }
+
+    .addToCartShimmer {
+      height: 40px;
+      padding: 12px 16px;
+      box-sizing: border-box;
+      width: 100%;
+      min-width: 120px;
+      border-radius: 4px;
+      background: linear-gradient(
+        90deg,
+        #f0f0f0 25%,
+        #e8e8e8 50%,
+        #f0f0f0 75%
+      );
+      background-size: 200% 100%;
+      animation: priceShimmerAnim 1.5s ease-in-out infinite;
     }
 
     .b2bAvailableOffers {
@@ -603,3 +639,43 @@
 // .textCenter {
 //   text-align: center;
 // }
+
+/* Price shimmer: same spacing as badge_section + productPrice (8px from name, 4px between badge and price) */
+.priceShimmer {
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+
+  .priceShimmerBadge {
+    height: 26px;
+    width: 100px;
+    max-width: 50%;
+    margin-bottom: 4px;
+    border-radius: 4px;
+    padding: 4px 8px;
+    box-sizing: border-box;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: priceShimmerAnim 1.5s ease-in-out infinite;
+  }
+
+  .priceShimmerLine {
+    height: 20px;
+    width: 40%;
+    min-width: 80px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: priceShimmerAnim 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes priceShimmerAnim {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}

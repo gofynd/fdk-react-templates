@@ -11,6 +11,7 @@ function ZeroPayButton({ payment, showPayment, onPriceDetailsClick, loader }) {
     getCurrencySymbol,
     isLoading,
     isPaymentLoading,
+    isCreditNoteApplied,
   } = payment;
   const isMobile = useMobile();
   return (
@@ -39,7 +40,7 @@ function ZeroPayButton({ payment, showPayment, onPriceDetailsClick, loader }) {
                 isPaymentLoading={isPaymentLoading}
                 loader={loader}
                 proceedToPay={() => {
-                  proceedToPay("PP", {});
+                  proceedToPay(!isCreditNoteApplied ? "PP" : "CREDITNOTE", {});
                 }}
                 btnTitle="PLACE ORDER"
               />
