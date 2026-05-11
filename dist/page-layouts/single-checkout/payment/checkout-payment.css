@@ -7446,11 +7446,14 @@ h5,
   margin: 0;
 }
 .b2b-credit-payment__infoText___b7Vgt ul,
-.b2b-credit-payment__infoText___b7Vgt ol,
-.b2b-credit-payment__infoText___b7Vgt li,
-.b2b-credit-payment__infoText___b7Vgt p,
-.b2b-credit-payment__infoText___b7Vgt a {
-  all: revert;
+.b2b-credit-payment__infoText___b7Vgt ol {
+  list-style: revert;
+  padding-left: revert;
+  margin: 0;
+}
+.b2b-credit-payment__infoText___b7Vgt ul li p,
+.b2b-credit-payment__infoText___b7Vgt ol li p {
+  margin: 0;
 }
 @media only screen and (min-width: 769px) {
   .b2b-credit-payment__infoText___b7Vgt {

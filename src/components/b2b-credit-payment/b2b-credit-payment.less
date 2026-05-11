@@ -167,8 +167,16 @@
     margin: 0;
   }
 
-  ul, ol, li, p, a {
-    all: revert;
+  ul, ol {
+    list-style: revert;
+    padding-left: revert;
+    margin: 0;
+
+    li {
+      p {
+        margin: 0;
+      }
+    }
   }
 
   @media @desktop {
