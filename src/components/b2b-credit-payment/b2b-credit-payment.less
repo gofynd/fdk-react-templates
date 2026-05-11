@@ -30,11 +30,11 @@
   border: 1px solid @DividerStokes;
   border-radius: 12px;
   padding: 12px 16px;
-  min-height: 124px;
+  min-height: 110px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: linear-gradient(to right, @ThemeAccentL5, @ThemeAccentL1);
+  background: @ThemeAccentL3;
 }
 
 .creditCardTopRow {
@@ -47,21 +47,25 @@
 .creditLabel {
   margin: 0;
   text-transform: uppercase;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 500;
-  color: @TextSecondary;
+  color: @TextLabel;
   letter-spacing: 0.05em;
+
+  @media @tablet {
+    font-size: 11px;
+  }
 }
 
 .creditAmount {
   margin: 8px 0 0;
-  font-size: 32px;
-  font-weight: 700;
+  font-size: 28px;
+  font-weight: 400;
   color: @TextHeading;
   line-height: 1.2;
 
   @media @mobile {
-    font-size: 26px;
+    font-size: 22px;
   }
 }
 
@@ -169,7 +173,6 @@
 
   ul, ol {
     list-style: revert;
-    padding-left: revert;
     margin: 0;
 
     li {

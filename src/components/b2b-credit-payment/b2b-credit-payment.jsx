@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import * as styles from "./b2b-credit-payment.less";
 import FyButton from "../core/fy-button/fy-button";
 import HTMLContent from "../core/html-content/html-content";
@@ -36,12 +36,6 @@ function CreditPayment({
   const isCreditPaymentLoading = isPaymentLoading || isCreditPaymentSubmitting;
   const isPayDisabled = isCreditPaymentLoading || isInsufficientCredit;
 
-  useEffect(() => {
-    if (!isPaymentLoading && isCreditPaymentSubmitting) {
-      setIsCreditPaymentSubmitting(false);
-    }
-  }, [isPaymentLoading, isCreditPaymentSubmitting]);
-
   const handlePayNow = async () => {
     if (isPayDisabled) return;
     setIsCreditPaymentSubmitting(true);
@@ -49,6 +43,8 @@ function CreditPayment({
       await proceedToPay("CREDIT", selectedPaymentPayload);
       acceptOrder();
     } catch {
+      // error handled by proceedToPay
+    } finally {
       setIsCreditPaymentSubmitting(false);
     }
   };
@@ -121,7 +117,7 @@ function CreditPayment({
                 disabled={isPayDisabled}
                 isLoading={isCreditPaymentLoading}
               >
-                Pay Now &rarr;
+                Pay Now 
               </FyButton>
             </div>
           )}
