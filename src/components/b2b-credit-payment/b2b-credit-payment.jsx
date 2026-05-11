@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useGlobalTranslation } from "fdk-core/utils";
 import * as styles from "./b2b-credit-payment.less";
 import FyButton from "../core/fy-button/fy-button";
 import HTMLContent from "../core/html-content/html-content";
@@ -20,6 +21,7 @@ function CreditPayment({
   styles: sharedStyles,
   loader,
 }) {
+  const { t } = useGlobalTranslation("translation");
   const [isCreditPaymentSubmitting, setIsCreditPaymentSubmitting] =
     useState(false);
   const totalValue = getTotalValue();
@@ -49,7 +51,6 @@ function CreditPayment({
     }
   };
 
-  const readyToUseText = "Ready to use";
   const tagline = lender?.tagline || "";
   const lenderDescription = lender?.description || "";
 
@@ -59,22 +60,22 @@ function CreditPayment({
         <div className={styles.creditWrapper}>
           <div className={styles.creditCard}>
             <div className={styles.creditCardTopRow}>
-              <p className={styles.creditLabel}>Available Credit</p>
+              <p className={styles.creditLabel}>{t("resource.checkout.credit_available_credit")}</p>
               <div
                 className={`${styles.creditReadyBadge} ${isInsufficientCredit ? styles.creditReadyBadgeDanger : ""}`}
               >
                 <span aria-hidden="true">&bull;</span>
                 <span>
                   {isInsufficientCredit
-                    ? "Insufficient credit"
-                    : readyToUseText}
+                    ? t("resource.checkout.credit_insufficient")
+                    : t("resource.checkout.credit_ready_to_use")}
                 </span>
               </div>
             </div>
             <p className={styles.creditAmount}>{formattedCredit}</p>
             {isInsufficientCredit && (
               <p className={styles.insufficientCreditMsg}>
-                Available credit is less than the order amount.
+                {t("resource.checkout.credit_insufficient_msg")}
               </p>
             )}
           </div>
@@ -108,7 +109,7 @@ function CreditPayment({
           ) : (
             <div className={styles.creditFooter}>
               <div className={styles.creditFooterLeft}>
-                <span className={styles.youPayLabel}>You pay</span>
+                <span className={styles.youPayLabel}>{t("resource.checkout.credit_you_pay")}</span>
                 <span className={styles.youPayAmount}>{formattedTotal}</span>
               </div>
               <FyButton
@@ -117,7 +118,7 @@ function CreditPayment({
                 disabled={isPayDisabled}
                 isLoading={isCreditPaymentLoading}
               >
-                Pay Now 
+                {t("resource.checkout.credit_pay_now")}
               </FyButton>
             </div>
           )}
