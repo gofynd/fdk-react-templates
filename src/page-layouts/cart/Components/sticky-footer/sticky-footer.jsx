@@ -60,7 +60,7 @@ function StickyFooter({
                 </span>
                 <span className={styles.nccTotalPrice}>
                   {currencyFormat(
-                    numberWithCommas(totalPrice),
+                    totalPrice,
                     currencySymbol,
                     formatLocale(locale, countryCode, true)
                   )}
@@ -106,7 +106,7 @@ function StickyFooter({
           <div className={styles.priceContainerMobile}>
             <div className={styles.totalPrice}>
               {currencyFormat(
-                numberWithCommas(totalPrice),
+                totalPrice,
                 currencySymbol,
                 formatLocale(locale, countryCode, true)
               )}

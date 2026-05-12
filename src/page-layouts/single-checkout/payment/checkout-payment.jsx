@@ -20,12 +20,9 @@ function CheckoutPayment({
   customClassName,
   isCouponApplied,
   redirectPaymentOptions,
-  setMopPayload,
   isCouponValid,
   setIsCouponValid,
   inValidCouponData,
-  neftFileUpload = () => {},
-  rtgsFileUpload = () => {},
 }) {
   const { t } = useGlobalTranslation("translation");
   const [showFailedMessage, setShowFailedMessage] = useState(false);
@@ -117,7 +114,7 @@ function CheckoutPayment({
       setTimerId(null);
     }
   };
-
+  console.log("firstone connected");
   return (
     <>
       <div
@@ -164,12 +161,9 @@ function CheckoutPayment({
               setCancelQrPayment={setCancelQrPayment}
               juspayErrorMessage={juspayErrorMessage}
               isCouponApplied={isCouponApplied}
-              setMopPayload={setMopPayload}
               isCouponValid={isCouponValid}
               setIsCouponValid={setIsCouponValid}
               inValidCouponData={inValidCouponData}
-              neftFileUpload={neftFileUpload}
-              rtgsFileUpload={rtgsFileUpload}
             ></CheckoutPaymentContent>
           </>
         ) : (
