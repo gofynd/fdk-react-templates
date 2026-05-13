@@ -15,7 +15,7 @@
 .main {
   display: flex;
   flex-direction: column;
-  padding: 8px 0 24px 0;
+  padding: 24px 0;
 
   @media @tablet {
     padding: 0;
@@ -37,7 +37,7 @@
   .formContainer {
     display: flex;
     flex-direction: column;
-    padding-top: 8px;
+    padding-top: 24px;
 
     @media @tablet {
       width: 100%;
@@ -64,18 +64,12 @@
         }
 
         .actionContainer {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          flex-wrap: nowrap; 
-          width: auto;
           .verified {
             padding: 0 12px;
             border-radius: 4px;
             height: 100%;
             cursor: unset;
           }
-         
 
           .primary {
             padding: 12px;
@@ -85,14 +79,6 @@
           }
 
           .verifyButton {
-            padding: 0 12px;
-            border-radius: 4px;
-            height: 100%;
-            white-space: nowrap;
-            cursor:pointer;
-          }
-
-          .editButton {
             padding: 0 12px;
             border-radius: 4px;
             height: 100%;
