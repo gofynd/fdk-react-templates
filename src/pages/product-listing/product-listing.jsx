@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "../../styles/product-listing.less";
 import InfiniteLoader from "../../components/core/infinite-loader/infinite-loader";
@@ -20,15 +20,13 @@ import Modal from "../../components/core/modal/modal";
 import AddToCart from "../../page-layouts/plp/Components/add-to-cart/add-to-cart";
 import { useViewport } from "../../helper/hooks";
 import SizeGuide from "../../page-layouts/plp/Components/size-guide/size-guide";
-import SaveToWishlistModal from "../../components/wishlist-modals/save-to-wishlist-modal";
 import FilterIcon from "../../assets/images/filter.svg";
 import SortIcon from "../../assets/images/sort.svg";
 import TwoGridIcon from "../../assets/images/grid-two.svg";
 import FourGridIcon from "../../assets/images/grid-four.svg";
 import TwoGridMobIcon from "../../assets/images/grid-two-mob.svg";
 import OneGridMobIcon from "../../assets/images/grid-one-mob.svg";
-import { useGlobalTranslation } from "fdk-core/utils";
-import CreateRenameWishlistModal from "../../components/wishlist-modals/create-wishlist-modal";
+import { useGlobalTranslation, useGlobalStore, useFPI } from "fdk-core/utils";
 
 const ProductListing = ({
   breadcrumb = [],
@@ -52,6 +50,7 @@ const ProductListing = ({
   isProductOpenInNewTab = false,
   isBrand = true,
   isSaleBadge = true,
+  isCustomBadge = true,
   isPrice = true,
   globalConfig = {},
   imgSrcSet,
@@ -70,11 +69,7 @@ const ProductListing = ({
   showColorVariants = false,
   actionButtonText,
   stickyFilterTopOffset = 0,
-  showQuantityController = false,
-  showBuyNowButton = false,
-  showMoq = false,
-  productsInWishlist = [],
-  showSmartWishlist = false,
+  filterToggle = false,
   onColumnCountUpdate = () => {},
   onResetFiltersClick = () => {},
   onFilterUpdate = () => {},
@@ -86,117 +81,29 @@ const ProductListing = ({
   onLoadMoreProducts = () => {},
   onProductNavigation = () => {},
   EmptyStateComponent,
-  isProductInWishlist = () => {},
-  getProductsInWishlist = () => {},
 }) => {
   const { t } = useGlobalTranslation("translation");
   const isTablet = useViewport(0, 768);
-  const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
-  const [showCreateWishlist, setShowCreateWishlist] = useState(false);
-  const [isCreateWishlistError, setIsCreateWishlistError] = useState(false);
-  const [createWishlistErrorMessage, setCreateWishlistErrorMessage] =
-    useState("");
+  const fpi = useFPI();
+  const { is_serviceable } = useGlobalStore(fpi?.getters?.CUSTOM_VALUE) || {};
+  const [isFilterVisible, setIsFilterVisible] = useState(filterToggle);
 
-  const [selectedProductForWishlist, setSelectedProductForWishlist] =
-    useState(null);
-  const [selectedWishlistIds, setSelectedWishlistIds] = useState([]);
-  const [productData, setProductData] = useState(null);
-
+  useEffect(() => {
+    setIsFilterVisible(filterToggle);
+  }, [filterToggle]);
   const {
     handleAddToCart,
     isOpen: isAddToCartOpen,
     showSizeGuide,
     handleCloseSizeGuide,
-    fetchAllWishlists,
-    showSnackbarMessage,
-    handleSaveToWishlist,
-    handleGetWishlistBySlug,
     ...restAddToModalProps
   } = addToCartModalProps;
 
-  useEffect(() => {
-    if (isRunningOnClient()) {
-      const savedPosition = sessionStorage.getItem("plpScrollPosition");
-      if (savedPosition) {
-        window.scrollTo(0, parseInt(savedPosition));
-        sessionStorage.removeItem("plpScrollPosition");
-      }
-      const handleBeforeUnload = () => {
-        sessionStorage.setItem("plpScrollPosition", window.scrollY.toString());
-      };
-
-      window.addEventListener("beforeunload", handleBeforeUnload);
-      return () => {
-        window.removeEventListener("beforeunload", handleBeforeUnload);
-      };
-    }
-  }, []);
-
-  useEffect(() => {
-    setSelectedProductForWishlist(restAddToModalProps?.productDataWishlist);
-  }, [restAddToModalProps?.productData]);
-
-  const handleWishlistIconClick = async (product) => {
-    await restAddToModalProps?.handleFetchProductDataWishlist(product?.slug);
-    const wishlistIds = await handleGetWishlistBySlug("", product?.slug, "");
-    setSelectedWishlistIds(wishlistIds);
-    setProductData(product);
-    setIsWishlistModalOpen(true);
-  };
-
-  const handleWishlistModalClose = () => {
-    setIsWishlistModalOpen(false);
-    setSelectedProductForWishlist(null);
-    setSelectedWishlistIds([]);
-  };
-
-  const handleWishlistSave = async (product, productPrice, selectedIds) => {
-    try {
-      if (handleSaveToWishlist) {
-        await handleSaveToWishlist(product, productPrice, selectedIds);
-      }
-
-      onWishlistClick(productData);
-      if (typeof getProductsInWishlist === "function") {
-        await getProductsInWishlist();
-      } else {
-        console.error(
-          "❌ getProductsInWishlist is not a function:",
-          getProductsInWishlist
-        );
-      }
-    } catch (error) {
-      console.error("❌ Error in handleWishlistSave:", error);
-    }
-
-    handleWishlistModalClose();
-  };
-
-  const handleWishlistClick = (wishlistId, selectedIds) => {
-    setSelectedWishlistIds(selectedIds);
-  };
-
-  const createWishlist = async (wishlistName) => {
-    if (wishlistName?.trim()) {
-      const response = await restAddToModalProps.handleCreateWishlist(
-        wishlistName.trim()
-      );
-      if (response.success) {
-        setShowCreateWishlist(false);
-        if (productData) {
-          setSelectedProductForWishlist(productData);
-          setIsWishlistModalOpen(true);
-        }
-        const newWishlistId = response.data._id;
-        setSelectedWishlistIds([newWishlistId]);
-        setIsCreateWishlistError(false);
-        setCreateWishlistErrorMessage("");
-      } else {
-        setIsCreateWishlistError(true);
-        setCreateWishlistErrorMessage(response.message);
-      }
-    }
-  };
+  const addToCartModalTitle = isTablet
+    ? restAddToModalProps?.productData?.product?.name?.length > 30
+      ? `${restAddToModalProps?.productData?.product?.name?.slice(0, 30)}...`
+      : restAddToModalProps?.productData?.product?.name || ""
+    : "";
 
   return (
     <div className={styles.plpWrapper}>
@@ -214,6 +121,12 @@ const ProductListing = ({
         </div>
       ) : (
         <>
+          {!title && (
+            <h1 className={styles.visuallyHidden}>
+              {t("resource.common.breadcrumb.products")}
+            </h1>
+          )}
+          {title && <h1 className={styles.visuallyHidden}>{title}</h1>}
           <div className={styles.mobileHeader}>
             <div className={styles.headerLeft}>
               {filterList.length > 0 && (
@@ -283,7 +196,7 @@ const ProductListing = ({
           <div className={styles.contentWrapper}>
             {filterList?.length !== 0 && (
               <StickyColumn
-                className={styles.left}
+                className={`${styles.left} ${filterToggle && !isFilterVisible ? styles.hidden : ""}`}
                 topOffset={stickyFilterTopOffset}
               >
                 <div className={styles.filterHeaderContainer}>
@@ -318,7 +231,7 @@ const ProductListing = ({
             <div className={styles.right}>
               <div className={styles.rightHeader}>
                 <div className={styles.headerLeft}>
-                  {title && <h1 className={styles.title}>{title}</h1>}
+                  {title && <h2 className={styles.title}>{title}</h2>}
                   {isProductCountDisplayed && (
                     <span className={styles.productCount}>
                       {`${productCount} ${productCount > 1 ? t("resource.common.items") : t("resource.common.item")}`}
@@ -326,6 +239,21 @@ const ProductListing = ({
                   )}
                 </div>
                 <div className={styles.headerRight}>
+                  {filterToggle && filterList?.length > 0 && (
+                    <div
+                      className={`${styles.filterToggleBtn} `}
+                      onClick={() => setIsFilterVisible(!isFilterVisible)}
+                    >
+                      <div className={styles.filterToggleText}>
+                        {isFilterVisible
+                          ? t("resource.common.hide_filters")
+                          : t("resource.common.show_filters")}
+                      </div>
+                      <div className={`${styles.filterIcon} `}>
+                        <FilterIcon />
+                      </div>
+                    </div>
+                  )}
                   <Sort sortList={sortList} onSortUpdate={onSortUpdate} />
                   <button
                     className={`${styles.colIconBtn} ${
@@ -412,6 +340,7 @@ const ProductListing = ({
                         columnCount,
                         isBrand,
                         isSaleBadge,
+                        isCustomBadge,
                         isPrice,
                         aspectRatio,
                         isWishlistIcon,
@@ -422,9 +351,7 @@ const ProductListing = ({
                         showColorVariants,
                         actionButtonText:
                           actionButtonText ?? t("resource.common.add_to_cart"),
-                        onWishlistClick: showSmartWishlist
-                          ? handleWishlistIconClick
-                          : onWishlistClick,
+                        onWishlistClick,
                         isImageFill,
                         showImageOnHover,
                         imageBackgroundColor,
@@ -432,10 +359,7 @@ const ProductListing = ({
                         handleAddToCart,
                         imgSrcSet,
                         onProductNavigation,
-                        globalConfig,
-                        productsInWishlist,
-                        getProductsInWishlist,
-                        showSmartWishlist,
+                        isServiceable: is_serviceable,
                       }}
                     />
                   </InfiniteLoader>
@@ -447,6 +371,7 @@ const ProductListing = ({
                       columnCount,
                       isBrand,
                       isSaleBadge,
+                      isCustomBadge,
                       isPrice,
                       aspectRatio,
                       isWishlistIcon,
@@ -457,9 +382,7 @@ const ProductListing = ({
                       showColorVariants,
                       actionButtonText:
                         actionButtonText ?? t("resource.common.add_to_cart"),
-                      onWishlistClick: showSmartWishlist
-                        ? handleWishlistIconClick
-                        : onWishlistClick,
+                      onWishlistClick,
                       isImageFill,
                       showImageOnHover,
                       imageBackgroundColor,
@@ -468,10 +391,7 @@ const ProductListing = ({
                       handleAddToCart,
                       imgSrcSet,
                       onProductNavigation,
-                      globalConfig,
-                      productsInWishlist,
-                      getProductsInWishlist,
-                      showSmartWishlist,
+                      isServiceable: is_serviceable,
                     }}
                   />
                 )}
@@ -511,19 +431,13 @@ const ProductListing = ({
                   containerClassName={styles.addToCartContainer}
                   bodyClassName={styles.addToCartBody}
                   titleClassName={styles.addToCartTitle}
-                  title={
-                    isTablet
-                      ? restAddToModalProps?.productData?.product?.name
-                      : ""
-                  }
+                  title={addToCartModalTitle}
                   closeDialog={restAddToModalProps?.handleClose}
                 >
                   <AddToCart
                     {...restAddToModalProps}
                     globalConfig={globalConfig}
-                    showQuantityController={showQuantityController}
-                    showBuyNowButton={showBuyNowButton}
-                    showMoq={showMoq}
+                    isServiceable={is_serviceable}
                   />
                 </Modal>
               )}
@@ -533,36 +447,6 @@ const ProductListing = ({
                 productMeta={restAddToModalProps?.productData?.product?.sizes}
               />
             </>
-          )}
-
-          {isWishlistModalOpen && restAddToModalProps?.productDataWishlist && (
-            <SaveToWishlistModal
-              isOpen={isWishlistModalOpen}
-              onClose={handleWishlistModalClose}
-              onSuccess={handleWishlistSave}
-              handleWishlistClick={handleWishlistClick}
-              fetchAllWishlists={fetchAllWishlists}
-              showSnackbarMessage={showSnackbarMessage}
-              selectedWishlistIds={selectedWishlistIds}
-              setSelectedWishlistIds={setSelectedWishlistIds}
-              productDataWishlist={restAddToModalProps?.productDataWishlist}
-              handleOpenCreateWishlistModal={() => setShowCreateWishlist(true)}
-            />
-          )}
-
-          {showCreateWishlist && (
-            <CreateRenameWishlistModal
-              isOpen={showCreateWishlist}
-              onClose={() => setShowCreateWishlist(false)}
-              title={t("resource.b2b.wishlist.create_wishlist")}
-              textAreaTitle={t("resource.b2b.wishlist.enter_name")}
-              textAreaPlaceholder={t("resource.b2b.wishlist.enter_your_wishlist_name")}
-              createButtonText={t("resource.b2b.wishlist.create")}
-              cancelButtonText={t("resource.b2b.wishlist.cancel")}
-              onSubmit={createWishlist}
-              isError={isCreateWishlistError}
-              errorMessage={createWishlistErrorMessage}
-            />
           )}
         </>
       )}
@@ -577,12 +461,6 @@ function ProductGrid({
   productList = [],
   ...restProps
 }) {
-  const handleProductClick = (e, product) => {
-    if (isRunningOnClient()) {
-      sessionStorage.setItem("plpScrollPosition", window.scrollY.toString());
-    }
-  };
-
   return (
     <div
       className={styles.productContainer}
@@ -608,6 +486,7 @@ function ProductGridItem({
   product,
   isBrand = true,
   isSaleBadge = true,
+  isCustomBadge = true,
   isPrice = true,
   isWishlistIcon = true,
   imgSrcSet,
@@ -627,10 +506,7 @@ function ProductGridItem({
   onWishlistClick = () => {},
   handleAddToCart = () => {},
   onProductNavigation = () => {},
-  globalConfig = {},
-  productsInWishlist = [],
-  getProductsInWishlist = () => {},
-  showSmartWishlist = false,
+  isServiceable = true,
 }) {
   const { t } = useGlobalTranslation("translation");
 
@@ -648,7 +524,12 @@ function ProductGridItem({
       state = {
         product: {
           ...product,
-          sizes: { sellable: product.sellable, sizes: product.sizes },
+          sizes: {
+            sellable: product.sellable,
+            sizes: product.sizes.map((s) =>
+              typeof s === "string" ? { display: s, value: s } : s
+            ),
+          },
         },
       };
     }
@@ -685,6 +566,7 @@ function ProductGridItem({
         isBrand={isBrand}
         isPrice={isPrice}
         isSaleBadge={isSaleBadge}
+        isCustomBadge={isCustomBadge}
         imgSrcSet={imgSrcSet}
         isWishlistIcon={isWishlistIcon}
         WishlistIconComponent={WishlistIconComponent}
@@ -699,10 +581,7 @@ function ProductGridItem({
         imagePlaceholder={imagePlaceholder}
         handleAddToCart={handleAddToCart}
         onClick={onProductNavigation}
-        globalConfig={globalConfig}
-        productsInWishlist={productsInWishlist}
-        getProductsInWishlist={getProductsInWishlist}
-        showSmartWishlist={showSmartWishlist}
+        isServiceable={isServiceable}
       />
     </FDKLink>
   );
