@@ -621,6 +621,44 @@ h5,
   letter-spacing: -0.24px;
   white-space: nowrap;
 }
+.product-card__productCard___VMIjd .product-card__productDescContainer___S8oiv .product-card__productDesc___nZT4A .product-card__priceShimmer___N2fQp {
+  height: 24px;
+  display: flex;
+  align-items: center;
+  margin: 2px 0 4px;
+}
+.product-card__productCard___VMIjd .product-card__productDescContainer___S8oiv .product-card__productDesc___nZT4A .product-card__priceShimmer___N2fQp .product-card__shimmerLine___SvxKL {
+  height: 24px;
+  width: 60%;
+  background: linear-gradient(90deg, #f8f8f8 25%, #f0f0f0 50%, #f8f8f8 75%);
+  background-size: 200% 100%;
+  border-radius: 4px;
+  animation: product-card__shimmer___WKnoj 1.5s infinite;
+}
+@keyframes product-card__shimmer___WKnoj {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+.product-card__productCard___VMIjd .product-card__productDescContainer___S8oiv .product-card__productDesc___nZT4A .product-card__addToCartShimmer___rZztm {
+  height: 40px;
+  width: 100%;
+  background: linear-gradient(90deg, #f8f8f8 25%, #f0f0f0 50%, #f8f8f8 75%);
+  background-size: 200% 100%;
+  border-radius: var(--buttonRadius, 0px);
+  animation: product-card__addToCartShimmer___rZztm 1.5s infinite;
+}
+@keyframes product-card__addToCartShimmer___rZztm {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
 .product-card__productCard___VMIjd .product-card__productDescContainer___S8oiv .product-card__productDesc___nZT4A .product-card__badge_section___oCvvP {
   display: flex;
   align-items: center;

@@ -286,6 +286,7 @@ const ProductCard = ({
   globalConfig = {},
   productsInWishlist = [],
   showSmartWishlist = false,
+  isPriceLoading = false,
 }) => {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -622,9 +623,13 @@ const ProductCard = ({
           </h5>
           {isPrice && (
             <>
-              {product?.contract ||
-              product?.quotation ||
-              product?.pricing_tier ? (
+              {isPriceLoading && loggedIn ? (
+                <div className={styles.priceShimmer}>
+                  <div className={styles.shimmerLine} />
+                </div>
+              ) : product?.contract ||
+                product?.quotation ||
+                product?.pricing_tier ? (
                 <>
                   {product.contract && (
                     <Tooltip
@@ -781,9 +786,10 @@ const ProductCard = ({
         {showAddToCart &&
           ((!loggedIn && show_discount_guest) ||
             (loggedIn && isMerchantKycApproved()) ||
-            (loggedIn &&
-              !isMerchantKycApproved() &&
-              show_discount_non_kyc)) && (
+            (loggedIn && !isMerchantKycApproved() && show_discount_non_kyc)) &&
+          (isPriceLoading && loggedIn ? (
+            <div className={styles.addToCartShimmer} />
+          ) : (
             <FyButton
               variant="outlined"
               className={styles.addToCart}
@@ -791,7 +797,7 @@ const ProductCard = ({
             >
               {actionButtonText ?? t("resource.common.add_to_cart")}
             </FyButton>
-          )}
+          ))}
 
         {show_available_offer_button &&
           ((!loggedIn && show_discount_guest) ||

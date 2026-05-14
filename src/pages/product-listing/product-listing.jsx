@@ -75,6 +75,7 @@ const ProductListing = ({
   showMoq = false,
   productsInWishlist = [],
   showSmartWishlist = false,
+  isPriceLoading = false,
   onColumnCountUpdate = () => {},
   onResetFiltersClick = () => {},
   onFilterUpdate = () => {},
@@ -436,6 +437,7 @@ const ProductListing = ({
                         productsInWishlist,
                         getProductsInWishlist,
                         showSmartWishlist,
+                        isPriceLoading,
                       }}
                     />
                   </InfiniteLoader>
@@ -472,6 +474,7 @@ const ProductListing = ({
                       productsInWishlist,
                       getProductsInWishlist,
                       showSmartWishlist,
+                      isPriceLoading,
                     }}
                   />
                 )}
@@ -631,6 +634,7 @@ function ProductGridItem({
   productsInWishlist = [],
   getProductsInWishlist = () => {},
   showSmartWishlist = false,
+  isPriceLoading = false,
 }) {
   const { t } = useGlobalTranslation("translation");
 
@@ -703,6 +707,7 @@ function ProductGridItem({
         productsInWishlist={productsInWishlist}
         getProductsInWishlist={getProductsInWishlist}
         showSmartWishlist={showSmartWishlist}
+        isPriceLoading={isPriceLoading}
       />
     </FDKLink>
   );
