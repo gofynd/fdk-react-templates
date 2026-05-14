@@ -32,13 +32,7 @@ function SinglePageShipment({
 }) {
   const { t } = useGlobalTranslation("translation");
   const navigate = useNavigate();
-  const {
-    proceedToPay,
-    getTotalValue,
-    isLoading,
-    isPaymentLoading,
-    isCreditNoteApplied,
-  } = payment;
+  const { proceedToPay, getTotalValue, isLoading, isPaymentLoading } = payment;
   const getShipmentCount = shipments?.length || 0;
 
   const editShipment = () => {
@@ -79,7 +73,7 @@ function SinglePageShipment({
               <div
                 className={styles.proceedPay}
                 onClick={() => {
-                  if (getTotalValue?.() === 0 && !isCreditNoteApplied) {
+                  if (getTotalValue?.() === 0) {
                     proceedToPay("PP", {});
                   } else {
                     redirectPaymentOptions();
@@ -91,7 +85,7 @@ function SinglePageShipment({
                   pointerEvents: isPaymentLoading ? "none" : "auto",
                 }}
               >
-                {getTotalValue?.() === 0 && !isCreditNoteApplied
+                {getTotalValue?.() === 0
                   ? "Place Order "
                   : t("resource.checkout.proceed_to_pay")}
               </div>
@@ -111,12 +105,11 @@ function SinglePageShipment({
             redirectPaymentOptions={redirectPaymentOptions}
             loader={loader}
             isPaymentLoading={isPaymentLoading}
-            isCreditNoteApplied={isCreditNoteApplied}
             globalConfig={globalConfig}
           ></SingleShipmentContent>
           <StickyPayNow
             btnTitle={
-              getTotalValue?.() === 0 && !isCreditNoteApplied
+              getTotalValue?.() === 0
                 ? "PLACE ORDER"
                 : t("resource.checkout.proceed_to_pay_caps")
             }
@@ -126,7 +119,7 @@ function SinglePageShipment({
             loader={loader}
             isPaymentLoading={isPaymentLoading}
             proceedToPay={() => {
-              if (getTotalValue?.() === 0 && !isCreditNoteApplied) {
+              if (getTotalValue?.() === 0) {
                 proceedToPay("PP", {});
               } else {
                 redirectPaymentOptions();
@@ -153,14 +146,10 @@ function SinglePageShipment({
                     {t("resource.checkout.order_summary")}
                   </div>
                   <div className={styles.address}>
-                    {isShipmentLoading ? (
-                      <Shimmer height="12px" width="120px" />
-                    ) : (
-                      getShipmentCount > 1
-                        ? getShipmentCount +
-                          ` ${t("resource.common.shipments_plural")}`
-                        : getShipmentCount + ` ${t("resource.common.shipments")}`
-                    )}
+                    {getShipmentCount > 1
+                      ? getShipmentCount +
+                        ` ${t("resource.common.shipments_plural")}`
+                      : getShipmentCount + ` ${t("resource.common.shipments")}`}
                   </div>
                 </div>
               </div>
@@ -170,17 +159,10 @@ function SinglePageShipment({
                 </div>
                 {getTotalValue?.() === 0 && (
                   <button
-                    className={`${styles.payBtn} ${styles.commonBtn}`}
-                    onClick={() =>
-                      proceedToPay(
-                        !isCreditNoteApplied ? "PP" : "CREDITNOTE",
-                        {}
-                      )
-                    }
+                    className={`${styles.commonBtn} ${styles.payBtn}`}
+                    onClick={() => proceedToPay("PP", {})}
                   >
-                    {!isPaymentLoading
-                      ? t("resource.checkout.place_order")
-                      : loader}
+                    PLACE ORDER
                   </button>
                 )}
               </div>
