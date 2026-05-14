@@ -623,7 +623,7 @@ const ProductCard = ({
           </h5>
           {isPrice && (
             <>
-              {isPriceLoading && loggedIn ? (
+              {isPriceLoading ? (
                 <div className={styles.priceShimmer}>
                   <div className={styles.shimmerLine} />
                 </div>
@@ -787,7 +787,7 @@ const ProductCard = ({
           ((!loggedIn && show_discount_guest) ||
             (loggedIn && isMerchantKycApproved()) ||
             (loggedIn && !isMerchantKycApproved() && show_discount_non_kyc)) &&
-          (isPriceLoading && loggedIn ? (
+          (isPriceLoading ? (
             <div className={styles.addToCartShimmer} />
           ) : (
             <FyButton
