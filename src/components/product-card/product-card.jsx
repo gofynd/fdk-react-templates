@@ -38,7 +38,7 @@
  */
 
 import React, { useMemo, useState, useCallback, useEffect } from "react";
-import { currencyFormat, formatLocale } from "../../helper/utils";
+import { currencyFormat, formatLocale, isRunningOnClient } from "../../helper/utils";
 import { useMobile } from "../../helper/hooks";
 import FyImage from "../core/fy-image/fy-image";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
@@ -623,7 +623,7 @@ const ProductCard = ({
           </h5>
           {isPrice && (
             <>
-              {isPriceLoading ? (
+              {(!isRunningOnClient() || isPriceLoading) ? (
                 <div className={styles.priceShimmer}>
                   <div className={styles.shimmerLine} />
                 </div>
@@ -787,7 +787,7 @@ const ProductCard = ({
           ((!loggedIn && show_discount_guest) ||
             (loggedIn && isMerchantKycApproved()) ||
             (loggedIn && !isMerchantKycApproved() && show_discount_non_kyc)) &&
-          (isPriceLoading ? (
+          ((!isRunningOnClient() || isPriceLoading) ? (
             <div className={styles.addToCartShimmer} />
           ) : (
             <FyButton
