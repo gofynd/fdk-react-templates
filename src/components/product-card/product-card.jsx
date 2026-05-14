@@ -138,7 +138,7 @@ const DefaultProductPrice = ({
             </span>
           </div>
 
-          {showKycCompletionBadge && !isKycKeyPresent && (
+          {/* {showKycCompletionBadge && !isKycKeyPresent && (
             <div className={styles.kycCompletionBadge}>
               <span className={styles.kycCompletionBadgeIcon}>
                 <SvgWrapper svgSrc="info-white" />
@@ -147,7 +147,7 @@ const DefaultProductPrice = ({
                 {kycBadgeText}
               </span>
             </div>
-          )}
+          )} */}
         </>
       );
     }
@@ -177,7 +177,7 @@ const DefaultProductPrice = ({
             </span>
           )}
         </div>
-        {showKycCompletionBadge && !isKycKeyPresent && (
+        {/* {showKycCompletionBadge && !isKycKeyPresent && (
           <div className={styles.kycCompletionBadge}>
             <span className={styles.kycCompletionBadgeIcon}>
               <SvgWrapper svgSrc="info-white" />
@@ -186,7 +186,7 @@ const DefaultProductPrice = ({
               {kycBadgeText}
             </span>
           </div>
-        )}
+        )} */}
       </>
     );
   }
