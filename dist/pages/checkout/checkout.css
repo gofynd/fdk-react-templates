@@ -13687,6 +13687,7 @@ h5,
     height: 100%;
     justify-content: space-between;
     padding: 12px;
+    gap: 100px;
   }
 }
 .b2b-credit-payment__creditWrapper___HYA4Q {
@@ -13874,6 +13875,11 @@ h5,
 }
 .b2b-credit-payment__creditPayBtn___k0Otp {
   min-width: 176px;
+}
+@media only screen and (min-width: 769px) {
+  .b2b-credit-payment__creditPayBtn___k0Otp {
+    min-width: 50%;
+  }
 }
 
 /**color by character**/
