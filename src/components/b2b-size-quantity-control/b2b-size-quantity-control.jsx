@@ -23,9 +23,9 @@ import { useMobile } from "../../helper/hooks/useMobile";
 function B2BSizeQuantityControl({
   isCartUpdating,
   count = 0,
-  onDecrementClick = () => {},
-  onIncrementClick = () => {},
-  onQtyChange = () => {},
+  onDecrementClick = () => { },
+  onIncrementClick = () => { },
+  onQtyChange = () => { },
   maxCartQuantity = 0,
   minCartQuantity = 0,
   containerClassName = "",
@@ -183,13 +183,12 @@ function B2BSizeQuantityControl({
   return (
     <>
       <div
-        className={`${styles.quantityCtrlContainer} ${styles[sizeType]} ${containerClassName} ${
-          serviceable ? "" : styles.notServiceable
-        } ${isSizeWrapperVisible ? "" : styles.borderRadius}`}
+        className={`${styles.quantityCtrlContainer} ${styles[sizeType]} ${containerClassName} ${serviceable ? "" : styles.notServiceable
+          } ${isSizeWrapperVisible ? "" : styles.borderRadius}`}
       >
         {isSizeWrapperVisible && (
           <div
-            className={styles.sizeWrapper}
+            className={`${styles.sizeWrapper} ${styles[sizeType]}`}
             onMouseEnter={() => shouldShowTooltip && setShowTooltip(true)}
             onMouseLeave={() => setShowTooltip(false)}
           >
@@ -206,9 +205,7 @@ function B2BSizeQuantityControl({
         )}
 
         <div
-          className={`${styles.quantityControl} ${
-            !isSizeWrapperVisible ? styles.removeBorderLeft : ""
-          }`}
+          className={`${styles.quantityControl} ${!isSizeWrapperVisible ? styles.removeBorderLeft : ""} ${styles[sizeType]}`}
         >
           <button
             disabled={

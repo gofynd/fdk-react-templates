@@ -309,7 +309,10 @@ function SaveToWishlistModal({
         hideHeader={true}
         ignoreClickOutsideForClass="mobile-option-menu"
       >
-        <div className={`${styles.wishlistModal} ${customStyles || ""}`}>
+        <div
+          className={`${styles.wishlistModal} ${customStyles || ""}`}
+          data-testid="save-to-wishlist-modal"
+        >
           <div className={styles.wishlistModalHeader}>
             <div className={styles.wishlistModalTitle}>
               {t("resource.dynamic_label.modal_save_to_wishlist")}
@@ -318,6 +321,7 @@ function SaveToWishlistModal({
               className={styles.wishlistModalClose}
               onClick={handleCancel}
               aria-label="Close"
+              data-testid="save-to-wishlist-close"
             >
               <CloseIcon />
             </button>
@@ -343,6 +347,9 @@ function SaveToWishlistModal({
                       <div
                         key={wishlist.id}
                         className={`${styles.wishlistItem} ${wishlist.isSelected ? styles.selected : ""}`}
+                        data-testid={`save-to-wishlist-row-${wishlist.id}`}
+                        data-wishlist-id={wishlist.id}
+                        data-wishlist-name={wishlist.name}
                         onClick={() => {
                           handleWishlistToggle(wishlist.id);
                         }}
@@ -355,6 +362,7 @@ function SaveToWishlistModal({
                               handleWishlistToggle(wishlist.id);
                             }}
                             className={styles.checkbox}
+                            data-testid={`save-to-wishlist-row-checkbox-${wishlist.id}`}
                           />
                         </div>
 
@@ -449,6 +457,7 @@ function SaveToWishlistModal({
                 onClose();
                 handleOpenCreateWishlistModal();
               }}
+              data-testid="save-to-wishlist-create-new"
             >
               <PlusIcon />
               {t("resource.dynamic_label.modal_create_new_wishlist")}
@@ -476,6 +485,7 @@ function SaveToWishlistModal({
                 className={styles.cancelButton}
                 onClick={handleCancel}
                 disabled={isLoading}
+                data-testid="save-to-wishlist-cancel"
               >
                 {t("resource.dynamic_label.modal_cancel")}
               </button>
@@ -490,6 +500,7 @@ function SaveToWishlistModal({
                   onClose();
                 }}
                 disabled={!wishlists.some((w) => w.isSelected) || isLoading}
+                data-testid="save-to-wishlist-save"
               >
                 {isLoading ? t("resource.dynamic_label.modal_saving") : t("resource.dynamic_label.modal_save")}
               </button>

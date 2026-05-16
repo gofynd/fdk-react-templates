@@ -31,6 +31,7 @@
  * @param {boolean} [props.showBadge=true] - Flag to display product badges.
  * @param {boolean} [props.showColorVariants=false] - Flag to display color variant dots.
  * @param {boolean} [props.isSlider=false] - Flag to indicate if card is used in a slider.
+ * @param {boolean} [props.isPriceLoading=false] - When true, shows a loader shimmer in the price/tooltip area to prevent layout shift while price is loading.
  *
  * @returns {JSX.Element} The rendered product card component.
  *
@@ -38,7 +39,12 @@
  */
 
 import React, { useMemo, useState, useCallback, useEffect } from "react";
-import { currencyFormat, formatLocale, isRunningOnClient } from "../../helper/utils";
+import {
+  currencyFormat,
+  formatLocale,
+  isValidCustomBadge,
+  isRunningOnClient
+} from "../../helper/utils";
 import { useMobile } from "../../helper/hooks";
 import FyImage from "../core/fy-image/fy-image";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
@@ -105,7 +111,10 @@ const DefaultProductPrice = ({
           <div
             className={`${styles.productPrice} ${centerAlign ? styles.center : ""}`}
           >
-            <span className={`${styles["productPrice--sale"]} ${styles.h4}`}>
+            <span
+              className={`${styles["productPrice--sale"]} ${styles.h4}`}
+              data-testid="product-price"
+            >
               {getListingPrice("marked")}
             </span>
           </div>
@@ -158,7 +167,10 @@ const DefaultProductPrice = ({
           className={`${styles.productPrice} ${centerAlign ? styles.center : ""}`}
         >
           {product?.price?.effective && (
-            <span className={`${styles["productPrice--sale"]} ${styles.h4}`}>
+            <span
+              className={`${styles["productPrice--sale"]} ${styles.h4}`}
+              data-testid="product-price"
+            >
               <ForcedLtr text={getListingPrice("effective")} />
             </span>
           )}
@@ -196,7 +208,10 @@ const DefaultProductPrice = ({
       className={`${styles.productPrice} ${centerAlign ? styles.center : ""}`}
     >
       {product?.price?.effective && (
-        <span className={`${styles["productPrice--sale"]} ${styles.h4}`}>
+        <span
+          className={`${styles["productPrice--sale"]} ${styles.h4}`}
+          data-testid="product-price"
+        >
           <ForcedLtr text={getListingPrice("effective")} />
         </span>
       )}
@@ -260,6 +275,7 @@ const ProductCard = ({
   isPrice = true,
   isSaleBadge = true,
   isWishlistIcon = true,
+  isCustomBadge = true,
   isImageFill = false,
   showImageOnHover = false,
   customImageContainerClass = "",
@@ -274,18 +290,19 @@ const ProductCard = ({
   ),
   actionButtonText,
   followedIdList = [],
-  onWishlistClick = () => {},
-  handleAddToCart = () => {},
-  onRemoveClick = () => {},
+  onWishlistClick = () => { },
+  handleAddToCart = () => { },
+  onRemoveClick = () => { },
   centerAlign = false,
   showAddToCart = false,
   showBadge = true,
   showColorVariants = false,
   isSlider = false,
-  onClick = () => {},
+  onClick = () => { },
   globalConfig = {},
   productsInWishlist = [],
   showSmartWishlist = false,
+  isServiceable = true,
   isPriceLoading = false,
 }) => {
   const { t } = useGlobalTranslation("translation");
@@ -368,19 +385,19 @@ const ProductCard = ({
         price =
           priceDetails.min !== priceDetails.max
             ? `${currencyFormat(
-                priceDetails.min,
-                priceDetails.currency_symbol,
-                formatLocale(locale, countryCode, true)
-              )} - ${currencyFormat(
-                priceDetails.max,
-                priceDetails.currency_symbol,
-                formatLocale(locale, countryCode, true)
-              )}`
+              priceDetails.min,
+              priceDetails.currency_symbol,
+              formatLocale(locale, countryCode, true)
+            )} - ${currencyFormat(
+              priceDetails.max,
+              priceDetails.currency_symbol,
+              formatLocale(locale, countryCode, true)
+            )}`
             : currencyFormat(
-                priceDetails.min,
-                priceDetails.currency_symbol,
-                formatLocale(locale, countryCode, true)
-              );
+              priceDetails.min,
+              priceDetails.currency_symbol,
+              formatLocale(locale, countryCode, true)
+            );
         break;
       default:
         break;
@@ -471,6 +488,14 @@ const ProductCard = ({
   const hasDiscount =
     getListingPrice("effective") !== getListingPrice("marked");
 
+  const hasB2bPricePath =
+    product?.contract || product?.quotation || product?.pricing_tier;
+  const hasPriceContent = hasB2bPricePath
+    ? product?.best_price?.price != null && product?.best_price?.currency_symbol
+    : !!product?.price;
+  const showPriceShimmer =
+    isPrice && (isPriceLoading || !hasPriceContent);
+
   const isFollowed = useMemo(() => {
     return !!followedIdList?.includes(product?.uid);
   }, [followedIdList, product]);
@@ -532,14 +557,12 @@ const ProductCard = ({
 
   return (
     <div
-      className={`${styles.productCard} ${
-        !product.sellable ? styles.disableCursor : ""
-      } ${styles[customClass[0]]} ${styles[customClass[1]]} ${
-        styles[customClass[2]]
-      } ${styles.animate} ${gridClass} ${isSlider ? styles.sliderCard : ""}`}
+      className={`${styles.productCard} ${!product.sellable ? styles.disableCursor : ""
+        } ${styles[customClass[0]]} ${styles[customClass[1]]} ${styles[customClass[2]]
+        } ${styles.animate} ${gridClass} ${isSlider ? styles.sliderCard : ""}`}
       onClick={onClick}
     >
-      <div className={`${styles.imageContainer} ${customImageContainerClass}`}>
+      <div className={`${styles.imageContainer} ${customImageContainerClass} ${!product.sellable ? styles.outOfStockContainer : ""}`}>
         {!isMobile && showImageOnHover && imageData.hoverUrl && (
           <FyImage
             src={imageData.hoverUrl}
@@ -569,6 +592,7 @@ const ProductCard = ({
             className={`${styles.wishlistBtn} ${(showSmartWishlist ? wishlistStatus.isInWishlist : isFollowed) ? styles.active : ""}`}
             onClick={handleWishlistClick}
             title={t("resource.product.wishlist_icon")}
+            data-testid="wishlist-button"
           >
             <WishlistIconComponent
               isFollowed={
@@ -582,6 +606,7 @@ const ProductCard = ({
             className={`${styles.wishlistBtn} ${isFollowed ? styles.active : ""}`}
             onClick={handleRemoveClick}
             title={t("resource.product.wishlist_icon")}
+            data-testid="wishlist-remove-button"
           >
             <RemoveIconComponent />
           </button>
@@ -592,7 +617,7 @@ const ProductCard = ({
               {t("resource.common.out_of_stock")}
             </span>
           </div>
-        ) : product.teaser_tag && showBadge ? (
+        ) : isCustomBadge && isValidCustomBadge(product.teaser_tag) && showBadge ? (
           <div className={styles.badge}>
             <span className={`${styles.text} ${styles.captionNormal}`}>
               {isMobileView
@@ -705,7 +730,7 @@ const ProductCard = ({
                       }
                     >
                       <div className={styles.badge_section}>
-                        <div className={styles.badge}>
+                        <div className={styles.badge} data-testid="quoted-price-badge">
                           <span>
                             {t(
                               "resource.b2b.components.product_card.quoted_price"
@@ -723,6 +748,7 @@ const ProductCard = ({
                   >
                     <span
                       className={`${styles["productPrice--sale"]} ${styles.h4}`}
+                      data-testid="product-price"
                     >
                       {currencyFormat(
                         product.best_price.price,
@@ -794,12 +820,15 @@ const ProductCard = ({
               variant="outlined"
               className={styles.addToCart}
               onClick={handleAddToCartClick}
+              disabled={!isServiceable}
+              data-testid="add-to-cart-button"
             >
               {actionButtonText ?? t("resource.common.add_to_cart")}
             </FyButton>
           ))}
 
-        {show_available_offer_button &&
+        {
+          show_available_offer_button &&
           ((!loggedIn && show_discount_guest) ||
             (loggedIn && isMerchantKycApproved()) ||
             (loggedIn &&
@@ -813,9 +842,10 @@ const ProductCard = ({
               isKycKeyPresent={isKycKeyPresent}
               isMerchantKycApproved={isMerchantKycApproved()}
             />
-          )}
-      </div>
-    </div>
+          )
+        }
+      </div >
+    </div >
   );
 };
 
