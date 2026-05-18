@@ -31,8 +31,6 @@ function SingleShipmentContent({
 }) {
   const { t } = useGlobalTranslation("translation");
   const navigate = useNavigate();
-  const hideSingleSize = globalConfig?.hide_single_size || false;
-
   const getShipmentItems = (shipment) => {
     let grpBySameSellerAndProduct = shipment?.items?.reduce((result, item) => {
       result[
@@ -271,12 +269,10 @@ function SingleShipmentContent({
                                         className={styles.sizeQuantity}
                                         key={article?.article?.size + index}
                                       >
-                                        {!(hideSingleSize && article?.article?.size?.toLowerCase() === "os") && (
-                                          <div className={styles.size}>
-                                            {t("resource.common.size")}:{" "}
-                                            {article?.article.size}
-                                          </div>
-                                        )}
+                                        <div className={styles.size}>
+                                          {t("resource.common.size")}:{" "}
+                                          {article?.article.size}
+                                        </div>
                                         <div className={styles.qty}>
                                           {t("resource.common.qty")}:{" "}
                                           {article?.quantity}

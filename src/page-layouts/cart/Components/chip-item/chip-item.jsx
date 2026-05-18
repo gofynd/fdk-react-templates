@@ -98,16 +98,12 @@ export default function ChipItem({
   // Use the actual backend item_index from the article, not the UI loop index
   // This is critical for cart updates to work correctly, especially with customized items
   const actualItemIndex = singleItemDetails?.article?.item_index ?? itemIndex;
-  
+
   const rawCustomizationOptions =
     singleItemDetails?.article?._custom_json?._display || [];
   const accordionContent = transformDisplayToAccordionContent(
     rawCustomizationOptions
   );
-
-  const availableSizes = singleItemDetails?.availability?.available_sizes || [];
-  const hideSizeChangeButton =
-    globalConfig?.hide_single_size && currentSize?.toLowerCase() === "os";
 
   const [items, setItems] = useState([
     {
@@ -202,14 +198,7 @@ export default function ChipItem({
       operation === "remove_item" ||
       isSizeUpdate
     ) {
-      // Capture sizeModal before closing it, so we can restore on failure
-      const sizeModalBeforeUpdate = isSizeUpdate ? sizeModal : null;
-
-      // Optimistically close the size modal before the API call + fetchCartDetails,
-      // preventing a re-indexed item from accidentally re-opening the modal
       if (isSizeUpdate) {
-        setCurrentSizeModalSize(null);
-        setSizeModal(null);
         setSizeModalErr(null);
       }
 
@@ -225,10 +214,14 @@ export default function ChipItem({
       );
 
       if (isSizeUpdate) {
-        if (!cartUpdateResponse?.success) {
-          // Restore modal on failure so user can retry
-          setSizeModal(sizeModalBeforeUpdate);
-          setSizeModalErr(t("resource.cart.size_is_out_of_stock"));
+        if (cartUpdateResponse?.success) {
+          setCurrentSizeModalSize(null);
+          setSizeModal(null);
+          setFetchedSizes(null);
+        } else {
+          setSizeModalErr(
+            cartUpdateResponse?.message || t("resource.cart.size_update_failed")
+          );
         }
       }
     }
@@ -379,16 +372,6 @@ export default function ChipItem({
       return updatedItems;
     });
   };
-
-  const normalizedSize = (size) => {
-    return String(size ?? "")
-      .trim()
-      .toLowerCase()
-      .replace(/\s+/g, "-")
-      .replace(/\//g, "-")
-      .replace(/[^a-z0-9-]/g, "");
-  };
-
   return (
     <>
       <div className={styles.cartItemsListContainer} key={itemIndex}>
@@ -464,7 +447,6 @@ export default function ChipItem({
                   index: actualItemIndex,
                 })
               }
-              data-testid="remove-item-button"
             >
               <SvgWrapper
                 svgSrc="item-close"
@@ -478,7 +460,6 @@ export default function ChipItem({
               className={`${styles.itemName} ${
                 isOutOfStock ? styles.outOfStock : ""
               } `}
-              data-testid={`cart-item-row-${singleItemDetails?.product?.item_code}-${normalizedSize(singleItemDetails?.article?.size)}`}
             >
               {singleItemDetails?.product?.name?.length > 24
                 ? `${singleItemDetails.product.name.slice(0, 24)}...`
@@ -491,8 +472,7 @@ export default function ChipItem({
             )}
             <div className={styles.itemSizeQuantityContainer}>
               <div className={styles.itemSizeQuantitySubContainer}>
-                {!hideSizeChangeButton && (
-                  <button
+                <button
                   className={styles.sizeContainer}
                   onClick={async (e) => {
                     e.stopPropagation();
@@ -526,8 +506,6 @@ export default function ChipItem({
                     />
                   </span>
                 </button>
-                )}
-               
                 {!isOutOfStock && isServiceable && (
                   <QuantityControl
                     isCartUpdating={isCartUpdating}
@@ -610,8 +588,8 @@ export default function ChipItem({
                   }`}
                 >
                   {currencyFormat(
-                    singleItemDetails?.price?.converted?.final_price ??
-                      singleItemDetails?.price?.base?.final_price,
+                    singleItemDetails?.price?.converted?.effective ??
+                      singleItemDetails?.price?.base?.effective,
                     singleItemDetails?.price?.converted?.currency_symbol ??
                       singleItemDetails?.price?.base?.currency_symbol,
                     formatLocale(locale, countryCode, true),
@@ -852,72 +830,87 @@ export default function ChipItem({
               <Skeleton height={16} width={80} borderRadius={4} />
               <div className={styles.sizeHorizontalList}>
                 {Array.from({ length: 5 }).map((_, i) => (
-                  <Skeleton key={i} type="rectangle" height={50} width={50} borderRadius={4} />
+                  <Skeleton
+                    key={i}
+                    type="rectangle"
+                    height={50}
+                    width={50}
+                    borderRadius={4}
+                  />
                 ))}
               </div>
             </>
           ) : (
             <>
               <div className={styles.sizeSelectHeading}>
-                {(fetchedSizes ?? sizeModalItemValue?.availability?.available_sizes)?.length > 0
+                {(
+                  fetchedSizes ??
+                  sizeModalItemValue?.availability?.available_sizes
+                )?.length > 0
                   ? t("resource.common.select_size")
                   : t("resource.cart.product_not_available")}
               </div>
               <div className={styles.sizeHorizontalList}>
-                {(fetchedSizes ?? sizeModalItemValue?.availability?.available_sizes)
-                  ?.length > 0 &&
-                  (fetchedSizes ?? sizeModalItemValue?.availability?.available_sizes)?.map(
-                    (singleSize) => {
-                      const isUnavailable = fetchedSizes
-                        ? singleSize?.quantity === 0 && !isCustomOrder
-                        : !singleSize?.is_available;
-                      const isEarlierSelectedSize =
-                        !currentSizeModalSize &&
-                        sizeModalItemValue?.article?.size === singleSize?.value;
-                      const isCurrentSelectedSize =
-                        currentSizeModalSize?.split("_")[1] === singleSize?.value;
-                      return (
+                {(
+                  fetchedSizes ??
+                  sizeModalItemValue?.availability?.available_sizes
+                )?.length > 0 &&
+                  (
+                    fetchedSizes ??
+                    sizeModalItemValue?.availability?.available_sizes
+                  )?.map((singleSize) => {
+                    const isUnavailable = fetchedSizes
+                      ? singleSize?.quantity === 0 && !isCustomOrder
+                      : !singleSize?.is_available;
+                    const isEarlierSelectedSize =
+                      !currentSizeModalSize &&
+                      sizeModalItemValue?.article?.size === singleSize?.value;
+                    const isCurrentSelectedSize =
+                      currentSizeModalSize?.split("_")[1] === singleSize?.value;
+                    return (
+                      <div
+                        key={singleSize?.display}
+                        className={`${styles.singleSize}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}
+                      >
                         <div
-                          key={singleSize?.display}
-                          className={`${styles.singleSize}`}
+                          className={`${styles.singleSizeDetails} ${
+                            isEarlierSelectedSize || isCurrentSelectedSize
+                              ? styles.singleSizeSelected
+                              : ""
+                          } ${isUnavailable ? styles.sigleSizeDisabled : ""}`}
                           onClick={(e) => {
                             e.stopPropagation();
+                            if (isUnavailable) return;
+
+                            const isOriginalSize =
+                              singleSize?.value ===
+                              sizeModalItemValue?.article?.size;
+
+                            if (isOriginalSize) {
+                              setSizeModalErr(null);
+                              setCurrentSizeModalSize(null);
+                            } else if (singleSize?.value) {
+                              setSizeModalErr(null);
+                              const parts = (sizeModal ?? "").split("_");
+                              parts[1] = singleSize?.value;
+                              const newSizeModalValue = parts.join("_");
+                              setCurrentSizeModalSize(newSizeModalValue);
+                            }
                           }}
                         >
-                          <div
-                            className={`${styles.singleSizeDetails} ${
-                              (isEarlierSelectedSize || isCurrentSelectedSize) ? styles.singleSizeSelected : ""
-                            } ${isUnavailable ? styles.sigleSizeDisabled : ""}`}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              if (isUnavailable) return;
-
-                              const isOriginalSize =
-                                singleSize?.value === sizeModalItemValue?.article?.size;
-
-                              if (isOriginalSize) {
-                                setSizeModalErr(null);
-                                setCurrentSizeModalSize(null);
-                              } else if (singleSize?.value) {
-                                setSizeModalErr(null);
-                                const parts = (sizeModal ?? "").split("_");
-                                parts[1] = singleSize?.value;
-                                const newSizeModalValue = parts.join("_");
-                                setCurrentSizeModalSize(newSizeModalValue);
-                              }
-                            }}
-                          >
-                            {singleSize?.display}
-                            {isUnavailable && (
-                              <svg>
-                                <line x1="0" y1="100%" x2="100%" y2="0" />
-                              </svg>
-                            )}
-                          </div>
+                          {singleSize?.display}
+                          {isUnavailable && (
+                            <svg>
+                              <line x1="0" y1="100%" x2="100%" y2="0" />
+                            </svg>
+                          )}
                         </div>
-                      );
-                    }
-                  )}
+                      </div>
+                    );
+                  })}
               </div>
             </>
           )}
@@ -937,7 +930,7 @@ export default function ChipItem({
               console.log("Size update blocked: cart is updating");
               return;
             }
-            
+
             // Safety check: prevent update if no size change
             if (
               !currentSizeModalSize ||
@@ -949,7 +942,7 @@ export default function ChipItem({
 
             // First, try to get the item from the current cartItems (handles frozen state)
             let matchedItem = cartItems[sizeModal];
-            
+
             // If not found in cartItems (shouldn't happen but defensive), search in live array
             if (!matchedItem) {
               for (let j = 0; j < cartItemsWithActualIndex.length; j += 1) {
@@ -968,7 +961,7 @@ export default function ChipItem({
               console.error("Failed to find cart item for size update", {
                 sizeModal,
                 cartItemsKeys: Object.keys(cartItems),
-                liveItemsCount: cartItemsWithActualIndex.length
+                liveItemsCount: cartItemsWithActualIndex.length,
               });
               return;
             }

@@ -385,6 +385,7 @@ const AddressForm = ({
 }) => {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
+  const platformData = useGlobalStore(fpi.getters.PLATFORM_DATA);
   const isOtherAddressType = !["Home", "Work", "Friends & Family"].includes(
     addressItem?.address_type
   );
@@ -417,6 +418,32 @@ const AddressForm = ({
     return userAutofillData;
   }, [userAutofillData, internationalShipping]);
 
+  const isEmailRequired =
+    platformData?.required_fields?.email?.is_required &&
+    platformData?.required_fields?.email?.level === "hard";
+
+  const updatedFormSchema = useMemo(() => {
+    return formSchema?.map((group) => ({
+      ...group,
+      fields: group?.fields?.map((field) => {
+        if (field.key === "email") {
+          return {
+            ...field,
+            required: isEmailRequired,
+            validation: {
+              ...field.validation,
+              ...(isEmailRequired && {
+                required: "Email is required",
+              }),
+            },
+          };
+        }
+
+        return field;
+      }),
+    }));
+  }, [formSchema, isEmailRequired]);
+
   const {
     control,
     register,
@@ -442,6 +469,7 @@ const AddressForm = ({
       country: selectedCountry || t("resource.localization.india"),
       // Auto-fill user data using memoized utility function (excluding phone if international)
       ...autofillDataForForm,
+      email: addressItem ? addressItem?.email || "" : isNewAddress ? autofillDataForForm?.email || "" : "",
       // area_code: addressItem?.area_code || defaultPincode || "",
     },
   });
@@ -530,6 +558,7 @@ useEffect(() => {
       }),
       // ✅ FIXED: Use ternary to avoid creating new values on every render
       country: addressItem?.country || selectedCountry,
+      email: addressItem?.email || "",
     });
   } else {
     setValue("is_default_address", true);
@@ -546,7 +575,7 @@ useEffect(() => {
         isValidNumber: true,
       });
     }
-    if (userAutofillData.email) {
+    if (isNewAddress && userAutofillData.email) {
       setValue("email", userAutofillData.email);
     }
   }
@@ -652,7 +681,7 @@ useEffect(() => {
     
     setValue("country", event);
     setTimeout(() => {
-      formSchema?.forEach((group) =>
+      updatedFormSchema?.forEach((group) =>
         group?.fields?.forEach(({ key }) => {
           // Don't clear user auto-filled fields when country changes
           if (key !== "name" && key !== "phone" && key !== "email") {
@@ -680,10 +709,10 @@ useEffect(() => {
       name: currentValues.name || addressItem?.name || data.name || userAutofillData?.name || "",
       // Don't use userAutofillData phone if international shipping is enabled
       phone: currentValues.phone || addressItemPhone || data.phone || (!internationalShipping ? userAutofillData?.phone : "") || "",
-      email: currentValues.email || addressItem?.email || data.email || userAutofillData?.email || "",
+      email: isNewAddress && !addressItem ? currentValues.email || data.email || userAutofillData?.email || "" : addressItem?.email ? currentValues.email || addressItem?.email : "",
     };
     reset(mergedData);
-    formSchema?.forEach((group) =>
+    updatedFormSchema?.forEach((group) =>
       group?.fields?.forEach(({ type, key }) => {
         if (type === "list") {
           setValue(key, "");
@@ -731,7 +760,7 @@ useEffect(() => {
             />
           </div>
         )}
-        {formSchema?.map((group, index) => (
+        {updatedFormSchema?.map((group, index) => (
           <div key={index} className={styles.formGroup}>
             <div ref={formContainerRef} className={styles.formContainer}>
               {group?.fields?.map((field) => (

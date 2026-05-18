@@ -375,6 +375,7 @@ const AddressForm = ({
       country: selectedCountry || t("resource.localization.india"),
       // Auto-fill user data using memoized utility function (excluding phone if international)
       ...autofillDataForForm,
+      email: addressItem ? addressItem?.email || "" : isNewAddress ? autofillDataForForm?.email || "" : "",
       // area_code: addressItem?.area_code || defaultPincode || "",
     },
   });
@@ -520,6 +521,7 @@ const AddressForm = ({
         }),
         // ✅ FIXED: Use ternary to avoid creating new values on every render
         country: countryValue,
+        email: addressItem?.email || "",
       });
     } else {
       setValue("is_default_address", true);
@@ -540,7 +542,7 @@ const AddressForm = ({
           isValidNumber: true,
         });
       }
-      if (userAutofillData.email) {
+      if (isNewAddress && userAutofillData.email) {
         setValue("email", userAutofillData.email);
       }
     }
@@ -732,11 +734,11 @@ const AddressForm = ({
         (!internationalShipping ? userAutofillData?.phone : "") ||
         "",
       email:
-        currentValues.email ||
-        addressItem?.email ||
-        data.email ||
-        userAutofillData?.email ||
-        "",
+        isNewAddress && !addressItem
+          ? currentValues.email || data.email || userAutofillData?.email || ""
+          : addressItem?.email
+            ? currentValues.email || addressItem?.email
+            : "",
       // Preserve address type selection
       address_type: currentValues.address_type || "Home",
       otherAddressType: currentValues.otherAddressType || "",

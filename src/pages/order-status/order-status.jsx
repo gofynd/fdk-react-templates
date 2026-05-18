@@ -412,8 +412,6 @@ function ProductItem({
   const getEffectivePrice = (item) =>
     numberWithCommas(item?.prices?.price_effective);
 
-  const hide_single_size = globalConfig?.hide_single_size || false;
-
   const { name, brand, size, itemQty, markedPrice, effectivePrice } =
     useMemo(() => {
       if (isBundleItem) {
@@ -496,7 +494,7 @@ function ProductItem({
             <div className={styles.productName}>{name}</div>
             <div className={styles.sizeInfo}>
               <div className={styles.sizeQuantity}>
-                {size && !(hide_single_size && size.toUpperCase() === "OS") && (
+                {size && (
                   <div className={styles.size}>
                     {t("resource.common.size")}: &nbsp;
                     {size}
