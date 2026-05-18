@@ -105,7 +105,6 @@ function Coupon({
   useEffect(() => {
     const subscription = watch((value, { name }) => {
       if (name === "couponInput" && errors?.root) {
-        console.log("clear");
         clearErrors("root");
       }
     });
@@ -138,6 +137,26 @@ function Coupon({
       // Check for HTML tags pattern
       return /<[^>]+>/.test(message);
     }, [message]);
+
+    const hasDescriptionHTMLTags = useMemo(() => {
+      if (!description || typeof description !== "string") return false;
+      return /<[^>]+>/.test(description);
+    }, [description]);
+
+    const descriptionContent = useMemo(() => {
+      if (!description) return null;
+
+      if (hasDescriptionHTMLTags) {
+        return (
+          <FyHTMLRenderer
+            htmlContent={description}
+            customClass={styles.couponDescription}
+          />
+        );
+      }
+
+      return <p className={styles.couponDescription}>{description}</p>;
+    }, [description, hasDescriptionHTMLTags]);
 
     // Memoize the message content rendering
     const messageContent = useMemo(() => {
@@ -185,7 +204,7 @@ function Coupon({
               className={styles.applyBtn}
               disabled={!isApplicable}
               onClick={() => {
-                applyCoupon(couponCode);
+                applyCoupon(couponCode, { errorDisplay: "toast" });
               }}
             >
               {t("resource.facets.apply_caps")}
@@ -195,7 +214,7 @@ function Coupon({
         {isApplicable && (
           <>
             {description && (
-              <p className={styles.couponDescription}>{description}</p>
+              <p className={styles.couponDescription}>{descriptionContent}</p>
             )}
             <hr className={styles.divider} />
             <p
@@ -444,7 +463,7 @@ function CouponItem({
           <button
             className={styles.couponApplyBtn}
             onClick={() => {
-              applyCoupon(couponCode);
+              applyCoupon(couponCode, { errorDisplay: "toast" });
             }}
           >
             {t("resource.facets.apply_caps")}
@@ -534,3 +553,4 @@ function NoCouponsAvailable() {
 }
 
 export default Coupon;
+
