@@ -685,6 +685,11 @@ export function useCheckoutPayment({
         console.log("Payment mode selected")
       );
       setSelectedTab(tabIn);
+    } else if (tabIn === "CREDIT") {
+      selectPaymentMode(paymentModePayload).then(() => {
+        console.log("Payment mode selected");
+      });
+      setSelectedTab(tabIn);
     } else if (tabIn === "CARD") {
       if (subMopIn !== "newCARD") setSelectedCard(subMopData);
     } else if (tabIn === "CARDLESS_EMI") {

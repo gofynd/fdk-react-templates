@@ -525,10 +525,7 @@ function CheckoutPaymentContent({
             lender={creditPaymentData?.lender}
             proceedToPay={proceedToPay}
             acceptOrder={acceptOrder}
-            selectedPaymentPayload={{
-              ...selectedPaymentPayload,
-              selectedCreditPayment,
-            }}
+            selectedPaymentPayload={selectedPaymentPayload}
             enableLinkPaymentOption={enableLinkPaymentOption}
             isPaymentLoading={isPaymentLoading}
             onPriceDetailsClick={onPriceDetailsClick}
@@ -666,6 +663,27 @@ function CheckoutPaymentContent({
               setvpa("");
               setLastValidatedBin("");
               unsetSelectedSubMop();
+              if (opt.name === "NEFT") {
+                const neftPaymentData = paymentOption?.payment_option?.find(
+                  (option) => option.name === "NEFT"
+                );
+                const neftSubMop = neftPaymentData?.list?.[0];
+                if (neftSubMop) selectMop("NEFT", "NEFT", neftSubMop.code || "");
+              }
+              if (opt.name === "RTGS") {
+                const rtgsPaymentData = paymentOption?.payment_option?.find(
+                  (option) => option.name === "RTGS"
+                );
+                const rtgsSubMop = rtgsPaymentData?.list?.[0];
+                if (rtgsSubMop) selectMop("RTGS", "RTGS", rtgsSubMop.code || "");
+              }
+              if (opt.name === "CREDIT") {
+                const creditOptionData = paymentOption?.payment_option?.find(
+                  (option) => option.name === "CREDIT"
+                );
+                const creditSubMop = creditOptionData?.list?.[0];
+                if (creditSubMop) selectMop("CREDIT", "CREDIT", creditSubMop.code || "");
+              }
             }
           }}
         >
@@ -1124,13 +1142,13 @@ function CheckoutPaymentContent({
                                 setvpa("");
                                 setLastValidatedBin("");
                                 unsetSelectedSubMop();
+
                                 const creditOptionData =
                                   paymentOption?.payment_option?.find(
                                     (option) => option.name === "CREDIT"
                                   );
                                 const creditSubMop = creditOptionData?.list?.[0];
                                 if (creditSubMop) {
-                                  setSelectedCreditPayment(creditSubMop);
                                   selectMop(
                                     creditOption.name,
                                     creditOption.name,
