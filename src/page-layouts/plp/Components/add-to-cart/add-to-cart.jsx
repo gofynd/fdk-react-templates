@@ -72,7 +72,6 @@ const AddToCart = ({
     hide_brand_name,
     is_limited_stock,
     limited_stock_label = t("resource.common.limited_stock_label"),
-    limited_stock_quantity = 11,
   } = globalConfig;
 
   const { media, name, short_description, variants, sizes, brand } = product;
@@ -454,8 +453,7 @@ const AddToCart = ({
           </div>
           {is_limited_stock &&
             limited_stock_label &&
-            productPrice?.quantity !== 0 &&
-            productPrice?.quantity <= limited_stock_quantity && (
+            productPrice?.quantity <= 10 && (
               <p className={styles.limitedQuantity}>
                 {(() => {
                   const fallback = t("resource.common.limited_stock_label");

@@ -10,18 +10,19 @@ const ShipmentFreeGiftItem = ({ freeGiftBags = [], currencySymbol = "₹", hasRa
     return null;
   }
 
-  // Group free gift bags by item_id to show as "1 free gift with quantity X"
+  // Group free gift bags by unique bag ID to show each variant separately
+  // This ensures different sizes/variants of the same product are shown as separate items
   const groupedGifts = freeGiftBags.reduce((acc, bag) => {
-    const itemId = bag?.item?.id;
-    if (!itemId) return acc;
+    const bagId = bag?.id || bag?.article?.uid;
+    if (!bagId) return acc;
 
-    if (!acc[itemId]) {
-      acc[itemId] = {
+    if (!acc[bagId]) {
+      acc[bagId] = {
         bag: bag,
         totalQuantity: 0,
       };
     }
-    acc[itemId].totalQuantity += bag?.quantity || 1;
+    acc[bagId].totalQuantity += bag?.quantity || 1;
     return acc;
   }, {});
 
