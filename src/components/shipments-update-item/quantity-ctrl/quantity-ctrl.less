@@ -5,21 +5,18 @@
   justify-content: space-around;
   border: 1px solid @DividerStokes;
   border-radius: 3px;
-  background: @DialogBackground;
   .operator {
-    background: @DialogBackground !important;
+    background: @PageBackground;
     .flex-center();
     border: none;
     width: 32px;
     cursor: pointer;
     padding: 2px;
     .operation {
-      background: @DialogBackground;
       .flex-center();
     }
   }
   button {
-    background: @DialogBackground ;
     &:disabled {
       background-color: @PageBackground;
       cursor: default;
@@ -29,10 +26,10 @@
   .qtyAmount {
     width: 38px;
     height: 100%;
-    border-left: 1px solid @DividerStokes;
-    border-right: 1px solid @DividerStokes;
+    border-inline-start: 1px solid @DividerStokes;
+    border-inline-end: 1px solid @DividerStokes;
     margin: 0px;
-    background-color: @DialogBackground;
+    background-color: @PageBackground;
     display: flex;
     align-items: center;
     input {
@@ -41,7 +38,7 @@
 
       vertical-align: middle;
       text-align: center;
-      background-color: @DialogBackground;
+      background-color: @PageBackground;
       color: @TextHeading;
       &:focus {
         outline: none;

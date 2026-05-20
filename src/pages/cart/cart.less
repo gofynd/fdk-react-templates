@@ -2,9 +2,6 @@
 
 .cartMainContainer {
   background-color: var(--pageBackground);
-  @media @mobile {
-    padding-bottom: 100px; // Space for fixed sticky footer
-  }
 
   .errContainer {
     background-color: @ErrorBackground;
@@ -93,17 +90,10 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    [data-mobile-footer="true"] & {
-      padding-bottom: 56px;
-    }
     .priceSummaryLoginButton {
       border-radius: @ButtonRadius;
       background: var(--buttonPrimary);
       cursor: pointer;
-
-      &[disabled] {
-        cursor: default;
-      }
       text-transform: uppercase;
       color: var(--buttonSecondary);
       width: 100%;
@@ -178,16 +168,5 @@
 
   .selected {
     display: flex;
-  }
-
-  .priceBreakupCartWrapper {
-    @media @mobile {
-      // Space for sticky footer to prevent "You've saved" message from being hidden on cart page only
-      padding-bottom: 100px;
-    }
-    @media @tablet {
-      // Space for sticky footer to prevent "You've saved" message from being hidden on cart page only
-      padding-bottom: 100px;
-    }
   }
 }
