@@ -96,7 +96,6 @@ const UPI_INVALID_VPA_ERROR = "resource.checkout.please_enter_correct_upi_id";
 import CardForm from "./card-form";
 import Shimmer from "../../../components/shimmer/shimmer";
 import CheckoutPaymentSkeleton from "./checkout-payment-skeleton";
-import CreditPayment from "../../../components/b2b-credit-payment/b2b-credit-payment";
 
 export const CREDIT_CARD_MASK = [
   {
@@ -204,7 +203,6 @@ function CheckoutPaymentContent({
     updateStoreCredits,
     creditUpdating,
     isPaymentLoading,
-    creditPaymentData,
   } = payment;
 
   useEffect(() => {
@@ -221,13 +219,8 @@ function CheckoutPaymentContent({
   let codOption = paymentOptions?.filter((opt) => opt.name === "COD")[0];
   let neftOption = paymentOptions?.filter((opt) => opt.name === "NEFT")[0];
   let rtgsOption = paymentOptions?.filter((opt) => opt.name === "RTGS")[0];
-  let creditOption = paymentOptions?.filter((opt) => opt.name === "CREDIT")[0];
   paymentOptions = paymentOptions?.filter(
-    (opt) =>
-      opt.name !== "COD" &&
-      opt.name !== "NEFT" &&
-      opt.name !== "RTGS" &&
-      opt.name !== "CREDIT"
+    (opt) => opt.name !== "COD" && opt.name !== "NEFT" && opt.name !== "RTGS"
   );
   const otherPaymentOptions = useMemo(() => otherOptions(), [paymentOption]);
   let upiSuggestions = paymentOption?.payment_option?.find?.(
@@ -269,7 +262,6 @@ function CheckoutPaymentContent({
   const [selectedOtherPayment, setSelectedOtherPayment] = useState({});
   const [selectedNeftPayment, setSelectedNeftPayment] = useState({});
   const [selectedRtgsPayment, setSelectedRtgsPayment] = useState({});
-  const [selectedCreditPayment, setSelectedCreditPayment] = useState({});
   const [savedUPISelect, setSavedUPISelect] = useState(false);
   const [showUPILoader, setUPILoader] = useState(false);
   const [selectedPaymentPayload, setSelectedPaymentPayload] = useState({
@@ -283,7 +275,6 @@ function CheckoutPaymentContent({
     selectedOtherPayment: selectedOtherPayment,
     selectedUpiIntentApp: selectedUpiIntentApp,
     selectedNeftPayment: selectedNeftPayment,
-    selectedCreditPayment: selectedCreditPayment,
   });
   const [paymentResponse, setPaymentResponse] = useState(null);
 
@@ -1334,12 +1325,6 @@ function CheckoutPaymentContent({
         console.log("Payment mode selected");
       });
       setSelectedRtgsPayment(subMopData);
-      setSelectedTab(tab);
-    } else if (tab === "CREDIT") {
-      selectPaymentMode(paymentModePayload).then(() => {
-        console.log("Payment mode selected");
-      });
-      setSelectedCreditPayment(subMopData);
       setSelectedTab(tab);
     } else if (tab === "CARD") {
       if (subMop !== "newCARD") {
@@ -4202,27 +4187,6 @@ function CheckoutPaymentContent({
           </div>
         );
       }
-      case "CREDIT":
-        return (
-          <CreditPayment
-            styles={styles}
-            StickyPayNow={StickyPayNow}
-            isTablet={isTablet}
-            getCurrencySymbol={getCurrencySymbol}
-            getTotalValue={getTotalValue}
-            availableCredit={creditPaymentData?.availableCredit}
-            isActive={creditPaymentData?.isActive}
-            lender={creditPaymentData?.lender}
-            proceedToPay={proceedToPay}
-            acceptOrder={acceptOrder}
-            selectedPaymentPayload={selectedPaymentPayload}
-            enableLinkPaymentOption={enableLinkPaymentOption}
-            isPaymentLoading={isPaymentLoading}
-            onPriceDetailsClick={onPriceDetailsClick}
-            priceFormatCurrencySymbol={priceFormatCurrencySymbol}
-            loader={loader}
-          />
-        );
       case "PL":
         return (
           <div>
@@ -4677,15 +4641,6 @@ function CheckoutPaymentContent({
                   selectMop("RTGS", "RTGS", rtgsSubMop.code || "");
                 }
               }
-              if (opt.name === "CREDIT") {
-                const creditOptionData = paymentOption?.payment_option?.find(
-                  (option) => option.name === "CREDIT"
-                );
-                const creditSubMop = creditOptionData?.list?.[0];
-                if (creditSubMop) {
-                  selectMop("CREDIT", "CREDIT", creditSubMop.code || "");
-                }
-              }
             }
           }}
         >
@@ -4695,19 +4650,14 @@ function CheckoutPaymentContent({
             &nbsp;
           </div>
           <div className={styles.link}>
-            <div className={`${styles.icon} ${opt.image_src && opt.name === "CREDIT" ? styles.creditLogoIcon : styles.mopIcon}`}>
-              {opt.image_src && opt.name === "CREDIT" ? (
-                <img src={opt.image_src} alt={opt?.display_name} />
-              ) : (
-                <SvgWrapper svgSrc={opt.svg}></SvgWrapper>
-              )}
+            <div className={`${styles.icon} ${styles.mopIcon}`}>
+              {/* <img src={opt.svg} alt="" /> */}
+              <SvgWrapper svgSrc={opt.svg}></SvgWrapper>
             </div>
             <div
               className={`${styles.modeName} ${selectedTab === opt.name ? styles.selectedModeName : ""}`}
             >
-              {opt.name === "CREDIT" && creditPaymentData?.lender?.brandName
-                ? creditPaymentData.lender.brandName
-                : translateDynamicLabel(opt?.display_name ?? "", t)}
+              {translateDynamicLabel(opt?.display_name ?? "", t)}
             </div>
           </div>
           {opt.subMopIcons && (
@@ -5228,110 +5178,6 @@ function CheckoutPaymentContent({
                           {isTablet && activeMop === rtgsOption.name && (
                             <div>
                               {selectedTab === rtgsOption.name &&
-                                navigationTab()}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                    {creditOption && (
-                      <div className={styles.neftBorderBottom}>
-                        <div
-                          className={`${styles.linkWrapper} ${selectedTab === creditOption.name && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === creditOption.name && isTablet ? styles.headerHightlight : ""} ${!codOption ? styles.lastChild : ""}`}
-                          key={creditOption?.display_name ?? ""}
-                          id="nav-title-credit"
-                        >
-                          <div
-                            className={styles["linkWrapper-row1"]}
-                            onClick={() => {
-                              if (isTablet) {
-                                setSelectedTab((prev) =>
-                                  prev === creditOption.name
-                                    ? ""
-                                    : creditOption.name
-                                );
-                                setTab(creditOption.name);
-                              } else {
-                                setSelectedTab(creditOption.name);
-                                setTab(creditOption.name);
-                              }
-                              removeDialogueError();
-                              toggleMop(creditOption.name);
-                              if (selectedTab !== creditOption.name) {
-                                if (isTablet) {
-                                  setSelectedPaymentPayload({});
-                                }
-                                setNameOnCard("");
-                                setCardExpiryDate("");
-                                setCvvNumber("");
-                                hideNewCard();
-                                setvpa("");
-                                setLastValidatedBin("");
-                                unsetSelectedSubMop();
-
-                                const creditOptionData =
-                                  paymentOption?.payment_option?.find(
-                                    (option) => option.name === "CREDIT"
-                                  );
-                                const creditSubMop = creditOptionData?.list?.[0];
-                                if (creditSubMop) {
-                                  selectMop(
-                                    creditOption.name,
-                                    creditOption.name,
-                                    creditSubMop.code || ""
-                                  );
-                                }
-                              }
-                            }}
-                          >
-                            <div
-                              className={`${selectedTab === creditOption.name ? styles.indicator : ""} ${styles.onDesktopView}`}
-                            >
-                              &nbsp;
-                            </div>
-                            <div className={styles.link}>
-                              <div
-                                className={`${styles.icon} ${creditOption.image_src ? styles.creditLogoIcon : styles.flexCenter}`}
-                              >
-                                {creditOption.image_src ? (
-                                  <img
-                                    src={creditOption.image_src}
-                                    alt={creditOption?.display_name}
-                                  />
-                                ) : (
-                                  <SvgWrapper svgSrc="credit" />
-                                )}
-                              </div>
-                              <div>
-                                <div
-                                  className={`${styles.modeName} ${selectedTab === creditOption.name ? styles.selectedModeName : ""}`}
-                                >
-                                  {creditPaymentData?.lender?.brandName
-                                    ? creditPaymentData.lender.brandName
-                                    : translateDynamicLabel(
-                                        creditOption?.display_name ?? "",
-                                        t
-                                      )}
-                                </div>
-                              </div>
-                            </div>
-                            <div
-                              className={`${styles.arrowContainer} ${styles.activeIconColor}`}
-                            >
-                              <SvgWrapper
-                                className={
-                                  selectedTab === creditOption.name &&
-                                  activeMop === creditOption.name
-                                    ? styles.upsideDown
-                                    : ""
-                                }
-                                svgSrc="accordion-arrow"
-                              />
-                            </div>
-                          </div>
-                          {isTablet && activeMop === creditOption.name && (
-                            <div>
-                              {selectedTab === creditOption.name &&
                                 navigationTab()}
                             </div>
                           )}
