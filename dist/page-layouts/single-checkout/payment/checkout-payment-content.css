@@ -7414,10 +7414,15 @@ h5,
   }
 }
 .b2b-credit-payment__infoTag___dX6lD {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--textSubHeading, #414340);
   text-align: start;
+}
+@media only screen and (max-width: 768px) {
+  .b2b-credit-payment__infoTag___dX6lD {
+    font-size: 14px;
+  }
 }
 .b2b-credit-payment__infoRow___JhsbF {
   background: var(--informationBackground, #ebd3bc);
