@@ -22,6 +22,7 @@ const Wishlist = ({
   imgSrcSet,
   aspectRatio,
   isProductOpenInNewTab = false,
+  showImageOnHover = false,
   listingPrice = "range",
   RemoveIconComponent,
   isImageFill,
@@ -35,7 +36,6 @@ const Wishlist = ({
   addToCartModalProps = {},
   showAddToCart = false,
   actionButtonText,
-  imageEffects = "none",
   globalConfig = {},
   showHeader = true,
 }) => {
@@ -94,6 +94,7 @@ const Wishlist = ({
                 imgSrcSet,
                 aspectRatio,
                 isProductOpenInNewTab,
+                showImageOnHover,
                 listingPrice,
                 RemoveIconComponent,
                 isImageFill,
@@ -102,7 +103,6 @@ const Wishlist = ({
                 imagePlaceholder,
                 actionButtonText,
                 showAddToCart,
-                imageEffects,
                 onRemoveClick,
                 handleAddToCart,
                 isServiceable: is_serviceable,
@@ -152,6 +152,7 @@ const WishlistProductCard = ({
   imgSrcSet,
   aspectRatio,
   isProductOpenInNewTab = false,
+  showImageOnHover = false,
   listingPrice = "range",
   RemoveIconComponent,
   isImageFill,
@@ -160,7 +161,6 @@ const WishlistProductCard = ({
   imagePlaceholder,
   actionButtonText,
   showAddToCart,
-  imageEffects = "none",
   onRemoveClick = () => {},
   handleAddToCart,
   isServiceable = true,
@@ -210,10 +210,10 @@ const WishlistProductCard = ({
         followedIdList={followedIdList}
         isImageFill={isImageFill}
         imageBackgroundColor={imageBackgroundColor}
+        showImageOnHover={showImageOnHover}
         imagePlaceholder={imagePlaceholder}
         columnCount={{ desktop: 4, tablet: 3, mobile: 2 }}
         showAddToCart={showAddToCart}
-        imageEffects={imageEffects}
         actionButtonText={actionButtonText ?? t("resource.common.add_to_cart")}
         handleAddToCart={handleAddToCart}
         isServiceable={isServiceable}

@@ -67,14 +67,7 @@
     }
 
     .productImage {
-      transition:
-        300ms transform cubic-bezier(0, 0, 0.2, 1),
-        200ms opacity ease,
-        200ms visibility ease;
-
-      &.mainImage {
-        position: relative;
-      }
+      transition: 300ms transform cubic-bezier(0, 0, 0.2, 1);
 
       &.hoverImage {
         position: absolute;
@@ -83,23 +76,17 @@
         opacity: 0;
       }
     }
-
+    @lg-min: 860px;
     @media @desktop {
-      &.zoomOnHover:hover {
-        .mainImage {
-          transform: scale(1.06);
+      &:hover {
+        .hoverImage + .mainImage {
+          visibility: hidden;
         }
-      }
-
-      &.hoverSwapEnabled:hover {
-        .hoverImage {
+        .hoverImage,
+        .mainImage {
           visibility: visible;
           opacity: 1;
-        }
-
-        .mainImage {
-          visibility: hidden;
-          opacity: 0;
+          transform: scale(1.1);
         }
       }
     }
@@ -155,55 +142,23 @@
       left: 50%;
       transform: translateX(-50%);
       display: flex;
-      gap: 8px;
-      justify-content: center;
-      align-items: center;
+      gap: 4px;
       z-index: 2;
+      pointer-events: none; // Allow clicks to pass through to the image/link
 
       .dot {
-        flex-shrink: 0;
-        width: 12px;
-        height: 12px;
+        width: 8px;
+        height: 8px;
         border-radius: 25px;
         background-color: @TextSecondary;
-        color: transparent;
-        border: none;
-        padding: 0;
-        cursor: pointer;
         transition:
           background-color 0.2s ease,
-          width 0.32s cubic-bezier(0.4, 0, 0.2, 1),
-          height 0.32s cubic-bezier(0.4, 0, 0.2, 1),
-          opacity 0.32s cubic-bezier(0.4, 0, 0.2, 1),
-          transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+          transform 0.2s ease;
 
         &.activeDot {
           background-color: @TextHeading;
-          opacity: 1;
+          transform: scale(1.2);
         }
-
-        &.dotTierLarge {
-          width: 10px;
-          height: 10px;
-          opacity: 0.82;
-        }
-
-        &.dotTierMedium {
-          width: 8px;
-          height: 8px;
-          opacity: 0.68;
-        }
-
-        &.dotTierSmall {
-          width: 6px;
-          height: 6px;
-          opacity: 0.55;
-        }
-      }
-
-      &.dotsCompact {
-        flex-wrap: nowrap;
-        min-height: 16px;
       }
     }
   }

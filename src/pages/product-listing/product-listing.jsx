@@ -55,6 +55,7 @@ const ProductListing = ({
   globalConfig = {},
   imgSrcSet,
   isImageFill = false,
+  showImageOnHover = false,
   isResetFilterDisable = false,
   imageBackgroundColor = "",
   imagePlaceholder = "",
@@ -66,7 +67,6 @@ const ProductListing = ({
   banner = {},
   showAddToCart = false,
   showColorVariants = false,
-  imageEffects = "none",
   actionButtonText,
   stickyFilterTopOffset = 0,
   filterToggle = false,
@@ -81,6 +81,7 @@ const ProductListing = ({
   onLoadMoreProducts = () => {},
   onProductNavigation = () => {},
   EmptyStateComponent,
+  showMultipleImages = false,
 }) => {
   const { t } = useGlobalTranslation("translation");
   const isTablet = useViewport(0, 768);
@@ -349,17 +350,18 @@ const ProductListing = ({
                         listingPrice,
                         showAddToCart,
                         showColorVariants,
-                        imageEffects,
                         actionButtonText:
                           actionButtonText ?? t("resource.common.add_to_cart"),
                         onWishlistClick,
                         isImageFill,
+                        showImageOnHover,
                         imageBackgroundColor,
                         imagePlaceholder,
                         handleAddToCart,
                         imgSrcSet,
                         onProductNavigation,
                         isServiceable: is_serviceable,
+                        showMultipleImages,
                       }}
                     />
                   </InfiniteLoader>
@@ -380,11 +382,11 @@ const ProductListing = ({
                       listingPrice,
                       showAddToCart,
                       showColorVariants,
-                      imageEffects,
                       actionButtonText:
                         actionButtonText ?? t("resource.common.add_to_cart"),
                       onWishlistClick,
                       isImageFill,
+                      showImageOnHover,
                       imageBackgroundColor,
                       isProductLoading,
                       imagePlaceholder,
@@ -392,6 +394,7 @@ const ProductListing = ({
                       imgSrcSet,
                       onProductNavigation,
                       isServiceable: is_serviceable,
+                      showMultipleImages,
                     }}
                   />
                 )}
@@ -497,9 +500,9 @@ function ProductGridItem({
   followedIdList = [],
   listingPrice = "range",
   isImageFill = false,
+  showImageOnHover = false,
   showAddToCart = false,
   showColorVariants = false,
-  imageEffects = "none",
   actionButtonText,
   imageBackgroundColor = "",
   imagePlaceholder = "",
@@ -507,6 +510,7 @@ function ProductGridItem({
   handleAddToCart = () => {},
   onProductNavigation = () => {},
   isServiceable = true,
+  showMultipleImages = false,
 }) {
   const { t } = useGlobalTranslation("translation");
 
@@ -573,15 +577,16 @@ function ProductGridItem({
         followedIdList={followedIdList}
         showAddToCart={showAddToCart}
         showColorVariants={showColorVariants}
-        imageEffects={imageEffects}
         actionButtonText={actionButtonText ?? t("resource.common.add_to_cart")}
         onWishlistClick={onWishlistClick}
         isImageFill={isImageFill}
+        showImageOnHover={showImageOnHover}
         imageBackgroundColor={imageBackgroundColor}
         imagePlaceholder={imagePlaceholder}
         handleAddToCart={handleAddToCart}
         onClick={onProductNavigation}
         isServiceable={isServiceable}
+        showMultipleImages={showMultipleImages}
       />
     </FDKLink>
   );
