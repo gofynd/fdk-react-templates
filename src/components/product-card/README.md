@@ -3,7 +3,8 @@
 The `product-card` component displays a product's details including its image, price, brand, and options like wishlist, add to cart, and sale badges.
 
 ## Features
-- **Image Handling**: Supports hover images, fallback placeholders, and responsive image loading.
+- **Image Handling**: Supports fallback placeholders and responsive image loading.
+- **Image Effects**: Supports `none`, `zoom_on_hover`, `swap_image`, and `show_multiple_images` behaviors on product-card images.
 - **Price Display**: Option to display product price in different formats (min, max, or range).
 - **Wishlist & Remove Icons**: Option to add/remove products to/from the wishlist and cart.
 - **Variants**: Displays product color variants, with color swatches.
@@ -24,7 +25,6 @@ The `product-card` component displays a product's details including its image, p
 | `isSaleBadge`        | `bool`         | `true`          | Determines whether the sale badge is displayed.                              |
 | `isWishlistIcon`     | `bool`         | `true`          | Determines whether the wishlist icon is displayed.                           |
 | `isImageFill`        | `bool`         | `false`         | If true, the image will fill the container.                                  |
-| `showImageOnHover`   | `bool`         | `false`         | If true, the hover image will be shown when the user hovers over the image.  |
 | `imageBackgroundColor`| `string`      | `""`            | Background color for the image container.                                   |
 | `imagePlaceholder`   | `string`       | `""`            | Fallback placeholder image URL when the actual image is unavailable.         |
 | `columnCount`        | `object`       | `{ desktop: 4, tablet: 3, mobile: 1 }` | Specifies the number of columns in different screen sizes.                   |
@@ -37,6 +37,7 @@ The `product-card` component displays a product's details including its image, p
 | `onRemoveClick`      | `function`     | `() => {}`      | Callback function when the remove icon is clicked.                           |
 | `centerAlign`        | `bool`         | `false`         | If true, center-aligns the product name and price.                           |
 | `showAddToCart`      | `bool`         | `false`         | If true, displays the "Add to Cart" button.                                  |
+| `imageEffects`       | `string`       | `"none"`        | Controls image behavior on desktop hover and mobile interaction. Supported values: `none`, `zoom_on_hover`, `swap_image`, `show_multiple_images`. |
 
 ## Example Usage
 
@@ -107,6 +108,7 @@ const App = () => {
           isSaleBadge={false}
           isWishlistIcon={true}
           showAddToCart={true}
+          imageEffects="show_multiple_images"
         />
     </div>
   )
