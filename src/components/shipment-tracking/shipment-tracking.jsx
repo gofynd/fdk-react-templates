@@ -8,7 +8,6 @@
  * @param {Function} props.changeinit - A function to handle changes in the shipment status.
  * @param {Object} props.invoiceDetails - Contains details about the invoice, including a presigned URL for downloading.
  * @param {boolean} props.showCreditNote - Whether to show the Download Credit Note button (default: false).
- * @param {Function} props.onDownloadCreditNote - Callback invoked with the credit note URL when the button is clicked.
  *
  * @returns {JSX.Element} A React component that renders the shipment tracking interface.
  *
@@ -34,7 +33,6 @@ function ShipmentTracking({
   availableFOCount,
   bagLength = 0,
   showCreditNote = false,
-  onDownloadCreditNote,
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -80,9 +78,9 @@ function ShipmentTracking({
     }
     if (showCreditNote && shipmentInfo?.credit_note?.credit_note_url) {
       arrLinks.push({
-        type: "credit_note",
         text: t("resource.common.download_credit_note"),
         link: shipmentInfo.credit_note.credit_note_url,
+        openInNewTab: true,
       });
     }
     arrLinks.push({
@@ -137,10 +135,6 @@ function ShipmentTracking({
         });
       }
       window.scrollTo(0, 0);
-    } else if (item?.type === "credit_note") {
-      if (onDownloadCreditNote) {
-        onDownloadCreditNote(item?.link);
-      }
     } else {
       if (item?.newTab) {
         window.open(item?.link, "_blank");
@@ -241,9 +235,9 @@ function ShipmentTracking({
       <div className={`${styles.links}`}>
         {getLinks()?.map((item, index) => (
           <Fragment key={`${item?.text}_${index}`}>
-            {item?.type === "internal" || item?.type === "credit_note" ? (
+            {item?.type === "internal" ? (
               <>
-                {index === 0 && item?.type === "internal" && (
+                {index === 0 && (
                   <div
                     className={`${styles.productExchangeBox} productExchangeContainer`}
                   ></div>
@@ -265,6 +259,10 @@ function ShipmentTracking({
                 key={index}
                 href={`${item?.link}`}
                 className={`${styles.regularsm}`}
+                {...(item?.openInNewTab && {
+                  target: "_blank",
+                  rel: "noopener noreferrer",
+                })}
               >
                 {item?.text === "RETURN"
                   ? t("resource.facets.return_caps")
