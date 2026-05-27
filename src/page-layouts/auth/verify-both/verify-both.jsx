@@ -129,9 +129,6 @@ function VerifyMobile({
         </button>
       </form>
       <div className={styles.resendOtpWrapper}>
-        <span className={styles.didntReceiveText}>
-          {t("resource.common.didnt_receive_otp")}
-        </span>
         <button
           className={styles.resendOtpBtn}
           onClick={resendOtp}
@@ -226,9 +223,6 @@ function VerifyEmail({
         </button>
       </form>
       <div className={styles.resendOtpWrapper}>
-        <span className={styles.didntReceiveText}>
-          {t("resource.common.didnt_receive_otp")}
-        </span>
         <button
           className={styles.resendOtpBtn}
           onClick={resendOtp}
