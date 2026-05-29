@@ -10,20 +10,13 @@
 
 import React, { useMemo } from "react";
 import * as styles from "./shipment-breakup.less";
-import { priceFormatCurrencySymbol } from "../../helper/utils";
+import { priceFormatCurrencySymbol, translateDynamicLabel } from "../../helper/utils";
 import { useGlobalTranslation } from "fdk-core/utils";
 
-function ShipmentBreakup({
-  title = "BILLING",
-  breakup,
-  isHorizontalLine = false,
-  customClass = "",
-  isAddPadding = true,
-}) {
+function ShipmentBreakup({ breakup }) {
   const { t } = useGlobalTranslation("translation");
-
-  const getPriceFormat = (symbol, price, currencyCode) => {
-    return priceFormatCurrencySymbol(symbol, price, undefined, currencyCode);
+  const getPriceFormat = (symbol, price) => {
+    return priceFormatCurrencySymbol(symbol, price);
   };
 
   const breakupValues = useMemo(() => {
@@ -35,48 +28,40 @@ function ShipmentBreakup({
   }, [breakup]);
 
   return (
-    <div
-className={`${styles.billing} ${styles.lightsm} ${customClass} ${
-    isAddPadding ? styles.shipmentBreakupContainerPadding : styles.noPadding
-  }`}    >
-      <h6 className={`${styles.title} ${styles.boldsm}`}>{title}</h6>
+    <div className={`${styles.billing} ${styles.lightsm}`}>
+      <div className={`${styles.title} ${styles.boldsm}`}>{t("resource.common.billing_caps")}</div>
       <>
-        {breakupValues?.map((item, index) => {
-          const isLast = index === breakupValues.length - 1;
-          const showItem = item.value !== "0" && item.value !== 0;
-
-          return (
-            <div key={index} className={`${styles.breakupItem}`}>
-              {showItem && (
-                <>
-                  {isLast && isHorizontalLine && (
-                    <div className={styles.horizontalLine}></div>
-                  )}
-                  <div className={styles.totalValContainer}>
-                    <span
-                      className={`${styles.label} ${
-                        isLast ? styles.grandTotal : ""
-                      }`}
-                    >
-                      {item.display}
-                    </span>
-                    <span
-                      className={`${styles.values} ${
-                        isLast ? styles.grandTotal : ""
-                      }`}
-                    >
+        {breakupValues?.map((item, index) => (
+          <div key={index} className={`${styles.breakupItem}`}>
+            {((index !== breakup.length - 1 && item.value !== "0") ||
+              (index === breakup.length - 1 && item.value !== "0")) && (
+              <>
+                {index !== breakup.length - 1 && (
+                  <span className={styles.totalValContainer}>
+                    <span className={styles.label}>{translateDynamicLabel(item.display, t)}</span>
+                    <span className={`${styles.values}`}>
                       {getPriceFormat(
                         item.currency_symbol,
-                        Number(item.value.toString().replace(/,/g, "")),
-                        item.currency_code
+                        Number(item.value.toString().replace(/,/g, ""))
                       )}
                     </span>
-                  </div>
-                </>
-              )}
-            </div>
-          );
-        })}
+                  </span>
+                )}
+                {index === breakup.length - 1 && (
+                  <span className={styles.totalValContainer}>
+                    <span className={styles.label}>{translateDynamicLabel(item.display, t)}</span>
+                    <span className={`${styles.values}`}>
+                      {getPriceFormat(
+                        item.currency_symbol,
+                        Number(item.value.toString().replace(/,/g, ""))
+                      )}
+                    </span>
+                  </span>
+                )}
+              </>
+            )}
+          </div>
+        ))}
       </>
     </div>
   );

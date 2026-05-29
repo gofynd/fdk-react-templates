@@ -26,7 +26,6 @@
 import React, { useState, useMemo, forwardRef } from "react";
 import * as styles from "./fy-image.less";
 import { transformImage } from "../../../helper/utils";
-import { RESPONSIVE_IMAGE_BREAKPOINTS } from "../../../helper/constant";
 
 const IMAGE_SIZES = [
   "original",
@@ -70,8 +69,13 @@ const FyImage = forwardRef(
       mobileAspectRatio,
       showOverlay = false,
       overlayColor = "#ffffff",
-      // Use optimized breakpoints from config by default
-      sources = RESPONSIVE_IMAGE_BREAKPOINTS,
+      sources = [
+        { breakpoint: { min: 780 }, width: 1280 },
+        { breakpoint: { min: 600 }, width: 1100 },
+        { breakpoint: { min: 480 }, width: 1200 },
+        { breakpoint: { min: 361 }, width: 900 },
+        { breakpoint: { max: 360 }, width: 640 },
+      ],
       customClass,
       globalConfig,
       defer = true,
@@ -82,11 +86,10 @@ const FyImage = forwardRef(
   ) => {
     const [isError, setIsError] = useState(false);
 
-    const bgColor = globalConfig?.img_container_bg || backgroundColor;
     const dynamicStyles = {
       "--aspect-ratio-desktop": `${aspectRatio}`,
       "--aspect-ratio-mobile": `${mobileAspectRatio || aspectRatio}`,
-      ...(bgColor && typeof bgColor === "string" && bgColor.trim() ? { "--bg-color": `${bgColor}` } : {}),
+      "--bg-color": `${globalConfig?.img_container_bg || backgroundColor}`,
       "--overlay-bgcolor": overlayColor,
     };
 
@@ -187,7 +190,7 @@ const FyImage = forwardRef(
 
     return (
       <div
-        className={`${styles.imageWrapper} ${isImageFill ? styles.fill : styles.contain}
+        className={`${styles.imageWrapper} ${isImageFill ? styles.fill : ""}
       ${isFixedAspectRatio ? styles.fixedAspRatio : ""} ${customClass}`}
         style={dynamicStyles}
       >
