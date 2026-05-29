@@ -7,7 +7,7 @@
  * @param {Object} props.shipmentInfo - Contains details about the shipment, such as whether it can be canceled or returned.
  * @param {Function} props.changeinit - A function to handle changes in the shipment status.
  * @param {Object} props.invoiceDetails - Contains details about the invoice, including a presigned URL for downloading.
- * @param {boolean} props.showCreditNote - Whether to show the Download Credit Note button (default: false).
+ * @param {Function} props.onAddToCart - A function to handle adding product to cart (for Buy Again functionality).
  *
  * @returns {JSX.Element} A React component that renders the shipment tracking interface.
  *
@@ -29,10 +29,9 @@ function ShipmentTracking({
   shipmentInfo = {},
   changeinit,
   invoiceDetails,
-  customNeedHelpLink,
   availableFOCount,
   bagLength = 0,
-  showCreditNote = false,
+  onAddToCart,
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -63,32 +62,39 @@ function ShipmentTracking({
         link: shipmentInfo?.track_url ? shipmentInfo?.track_url : "",
       });
     }
-    // if (shipmentInfo?.need_help_url) {
-    //   arrLinks.push({
-    //     type: "internal",
-    //     text: t("resource.common.need_help"),
-    //     link: "/faq/" || shipmentInfo?.need_help_url,
-    //   });
-    // }
+    if (shipmentInfo?.need_help_url) {
+      arrLinks.push({
+        type: "internal",
+        text: t("resource.common.need_help"),
+        link: "/contact-us",
+      });
+    }
+    // Buy Again button - always visible
+    const firstBag = shipmentInfo?.bags?.[0];
+    const productSlug = firstBag?.item?.slug_key;
+    if (productSlug) {
+      arrLinks.push({
+        type: "internal",
+        text: t("resource.common.buy_again") || "BUY AGAIN",
+        link: `/product/${productSlug}`,
+        action: "buy_again",
+        productSlug: productSlug,
+      });
+    }
     if (invoiceDetails?.success) {
       arrLinks.push({
         text: t("resource.common.download_invoice"),
         link: invoiceDetails?.presigned_url,
+        openInNewTab: true,
       });
     }
-    if (showCreditNote && shipmentInfo?.credit_note?.credit_note_url) {
+    if (shipmentInfo?.credit_note?.credit_note_url) {
       arrLinks.push({
         text: t("resource.common.download_credit_note"),
         link: shipmentInfo.credit_note.credit_note_url,
         openInNewTab: true,
       });
     }
-    arrLinks.push({
-      type: "internal",
-      text: t("resource.common.need_help"),
-      newTab: !!customNeedHelpLink?.value,
-      link: customNeedHelpLink?.value || "/faq/",
-    });
     return arrLinks;
   };
 
@@ -99,6 +105,14 @@ function ShipmentTracking({
   // const updateTypeText = () => {
   //   return shipmentInfo?.can_return ? "resource.facets.return_caps" : "resource.facets.cancel_caps";
   // };
+
+  const handleBuyAgain = async (productSlug) => {
+    if (onAddToCart) {
+      console.log("handleBuyAgain called", { productSlug });
+      // Use provided handler (typically opens add-to-cart modal)
+      onAddToCart(productSlug);
+    }
+  };
 
   const update = (item) => {
     if (["CANCEL", "RETURN"].includes(item?.text)) {
@@ -135,12 +149,13 @@ function ShipmentTracking({
         });
       }
       window.scrollTo(0, 0);
-    } else {
-      if (item?.newTab) {
-        window.open(item?.link, "_blank");
-      } else {
-        navigate(item?.link);
+    } else if (item?.action === "buy_again") {
+      // Handle Buy Again - add to cart instead of navigating
+      if (item?.productSlug) {
+        handleBuyAgain(item.productSlug);
       }
+    } else {
+      navigate(item?.link);
     }
   };
 

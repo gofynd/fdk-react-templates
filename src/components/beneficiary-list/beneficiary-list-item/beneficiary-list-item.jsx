@@ -24,16 +24,17 @@ import RadioIcon from "../../../assets/images/radio";
 import { useGlobalTranslation } from "fdk-core/utils";
 
 function BeneficiaryItem({ beneficiary, selectedBeneficiary, change }) {
+  if (!beneficiary) return null;
   const { t } = useGlobalTranslation("translation");
-  const isSelected =
-    selectedBeneficiary?.beneficiary_id === beneficiary?.beneficiary_id;
+  const isSelected = selectedBeneficiary?.id === beneficiary?.id;
   const getTitle = () => {
-    return beneficiary.title;
+    typeof beneficiary?.title ? beneficiary.title : "Unknown";
   };
   const getSubtitle = () => {
     return beneficiary.transfer_mode === "bank"
-      ? `${t("resource.order.account_details")}: ${beneficiary.account_holder} | ${beneficiary.account_no
-      } ${beneficiary.bank_name ? `| ${beneficiary.bank_name}` : ""}`
+      ? `${t("resource.order.account_details")}: ${beneficiary.account_holder} | ${
+          beneficiary.account_no
+        } ${beneficiary.bank_name ? `| ${beneficiary.bank_name}` : ""}`
       : beneficiary.subtitle;
   };
 

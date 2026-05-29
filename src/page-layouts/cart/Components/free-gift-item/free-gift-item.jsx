@@ -60,9 +60,7 @@ const FreeGiftItem = ({ item, currencySymbol = "₹" }) => {
                         {item_price_details?.effective?.max && (
                           <span className={styles.freeGiftItemFreeEffective}>
                             {currencyFormat(
-                              numberWithCommas(
-                                item_price_details?.effective?.max
-                              ),
+                              item_price_details?.effective?.max,
                               currencySymbol,
                               formatLocale(locale, countryCode, true)
                             )}
