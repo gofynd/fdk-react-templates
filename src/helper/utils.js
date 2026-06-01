@@ -10,6 +10,27 @@ export const debounce = (func, wait) => {
   };
 };
 
+export const formatDate = (isoString, dateOnly = false) => {
+  const date = new Date(isoString);
+
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = date.toLocaleString("en-US", { month: "short" });
+  const year = date.getFullYear();
+
+  let hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const ampm = hours >= 12 ? "PM" : "AM";
+
+  hours %= 12;
+  hours = hours || 12; // 0 becomes 12
+
+  if (dateOnly) {
+    return `${day} ${month}, ${year}`;
+  }
+
+  return `${day} ${month}, ${year}, ${hours}:${minutes} ${ampm}`;
+};
+
 export const getGlobalConfigValue = (globalConfig, id) =>
   globalConfig?.props?.[id] ?? "";
 
@@ -204,7 +225,12 @@ export const transformImage = (url, key, width) => {
   let updatedUrl = url;
   if (key && width) {
     const str = `/${key}/`;
-    updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
+    // updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
+    if (url.includes("/b2b-commerce/")) {
+      updatedUrl = url.replace(new RegExp(str), `/t.resize(w:${width})/`);
+    } else {
+      updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
+    }
   }
   try {
     const parsedUrl = new URL(updatedUrl);
@@ -319,12 +345,13 @@ export const currencyFormat = (
   locale = "en-IN",
   currencyCode = null
 ) => {
-  if (value == null || value === "") {
-    return "";
-  }
+  if (value == null || value === "") return "";
 
-  // Convert to number if it's a string
-  let num = typeof value === "string" ? parseFloat(value) : value;
+  // Convert to number if it's a string (strip commas so "1,039.5" parses as 1039.5, not 1)
+  let num =
+    typeof value === "string"
+      ? parseFloat(String(value).replace(/,/g, ""))
+      : value;
 
   // Ensure it's a number, not NaN
   if (Number.isNaN(num)) {
@@ -509,8 +536,11 @@ export function priceFormatCurrencySymbol(
 ) {
   if (price == null || price === "") return "";
 
-  // Convert to number if it's a string
-  let num = typeof price === "string" ? parseFloat(price) : price;
+  // Convert to number if it's a string (strip commas so "1,039.5" parses as 1039.5, not 1)
+  let num =
+    typeof price === "string"
+      ? parseFloat(String(price).replace(/,/g, ""))
+      : price;
 
   if (Number.isNaN(num)) return "";
 

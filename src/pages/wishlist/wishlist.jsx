@@ -22,6 +22,7 @@ const Wishlist = ({
   imgSrcSet,
   aspectRatio,
   isProductOpenInNewTab = false,
+  showImageOnHover = false,
   listingPrice = "range",
   RemoveIconComponent,
   isImageFill,
@@ -29,15 +30,16 @@ const Wishlist = ({
   hasNext = false,
   isLoading = false,
   EmptyStateComponent,
-  onLoadMore = () => {},
-  onRemoveClick = () => {},
+  onLoadMore = () => { },
+  onRemoveClick = () => { },
   imagePlaceholder = "",
   addToCartModalProps = {},
   showAddToCart = false,
   actionButtonText,
-  imageEffects = "none",
   globalConfig = {},
   showHeader = true,
+  showQuantityController = false,
+  showMoq = false,
 }) => {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -94,6 +96,7 @@ const Wishlist = ({
                 imgSrcSet,
                 aspectRatio,
                 isProductOpenInNewTab,
+                showImageOnHover,
                 listingPrice,
                 RemoveIconComponent,
                 isImageFill,
@@ -102,9 +105,9 @@ const Wishlist = ({
                 imagePlaceholder,
                 actionButtonText,
                 showAddToCart,
-                imageEffects,
                 onRemoveClick,
                 handleAddToCart,
+                globalConfig,
                 isServiceable: is_serviceable,
               }}
             />
@@ -129,6 +132,8 @@ const Wishlist = ({
               {...restAddToModalProps}
               globalConfig={globalConfig}
               isServiceable={is_serviceable}
+              showQuantityController={showQuantityController}
+              showMoq={showMoq}
             />
           </Modal>
           <SizeGuide
@@ -152,6 +157,7 @@ const WishlistProductCard = ({
   imgSrcSet,
   aspectRatio,
   isProductOpenInNewTab = false,
+  showImageOnHover = false,
   listingPrice = "range",
   RemoveIconComponent,
   isImageFill,
@@ -160,8 +166,7 @@ const WishlistProductCard = ({
   imagePlaceholder,
   actionButtonText,
   showAddToCart,
-  imageEffects = "none",
-  onRemoveClick = () => {},
+  onRemoveClick = () => { },
   handleAddToCart,
   isServiceable = true,
 }) => {
@@ -210,10 +215,10 @@ const WishlistProductCard = ({
         followedIdList={followedIdList}
         isImageFill={isImageFill}
         imageBackgroundColor={imageBackgroundColor}
+        showImageOnHover={showImageOnHover}
         imagePlaceholder={imagePlaceholder}
         columnCount={{ desktop: 4, tablet: 3, mobile: 2 }}
         showAddToCart={showAddToCart}
-        imageEffects={imageEffects}
         actionButtonText={actionButtonText ?? t("resource.common.add_to_cart")}
         handleAddToCart={handleAddToCart}
         isServiceable={isServiceable}
