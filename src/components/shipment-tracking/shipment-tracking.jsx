@@ -85,6 +85,14 @@ function ShipmentTracking({
       arrLinks.push({
         text: t("resource.common.download_invoice"),
         link: invoiceDetails?.presigned_url,
+        openInNewTab: true,
+      });
+    }
+    if (shipmentInfo?.credit_note?.credit_note_url) {
+      arrLinks.push({
+        text: t("resource.common.download_credit_note"),
+        link: shipmentInfo.credit_note.credit_note_url,
+        openInNewTab: true,
       });
     }
     return arrLinks;
@@ -266,6 +274,10 @@ function ShipmentTracking({
                 key={index}
                 href={`${item?.link}`}
                 className={`${styles.regularsm}`}
+                {...(item?.openInNewTab && {
+                  target: "_blank",
+                  rel: "noopener noreferrer",
+                })}
               >
                 {item?.text === "RETURN"
                   ? t("resource.facets.return_caps")
