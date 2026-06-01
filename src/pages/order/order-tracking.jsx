@@ -23,10 +23,14 @@ function OrderTracking({ instMob }) {
   return (
     <div className="basePageContainer margin0auto">
       <div className={`${styles.trackOrderCntr}`}>
-        <h2 className={`${styles.orderTitle}`}>{t("resource.order.where_is_order_id")}?</h2>
+        <h2 className={`${styles.orderTitle}`}>
+          {t("resource.order.track_your_order")}
+        </h2>
         <div className={`${styles.trackOrder}`}>
           <FyInput
-            label={isFocussed || orderId ? t("resource.order.enter_order_id")  : ""}
+            label={
+              isFocussed || orderId ? t("resource.order.enter_order_id") : ""
+            }
             labelVariant="floating"
             value={orderId}
             placeholder={!isFocussed ? t("resource.order.enter_order_id") : ""}
@@ -51,7 +55,7 @@ function OrderTracking({ instMob }) {
             variant="text"
             onClick={() => setShowDetails(!showDetails)}
           >
-           {t("resource.order.where_is_order_id")}?
+            {t("resource.order.where_is_order_id")}?
           </FyButton>
           {showDetails && (
             <div>
