@@ -1,4 +1,9 @@
-import { DEFAULT_CURRENCY_LOCALE, DEFAULT_UTC_LOCALE, IMAGE_OPTIMIZATION_CONFIG } from "./constant";
+import {
+  DEFAULT_CURRENCY_LOCALE,
+  DEFAULT_UTC_LOCALE,
+  IMAGE_OPTIMIZATION_CONFIG,
+  RESPONSIVE_IMAGE_BREAKPOINTS,
+} from "./constant";
 
 export const debounce = (func, wait) => {
   let timeout;
@@ -187,6 +192,84 @@ export function checkIfNumber(value) {
   const numberPattern = /^[0-9]+$/;
   return numberPattern.test(value);
 }
+
+const IMAGE_VARIANT_PATTERN =
+  /\/(?:original|\d+x\d+|resize-(?:w|h)?:[0-9]+(?:,(?:w|h)*:?[\d]*)?)\//;
+const RESIZABLE_IMAGE_KEYS = [
+  "original",
+  "30x0",
+  "44x0",
+  "66x0",
+  "50x0",
+  "75x0",
+  "60x60",
+  "90x90",
+  "100x0",
+  "130x200",
+  "135x0",
+  "270x0",
+  "360x0",
+  "500x0",
+  "400x0",
+  "540x0",
+  "720x0",
+  "312x480",
+  "resize-(w|h)?:[0-9]+(,)?(w|h)*(:)?[0-9]*",
+];
+
+export const isGifImageUrl = (url = "") =>
+  /\.gif(\?|#|$)/i.test(String(url || ""));
+
+export const replaceImageVariant = (url = "", variant = "original") => {
+  if (!url) return url;
+  const normalizedVariant = String(variant || "original").replace(
+    /^\/|\/$/g,
+    ""
+  );
+  return IMAGE_VARIANT_PATTERN.test(url)
+    ? url.replace(IMAGE_VARIANT_PATTERN, `/${normalizedVariant}/`)
+    : url;
+};
+
+const findImageSizeKey = (url = "") => {
+  for (let j = 0; j < RESIZABLE_IMAGE_KEYS.length; j++) {
+    if (url?.match(new RegExp(`/${RESIZABLE_IMAGE_KEYS[j]}/`))) {
+      return RESIZABLE_IMAGE_KEYS[j];
+    }
+  }
+  return "";
+};
+
+export const getResponsiveImageSources = (
+  sources = RESPONSIVE_IMAGE_BREAKPOINTS
+) => sources?.map((source) => ({ ...source })) || [];
+
+export const getResponsiveImageBaseUrl = (url = "", width = 200) => {
+  if (!url) return url;
+  if (isGifImageUrl(url)) {
+    return replaceImageVariant(url, "original");
+  }
+  const key = findImageSizeKey(url);
+  return key && width ? transformImage(url, key, width) : url;
+};
+
+export const getResponsiveImageSrcSet = (
+  url = "",
+  sources = RESPONSIVE_IMAGE_BREAKPOINTS
+) => {
+  if (!url || isGifImageUrl(url)) {
+    return "";
+  }
+
+  const key = findImageSizeKey(url);
+  if (!key) {
+    return "";
+  }
+
+  return sources
+    .map((source) => `${transformImage(url, key, source.width)} ${source.width}w`)
+    .join(", ");
+};
 
 /**
  * Transform image URL with DPR support for better quality on retina displays
