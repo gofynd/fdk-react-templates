@@ -1,5 +1,6 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useGlobalTranslation } from "fdk-core/utils";
 import * as styles from "./sticky-pay-now.less";
 
 const StickyPayNow = ({
@@ -7,12 +8,18 @@ const StickyPayNow = ({
   value = "",
   onPriceDetailsClick = () => {},
   proceedToPay = () => {},
-  btnTitle = "PAY NOW",
+  btnTitle,
+  customClassName,
+  enableLinkPaymentOption = false,
+  isJuspay = false,
+  isPaymentLoading = false,
+  loader,
 }) => {
+  const { t } = useGlobalTranslation("translation");
   return (
     <AnimatePresence mode="wait">
       <motion.div
-        className={`${styles.stickyBtnContainer}`}
+        className={`${styles.stickyBtnContainer} ${customClassName}`}
         key="pay-now-container"
         // initial={{ opacity: 0, y: "100%" }}
         // animate={{ opacity: 1, y: "0%" }}
@@ -20,21 +27,47 @@ const StickyPayNow = ({
         // transition={{ duration: 0.5 }}
       >
         <div className={`${styles.stickyBtnContainer1}`}>
-          <div className={styles.priceContainerMobile}>
-            <div className={styles.totalPrice}>{value}</div>
-            <div
-              className={`${styles.viewPriceBtn} ${styles.viewPBtn}`}
-              onClick={onPriceDetailsClick}
-            >
-              View Price Details
+          {!enableLinkPaymentOption && (
+            <div className={styles.priceContainerMobile}>
+              <div className={styles.totalPrice}>{value}</div>
+              <div
+                className={`${styles.viewPriceBtn} ${styles.viewPBtn}`}
+                onClick={onPriceDetailsClick}
+              >
+                {t("resource.cart.view_price_details")}
+              </div>
             </div>
-          </div>
-          <button
-            className={`${styles.cartCheckoutBtn} ${styles.checkoutButton}`}
-            onClick={proceedToPay}
-          >
-            {btnTitle}
-          </button>
+          )}
+          {!isJuspay ? (
+            <button
+              className={`${styles.cartCheckoutBtn} ${styles.checkoutButton}`}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                proceedToPay();
+              }}
+              disabled={isPaymentLoading}
+            >
+              {!isPaymentLoading ? (
+                <>{btnTitle || t("resource.cart.pay_now")}</>
+              ) : (
+                loader
+              )}
+            </button>
+          ) : (
+            <button
+              type="submit"
+              id="common_pay_btn"
+              className={`${styles.cartCheckoutBtn} ${styles.checkoutButton}`}
+              disabled={disabled || isPaymentLoading}
+            >
+              {!isPaymentLoading ? (
+                <>{t("resource.common.pay_caps")}</>
+              ) : (
+                loader
+              )}
+            </button>
+          )}
         </div>
       </motion.div>
     </AnimatePresence>

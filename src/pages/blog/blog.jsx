@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import Slider from "react-slick";
+import React, { useState, useEffect, useMemo, useRef  } from "react";
+import { useLocation } from "react-router-dom";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./blog.less";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
@@ -10,19 +9,45 @@ import BlogFooter from "../../components/blog-footer/blog-footer";
 import EmptyState from "../../components/empty-state/empty-state";
 import InfiniteLoader from "../../components/core/infinite-loader/infinite-loader";
 import Pagination from "../../page-layouts/plp/Components/pagination/pagination";
+import {
+  useNavigate,
+  useGlobalStore,
+  useFPI,
+  useGlobalTranslation,
+} from "fdk-core/utils";
 
 import {
   isRunningOnClient,
-  throttle,
   convertUTCDateToLocalDate,
+  formatLocale,
+  translateDynamicLabel,
 } from "../../helper/utils";
 import Shimmer from "../../components/shimmer/shimmer";
+import useLocaleDirection from "../../helper/hooks/useLocaleDirection";
+import { debounce } from "../../helper/utils";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+} from "../../components/carousel/carousel";
+import Autoplay from "embla-carousel-autoplay";
 
 function MemoizedSlide({ blog, index, sliderProps, getBlogTitle }) {
+  const { t } = useGlobalTranslation("translation");
+  const fpi = useFPI();
+  const i18nDetails = useGlobalStore(fpi?.getters?.i18N_DETAILS) || {};
+  const locale = i18nDetails?.language?.locale || "en";
+  const countryCode = i18nDetails?.countryCode || "IN";
   const getFormattedDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
     return isRunningOnClient()
-      ? convertUTCDateToLocalDate(dateString, options)
+      ? convertUTCDateToLocalDate(
+          dateString,
+          options,
+          formatLocale(locale, countryCode, true)
+        )
       : "";
   };
   const getBlogTag = (tags) => {
@@ -62,7 +87,7 @@ function MemoizedSlide({ blog, index, sliderProps, getBlogTitle }) {
           title={blog?.title}
           to={`/blog/${blog?.slug}`}
         >
-          {sliderProps?.btn_text}
+          {translateDynamicLabel(sliderProps?.btn_text, t)}
         </FDKLink>
       </div>
       <FyImage
@@ -70,7 +95,7 @@ function MemoizedSlide({ blog, index, sliderProps, getBlogTitle }) {
         src={blog?.feature_image?.secure_url || sliderProps?.fallback_image}
         isFixedAspectRatio={false}
         defer={false}
-        alt={`slide-${index}`}
+        alt={`${t("resource.blog.slide_alt")}-${index}`}
         showSkeleton={false}
         isImageFill
       />
@@ -91,6 +116,12 @@ function BlogList({
   ssrSearch,
   ssrFilters,
 }) {
+  const { direction } = useLocaleDirection();
+  const { t } = useGlobalTranslation("translation");
+  const fpi = useFPI();
+  const i18nDetails = useGlobalStore(fpi?.getters?.i18N_DETAILS) || {};
+  const locale = i18nDetails?.language?.locale || "en";
+  const countryCode = i18nDetails?.countryCode || "IN";
   const navigate = useNavigate();
   const location = useLocation();
   const [blogFilter, setBlogFilter] = useState(ssrFilters || []);
@@ -113,60 +144,33 @@ function BlogList({
     typeof show_top_blog === "boolean" || show_top_blog === ""
       ? show_top_blog
       : true;
-  const [windowWidth, setWindowWidth] = useState(0);
-  const [config, setConfig] = useState({
-    dots: false,
-    speed: Number(sliderProps?.slide_interval * 1000),
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    swipeToSlide: true,
-    autoplay: sliderProps?.autoplay,
-    pauseOnHover: true,
-    cssEase: "linear",
-    centerPadding: "75px",
-    arrows: false,
-    nextArrow: <SvgWrapper svgSrc="arrow-right" />,
-    prevArrow: <SvgWrapper svgSrc="arrow-left" />,
-    infinite: sliderBlogs?.tems?.length > 1,
-  });
 
-  useEffect(() => {
-    setConfig((prevConfig) => ({
-      ...prevConfig,
-      infinite: sliderBlogs?.items?.length > 1,
-    }));
-  }, [sliderBlogs]);
+  const carouselProps = useMemo(() => {
+    const opts = {
+      loop: sliderBlogs?.items?.length > 1,
+      skipSnaps: true,
+      direction,
+    };
+    const plugins = [];
+    if (sliderProps?.autoplay) {
+      plugins.push(
+        Autoplay({
+          stopOnMouseEnter: true,
+          stopOnInteraction: false,
+          delay: Number(sliderProps?.slide_interval || 3) * 1000,
+        })
+      );
+    }
+    return { opts, plugins };
+  }, [
+    sliderBlogs?.items?.length,
+    sliderProps?.autoplay,
+    sliderProps?.slide_interval,
+  ]);
 
   useEffect(() => {
     setBlogCount(totalBlogsList?.page?.item_total);
   }, [totalBlogsList]);
-
-  useEffect(() => {
-    if (sliderProps?.autoplay) {
-      setConfig((prevConfig) => ({
-        ...prevConfig,
-        autoplay: sliderProps.autoplay,
-        speed: Number(sliderProps.slide_interval * 1000),
-      }));
-    }
-  }, [sliderProps.autoplay, sliderProps.slide_interval]);
-
-  useEffect(() => {
-    const handleResize = throttle(() => {
-      setWindowWidth(isRunningOnClient() ? window.innerWidth : 0);
-    }, 500);
-
-    if (isRunningOnClient()) {
-      window.addEventListener("resize", handleResize);
-      handleResize();
-    }
-
-    return () => {
-      if (isRunningOnClient()) {
-        window.removeEventListener("resize", handleResize);
-      }
-    };
-  }, []);
 
   useEffect(() => {
     const searchParams = isRunningOnClient()
@@ -181,18 +185,7 @@ function BlogList({
       key: item?.toLowerCase(),
     }));
 
-    setBlogFilter([
-      ...(tagBlogFilters || []),
-      ...(search
-        ? [
-            {
-              display: search,
-              pretext: "text",
-              key: "search_text",
-            },
-          ]
-        : []),
-    ]);
+    setBlogFilter([...(tagBlogFilters || [])]);
   }, [location?.search]);
 
   const removeFilter = (filter) => {
@@ -211,26 +204,33 @@ function BlogList({
       search: searchParams?.toString(),
     });
   };
+
+  const debouncedSearchRef = useRef(
+    debounce((value, pathname, search, navigateFn) => {
+      const searchParams = isRunningOnClient()
+        ? new URLSearchParams(search)
+        : null;
+      searchParams?.delete("page_no");
+      if (value) {
+        searchParams?.set("search", value);
+      } else {
+        searchParams?.delete("search");
+      }
+      navigateFn?.({
+        pathname: pathname,
+        search: searchParams?.toString(),
+      });
+    }, 500)
+  ).current;
+
   const searchTextUpdate = (value) => {
     if (value.length > 90) {
       value = value.substring(0, 80);
     }
     setSearchText(value);
-
-    const searchParams = isRunningOnClient()
-      ? new URLSearchParams(location?.search)
-      : null;
-    searchParams?.delete("page_no");
-    if (value) {
-      searchParams?.set("search", value);
-    } else {
-      searchParams?.delete("search");
-    }
-    navigate?.({
-      pathname: location?.pathname,
-      search: searchParams?.toString(),
-    });
+    debouncedSearchRef(value, location?.pathname, location?.search, navigate);
   };
+
   const resetFilters = () => {
     setSearchText("");
     navigate?.({
@@ -241,7 +241,11 @@ function BlogList({
   const getFormattedDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
     return isRunningOnClient()
-      ? convertUTCDateToLocalDate(dateString, options)
+      ? convertUTCDateToLocalDate(
+          dateString,
+          options,
+          formatLocale(locale, countryCode, true)
+        )
       : "";
   };
   const getBlogTag = (tags) => {
@@ -376,45 +380,50 @@ function BlogList({
   return (
     <div>
       <div className={styles.blogContainer}>
-        {blogFilter?.length === 0 && blogs?.page?.item_total === 0 && (
-          <EmptyState title="No blogs found"></EmptyState>
-        )}
+        {blogFilter?.length === 0 &&
+          blogs?.page?.item_total === 0 &&
+          !searchText && (
+            <EmptyState title={t("resource.blog.no_blogs_found")}></EmptyState>
+          )}
         {showBlogSlideShow && (
           <div className={styles.sliderWrapper}>
-            <Slider
-              {...config}
-              initialSlide={0}
-              className={
-                sliderBlogs?.length <= 3 || windowWidth <= 480 ? "no-nav" : ""
-              }
-            >
-              {sliderBlogs?.items?.map((blog, index) => (
-                <MemoizedSlide
-                  key={index}
-                  blog={blog}
-                  index={index}
-                  getBlogTitle={getBlogTitle}
-                  sliderProps={sliderProps}
-                />
-              ))}
-            </Slider>
+            <Carousel {...carouselProps}>
+              <CarouselContent>
+                {sliderBlogs?.items?.map((blog, index) => (
+                  <CarouselItem key={index}>
+                    <MemoizedSlide
+                      blog={blog}
+                      index={index}
+                      getBlogTitle={getBlogTitle}
+                      sliderProps={sliderProps}
+                    />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className={styles.carouselBtn} />
+              <CarouselNext className={styles.carouselBtn} />
+            </Carousel>
           </div>
         )}
         <div className={styles.filterWrapper}>
           <div className={`${styles.filterWrapper__header}`}>
             <div>
               {blogFilter?.length > 0 && (
-                <span>Showing {blogs?.page?.item_total} results of </span>
+                <span>
+                  {t("resource.blog.showing_results", {
+                    count: blogs?.page?.item_total,
+                  })}{" "}
+                </span>
               )}
               {blogCount > 0 && (
                 <>
-                  <span>{blogCount}</span> items
+                  <span>{blogCount}</span> {t("resource.common.items")}
                 </>
               )}
             </div>
 
             <span className={`${styles.resetBtn}`} onClick={resetFilters}>
-              {blogFilter?.length > 0 && "Reset All"}
+              {blogFilter?.length > 0 && t("resource.facets.reset_all")}
             </span>
           </div>
 
@@ -437,7 +446,7 @@ function BlogList({
                 <input
                   type="text"
                   className={`${styles.blogSearch__input}`}
-                  placeholder="Search here..."
+                  placeholder={`${t("resource.common.search_here")}...`}
                   maxLength="80"
                   value={searchText}
                   onChange={(e) => searchTextUpdate(e?.target?.value)}
@@ -450,29 +459,32 @@ function BlogList({
           className={`${styles.blog__content} ${!isSidebarDisplayed ? `${styles.blog__contentFull}` : ""}`}
         >
           <div className={`${styles.blog__contentLeft}`}>
-            <div className={`${styles.filterList}`}>
-              {showFilters && blogFilter?.length > 0 && (
-                <div>Filtering by:</div>
-              )}
-              {showFilters &&
-                [...blogFilter].map((filter) => (
-                  <div className={`${styles.filterItem}`} key={filter?.key}>
-                    <span>{`${filter?.pretext}: ${filter?.display}`}</span>
-                    <SvgWrapper
-                      className={`${styles.filterItem__icon}`}
-                      svgSrc="close"
-                      onClick={() => removeFilter(filter)}
-                    />
-                  </div>
-                ))}
-            </div>
-
-            {blogFilter?.length > 0 && blogs?.page?.item_total === 0 && (
-              <EmptyState
-                title="No blogs found"
-                customClassName={styles.emptyBlog}
-              ></EmptyState>
+            {showFilters && blogFilter?.length > 0 && (
+              <div className={`${styles.filterList}`}>
+                {showFilters && blogFilter?.length > 0 && (
+                  <div>{t("resource.facets.filtering_by")}:</div>
+                )}
+                {showFilters &&
+                  [...blogFilter].map((filter) => (
+                    <div className={`${styles.filterItem}`} key={filter?.key}>
+                      <span>{`${filter?.pretext}: ${filter?.display}`}</span>
+                      <SvgWrapper
+                        className={`${styles.filterItem__icon}`}
+                        svgSrc="close"
+                        onClick={() => removeFilter(filter)}
+                      />
+                    </div>
+                  ))}
+              </div>
             )}
+
+            {(blogFilter?.length > 0 || searchText) &&
+              blogs?.page?.item_total === 0 && (
+                <EmptyState
+                  title={t("resource.blog.no_blogs_found")}
+                  customClassName={styles.emptyBlog}
+                ></EmptyState>
+              )}
             <div className={`${styles.blogContainer__grid}`}>
               {sliderProps?.loadingOption === "infinite" ? (
                 <InfiniteLoader

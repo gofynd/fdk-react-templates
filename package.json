@@ -3,10 +3,6 @@
   "version": "2.0.2",
   "description": "A react component library build for skyfire.",
   "main": "./dist",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/gofynd/fdk-react-templates"
-  },
   "scripts": {
     "test": "test",
     "build": "webpack",
@@ -75,7 +71,6 @@
   "license": "MIT",
   "dependencies": {
     "@google/model-viewer": "^4.0.0",
-    "react-slick": "^0.30.2",
     "rc-slider": "^11.1.9",
     "react-imask": "^7.6.1"
   }

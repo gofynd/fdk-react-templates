@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import "../../styles/main.less";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function VerifyEmail({ verifyEmail }) {
+  const { t } = useGlobalTranslation("translation");
   const [searchParams] = useSearchParams();
   const [isEmailCodeValid, setIsEmailCodeValid] = useState(true);
 
@@ -24,8 +26,8 @@ function VerifyEmail({ verifyEmail }) {
     <div className="content flexCenter">
       <span>
         {isEmailCodeValid
-          ? "Email Successfully Verified"
-          : "Code Expired/Invalid Request"}
+          ? t("resource.verify_email.email_success")
+          : t("resource.verify_email.code_expired")}
       </span>
     </div>
   );

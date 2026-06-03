@@ -2,6 +2,8 @@ import React, { useEffect, useId, useLayoutEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import * as styles from "./login-otp.less";
 import MobileNumber from "../../../auth/mobile-number/mobile-number";
+import { useGlobalTranslation } from "fdk-core/utils";
+import ForcedLtr from "../../../../components/forced-ltr/forced-ltr";
 
 function LoginOtp({
   mobileInfo = {
@@ -18,7 +20,9 @@ function LoginOtp({
   onLoginFormSubmit = () => {},
   onOtpSubmit = () => {},
   onResendOtpClick = () => {},
+  getOtpLoading,
 }) {
+  const { t } = useGlobalTranslation("translation");
   const { handleSubmit, control, getValues, reset, setValue } = useForm({
     mode: "onChange",
     defaultValues: {
@@ -43,7 +47,7 @@ function LoginOtp({
             rules={{
               validate: (value) => {
                 if (!value.isValidNumber) {
-                  return "Please enter valid phone number";
+                  return t("resource.common.enter_valid_phone_number");
                 }
                 return true;
               },
@@ -61,8 +65,12 @@ function LoginOtp({
               />
             )}
           />
-          <button className={styles.sendOtpBtn} type="submit">
-            GET OTP
+          <button
+            className={`btnPrimary ${styles.sendOtpBtn}`}
+            type="submit"
+            disabled={getOtpLoading}
+          >
+            {t("resource.auth.login.get_otp")}
           </button>
         </form>
       ) : (
@@ -91,6 +99,7 @@ function OtpForm({
   onResendOtpClick = () => {},
   onChangeButton = () => {},
 }) {
+  const { t } = useGlobalTranslation("translation");
   const otpInputId = useId();
 
   const {
@@ -142,15 +151,18 @@ function OtpForm({
         className={styles.loginInputGroup}
         onSubmit={handleSubmit(onOtpSubmit)}
       >
-        <h3 className={styles.otpTitle}>Verify Account</h3>
+        <h3 className={styles.otpTitle}>
+          {t("resource.localization.verify_account")}
+        </h3>
         <p className={styles.otpSentMsg}>
-          {`OTP sent to ${submittedMobile}`}
+          {`${t("resource.common.otp_sent_to")}`}{" "}
+          <ForcedLtr text={submittedMobile} />
           <button
             type="button"
             className={styles.changeBtn}
             onClick={onChangeButton}
           >
-            CHANGE
+            {t("resource.common.change_caps")}
           </button>
         </p>
 
@@ -159,7 +171,8 @@ function OtpForm({
             className={`${styles.loginInputTitle} ${errors?.root || errors?.mobileOtp ? styles.error : ""}`}
             htmlFor={otpInputId}
           >
-            Enter OTP <span className={`${styles.formReq}`}>*</span>
+            {t("resource.common.enter_otp")}{" "}
+            <span className={`${styles.formReq}`}>*</span>
           </label>
           <input
             id={otpInputId}
@@ -167,6 +180,7 @@ function OtpForm({
             inputMode="numeric"
             pattern="\d*"
             maxLength={4}
+            dir="ltr"
             onInput={(e) => {
               e.target.value = e.target.value
                 .replace(/[^0-9]/g, "")
@@ -174,7 +188,10 @@ function OtpForm({
             }}
             className={`${styles.otpInput} ${errors?.root || errors?.mobileOtp ? styles.error : ""}`}
             {...register("mobileOtp", {
-              required: { message: "Please enter valid otp", value: true },
+              required: {
+                message: t("resource.common.enter_valid_otp"),
+                value: true,
+              },
               maxLength: 4,
             })}
           />
@@ -185,8 +202,8 @@ function OtpForm({
             </div>
           )}
         </div>
-        <button className={styles.verifyOtpBtn} type="submit">
-          Continue
+        <button className={`btnPrimary ${styles.verifyOtpBtn}`} type="submit">
+          {t("resource.common.continue")}
         </button>
       </form>
       <button
@@ -194,7 +211,7 @@ function OtpForm({
         onClick={resendOtp}
         disabled={isResendBtnDisabled}
       >
-        {`Resend OTP${isResendBtnDisabled ? ` (${otpResendTime}S)` : ""}`}
+        {`${t("resource.common.resend_otp")}${isResendBtnDisabled ? ` (${otpResendTime}S)` : ""}`}
       </button>
     </>
   );

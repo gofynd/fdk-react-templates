@@ -1,0 +1,138 @@
+@import "../../styles/main.less";
+
+.accordionList > ul {
+  list-style: none;
+
+  > li {
+    list-style: none;
+  }
+}
+
+.accordionItem {
+  border-top: 1px solid #e0e0e0;
+  padding-top: 16px;
+  cursor: pointer;
+
+  .accordionRow {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+
+    & svg {
+      overflow: visible;
+    }
+
+    .accordionBox {
+      width: 100%;
+
+      .accordionTitle {
+        color: var(--Text-Heading, #1f1f1f);
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 140%;
+        width: 100%;
+      }
+
+      .accordionContent {
+        display: block;
+        color: @TextSecondary;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 140%;
+        margin-top: 8px;
+        cursor: default;
+
+        ul {
+          list-style: disc;
+          padding-left: 20px;
+        }
+
+        li {
+          margin-bottom: 4px;
+        }
+      }
+    }
+  }
+}
+
+.accordionContentImages {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.accordionContentImageItem {
+  display: flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  .imagePreview {
+    @media @desktop {
+      display: none;
+    }
+    position: absolute;
+    left: -155%;
+    top: -100px;
+    z-index: 20;
+  }
+  .largePreviewImg {
+    width: 73px;
+    height: 92px;
+    border-radius: 4px;
+    background: lightgray 50% / cover no-repeat;
+    box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.16);
+    pointer-events: none;
+  }
+}
+
+/* Show on hover */
+.accordionContentImageItem:hover .imagePreview {
+  display: block;
+}
+.accordionContentImg {
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--Text-Secondary, #6d6d6e);
+}
+
+.accordionContentKey {
+  color: var(--Text-Secondary, #6d6d6e);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+}
+
+.accordionContentValue {
+  color: var(--Text-Heading, #1f1f1f);
+  font-family: Inter;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 140%;
+}
+
+.accordionContentList li::marker {
+  color: var(--Text-Secondary, #6d6d6e);
+  font-size: 14px;
+}
+
+.accordionContentList {
+  list-style: disc;
+  padding-left: 20px;
+  margin: 0;
+}
+
+.accordionContentInner {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.filterArrowUp {
+  transform: rotate(180deg);
+}

@@ -207,15 +207,23 @@ const FyImage = forwardRef(
             />
           ))}
           <img
-            className={`fx-image ${styles.fyImg}`}
+            className={`fx-image ${styles.fyImg} ${styles.firefoxAltFix}`}
             srcSet={fallbackSrcset()}
             src={getSrc()}
-            alt={alt}
+            // Firefox fix: Start with empty alt, add proper alt after load
+            alt=""
+            title={alt} // Accessibility: tooltip still works
+            aria-label="Product image" // Screen readers
             onError={onError}
-            onLoad={onLoad}
+            onLoad={(e) => {
+              // Add proper alt text after image loads
+              e.target.alt = alt;
+              onLoad(e);
+            }}
             loading={defer ? "lazy" : "eager"}
             fetchpriority={defer ? "low" : "high"}
             ref={ref}
+            data-alt={alt}
           />
         </picture>
       </div>
