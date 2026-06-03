@@ -31,7 +31,7 @@ const ShipmentFreeGiftItem = ({ freeGiftBags = [], currencySymbol = "₹", hasRa
   return (
     <div className={`${styles.freeGiftContainer} ${hasRadioButton ? styles.withRadioButton : ''}`}>
       <h6 className={styles.freeGiftTitle}>
-        {uniqueGiftCount} {t("resource.cart.free_gift_added")}
+        {uniqueGiftCount} free gift added
       </h6>
       <div className={styles.freeGiftItemsWrapper}>
         {groupedGiftArray.map((group, index) => {
