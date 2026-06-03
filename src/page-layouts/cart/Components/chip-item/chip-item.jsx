@@ -105,6 +105,10 @@ export default function ChipItem({
     rawCustomizationOptions
   );
 
+  const availableSizes = singleItemDetails?.availability?.available_sizes || [];
+  const hideSizeChangeButton =
+    globalConfig?.hide_single_size && currentSize?.toLowerCase() === "os";
+
   const [items, setItems] = useState([
     {
       title: "Customization",
@@ -372,6 +376,16 @@ export default function ChipItem({
       return updatedItems;
     });
   };
+
+  const normalizedSize = (size) => {
+    return String(size ?? "")
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/\//g, "-")
+      .replace(/[^a-z0-9-]/g, "");
+  };
+
   return (
     <>
       <div className={styles.cartItemsListContainer} key={itemIndex}>
@@ -447,6 +461,7 @@ export default function ChipItem({
                   index: actualItemIndex,
                 })
               }
+              data-testid="remove-item-button"
             >
               <SvgWrapper
                 svgSrc="item-close"
@@ -460,6 +475,7 @@ export default function ChipItem({
               className={`${styles.itemName} ${
                 isOutOfStock ? styles.outOfStock : ""
               } `}
+              data-testid={`cart-item-row-${singleItemDetails?.product?.item_code}-${normalizedSize(singleItemDetails?.article?.size)}`}
             >
               {singleItemDetails?.product?.name?.length > 24
                 ? `${singleItemDetails.product.name.slice(0, 24)}...`
@@ -472,7 +488,8 @@ export default function ChipItem({
             )}
             <div className={styles.itemSizeQuantityContainer}>
               <div className={styles.itemSizeQuantitySubContainer}>
-                <button
+                {!hideSizeChangeButton && (
+                  <button
                   className={styles.sizeContainer}
                   onClick={async (e) => {
                     e.stopPropagation();
@@ -506,6 +523,8 @@ export default function ChipItem({
                     />
                   </span>
                 </button>
+                )}
+               
                 {!isOutOfStock && isServiceable && (
                   <QuantityControl
                     isCartUpdating={isCartUpdating}
@@ -588,8 +607,8 @@ export default function ChipItem({
                   }`}
                 >
                   {currencyFormat(
-                    singleItemDetails?.price?.converted?.effective ??
-                      singleItemDetails?.price?.base?.effective,
+                    singleItemDetails?.price?.converted?.final_price ??
+                      singleItemDetails?.price?.base?.final_price,
                     singleItemDetails?.price?.converted?.currency_symbol ??
                       singleItemDetails?.price?.base?.currency_symbol,
                     formatLocale(locale, countryCode, true),

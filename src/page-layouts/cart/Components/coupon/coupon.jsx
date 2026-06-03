@@ -213,9 +213,7 @@ function Coupon({
         </div>
         {isApplicable && (
           <>
-            {description && (
-              <p className={styles.couponDescription}>{descriptionContent}</p>
-            )}
+            {description && descriptionContent}
             <hr className={styles.divider} />
             <p
               className={`${styles.couponDesc} ${description ? styles.couponDescBold : ""}`}
@@ -247,8 +245,7 @@ function Coupon({
                       couponValue,
                       currencySymbol,
                       formatLocale(locale, countryCode, true),
-                      currencyCode,
-                      true
+                      currencyCode
                     )}
                   />
                 </span>
@@ -517,8 +514,7 @@ export function CouponSuccessModal({
                   coupon.value,
                   currencySymbol,
                   formatLocale(locale, countryCode, true),
-                  currencyCode,
-                  true
+                  currencyCode
                 )}
               </div>
               <div className={styles.couponValueSubheading}>

@@ -7,7 +7,6 @@ import * as styles from "./single-shipment-content.less";
 import { FDKLink } from "fdk-core/components";
 import { useGlobalTranslation, useNavigate } from "fdk-core/utils";
 import FreeGiftItem from "../../cart/Components/free-gift-item/free-gift-item";
-import ChipImage from "../../cart/Components/chip-item/chip-image";
 import Shimmer from "../../../components/shimmer/shimmer";
 import AppliedCouponIcon from "../../../assets/images/applied-coupon-small.svg";
 import ShippingLogoIcon from "../../../assets/images/shipping-logo.svg";
@@ -32,6 +31,8 @@ function SingleShipmentContent({
 }) {
   const { t } = useGlobalTranslation("translation");
   const navigate = useNavigate();
+  const hideSingleSize = globalConfig?.hide_single_size || false;
+
   const getShipmentItems = (shipment) => {
     let grpBySameSellerAndProduct = shipment?.items?.reduce((result, item) => {
       result[
@@ -60,6 +61,14 @@ function SingleShipmentContent({
     return updateArr;
   };
 
+  const isGifUrl = (url = "") => /\.gif(\?|#|$)/i.test(String(url || ""));
+  const getProductImage = (product) => {
+    if (product?.product?.images?.[0]?.url) {
+      return isGifUrl(product.product.images[0].url)
+        ? product.product.images[0].url
+        : product.product.images[0].url.replace("original", "resize-w:110");
+    }
+  };
   const getProductPath = (product) => {
     return "/product/" + product.product.slug;
   };
@@ -239,10 +248,10 @@ function SingleShipmentContent({
                                     },
                                   }}
                                 >
-                                  <ChipImage
-                                    product={product?.item?.product}
-                                    type={product?.item?.item_type}
-                                    globalConfig={globalConfig}
+                                  <img
+                                    src={getProductImage(product?.item)}
+                                    alt={product?.item?.product?.name}
+                                    className={`${globalConfig?.img_fill ? styles.imgCover : styles.imgContain}`}
                                   />
                                 </FDKLink>
                               </div>
@@ -262,10 +271,12 @@ function SingleShipmentContent({
                                         className={styles.sizeQuantity}
                                         key={article?.article?.size + index}
                                       >
-                                        <div className={styles.size}>
-                                          {t("resource.common.size")}:{" "}
-                                          {article?.article.size}
-                                        </div>
+                                        {!(hideSingleSize && article?.article?.size?.toLowerCase() === "os") && (
+                                          <div className={styles.size}>
+                                            {t("resource.common.size")}:{" "}
+                                            {article?.article.size}
+                                          </div>
+                                        )}
                                         <div className={styles.qty}>
                                           {t("resource.common.qty")}:{" "}
                                           {article?.quantity}
