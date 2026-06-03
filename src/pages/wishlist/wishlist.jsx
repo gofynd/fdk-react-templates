@@ -17,7 +17,6 @@ const Wishlist = ({
   totalCount = 0,
   isBrand = true,
   isSaleBadge = true,
-  isCustomBadge = true,
   isPrice = true,
   imgSrcSet,
   aspectRatio,
@@ -30,16 +29,14 @@ const Wishlist = ({
   hasNext = false,
   isLoading = false,
   EmptyStateComponent,
-  onLoadMore = () => { },
-  onRemoveClick = () => { },
+  onLoadMore = () => {},
+  onRemoveClick = () => {},
   imagePlaceholder = "",
   addToCartModalProps = {},
   showAddToCart = false,
   actionButtonText,
   globalConfig = {},
   showHeader = true,
-  showQuantityController = false,
-  showMoq = false,
 }) => {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -91,7 +88,6 @@ const Wishlist = ({
                 product,
                 isBrand,
                 isSaleBadge,
-                isCustomBadge,
                 isPrice,
                 imgSrcSet,
                 aspectRatio,
@@ -107,7 +103,6 @@ const Wishlist = ({
                 showAddToCart,
                 onRemoveClick,
                 handleAddToCart,
-                globalConfig,
                 isServiceable: is_serviceable,
               }}
             />
@@ -132,8 +127,6 @@ const Wishlist = ({
               {...restAddToModalProps}
               globalConfig={globalConfig}
               isServiceable={is_serviceable}
-              showQuantityController={showQuantityController}
-              showMoq={showMoq}
             />
           </Modal>
           <SizeGuide
@@ -152,7 +145,6 @@ const WishlistProductCard = ({
   index,
   isBrand = true,
   isSaleBadge = true,
-  isCustomBadge = true,
   isPrice = true,
   imgSrcSet,
   aspectRatio,
@@ -166,7 +158,7 @@ const WishlistProductCard = ({
   imagePlaceholder,
   actionButtonText,
   showAddToCart,
-  onRemoveClick = () => { },
+  onRemoveClick = () => {},
   handleAddToCart,
   isServiceable = true,
 }) => {
@@ -207,7 +199,6 @@ const WishlistProductCard = ({
         isBrand={isBrand}
         isPrice={isPrice}
         isSaleBadge={isSaleBadge}
-        isCustomBadge={isCustomBadge}
         isWishlistIcon={false}
         isRemoveIcon={true}
         RemoveIconComponent={RemoveIconComponent}

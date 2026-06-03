@@ -865,7 +865,7 @@ h5,
     padding: 16px;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
-    border-bottom: 1px solid var(--dividerStokes, #d4d1d1);
+    border-bottom: 1px solid var(--overlaypopupdividerstroke, #e0e0e0);
   }
 }
 .reattempt-shipment-modal__modalContainer___MGLqH .reattempt-shipment-modal__topContainer___CBUFk {
@@ -889,7 +889,7 @@ h5,
 @media only screen and (max-width: 480px) {
   .reattempt-shipment-modal__modalContainer___MGLqH .reattempt-shipment-modal__topContainer___CBUFk .reattempt-shipment-modal__inputsContainer___cNCaB {
     border: none;
-    border-bottom: 1px solid var(--dividerStokes, #d4d1d1);
+    border-bottom: 1px solid var(--overlaypopupdividerstroke, #e0e0e0);
     padding: 0;
   }
 }
@@ -983,7 +983,7 @@ h5,
     left: 0;
     right: 0;
     z-index: 0;
-    border-top: 1px solid var(--dividerStokes, #d4d1d1);
+    border-top: 1px solid var(--overlaypopupdividerstroke, #e0e0e0);
     background: var(--Theme-Page-Background, #FFF);
     box-shadow: 0px -4px 12px 0px rgba(0, 0, 0, 0.06);
   }
@@ -1360,7 +1360,7 @@ h5,
   position: absolute;
   transform: translateY(-50%) scale(0.9);
   z-index: 1;
-  background: var(--pageBackground, #f8f8f8);
+  background: #ffffff;
   padding: 0 0.3rem;
   margin: 0 0.5rem;
   font-size: 0.8rem;
@@ -1397,7 +1397,7 @@ h5,
 }
 .fy-input__fyInput___S4Mtu:disabled {
   color: var(--textSecondary, #9c9c9c);
-  border-color: var(--dividerStokes, #d4d1d1);
+  border-color: var(--overlaypopupdividerstroke, #e0e0e0);
   font-weight: 400;
 }
 .fy-input__fyInput___S4Mtu:focus {
@@ -1419,7 +1419,7 @@ h5,
   height: 48px;
 }
 .fy-input__outlined___CEaKm.fy-input__inputDisable___M8Zn2 {
-  border: 1px solid var(--dividerStokes, #d4d1d1);
+  border: 1px solid var(--overlaypopupdividerstroke, #e0e0e0);
   cursor: not-allowed;
   pointer-events: auto;
 }
@@ -1842,7 +1842,8 @@ h5,
   height: 48px;
   padding: 16px;
   border-radius: 6px;
-  border: 1px solid var(--dividerStokes, #d4d1d1);
+  border: 1px solid var(--overlaypopupdividerstroke, #e0e0e0);
+  background: var(--buttonSecondary, #fff);
 }
 .fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__inputWrapper___zh7iz input {
   border: none;
@@ -1903,7 +1904,7 @@ h5,
   width: 100%;
   position: absolute;
   top: 0;
-  border-bottom: 1px solid var(--dividerStokes, #d4d1d1);
+  border-bottom: 1px solid var(--overlaypopupdividerstroke, #e0e0e0);
 }
 .fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__titleContainer___O2vVH .fy-date-picker__titleText___iZItx {
   color: var(--textHeading, #26201a);
@@ -1969,7 +1970,7 @@ h5,
 .fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__calendarPopup___cA9su .fy-date-picker__calendarHeader___R20ub .fy-date-picker__controlContainer___cfI7T .fy-date-picker__monthYearSelect___hHzRC select {
   padding: 6px 10px;
   border-radius: 4px;
-  border: 1px solid var(--dividerStokes, #d4d1d1);
+  border: 1px solid var(--overlaypopupdividerstroke, #e0e0e0);
   background: var(--buttonSecondary, #fff);
   color: var(--textHeading, #26201a);
   font-weight: 600;
@@ -2017,7 +2018,7 @@ h5,
   cursor: pointer;
   font-size: 12px;
   font-weight: 600;
-  border: 1px solid var(--dividerStokes, #d4d1d1);
+  border: 1px solid var(--overlaypopupdividerstroke, #e0e0e0);
   padding: 0;
   box-sizing: border-box;
   min-height: 40px;
@@ -2915,9 +2916,6 @@ h5,
     display: none !important;
   }
 }
-.address-form__addressFormWrapper___M0Ler input {
-  font-weight: 400 !important;
-}
 .address-form__addressFormWrapper___M0Ler .address-form__formContainer___UrnfJ {
   display: flex;
   flex-wrap: wrap;
@@ -3063,15 +3061,9 @@ h5,
   box-sizing: border-box;
   width: 100%;
   background-color: transparent;
-  font-weight: 400;
 }
 .address-form__formItemDiv___ciw5I .address-form__formInputBox___QHRHx.address-form__otherInput___xvlRj {
   width: 45%;
-}
-@media only screen and (max-width: 480px) {
-  .address-form__formItemDiv___ciw5I .address-form__formInputBox___QHRHx {
-    font-weight: 400;
-  }
 }
 .address-form__formItemDiv___ciw5I .address-form__formCheckBox___ifOb0 {
   font-size: 0.8rem;
