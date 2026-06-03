@@ -23,7 +23,7 @@ function OrderTracking({ instMob, title, orderIdPlaceholder, trackOrderBtnText, 
   return (
     <div className="basePageContainer margin0auto">
       <div className={`${styles.trackOrderCntr}`}>
-        <h2 className={`${styles.orderTitle}`}>{title}?</h2>
+        <h2 className={`${styles.orderTitle}`}>{title}</h2>
         <div className={`${styles.trackOrder}`}>
           <FyInput
             label={isFocussed || orderId ? orderIdPlaceholder : ""}
@@ -57,7 +57,7 @@ function OrderTracking({ instMob, title, orderIdPlaceholder, trackOrderBtnText, 
             <div>
               <img
                 src={instMob}
-                alt={`${whereIsOrderIdText}?`}
+                alt={whereIsOrderIdText}
                 className={`${styles.demoImg}`}
               />
             </div>
