@@ -51,7 +51,7 @@ function OrderTracking({ instMob, title, orderIdPlaceholder, trackOrderBtnText, 
             variant="text"
             onClick={() => setShowDetails(!showDetails)}
           >
-           {whereIsOrderIdText}?
+           {whereIsOrderIdText}
           </FyButton>
           {showDetails && (
             <div>
