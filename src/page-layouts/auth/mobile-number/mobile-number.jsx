@@ -3,6 +3,7 @@ import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 import * as styles from "./mobile-number.less";
 import { PhoneNumberUtil } from "google-libphonenumber";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function MobileNumber({
   name = "",
@@ -10,13 +11,15 @@ function MobileNumber({
   countryCode = "91",
   disable = false,
   isShowLabel = true,
-  isRequired = "required",
+  isRequired,
+  showAsOptional = true,
   allowDropdown = true,
   isFocused = false,
   placeholder = "",
   label = "",
   error,
   onChange,
+  handleKeyDown = () => {},
   inputClassName,
   containerClassName,
   labelClassName,
@@ -29,6 +32,7 @@ function MobileNumber({
   countryIso,
   ...rest
 }) {
+  const { t } = useGlobalTranslation("translation");
   const inputId = useId();
   const phoneInputRef = useRef(null);
 
@@ -73,12 +77,24 @@ function MobileNumber({
     >
       {isShowLabel && (
         <label
-          className={`${styles.inputTitle} ${labelClassName || ""}`}
+          className={`${styles.inputTitle} ${labelClassName || ""}
+          ${styles.additionalLableClasses}
+          `}
           htmlFor={inputId}
+          style={{
+            fontSize: "12px",
+            fontStyle: "normal",
+            fontWeight: "400",
+            color: "var(--textLabel , #7d7676)" 
+          }}
         >
-          {label || "Mobile "}
+          {label || t("resource.common.mobile")}
           {isRequired === "optional" ? (
-            " (optional)"
+            !showAsOptional ? (
+              ""
+            ) : (
+              ` (${t("resource.common.optional_lower")})`
+            )
           ) : (
             <span className={styles.required}> * </span>
           )}
@@ -94,6 +110,7 @@ function MobileNumber({
         ref={phoneInputRef}
         style={{
           "--react-international-phone-height": height,
+          "--react-international-phone-width": "100%",
           "--react-international-phone-text-color": textColor,
           "--react-international-phone-border-radius": "4px",
           "--react-international-phone-border-color": `${error ? "var(--errorText, #b24141)" : "var(--dividerStokes, #d4d1d1)"}`,
@@ -114,6 +131,7 @@ function MobileNumber({
           buttonStyle: {
             padding: "0 8px",
           },
+          buttonClassName: `${styles.countryButton}`,
           dropdownStyleProps: {
             style: {
               zIndex: 999,
@@ -125,8 +143,12 @@ function MobileNumber({
         inputClassName={`${styles.mobileNumberInput} ${inputClassName || ""}`}
         inputProps={{
           id: inputId,
+          onKeyDown: handleKeyDown,
           autoComplete: "tel",
           ...inputProps,
+          style :{
+            width: "100%"
+          }
         }}
         placeholder={placeholder}
         hideDropdown={!allowDropdown}

@@ -5,21 +5,31 @@ import {
 } from "../../../helper/utils";
 import * as styles from "./single-shipment-content.less";
 import { FDKLink } from "fdk-core/components";
+import { useGlobalTranslation } from "fdk-core/utils";
 import FreeGiftItem from "../../cart/Components/free-gift-item/free-gift-item";
 import Shimmer from "../../../components/shimmer/shimmer";
 import AppliedCouponIcon from "../../../assets/images/applied-coupon-small.svg";
 import ShippingLogoIcon from "../../../assets/images/shipping-logo.svg";
+import Skeleton from "../../../components/core/skeletons/skeleton";
 
 function SingleShipmentContent({
   shipments,
   isShipmentLoading,
   showPaymentOptions,
-  isHyperlocal = false,
-  convertHyperlocalTat = () => {},
   loader,
   buybox = {},
-  hurryUpThreshold = 10,
+  availableFOCount,
+  isCartValid,
+  getTotalValue,
+  proceedToPay,
+  isLoading = false,
+  getDeliveryPromise,
+  redirectPaymentOptions,
+  isPaymentLoading = false,
+  globalConfig,
 }) {
+  const { t } = useGlobalTranslation("translation");
+  const hideSingleSize = globalConfig?.hide_single_size || false;
   const getShipmentItems = (shipment) => {
     let grpBySameSellerAndProduct = shipment?.items?.reduce((result, item) => {
       result[
@@ -84,7 +94,65 @@ function SingleShipmentContent({
     <>
       {isShipmentLoading ? (
         <div className={styles.parent}>
-          {loader || <Shimmer className={styles.shimmer} />}
+          {Array(3)
+            .fill()
+            .map((_) => (
+              <div className={styles.reviewContentContainer}>
+                <div className={styles.shipmentWrapper}>
+                  <div className={styles.shipmentHeading}>
+                    <div className={styles.headerLeft}>
+                      <Skeleton
+                        className={styles.shipmentLabelLoader}
+                        width={145}
+                        height={27}
+                      />
+                    </div>
+                    <div className={styles.deliveryDateWrapper}>
+                      <Skeleton
+                        className={styles.deliveryPromiseLoader}
+                        width={166}
+                        height={27}
+                      />
+                    </div>
+                  </div>
+                  <div className={styles.item}>
+                    <div className={styles.itemWrapper}>
+                      <div className={styles.leftImg}>
+                        <Skeleton width={100} aspectRatio={2 / 3} />
+                      </div>
+                      <div className={styles.rightDetails}>
+                        <div className={styles.productDetails}>
+                          <div>
+                            <div className={styles.brandName}>
+                              <Skeleton width={58} height={20} />
+                            </div>
+                            <div className={styles.productName}>
+                              <Skeleton width={134} height={20} />
+                            </div>
+                          </div>
+                          <div className={styles.sizeInfo}>
+                            <Skeleton width={100} height={20} />
+                          </div>
+                        </div>
+                        <div className={styles.paymentInfo}>
+                          <div className={styles.priceWrapper}>
+                            <div className={styles.effectivePrice}>
+                              <Skeleton width={40} height={20} />
+                            </div>
+                            <div className={styles.markedPrice}>
+                              <Skeleton width={35} height={20} />
+                            </div>
+                            <div className={styles.discount}>
+                              <Skeleton width={52} height={20} />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
         </div>
       ) : (
         <div className={styles.parent}>
@@ -98,11 +166,12 @@ function SingleShipmentContent({
                       <div className={styles.shipmentHeading}>
                         <div className={styles.headerLeft}>
                           <div className={styles.shipmentNumber}>
-                            Shipment {index + 1}/{shipments.length}
+                            {t("resource.common.shipment")} {index + 1}/
+                            {shipments.length}
                           </div>
                           <div className={styles.itemCount}>
                             (
-                            {`${shipmentItems.length} ${shipmentItems.length > 1 ? "Items" : "Item"}`}
+                            {`${shipmentItems.length} ${shipmentItems.length > 1 ? t("resource.common.item_simple_text_plural") : t("resource.common.item_simple_text")}`}
                             )
                           </div>
                         </div>
@@ -113,10 +182,14 @@ function SingleShipmentContent({
                             </div>
 
                             <div className={styles.deliveryDate}>
-                              {isHyperlocal
-                                ? convertHyperlocalTat(item?.promise?.iso?.max)
-                                : `Delivery by ${item?.promise?.formatted?.max}`}
+                              {getDeliveryPromise?.(item?.promise)}
                             </div>
+                            {availableFOCount > 1 &&
+                              item?.fulfillment_option?.name && (
+                                <div className={styles.foName}>
+                                  {item?.fulfillment_option?.name}
+                                </div>
+                              )}
                           </div>
                         )}
                       </div>
@@ -136,7 +209,21 @@ function SingleShipmentContent({
                             )}
                             <div className={styles.itemWrapper}>
                               <div className={styles.leftImg}>
-                                <FDKLink to={getProductPath(product?.item)}>
+                                <FDKLink
+                                  to={getProductPath(product?.item)}
+                                  state={{
+                                    product: {
+                                      ...product?.item?.product,
+                                      media:
+                                        product?.item?.product?.images?.map(
+                                          (i) => ({
+                                            ...i,
+                                            type: "image",
+                                          })
+                                        ) || [],
+                                    },
+                                  }}
+                                >
                                   <img
                                     src={getProductImage(product?.item)}
                                     alt={product?.item?.product?.name}
@@ -159,11 +246,15 @@ function SingleShipmentContent({
                                         className={styles.sizeQuantity}
                                         key={article?.article?.size + index}
                                       >
-                                        <div className={styles.size}>
-                                          Size: {article?.article.size}
-                                        </div>
+                                        {!(hideSingleSize && article?.article?.size?.toLowerCase() === "os") && (
+                                          <div className={styles.size}>
+                                            {t("resource.common.size")}:{" "}
+                                            {article?.article.size}
+                                          </div>
+                                        )}
                                         <div className={styles.qty}>
-                                          Qty: {article?.quantity}
+                                          {t("resource.common.qty")}:{" "}
+                                          {article?.quantity}
                                         </div>
                                       </div>
                                     ))}
@@ -192,27 +283,25 @@ function SingleShipmentContent({
                                     </div>
                                   </div>
                                   <div className={styles.offersWarning}>
-                                    {product?.item?.article?.quantity <= hurryUpThreshold &&
+                                    {product?.item?.article?.quantity < 11 &&
                                       product?.item?.article?.quantity > 0 &&
                                       !buybox?.is_seller_buybox_enabled && (
                                         <div className={styles.limitedQnty}>
-                                          Hurry! Only{" "}
-                                          {product?.item?.article?.quantity}{" "}
-                                          Left
+                                          {t(
+                                            "resource.common.hurry_only_left",
+                                            {
+                                              quantity:
+                                                product?.item?.article
+                                                  ?.quantity,
+                                            }
+                                          )}
                                         </div>
                                       )}
                                   </div>
                                 </div>
                               </div>
                               <FreeGiftItem
-                                item={
-                                  product?.articles?.find((article) =>
-                                    article?.promotions_applied?.some(
-                                      (p) =>
-                                        p?.promotion_type === "free_gift_items"
-                                    )
-                                  ) ?? product?.item
-                                }
+                                item={product?.item}
                                 currencySymbol={
                                   product?.item?.price?.converted
                                     ?.currency_symbol ??
@@ -229,8 +318,19 @@ function SingleShipmentContent({
               );
             })}
           <div className={styles.proceedBtnWrapper}>
-            <button className={styles.proceedBtn} onClick={showPaymentOptions}>
-              Proceed To Pay
+            <button
+              className={styles.proceedBtn}
+              onClick={() => {
+                if (getTotalValue?.() === 0) {
+                  proceedToPay("PP", {});
+                } else {
+                  redirectPaymentOptions();
+                  showPaymentOptions();
+                }
+              }}
+              disabled={isPaymentLoading}
+            >
+              {getTotalValue?.() === 0 ? "PLACE ORDER" : "Proceed To Pay"}
             </button>
           </div>
         </div>

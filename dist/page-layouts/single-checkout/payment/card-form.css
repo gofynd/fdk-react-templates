@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 18px;
+  line-height: 1.5;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 24px;
+    line-height: 1.5;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .checkout-payment-content__caption-medium___s4nwJ,
 .checkout-payment-content__captionMedium___boOFu {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .checkout-payment-content__caption-semi-bold____upNw,
 .checkout-payment-content__captionSemiBold___ThE5O {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -260,11 +260,11 @@ h5,
 }
 .checkout-payment-content__mr-5___JyuiJ,
 .checkout-payment-content__mr5___yab6i {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .checkout-payment-content__mr-2___BpAkg,
 .checkout-payment-content__mr2___bbNXm {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .checkout-payment-content__py-5___n6RPT,
 .checkout-payment-content__py5___jhOdB {
@@ -334,17 +334,142 @@ h5,
     display: none !important;
   }
 }
+.card_number_div, .card_exp_month_div, .card_exp_year_div, .security_code_div, .name_on_card_div {
+  height: 48px;
+  border: 1px solid var(--dividerStokes);
+  border-radius: 4px;
+  color: var(--textBody, #3c3131);
+  overflow: hidden;
+  padding-left: 16px;
+  padding-right: 16px;
+  outline: none;
+  margin-top: 16px;
+}
+.security_code_div {
+  width: 103px;
+}
+.card_exp_month_div, .card_exp_year_div {
+  width: 25%;
+}
+.security_code_div {
+  width: 50%;
+}
+@media screen and (max-width: 768px) {
+  .card_number_div, .card_exp_month_div, .card_exp_year_div, .security_code_div, .name_on_card_div {
+    height: 48px;
+  }
+}
+.checkout-payment-content__juspayCardNumberBox___Hk0Td {
+  position: relative;
+}
+.checkout-payment-content__juspayCardNetwork___D2nCX {
+  cursor: pointer;
+  height: 28px;
+  position: absolute;
+  inset-inline-end: 8px;
+  top: 25px;
+  transform: translateY(-50%);
+}
+@media only screen and (min-width: 769px) {
+  .checkout-payment-content__juspayCardNetwork___D2nCX {
+    top: 25px;
+    transform: translateY(-50%);
+    height: 32px;
+  }
+}
+.checkout-payment-content__cardDateCvvJuspayWrapper____0KQj {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+.checkout-payment-content__checkbox___ci4x4 {
+  accent-color: var(--buttonPrimary);
+  height: 13px;
+  width: 13px;
+  cursor: pointer;
+}
+.checkout-payment-content__checkboxWrapper___ohDrw {
+  display: flex;
+  justify-content: start;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+.checkout-payment-content__rbiGuidelines___jmtpW {
+  display: flex;
+  align-items: center;
+  margin-top: 16px;
+}
+@media only screen and (max-width: 480px) {
+  .checkout-payment-content__rbiGuidelines___jmtpW {
+    margin-bottom: 24px;
+  }
+}
+.checkout-payment-content__rbiGuidelines___jmtpW input:checked:before {
+  background-color: var(--buttonPrimary);
+}
+.checkout-payment-content__rbiGuidelines___jmtpW .checkout-payment-content__rbiGuidelinesText___N6rOU {
+  display: flex;
+  font-family: inherit;
+  font-weight: 400;
+  font-size: 12px;
+  color: #1f1f1f;
+  margin: 0 8px;
+  align-self: center;
+  line-height: 140%;
+}
+@media only screen and (max-width: 480px) {
+  .checkout-payment-content__marginBottom___qTP6J {
+    margin-bottom: 24px;
+  }
+}
 .checkout-payment-content__container___HusGh {
   background: var(--pageBackground, #f8f8f8);
 }
-@media only screen and (min-width: 481px) {
+.checkout-payment-content__container___HusGh.checkout-payment-content__unsetBorder___iXIU7 {
+  border: unset;
+  padding-top: 0;
+}
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  .checkout-payment-content__container___HusGh {
+    padding: 16px !important;
+  }
+}
+@media only screen and (min-width: 769px) {
   .checkout-payment-content__container___HusGh {
     display: flex;
     padding: 24px;
     border: 1px solid var(--dividerStokes);
     border-top: none;
     border-radius: 0 0 8px 8px;
+    flex-direction: column;
+    gap: 24px;
   }
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__creditNote___giWgh {
+  display: none;
+}
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__creditNote___giWgh {
+    margin-top: 20px;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__creditNote___giWgh {
+    display: block;
+  }
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__paymentOptions___iL15l {
+  display: flex;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__paymentOptions___iL15l.checkout-payment-content__displayNone___XXmrK {
+  display: none;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__paymentOptions___iL15l.checkout-payment-content__disable___KTrde {
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.5;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz {
   width: 33.33%;
@@ -355,25 +480,34 @@ h5,
   border-color: var(--dividerStokes);
   border-radius: 4px 0px 0px 4px;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz {
+    width: 42.3%;
+  }
+}
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz {
     width: 100%;
     border: none;
   }
 }
-.checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK:last-child {
+.checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK:last-child,
+.checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK.checkout-payment-content__lastChild___esW6B {
   border-bottom: none;
   flex: 1;
 }
-.checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK:last-child .checkout-payment-content__linkWrapper-row1___NJqkx {
+.checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK:last-child .checkout-payment-content__linkWrapper-row1___NJqkx,
+.checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK.checkout-payment-content__lastChild___esW6B .checkout-payment-content__linkWrapper-row1___NJqkx {
   border-bottom: 1px solid var(--dividerStokes);
 }
-@media only screen and (max-width: 480px) {
-  .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK:last-child .checkout-payment-content__linkWrapper-row1___NJqkx {
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK:last-child .checkout-payment-content__linkWrapper-row1___NJqkx,
+  .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK.checkout-payment-content__lastChild___esW6B .checkout-payment-content__linkWrapper-row1___NJqkx {
     border-bottom: unset;
   }
 }
-.checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK:last-child .checkout-payment-content__indicator___tucmm {
+.checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK:last-child .checkout-payment-content__indicator___tucmm,
+.checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK.checkout-payment-content__lastChild___esW6B .checkout-payment-content__indicator___tucmm {
   border-radius: 0px 0px 0px 4px !important;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK:first-child .checkout-payment-content__indicator___tucmm {
@@ -381,7 +515,7 @@ h5,
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK {
   border-bottom: 1px solid var(--dividerStokes);
-  border-right: 1px solid var(--dividerStokes);
+  border-inline-end: 1px solid var(--dividerStokes);
   background-color: #f8f8f8;
   cursor: pointer;
 }
@@ -396,10 +530,10 @@ h5,
 .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__activeIconColor___TWPaB svg > g > path {
   fill: var(--textHeading, #26201a);
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK {
     background-color: var(--pageBackground, #f8f8f8);
-    border-right: none;
+    border-inline-end: none;
     padding: 0 16px;
   }
 }
@@ -410,13 +544,18 @@ h5,
   display: flex;
   flex: 1;
   align-items: center;
-  padding-left: 12px;
+  padding-inline-end: 12px;
 }
-@media only screen and (min-width: 481px) {
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__linkWrapper-row1___NJqkx .checkout-payment-content__subMopIcons___KG7BY {
+    flex: unset !important;
+    padding-inline-start: 12px;
+  }
+}
+@media only screen and (min-width: 769px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__linkWrapper-row1___NJqkx .checkout-payment-content__subMopIcons___KG7BY {
     justify-content: flex-end;
     flex: 1;
-    padding: 0 16px;
   }
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__linkWrapper-row1___NJqkx .checkout-payment-content__subMopIcons___KG7BY .checkout-payment-content__subMopIcon___yhK5z {
@@ -424,7 +563,7 @@ h5,
   height: 28px;
   border-radius: 50%;
   border: 1px solid var(--dividerStokes);
-  margin-left: -5.25px;
+  margin-inline-start: -5.25px;
   background-color: #fff;
   object-fit: contain;
 }
@@ -442,6 +581,11 @@ h5,
   background-color: var(--primaryColor);
   border: 1px solid var(--primaryColor);
 }
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__indicator___tucmm {
+    display: none;
+  }
+}
 .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__link___ZIR_i {
   display: flex;
   padding: 24px 16px;
@@ -449,23 +593,24 @@ h5,
   word-break: break-word;
   align-items: center;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__link___ZIR_i {
     padding: 24px 0px;
   }
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__link___ZIR_i .checkout-payment-content__modeName___oABQ2 {
   align-self: center;
-  margin-left: 16px;
+  margin-inline-start: 16px;
   color: var(--Text-Body, #4d4d4e);
   font-size: 14px;
   font-weight: 500;
   line-height: 140%;
+  height: 18px;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__link___ZIR_i .checkout-payment-content__modeName___oABQ2 {
     color: var(--textHeading, #26201a);
-    margin-left: 8px;
+    margin-inline-start: 8px;
   }
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__link___ZIR_i .checkout-payment-content__selectedModeName___b23sW {
@@ -475,12 +620,12 @@ h5,
 .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__link___ZIR_i .checkout-payment-content__codCharge___o7TCE {
   font-weight: 400;
   font-size: 12px;
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
   line-height: 140%;
   border-radius: 4px;
   text-align: center;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__link___ZIR_i .checkout-payment-content__codCharge___o7TCE {
     padding-top: 4px;
   }
@@ -489,7 +634,7 @@ h5,
   display: flex;
   align-items: center;
 }
-@media only screen and (min-width: 481px) {
+@media only screen and (min-width: 769px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__payment-icons___Kaaz7 {
     justify-content: flex-end;
     flex: 1;
@@ -502,14 +647,22 @@ h5,
   justify-content: flex-end;
   flex: 1;
 }
+@media only screen and (min-width: 769px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__arrowContainer___LDeoa {
+    display: none;
+  }
+}
 .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__arrowContainer___LDeoa.checkout-payment-content__codIconContainer____fdEj svg {
   transform: rotate(270deg);
+}
+[dir="rtl"] .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__arrowContainer___LDeoa.checkout-payment-content__codIconContainer____fdEj svg {
+  transform: rotate(90deg);
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__navigationLink___jrTvz .checkout-payment-content__linkWrapper___rbKAK .checkout-payment-content__arrowContainer___LDeoa .checkout-payment-content__upsideDown___dk0Z9 {
   transform: rotate(180deg);
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__selectedNavigationTab___SZWiz {
-  border-right: none;
+  border-inline-end: none;
   background-color: var(--pageBackground, #f8f8f8);
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__selectedNavigationTab___SZWiz .checkout-payment-content__link___ZIR_i .checkout-payment-content__icon___Ty1m1 svg > path {
@@ -528,7 +681,7 @@ h5,
   border-bottom: none !important;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__linkWrapper___rbKAK.checkout-payment-content__selectedNavigationTab___SZWiz {
-  border-right: none;
+  border-inline-end: none;
   background-color: var(--pageBackground, #f8f8f8);
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__navigationTab___Tfdjy {
@@ -539,7 +692,14 @@ h5,
   border-width: 1px 1px 1px 0;
   border-radius: 0px 4px 4px 0px;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__navigationTab___Tfdjy {
+    padding: 16px;
+    width: unset;
+    flex: 1 0 0;
+  }
+}
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__navigationTab___Tfdjy {
     padding: 6px;
   }
@@ -547,12 +707,12 @@ h5,
 .checkout-payment-content__container___HusGh .checkout-payment-content__selectedBorder___xIVt8 .checkout-payment-content__modeItemName___FvXEZ {
   font-weight: 600 !important;
 }
-@media only screen and (min-width: 481px) {
+@media only screen and (min-width: 769px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__selectedBorder___xIVt8 {
     border: 1px solid var(--primaryColor);
   }
 }
-@media only screen and (min-width: 481px) {
+@media only screen and (min-width: 769px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__nonSelectedBorder___zA4x7 {
     border: 1px solid var(--dividerStokes);
   }
@@ -571,7 +731,7 @@ h5,
   margin-bottom: 15px;
   line-height: 140%;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__cardHeader___t2z6i,
   .checkout-payment-content__container___HusGh .checkout-payment-content__walletHeader___XQ4tZ,
   .checkout-payment-content__container___HusGh .checkout-payment-content__nbHeader___TAaVo,
@@ -581,9 +741,10 @@ h5,
   .checkout-payment-content__container___HusGh .checkout-payment-content__addCardHeader___KWnY5,
   .checkout-payment-content__container___HusGh .checkout-payment-content__otherHeader___Mizrt {
     font-weight: 500;
+    display: none;
   }
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__cardHeader___t2z6i,
   .checkout-payment-content__container___HusGh .checkout-payment-content__walletHeader___XQ4tZ,
   .checkout-payment-content__container___HusGh .checkout-payment-content__nbHeader___TAaVo,
@@ -610,7 +771,7 @@ h5,
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__savedCardWrapper___HlKIX .checkout-payment-content__savedCardHeaderWrapper___Mx_n_ button span {
   font-size: 16px;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__savedCardWrapper___HlKIX .checkout-payment-content__savedCardHeaderWrapper___Mx_n_ {
     margin-bottom: 16px;
   }
@@ -628,7 +789,7 @@ h5,
   font-weight: 400;
   line-height: 19.6px;
   color: var(--primaryColor);
-  margin-right: 8px;
+  margin-inline-end: 8px;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__savedCardWrapper___HlKIX .checkout-payment-content__why___Br7rt {
   font-size: 14px;
@@ -648,7 +809,7 @@ h5,
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__savedCardWrapper___HlKIX .checkout-payment-content__savedCardCvvWrapper___F2jGC .checkout-payment-content__cvvIcon___x175S {
   position: absolute;
-  right: 16px;
+  inset-inline-end: 16px;
   top: 50%;
   transform: translateY(-50%);
 }
@@ -664,7 +825,10 @@ h5,
   color: var(--textHeading);
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__savedCardWrapper___HlKIX .checkout-payment-content__cvvInfo___UveDM .checkout-payment-content__type___rvnHr .checkout-payment-content__desc___aVB9G {
-  margin: 8px 0 16px 0;
+  margin-top: 8px;
+  margin-inline-end: 0;
+  margin-bottom: 16px;
+  margin-inline-start: 0;
   color: var(--textBody);
   font-size: 12px;
 }
@@ -679,7 +843,7 @@ h5,
   border-radius: 8px;
   margin-bottom: 15px;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__savedCardWrapper___HlKIX .checkout-payment-content__cardList___b7iIC .checkout-payment-content__cardItem___joyot {
     padding: 0px;
   }
@@ -694,7 +858,7 @@ h5,
   display: flex;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__savedCardWrapper___HlKIX .checkout-payment-content__cardList___b7iIC .checkout-payment-content__cardItem___joyot .checkout-payment-content__cardDetailsWrapper___Sd8Fa .checkout-payment-content__cardDetailsRow1___S5WLy .checkout-payment-content__cardLeft___wppcO {
-  margin-right: 10px;
+  margin-inline-end: 10px;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__savedCardWrapper___HlKIX .checkout-payment-content__cardList___b7iIC .checkout-payment-content__cardItem___joyot .checkout-payment-content__cardDetailsWrapper___Sd8Fa .checkout-payment-content__cardDetailsRow1___S5WLy .checkout-payment-content__cardMiddle___K_8TV {
   display: flex;
@@ -706,7 +870,7 @@ h5,
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__savedCardWrapper___HlKIX .checkout-payment-content__cardList___b7iIC .checkout-payment-content__cardItem___joyot .checkout-payment-content__cardDetailsWrapper___Sd8Fa .checkout-payment-content__cardDetailsRow1___S5WLy .checkout-payment-content__cardMiddle___K_8TV .checkout-payment-content__numberLogo___gaVXh .checkout-payment-content__number___QPYFK {
   font-size: 14px;
   font-weight: 400;
-  margin-right: 8px;
+  margin-inline-end: 8px;
   align-self: center;
   line-height: 140%;
 }
@@ -728,12 +892,12 @@ h5,
   line-height: 16px;
   text-transform: capitalize;
   color: #27ae60;
-  margin-left: 4px;
+  margin-inline-start: 4px;
   line-height: 140%;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__savedCardWrapper___HlKIX .checkout-payment-content__cardList___b7iIC .checkout-payment-content__cardItem___joyot .checkout-payment-content__cardDetailsWrapper___Sd8Fa .checkout-payment-content__cardDetailsRow2___LKxpn {
   display: flex;
-  padding-left: 32px;
+  padding-inline-start: 32px;
   height: 48px;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__savedCardWrapper___HlKIX .checkout-payment-content__cardList___b7iIC .checkout-payment-content__cardItem___joyot .checkout-payment-content__cardDetailsWrapper___Sd8Fa .checkout-payment-content__cardDetailsRow2___LKxpn input {
@@ -777,7 +941,7 @@ h5,
   line-height: 140%;
   cursor: pointer;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__savedCardWrapper___HlKIX .checkout-payment-content__cardList___b7iIC .checkout-payment-content__cardItem___joyot .checkout-payment-content__payBtn___dgcAp {
     padding: 6px;
     font-size: 12px;
@@ -799,7 +963,7 @@ h5,
   line-height: 140%;
   cursor: unset;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__savedCardWrapper___HlKIX .checkout-payment-content__cardList___b7iIC .checkout-payment-content__cardItem___joyot .checkout-payment-content__payBtn___dgcAp[disabled] {
     padding: 6px;
     font-size: 12px;
@@ -817,7 +981,7 @@ h5,
   line-height: 140%;
   cursor: pointer;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__savedCardWrapper___HlKIX .checkout-payment-content__addNewCard___PpZop {
     padding: 6px;
     font-size: 12px;
@@ -836,11 +1000,16 @@ h5,
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__addCardHeader___KWnY5 .checkout-payment-content__newCardHeaderText___lJy6q {
   align-self: center;
-  margin-left: 10px;
+  margin-inline-start: 10px;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk {
   display: flex;
   flex-direction: column;
+}
+@media only screen and (max-width: 480px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk.checkout-payment-content__addPaddingBottom___Qc5bl {
+    padding-bottom: 24px;
+  }
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardInputWrapper___YqlSP {
   display: flex;
@@ -848,7 +1017,7 @@ h5,
   margin-top: 16px;
   position: relative;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardInputWrapper___YqlSP.checkout-payment-content__cardNumberBox___UUp9q {
     margin-top: 0;
   }
@@ -857,12 +1026,12 @@ h5,
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cvv___b1NMm {
   cursor: pointer;
   position: absolute;
-  right: 8px;
+  inset-inline-end: 8px;
   top: 50%;
   transform: translateY(-50%);
 }
-.checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardNetwork___GK7gx.checkout-payment-content__cvvError___gUVr7,
-.checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cvv___b1NMm.checkout-payment-content__cvvError___gUVr7 {
+.checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardNetwork___GK7gx.checkout-payment-content__iconPositionOnError___teSxE,
+.checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cvv___b1NMm.checkout-payment-content__iconPositionOnError___teSxE {
   top: 35%;
 }
 @media only screen and (min-width: 769px) {
@@ -871,8 +1040,8 @@ h5,
     top: 38%;
     transform: unset;
   }
-  .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardNetwork___GK7gx.checkout-payment-content__cvvError___gUVr7,
-  .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cvv___b1NMm.checkout-payment-content__cvvError___gUVr7 {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardNetwork___GK7gx.checkout-payment-content__iconPositionOnError___teSxE,
+  .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cvv___b1NMm.checkout-payment-content__iconPositionOnError___teSxE {
     top: 25%;
   }
 }
@@ -883,7 +1052,7 @@ h5,
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardInputWrapper___YqlSP.checkout-payment-content__cvvContainer___gw5Dt {
   width: 47%;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardInputWrapper___YqlSP.checkout-payment-content__expiryContainer___uq0BY,
   .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardInputWrapper___YqlSP.checkout-payment-content__cvvContainer___gw5Dt {
     width: 100%;
@@ -896,7 +1065,7 @@ h5,
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardDateCvvWrapper___dLwSn .checkout-payment-content__upArrowMark___JbdEA {
   position: absolute;
-  left: 50%;
+  inset-inline-start: 50%;
   top: -6px;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardDateCvvWrapper___dLwSn .checkout-payment-content__upArrowMark___JbdEA path {
@@ -908,7 +1077,7 @@ h5,
     left: 5px;
   }
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardDateCvvWrapper___dLwSn.checkout-payment-content__marginBottom___qTP6J {
     margin-bottom: 24px;
   }
@@ -929,14 +1098,15 @@ h5,
   border: 1px solid var(--dividerStokes);
   border-radius: 4px;
   color: var(--textBody, #3c3131);
+  pointer-events: inherit;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__error___DzZ0L {
-  border: 1px solid var(--errorText, #b24141);
+  border: 1px solid var(--errorText, #ff3333);
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__inputName___VvI9l {
   position: absolute;
   top: -8px;
-  left: 16px;
+  inset-inline-start: 16px;
   font-size: 12px;
   font-weight: 400;
   background-color: var(--pageBackground, #f8f8f8);
@@ -945,10 +1115,10 @@ h5,
   padding: 0 4px;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__inputName___VvI9l .checkout-payment-content__required___YDb3J {
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__errorInputName___creos {
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__rbiGuidelines___jmtpW {
   display: flex;
@@ -956,7 +1126,7 @@ h5,
   margin-top: 16px;
   accent-color: var(--primaryColor);
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__rbiGuidelines___jmtpW {
     margin-bottom: 24px;
   }
@@ -974,7 +1144,7 @@ h5,
   align-self: center;
   line-height: 140%;
 }
-@media only screen and (min-width: 481px) {
+@media only screen and (min-width: 769px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__rbiGuidelines___jmtpW .checkout-payment-content__rbiGuidelinesModal___s6bGj {
     max-width: 450px;
     padding: 8px;
@@ -984,7 +1154,10 @@ h5,
   padding: 16px;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__rbiGuidelines___jmtpW .checkout-payment-content__rbiGuidelinesContent___ycqoZ ul {
-  padding: 0 0 0 16px;
+  padding-top: 0;
+  padding-inline-end: 0;
+  padding-bottom: 0;
+  padding-inline-start: 16px;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__rbiGuidelines___jmtpW .checkout-payment-content__rbiGuidelinesContent___ycqoZ ul li {
   list-style-type: disc;
@@ -993,12 +1166,12 @@ h5,
   margin-bottom: 16px;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__saveNewCard___cPi2y {
-  padding: 8px;
-  border-radius: 5px;
+  padding: 16px;
+  border-radius: var(--buttonRadius, 0px);
   background-color: var(--primaryColor);
   border: none;
   width: 100%;
-  margin-top: 24px;
+  margin-top: 16px;
   font-weight: 600;
   font-size: 14px;
   text-transform: uppercase;
@@ -1007,12 +1180,12 @@ h5,
   line-height: 140%;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__saveNewCard___cPi2y[disabled] {
-  padding: 8px;
-  border-radius: 5px;
+  padding: 16px;
+  border-radius: var(--buttonRadius, 0px);
   background-color: var(--primaryColor);
   border: none;
   width: 100%;
-  margin-top: 24px;
+  margin-top: 16px;
   font-weight: 600;
   font-size: 14px;
   text-transform: uppercase;
@@ -1041,7 +1214,7 @@ h5,
     border-radius: 8px;
     position: absolute;
     z-index: 99;
-    right: -116px;
+    inset-inline-end: -116px;
     transform: unset;
     background: var(--dialogBackground, #fff);
     border: 1px solid var(--dividerStokes, #d4d1d1);
@@ -1059,7 +1232,10 @@ h5,
   }
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__cvvInfo___UveDM .checkout-payment-content__type___rvnHr .checkout-payment-content__desc___aVB9G {
-  margin: 8px 0 16px 0;
+  margin-top: 8px;
+  margin-inline-end: 0;
+  margin-bottom: 16px;
+  margin-inline-start: 0;
   color: var(--textBody);
 }
 @media only screen and (min-width: 769px) {
@@ -1068,7 +1244,10 @@ h5,
   }
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__addNewCardModal___HuBPW {
-  padding: 0px 16px 24px 16px;
+  padding-top: 0px;
+  padding-inline-end: 16px;
+  padding-bottom: 24px;
+  padding-inline-start: 16px;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__modePay___tBSpm .checkout-payment-content__payBtn___dgcAp,
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardlessPay___dcGhw .checkout-payment-content__payBtn___dgcAp,
@@ -1100,7 +1279,6 @@ h5,
 .checkout-payment-content__container___HusGh .checkout-payment-content__otherPay____c2Rs .checkout-payment-content__payBtn___dgcAp[disabled] {
   padding: 14px;
   border-radius: var(--buttonRadius, 0px);
-  background-color: white;
   color: var(--primaryColor);
   border: 1px solid var(--primaryColor);
   width: 100%;
@@ -1118,7 +1296,7 @@ h5,
   flex-direction: column;
   gap: 16px;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__modeOption___onKtJ {
     gap: 0px;
   }
@@ -1137,7 +1315,7 @@ h5,
 .checkout-payment-content__container___HusGh .checkout-payment-content__modeOption___onKtJ .checkout-payment-content__modeItemWrapper___IlJf3 label {
   cursor: pointer;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__modeOption___onKtJ .checkout-payment-content__modeItemWrapper___IlJf3 {
     padding: 24px 0px;
   }
@@ -1174,7 +1352,7 @@ h5,
   font-weight: 400;
   line-height: 140%;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__modeOption___onKtJ .checkout-payment-content__modeItemWrapper___IlJf3 .checkout-payment-content__modeItem___M6Obf .checkout-payment-content__moreModeName___F_lVI {
     color: var(--textHeading, #26201a);
     font-weight: 500;
@@ -1182,6 +1360,9 @@ h5,
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__modeOption___onKtJ .checkout-payment-content__modeItemWrapper___IlJf3 .checkout-payment-content__modeItem___M6Obf .checkout-payment-content__moreModeArrow___yBQbk {
   transform: rotate(270deg);
+}
+[dir="rtl"] .checkout-payment-content__container___HusGh .checkout-payment-content__modeOption___onKtJ .checkout-payment-content__modeItemWrapper___IlJf3 .checkout-payment-content__modeItem___M6Obf .checkout-payment-content__moreModeArrow___yBQbk {
+  transform: rotate(90deg);
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__modeOption___onKtJ .checkout-payment-content__modeItemWrapper___IlJf3 .checkout-payment-content__modeItem___M6Obf .checkout-payment-content__otherModeArrow___ulm30 {
   transform: rotate(360deg);
@@ -1201,7 +1382,7 @@ h5,
   max-height: 70vh;
   min-height: 40vh;
 }
-@media only screen and (min-width: 481px) {
+@media only screen and (min-width: 769px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__modeOption___onKtJ .checkout-payment-content__modalBody___pTEbc {
     max-height: 554px;
     min-width: 420px;
@@ -1231,7 +1412,7 @@ h5,
 .checkout-payment-content__container___HusGh .checkout-payment-content__upiMop___LVvVY {
   padding-bottom: 24px;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__container___HusGh .checkout-payment-content__upiMop___LVvVY .checkout-payment-content__upiApp___M2sjF:first-child {
     padding-top: 0;
   }
@@ -1257,6 +1438,12 @@ h5,
   align-items: center;
   border: 1px solid var(--dividerStokes);
   border-radius: 100px;
+  width: 38px;
+  height: 38px;
+  padding: 8px 4px;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__upiApp___M2sjF .checkout-payment-content__logo___jNLmQ:last-child {
+  padding: unset;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__upiApp___M2sjF .checkout-payment-content__displayName___dLKMP {
   flex: 1;
@@ -1446,18 +1633,18 @@ h5,
   border: 1px solid var(--primaryColor);
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__upiIdWrapper___Eqfiy .checkout-payment-content__error___DzZ0L {
-  border: 1px solid var(--errorText, #b24141);
+  border: 1px solid var(--errorText, #ff3333);
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__upiIdWrapper___Eqfiy .checkout-payment-content__upiInput___unikS.checkout-payment-content__input___CtIj_ {
   border: 1px solid var(--primaryColor);
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__upiIdWrapper___Eqfiy .checkout-payment-content__upiInput___unikS.checkout-payment-content__error___DzZ0L {
-  border: 1px solid var(--errorText, #b24141);
+  border: 1px solid var(--errorText, #ff3333);
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__upiIdWrapper___Eqfiy .checkout-payment-content__inputName___VvI9l {
   position: absolute;
   top: -8px;
-  left: 16px;
+  inset-inline-start: 16px;
   font-size: 12px;
   font-weight: 400;
   background-color: var(--pageBackground, #f8f8f8);
@@ -1466,10 +1653,10 @@ h5,
   padding: 0 4px;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__upiIdWrapper___Eqfiy .checkout-payment-content__inputName___VvI9l .checkout-payment-content__required___YDb3J {
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__upiIdWrapper___Eqfiy .checkout-payment-content__errorInputName___creos {
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__upiPay___CycYi .checkout-payment-content__payBtn___dgcAp {
   padding: 14px;
@@ -1483,7 +1670,8 @@ h5,
   text-transform: uppercase;
   cursor: pointer;
   line-height: 140%;
-  margin: 24px 0;
+  margin-top: 16px;
+  margin-bottom: 24px;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__upiPay___CycYi .checkout-payment-content__payBtn___dgcAp:hover {
   background-color: var(--buttonPrimaryL1, #71653a);
@@ -1523,12 +1711,386 @@ h5,
 .checkout-payment-content__container___HusGh .checkout-payment-content__codInfo___MgPkv {
   font-weight: 400;
   font-size: 12px;
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
   line-height: 140%;
   background-color: #fbeaea;
   border-radius: 4px;
   padding: 8px 0;
   text-align: center;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftWrapper___ZnGJq {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftSection___XyY5_ {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__neftSection___XyY5_ {
+    gap: 12px;
+  }
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftUploadButtonWrapper___HOPEO {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftUploadHelperWrapper____FI4K {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftSectionTitle___wYFRT {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--textHeading, #26201a);
+  font-family: var(--font-header, "WorkSans");
+  margin: 0;
+}
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__neftSectionTitle___wYFRT {
+    font-size: 12px;
+    letter-spacing: -0.24px;
+  }
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftBeneficiaryCard___v9vqB {
+  border: 1px solid var(--dividerStokes, #d4d1d1);
+  border-radius: 12px;
+  background-color: var(--themeAccentL4, #f9f6f0);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftBeneficiaryRow___B67RO {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  padding-bottom: 12px;
+}
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__neftBeneficiaryRow___B67RO {
+    padding-bottom: 10px;
+  }
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftBeneficiaryRow___B67RO:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftBeneficiaryLabelWrapper___wCpbw {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftBeneficiaryLabel___IxLDp {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--textHeading, #26201a);
+  font-family: var(--font-header, "WorkSans");
+}
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__neftBeneficiaryLabel___IxLDp {
+    color: var(--textHeading, #26201a);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: -0.24px;
+  }
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftLabelSeparator___nM7q5 {
+  font-weight: 600;
+  color: var(--textHeading, #26201a);
+  font-family: var(--font-header, "WorkSans");
+}
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__neftLabelSeparator___nM7q5 {
+    font-size: 12px;
+    letter-spacing: -0.24px;
+  }
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftBeneficiaryValue___VSKtC {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-family: var(--font-body, "WorkSans");
+  color: var(--textBody, #3c3131);
+}
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__neftBeneficiaryValue___VSKtC {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16.8px;
+  }
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftCopyButton___wWiC2 {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftCopyButton___wWiC2 svg {
+  height: 14px;
+  width: 14px;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftFieldGroup___ErYhm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftFieldLabel___Y0fAL {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--textHeading, #26201a);
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftFieldLabel___Y0fAL span {
+  color: var(--errorText, #ff3333);
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftInput___J9if5 {
+  height: 48px;
+  border: 1px solid var(--dividerStokes, #d4d1d1);
+  border-radius: 8px;
+  padding: 0 16px;
+  outline: none;
+  font-size: 14px;
+  font-family: var(--font-body, "WorkSans");
+}
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__neftInput___J9if5 {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16.8px;
+  }
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftInputError___ccM4_ {
+  border-color: var(--errorText, #ff3333);
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftHelperText___d6yek {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--textSecondary, #9c9c9c);
+  margin: 0;
+  font-family: var(--font-body, "WorkSans");
+}
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__neftHelperText___d6yek {
+    line-height: 16.8px;
+  }
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftUploadSection___yftvA {
+  width: 100%;
+  gap: 0px !important;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftUploadBox___lN_AQ {
+  border: 1px dashed var(--dividerStokes, #d4d1d1);
+  border-radius: 12px;
+  padding: 41px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-color: var(--themeAccentL5, #fff);
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftHiddenInput___gRoGG {
+  display: none;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftFormBlockInner___ytBnN {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftUploadIcon___lEIdv {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftUploadButton____P9YX {
+  width: max-content;
+  align-self: center;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--buttonPrimary, #4e3f09);
+  color: var(--buttonPrimary, #4e3f09);
+  background-color: var(--themeAccentL5, #fff);
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  font-family: var(--font-header, "WorkSans");
+}
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__neftUploadButton____P9YX {
+    text-align: center;
+    font-size: 12px;
+    line-height: 16.8px;
+  }
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftUploadTitle___jjKhS {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--textHeading, #26201a);
+  margin: 0;
+  font-family: var(--font-header, "WorkSans");
+}
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__neftUploadTitle___jjKhS {
+    color: var(--buttonPrimary, #4e3f09);
+    letter-spacing: -0.32px;
+  }
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftUploadHelper___VdgwE {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--textSecondary, #9c9c9c);
+  margin: 0;
+  font-family: var(--font-body, "WorkSans");
+}
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__neftUploadHelper___VdgwE {
+    color: var(--textBody, #3c3131);
+    text-align: center;
+    letter-spacing: -0.24px;
+  }
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftSelectedFile___dN_Dl {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--textHeading, #26201a);
+  margin: 0;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftPlaceOrderBtn___K0crW {
+  width: 100%;
+  padding: 14px;
+  border-radius: var(--buttonRadius, 0px);
+  border: none;
+  background-color: var(--buttonPrimary, #4e3f09);
+  color: var(--themeAccentL5, #fff);
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftPlaceOrderBtn___K0crW[disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftError___mGynD {
+  font-size: 12px;
+  color: var(--errorText, #ff3333);
+  margin: 0;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftUploadBoxDragging___qzYvP {
+  border-color: var(--buttonPrimary, #4e3f09);
+  background-color: var(--themeAccentL5, #fff);
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftProgressContainer___Y4kHO {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftProgressBarContainer___ZfKN5 {
+  flex: 1;
+  height: 8px;
+  background-color: var(--dividerStokes, #d4d1d1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftProgressBar___yGqnq {
+  height: 100%;
+  background-color: var(--buttonPrimary, #4e3f09);
+  transition: width 0.3s ease;
+  border-radius: 4px;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftProgressText___ztfJg {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--textHeading, #26201a);
+  flex-shrink: 0;
+  min-width: 40px;
+  text-align: right;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftFileCard___MdKnL {
+  margin-top: 10px;
+  border: 1px solid var(--dividerStokes, #d4d1d1);
+  border-radius: 8px;
+  padding: 16px;
+  background-color: var(--themeAccentL4, #f9f6f0);
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftFileCardContent___xVb59 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftFileInfo___iz6n0 {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex: 1;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftFileIcon___hBoN2 {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftFileDetails___hWXmT {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftFileName___QDni_ {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--textHeading, #26201a);
+  word-break: break-word;
+  display: flex;
+  align-items: center;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftSuccessIndicator___BZKEW {
+  color: var(--successText, #1c958f);
+  font-weight: 600;
+  margin-left: 4px;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftFileSize___jnR2T {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--textSecondary, #9c9c9c);
+  display: block;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftFileActions____fD_4 {
+  display: flex;
+  align-items: center;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftFileActionBtn___yWOeb {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftFileActionBtn___yWOeb:hover {
+  background-color: var(--dividerStokes, #d4d1d1);
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftDeleteIcon___ql9fu {
+  color: var(--errorText, #ff3333);
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftUploadError___smMI_ {
+  font-size: 14px;
+  padding-top: 10px;
+  color: var(--errorText, #ff3333);
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__neftFormBlock___QNGBp {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__container___HusGh .checkout-payment-content__neftFormBlock___QNGBp {
+    padding: 0px;
+  }
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__otherOption___DjTzG {
   display: flex;
@@ -1546,12 +2108,12 @@ h5,
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__otherOption___DjTzG .checkout-payment-content__otherItem___jN9vL .checkout-payment-content__otherLeft___TkRNH {
   align-self: center;
-  margin-right: 10px;
-  margin-left: 10px;
+  margin-inline-end: 10px;
+  margin-inline-start: 10px;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__otherOption___DjTzG .checkout-payment-content__otherItem___jN9vL .checkout-payment-content__otherMiddle___WxKzY {
   align-self: center;
-  margin-right: 10px;
+  margin-inline-end: 10px;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__otherOption___DjTzG .checkout-payment-content__otherItem___jN9vL .checkout-payment-content__otherMiddle___WxKzY img {
   width: 45px;
@@ -1571,7 +2133,7 @@ h5,
   color: green;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__formError___Mntli {
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
   font-size: 12px;
   font-weight: 400;
   margin-top: 8px;
@@ -1654,7 +2216,7 @@ h5,
   margin-top: 24px;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__saveUpi___ZgiT2 .checkout-payment-content__saveForLater___KeLM6 {
-  margin-right: 5px;
+  margin-inline-end: 5px;
   accent-color: var(--primaryColor);
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__saveUpi___ZgiT2 .checkout-payment-content__saveUpiTitle____DJ9j {
@@ -1693,7 +2255,10 @@ h5,
   font-weight: 700;
   font-size: 24px;
   line-height: 33.6px;
-  margin: 16px 0 8px 0;
+  margin-top: 16px;
+  margin-inline-end: 0;
+  margin-bottom: 8px;
+  margin-inline-start: 0;
   color: var(--primaryColor);
 }
 .checkout-payment-content__upiRedirectionModal___A77Sr .checkout-payment-content__message___r1UVA {
@@ -1749,7 +2314,7 @@ h5,
 }
 .checkout-payment-content__codModal___SSel2 .checkout-payment-content__closeCodModal___yySGE {
   position: absolute;
-  right: 24px;
+  inset-inline-end: 24px;
 }
 .checkout-payment-content__codModal___SSel2 .checkout-payment-content__message___r1UVA {
   font-size: 16px;
@@ -1763,7 +2328,7 @@ h5,
   font-size: 12px;
   font-weight: 400;
   line-height: 16.8px;
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
   text-align: center;
 }
 .checkout-payment-content__codModal___SSel2 .checkout-payment-content__payBtn___dgcAp {
@@ -1788,7 +2353,7 @@ h5,
 }
 .checkout-payment-content__whyCvvContainer___M4rgx .checkout-payment-content__upArrowMark___JbdEA {
   position: absolute;
-  left: 50%;
+  inset-inline-start: 50%;
   top: -6px;
 }
 .checkout-payment-content__whyCvvContainer___M4rgx .checkout-payment-content__upArrowMark___JbdEA path {
@@ -1809,7 +2374,7 @@ h5,
     border-radius: 8px;
     position: absolute;
     z-index: 99;
-    right: -116px;
+    inset-inline-end: -116px;
     transform: unset;
     background: var(--dialogBackground, #fff);
     border: 1px solid var(--dividerStokes, #d4d1d1);
@@ -1852,7 +2417,7 @@ h5,
     fill: var(--textBody, #3c3131);
   }
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__modeItemLogo___mixsN .checkout-payment-content__svgColor___07c9F g > path {
     fill: var(--textHeading, #26201a);
   }
@@ -1865,11 +2430,11 @@ h5,
   padding: 8px 4px;
   border-radius: 50%;
   object-fit: contain;
-  margin-right: 12px;
+  margin-inline-end: 12px;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__modeItemLogo___mixsN img {
-    margin-right: 8px;
+    margin-inline-end: 8px;
   }
 }
 .checkout-payment-content__logoNameContainer___cajWe {
@@ -1881,7 +2446,7 @@ h5,
   border-radius: 4px;
 }
 .checkout-payment-content__upiError___hFHVG {
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
   font-size: 12px;
   font-weight: 400;
 }
@@ -1894,7 +2459,7 @@ h5,
     height: 606px;
   }
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__moreOptionContainer___lSVOn {
     height: 434px;
   }
@@ -1905,7 +2470,7 @@ h5,
   margin-bottom: 16px;
   max-height: unset !important;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__bodyContainer___HeZQG .checkout-payment-content__modeItemName___FvXEZ {
     color: var(--textBody, #3c3131) !important;
     font-size: 12px;
@@ -1920,6 +2485,9 @@ h5,
   display: flex;
   align-items: center;
 }
+[dir="rtl"] .checkout-payment-content__moreModeIcon___Hjipo {
+  transform: rotate(90deg);
+}
 .checkout-payment-content__moreModeIcon___Hjipo svg {
   width: 20px;
   height: 20px;
@@ -1930,18 +2498,12 @@ h5,
 .checkout-payment-content__otherBorder___ARrf8 {
   border: 1px solid var(--dividerStokes, #d4d1d1);
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__otherBorder___ARrf8 {
     border: none;
   }
 }
-@media only screen and (min-width: 769px) {
-  .checkout-payment-content__modeItemLogo___mixsN .checkout-payment-content__moreWlIcon___xHrT7 {
-    width: 24px;
-    height: 24px;
-  }
-}
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__modeItemLogo___mixsN span {
     border: 1px solid var(--dividerStokes, #d4d1d1);
     padding: 8px 4px;
@@ -1954,17 +2516,17 @@ h5,
     align-items: anchor-center;
   }
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__upiMargin___LomcN:last-child {
     padding-bottom: 0 !important;
   }
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardModalHeader___ixj3K {
     padding: 16px !important;
   }
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .checkout-payment-content__newCardBodyModal___R9U49 .checkout-payment-content__rbiGuidelines___jmtpW {
     margin-top: 24px !important;
   }
@@ -1985,7 +2547,7 @@ h5,
 }
 .checkout-payment-content__crossMobile___jmnlv {
   position: absolute;
-  right: 16px;
+  inset-inline-end: 16px;
 }
 .checkout-payment-content__noResultFound___suFuv {
   color: var(--Text-Body, #4d4d4e);
@@ -1999,6 +2561,171 @@ h5,
   display: flex;
   align-items: center;
   justify-content: center;
+}
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__visibleOnTab___SSdnx {
+    display: block !important;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__onDesktopView___JFn5k {
+    display: none;
+  }
+}
+@media only screen and (min-width: 769px) {
+  .checkout-payment-content__onMobileView___IBzw6 {
+    display: none;
+  }
+}
+.checkout-payment-content__mopIcon___koORc {
+  width: 24px;
+  height: 24px;
+}
+.checkout-payment-content__noOptionContainer___uCGHg {
+  display: flex;
+  padding: 24px;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  align-self: stretch;
+  border: 1px solid var(--dividerStokes);
+  border-top: unset;
+  border-radius: 0 0 8px 8px;
+  background: var(--pageBackground, #f8f8f8);
+}
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__noOptionContainer___uCGHg {
+    border-radius: 0;
+    border: none;
+  }
+}
+.checkout-payment-content__noOptionContainer___uCGHg .checkout-payment-content__noOptionText___zceGG {
+  display: flex;
+  max-width: 580px;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.checkout-payment-content__noOptionContainer___uCGHg .checkout-payment-content__noOptionText___zceGG h3 {
+  color: var(--textHeading, #26201a);
+  text-align: center;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 140%;
+  align-self: stretch;
+}
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__noOptionContainer___uCGHg .checkout-payment-content__noOptionText___zceGG h3 {
+    font-weight: 600;
+  }
+}
+.checkout-payment-content__noOptionContainer___uCGHg .checkout-payment-content__noOptionText___zceGG p {
+  color: var(--textBody, #3c3131);
+  text-align: center;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  align-self: stretch;
+}
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__noOptionContainer___uCGHg .checkout-payment-content__noOptionText___zceGG p {
+    font-size: 12px;
+  }
+}
+.checkout-payment-content__noOptionContainer___uCGHg .checkout-payment-content__noOptionText___zceGG .checkout-payment-content__contact_us___KWS91 {
+  margin-top: 12px;
+}
+.checkout-payment-content__fileIcon___NbcO6 {
+  color: var(--buttonPrimary);
+}
+.checkout-payment-content__fs-12___pEtqR {
+  font-size: 12px;
+}
+.checkout-payment-content__neftUploadingFilesWrapper___floCy,
+.checkout-payment-content__neftUploadedFilesWrapper___JAZGJ {
+  margin-top: 10px;
+}
+.checkout-payment-content__field___BlHFM {
+  position: relative;
+}
+@media only screen and (min-width: 769px) {
+  .checkout-payment-content__field___BlHFM {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .checkout-payment-content__field___BlHFM {
+    width: 100%;
+    padding: 1rem 0;
+    padding-right: 0;
+    padding-bottom: 5px;
+  }
+}
+.checkout-payment-content__field___BlHFM .checkout-payment-content__field-input-container___DtAfx {
+  flex: 1;
+  padding-right: 10px;
+}
+@media only screen and (max-width: 480px) {
+  .checkout-payment-content__field___BlHFM .checkout-payment-content__field-input-container___DtAfx {
+    margin-bottom: 16px;
+    padding-right: 0;
+  }
+}
+.checkout-payment-content__field___BlHFM input:disabled {
+  background-color: transparent !important;
+  border: none !important;
+  cursor: not-allowed !important;
+}
+@media only screen and (max-width: 480px) {
+  .checkout-payment-content__field___BlHFM input {
+    font-size: 14px;
+  }
+}
+.checkout-payment-content__copyIcon___ggWRH svg {
+  height: 18px;
+  width: 18px;
+}
+.checkout-payment-content__neftBorderBottom___vUhV0 {
+  border-bottom: 1px solid var(--dividerStokes, #d4d1d1);
+}
+.checkout-payment-content__infoAlert___ZXxky {
+  display: flex;
+  align-items: center;
+  background: var(--informationBackground, #ebd3bc);
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: var(--informationText, #d28f51);
+  text-align: right;
+  font-family: var(--font-body, "WorkSans");
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16.8px;
+}
+@media only screen and (max-width: 480px) {
+  .checkout-payment-content__infoAlert___ZXxky {
+    text-align: left;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: -0.24px;
+  }
+}
+.checkout-payment-content__infoAlert___ZXxky svg {
+  margin-right: 8px;
+}
+.checkout-payment-content__infoAlert___ZXxky .checkout-payment-content__infoAlertIcon___y_72e {
+  display: flex;
+  align-items: center;
+}
+.checkout-payment-content__flexCenter____SO_C {
+  display: flex;
+  align-items: center;
 }
 
 /**color by character**/
@@ -2109,7 +2836,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 18px;
+  line-height: 1.5;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -2118,7 +2845,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 24px;
+    line-height: 1.5;
   }
 }
 h5,
@@ -2185,7 +2912,7 @@ h5,
 .modal__caption-medium___GbhtF,
 .modal__captionMedium___zCJpb {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -2198,7 +2925,7 @@ h5,
 .modal__caption-semi-bold___feZV5,
 .modal__captionSemiBold___pxAn7 {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -2263,11 +2990,11 @@ h5,
 }
 .modal__mr-5___DjKqT,
 .modal__mr5___il5jH {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .modal__mr-2___SKD1t,
 .modal__mr2___BSxti {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .modal__py-5___OpCsp,
 .modal__py5___hfa2b {
@@ -2394,8 +3121,8 @@ h5,
   .modal__modalContainer--borders____AGZf {
     border: none;
     border-radius: 0;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
+    border-start-start-radius: 8px;
+    border-start-end-radius: 8px;
   }
 }
 .modal__modalHeader___xKo1g {
@@ -2589,7 +3316,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 18px;
+  line-height: 1.5;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -2598,7 +3325,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 24px;
+    line-height: 1.5;
   }
 }
 h5,
@@ -2665,7 +3392,7 @@ h5,
 .sticky-pay-now__caption-medium___gZCqf,
 .sticky-pay-now__captionMedium___V6P3J {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -2678,7 +3405,7 @@ h5,
 .sticky-pay-now__caption-semi-bold___QX3JZ,
 .sticky-pay-now__captionSemiBold___Fc8TZ {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -2743,11 +3470,11 @@ h5,
 }
 .sticky-pay-now__mr-5___oR6lr,
 .sticky-pay-now__mr5___HP_gl {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .sticky-pay-now__mr-2___ITKs9,
 .sticky-pay-now__mr2___QJbJ6 {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .sticky-pay-now__py-5___obGDP,
 .sticky-pay-now__py5___uIeyz {
@@ -2822,8 +3549,8 @@ h5,
   width: 100%;
   z-index: 1;
   bottom: 0;
-  left: 0;
-  right: 0;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
   display: none;
   box-sizing: border-box;
   background-color: var(--pageBackground, #f8f8f8);
@@ -2899,5 +3626,361 @@ h5,
 }
 .sticky-pay-now__checkoutButton___mtO42 {
   gap: 12px;
+}
+.sticky-pay-now__buttonWidth___nKraw {
+  width: 100%;
+}
+
+/**color by character**/
+/** Font family **/
+/** Font weight **/
+.shimmer__display-block___KqKOs {
+  display: block;
+}
+.shimmer__inline-block___nil4V,
+.shimmer__inlineBlock___hAKaU {
+  display: inline-block;
+}
+.shimmer__flex-row___K_GLH {
+  display: flex;
+}
+.shimmer__flex-column___j7L8h,
+.shimmer__flexColumn____ueRj {
+  display: flex;
+  flex-direction: column;
+}
+.shimmer__flex-align-center___IU73o,
+.shimmer__flexAlignCenter___a20Y6 {
+  display: flex;
+  align-items: center;
+}
+.shimmer__flex-justify-center___k7rxq,
+.shimmer__flexJustifyCenter___qc6o_ {
+  display: flex;
+  justify-content: center;
+}
+.shimmer__flex-center___gPA9Y,
+.shimmer__flexCenter___kk6Ze {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.shimmer__justify-start___cdM76,
+.shimmer__justifyStart___KOCpm {
+  justify-content: flex-start;
+}
+.shimmer__justify-end___mO5Xw,
+.shimmer__justifyEnd___JEWEK {
+  justify-content: flex-end;
+}
+.shimmer__justify-between___i_6PG,
+.shimmer__justifyBetween___jgG4j {
+  justify-content: space-between;
+}
+.shimmer__justify-around___eWwfy,
+.shimmer__justifyAround___XXzeg {
+  justify-content: space-around;
+}
+.shimmer__justify-evenly___s10dI,
+.shimmer__justifyEvenly___KBq95 {
+  justify-content: space-evenly;
+}
+h1,
+.shimmer__h1____gV3I {
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 42px;
+  letter-spacing: -0.03em;
+  color: var(--textHeading, #26201a);
+}
+@media only screen and (min-width: 769px) {
+  h1,
+  .shimmer__h1____gV3I {
+    font-size: 36px;
+    line-height: 48px;
+  }
+}
+h2,
+.shimmer__h2___haEep {
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 36px;
+  letter-spacing: -0.03em;
+  color: var(--textHeading, #26201a);
+}
+@media only screen and (min-width: 769px) {
+  h2,
+  .shimmer__h2___haEep {
+    font-size: 32px;
+    line-height: 42px;
+  }
+}
+h3,
+.shimmer__h3___ym9A9 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--textHeading, #26201a);
+  font-size: 24px;
+  line-height: 32px;
+}
+@media only screen and (min-width: 769px) {
+  h3,
+  .shimmer__h3___ym9A9 {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--textHeading, #26201a);
+    font-size: 28px;
+    line-height: 36px;
+  }
+}
+h4,
+.shimmer__h4___gyvMX {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--textHeading, #26201a);
+  font-size: 16px;
+  line-height: 1.5;
+}
+@media only screen and (min-width: 769px) {
+  h4,
+  .shimmer__h4___gyvMX {
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--textHeading, #26201a);
+    font-size: 20px;
+    line-height: 1.5;
+  }
+}
+h5,
+.shimmer__h5___bN7mp {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: -0.02em;
+  color: var(--textHeading, #26201a);
+}
+@media only screen and (min-width: 769px) {
+  h5,
+  .shimmer__h5___bN7mp {
+    font-size: 16px;
+    line-height: 18px;
+  }
+}
+.shimmer__b1___LdTR4 {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  letter-spacing: -0.02em;
+  color: var(--textBody, #3c3131);
+}
+@media only screen and (min-width: 769px) {
+  .shimmer__b1___LdTR4 {
+    font-size: 16px;
+    line-height: 20px;
+  }
+}
+.shimmer__b-small___qWHLA,
+.shimmer__bSmall___MRmV7,
+.shimmer__b2___izX7s {
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--textBody, #3c3131);
+  font-size: 12px;
+  line-height: 16px;
+}
+@media only screen and (min-width: 769px) {
+  .shimmer__b-small___qWHLA,
+  .shimmer__bSmall___MRmV7,
+  .shimmer__b2___izX7s {
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--textBody, #3c3131);
+    font-size: 14px;
+    line-height: 18px;
+  }
+}
+.shimmer__d1____e6av {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 48px;
+  letter-spacing: -0.02em;
+}
+@media only screen and (min-width: 769px) {
+  .shimmer__d1____e6av {
+    font-size: 64px;
+    line-height: 85px;
+    letter-spacing: -0.03em;
+  }
+}
+.shimmer__caption-medium___pPy1K,
+.shimmer__captionMedium___r4GQ7 {
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  font-weight: 500;
+}
+@media only screen and (max-width: 480px) {
+  .shimmer__caption-medium___pPy1K,
+  .shimmer__captionMedium___r4GQ7 {
+    font-size: 11px;
+  }
+}
+.shimmer__caption-semi-bold___XEL7J,
+.shimmer__captionSemiBold___tdnAw {
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+@media only screen and (max-width: 480px) {
+  .shimmer__caption-semi-bold___XEL7J,
+  .shimmer__captionSemiBold___tdnAw {
+    font-size: 11px;
+  }
+}
+.shimmer__btn-link___rwrdT,
+.shimmer__btnLink___rywxA {
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  font-size: 12px;
+  line-height: 14px;
+  border-radius: var(--buttonRadius, 0px);
+  cursor: pointer;
+  color: var(--buttonLink, #b1655b);
+  text-decoration: underline;
+  background: none;
+  border: none;
+}
+@media only screen and (min-width: 769px) {
+  .shimmer__btn-link___rwrdT,
+  .shimmer__btnLink___rywxA {
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    font-size: 14px;
+    line-height: 16px;
+  }
+}
+.shimmer__btn-link___rwrdT:hover,
+.shimmer__btnLink___rywxA:hover {
+  color: var(--buttonLinkL1, #c1847c);
+}
+.shimmer__btn-link___rwrdT:disabled,
+.shimmer__btnLink___rywxA:disabled {
+  color: var(--buttonLinkL2, #d0a39d);
+}
+.shimmer__btn-link___rwrdT:active,
+.shimmer__btnLink___rywxA:active {
+  opacity: 0.8;
+}
+.shimmer__user-select-none___Z0xme,
+.shimmer__userSelectNone___yN1Qu {
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+.shimmer__margin-0-auto___adpvx,
+.shimmer__margin0auto___xyxLg {
+  margin: 0 auto;
+}
+.shimmer__base-page-container___Rn5KL,
+.shimmer__basePageContainer___gzYLo {
+  max-width: 1440px !important;
+}
+.shimmer__remove-scroll___HQR5l,
+.shimmer__removeScroll___tjurd {
+  overflow-y: hidden !important;
+}
+.shimmer__mr-5___F8hOD,
+.shimmer__mr5___It4I_ {
+  margin-inline-end: 30px !important;
+}
+.shimmer__mr-2___EaUKZ,
+.shimmer__mr2___dR4P0 {
+  margin-inline-end: 5px !important;
+}
+.shimmer__py-5___M0fI2,
+.shimmer__py5___Rtxsj {
+  padding-top: 1.875rem !important;
+  padding-bottom: 1.875rem !important;
+}
+.shimmer__view-all-text___vmduf,
+.shimmer__viewAllText___D2C2T {
+  font-size: 20px;
+  font-weight: 400;
+  text-transform: lowercase;
+  text-decoration: underline;
+}
+.shimmer__view-all-mobile___S9Jmi,
+.shimmer__viewAllMobile___rHXMU {
+  display: none;
+}
+@media only screen and (max-width: 768px) {
+  .shimmer__view-all-mobile___S9Jmi,
+  .shimmer__viewAllMobile___rHXMU {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 40px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .shimmer__view-all-mobile___S9Jmi,
+  .shimmer__viewAllMobile___rHXMU {
+    margin-top: 24px;
+  }
+}
+.shimmer__accent-btn___aeNG4,
+.shimmer__accentBtn___yOXdz {
+  background-color: var(--accentColor);
+  color: #fff;
+}
+.shimmer__no-scroll___f4vKo,
+.shimmer__noScroll___jlm3A {
+  overflow-y: hidden;
+}
+.shimmer__hide-overflow___qyrhR,
+.shimmer__hideOverflow___kiluw {
+  overflow: hidden;
+}
+.shimmer__markdown-body___O0_VR h6 {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+@media only screen and (max-width: 480px) {
+  .shimmer__markdown-body___O0_VR {
+    font-size: 12px !important;
+    padding: 5px !important;
+  }
+}
+.shimmer__view3d-canvas___Oe1zv {
+  width: 100%;
+  height: 100%;
+}
+@media only screen and (max-width: 480px) {
+  .shimmer__view-mobile-up___kKqQL {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .shimmer__view-mobile___pBIGH {
+    display: none !important;
+  }
+}
+.shimmer__shimmerBox___LToot {
+  width: var(--width);
+  height: var(--height);
+  background: linear-gradient(90deg, var(--themeAccentL4, #f9f6f0) 25%, var(--themeAccentL3, #f5f1e7) 50%, var(--themeAccentL4, #f9f6f0) 75%);
+  background-size: 200% 100%;
+  animation: shimmer__shimmer___b_S5k 1.5s infinite linear;
+  border-radius: 8px;
+}
+@keyframes shimmer__shimmer___b_S5k {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 

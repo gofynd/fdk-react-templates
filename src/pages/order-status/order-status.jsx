@@ -1,8 +1,12 @@
 import React, { useMemo } from "react";
 import {
   convertDate,
+  formatLocale,
   getAddressStr,
   numberWithCommas,
+  priceFormatCurrencySymbol,
+  translateDynamicLabel,
+  getProductImgAspectRatio,
 } from "../../helper/utils";
 import * as styles from "./order-status.less";
 import PriceBreakup from "../../components/price-breakup/price-breakup";
@@ -10,13 +14,16 @@ import CartGiftItem from "./components/cart-gift-item/cart-gift-item";
 import FyButton from "../../components/core/fy-button/fy-button";
 import Modal from "../../components/core/modal/modal";
 import { FDKLink } from "fdk-core/components";
+import { useGlobalStore, useFPI, useGlobalTranslation } from "fdk-core/utils";
 import TrueCheckIcon from "../../assets/images/true-check.svg";
+import { BagImage, BundleBagImage } from "../../components/bag/bag";
+import Accordion from "../../components/accordion/accordion";
 
 const orderFailurePageInfo = {
   link: "",
-  linktext: "RETRY",
-  text: "Oops! Your payment failed!",
-  subText: "You can retry checkout or take another option for payment.",
+  linktext: "resource.common.retry_caps",
+  text: "resource.common.oops_payment_failed",
+  subText: "resource.common.retry_checkout_or_other_payment_option",
   icon: "",
 };
 
@@ -29,14 +36,19 @@ function OrderStatus({
   showPolling = false,
   pollingComp = null,
   loader,
+  getGroupedShipmentBags,
+  globalConfig,
 }) {
-  const orderLink = useMemo(
-    () =>
-      isLoggedIn
-        ? "/profile/orders/"
-        : `/order-tracking/${orderData?.order_id || ""}`,
-    [isLoggedIn, orderData?.order_id]
-  );
+  const { t } = useGlobalTranslation("translation");
+  const fpi = useFPI();
+  const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
+  const locale = language?.locale;
+  function getOrderLink() {
+    const basePath = isLoggedIn
+      ? "/profile/orders/"
+      : `/order-tracking/${orderData?.order_id}`;
+    return locale && locale !== "en" ? `/${locale}${basePath}` : basePath;
+  }
 
   function getItemCount() {
     return orderData?.shipments?.reduce((total, ship) => {
@@ -52,7 +64,7 @@ function OrderStatus({
   }
 
   const getAddressData = orderData?.shipments?.[0]?.delivery_address || {
-    name: "John Doe",
+    name: t("resource.order.john_doe"),
     address_type: "Home",
     phone: "1234567890",
   };
@@ -65,26 +77,37 @@ function OrderStatus({
             <div>
               <TrueCheckIcon />
             </div>
-            <div className={styles.orderConfirmed}>ORDER CONFIRMED</div>
+            <div className={styles.orderConfirmed}>
+              {t("resource.order.order_confirmed_caps")}
+            </div>
             <div className={styles.successMsg}>
-              Thank you for shopping with us! Your order is placed successfully
+              {t("resource.order.order_success")}
             </div>
             <div className={styles.orderId}>
-              ORDER ID: <span>{orderData.order_id}</span>
+              {t("resource.order.order_id_caps")}:{" "}
+              <span>{orderData.order_id}</span>
             </div>
             <div className={styles.orderTime}>
-              Placed on:
-              <span> {convertDate(orderData.order_created_time)}</span>
+              {t("resource.order.placed_on")}:
+              <span>
+                {convertDate(
+                  orderData.order_created_time,
+                  formatLocale(locale, countryCode, true)
+                )}
+              </span>
             </div>
             <div className={styles.trackOrderBtn}>
-              <a href={orderLink} style={{ display: "inline-block" }}>
+              <a href={getOrderLink()} style={{ display: "inline-block" }}>
                 <FyButton type="button" variant="outlined">
-                  TRACK ORDER
+                  {t("resource.order.track_order_caps")}
                 </FyButton>
               </a>
-              <a className={styles.continueBtn} href="/">
+              <a
+                className={styles.continueBtn}
+                href={locale && locale !== "en" ? `/${locale}` : "/"}
+              >
                 <FyButton variant="contained" color="primary" type="button">
-                  CONTINUE SHOPPING
+                  {t("resource.common.continue_shopping")}
                 </FyButton>
               </a>
             </div>
@@ -97,7 +120,9 @@ function OrderStatus({
                     shipment={shipment}
                     index={index}
                     shipmentLength={orderData?.shipments?.length}
-                    orderLink={orderLink}
+                    orderLink={getOrderLink()}
+                    getGroupedShipmentBags={getGroupedShipmentBags}
+                    globalConfig={globalConfig}
                   />
                 ))}
               </div>
@@ -115,15 +140,46 @@ function OrderStatus({
               {isLoggedIn && (
                 <div className={`${styles["payment-address"]} fontBody`}>
                   <div className={styles["payment-wrapper"]}>
-                    <div className={styles["mode"]}>PAYMENT MODE</div>
-                    {orderData?.shipments?.[0]?.payment_info?.length > 0 &&
-                      orderData?.shipments?.[0]?.payment_info?.map(
-                        (paymentInfo) => (
+                    <div className={styles["mode"]}>
+                      {t("resource.common.payment_mode")}
+                    </div>
+                    {(() => {
+                      // Aggregate paymentInfos by mode (using a map)
+                      const paymentInfos = (orderData?.shipments || [])
+                        .flatMap(shipment => shipment?.payment_info || [])
+                        .filter(Boolean);
+
+                      // We'll group by unique "mode" (or fallback to display_name)
+                      const paymentModeMap = {};
+
+                      paymentInfos.forEach((paymentInfo) => {
+                        // Use a composite key in case display_name is duplicated but mode differs
+                        const modeKey = paymentInfo?.mode || paymentInfo?.display_name || "OTHER";
+                        if (!paymentModeMap[modeKey]) {
+                          paymentModeMap[modeKey] = {
+                            ...paymentInfo,
+                            amount: Number(paymentInfo?.amount) || 0,
+                          };
+                        } else {
+                          // Sum up the amount
+                          paymentModeMap[modeKey].amount += Number(paymentInfo?.amount) || 0;
+                        }
+                      });
+
+                      const mergedPaymentInfos = Object.values(paymentModeMap);
+
+                      if (mergedPaymentInfos.length > 0) {
+                        return mergedPaymentInfos.map((paymentInfo, idx) => (
                           <div
-                            key={paymentInfo?.display_name}
+                            key={`${paymentInfo?.display_name || paymentInfo?.mode}-${idx}`}
                             className={styles["mode-data"]}
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between"
+                            }}
                           >
-                            <span>
+                            <span style={{ display: "flex", alignItems: "center" }}>
                               <img
                                 src={
                                   paymentInfo?.logo ||
@@ -131,17 +187,29 @@ function OrderStatus({
                                 }
                                 alt={paymentInfo?.mode}
                               />
+                              <span className={styles["mode-name"]} style={{ marginLeft: 12, marginTop: 6 }}>
+                                {translateDynamicLabel(paymentInfo?.display_name, t) || t("resource.order.cod")}
+                              </span>
                             </span>
-                            <span className={styles["mode-name"]}>
-                              {paymentInfo?.display_name || "COD"}
+                            <span className={styles["mode-amount"]}>
+                              {paymentInfo?.amount !== undefined && paymentInfo?.amount !== null
+                                ? priceFormatCurrencySymbol(
+                                    paymentInfo?.currency_symbol ||
+                                      orderData?.breakup_values?.[0]?.currency_symbol,
+                                    paymentInfo?.amount
+                                  )
+                                : null}
                             </span>
                           </div>
-                        )
-                      )}
+                        ));
+                      }
+                      // If paymentInfos is empty, render nothing
+                      return null;
+                    })()}
                   </div>
                   <div className={styles["delivery-wrapper"]}>
                     <div className={styles["delivery-header"]}>
-                      DELIVERY ADDRESS
+                      {t("resource.order.delivery_address")}
                     </div>
                     <div className={styles["delivery-details"]}>
                       <div className={styles["name-label"]}>
@@ -149,10 +217,13 @@ function OrderStatus({
                           {getAddressData?.name}
                         </div>
                         <div className={styles["label"]}>
-                          {getAddressData?.address_type
-                            ?.charAt(0)
-                            ?.toUpperCase() +
-                            getAddressData?.address_type.slice(1)}
+                          {translateDynamicLabel(
+                            getAddressData?.address_type
+                              ?.charAt(0)
+                              ?.toUpperCase() +
+                              getAddressData?.address_type.slice(1),
+                            t
+                          )}
                         </div>
                       </div>
                       <div className={styles["address-phone"]}>
@@ -177,8 +248,12 @@ function OrderStatus({
           <Modal isOpen={true} hideHeader={true}>
             <div className={styles.orderStatusModal}>
               <div className={styles.loader}></div>
-              <p className={styles.title}>Fetching Order Details</p>
-              <p className={styles.message}>Please do not press back button</p>
+              <p className={styles.title}>
+                {t("resource.order.fetching_order_details")}
+              </p>
+              <p className={styles.message}>
+                {t("resource.order.please_do_not_press_back_button")}
+              </p>
             </div>
           </Modal>
         </div>
@@ -189,13 +264,15 @@ function OrderStatus({
       <div className={styles.orderFail}>
         <img src={orderFailImg} alt={orderFailImg} />
         <div className={styles.cartErrorText}>
-          <span>{orderFailurePageInfo.text}</span>
-          <span className={styles.subtext}>{orderFailurePageInfo.subText}</span>
+          <span>{t(orderFailurePageInfo.text)}</span>
+          <span className={styles.subtext}>
+            {t(orderFailurePageInfo.subText)}
+          </span>
           <button
             className={`${styles.commonBtn} ${styles.linkBtn} ${styles.boldSm}`}
             onClick={onOrderFailure}
           >
-            {orderFailurePageInfo.linktext}
+            {t(orderFailurePageInfo.linktext)}
           </button>
         </div>
       </div>
@@ -205,12 +282,23 @@ function OrderStatus({
 
 export default OrderStatus;
 
-function ShipmentItem({ shipment, index, shipmentLength, orderLink = "" }) {
-  const getBags = (bags) => {
-    return bags.filter(
-      (bag) => Object.keys(bag?.parent_promo_bags)?.length === 0
-    );
-  };
+function ShipmentItem({
+  shipment,
+  index,
+  shipmentLength,
+  orderLink = "",
+  getGroupedShipmentBags,
+  globalConfig,
+}) {
+  const { t } = useGlobalTranslation("translation");
+  const {
+    bags: getBags,
+    bundleGroups,
+    bundleGroupArticles,
+  } = useMemo(
+    () => getGroupedShipmentBags(shipment?.bags, { includePromoBags: false }),
+    [shipment?.bags]
+  );
 
   const isShipmentCancelled = shipment?.shipment_status?.value === "cancelled";
 
@@ -218,7 +306,9 @@ function ShipmentItem({ shipment, index, shipmentLength, orderLink = "" }) {
     <div className={styles.shipmentItem} key={index}>
       <div className={styles.shipmentItemHead}>
         <div>
-          <p className={styles.shipmentNumber}>{`Shipment ${
+          <p
+            className={styles.shipmentNumber}
+          >{`${t("resource.common.shipment")} ${
             index + 1
           } / ${shipmentLength}`}</p>
           <h5 style={{ marginTop: "8px" }}>{shipment?.shipment_id}</h5>
@@ -232,7 +322,8 @@ function ShipmentItem({ shipment, index, shipmentLength, orderLink = "" }) {
             }),
           }}
         >
-          Status: <span>{shipment?.shipment_status?.title}</span>
+          {t("resource.order.status")}:{" "}
+          <span>{shipment?.shipment_status?.title}</span>
         </div>
         <div
           className={styles.statusWrapperMobile}
@@ -247,9 +338,16 @@ function ShipmentItem({ shipment, index, shipmentLength, orderLink = "" }) {
         </div>
       </div>
       <div className={styles.shipmentItemItemsData}>
-        {getBags(shipment?.bags)?.map((item, index) => (
+        {getBags?.map((item, index) => (
           <div className={styles.shipmentProdItemWrapper}>
-            <ProductItem product={item} key={index} orderLink={orderLink} />
+            <ProductItem
+              key={index}
+              product={item}
+              orderLink={orderLink}
+              bundleGroups={bundleGroups}
+              bundleGroupArticles={bundleGroupArticles}
+              globalConfig={globalConfig}
+            />
           </div>
         ))}
       </div>
@@ -257,60 +355,153 @@ function ShipmentItem({ shipment, index, shipmentLength, orderLink = "" }) {
   );
 }
 
-function ProductItem({ product, orderLink = "" }) {
+function ProductItem({
+  product,
+  orderLink = "",
+  bundleGroups,
+  bundleGroupArticles,
+  globalConfig,
+}) {
+  const { t } = useGlobalTranslation("translation");
+  const bundleGroupId = product?.bundle_details?.bundle_group_id;
+  const aspectRatio = getProductImgAspectRatio(globalConfig);
+  const isBundleItem =
+    product?.bundle_details?.bundle_group_id &&
+    bundleGroups &&
+    bundleGroups[product?.bundle_details?.bundle_group_id]?.length > 0;
   const markedPriceCheck = product?.prices?.price_marked;
   const effectivePriceCheck = product?.prices?.price_effective;
+  const customizationOptions = product?.meta?._custom_json?._display || [];
+
+  const [items, setItems] = React.useState([
+    { title: "Customization", content: customizationOptions, open: false },
+  ]);
+
+  const handleItemClick = (index) => {
+    setItems((prevItems) => {
+      const updatedItems = [...prevItems];
+      updatedItems[index] = {
+        ...updatedItems[index],
+        open: !updatedItems[index].open,
+      };
+      return updatedItems;
+    });
+  };
 
   const getMarkedPrice = (item) => numberWithCommas(item?.prices?.price_marked);
   const getEffectivePrice = (item) =>
     numberWithCommas(item?.prices?.price_effective);
 
-  function getItem(bag) {
-    let bagItem = { ...bag };
+  const hide_single_size = globalConfig?.hide_single_size || false;
+
+  const { name, brand, size, itemQty, markedPrice, effectivePrice } =
+    useMemo(() => {
+      if (isBundleItem) {
+        // For bundles, sum all individual bag prices from the bundleGroups
+        // This avoids the mutation issue where getGroupedShipmentBags modifies bundle_details
+        const bundleBags = bundleGroups[bundleGroupId] || [];
+        
+        // Sum the ORIGINAL individual bag prices (not the modified base bag prices)
+        const totalEffectivePrice = bundleBags.reduce((sum, bag) => {
+          // If base bag has been aggregated by getGroupedShipmentBags, use financial_breakup instead
+          const isAggregated = bag?.bundle_details?.is_base && 
+                               bag?.prices?.price_effective > (bag?.financial_breakup?.[0]?.price_effective || bag?.prices?.price_effective);
+          
+          if (isAggregated) {
+            return sum + (bag?.financial_breakup?.[0]?.price_effective || 0);
+          }
+          
+          return sum + (bag?.prices?.price_effective || 0);
+        }, 0);
+        
+        const totalMarkedPrice = bundleBags.reduce((sum, bag) => {
+          const isAggregated = bag?.bundle_details?.is_base && 
+                               bag?.prices?.price_marked > (bag?.financial_breakup?.[0]?.price_marked || bag?.prices?.price_marked);
+          
+          if (isAggregated) {
+            return sum + (bag?.financial_breakup?.[0]?.price_marked || 0);
+          }
+          
+          return sum + (bag?.prices?.price_marked || 0);
+        }, 0);
+        
+        return {
+          name: product?.bundle_details?.name,
+          brand: "",
+          size: "",
+          itemQty: product?.bundle_details?.bundle_count,
+          markedPrice: totalMarkedPrice,
+          effectivePrice: totalEffectivePrice,
+        };
+      }
+      return {
+        name: product?.item?.name,
+        brand: product?.item?.brand?.name,
+        size: product?.item?.size,
+        itemQty: product?.quantity,
+        markedPrice: product?.prices?.price_marked,
+        effectivePrice: product?.prices?.price_effective,
+      };
+    }, [product, isBundleItem, bundleGroups, bundleGroupId]);
+
+  const getGiftItem = useMemo(() => {
+    let bagItem = { ...product };
     if (bagItem.applied_promos) {
       bagItem.promotions_applied = bagItem.applied_promos;
       delete bagItem.applied_promos;
     }
     return bagItem;
-  }
+  }, [product]);
 
   return (
     <FDKLink to={orderLink}>
       <div className={styles.shipmentProdItem}>
         <div className={styles.prodImg}>
-          <img src={product.item.image[0]} alt={product?.item?.name} />
+          <BagImage
+            bag={product}
+            isBundle={isBundleItem}
+            aspectRatio={aspectRatio}
+          />
         </div>
         <div className={styles.prodItemData}>
           <div className={styles.productDetails}>
-            <div className={styles.brandName}>{product?.item?.brand?.name}</div>
-            <div className={styles.productName}>{product?.item?.name}</div>
+            {brand && <div className={styles.brandName}>{brand}</div>}
+            <div className={styles.productName}>{name}</div>
             <div className={styles.sizeInfo}>
               <div className={styles.sizeQuantity}>
-                <div className={styles.size}>
-                  Size: &nbsp;
-                  {product?.item?.size}
-                </div>
+                {size && !(hide_single_size && size.toUpperCase() === "OS") && (
+                  <div className={styles.size}>
+                    {t("resource.common.size")}: &nbsp;
+                    {size}
+                  </div>
+                )}
                 <div className={styles.sizeQuantity}>
-                  Qty:&nbsp;
-                  {product?.quantity}
+                  {t("resource.common.qty")}:&nbsp;
+                  {itemQty}
                 </div>
               </div>
             </div>
             <div className={styles.paymentInfo}>
-              {effectivePriceCheck > 0 && (
+              {effectivePrice > 0 && (
                 <div className={styles.effectivePrice}>
-                  {`${product?.prices?.currency_symbol}${getEffectivePrice(
-                    product
-                  )}`}
+                  {`${product?.prices?.currency_symbol}${numberWithCommas(effectivePrice)}`}
                 </div>
               )}
-              {markedPriceCheck > 0 &&
-                effectivePriceCheck !== markedPriceCheck && (
-                  <div className={styles.markedPrice}>
-                    {`${product?.prices?.currency_symbol}${getMarkedPrice(product)}`}
-                  </div>
-                )}
+              {markedPrice > 0 && effectivePrice !== markedPrice && (
+                <div className={styles.markedPrice}>
+                  {`${product?.prices?.currency_symbol}${numberWithCommas(markedPrice)}`}
+                </div>
+              )}
             </div>
+            {customizationOptions.length > 0 && (
+              <div className={styles.productCustomizationContainer}>
+                <Accordion
+                  key={`${product.shipment_id}`}
+                  items={items}
+                  onItemClick={handleItemClick}
+                />
+              </div>
+            )}
 
             {/* Gift Wrap Display UI */}
             {product?.meta?.gift_card?.is_gift_applied && (
@@ -321,22 +512,24 @@ function ProductItem({ product, orderLink = "" }) {
                   disabled={product}
                   checked={product?.meta?.gift_card?.is_gift_applied}
                 />
-                <label htmlFor={product?.id}>Gift wrap Added</label>
+                <label htmlFor={product?.id}>
+                  {t("resource.order.gift_wrap_added")}
+                </label>
               </div>
             )}
             {/* Show Free Gifts  Desktop */}
-            {getItem(product)?.promotions_applied?.length > 0 && (
+            {getGiftItem?.promotions_applied?.length > 0 && (
               <div className={styles["desktop-free-gift"]}>
-                <CartGiftItem bagItem={getItem(product)}></CartGiftItem>
+                <CartGiftItem bagItem={getGiftItem}></CartGiftItem>
               </div>
             )}
           </div>
         </div>
       </div>
       {/* Show Free Gifts  Mobile */}
-      {getItem(product)?.promotions_applied?.length > 0 && (
+      {getGiftItem?.promotions_applied?.length > 0 && (
         <div className={styles["mobile-free-gift"]}>
-          <CartGiftItem bagItem={getItem(product)}></CartGiftItem>
+          <CartGiftItem bagItem={getGiftItem}></CartGiftItem>
         </div>
       )}
     </FDKLink>

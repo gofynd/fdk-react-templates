@@ -13,6 +13,13 @@
  * @param {function} onAddAddress - Callback function to handle adding a new address.
  * @param {function} onUpdateAddress - Callback function to handle updating an existing address.
  * @param {function} onGetLocality - Callback function to fetch locality information based on the address.
+ * @param {boolean} isGuestUser - Indicates if the user is a guest user.
+ * @param {object} user - User object containing profile information for auto-filling fields.
+ * @param {string} user.firstName - User's first name.
+ * @param {string} user.lastName - User's last name.
+ * @param {string} user.email - User's email address.
+ * @param {object} user.phone - User's phone information.
+ * @param {string} user.phone.mobile - User's mobile number.
  * @param {component} customFooter - Custom React component for rendering the footer of the form, typically a submit button.
  *
  * Default Props:
@@ -43,16 +50,19 @@
  *
  */
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import * as styles from "./address-form.less";
 import GoogleMapAddress from "../google-map/google-map";
 import FormInputSelector from "./form-input-selector";
 import FyDropdown from "../core/fy-dropdown/fy-dropdown";
+import { useGlobalTranslation } from "fdk-core/utils";
 import HomeIcon from "../../assets/images/home-type.svg";
 import OfficeIcon from "../../assets/images/office-type.svg";
 import FriendsFamilyIcon from "../../assets/images/friends-family.svg";
 import OtherIcon from "../../assets/images/other-type.svg";
+import { isRunningOnClient } from "../../helper/utils";
+import { useAddressAutofill } from "../../helper/hooks";
 
 const defaultFormSchema = [
   {
@@ -71,7 +81,7 @@ const defaultFormSchema = [
           pattern: {
             value: /^[A-Za-z0-9,./\s-]+$/,
             message:
-              "House No can only contain letters, numbers, comma, period, hyphen, and slash",
+            "House No can only contain letters, numbers, comma, period, hyphen, and slash",
           },
           maxLength: {
             value: 80,
@@ -91,7 +101,7 @@ const defaultFormSchema = [
           pattern: {
             value: /^[A-Za-z0-9,./\s-]+$/,
             message:
-              "address can only contain letters, numbers, comma, period, hyphen, and slash",
+              "address can only contain letters, numbers, comma, period, hyphen, and slash"
           },
           maxLength: {
             value: 80,
@@ -202,15 +212,33 @@ const defaultFormSchema = [
       {
         key: "phone",
         display: "Mobile Number",
-        type: "text",
+        type: "mobile",
         required: true,
         fullWidth: false,
         validation: {
           required: "Mobile number is required",
-          pattern: {
-            value: /^[6-9]\d{9}$/,
-            message: "Invalid mobile number",
-          },
+          validate: (value) => {
+            if (!value) return "Mobile number is required";
+            
+            // Always expect an object from MobileNumber component
+            if (typeof value === 'object') {
+              // Trust the component's validation if available
+              if (value.isValidNumber === true) return true;
+              
+              // If no validation flag, validate the mobile number
+              if (value.mobile) {
+                const mobileNumber = value.mobile.toString().replace(/[\s\-+]/g, '');
+                if (mobileNumber.length !== 10) return "Mobile number must be 10 digits";
+                return /^[6-9]\d{9}$/.test(mobileNumber) || "Invalid mobile number format";
+              }
+              return "Invalid mobile number";
+            }
+            
+            // Convert any string input to proper format
+            const mobileNumber = value.toString().replace(/[\s\-+]/g, '');
+            if (mobileNumber.length !== 10) return "Mobile number must be 10 digits";
+            return /^[6-9]\d{9}$/.test(mobileNumber) || "Invalid mobile number format";
+          }
         },
       },
       {
@@ -235,27 +263,105 @@ const defaultFormSchema = [
 
 const addressTypes = [
   {
-    label: "Home",
+    label: "resource.common.breadcrumb.home",
     value: "Home",
     icon: <HomeIcon className={styles.typeIcon} />,
   },
   {
-    label: "Work",
+    label: "resource.common.work",
     value: "Work",
     icon: <OfficeIcon className={styles.typeIcon} />,
   },
   {
-    label: "Friends & Family",
+    label: "resource.common.friends_&_family",
     value: "Friends & Family",
     icon: <FriendsFamilyIcon className={styles.typeIcon} />,
   },
   {
-    label: "Other",
+    label: "resource.common.other",
     value: "Other",
     icon: <OtherIcon className={styles.typeIcon} />,
   },
   // Add more address types as needed
 ];
+
+export const AddressFormInputs = ({
+  formSchema = [],
+  customStyles = {},
+  control = {},
+  formMethods = {},
+  onChange = () => {},
+}) => {
+  const formContainerRef = useRef(null);
+  const [currBgColor, setCurrBgColor] = useState("#fff");
+
+  useEffect(() => {
+    if (!isRunningOnClient()) return;
+    if (formContainerRef?.current) {
+      let levelChecked = 0;
+      const maxLevel = 20;
+
+      let parentEle = formContainerRef?.current?.parentElement;
+      while (parentEle && levelChecked < maxLevel) {
+        levelChecked++;
+        const computedStyle = window.getComputedStyle(parentEle);
+        const backgroundColor = computedStyle?.backgroundColor;
+        if (
+          backgroundColor !== "rgba(0, 0, 0, 0)" &&
+          backgroundColor !== "transparent"
+        ) {
+          setCurrBgColor(backgroundColor);
+          break;
+        }
+        parentEle = parentEle.parentElement;
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (onChange && formMethods?.getValues) {
+      const currentValues = formMethods.getValues();
+      onChange(currentValues);
+    }
+  }, [formMethods]);
+
+  return (
+    <div className={styles?.addressFormWrapper}>
+      {formSchema?.map((group, index) => (
+        <div key={index} className={styles.formGroup}>
+          <div
+            ref={formContainerRef}
+            className={
+              typeof customStyles?.formContainer === "string"
+                ? customStyles.formContainer
+                : styles.formContainer
+            }
+            style={
+              typeof customStyles?.formContainer === "object"
+                ? customStyles.formContainer
+                : undefined
+            }
+          >
+            {group?.fields?.map((field) => (
+              <FormInputSelector
+                labelClassName={styles.labelClassName}
+                isSingleField={group?.fields?.length === 1}
+                key={field.key}
+                formData={field}
+                control={control}
+                formMethods={{ ...formMethods }}
+                allowDropdown={false}
+                {...(typeof field.showAsOptional !== "undefined" && {
+                  showAsOptional: field.showAsOptional,
+                })}
+              />
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 const AddressForm = ({
   internationalShipping,
@@ -269,23 +375,24 @@ const AddressForm = ({
   onUpdateAddress = () => {},
   onGetLocality = () => {},
   isGuestUser = false,
-  customFooter = (
-    <button
-      className={`${styles.commonBtn} ${styles.deliverBtn}`}
-      type="submit"
-    >
-      {isNewAddress ? "Add Address" : "Update Address"}
-    </button>
-  ),
+  user = null,
+  customFooter,
   setI18nDetails,
   handleCountrySearch,
   getFilteredCountries,
   selectedCountry,
   countryDetails,
 }) => {
+  const { t } = useGlobalTranslation("translation");
   const isOtherAddressType = !["Home", "Work", "Friends & Family"].includes(
     addressItem?.address_type
   );
+    // Use custom hook for optimized autofill data
+    const { autofillData: userAutofillData } = useAddressAutofill(
+      user,
+      isGuestUser
+    );
+
   const {
     control,
     register,
@@ -308,7 +415,9 @@ const AddressForm = ({
       otherAddressType:
         addressItem && isOtherAddressType ? addressItem?.address_type : "",
       geo_location: { latitude: "", longitude: "" },
-      country: selectedCountry || "India",
+      country: selectedCountry || t("resource.localization.india"),
+      // Auto-fill user data using memoized utility function
+      ...userAutofillData,
       // area_code: addressItem?.area_code || defaultPincode || "",
     },
   });
@@ -334,8 +443,22 @@ const AddressForm = ({
     } else {
       setValue("is_default_address", true);
       setValue("address_type", "Home");
+      // Auto-fill user data when creating new address using memoized data
+      if (userAutofillData.name) {
+        setValue("name", userAutofillData.name);
+      }
+      if (userAutofillData.phone && userAutofillData.phone.mobile) {
+        setValue("phone", {
+          mobile: userAutofillData.phone.mobile,
+          countryCode: userAutofillData.phone.countryCode || "91",
+          isValidNumber: userAutofillData.phone.isValidNumber
+        });
+      }
+      if (userAutofillData.email) {
+        setValue("email", userAutofillData.email);
+      }
     }
-  }, [addressItem, reset]);
+  }, [addressItem, reset, userAutofillData]);
 
   useEffect(() => {
     setShowOtherText(address_type === "Other");
@@ -348,6 +471,7 @@ const AddressForm = ({
   }, [sector]);
 
   useEffect(() => {
+    if (!isRunningOnClient()) return;
     if (formContainerRef?.current) {
       let levelChecked = 0;
       const maxLevel = 20;
@@ -399,7 +523,10 @@ const AddressForm = ({
     setTimeout(() => {
       formSchema?.forEach((group) =>
         group?.fields?.forEach(({ key }) => {
-          setValue(key, "");
+          // Don't clear user auto-filled fields when country changes
+          if (key !== "name" && key !== "phone" && key !== "email") {
+            setValue(key, "");
+          }
         })
       );
     }, 0);
@@ -440,8 +567,8 @@ const AddressForm = ({
               optionValue="display_name"
               optionLabel="display_name"
               showDropdownIcon
-              label="Country"
-              placeholder="Select country"
+              label={t("resource.localization.country")}
+              placeholder={t("resource.localization.select_country")}
               containerClassName={styles.customClass}
             />
           </div>
@@ -464,7 +591,9 @@ const AddressForm = ({
           </div>
         ))}
         <div className={styles.addressTypeContainer}>
-          <label className={styles.addressTypeHeader}>SAVE AS </label>
+          <label className={styles.addressTypeHeader}>
+            {t("resource.common.save_as")}{" "}
+          </label>
           <div className={styles.typeWrap}>
             {addressTypes?.map((type) => (
               <button
@@ -474,7 +603,7 @@ const AddressForm = ({
                 className={`${styles.typeBtn} ${watch("address_type") === type.value ? styles.selected : ""}`}
               >
                 {type.icon}
-                <span>{type.label}</span>
+                <span>{t(type.label)}</span>
               </button>
             ))}
           </div>
@@ -483,37 +612,39 @@ const AddressForm = ({
             {...register("address_type", { required: true })}
           />
           {errors.address_type && (
-            <span className={`${styles.formError}`}>Field is required</span>
+            <span className={`${styles.formError}`}>{t("resource.common.field_required")}</span>
           )}
-        </div>
+        </div >
         {showOtherText && (
           <div className={styles.formItemDiv}>
             <label
               className={styles.formLabel}
               style={{ backgroundColor: currBgColor }}
             >
-              Other Address Type <span className={`${styles.formReq}`}>*</span>
-            </label>
+              {t("resource.localization.other_address_type")} <span className={`${styles.formReq}`}>*</span>
+            </label >
             <input
               {...register("otherAddressType", {
                 validate: (value) => {
                   if (!value.trim()) {
-                    return "Address Type is required";
+                    return `${t("resource.common.address.address_type")} ${t("resource.common.address.is_required")}`;
                   }
                   if (value.length < 1 || value.length > 30) {
-                    return "Length must be between 1 and 30";
+                    return t("resource.common.validation_length", { min: 1 || 0, max: 30 });
                   }
                   return true;
                 },
               })}
               className={`${styles.formInputBox} ${styles.otherInput}`}
             />
-            {errors.otherAddressType && (
-              <div className={`${styles.formError}`}>
-                {errors.otherAddressType.message}
-              </div>
-            )}
-          </div>
+            {
+              errors.otherAddressType && (
+                <div className={`${styles.formError}`}>
+                  {errors.otherAddressType.message}
+                </div>
+              )
+            }
+          </div >
         )}
         {!isGuestUser && (
           <div className={styles.defaultAddressContainer}>
@@ -524,11 +655,20 @@ const AddressForm = ({
               {...register("is_default_address")}
             />
             <label className={styles.label} htmlFor="is_default_address">
-              Make this my default address
+             {t("resource.common.address.make_this_my_default_address")}
             </label>
           </div>
         )}
-        <div>{customFooter}</div>
+        <div>
+          {customFooter ? 
+            customFooter : 
+            <button
+              className={`${styles.commonBtn} ${styles.deliverBtn}`}
+              type="submit"
+            >
+              {isNewAddress ? t("resource.common.address.add_address") : t("resource.common.address.update_address")}
+          </button>}
+      </div>
       </form>
     </div>
   );
