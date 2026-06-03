@@ -12,13 +12,11 @@
 
 import React from "react";
 import * as styles from "./shipment-address.less";
-import { useGlobalTranslation } from "fdk-core/utils";
 
 function ShipmentAddress({ address }) {
-  const { t } = useGlobalTranslation("translation");
   return (
     <div className={`${styles.address}`}>
-      <div className={`${styles.title} ${styles.boldsm}`}>{t("resource.common.address.address_caps")}</div>
+      <div className={`${styles.title} ${styles.boldsm}`}>ADDRESS</div>
       <div className={styles.lightsm}>
         {`${address?.name || ""} - ${address?.country_phone_code || ""} ${address?.phone || ""}`}
       </div>

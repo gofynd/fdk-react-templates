@@ -59,37 +59,30 @@
     }
     .trackOrderBtn {
       margin-top: 24px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: center;
-
       .trackBtn {
-        padding: 14px 24px;
-        border: 1px solid var(--buttonPrimary);
-        border-radius: @ButtonRadius;
-        font-size: 14px;
-
-        @media @mobile {
-          padding: 12px;
-          height: 41px;
+          padding: 14px 24px;
+          border: 1px solid var(--buttonPrimary);
+          border-radius: @ButtonRadius;
+          font-size: 14px;
+      
+          @media @mobile {
+            padding: 12px;
+            height: 41px;
+          }
         }
-      }
       .continueBtn {
         display: inline-block;
         padding-left: 12px;
         &:nth-child(2) {
-          @media (max-width: 399px) {
+          @media (max-width: 378px) {
             padding-top: 12px;
             padding-left: 0;
-          }
-          @media (min-width: 379px) and (max-width: 399px) {
-            padding-left: 12px;
           }
         }
       }
     }
   }
+
 
   .orderDetail {
     display: flex;
@@ -103,7 +96,7 @@
     }
     .leftOrderDetails {
       width: 64%;
-      margin-inline-end: 2%;
+      margin-right: 2%;
       @media @tablet-down {
         width: 100%;
       }
@@ -190,12 +183,16 @@
                 border-top: none;
               }
               .prodImg {
-                flex: 0 0 110px;
+                width: 125px;
+                img {
+                  max-width: 110px;
+                  max-height: 170px;
+                  cursor: pointer;
+                }
               }
               .prodItemData {
-                margin-inline-start: 14px;
+                margin-left: 14px;
                 min-width: 0;
-                width: 100%;
 
                 .productDetails {
                   .brandName {
@@ -216,7 +213,7 @@
                       margin-bottom: 4px;
 
                       .size {
-                        margin-inline-end: 12px;
+                        margin-right: 12px;
                       }
                     }
                   }
@@ -228,14 +225,14 @@
                     font-weight: 700;
                     font-size: 16px;
                     color: var(--textHeading);
-                    margin-inline-end: 12px;
+                    margin-right: 12px;
                   }
                   .markedPrice {
                     font-weight: 400;
                     font-size: 12px;
                     text-decoration-line: line-through;
                     color: var(--textLabel);
-                    margin-inline-end: 8px;
+                    margin-right: 8px;
                     align-self: center;
                   }
                   .discount {
@@ -305,10 +302,7 @@
     font-weight: 700;
     font-size: 24px;
     line-height: 33.6px;
-    margin-top: 16px;
-    margin-inline-end: 0;
-    margin-bottom: 8px;
-    margin-inline-start: 0px;
+    margin: 16px 0 8px 0;
     color: var(--primaryColor);
   }
 
@@ -385,12 +379,7 @@
         font-weight: 500;
         font-size: 12px;
         align-self: center;
-        margin-inline-start: 10px;
-        color: @TextBody;
-      }
-      .mode-amount {
-        font-size: 12px;
-        font-weight: 500;
+        margin-left: 10px;
         color: @TextBody;
       }
     }
@@ -470,8 +459,4 @@
     align-items: center;
     color: @TextHeading;
   }
-}
-
-.productCustomizationContainer {
-  margin: 16px 0;
 }

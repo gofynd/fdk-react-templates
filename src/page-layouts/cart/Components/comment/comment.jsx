@@ -2,11 +2,9 @@ import React, { useState } from "react";
 import * as styles from "./comment.less";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import Modal from "../../../../components/core/modal/modal";
-import { useGlobalTranslation } from "fdk-core/utils";
 import { useMobile } from "../../../../helper/hooks/useMobile";
 
-function Comment({ comment = "", onCommentChange = () => { } }) {
-  const { t } = useGlobalTranslation("translation");
+function Comment({ comment = "", onCommentChange = () => {} }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isCommentError = comment.length > 500;
   const isMobile = useMobile();
@@ -30,7 +28,7 @@ function Comment({ comment = "", onCommentChange = () => { } }) {
   return (
     <>
       <div className={styles.commentOuterBox} onClick={handleComment}>
-        <div className={styles.addCommentHeader}>{t("resource.cart.add_comment_caps")}</div>
+        <div className={styles.addCommentHeader}>ADD COMMENT</div>
         <div className={styles.commentBoxMobile}>
           <div className={styles.commentIconMobile}>
             <SvgWrapper svgSrc="comment-note-mobile" />
@@ -39,16 +37,16 @@ function Comment({ comment = "", onCommentChange = () => { } }) {
             <div className={styles.commentText}>{comment}</div>
           ) : (
             <div className={styles.addCommentLabel}>
-              <div className={styles.addCommentTitle}>{t("resource.cart.add_comment_caps")}</div>
+              <div className={styles.addCommentTitle}>ADD COMMENT</div>
               <div className={styles.body}>
-              {t("resource.cart.specific_instructions_prompt")}
+                Want to provide any specific instructions?
               </div>
             </div>
           )}
           <div className={styles.addBtn} onClick={openCommentModal}>
-            {comment.length > 0 ? t("resource.facets.edit") : `+ ${t("resource.facets.add_caps")}`}
+            {comment.length > 0 ? "Edit" : "+ ADD"}
           </div>
-        </div >
+        </div>
         <div className={styles.inputBox}>
           <div className={styles.commentBox}>
             <SvgWrapper
@@ -58,7 +56,7 @@ function Comment({ comment = "", onCommentChange = () => { } }) {
             <input
               type="text"
               value={comment}
-              placeholder={t("resource.cart.placeholder_specific_comment")}
+              placeholder="Have any specific comment?..."
               onChange={(e) => onCommentChange(e.target.value)}
             />
             <div
@@ -67,13 +65,13 @@ function Comment({ comment = "", onCommentChange = () => { } }) {
           </div>
           {isCommentError && (
             <div className={styles.commentError}>
-              {t("resource.cart.comment_character_limit")}
+              Comment should be within 500 characters
             </div>
           )}
         </div>
-      </div >
+      </div>
       <Modal
-        title={t("resource.cart.add_comment")}
+        title="Add Comment"
         isOpen={isModalOpen}
         closeDialog={() => setIsModalOpen(false)}
         headerClassName={styles.modelHeader}
@@ -82,7 +80,7 @@ function Comment({ comment = "", onCommentChange = () => { } }) {
         <div className={styles.modalContent}>
           <div>
             <textarea
-              placeholder={t("resource.cart.have_any_specific_instructions")}
+              placeholder="Have any specific instructions..."
               className={styles.modalTextarea}
               value={comment}
               onChange={(e) => onCommentChange(e.target.value)}
@@ -90,7 +88,7 @@ function Comment({ comment = "", onCommentChange = () => { } }) {
             <div className={styles.modalErrorWrapper}>
               {isCommentError && (
                 <div className={styles.modalCommentError}>
-                  {t("resource.cart.comment_character_limit")}
+                  Comment should be within 500 characters
                 </div>
               )}
               <div
@@ -103,10 +101,10 @@ function Comment({ comment = "", onCommentChange = () => { } }) {
             className={styles.modalActionBtn}
             onClick={closeCommentModal}
           >
-            {t("resource.cart.add_comment")}
+            Add Comment
           </button>
         </div>
-      </Modal >
+      </Modal>
     </>
   );
 }

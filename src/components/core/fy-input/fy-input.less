@@ -46,7 +46,6 @@
   box-sizing: border-box;
   width: 100%;
   background-color: transparent;
-  font-weight: 500;
   // To be removed once viewport meta is updated
   @media @mobile {
     font-size: 1rem;
@@ -67,9 +66,7 @@
   }
 
   &:disabled {
-    color: @TextSecondary;
-    border-color: @OverlayPopupDividerStroke;
-    font-weight: 400;
+    color: @TextDisabled;
   }
 
   &:focus {
@@ -96,12 +93,9 @@
   height: 48px;
 
   &.inputDisable {
-     border: 1px solid @OverlayPopupDividerStroke;
+    border: 1px solid @Gray;
     cursor: not-allowed;
-    pointer-events: auto;
-    input {
-      pointer-events: none; // Prevent input interaction but allow cursor display
-    }
+    pointer-events: none;
   }
 
   &.medium {
@@ -130,6 +124,22 @@
   display: flex;
   align-items: center;
   position: relative;
+
+  .startAdornment,
+  .endAdornment {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.5rem;
+  }
+
+  .startAdornment {
+    margin-right: 0.5rem;
+  }
+
+  .endAdornment {
+    margin-left: 0.5rem;
+  }
 
   input {
     flex: 1;

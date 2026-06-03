@@ -1,12 +1,7 @@
 import React, { useState, useMemo } from "react";
-import { numberWithCommas, currencyFormat, formatLocale, translateDynamicLabel } from "../../../../helper/utils";
+import { numberWithCommas, currencyFormat } from "../../../../helper/utils";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./gst-card.less";
-import {
-  useGlobalStore,
-  useFPI,
-  useGlobalTranslation
-} from "fdk-core/utils";
 
 function GstCard({
   gstNumber = "",
@@ -14,13 +9,9 @@ function GstCard({
   isApplied = false,
   error = {},
   currencySymbol = "₹",
-  onGstChange = () => { },
-  onRemoveGstClick = () => { },
+  onGstChange = () => {},
+  onRemoveGstClick = () => {},
 }) {
-  const { t } = useGlobalTranslation("translation");
-  const fpi = useFPI();
-  const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
-  const locale = language?.locale;
   const [checkBoxSelected, setCheckBoxSelected] = useState(isApplied);
 
   const isError = useMemo(() => Object.keys(error || {}).length !== 0, [error]);
@@ -42,7 +33,7 @@ function GstCard({
             checked={checkBoxSelected}
             onChange={handleCheckboxChange}
           />
-          <label htmlFor="gst-checkbox">{t("resource.cart.use_gst")}</label>
+          <label htmlFor="gst-checkbox">Use GST</label>
         </div>
       </div>
       {checkBoxSelected && (
@@ -51,7 +42,7 @@ function GstCard({
             type="text"
             maxLength="15"
             value={gstNumber}
-            placeholder={t("resource.cart.enter_gstin")}
+            placeholder="Enter GSTIN"
             disabled={isApplied}
             className={isError ? styles.errorBox : ""}
             onChange={(e) => onGstChange(e.target.value)}
@@ -67,27 +58,21 @@ function GstCard({
         <div className={styles.gstValidationBox}>
           {isApplied && !isError && (
             <span className={styles.colorSuccessNormal}>
-              {t("resource.cart.gstin_applied_success", {
-                gst_credit: currencyFormat(
-                  numberWithCommas(gstCharges),
-                  currencySymbol,
-                  formatLocale(locale, countryCode, true)
-                )
-              })}
+              {`GSTIN Applied Successfully!!! Claimed ${currencyFormat(
+                numberWithCommas(gstCharges),
+                currencySymbol
+              )} GST input credit`}
             </span>
           )}
           {isError && gstNumber.length > 0 && (
-            <span className={styles.colorErrorNormal}>{translateDynamicLabel(error.message, t)}</span>
+            <span className={styles.colorErrorNormal}>{error.message}</span>
           )}
           {!isApplied && (
             <span className={styles.statusInfo}>
-              {t("resource.cart.enter_gst_number", {
-                gst_credit: currencyFormat(
-                  numberWithCommas(gstCharges),
-                  currencySymbol,
-                  formatLocale(locale, countryCode, true)
-                )
-              })}
+              {`Enter GST number to claim ${currencyFormat(
+                numberWithCommas(gstCharges),
+                currencySymbol
+              )} input credit`}
             </span>
           )}
         </div>

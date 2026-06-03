@@ -13,34 +13,21 @@
       justify-content: space-between;
       border: 1px solid var(--dividerStokes);
       padding: 16px 24px;
-      @media @desktop {
-        border-radius: 8px 8px 0 0;
-      }
+
       @media @mobile {
         border-width: 1px 0;
         padding: 16px;
       }
 
-      @media @tablet {
-        flex-direction: column;
-      }
-
       .headerLeft {
         display: flex;
-        padding-top: 4px;
-        padding-inline-end: 12px;
-        padding-bottom: 4px;
-        padding-inline-start: 0px;
-
-        .shipmentLabelLoader {
-          height: 17px;
-        }
+        padding: 4px 12px 4px 0px;
 
         .shipmentNumber {
           font-weight: 600;
           font-size: 14px;
           color: var(--textHeading);
-          margin-inline-end: 8px;
+          margin-right: 8px;
           line-height: 140%;
           white-space: nowrap;
           @media @mobile {
@@ -59,20 +46,11 @@
           }
         }
       }
-
       .deliveryDateWrapper {
         display: flex;
         color: @SuccessText;
         gap: 8px;
         align-items: center;
-
-        .deliveryPromiseLoader {
-          height: 20px;
-        }
-
-        @media @tablet {
-          gap: 6px;
-        }
         .shippingLogo {
           height: 20px;
           width: 20px;
@@ -81,12 +59,6 @@
               fill: @SuccessText;
             }
           }
-        }
-        .foName {
-          color: @TextLabel;
-          font-size: 14px;
-          font-weight: 500;
-          line-height: 140%;
         }
         .deliveryDate {
           font-weight: 600;
@@ -122,7 +94,7 @@
         margin-bottom: 16px;
 
         span {
-          margin-inline-start: 6px;
+          margin-left: 6px;
         }
         .ribbonMsg {
           align-self: center;
@@ -197,7 +169,7 @@
                 line-height: 140%;
                 flex-wrap: wrap;
                 .size {
-                  margin-inline-end: 12px;
+                  margin-right: 12px;
                   line-height: 140%;
                 }
               }
@@ -210,20 +182,20 @@
 
             .priceWrapper {
               display: flex;
-              margin-inline-end: 12px;
+              margin-right: 12px;
               align-items: center;
 
               .effectivePrice {
                 color: @TextHeading;
                 font-size: 16px;
                 font-weight: 600;
-                margin-inline-end: 12px;
+                margin-right: 12px;
               }
               .markedPrice {
                 font-size: 12px;
                 text-decoration: line-through;
                 color: @TextLabel;
-                margin-inline-end: 12px;
+                margin-right: 12px;
               }
               .discount {
                 font-weight: 500;
@@ -253,10 +225,10 @@
                 font-size: 12px;
                 line-height: 140%;
                 color: @SuccessText;
-                margin-inline-end: 12px;
+                margin-right: 12px;
                 width: fit-content;
                 .offerInfoIcon {
-                  margin-inline-start: 6px;
+                  margin-left: 6px;
                   cursor: pointer;
                 }
               }
@@ -277,12 +249,6 @@
 .parent {
   border: 1px solid var(--dividerStokes);
   padding: 24px;
-  @media @desktop {
-    border-radius: 0px 0px 8px 8px;
-  }
-  @media @tablet-range {
-    padding: 16px;
-  }
   border-top: none;
 
   @media @mobile {
@@ -323,16 +289,12 @@
 
     span {
       align-self: center;
-      margin-inline-start: 3px;
+      margin-left: 3px;
     }
 
     @media @mobile {
       padding: 20px 24px;
       font-size: 14px;
     }
-  }
-  .proceedBtn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
   }
 }

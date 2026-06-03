@@ -11,21 +11,21 @@ export const ALL_PROFILE_MENU = [
   {
     key: "orders",
     Icon: OrdersIcon,
-    display: "resource.common.my_orders",
+    display: "My Orders",
     link: "/profile/orders",
     disabled_cart: false,
   },
   {
     key: "phone",
     Icon: CallIcon,
-    display: "resource.common.phone_number",
+    display: "Phone Number",
     link: "/profile/phone",
     disabled_cart: true,
   },
   {
     key: "email",
     Icon: EmailIcon,
-    display: "resource.common.email_address",
+    display: "Email Address",
     link: "/profile/email",
     staff: false,
     disabled_cart: true,
@@ -33,7 +33,7 @@ export const ALL_PROFILE_MENU = [
   {
     key: "address",
     Icon: AddressIcon,
-    display: "resource.common.my_address",
+    display: "My Address",
     link: "/profile/address",
     disabled_cart: false,
   },
@@ -42,15 +42,15 @@ export const ALL_PROFILE_MENU = [
 export const GENDER_OPTIONS = [
   {
     value: "male",
-    display: "resource.common.male",
+    display: "Male",
   },
   {
     value: "female",
-    display: "resource.common.female",
+    display: "Female",
   },
   {
     value: "unisex",
-    display: "resource.common.other",
+    display: "Other",
   },
 ];
 
@@ -59,11 +59,6 @@ export const DATE_FILTERS = [
     display: "Last 30 days",
     value: 30,
     is_selected: false,
-  },
-  {
-    display: "Last 90 days",
-    value: 90,
-    is_selected: true,
   },
   {
     display: "Last 6 months",
@@ -78,9 +73,6 @@ export const DATE_FILTERS = [
   {
     display: "Last 24 months",
     value: 730,
-    is_selected: false,
+    is_selected: true,
   },
 ];
-
-export const DEFAULT_UTC_LOCALE = "en-US";
-export const DEFAULT_CURRENCY_LOCALE = "en-IN";

@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 18px;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 1.5;
+    line-height: 24px;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .single-address-header__caption-medium___E8x7Y,
 .single-address-header__captionMedium___YAR0r {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .single-address-header__caption-semi-bold___fTa7O,
 .single-address-header__captionSemiBold___PtROp {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -260,11 +260,11 @@ h5,
 }
 .single-address-header__mr-5___DtA3i,
 .single-address-header__mr5___XkhXF {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .single-address-header__mr-2___XUItq,
 .single-address-header__mr2___Q4A0a {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .single-address-header__py-5___FYxYw,
 .single-address-header__py5___ta8qY {
@@ -340,16 +340,6 @@ h5,
   justify-content: space-between;
   border: 1px solid var(--dividerStokes);
 }
-@media only screen and (min-width: 769px) and (max-width: 1024px) {
-  .single-address-header__addressHeaderContainer___uHzhP {
-    padding: 16px;
-  }
-}
-@media only screen and (min-width: 769px) {
-  .single-address-header__addressHeaderContainer___uHzhP {
-    border-radius: 8px 8px 0 0;
-  }
-}
 .single-address-header__addressHeaderContainer__mobile___OsAjO {
   display: none;
 }
@@ -391,7 +381,7 @@ h5,
   font-weight: 400;
   line-height: 140%;
   align-self: center;
-  margin-inline-end: 5px;
+  margin-right: 5px;
 }
 .single-address-header__addressHeaderContainer___uHzhP .single-address-header__selectedAddressSection___CV_Su .single-address-header__deliverTo___gwZ5a .single-address-header__deliverToName___dUeyN {
   font-weight: 600;
@@ -431,7 +421,7 @@ h5,
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  padding-inline-start: 15px;
+  padding-left: 15px;
 }
 .single-address-header__addressHeaderContainer___uHzhP .single-address-header__wrapper___R6IaT .single-address-header__addressHeading___r9xwn {
   font-size: 14px;
@@ -476,21 +466,10 @@ h5,
 .single-address-header__addressSelectedHeaderContainer___iphxk {
   padding: 24px;
   display: flex;
-  border-radius: 8px;
   justify-content: space-between;
   border: 1px solid var(--dividerStokes);
   align-items: center;
   gap: 8px;
-}
-@media only screen and (max-width: 768px) {
-  .single-address-header__addressSelectedHeaderContainer___iphxk {
-    border-radius: unset;
-  }
-}
-@media only screen and (min-width: 769px) and (max-width: 1024px) {
-  .single-address-header__addressSelectedHeaderContainer___iphxk {
-    padding: 16px;
-  }
 }
 @media only screen and (max-width: 480px) {
   .single-address-header__addressSelectedHeaderContainer___iphxk {
@@ -552,23 +531,6 @@ h5,
 @media only screen and (max-width: 480px) {
   .single-address-header__hideAddress___tjYUK {
     display: none;
-  }
-}
-.single-address-header__addressModalContainer___kPuPf {
-  display: block;
-}
-.single-address-header__addressModalBody___umHZR {
-  display: grid;
-  grid-template-columns: 450px;
-  grid-template-rows: 1fr;
-  min-height: 84.26vh;
-  overflow: hidden;
-}
-@media only screen and (max-width: 768px) {
-  .single-address-header__addressModalBody___umHZR {
-    grid-template-columns: 1fr;
-    max-height: unset;
-    height: 100dvh;
   }
 }
 

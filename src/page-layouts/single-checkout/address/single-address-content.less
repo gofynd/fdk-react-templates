@@ -1,47 +1,11 @@
 @import "../../../styles/main.less";
 
 .addressContentConitainer {
-  @media @desktop {
-    border-radius: 0 0 8px 8px;
-  }
-
   .shimmer {
-    @media @mobile {
-      border-top: 1px solid @DividerStokes;
-      border-bottom: 1px solid @DividerStokes;
-    }
+    height: 250px;
 
-    .defaultAddressLabel {
-      margin: 12px 0;
-
-      @media @mobile {
-        margin: 0;
-        padding: 16px 16px 0;
-      }
-    }
-
-    .addressCard {
-      border-radius: 8px;
-      border: 1px solid @DividerStokes;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-
-      @media @mobile {
-        border: none;
-      }
-      .addressActionBtn {
-        display: flex;
-        justify-content: flex-end;
-        span {
-          width: fit-content;
-        }
-      }
-
-      .addressDeliverBtn {
-        margin-top: 16px;
-      }
+    @media @tablet {
+      height: 200px;
     }
   }
 
@@ -54,9 +18,7 @@
   display: flex;
   flex-direction: column;
   padding: 24px;
-  @media @tablet-range {
-    padding: 16px;
-  }
+
   border: 1px solid var(--dividerStokes);
   border-top: none;
   @media @mobile {
@@ -135,8 +97,8 @@
     @media @mobile {
       position: fixed;
       bottom: 0;
-      inset-inline-start: 0;
-      inset-inline-end: 0;
+      left: 0;
+      right: 0;
       padding: 16px;
       background: @PageBackground;
       z-index: 2;
