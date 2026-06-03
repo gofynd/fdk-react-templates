@@ -86,11 +86,10 @@ const FyImage = forwardRef(
   ) => {
     const [isError, setIsError] = useState(false);
 
-    const bgColor = globalConfig?.img_container_bg || backgroundColor;
     const dynamicStyles = {
       "--aspect-ratio-desktop": `${aspectRatio}`,
       "--aspect-ratio-mobile": `${mobileAspectRatio || aspectRatio}`,
-      ...(bgColor && typeof bgColor === "string" && bgColor.trim() ? { "--bg-color": `${bgColor}` } : {}),
+      "--bg-color": `${globalConfig?.img_container_bg || backgroundColor}`,
       "--overlay-bgcolor": overlayColor,
     };
 
@@ -208,23 +207,15 @@ const FyImage = forwardRef(
             />
           ))}
           <img
-            className={`fx-image ${styles.fyImg} ${styles.firefoxAltFix}`}
+            className={`fx-image ${styles.fyImg}`}
             srcSet={fallbackSrcset()}
             src={getSrc()}
-            // Firefox fix: Start with empty alt, add proper alt after load
-            alt=""
-            title={alt} // Accessibility: tooltip still works
-            aria-label="Product image" // Screen readers
+            alt={alt}
             onError={onError}
-            onLoad={(e) => {
-              // Add proper alt text after image loads
-              e.target.alt = alt;
-              onLoad(e);
-            }}
+            onLoad={onLoad}
             loading={defer ? "lazy" : "eager"}
             fetchpriority={defer ? "low" : "high"}
             ref={ref}
-            data-alt={alt}
           />
         </picture>
       </div>

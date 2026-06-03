@@ -7,7 +7,6 @@ import {
   isRunningOnClient,
 } from "../../../../helper/utils";
 import Viewer3D from "../viewer-3d/viewer-3d";
-import { useGlobalTranslation } from "fdk-core/utils";
 
 function LightboxImage({
   images,
@@ -15,14 +14,13 @@ function LightboxImage({
   startAt = 0,
   nThumbs = 5,
   showThumbs = true,
-  closeText,
-  nextText,
+  closeText = "Close (Esc)",
+  nextText = "Next",
   globalConfig = {},
   toggleResumeVideo,
   currentIndex,
   closeGallery,
 }) {
-  const { t } = useGlobalTranslation("translation");
   const [select, setSelect] = useState(startAt);
   const [lightBoxOn, setLightBoxOn] = useState(showLightBox);
   const [selectLoading, setSelectLoading] = useState(false);
@@ -150,13 +148,13 @@ function LightboxImage({
         <div className={styles.lbContent}>
           <div className={styles.lbHeader}>
             <h4>
-              {t("resource.product.image")} ({select + 1}/{images.length})
+              Image ({select + 1}/{images.length})
             </h4>
             <button
               type="button"
-              title={closeText || t("resource.facets.close_esc")}
+              title={closeText}
               className={styles.lbButtonClose}
-              aria-label={t("resource.facets.close_alt")}
+              aria-label="close"
               onClick={closeGallery}
             >
               <span>
@@ -188,7 +186,7 @@ function LightboxImage({
                 <div className={styles.videoContainer}>
                   {images[select].url.includes("youtube") ? (
                     <iframe
-                      title={t("resource.common.social_accounts.youtube")}
+                      title="Youtube"
                       key={images[select]?.url}
                       src={`${images[select]?.url}?enablejsapi=1&html5=1`}
                       srcSet={images[select]?.srcset || ""}
@@ -243,12 +241,13 @@ function LightboxImage({
               {images.length > 1 && (
                 <button
                   type="button"
-                  className={`${styles.lbArrow} ${styles.lbLeft} ${select === 0 ? styles.disableArrow : ""
-                    }`}
-                  title={t("resource.product.previous_text")}
+                  className={`${styles.lbArrow} ${styles.lbLeft} ${
+                    select === 0 ? styles.disableArrow : ""
+                  }`}
+                  title="previousText"
                   onClick={previousImage}
                   disabled={select === 0}
-                  aria-label={t("resource.facets.prev")}
+                  aria-label="prev"
                 >
                   <div name="previous">
                     <SvgWrapper svgSrc="arrow-left-white" />
@@ -259,14 +258,15 @@ function LightboxImage({
               {images.length > 1 && (
                 <button
                   type="button"
-                  className={`${styles.lbArrow} ${styles.lbRight} ${select === images.length - 1 ? styles.disableArrow : ""
-                    }`}
-                  title={nextText || t("resource.facets.next")}
+                  className={`${styles.lbArrow} ${styles.lbRight} ${
+                    select === images.length - 1 ? styles.disableArrow : ""
+                  }`}
+                  title={nextText}
                   onClick={nextImage}
                   disabled={select === images.length - 1}
-                  aria-label={t("resource.facets.next")}
+                  aria-label="Next"
                 >
-                  <div name={t("resource.facets.next")}>
+                  <div name="next">
                     <SvgWrapper svgSrc="arrow-right-white" />
                   </div>
                 </button>
@@ -291,10 +291,11 @@ function LightboxImage({
                           <FyImage
                             src={image?.url}
                             alt={image?.alt}
-                            customClass={`${styles.lbModalThumbnail} ${select === index
-                              ? `${styles["lbModalThumbnail-active"]}`
-                              : ""
-                              }`}
+                            customClass={`${styles.lbModalThumbnail} ${
+                              select === index
+                                ? `${styles["lbModalThumbnail-active"]}`
+                                : ""
+                            }`}
                             mobileAspectRatio={getProductImgAspectRatio(
                               globalConfig
                             )}
@@ -312,19 +313,21 @@ function LightboxImage({
                                 alt={image?.alt}
                                 src={getImageURL(image?.url)}
                                 className={`${styles.lbModalVideoThumbnail}
-                          ${select === index
-                                    ? `${styles["lbModalVideoThumbnail-active"]}`
-                                    : ""
-                                  }`}
+                          ${
+                            select === index
+                              ? `${styles["lbModalVideoThumbnail-active"]}`
+                              : ""
+                          }`}
                               />
                             ) : (
                               <video
                                 src={image?.url}
                                 className={`${styles.lbModalVideoThumbnail}
-                          ${select === index
-                                    ? `${styles["lbModalVideoThumbnail-active"]}`
-                                    : ""
-                                  }`}
+                          ${
+                            select === index
+                              ? `${styles["lbModalVideoThumbnail-active"]}`
+                              : ""
+                          }`}
                               />
                             )}
                             <SvgWrapper
@@ -335,10 +338,11 @@ function LightboxImage({
                         )}
                         {image?.type === "3d_model" && (
                           <div
-                            className={`${styles.modelThumbnail} ${select === index
-                              ? styles["lbModalThumbnail-active"]
-                              : ""
-                              }`}
+                            className={`${styles.modelThumbnail} ${
+                              select === index
+                                ? styles["lbModalThumbnail-active"]
+                                : ""
+                            }`}
                           >
                             <SvgWrapper
                               svgSrc="3D"

@@ -5,7 +5,6 @@ import Modal from "../../../../components/core/modal/modal";
 import FyButton from "../../../../components/core/fy-button/fy-button";
 import FyInput from "../../../../components/core/fy-input/fy-input";
 import MobileNumber from "../../../../page-layouts/auth/mobile-number/mobile-number";
-import { useGlobalTranslation } from "fdk-core/utils";
 
 function AddPhoneModal({
   sendOtpMobile,
@@ -15,7 +14,6 @@ function AddPhoneModal({
   onClose,
   countryCode,
 }) {
-  const { t } = useGlobalTranslation("translation");
   const [isLoading, setIsLoading] = useState(false);
   const [isOtpLoading, setIsOtpLoading] = useState(false);
 
@@ -137,7 +135,7 @@ function AddPhoneModal({
     <Modal
       isOpen={isOpen}
       closeDialog={onClose}
-      title={!showOtp ? t("resource.profile.add_number") : t("resource.profile.verify_number")}
+      title={!showOtp ? "Add Number" : "Verify Number"}
       containerClassName={styles.addPhoneContainer}
       bodyClassName={styles.addPhoneBody}
       headerClassName={styles.header}
@@ -154,7 +152,7 @@ function AddPhoneModal({
               control={numberControl}
               rules={{
                 validate: (value) =>
-                  value.isValidNumber || t("resource.common.enter_valid_phone_number"),
+                  value.isValidNumber || "Please enter valid phone number",
               }}
               render={({ field, fieldState: { error } }) => (
                 <MobileNumber
@@ -183,11 +181,11 @@ function AddPhoneModal({
             >
               <FyInput
                 id="otp"
-                label={t("resource.auth.login.otp")}
+                label="OTP"
                 labelVariant="floating"
                 type="number"
                 name="otp"
-                placeholder={t("resource.common.enter_otp")}
+                placeholder="Enter OTP"
                 className={styles.addMobileOtp}
                 {...otpRegister("otp")}
                 onChange={handleOtpChange}
@@ -200,8 +198,8 @@ function AddPhoneModal({
                   isLoading={isLoading}
                   className={`${styles.resendOtp} ${isShowResendOtp ? styles.showResendButton : ""}`}
                 >
-                  {t("resource.common.resend_otp")}
-                  {!isShowResendOtp ? t("resource.profile.countdown_in_seconds", { count: otpTime }) : null}
+                  Resend OTP
+                  {!isShowResendOtp ? ` in ${otpTime}s` : null}
                 </FyButton>
               )}
             </form>
@@ -217,7 +215,7 @@ function AddPhoneModal({
               form="numberForm"
               disabled={!isNumberValid}
             >
-              {t("resource.profile.send_otp")}
+              Send OTP
             </FyButton>
           ) : (
             <FyButton
@@ -228,7 +226,7 @@ function AddPhoneModal({
               form="otpForm"
               disabled={watchOtp("otp")?.length !== 4}
             >
-              {t("resource.facets.verify")}
+              Verify
             </FyButton>
           )}
         </div>

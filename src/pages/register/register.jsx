@@ -4,17 +4,14 @@ import {
   validateName,
   validateEmailField,
   validatePasswordField,
-  translateDynamicLabel,
 } from "../../helper/utils";
 import * as styles from "./register.less";
 import MobileNumber from "../../page-layouts/auth/mobile-number/mobile-number";
 import VerifyBoth from "../../page-layouts/auth/verify-both/verify-both";
 import LoginRegisterToggle from "../../page-layouts/auth/login-register-toggle/login-register-toggle";
-import { useGlobalTranslation } from "fdk-core/utils";
 import ShowPasswordIcon from "../../assets/images/show-password.svg";
 import HidePasswordIcon from "../../assets/images/hide-password.svg";
 import TermPrivacy from "../../page-layouts/login/component/term-privacy/term-privacy";
-import Tooltip from "../../components/tooltip/tooltip";
 
 function Register({
   isFormSubmitSuccess = false,
@@ -24,12 +21,11 @@ function Register({
   isEmail = true,
   emailLevel = "hard",
   error = null,
-  loginButtonLabel,
+  loginButtonLabel = "GO TO LOGIN",
   onLoginButtonClick = () => {},
   onRegisterFormSubmit = () => {},
   verifyDetailsProp = {},
 }) {
-  const { t } = useGlobalTranslation("translation");
   const firstnameId = useId();
   const lastnameId = useId();
   const emailId = useId();
@@ -38,7 +34,6 @@ function Register({
 
   const [isPasswordShow, setIsPasswordShow] = useState(false);
   const [isConfirmPasswordShow, setIsConfirmPasswordShow] = useState(false);
-  const [showConsentTooltip, setShowConsentTooltip] = useState(false);
 
   const validateEmail = (value) => {
     if ((isEmail && emailLevel === "hard") || value) {
@@ -46,6 +41,7 @@ function Register({
     }
     return true;
   };
+
   const validatePassword = (value) => validatePasswordField(value);
 
   const {
@@ -62,7 +58,7 @@ function Register({
       firstName: "",
       lastName: "",
       gender: "male",
-      consent: false,
+      consent: true,
       email: "",
       phone: {
         ...mobileInfo,
@@ -72,24 +68,18 @@ function Register({
     },
   });
 
-  const consentAccepted = watch("consent", false);
-
   const isEmailRequired = useMemo(() => {
     if (emailLevel === "soft") {
       return (
         <>
-          {t("resource.common.email")}{" "}
-          <span className={styles.optional}>
-            ({t("resource.common.optional")})
-          </span>
+          Email <span className={styles.optional}>(optional)</span>
         </>
       );
     }
     if (emailLevel === "hard") {
       return (
         <>
-          {t("resource.common.email")}{" "}
-          <span className={styles.required}>*</span>
+          Email <span className={styles.required}>*</span>
         </>
       );
     }
@@ -126,30 +116,19 @@ function Register({
     }
   }, [error]);
 
-  const handleRegisterSubmit = (data) => {
-    if (!consentAccepted) {
-      setShowConsentTooltip(true);
-      return;
-    }
-    onRegisterFormSubmit(data);
-  };
-
   return (
     <div className={styles.containerWrapper}>
       {!isFormSubmitSuccess ? (
         <form
           className={styles.registerFormWrapper}
-          onSubmit={handleSubmit(handleRegisterSubmit)}
+          onSubmit={handleSubmit(onRegisterFormSubmit)}
         >
-          <h1 className={styles.title}>
-            {t("resource.common.complete_signup")}
-          </h1>
+          <h1 className={styles.title}>Complete Signup</h1>
           <div
             className={`${styles.registerNameInput} ${errors.firstName ? styles.errorInput : ""}`}
           >
             <label className={styles.inputTitle} htmlFor={firstnameId}>
-              {t("resource.common.first_name")}
-              <span className={styles.required}> *</span>
+              First Name<span className={styles.required}> *</span>
             </label>
             <input
               id={firstnameId}
@@ -157,11 +136,10 @@ function Register({
               maxLength="30"
               {...register("firstName", {
                 validate: (value) =>
-                  validateName(value) ||
-                  t("resource.common.please_enter_valid_first_name"),
+                  validateName(value) || "Please enter a valid first name",
                 maxLength: {
                   value: 30,
-                  message: t("resource.common.maximum_30_characters_allowed"),
+                  message: "Maximum 30 characters allowed",
                 },
               })}
             />
@@ -173,8 +151,7 @@ function Register({
             className={`${styles.registerNameInput} ${errors.lastName ? styles.errorInput : ""}`}
           >
             <label className={styles.inputTitle} htmlFor={lastnameId}>
-              {t("resource.common.last_name")}
-              <span className={styles.required}> *</span>
+              Last Name<span className={styles.required}> *</span>
             </label>
             <input
               id={lastnameId}
@@ -182,11 +159,10 @@ function Register({
               maxLength="30"
               {...register("lastName", {
                 validate: (value) =>
-                  validateName(value) ||
-                  t("resource.common.please_enter_valid_last_name"),
+                  validateName(value) || "Please enter a valid last name",
                 maxLength: {
                   value: 30,
-                  message: t("resource.common.maximum_30_characters_allowed"),
+                  message: "Maximum 30 characters allowed",
                 },
               })}
             />
@@ -196,17 +172,17 @@ function Register({
           </div>
           <div className={styles.genderRadioContainer}>
             <label className={styles.radioContainer}>
-              {t("resource.common.male")}
+              Male
               <input type="radio" value="male" {...register("gender")} />
               <span className={styles.checkmark} />
             </label>
             <label className={styles.radioContainer}>
-              {t("resource.common.female")}
+              Female
               <input type="radio" value="female" {...register("gender")} />
               <span className={styles.checkmark} />
             </label>
             <label className={styles.radioContainer}>
-              {t("resource.common.other")}
+              Other
               <input type="radio" value="unisex" {...register("gender")} />
               <span className={styles.checkmark} />
             </label>
@@ -223,8 +199,7 @@ function Register({
                 type="text"
                 {...register("email", {
                   validate: (value) =>
-                    validateEmail(value) ||
-                    t("resource.common.please_enter_valid_email_address"),
+                    validateEmail(value) || "Please enter valid email address",
                 })}
               />
               {errors.email && (
@@ -241,8 +216,7 @@ function Register({
                   validate: (value) => {
                     if (isMobileRequired === "required" || value?.mobile) {
                       return (
-                        value.isValidNumber ||
-                        t("resource.common.enter_valid_phone_number")
+                        value.isValidNumber || "Please enter valid phone number"
                       );
                     }
                     return true;
@@ -268,8 +242,7 @@ function Register({
             }`}
           >
             <label className={styles.inputTitle} htmlFor={passwordId}>
-              {t("resource.auth.login.password")}
-              <span className={styles.required}> *</span>
+              Password<span className={styles.required}> *</span>
             </label>
             <div className={styles.passwordInputWrapper}>
               <input
@@ -278,7 +251,7 @@ function Register({
                 {...register("password", {
                   validate: (value) =>
                     validatePassword(value) ||
-                    t("resource.auth.password_requirements"),
+                    "Password must be at least 8 characters and contain at least 1 letter, 1 number and 1 special character.",
                 })}
               />
               {watch("password") && (
@@ -286,8 +259,8 @@ function Register({
                   className={styles.passwordToggle}
                   aria-label={
                     !isPasswordShow
-                      ? t("resource.auth.show_confirm_password")
-                      : t("resource.auth.hide_confirm_password")
+                      ? "Show confirm password"
+                      : "Hide confirm password"
                   }
                   onClick={togglePasswordDisplay}
                 >
@@ -309,8 +282,7 @@ function Register({
             }`}
           >
             <label className={styles.inputTitle} htmlFor={confirmPasswordId}>
-              {t("resource.auth.confirm_password")}
-              <span className={styles.required}> *</span>
+              Confirm Password<span className={styles.required}> *</span>
             </label>
             <div className={styles.passwordInputWrapper}>
               <input
@@ -319,11 +291,11 @@ function Register({
                 {...register("confirmPassword", {
                   required: {
                     value: true,
-                    message: t("resource.auth.please_enter_a_valid_password"),
+                    message: "Please enter a valid password",
                   },
                   validate: (value) =>
                     value === getValues("password") ||
-                    t("resource.auth.password_does_not_match"),
+                    "Password does not match",
                 })}
               />
               {watch("confirmPassword") && (
@@ -331,8 +303,8 @@ function Register({
                   className={styles.passwordToggle}
                   aria-label={
                     !isConfirmPasswordShow
-                      ? t("resource.auth.show_confirm_password")
-                      : t("resource.auth.hide_confirm_password")
+                      ? "Show confirm password"
+                      : "Hide confirm password"
                   }
                   onClick={toggleConfirmPasswordDisplay}
                 >
@@ -352,41 +324,38 @@ function Register({
           </div>
           {errors.root && (
             <div className={styles.loginAlert}>
-              <span>{translateDynamicLabel(errors.root.message, t)}</span>
+              <span>{errors.root.message}</span>
             </div>
           )}
 
           {/* Extension slot: above_register_button */}
 
-          <div className={styles.consentWrapperWithTooltip}>
-            <div className={styles.consentWrapper}>
-              <Controller
-                name="consent"
-                control={control}
-                render={({ field }) => (
-                  <div className={styles.consentWrapper}>
-                    <TermPrivacy
-                      onChange={field.onChange}
-                      checked={field.value}
-                    />
-                  </div>
-                )}
-              />
-            </div>
-            <Tooltip
-              message={t("resource.auth.terms_and_condition")}
-              isVisible={showConsentTooltip}
-              onClose={() => setShowConsentTooltip(false)}
-              position="bottom"
+          <div className={styles.consentWrapper}>
+            <Controller
+              name="consent"
+              control={control}
+              rules={{
+                required:
+                  "To continue, please accept our Terms of Service & Privacy Policy",
+              }}
+              render={({ field, fieldState: { error } }) => (
+                <div className={styles.consentWrapper}>
+                  <TermPrivacy
+                    onChange={field.onChange}
+                    checked={field.value}
+                  />
+                  {error && <p className={styles.errorText}>{error.message}</p>}
+                </div>
+              )}
             />
           </div>
 
           <button className={styles.registerBtn} type="submit">
-            {t("resource.common.continue")}
+            Continue
           </button>
 
           <LoginRegisterToggle
-            label={loginButtonLabel || t("resource.auth.login.go_to_login")}
+            label={loginButtonLabel}
             onClick={onLoginButtonClick}
           />
         </form>

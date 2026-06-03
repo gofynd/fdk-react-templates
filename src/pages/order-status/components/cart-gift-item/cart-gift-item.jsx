@@ -1,9 +1,7 @@
 import React, { useMemo } from "react";
 import * as styles from "./cart-gift-item.less";
-import { useGlobalTranslation } from "fdk-core/utils";
 
 const CartGiftItem = ({ bagItem }) => {
-  const { t } = useGlobalTranslation("translation");
   const freeGiftPromotions = useMemo(
     () =>
       bagItem?.promotions_applied?.filter(
@@ -17,26 +15,23 @@ const CartGiftItem = ({ bagItem }) => {
     return null;
   }
 
-  const getFreeGiftImage = (data) => {
-    if (!data || typeof data !== "string") {
-      return "";
-    }
-    return data.replace("original", "resize-w:50");
-  };
+  const getFreeGiftImage = (data) => data.replace("original", "resize-w:50");
   const getCurrencySymbol = bagItem?.price?.converted?.currency_symbol || "₹";
 
   return (
     <div className={styles["free-gift-box"]}>
       <div className={styles["ncc-promotions-applied-container"]}>
         <div className={styles["ncc-promotions_applied"]}>
-          {freeGiftPromotions?.[0]?.applied_free_articles?.length} {t("resource.cart.free_gift_applied")}
+          {freeGiftPromotions?.[0]?.applied_free_articles?.length} Free Gift
+          Applied
         </div>
       </div>
       <div
-        className={`${styles["free-gift-items-box"]} ${freeGiftPromotions.length > 1
-          ? styles["free-gift-items-container"]
-          : ""
-          }`}
+        className={`${styles["free-gift-items-box"]} ${
+          freeGiftPromotions.length > 1
+            ? styles["free-gift-items-container"]
+            : ""
+        }`}
       >
         {freeGiftPromotions.map((giftItem, index) => (
           <div key={giftItem.promo_id + index} className={styles["free-items"]}>
@@ -48,14 +43,14 @@ const CartGiftItem = ({ bagItem }) => {
                     className={styles["free-gift-item"]}
                   >
                     <div className={styles["free-gift-scroll-items"]}>
-                      {appliedItem?.free_gift_item_details?.item_images_url?.[0] && (
+                      {appliedItem?.free_gift_item_details?.item_images_url && (
                         <img
                           className={styles["free-gift-item-image"]}
                           src={getFreeGiftImage(
                             appliedItem.free_gift_item_details
-                              .item_images_url[0]
+                              .item_images_url?.[0]
                           )}
-                          alt={t("resource.common.gift")}
+                          alt="gift"
                         />
                       )}
                       <div className={styles["ncc-free-gift-item-name"]}>
@@ -67,7 +62,7 @@ const CartGiftItem = ({ bagItem }) => {
                             <span
                               className={styles["ncc-fw-600 quantity-color"]}
                             >
-                              {t("resource.common.quantity")}
+                              Quantity
                             </span>
                             <span className={styles["ncc-free-gift"]}>
                               {appliedItem.quantity}
