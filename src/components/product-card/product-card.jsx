@@ -31,6 +31,7 @@
  * @param {boolean} [props.showBadge=true] - Flag to display product badges.
  * @param {boolean} [props.showColorVariants=false] - Flag to display color variant dots.
  * @param {boolean} [props.isSlider=false] - Flag to indicate if card is used in a slider.
+ * @param {boolean} [props.isPriceLoading=false] - When true, shows a loader shimmer in the price/tooltip area to prevent layout shift while price is loading.
  *
  * @returns {JSX.Element} The rendered product card component.
  *
@@ -38,7 +39,12 @@
  */
 
 import React, { useMemo, useState, useCallback, useEffect } from "react";
-import { currencyFormat, formatLocale, isRunningOnClient } from "../../helper/utils";
+import {
+  currencyFormat,
+  formatLocale,
+  isValidCustomBadge,
+  isRunningOnClient
+} from "../../helper/utils";
 import { useMobile } from "../../helper/hooks";
 import FyImage from "../core/fy-image/fy-image";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
@@ -105,7 +111,10 @@ const DefaultProductPrice = ({
           <div
             className={`${styles.productPrice} ${centerAlign ? styles.center : ""}`}
           >
-            <span className={`${styles["productPrice--sale"]} ${styles.h4}`}>
+            <span
+              className={`${styles["productPrice--sale"]} ${styles.h4}`}
+              data-testid="product-price"
+            >
               {getListingPrice("marked")}
             </span>
           </div>
@@ -158,7 +167,10 @@ const DefaultProductPrice = ({
           className={`${styles.productPrice} ${centerAlign ? styles.center : ""}`}
         >
           {product?.price?.effective && (
-            <span className={`${styles["productPrice--sale"]} ${styles.h4}`}>
+            <span
+              className={`${styles["productPrice--sale"]} ${styles.h4}`}
+              data-testid="product-price"
+            >
               <ForcedLtr text={getListingPrice("effective")} />
             </span>
           )}
@@ -196,7 +208,10 @@ const DefaultProductPrice = ({
       className={`${styles.productPrice} ${centerAlign ? styles.center : ""}`}
     >
       {product?.price?.effective && (
-        <span className={`${styles["productPrice--sale"]} ${styles.h4}`}>
+        <span
+          className={`${styles["productPrice--sale"]} ${styles.h4}`}
+          data-testid="product-price"
+        >
           <ForcedLtr text={getListingPrice("effective")} />
         </span>
       )}
@@ -260,6 +275,7 @@ const ProductCard = ({
   isPrice = true,
   isSaleBadge = true,
   isWishlistIcon = true,
+  isCustomBadge = true,
   isImageFill = false,
   showImageOnHover = false,
   customImageContainerClass = "",
@@ -274,19 +290,21 @@ const ProductCard = ({
   ),
   actionButtonText,
   followedIdList = [],
-  onWishlistClick = () => {},
-  handleAddToCart = () => {},
-  onRemoveClick = () => {},
+  onWishlistClick = () => { },
+  handleAddToCart = () => { },
+  onRemoveClick = () => { },
   centerAlign = false,
   showAddToCart = false,
   showBadge = true,
   showColorVariants = false,
   isSlider = false,
-  onClick = () => {},
+  onClick = () => { },
   globalConfig = {},
   productsInWishlist = [],
   showSmartWishlist = false,
+  isServiceable = true,
   isPriceLoading = false,
+  showMultipleImages = false,
 }) => {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -368,19 +386,19 @@ const ProductCard = ({
         price =
           priceDetails.min !== priceDetails.max
             ? `${currencyFormat(
-                priceDetails.min,
-                priceDetails.currency_symbol,
-                formatLocale(locale, countryCode, true)
-              )} - ${currencyFormat(
-                priceDetails.max,
-                priceDetails.currency_symbol,
-                formatLocale(locale, countryCode, true)
-              )}`
+              priceDetails.min,
+              priceDetails.currency_symbol,
+              formatLocale(locale, countryCode, true)
+            )} - ${currencyFormat(
+              priceDetails.max,
+              priceDetails.currency_symbol,
+              formatLocale(locale, countryCode, true)
+            )}`
             : currencyFormat(
-                priceDetails.min,
-                priceDetails.currency_symbol,
-                formatLocale(locale, countryCode, true)
-              );
+              priceDetails.min,
+              priceDetails.currency_symbol,
+              formatLocale(locale, countryCode, true)
+            );
         break;
       default:
         break;
@@ -471,6 +489,14 @@ const ProductCard = ({
   const hasDiscount =
     getListingPrice("effective") !== getListingPrice("marked");
 
+  const hasB2bPricePath =
+    product?.contract || product?.quotation || product?.pricing_tier;
+  const hasPriceContent = hasB2bPricePath
+    ? product?.best_price?.price != null && product?.best_price?.currency_symbol
+    : !!product?.price;
+  const showPriceShimmer =
+    isPrice && (isPriceLoading || !hasPriceContent);
+
   const isFollowed = useMemo(() => {
     return !!followedIdList?.includes(product?.uid);
   }, [followedIdList, product]);
@@ -530,45 +556,161 @@ const ProductCard = ({
     [currentShade?.uid]
   );
 
+  // =================== MULTIPLE IMAGES FUNCTIONALITY ===================
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const hoverIntervalRef = React.useRef(null);
+
+  const productImages = useMemo(() => {
+    if (!showMultipleImages) return [];
+
+    // Combine all available images from product media
+    const images =
+      product?.media?.filter((media) => media.type === "image") || [];
+
+    // If no images, fall back to current logic
+    if (images.length === 0) return [];
+
+    return images;
+  }, [product, showMultipleImages]);
+
+  // Desktop Slideshow Logic
+  useEffect(() => {
+    if (!showMultipleImages || isMobile) return;
+
+    if (isHovered && productImages.length > 1) {
+      hoverIntervalRef.current = setInterval(() => {
+        setCurrentImageIndex((prev) => (prev + 1) % productImages.length);
+      }, 1000); // Change image every 1 second
+    } else {
+      setCurrentImageIndex(0);
+      if (hoverIntervalRef.current) {
+        clearInterval(hoverIntervalRef.current);
+      }
+    }
+
+    return () => {
+      if (hoverIntervalRef.current) {
+        clearInterval(hoverIntervalRef.current);
+      }
+    };
+  }, [isHovered, showMultipleImages, isMobile, productImages.length]);
+
+  const handleMouseEnter = () => setIsHovered(true);
+  const handleMouseLeave = () => setIsHovered(false);
+
+  const handleMobileScroll = (e) => {
+    if (!isMobile) return;
+    const scrollLeft = e.target.scrollLeft;
+    const width = e.target.clientWidth;
+    const newIndex = Math.round(scrollLeft / width);
+    setCurrentImageIndex(newIndex);
+  };
+
+  // =================== END MULTIPLE IMAGES FUNCTIONALITY ===================
+
   return (
     <div
-      className={`${styles.productCard} ${
-        !product.sellable ? styles.disableCursor : ""
-      } ${styles[customClass[0]]} ${styles[customClass[1]]} ${
-        styles[customClass[2]]
-      } ${styles.animate} ${gridClass} ${isSlider ? styles.sliderCard : ""}`}
+      className={`${styles.productCard} ${!product.sellable ? styles.disableCursor : ""
+        } ${styles[customClass[0]]} ${styles[customClass[1]]} ${styles[customClass[2]]
+        } ${styles.animate} ${gridClass} ${isSlider ? styles.sliderCard : ""}`}
       onClick={onClick}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
-      <div className={`${styles.imageContainer} ${customImageContainerClass}`}>
-        {!isMobile && showImageOnHover && imageData.hoverUrl && (
-          <FyImage
-            src={imageData.hoverUrl}
-            alt={imageData.hoverAlt}
-            aspectRatio={aspectRatio}
-            isImageFill={isImageFill}
-            backgroundColor={imageBackgroundColor}
-            isFixedAspectRatio={true}
-            customClass={`${styles.productImage} ${styles.hoverImage}`}
-            sources={imgSrcSet}
-            defer={true}
-          />
+      <div
+        className={`${styles.imageContainer} ${customImageContainerClass} ${
+          !product.sellable ? styles.outOfStockContainer : ""
+        }`}
+      >
+        {/* Mobile View: Horizontal Scroll */}
+        {showMultipleImages && isMobile && productImages.length > 0 ? (
+          <div
+            className={styles.mobileScrollContainer}
+            onScroll={handleMobileScroll}
+          >
+            {productImages.map((img, index) => (
+              <div key={index} className={styles.mobileImageWrapper}>
+                <FyImage
+                  src={img.url}
+                  alt={img.alt || product.name}
+                  aspectRatio={aspectRatio}
+                  isImageFill={isImageFill}
+                  backgroundColor={imageBackgroundColor}
+                  isFixedAspectRatio={true}
+                  customClass={`${styles.mobileImage}`}
+                  sources={imgSrcSet}
+                  defer={index !== 0} // Defer loading for non-first images
+                />
+              </div>
+            ))}
+          </div>
+        ) : (
+          /* Desktop View or Default View */
+          <>
+            {showMultipleImages && !isMobile && productImages.length > 0 ? (
+              <div className={styles.desktopSlideshowContainer}>
+                <div
+                  className={styles.slidesWrapper}
+                  style={{
+                    transform: `translateX(-${currentImageIndex * 100}%)`,
+                  }}
+                >
+                  {productImages.map((img, index) => (
+                    <div key={index} className={styles.slide}>
+                      <FyImage
+                        src={img.url}
+                        alt={img.alt || product.name}
+                        aspectRatio={aspectRatio}
+                        isImageFill={isImageFill}
+                        backgroundColor={imageBackgroundColor}
+                        isFixedAspectRatio={true}
+                        customClass={`${styles.productImage}`}
+                        sources={imgSrcSet}
+                        defer={index > 1}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <>
+                {!isMobile && showImageOnHover && imageData.hoverUrl && (
+                  <FyImage
+                    src={imageData.hoverUrl}
+                    alt={imageData.hoverAlt}
+                    aspectRatio={aspectRatio}
+                    isImageFill={isImageFill}
+                    backgroundColor={imageBackgroundColor}
+                    isFixedAspectRatio={true}
+                    customClass={`${styles.productImage} ${styles.hoverImage}`}
+                    sources={imgSrcSet}
+                    defer={true}
+                  />
+                )}
+                <FyImage
+                  src={imageData.url}
+                  alt={imageData.alt}
+                  aspectRatio={aspectRatio}
+                  isImageFill={isImageFill}
+                  backgroundColor={imageBackgroundColor}
+                  isFixedAspectRatio={true}
+                  customClass={`${styles.productImage} ${styles.mainImage}`}
+                  sources={imgSrcSet}
+                  defer={false}
+                />
+              </>
+            )}
+          </>
         )}
-        <FyImage
-          src={imageData.url}
-          alt={imageData.alt}
-          aspectRatio={aspectRatio}
-          isImageFill={isImageFill}
-          backgroundColor={imageBackgroundColor}
-          isFixedAspectRatio={true}
-          customClass={`${styles.productImage} ${styles.mainImage}`}
-          sources={imgSrcSet}
-          defer={false}
-        />
-        {isWishlistIcon && loggedIn && isMerchantKycApproved() && (
+
+        {isWishlistIcon && (
           <button
             className={`${styles.wishlistBtn} ${(showSmartWishlist ? wishlistStatus.isInWishlist : isFollowed) ? styles.active : ""}`}
             onClick={handleWishlistClick}
             title={t("resource.product.wishlist_icon")}
+            data-testid="wishlist-button"
           >
             <WishlistIconComponent
               isFollowed={
@@ -582,6 +724,7 @@ const ProductCard = ({
             className={`${styles.wishlistBtn} ${isFollowed ? styles.active : ""}`}
             onClick={handleRemoveClick}
             title={t("resource.product.wishlist_icon")}
+            data-testid="wishlist-remove-button"
           >
             <RemoveIconComponent />
           </button>
@@ -592,7 +735,7 @@ const ProductCard = ({
               {t("resource.common.out_of_stock")}
             </span>
           </div>
-        ) : product.teaser_tag && showBadge ? (
+        ) : isCustomBadge && isValidCustomBadge(product.teaser_tag) && showBadge ? (
           <div className={styles.badge}>
             <span className={`${styles.text} ${styles.captionNormal}`}>
               {isMobileView
@@ -607,6 +750,20 @@ const ProductCard = ({
             </span>
           </div>
         ) : null}
+
+        {/* Dots Pagination */}
+        {showMultipleImages && productImages.length > 1 && (
+          <div className={styles.dotsContainer}>
+            {productImages.map((_, index) => (
+              <div
+                key={index}
+                className={`${styles.dot} ${
+                  index === currentImageIndex ? styles.activeDot : ""
+                }`}
+              />
+            ))}
+          </div>
+        )}
       </div>
       <div
         className={`${styles.productDescContainer} ${customeProductDescContainerClass}`}
@@ -705,7 +862,7 @@ const ProductCard = ({
                       }
                     >
                       <div className={styles.badge_section}>
-                        <div className={styles.badge}>
+                        <div className={styles.badge} data-testid="quoted-price-badge">
                           <span>
                             {t(
                               "resource.b2b.components.product_card.quoted_price"
@@ -723,6 +880,7 @@ const ProductCard = ({
                   >
                     <span
                       className={`${styles["productPrice--sale"]} ${styles.h4}`}
+                      data-testid="product-price"
                     >
                       {currencyFormat(
                         product.best_price.price,
@@ -794,12 +952,15 @@ const ProductCard = ({
               variant="outlined"
               className={styles.addToCart}
               onClick={handleAddToCartClick}
+              disabled={!isServiceable}
+              data-testid="add-to-cart-button"
             >
               {actionButtonText ?? t("resource.common.add_to_cart")}
             </FyButton>
           ))}
 
-        {show_available_offer_button &&
+        {
+          show_available_offer_button &&
           ((!loggedIn && show_discount_guest) ||
             (loggedIn && isMerchantKycApproved()) ||
             (loggedIn &&
@@ -813,9 +974,10 @@ const ProductCard = ({
               isKycKeyPresent={isKycKeyPresent}
               isMerchantKycApproved={isMerchantKycApproved()}
             />
-          )}
-      </div>
-    </div>
+          )
+        }
+      </div >
+    </div >
   );
 };
 

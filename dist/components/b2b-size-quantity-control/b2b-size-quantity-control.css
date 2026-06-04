@@ -354,6 +354,7 @@ h5,
 }
 .b2b-size-quantity-control__quantityCtrlContainer___MCcbr.b2b-size-quantity-control__small___LAYUd {
   height: 32px;
+  width: max-content;
 }
 .b2b-size-quantity-control__quantityCtrlContainer___MCcbr.b2b-size-quantity-control__medium___TV7O5 {
   height: 42px;
@@ -374,6 +375,11 @@ h5,
   .b2b-size-quantity-control__quantityCtrlContainer___MCcbr .b2b-size-quantity-control__sizeWrapper___UjcD9 {
     width: 50%;
   }
+}
+.b2b-size-quantity-control__quantityCtrlContainer___MCcbr .b2b-size-quantity-control__sizeWrapper___UjcD9.b2b-size-quantity-control__small___LAYUd {
+  min-width: auto;
+  max-width: 52px;
+  width: auto;
 }
 .b2b-size-quantity-control__quantityCtrlContainer___MCcbr .b2b-size-quantity-control__sizeWrapper___UjcD9:hover {
   z-index: 1;
@@ -418,6 +424,11 @@ h5,
   .b2b-size-quantity-control__quantityCtrlContainer___MCcbr .b2b-size-quantity-control__quantityControl___C80Ns {
     width: 50%;
   }
+}
+.b2b-size-quantity-control__quantityCtrlContainer___MCcbr .b2b-size-quantity-control__quantityControl___C80Ns.b2b-size-quantity-control__small___LAYUd {
+  width: fit-content !important;
+  min-width: fit-content;
+  max-width: fit-content;
 }
 .b2b-size-quantity-control__quantityCtrlContainer___MCcbr .b2b-size-quantity-control__quantityControl___C80Ns.b2b-size-quantity-control__removeBorderLeft___y_jgv {
   border-left: none;

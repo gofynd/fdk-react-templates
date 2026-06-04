@@ -20,12 +20,11 @@ function CheckoutPayment({
   customClassName,
   isCouponApplied,
   redirectPaymentOptions,
-  setMopPayload,
   isCouponValid,
   setIsCouponValid,
   inValidCouponData,
-  neftFileUpload = () => {},
-  rtgsFileUpload = () => {},
+  neftFileUpload = { state: {}, upload: () => {}, reset: () => {} },
+  rtgsFileUpload = { state: {}, upload: () => {}, reset: () => {} },
 }) {
   const { t } = useGlobalTranslation("translation");
   const [showFailedMessage, setShowFailedMessage] = useState(false);
@@ -38,6 +37,8 @@ function CheckoutPayment({
     setErrorMessage,
     enableLinkPaymentOption,
     getTotalValue,
+    isCreditNoteApplied,
+    isLoading,
   } = payment;
   const isMobile = useMobile();
 
@@ -115,11 +116,11 @@ function CheckoutPayment({
       setTimerId(null);
     }
   };
-
+  console.log("firstone connected");
   return (
     <>
       <div
-        className={`${styles.paymentContainer} ${!showPayment ? styles.hidePayment : ""} ${enableLinkPaymentOption ? styles.unsetMarginTop : ""} ${getTotalValue?.() === 0 ? styles.disabledPayment : ""}`}
+        className={`${styles.paymentContainer} ${!showPayment ? styles.hidePayment : ""} ${enableLinkPaymentOption ? styles.unsetMarginTop : ""} ${getTotalValue?.() === 0 && !isCreditNoteApplied && !isLoading ? styles.disabledPayment : ""}`}
       >
         {showPayment ? (
           <>
@@ -162,7 +163,6 @@ function CheckoutPayment({
               setCancelQrPayment={setCancelQrPayment}
               juspayErrorMessage={juspayErrorMessage}
               isCouponApplied={isCouponApplied}
-              setMopPayload={setMopPayload}
               isCouponValid={isCouponValid}
               setIsCouponValid={setIsCouponValid}
               inValidCouponData={inValidCouponData}

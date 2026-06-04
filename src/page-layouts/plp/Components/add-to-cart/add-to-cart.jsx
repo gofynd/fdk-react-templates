@@ -1,11 +1,10 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect, useRef } from "react";
 import * as styles from "./add-to-cart.less";
 import ImageGallery from "../image-gallery/image-gallery";
 import ProductVariants from "../product-variants/product-variants";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import FyButton from "../../../../components/core/fy-button/fy-button";
 import DeliveryInfo from "../delivery-info/delivery-info";
-import QuantityControl from "../../../../components/quantity-control/quantity-control";
 import FyDropdown from "../../../../components/core/fy-dropdown/fy-dropdown";
 import {
   currencyFormat,
@@ -26,6 +25,7 @@ import {
   useFPI,
   useNavigate,
 } from "fdk-core/utils";
+import Skeleton from "../../../../components/core/skeletons/skeleton";
 
 const AddToCart = ({
   productData = {},
@@ -49,12 +49,13 @@ const AddToCart = ({
   incrementDecrementUnit,
   fulfillmentOptions = [],
   currentFO = {},
-  setCurrentFO = () => { },
+  setCurrentFO = () => {},
   availableFOCount,
   getDeliveryPromise,
   showQuantityController = false,
   showBuyNowButton = false,
   showMoq = false,
+  isServiceable = true,
 }) => {
   const [isCartLoading, setIsCartLoading] = useState(false);
 
@@ -70,6 +71,17 @@ const AddToCart = ({
   }, [productData.productPrice?._custom_json?.child_details]);
 
   const fpi = useFPI();
+  const [foLoading, setFoLoading] = useState(false);
+  const [isLoadingCart, setIsLoadingCart] = useState(false);
+
+  const handleCheckout = async (event, isBuyNow) => {
+    setIsLoadingCart(true);
+    try {
+      await addProductForCheckout(event, selectedSize, isBuyNow);
+    } finally {
+      setIsLoadingCart(false);
+    }
+  };
   const { language, countryCode } =
     useGlobalStore(fpi.getters.i18N_DETAILS) || {};
   const locale = language?.locale ? language?.locale : "en";
@@ -88,7 +100,7 @@ const AddToCart = ({
   // }, [selectedSize, productData?.product?.slug]);
 
   const cartQuantity = useMemo(() => {
-    return productData?.selectedQuantity;
+    return productData?.selectedQuantity ?? 0;
   }, [productData?.selectedQuantity]);
 
   const totalAvailableQuantity =
@@ -104,7 +116,17 @@ const AddToCart = ({
 
   const navigate = useNavigate();
 
-  const [quantity, setQuantity] = useState(productData?.selectedQuantity || 0);
+  const [quantity, setQuantity] = useState(productData?.selectedQuantity ?? 0);
+  const prevSelectedSizeRef = useRef(selectedSize);
+  const sizeJustChanged = prevSelectedSizeRef.current !== selectedSize;
+  if (sizeJustChanged) {
+    prevSelectedSizeRef.current = selectedSize;
+  }
+  const displayCount = sizeJustChanged
+    ? 0
+    : (typeof productData?.selectedQuantity === "number"
+      ? productData.selectedQuantity
+      : quantity);
   const [hasAddedToCart, setHasAddedToCart] = useState(false);
   const [quantityError, setQuantityError] = useState(() => {
     if (isOutOfStock) {
@@ -121,6 +143,9 @@ const AddToCart = ({
     show_price,
     show_quantity_control,
     hide_brand_name,
+    is_limited_stock,
+    limited_stock_label = t("resource.common.limited_stock_label"),
+    limited_stock_quantity = 11,
   } = globalConfig;
 
   const { media, name, short_description, variants, sizes, brand } = product;
@@ -262,6 +287,7 @@ const AddToCart = ({
   useEffect(() => {
     if (selectedSize) {
       setQuantity(0);
+      setHasAddedToCart(false);
       // Show out of stock error if product is out of stock
       if (isOutOfStock) {
         setQuantityError({ hasError: true, message: "Out of stock" });
@@ -288,6 +314,18 @@ const AddToCart = ({
       setHasAddedToCart(false);
     }
   }, [selectedSize]);
+
+  // Sync local quantity when fulfillment option or parent selectedQuantity changes,
+  // so switching FO shows correct qty (e.g. 0 for the FO that has no cart line).
+  useEffect(() => {
+    if (typeof productData?.selectedQuantity === "number") {
+      setQuantity(productData.selectedQuantity);
+    }
+  }, [productData?.selectedQuantity, currentFO?.slug]);
+  const mobileTruncatedTitle = useMemo(() => {
+    if (!name) return "";
+    return name.length > 30 ? `${name.slice(0, 30)}...` : name;
+  }, [name]);
 
   return (
     <div className={styles.productDescContainer}>
@@ -317,10 +355,9 @@ const AddToCart = ({
             )}
             <h1 className={styles.product__title}>{slug && name}</h1>
 
-            {/* Tooltip badges (Quoted/Contract Price) + Price: show one shimmer when loading, else show real content */}
             {show_price && sizes?.sellable && (
               <>
-                {productData?.isBestPriceLoading ? (
+                {productData?.isBestPriceLoading && selectedSize ? (
                   <div className={styles.product__price}>
                     <div className={styles.priceShimmer}>
                       <div className={styles.shimmerLine} />
@@ -328,6 +365,7 @@ const AddToCart = ({
                   </div>
                 ) : (
                   <>
+
                     {productData?.product?.best_price?.is_applicable && (
                       <B2bBestPriceWrapper
                         loggedIn={loggedIn}
@@ -337,6 +375,7 @@ const AddToCart = ({
                         isMerchantKycApproved={isMerchantKycApproved()}
                       />
                     )}
+
                     {productData?.product?.contract?.is_applicable && (
                       <Tooltip
                         position="right"
@@ -372,6 +411,7 @@ const AddToCart = ({
                         </div>
                       </Tooltip>
                     )}
+
                     {productData?.product?.quotation?.is_applicable && (
                       <Tooltip
                         position="right"
@@ -395,7 +435,7 @@ const AddToCart = ({
                         }
                       >
                         <div className={styles.badge_section}>
-                          <div className={styles.badge}>
+                          <div className={styles.badge} data-testid="quoted-price-badge">
                             <span>
                               {t("resource.b2b.components.add_to_cart.quoted_price")}
                             </span>
@@ -406,12 +446,16 @@ const AddToCart = ({
                         </div>
                       </Tooltip>
                     )}
+
+                    {/* ---------- Product Price ---------- */}
                     {show_price && sizes?.sellable && (
                       <div className={styles.product__price}>
                         {productData?.product?.quotation?.is_applicable ||
                           productData?.product?.contract?.is_applicable ||
                           productData?.product?.pricing_tier?.is_applicable ? (
-                          <h4 className={styles["product__price--effective"]}>
+                          <h4 className={styles["product__price--effective"]}
+                            data-testid="product-price"
+                          >
                             {currencyFormat(
                               productData?.product?.best_price?.price,
                               productData?.productPrice?.price?.currency_symbol,
@@ -476,16 +520,28 @@ const AddToCart = ({
               availableFOCount > 1 && (
                 <div className={styles.fulfillmentWrapper}>
                   <div className={styles.foList}>
-                    {fulfillmentOptions.map((foItem, index) => (
-                      <FullfillmentOption
-                        key={index}
-                        foItem={foItem}
-                        fulfillmentOptions={fulfillmentOptions}
-                        currentFO={currentFO}
-                        setCurrentFO={setCurrentFO}
-                        getDeliveryPromise={getDeliveryPromise}
-                      />
-                    ))}
+                    {foLoading
+                      ? fulfillmentOptions.map((_, index) => (
+                        <div key={`fo-skeleton-${index}`} className={styles.fulfillmentOption}>
+                          <div style={{ width: "20px" }} className={styles.foIcon}>
+                            <Skeleton height={18} width={18} />
+                          </div>
+                          <div style={{ display: "flex", flexDirection: "column", gap: "4px", width: "100%" }}>
+                            <Skeleton height={14} width={200} />
+                            <Skeleton height={12} width={120} />
+                          </div>
+                        </div>
+                      ))
+                      : fulfillmentOptions.map((foItem, index) => (
+                        <FullfillmentOption
+                          key={index}
+                          foItem={foItem}
+                          fulfillmentOptions={fulfillmentOptions}
+                          currentFO={currentFO}
+                          setCurrentFO={setCurrentFO}
+                          getDeliveryPromise={getDeliveryPromise}
+                        />
+                      ))}
                   </div>
                 </div>
               )}
@@ -539,7 +595,7 @@ const AddToCart = ({
                           styles["sizeSelection__block--selected"]
                           } `}
                         title={size?.value}
-                        onClick={() => onSizeSelection(size?.value)}
+                         onClick={() => { if (size?.value !== selectedSize) onSizeSelection(size?.value); }}
                       >
                         {size?.display}
                         {size?.quantity === 0 && !isMto && (
@@ -578,6 +634,7 @@ const AddToCart = ({
                 {showQuantityController && (
                   <div className={styles.quantityControl}>
                     <B2BSizeQuantityControl
+                      key={selectedSize}
                       minCartQuantity={minCartQuantity}
                       maxCartQuantity={maxCartQuantity}
                       isCartUpdating={isCartUpdating || isCartLoading}
@@ -586,24 +643,54 @@ const AddToCart = ({
                       }
                       pincode={deliverInfoProps?.pincode}
                       placeholder="Qty"
-                      count={productData?.selectedQuantity || quantity}
+                      count={displayCount}
                       onDecrementClick={(e) => {
+                        if (deliverInfoProps?.pincodeErrorMessage && cartQuantity > 0) {
+                          console.log("[AddToCart][PincodeCheck]", "onDecrementClick blocked (size-block)", { pincodeErrorMessage: deliverInfoProps?.pincodeErrorMessage, quantity, displayCount, cartQuantity, selectedSize });
+                          return;
+                        }
                         const newQty =
-                          (productData?.selectedQuantity || quantity) -
+                          displayCount -
                           (incrementDecrementUnit || minCartQuantity || 1);
+                        console.log("[AddToCart][PincodeCheck]", "onDecrementClick allowed (size-block)", { quantity, displayCount, cartQuantity, newQty, selectedSize });
                         showWarningForInvalidInput(newQty);
-                        cartUpdateHandler(
-                          e,
-                          -incrementDecrementUnit,
-                          "update_item"
-                        );
+                        updateQuantity(Math.max(0, newQty));
+                        if (cartQuantity > 0) {
+                          cartUpdateHandler(
+                            e,
+                            -incrementDecrementUnit,
+                            "update_item"
+                          );
+                        }
                       }}
                       serviceable={selectedSize && !isOutOfStock}
                       onIncrementClick={(e) => {
+                        if (!deliverInfoProps?.isCrossBorderOrder) {
+                          const pincode = deliverInfoProps?.pincode ?? "";
+                          const pincodeErr = deliverInfoProps?.pincodeErrorMessage ?? "";
+                          if (
+                            pageConfig?.mandatory_pincode &&
+                            (pincode.length !== 6 || pincodeErr.length)
+                          ) {
+                            console.log("[AddToCart][PincodeCheck]", "onIncrementClick blocked (size-block)", { pincodeErrorMessage: pincodeErr, pincode, quantity, displayCount, cartQuantity, selectedSize });
+                            deliverInfoProps?.setPincodeErrorMessage?.(t("resource.product.enter_valid_location"));
+                            return;
+                          }
+                          if (
+                            !pageConfig?.mandatory_pincode &&
+                            ((pincode.length > 0 && pincode.length < 6) || pincodeErr.length)
+                          ) {
+                            console.log("[AddToCart][PincodeCheck]", "onIncrementClick blocked (size-block)", { pincodeErrorMessage: pincodeErr, pincode, quantity, displayCount, cartQuantity, selectedSize });
+                            deliverInfoProps?.setPincodeErrorMessage?.(t("resource.product.enter_valid_location"));
+                            return;
+                          }
+                        }
                         const newQty =
-                          (productData?.selectedQuantity || quantity) +
+                          displayCount +
                           (incrementDecrementUnit || minCartQuantity || 1);
+                        console.log("[AddToCart][PincodeCheck]", "onIncrementClick allowed (size-block)", { quantity, displayCount, cartQuantity, newQty, selectedSize });
                         showWarningForInvalidInput(newQty);
+                        updateQuantity(newQty);
                         if (cartQuantity === 0) {
                           addProductForCheckout(
                             e,
@@ -621,11 +708,32 @@ const AddToCart = ({
                         }
                       }}
                       onQtyChange={(e, currentNum) => {
+                        if (!deliverInfoProps?.isCrossBorderOrder) {
+                          const pincode = deliverInfoProps?.pincode ?? "";
+                          const pincodeErr = deliverInfoProps?.pincodeErrorMessage ?? "";
+                          if (
+                            pageConfig?.mandatory_pincode &&
+                            (pincode.length !== 6 || pincodeErr.length)
+                          ) {
+                            console.log("[AddToCart][PincodeCheck]", "onQtyChange blocked (size-block)", { pincodeErrorMessage: pincodeErr, pincode, quantity, displayCount, cartQuantity, selectedSize, currentNum });
+                            deliverInfoProps?.setPincodeErrorMessage?.(t("resource.product.enter_valid_location"));
+                            return;
+                          }
+                          if (
+                            !pageConfig?.mandatory_pincode &&
+                            ((pincode.length > 0 && pincode.length < 6) || pincodeErr.length)
+                          ) {
+                            console.log("[AddToCart][PincodeCheck]", "onQtyChange blocked (size-block)", { pincodeErrorMessage: pincodeErr, pincode, quantity, displayCount, cartQuantity, selectedSize, currentNum });
+                            deliverInfoProps?.setPincodeErrorMessage?.(t("resource.product.enter_valid_location"));
+                            return;
+                          }
+                        }
                         showWarningForInvalidInput(e.target.value);
                         const clampedQuantity = Math.max(
                           Math.min(currentNum, maxCartQuantity),
                           minCartQuantity
                         );
+                        console.log("[AddToCart][PincodeCheck]", "onQtyChange allowed (size-block)", { quantity, displayCount, cartQuantity, clampedQuantity, currentNum, selectedSize });
                         updateQuantity(clampedQuantity);
                         if (cartQuantity === 0) {
                           addProductForCheckout(
@@ -658,7 +766,7 @@ const AddToCart = ({
                   <FyDropdown
                     options={sizes?.sizes || []}
                     value={selectedSize}
-                    onChange={onSizeSelection}
+                    onChange={(value) => { if (value !== selectedSize) onSizeSelection(value); }}
                     placeholder={t("resource.common.select_size_caps")}
                     valuePrefix={`${t("resource.common.size")}:`}
                     dataKey="value"
@@ -673,32 +781,66 @@ const AddToCart = ({
                 {showQuantityController && (
                   <div>
                     <B2BSizeQuantityControl
+                      key={selectedSize}
                       minCartQuantity={minCartQuantity}
                       maxCartQuantity={maxCartQuantity}
                       isCartUpdating={isCartUpdating || isCartLoading}
                       placeholder="Qty"
+                      deliveryErrorMessage={
+                        deliverInfoProps?.pincodeErrorMessage
+                      }
                       pincodeErrorMessage={
                         deliverInfoProps?.pincodeErrorMessage
                       }
                       pincode={deliverInfoProps?.pincode}
-                      count={productData?.selectedQuantity || quantity}
+                      count={displayCount}
                       onDecrementClick={(e) => {
+                        if (deliverInfoProps?.pincodeErrorMessage && cartQuantity > 0) {
+                          console.log("[AddToCart][PincodeCheck]", "onDecrementClick blocked (dropdown)", { pincodeErrorMessage: deliverInfoProps?.pincodeErrorMessage, quantity, displayCount, cartQuantity, selectedSize });
+                          return;
+                        }
                         const newQty =
-                          (productData?.selectedQuantity || quantity) -
+                          displayCount -
                           (incrementDecrementUnit || minCartQuantity || 1);
+                        console.log("[AddToCart][PincodeCheck]", "onDecrementClick allowed (dropdown)", { quantity, displayCount, cartQuantity, newQty, selectedSize });
                         showWarningForInvalidInput(newQty);
-                        cartUpdateHandler(
-                          e,
-                          -incrementDecrementUnit,
-                          "update_item"
-                        );
+                        updateQuantity(Math.max(0, newQty));
+                        if (cartQuantity > 0) {
+                          cartUpdateHandler(
+                            e,
+                            -incrementDecrementUnit,
+                            "update_item"
+                          );
+                        }
                       }}
                       serviceable={selectedSize && !isOutOfStock}
                       onIncrementClick={(e) => {
+                        if (!deliverInfoProps?.isCrossBorderOrder) {
+                          const pincode = deliverInfoProps?.pincode ?? "";
+                          const pincodeErr = deliverInfoProps?.pincodeErrorMessage ?? "";
+                          if (
+                            pageConfig?.mandatory_pincode &&
+                            (pincode.length !== 6 || pincodeErr.length)
+                          ) {
+                            console.log("[AddToCart][PincodeCheck]", "onIncrementClick blocked (dropdown)", { pincodeErrorMessage: pincodeErr, pincode, quantity, displayCount, cartQuantity, selectedSize });
+                            deliverInfoProps?.setPincodeErrorMessage?.(t("resource.product.enter_valid_location"));
+                            return;
+                          }
+                          if (
+                            !pageConfig?.mandatory_pincode &&
+                            ((pincode.length > 0 && pincode.length < 6) || pincodeErr.length)
+                          ) {
+                            console.log("[AddToCart][PincodeCheck]", "onIncrementClick blocked (dropdown)", { pincodeErrorMessage: pincodeErr, pincode, quantity, displayCount, cartQuantity, selectedSize });
+                            deliverInfoProps?.setPincodeErrorMessage?.(t("resource.product.enter_valid_location"));
+                            return;
+                          }
+                        }
                         const newQty =
-                          (productData?.selectedQuantity || quantity) +
+                          displayCount +
                           (incrementDecrementUnit || minCartQuantity || 1);
+                        console.log("[AddToCart][PincodeCheck]", "onIncrementClick allowed (dropdown)", { quantity, displayCount, cartQuantity, newQty, selectedSize });
                         showWarningForInvalidInput(newQty);
+                        updateQuantity(newQty);
                         if (cartQuantity === 0) {
                           addProductForCheckout(
                             e,
@@ -716,11 +858,32 @@ const AddToCart = ({
                         }
                       }}
                       onQtyChange={(e, currentNum) => {
+                        if (!deliverInfoProps?.isCrossBorderOrder) {
+                          const pincode = deliverInfoProps?.pincode ?? "";
+                          const pincodeErr = deliverInfoProps?.pincodeErrorMessage ?? "";
+                          if (
+                            pageConfig?.mandatory_pincode &&
+                            (pincode.length !== 6 || pincodeErr.length)
+                          ) {
+                            console.log("[AddToCart][PincodeCheck]", "onQtyChange blocked (dropdown)", { pincodeErrorMessage: pincodeErr, pincode, quantity, displayCount, cartQuantity, selectedSize, currentNum });
+                            deliverInfoProps?.setPincodeErrorMessage?.(t("resource.product.enter_valid_location"));
+                            return;
+                          }
+                          if (
+                            !pageConfig?.mandatory_pincode &&
+                            ((pincode.length > 0 && pincode.length < 6) || pincodeErr.length)
+                          ) {
+                            console.log("[AddToCart][PincodeCheck]", "onQtyChange blocked (dropdown)", { pincodeErrorMessage: pincodeErr, pincode, quantity, displayCount, cartQuantity, selectedSize, currentNum });
+                            deliverInfoProps?.setPincodeErrorMessage?.(t("resource.product.enter_valid_location"));
+                            return;
+                          }
+                        }
                         showWarningForInvalidInput(e.target.value);
                         const clampedQuantity = Math.max(
                           Math.min(currentNum, maxCartQuantity),
                           minCartQuantity
                         );
+                        console.log("[AddToCart][PincodeCheck]", "onQtyChange allowed (dropdown)", { quantity, displayCount, cartQuantity, clampedQuantity, currentNum, selectedSize });
                         updateQuantity(clampedQuantity);
                         if (cartQuantity === 0) {
                           addProductForCheckout(
@@ -790,7 +953,8 @@ const AddToCart = ({
               </div>
             )}
             {sizes?.sellable && selectedSize && (
-              <DeliveryInfo {...deliverInfoProps} />
+              // <DeliveryInfo {...deliverInfoProps} />
+              <DeliveryInfo {...deliverInfoProps} setFoLoading={setFoLoading} mandatoryPincode={pageConfig?.mandatory_pincode} />
             )}
 
             <div className={styles.viewMore}>
@@ -851,7 +1015,7 @@ const AddToCart = ({
                             setQuantityError({ hasError: false, message: "" });
                           }
                         }}
-                        disabled={showQuantityController && quantity === 0}
+                        disabled={showQuantityController && quantity === 0 || !isServiceable}
                         startIcon={
                           <CartIcon
                             className={`${styles.cartIcon} ${
@@ -878,7 +1042,7 @@ const AddToCart = ({
                     handleClose();
                     navigate("/cart/bag");
                   }}
-                  disabled={productData?.selectedQuantity === 0}
+                  disabled={displayCount === 0}
                   startIcon={
                     <CartIcon
                       className={`${styles.cartIcon} ${showBuyNowButton ? styles.fillSecondary : ""
@@ -905,12 +1069,11 @@ const AddToCart = ({
                         selectedSize,
                         true,
                         setIsCartLoading,
-                        showQuantityController
-                          ? productData?.selectedQuantity
-                          : 0
+                        showQuantityController ? displayCount : 0
                       )
                     }
                     startIcon={<BuyNowIcon className={styles.cartIcon} />}
+                    disabled={isLoadingCart || !isServiceable}
                   >
                     {t("resource.common.buy_now_caps")}
                   </FyButton>
@@ -923,6 +1086,25 @@ const AddToCart = ({
               </FyButton>
             )}
           </div>
+          {is_limited_stock &&
+            limited_stock_label &&
+            productPrice?.quantity !== 0 &&
+            productPrice?.quantity <= limited_stock_quantity && (
+              <p className={styles.limitedQuantity}>
+                {(() => {
+                  const fallback = t("resource.common.limited_stock_label");
+                  let label;
+                  if (limited_stock_label?.startsWith("t:")) {
+                    const key = limited_stock_label.slice(2);
+                    const translated = t(key);
+                    label = translated === key ? fallback : translated;
+                  } else {
+                    label = limited_stock_label;
+                  }
+                  return label.replace(/\{\{qty\}\}/g, productPrice?.quantity);
+                })()}
+              </p>
+            )}
         </div>
       </div>
     </div>

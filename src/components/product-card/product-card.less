@@ -4,7 +4,9 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-
+  .disableCursor {
+    filter: invert(1);
+  }
   .removeIcon {
     path {
       fill: @TextBody !important;
@@ -27,6 +29,23 @@
     position: relative;
     border-radius: @ImageRadius;
     -webkit-mask-image: -webkit-radial-gradient(white, black); //safari fix
+    mask-image: radial-gradient(white, black);
+
+    &.outOfStockContainer {
+      .productImage {
+        filter: grayscale(100%);
+        opacity: 0.7;
+      }
+
+      @media @desktop {
+        &:hover {
+          .productImage {
+            filter: grayscale(100%);
+            opacity: 0.7;
+          }
+        }
+      }
+    }
 
     .wishlistBtn {
       display: flex;
@@ -85,6 +104,7 @@
       .text {
         display: -webkit-box;
         -webkit-line-clamp: 2;
+        line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
       }
@@ -124,6 +144,32 @@
       padding: 4px;
       background-color: @ThemeAccentD5;
       border-radius: 4px;
+    }
+
+    .dotsContainer {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 4px;
+      z-index: 2;
+      pointer-events: none; // Allow clicks to pass through to the image/link
+
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 25px;
+        background-color: @TextSecondary;
+        transition:
+          background-color 0.2s ease,
+          transform 0.2s ease;
+
+        &.activeDot {
+          background-color: @TextHeading;
+          transform: scale(1.2);
+        }
+      }
     }
   }
   .productDescContainer {
@@ -185,6 +231,7 @@
           text-align: center;
         }
       }
+
       .productVariants {
         margin-top: 8px;
 
@@ -256,7 +303,12 @@
         .shimmerLine {
           height: 24px;
           width: 60%;
-          background: linear-gradient(90deg, #f8f8f8 25%, #f0f0f0 50%, #f8f8f8 75%);
+          background: linear-gradient(
+            90deg,
+            #f8f8f8 25%,
+            #f0f0f0 50%,
+            #f8f8f8 75%
+          );
           background-size: 200% 100%;
           border-radius: 4px;
           animation: shimmer 1.5s infinite;
@@ -276,7 +328,12 @@
         // Exact same height as .addToCart button (height: 40px)
         height: 40px;
         width: 100%;
-        background: linear-gradient(90deg, #f8f8f8 25%, #f0f0f0 50%, #f8f8f8 75%);
+        background: linear-gradient(
+          90deg,
+          #f8f8f8 25%,
+          #f0f0f0 50%,
+          #f8f8f8 75%
+        );
         background-size: 200% 100%;
         border-radius: @ButtonRadius;
         animation: addToCartShimmer 1.5s infinite;
@@ -325,6 +382,18 @@
       height: 40px;
       font-size: 12px;
       white-space: nowrap;
+    }
+
+    .addToCartShimmer {
+      height: 40px;
+      padding: 12px 16px;
+      box-sizing: border-box;
+      width: 100%;
+      min-width: 120px;
+      border-radius: 4px;
+      background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: priceShimmerAnim 1.5s ease-in-out infinite;
     }
 
     .b2bAvailableOffers {
@@ -379,9 +448,10 @@
   @media @mobile {
     &.mob-grid-1-card {
       .imageContainer {
+        // As per Ankit Jain: fix wishlist icon position on mobile to prevent layout break
         .wishlistBtn {
-          top: 16px;
-          inset-inline-end: 16px;
+          top: 6px !important;
+          inset-inline-end: 6px !important;
         }
         .badge {
           inset-inline-start: 16px;
@@ -431,9 +501,10 @@
         }
       }
       .imageContainer {
+        // As per Ankit Jain: fix wishlist icon position on mobile to prevent layout break
         .wishlistBtn {
-          top: 8px;
-          inset-inline-end: 8px;
+          top: 6px !important;
+          inset-inline-end: 6px !important;
         }
         .badge {
           inset-inline-start: 8px;
@@ -649,3 +720,90 @@
 // .textCenter {
 //   text-align: center;
 // }
+
+/* Price shimmer: same spacing as badge_section + productPrice (8px from name, 4px between badge and price) */
+.priceShimmer {
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+
+  .priceShimmerBadge {
+    height: 26px;
+    width: 100px;
+    max-width: 50%;
+    margin-bottom: 4px;
+    border-radius: 4px;
+    padding: 4px 8px;
+    box-sizing: border-box;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: priceShimmerAnim 1.5s ease-in-out infinite;
+  }
+
+  .priceShimmerLine {
+    height: 20px;
+    width: 40%;
+    min-width: 80px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: priceShimmerAnim 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes priceShimmerAnim {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.mobileScrollContainer {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; // Firefox
+  -ms-overflow-style: none; // IE/Edge
+
+  &::-webkit-scrollbar {
+    display: none; // Chrome/Safari
+  }
+
+  .mobileImageWrapper {
+    min-width: 100%;
+    scroll-snap-align: start;
+    position: relative;
+
+    .mobileImage {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}
+
+.desktopSlideshowContainer {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  .slidesWrapper {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    height: 100%;
+    width: 100%;
+    will-change: transform;
+  }
+
+  .slide {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+}

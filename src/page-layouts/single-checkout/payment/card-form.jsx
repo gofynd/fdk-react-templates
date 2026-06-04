@@ -61,6 +61,7 @@ function CardForm({
   setIsJuspayCouponApplied,
   isPaymentLoading = false,
   loader = <div></div>,
+  mopSelectionLoading,
 }) {
   const { t } = useGlobalTranslation("translation");
   const isFormatterSet = useRef(false);
@@ -189,6 +190,7 @@ function CardForm({
             value={cardNumber}
             dir="ltr"
             autoComplete="cc-number"
+            data-testid="card-number-input"
           />
           {(cardNumber || cardNumberError) && (
             <span
@@ -201,6 +203,10 @@ function CardForm({
           {cardDetailsData && cardDetailsData.logo && (
             <img
               src={cardDetailsData.logo}
+              alt={
+                cardDetailsData?.name ||
+                t("resource.checkout.card_network_logo")
+              }
               className={`${styles.cardNetwork} ${cardNumberError ? styles.iconPositionOnError : ""}`}
             />
           )}
@@ -219,6 +225,7 @@ function CardForm({
             value={nameOnCard}
             onChange={handleNameOnCardInput}
             onBlur={validateNameOnCard}
+            data-testid="card-name-input"
           />
           {(nameOnCard || cardNameError) && (
             <span
@@ -261,6 +268,7 @@ function CardForm({
               placeholder={`${t("resource.checkout.expiry_date")}*`}
               className={`${cardExpiryError ? styles.error : ""} ${styles.cardExpiry}`}
               onBlur={validateCardExpiryDate}
+              data-testid="card-expiry-date"
             />
             {(cardExpiryDate || cardExpiryError) && (
               <span
@@ -284,6 +292,7 @@ function CardForm({
               className={`${cardCVVError ? styles.error : ""} ${styles.cardCvv}`}
               onChange={handleCvvNumberInput}
               onBlur={validateCvv}
+              data-testid="card-cvv"
             />
             <div
               className={`${styles.cvvContainer} ${styles.cvv} ${cardCVVError || cardExpiryError ? styles.iconPositionOnError : ""}`}
@@ -387,12 +396,14 @@ function CardForm({
             proceedToPay={() => payUsingCard()}
             loader={loader}
             isPaymentLoading={isPaymentLoading}
+            mopSelectionLoading={mopSelectionLoading}
           />
         ) : (
           <button
             className={styles.saveNewCard}
             onClick={() => payUsingCard()}
-            disabled={!isCardValid() || isPaymentLoading}
+            disabled={!isCardValid() || isPaymentLoading || mopSelectionLoading}
+            data-testid="card-payment-button"
           >
             {!isPaymentLoading ? (
               <>

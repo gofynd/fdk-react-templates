@@ -956,7 +956,7 @@ h5,
   font-size: 14px;
   padding: 14px;
   border-radius: var(--buttonRadius, 0px);
-  color: var(--buttonPrimary);
+  color: var(--buttonSecondary, #fff);
   opacity: 0.2;
   border: 1px solid var(--buttonPrimary);
   text-transform: uppercase;
@@ -1189,7 +1189,7 @@ h5,
   font-weight: 600;
   font-size: 14px;
   text-transform: uppercase;
-  color: white;
+  color: var(--buttonSecondary, #fff);
   line-height: 140%;
   opacity: 20%;
   cursor: not-allowed;
@@ -1279,7 +1279,7 @@ h5,
 .checkout-payment-content__container___HusGh .checkout-payment-content__otherPay____c2Rs .checkout-payment-content__payBtn___dgcAp[disabled] {
   padding: 14px;
   border-radius: var(--buttonRadius, 0px);
-  color: var(--primaryColor);
+  color: var(--buttonSecondary, #fff);
   border: 1px solid var(--primaryColor);
   width: 100%;
   margin-top: 24px;
@@ -1441,6 +1441,10 @@ h5,
   width: 38px;
   height: 38px;
   padding: 8px 4px;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__upiApp___M2sjF .checkout-payment-content__logo___jNLmQ > svg {
+  width: 100%;
+  height: 100%;
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__upiApp___M2sjF .checkout-payment-content__logo___jNLmQ:last-child {
   padding: unset;
@@ -1687,7 +1691,7 @@ h5,
   margin: 24px 0;
   background-color: var(--primaryColor);
   border: none;
-  color: white;
+  color: var(--buttonSecondary, #fff);
   line-height: 140%;
   opacity: 20%;
   cursor: not-allowed;
@@ -2304,6 +2308,9 @@ h5,
 .checkout-payment-content__couponValidityModal___dm1Lz {
   z-index: 99 !important;
 }
+.checkout-payment-content__inCreasedZindex___ms0Z3 {
+  z-index: 1099 !important;
+}
 .checkout-payment-content__codModal___SSel2 {
   padding: 24px;
   display: flex;
@@ -2580,6 +2587,17 @@ h5,
 .checkout-payment-content__mopIcon___koORc {
   width: 24px;
   height: 24px;
+}
+.checkout-payment-content__creditLogoIcon___QEFIJ {
+  height: 29px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+.checkout-payment-content__creditLogoIcon___QEFIJ img {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
 }
 .checkout-payment-content__noOptionContainer___uCGHg {
   display: flex;
@@ -3498,7 +3516,7 @@ h5,
 }
 .modal__modalBody___peHlJ {
   flex: 1;
-  max-height: 90vh;
+  max-height: 95vh;
   overflow-y: auto;
 }
 .modal__rightModal___acoje {
@@ -3532,6 +3550,11 @@ h5,
     align-items: center;
   }
 }
+@media only screen and (max-width: 480px) {
+  .modal__centerModal___CkbLu {
+    align-items: flex-end;
+  }
+}
 .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 {
   border-radius: 8px;
 }
@@ -3541,8 +3564,20 @@ h5,
     max-width: 720px;
   }
 }
+@media only screen and (max-width: 480px) {
+  .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0;
+  }
+}
 .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 .modal__modalHeader___xKo1g {
   border-radius: 8px 8px 0px 0px;
+}
+@media only screen and (max-width: 480px) {
+  .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 .modal__modalHeader___xKo1g {
+    border-radius: 0;
+  }
 }
 .modal__modalTitle___yvZQo {
   font-weight: 600;
@@ -3913,6 +3948,13 @@ h5,
 @media only screen and (max-width: 480px) {
   .sticky-pay-now__stickyBtnContainer___L7zbD {
     display: block;
+    z-index: 30;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .sticky-pay-now__stickyBtnContainer___L7zbD {
+    display: block;
+    z-index: 30;
   }
 }
 .sticky-pay-now__stickyBtnContainer1___YFwCC {
@@ -3979,6 +4021,9 @@ h5,
 }
 .sticky-pay-now__checkoutButton___mtO42 {
   gap: 12px;
+}
+.sticky-pay-now__checkoutButton___mtO42.sticky-pay-now__linkPayBtn___CY0FQ {
+  width: 100%;
 }
 .sticky-pay-now__buttonWidth___nKraw {
   width: 100%;
