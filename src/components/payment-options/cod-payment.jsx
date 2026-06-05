@@ -94,7 +94,10 @@ function CodPayment({
                   {t("resource.checkout.continue_with_cod")}{" "}
                   {priceFormatCurrencySymbol(
                     getCurrencySymbol,
-                    getTotalValue()
+                    getTotalValue(),
+                    "en-IN",
+                    null,
+                    true
                   )}
                 </>
               ) : (

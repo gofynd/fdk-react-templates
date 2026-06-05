@@ -1,4 +1,4 @@
-import React, { useId, useState, useMemo, useEffect, useRef } from "react";
+import React, { useId, useState, useMemo, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import {
   validateName,
@@ -28,7 +28,6 @@ function Register({
   onLoginButtonClick = () => {},
   onRegisterFormSubmit = () => {},
   verifyDetailsProp = {},
-  showReferralCodeField = false,
 }) {
   const { t } = useGlobalTranslation("translation");
   const firstnameId = useId();
@@ -36,8 +35,6 @@ function Register({
   const emailId = useId();
   const passwordId = useId();
   const confirmPasswordId = useId();
-  const referralCodeId = useId();
-  const referralCodeInitialized = useRef(false);
 
   const [isPasswordShow, setIsPasswordShow] = useState(false);
   const [isConfirmPasswordShow, setIsConfirmPasswordShow] = useState(false);
@@ -60,7 +57,6 @@ function Register({
     getValues,
     setError,
     clearErrors,
-    setValue,
   } = useForm({
     mode: "onTouched",
     defaultValues: {
@@ -74,33 +70,10 @@ function Register({
       },
       password: "",
       confirmPassword: "",
-      referralCode: "",
     },
   });
 
-  // Auto-fill referral code from localStorage on mount
-
-  useEffect(() => {
-    if (referralCodeInitialized.current) return;
-    referralCodeInitialized.current = true;
-    try {
-      const raw = localStorage.getItem("loyalty_referral_code");
-      if (!raw) return;
-      let code = null;
-      try {
-        const parsed = JSON.parse(raw);
-        if (parsed && typeof parsed.code === "string") code = parsed.code;
-      } catch {
-        if (typeof raw === "string" && raw.trim()) code = raw.trim();
-      }
-      if (code) setValue("referralCode", code);
-    } catch {
-      // localStorage unavailable — skip silently
-    }
-  }, [setValue]);
-
   const consentAccepted = watch("consent", false);
-  
   const phoneValue = watch("phone");
 
   const isEmailRequired = useMemo(() => {
@@ -379,26 +352,6 @@ function Register({
               </p>
             )}
           </div>
-
-          {showReferralCodeField && (
-            <div className={styles.registerNameInput}>
-              <label className={styles.inputTitle} htmlFor={referralCodeId}>
-                {t("resource.auth.referral_code_label", { defaultValue: "Referral Code" })}{" "}
-                <span className={styles.optional}>
-                  ({t("resource.common.optional")})
-                </span>
-              </label>
-              <input
-                id={referralCodeId}
-                type="text"
-                autoComplete="off"
-                {...register("referralCode", {
-                  setValueAs: (v) => (typeof v === "string" ? v.trim() : v),
-                })}
-              />
-            </div>
-          )}
-
           {errors.root && (
             <div className={styles.loginAlert}>
               <span>{translateDynamicLabel(errors.root.message, t)}</span>
