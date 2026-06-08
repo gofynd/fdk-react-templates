@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 18px;
+  line-height: 1.5;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 24px;
+    line-height: 1.5;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .verify-both__caption-medium___QjOc_,
 .verify-both__captionMedium___vIB7N {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .verify-both__caption-semi-bold___hN2r2,
 .verify-both__captionSemiBold___ZGDKF {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -260,11 +260,11 @@ h5,
 }
 .verify-both__mr-5___IG86K,
 .verify-both__mr5___XKxD3 {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .verify-both__mr-2___dO4B7,
 .verify-both__mr2___JTLZw {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .verify-both__py-5___kBc3U,
 .verify-both__py5___WBjq8 {
@@ -409,10 +409,10 @@ h5,
   outline: none;
 }
 .verify-both__formWrapper___i4gyS .verify-both__inputGroup___WBoRS.verify-both__error___zKEjP .verify-both__label___m7Eae {
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
 }
 .verify-both__formWrapper___i4gyS .verify-both__inputGroup___WBoRS.verify-both__error___zKEjP input {
-  border-color: var(--errorText, #b24141);
+  border-color: var(--errorText, #ff3333);
 }
 .verify-both__submitBtn___rVsbN {
   border: none;
@@ -439,12 +439,22 @@ h5,
   font-weight: 400;
   line-height: 140%;
   margin-top: 8px;
-  color: var(--errorText, #b24141);
+  color: var(--errorText, #ff3333);
 }
 .verify-both__resendOtpWrapper___Mq8mf {
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 24px;
   margin-top: 32px;
+  flex-wrap: nowrap;
+}
+.verify-both__resendOtpWrapper___Mq8mf .verify-both__didntReceiveText___pPOue {
+  color: var(--textBody, #3c3131);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 19.6px;
 }
 .verify-both__resendOtpWrapper___Mq8mf .verify-both__resendOtpBtn___B4cLV {
   color: var(--textSecondary, #9c9c9c);

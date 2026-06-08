@@ -16,6 +16,7 @@ import React, { useState, useMemo } from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./blog-tabs.less";
 import FyImage from "../core/fy-image/fy-image";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function BlogTabs({
   className = "",
@@ -26,18 +27,19 @@ function BlogTabs({
   fallback_image = "",
 }) {
   const [sideTab, setSideTab] = useState(0);
+  const { t } = useGlobalTranslation("translation");
 
   const blogTabsList = useMemo(() => {
     let list = [];
     if (show_top_blog && topViewedBlogs?.length) {
       list.push({
-        label: "Top viewed",
+        label: t("resource.blog.top_viewed"),
         list: topViewedBlogs,
       });
     }
     if (show_recent_blog && recentBlogs?.length) {
       list.push({
-        label: "Recently Published",
+        label: t("resource.blog.recently_published"),
         list: recentBlogs,
       });
     }
@@ -61,7 +63,7 @@ function BlogTabs({
             <div>{label}</div>
           </button>
         ))}
-      </div>
+      </div >
 
       <div className={`${styles.sideTabs__content}`}>
         {blogTabsList.map(
@@ -98,7 +100,7 @@ function BlogTabs({
             )
         )}
       </div>
-    </div>
+    </div >
   );
 }
 

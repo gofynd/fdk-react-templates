@@ -18,10 +18,12 @@
  */
 
 import React, { useState, useEffect, useCallback } from "react";
-import RangeSlider from "react-range-slider-input";
+import Slider from "rc-slider";
+import "rc-slider/assets/index.css";
 import * as styles from "./range-slider.less";
 import FyInput from "../core/fy-input/fy-input";
 import { debounce } from "../../helper/utils";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function CustomRangeSlider({
   min,
@@ -31,8 +33,10 @@ function CustomRangeSlider({
   selectedMax,
   count,
   currencySymbol = "",
+  postfix = "",
   onSliderUpdate = () => {},
 }) {
+  const { t } = useGlobalTranslation("translation");
   const [startValue, setStartValue] = useState(selectedMin);
   const [endValue, setEndValue] = useState(selectedMax);
   const [rangeMessage, setRangeMessage] = useState("");
@@ -45,60 +49,84 @@ function CustomRangeSlider({
     setEndValue(selectedMax);
   }, [selectedMax]);
 
-  const setValue = () => {
-    onSliderUpdate({ minValue: startValue, maxValue: endValue });
+  const setValue = (values) => {
+    const [minValue, maxValue] = values;
+    onSliderUpdate({ minValue, maxValue });
   };
 
-  const onSliderInput = (event) => {
-    const [startValue, endValue] = event;
-    setStartValue(startValue);
-    setEndValue(endValue);
+  const onSliderInput = (values) => {
+    const [newStartValue, newEndValue] = values;
+    setStartValue(newStartValue);
+    setEndValue(newEndValue);
+    setRangeMessage(""); 
   };
 
   const debouncedSliderUpdate = useCallback(
     debounce(({ minValue, maxValue }) => {
       onSliderUpdate({ minValue, maxValue });
     }, 800),
-    []
+    [onSliderUpdate]
   );
 
   const onMinValueChange = (value) => {
-    setStartValue(value);
-    if (value >= min && value < endValue) {
+    const numValue = value === "" ? min : Number(value);
+    setStartValue(numValue);
+    
+    if (numValue >= min && numValue < endValue) {
       debouncedSliderUpdate({
-        minValue: value < min ? min : value,
+        minValue: numValue < min ? min : numValue,
         maxValue: endValue,
       });
+      setRangeMessage("");
+    } else if (numValue < min) {
+      setRangeMessage(`${t("resource.product.min_value_should_be")} ${min}`);
+    } else if (numValue >= endValue) {
+      setRangeMessage(
+        `${t("resource.product.min_value_cannot_exceed")} ${endValue}`
+      );
     }
-    if (value < min) {
-      setRangeMessage(`The minimum value should be ${min}`);
-    } else if (value >= endValue) {
-      setRangeMessage(`The minimum value cannot exceed ${endValue}`);
-    } else setRangeMessage("");
   };
 
   const onMinBlurChange = (value) => {
-    if (value < min) setStartValue(min);
+    const numValue = value === "" ? min : Number(value);
+    if (numValue < min) {
+      setStartValue(min);
+      onSliderUpdate({ minValue: min, maxValue: endValue });
+    } else if (numValue >= endValue) {
+      setStartValue(endValue - 1);
+      onSliderUpdate({ minValue: endValue - 1, maxValue: endValue });
+    }
     setRangeMessage("");
   };
 
-  const onMaxValueChange = async (value) => {
-    setEndValue(value);
-    if (value <= max && value > startValue) {
+  const onMaxValueChange = (value) => {
+    const numValue = value === "" ? max : Number(value);
+    setEndValue(numValue);
+    
+    if (numValue <= max && numValue > startValue) {
       debouncedSliderUpdate({
         minValue: startValue,
-        maxValue: value > max ? max : value,
+        maxValue: numValue > max ? max : numValue,
       });
+      setRangeMessage("");
+    } else if (numValue > max) {
+      setRangeMessage(`${t("resource.product.max_value_should_be")} ${max}`);
+    } else if (numValue <= startValue) {
+      setRangeMessage(
+        `${t("resource.product.max_value_should_be_greater_than")} ${startValue}`
+      );
     }
-    if (value > max) {
-      setRangeMessage(`The maximum value should be ${max}`);
-    } else if (value <= startValue) {
-      setRangeMessage(`The maximum value should be greater than ${startValue}`);
-    } else setRangeMessage("");
   };
 
   const onMaxBlurChange = (value) => {
-    if (value > max) setEndValue(max);
+    const numValue = value === "" ? max : Number(value);
+    if (numValue > max) {
+      setEndValue(max);
+      onSliderUpdate({ minValue: startValue, maxValue: max });
+    } else if (numValue <= startValue) {
+      setEndValue(startValue + 1);
+      onSliderUpdate({ minValue: startValue, maxValue: startValue + 1 });
+    }
     setRangeMessage("");
   };
 
@@ -109,8 +137,8 @@ function CustomRangeSlider({
       )}
       <div className={styles.inputContainer}>
         <div>
-          <label className={styles.label} htmlFor="from">
-            From
+          <label className={styles.label} htmlFor={t("resource.facets.from")}>
+            {t("resource.facets.from")}
           </label>
           <div className={styles.flexAlignCenter}>
             {currencySymbol && (
@@ -118,18 +146,21 @@ function CustomRangeSlider({
             )}
             <FyInput
               value={startValue}
-              id="from"
+              id={t("resource.facets.from")}
               type="number"
               onChange={(event) => onMinValueChange(event.target.value)}
               onBlur={(event) => onMinBlurChange(event.target.value)}
               inputClassName={styles.fieldItem}
               min={min}
             />
+            {!currencySymbol && postfix && (
+              <span className={styles.postfix}>{postfix}</span>
+            )}
           </div>
         </div>
         <div>
-          <label className={styles.label} htmlFor="to">
-            To
+          <label className={styles.label} htmlFor={t("resource.facets.to")}>
+            {t("resource.facets.to")}
           </label>
           <div className={styles.flexAlignCenter}>
             {currencySymbol && (
@@ -140,26 +171,33 @@ function CustomRangeSlider({
               value={endValue}
               onChange={(event) => onMaxValueChange(event.target.value)}
               onBlur={(event) => onMaxBlurChange(event.target.value)}
-              id="to"
+              id={t("resource.facets.to")}
               type="number"
               inputClassName={styles.fieldItem}
               max={max}
             />
+            {!currencySymbol && postfix && (
+              <span className={styles.postfix}>{postfix}</span>
+            )}
           </div>
         </div>
       </div>
       <div className={styles.sliderWrapper}>
-        <RangeSlider
+        <Slider
+          range
           className={styles.rangeSlider}
+          allowCross={false}
           min={min}
           max={max}
           value={[startValue, endValue]}
-          onInput={onSliderInput}
-          onThumbDragEnd={setValue}
+          onChange={onSliderInput}
+          onChangeComplete={setValue}
         />
 
         {count && (
-          <div className={styles.entityCount}>{count} Products Found</div>
+          <div className={styles.entityCount}>
+            {count} {t("resource.product.products_found")}
+          </div>
         )}
 
         {rangeMessage && <p className={styles.errorMessage}>{rangeMessage}</p>}
