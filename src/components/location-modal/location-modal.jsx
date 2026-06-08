@@ -20,7 +20,6 @@ import Modal from "../core/modal/modal";
 import { useForm } from "react-hook-form";
 import FyInput from "../core/fy-input/fy-input";
 import FyButton from "../core/fy-button/fy-button";
-import { useGlobalTranslation } from "fdk-core/utils";
 
 function LocationModal({
   isOpen = true,
@@ -31,7 +30,6 @@ function LocationModal({
   onSubmit = () => {},
   onCurrentLocationClick = () => {},
 }) {
-  const { t } = useGlobalTranslation("translation");
   const {
     register,
     handleSubmit,
@@ -79,25 +77,26 @@ function LocationModal({
     >
       <div className={styles.locationModalHeader}>
         <h3 className={styles.modalTitle}>
-          {t("resource.localization.check_pincode_availability")}
+          Enter pincode to check availability
         </h3>
       </div>
       <p className={styles.locationSubtext}>
-        {t("resource.localization.choose_address_for_availability")}
+        Choose your address location to see product availability and delivery
+        options
       </p>
       <form className={styles.locationInput} onSubmit={handleSubmit(onSubmit)}>
         <FyInput
           autoComplete="off"
-          placeholder={t("resource.common.address.enter_pincode")}
+          placeholder="Enter Pincode"
           containerClassName={styles.pincodeInputWrapper}
           inputClassName={`${styles.pincodeInput} b2`}
           type="text"
           maxLength="6"
           {...register("pincode", {
-            required: t("resource.common.address.valid_six_digit_pincode"),
+            required: "Please enter a valid 6-digit pincode",
             pattern: {
               value: /^\d{6}$/,
-              message: t("resource.common.address.pincode_six_digits_required"),
+              message: "Pincode must be exactly 6 digits long",
             },
           })}
           error={!!errors.pincode || !!errors.root}
@@ -108,7 +107,7 @@ function LocationModal({
           type="submit"
           disabled={!isValid}
         >
-          {t("resource.facets.apply_caps")}
+          APPLY
         </FyButton>
       </form>
       {isLocationButton && (
@@ -117,7 +116,7 @@ function LocationModal({
           className={styles.currentLocation}
           onClick={onCurrentLocationClick}
         >
-          {t("resource.localization.use_current_location")}
+          use my current location
         </button>
       )}
     </Modal>
