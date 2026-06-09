@@ -148,6 +148,7 @@ function Modal({
           // initial={{ opacity: 0 }}
           // animate={{ opacity: 1 }}
           // exit={{ opacity: 0 }}
+          data-modal-overlay="true"
           className={`${styles.modal} ${modalType === "right-modal" ? styles.rightModal : ""} ${modalType === "center-modal" ? styles.centerModal : ""} ${customClassName ?? ""}`}
           ref={modalRef}
           // tabIndex="0"
