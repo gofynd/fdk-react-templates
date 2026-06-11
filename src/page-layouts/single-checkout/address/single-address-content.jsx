@@ -1,14 +1,9 @@
-import React, { useState, useMemo } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import AddressItem from "../../../components/address-item/address-item";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./single-address-content.less";
-import {
-  useNavigate,
-  useGlobalTranslation,
-  useGlobalStore,
-} from "fdk-core/utils";
-import Skeleton from "../../../components/core/skeletons/skeleton";
-import { isValidErrorMessage } from "../../../helper/utils";
+import Shimmer from "../../../components/shimmer/shimmer";
 
 function AddressRight({
   selectedAddressId,
@@ -16,7 +11,6 @@ function AddressRight({
   editAddress,
   removeAddress,
 }) {
-  const { t } = useGlobalTranslation("translation");
   return (
     <>
       {selectedAddressId == addressItem?.id && (
@@ -25,11 +19,11 @@ function AddressRight({
             className={styles.edit}
             onClick={() => editAddress(addressItem)}
           >
-            {t("resource.common.edit_lower")}
+            edit
           </span>
           <span>|</span>
           <span className={styles.remove} onClick={() => removeAddress()}>
-            {t("resource.facets.remove")}
+            Remove
           </span>
         </div>
       )}
@@ -37,32 +31,16 @@ function AddressRight({
   );
 }
 
-function DeliverBtn({
-  selectedAddressId,
-  id,
-  selectAddress,
-  getTotalValue,
-  showPaymentOptions,
-  isCreditNoteApplied,
-}) {
-  const { t } = useGlobalTranslation("translation");
-  const { app_features } = useGlobalStore(fpi.getters.CONFIGURATION) || {};
-  const { order = {} } = app_features || {};
+function DeliverBtn({ selectedAddressId, id, selectAddress }) {
   return (
     <>
       {selectedAddressId === id && (
         <div className={styles.actionContainer}>
           <button
             className={styles.deliverToThis}
-            disabled={!order?.enabled}
-            onClick={() => {
-              if (getTotalValue?.() === 0 && !isCreditNoteApplied) {
-                showPaymentOptions();
-              }
-              selectAddress();
-            }}
+            onClick={() => selectAddress()}
           >
-            {t("resource.checkout.deliver_to_this_address")}
+            DELIVER TO THIS ADDRESS
           </button>
         </div>
       )}
@@ -71,15 +49,7 @@ function DeliverBtn({
 }
 
 function InvalidAddress({ errorMessage }) {
-  const { t } = useGlobalTranslation("translation");
   const navigate = useNavigate();
-
-  // Don't display generic JavaScript errors or invalid messages to users
-  // Use utility function to validate error message
-  if (!isValidErrorMessage(errorMessage)) {
-    return null;
-  }
-
   return (
     <div className={styles.invalidAddError}>
       <div className={styles.invalidAddErrorLeft}>
@@ -99,7 +69,7 @@ function InvalidAddress({ errorMessage }) {
           navigate("/cart/bag");
         }}
       >
-        {t("resource.checkout.edit_cart")}
+        Edit CART
       </button>
     </div>
   );
@@ -118,35 +88,19 @@ function SingleAddressContent({
   getOtherAddress,
   getDefaultAddress,
   loader,
-  isApiLoading,
-  showPaymentOptions,
-  getTotalValue,
-  isCreditNoteApplied,
 }) {
-  const { t } = useGlobalTranslation("translation");
-  const [showAllOtherAddresses, setShowAllOtherAddresses] = useState(false);
   function selectAdd(id) {
     setSelectedAddressId(id);
   }
-
-  const displayedOtherAddresses = useMemo(() => {
-    if (showAllOtherAddresses || getOtherAddress.length <= 3) {
-      return getOtherAddress;
-    }
-    return getOtherAddress.slice(0, 3);
-  }, [showAllOtherAddresses, getOtherAddress]);
-
   return (
     <>
       {allAddresses &&
       allAddresses.length &&
-      !(addressLoader || addressLoading || isApiLoading) ? (
+      !(addressLoader || addressLoading) ? (
         <div className={styles.addressContentConitainer}>
           {getDefaultAddress.length > 0 ? (
             <div className={styles.address}>
-              <div className={styles.heading}>
-                {t("resource.common.address.default_address")}
-              </div>
+              <div className={styles.heading}>Default Address</div>
               {getDefaultAddress.map((item, index) => {
                 return (
                   <AddressItem
@@ -176,9 +130,6 @@ function SingleAddressContent({
                           selectedAddressId={selectedAddressId}
                           id={item?.id}
                           selectAddress={selectAddress}
-                          getTotalValue={getTotalValue}
-                          showPaymentOptions={showPaymentOptions}
-                          isCreditNoteApplied={isCreditNoteApplied}
                         />
                       </>
                     }
@@ -190,10 +141,8 @@ function SingleAddressContent({
 
           {getOtherAddress.length > 0 ? (
             <div className={styles.address}>
-              <div className={styles.heading}>
-                {t("resource.common.address.other_address")}
-              </div>
-              {displayedOtherAddresses.map((item, index) => {
+              <div className={styles.heading}>Other Address</div>
+              {getOtherAddress.map((item, index) => {
                 return (
                   <AddressItem
                     containerClassName={styles.customAddressItem}
@@ -222,64 +171,20 @@ function SingleAddressContent({
                           selectedAddressId={selectedAddressId}
                           id={item?.id}
                           selectAddress={selectAddress}
-                          getTotalValue={getTotalValue}
-                          showPaymentOptions={showPaymentOptions}
-                          isCreditNoteApplied={isCreditNoteApplied}
                         />
                       </>
                     }
                   ></AddressItem>
                 );
               })}
-
-              {getOtherAddress.length > 3 && (
-                <div className={styles.showMoreBtnContainer}>
-                  <button
-                    className={styles.showOtherAddresses}
-                    onClick={() => setShowAllOtherAddresses((prev) => !prev)}
-                  >
-                    <span>
-                      {showAllOtherAddresses
-                        ? t("resource.common.show_fewer_addresses")
-                        : t("resource.common.show_more_addresses")}
-                    </span>
-                    <span
-                      className={`${styles.arrow} ${
-                        showAllOtherAddresses
-                          ? styles.rotateUp
-                          : styles.rotateDown
-                      }`}
-                    >
-                      <SvgWrapper svgSrc="arrow-down" />
-                    </span>
-                  </button>
-                </div>
-              )}
             </div>
           ) : null}
         </div>
       ) : (
         <>
-          {addressLoading || addressLoader || isApiLoading ? (
+          {addressLoading || addressLoader ? (
             <div className={styles.addressContentConitainer}>
-              <div className={styles.shimmer}>
-                <Skeleton
-                  className={styles.defaultAddressLabel}
-                  width={93}
-                  height={17}
-                />
-                <div className={styles.addressCard}>
-                  <Skeleton width={158} height={25} />
-                  <Skeleton width={265} height={17} />
-                  <Skeleton width={100} height={17} />
-
-                  <div className={styles.addressActionBtn}>
-                    <Skeleton width={93} height={17} />
-                  </div>
-
-                  <Skeleton className={styles.addressDeliverBtn} height={37} />
-                </div>
-              </div>
+              {loader || <Shimmer className={styles.shimmer} />}
             </div>
           ) : (
             <div
@@ -287,11 +192,10 @@ function SingleAddressContent({
               style={{
                 textAlign: "center",
                 color: "var(--textLabel)",
-                marginBottom: "12px",
+                marginBottom:"12px"
               }}
             >
-              {" "}
-              {t("resource.checkout.no_address_found")}
+              No Address Found, Please Add Address
             </div>
           )}
         </>

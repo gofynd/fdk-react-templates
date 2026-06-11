@@ -3,39 +3,10 @@ import { useForm } from "react-hook-form";
 import * as styles from "./delivery-location.less";
 import Modal from "../../../../components/core/modal/modal";
 import AddressItem from "../../../../components/address-item/address-item";
-import AddressForm from "../../../../components/address-form/v2/address-form";
-import { useGlobalTranslation, useGlobalStore, useFPI } from "fdk-core/utils";
-import { translateDynamicLabel } from "../../../../helper/utils";
-import FyButton from "../../../../components/core/fy-button/fy-button";
-
-function AddressRight({
-  selectedAddressId,
-  addressItem,
-  updateAddress,
-  removeAddress,
-}) {
-  const { t } = useGlobalTranslation("translation");
-  return (
-    <div className={styles.buttonsContainer}>
-      <span className={styles.edit} onClick={() => updateAddress(addressItem)}>
-        {t("resource.common.edit_lower")}
-      </span>
-      <span className={styles.buttonDivider}>|</span>
-      <span
-        className={styles.remove}
-        onClick={() => removeAddress(addressItem?.id)}
-      >
-        {t("resource.facets.remove")}
-      </span>
-    </div>
-  );
-}
-
+import AddressForm from "../../../../components/address-form/address-form";
 function DeliveryLocation({
   pincode = "",
   deliveryLocation,
-  addressTags = [],
-  btnLabel,
   pincodeInput,
   error = null,
   isPincodeModalOpen = false,
@@ -44,8 +15,8 @@ function DeliveryLocation({
   defaultAddress = [],
   otherAddresses = [],
   selectedAddressId = "",
-  showGoogleMap,
   mapApiKey,
+  showGoogleMap,
   getLocality,
   selectAddress,
   addrError,
@@ -53,7 +24,6 @@ function DeliveryLocation({
   onAddButtonClick = () => {},
   onPincodeSubmit = () => {},
   onCloseModalClick = () => {},
-  onBackFromAddAddress = null,
   setSelectedAddressId = () => {},
   addAddress = () => {},
   isInternationalShippingEnabled = false,
@@ -64,20 +34,8 @@ function DeliveryLocation({
   getFilteredCountries = () => {},
   selectedCountry,
   countryDetails,
-  formKey,
   isGuestUser = false,
-  user,
-  isNewAddress,
-  updateAddress,
-  removeAddress,
-  acceptOrder,
 }) {
-  const { t } = useGlobalTranslation("translation");
-  const fpi = useFPI();
-  // Fetch user data internally if not provided via props (similar to checkout page)
-  const userDetails = useGlobalStore(fpi?.getters?.USER_DATA);
-  const userData = user || userDetails;
-  const computedBtnLabel = btnLabel || t("resource.cart.change");
   const {
     handleSubmit,
     register,
@@ -85,12 +43,12 @@ function DeliveryLocation({
     setError,
     clearErrors,
   } = useForm({
-    mode: "onSubmit",
+    mode: "onChange",
     defaultValues: {
       pincode,
     },
   });
-  const { displayName, maxLength, validatePincode } = pincodeInput || {};
+  const { displayName, maxLength, validatePincode } = pincodeInput;
 
   useEffect(() => {
     if (error) {
@@ -104,50 +62,28 @@ function DeliveryLocation({
     return (
       id === addrError?.id &&
       addrError?.message && (
-        <div className={styles.addrErrText}>
-          {translateDynamicLabel(addrError?.message, t)}
-        </div>
+        <div className={styles.addrErrText}>{addrError?.message}</div>
       )
     );
   };
   return (
     <div className={styles.cartPincodeContainer}>
       <div className={styles.pinCodeDetailsContainer}>
-        <div className={styles.deliveryHeader}>
-          <span className={styles.pincodeHeading}>
-            {deliveryLocation
-              ? `${t("resource.common.deliver_to")}:`
-              : t("resource.cart.check_delivery_time_services")}
-          </span>
-          {deliveryLocation && (
-            <span className={styles.pinCode}>{deliveryLocation}</span>
-          )}
-          {addressTags && addressTags.length > 0 && (
-            <div className={styles.addressTagsContainer}>
-              {addressTags
-                .filter((tag) => tag != null && tag !== "")
-                .map((tag, index) => (
-                  <span key={index} className={styles.addressTag}>
-                    {tag}
-                  </span>
-                ))}
-            </div>
-          )}
-        </div>
+        <span className={styles.pincodeHeading}>
+          {deliveryLocation ? "Deliver To:" : "Check delivery time & services"}
+        </span>
+        <span className={styles.pinCode}>
+          &nbsp;
+          {deliveryLocation}
+        </span>
       </div>
-      <div>
-        <button
-          className={styles.changePinCodeButton}
-          onClick={onChangeButtonClick}
-          disabled={!acceptOrder}
-        >
-          {deliveryLocation ? t("resource.cart.change") : computedBtnLabel}
-        </button>
+      <div className={styles.changePinCodeButton} onClick={onChangeButtonClick}>
+        Change
       </div>
       <Modal
         isOpen={isPincodeModalOpen}
         closeDialog={onCloseModalClick}
-        title={`${t("resource.common.delivery")} ${displayName || ""}`}
+        title={`Delivery ${displayName}`}
         containerClassName={styles.pincodeModal}
         bodyClassName={styles.modalBody}
         headerClassName={styles.modalHeader}
@@ -159,15 +95,15 @@ function DeliveryLocation({
           <div className={styles.modalPincodeInput}>
             <input
               type="text"
-              placeholder={`${t("resource.common.enter")} ${displayName || ""}`}
+              placeholder={`Enter ${displayName}`}
               {...register("pincode", {
                 validate: validatePincode,
               })}
-              maxLength={maxLength || undefined}
+              maxLength={maxLength}
             />
           </div>
           <button className={styles.modalChangePinCodeButton} type="submit">
-            {t("resource.facets.check")}
+            CHECK
           </button>
           {errors.pincode && (
             <div className={styles.errorText}>{errors?.pincode?.message}</div>
@@ -179,122 +115,127 @@ function DeliveryLocation({
       </Modal>
       <Modal
         isOpen={isAddressModalOpen}
+        modalType="right-modal"
         closeDialog={onCloseModalClick}
-        title={t("resource.common.address.select_delivery_address")}
-        customClassName={styles.deliveryAddressModal}
-        containerClassName={styles.deliverAddressesModalContainer}
-        headerClassName={styles.deliveryAddressHeader}
-        bodyClassName={styles.deliveryAddressBody}
+        title="Change Address"
       >
-        <>
-          <div className={styles.deliverAddressesContainer}>
-            <div className={styles.contentHeaderContainer}>
-              <h5 className={styles.contentHeader}>
-                {t("resource.common.address.saved_addresses")}
-              </h5>
-              <button className={styles.addCta} onClick={onAddButtonClick}>
-                +&nbsp;{t("resource.common.address.add_new_address")}
+        <div className={styles.addressModal}>
+          <div className={styles.modalBody}>
+            <form
+              className={styles.pincodeBox}
+              onSubmit={handleSubmit(onPincodeSubmit)}
+            >
+              <div className={styles.modalPincodeInput}>
+                <input
+                  type="text"
+                  placeholder={`Enter ${displayName}`}
+                  {...register("pincode", {
+                    validate: validatePincode,
+                  })}
+                  maxLength={maxLength}
+                />
+              </div>
+              <button className={styles.modalChangePinCodeButton} type="submit">
+                CHECK
               </button>
-            </div>
-            <div className={styles.deliveryAddressList}>
-              {defaultAddress?.map((item, index) => (
-                <AddressItem
-                  key={`${item?.id}_#${index}`}
-                  containerClassName={styles.customAddressItem}
-                  addressItem={item}
-                  onAddressSelect={setSelectedAddressId}
-                  showAddressSelectionCheckbox={true}
-                  selectedAddressId={selectedAddressId}
-                  isDefault={true}
-                  belowAddressSlot={
-                    <>
-                      <AddrErrorDiv id={item?.id} />
-                      <div className={styles.addressActions}>
-                        <AddressRight
-                          selectedAddressId={selectedAddressId}
-                          addressItem={item}
-                          updateAddress={updateAddress}
-                          removeAddress={removeAddress}
-                        />
-                      </div>
-                    </>
-                  }
-                ></AddressItem>
-              ))}
-              {otherAddresses.map((item, index) => (
-                <AddressItem
-                  key={`${item?.id}_#${index}`}
-                  containerClassName={styles.customAddressItem}
-                  addressItem={item}
-                  onAddressSelect={setSelectedAddressId}
-                  showAddressSelectionCheckbox={true}
-                  selectedAddressId={selectedAddressId}
-                  belowAddressSlot={
-                    <>
-                      <AddrErrorDiv id={item?.id} />
-                      <div className={styles.addressActions}>
-                        <AddressRight
-                          selectedAddressId={selectedAddressId}
-                          addressItem={item}
-                          updateAddress={updateAddress}
-                          removeAddress={removeAddress}
-                        />
-                      </div>
-                    </>
-                  }
-                ></AddressItem>
-              ))}
+              {errors.pincode && (
+                <div className={styles.errorText}>
+                  {errors?.pincode?.message}
+                </div>
+              )}
+              {errors.root && (
+                <div className={styles.errorText}>{errors?.root?.message}</div>
+              )}
+            </form>
+            <div className={styles.addressContentConitainer}>
+              {defaultAddress?.length > 0 && (
+                <div className={styles.addressItemContainer}>
+                  <div className={styles.heading}>Default Address</div>
+                  {defaultAddress?.map((item, index) => {
+                    return (
+                      <AddressItem
+                        key={`${item?.id}_#${index}`}
+                        containerClassName={styles.customAddressItem}
+                        addressItem={item}
+                        onAddressSelect={setSelectedAddressId}
+                        showAddressSelectionCheckbox={true}
+                        selectedAddressId={selectedAddressId}
+                        belowAddressSlot={<AddrErrorDiv id={item?.id} />}
+                      ></AddressItem>
+                    );
+                  })}
+                </div>
+              )}
+              {otherAddresses?.length > 0 && (
+                <div className={styles.addressItemContainer}>
+                  <div className={styles.heading}>Other Address</div>
+                  {otherAddresses.map((item, index) => {
+                    return (
+                      <AddressItem
+                        key={`${item?.id}_#${index}`}
+                        containerClassName={styles.customAddressItem}
+                        addressItem={item}
+                        onAddressSelect={setSelectedAddressId}
+                        showAddressSelectionCheckbox={true}
+                        selectedAddressId={selectedAddressId}
+                        belowAddressSlot={<AddrErrorDiv id={item?.id} />}
+                      ></AddressItem>
+                    );
+                  })}
+                </div>
+              )}
+              <div className={styles.addAddress}>
+                <button
+                  className={`${styles.commonBtn} ${styles.addCta}`}
+                  onClick={onAddButtonClick}
+                >
+                  + &nbsp; Add New Address
+                </button>
+              </div>
             </div>
           </div>
+
           {selectedAddressId &&
             (defaultAddress.length > 0 || otherAddresses?.length > 0) && (
               <div className={styles.stickyContainer}>
-                <FyButton
-                  color="primary"
-                  variant="contained"
-                  fullWidth
-                  className={styles.deliveryCta}
+                <button
+                  className={`${styles.commonBtn} ${styles.selectCta}`}
                   onClick={selectAddress}
                 >
-                  {t("resource.common.address.deliver_here")}
-                </FyButton>
+                  select this address
+                </button>
               </div>
             )}
-        </>
+        </div>
       </Modal>
       <Modal
-        title={t("resource.common.address.add_new_address")}
+        title="Add new Address"
         isOpen={isAddAddressModalOpen}
-        modalType="center-modal"
         closeDialog={onCloseModalClick}
+        modalType="right-modal"
         ignoreClickOutsideForClass="pac"
-        hideHeader
-        customClassName={styles.addAddressModalWrapper}
-        containerClassName={styles.addAddressModalContainer}
-        bodyClassName={styles.addAddressModalBody}
       >
-        <AddressForm
-          key={formKey || `${addressItem?.id || 'new'}-${countryDetails?.iso2 || 'default'}`}
-          internationalShipping={isInternationalShippingEnabled}
-          addressItem={addressItem}
-          formSchema={addressFormSchema}
-          isNewAddress={isNewAddress}
-          onAddAddress={addAddress}
-          isMap={showGoogleMap}
-          mapApiKey={mapApiKey}
-          onGetLocality={getLocality}
-          defaultPincode={pincode}
-          setI18nDetails={onCountryChange}
-          handleCountrySearch={handleCountrySearch}
-          getFilteredCountries={getFilteredCountries}
-          selectedCountry={selectedCountry}
-          countryDetails={countryDetails}
-          isGuestUser={isGuestUser}
-          onClose={onCloseModalClick}
-          onBack={onBackFromAddAddress}
-          onUpdateAddress={addAddress}
-          user={userData}
-        ></AddressForm>
+        <div className={styles.addressModal}>
+          <div className={`${styles.modalBody} ${styles.addressFormWrapper}`}>
+            <AddressForm
+              internationalShipping={isInternationalShippingEnabled}
+              addressItem={addressItem}
+              formSchema={addressFormSchema}
+              isNewAddress={true}
+              onAddAddress={addAddress}
+              mapApiKey={mapApiKey}
+              showGoogleMap={showGoogleMap}
+              onGetLocality={getLocality}
+              defaultPincode={pincode}
+              setI18nDetails={onCountryChange}
+              handleCountrySearch={handleCountrySearch}
+              getFilteredCountries={getFilteredCountries}
+              selectedCountry={selectedCountry?.display_name ?? ""}
+              countryDetails={countryDetails}
+              isGuestUser={isGuestUser}
+            ></AddressForm>
+          </div>
+        </div>
       </Modal>
     </div>
   );

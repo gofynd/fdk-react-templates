@@ -7,6 +7,7 @@ The `BlogList` component displays a list of blogs with various functionalities, 
 
 - `react`
 - `react-router-dom`
+- `react-slick`
 - `fdk-core/components`
 - Custom components:
   - `SvgWrapper`

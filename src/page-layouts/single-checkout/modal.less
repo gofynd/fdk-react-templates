@@ -11,8 +11,8 @@
   position: fixed;
   top: 0;
   bottom: 0;
-  inset-inline-start: 0;
-  inset-inline-end: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
   overflow-y: auto;
   overflow-x: hidden;
@@ -28,17 +28,17 @@
   width: 40%;
   position: fixed;
   bottom: 0;
-  inset-inline-end: 0;
+  right: 0;
   opacity: 0;
   transition: right 0.5s ease-in-out; /* Added transition property for animation */
-  inset-inline-end: -40%; /* Initial state - hidden off the right side */
+  right: -40%; /* Initial state - hidden off the right side */
   @media @tablet {
     width: 60%;
-    inset-inline-end: -60%; /* Initial state - hidden off the right side */
+    right: -60%; /* Initial state - hidden off the right side */
   }
   @media @mobile {
     width: 100%;
-    inset-inline-end: -100%; /* Initial state - hidden off the right side */
+    right: -100%; /* Initial state - hidden off the right side */
   }
   &::-webkit-scrollbar {
     width: 5px;
@@ -93,7 +93,7 @@
 }
 
 .modalContainerCss.slideIn {
-  inset-inline-end: 0; /* Final state - fully visible */
+  right: 0; /* Final state - fully visible */
   opacity: 1;
 }
 
@@ -107,7 +107,4 @@
 .slideFadeEnter .modalContainerCss,
 .slideFadeLeaveTo .modalContainerCss {
   transform: translate3d(100vh, 0, 0);
-  [dir="rtl"] & {
-    transform: translate3d(-100vh, 0, 0);
-  }
 }

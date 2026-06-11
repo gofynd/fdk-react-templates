@@ -1,73 +1,33 @@
 @import "../../styles/main.less";
 
-.scheduleIconContainer {
-  margin-top: auto;
-  padding: 4px 0 4px 0;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-  color: @TextHeading;
-  font-size: 14px;
-  font-weight: 500;
-  .scheduleIcon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .scheduleIconText {
-    flex: 1;
-
-    .windowClosedText {
-      color: @TextLabel;
-      font-size: 14px;
-      font-style: normal;
-      font-weight: 400;
-      span {
-        font-weight: 500;
-      }
-    }
-  }
-}
-
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-  @media @mobile {
-    align-items: flex-end;
-  }
-}
 .orderItem {
   color: @Mako;
   background-color: @HighlightColor;
   padding: 16px;
-  border-radius: 0px;
-  margin-bottom: 16px;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
+  border-radius: 4px;
 
   .orderHeader {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+    cursor: pointer;
+    position: relative;
+
+    .filter {
+      position: absolute;
+      right: 0px;
+    }
+    .filterArrowUp {
+      margin-left: auto;
+      transform: rotate(180deg);
+    }
+    .filterArrowDown {
+      margin-left: auto;
+    }
 
     .orderId {
       color: @TextHeading;
       font-weight: 600;
       line-height: 140%;
+      font-weight: 700;
       font-size: 16px;
-      margin: 0;
     }
 
     .orderTime {
@@ -76,65 +36,41 @@
       font-weight: 400;
       line-height: 140%;
       margin-top: 4px;
-      margin-bottom: 0;
     }
   }
 
   .shipmentData {
     animation: fadeIn 0.5s ease;
     border-top: none;
-    margin: 16px 0 0 0;
+    margin: 16px 0;
     padding: 0;
     cursor: pointer;
     display: flex;
     gap: 16px;
-    transition: opacity 0.2s ease;
-
-    &:hover {
-      opacity: 0.8;
-    }
 
     .shipmentLeft {
-      width: 100px;
-      height: 100px;
-      flex-shrink: 0;
-      border-radius: @ButtonRadius;
-      overflow: hidden;
-      background: white;
-      position: relative;
-
-      .bagImg,
-      picture,
-      img {
-        border-radius: inherit;
-      }
-
-      .bagImg,
-      picture {
-        overflow: hidden;
-      }
+      display: table-cell;
 
       img {
-        width: 100%;
-        height: 100%;
+        width: 80px;
+        height: 100px;
+        object-fit: cover;
       }
 
       #total-item {
         text-align: center;
-        position: absolute;
-        bottom: 8px;
-        right: 8px;
+        position: relative;
+        float: right;
         background: @Mako2;
         color: white;
+        top: -40px;
+        left: -10px;
         border-radius: 50%;
         width: 35px;
         height: 35px;
         line-height: 13px;
         font-size: 13px;
         padding: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
       }
     }
     .bold {
@@ -153,67 +89,39 @@
     }
 
     .shipmentRight {
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-      gap: 4px;
-      min-width: 0;
+      display: table-cell;
+      vertical-align: top;
 
       .shipmentId {
-        margin: 0;
+        margin: 4px 0px;
       }
       .boldls {
         font-weight: 600;
-        font-size: 14px;
       }
       .uktLinks {
         cursor: pointer;
         text-decoration: none;
         color: @TextHeading;
-        font-size: 14px;
-        font-weight: 500;
-        line-height: 140%;
-        margin: 0;
-        white-space: pre-wrap;
-      }
-      .shipmentStats {
-        margin: 0;
-        color: @TextLabel;
         font-size: 12px;
         font-weight: 500;
         line-height: 140%;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-
-        span:nth-child(2) {
-          margin: 0 4px;
-        }
       }
-      .buttonContainer {
-        display: flex;
-        padding-top: 8px;
-
-        @media @mobile {
-          padding-top: 8px;
-        }
-
-        .requestReattempt {
-          min-width: 100%;
-
-          button {
-            margin-top: auto;
-            width: auto;
-            padding: 4px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 700;
-            color: @UserAlertButtonLink;
-          }
-        }
-        .deliveryReattemptRequested {
-          min-width: 100%;
-        }
+      .shipmentStats {
+        margin: 4px 0px;
+        color: @TextLabel;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 140%; /* 16.8px */
+      }
+      .status {
+        border-radius: 4px;
+        background: @SuccessBackground;
+        padding: 4px;
+        color: @SuccessText;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 140%;
+        width: fit-content;
       }
       .shipmentBrands {
         margin: 8px 0px;
@@ -221,37 +129,6 @@
     }
   }
 
-  .shipmentThird {
-    margin: 0;
-    .status {
-      border-radius: 4px;
-      background: @SuccessBackground;
-      padding: 4px;
-      color: @SuccessText;
-      font-size: 12px;
-      font-weight: 500;
-      line-height: 140%;
-      width: fit-content;
-    }
-    .error {
-      border-radius: 4px;
-      background-color: @ErrorBackground;
-      padding: 4px;
-      color: @ErrorText;
-      font-size: 12px;
-      font-weight: 500;
-      width: fit-content;
-    }
-    .info {
-      border-radius: 4px;
-      background-color: @UserAlertsInfoBackground;
-      padding: 4px;
-      color: @UserAlertsInfoText;
-      font-size: 12px;
-      font-weight: 500;
-      width: fit-content;
-    }
-  }
   .buttons {
     display: flex;
     .ordercheckout {
@@ -277,36 +154,10 @@
   }
 
   .showAccordionBody {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    padding-top: 16px;
+    display: block;
   }
 
   .hideAccordionBody {
     display: none;
   }
-}
-
-.error {
-  border-radius: 4px;
-  background-color: @ErrorBackground;
-  padding: 4px;
-  color: @ErrorText;
-  font-size: 12px;
-  font-weight: 500;
-  width: fit-content;
-}
-
-.info {
-  border-radius: 4px;
-  background-color: @UserAlertsInfoBackground;
-  padding: 4px;
-  color: @UserAlertsInfoText;
-  font-size: 12px;
-  font-weight: 500;
-  width: fit-content;
-}
-.productCustomizationContainer {
-  margin-bottom: 16px;
 }
