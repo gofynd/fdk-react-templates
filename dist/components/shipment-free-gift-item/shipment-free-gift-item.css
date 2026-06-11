@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 18px;
+  line-height: 1.5;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 24px;
+    line-height: 1.5;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .shipment-free-gift-item__caption-medium___y7a9S,
 .shipment-free-gift-item__captionMedium___Mpife {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .shipment-free-gift-item__caption-semi-bold___DTZrl,
 .shipment-free-gift-item__captionSemiBold___xMxRT {
   font-size: 12px;
-  line-height: 14px;
+  line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -260,11 +260,11 @@ h5,
 }
 .shipment-free-gift-item__mr-5___vkhms,
 .shipment-free-gift-item__mr5___XrIbi {
-  margin-right: 30px !important;
+  margin-inline-end: 30px !important;
 }
 .shipment-free-gift-item__mr-2___KAOQ3,
 .shipment-free-gift-item__mr2___GlLXJ {
-  margin-right: 5px !important;
+  margin-inline-end: 5px !important;
 }
 .shipment-free-gift-item__py-5___oD1wA,
 .shipment-free-gift-item__py5___IovBN {
@@ -360,7 +360,7 @@ h5,
   display: flex;
   gap: 12px;
   padding: 12px;
-  background-color: var(--pageBackground, #f8f8f8);
+  background-color: var(--Theme-Page-Background, #FFF);
   border-radius: 4px;
   border: 1px solid var(--dividerStokes, #d4d1d1);
 }

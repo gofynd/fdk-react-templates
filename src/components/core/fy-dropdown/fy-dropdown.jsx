@@ -29,6 +29,7 @@ import React, {
 } from "react";
 import * as styles from "./fy-dropdown.less";
 import SvgWrapper from "../svgWrapper/SvgWrapper";
+import { isRunningOnClient } from "../../../helper/utils";
 
 const FyDropdown = ({
   options = [],
@@ -48,7 +49,7 @@ const FyDropdown = ({
   disabledOptionClassName = "",
   disabled = false,
   disabledOptions = [],
-  onChange = (value) => {},
+  onChange = () => {},
   disableSearch = false,
 }) => {
   const id = useId();
@@ -68,11 +69,17 @@ const FyDropdown = ({
   }, [options]);
 
   useEffect(() => {
-    setQuery(value);
-    setSelectedValue(
-      filteredOptions?.find((option) => option?.[dataKey] === value)
-    );
-  }, [value, filteredOptions]);
+    // Handle both object and string values for backward compatibility
+    const valueToMatch = typeof value === 'object' && value !== null 
+      ? (value?.name || value?.display_name || value?.[dataKey] || "")
+      : (value || "");
+    
+    const foundOption = valueToMatch ? options?.find((option) => option?.[dataKey] === valueToMatch) : null;
+    
+    setSelectedValue(foundOption);
+    // Set query to display text from option, or fallback to valueToMatch
+    setQuery(foundOption?.display || valueToMatch);
+  }, [value, options, dataKey]);
 
   const customLabelClassName = useMemo(
     () => `${styles.label} ${labelClassName ?? ""}`,
@@ -89,12 +96,18 @@ const FyDropdown = ({
   };
 
   const handleClickOutside = useCallback((event) => {
+    // Don't close if clicking on the dropdown list element (which is appended to body)
+    const listElement = document?.getElementById?.(id);
+    if (listElement && listElement.contains(event.target)) {
+      return; // Let the click handler on the list item handle it
+    }
     if (!dropdown?.current?.contains(event.target)) {
       setIsOpen(false);
     }
-  }, []);
+  }, [id]);
 
   const adjustDropdownMenuPosition = useCallback(() => {
+    if (!isRunningOnClient()) return;
     const dropdownButtonElement = dropdownButton?.current;
     const dropdownListElement = dropdownList?.current;
 
@@ -121,13 +134,16 @@ const FyDropdown = ({
     (option) => {
       setQuery(option.display);
       setSelectedValue(option);
-      onChange?.(option?.[dataKey]);
-      toggleDropdown();
+      setIskeyPressed(0);
+      const valueToPass = option?.[dataKey];
+      onChange?.(valueToPass);
+      // Don't toggle here - it's handled in the click handler
     },
-    [toggleDropdown]
+    [dataKey, onChange]
   );
 
   useEffect(() => {
+    if (!isRunningOnClient()) return;
     const clearEventListeners = () => {
       window.removeEventListener("click", handleClickOutside);
       window.removeEventListener("scroll", adjustDropdownMenuPosition);
@@ -170,13 +186,21 @@ const FyDropdown = ({
       if (!disabled) {
         listItem.addEventListener("click", (event) => {
           event?.stopPropagation();
-          handleChange?.(option);
+          event?.preventDefault();
+          // Close dropdown first, then handle change
+          setIsOpen(false);
+          // Use setTimeout to ensure state update doesn't interfere
+          setTimeout(() => {
+            handleChange?.(option);
+          }, 0);
         });
       }
       listElement.appendChild(listItem);
     });
 
     listElement.className = `${styles.dropdownList}  ${isOpen ? styles.open : ""} ${dropdownListClassName}`;
+    listElement.style.pointerEvents = 'auto';
+    listElement.style.zIndex = '9999';
     Object.keys(dropdownStyles).forEach((key) => {
       listElement.style[key] = dropdownStyles[key];
     });
@@ -248,7 +272,7 @@ const FyDropdown = ({
             onClick={toggleDropdown}
             ref={dropdownButton}
             tabIndex={!disableSearch ? 0 : null}
-            onKeyDown={(e) => {
+            onKeyDown={() => {
               setIskeyPressed((prev) => prev + 1);
               isKeyPressed === 0 && setQuery("");
               inputRef.current.focus();
@@ -270,7 +294,21 @@ const FyDropdown = ({
         )}
       </div>
       {isOpen && (
-        <div className={styles.emptyDiv} onClickCapture={toggleDropdown}></div>
+        <div 
+          className={styles.emptyDiv} 
+          onClickCapture={(e) => {
+            // Don't close if clicking on the dropdown list or dropdown button
+            const listElement = document?.getElementById?.(id);
+            const isClickOnList = listElement && listElement.contains(e.target);
+            const isClickOnButton = dropdownButton?.current?.contains(e.target);
+            
+            if (isClickOnList || isClickOnButton) {
+              return; // Let the click handler on the list item handle it
+            }
+            toggleDropdown(e);
+          }}
+          style={{ pointerEvents: 'auto' }}
+        ></div>
       )}
       {error && <div className={styles.error}>{error.message}</div>}
     </div>
