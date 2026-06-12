@@ -675,6 +675,21 @@ export function useCheckoutPayment({
       );
       setSelectedTab(tabIn);
       setIsCodModalOpen(true);
+    } else if (tabIn === "NEFT") {
+      selectPaymentMode(paymentModePayload).then(() =>
+        console.log("Payment mode selected")
+      );
+      setSelectedTab(tabIn);
+    } else if (tabIn === "RTGS") {
+      selectPaymentMode(paymentModePayload).then(() =>
+        console.log("Payment mode selected")
+      );
+      setSelectedTab(tabIn);
+    } else if (tabIn === "CREDIT") {
+      selectPaymentMode(paymentModePayload).then(() => {
+        console.log("Payment mode selected");
+      });
+      setSelectedTab(tabIn);
     } else if (tabIn === "CARD") {
       if (subMopIn !== "newCARD") setSelectedCard(subMopData);
     } else if (tabIn === "CARDLESS_EMI") {

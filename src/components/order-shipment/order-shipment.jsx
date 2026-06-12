@@ -74,7 +74,6 @@ const ShipmentDetails = ({
   bundleGroups,
   bundleGroupArticles,
   aspectRatio,
-  isImageFill,
   naivgateToShipment,
   isAdmin,
   t,
@@ -139,7 +138,6 @@ const ShipmentDetails = ({
             bag={item?.bags?.[0]}
             isBundle={isBundleItem}
             aspectRatio={aspectRatio}
-            isImageFill={isImageFill}
           />
           {item?.bags?.length > 1 && (
             <div id="total-item">
@@ -306,7 +304,6 @@ function OrderShipment({
   const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
   const locale = language?.locale;
   const [isAdmin, setIsAdmin] = useState(false);
-  // const [selectedShipment, setSelectedShipment] = useState("");
   const navigate = useNavigate();
   // const params = useParams();
   const isMobile = useMobile();
@@ -314,7 +311,6 @@ function OrderShipment({
     () => getProductImgAspectRatio(globalConfig),
     [globalConfig]
   );
-  const isImageFill = globalConfig?.img_fill;
 
   // Safe wrapper for getGroupedShipmentBags with fallback for non-bundle items
   const safeGetGroupedShipmentBags = (bags) => {
@@ -456,7 +452,6 @@ function OrderShipment({
                       bundleGroups={bundleGroups}
                       bundleGroupArticles={bundleGroupArticles}
                       aspectRatio={aspectRatio}
-                      isImageFill={isImageFill}
                       naivgateToShipment={naivgateToShipment}
                       isAdmin={isAdmin}
                       t={t}
@@ -479,7 +474,6 @@ function OrderShipment({
                     bundleGroups={bundleGroups}
                     bundleGroupArticles={bundleGroupArticles}
                     aspectRatio={aspectRatio}
-                    isImageFill={isImageFill}
                     naivgateToShipment={naivgateToShipment}
                     isAdmin={isAdmin}
                     t={t}
