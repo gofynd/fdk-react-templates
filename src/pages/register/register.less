@@ -73,8 +73,8 @@
 
     .radioContainer {
       margin-bottom: 8px;
-      padding-inline-start: 24px;
-      margin-inline-end: 12px;
+      padding-left: 24px;
+      margin-right: 12px;
       position: relative;
       color: @TextBody;
       font-size: 14px;
@@ -92,7 +92,7 @@
         width: 16px;
         position: absolute;
         top: 50%;
-        inset-inline-start: 0;
+        left: 0;
         transform: translateY(-50%);
         border: 1px solid #919191;
         border-radius: 50%;
@@ -102,11 +102,8 @@
         position: absolute;
         display: none;
         top: 50%;
-        inset-inline-start: 50%;
+        left: 50%;
         transform: translate(-50%, -50%);
-        [dir="rtl"] & {
-          transform: translate(50%, -50%);
-        }
         width: 9px;
         height: 9px;
         border-radius: 50%;
@@ -139,10 +136,6 @@
       min-height: 49px;
     }
   }
-  .consentWrapperWithTooltip {
-    position: relative;
-  }
-
   .registerBtn {
     display: block;
     border: none;
@@ -157,11 +150,6 @@
     font-weight: 600;
     line-height: 22.4px;
     text-transform: uppercase;
-    &:disabled {
-      background: @DividerStokes;
-      color: @TextLabel;
-      cursor: not-allowed;
-    }
   }
   .errorText {
     display: none;
@@ -202,14 +190,14 @@
   position: relative;
   input {
     width: 100%;
-    padding-inline-end: 40px;
+    padding-right: 40px;
     background-color: @PageBackground;
   }
 }
 
 .consentWrapper {
   .errorText {
-    display: inline-block;
+   display: inline-block;
     color: @ErrorText;
     font-size: 12px;
     font-style: normal;
@@ -219,27 +207,13 @@
   }
 }
 
-// .optional {
-//   color: @TextLabel;
-//   font-size: 11px;
-//   font-weight: 400;
-// }
-
-// .referralHint {
-//   color: @TextLabel;
-//   font-size: 11px;
-//   font-weight: 400;
-//   line-height: 15.4px;
-//   margin: 6px 0 0 0;
-// }
-
 .passwordToggle {
   height: 24px;
   width: 24px;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  inset-inline-end: 12px;
+  right: 12px;
   cursor: pointer;
   background: none;
   border: none;

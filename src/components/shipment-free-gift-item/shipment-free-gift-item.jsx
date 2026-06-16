@@ -10,8 +10,7 @@ const ShipmentFreeGiftItem = ({ freeGiftBags = [], currencySymbol = "₹", hasRa
     return null;
   }
 
-  // Group free gift bags by unique bag ID to show each variant separately
-  // This ensures different sizes/variants of the same product are shown as separate items
+  // Group free gift bags by unique bag ID so each variant stays visible.
   const groupedGifts = freeGiftBags.reduce((acc, bag) => {
     const bagId = bag?.id || bag?.article?.uid;
     if (!bagId) return acc;
@@ -32,7 +31,7 @@ const ShipmentFreeGiftItem = ({ freeGiftBags = [], currencySymbol = "₹", hasRa
   return (
     <div className={`${styles.freeGiftContainer} ${hasRadioButton ? styles.withRadioButton : ''}`}>
       <h6 className={styles.freeGiftTitle}>
-        {uniqueGiftCount} {t("resource.cart.free_gift_added")}
+        {uniqueGiftCount} free gift added
       </h6>
       <div className={styles.freeGiftItemsWrapper}>
         {groupedGiftArray.map((group, index) => {
@@ -60,20 +59,20 @@ const ShipmentFreeGiftItem = ({ freeGiftBags = [], currencySymbol = "₹", hasRa
                 <div className={styles.freeGiftName}>{itemName}</div>
                 {itemSize && (
                   <div className={styles.freeGiftSize}>
-                    {t("resource.common.size")}: {itemSize}
+                    Size: {itemSize}
                   </div>
                 )}
                 {totalQuantity > 0 && (
                   <div className={styles.freeGiftQuantity}>
                     <span className={styles.quantityLabel}>
-                      {t("resource.common.quantity")}:
+                      Quantity:
                     </span>{" "}
                     <span className={styles.quantityValue}>{totalQuantity}</span>
                   </div>
                 )}
                 <div className={styles.freeGiftPrice}>
                   <span className={styles.freeLabel}>
-                    {t("resource.common.free")}
+                    FREE
                   </span>
                   {priceMarked > 0 && (
                     <span className={styles.originalPrice}>

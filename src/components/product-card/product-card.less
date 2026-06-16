@@ -4,11 +4,9 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  .disableCursor {
-    filter: invert(1);
-  }
+
   .removeIcon {
-    path {
+    path{
       fill: @TextBody !important;
     }
   }
@@ -29,23 +27,6 @@
     position: relative;
     border-radius: @ImageRadius;
     -webkit-mask-image: -webkit-radial-gradient(white, black); //safari fix
-    mask-image: radial-gradient(white, black);
-
-    &.outOfStockContainer {
-      .productImage {
-        filter: grayscale(100%);
-        opacity: 0.7;
-      }
-
-      @media @desktop {
-        &:hover {
-          .productImage {
-            filter: grayscale(100%);
-            opacity: 0.7;
-          }
-        }
-      }
-    }
 
     .wishlistBtn {
       display: flex;
@@ -104,7 +85,6 @@
       .text {
         display: -webkit-box;
         -webkit-line-clamp: 2;
-        line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
       }
@@ -135,42 +115,6 @@
     .extension {
       position: absolute;
     }
-
-    .b2bAvailableOffer {
-      position: absolute;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 4px;
-      background-color: @ThemeAccentD5;
-      border-radius: 4px;
-    }
-
-    .dotsContainer {
-      position: absolute;
-      bottom: 12px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 4px;
-      z-index: 2;
-      pointer-events: none; // Allow clicks to pass through to the image/link
-
-      .dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 25px;
-        background-color: @TextSecondary;
-        transition:
-          background-color 0.2s ease,
-          transform 0.2s ease;
-
-        &.activeDot {
-          background-color: @TextHeading;
-          transform: scale(1.2);
-        }
-      }
-    }
   }
   .productDescContainer {
     display: flex;
@@ -184,7 +128,7 @@
     }
 
     .productDesc {
-      width: 100%;
+      min-width: 0;
       .productBrand {
         margin-bottom: 4px;
         .text-line-clamp();
@@ -202,171 +146,66 @@
           text-align: center;
         }
       }
-
       .productPrice {
         display: flex;
         flex-wrap: wrap;
         align-items: baseline;
-        &--textCenter {
-          text-align: center;
-        }
+
         &.center {
           justify-content: center;
         }
 
         &--sale {
-          margin-inline-end: 8px;
+          margin-right: 8px;
         }
         &--regular {
           text-decoration: line-through;
           color: @TextLabel;
-          margin-inline-end: 4px;
+          margin-right: 4px;
           font-size: 12px;
           line-height: 14px;
         }
         &--discount {
           color: @SaleDiscountText;
         }
-        &--textCenter {
-          text-align: center;
-        }
       }
-
       .productVariants {
         margin-top: 8px;
 
-        .colorVariants {
+        .flex-align-center();
+        gap: 8px;
+        .shade {
           .flex-align-center();
-          gap: 12px;
-
-          .colorDot {
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            display: block;
-            cursor: pointer;
-            // transition: all 0.2s ease;
-            text-decoration: none;
-            flex-shrink: 0;
-            position: relative;
-
-            // Default: just the color circle, no border
-            border: none;
-            background-color: var(--color, #ccc);
-
-            &:hover {
-              transform: scale(1.1);
-              z-index: 10;
-            }
-
-            // Only current color gets black outer ring with inner color
-            &.currentColor {
-              border: 1px solid @TextHeading; // Black outer ring
-              background-color: transparent;
-              width: 22px;
-              height: 22px;
-
-              // Inner color circle with spacing for current color only
-              &::before {
-                content: "";
-                position: absolute;
-                top: 2px;
-                left: 2px;
-                right: 2px;
-                bottom: 2px;
-                border-radius: 50%;
-                background-color: var(--color, #ccc);
-                z-index: 1;
-              }
-            }
-          }
-
-          .moreColors {
-            color: @TextBody;
-            font-size: 12px;
-            font-weight: 400;
-            line-height: 14px;
-            letter-spacing: -0.24px;
-            white-space: nowrap;
-          }
-        }
-      }
-
-      .priceShimmer {
-        // Same height as .h4 on mobile (font-size:16px * line-height:1.5)
-        // so the button below doesn't shift when real price loads in
-        height: 24px;
-        // display: flex;
-        // align-items: center;
-        margin: 2px 0 4px;
-
-        .shimmerLine {
-          height: 24px;
-          width: 60%;
-          background: linear-gradient(
-            90deg,
-            #f8f8f8 25%,
-            #f0f0f0 50%,
-            #f8f8f8 75%
-          );
-          background-size: 200% 100%;
-          border-radius: 4px;
-          animation: shimmer 1.5s infinite;
-        }
-
-        @keyframes shimmer {
-          0% {
-            background-position: -200% 0;
-          }
-          100% {
-            background-position: 200% 0;
-          }
-        }
-      }
-
-      .addToCartShimmer {
-        // Exact same height as .addToCart button (height: 40px)
-        height: 40px;
-        width: 100%;
-        background: linear-gradient(
-          90deg,
-          #f8f8f8 25%,
-          #f0f0f0 50%,
-          #f8f8f8 75%
-        );
-        background-size: 200% 100%;
-        border-radius: @ButtonRadius;
-        animation: addToCartShimmer 1.5s infinite;
-
-        @keyframes addToCartShimmer {
-          0% {
-            background-position: -200% 0;
-          }
-          100% {
-            background-position: 200% 0;
-          }
-        }
-      }
-
-      .badge_section {
-        display: flex;
-        align-items: center;
-        margin-bottom: 4px;
-
-        .badge {
-          display: flex;
-          align-items: center;
           padding: 4px 8px;
-          border-radius: 4px;
-          background-color: @SuccessText;
-          color: #fff;
-          font-size: 12px;
-          font-weight: 400 !important;
-          gap: 4px;
-
-          .info_icon {
+          background-color: @ThemeAccentL5;
+          border: 1px solid @DividerStokes;
+          border-radius: 40px;
+          .shadeColor {
+            width: 12px;
+            height: 12px;
+            border: 1px solid @DividerStokes;
+            border-radius: 50%;
+          }
+          .shadeName,
+          .shadeCount {
+            margin-left: 4px;
+            font-size: 12px;
+            line-height: 14px;
+            color: @TextBody;
+            text-transform: capitalize;
+          }
+        }
+        .allShades {
+          .variantContainer {
             display: flex;
-            align-items: center;
+            isolation: isolate;
+            .shadeColor:not(:first-child) {
+              margin-left: -4px;
+              z-index: -1;
+            }
+            .shadeColor:last-child {
+              z-index: -2;
+            }
           }
         }
       }
@@ -383,89 +222,23 @@
       font-size: 12px;
       white-space: nowrap;
     }
-
-    .addToCartShimmer {
-      height: 40px;
-      padding: 12px 16px;
-      box-sizing: border-box;
-      width: 100%;
-      min-width: 120px;
-      border-radius: 4px;
-      background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
-      background-size: 200% 100%;
-      animation: priceShimmerAnim 1.5s ease-in-out infinite;
-    }
-
-    .b2bAvailableOffers {
-      background: @ButtonSecondary;
-      font-weight: 500;
-      line-height: 16px;
-      letter-spacing: -0.24px;
-      text-transform: uppercase;
-      padding: 12px 16px;
-      height: 40px;
-      font-size: 12px;
-      white-space: nowrap;
-    }
-
-    .loginToViewPricing {
-      background: @ButtonSecondary;
-      font-size: 14px;
-      line-height: 18px;
-      letter-spacing: -0.28px;
-      border-radius: 4px;
-      padding: 8px;
-      height: 32px;
-      white-space: nowrap;
-      margin-top: 8px;
-      width: 100%;
-    }
-
-    .kycCompletionBadge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 4px;
-      margin: 8px 0px;
-      background-color: #fff5d6;
-      border-radius: 4px;
-      color: @TextHeading;
-
-      .kycCompletionBadgeIcon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 16px;
-        height: 16px;
-        color: #f5a300;
-      }
-
-      .kycCompletionBadgeText {
-        font-size: 12px;
-      }
-    }
   }
   @media @mobile {
     &.mob-grid-1-card {
       .imageContainer {
-        // As per Ankit Jain: fix wishlist icon position on mobile to prevent layout break
         .wishlistBtn {
-          top: 6px !important;
-          inset-inline-end: 6px !important;
+          top: 16px;
+          right: 16px;
         }
         .badge {
-          inset-inline-start: 16px;
+          left: 16px;
           top: 16px;
         }
         .review {
-          inset-inline-end: 16px;
+          right: 16px;
           bottom: 16px;
         }
         .extension {
-          inset-inline-start: 16px;
-          bottom: 16px;
-        }
-        .b2bAvailableOffer {
           left: 16px;
           bottom: 16px;
         }
@@ -490,35 +263,21 @@
         .addToCart {
           width: 100%;
         }
-
-        .loginToViewPricing {
-          width: 100%;
-          font-size: 12px;
-        }
-
-        .b2bAvailableOffers {
-          width: 100%;
-        }
       }
       .imageContainer {
-        // As per Ankit Jain: fix wishlist icon position on mobile to prevent layout break
         .wishlistBtn {
-          top: 6px !important;
-          inset-inline-end: 6px !important;
+          top: 8px;
+          right: 8px;
         }
         .badge {
-          inset-inline-start: 8px;
+          left: 8px;
           top: 8px;
         }
         .review {
-          inset-inline-end: 8px;
+          right: 8px;
           bottom: 8px;
         }
         .extension {
-          inset-inline-start: 8px;
-          bottom: 8px;
-        }
-        .b2bAvailableOffer {
           left: 8px;
           bottom: 8px;
         }
@@ -531,32 +290,20 @@
         width: 104px;
       }
 
-      .loginToViewPricing {
-        width: 100%;
-      }
-
-      .b2bAvailableOffers {
-        width: 104px;
-      }
-
       .imageContainer {
         .wishlistBtn {
           top: 24px;
-          inset-inline-end: 24px;
+          right: 24px;
         }
         .badge {
-          inset-inline-start: 24px;
+          left: 24px;
           top: 29px;
         }
         .review {
-          inset-inline-end: 24px;
+          right: 24px;
           bottom: 24px;
         }
         .extension {
-          inset-inline-start: 24px;
-          bottom: 24px;
-        }
-        .b2bAvailableOffer {
           left: 24px;
           bottom: 24px;
         }
@@ -572,32 +319,20 @@
         width: 104px;
       }
 
-      .loginToViewPricing {
-        width: 100%;
-      }
-
-      .b2bAvailableOffers {
-        width: 104px;
-      }
-
       .imageContainer {
         .wishlistBtn {
           top: 12px;
-          inset-inline-end: 12px;
+          right: 12px;
         }
         .badge {
-          inset-inline-start: 12px;
+          left: 12px;
           top: 17px;
         }
         .review {
-          inset-inline-end: 12px;
+          right: 12px;
           bottom: 12px;
         }
         .extension {
-          inset-inline-start: 12px;
-          bottom: 12px;
-        }
-        .b2bAvailableOffer {
           left: 12px;
           bottom: 12px;
         }
@@ -614,33 +349,20 @@
       .addToCart {
         width: 144px;
       }
-
-      .loginToViewPricing {
-        width: 100%;
-      }
-
-      .b2bAvailableOffers {
-        width: 144px;
-      }
-
       .imageContainer {
         .wishlistBtn {
           top: 24px;
-          inset-inline-end: 24px;
+          right: 24px;
         }
         .badge {
-          inset-inline-start: 24px;
+          left: 24px;
           top: 24px;
         }
         .review {
-          inset-inline-end: 24px;
+          right: 24px;
           bottom: 24px;
         }
         .extension {
-          inset-inline-start: 24px;
-          bottom: 24px;
-        }
-        .b2bAvailableOffer {
           left: 24px;
           bottom: 24px;
         }
@@ -659,14 +381,6 @@
           width: 100%;
         }
 
-        .loginToViewPricing {
-          width: 100%;
-        }
-
-        .b2bAvailableOffers {
-          width: 100%;
-        }
-
         .productDesc {
           .productName {
             margin-bottom: 5px;
@@ -677,21 +391,17 @@
       .imageContainer {
         .wishlistBtn {
           top: 12px;
-          inset-inline-end: 12px;
+          right: 12px;
         }
         .badge {
-          inset-inline-start: 12px;
+          left: 12px;
           top: 12px;
         }
         .review {
-          inset-inline-end: 12px;
+          right: 12px;
           bottom: 12px;
         }
         .extension {
-          inset-inline-start: 12px;
-          bottom: 12px;
-        }
-        .b2bAvailableOffer {
           left: 12px;
           bottom: 12px;
         }
@@ -699,6 +409,7 @@
     }
   }
   .captionNormal();
+ 
 }
 
 // .animate {
@@ -717,93 +428,3 @@
 //     transform: translateY(0);
 //   }
 // }
-// .textCenter {
-//   text-align: center;
-// }
-
-/* Price shimmer: same spacing as badge_section + productPrice (8px from name, 4px between badge and price) */
-.priceShimmer {
-  margin-top: 4px;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-
-  .priceShimmerBadge {
-    height: 26px;
-    width: 100px;
-    max-width: 50%;
-    margin-bottom: 4px;
-    border-radius: 4px;
-    padding: 4px 8px;
-    box-sizing: border-box;
-    background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
-    background-size: 200% 100%;
-    animation: priceShimmerAnim 1.5s ease-in-out infinite;
-  }
-
-  .priceShimmerLine {
-    height: 20px;
-    width: 40%;
-    min-width: 80px;
-    border-radius: 4px;
-    background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
-    background-size: 200% 100%;
-    animation: priceShimmerAnim 1.5s ease-in-out infinite;
-  }
-}
-
-@keyframes priceShimmerAnim {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
-}
-
-.mobileScrollContainer {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none; // Firefox
-  -ms-overflow-style: none; // IE/Edge
-
-  &::-webkit-scrollbar {
-    display: none; // Chrome/Safari
-  }
-
-  .mobileImageWrapper {
-    min-width: 100%;
-    scroll-snap-align: start;
-    position: relative;
-
-    .mobileImage {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
-}
-
-.desktopSlideshowContainer {
-  overflow: hidden;
-  position: relative;
-  width: 100%;
-  height: 100%;
-
-  .slidesWrapper {
-    display: flex;
-    transition: transform 0.5s ease-in-out;
-    height: 100%;
-    width: 100%;
-    will-change: transform;
-  }
-
-  .slide {
-    flex: 0 0 100%;
-    width: 100%;
-    height: 100%;
-    position: relative;
-  }
-}
