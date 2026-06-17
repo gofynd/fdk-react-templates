@@ -35,6 +35,7 @@ function ShipmentTracking({
   bagLength = 0,
   onAddToCart,
   showCreditNote = false,
+  isSelfPickup = false,
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -42,6 +43,10 @@ function ShipmentTracking({
   const locale = language?.locale;
   const navigate = useNavigate();
   const [showDetailedTracking, setShowDetailedTracking] = useState(false);
+
+  // Return is not applicable to self-pickup orders, so treat can_return as false for them. This
+  // hides the Return action (Cancel, if available, still shows).
+  const canReturn = !!shipmentInfo?.can_return && !isSelfPickup;
   const getTime = (item) => {
     return convertUTCDateToLocalDate(
       item?.created_ts ? item?.created_ts : item?.time,
@@ -52,7 +57,7 @@ function ShipmentTracking({
 
   const getLinks = () => {
     const arrLinks = [];
-    if (shipmentInfo?.can_cancel || shipmentInfo?.can_return) {
+    if (shipmentInfo?.can_cancel || canReturn) {
       arrLinks.push({
         type: "internal",
         text: updateType(),
@@ -115,7 +120,7 @@ function ShipmentTracking({
   };
 
   const updateType = () => {
-    return shipmentInfo?.can_return ? "RETURN" : "CANCEL";
+    return canReturn ? "RETURN" : "CANCEL";
   };
 
   // const updateTypeText = () => {

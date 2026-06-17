@@ -87,7 +87,16 @@ const AddToCart = ({
   const locale = language?.locale ? language?.locale : "en";
   const { t } = useGlobalTranslation("translation");
   const loggedIn = useGlobalStore(fpi.getters.LOGGED_IN);
-  const { merchant_data } = useGlobalStore(fpi?.getters?.CUSTOM_VALUE);
+  const { merchant_data, app_features: customAppFeatures } =
+    useGlobalStore(fpi?.getters?.CUSTOM_VALUE) || {};
+  const { app_features: configAppFeatures } =
+    useGlobalStore(fpi?.getters?.CONFIGURATION) || {};
+  // When self pickup is enabled, the fulfillment option is chosen on the cart page, so the
+  // fulfillment selector is hidden here. Read the flag from either app_features source; when it's
+  // not available the value is falsy and the selector renders exactly as before (no breaking change).
+  const isSelfPickupEnabled =
+    customAppFeatures?.self_pickup === true ||
+    configAppFeatures?.self_pickup === true;
 
   const keyName = "kyc_status";
   const isKycKeyPresent = merchant_data?.[keyName] !== undefined;
@@ -515,7 +524,8 @@ const AddToCart = ({
               <B2bMOQWrapper productDetails={productData} />
             )}
 
-            {selectedSize &&
+            {!isSelfPickupEnabled &&
+              selectedSize &&
               !!fulfillmentOptions.length &&
               availableFOCount > 1 && (
                 <div className={styles.fulfillmentWrapper}>
