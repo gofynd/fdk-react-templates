@@ -245,8 +245,7 @@ function Coupon({
                       couponValue,
                       currencySymbol,
                       formatLocale(locale, countryCode, true),
-                      currencyCode,
-                      true
+                      currencyCode
                     )}
                   />
                 </span>
@@ -515,8 +514,7 @@ export function CouponSuccessModal({
                   coupon.value,
                   currencySymbol,
                   formatLocale(locale, countryCode, true),
-                  currencyCode,
-                  true
+                  currencyCode
                 )}
               </div>
               <div className={styles.couponValueSubheading}>

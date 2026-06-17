@@ -190,6 +190,7 @@ function CardForm({
             value={cardNumber}
             dir="ltr"
             autoComplete="cc-number"
+            data-testid="card-number-input"
           />
           {(cardNumber || cardNumberError) && (
             <span
@@ -224,6 +225,7 @@ function CardForm({
             value={nameOnCard}
             onChange={handleNameOnCardInput}
             onBlur={validateNameOnCard}
+            data-testid="card-name-input"
           />
           {(nameOnCard || cardNameError) && (
             <span
@@ -266,6 +268,7 @@ function CardForm({
               placeholder={`${t("resource.checkout.expiry_date")}*`}
               className={`${cardExpiryError ? styles.error : ""} ${styles.cardExpiry}`}
               onBlur={validateCardExpiryDate}
+              data-testid="card-expiry-date"
             />
             {(cardExpiryDate || cardExpiryError) && (
               <span
@@ -289,6 +292,7 @@ function CardForm({
               className={`${cardCVVError ? styles.error : ""} ${styles.cardCvv}`}
               onChange={handleCvvNumberInput}
               onBlur={validateCvv}
+              data-testid="card-cvv"
             />
             <div
               className={`${styles.cvvContainer} ${styles.cvv} ${cardCVVError || cardExpiryError ? styles.iconPositionOnError : ""}`}
@@ -385,10 +389,7 @@ function CardForm({
             disabled={!isCardValid()}
             value={priceFormatCurrencySymbol(
               getCurrencySymbol,
-              getTotalValue(),
-              "en-IN",
-              null,
-              true
+              getTotalValue()
             )}
             enableLinkPaymentOption={enableLinkPaymentOption}
             onPriceDetailsClick={onPriceDetailsClick}
@@ -402,11 +403,12 @@ function CardForm({
             className={styles.saveNewCard}
             onClick={() => payUsingCard()}
             disabled={!isCardValid() || isPaymentLoading || mopSelectionLoading}
+            data-testid="card-payment-button"
           >
             {!isPaymentLoading ? (
               <>
                 {t("resource.common.pay_caps")}{" "}
-                {priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue(), "en-IN", null, true)}
+                {priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue())}
               </>
             ) : (
               loader
