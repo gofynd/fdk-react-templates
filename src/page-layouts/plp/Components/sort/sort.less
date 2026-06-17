@@ -12,7 +12,7 @@
   }
 
   .selectedSortWrapper {
-    margin-left: 8px;
+    margin-inline-start: 8px;
     color: @TextHeading;
     display: flex;
     align-items: center;
@@ -23,7 +23,7 @@
       width: 16px;
       height: 16px;
       fill: @TextHeading;
-      margin-left: 4px;
+      margin-inline-start: 4px;
       &.open {
         transform: scale(1, -1);
       }
@@ -34,7 +34,7 @@
     background-color: @DialogBackground;
     position: absolute;
     top: 32px;
-    left: 10px;
+    inset-inline-start: 10px;
     z-index: @menu;
     margin: auto;
     min-width: 190px;
@@ -71,8 +71,8 @@
       .dropdownList {
         position: fixed;
         top: 0;
-        left: 0;
-        right: 0;
+        inset-inline-start: 0;
+        inset-inline-end: 0;
         bottom: 0;
         li {
           padding: 18px;

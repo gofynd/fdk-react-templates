@@ -52,7 +52,7 @@ export default App;
 
 ### Props
 - **isLoggedIn** (boolean, optional): Indicates whether the user is logged in. Defaults to `false`.
-- **isValid** (boolean, optional): Indicates whether the cart is valid for checkout. Defaults to `true`.
+- **isValid** (boolean, optional): Indicates whether the cart is {t("resource.checkout.valid_for")} checkout. Defaults to `true`.
 - **isOutOfStock** (boolean, optional): Indicates if any items in the cart are out of stock. Defaults to `false`.
 - **isNotServicable** (boolean, optional): Indicates if the delivery location is not serviceable. Defaults to `false`.
 - **isAnonymous** (boolean, optional): Indicates whether the user is browsing as a guest. Defaults to `true`.

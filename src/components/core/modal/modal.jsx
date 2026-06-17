@@ -28,6 +28,7 @@ import React, { useEffect, useMemo, useRef } from "react";
 import * as styles from "./modal.less";
 import { useMobile } from "../../../helper/hooks/useMobile";
 import CloseBoldIcon from "../../../assets/images/close-bold.svg";
+import { isRunningOnClient } from "../../../helper/utils";
 
 function Modal({
   isOpen,
@@ -46,6 +47,8 @@ function Modal({
   containerClassName,
   ignoreClickOutsideForClass,
   customClassName,
+  notCloseOnclickOutside,
+  titleContainerStyles
 }) {
   const modalRef = useRef(null);
   const modalContainerRef = useRef(null);
@@ -59,6 +62,7 @@ function Modal({
   }, [isOpen, childHandleFocus]);
 
   const handleClickOutside = (event) => {
+    if (notCloseOnclickOutside) return;
     if (
       isCancellable &&
       modalContainerRef.current &&
@@ -75,6 +79,7 @@ function Modal({
   };
 
   useEffect(() => {
+    if (!isRunningOnClient()) return;
     const openModals = document.querySelectorAll(`.${styles.modalContainer}`);
 
     if (isOpen) {
@@ -118,23 +123,23 @@ function Modal({
     [bodyClassName]
   );
 
-  const animationVariants = useMemo(
-    () => ({
-      initial: { opacity: 0, x: "100%" },
-      animate: { opacity: 1, x: 0, transition: { duration: 0.5 } },
-      exit: { opacity: 0, x: "100%", transition: { duration: 0.5 } },
-    }),
-    []
-  );
+  // const animationVariants = useMemo(
+  //   () => ({
+  //     initial: { opacity: 0, x: isRunningOnClient() && document.dir === "rtl" ? "-100%" : "100%" },
+  //     animate: { opacity: 1, x: 0, transition: { duration: 0.5 } },
+  //     exit: { opacity: 0, x: isRunningOnClient() && document.dir === "rtl" ? "-100%" : "100%", transition: { duration: 0.5 } },
+  //   }),
+  //   []
+  // );
 
-  const mobileAnimationVariants = useMemo(
-    () => ({
-      initial: { opacity: 0, y: "100%" },
-      animate: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-      exit: { opacity: 0, y: "100%", transition: { duration: 0.5 } },
-    }),
-    []
-  );
+  // const mobileAnimationVariants = useMemo(
+  //   () => ({
+  //     initial: { opacity: 0, y: "100%" },
+  //     animate: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  //     exit: { opacity: 0, y: "100%", transition: { duration: 0.5 } },
+  //   }),
+  //   []
+  // );
 
   return (
     <>
@@ -164,7 +169,7 @@ function Modal({
           >
             {!hideHeader && (
               <div className={customHeaderClass}>
-                <div>
+                <div style={titleContainerStyles || {}}>
                   <div className={customTitleClass}>{title}</div>
                   {subTitle && (
                     <div className={customSubTitleClass}>{subTitle}</div>

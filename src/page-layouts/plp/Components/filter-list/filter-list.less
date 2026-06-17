@@ -6,8 +6,11 @@
     margin-bottom: 16px;
     .text {
       font-size: 12px;
-      line-height: 14px;
-      padding: 15px 15px 15px 44px;
+      line-height: 1.5;
+      padding-top: 15px;
+      padding-inline-end: 15px;
+      padding-bottom: 15px;
+      padding-inline-start: 44px;
       width: 100%;
       border: 1px solid @DividerStokes;
       background-color: transparent;
@@ -16,14 +19,14 @@
       width: 18px;
       height: 18px;
       position: absolute;
-      left: 12px;
+      inset-inline-start: 12px;
     }
   }
   &--items {
     .filter__item {
       cursor: pointer;
       font-size: 12px;
-      line-height: 14px;
+      line-height: 1.5;
 
       &:hover .checkbox-icon:not(.selected) {
         stroke: @ButtonPrimary;
@@ -31,7 +34,7 @@
       .checkbox-icon {
         width: 26px;
         height: 26px;
-        margin-right: 8px;
+        margin-inline-end: 8px;
         stroke: @DividerStokes;
         &.selected {
           fill: @ButtonPrimary;
@@ -42,12 +45,12 @@
         width: 16px;
         height: 16px;
         border-radius: 50%;
-        margin-right: 8px;
+        margin-inline-end: 8px;
         border: 1px solid @DividerStokes;
       }
       &--value {
         color: @TextBody;
-        margin-right: 4px;
+        margin-inline-end: 4px;
         text-overflow: ellipsis;
         overflow: hidden;
       }
@@ -81,18 +84,26 @@
     }
   }
   .filter__popup {
-    width: 1023px;
-    height: calc(100vh - var(--headerHeight) - 40px);
+    width: min(1023px, calc(100vw - 32px));
     max-height: 562px;
     border: 1px solid @DividerStokes;
     background-color: @DialogBackground;
     position: fixed;
-    top: calc(50% + (var(--headerHeight) / 2));
+    top: 20px;
     left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 41;
+    transform: translateX(-50%);
+    [dir="rtl"] & {
+      left: auto;
+      right: 50%;
+      transform: translateX(50%);
+    }
+    z-index: 9999;
     border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    display: flex;
+    flex-direction: column;
     &--header {
+      flex-shrink: 0;
       padding: 16px 24px;
       border-bottom: 1px solid @DividerStokes;
       .search {
@@ -101,7 +112,7 @@
           padding: 16px;
           width: 264px;
           border: 1px solid @DividerStokes;
-          margin-right: 32px;
+          margin-inline-end: 32px;
         }
       }
       .alphabets {
@@ -120,7 +131,7 @@
         }
       }
       .close-icon {
-        margin-left: auto;
+        margin-inline-start: auto;
         width: 24px;
         height: 24px;
         fill: @TextHeading;
@@ -131,11 +142,13 @@
       display: flex;
       flex-wrap: wrap;
       flex-direction: column;
-      height: calc(100% - 87px);
+      flex: 1;
+      min-height: 0;
       padding: 24px 12px;
       overflow-x: auto;
+      overflow-y: auto;
       scroll-behavior: smooth;
-      scroll-margin-left: 24px;
+      scroll-margin-inline-start: 24px;
       &.emptyPopupContent {
         justify-content: center;
       }
@@ -144,18 +157,18 @@
         color: @TextBody;
       }
       .alphabet-label {
-        padding-left: 12px;
+        padding-inline-start: 12px;
         margin-bottom: 11px;
         & > h4 {
           color: @ButtonPrimary;
         }
       }
       .filter {
-        padding-left: 12px;
+        padding-inline-start: 12px;
         margin-bottom: 5px;
         &__item {
           font-size: 12px;
-          line-height: 14px;
+          line-height: 1.5;
           cursor: pointer;
           &:hover .checkbox-icon:not(.selected) {
             stroke: @ButtonPrimary;
@@ -163,7 +176,7 @@
           .checkbox-icon {
             width: 26px;
             height: 26px;
-            margin-right: 8px;
+            margin-inline-end: 8px;
             stroke: @DividerStokes;
             &.selected {
               fill: @ButtonPrimary;
@@ -171,7 +184,7 @@
           }
           &--value {
             color: @TextBody;
-            margin-right: 4px;
+            margin-inline-end: 4px;
           }
           &--count {
             color: @TextDisabled;
@@ -185,10 +198,13 @@
   }
   .overlay {
     position: fixed;
-    .inset(0);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background-color: @Overlay;
     opacity: 0.6;
-    z-index: 40;
+    z-index: 9998;
     &.show {
       display: block;
     }

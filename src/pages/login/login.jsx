@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./login.less";
 import LoginPassword from "../../page-layouts/login/component/login-password/login-password";
@@ -6,16 +6,21 @@ import LoginOtp from "../../page-layouts/login/component/login-otp/login-otp";
 import LoginModeButton from "../../page-layouts/login/component/login-mode-button/login-mode-button";
 import LoginRegisterToggle from "../../page-layouts/auth/login-register-toggle/login-register-toggle";
 import TermPrivacy from "../../page-layouts/login/component/term-privacy/term-privacy";
+import { useGlobalTranslation } from "fdk-core/utils";
+import GoogleLoginButton from "../../page-layouts/login/component/soacial-login-button/google-login-button";
+import FacebookLogin from "../../page-layouts/login/component/soacial-login-button/facebook-login-button";
+import AppleLoginButton from "../../page-layouts/login/component/soacial-login-button/apple-login-button";
+import Tooltip from "../../components/tooltip/tooltip";
 
 function Login({
   logo = {},
-  title = "Login",
-  subTitle = "Login to Shop",
+  title,
+  subTitle,
   isPassword = false,
   isOtp = true,
   showLoginToggleButton = true,
   isRegisterEnabled = true,
-  registerButtonLabel = "GO TO REGISTER",
+  registerButtonLabel,
   onLoginToggleClick = () => {},
   onRegisterButtonClick = () => {},
   onLoginFormSubmit = () => {},
@@ -34,7 +39,22 @@ function Login({
   isForgotPassword,
   passwordError,
   onForgotPasswordClick,
+  getOtpLoading,
+  googleClientId,
+  onGoogleCredential,
+  handleGoogleError,
+  social,
+  facebookAppId,
+  appleId,
+  appleRedirectURI,
+  loginWithFacebookMutation,
+  application_id,
+  onAppleCredential,
 }) {
+  const { t } = useGlobalTranslation("translation");
+  const [isTermsAccepted, setIsTermsAccepted] = useState(false);
+  const [showConsentTooltip, setShowConsentTooltip] = useState(false);
+
   return (
     <div className={styles.loginWrapper}>
       <div>
@@ -58,8 +78,20 @@ function Login({
                 />
               </FDKLink>
             )}
-            {title && <h1 className={styles.loginTitle}>{title}</h1>}
-            {subTitle && <p className={styles.loginSubText}>{subTitle}</p>}
+            {title && (
+              <h1 className={styles.loginTitle}>
+                {title || t("resource.auth.login.login")}
+              </h1>
+            )}
+            {subTitle && (
+              <p
+                className={
+                  styles.loginSubText || t("resource.auth.login.login_to_shop")
+                }
+              >
+                {subTitle}
+              </p>
+            )}
           </>
         )}
         {isPassword && (
@@ -70,6 +102,8 @@ function Login({
               isForgotPassword,
               onForgotPasswordClick,
               onLoginFormSubmit,
+              isTermsAccepted,
+              setShowConsentTooltip,
             }}
           />
         )}
@@ -86,19 +120,57 @@ function Login({
               onOtpSubmit,
               onResendOtpClick,
               onLoginFormSubmit,
+              getOtpLoading,
+              isTermsAccepted,
+              setShowConsentTooltip,
             }}
           />
         )}
         {!isFormSubmitSuccess && (
           <>
-            <TermPrivacy />
+            <div className={styles.consentWrapperWithTooltip}>
+              <TermPrivacy
+                onChange={setIsTermsAccepted}
+                checked={isTermsAccepted}
+              />
+              <Tooltip
+                message={t("resource.auth.terms_and_condition")}
+                isVisible={showConsentTooltip}
+                onClose={() => setShowConsentTooltip(false)}
+                position="bottom"
+              />
+            </div>
             <div className={styles.loginBtnGroup}>
               {showLoginToggleButton && (
                 <LoginModeButton {...{ onLoginToggleClick, isOtp }} />
               )}
+              {social?.google && (
+                <GoogleLoginButton
+                  googleClientId={googleClientId}
+                  onGoogleCredential={onGoogleCredential}
+                  onError={handleGoogleError}
+                />
+              )}
+              {social?.facebook && (
+                <FacebookLogin
+                  facebookAppId={facebookAppId}
+                  loginWithFacebookMutation={loginWithFacebookMutation}
+                  application_id={application_id}
+                />
+              )}
+              {social?.apple && (
+                <AppleLoginButton
+                  appleClientId={appleId}
+                  onAppleCredential={onAppleCredential}
+                  redirectURI={appleRedirectURI}
+                  onError={handleGoogleError}
+                />
+              )}
               {isRegisterEnabled && (
                 <LoginRegisterToggle
-                  label={registerButtonLabel}
+                  label={
+                    registerButtonLabel || t("resource.common.go_to_register")
+                  }
                   onClick={onRegisterButtonClick}
                 />
               )}

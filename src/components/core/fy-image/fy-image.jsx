@@ -26,6 +26,7 @@
 import React, { useState, useMemo, forwardRef } from "react";
 import * as styles from "./fy-image.less";
 import { transformImage } from "../../../helper/utils";
+import { RESPONSIVE_IMAGE_BREAKPOINTS } from "../../../helper/constant";
 
 const IMAGE_SIZES = [
   "original",
@@ -69,13 +70,8 @@ const FyImage = forwardRef(
       mobileAspectRatio,
       showOverlay = false,
       overlayColor = "#ffffff",
-      sources = [
-        { breakpoint: { min: 780 }, width: 1280 },
-        { breakpoint: { min: 600 }, width: 1100 },
-        { breakpoint: { min: 480 }, width: 1200 },
-        { breakpoint: { min: 361 }, width: 900 },
-        { breakpoint: { max: 360 }, width: 640 },
-      ],
+      // Use optimized breakpoints from config by default
+      sources = RESPONSIVE_IMAGE_BREAKPOINTS,
       customClass,
       globalConfig,
       defer = true,
@@ -86,10 +82,11 @@ const FyImage = forwardRef(
   ) => {
     const [isError, setIsError] = useState(false);
 
+    const bgColor = globalConfig?.img_container_bg || backgroundColor;
     const dynamicStyles = {
       "--aspect-ratio-desktop": `${aspectRatio}`,
       "--aspect-ratio-mobile": `${mobileAspectRatio || aspectRatio}`,
-      "--bg-color": `${globalConfig?.img_container_bg || backgroundColor}`,
+      ...(bgColor && typeof bgColor === "string" && bgColor.trim() ? { "--bg-color": `${bgColor}` } : {}),
       "--overlay-bgcolor": overlayColor,
     };
 
@@ -190,7 +187,7 @@ const FyImage = forwardRef(
 
     return (
       <div
-        className={`${styles.imageWrapper} ${isImageFill ? styles.fill : ""}
+        className={`${styles.imageWrapper} ${isImageFill ? styles.fill : styles.contain}
       ${isFixedAspectRatio ? styles.fixedAspRatio : ""} ${customClass}`}
         style={dynamicStyles}
       >
@@ -207,15 +204,23 @@ const FyImage = forwardRef(
             />
           ))}
           <img
-            className={`fx-image ${styles.fyImg}`}
+            className={`fx-image ${styles.fyImg} ${styles.firefoxAltFix}`}
             srcSet={fallbackSrcset()}
             src={getSrc()}
-            alt={alt}
+            // Firefox fix: Start with empty alt, add proper alt after load
+            alt=""
+            title={alt} // Accessibility: tooltip still works
+            aria-label="Product image" // Screen readers
             onError={onError}
-            onLoad={onLoad}
+            onLoad={(e) => {
+              // Add proper alt text after image loads
+              e.target.alt = alt;
+              onLoad(e);
+            }}
             loading={defer ? "lazy" : "eager"}
             fetchpriority={defer ? "low" : "high"}
             ref={ref}
+            data-alt={alt}
           />
         </picture>
       </div>
