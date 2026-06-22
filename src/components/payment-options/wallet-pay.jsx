@@ -77,7 +77,10 @@ function WalletPayment({
               customClassName={styles.visibleOnTab}
               value={priceFormatCurrencySymbol(
                 getCurrencySymbol,
-                getTotalValue()
+                getTotalValue(),
+                "en-IN",
+                null,
+                true
               )}
               onPriceDetailsClick={onPriceDetailsClick}
               disabled={mopSelectionLoading || !selectedWallet.code}
@@ -108,7 +111,10 @@ function WalletPayment({
                     {t("resource.common.pay_caps")}{" "}
                     {priceFormatCurrencySymbol(
                       getCurrencySymbol,
-                      getTotalValue()
+                      getTotalValue(),
+                      "en-IN",
+                      null,
+                      true
                     )}
                   </>
                 ) : (
