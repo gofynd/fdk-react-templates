@@ -9796,11 +9796,11 @@ h5,
   stroke: var(--dividerStokes, #d4d1d1);
   stroke-width: 1;
 }
-.add-to-cart__dropdownContainer___OCWpV > div,
-.add-to-cart__dropdown___fUthd {
+.add-to-cart__dropdownContainer___OCWpV > div {
   border-radius: var(--buttonRadius, 0px) !important;
 }
 .add-to-cart__dropdown___fUthd {
+  border-radius: min(8px, var(--buttonRadius, 0px)) !important;
   background-color: var(--dialogBackground, #fff) !important;
 }
 .add-to-cart__sizeValue___FVZKC {

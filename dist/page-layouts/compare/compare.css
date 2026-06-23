@@ -2872,7 +2872,7 @@ h5,
 }
 .compare__customeProductDescContainerClass___sacZ1 button {
   width: 100% !important;
-  border-radius: 4px;
+  border-radius: var(--buttonRadius, 0px);
 }
 
 /**color by character**/
@@ -3836,7 +3836,7 @@ h5,
   height: 48px;
   width: 153px;
   padding: 12px;
-  border-radius: 4px;
+  border-radius: var(--buttonRadius, 0px);
   border: 0.8px solid var(--overlay-popup-dividers-dividers-and-strokes, #d4d1d1);
   background: var(--buttonSecondary, #fff);
   color: var(--buttonPrimary, #4e3f09);

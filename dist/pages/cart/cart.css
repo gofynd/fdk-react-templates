@@ -14655,7 +14655,7 @@ h5,
   line-height: 140%;
   text-transform: uppercase;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: var(--buttonRadius, 0px);
 }
 @media only screen and (max-width: 768px) {
   .remove-cart-item__removeModalFooter___wF0NY .remove-cart-item__removeBtn___w3ksf,

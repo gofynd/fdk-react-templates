@@ -739,7 +739,7 @@ input:focus-visible {
   border: none;
   width: 100%;
   height: 48px;
-  border-radius: 4px;
+  border-radius: var(--buttonRadius, 0px);
   background: var(--buttonPrimary, #4e3f09);
 }
 .login-password__loginButton___T9F0a[disabled] {
@@ -1578,7 +1578,7 @@ h5,
 .login-otp__sendOtpBtn___m6A1L,
 .login-otp__verifyOtpBtn___UCOSR {
   border: none;
-  border-radius: 4px;
+  border-radius: var(--buttonRadius, 0px);
   width: 100%;
   height: 48px;
   color: var(--buttonSecondary, #fff);
@@ -2067,7 +2067,7 @@ h5,
   align-items: center;
   padding: 12px;
   background-color: transparent;
-  border-radius: 4px;
+  border-radius: var(--buttonRadius, 0px);
   border: 1px solid var(--dividerStokes, #d4d1d1);
   cursor: pointer;
   width: 100%;
@@ -2440,7 +2440,7 @@ h5,
   align-items: center;
   padding: 12px;
   background-color: transparent;
-  border-radius: 4px;
+  border-radius: var(--buttonRadius, 0px);
   border: 1px solid var(--dividerStokes, #d4d1d1);
   cursor: pointer;
   width: 100%;
@@ -3188,12 +3188,22 @@ h5,
 }
 .google-login-button__google-login-container___gsSus .google-login-button__google-signin-wrapper___ewjLC {
   width: 100%;
+  border-radius: var(--buttonRadius, 0px);
+  overflow: hidden;
+}
+.google-login-button__google-login-container___gsSus .g_id_signin,
+.google-login-button__google-login-container___gsSus .g_id_signin > div,
+.google-login-button__google-login-container___gsSus .g_id_signin iframe {
+  border-radius: var(--buttonRadius, 0px) !important;
+}
+.google-login-button__google-login-container___gsSus .g_id_signin {
+  overflow: hidden;
 }
 .google-login-button__google-login-container___gsSus .g_id_signin > div[role="button"] {
   height: 48px !important;
   padding: 12px !important;
   background: transparent !important;
-  border-radius: 4px !important;
+  border-radius: var(--buttonRadius, 0px) !important;
   border: 1px solid var(--dividerStokes) !important;
   font-size: 14px !important;
   font-style: normal !important;
@@ -3565,7 +3575,7 @@ h5,
   height: 48px;
   padding: 12px;
   background: transparent;
-  border-radius: 4px;
+  border-radius: var(--buttonRadius, 0px);
   border: 1px solid var(--dividerStokes, #dadce0);
   font-size: 14px;
   font-style: normal;
@@ -3938,7 +3948,7 @@ h5,
   height: 48px;
   padding: 12px;
   background: transparent;
-  border-radius: 4px;
+  border-radius: var(--buttonRadius, 0px);
   border: 1px solid var(--dividerStokes, #dadce0);
   font-size: 14px;
   font-style: normal;
