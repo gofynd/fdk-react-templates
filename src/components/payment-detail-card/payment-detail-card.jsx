@@ -41,8 +41,7 @@ function PaymentDetailCard({ breakup, paymentDetails }) {
                     totalVal?.currency_symbol,
                     paymentInfo?.amount,
                     undefined,
-                    totalVal?.currency_code,
-                    true
+                    totalVal?.currency_code
                   )}
                 {!paymentInfo?.amount &&
                   totalVal &&
@@ -50,8 +49,7 @@ function PaymentDetailCard({ breakup, paymentDetails }) {
                     totalVal?.currency_symbol,
                     totalVal?.value,
                     undefined,
-                    totalVal?.currency_code,
-                    true
+                    totalVal?.currency_code
                   )}
               </span>
             </div>

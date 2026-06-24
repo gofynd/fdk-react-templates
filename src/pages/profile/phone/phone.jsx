@@ -22,16 +22,9 @@ function Phone({
   const [isLoading, setIsLoading] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedPhone, setSelectedPhone] = useState({});
-  const [phoneToVerify, setPhoneToVerify] = useState(null);
-  const [verifyOtpData, setVerifyOtpData] = useState(null);
-  const [verifyingPhone, setVerifyingPhone] = useState("");
 
   const handleShowAddModal = useCallback((show) => {
     setShowAddModal(show);
-    if (!show) {
-      setPhoneToVerify(null);
-      setVerifyOtpData(null);
-    }
   }, []);
 
   const handleSetPrimary = useCallback(async (phone) => {
@@ -66,42 +59,6 @@ function Phone({
       setIsLoading(false);
     }
   }, [selectedPhone]);
-
-  const getPhoneOtpPayload = useCallback(
-    (phoneDetails) => {
-      const payloadCountryCode =
-        phoneDetails?.countryCode || phoneDetails?.country_code || countryCode;
-
-      return {
-        mobile: phoneDetails?.mobile || phoneDetails?.phone || "",
-        countryCode: payloadCountryCode?.toString?.().replace("+", "") || "91",
-        isValidNumber: true,
-      };
-    },
-    [countryCode]
-  );
-
-  const handleVerifyPhone = useCallback(
-    async (phoneDetails) => {
-      const phonePayload = getPhoneOtpPayload(phoneDetails);
-
-      if (!phonePayload.mobile) return;
-
-      try {
-        setVerifyingPhone(phonePayload.mobile.toString());
-        const data = await sendOtpMobile(phonePayload);
-
-        setPhoneToVerify(phonePayload);
-        setVerifyOtpData(data);
-        setShowAddModal(true);
-      } catch (error) {
-        throw error;
-      } finally {
-        setVerifyingPhone("");
-      }
-    },
-    [getPhoneOtpPayload, sendOtpMobile]
-  );
 
   if (isLoading) {
     return (
@@ -166,9 +123,7 @@ function Phone({
                             variant="outlined"
                             className={styles.verifyBtn}
                             size="small"
-                            isLoading={verifyingPhone === phone?.toString()}
-                            disabled={!!verifyingPhone}
-                            onClick={() => handleVerifyPhone(phoneDetails)}
+                            isLoading={isLoading}
                           >
                             {t("resource.facets.verify")}
                           </FyButton>
@@ -218,8 +173,6 @@ function Phone({
           verifyMobileOtp={verifyMobileOtp}
           isOpen={showAddModal}
           countryCode={countryCode}
-          initialPhone={phoneToVerify}
-          initialOtpData={verifyOtpData}
           onClose={() => handleShowAddModal(false)}
           // countries={countries}
         />
