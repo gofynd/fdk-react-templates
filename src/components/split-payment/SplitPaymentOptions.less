@@ -1,0 +1,51 @@
+@import "../../styles/main.less";
+
+// All payment method UI styles come from CheckoutPaymentContent via
+// checkout-payment-content.less — only wrapper and error-banner styles live here.
+
+.splitPaymentOptionsWrapper {
+  margin-top: 8px;
+}
+
+.skeletonWrapper {
+  border: 1px solid var(--dividerStokes);
+  border-radius: 4px;
+  padding: 16px;
+}
+
+.payButtonLoader {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  vertical-align: middle;
+  animation: splitPayButtonSpin 0.8s linear infinite;
+}
+
+@keyframes splitPayButtonSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Error banner — matches .paymentFailedHeader / .redSplit in checkout-payment.less.
+.paymentFailedHeader {
+  border-width: 0 1px 1px 1px;
+  border-color: var(--dividerStokes);
+  border-style: solid;
+  display: flex;
+  flex-direction: row;
+  padding: 24px;
+
+  @media @mobile {
+    padding: 20px;
+  }
+
+  .redSplit {
+    width: 8px;
+    background: @ErrorText;
+    border-radius: 8px 0 0 8px;
+  }
+}

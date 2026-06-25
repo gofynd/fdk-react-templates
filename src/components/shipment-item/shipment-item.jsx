@@ -57,6 +57,7 @@ function ShipmentItem({
   const isBundleItem =
     bundleGroupId && bundleGroups && bundleGroups[bundleGroupId]?.length > 0;
 
+  const hide_single_size = globalConfig?.hide_single_size || false;
   // Get free gift items for this parent bag
   const freeGiftBags = freeGiftGroups?.[bag?.id] || [];
   const hasFreeGifts = freeGiftBags.length > 0;
@@ -145,29 +146,31 @@ function ShipmentItem({
             state={{
               product: isBundleItem
                 ? {
-                    ...bag?.bundle_details,
-                    media:
-                      bag?.bundle_details?.images?.map((i) => ({
-                        url: i,
-                        type: "image",
-                      })) || [],
-                  }
+                  ...bag?.bundle_details,
+                  media:
+                    bag?.bundle_details?.images?.map((i) => ({
+                      url: i,
+                      type: "image",
+                    })) || [],
+                }
                 : {
-                    ...bag?.item,
-                    media:
-                      bag?.item?.image?.map((i) => ({
-                        url: i,
-                        type: "image",
-                      })) || [],
-                  },
+                  ...bag?.item,
+                  media:
+                    bag?.item?.image?.map((i) => ({
+                      url: i,
+                      type: "image",
+                    })) || [],
+                },
             }}
           >
             <div className={`${styles.brand}`}>{name}</div>{" "}
           </FDKLink>
           <div className={`${styles.bagDetails}`}>
             <div className={`${styles.chip} ${styles.regularxxs}`}>
-              <span className={`${styles.itemSize}`}>{size}</span>
-              {size && quantity && (
+              {!(hide_single_size && size?.toUpperCase() === "OS") && (
+                <span className={`${styles.itemSize}`}>{size}</span>
+              )}
+              {size && !(hide_single_size && size?.toUpperCase() === "OS") && quantity && (
                 <span className={styles.itemSeparator}>{` | `}</span>
               )}
               <span className={`${styles.itemQty}`}>
@@ -204,8 +207,7 @@ function ShipmentItem({
           )}
           <div className={styles.buttonContainer}>
             <div
-              className={`${styles.requestReattempt} ${
-                shipmentDetails?.shipment_status?.value ===
+              className={`${styles.requestReattempt} ${shipmentDetails?.shipment_status?.value ===
                 "delivery_reattempt_requested"
                   ? styles.deliveryReattemptRequested
                   : ""
@@ -231,13 +233,6 @@ const ShipmentImage = ({
   globalConfig,
 }) => {
   const aspectRatio = getProductImgAspectRatio(globalConfig);
-  const imageRadiusStyle =
-    globalConfig?.["item-image-border-radius"] != null
-      ? {
-          "--itemImageRadius": `${globalConfig["item-image-border-radius"]}px`,
-        }
-      : undefined;
-
   const getItemImage = () => {
     return (
       <BagImage
@@ -253,25 +248,24 @@ const ShipmentImage = ({
     <FDKLink
       to={`/product/${isBundleItem ? bag?.bundle_details?.slug : bag?.item?.slug_key}`}
       className={`${styles.bagImg}`}
-      style={imageRadiusStyle}
       state={{
         product: isBundleItem
           ? {
-              ...bag?.bundle_details,
-              media:
-                bag?.bundle_details?.images?.map((i) => ({
-                  url: i,
-                  type: "image",
-                })) || [],
-            }
+            ...bag?.bundle_details,
+            media:
+              bag?.bundle_details?.images?.map((i) => ({
+                url: i,
+                type: "image",
+              })) || [],
+          }
           : {
-              ...bag?.item,
-              media:
-                bag?.item?.image?.map((i) => ({
-                  url: i,
-                  type: "image",
-                })) || [],
-            },
+            ...bag?.item,
+            media:
+              bag?.item?.image?.map((i) => ({
+                url: i,
+                type: "image",
+              })) || [],
+          },
       }}
     >
       {getItemImage()}

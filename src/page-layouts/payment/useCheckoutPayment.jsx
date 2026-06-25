@@ -675,6 +675,21 @@ export function useCheckoutPayment({
       );
       setSelectedTab(tabIn);
       setIsCodModalOpen(true);
+    } else if (tabIn === "NEFT") {
+      selectPaymentMode(paymentModePayload).then(() =>
+        console.log("Payment mode selected")
+      );
+      setSelectedTab(tabIn);
+    } else if (tabIn === "RTGS") {
+      selectPaymentMode(paymentModePayload).then(() =>
+        console.log("Payment mode selected")
+      );
+      setSelectedTab(tabIn);
+    } else if (tabIn === "CREDIT") {
+      selectPaymentMode(paymentModePayload).then(() => {
+        console.log("Payment mode selected");
+      });
+      setSelectedTab(tabIn);
     } else if (tabIn === "CARD") {
       if (subMopIn !== "newCARD") setSelectedCard(subMopData);
     } else if (tabIn === "CARDLESS_EMI") {
@@ -1108,18 +1123,27 @@ export function useCheckoutPayment({
     if (getTotalValue?.() === 0) {
       setSelectedTab("COD");
     } else if (!enableLinkPaymentOption) {
+      const selectedTabExists =
+        selectedTab &&
+        (paymentOptions?.some((opt) => opt.name === selectedTab) ||
+          (selectedTab === "Other" && otherPaymentOptions?.length > 0) ||
+          otherPaymentOptions?.some((opt) => opt.name === selectedTab) ||
+          codOption?.name === selectedTab);
+
       if (paymentOptions?.length > 0) {
-        setSelectedTab(paymentOptions[0].name);
-        setActiveMop(paymentOptions[0].name);
-      } else if (otherPaymentOptions?.length > 0) {
+        if (!selectedTabExists) {
+          setSelectedTab(paymentOptions[0].name);
+          setActiveMop(paymentOptions[0].name);
+        }
+      } else if (otherPaymentOptions?.length > 0 && !selectedTabExists) {
         setSelectedTab("Other");
         setActiveMop("Other");
-      } else if (codOption?.name) {
+      } else if (codOption?.name && !selectedTabExists) {
         selectMop(codOption?.name, codOption?.name, codOption?.name);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paymentOption]);
+  }, [paymentOption, selectedTab]);
 
   const handleScrollToTop = (index) => {
     const element = document.getElementById(`nav-title-${index}`);

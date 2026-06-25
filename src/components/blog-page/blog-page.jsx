@@ -147,7 +147,7 @@ function BlogPage({
                 className={`${styles.breadcrumb__icon}`}
                 svgSrc="breadcrumb-angle"
               />
-              <span className={`${styles.breadcrumb__label} ${styles.breadcrumb__labelActive}`}>
+              <span className={`${styles.breadcrumb__label}`}>
                 {blogDetails?.slug?.replace(/-/g, " ")}
               </span>
             </div>
