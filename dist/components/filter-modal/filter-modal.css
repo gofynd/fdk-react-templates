@@ -802,6 +802,10 @@ h5,
   width: 100%;
   border: 1px solid var(--dividerStokes, #d4d1d1);
   background-color: transparent;
+  color: var(--textLabel, #7d7676);
+}
+.filter-list__filter__list--search___zZ8XN .filter-list__text___BdD0V::placeholder {
+  color: var(--textLabel, #7d7676);
 }
 .filter-list__filter__list--search___zZ8XN .filter-list__search-icon___UE4e9 {
   width: 18px;
@@ -897,6 +901,10 @@ h5,
   width: 264px;
   border: 1px solid var(--dividerStokes, #d4d1d1);
   margin-inline-end: 32px;
+  color: var(--textLabel, #7d7676);
+}
+.filter-list__filter__list___rtO83 .filter-list__filter__popup--header___zJp3U .filter-list__search__input___qPmAZ::placeholder {
+  color: var(--textLabel, #7d7676);
 }
 .filter-list__filter__list___rtO83 .filter-list__filter__popup--header___zJp3U .filter-list__alphabets___mCACK {
   display: flex;
@@ -1823,7 +1831,7 @@ h5,
 }
 .fy-input__fyInput___S4Mtu::placeholder {
   color: var(--textLabel, #7d7676);
-  opacity: 0.3;
+  opacity: 1;
 }
 .fy-input__fyInput___S4Mtu::-webkit-outer-spin-button,
 .fy-input__fyInput___S4Mtu::-webkit-inner-spin-button {
@@ -1835,7 +1843,7 @@ h5,
 }
 .fy-input__fyInput___S4Mtu:disabled {
   color: var(--textSecondary, #9c9c9c);
-  border-color: var(--dividerStokes, #d4d1d1);
+  border-color: var(--overlaypopupdividerstroke, #e0e0e0);
   font-weight: 400;
 }
 .fy-input__fyInput___S4Mtu:focus {
@@ -1857,7 +1865,7 @@ h5,
   height: 48px;
 }
 .fy-input__outlined___CEaKm.fy-input__inputDisable___M8Zn2 {
-  border: 1px solid var(--dividerStokes, #d4d1d1);
+  border: 1px solid var(--overlaypopupdividerstroke, #e0e0e0);
   cursor: not-allowed;
   pointer-events: auto;
 }

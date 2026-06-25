@@ -67,7 +67,14 @@
     }
 
     .productImage {
-      transition: 300ms transform cubic-bezier(0, 0, 0.2, 1);
+      transition:
+        300ms transform cubic-bezier(0, 0, 0.2, 1),
+        200ms opacity ease,
+        200ms visibility ease;
+
+      &.mainImage {
+        position: relative;
+      }
 
       &.hoverImage {
         position: absolute;
@@ -76,17 +83,23 @@
         opacity: 0;
       }
     }
-    @lg-min: 860px;
+
     @media @desktop {
-      &:hover {
-        .hoverImage + .mainImage {
-          visibility: hidden;
-        }
-        .hoverImage,
+      &.zoomOnHover:hover {
         .mainImage {
+          transform: scale(1.06);
+        }
+      }
+
+      &.hoverSwapEnabled:hover {
+        .hoverImage {
           visibility: visible;
           opacity: 1;
-          transform: scale(1.1);
+        }
+
+        .mainImage {
+          visibility: hidden;
+          opacity: 0;
         }
       }
     }
@@ -136,39 +149,61 @@
       position: absolute;
     }
 
-    .b2bAvailableOffer {
-      position: absolute;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 4px;
-      background-color: @ThemeAccentD5;
-      border-radius: 4px;
-    }
-
     .dotsContainer {
       position: absolute;
       bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
-      gap: 4px;
+      gap: 8px;
+      justify-content: center;
+      align-items: center;
       z-index: 2;
-      pointer-events: none; // Allow clicks to pass through to the image/link
 
       .dot {
-        width: 8px;
-        height: 8px;
+        flex-shrink: 0;
+        width: 12px;
+        height: 12px;
         border-radius: 25px;
         background-color: @TextSecondary;
+        color: transparent;
+        border: none;
+        padding: 0;
+        cursor: pointer;
         transition:
           background-color 0.2s ease,
-          transform 0.2s ease;
+          width 0.32s cubic-bezier(0.4, 0, 0.2, 1),
+          height 0.32s cubic-bezier(0.4, 0, 0.2, 1),
+          opacity 0.32s cubic-bezier(0.4, 0, 0.2, 1),
+          transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
 
         &.activeDot {
           background-color: @TextHeading;
-          transform: scale(1.2);
+          opacity: 1;
         }
+
+        &.dotTierLarge {
+          width: 10px;
+          height: 10px;
+          opacity: 0.82;
+        }
+
+        &.dotTierMedium {
+          width: 8px;
+          height: 8px;
+          opacity: 0.68;
+        }
+
+        &.dotTierSmall {
+          width: 6px;
+          height: 6px;
+          opacity: 0.55;
+        }
+      }
+
+      &.dotsCompact {
+        flex-wrap: nowrap;
+        min-height: 16px;
       }
     }
   }
@@ -184,7 +219,7 @@
     }
 
     .productDesc {
-      width: 100%;
+      min-width: 0;
       .productBrand {
         margin-bottom: 4px;
         .text-line-clamp();
@@ -202,7 +237,6 @@
           text-align: center;
         }
       }
-
       .productPrice {
         display: flex;
         flex-wrap: wrap;
@@ -231,7 +265,6 @@
           text-align: center;
         }
       }
-
       .productVariants {
         margin-top: 8px;
 
@@ -281,6 +314,43 @@
             }
           }
 
+          // Image-based variant swatch: circular thumbnail, same footprint as colorDot
+          .imageDot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: block;
+            overflow: hidden;
+            cursor: pointer;
+            text-decoration: none;
+            flex-shrink: 0;
+            position: relative;
+            box-sizing: border-box;
+            border: 1px solid @DividerStokes;
+            padding: 0;
+
+            .imageDotImg,
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              border-radius: 50%;
+            }
+
+            &:hover {
+              transform: scale(1.1);
+              z-index: 10;
+            }
+
+            // Selected: black outer ring with inner spacing, matching colorDot
+            &.currentColor {
+              width: 22px;
+              height: 22px;
+              border: 1px solid @TextHeading;
+              padding: 2px;
+            }
+          }
+
           .moreColors {
             color: @TextBody;
             font-size: 12px;
@@ -288,85 +358,6 @@
             line-height: 14px;
             letter-spacing: -0.24px;
             white-space: nowrap;
-          }
-        }
-      }
-
-      .priceShimmer {
-        // Same height as .h4 on mobile (font-size:16px * line-height:1.5)
-        // so the button below doesn't shift when real price loads in
-        height: 24px;
-        // display: flex;
-        // align-items: center;
-        margin: 2px 0 4px;
-
-        .shimmerLine {
-          height: 24px;
-          width: 60%;
-          background: linear-gradient(
-            90deg,
-            #f8f8f8 25%,
-            #f0f0f0 50%,
-            #f8f8f8 75%
-          );
-          background-size: 200% 100%;
-          border-radius: 4px;
-          animation: shimmer 1.5s infinite;
-        }
-
-        @keyframes shimmer {
-          0% {
-            background-position: -200% 0;
-          }
-          100% {
-            background-position: 200% 0;
-          }
-        }
-      }
-
-      .addToCartShimmer {
-        // Exact same height as .addToCart button (height: 40px)
-        height: 40px;
-        width: 100%;
-        background: linear-gradient(
-          90deg,
-          #f8f8f8 25%,
-          #f0f0f0 50%,
-          #f8f8f8 75%
-        );
-        background-size: 200% 100%;
-        border-radius: @ButtonRadius;
-        animation: addToCartShimmer 1.5s infinite;
-
-        @keyframes addToCartShimmer {
-          0% {
-            background-position: -200% 0;
-          }
-          100% {
-            background-position: 200% 0;
-          }
-        }
-      }
-
-      .badge_section {
-        display: flex;
-        align-items: center;
-        margin-bottom: 4px;
-
-        .badge {
-          display: flex;
-          align-items: center;
-          padding: 4px 8px;
-          border-radius: 4px;
-          background-color: @SuccessText;
-          color: #fff;
-          font-size: 12px;
-          font-weight: 400 !important;
-          gap: 4px;
-
-          .info_icon {
-            display: flex;
-            align-items: center;
           }
         }
       }
@@ -382,67 +373,6 @@
       height: 40px;
       font-size: 12px;
       white-space: nowrap;
-    }
-
-    .addToCartShimmer {
-      height: 40px;
-      padding: 12px 16px;
-      box-sizing: border-box;
-      width: 100%;
-      min-width: 120px;
-      border-radius: 4px;
-      background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
-      background-size: 200% 100%;
-      animation: priceShimmerAnim 1.5s ease-in-out infinite;
-    }
-
-    .b2bAvailableOffers {
-      background: @ButtonSecondary;
-      font-weight: 500;
-      line-height: 16px;
-      letter-spacing: -0.24px;
-      text-transform: uppercase;
-      padding: 12px 16px;
-      height: 40px;
-      font-size: 12px;
-      white-space: nowrap;
-    }
-
-    .loginToViewPricing {
-      background: @ButtonSecondary;
-      font-size: 14px;
-      line-height: 18px;
-      letter-spacing: -0.28px;
-      border-radius: 4px;
-      padding: 8px;
-      height: 32px;
-      white-space: nowrap;
-      margin-top: 8px;
-      width: 100%;
-    }
-
-    .kycCompletionBadge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 4px;
-      margin: 8px 0px;
-      background-color: #fff5d6;
-      border-radius: 4px;
-      color: @TextHeading;
-
-      .kycCompletionBadgeIcon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 16px;
-        height: 16px;
-        color: #f5a300;
-      }
-
-      .kycCompletionBadgeText {
-        font-size: 12px;
-      }
     }
   }
   @media @mobile {
@@ -463,10 +393,6 @@
         }
         .extension {
           inset-inline-start: 16px;
-          bottom: 16px;
-        }
-        .b2bAvailableOffer {
-          left: 16px;
           bottom: 16px;
         }
       }
@@ -490,15 +416,6 @@
         .addToCart {
           width: 100%;
         }
-
-        .loginToViewPricing {
-          width: 100%;
-          font-size: 12px;
-        }
-
-        .b2bAvailableOffers {
-          width: 100%;
-        }
       }
       .imageContainer {
         // As per Ankit Jain: fix wishlist icon position on mobile to prevent layout break
@@ -518,24 +435,12 @@
           inset-inline-start: 8px;
           bottom: 8px;
         }
-        .b2bAvailableOffer {
-          left: 8px;
-          bottom: 8px;
-        }
       }
     }
   }
   @media @mobile-up {
     &.tablet-grid-2-card {
       .addToCart {
-        width: 104px;
-      }
-
-      .loginToViewPricing {
-        width: 100%;
-      }
-
-      .b2bAvailableOffers {
         width: 104px;
       }
 
@@ -556,10 +461,6 @@
           inset-inline-start: 24px;
           bottom: 24px;
         }
-        .b2bAvailableOffer {
-          left: 24px;
-          bottom: 24px;
-        }
       }
       .productDesc {
         .productName {
@@ -569,14 +470,6 @@
     }
     &.tablet-grid-3-card {
       .addToCart {
-        width: 104px;
-      }
-
-      .loginToViewPricing {
-        width: 100%;
-      }
-
-      .b2bAvailableOffers {
         width: 104px;
       }
 
@@ -597,10 +490,6 @@
           inset-inline-start: 12px;
           bottom: 12px;
         }
-        .b2bAvailableOffer {
-          left: 12px;
-          bottom: 12px;
-        }
       }
       .productDesc {
         .product-name {
@@ -614,15 +503,6 @@
       .addToCart {
         width: 144px;
       }
-
-      .loginToViewPricing {
-        width: 100%;
-      }
-
-      .b2bAvailableOffers {
-        width: 144px;
-      }
-
       .imageContainer {
         .wishlistBtn {
           top: 24px;
@@ -640,10 +520,6 @@
           inset-inline-start: 24px;
           bottom: 24px;
         }
-        .b2bAvailableOffer {
-          left: 24px;
-          bottom: 24px;
-        }
       }
       .productDesc {
         .productName {
@@ -656,14 +532,6 @@
         flex-direction: column;
 
         .addToCart {
-          width: 100%;
-        }
-
-        .loginToViewPricing {
-          width: 100%;
-        }
-
-        .b2bAvailableOffers {
           width: 100%;
         }
 
@@ -691,10 +559,6 @@
           inset-inline-start: 12px;
           bottom: 12px;
         }
-        .b2bAvailableOffer {
-          left: 12px;
-          bottom: 12px;
-        }
       }
     }
   }
@@ -720,46 +584,6 @@
 // .textCenter {
 //   text-align: center;
 // }
-
-/* Price shimmer: same spacing as badge_section + productPrice (8px from name, 4px between badge and price) */
-.priceShimmer {
-  margin-top: 4px;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-
-  .priceShimmerBadge {
-    height: 26px;
-    width: 100px;
-    max-width: 50%;
-    margin-bottom: 4px;
-    border-radius: 4px;
-    padding: 4px 8px;
-    box-sizing: border-box;
-    background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
-    background-size: 200% 100%;
-    animation: priceShimmerAnim 1.5s ease-in-out infinite;
-  }
-
-  .priceShimmerLine {
-    height: 20px;
-    width: 40%;
-    min-width: 80px;
-    border-radius: 4px;
-    background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
-    background-size: 200% 100%;
-    animation: priceShimmerAnim 1.5s ease-in-out infinite;
-  }
-}
-
-@keyframes priceShimmerAnim {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
-}
 
 .mobileScrollContainer {
   display: flex;
