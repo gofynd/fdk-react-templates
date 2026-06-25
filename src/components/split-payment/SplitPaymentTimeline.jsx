@@ -13,7 +13,7 @@ const formatMethod = (method) => {
   return method.display_name || method.name || method.mode || method.mop || "";
 };
 
-function SplitPaymentTimeline({ payments, currencySymbol = "₹" }) {
+function SplitPaymentTimeline({ payments, currencySymbol = "" }) {
   if (!payments?.length) return null;
 
   return (
@@ -34,7 +34,7 @@ function SplitPaymentTimeline({ payments, currencySymbol = "₹" }) {
               </span>
             )}
             {payment.status === "ongoing" && (
-              <span className={styles.statusBadge}>Ongoing</span>
+              <span className={styles.statusBadge}>Current</span>
             )}
           </div>
           {payment.amount > 0 && (

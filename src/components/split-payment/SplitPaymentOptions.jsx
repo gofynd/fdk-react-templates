@@ -152,6 +152,7 @@ function SplitPaymentOptions({
   const [paymentErrHeading, setPaymentErrHeading] = useState("");
   const [paymentErrMsg, setPaymentErrMsg] = useState("");
   const timerRef = useRef(null);
+  const paymentInFlightRef = useRef(false);
 
   // Ref so proceedToPay always reads the latest tab without going stale.
   const selectedTabRef = useRef("");
@@ -241,6 +242,9 @@ function SplitPaymentOptions({
   // ─── The single override: intercept every Pay click ───────────────────────
   const proceedToPay = useCallback(
     async (mop, paymentPayload = {}) => {
+      if (paymentInFlightRef.current || isLoading) return STABLE_CHECKOUT_RESULT;
+
+      paymentInFlightRef.current = true;
       const tab = selectedTabRef.current;
       const effectiveMop = mop === "newCARD" ? "CARD" : (mop ?? tab);
       const opt =
@@ -258,10 +262,11 @@ function SplitPaymentOptions({
         });
         return toCheckoutCartResponse(response);
       } finally {
+        paymentInFlightRef.current = false;
         setIsPaymentLoading(false);
       }
     },
-    [options, onPay]
+    [isLoading, options, onPay]
   );
 
   const payment = useMemo(

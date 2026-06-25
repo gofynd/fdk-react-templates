@@ -37,9 +37,6 @@ function SplitPaymentProgressCard({
 
         <div className={styles.orderRow}>
           <span>Order ID : {orderId}</span>
-          <button type="button" className={styles.viewDetailsButton}>
-            VIEW DETAILS
-          </button>
         </div>
       </div>
 

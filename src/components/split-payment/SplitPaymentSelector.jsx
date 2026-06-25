@@ -14,6 +14,7 @@ function SplitPaymentSelector({
   showAmount = false,
   paymentIndex = 1,
   helperText,
+  currencySymbol = "",
 }) {
   const ordinalMap = ["first", "second", "third", "fourth", "fifth"];
   const ordinal = ordinalMap[paymentIndex - 1] || `${paymentIndex}th`;
@@ -43,7 +44,7 @@ function SplitPaymentSelector({
         <div className={styles.amountBlock}>
           <span className={styles.amountLabel}>Enter Amount</span>
           <div className={styles.amountInputRow}>
-            <span className={styles.currency}>&#8377;</span>
+            <span className={styles.currency}>{currencySymbol}</span>
             <input
               type="number"
               className={styles.amountInput}
