@@ -8,6 +8,7 @@ import Loader from "../../../components/loader/loader";
 import { useGlobalTranslation } from "fdk-core/utils";
 import EmptyState from "../components/empty-state/empty-state";
 import AddAddressIcon from "../../../assets/images/add-address.svg";
+import EmailEmptyIcon from "../../../assets/images/email.svg";
 
 function Email({
   sendVerificationLinkToEmail,
@@ -16,6 +17,7 @@ function Email({
   deleteEmail,
   updateEmail,
   emails,
+  emptyStateIcon = <EmailEmptyIcon />,
 }) {
   const { t } = useGlobalTranslation("translation");
   const [showAddModal, setShowAddModal] = useState(false);
@@ -208,6 +210,7 @@ function Email({
         )}
         {!emails?.length && (
           <EmptyState
+            emptyStateIcon={emptyStateIcon}
             title={t("resource.profile.no_email_address_added")}
             onBtnClick={() => handleShowAddModal(true)}
             btnTitle={t("resource.profile.add_email_address")}

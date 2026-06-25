@@ -83,6 +83,18 @@
 }
 
 .modalHeader {
+  [class*="crossIcon"] {
+    color: @TextBody;
+
+    svg {
+      fill: currentColor;
+    }
+
+    svg path {
+      fill: currentColor;
+    }
+  }
+
   @media @mobile {
     line-height: 140%;
   }
@@ -130,7 +142,7 @@
           border: 1px solid @DividerStokes;
           border-radius: 4px;
           background: @DialogBackground;
-          color: @TextBody;
+          color: @TextHeading;
           font-size: 12px;
           font-weight: 400;
           padding: 16px;
@@ -420,6 +432,15 @@
     align-items: center;
     justify-content: center;
     z-index: 3;
+    color: @TextBody;
+
+    svg {
+      fill: currentColor;
+    }
+
+    svg path {
+      fill: currentColor;
+    }
   }
 
   .couponSuccessGif {

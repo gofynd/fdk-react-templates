@@ -1,7 +1,7 @@
 @import "../../../../styles/main.less";
 
 .cartItemsListContainer {
-  padding: 16px;
+  padding: 24px;
   border: 1px solid @DividerStokes;
   border-top: 0 solid @DividerStokes;
 
@@ -36,7 +36,7 @@
 
       a {
         img {
-          width: 85%;
+          width: 100%;
           border-radius: 4px;
         }
       }
@@ -216,6 +216,10 @@
     .shippingLogo {
       color: @TextBody;
       display: flex;
+
+      svg path {
+        fill: @TextBody;
+      }
     }
 
     .deliveryDate {
@@ -379,12 +383,14 @@
             margin-bottom: 8px;
             font-size: 16px;
             font-weight: 600;
+            color: @TextHeading;
           }
 
           .sizeModalName {
             margin-inline-end: 20px;
             font-size: 16px;
             font-weight: 400;
+            color: @TextBody;
           }
         }
 
@@ -392,6 +398,7 @@
           margin-top: 8px;
           font-size: 14px;
           font-weight: 600;
+          color: @TextHeading;
         }
       }
     }
