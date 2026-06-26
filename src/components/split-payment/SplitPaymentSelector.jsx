@@ -49,18 +49,26 @@ function SplitPaymentSelector({
               min={minAmount || 1}
               max={maxAmount || undefined}
               disabled={disabled && !onAmountChange}
-              onChange={(event) =>
-                onAmountChange?.(Number(event.target.value))
-              }
+              onChange={(event) => onAmountChange?.(Number(event.target.value))}
             />
           </div>
         </div>
       )}
-      {showAmount && isSelected && !amountEditable && !isLoading && amount > 0 && (
-        <div className={styles.amountDisplay}>
-          <span className={styles.amountDisplayValue}>Advance payable amount {currencySymbol}{amount}</span>
-        </div>
-      )}
+      {showAmount &&
+        isSelected &&
+        !amountEditable &&
+        !isLoading &&
+        amount > 0 && (
+          <div className={styles.amountDisplay}>
+            <span className={styles.amountDisplayValue}>
+              Advance payable amount{" "}
+              <strong className={styles.amountDisplayStrong}>
+                {currencySymbol}
+                {amount}{" "}
+              </strong>
+            </span>
+          </div>
+        )}
       {codCharges > 0 && (
         <div className={styles.codInfo}>
           <span className={styles.codInfoIcon}>
@@ -68,8 +76,7 @@ function SplitPaymentSelector({
           </span>
           <span className={styles.codInfoText}>
             Your second order will be placed via{" "}
-            <strong>Cash on Delivery</strong>
-            {" "}with an extra charge of{" "}
+            <strong>Cash on Delivery</strong> with an extra charge of{" "}
             <strong>
               {currencySymbol}
               {codCharges}

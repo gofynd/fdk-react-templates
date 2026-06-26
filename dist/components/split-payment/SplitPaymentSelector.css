@@ -458,8 +458,11 @@ h5,
 .SplitPaymentSelector__amountDisplayValue___jBrwg {
   font-size: 16px;
   font-weight: 600;
-  color: var(--textBody, #3c3131);
+  color: var(--textLabel, #7d7676);
   line-height: 1.3;
+}
+.SplitPaymentSelector__amountDisplayStrong___luPVs {
+  color: var(--textBody, #3c3131);
 }
 .SplitPaymentSelector__codInfo___FA1c3 {
   display: flex;
