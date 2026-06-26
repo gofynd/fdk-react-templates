@@ -388,7 +388,7 @@ h5,
   white-space: nowrap;
 }
 .SplitPaymentSelector__amountBlock___hXizI {
-  max-width: 420px;
+  max-width: 200px;
   margin: 8px 0 0 32px;
 }
 .SplitPaymentSelector__amountLabel___AYTrc {
@@ -404,6 +404,9 @@ h5,
   border: 1px solid var(--dividerStokes, #d4d1d1);
   border-radius: 4px;
   padding: 10px 12px;
+}
+.SplitPaymentSelector__amountInputRow___ZqiWS input {
+  padding: 0px;
 }
 .SplitPaymentSelector__currency___GKfhg {
   color: var(--textBody, #3c3131);
@@ -456,6 +459,7 @@ h5,
   color: var(--textLabel, #7d7676);
   flex-shrink: 0;
   line-height: 1.5;
+  display: flex;
 }
 .SplitPaymentSelector__codInfoText___LC19v {
   font-size: 13px;

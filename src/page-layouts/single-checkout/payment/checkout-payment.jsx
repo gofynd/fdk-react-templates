@@ -155,13 +155,7 @@ function CheckoutPayment({
                 ></CheckoutPaymentFailure>
               </div>
             )}
-            {paymentContentOverride ? (
-              <>
-                {beforePaymentContent}
-                {paymentContentOverride}
-              </>
-            ) : (
-              <CheckoutPaymentContent
+            <CheckoutPaymentContent
                 payment={payment}
                 loader={loader}
                 handleShowFailedMessage={handleShowFailedMessage}
@@ -177,8 +171,8 @@ function CheckoutPayment({
                 neftFileUpload={neftFileUpload}
                 rtgsFileUpload={rtgsFileUpload}
                 beforePaymentContent={beforePaymentContent}
+                paymentContentOverride={paymentContentOverride}
               ></CheckoutPaymentContent>
-            )}
           </>
         ) : (
           <div className={styles.reviewHeaderUnselect}>

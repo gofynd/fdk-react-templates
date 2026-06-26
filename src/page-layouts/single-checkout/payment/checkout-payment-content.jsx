@@ -41,6 +41,7 @@ function CheckoutPaymentContent({
   neftFileUpload = { state: {}, upload: () => {}, reset: () => {} },
   rtgsFileUpload = { state: {}, upload: () => {}, reset: () => {} },
   beforePaymentContent = null,
+  paymentContentOverride = null,
 }) {
   const checkoutPayment = useCheckoutPayment({
     payment,
@@ -848,6 +849,8 @@ function CheckoutPaymentContent({
 
               {creditUpdating ? (
                 <CheckoutPaymentSkeleton />
+              ) : paymentContentOverride ? (
+                paymentContentOverride
               ) : (
                 <div
                   className={`${styles.paymentOptions} ${!getTotalValue() ? styles.displayNone : ""}`}

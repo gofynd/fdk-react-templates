@@ -332,7 +332,13 @@ function SplitPaymentOptions({
   // Don't mount CheckoutPaymentContent until we have real options and a
   // non-zero amount. Mounting with empty options causes useCheckoutPayment's
   // init effect to see getTotalValue()===0 → setSelectedTab("COD") → blank UI.
-  const isReady = (options?.length ?? 0) > 0 && (amount ?? 0) > 0;
+  // Once ready, keep mounted — clearing the amount input must not revert to
+  // the skeleton (it would show a permanent loading state with no re-fetch).
+  const wasReadyRef = useRef(false);
+  if ((options?.length ?? 0) > 0 && (amount ?? 0) > 0) {
+    wasReadyRef.current = true;
+  }
+  const isReady = wasReadyRef.current;
 
   return (
     <div className={styles.splitPaymentOptionsWrapper}>
