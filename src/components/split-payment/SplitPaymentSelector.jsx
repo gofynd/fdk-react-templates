@@ -57,9 +57,9 @@ function SplitPaymentSelector({
         </div>
       )}
       {showAmount && isSelected && !amountEditable && !isLoading && amount > 0 && (
-        <span className={styles.amountText}>
-          {currencySymbol}{amount}
-        </span>
+        <div className={styles.amountDisplay}>
+          <span className={styles.amountDisplayValue}>Advance payable amount {currencySymbol}{amount}</span>
+        </div>
       )}
       {codCharges > 0 && (
         <div className={styles.codInfo}>
