@@ -7,23 +7,17 @@ const EmptyState = ({
   btnTitle = "",
   onBtnClick = "",
   icon = <></>,
-  emptyStateIcon = null,
   style = {},
   description,
 }) => {
   return (
     <div className={styles.emptyContainer} style={style}>
-      {emptyStateIcon && (
-        <div className={styles.emptyStateIconWrapper}>{emptyStateIcon}</div>
+      <div className={styles.emptyText}>{title}</div>
+      {description && (
+        <div className={`${styles.description} `}>
+          <p>{description}</p>
+        </div>
       )}
-      <div className={styles.emptyContent}>
-        <div className={styles.emptyText}>{title}</div>
-        {description && (
-          <div className={`${styles.description} `}>
-            <p>{description}</p>
-          </div>
-        )}
-      </div>
       <div className={styles.submitBtnContainer}>
         <FyButton
           className={styles.btn}
