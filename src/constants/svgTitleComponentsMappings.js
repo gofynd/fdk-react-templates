@@ -140,6 +140,7 @@ import infoWhite from "../assets/images/info-white.svg";
 import lockIcon from "../assets/images/lock-icon.svg";
 import neft from "../assets/images/neft.svg";
 import rtgs from "../assets/images/rtgs.svg";
+import splitPayment from "../assets/images/split-payment.svg";
 
 export const svgTitleComponentsMappings = {
   "accordion-arrow": AccordionArrow,
@@ -284,4 +285,5 @@ export const svgTitleComponentsMappings = {
   "local-offer": localOffer,
   "info-white": infoWhite,
   "lock-icon": lockIcon,
+  "split-payment": splitPayment,
 };

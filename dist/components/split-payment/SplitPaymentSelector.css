@@ -380,12 +380,19 @@ h5,
   animation: SplitPaymentSelector__splitSpin___bk5z_ 0.7s linear infinite;
 }
 .SplitPaymentSelector__badge___SjupM {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   font-size: 12px;
   color: var(--textLabel, #7d7676);
   background: var(--themeAccentL4, #f9f6f0);
   border-radius: 12px;
   padding: 6px 12px;
   white-space: nowrap;
+}
+.SplitPaymentSelector__badgeIcon___UiIst {
+  display: inline-flex;
+  align-items: center;
 }
 .SplitPaymentSelector__amountBlock___hXizI {
   max-width: 200px;

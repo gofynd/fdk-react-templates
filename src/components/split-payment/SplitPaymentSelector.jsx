@@ -39,7 +39,8 @@ function SplitPaymentSelector({
         </label>
         {splitsCount > 0 && (
           <span className={styles.badge}>
-            &#8661; {splitsCount} splits available
+            <SvgWrapper svgSrc="split-payment" className={styles.badgeIcon} />
+            {splitsCount} splits available
           </span>
         )}
       </div>
