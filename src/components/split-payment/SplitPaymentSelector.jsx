@@ -16,12 +16,10 @@ function SplitPaymentSelector({
   paymentIndex = 1,
   helperText,
   currencySymbol = "",
-  splitPaymentLabel = "Split Payment",
+  splitPaymentLabel = "Advance Payment",
   amountEditable = true,
   codCharges = 0,
 }) {
-  const ordinalMap = ["first", "second", "third", "fourth", "fifth"];
-  const ordinal = ordinalMap[paymentIndex - 1] || `${paymentIndex}th`;
 
   return (
     <div className={styles.wrapper}>
@@ -37,17 +35,11 @@ function SplitPaymentSelector({
           <span className={styles.text}>{splitPaymentLabel}</span>
           {isLoading && <span className={styles.spinner} />}
         </label>
-        {splitsCount > 0 && (
-          <span className={styles.badge}>
-            <SvgWrapper svgSrc="split-payment" className={styles.badgeIcon} />
-            {splitsCount} splits available
-          </span>
-        )}
       </div>
 
       {showAmount && isSelected && amountEditable && (
         <div className={styles.amountBlock}>
-          <span className={styles.amountLabel}>Enter Amount</span>
+          <span className={styles.amountLabel}>Advance Amount</span>
           <div className={styles.amountInputRow}>
             <span className={styles.currency}>{currencySymbol}</span>
             <input
@@ -62,10 +54,6 @@ function SplitPaymentSelector({
               }
             />
           </div>
-          <span className={styles.helper}>
-            {helperText ||
-              `Specify amount that you want to process for the ${ordinal} payment`}
-          </span>
         </div>
       )}
       {showAmount && isSelected && !amountEditable && !isLoading && amount > 0 && (

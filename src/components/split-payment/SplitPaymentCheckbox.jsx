@@ -15,9 +15,6 @@ function SplitPaymentCheckbox({ isSelected, onToggle, isLoading, splitsCount }) 
         <span className={styles.text}>Split Payment</span>
         {isLoading && <span className={styles.spinner} />}
       </label>
-      {splitsCount > 0 && (
-        <span className={styles.badge}>&#8661; {splitsCount} splits available</span>
-      )}
     </div>
   );
 }
