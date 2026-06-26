@@ -117,6 +117,16 @@
     border: unset;
     padding-top: 0;
   }
+  &.split {
+    @media @tablet-range {
+      border: 0px;
+      padding: 0px !important;
+    }
+    @media @desktop {
+      border: 0px;
+      padding: 0px;
+    }
+  }
   @media @tablet-range {
     padding: 16px !important;
   }

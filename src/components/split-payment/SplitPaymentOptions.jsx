@@ -142,6 +142,7 @@ function SplitPaymentOptions({
   checkAndUpdatePaymentStatus = STABLE_CHECK_STATUS_NOOP,
   cancelPayment = STABLE_ASYNC_NOOP,
   getPaymentSuccessRedirectUrl,
+  isSplitPayment = false,
 }) {
   const [selectedTab, setSelectedTab] = useState("");
   const [showUpiRedirectionModal, setShowUpiRedirectionModal] = useState(false);
@@ -367,6 +368,7 @@ function SplitPaymentOptions({
           inValidCouponData={null}
           neftFileUpload={neftFileUpload}
           rtgsFileUpload={rtgsFileUpload}
+          isSplitPayment={isSplitPayment}
         />
       ) : (
         <div className={styles.skeletonWrapper}>

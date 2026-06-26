@@ -42,6 +42,7 @@ function CheckoutPaymentContent({
   rtgsFileUpload = { state: {}, upload: () => {}, reset: () => {} },
   beforePaymentContent = null,
   paymentContentOverride = null,
+  isSplitPayment = false,
 }) {
   const checkoutPayment = useCheckoutPayment({
     payment,
@@ -824,7 +825,7 @@ function CheckoutPaymentContent({
         </div>
       ) : (
         <div
-          className={`${styles.container} ${enableLinkPaymentOption ? styles.unsetBorder : ""}`}
+          className={`${styles.container} ${enableLinkPaymentOption ? styles.unsetBorder : ""} ${isSplitPayment ? styles.split : ""}`}
         >
           {true ? (
             <>
