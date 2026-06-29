@@ -819,6 +819,8 @@ function CheckoutPaymentContent({
           </Modal>
         )}
 
+      {beforePaymentContent}
+
       {isLoading ? (
         <div className={styles.container}>
           <CheckoutPaymentSkeleton />
@@ -846,8 +848,6 @@ function CheckoutPaymentContent({
                   />
                 </div>
               )}
-
-              {beforePaymentContent}
 
               {creditUpdating ? (
                 <CheckoutPaymentSkeleton />

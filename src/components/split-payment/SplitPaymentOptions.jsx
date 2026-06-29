@@ -19,7 +19,6 @@ const STABLE_CARD_DETAILS_NOOP = async () => ({
 const STABLE_CHECK_STATUS_NOOP = async () => ({
   data: { checkAndUpdatePaymentStatus: { status: "pending" } },
 });
-const STABLE_EMPTY_LIST = () => [];
 // status=INACTIVE hides the CreditNote block inside CheckoutPaymentContent.
 const STABLE_PARTIAL_PAYMENT_OPTION = {
   list: [{ balance: { account: { status: "INACTIVE" } } }],
@@ -162,17 +161,27 @@ function SplitPaymentOptions({
     selectedTabRef.current = selectedTab;
   }, [selectedTab]);
 
-  // Auto-select first option when options load.
+  // Auto-select the first main tab when options load. Standard-flow options
+  // (e.g. Razorpay Express, CHECKOUT) live under "More Payment Options" and must
+  // not be the auto-selected tab, so pick the first custom-flow (non-COD) option
+  // — matching the normal checkout flow. Fall back to the first option.
   useEffect(() => {
     if (!options?.length) return;
 
-    const selectedTabExists = options.some(
-      (option) => option?.name === selectedTab
-    );
+    // "Other" is the synthetic "More Payment Options" bucket — it is a valid
+    // selection even though no option is literally named "Other", so never
+    // reset it back to a tab.
+    const selectedTabExists =
+      selectedTab === "Other" ||
+      options.some((option) => option?.name === selectedTab);
 
-    if (!selectedTab || !selectedTabExists) {
-      setSelectedTab(options[0].name);
-    }
+    if (selectedTab && selectedTabExists) return;
+
+    const firstMainOption =
+      options.find(
+        (option) => option?.flow === "custom" && option?.name !== "COD"
+      ) ?? options[0];
+    setSelectedTab(firstMainOption.name);
   }, [options, selectedTab]);
 
   useEffect(
@@ -214,12 +223,47 @@ function SplitPaymentOptions({
   );
 
   // Transformed nav items: add svg / subMopIcons so tab icons render correctly.
-  // Split payment must render every returned non-split method, including
-  // standard extension methods like NEFT and RTGS.
-  const PaymentOptionsList = useCallback(
-    () => (options ?? []).map(toNavOption),
-    [options]
-  );
+  // Mirror usePayment.PaymentOptionsList: only custom-flow methods become
+  // top-level tabs, with NEFT/RTGS/CREDIT appended (CheckoutPaymentContent
+  // extracts those by name into their own nav blocks). Standard-flow aggregator
+  // methods are handed to otherOptions() → "More Payment Options".
+  const PaymentOptionsList = useCallback(() => {
+    const list = options ?? [];
+
+    const mainOptions = list
+      .filter((opt) => opt?.flow === "custom")
+      .filter((opt) => !opt?.list?.[0]?.partial_payment_allowed)
+      .map(toNavOption);
+
+    ["NEFT", "RTGS", "CREDIT"].forEach((name) => {
+      const offlineOption = list.find((opt) => opt?.name === name);
+      if (offlineOption) mainOptions.push(toNavOption(offlineOption));
+    });
+
+    return mainOptions;
+  }, [options]);
+
+  // Mirror usePayment.otherOptions: standard-flow methods that are not one of
+  // the named custom/offline modes → rendered inside "More Payment Options".
+  const otherOptions = useCallback(() => {
+    const list = options ?? [];
+    return list
+      .filter(
+        (opt) =>
+          opt?.name !== "CARD" &&
+          opt?.name !== "WL" &&
+          opt?.name !== "UPI" &&
+          opt?.name !== "NB" &&
+          opt?.name !== "CARDLESS_EMI" &&
+          opt?.name !== "PL" &&
+          opt?.name !== "COD" &&
+          opt?.name !== "NEFT" &&
+          opt?.name !== "RTGS" &&
+          opt?.name !== "CREDIT"
+      )
+      .filter((opt) => !opt?.list?.[0]?.partial_payment_allowed)
+      .filter((opt) => opt?.flow === "standard");
+  }, [options]);
 
   // selectedTabData must come from raw options so sub-components get list[]/
   // stored_payment_details for card/wallet/NB selection.
@@ -288,9 +332,10 @@ function SplitPaymentOptions({
       checkAndUpdatePaymentStatus,
       cancelPayment,
       getPaymentSuccessRedirectUrl,
-      // otherOptions must be empty — returning options here would show
-      // every method in both the nav AND the "More Payment Options" panel.
-      otherOptions: STABLE_EMPTY_LIST,
+      // Standard-flow aggregator methods (e.g. Razorpay Express, CHECKOUT) are
+      // grouped under "More Payment Options", matching the normal checkout flow.
+      // PaymentOptionsList already excludes them, so there is no duplication.
+      otherOptions,
       setUPIError,
       validateCoupon: STABLE_ASYNC_NOOP,
       selectPaymentMode: STABLE_ASYNC_NOOP,
@@ -316,6 +361,7 @@ function SplitPaymentOptions({
       proceedToPay,
       getTotalValue,
       PaymentOptionsList,
+      otherOptions,
       paymentOption,
       getUPIIntentApps,
       cardDetails,
