@@ -339,22 +339,12 @@ h5,
 }
 .google-login-button__google-login-container___gsSus .google-login-button__google-signin-wrapper___ewjLC {
   width: 100%;
-  border-radius: var(--buttonRadius, 0px);
-  overflow: hidden;
-}
-.google-login-button__google-login-container___gsSus .g_id_signin,
-.google-login-button__google-login-container___gsSus .g_id_signin > div,
-.google-login-button__google-login-container___gsSus .g_id_signin iframe {
-  border-radius: var(--buttonRadius, 0px) !important;
-}
-.google-login-button__google-login-container___gsSus .g_id_signin {
-  overflow: hidden;
 }
 .google-login-button__google-login-container___gsSus .g_id_signin > div[role="button"] {
   height: 48px !important;
   padding: 12px !important;
   background: transparent !important;
-  border-radius: var(--buttonRadius, 0px) !important;
+  border-radius: 4px !important;
   border: 1px solid var(--dividerStokes) !important;
   font-size: 14px !important;
   font-style: normal !important;
