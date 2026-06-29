@@ -18,7 +18,7 @@ function SplitPaymentSelector({
   currencySymbol = "",
   splitPaymentLabel = "Advance Payment",
   amountEditable = true,
-  amountDisabled = false,
+  isSplitDisabled = false,
   codCharges = 0,
 }) {
 
@@ -30,7 +30,7 @@ function SplitPaymentSelector({
             type="checkbox"
             className={styles.checkbox}
             checked={isSelected}
-            disabled={disabled || isLoading}
+            disabled={isSplitDisabled || disabled || isLoading}
             onChange={(event) => onToggle?.(event.target.checked)}
           />
           <span className={styles.text}>{splitPaymentLabel}</span>
@@ -49,7 +49,7 @@ function SplitPaymentSelector({
               value={amount || ""}
               min={minAmount || 1}
               max={maxAmount || undefined}
-              disabled={amountDisabled || (disabled && !onAmountChange)}
+              disabled={disabled && !onAmountChange}
               onChange={(event) => onAmountChange?.(Number(event.target.value))}
             />
           </div>
