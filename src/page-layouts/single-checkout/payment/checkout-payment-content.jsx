@@ -819,8 +819,6 @@ function CheckoutPaymentContent({
           </Modal>
         )}
 
-      {beforePaymentContent}
-
       {isLoading ? (
         <div className={styles.container}>
           <CheckoutPaymentSkeleton />
@@ -829,6 +827,7 @@ function CheckoutPaymentContent({
         <div
           className={`${styles.container} ${enableLinkPaymentOption ? styles.unsetBorder : ""} ${isSplitPayment ? styles.split : ""}`}
         >
+          {beforePaymentContent}
           {true ? (
             <>
               {!paymentContentOverride &&
