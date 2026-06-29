@@ -18,6 +18,7 @@ function SplitPaymentSelector({
   currencySymbol = "",
   splitPaymentLabel = "Advance Payment",
   amountEditable = true,
+  amountDisabled = false,
   codCharges = 0,
 }) {
 
@@ -48,7 +49,7 @@ function SplitPaymentSelector({
               value={amount || ""}
               min={minAmount || 1}
               max={maxAmount || undefined}
-              disabled={disabled && !onAmountChange}
+              disabled={amountDisabled || (disabled && !onAmountChange)}
               onChange={(event) => onAmountChange?.(Number(event.target.value))}
             />
           </div>
