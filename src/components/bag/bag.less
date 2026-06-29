@@ -2,10 +2,15 @@
 
 .bagImg {
   min-width: 80px;
-  border-radius: @ButtonRadius;
+  border-radius: @ItemImageRadius;
   overflow: hidden;
- 
+
+  picture,
+  img {
+    border-radius: inherit;
+  }
 }
+
 .bundleImg {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -24,6 +29,13 @@
 
     .itemImg {
       display: flex;
+      border-radius: inherit;
+      overflow: hidden;
+
+      picture,
+      img {
+        border-radius: inherit;
+      }
     }
 
     .bundleCount {

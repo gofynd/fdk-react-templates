@@ -86,7 +86,10 @@ function NetBankingPay({
               customClassName={styles.visibleOnTab}
               value={priceFormatCurrencySymbol(
                 getCurrencySymbol,
-                getTotalValue()
+                getTotalValue(),
+                "en-IN",
+                null,
+                true
               )}
               onPriceDetailsClick={onPriceDetailsClick}
               disabled={mopSelectionLoading || !selectedNB?.code}
@@ -116,7 +119,10 @@ function NetBankingPay({
                     {t("resource.common.pay_caps")}{" "}
                     {priceFormatCurrencySymbol(
                       getCurrencySymbol,
-                      getTotalValue()
+                      getTotalValue(),
+                      "en-IN",
+                      null,
+                      true
                     )}
                   </>
                 ) : (

@@ -57,7 +57,6 @@ export function useCheckoutPayment({
     enableLinkPaymentOption,
     setIsPaymentLoading,
     setShowUpiRedirectionModal,
-    getPaymentSuccessRedirectUrl,
   } = payment;
 
   // env / derived
@@ -676,21 +675,6 @@ export function useCheckoutPayment({
       );
       setSelectedTab(tabIn);
       setIsCodModalOpen(true);
-    } else if (tabIn === "NEFT") {
-      selectPaymentMode(paymentModePayload).then(() =>
-        console.log("Payment mode selected")
-      );
-      setSelectedTab(tabIn);
-    } else if (tabIn === "RTGS") {
-      selectPaymentMode(paymentModePayload).then(() =>
-        console.log("Payment mode selected")
-      );
-      setSelectedTab(tabIn);
-    } else if (tabIn === "CREDIT") {
-      selectPaymentMode(paymentModePayload).then(() => {
-        console.log("Payment mode selected");
-      });
-      setSelectedTab(tabIn);
     } else if (tabIn === "CARD") {
       if (subMopIn !== "newCARD") setSelectedCard(subMopData);
     } else if (tabIn === "CARDLESS_EMI") {
@@ -841,17 +825,9 @@ export function useCheckoutPayment({
         const params = new URLSearchParams();
         for (const key in qrParams) params.append(key, qrParams[key]);
 
-        const defaultUrl = `${window.location.origin}${
+        const finalUrl = `${window.location.origin}${
           locale && locale !== "en" ? `/${locale}` : ""
         }/cart/order-status/?${params.toString()}`;
-        const finalUrl =
-          getPaymentSuccessRedirectUrl?.({
-            defaultUrl,
-            locale,
-            params,
-            qrPayload,
-            qrParams,
-          }) || defaultUrl;
 
         window.location.href = finalUrl;
       } else if (status === "failed") {
@@ -1132,27 +1108,18 @@ export function useCheckoutPayment({
     if (getTotalValue?.() === 0) {
       setSelectedTab("COD");
     } else if (!enableLinkPaymentOption) {
-      const selectedTabExists =
-        selectedTab &&
-        (paymentOptions?.some((opt) => opt.name === selectedTab) ||
-          (selectedTab === "Other" && otherPaymentOptions?.length > 0) ||
-          otherPaymentOptions?.some((opt) => opt.name === selectedTab) ||
-          codOption?.name === selectedTab);
-
       if (paymentOptions?.length > 0) {
-        if (!selectedTabExists) {
-          setSelectedTab(paymentOptions[0].name);
-          setActiveMop(paymentOptions[0].name);
-        }
-      } else if (otherPaymentOptions?.length > 0 && !selectedTabExists) {
+        setSelectedTab(paymentOptions[0].name);
+        setActiveMop(paymentOptions[0].name);
+      } else if (otherPaymentOptions?.length > 0) {
         setSelectedTab("Other");
         setActiveMop("Other");
-      } else if (codOption?.name && !selectedTabExists) {
+      } else if (codOption?.name) {
         selectMop(codOption?.name, codOption?.name, codOption?.name);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paymentOption, selectedTab]);
+  }, [paymentOption]);
 
   const handleScrollToTop = (index) => {
     const element = document.getElementById(`nav-title-${index}`);

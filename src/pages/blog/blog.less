@@ -187,6 +187,9 @@
         }
       }
     }
+    &__publishDate {
+      color: @TextBody;
+    }
     &__title {
       &.titleMobile {
         @media @desktop {
@@ -273,6 +276,7 @@
     margin-bottom: 5px;
     display: flex;
     justify-content: space-between;
+    color: @TextBody;
     .resetBtn {
       color: @ButtonLink;
       padding-bottom: 0.2rem;
@@ -319,6 +323,9 @@
     height: 50px;
     padding: 8px 16px;
     box-shadow: 0 4px 9px 4px rgba(179, 179, 180, 0.15);
+    &::placeholder {
+      color: @TextLabel;
+    }
     @media @tablet {
       width: 100%;
       margin-top: 0;

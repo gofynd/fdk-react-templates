@@ -128,9 +128,22 @@
       align-items: center;
       gap: 16px;
       align-self: stretch;
-      svg g > path {
-        fill: @TextHeading;
+
+      svg {
+        color: @TextBody;
+
+        path,
+        g > path,
+        circle,
+        rect {
+          fill: @TextBody;
+        }
+
+        [stroke] {
+          stroke: @TextBody;
+        }
       }
+
       span {
         display: inline-block;
         word-break: break-word;
@@ -153,7 +166,7 @@
       //background-color: @ThemeAccentL5;
 
       input::placeholder {
-        color: @TextSecondary;
+        color: @TextLabel;
         opacity: 1;
       }
     }
@@ -161,11 +174,11 @@
       height: 118px;
     }
     .inputPlaceholder::placeholder {
-      color: @TextSecondary;
+      color: @TextLabel;
       opacity: 1;
     }
     .inputPlaceholder:focus::placeholder {
-      color: @TextBody;
+      color: @TextLabel;
     }
   }
 }
@@ -195,5 +208,20 @@
 .iconSpacing {
   @media @mobile {
     gap: 12px;
+  }
+
+  svg {
+    color: @TextBody;
+
+    path,
+    g > path,
+    circle,
+    rect {
+      fill: @TextBody;
+    }
+
+    [stroke] {
+      stroke: @TextBody;
+    }
   }
 }

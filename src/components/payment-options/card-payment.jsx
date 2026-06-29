@@ -212,7 +212,10 @@ function CardPayment({
 
   const totalPayValue = priceFormatCurrencySymbol(
     getCurrencySymbol,
-    getTotalValue()
+    getTotalValue(),
+    "en-IN",
+    null,
+    true
   );
 
   return (

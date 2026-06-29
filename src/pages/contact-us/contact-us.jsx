@@ -223,7 +223,7 @@ function ContactSupport({
                 {showAddress &&
                   contactInfo?.address?.address_line?.[0]?.length > 0 && (
                     <div className={`${styles.item} fontBody b1`}>
-                      <div>
+                      <div className={styles.locationIcon}>
                         <SvgWrapper svgSrc="location" />
                       </div>
                       <div>
