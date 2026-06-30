@@ -76,13 +76,11 @@ function SplitPaymentSelector({
             <SvgWrapper svgSrc="infoIcon" />
           </span>
           <span className={styles.codInfoText}>
-            Your second order will be placed via{" "}
-            <strong>Cash on Delivery</strong> with an extra charge of{" "}
             <strong>
-              {currencySymbol}
-              {codCharges}
+              +{currencySymbol}{codCharges}{" "}
             </strong>
-            .
+            will be charged extra for{" "}
+            <strong>Cash on Delivery </strong>option.
           </span>
         </div>
       )}
