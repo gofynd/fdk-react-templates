@@ -4696,15 +4696,6 @@ button {
     height: 100dvh;
   }
 }
-@media only screen and (max-width: 768px) {
-  [data-mobile-footer="true"] .delivery-location__addAddressModalBody___fK3pF {
-    height: calc(100vh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
-    height: calc(100dvh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
-    max-height: calc(100vh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
-    max-height: calc(100dvh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
-    overflow-y: auto;
-  }
-}
 .delivery-location__deliveryAddressModal___bufVh .delivery-location__deliverAddressesModalContainer___a40y1 {
   width: 100%;
   max-height: unset;
@@ -4721,14 +4712,6 @@ button {
   .delivery-location__deliveryAddressModal___bufVh .delivery-location__deliverAddressesModalContainer___a40y1 {
     max-width: 450px;
     max-height: 84.26dvh;
-  }
-}
-@media only screen and (max-width: 768px) {
-  [data-mobile-footer="true"] .delivery-location__deliveryAddressModal___bufVh .delivery-location__deliverAddressesModalContainer___a40y1 {
-    height: calc(100vh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
-    height: calc(100dvh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
-    max-height: calc(100vh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
-    max-height: calc(100dvh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
   }
 }
 .delivery-location__deliveryAddressModal___bufVh .delivery-location__deliveryAddressHeader___jz_o1 {
@@ -4829,14 +4812,6 @@ button {
     max-width: 450px !important;
     max-height: 84.26dvh;
     width: 450px !important;
-  }
-}
-@media only screen and (max-width: 768px) {
-  [data-mobile-footer="true"] .delivery-location__addAddressModalContainer___d5do4 {
-    height: calc(100vh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px)) !important;
-    height: calc(100dvh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px)) !important;
-    max-height: calc(100vh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px)) !important;
-    max-height: calc(100dvh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px)) !important;
   }
 }
 .delivery-location__heading___o8Vrb {
@@ -5628,15 +5603,9 @@ h5,
   box-sizing: border-box;
   width: 100%;
   background-color: transparent;
-  font-weight: 400;
 }
 .address-form__formItemDiv___goDqf .address-form__formInputBox___vnn5S.address-form__otherInput___fTj3R {
   width: 45%;
-}
-@media only screen and (max-width: 480px) {
-  .address-form__formItemDiv___goDqf .address-form__formInputBox___vnn5S {
-    font-weight: 400;
-  }
 }
 .address-form__formItemDiv___goDqf .address-form__formCheckBox___jit3S {
   font-size: 0.8rem;
@@ -6004,9 +5973,6 @@ h5,
 }
 .address-form__addressForm___aVT4x {
   margin-top: 8px;
-}
-.address-form__addressForm___aVT4x input {
-  font-weight: 400 !important;
 }
 .address-form__formBody___iy_8y {
   overflow: auto;
@@ -7754,7 +7720,7 @@ h5,
   position: absolute;
   transform: translateY(-50%) scale(0.9);
   z-index: 1;
-  background: var(--pageBackground, #f8f8f8);
+  background: #ffffff;
   padding: 0 0.3rem;
   margin: 0 0.5rem;
   font-size: 0.8rem;
@@ -7791,7 +7757,7 @@ h5,
 }
 .fy-input__fyInput___S4Mtu:disabled {
   color: var(--textSecondary, #9c9c9c);
-  border-color: var(--dividerStokes, #d4d1d1);
+  border-color: var(--overlaypopupdividerstroke, #e0e0e0);
   font-weight: 400;
 }
 .fy-input__fyInput___S4Mtu:focus {
@@ -7813,7 +7779,7 @@ h5,
   height: 48px;
 }
 .fy-input__outlined___CEaKm.fy-input__inputDisable___M8Zn2 {
-  border: 1px solid var(--dividerStokes, #d4d1d1);
+  border: 1px solid var(--overlaypopupdividerstroke, #e0e0e0);
   cursor: not-allowed;
   pointer-events: auto;
 }
@@ -9802,10 +9768,10 @@ h5,
   flex-direction: row;
   margin-top: 16px;
   padding: 12px;
-  cursor: pointer;
   background: var(--successBackground, #c2dbc9);
   border-radius: 8px;
   gap: 16px;
+  cursor: pointer;
 }
 .coupon__couponBoxContainer___yJTiZ .coupon__couponApplyBox___HJFgo .coupon__removeIcon___NieyV,
 .coupon__couponBoxContainer___yJTiZ .coupon__couponApplyBox___HJFgo .coupon__arrowIcon___yL8Tb {
@@ -10098,7 +10064,6 @@ h5,
   font-weight: 400;
   line-height: 140%;
 }
-/* ===== Coupon Success Modal ===== */
 @media only screen and (max-width: 480px) {
   .coupon__couponSuccessModalContainerCustom___KGtM7 {
     width: 272px;
@@ -10111,10 +10076,10 @@ h5,
 }
 .coupon__couponSuccessModalContainer___xN3X5 {
   overflow: visible !important;
-  width: 300px;
-  min-width: 300px;
-  max-width: 300px;
-  margin: 0 auto;
+  width: 300px ;
+  min-width: 300px ;
+  max-width: 300px ;
+  margin: 0 auto ;
 }
 @media only screen and (max-width: 480px) {
   .coupon__couponSuccessModalContainer___xN3X5 {
@@ -10125,10 +10090,10 @@ h5,
   }
 }
 .coupon__couponSuccessModalContent___TUDzT {
-  padding-top: 40px;
+  position: relative;
+  padding: 16px 16px 12px 16px;
   display: flex;
   align-items: center;
-  overflow: visible !important;
   flex-direction: column;
   justify-content: center;
   background-color: var(--dialogBackground, #fff);
@@ -10136,7 +10101,6 @@ h5,
   border: 1px solid var(--dividerStokes, #d4d1d1);
   border-radius: 8px;
   max-height: 720px;
-  min-height: 275px;
 }
 @media only screen and (max-width: 480px) {
   .coupon__couponSuccessModalContent___TUDzT {
@@ -10153,29 +10117,16 @@ h5,
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 3;
 }
 .coupon__couponSuccessModalContent___TUDzT .coupon__couponSuccessGif___cMoJ1 {
   position: absolute;
   height: 100%;
   width: 100%;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
 }
 .coupon__couponSuccessModalContent___TUDzT .coupon__couponSuccessIcon___ghwlx {
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
-  top: -28px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 2;
-}
-.coupon__couponSuccessModalContent___TUDzT .coupon__couponSuccessIcon___ghwlx > span {
-  position: relative;
-  display: inline-flex;
 }
 .coupon__couponSuccessModalContent___TUDzT .coupon__modalBody___vZ3YF {
   margin-top: 8px;
@@ -10186,7 +10137,6 @@ h5,
   align-items: center;
   text-align: center;
   gap: 4px;
-  z-index: 1;
 }
 .coupon__couponSuccessModalContent___TUDzT .coupon__modalBody___vZ3YF .coupon__couponValueSubheading___T7m43 {
   color: var(--textBody, #3c3131);
@@ -10212,16 +10162,13 @@ h5,
   font-size: 12px;
   font-weight: 600;
   line-height: 140%;
-  font-size: 14px;
+  text-transform: uppercase;
+  padding: 4px;
   color: var(--buttonLink, #b1655b);
   background: var(--dialogBackground, #fff);
+  text-transform: capitalize;
   cursor: pointer;
   border: none;
-  z-index: 1;
-  text-transform: capitalize;
-  position: relative;
-  padding-top: 20px;
-  margin-top: 20px;
 }
 @media only screen and (max-width: 480px), only screen and (max-width: 768px) {
   .coupon__couponModalContainerOuter___FUSIt {
@@ -10332,9 +10279,8 @@ h5,
   width: 100%;
   height: 1px;
   margin: 12px 0;
-  background: none;
+  background-color: var(--dividerStokes, #d4d1d1);
   border: none;
-  border-top: 1px dashed var(--dividerStokes, #d4d1d1);
 }
 .coupon__couponListTitleWrapper___NDeTO .coupon__couponDesc___MoNuL {
   width: 100%;
@@ -10345,18 +10291,6 @@ h5,
   color: var(--textLabel, #7d7676);
   overflow: hidden;
   text-overflow: ellipsis;
-}
-.coupon__couponListTitleWrapper___NDeTO .coupon__couponDesc___MoNuL.coupon__couponDescBold___PmziP {
-  font-weight: 600;
-}
-.coupon__couponListTitleWrapper___NDeTO .coupon__couponDescription___qYxmm {
-  width: 100%;
-  margin: 12px 0px 0px 0px;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 140%;
-  color: var(--textBody, #3c3131);
-  word-break: break-word;
 }
 .coupon__couponListTitleWrapper___NDeTO .coupon__offerList___btbIe {
   display: flex;
@@ -10722,9 +10656,6 @@ h5,
     display: none !important;
   }
 }
-.address-form__addressFormWrapper___M0Ler input {
-  font-weight: 400 !important;
-}
 .address-form__addressFormWrapper___M0Ler .address-form__formContainer___UrnfJ {
   display: flex;
   flex-wrap: wrap;
@@ -10870,15 +10801,9 @@ h5,
   box-sizing: border-box;
   width: 100%;
   background-color: transparent;
-  font-weight: 400;
 }
 .address-form__formItemDiv___ciw5I .address-form__formInputBox___QHRHx.address-form__otherInput___xvlRj {
   width: 45%;
-}
-@media only screen and (max-width: 480px) {
-  .address-form__formItemDiv___ciw5I .address-form__formInputBox___QHRHx {
-    font-weight: 400;
-  }
 }
 .address-form__formItemDiv___ciw5I .address-form__formCheckBox___ifOb0 {
   font-size: 0.8rem;
@@ -12525,9 +12450,6 @@ h5,
 }
 .fy-image__imageWrapper___wKmP2.fy-image__fill___rFWVY .fy-image__fyImg___yIv86 {
   object-fit: cover;
-}
-.fy-image__imageWrapper___wKmP2.fy-image__contain___nRgq8 .fy-image__fyImg___yIv86 {
-  object-fit: contain;
 }
 .fy-image__imageWrapper___wKmP2.fy-image__fixedAspRatio___fyXGS picture {
   aspect-ratio: var(--aspect-ratio-mobile);

@@ -60,7 +60,7 @@ function StickyFooter({
                 </span>
                 <span className={styles.nccTotalPrice}>
                   {currencyFormat(
-                    totalPrice,
+                    numberWithCommas(totalPrice),
                     currencySymbol,
                     formatLocale(locale, countryCode, true)
                   )}
@@ -83,7 +83,7 @@ function StickyFooter({
             className={`${styles.width40} ${styles.secondaryCheckoutBtn}`}
             onClick={onLoginClick}
           >
-            {t("resource.auth.login.login_caps")}
+           CHECKOUT
           </button>
 
           {isAnonymous && (
@@ -94,7 +94,7 @@ function StickyFooter({
               }
               onClick={onCheckoutClick}
             >
-              {t("resource.section.cart.continue_as_guest")}
+              CHECKOUT
             </button>
           )}
         </div>
@@ -106,7 +106,7 @@ function StickyFooter({
           <div className={styles.priceContainerMobile}>
             <div className={styles.totalPrice}>
               {currencyFormat(
-                totalPrice,
+                numberWithCommas(totalPrice),
                 currencySymbol,
                 formatLocale(locale, countryCode, true)
               )}

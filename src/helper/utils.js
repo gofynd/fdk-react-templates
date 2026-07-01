@@ -1,4 +1,4 @@
-import { DEFAULT_CURRENCY_LOCALE, DEFAULT_UTC_LOCALE, IMAGE_OPTIMIZATION_CONFIG } from "./constant";
+import { DEFAULT_CURRENCY_LOCALE, DEFAULT_UTC_LOCALE } from "./constant";
 
 export const debounce = (func, wait) => {
   let timeout;
@@ -8,27 +8,6 @@ export const debounce = (func, wait) => {
       func.apply(this, args);
     }, wait);
   };
-};
-
-export const formatDate = (isoString, dateOnly = false) => {
-  const date = new Date(isoString);
-
-  const day = date.getDate().toString().padStart(2, "0");
-  const month = date.toLocaleString("en-US", { month: "short" });
-  const year = date.getFullYear();
-
-  let hours = date.getHours();
-  const minutes = date.getMinutes().toString().padStart(2, "0");
-  const ampm = hours >= 12 ? "PM" : "AM";
-
-  hours %= 12;
-  hours = hours || 12; // 0 becomes 12
-
-  if (dateOnly) {
-    return `${day} ${month}, ${year}`;
-  }
-
-  return `${day} ${month}, ${year}, ${hours}:${minutes} ${ampm}`;
 };
 
 export const getGlobalConfigValue = (globalConfig, id) =>
@@ -43,18 +22,6 @@ export function replaceQueryPlaceholders(queryFormat, value1, value2) {
 
 export const singleValuesFilters = {
   sortOn: true,
-};
-
-/**
- * Validates custom badge (teaser_tag) for display.
- * Returns false if badge is empty, whitespace-only, single character, or "."
- * @param {string|null|undefined} teaserTag - The custom badge text
- * @returns {boolean} - True if badge should be rendered
- */
-export const isValidCustomBadge = (teaserTag) => {
-  if (teaserTag == null || typeof teaserTag !== "string") return false;
-  const trimmed = teaserTag.trim();
-  return trimmed.length > 1 && trimmed !== ".";
 };
 
 export function roundToDecimals(number, decimalPlaces = 2) {
@@ -99,8 +66,7 @@ export function convertDate(dateString, locale = "en-US") {
   const date = new Date(dateString);
 
   // Use browser's local timezone with fallback to UTC
-  const browserTimezone =
-    Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+  const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
 
   const options = {
     month: "long",
@@ -118,7 +84,7 @@ export function convertDate(dateString, locale = "en-US") {
 }
 
 export function validateName(name) {
-  const regexp = /^\p{L}+(?:[' -]\p{L}+)*$/u;
+  const regexp = /^[a-zA-Z0-9-_'. ]+$/;
   return regexp.test(String(name).toLowerCase().trim());
 }
 
@@ -165,8 +131,7 @@ export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
       return "Invalid date";
     }
 
-    const browserTimezone =
-      Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+    const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
     // console.log("🌐 Detected browser time zone →", browserTimezone);
 
     const options = {
@@ -186,6 +151,7 @@ export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
     return "Invalid date";
   }
 };
+
 
 export function validateEmailField(value) {
   const emailPattern =
@@ -209,33 +175,22 @@ export function checkIfNumber(value) {
   return numberPattern.test(value);
 }
 
-/**
- * Transform image URL with DPR support for better quality on retina displays
- * @param {string} url - Original image URL
- * @param {string} key - Image size key to replace
- * @param {number} width - Target width in pixels
- * @returns {string} Transformed image URL with DPR parameter
- */
 export const transformImage = (url, key, width) => {
-  // DPR is intentionally fixed at 1 — RESPONSIVE_IMAGE_BREAKPOINTS already bakes
-  // DPR into width values. Auto-detecting window.devicePixelRatio caused SSR/client
-  // URL mismatch (dpr=1 on server, dpr=2 on client) which re-fetched every image on hydration.
-  const dpr = 1;
-
+  const dpr = Math.min(
+    Math.max(
+      Math.round(isRunningOnClient() ? window.devicePixelRatio || 1 : 1),
+      1
+    ),
+    5
+  );
   let updatedUrl = url;
   if (key && width) {
     const str = `/${key}/`;
-    // updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
-    if (url.includes("/b2b-commerce/")) {
-      updatedUrl = url.replace(new RegExp(str), `/t.resize(w:${width})/`);
-    } else {
-      updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
-    }
+    updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
   }
   try {
     const parsedUrl = new URL(updatedUrl);
-    // Use .set() instead of .append() to replace existing dpr parameter and avoid duplicates
-    parsedUrl.searchParams.set("dpr", dpr);
+    parsedUrl.searchParams.append("dpr", 1);
     return parsedUrl.toString();
   } catch (error) {
     return updatedUrl;
@@ -339,30 +294,13 @@ export const getLocaleFromCurrency = (currencyCode) => {
  * @param {string} currencyCode - Currency code (e.g., 'USD', 'AED', 'INR') - used to override locale if provided
  * @returns {string} Formatted currency string
  */
-export const currencyFormat = (
-  value,
-  currencySymbol,
-  locale = "en-IN",
-  currencyCode = null
-) => {
+export const currencyFormat = (value, currencySymbol, locale = "en-IN", currencyCode = null) => {
   if (value == null || value === "") return "";
 
-  // Convert to number if it's a string (strip commas so "1,039.5" parses as 1039.5, not 1)
-  let num =
-    typeof value === "string"
-      ? parseFloat(String(value).replace(/,/g, ""))
-      : value;
+  // Convert to number if it's a string
+  const num = typeof value === "string" ? parseFloat(value) : value;
 
-  // Ensure it's a number, not NaN
-  if (Number.isNaN(num)) {
-    return "";
-  }
-
-  // Convert to number explicitly to handle edge cases
-  num = Number(num);
-  if (Number.isNaN(num)) {
-    return "";
-  }
+  if (Number.isNaN(num)) return "";
 
   // If currency code is provided, use it to determine locale
   let finalLocale = locale;
@@ -370,14 +308,8 @@ export const currencyFormat = (
     finalLocale = getLocaleFromCurrency(currencyCode);
   }
 
-  // Ensure locale is valid, fallback to en-IN if not
-  if (!finalLocale || finalLocale === "en" || finalLocale === "") {
-    finalLocale = "en-IN";
-  }
-
   // Determine if we should use Indian numbering system
-  const isIndianLocale =
-    finalLocale === "en-IN" || finalLocale?.startsWith("en-IN");
+  const isIndianLocale = finalLocale === "en-IN" || finalLocale?.startsWith("en-IN");
 
   try {
     // Use Intl.NumberFormat for locale-aware formatting
@@ -408,7 +340,7 @@ export const currencyFormat = (
     }
 
     return finalResult;
-  } catch (error) {
+  } catch {
     // Fallback to basic formatting if locale is invalid
     console.warn(
       `Invalid locale "${finalLocale}", falling back to default formatting`
@@ -423,6 +355,7 @@ export const currencyFormat = (
     return formattedValue;
   }
 };
+
 
 export const getReviewRatingData = function (customMeta) {
   const data = {};
@@ -528,19 +461,11 @@ export function deepEqual(obj1, obj2) {
  * @param {string} currencyCode - Currency code (e.g., 'USD', 'AED', 'INR') - used to override locale if provided
  * @returns {string} Formatted price string with currency symbol
  */
-export function priceFormatCurrencySymbol(
-  symbol,
-  price = 0,
-  locale = "en-IN",
-  currencyCode = null
-) {
+export function priceFormatCurrencySymbol(symbol, price = 0, locale = "en-IN", currencyCode = null) {
   if (price == null || price === "") return "";
 
-  // Convert to number if it's a string (strip commas so "1,039.5" parses as 1039.5, not 1)
-  let num =
-    typeof price === "string"
-      ? parseFloat(String(price).replace(/,/g, ""))
-      : price;
+  // Convert to number if it's a string
+  let num = typeof price === "string" ? parseFloat(price) : price;
 
   if (Number.isNaN(num)) return "";
 
@@ -554,8 +479,7 @@ export function priceFormatCurrencySymbol(
   }
 
   // Determine if we should use Indian numbering system
-  const isIndianLocale =
-    finalLocale === "en-IN" || finalLocale?.startsWith("en-IN");
+  const isIndianLocale = finalLocale === "en-IN" || finalLocale?.startsWith("en-IN");
 
   try {
     // Use Intl.NumberFormat for locale-aware formatting
@@ -570,16 +494,15 @@ export function priceFormatCurrencySymbol(
       useGrouping: true,
     });
 
-    const sign = num < 0 ? "- " : "";
-    const formattedPrice = formatter.format(Math.abs(num));
+    const formattedPrice = formatter.format(num);
     const hasAlphabeticCurrency = /^[A-Za-z]+$/.test(symbol);
 
     // Handle currency symbol placement
     let finalResult;
     if (hasAlphabeticCurrency) {
-      finalResult = `${sign}${symbol} ${formattedPrice}`;
+      finalResult = `${symbol} ${formattedPrice}`;
     } else {
-      finalResult = `${sign}${symbol}${formattedPrice}`;
+      finalResult = `${symbol}${formattedPrice}`;
     }
 
     return finalResult;
@@ -640,9 +563,7 @@ export const formatLocale = (locale, countryCode, isCurrencyLocale = false) => {
   if (locale === "en" || !locale) {
     return DEFAULT_UTC_LOCALE;
   }
-  const finalLocale = locale.includes("-")
-    ? locale
-    : `${locale}${countryCode ? "-" + countryCode : ""}`;
+  const finalLocale = locale.includes("-") ? locale : `${locale}${countryCode ? "-" + countryCode : ""}`;
 
   return isValidLocale(finalLocale) ? finalLocale : DEFAULT_UTC_LOCALE;
 };
@@ -653,7 +574,10 @@ export const translateValidationMessages = (validationObject, t) => {
   Object.keys(updatedValidation).forEach((key) => {
     const rule = updatedValidation[key];
 
-    if (typeof rule === "object" && rule.message) {
+    if (
+      typeof rule === "object" &&
+      rule.message
+    ) {
       rule.message = translateDynamicLabel(rule.message, t);
     } else if (typeof rule === "string") {
       updatedValidation[key] = translateDynamicLabel(rule, t);
@@ -680,9 +604,8 @@ export const getAddressStr = (item, isAddressTypeAvailable) => {
       parts.unshift(item.address_type);
     }
     let addressStr = parts.join(", ");
-    const postalCode = item.area_code || item.pincode;
-    if (postalCode) {
-      addressStr += ` ${postalCode}`;
+    if (item.area_code) {
+      addressStr += ` ${item.area_code}`;
     }
     if (item.country) {
       // Handle country as object or string
@@ -746,83 +669,6 @@ export function translateDynamicLabel(input, t) {
     console.warn("Error in translateDynamicLabel:", error);
     return typeof input === "string" ? input : "";
   }
-}
-
-/**
- * Checks if an error message is a generic JavaScript error that shouldn't be shown to users.
- * These are typically internal errors that should be handled gracefully.
- * Only meaningful API/validation errors should be displayed to users.
- *
- * @param {string|null|undefined} errorMessage - The error message to check
- * @returns {boolean} - True if the error is a generic JS error, false otherwise
- */
-export function isGenericJSError(errorMessage) {
-  // Early return for null, undefined, or non-string types
-  if (!errorMessage || typeof errorMessage !== "string") {
-    return false;
-  }
-
-  const errorLower = errorMessage.toLowerCase();
-
-  // Check for common generic JavaScript error patterns
-  const genericErrorPatterns = [
-    "cannot read properties",
-    "reading 'find'",
-    "reading 'map'",
-    "reading 'length'",
-    "reading 'slice'",
-    "reading 'filter'",
-    "reading 'reduce'",
-    "reading 'forEach'",
-    "reading 'push'",
-    "reading 'pop'",
-    "is not a function",
-    "is not defined",
-    "cannot read",
-    "typeerror",
-    "referenceerror",
-    "syntaxerror",
-    "rangeerror",
-    "undefined is not",
-    "null is not",
-  ];
-
-  // Check if error message contains any generic error patterns
-  const hasGenericPattern = genericErrorPatterns.some((pattern) =>
-    errorLower.includes(pattern)
-  );
-
-  // Also check for the specific pattern: "undefined" + "reading"
-  const hasUndefinedReadingPattern =
-    errorLower.includes("undefined") && errorLower.includes("reading");
-
-  return hasGenericPattern || hasUndefinedReadingPattern;
-}
-
-/**
- * Validates if an error message is valid and should be displayed to users.
- * Filters out generic JavaScript errors and empty/invalid messages.
- *
- * @param {string|null|undefined} errorMessage - The error message to validate
- * @returns {boolean} - True if the error message is valid and should be displayed, false otherwise
- */
-export function isValidErrorMessage(errorMessage) {
-  // Must be a non-empty string
-  if (!errorMessage || typeof errorMessage !== "string") {
-    return false;
-  }
-
-  // Must not be empty after trimming
-  if (errorMessage.trim() === "") {
-    return false;
-  }
-
-  // Must not be a generic JavaScript error
-  if (isGenericJSError(errorMessage)) {
-    return false;
-  }
-
-  return true;
 }
 
 export function getLocaleDirection(fpi) {
@@ -904,19 +750,15 @@ export const getUserPrimaryPhone = (user) => {
     return null;
   }
 
-  const primaryPhone =
-    user.phone_numbers.find((phone) => phone.primary) ||
-    user.phone_numbers.find((phone) => phone.active) ||
-    user.phone_numbers[0];
+  const primaryPhone = user.phone_numbers.find((phone) => phone.primary);
   if (!primaryPhone) return null;
 
   const countryCode = primaryPhone.country_code?.toString() || "91";
   const mobile = primaryPhone.phone || "";
-  if (!mobile) return null;
 
   return {
     mobile,
-    countryCode,
+    countryCode
   };
 };
 
@@ -992,18 +834,4 @@ export const getConfigFromProps = (props) => {
 
   // Handle direct object props
   return props;
-};
-
-export const formatDeliveryAddress = (d = {}) => {
-  const line1 = [d.address, d.area].filter(Boolean).join(" ").trim();
-  const line2 = d.landmark?.trim() || "";
-  const line3 = [d.city, [d.state, d.area_code || d.pincode].filter(Boolean).join(" ")].filter(Boolean).join(", ").trim();
-  const line4 = d.country?.trim() || "";
-
-  return [line1, line2, line3, line4].filter(Boolean).join(",\n");
-};
-
-export const truncateName = (name,length) => {
-  if (!name) return "";
-  return name.length > length ? name.slice(0, length) + "..." : name;
 };
