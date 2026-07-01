@@ -103,8 +103,6 @@ function Login({
               onForgotPasswordClick,
               onLoginFormSubmit,
               isTermsAccepted,
-              setIsTermsAccepted,
-              showConsentTooltip,
               setShowConsentTooltip,
             }}
           />
@@ -124,28 +122,24 @@ function Login({
               onLoginFormSubmit,
               getOtpLoading,
               isTermsAccepted,
-              setIsTermsAccepted,
-              showConsentTooltip,
               setShowConsentTooltip,
             }}
           />
         )}
         {!isFormSubmitSuccess && (
           <>
-            {isPassword && !isOtp && (
-              <div className={styles.consentWrapperWithTooltip}>
-                <TermPrivacy
-                  onChange={setIsTermsAccepted}
-                  checked={isTermsAccepted}
-                />
-                <Tooltip
-                  message={t("resource.auth.terms_and_condition")}
-                  isVisible={showConsentTooltip}
-                  onClose={() => setShowConsentTooltip(false)}
-                  position="bottom"
-                />
-              </div>
-            )}
+            <div className={styles.consentWrapperWithTooltip}>
+              <TermPrivacy
+                onChange={setIsTermsAccepted}
+                checked={isTermsAccepted}
+              />
+              <Tooltip
+                message={t("resource.auth.terms_and_condition")}
+                isVisible={showConsentTooltip}
+                onClose={() => setShowConsentTooltip(false)}
+                position="bottom"
+              />
+            </div>
             <div className={styles.loginBtnGroup}>
               {showLoginToggleButton && (
                 <LoginModeButton {...{ onLoginToggleClick, isOtp }} />

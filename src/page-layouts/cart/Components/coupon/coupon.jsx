@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import {
   currencyFormat,
   formatLocale,
-  numberWithCommas,
   translateDynamicLabel,
 } from "../../../../helper/utils";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
@@ -21,6 +20,7 @@ function Coupon({
   couponValue = 0,
   hasCancel = false,
   currencySymbol = "₹",
+  currencyCode = null,
   error = null,
   successCoupon = {},
   couponSuccessGif = "",
@@ -105,7 +105,6 @@ function Coupon({
   useEffect(() => {
     const subscription = watch((value, { name }) => {
       if (name === "couponInput" && errors?.root) {
-        console.log("clear");
         clearErrors("root");
       }
     });
@@ -138,6 +137,26 @@ function Coupon({
       // Check for HTML tags pattern
       return /<[^>]+>/.test(message);
     }, [message]);
+
+    const hasDescriptionHTMLTags = useMemo(() => {
+      if (!description || typeof description !== "string") return false;
+      return /<[^>]+>/.test(description);
+    }, [description]);
+
+    const descriptionContent = useMemo(() => {
+      if (!description) return null;
+
+      if (hasDescriptionHTMLTags) {
+        return (
+          <FyHTMLRenderer
+            htmlContent={description}
+            customClass={styles.couponDescription}
+          />
+        );
+      }
+
+      return <p className={styles.couponDescription}>{description}</p>;
+    }, [description, hasDescriptionHTMLTags]);
 
     // Memoize the message content rendering
     const messageContent = useMemo(() => {
@@ -185,7 +204,7 @@ function Coupon({
               className={styles.applyBtn}
               disabled={!isApplicable}
               onClick={() => {
-                applyCoupon(couponCode);
+                applyCoupon(couponCode, { errorDisplay: "toast" });
               }}
             >
               {t("resource.facets.apply_caps")}
@@ -194,9 +213,13 @@ function Coupon({
         </div>
         {isApplicable && (
           <>
+            {description && descriptionContent}
             <hr className={styles.divider} />
-
-            <p className={styles.couponDesc}>{expiresOn}</p>
+            <p
+              className={`${styles.couponDesc} ${description ? styles.couponDescBold : ""}`}
+            >
+              {expiresOn}
+            </p>
           </>
         )}
       </div>
@@ -221,7 +244,8 @@ function Coupon({
                     text={currencyFormat(
                       couponValue,
                       currencySymbol,
-                      formatLocale(locale, countryCode, true)
+                      formatLocale(locale, countryCode, true),
+                      currencyCode
                     )}
                   />
                 </span>
@@ -361,6 +385,7 @@ function Coupon({
         isOpen={isCouponSuccessModalOpen}
         coupon={successCoupon}
         currencySymbol={currencySymbol}
+        currencyCode={currencyCode}
         couponSuccessGif={couponSuccessGif}
         closeDialog={onCouponSuccessCloseModalClick}
       />
@@ -436,7 +461,7 @@ function CouponItem({
           <button
             className={styles.couponApplyBtn}
             onClick={() => {
-              applyCoupon(couponCode);
+              applyCoupon(couponCode, { errorDisplay: "toast" });
             }}
           >
             {t("resource.facets.apply_caps")}
@@ -446,10 +471,11 @@ function CouponItem({
   );
 }
 
-function CouponSuccessModal({
+export function CouponSuccessModal({
   isOpen = false,
   coupon = {},
   currencySymbol = "₹",
+  currencyCode = null,
   couponSuccessGif = "",
   closeDialog = () => {},
 }) {
@@ -464,35 +490,42 @@ function CouponSuccessModal({
       closeDialog={closeDialog}
       modalType="center-modal"
       customClassName={styles.couponSuccessModal}
-      customContainerClass = {styles.couponSuccessModalContainerCustom}
       containerClassName={styles.couponSuccessModalContainer}
     >
       <div className={styles.couponSuccessModalContent}>
-        <span className={styles["close-icon"]} onClick={closeDialog}>
-          <SvgWrapper svgSrc="close" />
-        </span>
-        <div className={styles.modalHeader}>
+        <img
+          className={styles.couponSuccessGif}
+          src={couponSuccessGif}
+          alt={t("resource.cart.coupon_success")}
+        />
+        <div className={styles.couponSuccessIcon}>
           <span>
             <SvgWrapper svgSrc="coupon-success" />
           </span>
         </div>
-
-        <div className={styles.modalBody}>
-          <div className={styles.couponValueSubheading}>
-            {currencyFormat(
-              coupon.value,
-              currencySymbol,
-              formatLocale(locale, countryCode, true)
-            )}{" "}
-            {t("resource.cart.savings_with_this_coupon")}
+        {coupon?.code && coupon?.is_applied && (
+          <div className={styles.modalBody}>
+            <div>
+              <div className={styles.couponHeading}>
+                '{coupon?.code}' {t("resource.common.applied")}
+              </div>
+              <div className={styles.couponValue}>
+                {currencyFormat(
+                  coupon.value,
+                  currencySymbol,
+                  formatLocale(locale, countryCode, true),
+                  currencyCode
+                )}
+              </div>
+              <div className={styles.couponValueSubheading}>
+                {t("resource.cart.savings_with_this_coupon")}
+              </div>
+            </div>
+            <button className={styles.bodyFooterBtn} onClick={closeDialog}>
+              {t("resource.cart.wohooo")}!!
+            </button>
           </div>
-
-          <div className={styles.subTitle}>{coupon?.sub_title}</div>
-        </div>
-
-        <div className={styles.bodyFooterBtn} onClick={closeDialog}>
-          OKAY
-        </div>
+        )}
       </div>
     </Modal>
   );
@@ -518,3 +551,4 @@ function NoCouponsAvailable() {
 }
 
 export default Coupon;
+

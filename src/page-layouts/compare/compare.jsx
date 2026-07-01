@@ -2,22 +2,15 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { FDKLink } from "fdk-core/components";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
 import ProductCard from "../../components/product-card/product-card";
-import FyImage from "../../components/core/fy-image/fy-image";
 import * as styles from "./compare.less";
 import { useGlobalTranslation } from "fdk-core/utils";
 import PlusIcon from "../../assets/images/plus-icon.svg";
-import CartIcon from "../../assets/images/cart-icon.svg";
 import SearchIcon from "../../assets/images/search-icon.svg";
 import CloseIcon from "../../assets/images/clear-search-close-icon.svg";
-import { currencyFormat, formatLocale } from "../../helper/utils";
-import { div, style } from "framer-motion/client";
 import Modal from "../../components/core/modal/modal";
 import CompareProductCard from "../../components/compare-product-card/compare-product-card";
 import { useGlobalStore, useFPI } from "fdk-core/utils";
-import { useMobile } from "../../helper/hooks";
-import AddToCart from "../plp/Components/add-to-cart/add-to-cart";
 import { useNavigate } from "react-router-dom";
-import Shimmer from "../../components/shimmer/shimmer";
 
 function Compare({
   isLoading = false,
@@ -45,6 +38,7 @@ function Compare({
   getAttribute = () => {},
   checkHtml = () => {},
   handleAddToCart,
+  listingPrice = "range",
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -227,6 +221,7 @@ function Compare({
         key={`search-shimmer-${index}`}
         productItem={null}
         isLoading={true}
+        globalConfig={globalConfig}
       />
     ));
   };
@@ -252,6 +247,8 @@ function Compare({
                 if (ok) setShowProductModal(false);
               }}
               isLoading={false}
+              globalConfig={globalConfig}
+              listingPrice={listingPrice}
             />
           ))}
         </div>
@@ -381,14 +378,13 @@ function Compare({
                                   isSaleBadge={false}
                                   isWishlistIcon={false}
                                   showBadge={false}
-                                  customImageContainerClass={
-                                    styles.customImageContainer
-                                  }
+                                  customImageContainerClass={`${styles.customImageContainer} ${globalConfig?.img_fill ? styles.objectFitCover : styles.objectFitContain}`}
                                   handleAddToCart={handleAddToCart}
                                   isServiceable={is_serviceable}
                                   customeProductDescContainerClass={
                                     styles.customeProductDescContainerClass
                                   }
+                                  listingPrice={listingPrice}
                                 />
                               </FDKLink>
                             </div>

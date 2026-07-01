@@ -44,9 +44,10 @@ const StickyPayNow = ({
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
+                if (disabled || isPaymentLoading) return;
                 proceedToPay();
               }}
-              disabled={isPaymentLoading}
+              disabled={disabled || isPaymentLoading}
             >
               {!isPaymentLoading ? (
                 <>{btnTitle || t("resource.cart.pay_now")}</>

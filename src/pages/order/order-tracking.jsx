@@ -4,7 +4,7 @@ import { useNavigate, useGlobalTranslation } from "fdk-core/utils";
 import FyInput from "../../components/core/fy-input/fy-input";
 import FyButton from "../../components/core/fy-button/fy-button";
 
-function OrderTracking({ instMob }) {
+function OrderTracking({ instMob, title, orderIdPlaceholder, trackOrderBtnText, whereIsOrderIdText }) {
   const { t } = useGlobalTranslation("translation");
   const [showDetails, setShowDetails] = useState(false);
 
@@ -23,13 +23,13 @@ function OrderTracking({ instMob }) {
   return (
     <div className="basePageContainer margin0auto">
       <div className={`${styles.trackOrderCntr}`}>
-        <h2 className={`${styles.orderTitle}`}>{t("resource.order.where_is_order_id")}?</h2>
+        <h2 className={`${styles.orderTitle}`}>{title}</h2>
         <div className={`${styles.trackOrder}`}>
           <FyInput
-            label={isFocussed || orderId ? t("resource.order.enter_order_id")  : ""}
+            label={isFocussed || orderId ? orderIdPlaceholder : ""}
             labelVariant="floating"
             value={orderId}
-            placeholder={!isFocussed ? t("resource.order.enter_order_id") : ""}
+            placeholder={!isFocussed ? orderIdPlaceholder : ""}
             maxLength="20"
             error={showError}
             errorMessage={t("resource.order.invalid_order_id")}
@@ -44,20 +44,20 @@ function OrderTracking({ instMob }) {
             size="medium"
             onClick={trackOrder}
           >
-            {t("resource.order.track_order_caps")}
+            {trackOrderBtnText}
           </FyButton>
           <FyButton
             className={styles.btn}
             variant="text"
             onClick={() => setShowDetails(!showDetails)}
           >
-           {t("resource.order.where_is_order_id")}?
+           {whereIsOrderIdText}
           </FyButton>
           {showDetails && (
             <div>
               <img
                 src={instMob}
-                alt={`${t("resource.order.where_is_order_id")}?`}
+                alt={whereIsOrderIdText}
                 className={`${styles.demoImg}`}
               />
             </div>

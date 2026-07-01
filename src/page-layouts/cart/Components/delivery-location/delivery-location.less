@@ -215,6 +215,17 @@
     max-height: unset;
     height: 100dvh;
   }
+
+  // When mobile footer is visible, account for nav bar + safe area to prevent cropping across devices
+  [data-mobile-footer="true"] & {
+    @media @tablet {
+      height: calc(100vh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
+      height: calc(100dvh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
+      max-height: calc(100vh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
+      max-height: calc(100dvh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
+      overflow-y: auto;
+    }
+  }
 }
 
 .deliveryAddressModal {
@@ -230,6 +241,15 @@
     @media @desktop {
       max-width: 450px;
       max-height: 84.26dvh;
+    }
+    // When mobile footer is visible, constrain height to prevent cropping across devices
+    [data-mobile-footer="true"] & {
+      @media @tablet {
+        height: calc(100vh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
+        height: calc(100dvh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
+        max-height: calc(100vh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
+        max-height: calc(100dvh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px));
+      }
     }
   }
   .deliveryAddressHeader {
@@ -330,6 +350,16 @@
     max-width: 450px !important;
     max-height: 84.26dvh;
     width: 450px !important;
+  }
+
+  // When mobile footer is visible, constrain height to prevent cropping on various handsets
+  [data-mobile-footer="true"] & {
+    @media @tablet {
+      height: calc(100vh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px)) !important;
+      height: calc(100dvh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px)) !important;
+      max-height: calc(100vh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px)) !important;
+      max-height: calc(100dvh - var(--mobile-nav-height, 56px) - env(safe-area-inset-bottom, 0px)) !important;
+    }
   }
 }
 .heading {

@@ -39,6 +39,7 @@ function SingleAddress({
     setOpenModal,
     openModal,
     resetAddressState,
+    handleModalClose,
     updateAddress,
     addAddress,
     modalTitle,
@@ -79,7 +80,7 @@ function SingleAddress({
           hideHeader
           isOpen={openModal}
           modalType="center-modal"
-          closeDialog={resetAddressState}
+          closeDialog={handleModalClose}
           containerClassName={styles.addressModalContainer}
           bodyClassName={styles.addressModalBody}
         >
@@ -102,7 +103,7 @@ function SingleAddress({
             countryDetails={countryDetails}
             isGuestUser={isGuestUser}
             user={userDetails}
-            onClose={resetAddressState}
+            onClose={handleModalClose}
           />
         </Modal>
         {showShipment || showPayment ? null : (

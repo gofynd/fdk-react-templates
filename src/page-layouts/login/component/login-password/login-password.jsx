@@ -8,8 +8,6 @@ import {
 import * as styles from "./login-password.less";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import MobileNumber from "../../../auth/mobile-number/mobile-number";
-import TermPrivacy from "../term-privacy/term-privacy";
-import Tooltip from "../../../../components/tooltip/tooltip";
 import { useGlobalTranslation } from "fdk-core/utils";
 
 function loginPassword({
@@ -19,8 +17,6 @@ function loginPassword({
   onForgotPasswordClick = () => {},
   onLoginFormSubmit = () => {},
   isTermsAccepted = false,
-  setIsTermsAccepted = () => {},
-  showConsentTooltip = false,
   setShowConsentTooltip = () => {},
 }) {
   const { t } = useGlobalTranslation("translation");
@@ -223,21 +219,13 @@ function loginPassword({
             </button>
           </div>
         )}
-        {/* <div className={styles.consentWrapperWithTooltip}>
-          <TermPrivacy
-            onChange={setIsTermsAccepted}
-            checked={isTermsAccepted}
-          />
-          <Tooltip
-            message={t("resource.auth.terms_and_condition")}
-            isVisible={showConsentTooltip}
-            onClose={() => setShowConsentTooltip(false)}
-            position="bottom"
-          />
-        </div> */}
       </div>
 
-      <button className={styles.loginButton} type="submit">
+      <button
+        className={styles.loginButton}
+        type="submit"
+        disabled={showInputNumber && !watch("phone")?.isValidNumber}
+      >
         {translateDynamicLabel(loginButtonText, t) ||
           t("resource.auth.login.login_caps")}
       </button>

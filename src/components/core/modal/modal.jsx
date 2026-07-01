@@ -48,6 +48,7 @@ function Modal({
   ignoreClickOutsideForClass,
   customClassName,
   notCloseOnclickOutside,
+  titleContainerStyles
 }) {
   const modalRef = useRef(null);
   const modalContainerRef = useRef(null);
@@ -147,6 +148,7 @@ function Modal({
           // initial={{ opacity: 0 }}
           // animate={{ opacity: 1 }}
           // exit={{ opacity: 0 }}
+          data-modal-overlay="true"
           className={`${styles.modal} ${modalType === "right-modal" ? styles.rightModal : ""} ${modalType === "center-modal" ? styles.centerModal : ""} ${customClassName ?? ""}`}
           ref={modalRef}
           // tabIndex="0"
@@ -168,7 +170,7 @@ function Modal({
           >
             {!hideHeader && (
               <div className={customHeaderClass}>
-                <div>
+                <div style={titleContainerStyles || {}}>
                   <div className={customTitleClass}>{title}</div>
                   {subTitle && (
                     <div className={customSubTitleClass}>{subTitle}</div>
