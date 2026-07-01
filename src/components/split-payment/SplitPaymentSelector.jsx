@@ -22,6 +22,10 @@ function SplitPaymentSelector({
   codCharges = 0,
   remainingAmount = 0,
 }) {
+  const formatAmount = (value) => {
+    const num = Number(value);
+    return Number.isFinite(num) ? Math.round(num * 100) / 100 : value;
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -62,7 +66,7 @@ function SplitPaymentSelector({
                 Pay{" "}
                 <strong className={styles.amountDisplayStrong}>
                   {currencySymbol}
-                  {amount}
+                  {formatAmount(amount)}
                 </strong>{" "}
                 now to confirm this order
               </span>
@@ -71,7 +75,7 @@ function SplitPaymentSelector({
                   Remaining {" "}
                   <strong>
                     {currencySymbol}
-                    {remainingAmount}
+                    {formatAmount(remainingAmount)}
                   </strong>{" "}
                   will be collected as cash on delivery
                 </span>
@@ -90,7 +94,7 @@ function SplitPaymentSelector({
               Pay{" "}
               <strong className={styles.amountDisplayStrong}>
                 {currencySymbol}
-                {amount}
+                {formatAmount(amount)}
               </strong>{" "}
               now to confirm this order
             </span>
@@ -99,9 +103,9 @@ function SplitPaymentSelector({
                 Remaining {" "}
                 <strong>
                   {currencySymbol}
-                  {remainingAmount}
+                  {formatAmount(remainingAmount)}
                 </strong>{" "}
-                will be collected as cash on delivery
+                will be collected at the time of delivery
               </span>
             )}
           </div>
@@ -113,7 +117,7 @@ function SplitPaymentSelector({
           </span>
           <span className={styles.codInfoText}>
             <strong>
-              +{currencySymbol}{codCharges}{" "}
+              +{currencySymbol}{formatAmount(codCharges)}{" "}
             </strong>
             will be charged extra for{" "}
             <strong>Cash on Delivery </strong>option.
