@@ -74,7 +74,10 @@ function CardLessEmi({
                     customClassName={styles.visibleOnTab}
                     value={priceFormatCurrencySymbol(
                       getCurrencySymbol,
-                      getTotalValue()
+                      getTotalValue(),
+                      "en-IN",
+                      null,
+                      true
                     )}
                     disabled={mopSelectionLoading}
                     onPriceDetailsClick={onPriceDetailsClick}
@@ -100,7 +103,10 @@ function CardLessEmi({
                         {t("resource.common.pay_caps")}{" "}
                         {priceFormatCurrencySymbol(
                           getCurrencySymbol,
-                          getTotalValue()
+                          getTotalValue(),
+                          "en-IN",
+                          null,
+                          true
                         )}
                       </>
                     ) : (

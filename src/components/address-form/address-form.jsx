@@ -398,7 +398,7 @@ const AddressForm = ({
   // Get currentCountry based on header selection (same logic as useInternational)
   const currentCountry = useMemo(() => {
     return countryCurrencies?.find(
-      (country) => country.iso2 === i18nDetails?.countryCode
+      (country) => country?.iso2 === i18nDetails?.countryCode
     );
   }, [countryCurrencies, i18nDetails?.countryCode]);
 

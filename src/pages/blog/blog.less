@@ -168,9 +168,11 @@
     }
     &__info {
       padding: 0 1rem 1rem;
+      min-width: 0;
       @media @desktop {
         padding: 0;
         max-width: 600px;
+        flex: 1 1 auto;
       }
     }
     &__meta {
@@ -187,6 +189,9 @@
         }
       }
     }
+    &__publishDate {
+      color: @TextBody;
+    }
     &__title {
       &.titleMobile {
         @media @desktop {
@@ -200,6 +205,7 @@
       }
       font-size: 32px;
       line-height: 36px;
+      overflow-wrap: anywhere;
       @media @mobile {
         font-size: 20px;
         line-height: 133%;
@@ -231,9 +237,16 @@
       margin-bottom: 8px;
       font-size: 16px;
       line-height: 22px;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      overflow-wrap: anywhere;
       @media screen and (max-width: 767px) {
         font-size: 14px;
         line-height: 24px;
+        -webkit-line-clamp: 3;
       }
       @media @mobile {
         display: none;
@@ -241,6 +254,7 @@
       @media @desktop-xl {
         font-size: 18px;
         line-height: 24px;
+        -webkit-line-clamp: 5;
       }
     }
     &__button {
@@ -273,6 +287,7 @@
     margin-bottom: 5px;
     display: flex;
     justify-content: space-between;
+    color: @TextBody;
     .resetBtn {
       color: @ButtonLink;
       padding-bottom: 0.2rem;
@@ -319,6 +334,9 @@
     height: 50px;
     padding: 8px 16px;
     box-shadow: 0 4px 9px 4px rgba(179, 179, 180, 0.15);
+    &::placeholder {
+      color: @TextLabel;
+    }
     @media @tablet {
       width: 100%;
       margin-top: 0;

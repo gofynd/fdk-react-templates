@@ -22,7 +22,6 @@ import {
 } from "fdk-core/utils";
 import ChipImage from "./chip-image";
 import { transformDisplayToAccordionContent } from "../../../../helper/customization-display";
-import { SELF_PICKUP_SLUG } from "../../../../helper/constant";
 
 const GET_PRODUCT_SIZES = `query ProductSizes($slug: String!) {
   product(slug: $slug) {
@@ -72,21 +71,6 @@ export default function ChipItem({
   const navigate = useNavigate();
   const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
   const locale = language?.locale;
-
-  // Detect a self-pickup line internally (feature flag on + this line is on the pickup fulfillment
-  // slug). Self pickup has no delivery date, so we hide the shipping logo + delivery date for these
-  // lines while still showing the fulfillment option name. Read the flag from either app_features
-  // source, mirroring the rest of the theme.
-  const { app_features: customAppFeatures } =
-    useGlobalStore(fpi?.getters?.CUSTOM_VALUE) || {};
-  const { app_features: configAppFeatures } =
-    useGlobalStore(fpi?.getters?.CONFIGURATION) || {};
-  const isSelfPickupEnabled =
-    customAppFeatures?.self_pickup === true ||
-    configAppFeatures?.self_pickup === true;
-  const isSelfPickupItem =
-    isSelfPickupEnabled &&
-    singleItemDetails?.article?.fulfillment_option?.slug === SELF_PICKUP_SLUG;
   const { limited_stock_quantity: limitedStockQuantity = 11 } =
     globalConfig || {};
   const isMobile = useMobile();
@@ -120,10 +104,6 @@ export default function ChipItem({
   const accordionContent = transformDisplayToAccordionContent(
     rawCustomizationOptions
   );
-
-  const availableSizes = singleItemDetails?.availability?.available_sizes || [];
-  const hideSizeChangeButton =
-    globalConfig?.hide_single_size && currentSize?.toLowerCase() === "os";
 
   const [items, setItems] = useState([
     {
@@ -392,16 +372,6 @@ export default function ChipItem({
       return updatedItems;
     });
   };
-
-  const normalizedSize = (size) => {
-    return String(size ?? "")
-      .trim()
-      .toLowerCase()
-      .replace(/\s+/g, "-")
-      .replace(/\//g, "-")
-      .replace(/[^a-z0-9-]/g, "");
-  };
-
   return (
     <>
       <div className={styles.cartItemsListContainer} key={itemIndex}>
@@ -477,7 +447,6 @@ export default function ChipItem({
                   index: actualItemIndex,
                 })
               }
-              data-testid="remove-item-button"
             >
               <SvgWrapper
                 svgSrc="item-close"
@@ -491,7 +460,6 @@ export default function ChipItem({
               className={`${styles.itemName} ${
                 isOutOfStock ? styles.outOfStock : ""
               } `}
-              data-testid={`cart-item-row-${singleItemDetails?.product?.item_code}-${normalizedSize(singleItemDetails?.article?.size)}`}
             >
               {singleItemDetails?.product?.name?.length > 24
                 ? `${singleItemDetails.product.name.slice(0, 24)}...`
@@ -504,8 +472,7 @@ export default function ChipItem({
             )}
             <div className={styles.itemSizeQuantityContainer}>
               <div className={styles.itemSizeQuantitySubContainer}>
-                {!hideSizeChangeButton && (
-                  <button
+                <button
                   className={styles.sizeContainer}
                   onClick={async (e) => {
                     e.stopPropagation();
@@ -539,8 +506,6 @@ export default function ChipItem({
                     />
                   </span>
                 </button>
-                )}
-               
                 {!isOutOfStock && isServiceable && (
                   <QuantityControl
                     isCartUpdating={isCartUpdating}
@@ -623,8 +588,8 @@ export default function ChipItem({
                   }`}
                 >
                   {currencyFormat(
-                    singleItemDetails?.price?.converted?.final_price ??
-                      singleItemDetails?.price?.base?.final_price,
+                    singleItemDetails?.price?.converted?.effective ??
+                      singleItemDetails?.price?.base?.effective,
                     singleItemDetails?.price?.converted?.currency_symbol ??
                       singleItemDetails?.price?.base?.currency_symbol,
                     formatLocale(locale, countryCode, true),
@@ -651,7 +616,6 @@ export default function ChipItem({
                 </span>
               </div>
               {isDeliveryPromise &&
-                !isSelfPickupItem &&
                 !isOutOfStock &&
                 isServiceable &&
                 singleItemDetails?.delivery_promise?.iso?.max && (
@@ -671,26 +635,11 @@ export default function ChipItem({
                         {singleItemDetails?.article?.fulfillment_option?.name}
                       </div>
                     )}
-                    {/*
+                    {/* 
                     <div className={styles.changeFO} onClick={openFOModal}>
                       CHANGE
-                    </div>
+                    </div> 
                     */}
-                  </div>
-                )}
-              {/* Self pickup: no delivery date, so drop the truck + date but still show the
-                  fulfillment option name on its own. */}
-              {isSelfPickupItem &&
-                !isOutOfStock &&
-                isServiceable &&
-                availableFOCount > 1 &&
-                singleItemDetails?.article?.fulfillment_option?.name && (
-                  <div
-                    className={`${styles.deliveryDateWrapper} ${styles["deliveryDateWrapper--desktop"]}`}
-                  >
-                    <div className={styles.selectedFO}>
-                      {singleItemDetails?.article?.fulfillment_option?.name}
-                    </div>
                   </div>
                 )}
             </div>
@@ -725,7 +674,6 @@ export default function ChipItem({
         </div>
 
         {isDeliveryPromise &&
-          !isSelfPickupItem &&
           !isOutOfStock &&
           isServiceable &&
           singleItemDetails?.delivery_promise?.iso?.max && (
@@ -743,27 +691,11 @@ export default function ChipItem({
                   {singleItemDetails?.article?.fulfillment_option?.name}
                 </div>
               )}
-              {/*
+              {/* 
               <div className={styles.changeFO} onClick={openFOModal}>
                 CHANGE
-              </div>
+              </div> 
               */}
-            </div>
-          )}
-
-        {/* Self pickup: no delivery date, so drop the truck + date but still show the
-            fulfillment option name on its own. */}
-        {isSelfPickupItem &&
-          !isOutOfStock &&
-          isServiceable &&
-          availableFOCount > 1 &&
-          singleItemDetails?.article?.fulfillment_option?.name && (
-            <div
-              className={`${styles.deliveryDateWrapper} ${styles["deliveryDateWrapper--mobile"]}`}
-            >
-              <div className={styles.selectedFO}>
-                {singleItemDetails?.article?.fulfillment_option?.name}
-              </div>
             </div>
           )}
 
