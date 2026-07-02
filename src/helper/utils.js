@@ -1,9 +1,4 @@
-import {
-  DEFAULT_CURRENCY_LOCALE,
-  DEFAULT_UTC_LOCALE,
-  IMAGE_OPTIMIZATION_CONFIG,
-  RESPONSIVE_IMAGE_BREAKPOINTS,
-} from "./constant";
+import { DEFAULT_CURRENCY_LOCALE, DEFAULT_UTC_LOCALE, IMAGE_OPTIMIZATION_CONFIG } from "./constant";
 
 export const debounce = (func, wait) => {
   let timeout;
@@ -13,6 +8,27 @@ export const debounce = (func, wait) => {
       func.apply(this, args);
     }, wait);
   };
+};
+
+export const formatDate = (isoString, dateOnly = false) => {
+  const date = new Date(isoString);
+
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = date.toLocaleString("en-US", { month: "short" });
+  const year = date.getFullYear();
+
+  let hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const ampm = hours >= 12 ? "PM" : "AM";
+
+  hours %= 12;
+  hours = hours || 12; // 0 becomes 12
+
+  if (dateOnly) {
+    return `${day} ${month}, ${year}`;
+  }
+
+  return `${day} ${month}, ${year}, ${hours}:${minutes} ${ampm}`;
 };
 
 export const getGlobalConfigValue = (globalConfig, id) =>
@@ -193,84 +209,6 @@ export function checkIfNumber(value) {
   return numberPattern.test(value);
 }
 
-const IMAGE_VARIANT_PATTERN =
-  /\/(?:original|\d+x\d+|resize-(?:w|h)?:[0-9]+(?:,(?:w|h)*:?[\d]*)?)\//;
-const RESIZABLE_IMAGE_KEYS = [
-  "original",
-  "30x0",
-  "44x0",
-  "66x0",
-  "50x0",
-  "75x0",
-  "60x60",
-  "90x90",
-  "100x0",
-  "130x200",
-  "135x0",
-  "270x0",
-  "360x0",
-  "500x0",
-  "400x0",
-  "540x0",
-  "720x0",
-  "312x480",
-  "resize-(w|h)?:[0-9]+(,)?(w|h)*(:)?[0-9]*",
-];
-
-export const isGifImageUrl = (url = "") =>
-  /\.gif(\?|#|$)/i.test(String(url || ""));
-
-export const replaceImageVariant = (url = "", variant = "original") => {
-  if (!url) return url;
-  const normalizedVariant = String(variant || "original").replace(
-    /^\/|\/$/g,
-    ""
-  );
-  return IMAGE_VARIANT_PATTERN.test(url)
-    ? url.replace(IMAGE_VARIANT_PATTERN, `/${normalizedVariant}/`)
-    : url;
-};
-
-const findImageSizeKey = (url = "") => {
-  for (let j = 0; j < RESIZABLE_IMAGE_KEYS.length; j++) {
-    if (url?.match(new RegExp(`/${RESIZABLE_IMAGE_KEYS[j]}/`))) {
-      return RESIZABLE_IMAGE_KEYS[j];
-    }
-  }
-  return "";
-};
-
-export const getResponsiveImageSources = (
-  sources = RESPONSIVE_IMAGE_BREAKPOINTS
-) => sources?.map((source) => ({ ...source })) || [];
-
-export const getResponsiveImageBaseUrl = (url = "", width = 200) => {
-  if (!url) return url;
-  if (isGifImageUrl(url)) {
-    return replaceImageVariant(url, "original");
-  }
-  const key = findImageSizeKey(url);
-  return key && width ? transformImage(url, key, width) : url;
-};
-
-export const getResponsiveImageSrcSet = (
-  url = "",
-  sources = RESPONSIVE_IMAGE_BREAKPOINTS
-) => {
-  if (!url || isGifImageUrl(url)) {
-    return "";
-  }
-
-  const key = findImageSizeKey(url);
-  if (!key) {
-    return "";
-  }
-
-  return sources
-    .map((source) => `${transformImage(url, key, source.width)} ${source.width}w`)
-    .join(", ");
-};
-
 /**
  * Transform image URL with DPR support for better quality on retina displays
  * @param {string} url - Original image URL
@@ -287,7 +225,12 @@ export const transformImage = (url, key, width) => {
   let updatedUrl = url;
   if (key && width) {
     const str = `/${key}/`;
-    updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
+    // updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
+    if (url.includes("/b2b-commerce/")) {
+      updatedUrl = url.replace(new RegExp(str), `/t.resize(w:${width})/`);
+    } else {
+      updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
+    }
   }
   try {
     const parsedUrl = new URL(updatedUrl);
@@ -400,15 +343,15 @@ export const currencyFormat = (
   value,
   currencySymbol,
   locale = "en-IN",
-  currencyCode = null,
-  forceDecimals = false
+  currencyCode = null
 ) => {
-  if (value == null || value === "") {
-    return "";
-  }
+  if (value == null || value === "") return "";
 
-  // Convert to number if it's a string
-  let num = typeof value === "string" ? parseFloat(value) : value;
+  // Convert to number if it's a string (strip commas so "1,039.5" parses as 1039.5, not 1)
+  let num =
+    typeof value === "string"
+      ? parseFloat(String(value).replace(/,/g, ""))
+      : value;
 
   // Ensure it's a number, not NaN
   if (Number.isNaN(num)) {
@@ -432,16 +375,19 @@ export const currencyFormat = (
     finalLocale = "en-IN";
   }
 
-  try {
-    // Always force the Latin (latn) numbering system so prices render with
-    // Western digits across all locales (e.g. SAR -> ar-SA), matching the rest
-    // of the storefront. Locale-aware grouping/decimal separators are preserved.
-    const localeString = `${finalLocale}-u-nu-latn`;
+  // Determine if we should use Indian numbering system
+  const isIndianLocale =
+    finalLocale === "en-IN" || finalLocale?.startsWith("en-IN");
 
-    const hasDecimal = forceDecimals && num % 1 !== 0;
+  try {
+    // Use Intl.NumberFormat for locale-aware formatting
+    const numberingSystem = isIndianLocale ? "latn" : undefined;
+    const localeString = numberingSystem
+      ? `${finalLocale}-u-nu-${numberingSystem}`
+      : finalLocale;
+
     const formatter = new Intl.NumberFormat(localeString, {
-      minimumFractionDigits: hasDecimal ? 2 : 0,
-      maximumFractionDigits: forceDecimals ? 2 : 20,
+      maximumFractionDigits: 20,
       useGrouping: true,
     });
 
@@ -467,11 +413,7 @@ export const currencyFormat = (
     console.warn(
       `Invalid locale "${finalLocale}", falling back to default formatting`
     );
-    const hasDecimal = forceDecimals && num % 1 !== 0;
-    const formattedValue = num.toLocaleString("en-US", {
-      minimumFractionDigits: hasDecimal ? 2 : 0,
-      maximumFractionDigits: forceDecimals ? 2 : 20,
-    });
+    const formattedValue = num.toLocaleString("en-US");
     if (currencySymbol && /^[A-Z]+$/.test(currencySymbol)) {
       return `${currencySymbol} ${formattedValue}`;
     }
@@ -590,13 +532,15 @@ export function priceFormatCurrencySymbol(
   symbol,
   price = 0,
   locale = "en-IN",
-  currencyCode = null,
-  forceDecimals = false
+  currencyCode = null
 ) {
   if (price == null || price === "") return "";
 
-  // Convert to number if it's a string
-  let num = typeof price === "string" ? parseFloat(price) : price;
+  // Convert to number if it's a string (strip commas so "1,039.5" parses as 1039.5, not 1)
+  let num =
+    typeof price === "string"
+      ? parseFloat(String(price).replace(/,/g, ""))
+      : price;
 
   if (Number.isNaN(num)) return "";
 
@@ -609,15 +553,19 @@ export function priceFormatCurrencySymbol(
     finalLocale = getLocaleFromCurrency(currencyCode);
   }
 
-  try {
-    // Always force the Latin (latn) numbering system so prices render with
-    // Western digits across all locales (e.g. SAR -> ar-SA), matching the rest
-    // of the storefront. Locale-aware grouping/decimal separators are preserved.
-    const localeString = `${finalLocale}-u-nu-latn`;
+  // Determine if we should use Indian numbering system
+  const isIndianLocale =
+    finalLocale === "en-IN" || finalLocale?.startsWith("en-IN");
 
-    const hasDecimal = forceDecimals && num % 1 !== 0;
+  try {
+    // Use Intl.NumberFormat for locale-aware formatting
+    const numberingSystem = isIndianLocale ? "latn" : undefined;
+    const localeString = numberingSystem
+      ? `${finalLocale}-u-nu-${numberingSystem}`
+      : finalLocale;
+
     const formatter = new Intl.NumberFormat(localeString, {
-      minimumFractionDigits: hasDecimal ? 2 : 0,
+      minimumFractionDigits: 0,
       maximumFractionDigits: 2,
       useGrouping: true,
     });
@@ -640,9 +588,8 @@ export function priceFormatCurrencySymbol(
     console.warn(
       `Invalid locale "${finalLocale}", falling back to default formatting`
     );
-    const hasDecimal = forceDecimals && num % 1 !== 0;
     const formattedPrice = num.toLocaleString("en-US", {
-      minimumFractionDigits: hasDecimal ? 2 : 0,
+      minimumFractionDigits: 0,
       maximumFractionDigits: 2,
     });
     const hasAlphabeticCurrency = /^[A-Za-z]+$/.test(symbol);
