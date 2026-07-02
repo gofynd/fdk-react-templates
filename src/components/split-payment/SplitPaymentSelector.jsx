@@ -1,4 +1,5 @@
 import React from "react";
+import { useGlobalTranslation } from "fdk-core/utils";
 import * as styles from "./SplitPaymentSelector.less";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
 
@@ -16,12 +17,13 @@ function SplitPaymentSelector({
   paymentIndex = 1,
   helperText,
   currencySymbol = "",
-  splitPaymentLabel = "Advance Payment",
+  splitPaymentLabel,
   amountEditable = true,
   isSplitDisabled = false,
   codCharges = 0,
   remainingAmount = 0,
 }) {
+  const { t } = useGlobalTranslation("translation");
   const formatAmount = (value) => {
     const num = Number(value);
     return Number.isFinite(num) ? Math.round(num * 100) / 100 : value;
@@ -38,7 +40,10 @@ function SplitPaymentSelector({
             disabled={isSplitDisabled || disabled || isLoading}
             onChange={(event) => onToggle?.(event.target.checked)}
           />
-          <span className={styles.text}>{splitPaymentLabel}</span>
+          <span className={styles.text}>
+            {splitPaymentLabel ||
+              t("resource.b2b.components.split_payment.advance_payment")}
+          </span>
           {isLoading && <span className={styles.spinner} />}
         </label>
       </div>
@@ -46,7 +51,9 @@ function SplitPaymentSelector({
       {showAmount && isSelected && amountEditable && (
         <>
           <div className={styles.amountBlock}>
-            <span className={styles.amountLabel}>Advance Amount</span>
+            <span className={styles.amountLabel}>
+              {t("resource.b2b.components.split_payment.advance_amount")}
+            </span>
             <div className={styles.amountInputRow}>
               <span className={styles.currency}>{currencySymbol}</span>
               <input
@@ -65,21 +72,23 @@ function SplitPaymentSelector({
           {amount > 0 && (
             <div className={styles.amountDisplay}>
               <span className={styles.amountDisplayValue}>
-                Pay{" "}
+                {t("resource.b2b.components.split_payment.pay")}{" "}
                 <strong className={styles.amountDisplayStrong}>
                   {currencySymbol}
                   {formatAmount(amount)}
                 </strong>{" "}
-                now to confirm this order
+                {t("resource.b2b.components.split_payment.now_to_confirm_order")}
               </span>
               {remainingAmount > 0 && (
                 <span className={styles.amountDisplayLabel}>
-                  Remaining{" "}
+                  {t("resource.b2b.components.split_payment.remaining")}{" "}
                   <strong>
                     {currencySymbol}
                     {formatAmount(remainingAmount)}
                   </strong>{" "}
-                  will be collected as cash on delivery
+                  {t(
+                    "resource.b2b.components.split_payment.will_be_collected_as_cod"
+                  )}
                 </span>
               )}
             </div>
@@ -93,21 +102,23 @@ function SplitPaymentSelector({
         amount > 0 && (
           <div className={styles.amountDisplay}>
             <span className={styles.amountDisplayValue}>
-              Pay{" "}
+              {t("resource.b2b.components.split_payment.pay")}{" "}
               <strong className={styles.amountDisplayStrong}>
                 {currencySymbol}
                 {formatAmount(amount)}
               </strong>{" "}
-              now to confirm this order
+              {t("resource.b2b.components.split_payment.now_to_confirm_order")}
             </span>
             {remainingAmount > 0 && (
               <span className={styles.amountDisplayLabel}>
-                Remaining{" "}
+                {t("resource.b2b.components.split_payment.remaining")}{" "}
                 <strong>
                   {currencySymbol}
                   {formatAmount(remainingAmount)}
                 </strong>{" "}
-                will be collected at the time of delivery
+                {t(
+                  "resource.b2b.components.split_payment.will_be_collected_at_delivery"
+                )}
               </span>
             )}
           </div>
@@ -122,7 +133,7 @@ function SplitPaymentSelector({
               +{currencySymbol}
               {formatAmount(codCharges)}{" "}
             </strong>
-            will be charged extra for Cash on Delivery option.
+            {t("resource.b2b.components.split_payment.cod_extra_charge")}
           </span>
         </div>
       )}

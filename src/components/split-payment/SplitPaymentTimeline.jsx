@@ -1,4 +1,5 @@
 import React from "react";
+import { useGlobalTranslation } from "fdk-core/utils";
 import * as styles from "./SplitPaymentTimeline.less";
 
 const STATUS_ICON = {
@@ -14,6 +15,7 @@ const formatMethod = (method) => {
 };
 
 function SplitPaymentTimeline({ payments, currencySymbol = "" }) {
+  const { t } = useGlobalTranslation("translation");
   if (!payments?.length) return null;
 
   return (
@@ -30,11 +32,15 @@ function SplitPaymentTimeline({ payments, currencySymbol = "" }) {
             <span className={styles.paymentLabel}>{payment.label}</span>
             {formatMethod(payment.method) && (
               <span className={styles.method}>
-                via {formatMethod(payment.method)}
+                {t("resource.b2b.components.split_payment.via", {
+                  method: formatMethod(payment.method),
+                })}
               </span>
             )}
             {payment.status === "ongoing" && (
-              <span className={styles.statusBadge}>Current</span>
+              <span className={styles.statusBadge}>
+                {t("resource.b2b.components.split_payment.current")}
+              </span>
             )}
           </div>
           {payment.amount > 0 && (

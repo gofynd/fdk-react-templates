@@ -1,4 +1,5 @@
 import React from "react";
+import { useGlobalTranslation } from "fdk-core/utils";
 import SplitPaymentTimeline from "./SplitPaymentTimeline";
 import * as styles from "./SplitPaymentSummary.less";
 
@@ -15,27 +16,36 @@ function SplitPaymentSummary({
   remainingAmount = 0,
   payments = [],
 }) {
+  const { t } = useGlobalTranslation("translation");
   return (
     <div className={styles.wrapper}>
       <div className={styles.card}>
-        <h3 className={styles.title}>Price Summary ({itemCount} Items)</h3>
+        <h3 className={styles.title}>
+          {t("resource.b2b.components.split_payment.price_summary_items", {
+            count: itemCount,
+          })}
+        </h3>
         <div className={styles.row}>
-          <span>Total MRP</span>
+          <span>{t("resource.b2b.components.split_payment.total_mrp")}</span>
           <strong>{formatAmount(totalMrp, currencySymbol)}</strong>
         </div>
         <div className={styles.row}>
-          <span>Discount</span>
+          <span>{t("resource.b2b.components.split_payment.discount")}</span>
           <strong className={styles.success}>
             -{formatAmount(Math.abs(discount), currencySymbol)}
           </strong>
         </div>
         <div className={styles.row}>
-          <span>Subtotal</span>
+          <span>{t("resource.b2b.components.split_payment.subtotal")}</span>
           <strong>{formatAmount(subtotal, currencySymbol)}</strong>
         </div>
         {paidAmount > 0 && (
           <div className={styles.row}>
-            <span>Payment 1</span>
+            <span>
+              {t("resource.b2b.components.split_payment.payment_number", {
+                number: 1,
+              })}
+            </span>
             <strong className={styles.success}>
               -{formatAmount(paidAmount, currencySymbol)}
             </strong>
@@ -43,7 +53,9 @@ function SplitPaymentSummary({
         )}
         <div className={styles.divider} />
         <div className={styles.totalRow}>
-          <span>Remaining Amount Payable</span>
+          <span>
+            {t("resource.b2b.components.split_payment.remaining_amount_payable")}
+          </span>
           <strong>{formatAmount(remainingAmount, currencySymbol)}</strong>
         </div>
       </div>

@@ -8,6 +8,7 @@ import React, {
 import CheckoutPaymentContent from "../../page-layouts/single-checkout/payment/checkout-payment-content";
 import CheckoutPaymentFailure from "../../page-layouts/single-checkout/payment/checkout-payment-failure";
 import CheckoutPaymentSkeleton from "../../page-layouts/single-checkout/payment/checkout-payment-skeleton";
+import { useGlobalTranslation } from "fdk-core/utils";
 import * as styles from "./SplitPaymentOptions.less";
 
 // ─── Stable no-op references so useCheckoutPayment effects don't re-fire ──────
@@ -143,6 +144,7 @@ function SplitPaymentOptions({
   getPaymentSuccessRedirectUrl,
   isSplitPayment = false,
 }) {
+  const { t } = useGlobalTranslation("translation");
   const [selectedTab, setSelectedTab] = useState("");
   const [showUpiRedirectionModal, setShowUpiRedirectionModal] = useState(false);
   const [isPaymentLoading, setIsPaymentLoading] = useState(false);
@@ -281,7 +283,7 @@ function SplitPaymentOptions({
   const payButtonLoader = (
     <span
       className={styles.payButtonLoader}
-      aria-label="Processing payment"
+      aria-label={t("resource.b2b.components.split_payment.processing_payment")}
     />
   );
 

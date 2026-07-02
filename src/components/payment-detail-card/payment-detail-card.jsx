@@ -86,7 +86,8 @@ function PaymentDetailCard({
           onClick={onPayRemaining}
           disabled={isPayRemainingLoading}
         >
-          Pay Remaining {formattedRemainingAmount}
+          {t("resource.b2b.components.split_payment.pay_remaining")}{" "}
+          {formattedRemainingAmount}
         </button>
       )}
     </div>
