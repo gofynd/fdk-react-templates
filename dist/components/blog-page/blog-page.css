@@ -377,6 +377,7 @@ h5,
 }
 .blog-page__blogContainer___zYAl1 .blog-page__leftCol___X8GrY {
   width: 100%;
+  min-width: 0;
 }
 @media only screen and (max-width: 768px) {
   .blog-page__blogContainer___zYAl1 .blog-page__leftCol___X8GrY {
@@ -416,6 +417,8 @@ h5,
 }
 .blog-page__blogPost__header___Iy3lC {
   margin-bottom: 20px;
+  max-width: 100%;
+  min-width: 0;
 }
 .blog-page__blogPost__breadcrumb___EJUzC {
   padding-top: 2px;
@@ -428,6 +431,9 @@ h5,
   font-size: 38px;
   line-height: 44px;
   font-weight: 700;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 @media only screen and (max-width: 480px) {
   .blog-page__blogPost__heading___A43Bo {
@@ -500,8 +506,12 @@ h5,
   background-color: transparent;
 }
 .blog-page__breadcrumb___TcPAQ {
-  color: var(--textSecondary, #9c9c9c);
+  font-family: var(--fontBody);
+  color: var(--textBody, #3c3131);
   margin-bottom: 40px;
+}
+.blog-page__breadcrumb___TcPAQ a {
+  color: var(--textBody, #3c3131);
 }
 .blog-page__breadcrumb__icon___iPxwn {
   width: 4px;
@@ -514,6 +524,11 @@ h5,
   font-weight: 400;
   line-height: 15px;
   text-transform: capitalize;
+  color: var(--textBody, #3c3131);
+}
+.blog-page__breadcrumb__labelActive___S_aFq {
+  font-family: var(--fontHeader);
+  color: var(--textHeading, #26201a);
 }
 .blog-page__breadcrumb__link___mWfeS {
   display: flex;
@@ -527,6 +542,12 @@ h5,
   font-size: 14px;
   font-weight: 400;
   line-height: 20px;
+}
+.blog-page__author__label___jOfZD {
+  color: var(--textHeading, #26201a);
+}
+.blog-page__publishDate__label___LNdGS {
+  color: var(--textBody, #3c3131);
 }
 .blog-page__social___QVRa3 {
   gap: 0.5rem;
@@ -543,6 +564,7 @@ h5,
   font-size: 14px;
   font-weight: 400;
   line-height: 20px;
+  color: var(--textHeading, #26201a);
 }
 .blog-page__social__icon___aUYDV {
   border-radius: 100%;
@@ -1425,6 +1447,7 @@ h5,
   text-align: center;
   font-size: 14px;
   line-height: 24px;
+  color: var(--textBody, #3c3131);
 }
 @media only screen and (min-width: 481px) {
   .blog-footer__footer__description___cMbT8 {

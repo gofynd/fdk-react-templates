@@ -83,13 +83,15 @@ function MemoizedSlide({ blog, index, sliderProps, getBlogTitle }) {
         {blog?.summary && (
           <p className={`${styles.blogItem__content}`}>{blog?.summary}</p>
         )}
-        <FDKLink
-          className={`${styles.blogItem__button} ${styles.btnPrimary}`}
-          title={blog?.title}
-          to={`/blog/${blog?.slug}`}
-        >
-          {translateDynamicLabel(sliderProps?.btn_text, t)}
-        </FDKLink>
+        {!!sliderProps?.btn_text?.trim() && (
+          <FDKLink
+            className={`${styles.blogItem__button} ${styles.btnPrimary}`}
+            title={blog?.title}
+            to={`/blog/${blog?.slug}`}
+          >
+            {translateDynamicLabel(sliderProps?.btn_text, t)}
+          </FDKLink>
+        )}
       </div>
       <FyImage
         customClass={styles.blogItem__image}
