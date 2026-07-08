@@ -222,6 +222,7 @@ function UpiAppPayment({
                     }
                     selectMop("UPI", "UPI", "UPI");
                     cancelQrPayment();
+                    handleProceedToPayClick();
                   }}
                   disabled={
                     mopSelectionLoading ||

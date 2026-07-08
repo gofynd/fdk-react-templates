@@ -57,6 +57,7 @@ export function useCheckoutPayment({
     enableLinkPaymentOption,
     setIsPaymentLoading,
     setShowUpiRedirectionModal,
+    getPaymentSuccessRedirectUrl,
   } = payment;
 
   // env / derived
@@ -840,9 +841,17 @@ export function useCheckoutPayment({
         const params = new URLSearchParams();
         for (const key in qrParams) params.append(key, qrParams[key]);
 
-        const finalUrl = `${window.location.origin}${
+        const defaultUrl = `${window.location.origin}${
           locale && locale !== "en" ? `/${locale}` : ""
         }/cart/order-status/?${params.toString()}`;
+        const finalUrl =
+          getPaymentSuccessRedirectUrl?.({
+            defaultUrl,
+            locale,
+            params,
+            qrPayload,
+            qrParams,
+          }) || defaultUrl;
 
         window.location.href = finalUrl;
       } else if (status === "failed") {
@@ -1123,18 +1132,27 @@ export function useCheckoutPayment({
     if (getTotalValue?.() === 0) {
       setSelectedTab("COD");
     } else if (!enableLinkPaymentOption) {
+      const selectedTabExists =
+        selectedTab &&
+        (paymentOptions?.some((opt) => opt.name === selectedTab) ||
+          (selectedTab === "Other" && otherPaymentOptions?.length > 0) ||
+          otherPaymentOptions?.some((opt) => opt.name === selectedTab) ||
+          codOption?.name === selectedTab);
+
       if (paymentOptions?.length > 0) {
-        setSelectedTab(paymentOptions[0].name);
-        setActiveMop(paymentOptions[0].name);
-      } else if (otherPaymentOptions?.length > 0) {
+        if (!selectedTabExists) {
+          setSelectedTab(paymentOptions[0].name);
+          setActiveMop(paymentOptions[0].name);
+        }
+      } else if (otherPaymentOptions?.length > 0 && !selectedTabExists) {
         setSelectedTab("Other");
         setActiveMop("Other");
-      } else if (codOption?.name) {
+      } else if (codOption?.name && !selectedTabExists) {
         selectMop(codOption?.name, codOption?.name, codOption?.name);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paymentOption]);
+  }, [paymentOption, selectedTab]);
 
   const handleScrollToTop = (index) => {
     const element = document.getElementById(`nav-title-${index}`);

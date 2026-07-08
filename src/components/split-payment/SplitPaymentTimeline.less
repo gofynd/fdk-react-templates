@@ -3,21 +3,24 @@
 .timeline {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 0;
+  padding: 4px 0;
 }
 
 .row {
   display: flex;
-  align-items: flex-start;
-  gap: 12px;
+  align-items: center;
+  gap: 14px;
+  min-height: 52px;
+  padding: 7px 18px 7px 10px;
 }
 
 .icon {
-  width: 20px;
+  width: 22px;
   flex-shrink: 0;
-  font-size: 14px;
+  font-size: 15px;
+  line-height: 22px;
   text-align: center;
-  padding-top: 2px;
   color: @TextSecondary;
 }
 
@@ -25,30 +28,36 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
+  min-width: 0;
 }
 
 .paymentLabel {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 700;
   color: @TextBody;
+  line-height: 19px;
 }
 
 .method {
-  font-size: 12px;
+  font-size: 11px;
   color: @TextLabel;
+  line-height: 15px;
 }
 
 .statusBadge {
   font-size: 12px;
   color: @UserAlertsInfoText;
+  line-height: 16px;
 }
 
 .amount {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 700;
   color: @TextBody;
   white-space: nowrap;
+  line-height: 20px;
+  margin-left: 12px;
 }
 
 .completed {
@@ -66,6 +75,7 @@
 .pending {
   .icon {
     color: @TextSecondary;
+    font-size: 12px;
   }
 
   .paymentLabel {

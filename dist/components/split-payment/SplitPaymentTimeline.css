@@ -337,45 +337,54 @@ h5,
 .SplitPaymentTimeline__timeline___XY_Rv {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 0;
+  padding: 4px 0;
 }
 .SplitPaymentTimeline__row___Ssl62 {
   display: flex;
-  align-items: flex-start;
-  gap: 12px;
+  align-items: center;
+  gap: 14px;
+  min-height: 52px;
+  padding: 7px 18px 7px 10px;
 }
 .SplitPaymentTimeline__icon___GjAkW {
-  width: 20px;
+  width: 22px;
   flex-shrink: 0;
-  font-size: 14px;
+  font-size: 15px;
+  line-height: 22px;
   text-align: center;
-  padding-top: 2px;
   color: var(--textSecondary, #9c9c9c);
 }
 .SplitPaymentTimeline__info___f44Wl {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
+  min-width: 0;
 }
 .SplitPaymentTimeline__paymentLabel___bln0Z {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 700;
   color: var(--textBody, #3c3131);
+  line-height: 19px;
 }
 .SplitPaymentTimeline__method___cGCRR {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--textLabel, #7d7676);
+  line-height: 15px;
 }
 .SplitPaymentTimeline__statusBadge___zEfbp {
   font-size: 12px;
   color: var(--useralertsinfotext, #D4803C);
+  line-height: 16px;
 }
 .SplitPaymentTimeline__amount___CskNT {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 700;
   color: var(--textBody, #3c3131);
   white-space: nowrap;
+  line-height: 20px;
+  margin-left: 12px;
 }
 .SplitPaymentTimeline__completed___QMUfe .SplitPaymentTimeline__icon___GjAkW {
   color: var(--successText, #1c958f);
@@ -385,6 +394,7 @@ h5,
 }
 .SplitPaymentTimeline__pending___sV1kN .SplitPaymentTimeline__icon___GjAkW {
   color: var(--textSecondary, #9c9c9c);
+  font-size: 12px;
 }
 .SplitPaymentTimeline__pending___sV1kN .SplitPaymentTimeline__paymentLabel___bln0Z {
   color: var(--textSecondary, #9c9c9c);

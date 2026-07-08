@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { IMaskInput } from "react-imask";
+import { IMaskInput, IMask } from "react-imask";
 import * as styles from "./checkout-payment-content.less";
 import Modal from "../../../components/core/modal/modal";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";

@@ -40,6 +40,9 @@ function CheckoutPaymentContent({
   inValidCouponData,
   neftFileUpload = { state: {}, upload: () => {}, reset: () => {} },
   rtgsFileUpload = { state: {}, upload: () => {}, reset: () => {} },
+  beforePaymentContent = null,
+  paymentContentOverride = null,
+  isSplitPayment = false,
 }) {
   const checkoutPayment = useCheckoutPayment({
     payment,
@@ -822,12 +825,17 @@ function CheckoutPaymentContent({
         </div>
       ) : (
         <div
-          className={`${styles.container} ${enableLinkPaymentOption ? styles.unsetBorder : ""}`}
+          className={`${styles.container} ${enableLinkPaymentOption ? styles.unsetBorder : ""} ${isSplitPayment ? styles.split : ""}`}
         >
+          {beforePaymentContent}
           {true ? (
             <>
-              {partialPaymentOption?.list[0]?.balance?.account?.status !==
-                "INACTIVE" && (
+              {!paymentContentOverride &&
+                partialPaymentOption?.list?.some(
+                  (option) => option?.partial_payment_allowed
+                ) &&
+                partialPaymentOption?.list?.[0]?.balance?.account?.status !==
+                  "INACTIVE" && (
                 <div className={styles.creditNote}>
                   <CreditNote
                     data={partialPaymentOption}
@@ -842,6 +850,8 @@ function CheckoutPaymentContent({
 
               {creditUpdating ? (
                 <CheckoutPaymentSkeleton />
+              ) : paymentContentOverride ? (
+                paymentContentOverride
               ) : (
                 <div
                   className={`${styles.paymentOptions} ${!getTotalValue() ? styles.displayNone : ""}`}
