@@ -1,0 +1,167 @@
+@import "../../styles/main.less";
+
+.container {
+  display: flex;
+  border: 1px solid @DividerStokes;
+  border-radius: 4px;
+  margin-top: 8px;
+  background: @ThemePageBackground;
+  min-height: 240px;
+
+  @media @mobile {
+    flex-direction: column;
+  }
+}
+
+.tabList {
+  width: 200px;
+  flex-shrink: 0;
+  border-right: 1px solid @DividerStokes;
+
+  @media @mobile {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid @DividerStokes;
+  }
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid @DividerStokes;
+  position: relative;
+  gap: 8px;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover:not(.selectedTab) {
+    background: @ThemeAccentL4;
+  }
+}
+
+.selectedTab {
+  .selectedIndicator {
+    visibility: visible;
+  }
+}
+
+.selectedIndicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: @ButtonPrimary;
+  border-radius: 0 2px 2px 0;
+  visibility: hidden;
+}
+
+.tabMain {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.tabIcon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.tabName {
+  font-size: 13px;
+  color: @TextBody;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.selectedTabName {
+  color: @ButtonPrimary;
+  font-weight: 600;
+}
+
+.subIcons {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.subIcon {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+}
+
+.subIconImg {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.content {
+  flex: 1;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholder {
+  font-size: 14px;
+  color: @TextLabel;
+  text-align: center;
+}
+
+.payArea {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.methodName {
+  font-size: 16px;
+  font-weight: 600;
+  color: @TextHeading;
+  text-align: center;
+  margin: 0;
+}
+
+.methodHint {
+  font-size: 13px;
+  color: @TextLabel;
+  text-align: center;
+  margin: 0;
+}
+
+.payBtn {
+  width: 100%;
+  max-width: 280px;
+  padding: 14px;
+  background: @ButtonPrimary;
+  color: @ButtonSecondary;
+  border: none;
+  border-radius: @ButtonRadius;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

@@ -13,9 +13,13 @@ const CreditNote = ({
     [data]
   );
 
-  const handleChange = (option) => {
-    updateStoreCredits(!option?.balance?.is_applied);
-    if (!option?.balance?.is_applied) {
+  const handleChange = (option, nextChecked) => {
+    const shouldApply =
+      typeof nextChecked === "boolean"
+        ? nextChecked
+        : !option?.balance?.is_applied;
+    updateStoreCredits(shouldApply);
+    if (shouldApply) {
       validateCouponOnCreditNoteApplied("CREDITNOTE", "CREDITNOTE");
     }
   };
@@ -38,9 +42,9 @@ const CreditNote = ({
                   <label className={styles.actionContainer}>
                     <input
                       className={styles.checbox}
-                      checked={option?.balance?.is_applied}
+                      checked={!!option?.balance?.is_applied}
                       type="checkbox"
-                      onChange={() => handleChange(option)}
+                      onChange={(e) => handleChange(option, e.target.checked)}
                     />
                     <div className={styles.label}>
                       <div className={`${styles.title} ${styles.bold}`}>

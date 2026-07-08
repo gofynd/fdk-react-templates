@@ -837,12 +837,8 @@ h5,
 }
 .bag__bagImg___F1kfj {
   min-width: 80px;
-  border-radius: var(--itemImageRadius, 11px);
+  border-radius: var(--buttonRadius, 0px);
   overflow: hidden;
-}
-.bag__bagImg___F1kfj picture,
-.bag__bagImg___F1kfj img {
-  border-radius: inherit;
 }
 .bag__bundleImg___TEyPU {
   display: grid;
@@ -862,12 +858,6 @@ h5,
 }
 .bag__bundleImg___TEyPU .bag__bundleImgItem___slqOT .bag__itemImg___tRLBP {
   display: flex;
-  border-radius: inherit;
-  overflow: hidden;
-}
-.bag__bundleImg___TEyPU .bag__bundleImgItem___slqOT .bag__itemImg___tRLBP picture,
-.bag__bundleImg___TEyPU .bag__bundleImgItem___slqOT .bag__itemImg___tRLBP img {
-  border-radius: inherit;
 }
 .bag__bundleImg___TEyPU .bag__bundleImgItem___slqOT .bag__bundleCount___C799t {
   position: absolute;
