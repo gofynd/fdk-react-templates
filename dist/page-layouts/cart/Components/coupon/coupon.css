@@ -413,6 +413,15 @@ h5,
   font-weight: 500;
   margin-top: 4px;
 }
+.coupon__modalHeader___a8t1e [class*="crossIcon"] {
+  color: var(--textBody, #3c3131);
+}
+.coupon__modalHeader___a8t1e [class*="crossIcon"] svg {
+  fill: currentColor;
+}
+.coupon__modalHeader___a8t1e [class*="crossIcon"] svg path {
+  fill: currentColor;
+}
 @media only screen and (max-width: 480px) {
   .coupon__modalHeader___a8t1e {
     line-height: 140%;
@@ -458,7 +467,7 @@ h5,
   border: 1px solid var(--dividerStokes, #d4d1d1);
   border-radius: 4px;
   background: var(--dialogBackground, #fff);
-  color: var(--textBody, #3c3131);
+  color: var(--textHeading, #26201a);
   font-size: 12px;
   font-weight: 400;
   padding: 16px;
@@ -718,6 +727,13 @@ h5,
   align-items: center;
   justify-content: center;
   z-index: 3;
+  color: var(--textBody, #3c3131);
+}
+.coupon__couponSuccessModalContent___TUDzT .coupon__close-icon___w35na svg {
+  fill: currentColor;
+}
+.coupon__couponSuccessModalContent___TUDzT .coupon__close-icon___w35na svg path {
+  fill: currentColor;
 }
 .coupon__couponSuccessModalContent___TUDzT .coupon__couponSuccessGif___cMoJ1 {
   position: absolute;

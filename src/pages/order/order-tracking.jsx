@@ -4,7 +4,16 @@ import { useNavigate, useGlobalTranslation } from "fdk-core/utils";
 import FyInput from "../../components/core/fy-input/fy-input";
 import FyButton from "../../components/core/fy-button/fy-button";
 
-function OrderTracking({ instMob, title, orderIdPlaceholder, trackOrderBtnText, whereIsOrderIdText }) {
+function OrderTracking({
+  instMob,
+  title,
+  inputPlaceholder,
+  trackButtonText,
+  orderHelpText,
+  buttonText,
+  helpText,
+  typographyCss,
+}) {
   const { t } = useGlobalTranslation("translation");
   const [showDetails, setShowDetails] = useState(false);
 
@@ -20,16 +29,42 @@ function OrderTracking({ instMob, title, orderIdPlaceholder, trackOrderBtnText, 
     }
     navigate(`/order-tracking/${orderId}`);
   };
+  const orderTitle = title?.value || title || "Track Your Shipment";
+  const orderInputPlaceholder =
+    inputPlaceholder?.value ||
+    inputPlaceholder ||
+    t("resource.order.enter_your_order_number");
+
+  const trackButtonLabel =
+    trackButtonText?.value ||
+    trackButtonText ||
+    buttonText?.value ||
+    buttonText ||
+    "Check Status";
+  const orderHelpLabel =
+    orderHelpText?.value ||
+    orderHelpText ||
+    helpText?.value ||
+    helpText ||
+    "Need help finding your order number?";
+
   return (
-    <div className="basePageContainer margin0auto">
+    <div
+      className={`basePageContainer margin0auto order-tracking-section ${
+        typographyCss ? styles.customTypography : ""
+      }`}
+    >
+      {typographyCss && <style>{typographyCss}</style>}
       <div className={`${styles.trackOrderCntr}`}>
-        <h2 className={`${styles.orderTitle}`}>{title}</h2>
+        <h2 className={`${styles.orderTitle}`}>{orderTitle}</h2>
         <div className={`${styles.trackOrder}`}>
           <FyInput
-            label={isFocussed || orderId ? orderIdPlaceholder : ""}
+            label={
+              isFocussed || orderId ? t("resource.order.enter_order_id") : ""
+            }
             labelVariant="floating"
             value={orderId}
-            placeholder={!isFocussed ? orderIdPlaceholder : ""}
+            placeholder={!isFocussed ? orderInputPlaceholder : ""}
             maxLength="20"
             error={showError}
             errorMessage={t("resource.order.invalid_order_id")}
@@ -44,20 +79,20 @@ function OrderTracking({ instMob, title, orderIdPlaceholder, trackOrderBtnText, 
             size="medium"
             onClick={trackOrder}
           >
-            {trackOrderBtnText}
+            {trackButtonLabel}
           </FyButton>
           <FyButton
             className={styles.btn}
             variant="text"
             onClick={() => setShowDetails(!showDetails)}
           >
-           {whereIsOrderIdText}
+            {orderHelpLabel}
           </FyButton>
           {showDetails && (
             <div>
               <img
                 src={instMob}
-                alt={whereIsOrderIdText}
+                alt={orderHelpLabel}
                 className={`${styles.demoImg}`}
               />
             </div>

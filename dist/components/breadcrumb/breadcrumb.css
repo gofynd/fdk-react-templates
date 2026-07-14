@@ -339,6 +339,8 @@ h5,
   line-height: 1.5;
   letter-spacing: -0.02em;
   font-weight: 400;
+  font-family: var(--fontBody);
+  color: var(--textBody, #3c3131);
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -347,7 +349,12 @@ h5,
     font-size: 11px;
   }
 }
-.breadcrumb__breadcrumbs___lMY9E span {
-  color: var(--textSecondary, #9c9c9c);
+.breadcrumb__breadcrumbs___lMY9E span,
+.breadcrumb__breadcrumbs___lMY9E a {
+  color: var(--textBody, #3c3131);
+}
+.breadcrumb__breadcrumbs___lMY9E .breadcrumb__active___NRqNx {
+  font-family: var(--fontHeader);
+  color: var(--textHeading, #26201a);
 }
 
