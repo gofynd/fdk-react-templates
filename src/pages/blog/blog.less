@@ -123,6 +123,9 @@
 }
 .sliderWrapper {
   padding-bottom: 60px;
+  @media @mobile, @tablet {
+    padding-bottom: 40px;
+  }
   .carouselBtn {
     &[disabled] {
       display: none;
@@ -131,7 +134,7 @@
       display: none;
     }
   }
-  
+
   .blogItem {
     @media @tablet {
       height: 100%;
@@ -152,6 +155,8 @@
     margin: 0 calc(var(--gap) / 2);
     @media @tablet {
       --gap: 16px;
+      border: 1px solid @DividerStokes;
+      margin: 0;
     }
     @media @desktop {
       flex-direction: row;
@@ -165,6 +170,8 @@
       align-items: stretch;
       --gap: 12px;
       margin-inline-end: var(--p-right-mob, 12px);
+      border: 1px solid @DividerStokes;
+      margin: 0;
     }
     &__info {
       padding: 0 1rem 1rem;
@@ -248,9 +255,7 @@
         line-height: 24px;
         -webkit-line-clamp: 3;
       }
-      @media @mobile {
-        display: none;
-      }
+
       @media @desktop-xl {
         font-size: 18px;
         line-height: 24px;
