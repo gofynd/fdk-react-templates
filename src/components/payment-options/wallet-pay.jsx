@@ -29,6 +29,7 @@ function WalletPayment({
   getWalletdBorder,
   selectedPaymentPayload,
   mopSelectionLoading,
+  isPaymentDisabled = false,
 }) {
   const isTablet = useViewport(0, 768);
   const initialVisibleWalletCount = 3;
@@ -83,7 +84,9 @@ function WalletPayment({
                 true
               )}
               onPriceDetailsClick={onPriceDetailsClick}
-              disabled={mopSelectionLoading || !selectedWallet.code}
+              disabled={
+                mopSelectionLoading || !selectedWallet.code || isPaymentDisabled
+              }
               enableLinkPaymentOption={enableLinkPaymentOption}
               isPaymentLoading={isPaymentLoading}
               loader={loader}
@@ -104,7 +107,9 @@ function WalletPayment({
                     acceptOrder();
                   }
                 }}
-                disabled={mopSelectionLoading || isPaymentLoading}
+                disabled={
+                  mopSelectionLoading || isPaymentLoading || isPaymentDisabled
+                }
               >
                 {!isPaymentLoading ? (
                   <>

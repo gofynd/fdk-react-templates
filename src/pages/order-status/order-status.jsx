@@ -69,12 +69,6 @@ function OrderStatus({
     address_type: "Home",
     phone: "1234567890",
   };
-  const imageRadiusStyle =
-    globalConfig?.["item-image-border-radius"] != null
-      ? {
-          "--itemImageRadius": `${globalConfig["item-image-border-radius"]}px`,
-        }
-      : undefined;
 
   return success === "true" ? (
     <div className={styles.orders}>
@@ -489,7 +483,7 @@ function ProductItem({
   return (
     <FDKLink to={orderLink}>
       <div className={styles.shipmentProdItem}>
-        <div className={styles.prodImg} style={imageRadiusStyle}>
+        <div className={styles.prodImg}>
           <BagImage
             bag={product}
             isBundle={isBundleItem}

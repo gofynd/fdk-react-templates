@@ -2375,7 +2375,7 @@ h5,
 }
 .bag__bagImg___F1kfj {
   min-width: 80px;
-  border-radius: var(--itemImageRadius, 11px);
+  border-radius: var(--buttonRadius, 0px);
   overflow: hidden;
 }
 .bag__bagImg___F1kfj picture,
@@ -5815,7 +5815,7 @@ h5,
 }
 .fy-input__fyInput___S4Mtu::placeholder {
   color: var(--textLabel, #7d7676);
-  opacity: 1;
+  opacity: 0.3;
 }
 .fy-input__fyInput___S4Mtu::-webkit-outer-spin-button,
 .fy-input__fyInput___S4Mtu::-webkit-inner-spin-button {

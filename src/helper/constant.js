@@ -110,19 +110,3 @@ export const RESPONSIVE_IMAGE_BREAKPOINTS = [
   // Mobile small (<360px): 540px image (320 * 1.69 = 540)
   { breakpoint: { max: 359 }, width: 540 },
 ];
-
-export const TYPOGRAPHY_RULES = {
-  heading: {
-    fallback: 72,
-    compactViewport: 320,
-    minViewport: 430,
-    maxViewport: 1440,
-  },
-  description: {
-    fallback: 16,
-    minFloor: 14,
-    compactViewport: 320,
-    minViewport: 430,
-    maxViewport: 1440,
-  },
-};

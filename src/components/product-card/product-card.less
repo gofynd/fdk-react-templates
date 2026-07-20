@@ -314,43 +314,6 @@
             }
           }
 
-          // Image-based variant swatch: circular thumbnail, same footprint as colorDot
-          .imageDot {
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            display: block;
-            overflow: hidden;
-            cursor: pointer;
-            text-decoration: none;
-            flex-shrink: 0;
-            position: relative;
-            box-sizing: border-box;
-            border: 1px solid @DividerStokes;
-            padding: 0;
-
-            .imageDotImg,
-            img {
-              width: 100%;
-              height: 100%;
-              object-fit: cover;
-              border-radius: 50%;
-            }
-
-            &:hover {
-              transform: scale(1.1);
-              z-index: 10;
-            }
-
-            // Selected: black outer ring with inner spacing, matching colorDot
-            &.currentColor {
-              width: 22px;
-              height: 22px;
-              border: 1px solid @TextHeading;
-              padding: 2px;
-            }
-          }
-
           .moreColors {
             color: @TextBody;
             font-size: 12px;

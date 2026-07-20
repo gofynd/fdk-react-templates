@@ -3,7 +3,6 @@ import {
   DEFAULT_UTC_LOCALE,
   IMAGE_OPTIMIZATION_CONFIG,
   RESPONSIVE_IMAGE_BREAKPOINTS,
-  TYPOGRAPHY_RULES,
 } from "./constant";
 
 export const debounce = (func, wait) => {
@@ -433,11 +432,16 @@ export const currencyFormat = (
     finalLocale = "en-IN";
   }
 
+  // Determine if we should use Indian numbering system
+  const isIndianLocale =
+    finalLocale === "en-IN" || finalLocale?.startsWith("en-IN");
+
   try {
-    // Always force the Latin (latn) numbering system so prices render with
-    // Western digits across all locales (e.g. SAR -> ar-SA), matching the rest
-    // of the storefront. Locale-aware grouping/decimal separators are preserved.
-    const localeString = `${finalLocale}-u-nu-latn`;
+    // Use Intl.NumberFormat for locale-aware formatting
+    const numberingSystem = isIndianLocale ? "latn" : undefined;
+    const localeString = numberingSystem
+      ? `${finalLocale}-u-nu-${numberingSystem}`
+      : finalLocale;
 
     const hasDecimal = forceDecimals && num % 1 !== 0;
     const formatter = new Intl.NumberFormat(localeString, {
@@ -610,11 +614,16 @@ export function priceFormatCurrencySymbol(
     finalLocale = getLocaleFromCurrency(currencyCode);
   }
 
+  // Determine if we should use Indian numbering system
+  const isIndianLocale =
+    finalLocale === "en-IN" || finalLocale?.startsWith("en-IN");
+
   try {
-    // Always force the Latin (latn) numbering system so prices render with
-    // Western digits across all locales (e.g. SAR -> ar-SA), matching the rest
-    // of the storefront. Locale-aware grouping/decimal separators are preserved.
-    const localeString = `${finalLocale}-u-nu-latn`;
+    // Use Intl.NumberFormat for locale-aware formatting
+    const numberingSystem = isIndianLocale ? "latn" : undefined;
+    const localeString = numberingSystem
+      ? `${finalLocale}-u-nu-${numberingSystem}`
+      : finalLocale;
 
     const hasDecimal = forceDecimals && num % 1 !== 0;
     const formatter = new Intl.NumberFormat(localeString, {
@@ -1060,104 +1069,4 @@ export const formatDeliveryAddress = (d = {}) => {
 export const truncateName = (name,length) => {
   if (!name) return "";
   return name.length > length ? name.slice(0, length) + "..." : name;
-};
-
-const getHeadingMinRatio = (max) => {
-  if (max <= 72) return 0.71;
-  if (max <= 120) return 0.55;
-  if (max <= 184) return 0.32;
-  return 0.32;
-};
-
-const getDescriptionMinRatio = (max) => {
-  if (max <= 24) return 0.85;
-  if (max <= 42) return 0.8;
-  return getHeadingMinRatio(max);
-};
-
-const getHeadingCompactMin = (max, min) => {
-  if (max <= 72) {
-    return Math.min(min, Math.max(36, Math.round(max * 0.56)));
-  }
-
-  if (max <= 120) {
-    return Math.min(min, Math.max(40, Math.round(max * 0.4)));
-  }
-
-  return Math.min(min, Math.max(40, Math.round(max * 0.22)));
-};
-
-const getCompactTypographyMin = (max, min, variant) => {
-  if (variant === "heading" || max > 42) {
-    return getHeadingCompactMin(max, min);
-  }
-
-  return min;
-};
-
-export const getClampTypographySize = (value, variant = "heading") => {
-  const normalizedVariant = TYPOGRAPHY_RULES[variant] ? variant : "heading";
-  const rule = TYPOGRAPHY_RULES[normalizedVariant];
-  const parsed = parseFloat(`${value}`.trim());
-  const max =
-    Number.isFinite(parsed) && parsed > 0
-      ? Math.round(parsed)
-      : rule.fallback;
-
-  const minRatio =
-    normalizedVariant === "heading"
-      ? getHeadingMinRatio(max)
-      : getDescriptionMinRatio(max);
-  const minFloor = normalizedVariant === "heading" ? 24 : rule.minFloor;
-  const min = Math.min(
-    max,
-    Math.max(minFloor, Math.round(max * minRatio))
-  );
-  const compactViewport = rule.compactViewport || rule.minViewport;
-  const compactMin = getCompactTypographyMin(
-    max,
-    min,
-    normalizedVariant
-  );
-
-  if (compactViewport < rule.minViewport && compactMin < min) {
-    const compactRange = min - compactMin;
-    const desktopRange = max - min;
-    const compactViewportRange = rule.minViewport - compactViewport;
-    const desktopViewportRange = rule.maxViewport - rule.minViewport;
-
-    return `clamp(${compactMin}px, round(nearest, calc(${compactMin}px + clamp(0px, calc(${compactRange} * ((100vw - ${compactViewport}px) / ${compactViewportRange})), ${compactRange}px) + clamp(0px, calc(${desktopRange} * ((100vw - ${rule.minViewport}px) / ${desktopViewportRange})), ${desktopRange}px)), 1px), ${max}px)`;
-  }
-
-  return `clamp(${min}px, round(nearest, calc(${min}px + (${max} - ${min}) * ((100vw - ${rule.minViewport}px) / ${rule.maxViewport - rule.minViewport})), 1px), ${max}px)`;
-};
-
-export const getCustomFontSize = (value, variant = "heading") => {
-  const parsed = parseFloat(`${value}`.trim());
-  if (!Number.isFinite(parsed) || parsed <= 0) return undefined;
-  if (parsed <= 42) return `${Math.round(parsed)}px`;
-  return getClampTypographySize(parsed, variant);
-};
-
-const HEADING_FONT_WEIGHT_VALUES = ["400", "500", "600", "700", "800"];
-const HEADING_TEXT_TRANSFORM_VALUES = [
-  "uppercase",
-  "lowercase",
-  "capitalize",
-];
-
-const getTypographyConfigValue = (value) => value?.value ?? value;
-
-export const getHeadingTypographyStyles = (config = {}) => {
-  const fontWeight = `${getTypographyConfigValue(config.heading_font_weight) || ""}`;
-  const textTransform = `${getTypographyConfigValue(config.heading_text_transform) || ""}`;
-
-  return {
-    ...(HEADING_FONT_WEIGHT_VALUES.includes(fontWeight) && {
-      "--section-heading-weight": fontWeight,
-    }),
-    ...(HEADING_TEXT_TRANSFORM_VALUES.includes(textTransform) && {
-      "--section-heading-text-transform": textTransform,
-    }),
-  };
 };

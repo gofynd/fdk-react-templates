@@ -349,9 +349,6 @@ h5,
 .phone__phoneInputContainer___fBDbN {
   width: 350px !important;
 }
-.phone__phoneInputContainer___fBDbN input {
-  color: var(--textHeading, #26201a) !important;
-}
 @media only screen and (max-width: 480px) {
   .phone__phoneInputContainer___fBDbN {
     width: unset !important;
@@ -819,10 +816,6 @@ h5,
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__dialCodePreview___E0m4Z {
   border-inline: none;
   padding-inline-end: 4px;
-  color: var(--textHeading, #26201a);
-}
-.mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__countryButton___NUFUC {
-  color: var(--textHeading, #26201a);
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG {
   width: 100%;
@@ -830,7 +823,6 @@ h5,
   display: flex;
   border-inline-start: none;
   padding-inline-start: 4px;
-  color: var(--textHeading, #26201a);
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG:focus-visible {
   outline: none;
@@ -3182,7 +3174,7 @@ h5,
 }
 .fy-input__fyInput___S4Mtu::placeholder {
   color: var(--textLabel, #7d7676);
-  opacity: 1;
+  opacity: 0.3;
 }
 .fy-input__fyInput___S4Mtu::-webkit-outer-spin-button,
 .fy-input__fyInput___S4Mtu::-webkit-inner-spin-button {
@@ -3597,34 +3589,11 @@ h5,
   align-items: center;
   justify-content: center;
 }
-.empty-state__emptyContainer___hXYwb .empty-state__emptyStateIconWrapper___e5Enh {
-  flex: 0 0 auto;
-  align-self: center;
-  margin: 0 auto;
-  width: 185px;
-}
-.empty-state__emptyContainer___hXYwb .empty-state__emptyStateIconWrapper___e5Enh svg path[fill="#0B9FA2"],
-.empty-state__emptyContainer___hXYwb .empty-state__emptyStateIconWrapper___e5Enh svg rect[fill="#0B9FA2"],
-.empty-state__emptyContainer___hXYwb .empty-state__emptyStateIconWrapper___e5Enh svg circle[fill="#0B9FA2"],
-.empty-state__emptyContainer___hXYwb .empty-state__emptyStateIconWrapper___e5Enh svg ellipse[fill="#0B9FA2"] {
-  fill: var(--textBody, #3c3131);
-}
-.empty-state__emptyContainer___hXYwb .empty-state__emptyStateIconWrapper___e5Enh svg path[stroke="#0B9FA2"],
-.empty-state__emptyContainer___hXYwb .empty-state__emptyStateIconWrapper___e5Enh svg rect[stroke="#0B9FA2"],
-.empty-state__emptyContainer___hXYwb .empty-state__emptyStateIconWrapper___e5Enh svg circle[stroke="#0B9FA2"],
-.empty-state__emptyContainer___hXYwb .empty-state__emptyStateIconWrapper___e5Enh svg ellipse[stroke="#0B9FA2"] {
-  stroke: var(--textBody, #3c3131);
-}
-.empty-state__emptyContainer___hXYwb .empty-state__emptyContent___rvQSi {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: center;
-}
 .empty-state__emptyContainer___hXYwb .empty-state__description___kUU3P {
   display: flex;
   justify-content: center;
   max-width: 480px;
+  margin-top: 8px;
   text-align: center;
   line-height: 18px;
   letter-spacing: -0.02em;

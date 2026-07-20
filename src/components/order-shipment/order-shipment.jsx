@@ -74,7 +74,6 @@ const ShipmentDetails = ({
   bundleGroups,
   bundleGroupArticles,
   aspectRatio,
-  globalConfig,
   isImageFill,
   naivgateToShipment,
   isAdmin,
@@ -109,12 +108,6 @@ const ShipmentDetails = ({
     bundleGroupId && bundleGroups && bundleGroups[bundleGroupId]?.length > 0;
 
   const productName = getProductsName({ bag: item?.bags?.[0], isBundleItem });
-  const imageRadiusStyle =
-    globalConfig?.["item-image-border-radius"] != null
-      ? {
-          "--itemImageRadius": `${globalConfig["item-image-border-radius"]}px`,
-        }
-      : undefined;
 
   const reattemptEndDate = item?.ndr_details?.allowed_delivery_window?.end_date
     ? (() => {
@@ -141,7 +134,7 @@ const ShipmentDetails = ({
         key={item.shipment_id}
         onClick={() => naivgateToShipment(item)}
       >
-        <div className={styles.shipmentLeft} style={imageRadiusStyle}>
+        <div className={styles.shipmentLeft}>
           <BagImage
             bag={item?.bags?.[0]}
             isBundle={isBundleItem}
@@ -463,7 +456,6 @@ function OrderShipment({
                       bundleGroups={bundleGroups}
                       bundleGroupArticles={bundleGroupArticles}
                       aspectRatio={aspectRatio}
-                      globalConfig={globalConfig}
                       isImageFill={isImageFill}
                       naivgateToShipment={naivgateToShipment}
                       isAdmin={isAdmin}
@@ -487,7 +479,6 @@ function OrderShipment({
                     bundleGroups={bundleGroups}
                     bundleGroupArticles={bundleGroupArticles}
                     aspectRatio={aspectRatio}
-                    globalConfig={globalConfig}
                     isImageFill={isImageFill}
                     naivgateToShipment={naivgateToShipment}
                     isAdmin={isAdmin}

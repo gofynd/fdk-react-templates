@@ -34,7 +34,6 @@ const ProductListing = ({
   productCount = 0,
   title = "",
   description = "",
-  descriptionFontSize,
   isScrollTop = true,
   filterList = [],
   selectedFilters = [],
@@ -423,7 +422,6 @@ const ProductListing = ({
               <ListingDescription
                 key={description.length}
                 description={description}
-                descriptionFontSize={descriptionFontSize}
               />
             </div>
           </div>

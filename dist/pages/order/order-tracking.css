@@ -407,12 +407,6 @@ h5,
   margin-bottom: 10px;
   margin-inline-start: 0px;
 }
-.order-tracking__customTypography___Y72wu .order-tracking__orderTitle___IljZo {
-  font-size: var(--section-heading-size, 24px);
-  font-weight: var(--section-heading-weight, 700);
-  text-transform: var(--section-heading-text-transform);
-  line-height: calc(var(--section-heading-size, 24px) + 10px);
-}
 
 /**color by character**/
 /** Font family **/
@@ -801,7 +795,7 @@ h5,
 }
 .fy-input__fyInput___S4Mtu::placeholder {
   color: var(--textLabel, #7d7676);
-  opacity: 1;
+  opacity: 0.3;
 }
 .fy-input__fyInput___S4Mtu::-webkit-outer-spin-button,
 .fy-input__fyInput___S4Mtu::-webkit-inner-spin-button {

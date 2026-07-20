@@ -231,13 +231,6 @@ const ShipmentImage = ({
   globalConfig,
 }) => {
   const aspectRatio = getProductImgAspectRatio(globalConfig);
-  const imageRadiusStyle =
-    globalConfig?.["item-image-border-radius"] != null
-      ? {
-          "--itemImageRadius": `${globalConfig["item-image-border-radius"]}px`,
-        }
-      : undefined;
-
   const getItemImage = () => {
     return (
       <BagImage
@@ -253,7 +246,6 @@ const ShipmentImage = ({
     <FDKLink
       to={`/product/${isBundleItem ? bag?.bundle_details?.slug : bag?.item?.slug_key}`}
       className={`${styles.bagImg}`}
-      style={imageRadiusStyle}
       state={{
         product: isBundleItem
           ? {

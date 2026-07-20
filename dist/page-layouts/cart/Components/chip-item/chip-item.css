@@ -531,9 +531,6 @@ h5,
   color: var(--textBody, #3c3131);
   display: flex;
 }
-.chip-item__cartItemsListContainer___ud9jU .chip-item__deliveryDateWrapper___TcR1g .chip-item__shippingLogo___bkf1K svg path {
-  fill: var(--textBody, #3c3131);
-}
 .chip-item__cartItemsListContainer___ud9jU .chip-item__deliveryDateWrapper___TcR1g .chip-item__deliveryDate___o3m1j {
   margin-left: 8px;
   color: var(--textHeading, #26201a);
@@ -689,19 +686,16 @@ h5,
   margin-bottom: 8px;
   font-size: 16px;
   font-weight: 600;
-  color: var(--textHeading, #26201a);
 }
 .chip-item__sModalContainer___ARs9G .chip-item__sizeModalTitle___ITUcq .chip-item__sizeModalDiv____Vutd .chip-item__sizeModalContent___TAnsO div .chip-item__sizeModalName___MxYVI {
   margin-inline-end: 20px;
   font-size: 16px;
   font-weight: 400;
-  color: var(--textBody, #3c3131);
 }
 .chip-item__sModalContainer___ARs9G .chip-item__sizeModalTitle___ITUcq .chip-item__sizeModalDiv____Vutd .chip-item__sizeModalContent___TAnsO .chip-item__sizeDiscount___yJRZW {
   margin-top: 8px;
   font-size: 14px;
   font-weight: 600;
-  color: var(--textHeading, #26201a);
 }
 .chip-item__sModalContainer___ARs9G .chip-item__sizeModalTitle___ITUcq .chip-item__modalCloseIcon___dHACa {
   position: absolute;
@@ -3585,7 +3579,7 @@ h5,
 }
 .chip-image__itemImg___iI27G {
   width: 100%;
-  border-radius: var(--itemImageRadius, 11px);
+  border-radius: var(--buttonRadius, 0px);
   overflow: hidden;
 }
 .chip-image__bundleChipImages___aq4HR {
@@ -3595,10 +3589,10 @@ h5,
   padding: 4px;
   gap: 4px;
   border: 1px solid var(--dividerStokes, #d4d1d1);
-  border-radius: var(--itemImageRadius, 11px);
+  border-radius: var(--buttonRadius, 0px);
 }
 .chip-image__bundleChipImages___aq4HR .chip-image__itemImg___iI27G {
-  border-radius: calc(var(--itemImageRadius, 11px) / 2);
+  border-radius: calc(var(--buttonRadius, 0px) / 2);
   display: flex;
 }
 

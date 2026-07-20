@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import CheckoutPaymentContent from "./checkout-payment-content";
 import * as styles from "./checkout-payment.less";
@@ -23,6 +23,7 @@ function CheckoutPayment({
   isCouponValid,
   setIsCouponValid,
   inValidCouponData,
+  splitPaymentConfig,
 }) {
   const { t } = useGlobalTranslation("translation");
   const [showFailedMessage, setShowFailedMessage] = useState(false);
@@ -30,6 +31,17 @@ function CheckoutPayment({
   const [paymentErrMsg, setPaymentErrMsg] = useState("");
   const [juspayErrorMessage, setJuspayErrorMessage] = useState(false);
   const [timerId, setTimerId] = useState(null);
+  const paymentWithUiConfig = useMemo(() => {
+    if (!splitPaymentConfig) return payment;
+
+    return {
+      ...payment,
+      splitPaymentConfig: {
+        ...(payment?.splitPaymentConfig || {}),
+        ...splitPaymentConfig,
+      },
+    };
+  }, [payment, splitPaymentConfig]);
   const {
     errorMessage,
     setErrorMessage,
@@ -37,15 +49,44 @@ function CheckoutPayment({
     getTotalValue,
     isCreditNoteApplied,
     isLoading,
-  } = payment;
+  } = paymentWithUiConfig;
   const isMobile = useMobile();
+  const isSplitPaymentActive =
+    paymentWithUiConfig?.splitPaymentConfig?.enabled === true &&
+    paymentWithUiConfig?.splitPaymentConfig?.defaultSelected === true;
+  const shouldDisablePayment =
+    getTotalValue?.() === 0 &&
+    !isCreditNoteApplied &&
+    !isLoading &&
+    !isSplitPaymentActive;
+  const shouldShowStoreCredit =
+    !isSplitPaymentActive &&
+    paymentWithUiConfig?.splitPaymentConfig?.hideStoreCredit !== true;
+  const shouldHidePaymentContent =
+    paymentWithUiConfig?.hidePaymentContentOnError === true;
+  const translatedPleaseTryAgainLater = t(
+    "resource.checkout.please_try_again_later"
+  );
+  const pleaseTryAgainLaterText =
+    translatedPleaseTryAgainLater === "resource.checkout.please_try_again_later"
+      ? "Please try again later"
+      : translatedPleaseTryAgainLater;
+  const shouldShowPaymentFailedMessage =
+    showFailedMessage ||
+    (shouldHidePaymentContent && String(errorMessage || "").trim().length > 0);
+  const visiblePaymentErrHeading = showFailedMessage
+    ? paymentErrHeading
+    : pleaseTryAgainLaterText;
+  const visiblePaymentErrMsg = showFailedMessage
+    ? paymentErrMsg
+    : errorMessage;
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     if (errorMessage?.length > 0) {
       handleShowFailedMessage({
         failed: true,
-        paymentErrHeading: t("resource.checkout.please_try_again_later"),
+        paymentErrHeading: pleaseTryAgainLaterText,
         paymentErrMsg: errorMessage,
       });
       onFailedGetCartShipmentDetails();
@@ -118,16 +159,18 @@ function CheckoutPayment({
   return (
     <>
       <div
-        className={`${styles.paymentContainer} ${!showPayment ? styles.hidePayment : ""} ${enableLinkPaymentOption ? styles.unsetMarginTop : ""} ${getTotalValue?.() === 0 && !isCreditNoteApplied && !isLoading ? styles.disabledPayment : ""}`}
+        className={`${styles.paymentContainer} ${!showPayment ? styles.hidePayment : ""} ${enableLinkPaymentOption ? styles.unsetMarginTop : ""} ${shouldDisablePayment ? styles.disabledPayment : ""}`}
       >
         {showPayment ? (
           <>
-            <div className={styles.creditNote}>
-              <CreditNote
-                data={payment?.partialPaymentOption}
-                updateStoreCredits={payment?.updateStoreCredits}
-              />
-            </div>
+            {shouldShowStoreCredit && (
+              <div className={styles.creditNote}>
+                <CreditNote
+                  data={paymentWithUiConfig?.partialPaymentOption}
+                  updateStoreCredits={paymentWithUiConfig?.updateStoreCredits}
+                />
+              </div>
+            )}
             <div
               className={`${styles.paymentHeaderSelect} ${customClassName} ${enableLinkPaymentOption ? styles.unsetBorder : ""}`}
             >
@@ -142,29 +185,31 @@ function CheckoutPayment({
                 {t("resource.checkout.select_payment_method")}
               </div>
             </div>
-            {showFailedMessage && (
+            {shouldShowPaymentFailedMessage && (
               <div className={styles.paymentFailedHeader}>
                 <div className={styles.redSplit}></div>
                 <CheckoutPaymentFailure
-                  paymentErrHeading={paymentErrHeading}
-                  paymentErrMsg={paymentErrMsg}
+                  paymentErrHeading={visiblePaymentErrHeading}
+                  paymentErrMsg={visiblePaymentErrMsg}
                 ></CheckoutPaymentFailure>
               </div>
             )}
-            <CheckoutPaymentContent
-              payment={payment}
-              loader={loader}
-              handleShowFailedMessage={handleShowFailedMessage}
-              onPriceDetailsClick={onPriceDetailsClick}
-              breakUpValues={breakUpValues}
-              removeDialogueError={hideFailedMessage}
-              setCancelQrPayment={setCancelQrPayment}
-              juspayErrorMessage={juspayErrorMessage}
-              isCouponApplied={isCouponApplied}
-              isCouponValid={isCouponValid}
-              setIsCouponValid={setIsCouponValid}
-              inValidCouponData={inValidCouponData}
-            ></CheckoutPaymentContent>
+            {!shouldHidePaymentContent && (
+              <CheckoutPaymentContent
+                payment={paymentWithUiConfig}
+                loader={loader}
+                handleShowFailedMessage={handleShowFailedMessage}
+                onPriceDetailsClick={onPriceDetailsClick}
+                breakUpValues={breakUpValues}
+                removeDialogueError={hideFailedMessage}
+                setCancelQrPayment={setCancelQrPayment}
+                juspayErrorMessage={juspayErrorMessage}
+                isCouponApplied={isCouponApplied}
+                isCouponValid={isCouponValid}
+                setIsCouponValid={setIsCouponValid}
+                inValidCouponData={inValidCouponData}
+              ></CheckoutPaymentContent>
+            )}
           </>
         ) : (
           <div className={styles.reviewHeaderUnselect}>

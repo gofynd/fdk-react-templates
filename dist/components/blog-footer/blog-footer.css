@@ -372,7 +372,6 @@ h5,
   text-align: center;
   font-size: 14px;
   line-height: 24px;
-  color: var(--textBody, #3c3131);
 }
 @media only screen and (min-width: 481px) {
   .blog-footer__footer__description___cMbT8 {
@@ -433,15 +432,5 @@ h5,
   .blog-footer__footer__cta___TQO4_ {
     min-height: 48px;
   }
-}
-.blog-footer__customTypography___mxQgJ .blog-footer__footer__title___ku9_a {
-  font-size: var(--section-heading-size, 32px);
-  font-weight: var(--section-heading-weight, 700);
-  text-transform: var(--section-heading-text-transform);
-  line-height: calc(var(--section-heading-size, 32px) + 8px);
-}
-.blog-footer__customTypography___mxQgJ .blog-footer__footer__description___cMbT8 {
-  font-size: var(--section-description-size, 14px);
-  line-height: calc(var(--section-description-size, 14px) + 4px);
 }
 
