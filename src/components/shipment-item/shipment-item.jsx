@@ -20,17 +20,16 @@ import * as styles from "./shipment-item.less";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
 import { priceFormatCurrencySymbol } from "../../helper/utils";
 import { useGlobalTranslation } from "fdk-core/utils";
-import { BagImage } from "../../components/bag/bag";
+import ScheduleIcon from "../../assets/images/schedule.svg";
+import { BagImage, BundleBagImage } from "../../components/bag/bag";
 import { getProductImgAspectRatio } from "../../helper/utils";
 import Accordion from "../accordion/accordion";
 import { transformDisplayToAccordionContent } from "../../helper/customization-display";
-import ShipmentFreeGiftItem from "../shipment-free-gift-item/shipment-free-gift-item";
 
 function ShipmentItem({
   bag,
   bundleGroups,
   bundleGroupArticles,
-  freeGiftGroups,
   initial,
   selectId,
   onChangeValue,
@@ -46,6 +45,39 @@ function ShipmentItem({
     onChangeValue(id);
   };
 
+  function formatUTCToDateString(utcString) {
+    if (!utcString) return "";
+
+    const date = new Date(utcString);
+
+    // Use browser's local timezone with fallback to UTC
+    const browserTimezone =
+      Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+
+    const options = {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      timeZone: browserTimezone,
+    };
+
+    return date
+      .toLocaleDateString("en-GB", options)
+      .replace(" ", " ")
+      .replace(",", ",");
+  }
+
+  const ndrWindowExhausted = () => {
+    const endDateStr =
+      shipmentDetails?.ndr_details?.allowed_delivery_window?.end_date;
+    if (!endDateStr) return false;
+
+    const endDate = new Date(endDateStr);
+    const now = new Date();
+
+    return endDate < now;
+  };
+
   const customizationOptions = transformDisplayToAccordionContent(
     bag?.meta?._custom_json?._display || []
   );
@@ -56,13 +88,6 @@ function ShipmentItem({
   const bundleGroupId = bag?.bundle_details?.bundle_group_id;
   const isBundleItem =
     bundleGroupId && bundleGroups && bundleGroups[bundleGroupId]?.length > 0;
-
-  // Get free gift items for this parent bag
-  const freeGiftBags = freeGiftGroups?.[bag?.id] || [];
-  const hasFreeGifts = freeGiftBags.length > 0;
-  
-  // Check if radio button is shown (for proper alignment of free gifts)
-  const hasRadioButton = !initial && type === "my-orders" && (bag.can_cancel || bag.can_return);
 
   const { name, size, quantity, price } = useMemo(() => {
     if (isBundleItem) {
@@ -135,7 +160,11 @@ function ShipmentItem({
           )}
         <ShipmentImage
           bag={bag}
+          type={type}
           isBundleItem={isBundleItem}
+          bundleGroupId={bag?.bundle_details?.bundle_group_id}
+          bundleGroups={bundleGroups}
+          bundleGroupArticles={bundleGroupArticles}
           globalConfig={globalConfig}
         />
         <div className={`${styles.bagInfo}`}>
@@ -214,20 +243,16 @@ function ShipmentItem({
           </div>
         </div>
       </div>
-      {hasFreeGifts && (
-        <ShipmentFreeGiftItem
-          freeGiftBags={freeGiftBags}
-          currencySymbol={bag?.prices?.currency_symbol}
-          hasRadioButton={hasRadioButton}
-        />
-      )}
     </div>
   );
 }
 
 const ShipmentImage = ({
   bag,
+  type,
+  bundleGroupId,
   isBundleItem,
+  bundleGroupArticles,
   globalConfig,
 }) => {
   const aspectRatio = getProductImgAspectRatio(globalConfig);

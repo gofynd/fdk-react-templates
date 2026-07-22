@@ -16,6 +16,13 @@ export const ALL_PROFILE_MENU = [
     disabled_cart: false,
   },
   {
+    key: "returned_orders",
+    Icon: OrdersIcon,
+    display: "My Returns",
+    link: "/profile/orders?status=4",
+    disabled_cart: false,
+  },
+  {
     key: "phone",
     Icon: CallIcon,
     display: "resource.common.phone_number",

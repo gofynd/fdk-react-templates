@@ -202,6 +202,85 @@
   }
 }
 
+.quickShopGallery {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: oklch(96% 0.006 100);
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: @TextHeading;
+  }
+}
+
+.quickShopBadge {
+  position: absolute;
+  top: 0;
+  inset-inline-start: 0;
+  z-index: 3;
+  min-height: 40px;
+  padding: 6px 4px;
+  background: @DialogBackground;
+  color: @TextHeading;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+.quickShopWishlist {
+  position: absolute;
+  top: 24px;
+  inset-inline-end: 24px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  background: @DialogBackground;
+  color: @TextHeading;
+  cursor: pointer;
+
+  &.active,
+  &:hover {
+    color: @TextHeading;
+  }
+
+  .quickShopWishlistIcon {
+    display: block;
+    width: 25px;
+    height: 24px;
+    object-fit: contain;
+  }
+}
+
+.quickShopImageFrame {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+}
+
+.quickShopImage {
+  width: 100%;
+  background: oklch(96% 0.006 100);
+}
+
 .disableArrow {
   cursor: default;
   pointer-events: none;

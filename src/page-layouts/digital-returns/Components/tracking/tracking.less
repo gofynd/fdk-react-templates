@@ -1,0 +1,143 @@
+@import "../../../../styles/main.less";
+
+.tracking {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 400;
+  color: @TextHeading;
+  margin: 0;
+
+  @media @desktop {
+    font-size: 32px;
+  }
+}
+
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-top: 1px solid @DividerStokes;
+  border-bottom: 1px solid @DividerStokes;
+  padding: 20px 0;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  font-size: 13px;
+}
+
+.summaryLabel {
+  color: @TextBody;
+}
+
+.summaryValue {
+  color: @TextHeading;
+  font-weight: 500;
+  text-align: right;
+}
+
+.summaryStatus {
+  .summaryValue();
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+// TIMELINE — vertical stepper
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+
+  @media @desktop {
+    padding: 16px 0;
+  }
+}
+
+.timelineStep {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  gap: 16px;
+  align-items: center;
+  padding: 12px 0;
+  position: relative;
+
+  &:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: 11px;
+    top: 32px;
+    bottom: -4px;
+    width: 1px;
+    background: @DividerStokes;
+  }
+
+  &.done:not(:last-child)::before {
+    background: @TextHeading;
+  }
+}
+
+.timelineDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid @DividerStokes;
+  background: @PageBackground;
+  margin-inline-start: 6px;
+  z-index: 1;
+
+  .done & {
+    background: @TextHeading;
+    border-color: @TextHeading;
+  }
+}
+
+.timelineLabel {
+  font-size: 14px;
+  line-height: 1.4;
+  color: @TextBody;
+
+  .done & {
+    color: @TextHeading;
+  }
+
+  .active & {
+    font-weight: 500;
+  }
+}
+
+.backBtn {
+  width: 100%;
+  height: 48px;
+  border: 1px solid @TextHeading !important;
+  background: transparent !important;
+  color: @TextHeading !important;
+  border-radius: 0 !important;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+
+  &:hover:not(:disabled) {
+    background: @TextHeading !important;
+    color: @PageBackground !important;
+  }
+
+  @media @desktop {
+    height: 52px;
+  }
+}

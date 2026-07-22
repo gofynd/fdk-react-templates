@@ -36,8 +36,6 @@ function NetBankingPay({
 
   // payload
   selectedPaymentPayload,
-  mopSelectionLoading,
-  isPaymentDisabled = false,
 }) {
   const isTablet = useViewport(0, 768);
 
@@ -87,15 +85,10 @@ function NetBankingPay({
               customClassName={styles.visibleOnTab}
               value={priceFormatCurrencySymbol(
                 getCurrencySymbol,
-                getTotalValue(),
-                "en-IN",
-                null,
-                true
+                getTotalValue()
               )}
               onPriceDetailsClick={onPriceDetailsClick}
-              disabled={
-                mopSelectionLoading || !selectedNB?.code || isPaymentDisabled
-              }
+              disabled={!selectedNB?.code}
               enableLinkPaymentOption={enableLinkPaymentOption}
               isPaymentLoading={isPaymentLoading}
               loader={loader}
@@ -115,19 +108,14 @@ function NetBankingPay({
                     acceptOrder();
                   }
                 }}
-                disabled={
-                  mopSelectionLoading || isPaymentLoading || isPaymentDisabled
-                }
+                disabled={isPaymentLoading}
               >
                 {!isPaymentLoading ? (
                   <>
                     {t("resource.common.pay_caps")}{" "}
                     {priceFormatCurrencySymbol(
                       getCurrencySymbol,
-                      getTotalValue(),
-                      "en-IN",
-                      null,
-                      true
+                      getTotalValue()
                     )}
                   </>
                 ) : (

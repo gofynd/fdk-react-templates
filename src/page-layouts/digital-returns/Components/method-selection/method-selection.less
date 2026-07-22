@@ -1,0 +1,149 @@
+@import "../../../../styles/main.less";
+
+.methodSelection {
+  width: 100%;
+  max-width: 996px;
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+
+  @media @desktop {
+    grid-template-columns: minmax(0, 442px) minmax(0, 442px);
+    gap: 110px;
+    align-items: start;
+  }
+}
+
+.colHeading {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: @TextHeading;
+  margin: 0 0 18px;
+  line-height: 16px;
+}
+
+.colSubheading {
+  font-size: 13px;
+  line-height: 14px;
+  color: @TextHeading;
+  margin: 0 0 34px;
+  max-width: 442px;
+}
+
+.left {
+  min-width: 0;
+}
+
+.methodCard {
+  display: block;
+  width: 100%;
+  min-height: 72px;
+  padding: 13px 12px;
+  border: 1px solid @DividerStokes;
+  background: @DialogBackground;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+
+  &:hover,
+  &:focus-within {
+    border-color: @TextLabel;
+  }
+}
+
+.radio {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.methodLabel {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.methodName {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 16px;
+  color: @TextHeading;
+}
+
+.methodPickupAddress {
+  font-size: 12px;
+  line-height: 16px;
+  color: @TextBody;
+  white-space: pre-line;
+}
+
+.methodCost {
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 16px;
+  text-transform: uppercase;
+  color: @TextHeading;
+}
+
+.right {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.orderDetails {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+}
+
+.orderRow {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin: 0;
+
+  dt {
+    font-size: 13px;
+    color: @TextLabel;
+    margin: 0;
+    line-height: 16px;
+  }
+
+  dd {
+    margin: 0;
+    font-size: 13px;
+    line-height: 16px;
+    color: @TextHeading;
+  }
+}
+
+.preLine {
+  white-space: pre-line;
+}
+
+.confirmAction {
+  width: 100% !important;
+  height: 48px !important;
+  margin-top: 20px;
+  padding: 0 18px !important;
+  align-items: center !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0 !important;
+}

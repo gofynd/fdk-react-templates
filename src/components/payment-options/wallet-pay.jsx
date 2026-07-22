@@ -28,8 +28,6 @@ function WalletPayment({
   StickyPayNow,
   getWalletdBorder,
   selectedPaymentPayload,
-  mopSelectionLoading,
-  isPaymentDisabled = false,
 }) {
   const isTablet = useViewport(0, 768);
   const initialVisibleWalletCount = 3;
@@ -78,15 +76,10 @@ function WalletPayment({
               customClassName={styles.visibleOnTab}
               value={priceFormatCurrencySymbol(
                 getCurrencySymbol,
-                getTotalValue(),
-                "en-IN",
-                null,
-                true
+                getTotalValue()
               )}
               onPriceDetailsClick={onPriceDetailsClick}
-              disabled={
-                mopSelectionLoading || !selectedWallet.code || isPaymentDisabled
-              }
+              disabled={!selectedWallet.code}
               enableLinkPaymentOption={enableLinkPaymentOption}
               isPaymentLoading={isPaymentLoading}
               loader={loader}
@@ -107,19 +100,14 @@ function WalletPayment({
                     acceptOrder();
                   }
                 }}
-                disabled={
-                  mopSelectionLoading || isPaymentLoading || isPaymentDisabled
-                }
+                disabled={isPaymentLoading}
               >
                 {!isPaymentLoading ? (
                   <>
                     {t("resource.common.pay_caps")}{" "}
                     {priceFormatCurrencySymbol(
                       getCurrencySymbol,
-                      getTotalValue(),
-                      "en-IN",
-                      null,
-                      true
+                      getTotalValue()
                     )}
                   </>
                 ) : (

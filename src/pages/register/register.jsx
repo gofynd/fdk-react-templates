@@ -57,7 +57,6 @@ function Register({
     getValues,
     setError,
     clearErrors,
-    trigger,
   } = useForm({
     mode: "onTouched",
     defaultValues: {
@@ -128,27 +127,6 @@ function Register({
       clearErrors("root");
     }
   }, [error]);
-
-  // Clear the server-side (root) error once the user edits any field,
-  // so a failed signup attempt doesn't permanently block resubmission
-  useEffect(() => {
-    const subscription = watch(() => {
-      if (errors.root) {
-        clearErrors("root");
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [watch, errors.root, clearErrors]);
-
-  const passwordValue = watch("password");
-
-  // Keep password & confirm password in sync: re-validate confirm password
-  // whenever password changes, so a stale mismatch error gets cleared
-  useEffect(() => {
-    if (getValues("confirmPassword") || errors.confirmPassword) {
-      trigger("confirmPassword");
-    }
-  }, [passwordValue, trigger, getValues]);
 
   const handleRegisterSubmit = (data) => {
     if (!consentAccepted) {
@@ -409,7 +387,7 @@ function Register({
             className={styles.registerBtn}
             type="submit"
             disabled={
-              Object.keys(errors).some((key) => key !== "root") ||
+              Object.keys(errors).length > 0 ||
               (isMobile &&
                 (isMobileRequired === "required" || phoneValue?.mobile) &&
                 !phoneValue?.isValidNumber)

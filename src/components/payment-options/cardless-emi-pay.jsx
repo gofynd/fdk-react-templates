@@ -30,8 +30,6 @@ function CardLessEmi({
   isPaymentLoading,
   loader,
   onPriceDetailsClick,
-  mopSelectionLoading,
-  isPaymentDisabled = false,
 }) {
   const isTablet = useViewport(0, 768);
   return (
@@ -75,12 +73,8 @@ function CardLessEmi({
                     customClassName={styles.visibleOnTab}
                     value={priceFormatCurrencySymbol(
                       getCurrencySymbol,
-                      getTotalValue(),
-                      "en-IN",
-                      null,
-                      true
+                      getTotalValue()
                     )}
-                    disabled={mopSelectionLoading || isPaymentDisabled}
                     onPriceDetailsClick={onPriceDetailsClick}
                     enableLinkPaymentOption={enableLinkPaymentOption}
                     isPaymentLoading={isPaymentLoading}
@@ -97,17 +91,14 @@ function CardLessEmi({
                       proceedToPay("CARDLESS_EMI", selectedPaymentPayload);
                       acceptOrder();
                     }}
-                    disabled={isPaymentLoading || isPaymentDisabled}
+                    disabled={isPaymentLoading}
                   >
                     {!isPaymentLoading ? (
                       <>
                         {t("resource.common.pay_caps")}{" "}
                         {priceFormatCurrencySymbol(
                           getCurrencySymbol,
-                          getTotalValue(),
-                          "en-IN",
-                          null,
-                          true
+                          getTotalValue()
                         )}
                       </>
                     ) : (
