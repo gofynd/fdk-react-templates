@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "../../styles/product-listing.less";
 import InfiniteLoader from "../../components/core/infinite-loader/infinite-loader";
@@ -21,44 +21,12 @@ import AddToCart from "../../page-layouts/plp/Components/add-to-cart/add-to-cart
 import { useViewport } from "../../helper/hooks";
 import SizeGuide from "../../page-layouts/plp/Components/size-guide/size-guide";
 import FilterIcon from "../../assets/images/filter.svg";
+import SortIcon from "../../assets/images/sort.svg";
 import TwoGridIcon from "../../assets/images/grid-two.svg";
 import FourGridIcon from "../../assets/images/grid-four.svg";
 import TwoGridMobIcon from "../../assets/images/grid-two-mob.svg";
 import OneGridMobIcon from "../../assets/images/grid-one-mob.svg";
-import {
-  useGlobalTranslation,
-  useGlobalStore,
-  useFPI,
-  useNavigate,
-} from "fdk-core/utils";
-import dummyProductImage from "../../assets/images/dummy-product.svg";
-
-const DEMO_PRODUCTS = Array.from({ length: 20 }, (_, index) => ({
-  uid: `demo-${index + 1}`,
-  slug: `demo-product-${index + 1}`,
-  name: "Linen blend relaxed fit",
-  brand: { name: "COS" },
-  teaser_tag: index % 3 === 0 ? "NEW" : "",
-  discount: index % 4 === 0 ? "20% OFF" : "",
-  sellable: true,
-  media: [{ type: "image", url: dummyProductImage }],
-  price: {
-    effective: { min: 1290, max: 1290, currency_symbol: "₹" },
-    marked: { min: 1590, max: 1590, currency_symbol: "₹" },
-  },
-}));
-
-const COS_CATEGORY_LINKS = [
-  { label: "CLOTHING", to: "/men/new-arrivals" },
-  { label: "ALL MENSWEAR", to: "/men/view-all" },
-  { label: "LINEN", to: "/men/linen-collection" },
-  { label: "T-SHIRTS", to: "/men/t-shirts" },
-  { label: "SHIRTS", to: "/men/shirts" },
-  { label: "POLO SHIRTS", to: "/men/polo-shirts" },
-  { label: "TROUSERS", to: "/men/trousers" },
-  { label: "JEANS", to: "/men/jeans" },
-  { label: "ACCESSORIES", to: "/men/new-accessories" },
-];
+import { useGlobalTranslation, useGlobalStore, useFPI } from "fdk-core/utils";
 
 const ProductListing = ({
   breadcrumb = [],
@@ -88,6 +56,7 @@ const ProductListing = ({
   imgSrcSet,
   isImageFill = false,
   showImageOnHover = false,
+  showMultipleImages = false,
   isResetFilterDisable = false,
   imageBackgroundColor = "",
   imagePlaceholder = "",
@@ -97,8 +66,9 @@ const ProductListing = ({
   followedIdList = [],
   listingPrice = "range",
   banner = {},
-  showAddToCart = true,
-  showColorVariants = true,
+  showAddToCart = false,
+  showColorVariants = false,
+  imageEffects,
   actionButtonText,
   stickyFilterTopOffset = 0,
   filterToggle = false,
@@ -136,30 +106,10 @@ const ProductListing = ({
       ? `${restAddToModalProps?.productData?.product?.name?.slice(0, 30)}...`
       : restAddToModalProps?.productData?.product?.name || ""
     : "";
-  const shouldShowDemoData =
-    !isPageLoading && (!productList || productList.length === 0);
-  const displayProductList = shouldShowDemoData ? DEMO_PRODUCTS : productList;
-  const loadedProductCount = displayProductList?.length || 0;
-  const modalServiceable =
-    typeof restAddToModalProps?.is_serviceable === "boolean"
-      ? restAddToModalProps.is_serviceable
-      : is_serviceable;
-  const totalProductCount = Number(productCount) || 0;
-  const visibleProductCount = totalProductCount
-    ? Math.min(loadedProductCount, totalProductCount)
-    : loadedProductCount;
-  const loadMoreProgress = totalProductCount
-    ? Math.min(100, Math.max(0, (visibleProductCount / totalProductCount) * 100))
-    : 0;
-  const loadMoreLabel = totalProductCount
-    ? `LOAD MORE PRODUCTS (${visibleProductCount}/${totalProductCount})`
-    : "LOAD MORE PRODUCTS";
-  const shouldShowPageLoader =
-    isRunningOnClient() && isPageLoading && loadedProductCount === 0;
 
   return (
     <div className={styles.plpWrapper}>
-      {shouldShowPageLoader ? (
+      {isRunningOnClient() && isPageLoading ? (
         <div className={styles.loader}></div>
       ) : productList?.length === 0 && !(isPageLoading || isPageLoading) ? (
         <div>
@@ -181,46 +131,27 @@ const ProductListing = ({
           {title && <h1 className={styles.visuallyHidden}>{title}</h1>}
           <div className={styles.mobileHeader}>
             <div className={styles.headerLeft}>
-              <button
-                type="button"
-                className={styles.filterSortBtn}
-                onClick={
-                  filterList.length > 0 ? onFilterModalBtnClick : onSortModalBtnClick
-                }
-                aria-label="Filter and sort products"
-              >
-                <FilterIcon aria-hidden="true" />
-                <span>Filter & sort</span>
+              {filterList.length > 0 && (
+                <button
+                  className={styles.filterBtn}
+                  onClick={onFilterModalBtnClick}
+                >
+                  <FilterIcon />
+                  <span>{t("resource.common.filter")}</span>
+                </button>
+              )}
+              <button onClick={onSortModalBtnClick}>
+                <SortIcon />
+                <span>{t("resource.facets.sort_by")}</span>
               </button>
             </div>
-            <nav className={styles.quickCategoryNav} aria-label="Product categories">
-              {COS_CATEGORY_LINKS.map((item, index) => (
-                <FDKLink
-                  key={item.label}
-                  to={item.to}
-                  className={`${styles.quickCategoryLink} ${
-                    index === 0 ? styles.active : ""
-                  }`}
-                >
-                  {item.label}
-                </FDKLink>
-              ))}
-            </nav>
             <div className={styles.headerRight}>
-              {/* COS Figma match: 4 grid toggle buttons that update the current viewport's column count.
-                  On desktop (>=769px): updates desktop columns (1/2/4/10).
-                  On tablet: updates tablet columns.
-                  On mobile: updates mobile columns. */}
               <button
                 className={`${styles.colIconBtn} ${styles.mobile} ${
-                  (isTablet ? columnCount?.mobile === 1 : columnCount?.desktop === 1) ? styles.active : ""
+                  columnCount?.mobile === 1 ? styles.active : ""
                 }`}
                 onClick={() =>
-                  onColumnCountUpdate(
-                    isTablet
-                      ? { screen: "mobile", count: 1 }
-                      : { screen: "desktop", count: 1 }
-                  )
+                  onColumnCountUpdate({ screen: "mobile", count: 1 })
                 }
                 title={t("resource.product.mobile_grid_one")}
               >
@@ -228,14 +159,10 @@ const ProductListing = ({
               </button>
               <button
                 className={`${styles.colIconBtn} ${styles.mobile} ${
-                  (isTablet ? columnCount?.mobile === 2 : columnCount?.desktop === 2) ? styles.active : ""
+                  columnCount?.mobile === 2 ? styles.active : ""
                 }`}
                 onClick={() =>
-                  onColumnCountUpdate(
-                    isTablet
-                      ? { screen: "mobile", count: 2 }
-                      : { screen: "desktop", count: 2 }
-                  )
+                  onColumnCountUpdate({ screen: "mobile", count: 2 })
                 }
                 title={t("resource.product.mobile_grid_two")}
               >
@@ -243,14 +170,10 @@ const ProductListing = ({
               </button>
               <button
                 className={`${styles.colIconBtn} ${styles.tablet} ${
-                  (isTablet ? columnCount?.tablet === 2 : columnCount?.desktop === 4) ? styles.active : ""
+                  columnCount?.tablet === 2 ? styles.active : ""
                 }`}
                 onClick={() =>
-                  onColumnCountUpdate(
-                    isTablet
-                      ? { screen: "tablet", count: 2 }
-                      : { screen: "desktop", count: 4 }
-                  )
+                  onColumnCountUpdate({ screen: "tablet", count: 2 })
                 }
                 title={t("resource.product.tablet_grid_two")}
               >
@@ -258,16 +181,12 @@ const ProductListing = ({
               </button>
               <button
                 className={`${styles.colIconBtn} ${styles.tablet} ${
-                  (isTablet ? columnCount?.tablet === 3 : columnCount?.desktop === 10) ? styles.active : ""
+                  columnCount?.tablet === 3 ? styles.active : ""
                 }`}
                 onClick={() =>
-                  onColumnCountUpdate(
-                    isTablet
-                      ? { screen: "tablet", count: 3 }
-                      : { screen: "desktop", count: 10 }
-                  )
+                  onColumnCountUpdate({ screen: "tablet", count: 3 })
                 }
-                title="Mini grid"
+                title={t("resource.product.tablet_grid_four")}
               >
                 <FourGridIcon />
               </button>
@@ -410,11 +329,6 @@ const ProductListing = ({
                 </div>
               )}
               <div className={styles["plp-container"]}>
-                {isProductLoading && (
-                  <div className={styles.plpLoaderHeader}>
-                    {t("resource.product.desktop_grid_four") || "Desktop - 4 Column"}
-                  </div>
-                )}
                 {loadingOption === "infinite" ? (
                   <InfiniteLoader
                     hasNext={paginationProps.hasNext}
@@ -424,7 +338,7 @@ const ProductListing = ({
                     <ProductGrid
                       {...{
                         isProductOpenInNewTab,
-                        productList: displayProductList,
+                        productList,
                         columnCount,
                         isBrand,
                         isSaleBadge,
@@ -437,11 +351,13 @@ const ProductListing = ({
                         listingPrice,
                         showAddToCart,
                         showColorVariants,
+                        showImageOnHover,
+                        showMultipleImages,
+                        imageEffects,
                         actionButtonText:
                           actionButtonText ?? t("resource.common.add_to_cart"),
                         onWishlistClick,
                         isImageFill,
-                        showImageOnHover,
                         imageBackgroundColor,
                         imagePlaceholder,
                         handleAddToCart,
@@ -455,7 +371,7 @@ const ProductListing = ({
                   <ProductGrid
                     {...{
                       isProductOpenInNewTab,
-                      productList: displayProductList,
+                      productList,
                       columnCount,
                       isBrand,
                       isSaleBadge,
@@ -468,11 +384,13 @@ const ProductListing = ({
                       listingPrice,
                       showAddToCart,
                       showColorVariants,
+                      showImageOnHover,
+                      showMultipleImages,
+                      imageEffects,
                       actionButtonText:
                         actionButtonText ?? t("resource.common.add_to_cart"),
                       onWishlistClick,
                       isImageFill,
-                      showImageOnHover,
                       imageBackgroundColor,
                       isProductLoading,
                       imagePlaceholder,
@@ -491,22 +409,12 @@ const ProductListing = ({
                 {loadingOption === "view_more" && paginationProps.hasNext && (
                   <div className={styles.viewMoreWrapper}>
                     <button
-                      className={`${styles.viewMoreBtn} ${
-                        isProductLoading ? styles.loading : ""
-                      }`}
+                      className={styles.viewMoreBtn}
                       onClick={onViewMoreClick}
                       tabIndex="0"
                       disabled={isProductLoading}
-                      style={{ "--load-more-progress": `${loadMoreProgress}%` }}
-                      aria-label={loadMoreLabel}
                     >
-                      <span
-                        className={styles.viewMoreProgress}
-                        aria-hidden="true"
-                      />
-                      <span className={styles.viewMoreLabel}>
-                        {loadMoreLabel}
-                      </span>
+                      {t("resource.facets.view_more")}
                     </button>
                   </div>
                 )}
@@ -518,15 +426,7 @@ const ProductListing = ({
             </div>
           </div>
           <SortModal {...sortModalProps} />
-          <FilterModal
-            {...{
-              isResetFilterDisable,
-              sortList,
-              productCount,
-              onSortUpdate,
-              ...filterModalProps,
-            }}
-          />
+          <FilterModal {...{ isResetFilterDisable, ...filterModalProps }} />
           {isScrollTop && <ScrollTop />}
           {showAddToCart && (
             <>
@@ -534,8 +434,6 @@ const ProductListing = ({
                 <Modal
                   isOpen={isAddToCartOpen}
                   hideHeader={!isTablet}
-                  modalType="right-modal"
-                  customClassName={styles.quickShopModal}
                   containerClassName={styles.addToCartContainer}
                   bodyClassName={styles.addToCartBody}
                   titleClassName={styles.addToCartTitle}
@@ -545,10 +443,7 @@ const ProductListing = ({
                   <AddToCart
                     {...restAddToModalProps}
                     globalConfig={globalConfig}
-                    isServiceable={modalServiceable}
-                    recommendationProducts={displayProductList}
-                    followedIdList={followedIdList}
-                    onWishlistClick={onWishlistClick}
+                    isServiceable={is_serviceable}
                   />
                 </Modal>
               )}
@@ -556,7 +451,6 @@ const ProductListing = ({
                 isOpen={showSizeGuide}
                 onCloseDialog={handleCloseSizeGuide}
                 productMeta={restAddToModalProps?.productData?.product?.sizes}
-                selectedSize={restAddToModalProps?.selectedSize}
               />
             </>
           )}
@@ -583,54 +477,16 @@ function ProductGrid({
       }}
     >
       {productList?.length > 0 &&
-        productList.map((product, index) => (
+        productList.map((product) => (
           <ProductGridItem
-            key={
-              product?.uid ||
-              product?.slug ||
-              `${product?.name || "product"}-${index}`
-            }
+            key={product?.uid}
             product={product}
-            columnCount={columnCount}
             {...restProps}
           />
         ))}
     </div>
   );
 }
-
-const isInteractiveProductCardTarget = (target) =>
-  !!target?.closest?.(
-    'a, button, input, select, textarea, [role="button"], [data-product-card-interactive="true"]'
-  );
-
-const getProductPath = (product = {}, linkProps = {}) => {
-  const rawSlug = linkProps?.action?.page?.params?.slug || product?.slug;
-  const slug = Array.isArray(rawSlug) ? rawSlug[0] : rawSlug;
-
-  if (!slug) return "";
-
-  const query = linkProps?.action?.page?.query || {};
-  const searchParams = new URLSearchParams();
-
-  Object.entries(query).forEach(([key, value]) => {
-    if (Array.isArray(value)) {
-      value.forEach((item) => {
-        if (item !== null && item !== undefined && item !== "") {
-          searchParams.append(key, item);
-        }
-      });
-      return;
-    }
-
-    if (value !== null && value !== undefined && value !== "") {
-      searchParams.set(key, value);
-    }
-  });
-
-  const search = searchParams.toString();
-  return `/product/${slug}${search ? `?${search}` : ""}`;
-};
 
 function ProductGridItem({
   product,
@@ -647,9 +503,11 @@ function ProductGridItem({
   followedIdList = [],
   listingPrice = "range",
   isImageFill = false,
+  showAddToCart = false,
+  showColorVariants = false,
   showImageOnHover = false,
-  showAddToCart = true,
-  showColorVariants = true,
+  showMultipleImages = false,
+  imageEffects,
   actionButtonText,
   imageBackgroundColor = "",
   imagePlaceholder = "",
@@ -659,7 +517,6 @@ function ProductGridItem({
   isServiceable = true,
 }) {
   const { t } = useGlobalTranslation("translation");
-  const navigate = useNavigate();
 
   const getProductLinkProps = useMemo(() => {
     const isMto = product?.custom_order?.is_custom_order || false;
@@ -687,11 +544,11 @@ function ProductGridItem({
 
     return {
       action: {
-        ...(product?.action || {}),
+        ...product.action,
         page: {
-          ...(product?.action?.page || {}),
+          ...product.action.page,
           query: {
-            ...(product?.action?.page?.query || {}),
+            ...product.action.page.query,
             ...(sizeToSelect && { size: sizeToSelect }),
           },
         },
@@ -699,76 +556,12 @@ function ProductGridItem({
       state,
     };
   }, [product]);
-  const productPath = useMemo(
-    () => getProductPath(product, getProductLinkProps),
-    [product, getProductLinkProps]
-  );
-
-  const navigateToProduct = useCallback(
-    (event) => {
-      if (!productPath) return;
-
-      onProductNavigation();
-
-      if (
-        isProductOpenInNewTab ||
-        event?.metaKey ||
-        event?.ctrlKey ||
-        event?.shiftKey
-      ) {
-        if (isRunningOnClient()) {
-          window.open(productPath, "_blank", "noopener,noreferrer");
-        }
-        return;
-      }
-
-      navigate(productPath, { state: getProductLinkProps.state });
-    },
-    [
-      getProductLinkProps.state,
-      isProductOpenInNewTab,
-      navigate,
-      onProductNavigation,
-      productPath,
-    ]
-  );
-
-  const handleProductClick = useCallback(
-    (event) => {
-      if (
-        event?.defaultPrevented ||
-        isInteractiveProductCardTarget(event?.target)
-      ) {
-        return;
-      }
-
-      navigateToProduct(event);
-    },
-    [navigateToProduct]
-  );
-
-  const handleProductKeyDown = useCallback(
-    (event) => {
-      if (
-        (event.key !== "Enter" && event.key !== " ") ||
-        isInteractiveProductCardTarget(event.target)
-      ) {
-        return;
-      }
-
-      event.preventDefault();
-      navigateToProduct(event);
-    },
-    [navigateToProduct]
-  );
 
   return (
-    <div
+    <FDKLink
       className={styles["product-wrapper"]}
-      role="link"
-      tabIndex={0}
-      onClick={handleProductClick}
-      onKeyDown={handleProductKeyDown}
+      {...getProductLinkProps}
+      target={isProductOpenInNewTab ? "_blank" : "_self"}
       style={{
         display: "block",
       }}
@@ -788,15 +581,18 @@ function ProductGridItem({
         followedIdList={followedIdList}
         showAddToCart={showAddToCart}
         showColorVariants={showColorVariants}
+        showImageOnHover={showImageOnHover}
+        showMultipleImages={showMultipleImages}
+        imageEffects={imageEffects}
         actionButtonText={actionButtonText ?? t("resource.common.add_to_cart")}
         onWishlistClick={onWishlistClick}
         isImageFill={isImageFill}
-        showImageOnHover={showImageOnHover}
         imageBackgroundColor={imageBackgroundColor}
         imagePlaceholder={imagePlaceholder}
         handleAddToCart={handleAddToCart}
+        onClick={onProductNavigation}
         isServiceable={isServiceable}
       />
-    </div>
+    </FDKLink>
   );
 }

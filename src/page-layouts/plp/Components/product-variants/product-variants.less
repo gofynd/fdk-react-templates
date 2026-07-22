@@ -1,60 +1,58 @@
 @import "../../../../styles/main.less";
 
-.productVariants {
-  margin-top: 52px;
-}
-
 .variantTitle {
-  font-size: 16px;
+  font-size: 12px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  letter-spacing: 0;
-
-  @media @tablet {
-    font-size: 13px;
-  }
+  letter-spacing: -0.24px;
 }
 
 .variantWrapper {
-  margin-top: 0;
+  margin-top: 24px;
 
   @media @tablet {
-    margin-top: 0;
+    margin-top: 16px;
   }
 }
 
 .variantContainer {
   display: flex;
   align-items: center;
-  column-gap: 34px;
-  row-gap: 16px;
+  .grid-gap(6px, 8px);
   flex-wrap: wrap;
-  margin-top: 22px;
+  margin-top: 6px;
   &::-webkit-scrollbar {
     display: none;
   }
   .variantItemImage,
   .variantItemColor .color {
-    width: 14px;
-    height: 14px;
-    border-radius: 2px;
+    width: 48px;
+    height: 48px;
+    border-radius: 4px;
     position: relative;
     overflow: hidden;
 
     @media @desktop {
-      width: 18px;
-      height: 18px;
+      width: 56px;
+      height: 56px;
     }
 
-    .overlay,
-    .selectedIcon {
-      display: none;
+    &:not(.selected) {
+      .overlay,
+      .selectedIcon {
+        display: none;
+      }
     }
     &:is(.unavailable) {
       .overlay {
         display: block;
         background: rgba(255, 255, 255, 0.7);
+      }
+    }
+    &:hover {
+      .overlay {
+        display: block;
       }
     }
     .overlay {
@@ -70,7 +68,16 @@
       display: none;
     }
     .selectedIcon {
-      display: none;
+      height: 24px;
+      width: 24px;
+      position: absolute;
+      top: 50%;
+      inset-inline-start: 50%;
+      transform: translate(-50%, -50%);
+      [dir="rtl"] & {
+        transform: translate(50%, -50%);
+      }
+      fill: @ButtonSecondary;
     }
   }
   .variantItemImage {
@@ -78,24 +85,10 @@
     cursor: pointer;
   }
   .variantItemColor {
-    position: relative;
-    padding-bottom: 10px;
-
-    &.selected::after {
-      content: "";
-      position: absolute;
-      inset-inline-start: 0;
-      bottom: 0;
-      width: 18px;
-      height: 1px;
-      background: @TextHeading;
-    }
-
     .color {
-      width: 18px;
-      height: 18px;
+      width: 40px;
+      height: 40px;
       border: 1px solid @DividerStokes;
-      box-sizing: border-box;
 
       &.unavailable .overlay > span {
         position: absolute;

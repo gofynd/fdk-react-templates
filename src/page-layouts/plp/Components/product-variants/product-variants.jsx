@@ -47,7 +47,8 @@ function ProductVariants({
       selectedValue = selectedVariant?.value;
     }
 
-    return selectedValue || "";
+    return `${item.header ? `${item.header}: ` : ""}${selectedValue ? `${selectedValue} (${t("resource.common.selected")})` : ""
+      }`;
   };
 
   const handleLink = (event, itemSlug) => {

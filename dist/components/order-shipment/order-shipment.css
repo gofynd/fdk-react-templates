@@ -427,15 +427,23 @@ h5,
   width: 100px;
   height: 100px;
   flex-shrink: 0;
-  border-radius: 4px;
+  border-radius: var(--buttonRadius, 0px);
   overflow: hidden;
   background: white;
   position: relative;
 }
+.order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentLeft___o0Q0q .order-shipment__bagImg___sZIsv,
+.order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentLeft___o0Q0q picture,
+.order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentLeft___o0Q0q img {
+  border-radius: inherit;
+}
+.order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentLeft___o0Q0q .order-shipment__bagImg___sZIsv,
+.order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentLeft___o0Q0q picture {
+  overflow: hidden;
+}
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentLeft___o0Q0q img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentLeft___o0Q0q #order-shipment__total-item___SOgWJ {
   text-align: center;
@@ -1063,7 +1071,7 @@ h5,
 }
 .accordion__accordionContentValue___FESOa {
   color: var(--Text-Heading, #1f1f1f);
-  font-family: Inter;
+  font-family: var(--font-body);
   font-size: 12px;
   font-style: normal;
   font-weight: 600;
@@ -1442,6 +1450,10 @@ h5,
   border-radius: var(--buttonRadius, 0px);
   overflow: hidden;
 }
+.bag__bagImg___F1kfj picture,
+.bag__bagImg___F1kfj img {
+  border-radius: inherit;
+}
 .bag__bundleImg___TEyPU {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -1460,6 +1472,12 @@ h5,
 }
 .bag__bundleImg___TEyPU .bag__bundleImgItem___slqOT .bag__itemImg___tRLBP {
   display: flex;
+  border-radius: inherit;
+  overflow: hidden;
+}
+.bag__bundleImg___TEyPU .bag__bundleImgItem___slqOT .bag__itemImg___tRLBP picture,
+.bag__bundleImg___TEyPU .bag__bundleImgItem___slqOT .bag__itemImg___tRLBP img {
+  border-radius: inherit;
 }
 .bag__bundleImg___TEyPU .bag__bundleImgItem___slqOT .bag__bundleCount___C799t {
   position: absolute;

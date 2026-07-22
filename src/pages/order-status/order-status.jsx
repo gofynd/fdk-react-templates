@@ -211,7 +211,10 @@ function OrderStatus({
                                     paymentInfo?.currency_symbol ||
                                       orderData?.breakup_values?.[0]
                                         ?.currency_symbol,
-                                    paymentInfo?.amount
+                                    paymentInfo?.amount,
+                                    "en-IN",
+                                    null,
+                                    true
                                   )
                                 : null}
                             </span>

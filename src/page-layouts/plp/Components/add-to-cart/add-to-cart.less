@@ -3,15 +3,10 @@
 .productDescContainer {
   display: flex;
   box-sizing: border-box;
-  width: 100%;
-  height: 100%;
-  background: @DialogBackground;
 
   @media @desktop {
-    width: 100%;
-    max-width: 100%;
-    height: 100vh;
-    min-height: 100vh;
+    width: 80vw;
+    max-width: 1200px;
   }
 
   .shimmer {
@@ -25,37 +20,30 @@
   }
 
   .left {
-    padding: 0;
-    align-self: stretch;
-    background: @ThemeAccentL2;
+    padding: 24px 16px;
+    align-self: center;
 
     @media @tablet {
       display: none;
     }
 
-    width: 50%;
-    border-inline-end: 1px solid @DividerStokes;
-    overflow: hidden;
-
-    .imgWrap {
-      height: 100%;
-
-      :global(.imageGallery) {
-        height: 100%;
-      }
-
-      :global(.imageBox) {
-        margin: 0;
-      }
-    }
+    width: 52%;
   }
   .right {
-    width: 50%;
+    width: 48%;
     box-sizing: border-box;
     position: relative;
     @media @tablet {
       width: 100%;
       box-sizing: border-box;
+    }
+
+    .limitedQuantity {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 140%;
+      color: @ErrorText;
+      padding: 24px;
     }
 
     .preview {
@@ -67,23 +55,20 @@
     }
 
     .productInfo {
-      height: 100%;
       overflow: hidden;
 
       .product {
-        height: 100%;
-        padding: 24px;
-        box-sizing: border-box;
+        padding: 24px 24px 8px;
         position: relative;
         overflow: hidden;
 
         @media @desktop {
           .productScrollContent {
-            max-height: calc(100vh - 60px);
+            max-height: calc(90vh - 112px);
           }
         }
         @media @tablet {
-          padding: 14px 14px 8px;
+          padding: 16px;
 
           .productScrollContent {
             max-height: calc(60vh - 32px);
@@ -98,104 +83,22 @@
         }
 
         .productScrollContent {
-          height: 100%;
           overflow-y: auto;
           overflow-x: hidden;
           scrollbar-width: thin;
-
-          &::-webkit-scrollbar {
-            width: 4px;
-          }
-
-          &::-webkit-scrollbar-thumb {
-            background: @TextHeading;
-          }
-        }
-
-        .wishlistToast {
-          position: absolute;
-          top: 46px;
-          inset-inline-end: 24px;
-          z-index: 7;
-          display: grid;
-          grid-template-columns: 56px minmax(0, 1fr) 32px;
-          align-items: start;
-          width: min(320px, calc(100% - 48px));
-          min-height: 84px;
-          border: 1px solid @DividerStokes;
-          background: @DialogBackground;
-          color: @TextHeading;
-          box-sizing: border-box;
-        }
-
-        .wishlistToastImage {
-          width: 56px;
-          min-height: 84px;
-          background: oklch(96% 0.006 100);
-          overflow: hidden;
-        }
-
-        .wishlistToastCopy {
-          display: grid;
-          gap: 8px;
-          min-width: 0;
-          padding: 14px 10px;
-
-          strong {
-            color: @TextHeading;
-            font-size: 12px;
-            font-weight: 400;
-            line-height: 1.2;
-            letter-spacing: 0;
-          }
-        }
-
-        .wishlistToastLink {
-          width: max-content;
-          color: @TextHeading;
-          font-size: 13px;
-          font-weight: 400;
-          line-height: 1.2;
-          letter-spacing: 0;
-          text-decoration: none;
-
-          span {
-            margin-inline-start: 6px;
-          }
-        }
-
-        .wishlistToastClose {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 32px;
-          height: 32px;
-          padding: 0;
-          margin: 8px 6px 0 0;
-          border: 0;
-          background: transparent;
-          color: @TextHeading;
-          cursor: pointer;
-
-          svg {
-            width: 12px;
-            height: 12px;
-          }
         }
 
         &__title {
-          margin-bottom: 12px;
+          margin-bottom: 16px;
           word-wrap: break-word;
-          letter-spacing: 0;
+          letter-spacing: -0.02em;
           overflow: hidden;
           color: @TextHeading;
           text-overflow: ellipsis;
-          font-size: 16px;
-          font-weight: 700;
-          line-height: 1.2;
-          width: calc(100% - 24px);
-          text-transform: uppercase;
-          letter-spacing: 0;
+          font-size: 20px;
+          font-weight: 600;
+          line-height: normal;
+          width: 90%;
 
           @media @mobile, @tablet {
             display: none;
@@ -221,10 +124,14 @@
         }
 
         &__brand {
-          display: none;
+          color: @TextHeading;
+          font-size: 14px;
+          font-weight: 600;
+          line-height: normal;
+          margin-bottom: 4px;
 
           @media @tablet {
-            margin-bottom: 4px;
+            margin-bottom: 8px;
           }
         }
 
@@ -277,21 +184,21 @@
           }
         }
         &__price {
-          font-size: 14px;
-          margin-bottom: 0;
+          font-size: 16px;
+          margin-bottom: 2px;
           display: flex;
           align-items: center;
 
           &--effective {
             color: @TextHeading;
-            font-size: 14px;
-            font-weight: 400;
+            font-size: 16px;
+            font-weight: 600;
             line-height: normal;
-            letter-spacing: 0;
+            letter-spacing: -0.32px;
 
             @media @tablet {
-              font-size: 22px;
-              letter-spacing: 0;
+              font-size: 14px;
+              letter-spacing: -0.28px;
             }
           }
 
@@ -301,7 +208,7 @@
             font-size: 12px;
             font-weight: 400;
             line-height: normal;
-            letter-spacing: 0;
+            letter-spacing: -0.24px;
             text-decoration: line-through;
           }
 
@@ -320,26 +227,22 @@
           &--guide {
             display: flex;
             align-items: center;
-            gap: 7px;
-            color: @TextHeading !important;
+            gap: 2px;
             font-size: 14px;
             font-weight: 400;
-            line-height: 1.2;
-            letter-spacing: 0;
+            line-height: 18px;
+            letter-spacing: -0.28px;
             padding: 0;
             height: auto;
             cursor: pointer;
-            background: transparent !important;
 
             @media @tablet {
-              font-size: 14px;
+              font-size: 12px;
             }
 
-            .sizeGuideChevron {
-              display: inline-flex;
-              align-items: center;
-              font-size: 18px;
-              line-height: 1;
+            .scaleIcon {
+              width: 25px;
+              height: 12px;
             }
           }
         }
@@ -356,17 +259,17 @@
 
         .viewMore {
           font-size: 14px;
-          font-weight: 400;
+          font-weight: 500;
           line-height: normal;
-          letter-spacing: 0;
-          text-transform: none;
-          margin-top: 34px;
+          letter-spacing: -0.28px;
+          text-transform: uppercase;
+          margin-top: 24px;
           color: @TextHeading;
 
           @media @tablet {
-            margin-top: 14px;
-            font-size: 14px;
-            letter-spacing: 0;
+            margin-top: 16px;
+            font-size: 12px;
+            letter-spacing: -0.24px;
           }
 
           &:hover {
@@ -374,26 +277,15 @@
           }
 
           span {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
             cursor: pointer;
-
-            &::after {
-              content: "›";
-              font-size: 18px;
-              line-height: 1;
-            }
           }
         }
 
         .crossIcon {
           position: absolute;
-          top: 20px;
-          inset-inline-end: 20px;
+          top: 16px;
+          inset-inline-end: 16px;
           cursor: pointer;
-          transform: scale(1);
-          z-index: 2;
 
           @media @tablet {
             display: none;
@@ -466,23 +358,22 @@
       .actionButtons {
         display: flex;
         align-items: center;
-        gap: 8px;
-        position: static;
-        padding: 0;
-        margin-top: 40px;
-        z-index: 1;
+        gap: 12px;
+        position: sticky;
+        bottom: 0;
+        padding: 16px 24px;
+        z-index: 9;
         background-color: @DialogBackground;
-        height: auto;
-        border-top: 0;
+        height: 100%;
 
         .cartIcon {
-          fill: @ButtonSecondary;
-          height: 16px;
-          width: 16px;
+          fill: @ButtonPrimary;
+          height: 14px;
+          width: 13px;
         }
 
         @media @tablet {
-          padding: 10px 14px 16px;
+          padding: 16px 16px 32px;
         }
 
         .buyNow {
@@ -491,15 +382,11 @@
 
         button {
           flex: 1;
-          min-height: 52px;
-          font-size: 14px;
-          letter-spacing: 0;
-          text-transform: uppercase;
 
           @media @tablet {
-            height: 44px;
-            padding: 10px 14px;
-            font-size: 14px;
+            height: 40px;
+            padding: 12px 16px;
+            font-size: 12px;
           }
         }
 
@@ -629,174 +516,53 @@
   margin: 24px 0;
 }
 
-.quickShopColorSection {
-  margin-top: 34px;
-}
-
-.quickShopColorName {
-  color: @TextHeading;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.25;
-  letter-spacing: 0;
-}
-
-.quickShopSwatches {
-  display: grid;
-  grid-template-columns: repeat(8, 16px);
-  column-gap: 24px;
-  row-gap: 18px;
-  margin-top: 14px;
-
-  @media @tablet {
-    display: flex;
-    flex-wrap: wrap;
-    column-gap: 18px;
-    row-gap: 16px;
-  }
-}
-
-.quickShopSwatch {
-  position: relative;
-  width: 16px;
-  height: 24px;
-  padding: 0 0 8px;
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-
-  &::after {
-    content: "";
-    position: absolute;
-    inset-inline-start: 0;
-    bottom: 0;
-    width: 16px;
-    height: 1px;
-    background: transparent;
-  }
-}
-
-.quickShopSwatchSelected::after {
-  background: @TextHeading;
-}
-
-.quickShopSwatchUnavailable {
-  cursor: default;
-  opacity: 0.45;
-}
-
-.quickShopSwatchFill {
-  display: block;
-  width: 16px;
-  height: 16px;
-  border: 1px solid @DividerStokes;
-  box-sizing: border-box;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
 .sizeSelection {
-  margin-top: 60px;
+  margin-top: 24px;
   display: grid;
   grid-template-rows: 1fr;
   transition: grid-template-rows 0.5s;
 
   @media @tablet {
-    margin-top: 10px;
+    margin-top: 16px;
   }
 
   .sizeHeaderContainer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 42px;
+    margin-bottom: 10px;
   }
 
   & > div {
     overflow: hidden;
   }
-
-  & > &__wrapper {
-    overflow: visible;
-  }
   &__label {
-    display: flex;
-    align-items: baseline;
-    gap: 18px;
-    min-width: 0;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 400;
-    line-height: 1.2;
-    letter-spacing: 0;
+    line-height: normal;
+    letter-spacing: -0.24px;
     color: @TextLabel;
-    span {
-      color: @TextHeading;
-    }
-    @media @tablet {
-      font-size: 16px;
-    }
   }
-
-  &__selectedValue {
-    color: @TextHeading;
-  }
-
-  &__stockText {
-    color: oklch(49% 0.22 28) !important;
-  }
-
   &__wrapper {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    align-items: stretch;
-    border-top: 1px solid @DividerStokes;
-    border-inline-start: 1px solid @DividerStokes;
-    padding-bottom: 0;
-    overflow: visible;
+    display: flex;
+    flex-wrap: wrap;
+    .grid-gap(8px);
   }
 
   &__block {
-    appearance: none;
-    -webkit-appearance: none;
-    display: flex;
-    align-items: center;
-    border-radius: 0;
-    border: 0;
-    border-inline-end: 1px solid @DividerStokes;
-    border-bottom: 1px solid @DividerStokes;
-    margin: 0;
-    min-width: 0;
-    width: 100%;
-    height: 45px;
-    padding: 0 12px;
-    outline: none;
+    border-radius: @ButtonRadius;
+    border: 1px solid @DividerStokes;
+    padding: 6px 12px;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
     position: relative;
     color: @TextBody;
-    background-color: @DialogBackground;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1;
-    text-align: start;
-    box-sizing: border-box;
-    @media @tablet {
-      font-size: 14px;
-      height: 44px;
-      padding: 0 12px;
-      line-height: 1;
-    }
-    &--comingSoon {
-      color: @TextLabel;
-    }
-
+    background-color: @PageBackground;
     &--selected {
-      z-index: 2;
-      background-color: @DialogBackground;
-      color: @TextHeading;
-      box-shadow: 0 0 0 2px @TextHeading;
+      background-color: @ButtonPrimary;
+      color: @ButtonSecondary;
+      border: none;
     }
 
     &--selectable {
@@ -819,76 +585,6 @@
         stroke: @DividerStokes;
         stroke-width: 1;
       }
-    }
-
-  }
-
-  &__value {
-    display: inline-flex;
-    align-items: flex-start;
-    max-width: 100%;
-    min-width: 0;
-  }
-
-  &__stockDot {
-    flex: 0 0 auto;
-    width: 6px;
-    height: 6px;
-    margin-top: -1px;
-    background: oklch(49% 0.22 28);
-
-    @media @tablet {
-      width: 5px;
-      height: 5px;
-      margin-top: -1px;
-    }
-  }
-
-  &__comingSoonIcon {
-    position: relative;
-    flex: 0 0 auto;
-    width: 9px;
-    height: 9px;
-    margin-top: -1px;
-    border: 1px solid currentColor;
-    border-radius: 50%;
-    box-sizing: border-box;
-
-    &::before,
-    &::after {
-      content: "";
-      position: absolute;
-      inset-inline-start: 50%;
-      top: 50%;
-      width: 1px;
-      background: currentColor;
-      transform-origin: 50% 0;
-    }
-
-    &::before {
-      height: 3px;
-      transform: translate(-50%, -50%);
-    }
-
-    &::after {
-      height: 2px;
-      transform: translate(-50%, -50%) rotate(90deg);
-    }
-  }
-
-  &__notifyIcon {
-    position: absolute;
-    top: 50%;
-    inset-inline-end: 20px;
-    display: block;
-    width: 8px;
-    height: 8px;
-    opacity: 0.54;
-    object-fit: contain;
-    transform: translateY(-50%);
-
-    @media @tablet {
-      inset-inline-end: 12px;
     }
   }
 }
@@ -915,624 +611,4 @@
 .disabledOption {
   text-decoration-line: line-through;
   color: @TextDisabled;
-}
-
-.addToBagBtn {
-  width: 100%;
-  justify-content: space-between;
-  background: @ButtonPrimary !important;
-  border-color: @ButtonPrimary !important;
-  border-radius: 0 !important;
-  color: @ButtonSecondary !important;
-  text-transform: uppercase;
-  letter-spacing: 0;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1;
-  height: 52px !important;
-  min-height: 52px;
-  padding: 0 20px;
-
-  span {
-    align-items: center;
-  }
-
-  @media @tablet {
-    height: 46px !important;
-    min-height: 46px;
-    font-size: 14px;
-    padding: 0 14px;
-  }
-}
-
-.notifyClockIcon {
-  position: relative;
-  display: inline-block;
-  width: 17px;
-  height: 17px;
-  border: 1.5px solid currentColor;
-  border-radius: 50%;
-  box-sizing: border-box;
-
-  &::before,
-  &::after {
-    content: "";
-    position: absolute;
-    inset-inline-start: 50%;
-    top: 50%;
-    width: 1.5px;
-    background: currentColor;
-    transform-origin: 50% 0;
-  }
-
-  &::before {
-    height: 5px;
-    transform: translate(-50%, -50%);
-  }
-
-  &::after {
-    height: 4px;
-    transform: translate(-50%, -50%) rotate(95deg);
-  }
-}
-
-.notifyBellIcon {
-  display: block;
-  width: 8px;
-  height: 8px;
-  object-fit: contain;
-  filter: invert(1);
-}
-
-.notifyPanel {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  display: flex;
-  flex-direction: column;
-  background: @DialogBackground;
-  color: @TextHeading;
-  overflow: hidden;
-}
-
-.notifyHeader {
-  display: flex;
-  align-items: stretch;
-  justify-content: space-between;
-  min-height: 54px;
-  border-bottom: 1px solid @DividerStokes;
-  background: @DialogBackground;
-}
-
-.notifyTabs {
-  display: flex;
-  align-items: stretch;
-  min-width: 0;
-}
-
-.notifyTab {
-  position: relative;
-  border: 0;
-  background: transparent;
-  color: @TextHeading;
-  padding: 0 24px;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1;
-  letter-spacing: 0;
-  cursor: pointer;
-
-  &::after {
-    content: "";
-    position: absolute;
-    inset-inline-start: 24px;
-    inset-inline-end: 24px;
-    bottom: 0;
-    height: 1px;
-    background: transparent;
-  }
-}
-
-.notifyTabActive::after {
-  background: @TextHeading;
-}
-
-.notifyTabActive {
-  font-weight: 700;
-}
-
-.notifyClose {
-  width: 54px;
-  min-width: 54px;
-  border: 0;
-  border-left: 1px solid @DividerStokes;
-  background: transparent;
-  color: @TextHeading;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-
-  svg {
-    width: 18px;
-    height: 18px;
-  }
-}
-
-.notifyPanelBody {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 24px 28px 0;
-  scrollbar-width: thin;
-
-  &::-webkit-scrollbar {
-    width: 4px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: @TextHeading;
-  }
-}
-
-.notifySizeLine,
-.notifyIntro,
-.notifyStoreContent p,
-.notifyStoreIntro p {
-  margin: 0;
-  color: @TextHeading;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.35;
-  letter-spacing: 0;
-
-  span {
-    margin-inline-start: 12px;
-  }
-}
-
-.notifyCopy {
-  margin: 24px 0 0;
-  color: @TextHeading;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.35;
-  letter-spacing: 0;
-}
-
-.notifyFieldGroup {
-  margin-top: 40px;
-  border: 1px solid @DividerStokes;
-  background: @DialogBackground;
-
-  label {
-    display: block;
-    min-height: 56px;
-    padding: 12px;
-    box-sizing: border-box;
-
-    & + label {
-      border-top: 1px solid @DividerStokes;
-    }
-
-    > span {
-      display: block;
-      margin-bottom: 5px;
-      color: @TextLabel;
-      font-size: 12px;
-      line-height: 1;
-      letter-spacing: 0;
-    }
-  }
-
-  input {
-    width: 100%;
-    border: 0;
-    outline: 0;
-    padding: 0;
-    background: transparent;
-    color: @TextHeading;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 1.2;
-    letter-spacing: 0;
-
-    &::placeholder {
-      color: @TextLabel;
-      opacity: 1;
-    }
-  }
-}
-
-.notifyPhoneField {
-  div {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-  }
-
-  input {
-    min-width: 0;
-  }
-}
-
-.notifyPhoneCode {
-  flex: 0 0 auto;
-  margin: 0 !important;
-  color: @TextHeading !important;
-  font-size: 16px !important;
-  line-height: 1.2 !important;
-}
-
-.notifyConsent {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  margin-top: 34px;
-  color: @TextBody;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 1.15;
-  letter-spacing: 0;
-
-  input {
-    flex: 0 0 auto;
-    width: 13px;
-    height: 13px;
-    margin: 2px 0 0;
-    accent-color: @TextHeading;
-  }
-
-  u {
-    text-underline-offset: 2px;
-  }
-}
-
-.notifyAudienceGroup {
-  display: grid;
-  gap: 18px;
-  margin-top: 28px;
-  padding-inline-start: 20px;
-
-  label {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    color: @TextHeading;
-    font-size: 14px;
-    line-height: 1;
-  }
-
-  input {
-    width: 13px;
-    height: 13px;
-    margin: 0;
-    accent-color: @TextHeading;
-  }
-}
-
-.notifyActionButton {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  height: 52px;
-  margin-top: 52px;
-  padding: 0 20px;
-  border: 1px solid @DividerStokes;
-  border-radius: 0;
-  background: @DialogBackground;
-  color: @TextLabel;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1;
-  letter-spacing: 0;
-  text-transform: uppercase;
-  cursor: default;
-}
-
-.notifyActionButtonActive {
-  border-color: @ButtonPrimary;
-  background: @ButtonPrimary;
-  color: @ButtonSecondary;
-  cursor: pointer;
-}
-
-.notifySummary {
-  display: grid;
-  gap: 16px;
-  margin-top: 30px;
-
-  div {
-    display: grid;
-    gap: 6px;
-  }
-
-  span {
-    color: @TextLabel;
-    font-size: 13px;
-    font-weight: 400;
-    line-height: 1;
-  }
-
-  strong {
-    color: @TextHeading;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 1.2;
-  }
-}
-
-.notifyProductCard {
-  display: grid;
-  grid-template-columns: 104px minmax(0, 1fr) auto;
-  gap: 14px;
-  margin: 30px -28px 0;
-  padding: 0 28px;
-  min-height: 152px;
-  border-top: 1px solid @DividerStokes;
-  border-bottom: 1px solid @DividerStokes;
-  background: @DialogBackground;
-}
-
-.notifyProductImage {
-  align-self: stretch;
-  background: oklch(96% 0.006 100);
-}
-
-.notifyProductDetails {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  min-width: 0;
-  padding: 18px 0 14px;
-
-  p {
-    margin: 0;
-    color: @TextHeading;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1.2;
-  }
-
-  span {
-    display: block;
-    color: oklch(49% 0.22 28);
-    font-size: 14px;
-    line-height: 1.2;
-  }
-
-  dl {
-    display: grid;
-    gap: 2px;
-    margin: 0;
-  }
-
-  dl div {
-    display: flex;
-    gap: 8px;
-  }
-
-  dt,
-  dd {
-    margin: 0;
-    color: @TextHeading;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1.2;
-  }
-}
-
-.notifyProductPrice {
-  padding-top: 18px;
-  color: @TextHeading;
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 1.2;
-  white-space: nowrap;
-}
-
-.notifyStoreContent {
-  display: block;
-}
-
-.notifyStoreIntro {
-  display: grid;
-  gap: 40px;
-  padding-bottom: 52px;
-  border-bottom: 1px solid @DividerStokes;
-}
-
-.storeLegend {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 28px;
-  color: @TextHeading;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1;
-
-  span {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-  }
-}
-
-.storeStatusIcon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 12px;
-  height: 12px;
-  border: 1px solid currentColor;
-  box-sizing: border-box;
-  font-size: 10px;
-  font-weight: 600;
-  line-height: 1;
-  letter-spacing: 0;
-}
-
-.storeStatusIconIn {
-  color: oklch(48% 0.09 148);
-}
-
-.storeStatusIconFew {
-  color: oklch(64% 0.18 64);
-}
-
-.storeStatusIconOut {
-  color: oklch(49% 0.22 28);
-}
-
-.storeList {
-  margin: 0 -28px;
-}
-
-.storeCard {
-  padding: 18px 28px 28px;
-  border-bottom: 1px solid @DividerStokes;
-  background: @DialogBackground;
-
-  p {
-    margin-top: 14px;
-    font-size: 16px;
-    line-height: 1.3;
-  }
-}
-
-.storeCardHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-
-  h3 {
-    margin: 0;
-    color: @TextHeading;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 1.2;
-    letter-spacing: 0;
-  }
-
-  button {
-    width: 24px;
-    height: 24px;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: @TextHeading;
-    font-size: 22px;
-    font-weight: 300;
-    line-height: 1;
-    cursor: pointer;
-  }
-}
-
-.storeSizeList {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  margin-top: 28px;
-
-  > span {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    color: @TextHeading;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 1;
-  }
-}
-
-.notifyTrending {
-  margin-top: 72px;
-  padding-bottom: 28px;
-}
-
-.notifyTrendingHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 18px;
-
-  h2 {
-    margin: 0;
-    color: @TextHeading;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1.2;
-  }
-
-  div {
-    display: flex;
-    gap: 24px;
-    color: @TextHeading;
-    font-size: 16px;
-    line-height: 1;
-  }
-}
-
-.notifyTrendingGrid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.notifyTrendingItem {
-  position: relative;
-  display: block;
-  min-width: 0;
-  background: oklch(96% 0.006 100);
-}
-
-.notifyTrendingBadge {
-  position: absolute;
-  top: 0;
-  inset-inline-start: 0;
-  z-index: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 26px;
-  height: 38px;
-  padding: 0 2px;
-  background: @DialogBackground;
-  color: @TextHeading;
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 1;
-  letter-spacing: 0;
-  text-transform: uppercase;
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-}
-
-.quickShopRecommendations {
-  margin-top: clamp(64px, 20vh, 220px);
-
-  h2 {
-    margin-bottom: 14px;
-    color: @TextHeading;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1.25;
-    letter-spacing: 0;
-  }
-}
-
-.recommendationGrid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0;
-  background: oklch(96% 0.006 100);
-}
-
-.recommendationItem {
-  display: block;
-  min-width: 0;
 }

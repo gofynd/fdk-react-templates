@@ -1,4 +1,9 @@
-import { DEFAULT_CURRENCY_LOCALE, DEFAULT_UTC_LOCALE, IMAGE_OPTIMIZATION_CONFIG } from "./constant";
+import {
+  DEFAULT_CURRENCY_LOCALE,
+  DEFAULT_UTC_LOCALE,
+  IMAGE_OPTIMIZATION_CONFIG,
+  RESPONSIVE_IMAGE_BREAKPOINTS,
+} from "./constant";
 
 export const debounce = (func, wait) => {
   let timeout;
@@ -188,6 +193,84 @@ export function checkIfNumber(value) {
   return numberPattern.test(value);
 }
 
+const IMAGE_VARIANT_PATTERN =
+  /\/(?:original|\d+x\d+|resize-(?:w|h)?:[0-9]+(?:,(?:w|h)*:?[\d]*)?)\//;
+const RESIZABLE_IMAGE_KEYS = [
+  "original",
+  "30x0",
+  "44x0",
+  "66x0",
+  "50x0",
+  "75x0",
+  "60x60",
+  "90x90",
+  "100x0",
+  "130x200",
+  "135x0",
+  "270x0",
+  "360x0",
+  "500x0",
+  "400x0",
+  "540x0",
+  "720x0",
+  "312x480",
+  "resize-(w|h)?:[0-9]+(,)?(w|h)*(:)?[0-9]*",
+];
+
+export const isGifImageUrl = (url = "") =>
+  /\.gif(\?|#|$)/i.test(String(url || ""));
+
+export const replaceImageVariant = (url = "", variant = "original") => {
+  if (!url) return url;
+  const normalizedVariant = String(variant || "original").replace(
+    /^\/|\/$/g,
+    ""
+  );
+  return IMAGE_VARIANT_PATTERN.test(url)
+    ? url.replace(IMAGE_VARIANT_PATTERN, `/${normalizedVariant}/`)
+    : url;
+};
+
+const findImageSizeKey = (url = "") => {
+  for (let j = 0; j < RESIZABLE_IMAGE_KEYS.length; j++) {
+    if (url?.match(new RegExp(`/${RESIZABLE_IMAGE_KEYS[j]}/`))) {
+      return RESIZABLE_IMAGE_KEYS[j];
+    }
+  }
+  return "";
+};
+
+export const getResponsiveImageSources = (
+  sources = RESPONSIVE_IMAGE_BREAKPOINTS
+) => sources?.map((source) => ({ ...source })) || [];
+
+export const getResponsiveImageBaseUrl = (url = "", width = 200) => {
+  if (!url) return url;
+  if (isGifImageUrl(url)) {
+    return replaceImageVariant(url, "original");
+  }
+  const key = findImageSizeKey(url);
+  return key && width ? transformImage(url, key, width) : url;
+};
+
+export const getResponsiveImageSrcSet = (
+  url = "",
+  sources = RESPONSIVE_IMAGE_BREAKPOINTS
+) => {
+  if (!url || isGifImageUrl(url)) {
+    return "";
+  }
+
+  const key = findImageSizeKey(url);
+  if (!key) {
+    return "";
+  }
+
+  return sources
+    .map((source) => `${transformImage(url, key, source.width)} ${source.width}w`)
+    .join(", ");
+};
+
 /**
  * Transform image URL with DPR support for better quality on retina displays
  * @param {string} url - Original image URL
@@ -317,7 +400,8 @@ export const currencyFormat = (
   value,
   currencySymbol,
   locale = "en-IN",
-  currencyCode = null
+  currencyCode = null,
+  forceDecimals = false
 ) => {
   if (value == null || value === "") {
     return "";
@@ -359,8 +443,10 @@ export const currencyFormat = (
       ? `${finalLocale}-u-nu-${numberingSystem}`
       : finalLocale;
 
+    const hasDecimal = forceDecimals && num % 1 !== 0;
     const formatter = new Intl.NumberFormat(localeString, {
-      maximumFractionDigits: 20,
+      minimumFractionDigits: hasDecimal ? 2 : 0,
+      maximumFractionDigits: forceDecimals ? 2 : 20,
       useGrouping: true,
     });
 
@@ -386,7 +472,11 @@ export const currencyFormat = (
     console.warn(
       `Invalid locale "${finalLocale}", falling back to default formatting`
     );
-    const formattedValue = num.toLocaleString("en-US");
+    const hasDecimal = forceDecimals && num % 1 !== 0;
+    const formattedValue = num.toLocaleString("en-US", {
+      minimumFractionDigits: hasDecimal ? 2 : 0,
+      maximumFractionDigits: forceDecimals ? 2 : 20,
+    });
     if (currencySymbol && /^[A-Z]+$/.test(currencySymbol)) {
       return `${currencySymbol} ${formattedValue}`;
     }
@@ -505,7 +595,8 @@ export function priceFormatCurrencySymbol(
   symbol,
   price = 0,
   locale = "en-IN",
-  currencyCode = null
+  currencyCode = null,
+  forceDecimals = false
 ) {
   if (price == null || price === "") return "";
 
@@ -534,8 +625,9 @@ export function priceFormatCurrencySymbol(
       ? `${finalLocale}-u-nu-${numberingSystem}`
       : finalLocale;
 
+    const hasDecimal = forceDecimals && num % 1 !== 0;
     const formatter = new Intl.NumberFormat(localeString, {
-      minimumFractionDigits: 0,
+      minimumFractionDigits: hasDecimal ? 2 : 0,
       maximumFractionDigits: 2,
       useGrouping: true,
     });
@@ -558,8 +650,9 @@ export function priceFormatCurrencySymbol(
     console.warn(
       `Invalid locale "${finalLocale}", falling back to default formatting`
     );
+    const hasDecimal = forceDecimals && num % 1 !== 0;
     const formattedPrice = num.toLocaleString("en-US", {
-      minimumFractionDigits: 0,
+      minimumFractionDigits: hasDecimal ? 2 : 0,
       maximumFractionDigits: 2,
     });
     const hasAlphabeticCurrency = /^[A-Za-z]+$/.test(symbol);
@@ -874,11 +967,15 @@ export const getUserPrimaryPhone = (user) => {
     return null;
   }
 
-  const primaryPhone = user.phone_numbers.find((phone) => phone.primary);
+  const primaryPhone =
+    user.phone_numbers.find((phone) => phone.primary) ||
+    user.phone_numbers.find((phone) => phone.active) ||
+    user.phone_numbers[0];
   if (!primaryPhone) return null;
 
   const countryCode = primaryPhone.country_code?.toString() || "91";
   const mobile = primaryPhone.phone || "";
+  if (!mobile) return null;
 
   return {
     mobile,

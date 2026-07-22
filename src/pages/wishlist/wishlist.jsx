@@ -23,6 +23,7 @@ const Wishlist = ({
   aspectRatio,
   isProductOpenInNewTab = false,
   showImageOnHover = false,
+  showMultipleImages = false,
   listingPrice = "range",
   RemoveIconComponent,
   isImageFill,
@@ -36,6 +37,7 @@ const Wishlist = ({
   addToCartModalProps = {},
   showAddToCart = false,
   actionButtonText,
+  imageEffects,
   globalConfig = {},
   showHeader = true,
 }) => {
@@ -95,6 +97,7 @@ const Wishlist = ({
                 aspectRatio,
                 isProductOpenInNewTab,
                 showImageOnHover,
+                showMultipleImages,
                 listingPrice,
                 RemoveIconComponent,
                 isImageFill,
@@ -103,6 +106,7 @@ const Wishlist = ({
                 imagePlaceholder,
                 actionButtonText,
                 showAddToCart,
+                imageEffects,
                 onRemoveClick,
                 handleAddToCart,
                 isServiceable: is_serviceable,
@@ -135,7 +139,6 @@ const Wishlist = ({
             isOpen={showSizeGuide}
             onCloseDialog={handleCloseSizeGuide}
             productMeta={restAddToModalProps?.productData?.product?.sizes}
-            selectedSize={restAddToModalProps?.selectedSize}
           />
         </>
       )}
@@ -154,6 +157,7 @@ const WishlistProductCard = ({
   aspectRatio,
   isProductOpenInNewTab = false,
   showImageOnHover = false,
+  showMultipleImages = false,
   listingPrice = "range",
   RemoveIconComponent,
   isImageFill,
@@ -162,6 +166,7 @@ const WishlistProductCard = ({
   imagePlaceholder,
   actionButtonText,
   showAddToCart,
+  imageEffects,
   onRemoveClick = () => {},
   handleAddToCart,
   isServiceable = true,
@@ -211,10 +216,12 @@ const WishlistProductCard = ({
         followedIdList={followedIdList}
         isImageFill={isImageFill}
         imageBackgroundColor={imageBackgroundColor}
-        showImageOnHover={showImageOnHover}
         imagePlaceholder={imagePlaceholder}
         columnCount={{ desktop: 4, tablet: 3, mobile: 2 }}
         showAddToCart={showAddToCart}
+        showImageOnHover={showImageOnHover}
+        showMultipleImages={showMultipleImages}
+        imageEffects={imageEffects}
         actionButtonText={actionButtonText ?? t("resource.common.add_to_cart")}
         handleAddToCart={handleAddToCart}
         isServiceable={isServiceable}

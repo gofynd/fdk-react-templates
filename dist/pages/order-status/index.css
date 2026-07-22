@@ -3971,6 +3971,10 @@ h5,
   border-radius: var(--buttonRadius, 0px);
   overflow: hidden;
 }
+.bag__bagImg___F1kfj picture,
+.bag__bagImg___F1kfj img {
+  border-radius: inherit;
+}
 .bag__bundleImg___TEyPU {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -3989,6 +3993,12 @@ h5,
 }
 .bag__bundleImg___TEyPU .bag__bundleImgItem___slqOT .bag__itemImg___tRLBP {
   display: flex;
+  border-radius: inherit;
+  overflow: hidden;
+}
+.bag__bundleImg___TEyPU .bag__bundleImgItem___slqOT .bag__itemImg___tRLBP picture,
+.bag__bundleImg___TEyPU .bag__bundleImgItem___slqOT .bag__itemImg___tRLBP img {
+  border-radius: inherit;
 }
 .bag__bundleImg___TEyPU .bag__bundleImgItem___slqOT .bag__bundleCount___C799t {
   position: absolute;
@@ -4504,7 +4514,7 @@ h5,
 }
 .accordion__accordionContentValue___FESOa {
   color: var(--Text-Heading, #1f1f1f);
-  font-family: Inter;
+  font-family: var(--font-body);
   font-size: 12px;
   font-style: normal;
   font-weight: 600;

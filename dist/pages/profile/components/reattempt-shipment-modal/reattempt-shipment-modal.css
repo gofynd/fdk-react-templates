@@ -2915,6 +2915,9 @@ h5,
     display: none !important;
   }
 }
+.address-form__addressFormWrapper___M0Ler input {
+  font-weight: 400 !important;
+}
 .address-form__addressFormWrapper___M0Ler .address-form__formContainer___UrnfJ {
   display: flex;
   flex-wrap: wrap;
@@ -3060,9 +3063,15 @@ h5,
   box-sizing: border-box;
   width: 100%;
   background-color: transparent;
+  font-weight: 400;
 }
 .address-form__formItemDiv___ciw5I .address-form__formInputBox___QHRHx.address-form__otherInput___xvlRj {
   width: 45%;
+}
+@media only screen and (max-width: 480px) {
+  .address-form__formItemDiv___ciw5I .address-form__formInputBox___QHRHx {
+    font-weight: 400;
+  }
 }
 .address-form__formItemDiv___ciw5I .address-form__formCheckBox___ifOb0 {
   font-size: 0.8rem;

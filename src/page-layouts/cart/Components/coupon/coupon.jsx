@@ -105,7 +105,6 @@ function Coupon({
   useEffect(() => {
     const subscription = watch((value, { name }) => {
       if (name === "couponInput" && errors?.root) {
-        console.log("clear");
         clearErrors("root");
       }
     });
@@ -138,6 +137,26 @@ function Coupon({
       // Check for HTML tags pattern
       return /<[^>]+>/.test(message);
     }, [message]);
+
+    const hasDescriptionHTMLTags = useMemo(() => {
+      if (!description || typeof description !== "string") return false;
+      return /<[^>]+>/.test(description);
+    }, [description]);
+
+    const descriptionContent = useMemo(() => {
+      if (!description) return null;
+
+      if (hasDescriptionHTMLTags) {
+        return (
+          <FyHTMLRenderer
+            htmlContent={description}
+            customClass={styles.couponDescription}
+          />
+        );
+      }
+
+      return <p className={styles.couponDescription}>{description}</p>;
+    }, [description, hasDescriptionHTMLTags]);
 
     // Memoize the message content rendering
     const messageContent = useMemo(() => {
@@ -185,7 +204,7 @@ function Coupon({
               className={styles.applyBtn}
               disabled={!isApplicable}
               onClick={() => {
-                applyCoupon(couponCode);
+                applyCoupon(couponCode, { errorDisplay: "toast" });
               }}
             >
               {t("resource.facets.apply_caps")}
@@ -194,9 +213,13 @@ function Coupon({
         </div>
         {isApplicable && (
           <>
+            {description && descriptionContent}
             <hr className={styles.divider} />
-
-            <p className={styles.couponDesc}>{expiresOn}</p>
+            <p
+              className={`${styles.couponDesc} ${description ? styles.couponDescBold : ""}`}
+            >
+              {expiresOn}
+            </p>
           </>
         )}
       </div>
@@ -222,7 +245,8 @@ function Coupon({
                       couponValue,
                       currencySymbol,
                       formatLocale(locale, countryCode, true),
-                      currencyCode
+                      currencyCode,
+                      true
                     )}
                   />
                 </span>
@@ -438,7 +462,7 @@ function CouponItem({
           <button
             className={styles.couponApplyBtn}
             onClick={() => {
-              applyCoupon(couponCode);
+              applyCoupon(couponCode, { errorDisplay: "toast" });
             }}
           >
             {t("resource.facets.apply_caps")}
@@ -448,7 +472,7 @@ function CouponItem({
   );
 }
 
-function CouponSuccessModal({
+export function CouponSuccessModal({
   isOpen = false,
   coupon = {},
   currencySymbol = "₹",
@@ -491,7 +515,8 @@ function CouponSuccessModal({
                   coupon.value,
                   currencySymbol,
                   formatLocale(locale, countryCode, true),
-                  currencyCode
+                  currencyCode,
+                  true
                 )}
               </div>
               <div className={styles.couponValueSubheading}>
@@ -528,3 +553,4 @@ function NoCouponsAvailable() {
 }
 
 export default Coupon;
+

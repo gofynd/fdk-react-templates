@@ -385,6 +385,7 @@ const AddressForm = ({
 }) => {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
+  const platformData = useGlobalStore(fpi.getters.PLATFORM_DATA);
   const isOtherAddressType = !["Home", "Work", "Friends & Family"].includes(
     addressItem?.address_type
   );
@@ -417,6 +418,32 @@ const AddressForm = ({
     return userAutofillData;
   }, [userAutofillData, internationalShipping]);
 
+  const isEmailRequired =
+    platformData?.required_fields?.email?.is_required &&
+    platformData?.required_fields?.email?.level === "hard";
+
+  const updatedFormSchema = useMemo(() => {
+    return formSchema?.map((group) => ({
+      ...group,
+      fields: group?.fields?.map((field) => {
+        if (field.key === "email") {
+          return {
+            ...field,
+            required: isEmailRequired,
+            validation: {
+              ...field.validation,
+              ...(isEmailRequired && {
+                required: "Email is required",
+              }),
+            },
+          };
+        }
+
+        return field;
+      }),
+    }));
+  }, [formSchema, isEmailRequired]);
+
   const {
     control,
     register,
@@ -442,6 +469,7 @@ const AddressForm = ({
       country: selectedCountry || t("resource.localization.india"),
       // Auto-fill user data using memoized utility function (excluding phone if international)
       ...autofillDataForForm,
+      email: addressItem ? addressItem?.email || "" : isNewAddress ? autofillDataForForm?.email || "" : "",
       // area_code: addressItem?.area_code || defaultPincode || "",
     },
   });
@@ -530,6 +558,7 @@ useEffect(() => {
       }),
       // ✅ FIXED: Use ternary to avoid creating new values on every render
       country: addressItem?.country || selectedCountry,
+      email: addressItem?.email || "",
     });
   } else {
     setValue("is_default_address", true);
@@ -546,7 +575,7 @@ useEffect(() => {
         isValidNumber: true,
       });
     }
-    if (userAutofillData.email) {
+    if (isNewAddress && userAutofillData.email) {
       setValue("email", userAutofillData.email);
     }
   }
@@ -604,21 +633,42 @@ useEffect(() => {
     );
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     let payload = { ...data };
     if (payload.address_type === "Other") {
       payload.address_type = payload?.otherAddressType || "Other";
     }
     delete payload?.otherAddressType;
-    // Convert country object to string (uid/id/iso2) if it's an object
-    // Handles: API country objects (with id), countryCurrencies objects (with uid/iso2), and string values
+    // Convert country object to a stable identifier if it's an object.
+    // Prefer backend identifiers (uid/id/iso2) — display_name/name are
+    // locale-sensitive labels and only safe as a last-resort fallback.
     if (payload.country && typeof payload.country === "object" && payload.country !== null) {
-      payload.country = payload.country.uid || payload.country.id || payload.country.iso2 || String(payload.country);
+      payload.country = payload.country.uid || payload.country.id || payload.country.iso2 || payload.country.display_name || payload.country.name || String(payload.country);
     }
     if (isNewAddress) {
-      onAddAddress(removeNullValues(payload));
+      const result = await Promise.resolve(onAddAddress(removeNullValues(payload)));
+      if (result && !result?.success && result?.errors) {
+        const fieldErrors = result?.errors?.[0]?.extensions?.details?.field_errors;
+        if (fieldErrors && typeof fieldErrors === "object") {
+          for (const [field, messages] of Object.entries(fieldErrors)) {
+            if (Array.isArray(messages) && messages[0]) {
+              setError(field, { type: "manual", message: messages[0] });
+            }
+          }
+        }
+      }
     } else {
-      onUpdateAddress(removeNullValues(payload));
+      const result = await Promise.resolve(onUpdateAddress(removeNullValues(payload)));
+      if (result && !result?.success && result?.errors) {
+        const fieldErrors = result?.errors?.[0]?.extensions?.details?.field_errors;
+        if (fieldErrors && typeof fieldErrors === "object") {
+          for (const [field, messages] of Object.entries(fieldErrors)) {
+            if (Array.isArray(messages) && messages[0]) {
+              setError(field, { type: "manual", message: messages[0] });
+            }
+          }
+        }
+      }
     }
   };
 
@@ -631,7 +681,7 @@ useEffect(() => {
     
     setValue("country", event);
     setTimeout(() => {
-      formSchema?.forEach((group) =>
+      updatedFormSchema?.forEach((group) =>
         group?.fields?.forEach(({ key }) => {
           // Don't clear user auto-filled fields when country changes
           if (key !== "name" && key !== "phone" && key !== "email") {
@@ -659,10 +709,10 @@ useEffect(() => {
       name: currentValues.name || addressItem?.name || data.name || userAutofillData?.name || "",
       // Don't use userAutofillData phone if international shipping is enabled
       phone: currentValues.phone || addressItemPhone || data.phone || (!internationalShipping ? userAutofillData?.phone : "") || "",
-      email: currentValues.email || addressItem?.email || data.email || userAutofillData?.email || "",
+      email: isNewAddress && !addressItem ? currentValues.email || data.email || userAutofillData?.email || "" : addressItem?.email ? currentValues.email || addressItem?.email : "",
     };
     reset(mergedData);
-    formSchema?.forEach((group) =>
+    updatedFormSchema?.forEach((group) =>
       group?.fields?.forEach(({ type, key }) => {
         if (type === "list") {
           setValue(key, "");
@@ -710,7 +760,7 @@ useEffect(() => {
             />
           </div>
         )}
-        {formSchema?.map((group, index) => (
+        {updatedFormSchema?.map((group, index) => (
           <div key={index} className={styles.formGroup}>
             <div ref={formContainerRef} className={styles.formContainer}>
               {group?.fields?.map((field) => (
