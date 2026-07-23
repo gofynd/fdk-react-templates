@@ -1906,6 +1906,54 @@
 .couponValidityModal {
   z-index: 99 !important;
 }
+.splitCreditNoteConfirmationModal {
+  z-index: 99 !important;
+}
+.splitCreditNoteConfirmation {
+  max-width: 450px;
+  padding: 16px;
+}
+.splitCreditNoteConfirmationMessage {
+  margin: 0 0 16px;
+  color: @TextBody;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 19.6px;
+}
+.splitCreditNoteConfirmationActions {
+  display: flex;
+  gap: 16px;
+
+  @media @mobile {
+    gap: 12px;
+  }
+}
+.splitCreditNoteConfirmationButton {
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: @ButtonRadius;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 140%;
+  text-align: center;
+  text-transform: uppercase;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+}
+.cancelSplitCreditNoteButton {
+  border: 1px solid var(--buttonPrimary);
+  background-color: var(--buttonSecondary);
+  color: var(--primaryColor);
+}
+.proceedSplitCreditNoteButton {
+  border: 1px solid var(--buttonPrimary);
+  background-color: var(--buttonPrimary);
+  color: var(--buttonSecondary);
+}
 .inCreasedZindex {
   z-index: 1099 !important;
 }

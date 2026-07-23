@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as styles from "./checkout-payment-content.less";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import Modal from "../../../components/core/modal/modal";
@@ -93,10 +93,34 @@ function CheckoutPaymentContent({
     shouldEnableSplitPaymentAfterCouponRemoval,
     setShouldEnableSplitPaymentAfterCouponRemoval,
   ] = useState(false);
+  const [isSplitPaymentCouponValidating, setIsSplitPaymentCouponValidating] =
+    useState(false);
+  const [showSplitCreditNoteConfirmation, setShowSplitCreditNoteConfirmation] =
+    useState(false);
   const [
-    isSplitPaymentCouponValidating,
-    setIsSplitPaymentCouponValidating,
+    shouldApplyCreditNoteWithSplitPayment,
+    setShouldApplyCreditNoteWithSplitPayment,
   ] = useState(false);
+  const [isSplitCreditNoteProceeding, setIsSplitCreditNoteProceeding] =
+    useState(false);
+  const splitCreditNoteProceedingRef = useRef(false);
+  const isTruthyValue = (value) =>
+    value === true || String(value).toLowerCase() === "true";
+  const getStoreCreditBreakupAmount = () => {
+    const storeCreditBreakup = Array.isArray(breakUpValues)
+      ? breakUpValues.find((item) => item?.key === "store_credit")?.value
+      : breakUpValues?.store_credit;
+    const amount = Number(String(storeCreditBreakup || "").replace(/[^\d.]/g, ""));
+
+    return Number.isFinite(amount) ? amount : 0;
+  };
+  const isCreditNoteAppliedForSplit =
+    isTruthyValue(splitPaymentConfig?.isCreditNoteApplied) ||
+    isTruthyValue(splitPaymentConfig?.is_credit_note_applied) ||
+    getStoreCreditBreakupAmount() > 0 ||
+    partialPaymentOption?.list?.some((option) =>
+      isTruthyValue(option?.balance?.is_applied)
+    );
 
   useEffect(() => {
     const isTruthySplitFlag = (value) =>
@@ -345,6 +369,49 @@ function CheckoutPaymentContent({
   const getRoundedCurrencyAmount = (amount) =>
     Math.round((Number(amount) + Number.EPSILON) * 100) / 100;
 
+  const getBreakupValue = (key) => {
+    if (Array.isArray(breakUpValues)) {
+      return breakUpValues.find(
+        (value) => value?.key === key || value?.name === key
+      )?.value;
+    }
+
+    return breakUpValues?.[key];
+  };
+
+  const getSplitCreditNoteAmount = () => {
+    const appliedCreditNoteOption =
+      partialPaymentOption?.list?.find((option) =>
+        isTruthyValue(option?.balance?.is_applied)
+      ) ||
+      partialPaymentOption?.list?.[0] ||
+      {};
+    const balance = appliedCreditNoteOption?.balance || {};
+    const account = balance?.account || appliedCreditNoteOption?.account || {};
+
+    return (
+      [
+        getBreakupValue("store_credit"),
+        appliedCreditNoteOption?.amount,
+        appliedCreditNoteOption?.value,
+        appliedCreditNoteOption?.applied_amount,
+        appliedCreditNoteOption?.appliedAmount,
+        balance?.amount,
+        balance?.value,
+        balance?.applied_amount,
+        balance?.appliedAmount,
+        balance?.amount_on_hold?.amount,
+        account?.amount_on_hold?.amount,
+        balance?.redeemable_balance?.amount,
+        account?.redeemable_balance?.amount,
+        balance?.available_balance?.amount,
+        account?.available_balance?.amount,
+      ]
+        .map((amount) => getNumericAmount(amount))
+        .find((amount) => amount > 0) || 0
+    );
+  };
+
   const getFormattedSplitLimitAmount = (amount) =>
     priceFormatCurrencySymbol(
       splitPaymentCurrencySymbol,
@@ -378,9 +445,10 @@ function CheckoutPaymentContent({
 
     if (minTransactionLimitType === "percentage") {
       return (
-        (minTransactionBaseAmount || getNumericAmount(baseAmount)) *
-        minTransactionValue
-      ) / 100;
+        ((minTransactionBaseAmount || getNumericAmount(baseAmount)) *
+          minTransactionValue) /
+        100
+      );
     }
 
     return minTransactionValue;
@@ -419,6 +487,7 @@ function CheckoutPaymentContent({
 
     if (
       hasSplitAmount &&
+      !isCreditNoteAppliedForSplit &&
       totalAmount &&
       (shouldAllowFullSplitAmount
         ? splitAmount > totalAmount
@@ -517,15 +586,20 @@ function CheckoutPaymentContent({
 
     setSplitPaymentAmountError(errorMessage);
 
-    if (errorMessage || !splitPaymentCodPayableAmount) {
+    if (!splitPaymentCodPayableAmount) {
       return;
     }
 
-    if (typeof onSplitCodContinue === "function") {
-      onSplitCodContinue(formatSplitPaymentAmount(splitCodAmount));
+    const handleSplitCodContinueAction =
+      onSplitCodContinue || splitPaymentConfig?.onSplitCodContinue;
+
+    if (typeof handleSplitCodContinueAction === "function") {
+      handleSplitCodContinueAction(formatSplitPaymentAmount(splitCodAmount));
       return;
     }
-
+    if (errorMessage) {
+      return;
+    }
     onSplitPaymentAmountBlur?.(formatSplitPaymentAmount(splitCodAmount));
   };
   const handleSplitCodBack = () => {
@@ -533,9 +607,7 @@ function CheckoutPaymentContent({
   };
   const splitCodAction = {
     buttonLabel: `Continue To Pay${
-      formattedSplitPaymentCodAmount
-        ? ` ${formattedSplitPaymentCodAmount}`
-        : ""
+      formattedSplitPaymentCodAmount ? ` ${formattedSplitPaymentCodAmount}` : ""
     }`,
     disabled: !hasValidSplitCodAmount,
     title: hasValidSplitCodAmount
@@ -545,32 +617,53 @@ function CheckoutPaymentContent({
     onContinue: handleSplitCodContinue,
   };
 
-  const applySplitPaymentSelection = (nextValue) => {
+  const applySplitPaymentSelection = (nextValue, options = {}) => {
     const nextAmount = nextValue
       ? splitPaymentAmount || getDefaultSplitPaymentAmount()
       : "";
     const errorMessage = nextValue
       ? getSplitPaymentAmountError(nextAmount)
       : "";
+    const shouldIncludeCreditNote =
+      nextValue &&
+      (options?.includeCreditNote === true || isCreditNoteAppliedForSplit);
+    const creditNoteAmount = shouldIncludeCreditNote
+      ? getSplitCreditNoteAmount()
+      : 0;
 
     setIsSplitPaymentSelected(nextValue);
     setSplitPaymentAmount(nextAmount);
     setSplitPaymentAmountError(errorMessage);
-    onSplitPaymentChange?.(nextValue);
+    onSplitPaymentChange?.(nextValue, {
+      ...options,
+      amount: nextAmount,
+      splitPaymentAmount: nextAmount,
+      ...(shouldIncludeCreditNote
+        ? {
+            includeCreditNote: true,
+            include_credit_note: true,
+          }
+        : {}),
+      ...(creditNoteAmount
+        ? {
+            creditNoteAmount,
+            credit_note_amount: creditNoteAmount,
+          }
+        : {}),
+    });
     onSplitPaymentAmountChange?.(
       errorMessage ? "" : formatSplitPaymentAmount(nextAmount)
     );
+    if (!nextValue) {
+      setShouldApplyCreditNoteWithSplitPayment(false);
+    }
   };
 
-  const handleSplitPaymentChange = async () => {
-    if (isSplitPaymentCheckboxDisabled || isSplitPaymentCouponValidating) {
-      return;
-    }
-
-    const nextValue = !isSplitPaymentSelected;
-
+  const continueSplitPaymentSelection = async (nextValue, options = {}) => {
     if (nextValue && isCouponApplied) {
       const validateAppliedCoupon = splitPaymentConfig?.onAppliedCouponValidate;
+      const includeCreditNote =
+        options?.includeCreditNote === true || isCreditNoteAppliedForSplit;
 
       if (typeof validateAppliedCoupon === "function") {
         setIsSplitPaymentCouponValidating(true);
@@ -587,7 +680,7 @@ function CheckoutPaymentContent({
             (!couponHasCode && couponValidity?.valid !== false);
 
           if (isCouponValidForSplit) {
-            applySplitPaymentSelection(true);
+            applySplitPaymentSelection(true, options);
             return;
           }
 
@@ -603,6 +696,7 @@ function CheckoutPaymentContent({
               "Split payment cannot be used with the applied coupon. Do you want to remove the coupon and continue?",
             valid: couponValidity?.valid,
           });
+          setShouldApplyCreditNoteWithSplitPayment(includeCreditNote);
           setShouldEnableSplitPaymentAfterCouponRemoval(true);
           setShowCouponValidityModal(true);
           return;
@@ -618,17 +712,65 @@ function CheckoutPaymentContent({
         message:
           "Split payment cannot be used with the applied coupon. Do you want to remove the coupon and continue?",
       });
+      setShouldApplyCreditNoteWithSplitPayment(includeCreditNote);
       setShouldEnableSplitPaymentAfterCouponRemoval(true);
       setShowCouponValidityModal(true);
       return;
     }
 
-    applySplitPaymentSelection(nextValue);
+    applySplitPaymentSelection(nextValue, options);
+  };
+
+  const handleSplitPaymentChange = async () => {
+    if (isSplitPaymentCheckboxDisabled || isSplitPaymentCouponValidating) {
+      return;
+    }
+
+    const nextValue = !isSplitPaymentSelected;
+
+    if (nextValue && isCreditNoteAppliedForSplit) {
+      setShowSplitCreditNoteConfirmation(true);
+      return;
+    }
+
+    await continueSplitPaymentSelection(nextValue);
+  };
+
+  const confirmSplitCreditNoteSelection = async () => {
+    if (
+      isSplitPaymentCouponValidating ||
+      isSplitCreditNoteProceeding ||
+      splitCreditNoteProceedingRef.current
+    ) {
+      return;
+    }
+
+    splitCreditNoteProceedingRef.current = true;
+    setIsSplitCreditNoteProceeding(true);
+
+    try {
+      setShowSplitCreditNoteConfirmation(false);
+      setShouldApplyCreditNoteWithSplitPayment(true);
+      await continueSplitPaymentSelection(true, { includeCreditNote: true });
+    } finally {
+      splitCreditNoteProceedingRef.current = false;
+      setIsSplitCreditNoteProceeding(false);
+    }
+  };
+
+  const cancelSplitCreditNoteSelection = () => {
+    if (isSplitCreditNoteProceeding || splitCreditNoteProceedingRef.current) {
+      return;
+    }
+
+    setShowSplitCreditNoteConfirmation(false);
+    setShouldApplyCreditNoteWithSplitPayment(false);
   };
 
   const closeCouponValidityModal = () => {
     if (shouldEnableSplitPaymentAfterCouponRemoval) {
       setShouldEnableSplitPaymentAfterCouponRemoval(false);
+      setShouldApplyCreditNoteWithSplitPayment(false);
       setShowCouponValidityModal(false);
       fpi.custom.setValue("isCouponValid", true);
       return;
@@ -651,11 +793,14 @@ function CheckoutPaymentContent({
           : false;
 
       setShouldEnableSplitPaymentAfterCouponRemoval(false);
+      setShouldApplyCreditNoteWithSplitPayment(false);
       setShowCouponValidityModal(false);
       fpi.custom.setValue("isCouponValid", true);
 
       if (isCouponRemoved) {
-        applySplitPaymentSelection(true);
+        applySplitPaymentSelection(true, {
+          includeCreditNote: shouldApplyCreditNoteWithSplitPayment,
+        });
       }
       return;
     }
@@ -671,6 +816,7 @@ function CheckoutPaymentContent({
   const cancelCouponRemoval = () => {
     if (shouldEnableSplitPaymentAfterCouponRemoval) {
       setShouldEnableSplitPaymentAfterCouponRemoval(false);
+      setShouldApplyCreditNoteWithSplitPayment(false);
       setShowCouponValidityModal(false);
       fpi.custom.setValue("isCouponValid", true);
       return;
@@ -1177,6 +1323,41 @@ function CheckoutPaymentContent({
             </div>
           </Modal>
         )}
+
+      <Modal
+        customClassName={styles.splitCreditNoteConfirmationModal}
+        isOpen={showSplitCreditNoteConfirmation}
+        title="Confirm Split Payment"
+        notCloseOnclickOutside={true}
+        closeDialog={cancelSplitCreditNoteSelection}
+      >
+        <div className={styles.splitCreditNoteConfirmation}>
+          <p className={styles.splitCreditNoteConfirmationMessage}>
+            You have selected Credit Note with Split Payment. If you continue,
+            your Credit Note will be applied to this order and can only be
+            refunded after the order is cancelled.
+          </p>
+          <div className={styles.splitCreditNoteConfirmationActions}>
+            <button
+              className={`${styles.splitCreditNoteConfirmationButton} ${styles.cancelSplitCreditNoteButton}`}
+              onClick={cancelSplitCreditNoteSelection}
+              type="button"
+            >
+              Cancel
+            </button>
+            <button
+              className={`${styles.splitCreditNoteConfirmationButton} ${styles.proceedSplitCreditNoteButton}`}
+              disabled={
+                isSplitPaymentCouponValidating || isSplitCreditNoteProceeding
+              }
+              onClick={confirmSplitCreditNoteSelection}
+              type="button"
+            >
+              Proceed
+            </button>
+          </div>
+        </div>
+      </Modal>
 
       {shouldShowFullPaymentSkeleton ? (
         <div className={styles.container}>

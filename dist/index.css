@@ -44353,6 +44353,54 @@ h5,
 .checkout-payment-content__couponValidityModal___dm1Lz {
   z-index: 99 !important;
 }
+.checkout-payment-content__splitCreditNoteConfirmationModal___FFyvZ {
+  z-index: 99 !important;
+}
+.checkout-payment-content__splitCreditNoteConfirmation___s6vcJ {
+  max-width: 450px;
+  padding: 16px;
+}
+.checkout-payment-content__splitCreditNoteConfirmationMessage___L5qzZ {
+  margin: 0 0 16px;
+  color: var(--textBody, #3c3131);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 19.6px;
+}
+.checkout-payment-content__splitCreditNoteConfirmationActions___Qd4pN {
+  display: flex;
+  gap: 16px;
+}
+@media only screen and (max-width: 480px) {
+  .checkout-payment-content__splitCreditNoteConfirmationActions___Qd4pN {
+    gap: 12px;
+  }
+}
+.checkout-payment-content__splitCreditNoteConfirmationButton___ujuQy {
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: var(--buttonRadius, 0px);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 140%;
+  text-align: center;
+  text-transform: uppercase;
+}
+.checkout-payment-content__splitCreditNoteConfirmationButton___ujuQy:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+.checkout-payment-content__cancelSplitCreditNoteButton___WCikB {
+  border: 1px solid var(--buttonPrimary);
+  background-color: var(--buttonSecondary);
+  color: var(--primaryColor);
+}
+.checkout-payment-content__proceedSplitCreditNoteButton___nKbEr {
+  border: 1px solid var(--buttonPrimary);
+  background-color: var(--buttonPrimary);
+  color: var(--buttonSecondary);
+}
 .checkout-payment-content__inCreasedZindex___ms0Z3 {
   z-index: 1099 !important;
 }
