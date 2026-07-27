@@ -40,13 +40,13 @@ const StickyPayNow = ({
           )}
           {!isJuspay ? (
             <button
-              className={`${styles.cartCheckoutBtn} ${styles.checkoutButton} ${enableLinkPaymentOption ? styles.linkPayBtn : ""}`}
+              className={`${styles.cartCheckoutBtn} ${styles.checkoutButton}`}
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 proceedToPay();
               }}
-              disabled={disabled || isPaymentLoading}
+              disabled={isPaymentLoading}
             >
               {!isPaymentLoading ? (
                 <>{btnTitle || t("resource.cart.pay_now")}</>

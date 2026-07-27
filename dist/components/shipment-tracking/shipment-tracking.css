@@ -356,13 +356,13 @@ h5,
 }
 .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__shipmentTitle___fnc95 .shipment-tracking__foName___Pcnko {
   color: var(--textLabel, #7d7676);
-  font-size: 14px;
+  font-size: clamp(0.875rem, 0.725vw, 1.625rem);
   font-weight: 500;
   line-height: 140%;
 }
 .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__boldsm___aDLPp {
   font-weight: 700;
-  font-size: 16px;
+  font-size: clamp(1rem, 0.8vw, 2rem);
 }
 @media only screen and (max-width: 768px) {
   .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__boldsm___aDLPp {
@@ -379,7 +379,7 @@ h5,
 }
 .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__lightxxs___zgSgn {
   font-weight: 300;
-  font-size: 13px;
+  font-size: clamp(0.8125rem, 0.6625vw, 1.5625rem);
 }
 @media only screen and (max-width: 768px) {
   .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__lightxxs___zgSgn {
@@ -424,14 +424,14 @@ h5,
 }
 .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__trackInfo___A5RXX .shipment-tracking__boldsm___aDLPp {
   font-weight: 700;
-  font-size: 14px;
+  font-size: clamp(0.875rem, 0.725vw, 1.625rem);
 }
 .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__trackInfo___A5RXX .shipment-tracking__time___UZX8Q {
   margin-top: 5px;
 }
 .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__trackInfo___A5RXX .shipment-tracking__lightxxs___zgSgn {
   font-weight: 300;
-  font-size: 13px;
+  font-size: clamp(0.8125rem, 0.6625vw, 1.5625rem);
 }
 @media only screen and (max-width: 768px) {
   .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__trackItem___geRoz .shipment-tracking__trackInfo___A5RXX .shipment-tracking__lightxxs___zgSgn {
@@ -487,9 +487,6 @@ h5,
   padding-top: 16px;
   margin: 0 16px;
 }
-.shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI .shipment-tracking__productExchangeBox___t2joe {
-  display: none;
-}
 .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI div,
 .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__links___E7mYI a {
   flex: 1;
@@ -498,7 +495,7 @@ h5,
   cursor: pointer;
   text-align: center;
   align-items: center;
-  font-size: 12px;
+  font-size: clamp(0.75rem, 0.6vw, 1.5rem);
   font-weight: 500;
   line-height: 140%;
   border-inline-end: 1px solid var(--dividerStokes, #d4d1d1);

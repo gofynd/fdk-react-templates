@@ -14,8 +14,7 @@
  * @param {boolean} [props.isSaleBadge=true] - Flag to display a sale badge if applicable.
  * @param {boolean} [props.isWishlistIcon=true] - Flag to display a wishlist icon.
  * @param {boolean} [props.isImageFill=false] - Flag to determine if the image should fill its container.
- * @param {boolean} [props.showImageOnHover=false] - Deprecated. Use imageEffects="swap_image" instead.
- * @param {boolean} [props.showMultipleImages=false] - Deprecated. Use imageEffects="show_multiple_images" instead.
+ * @param {boolean} [props.showImageOnHover=false] - Flag to show a different image on hover.
  * @param {string} [props.imageBackgroundColor=""] - Background color for the image.
  * @param {string} [props.imagePlaceholder=""] - Placeholder image URL.
  * @param {Object} [props.columnCount={ desktop: 4, tablet: 3, mobile: 1 }] - Number of columns for different viewports.
@@ -32,19 +31,14 @@
  * @param {boolean} [props.showBadge=true] - Flag to display product badges.
  * @param {boolean} [props.showColorVariants=false] - Flag to display color variant dots.
  * @param {boolean} [props.isSlider=false] - Flag to indicate if card is used in a slider.
- * @param {string} [props.imageEffects="none"] - Controls product-image behavior on desktop hover and mobile interaction.
  *
  * @returns {JSX.Element} The rendered product card component.
  *
  * Note: Color variants are now clickable and will change the product image using optimized state management.
  */
 
-import React, { useMemo, useState, useCallback, useEffect ,useRef } from "react";
-import {
-  currencyFormat,
-  formatLocale,
-  isValidCustomBadge,
-} from "../../helper/utils";
+import React, { useMemo, useState, useCallback, useEffect } from "react";
+import { currencyFormat, formatLocale } from "../../helper/utils";
 import { useMobile } from "../../helper/hooks";
 import FyImage from "../core/fy-image/fy-image";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
@@ -52,109 +46,6 @@ import * as styles from "./product-card.less";
 import FyButton from "../core/fy-button/fy-button";
 import { useGlobalStore, useFPI, useGlobalTranslation } from "fdk-core/utils";
 import ForcedLtr from "../forced-ltr/forced-ltr";
-
-const DOTS_COMPACT_THRESHOLD = 5;
-const DOTS_WINDOW_SIZE = 5;
-
-function getDotWindow(total, selectedIndex, { windowSize = 5, threshold = 5 } = {}) {
-  if (total <= threshold) {
-    return {
-      windowStart: 0,
-      visibleIndices: Array.from({ length: total }, (_, i) => i),
-    };
-  }
-
-  const size = Math.min(windowSize, total);
-  const maxStart = total - size;
-  let windowStart = selectedIndex - Math.floor(size / 2);
-  windowStart = Math.max(0, Math.min(windowStart, maxStart));
-  const visibleIndices = Array.from(
-    { length: size },
-    (_, i) => windowStart + i
-  );
-  return { windowStart, visibleIndices };
-}
-
-function getInactiveDotTier(rel, posInWindow) {
-  switch (rel) {
-    case 0:
-      return posInWindow <= 3 ? "large" : "small";
-    case 1:
-      if (posInWindow === 0) return "medium";
-      if (posInWindow === 2) return "large";
-      if (posInWindow === 3) return "medium";
-      return "small";
-    case 2:
-      if (posInWindow === 0 || posInWindow === 4) return "small";
-      if (posInWindow === 1 || posInWindow === 3) return "medium";
-      return "small";
-    case 3:
-      if (posInWindow === 0) return "small";
-      if (posInWindow === 1) return "medium";
-      if (posInWindow === 2) return "large";
-      return "medium";
-    case 4:
-      if (posInWindow === 0) return "small";
-      return "large";
-    default:
-      return "small";
-  }
-}
-
-function getDotSizeTier(slideIndex, { total, selectedIndex, windowStart, windowSize }) {
-  if (slideIndex === selectedIndex) {
-    return "active";
-  }
-
-  const rel = selectedIndex - windowStart;
-  const posInWindow = slideIndex - windowStart;
-  if (rel < 0 || rel >= windowSize || posInWindow < 0 || posInWindow >= windowSize) {
-    return "small";
-  }
-
-  return getInactiveDotTier(rel, posInWindow);
-}
-
-function getDotTierClass(tier) {
-  if (!tier || tier === "active") {
-    return null;
-  }
-  switch (tier) {
-    case "large":
-      return styles.dotTierLarge;
-    case "medium":
-      return styles.dotTierMedium;
-    case "small":
-      return styles.dotTierSmall;
-    default:
-      return null;
-  }
-}
-
-const IMAGE_EFFECTS = {
-  NONE: "none",
-  ZOOM: "zoom_on_hover",
-  SWAP: "swap_image",
-  MULTIPLE: "show_multiple_images",
-};
-
-function resolveImageEffect(imageEffects, { showImageOnHover, showMultipleImages }) {
-  const validEffects = Object.values(IMAGE_EFFECTS);
-
-  if (validEffects.includes(imageEffects)) {
-    return imageEffects;
-  }
-
-  if (showMultipleImages) {
-    return IMAGE_EFFECTS.MULTIPLE;
-  }
-
-  if (showImageOnHover) {
-    return IMAGE_EFFECTS.SWAP;
-  }
-
-  return IMAGE_EFFECTS.NONE;
-}
 
 const ProductCard = ({
   product,
@@ -172,13 +63,12 @@ const ProductCard = ({
   isPrice = true,
   isSaleBadge = true,
   isWishlistIcon = true,
-  isCustomBadge = true,
   isImageFill = false,
   showImageOnHover = false,
-  showMultipleImages = false,
   customImageContainerClass = "",
   imageBackgroundColor = "",
   customeProductDescContainerClass = "",
+
   imagePlaceholder = "",
   columnCount = { desktop: 4, tablet: 3, mobile: 1 },
   WishlistIconComponent = () => <SvgWrapper svgSrc="wishlist-plp" />,
@@ -196,9 +86,7 @@ const ProductCard = ({
   showBadge = true,
   showColorVariants = false,
   isSlider = false,
-  imageEffects,
   onClick = () => {},
-  isServiceable = true,
 }) => {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -206,13 +94,8 @@ const ProductCard = ({
   const locale = i18nDetails?.language?.locale || "en";
   const countryCode = i18nDetails?.countryCode || "IN";
   const isMobile = useMobile();
-  const touchStartXRef = useRef(null);
-  const didSwipeRef = useRef(false);
 
   const [isMobileView, setIsMobileView] = useState(false);
-  const [activeImageIndex, setActiveImageIndex] = useState(0);
-  const [isImageHovered, setIsImageHovered] = useState(false);
-
   useEffect(() => {
     const checkMobileView = () => {
       setIsMobileView(window.innerWidth <= 1024);
@@ -314,12 +197,18 @@ const ProductCard = ({
   const imageData = useMemo(() => {
     const currentImages = getProductImages(currentShade);
     const fallbackImages = getProductImages();
-    const images = currentImages.length ? currentImages : fallbackImages;
 
     return {
-      images,
-      url: images[0]?.url || imagePlaceholder,
-      alt: images[0]?.alt || `${product?.brand?.name} | ${product?.name}`,
+      url: currentImages[0]?.url || fallbackImages[0]?.url || imagePlaceholder,
+      alt:
+        currentImages[0]?.alt ||
+        fallbackImages[0]?.alt ||
+        `${product?.brand?.name} | ${product?.name}`,
+      hoverUrl: currentImages[1]?.url || fallbackImages[1]?.url || "",
+      hoverAlt:
+        currentImages[1]?.alt ||
+        fallbackImages[1]?.alt ||
+        `${product?.brand?.name} | ${product?.name}`,
     };
   }, [
     currentShade,
@@ -339,61 +228,10 @@ const ProductCard = ({
     return defaultVariant ? [defaultVariant, ...otherVariants] : items;
   }, [colorVariants]);
 
-  const resolvedImageEffect = useMemo(() => {
-    return resolveImageEffect(imageEffects, {
-      showImageOnHover,
-      showMultipleImages,
-    });
-  }, [imageEffects, showImageOnHover, showMultipleImages]);
-
-  const imageList = useMemo(() => {
-    if (imageData.images?.length) {
-      return imageData.images;
-    }
-
-    return [
-      {
-        url: imageData.url,
-        alt: imageData.alt,
-      },
-    ];
-  }, [imageData]);
-
-  const imageSignature = useMemo(
-    () => imageList.map((image) => image?.url).join("|"),
-    [imageList]
-  );
+  // =================== END OPTIMIZED VARIANT FUNCTIONALITY ===================
 
   const hasDiscount =
     getListingPrice("effective") !== getListingPrice("marked");
-  const hasSecondaryImage = Boolean(imageList[1]?.url);
-  const hasMultipleImages = imageList.length > 1;
-  const isZoomEffect = resolvedImageEffect === IMAGE_EFFECTS.ZOOM;
-  const isSwapEffect = resolvedImageEffect === IMAGE_EFFECTS.SWAP;
-  const isMultipleImagesEffect =
-    resolvedImageEffect === IMAGE_EFFECTS.MULTIPLE && hasMultipleImages;
-  const activeImage = imageList[activeImageIndex] || imageList[0];
-
-  useEffect(() => {
-    setActiveImageIndex(0);
-    setIsImageHovered(false);
-    touchStartXRef.current = null;
-    didSwipeRef.current = false;
-  }, [imageSignature, resolvedImageEffect]);
-
-  useEffect(() => {
-    if (!isMultipleImagesEffect || isMobile || !isImageHovered) {
-      return undefined;
-    }
-
-    const intervalId = window.setInterval(() => {
-      setActiveImageIndex((previousIndex) =>
-        previousIndex === imageList.length - 1 ? 0 : previousIndex + 1
-      );
-    }, 1200);
-
-    return () => window.clearInterval(intervalId);
-  }, [imageList.length, isImageHovered, isMobile, isMultipleImagesEffect]);
 
   const isFollowed = useMemo(() => {
     return !!followedIdList?.includes(product?.uid);
@@ -437,97 +275,6 @@ const ProductCard = ({
     [currentShade?.uid]
   );
 
-  const handleImageMouseEnter = () => {
-    if (!isMobile && isMultipleImagesEffect) {
-      setIsImageHovered(true);
-    }
-  };
-
-  const handleImageMouseLeave = () => {
-    if (!isMobile && isMultipleImagesEffect) {
-      setIsImageHovered(false);
-      setActiveImageIndex(0);
-    }
-  };
-
-  const handleImageTouchStart = (event) => {
-    if (!isMobile || !isMultipleImagesEffect) {
-      return;
-    }
-
-    touchStartXRef.current = event.touches[0]?.clientX ?? null;
-    didSwipeRef.current = false;
-  };
-
-  const handleImageTouchEnd = (event) => {
-    if (!isMobile || !isMultipleImagesEffect) {
-      return;
-    }
-
-    const touchEndX = event.changedTouches[0]?.clientX ?? null;
-
-    if (touchStartXRef.current === null || touchEndX === null) {
-      return;
-    }
-
-    const deltaX = touchStartXRef.current - touchEndX;
-    const swipeThreshold = 35;
-
-    if (Math.abs(deltaX) < swipeThreshold) {
-      touchStartXRef.current = null;
-      return;
-    }
-
-    didSwipeRef.current = true;
-    setActiveImageIndex((previousIndex) => {
-      if (deltaX > 0) {
-        return previousIndex === imageList.length - 1 ? 0 : previousIndex + 1;
-      }
-
-      return previousIndex === 0 ? imageList.length - 1 : previousIndex - 1;
-    });
-    touchStartXRef.current = null;
-  };
-
-  const handleImageClickCapture = (event) => {
-    if (!didSwipeRef.current) {
-      return;
-    }
-
-    event.preventDefault();
-    event.stopPropagation();
-    didSwipeRef.current = false;
-  };
-
-  const handleDotClick = (event, index) => {
-    event.preventDefault();
-    event.stopPropagation();
-    setActiveImageIndex(index);
-  };
-
-  const isCompactDots = imageList.length > DOTS_COMPACT_THRESHOLD;
-  
-  const dotWindowData = useMemo(() => {
-    return getDotWindow(imageList.length, activeImageIndex, {
-      windowSize: DOTS_WINDOW_SIZE,
-      threshold: DOTS_COMPACT_THRESHOLD,
-    });
-  }, [imageList.length, activeImageIndex]);
-
-  const renderImage = (image, additionalClass = "", { defer = false } = {}) => (
-    <FyImage
-      src={image?.url || imagePlaceholder}
-      alt={image?.alt || `${product?.brand?.name} | ${product?.name}`}
-      aspectRatio={aspectRatio}
-      isImageFill={isImageFill}
-      backgroundColor={imageBackgroundColor}
-      isFixedAspectRatio={true}
-      customClass={`${styles.productImage} ${additionalClass}`.trim()}
-      sources={imgSrcSet}
-      defer={defer}
-    />
-  );
-
   return (
     <div
       className={`${styles.productCard} ${
@@ -537,96 +284,31 @@ const ProductCard = ({
       } ${styles.animate} ${gridClass} ${isSlider ? styles.sliderCard : ""}`}
       onClick={onClick}
     >
-      <div
-        className={`${styles.imageContainer} ${customImageContainerClass} ${
-          !product.sellable ? styles.outOfStockContainer : ""
-        } ${!isMobile && isZoomEffect ? styles.zoomOnHover : ""} ${
-          !isMobile && isSwapEffect && hasSecondaryImage
-            ? styles.hoverSwapEnabled
-            : ""
-        }`}
-        onMouseEnter={handleImageMouseEnter}
-        onMouseLeave={handleImageMouseLeave}
-        onTouchStart={handleImageTouchStart}
-        onTouchEnd={handleImageTouchEnd}
-        onClickCapture={handleImageClickCapture}
-      >
-        {isMultipleImagesEffect ? (
-          <>
-            <div className={styles.desktopSlideshowContainer}>
-              <div
-                className={styles.slidesWrapper}
-                style={{
-                  transform: `translateX(-${activeImageIndex * 100}%)`,
-                }}
-              >
-                {imageList.map((image, index) => (
-                  <div className={styles.slide} key={image?.url || index}>
-                    {renderImage(image, styles.mainImage, {
-                      defer: index !== activeImageIndex,
-                    })}
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className={`${styles.dotsContainer} ${isCompactDots ? styles.dotsCompact : ""}`}>
-              {!isCompactDots &&
-                imageList.map((image, index) => (
-                  <span
-                    key={`dot-${image?.url || index}`}
-                    role="button"
-                    tabIndex={0}
-                    className={`${styles.dot} ${
-                      activeImageIndex === index ? styles.activeDot : ""
-                    }`}
-                    onClick={(event) => handleDotClick(event, index)}
-                    onKeyDown={(event) => {
-                      if (event.key === "Enter" || event.key === " ") {
-                        handleDotClick(event, index);
-                      }
-                    }}
-                    aria-label={`Show image ${index + 1}`}
-                  />
-                ))}
-              {isCompactDots &&
-                dotWindowData.visibleIndices.map((index) => {
-                  const tier = getDotSizeTier(index, {
-                    total: imageList.length,
-                    selectedIndex: activeImageIndex,
-                    windowStart: dotWindowData.windowStart,
-                    windowSize: dotWindowData.visibleIndices.length,
-                  });
-                  const isActive = index === activeImageIndex;
-                  const tierClass = isCompactDots ? getDotTierClass(tier) : null;
-                  return (
-                    <span
-                      key={`dot-${imageList[index]?.url || index}`}
-                      role="button"
-                      tabIndex={0}
-                      className={`${styles.dot} ${tierClass || ""} ${
-                        isActive ? styles.activeDot : ""
-                      }`}
-                      onClick={(event) => handleDotClick(event, index)}
-                      onKeyDown={(event) => {
-                        if (event.key === "Enter" || event.key === " ") {
-                          handleDotClick(event, index);
-                        }
-                      }}
-                      aria-label={`Show image ${index + 1}`}
-                    />
-                  );
-                })}
-            </div>
-          </>
-        ) : !isMobile && isSwapEffect && hasSecondaryImage ? (
-          <>
-            {renderImage(imageList[1], styles.hoverImage, { defer: true })}
-            {renderImage(imageList[0], styles.mainImage)}
-          </>
-        ) : (
-          renderImage(activeImage, styles.mainImage)
+      <div className={`${styles.imageContainer} ${customImageContainerClass}`}>
+        {!isMobile && showImageOnHover && imageData.hoverUrl && (
+          <FyImage
+            src={imageData.hoverUrl}
+            alt={imageData.hoverAlt}
+            aspectRatio={aspectRatio}
+            isImageFill={isImageFill}
+            backgroundColor={imageBackgroundColor}
+            isFixedAspectRatio={true}
+            customClass={`${styles.productImage} ${styles.hoverImage}`}
+            sources={imgSrcSet}
+            defer={true}
+          />
         )}
-
+        <FyImage
+          src={imageData.url}
+          alt={imageData.alt}
+          aspectRatio={aspectRatio}
+          isImageFill={isImageFill}
+          backgroundColor={imageBackgroundColor}
+          isFixedAspectRatio={true}
+          customClass={`${styles.productImage} ${styles.mainImage}`}
+          sources={imgSrcSet}
+          defer={false}
+        />
         {isWishlistIcon && (
           <button
             className={`${styles.wishlistBtn} ${isFollowed ? styles.active : ""}`}
@@ -651,7 +333,7 @@ const ProductCard = ({
               {t("resource.common.out_of_stock")}
             </span>
           </div>
-        ) : isCustomBadge && isValidCustomBadge(product.teaser_tag) && showBadge ? (
+        ) : product.teaser_tag && showBadge ? (
           <div className={styles.badge}>
             <span className={`${styles.text} ${styles.captionNormal}`}>
               {isMobileView

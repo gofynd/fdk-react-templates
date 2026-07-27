@@ -31,7 +31,6 @@ import {
   CarouselItem,
   CarouselPrevious,
   CarouselNext,
-  CarouselDots,
 } from "../../components/carousel/carousel";
 import Autoplay from "embla-carousel-autoplay";
 
@@ -74,12 +73,12 @@ function MemoizedSlide({ blog, index, sliderProps, getBlogTitle }) {
             {getFormattedDate(blog?.publish_date)}
           </span>
         </div>
-        <h2 className={`${styles.blogItem__title} ${styles.titleMobile}`}>
+        <h1 className={`${styles.blogItem__title} ${styles.titleMobile}`}>
           {getBlogTitle(blog?.title)}
-        </h2>
-        <h2 className={`${styles.blogItem__title} ${styles.titleDesktop}`}>
+        </h1>
+        <h1 className={`${styles.blogItem__title} ${styles.titleDesktop}`}>
           {blog?.title}
-        </h2>
+        </h1>
         {blog?.summary && (
           <p className={`${styles.blogItem__content}`}>{blog?.summary}</p>
         )}
@@ -402,8 +401,6 @@ function BlogList({
                 ))}
               </CarouselContent>
               <CarouselPrevious className={styles.carouselBtn} />
-              {/* NOTE:  Enable if dots are required to be added in carousel */}
-              {/* <CarouselDots/> */}
               <CarouselNext className={styles.carouselBtn} />
             </Carousel>
           </div>

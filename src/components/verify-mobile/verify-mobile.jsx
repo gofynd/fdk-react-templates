@@ -21,7 +21,6 @@ export default function VerifyMobile({
   setIsFormSubmitSuccess = () => {},
   setShowInputNumber = () => {},
   reset = () => {},
-  isNewPassword = false,
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -154,9 +153,7 @@ export default function VerifyMobile({
           className={`${styles.loginInputGroup} ${errors?.password || errors?.root ? styles.error : ""}`}
         >
           <label className={styles.loginInputTitle} htmlFor={passwordId}>
-            {isNewPassword
-              ? t("resource.auth.new_password")
-              : t("resource.auth.login.password")}
+            {t("resource.auth.login.password")}
             <span className={styles.required}> *</span>
           </label>
           <div

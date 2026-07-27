@@ -6,7 +6,7 @@ import OrderShipment from "../../../components/order-shipment/order-shipment";
 import ShipmentItem from "../../../components/shipment-item/shipment-item";
 import ShipmentTracking from "../../../components/shipment-tracking/shipment-tracking";
 import ShipmentBreakup from "../../../components/shipment-breakup/shipment-breakup";
-import { useFPI, useGlobalTranslation, useNavigate } from "fdk-core/utils";
+import { useGlobalTranslation, useNavigate } from "fdk-core/utils";
 import FyButton from "../../../components/core/fy-button/fy-button";
 import FyInput from "../../../components/core/fy-input/fy-input";
 import Loader from "../../../components/loader/loader";
@@ -22,11 +22,8 @@ function OrderTrackingDetails({
   isShipmentLoading,
   linkOrderDetails,
   availableFOCount,
-  globalConfig,
-  onAddToCart,
 }) {
   const { t } = useGlobalTranslation("translation");
-  const fpi = useFPI();
   const params = useParams();
   const [orderId, setOrderId] = useState(params.orderId ?? "");
   const [showError, setShowError] = useState(false);
@@ -35,11 +32,6 @@ function OrderTrackingDetails({
     useState(orderShipments);
   const navigate = useNavigate();
   const [isFocussed, setIsFocussed] = useState(false);
-  const themeGlobalConfig =
-    globalConfig ||
-    fpi.store.getState()?.theme?.theme?.config?.list?.[0]?.global_config
-      ?.custom?.props ||
-    {};
 
   const trackOrder = () => {
     setShowError(false);
@@ -148,7 +140,6 @@ function OrderTrackingDetails({
                     orderInfo={orderShipments}
                     isBuyAgainEligible={false}
                     availableFOCount={availableFOCount}
-                    globalConfig={themeGlobalConfig}
                   ></OrderShipment>
                 </div>
                 {isShipmentLoading ? (
@@ -165,7 +156,6 @@ function OrderTrackingDetails({
                             track_url: selectedShipmentBag?.track_url,
                           }}
                           type="tracking"
-                          globalConfig={themeGlobalConfig}
                         />
                       ))}
                     </div>
@@ -189,7 +179,6 @@ function OrderTrackingDetails({
                         shipmentInfo={selectedShipmentBag || {}}
                         changeinit={toggelInit}
                         invoiceDetails={invoiceDetails}
-                        onAddToCart={onAddToCart}
                       ></ShipmentTracking>
                     </div>
                     <div className={`${styles.shipment} ${styles.noPadding}`}>

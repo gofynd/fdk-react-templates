@@ -293,23 +293,12 @@
 
               img {
                 height: 312px;
+                object-fit: cover;
                 align-self: stretch;
-                object-fit: cover; 
 
                 @media @mobile {
                   height: 165px;
-                }
-              }
-
-              &.objectFitContain {
-                img {
-                  object-fit: contain;
-                }
-              }
-
-              &.objectFitCover {
-                img {
-                  object-fit: cover;
+                  align-self: stretch;
                 }
               }
             }

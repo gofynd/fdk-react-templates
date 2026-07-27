@@ -1,13 +1,8 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import * as styles from "./credit-note.less";
 import { priceFormatCurrencySymbol } from "../../../../helper/utils";
 
-const CreditNote = ({
-  data = {},
-  updateStoreCredits = () => {},
-  validateCouponOnCreditNoteApplied,
-  isCouponApplied,
-}) => {
+const CreditNote = ({ data = {}, updateStoreCredits = () => {} }) => {
   const show = useMemo(
     () => data && data?.list?.some((option) => option.partial_payment_allowed),
     [data]
@@ -15,15 +10,8 @@ const CreditNote = ({
 
   const handleChange = (option) => {
     updateStoreCredits(!option?.balance?.is_applied);
-    if (!option?.balance?.is_applied) {
-      validateCouponOnCreditNoteApplied("CREDITNOTE", "CREDITNOTE");
-    }
   };
-  useEffect(() => {
-    if (data?.list?.[0]?.balance?.is_applied && isCouponApplied) {
-      validateCouponOnCreditNoteApplied("CREDITNOTE", "CREDITNOTE");
-    }
-  }, [data?.list?.[0]?.balance?.is_applied]);
+
   return (
     <>
       {show && (

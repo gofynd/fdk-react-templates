@@ -17,6 +17,8 @@ import Autocomplete from "react-google-autocomplete";
 import SearchIcon from "../../assets/images/search.svg";
 import LocateIcon from "../../assets/images/locate.svg";
 import { useGlobalTranslation } from "fdk-core/utils";
+
+const libraries = ["places"];
 const mapContainerStyle = {
   width: "100%",
   height: "300px",
@@ -38,9 +40,6 @@ const GoogleMapAddress = ({
   onLoad = () => {},
 }) => {
   const { t } = useGlobalTranslation("translation");
-  const isNewAddress = !addressItem;
-  // Mumbai coordinates as fallback default
-  const MUMBAI_COORDINATES = { lat: 19.0760, lng: 72.8777 };
   
   // Get last used location from localStorage
   const getLastUsedLocation = () => {
@@ -52,26 +51,21 @@ const GoogleMapAddress = ({
     }
   };
   
+  // Priority: addressItem geo_location > last used location > country details
   const lastUsedLocation = getLastUsedLocation();
-  // Priority: addressItem geo_location > last used location > country details > Mumbai
-  const defaultCoordinates = {
+  const [selectedPlace, setSelectedPlace] = useState({
     lat: Number(
       addressItem?.geo_location?.latitude ||
       lastUsedLocation?.lat ||
       countryDetails?.latitude ||
-      MUMBAI_COORDINATES.lat
+      0
     ),
     lng: Number(
       addressItem?.geo_location?.longitude ||
       lastUsedLocation?.lng ||
       countryDetails?.longitude ||
-      MUMBAI_COORDINATES.lng
+      0
     ),
-  };
-  
-  const [selectedPlace, setSelectedPlace] = useState({
-    lat: defaultCoordinates.lat,
-    lng: defaultCoordinates.lng,
   });
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
@@ -86,11 +80,11 @@ const GoogleMapAddress = ({
   const mapRef = useRef(null);
   const hasInitialGeocodeRef = useRef(false);
   const lastGeocodeKeyRef = useRef(null);
+  const isNewAddress = !addressItem;
 
   const { isLoaded: isMapLoaded } = useJsApiLoader({
     googleMapsApiKey: mapApiKey,
-    id: "google-maps-script",
-    libraries: ["places"],
+    libraries,
   });
 
   useEffect(() => {
@@ -102,17 +96,14 @@ const GoogleMapAddress = ({
       setSelectedPlace(location);
       mapRef?.current?.panTo(location);
     } else {
-      // Use Mumbai coordinates for new addresses, otherwise use countryDetails
-      const location = isNewAddress
-        ? { lat: 19.0760, lng: 72.8777 } // Mumbai coordinates
-        : {
-            lat: Number(countryDetails?.latitude),
-            lng: Number(countryDetails?.longitude),
-          };
+      const location = {
+        lat: Number(countryDetails?.latitude),
+        lng: Number(countryDetails?.longitude),
+      };
       setSelectedPlace(location);
       mapRef?.current?.panTo(location);
     }
-  }, [countryDetails, addressItem, isNewAddress]);
+  }, [countryDetails, addressItem]);
 
   function stateReset() {
     setPincode("");
@@ -272,7 +263,13 @@ const GoogleMapAddress = ({
           }
         });
         const localLocality = subLocalities.join(", ");
-        const addressData = {
+        setPremise(localPremise);
+        setCountry(localCountry);
+        setCity(localCity);
+        setState(localState);
+        setPincode(localPincode);
+        setLocality(localLocality);
+        selectAddress({
           city: localCity,
           area_code: localPincode,
           state: localState,
@@ -280,14 +277,7 @@ const GoogleMapAddress = ({
           address: localPremise,
           country: localCountry,
           geo_location: { latitude: outLat, longitude: outLng },
-        };
-        setPremise(localPremise);
-        setCountry(localCountry);
-        setCity(localCity);
-        setState(localState);
-        setPincode(localPincode);
-        setLocality(localLocality);
-        selectAddress(addressData);
+        });
         lastGeocodeKeyRef.current = key;
       }
     } catch (error) {
@@ -337,8 +327,8 @@ const GoogleMapAddress = ({
   const handleLocationError = (browserHasGeolocation) => {
     console.error(
       browserHasGeolocation
-        ? "Error: The Geolocation service failed."
-        : "Error: Your browser doesn't support geolocation."
+        ? "Location access is blocked. Please enable location permissions in your browser settings."
+        : "Your browser doesn't support geolocation."
     );
   };
 

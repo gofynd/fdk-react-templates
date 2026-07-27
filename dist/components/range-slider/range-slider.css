@@ -353,11 +353,6 @@ h5,
   font-size: 14px;
   color: var(--textBody, #3c3131);
 }
-.range-slider__CustomRangeSlider___Uo_rw .range-slider__postfix___lbLy1 {
-  margin-left: 4px;
-  font-size: 14px;
-  color: var(--textBody, #3c3131);
-}
 .range-slider__CustomRangeSlider___Uo_rw .range-slider__inputContainer___pyXpE {
   display: flex;
   justify-content: space-between;
@@ -779,12 +774,12 @@ h5,
   color: var(--errorText, #ff3333);
   padding-top: 5px;
   font-weight: 400;
-  font-size: 12px;
+  font-size: clamp(0.75rem, 0.6vw, 1.5rem);
 }
 .fy-input__label___YQgmr {
   color: var(--textLabel, #7d7676);
-  font-size: 12px;
-  line-height: 21px;
+  font-size: clamp(0.75rem, 0.6vw, 1.5rem);
+  line-height: 175%;
 }
 .fy-input__label___YQgmr span {
   color: var(--errorText, #ff3333);
@@ -796,10 +791,10 @@ h5,
   position: absolute;
   transform: translateY(-50%) scale(0.9);
   z-index: 1;
-  background: var(--pageBackground, #f8f8f8);
+  background: #ffffff;
   padding: 0 0.3rem;
   margin: 0 0.5rem;
-  font-size: 0.8rem;
+  font-size: clamp(1rem, 0.8vw, 2rem);
   pointer-events: none;
   line-height: unset;
 }

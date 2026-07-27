@@ -886,9 +886,6 @@ h5,
   color: var(--buttonSecondary);
   cursor: pointer;
 }
-.single-address-content__addressContentConitainer___CupPn .single-address-content__actionContainer___vCQh2 .single-address-content__deliverToThis___tRzNQ:disabled {
-  opacity: 0.6;
-}
 @media only screen and (max-width: 480px) {
   .single-address-content__addressContentConitainer___CupPn .single-address-content__actionContainer___vCQh2 .single-address-content__deliverToThis___tRzNQ {
     padding: 20px 24px;
@@ -939,61 +936,6 @@ h5,
   text-transform: uppercase;
   color: var(--errorText, #ff3333);
   cursor: pointer;
-}
-.single-address-content__showMoreBtnContainer___K9Zyg {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 4px;
-}
-.single-address-content__showMoreBtnContainer___K9Zyg .single-address-content__showOtherAddresses___sE7EG {
-  cursor: pointer;
-  display: flex;
-  gap: 6px;
-  /* ✅ FIX → These must NOT be inside "span { }" */
-}
-@media only screen and (max-width: 480px) {
-  .single-address-content__showMoreBtnContainer___K9Zyg .single-address-content__showOtherAddresses___sE7EG {
-    font-size: 12px;
-    margin: 8px 0px !important;
-  }
-}
-.single-address-content__showMoreBtnContainer___K9Zyg .single-address-content__showOtherAddresses___sE7EG span {
-  color: var(--buttonPrimary, #4e3f09);
-  font-size: 14px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-  font-weight: 500;
-  align-self: stretch;
-}
-@media only screen and (max-width: 480px) {
-  .single-address-content__showMoreBtnContainer___K9Zyg .single-address-content__showOtherAddresses___sE7EG span {
-    font-size: 12px;
-  }
-}
-.single-address-content__showMoreBtnContainer___K9Zyg .single-address-content__showOtherAddresses___sE7EG .single-address-content__arrow___ONIp7 {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-  flex-shrink: 0;
-}
-.single-address-content__showMoreBtnContainer___K9Zyg .single-address-content__showOtherAddresses___sE7EG .single-address-content__arrow___ONIp7 svg {
-  width: 100%;
-  height: 100%;
-}
-.single-address-content__showMoreBtnContainer___K9Zyg .single-address-content__showOtherAddresses___sE7EG .single-address-content__rotateDown___xUhKw {
-  transform: rotate(0deg);
-  transition: transform 0.2s ease;
-  width: 22px;
-}
-.single-address-content__showMoreBtnContainer___K9Zyg .single-address-content__showOtherAddresses___sE7EG .single-address-content__rotateUp___QT5Zr {
-  transform: rotate(180deg);
-  transition: transform 0.2s ease;
-  width: 22px;
 }
 
 /**color by character**/

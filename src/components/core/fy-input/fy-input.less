@@ -9,14 +9,14 @@
     color: @ErrorText;
     padding-top: 5px;
     font-weight: 400;
-    font-size: 12px;
+    font-size: clamp(0.75rem, 0.6vw + 0rem, 1.5rem);
   }
 }
 
 .label {
   color: @TextLabel;
-  font-size: 12px;
-  line-height: 21px;
+  font-size: clamp(0.75rem, 0.6vw + 0rem, 1.5rem);
+  line-height: 175%;
   span {
     color: @ErrorText;
   }
@@ -29,10 +29,10 @@
   position: absolute;
   transform: translateY(-50%) scale(0.9);
   z-index: 1;
-  background: @PageBackground;
+  background: @White;
   padding: 0 0.3rem;
   margin: 0 0.5rem;
-  font-size: 0.8rem;
+  font-size: clamp(1rem, 0.8vw + 0rem, 2rem);
   pointer-events: none;
   line-height: unset;
 }

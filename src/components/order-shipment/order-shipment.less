@@ -9,7 +9,7 @@
   align-items: center;
   gap: 4px;
   color: @TextHeading;
-  font-size: 14px;
+  font-size: clamp(0.875rem, 0.6vw + 0.125rem, 1.625rem);;
   font-weight: 500;
   .scheduleIcon {
     display: flex;
@@ -21,7 +21,7 @@
 
     .windowClosedText {
       color: @TextLabel;
-      font-size: 14px;
+      font-size: clamp(0.875rem, 0.6vw + 0.125rem, 1.625rem);;
       font-style: normal;
       font-weight: 400;
       span {
@@ -48,107 +48,88 @@
 }
 .orderItem {
   color: @Mako;
-  background-color: @HighlightColor;
+  background-color: #f5f4ef;
   padding: 16px;
-  border-radius: 0px;
-  margin-bottom: 16px;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-
+  border-radius: 4px;
   .orderHeader {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+    cursor: pointer;
+    position: relative;
+
+    .filter {
+      position: absolute;
+      inset-inline-end: 0px;
+    }
+    .filterArrowUp {
+      margin-left: auto;
+      transform: rotate(180deg);
+    }
+    .filterArrowDown {
+      margin-left: auto;
+    }
 
     .orderId {
       color: @TextHeading;
       font-weight: 600;
       line-height: 140%;
-      font-size: 16px;
-      margin: 0;
+      font-weight: 700;
+      font-size: clamp(1rem, 0.8vw + 0rem, 2rem);
     }
 
     .orderTime {
       color: @TextLabel;
-      font-size: 12px;
+      font-size: clamp(0.75rem, 0.6vw + 0rem, 1.5rem);
       font-weight: 400;
       line-height: 140%;
       margin-top: 4px;
-      margin-bottom: 0;
     }
   }
 
   .shipmentData {
     animation: fadeIn 0.5s ease;
     border-top: none;
-    margin: 16px 0 0 0;
+    margin: 16px 0;
     padding: 0;
     cursor: pointer;
     display: flex;
     gap: 16px;
-    transition: opacity 0.2s ease;
-
-    &:hover {
-      opacity: 0.8;
-    }
 
     .shipmentLeft {
-      width: 100px;
-      height: 100px;
-      flex-shrink: 0;
-      border-radius: @ButtonRadius;
-      overflow: hidden;
-      background: white;
-      position: relative;
-
-      .bagImg,
-      picture,
-      img {
-        border-radius: inherit;
-      }
-
-      .bagImg,
-      picture {
-        overflow: hidden;
-      }
+      display: table-cell;
 
       img {
-        width: 100%;
-        height: 100%;
+        width: 80px;
+        height: 100px;
+        object-fit: cover;
       }
 
       #total-item {
         text-align: center;
-        position: absolute;
-        bottom: 8px;
-        right: 8px;
+        position: relative;
+        float: right;
         background: @Mako2;
         color: white;
+        top: -40px;
+        left: -10px;
         border-radius: 50%;
         width: 35px;
         height: 35px;
-        line-height: 13px;
-        font-size: 13px;
+        line-height: 100%;
+        font-size: clamp(0.8125rem, 0.6vw + 0.0625rem, 1.5625rem);
         padding: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
       }
     }
     .bold {
       font-weight: 700;
-      font-size: 14px;
+      font-size: clamp(0.875rem, 0.6vw + 0.125rem, 1.625rem);;
     }
     .light {
       font-weight: 300;
-      font-size: 16px;
+      font-size: clamp(1rem, 0.8vw + 0rem, 2rem);
       @media @tablet {
-        font-size: 14px;
+        font-size: clamp(0.875rem, 0.6vw + 0.125rem, 1.625rem);;
       }
       @media @mobile {
-        font-size: 14px;
+        font-size: clamp(0.875rem, 0.6vw + 0.125rem, 1.625rem);;
       }
     }
 
@@ -156,39 +137,26 @@
       display: flex;
       flex-direction: column;
       flex: 1;
-      gap: 4px;
-      min-width: 0;
-
       .shipmentId {
-        margin: 0;
+        margin: 4px 0px;
       }
       .boldls {
         font-weight: 600;
-        font-size: 14px;
       }
       .uktLinks {
         cursor: pointer;
         text-decoration: none;
         color: @TextHeading;
-        font-size: 14px;
+        font-size: clamp(0.75rem, 0.6vw + 0rem, 1.5rem);
         font-weight: 500;
         line-height: 140%;
-        margin: 0;
-        white-space: pre-wrap;
       }
       .shipmentStats {
-        margin: 0;
+        margin: 4px 0px;
         color: @TextLabel;
-        font-size: 12px;
+        font-size: clamp(0.75rem, 0.6vw + 0rem, 1.5rem);
         font-weight: 500;
-        line-height: 140%;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-
-        span:nth-child(2) {
-          margin: 0 4px;
-        }
+        line-height: 140%; /* 16.8px */
       }
       .buttonContainer {
         display: flex;
@@ -206,7 +174,7 @@
             width: auto;
             padding: 4px;
             border-radius: 8px;
-            font-size: 12px;
+            font-size: clamp(0.75rem, 0.6vw + 0rem, 1.5rem);
             font-weight: 700;
             color: @UserAlertButtonLink;
           }
@@ -228,7 +196,7 @@
       background: @SuccessBackground;
       padding: 4px;
       color: @SuccessText;
-      font-size: 12px;
+      font-size: clamp(0.75rem, 0.6vw + 0rem, 1.5rem);
       font-weight: 500;
       line-height: 140%;
       width: fit-content;
@@ -238,7 +206,7 @@
       background-color: @ErrorBackground;
       padding: 4px;
       color: @ErrorText;
-      font-size: 12px;
+      font-size: clamp(0.75rem, 0.6vw + 0rem, 1.5rem);
       font-weight: 500;
       width: fit-content;
     }
@@ -247,7 +215,7 @@
       background-color: @UserAlertsInfoBackground;
       padding: 4px;
       color: @UserAlertsInfoText;
-      font-size: 12px;
+      font-size: clamp(0.75rem, 0.6vw + 0rem, 1.5rem);
       font-weight: 500;
       width: fit-content;
     }
@@ -264,7 +232,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
+      font-size: clamp(1rem, 0.8vw + 0rem, 2rem);
       text-align: center;
       color: @ThemeAccentL5;
       cursor: pointer;
@@ -277,10 +245,7 @@
   }
 
   .showAccordionBody {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    padding-top: 16px;
+    display: block;
   }
 
   .hideAccordionBody {
@@ -293,7 +258,7 @@
   background-color: @ErrorBackground;
   padding: 4px;
   color: @ErrorText;
-  font-size: 12px;
+  font-size: clamp(0.75rem, 0.6vw + 0rem, 1.5rem);
   font-weight: 500;
   width: fit-content;
 }
@@ -303,7 +268,7 @@
   background-color: @UserAlertsInfoBackground;
   padding: 4px;
   color: @UserAlertsInfoText;
-  font-size: 12px;
+  font-size: clamp(0.75rem, 0.6vw + 0rem, 1.5rem);
   font-weight: 500;
   width: fit-content;
 }

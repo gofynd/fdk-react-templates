@@ -9,8 +9,6 @@ const CompareProductCard = ({
   productItem,
   addProduct = () => {},
   isLoading = false,
-  globalConfig,
-  listingPrice = "range",
 }) => {
   const locale = "en";
   const countryCode = "IN";
@@ -42,6 +40,7 @@ const CompareProductCard = ({
     screenSize === "desktop" ? 80 : screenSize === "tablet" ? 100 : 66
   );
   const titleAttr = rawName;
+  console.log(productName, "productName", productName.length);
   const formatPrice = (value, symbol) => {
     const localeCode = formatLocale(locale, countryCode, true);
     return currencyFormat(value, symbol, localeCode);
@@ -78,7 +77,7 @@ const CompareProductCard = ({
     return formatPrice(priceDetails.min, symbol);
   };
 
-  const price = getFormattedPrice(productItem, listingPrice);
+  const price = getFormattedPrice(productItem);
   const actualPrice = getMarkedPrice(productItem);
   const isEmpty = !productItem;
 
@@ -106,9 +105,6 @@ const CompareProductCard = ({
         <img
           src={productItem?.media?.[0]?.url}
           alt={productItem?.media?.[0]?.alt}
-          className={
-            globalConfig?.img_fill ? styles.imageCover : styles.imageContain
-          }
         />
       </div>
 

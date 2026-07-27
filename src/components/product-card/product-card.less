@@ -4,9 +4,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  .disableCursor {
-    filter: invert(1);
-  }
+
   .removeIcon {
     path {
       fill: @TextBody !important;
@@ -29,23 +27,6 @@
     position: relative;
     border-radius: @ImageRadius;
     -webkit-mask-image: -webkit-radial-gradient(white, black); //safari fix
-    mask-image: radial-gradient(white, black);
-
-    &.outOfStockContainer {
-      .productImage {
-        filter: grayscale(100%);
-        opacity: 0.7;
-      }
-
-      @media @desktop {
-        &:hover {
-          .productImage {
-            filter: grayscale(100%);
-            opacity: 0.7;
-          }
-        }
-      }
-    }
 
     .wishlistBtn {
       display: flex;
@@ -67,14 +48,7 @@
     }
 
     .productImage {
-      transition:
-        300ms transform cubic-bezier(0, 0, 0.2, 1),
-        200ms opacity ease,
-        200ms visibility ease;
-
-      &.mainImage {
-        position: relative;
-      }
+      transition: 300ms transform cubic-bezier(0, 0, 0.2, 1);
 
       &.hoverImage {
         position: absolute;
@@ -83,23 +57,17 @@
         opacity: 0;
       }
     }
-
+    @lg-min: 860px;
     @media @desktop {
-      &.zoomOnHover:hover {
-        .mainImage {
-          transform: scale(1.06);
+      &:hover {
+        .hoverImage + .mainImage {
+          visibility: hidden;
         }
-      }
-
-      &.hoverSwapEnabled:hover {
-        .hoverImage {
+        .hoverImage,
+        .mainImage {
           visibility: visible;
           opacity: 1;
-        }
-
-        .mainImage {
-          visibility: hidden;
-          opacity: 0;
+          transform: scale(1.1);
         }
       }
     }
@@ -117,7 +85,6 @@
       .text {
         display: -webkit-box;
         -webkit-line-clamp: 2;
-        line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
       }
@@ -147,64 +114,6 @@
 
     .extension {
       position: absolute;
-    }
-
-    .dotsContainer {
-      position: absolute;
-      bottom: 12px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-      align-items: center;
-      z-index: 2;
-
-      .dot {
-        flex-shrink: 0;
-        width: 12px;
-        height: 12px;
-        border-radius: 25px;
-        background-color: @TextSecondary;
-        color: transparent;
-        border: none;
-        padding: 0;
-        cursor: pointer;
-        transition:
-          background-color 0.2s ease,
-          width 0.32s cubic-bezier(0.4, 0, 0.2, 1),
-          height 0.32s cubic-bezier(0.4, 0, 0.2, 1),
-          opacity 0.32s cubic-bezier(0.4, 0, 0.2, 1),
-          transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
-
-        &.activeDot {
-          background-color: @TextHeading;
-          opacity: 1;
-        }
-
-        &.dotTierLarge {
-          width: 10px;
-          height: 10px;
-          opacity: 0.82;
-        }
-
-        &.dotTierMedium {
-          width: 8px;
-          height: 8px;
-          opacity: 0.68;
-        }
-
-        &.dotTierSmall {
-          width: 6px;
-          height: 6px;
-          opacity: 0.55;
-        }
-      }
-
-      &.dotsCompact {
-        flex-wrap: nowrap;
-        min-height: 16px;
-      }
     }
   }
   .productDescContainer {
@@ -341,10 +250,9 @@
   @media @mobile {
     &.mob-grid-1-card {
       .imageContainer {
-        // As per Ankit Jain: fix wishlist icon position on mobile to prevent layout break
         .wishlistBtn {
-          top: 6px !important;
-          inset-inline-end: 6px !important;
+          top: 16px;
+          inset-inline-end: 16px;
         }
         .badge {
           inset-inline-start: 16px;
@@ -381,10 +289,9 @@
         }
       }
       .imageContainer {
-        // As per Ankit Jain: fix wishlist icon position on mobile to prevent layout break
         .wishlistBtn {
-          top: 6px !important;
-          inset-inline-end: 6px !important;
+          top: 8px;
+          inset-inline-end: 8px;
         }
         .badge {
           inset-inline-start: 8px;
@@ -547,50 +454,3 @@
 // .textCenter {
 //   text-align: center;
 // }
-
-.mobileScrollContainer {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none; // Firefox
-  -ms-overflow-style: none; // IE/Edge
-
-  &::-webkit-scrollbar {
-    display: none; // Chrome/Safari
-  }
-
-  .mobileImageWrapper {
-    min-width: 100%;
-    scroll-snap-align: start;
-    position: relative;
-
-    .mobileImage {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
-}
-
-.desktopSlideshowContainer {
-  overflow: hidden;
-  position: relative;
-  width: 100%;
-  height: 100%;
-
-  .slidesWrapper {
-    display: flex;
-    transition: transform 0.5s ease-in-out;
-    height: 100%;
-    width: 100%;
-    will-change: transform;
-  }
-
-  .slide {
-    flex: 0 0 100%;
-    width: 100%;
-    height: 100%;
-    position: relative;
-  }
-}

@@ -3,7 +3,6 @@
 .orderTrackingDetails {
   padding: 16px 0;
   margin: 0 auto;
-
   .linkMainBox {
     @media @desktop {
       width: 381px;
@@ -79,7 +78,7 @@
 
     .orderIdInput {
       text-transform: uppercase;
-      font-size: 12px;
+      font-size: clamp(0.75rem, 0.6vw + 0rem, 1.5rem);
       width: 350px;
 
       @media @mobile {
@@ -88,7 +87,7 @@
     }
 
     .btn {
-      font-size: 12px;
+      font-size: clamp(0.75rem, 0.6vw + 0rem, 1.5rem);
 
       @media @mobile {
         width: 100%;
@@ -187,6 +186,7 @@
       padding-inline-end: 30px;
       padding-top: 5px;
       cursor: pointer;
+      font-size: clamp(0.75rem, 0.6vw + 0rem, 1.5rem);
     }
   }
 }

@@ -59,7 +59,7 @@ function FilterModal({
     navigate?.({
       pathname: location?.pathname,
       ...(selectedFiltersParams && { search: selectedFiltersParams }),
-    });
+    }, { replace: true });
 
     onCloseModalClick?.();
   };

@@ -832,6 +832,16 @@ h5,
   /* Opera */
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
+@media screen and (min-width: 2000px) {
+  .modal__modalContainer___BoKU8 {
+    max-width: 1000px;
+  }
+}
+@media screen and (min-width: 3500px) {
+  .modal__modalContainer___BoKU8 {
+    max-width: 1500px;
+  }
+}
 @media only screen and (max-width: 768px) {
   .modal__modalContainer___BoKU8 {
     width: 100%;
@@ -866,7 +876,7 @@ h5,
 }
 .modal__modalBody___peHlJ {
   flex: 1;
-  max-height: 95vh;
+  max-height: 90vh;
   overflow-y: auto;
 }
 .modal__rightModal___acoje {
@@ -900,11 +910,6 @@ h5,
     align-items: center;
   }
 }
-@media only screen and (max-width: 480px) {
-  .modal__centerModal___CkbLu {
-    align-items: flex-end;
-  }
-}
 .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 {
   border-radius: 8px;
 }
@@ -914,20 +919,8 @@ h5,
     max-width: 720px;
   }
 }
-@media only screen and (max-width: 480px) {
-  .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 {
-    width: 100%;
-    max-width: 100%;
-    border-radius: 0;
-  }
-}
 .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 .modal__modalHeader___xKo1g {
   border-radius: 8px 8px 0px 0px;
-}
-@media only screen and (max-width: 480px) {
-  .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 .modal__modalHeader___xKo1g {
-    border-radius: 0;
-  }
 }
 .modal__modalTitle___yvZQo {
   font-weight: 600;
@@ -1375,18 +1368,19 @@ h5,
   color: var(--successText, #1c958f);
 }
 .fy-button__contained___F5O7g {
-  background-color: var(--buttonPrimary, #4e3f09);
-  color: #ffffff;
+  background-color: var(--buttonSecondary, #fff);
+  color: var(--buttonPrimary, #4e3f09);
+  border-radius: 100px;
 }
-.fy-button__contained___F5O7g.fy-button__primary___xKz1S:hover:not(:disabled) {
-  background-color: var(--buttonPrimaryL1, #71653a);
-  color: #ffffff;
+.fy-button__contained___F5O7g.fy-button__primary___xKz1S:hover {
+  background-color: var(--buttonSecondary, #fff);
+  color: var(--buttonPrimary, #4e3f09);
 }
 .fy-button__contained___F5O7g.fy-button__secondary___z_hBB {
   background-color: var(--buttonSecondary, #fff);
   color: var(--buttonPrimary, #4e3f09);
 }
-.fy-button__contained___F5O7g.fy-button__secondary___z_hBB:hover:not(:disabled) {
+.fy-button__contained___F5O7g.fy-button__secondary___z_hBB:hover {
   background-color: var(--buttonPrimaryL1, #71653a);
   color: #ffffff;
 }
@@ -1403,18 +1397,18 @@ h5,
   border: 1px solid var(--buttonPrimary, #4e3f09);
   color: var(--buttonPrimary, #4e3f09);
 }
-.fy-button__outlined___WccQN.fy-button__primary___xKz1S:hover:not(:disabled) {
+.fy-button__outlined___WccQN.fy-button__primary___xKz1S:hover {
   background-color: var(--buttonPrimary, #4e3f09);
   color: var(--buttonSecondary, #fff);
 }
-.fy-button__outlined___WccQN.fy-button__primary___xKz1S:hover:not(:disabled) svg path {
+.fy-button__outlined___WccQN.fy-button__primary___xKz1S:hover svg path {
   fill: var(--buttonSecondary, #fff);
 }
 .fy-button__outlined___WccQN.fy-button__secondary___z_hBB {
   border: 1px solid var(--buttonSecondary, #fff);
   color: var(--buttonPrimary, #4e3f09);
 }
-.fy-button__outlined___WccQN.fy-button__secondary___z_hBB:hover:not(:disabled) {
+.fy-button__outlined___WccQN.fy-button__secondary___z_hBB:hover {
   background-color: var(--buttonPrimary, #4e3f09);
   color: #ffffff;
 }
@@ -2279,12 +2273,12 @@ h5,
   color: var(--errorText, #ff3333);
   padding-top: 5px;
   font-weight: 400;
-  font-size: 12px;
+  font-size: clamp(0.75rem, 0.6vw, 1.5rem);
 }
 .fy-input__label___YQgmr {
   color: var(--textLabel, #7d7676);
-  font-size: 12px;
-  line-height: 21px;
+  font-size: clamp(0.75rem, 0.6vw, 1.5rem);
+  line-height: 175%;
 }
 .fy-input__label___YQgmr span {
   color: var(--errorText, #ff3333);
@@ -2296,10 +2290,10 @@ h5,
   position: absolute;
   transform: translateY(-50%) scale(0.9);
   z-index: 1;
-  background: var(--pageBackground, #f8f8f8);
+  background: #ffffff;
   padding: 0 0.3rem;
   margin: 0 0.5rem;
-  font-size: 0.8rem;
+  font-size: clamp(1rem, 0.8vw, 2rem);
   pointer-events: none;
   line-height: unset;
 }

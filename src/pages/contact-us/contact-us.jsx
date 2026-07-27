@@ -96,13 +96,10 @@ function ContactSupport({
       showAsterik: true,
       required: true,
       error: errors?.phone,
-      // ✅ FIX 1: Stricter pattern — requires at least 7 digits
       pattern: {
-        value: /^\+?\d{7,15}$/,
+        value: /^\+?[0-9\s]{1,15}$/,
         message: t("resource.contact_us.please_enter_a_valid_phone_number"),
       },
-      // ✅ FIX 2: Explicit required message so errors.phone.message is always set
-      requiredMessage: t("resource.contact_us.please_enter_your_phone_number"),
       errorMessage: t("resource.contact_us.please_enter_your_phone_number"),
     },
     {
@@ -142,7 +139,12 @@ function ContactSupport({
   const submitForm = async (data) => {
     try {
       await handleSubmitForm(data);
-      reset({ name: "", phone: "", email: "", comment: "" });
+      reset({
+        name: "",
+        phone: "",
+        email: "",
+        comment: "",
+      });
       setText("");
     } catch (err) {
       console.error("Form submission failed", err);
@@ -190,18 +192,10 @@ function ContactSupport({
   return (
     <div className={`basePageContainer margin0auto`}>
       <div
-        className={`${styles.contactUs_mainContainer} ${
-          pageConfig?.align_image === "left" && styles.invert
-        }`}
+        className={` ${styles.contactUs_mainContainer} ${pageConfig?.align_image === "left" && styles.invert}`}
       >
         <div
-          className={`${styles.contact_container} ${
-            pageConfig?.image_desktop ? styles.onImageContainer : ""
-          } ${
-            pageConfig?.align_description === "above_footer"
-              ? styles.reducedBottomGap
-              : ""
-          }`}
+          className={`${styles.contact_container} ${pageConfig?.image_desktop ? styles.onImageContainer : ""} ${pageConfig?.align_description === "above_footer" ? styles.reducedBottomGap : ""}`}
         >
           <div className={`${styles.flex_item}`}>
             <div>
@@ -212,7 +206,7 @@ function ContactSupport({
                 showDescription &&
                 pageConfig?.align_description !== "above_footer" && (
                   <p
-                    className={`${styles.description} ${styles.showDesktop} fontBody`}
+                    className={`${styles.description}  ${styles.showDesktop} fontBody`}
                   >
                     {appInfo?.description}
                   </p>
@@ -289,14 +283,7 @@ function ContactSupport({
                     name={field.name}
                     control={control}
                     rules={{
-                      // ✅ FIX 3: required now carries a message for all fields
-                      required: field.required
-                        ? {
-                            value: true,
-                            message:
-                              field.requiredMessage || field.errorMessage,
-                          }
-                        : false,
+                      required: field.required,
                       pattern: field.pattern,
                       validate:
                         field.name === "comment"
@@ -329,16 +316,19 @@ function ContactSupport({
                         type={field.type}
                         maxLength={field.type === "textarea" ? 500 : null}
                         error={errors[field.name]}
-                        // ✅ FIX 4: Removed onInput entirely — all sanitization
-                        // now happens in a single onChange handler, preventing
-                        // the double-update race condition for tel inputs
+                        onInput={
+                          field.type === "tel"
+                            ? (e) => {
+                                // Allow only numbers, space, and + for country code
+                                e.target.value = e.target.value
+                                  .replace(/[^+\d\s]/g, "")
+                                  .slice(0, 15);
+                                onChange(e);
+                              }
+                            : null
+                        }
                         onChange={(e) => {
-                          let val = e.target.value;
-                          if (field.type === "tel") {
-                            // Sanitize: allow +, digits, spaces only, max 15 chars
-                            val = val.replace(/[^+\d]/g, "").slice(0, 15);
-                            e.target.value = val; // keep DOM in sync
-                          }
+                          const val = e.target.value;
                           onChange(e);
                           if (field.type === "textarea") {
                             setText(val);
@@ -346,8 +336,6 @@ function ContactSupport({
                         }}
                         value={value}
                         multiline={field.multiline}
-                        // ✅ FIX 5: errors[field.name].message is now always
-                        // populated, so this correctly shows the right message
                         errorMessage={
                           errors[field.name]
                             ? errors[field.name].message || field.errorMessage
@@ -383,7 +371,6 @@ function ContactSupport({
             <FyImage
               customClass={styles.imageWrapper}
               src={pageConfig?.image_desktop}
-              alt={pageConfig?.title || t("resource.contact_us.hero_image")}
               aspectRatio={3 / 4}
               showOverlay={true}
               overlayColor="#000000"
@@ -396,9 +383,7 @@ function ContactSupport({
         showDescription &&
         pageConfig?.align_description === "above_footer" && (
           <div
-            className={`${styles.flex_item} ${styles.descriptionMargin} ${
-              pageConfig?.image_desktop ? styles.descriptionPaddingTop : ""
-            }`}
+            className={`${styles.flex_item} ${styles.descriptionMargin} ${pageConfig?.image_desktop ? styles.descriptionPaddingTop : ""}`}
           >
             <p className={`${styles.description} fontBody`}>
               {appInfo?.description}

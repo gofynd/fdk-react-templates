@@ -3,7 +3,7 @@
 .loginWrapper {
   width: 100%;
   padding: 24px;
-  max-width: 400px;
+  max-width: 796px;
   .loginLogoDesktop,
   .loginLogoMobile {
     width: 160px;
@@ -22,17 +22,38 @@
     }
   }
   .loginTitle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: nowrap;
     color: @TextHeading;
     text-align: center;
-    font-size: 32px;
+    font-size: 60px;
     font-style: normal;
     font-weight: 700;
-    line-height: 44.8px;
+    line-height: 72px;
+    letter-spacing: 0;
     margin-top: 16px;
 
     @media @tablet {
-      font-size: 24px;
-      line-height: 33.6px;
+      gap: 12px;
+      font-size: 34px;
+      line-height: 44px;
+    }
+
+    span {
+      white-space: nowrap;
+    }
+  }
+  .loginTitleLogo {
+    display: block;
+    flex: 0 0 auto;
+    margin-top: 9px;
+
+    @media @tablet {
+      max-width: 45%;
+      height: auto;
     }
   }
   .loginSubText {
@@ -44,10 +65,10 @@
     line-height: 19.6px;
     margin-top: 8px;
   }
-  .consentWrapperWithTooltip {
-    position: relative;
-  }
   .loginBtnGroup {
     margin-top: 32px;
   }
 }
+  /deep/ .fdk-theme-outlet {
+      min-height: unset;
+    }

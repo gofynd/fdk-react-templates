@@ -381,6 +381,16 @@ h5,
   /* Opera */
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
+@media screen and (min-width: 2000px) {
+  .modal__modalContainer___BoKU8 {
+    max-width: 1000px;
+  }
+}
+@media screen and (min-width: 3500px) {
+  .modal__modalContainer___BoKU8 {
+    max-width: 1500px;
+  }
+}
 @media only screen and (max-width: 768px) {
   .modal__modalContainer___BoKU8 {
     width: 100%;
@@ -415,7 +425,7 @@ h5,
 }
 .modal__modalBody___peHlJ {
   flex: 1;
-  max-height: 95vh;
+  max-height: 90vh;
   overflow-y: auto;
 }
 .modal__rightModal___acoje {
@@ -449,11 +459,6 @@ h5,
     align-items: center;
   }
 }
-@media only screen and (max-width: 480px) {
-  .modal__centerModal___CkbLu {
-    align-items: flex-end;
-  }
-}
 .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 {
   border-radius: 8px;
 }
@@ -463,20 +468,8 @@ h5,
     max-width: 720px;
   }
 }
-@media only screen and (max-width: 480px) {
-  .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 {
-    width: 100%;
-    max-width: 100%;
-    border-radius: 0;
-  }
-}
 .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 .modal__modalHeader___xKo1g {
   border-radius: 8px 8px 0px 0px;
-}
-@media only screen and (max-width: 480px) {
-  .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 .modal__modalHeader___xKo1g {
-    border-radius: 0;
-  }
 }
 .modal__modalTitle___yvZQo {
   font-weight: 600;
@@ -1343,12 +1336,12 @@ h5,
   color: var(--errorText, #ff3333);
   padding-top: 5px;
   font-weight: 400;
-  font-size: 12px;
+  font-size: clamp(0.75rem, 0.6vw, 1.5rem);
 }
 .fy-input__label___YQgmr {
   color: var(--textLabel, #7d7676);
-  font-size: 12px;
-  line-height: 21px;
+  font-size: clamp(0.75rem, 0.6vw, 1.5rem);
+  line-height: 175%;
 }
 .fy-input__label___YQgmr span {
   color: var(--errorText, #ff3333);
@@ -1360,10 +1353,10 @@ h5,
   position: absolute;
   transform: translateY(-50%) scale(0.9);
   z-index: 1;
-  background: var(--pageBackground, #f8f8f8);
+  background: #ffffff;
   padding: 0 0.3rem;
   margin: 0 0.5rem;
-  font-size: 0.8rem;
+  font-size: clamp(1rem, 0.8vw, 2rem);
   pointer-events: none;
   line-height: unset;
 }
@@ -1795,8 +1788,8 @@ h5,
   padding: 16px;
 }
 .fy-date-picker__selectedAndActive___z3HnR {
-  background-color: var(--buttonPrimary, #4e3f09);
-  color: var(--buttonSecondary, #fff);
+  background-color: var(--buttonSecondary, #fff);
+  color: var(--buttonPrimary, #4e3f09);
   font-weight: bold;
 }
 .fy-date-picker__calendarWrapper___J5Y4d {
@@ -1959,26 +1952,6 @@ h5,
   font-weight: 600;
   color: var(--textHeading, #26201a);
 }
-.fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__calendarPopup___cA9su .fy-date-picker__calendarHeader___R20ub .fy-date-picker__controlContainer___cfI7T .fy-date-picker__monthYearSelect___hHzRC {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  justify-content: center;
-}
-.fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__calendarPopup___cA9su .fy-date-picker__calendarHeader___R20ub .fy-date-picker__controlContainer___cfI7T .fy-date-picker__monthYearSelect___hHzRC select {
-  padding: 6px 10px;
-  border-radius: 4px;
-  border: 1px solid var(--overlaypopupdividerstroke, #e0e0e0);
-  background: var(--buttonSecondary, #fff);
-  color: var(--textHeading, #26201a);
-  font-weight: 600;
-  cursor: pointer;
-  min-width: 120px;
-}
-.fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__calendarPopup___cA9su .fy-date-picker__calendarHeader___R20ub .fy-date-picker__controlContainer___cfI7T .fy-date-picker__monthYearSelect___hHzRC select:focus {
-  outline: 1px solid var(--buttonPrimary, #4e3f09);
-}
 .fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__calendarPopup___cA9su .fy-date-picker__calendarGrid___LILc2 {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -2026,8 +1999,8 @@ h5,
   height: 100%;
 }
 .fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__calendarPopup___cA9su .fy-date-picker__calendarGrid___LILc2 .fy-date-picker__dayCell___vK_vH:hover {
-  background-color: var(--buttonPrimary, #4e3f09);
-  opacity: 0.85;
+  background-color: var(--buttonSecondary, #fff);
+  color: var(--buttonPrimary, #4e3f09);
 }
 @media only screen and (max-width: 480px) {
   .fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__calendarPopup___cA9su .fy-date-picker__calendarGrid___LILc2 .fy-date-picker__dayCell___vK_vH {
@@ -2059,7 +2032,9 @@ h5,
 }
 .fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__calendarPopup___cA9su .fy-date-picker__confirmButton___CCmqD {
   display: none;
-  background-color: var(--buttonPrimary, #4e3f09);
+  background-color: var(--buttonSecondary, #fff);
+  color: var(--buttonPrimary, #4e3f09);
+  border-radius: 100px !important;
 }
 @media only screen and (max-width: 480px) {
   .fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__calendarPopup___cA9su .fy-date-picker__confirmButton___CCmqD {
@@ -2071,13 +2046,14 @@ h5,
   }
   .fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__calendarPopup___cA9su .fy-date-picker__confirmButton___CCmqD button {
     display: flex;
-    color: var(--buttonSecondary, #fff);
     padding: 16px 24px;
     justify-content: center;
     align-items: center;
     font-size: 16px;
     font-weight: 600;
     width: 100%;
+    border-radius: 100px !important;
+    color: var(--textHeading, #26201a) !important;
   }
   .fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__calendarPopup___cA9su .fy-date-picker__confirmButton___CCmqD:hover {
     opacity: 0.85;
@@ -2915,9 +2891,6 @@ h5,
     display: none !important;
   }
 }
-.address-form__addressFormWrapper___M0Ler input {
-  font-weight: 400 !important;
-}
 .address-form__addressFormWrapper___M0Ler .address-form__formContainer___UrnfJ {
   display: flex;
   flex-wrap: wrap;
@@ -3063,15 +3036,9 @@ h5,
   box-sizing: border-box;
   width: 100%;
   background-color: transparent;
-  font-weight: 400;
 }
 .address-form__formItemDiv___ciw5I .address-form__formInputBox___QHRHx.address-form__otherInput___xvlRj {
   width: 45%;
-}
-@media only screen and (max-width: 480px) {
-  .address-form__formItemDiv___ciw5I .address-form__formInputBox___QHRHx {
-    font-weight: 400;
-  }
 }
 .address-form__formItemDiv___ciw5I .address-form__formCheckBox___ifOb0 {
   font-size: 0.8rem;
