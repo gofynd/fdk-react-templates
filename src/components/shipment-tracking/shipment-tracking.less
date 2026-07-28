@@ -22,7 +22,7 @@
 
     .foName {
       color: @TextLabel;
-      font-size: clamp(0.875rem, 0.6vw + 0.125rem, 1.625rem);
+      font-size: 14px;
       font-weight: 500;
       line-height: 140%;
     }
@@ -30,7 +30,7 @@
 
   .boldsm {
     font-weight: 700;
-    font-size: clamp(1rem, 0.8vw + 0rem, 2rem);
+    font-size: 16px;
     @media @tablet {
       font-size: 14px;
     }
@@ -43,7 +43,7 @@
   }
   .lightxxs {
     font-weight: 300;
-    font-size: clamp(0.8125rem, 0.6vw + 0.0625rem, 1.5625rem);;
+    font-size: 13px;
     @media @tablet {
       font-size: 12px;
     }
@@ -87,14 +87,14 @@
       margin-inline-start: 20px;
       .boldsm {
         font-weight: 700;
-        font-size: clamp(0.875rem, 0.6vw + 0.125rem, 1.625rem);
+        font-size: 14px;
       }
       .time {
         margin-top: 5px;
       }
       .lightxxs {
         font-weight: 300;
-        font-size: clamp(0.8125rem, 0.6vw + 0.0625rem, 1.5625rem);;
+        font-size: 13px;
         @media @tablet {
           font-size: 12px;
         }
@@ -149,7 +149,9 @@
     border-top: 1px solid @DividerStokes;
     padding-top: 16px;
     margin: 0 16px;
-
+    .productExchangeBox {
+      display: none;
+    }
     div,
     a {
       flex: 1;
@@ -158,7 +160,7 @@
       cursor: pointer;
       text-align: center;
       align-items: center;
-      font-size: clamp(0.75rem, 0.6vw + 0rem, 1.5rem);
+      font-size: 12px;
       font-weight: 500;
       line-height: 140%;
       border-inline-end: 1px solid @DividerStokes;

@@ -803,6 +803,9 @@ h5,
   border: 1px solid var(--dividerStokes);
   border-radius: 4px;
 }
+.checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__savedCardWrapper___HlKIX .checkout-payment-content__savedCardCvvWrapper___F2jGC .checkout-payment-content__cvv___b1NMm::placeholder {
+  color: var(--textLabel, #7d7676);
+}
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__savedCardWrapper___HlKIX .checkout-payment-content__savedCardCvvWrapper___F2jGC .checkout-payment-content__cvvIcon___x175S {
   position: absolute;
   inset-inline-end: 16px;
@@ -952,7 +955,7 @@ h5,
   font-size: 14px;
   padding: 14px;
   border-radius: var(--buttonRadius, 0px);
-  color: var(--buttonPrimary);
+  color: var(--buttonSecondary, #fff);
   opacity: 0.2;
   border: 1px solid var(--buttonPrimary);
   text-transform: uppercase;
@@ -1086,6 +1089,9 @@ h5,
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardDateCvvWrapper___dLwSn .checkout-payment-content__cardInputWrapper___YqlSP input {
   width: 100%;
 }
+.checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardDateCvvWrapper___dLwSn .checkout-payment-content__cardInputWrapper___YqlSP input::placeholder {
+  color: var(--textLabel, #7d7676);
+}
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardNumber___Qk_yD,
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardName___t6PnC,
 .checkout-payment-content__container___HusGh .checkout-payment-content__cardTab___uYvQv .checkout-payment-content__newCardWrapper___p35go .checkout-payment-content__newCard___gXKVk .checkout-payment-content__cardExpiry____xnGR,
@@ -1185,7 +1191,7 @@ h5,
   font-weight: 600;
   font-size: 14px;
   text-transform: uppercase;
-  color: white;
+  color: var(--buttonSecondary, #fff);
   line-height: 140%;
   opacity: 20%;
   cursor: not-allowed;
@@ -1275,7 +1281,7 @@ h5,
 .checkout-payment-content__container___HusGh .checkout-payment-content__otherPay____c2Rs .checkout-payment-content__payBtn___dgcAp[disabled] {
   padding: 14px;
   border-radius: var(--buttonRadius, 0px);
-  color: var(--primaryColor);
+  color: var(--buttonSecondary, #fff);
   border: 1px solid var(--primaryColor);
   width: 100%;
   margin-top: 24px;
@@ -1404,6 +1410,9 @@ h5,
   height: 100%;
   border: none;
   background: transparent;
+}
+.checkout-payment-content__container___HusGh .checkout-payment-content__modeOption___onKtJ .checkout-payment-content__modalBody___pTEbc .checkout-payment-content__searchBox___k_Nxn input::placeholder {
+  color: var(--textLabel, #7d7676);
 }
 .checkout-payment-content__container___HusGh .checkout-payment-content__upiMop___LVvVY {
   padding-bottom: 24px;
@@ -1687,7 +1696,7 @@ h5,
   margin: 24px 0;
   background-color: var(--primaryColor);
   border: none;
-  color: white;
+  color: var(--buttonSecondary, #fff);
   line-height: 140%;
   opacity: 20%;
   cursor: not-allowed;
@@ -1929,6 +1938,9 @@ h5,
 }
 .checkout-payment-content__couponValidityModal___dm1Lz {
   z-index: 99 !important;
+}
+.checkout-payment-content__inCreasedZindex___ms0Z3 {
+  z-index: 1099 !important;
 }
 .checkout-payment-content__codModal___SSel2 {
   padding: 24px;
@@ -2654,16 +2666,6 @@ h5,
   /* Opera */
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
-@media screen and (min-width: 2000px) {
-  .modal__modalContainer___BoKU8 {
-    max-width: 1000px;
-  }
-}
-@media screen and (min-width: 3500px) {
-  .modal__modalContainer___BoKU8 {
-    max-width: 1500px;
-  }
-}
 @media only screen and (max-width: 768px) {
   .modal__modalContainer___BoKU8 {
     width: 100%;
@@ -2698,7 +2700,7 @@ h5,
 }
 .modal__modalBody___peHlJ {
   flex: 1;
-  max-height: 90vh;
+  max-height: 95vh;
   overflow-y: auto;
 }
 .modal__rightModal___acoje {
@@ -2732,6 +2734,11 @@ h5,
     align-items: center;
   }
 }
+@media only screen and (max-width: 480px) {
+  .modal__centerModal___CkbLu {
+    align-items: flex-end;
+  }
+}
 .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 {
   border-radius: 8px;
 }
@@ -2741,8 +2748,20 @@ h5,
     max-width: 720px;
   }
 }
+@media only screen and (max-width: 480px) {
+  .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0;
+  }
+}
 .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 .modal__modalHeader___xKo1g {
   border-radius: 8px 8px 0px 0px;
+}
+@media only screen and (max-width: 480px) {
+  .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 .modal__modalHeader___xKo1g {
+    border-radius: 0;
+  }
 }
 .modal__modalTitle___yvZQo {
   font-weight: 600;
@@ -3113,6 +3132,13 @@ h5,
 @media only screen and (max-width: 480px) {
   .sticky-pay-now__stickyBtnContainer___L7zbD {
     display: block;
+    z-index: 30;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .sticky-pay-now__stickyBtnContainer___L7zbD {
+    display: block;
+    z-index: 30;
   }
 }
 .sticky-pay-now__stickyBtnContainer1___YFwCC {
@@ -3179,6 +3205,9 @@ h5,
 }
 .sticky-pay-now__checkoutButton___mtO42 {
   gap: 12px;
+}
+.sticky-pay-now__checkoutButton___mtO42.sticky-pay-now__linkPayBtn___CY0FQ {
+  width: 100%;
 }
 .sticky-pay-now__buttonWidth___nKraw {
   width: 100%;

@@ -394,7 +394,8 @@ h5,
   pointer-events: none;
 }
 .pagination__disable___HXiQw {
-  pointer-events: none;
+  pointer-events: none !important;
+  display: none !important;
 }
 .pagination__disable___HXiQw .pagination__arrowIcon___Fwbz0 {
   fill: var(--textSecondary, #9c9c9c);

@@ -7,6 +7,7 @@
  * @param {Object} props.shipmentInfo - Contains details about the shipment, such as whether it can be canceled or returned.
  * @param {Function} props.changeinit - A function to handle changes in the shipment status.
  * @param {Object} props.invoiceDetails - Contains details about the invoice, including a presigned URL for downloading.
+ * @param {Function} props.onAddToCart - A function to handle adding product to cart (for Buy Again functionality).
  *
  * @returns {JSX.Element} A React component that renders the shipment tracking interface.
  *
@@ -30,6 +31,7 @@ function ShipmentTracking({
   invoiceDetails,
   availableFOCount,
   bagLength = 0,
+  onAddToCart,
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -64,13 +66,33 @@ function ShipmentTracking({
       arrLinks.push({
         type: "internal",
         text: t("resource.common.need_help"),
-        link: "/faq/" || shipmentInfo?.need_help_url,
+        link: "/contact-us",
+      });
+    }
+    // Buy Again button - always visible
+    const firstBag = shipmentInfo?.bags?.[0];
+    const productSlug = firstBag?.item?.slug_key;
+    if (productSlug) {
+      arrLinks.push({
+        type: "internal",
+        text: t("resource.common.buy_again") || "BUY AGAIN",
+        link: `/product/${productSlug}`,
+        action: "buy_again",
+        productSlug: productSlug,
       });
     }
     if (invoiceDetails?.success) {
       arrLinks.push({
         text: t("resource.common.download_invoice"),
         link: invoiceDetails?.presigned_url,
+        openInNewTab: true,
+      });
+    }
+    if (shipmentInfo?.credit_note?.credit_note_url) {
+      arrLinks.push({
+        text: t("resource.common.download_credit_note"),
+        link: shipmentInfo.credit_note.credit_note_url,
+        openInNewTab: true,
       });
     }
     return arrLinks;
@@ -84,21 +106,31 @@ function ShipmentTracking({
   //   return shipmentInfo?.can_return ? "resource.facets.return_caps" : "resource.facets.cancel_caps";
   // };
 
+  const handleBuyAgain = async (productSlug) => {
+    if (onAddToCart) {
+      console.log("handleBuyAgain called", { productSlug });
+      // Use provided handler (typically opens add-to-cart modal)
+      onAddToCart(productSlug);
+    }
+  };
+
   const update = (item) => {
     if (["CANCEL", "RETURN"].includes(item?.text)) {
       const firstBag = shipmentInfo?.bags?.[0];
       const isBundleItem = firstBag?.bundle_details?.bundle_group_id;
-      const isPartialReturnBundle = 
-        isBundleItem && 
+      const isPartialReturnBundle =
+        isBundleItem &&
         firstBag?.bundle_details?.return_config?.allow_partial_return;
-      
+
       // Direct navigate if: single bag OR bundle with allow_partial_return: false
       if (bagLength === 1 && (!isBundleItem || !isPartialReturnBundle)) {
         // Find the base bag for bundles, otherwise use first bag
-        const selectedBag = isBundleItem 
-          ? shipmentInfo.bags.find((bag) => bag?.bundle_details?.is_base === true) || firstBag
+        const selectedBag = isBundleItem
+          ? shipmentInfo.bags.find(
+              (bag) => bag?.bundle_details?.is_base === true
+            ) || firstBag
           : firstBag;
-        
+
         const bagId = selectedBag?.id;
         const querParams = new URLSearchParams(location.search);
         if (bagId) {
@@ -117,6 +149,11 @@ function ShipmentTracking({
         });
       }
       window.scrollTo(0, 0);
+    } else if (item?.action === "buy_again") {
+      // Handle Buy Again - add to cart instead of navigating
+      if (item?.productSlug) {
+        handleBuyAgain(item.productSlug);
+      }
     } else {
       navigate(item?.link);
     }
@@ -214,22 +251,33 @@ function ShipmentTracking({
         {getLinks()?.map((item, index) => (
           <Fragment key={`${item?.text}_${index}`}>
             {item?.type === "internal" ? (
-              <div
-                key={index}
-                onClick={() => update(item)}
-                className={`${styles.regularsm}`}
-              >
-                {item?.text === "RETURN"
-                  ? t("resource.facets.return_caps")
-                  : item?.text === "CANCEL"
-                    ? t("resource.facets.cancel_caps")
-                    : item?.text}
-              </div>
+              <>
+                {index === 0 && (
+                  <div
+                    className={`${styles.productExchangeBox} productExchangeContainer`}
+                  ></div>
+                )}
+                <div
+                  key={index}
+                  onClick={() => update(item)}
+                  className={`${styles.regularsm}`}
+                >
+                  {item?.text === "RETURN"
+                    ? t("resource.facets.return_caps")
+                    : item?.text === "CANCEL"
+                      ? t("resource.facets.cancel_caps")
+                      : item?.text}
+                </div>
+              </>
             ) : (
               <a
                 key={index}
                 href={`${item?.link}`}
                 className={`${styles.regularsm}`}
+                {...(item?.openInNewTab && {
+                  target: "_blank",
+                  rel: "noopener noreferrer",
+                })}
               >
                 {item?.text === "RETURN"
                   ? t("resource.facets.return_caps")

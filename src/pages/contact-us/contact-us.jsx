@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import * as styles from "./contact-us.less";
 import FyInput from "../../components/core/fy-input/fy-input";
 import { Controller, useForm } from "react-hook-form";
@@ -6,6 +6,10 @@ import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
 import FyButton from "../../components/core/fy-button/fy-button";
 import FyImage from "../../components/core/fy-image/fy-image";
 import { useGlobalTranslation } from "fdk-core/utils";
+import {
+  getCustomFontSize,
+  getHeadingTypographyStyles,
+} from "../../helper/utils";
 
 function ContactSupport({
   contactInfo = "",
@@ -73,6 +77,7 @@ function ContactSupport({
 
   const [focusedInput, setFocusedInput] = useState(null);
   const [text, setText] = useState("");
+  const containerRef = useRef(null);
   const inputFields = [
     {
       type: "text",
@@ -96,10 +101,13 @@ function ContactSupport({
       showAsterik: true,
       required: true,
       error: errors?.phone,
+      // ✅ FIX 1: Stricter pattern — requires at least 7 digits
       pattern: {
-        value: /^\+?[0-9\s]{1,15}$/,
+        value: /^\+?\d{7,15}$/,
         message: t("resource.contact_us.please_enter_a_valid_phone_number"),
       },
+      // ✅ FIX 2: Explicit required message so errors.phone.message is always set
+      requiredMessage: t("resource.contact_us.please_enter_your_phone_number"),
       errorMessage: t("resource.contact_us.please_enter_your_phone_number"),
     },
     {
@@ -131,6 +139,57 @@ function ContactSupport({
 
   const contact = supportInfo?.contact?.phone?.phone[0];
   const email = supportInfo?.contact?.email?.email[0]?.value;
+  const getPageConfigValue = (value) => value?.value ?? value;
+  const contactTitle =
+    getPageConfigValue(pageConfig?.title) || t("resource.common.contact_us");
+  const isCustomTypography =
+    getPageConfigValue(pageConfig?.typography_preset) === "custom";
+  const headingFontSize = isCustomTypography
+    ? getCustomFontSize(
+        getPageConfigValue(pageConfig?.heading_font_size) || "32",
+        "heading"
+      )
+    : undefined;
+  const descriptionFontSize = isCustomTypography
+    ? getCustomFontSize(
+        getPageConfigValue(pageConfig?.description_font_size) || "14",
+        "description"
+      )
+    : undefined;
+  const headingTypographyStyles = getHeadingTypographyStyles(pageConfig);
+  const hasCustomFontSize = Boolean(isCustomTypography && headingFontSize);
+  const hasCustomHeadingTypography = Boolean(
+    Object.keys(headingTypographyStyles).length
+  );
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    container.style.removeProperty("--contact-title-size");
+    container.style.removeProperty("--section-description-size");
+    container.style.removeProperty("--section-heading-weight");
+    container.style.removeProperty("--section-heading-text-transform");
+
+    if (isCustomTypography && headingFontSize) {
+      container.style.setProperty("--contact-title-size", headingFontSize);
+    }
+    if (isCustomTypography && descriptionFontSize) {
+      container.style.setProperty(
+        "--section-description-size",
+        descriptionFontSize
+      );
+    }
+
+    Object.entries(headingTypographyStyles).forEach(([key, value]) => {
+      container.style.setProperty(key, value);
+    });
+  }, [
+    isCustomTypography,
+    headingFontSize,
+    descriptionFontSize,
+    headingTypographyStyles,
+  ]);
 
   const overlayStyles = {
     "--overlay-opacity": `${pageConfig?.opacity}%`,
@@ -139,12 +198,7 @@ function ContactSupport({
   const submitForm = async (data) => {
     try {
       await handleSubmitForm(data);
-      reset({
-        name: "",
-        phone: "",
-        email: "",
-        comment: "",
-      });
+      reset({ name: "", phone: "", email: "", comment: "" });
       setText("");
     } catch (err) {
       console.error("Form submission failed", err);
@@ -190,23 +244,38 @@ function ContactSupport({
   );
 
   return (
-    <div className={`basePageContainer margin0auto`}>
+    <div
+      ref={containerRef}
+      className={`basePageContainer margin0auto ${
+        hasCustomFontSize ? styles.customTypography : ""
+      } ${hasCustomHeadingTypography ? styles.customHeadingTypography : ""}`}
+    >
       <div
-        className={` ${styles.contactUs_mainContainer} ${pageConfig?.align_image === "left" && styles.invert}`}
+        className={`${styles.contactUs_mainContainer} ${
+          pageConfig?.align_image === "left" && styles.invert
+        }`}
       >
         <div
-          className={`${styles.contact_container} ${pageConfig?.image_desktop ? styles.onImageContainer : ""} ${pageConfig?.align_description === "above_footer" ? styles.reducedBottomGap : ""}`}
+          className={`${styles.contact_container} ${
+            pageConfig?.image_desktop ? styles.onImageContainer : ""
+          } ${
+            pageConfig?.align_description === "above_footer"
+              ? styles.reducedBottomGap
+              : ""
+          }`}
         >
           <div className={`${styles.flex_item}`}>
             <div>
-              <h1 className={`fontHeader ${styles.showDesktop}`}>
-                {t("resource.common.contact_us")}
+              <h1
+                className={`fontHeader ${styles.contactTitle} ${styles.showDesktop}`}
+              >
+                {contactTitle}
               </h1>
               {appInfo?.description?.length > 0 &&
                 showDescription &&
                 pageConfig?.align_description !== "above_footer" && (
                   <p
-                    className={`${styles.description}  ${styles.showDesktop} fontBody`}
+                    className={`${styles.description} ${styles.showDesktop} fontBody`}
                   >
                     {appInfo?.description}
                   </p>
@@ -217,7 +286,7 @@ function ContactSupport({
                 {showAddress &&
                   contactInfo?.address?.address_line?.[0]?.length > 0 && (
                     <div className={`${styles.item} fontBody b1`}>
-                      <div>
+                      <div className={styles.locationIcon}>
                         <SvgWrapper svgSrc="location" />
                       </div>
                       <div>
@@ -263,8 +332,10 @@ function ContactSupport({
           </div>
           <div className={styles.flex_item}>
             <div>
-              <h3 className={`${styles.showMobile} fontHeader`}>
-                {t("resource.common.contact_us")}
+              <h3
+                className={`${styles.contactTitle} ${styles.showMobile} fontHeader`}
+              >
+                {contactTitle}
               </h3>
               {appInfo?.description?.length > 0 &&
                 showDescription &&
@@ -283,7 +354,14 @@ function ContactSupport({
                     name={field.name}
                     control={control}
                     rules={{
-                      required: field.required,
+                      // ✅ FIX 3: required now carries a message for all fields
+                      required: field.required
+                        ? {
+                            value: true,
+                            message:
+                              field.requiredMessage || field.errorMessage,
+                          }
+                        : false,
                       pattern: field.pattern,
                       validate:
                         field.name === "comment"
@@ -316,19 +394,16 @@ function ContactSupport({
                         type={field.type}
                         maxLength={field.type === "textarea" ? 500 : null}
                         error={errors[field.name]}
-                        onInput={
-                          field.type === "tel"
-                            ? (e) => {
-                                // Allow only numbers, space, and + for country code
-                                e.target.value = e.target.value
-                                  .replace(/[^+\d\s]/g, "")
-                                  .slice(0, 15);
-                                onChange(e);
-                              }
-                            : null
-                        }
+                        // ✅ FIX 4: Removed onInput entirely — all sanitization
+                        // now happens in a single onChange handler, preventing
+                        // the double-update race condition for tel inputs
                         onChange={(e) => {
-                          const val = e.target.value;
+                          let val = e.target.value;
+                          if (field.type === "tel") {
+                            // Sanitize: allow +, digits, spaces only, max 15 chars
+                            val = val.replace(/[^+\d]/g, "").slice(0, 15);
+                            e.target.value = val; // keep DOM in sync
+                          }
                           onChange(e);
                           if (field.type === "textarea") {
                             setText(val);
@@ -336,6 +411,8 @@ function ContactSupport({
                         }}
                         value={value}
                         multiline={field.multiline}
+                        // ✅ FIX 5: errors[field.name].message is now always
+                        // populated, so this correctly shows the right message
                         errorMessage={
                           errors[field.name]
                             ? errors[field.name].message || field.errorMessage
@@ -371,6 +448,7 @@ function ContactSupport({
             <FyImage
               customClass={styles.imageWrapper}
               src={pageConfig?.image_desktop}
+              alt={pageConfig?.title || t("resource.contact_us.hero_image")}
               aspectRatio={3 / 4}
               showOverlay={true}
               overlayColor="#000000"
@@ -383,7 +461,9 @@ function ContactSupport({
         showDescription &&
         pageConfig?.align_description === "above_footer" && (
           <div
-            className={`${styles.flex_item} ${styles.descriptionMargin} ${pageConfig?.image_desktop ? styles.descriptionPaddingTop : ""}`}
+            className={`${styles.flex_item} ${styles.descriptionMargin} ${
+              pageConfig?.image_desktop ? styles.descriptionPaddingTop : ""
+            }`}
           >
             <p className={`${styles.description} fontBody`}>
               {appInfo?.description}

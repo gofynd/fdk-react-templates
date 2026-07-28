@@ -469,6 +469,10 @@
           padding: 16px;
           border: 1px solid var(--dividerStokes);
           border-radius: 4px;
+
+          &::placeholder {
+            color: @TextLabel;
+          }
         }
 
         .cvvIcon {
@@ -623,7 +627,7 @@
             font-size: 14px;
             padding: 14px;
             border-radius: @ButtonRadius;
-            color: var(--buttonPrimary);
+            color: @ButtonSecondary;
             opacity: 0.2;
             border: 1px solid var(--buttonPrimary);
             text-transform: uppercase;
@@ -745,6 +749,10 @@
             flex-direction: column;
             input {
               width: 100%;
+
+              &::placeholder {
+                color: @TextLabel;
+              }
             }
           }
         }
@@ -848,7 +856,7 @@
         font-weight: 600;
         font-size: 14px;
         text-transform: uppercase;
-        color: white;
+        color: @ButtonSecondary;
         line-height: 140%;
         opacity: 20%;
         cursor: not-allowed;
@@ -933,7 +941,7 @@
     .payBtn[disabled] {
       padding: 14px;
       border-radius: @ButtonRadius;
-      color: var(--primaryColor);
+      color: @ButtonSecondary;
       border: 1px solid var(--primaryColor);
       width: 100%;
       margin-top: 24px;
@@ -1055,6 +1063,10 @@
           height: 100%;
           border: none;
           background: transparent;
+
+          &::placeholder {
+            color: @TextLabel;
+          }
         }
       }
     }
@@ -1375,7 +1387,7 @@
       margin: 24px 0;
       background-color: var(--primaryColor);
       border: none;
-      color: white;
+      color: @ButtonSecondary;
       line-height: 140%;
       opacity: 20%;
       cursor: not-allowed;
@@ -1648,6 +1660,9 @@
 }
 .couponValidityModal {
   z-index: 99 !important;
+}
+.inCreasedZindex {
+  z-index: 1099 !important;
 }
 .codModal {
   padding: 24px;

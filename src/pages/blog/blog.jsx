@@ -31,6 +31,7 @@ import {
   CarouselItem,
   CarouselPrevious,
   CarouselNext,
+  CarouselDots,
 } from "../../components/carousel/carousel";
 import Autoplay from "embla-carousel-autoplay";
 
@@ -73,22 +74,24 @@ function MemoizedSlide({ blog, index, sliderProps, getBlogTitle }) {
             {getFormattedDate(blog?.publish_date)}
           </span>
         </div>
-        <h1 className={`${styles.blogItem__title} ${styles.titleMobile}`}>
+        <h2 className={`${styles.blogItem__title} ${styles.titleMobile}`}>
           {getBlogTitle(blog?.title)}
-        </h1>
-        <h1 className={`${styles.blogItem__title} ${styles.titleDesktop}`}>
+        </h2>
+        <h2 className={`${styles.blogItem__title} ${styles.titleDesktop}`}>
           {blog?.title}
-        </h1>
+        </h2>
         {blog?.summary && (
           <p className={`${styles.blogItem__content}`}>{blog?.summary}</p>
         )}
-        <FDKLink
-          className={`${styles.blogItem__button} ${styles.btnPrimary}`}
-          title={blog?.title}
-          to={`/blog/${blog?.slug}`}
-        >
-          {translateDynamicLabel(sliderProps?.btn_text, t)}
-        </FDKLink>
+        {!!sliderProps?.btn_text?.trim() && (
+          <FDKLink
+            className={`${styles.blogItem__button} ${styles.btnPrimary}`}
+            title={blog?.title}
+            to={`/blog/${blog?.slug}`}
+          >
+            {translateDynamicLabel(sliderProps?.btn_text, t)}
+          </FDKLink>
+        )}
       </div>
       <FyImage
         customClass={styles.blogItem__image}
@@ -115,6 +118,7 @@ function BlogList({
   isBlogPageLoading,
   ssrSearch,
   ssrFilters,
+  typographyStyle,
 }) {
   const { direction } = useLocaleDirection();
   const { t } = useGlobalTranslation("translation");
@@ -401,6 +405,8 @@ function BlogList({
                 ))}
               </CarouselContent>
               <CarouselPrevious className={styles.carouselBtn} />
+              {/* NOTE:  Enable if dots are required to be added in carousel */}
+              {/* <CarouselDots/> */}
               <CarouselNext className={styles.carouselBtn} />
             </Carousel>
           </div>
@@ -511,7 +517,10 @@ function BlogList({
           ></BlogTabs>
         </div>
       </div>
-      <BlogFooter {...footerProps}></BlogFooter>
+      <BlogFooter
+        {...footerProps}
+        typographyStyle={typographyStyle}
+      ></BlogFooter>
     </div>
   );
 }

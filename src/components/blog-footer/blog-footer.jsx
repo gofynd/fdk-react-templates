@@ -15,14 +15,23 @@ import React from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./blog-footer.less";
 
-function BlogFooter({ title, description, button_text, button_link }) {
+function BlogFooter({
+  title,
+  description,
+  button_text,
+  button_link,
+  typographyStyle,
+}) {
   if (!title && !description && !button_text) {
     return null;
   }
   return (
-    <div className={`${styles.footer}`}>
+    <div
+      className={`${styles.footer} ${typographyStyle ? styles.customTypography : ""}`}
+      style={typographyStyle}
+    >
       <div className={`${styles.footer__container}`}>
-        <h2 className={`${styles.footer__title}`}>{title}</h2>
+        <h1 className={`${styles.footer__title}`}>{title}</h1>
         <p
           className={`${styles.footer__description} ${styles.textBody} ${styles.breakWords}`}
         >

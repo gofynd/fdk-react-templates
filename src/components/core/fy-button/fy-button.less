@@ -117,14 +117,13 @@
 }
 
 .contained {
-  background-color: @ButtonSecondary;
-  color: @ButtonPrimary;
-  border-radius: 100px;
+  background-color: @ButtonPrimary;
+  color: @White;
 
   &.primary {
-    &:hover {
-      background-color: @ButtonSecondary;
-      color: @ButtonPrimary;
+    &:hover:not(:disabled) {
+      background-color: @ButtonPrimaryL1;
+      color: @White;
     }
   }
 
@@ -132,7 +131,7 @@
     background-color: @ButtonSecondary;
     color: @ButtonPrimary;
 
-    &:hover {
+    &:hover:not(:disabled) {
       background-color: @ButtonPrimaryL1;
       color: @White;
     }
@@ -155,7 +154,7 @@
   color: @ButtonPrimary;
 
   &.primary {
-    &:hover {
+    &:hover:not(:disabled) {
       background-color: @ButtonPrimary;
       color: @ButtonSecondary;
 
@@ -171,7 +170,7 @@
     border: 1px solid @ButtonSecondary;
     color: @ButtonPrimary;
 
-    &:hover {
+    &:hover:not(:disabled) {
       background-color: @ButtonPrimary;
       color: @White;
     }

@@ -23,11 +23,11 @@ function TermPrivacy({ onChange, checked }) {
           />
           <span>
             {t("resource.auth.login.agree_to_the")}&nbsp;
-            <FDKLink to="/sections/terms-and-conditions" target="_blank">
+            <FDKLink to="/terms-and-conditions" target="_blank">
               {t("resource.auth.login.terms_of_service")}
             </FDKLink>
             &nbsp;{t("resource.auth.login.and_symbol")}&nbsp;
-            <FDKLink to="/sections/privacy-policy" target="_blank">
+            <FDKLink to="/privacy-policy" target="_blank">
             {t("resource.auth.login.privacy_policy")}
             </FDKLink>
           </span>
@@ -44,11 +44,11 @@ function TermPrivacy({ onChange, checked }) {
           />
           <span>
             {t("resource.auth.login.agree_to_terms_prompt")}&nbsp;
-            <FDKLink to="/sections/terms-and-conditions" target="_blank">
+            <FDKLink to="/terms-and-conditions" target="_blank">
               {t("resource.auth.login.terms_of_service")}
             </FDKLink>
             &nbsp;{t("resource.auth.login.and_symbol")}&nbsp;
-            <FDKLink to="/sections/privacy-policy" target="_blank">
+            <FDKLink to="/privacy-policy" target="_blank">
               {t("resource.auth.login.privacy_policy")}
             </FDKLink>
           </span>

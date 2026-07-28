@@ -1,6 +1,10 @@
 import React, { useMemo } from "react";
 import * as styles from "./cart-gift-item.less";
 import { useGlobalTranslation } from "fdk-core/utils";
+import {
+  getResponsiveImageBaseUrl,
+  getResponsiveImageSrcSet,
+} from "../../../../helper/utils";
 
 const CartGiftItem = ({ bagItem }) => {
   const { t } = useGlobalTranslation("translation");
@@ -17,7 +21,12 @@ const CartGiftItem = ({ bagItem }) => {
     return null;
   }
 
-  const getFreeGiftImage = (data) => data.replace("original", "resize-w:50");
+  const getFreeGiftImage = (data) => {
+    if (!data || typeof data !== "string") {
+      return "";
+    }
+    return getResponsiveImageBaseUrl(data, 140);
+  };
   const getCurrencySymbol = bagItem?.price?.converted?.currency_symbol || "₹";
 
   return (
@@ -43,13 +52,17 @@ const CartGiftItem = ({ bagItem }) => {
                     className={styles["free-gift-item"]}
                   >
                     <div className={styles["free-gift-scroll-items"]}>
-                      {appliedItem?.free_gift_item_details?.item_images_url && (
+                      {appliedItem?.free_gift_item_details?.item_images_url?.[0] && (
                         <img
                           className={styles["free-gift-item-image"]}
                           src={getFreeGiftImage(
                             appliedItem.free_gift_item_details
-                              .item_images_url?.[0]
+                              .item_images_url[0]
                           )}
+                          srcSet={getResponsiveImageSrcSet(
+                            appliedItem.free_gift_item_details.item_images_url[0]
+                          )}
+                          sizes="46px"
                           alt={t("resource.common.gift")}
                         />
                       )}

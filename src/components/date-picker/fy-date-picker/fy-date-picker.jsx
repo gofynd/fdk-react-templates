@@ -16,6 +16,7 @@
  * @param {string} [props.inputLabel="label"] - The label displayed above the input field.
  * @param {string[]} [props.excludeDates=[]] - Array of date strings (in `dateFormat`) that should be disabled (unselectable).
  * @param {boolean} [props.enableMonthYearSelection=false] - Enables month and year dropdown selectors when true.
+ * @param {string} [props.modalTitle] - Custom title for the calendar modal (mobile view). Defaults to reattempt date translation.
  *
  * @returns {JSX.Element} The rendered date picker component.
  */
@@ -50,6 +51,7 @@ const FyDatePicker = React.forwardRef(
       errorMessage = "",
       handleShowCalendarPopup = () => {},
       enableMonthYearSelection = false,
+      modalTitle,
     },
     ref
   ) => {
@@ -176,26 +178,28 @@ const FyDatePicker = React.forwardRef(
       const sep = dateFormat.includes("/") ? "/" : "-";
       const parts = formattedDate.split(sep).map(Number);
 
-      let dateObj;
+      let year, month, day;
 
       switch (dateFormat) {
         case "DD-MM-YYYY":
         case "DD/MM/YYYY":
-          dateObj = new Date(parts[2], parts[1] - 1, parts[0]);
+          [day, month, year] = parts;
           break;
         case "MM-DD-YYYY":
         case "MM/DD/YYYY":
-          dateObj = new Date(parts[2], parts[0] - 1, parts[1]);
+          [month, day, year] = parts;
           break;
         case "YYYY-DD-MM":
         case "YYYY/DD/MM":
-          dateObj = new Date(parts[0], parts[2] - 1, parts[1]);
+          [year, day, month] = parts;
           break;
         default:
-          dateObj = new Date(NaN);
+          return "";
       }
 
-      return !isNaN(dateObj) ? dateObj.toISOString() : "";
+      // Use UTC to avoid timezone shift issues for date-only values
+      const utcDate = new Date(Date.UTC(year, month - 1, day, 0, 0, 0, 0));
+      return !isNaN(utcDate.getTime()) ? utcDate.toISOString() : "";
     };
 
     const getDaysInMonth = (month, year) =>
@@ -231,30 +235,50 @@ const FyDatePicker = React.forwardRef(
       return null;
     };
 
-    const buildYearOptions = () => {
+    // Single source of truth for selectable year range (used by year dropdown and view clamp).
+    const getSelectableYearRange = () => {
+      if (!minInactiveDate && !maxInactiveDate) return null;
       const lowerBoundDate = maxInactiveDate
         ? parseDateString(maxInactiveDate)
         : null;
       const upperBoundDate = minInactiveDate
         ? parseDateString(minInactiveDate)
         : null;
-      const currentYear = today.getFullYear();
-      const defaultLowerBound = currentYear - 100;
-      const defaultUpperBound = currentYear;
-
-      const lowerBound =
+      const y = today.getFullYear();
+      const lowerYear =
         lowerBoundDate && !isNaN(lowerBoundDate)
-          ? Math.max(lowerBoundDate.getFullYear(), defaultLowerBound)
-          : defaultLowerBound;
-      const upperBound =
+          ? Math.max(lowerBoundDate.getFullYear(), y - 100)
+          : y - 100;
+      const upperYear =
         upperBoundDate && !isNaN(upperBoundDate)
-          ? Math.min(upperBoundDate.getFullYear(), defaultUpperBound)
-          : defaultUpperBound;
-      const start = Math.min(lowerBound, upperBound);
-      const end = Math.max(lowerBound, upperBound);
+          ? Math.min(upperBoundDate.getFullYear(), y)
+          : y;
+      return {
+        minYear: Math.min(lowerYear, upperYear),
+        maxYear: Math.max(lowerYear, upperYear),
+        upperBoundDate:
+          upperBoundDate && !isNaN(upperBoundDate) ? upperBoundDate : null,
+      };
+    };
 
+    const buildYearOptions = () => {
+      const range = getSelectableYearRange();
+      const start = range ? range.minYear : today.getFullYear() - 100;
+      const end = range ? range.maxYear : today.getFullYear();
       return Array.from({ length: end - start + 1 }, (_, idx) => start + idx);
     };
+
+    // Clamp calendar view to selectable range when bounds exist (e.g. DOB opens at 2008 not 1926).
+    useEffect(() => {
+      const range = getSelectableYearRange();
+      if (!range) return;
+      const { minYear, maxYear, upperBoundDate } = range;
+      setCurrentYear((prev) => {
+        if (prev >= minYear && prev <= maxYear) return prev;
+        if (upperBoundDate) setCurrentMonth(upperBoundDate.getMonth());
+        return maxYear;
+      });
+    }, [minInactiveDate, maxInactiveDate]);
 
     const handleClearDate = () => {
       setSelectedDate("");
@@ -268,15 +292,8 @@ const FyDatePicker = React.forwardRef(
         setSelectedDate(formatted);
         setInlineError(""); // Clear any inline error when selecting a valid date
         if (!isMobile) {
-          const parsed = parseDateString(formatted);
-          const now = new Date();
-          parsed.setHours(
-            now.getHours(),
-            now.getMinutes(),
-            now.getSeconds(),
-            now.getMilliseconds()
-          );
-          onChange(parsed.toISOString());
+          // Use UTC midnight to avoid timezone shift issues for date-only values
+          onChange(toUTCISOString(formatted));
           setShowCalendar(false);
         }
         // else: wait for CONFIRM
@@ -317,15 +334,8 @@ const FyDatePicker = React.forwardRef(
 
     const handleConfirm = () => {
       if (selectedDate && isValidDateString(selectedDate)) {
-        const parsed = parseDateString(selectedDate);
-        const now = new Date();
-        parsed.setHours(
-          now.getHours(),
-          now.getMinutes(),
-          now.getSeconds(),
-          now.getMilliseconds()
-        );
-        onChange(parsed.toISOString());
+        // Use UTC midnight to avoid timezone shift issues for date-only values
+        onChange(toUTCISOString(selectedDate));
       }
       setShowCalendar(false);
     };
@@ -338,15 +348,8 @@ const FyDatePicker = React.forwardRef(
         setCurrentYear(year);
         setInlineError(""); // Clear any inline error when selecting a valid date
         if (!isMobile) {
-          const parsed = parseDateString(formatted);
-          const now = new Date();
-          parsed.setHours(
-            now.getHours(),
-            now.getMinutes(),
-            now.getSeconds(),
-            now.getMilliseconds()
-          );
-          onChange(parsed.toISOString());
+          // Use UTC midnight to avoid timezone shift issues for date-only values
+          onChange(toUTCISOString(formatted));
           setShowCalendar(false);
         }
       }
@@ -479,7 +482,7 @@ const FyDatePicker = React.forwardRef(
               {calendarDays}
             </div>
             <div className={styles.confirmButton}>
-              <button onClick={handleConfirm}>Confirm</button>
+              <button onClick={handleConfirm}>CONFIRM</button>
             </div>
           </div>
         );
@@ -494,7 +497,7 @@ const FyDatePicker = React.forwardRef(
               isOpen={showCalendar}
               closeDialog={() => setShowCalendar(false)}
               headerClassName={styles.popupTitle}
-              title="Select Date"
+              title={modalTitle ?? t("resource.profile.select_reattempt_date")}
             >
               <ChildCalender />
             </Modal>
@@ -584,14 +587,8 @@ const FyDatePicker = React.forwardRef(
                     setCurrentYear(parsed.getFullYear());
                     setCurrentMonth(parsed.getMonth());
                     setShowCalendar(false);
-                    const now = new Date();
-                    parsed.setHours(
-                      now.getHours(),
-                      now.getMinutes(),
-                      now.getSeconds(),
-                      now.getMilliseconds()
-                    );
-                    onChange(parsed.toISOString());
+                    // Use UTC midnight to avoid timezone shift issues for date-only values
+                    onChange(toUTCISOString(selectedDate));
                     setInlineError(""); // Clear any existing inline error
                   } else {
                     // Replace alert with inline error

@@ -60,13 +60,17 @@ function PriceBreakup({
   isInternationalTaxLabel = false,
   customClassName,
   isLoading = false,
+  priceSummaryContainerClass,
 }) {
   const { t } = useGlobalTranslation("translation");
   const cssVar = {
     "--card-border-radius": `${cardBorderRadius}`,
   };
   const priceBreakupLoaderWidth = [60, 50, 45, 90, 34];
-
+  const priceSummaryContainerStyle = useMemo(
+    () => `${styles.priceSummaryContainer} ${priceSummaryContainerClass ?? ""}`,
+    [priceSummaryContainerClass]
+  );
   const totalDiscount = useMemo(() => {
     let totalDis = 0;
     breakUpValues?.forEach((element) => {
@@ -98,7 +102,7 @@ function PriceBreakup({
 
   return (
     <div
-      className={styles.priceSummaryContainer}
+      className={priceSummaryContainerStyle}
       style={cssVar}
       id="price-breakup-container-id"
     >
@@ -165,7 +169,10 @@ function PriceBreakup({
                   >
                     {priceFormatCurrencySymbol(
                       item?.currency_symbol,
-                      item?.value
+                      item?.value,
+                      undefined,
+                      item?.currency_code,
+                      true
                     )}
                   </div>
                 </>
@@ -175,7 +182,10 @@ function PriceBreakup({
                   <div>
                     {priceFormatCurrencySymbol(
                       item?.currency_symbol,
-                      item?.value
+                      item?.value,
+                      undefined,
+                      item?.currency_code,
+                      true
                     )}
                   </div>
                 </>
@@ -191,11 +201,11 @@ function PriceBreakup({
         </div>
       )}
 
-      {isLoading ? (
-        <Skeleton height={38} className={styles.discountLoading} />
-      ) : (
-        <>
-          {showTotalDiscount && totalDiscount > 0 && (
+      {showTotalDiscount &&
+        (isLoading ? (
+          <Skeleton height={38} className={styles.discountLoading} />
+        ) : (
+          totalDiscount > 0 && (
             <div className={styles.discountPreviewContiner}>
               <span className={styles.icon}>{greetingIcon}</span>
               <span className={styles.discountPreviewMessage}>
@@ -206,14 +216,16 @@ function PriceBreakup({
                 <ForcedLtr
                   text={priceFormatCurrencySymbol(
                     currencySymbol,
-                    totalDiscount
+                    totalDiscount,
+                    undefined,
+                    breakUpValues?.[0]?.currency_code,
+                    true
                   )}
                 />
               </span>
             </div>
-          )}
-        </>
-      )}
+          )
+        ))}
     </div>
   );
 }

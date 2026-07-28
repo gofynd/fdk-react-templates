@@ -10,7 +10,7 @@ import { useGlobalTranslation } from "fdk-core/utils";
 import GoogleLoginButton from "../../page-layouts/login/component/soacial-login-button/google-login-button";
 import FacebookLogin from "../../page-layouts/login/component/soacial-login-button/facebook-login-button";
 import AppleLoginButton from "../../page-layouts/login/component/soacial-login-button/apple-login-button";
-import EdAMammaLogo from "../../assets/images/ed-a-mamma-logo.svg";
+import Tooltip from "../../components/tooltip/tooltip";
 
 function Login({
   logo = {},
@@ -53,7 +53,8 @@ function Login({
 }) {
   const { t } = useGlobalTranslation("translation");
   const [isTermsAccepted, setIsTermsAccepted] = useState(false);
-  
+  const [showConsentTooltip, setShowConsentTooltip] = useState(false);
+
   return (
     <div className={styles.loginWrapper}>
       <div>
@@ -79,12 +80,7 @@ function Login({
             )}
             {title && (
               <h1 className={styles.loginTitle}>
-                <span>{title || t("resource.auth.login.login")}</span>
-                <EdAMammaLogo
-                  className={styles.loginTitleLogo}
-                  role="img"
-                  aria-label="Ed-a-Mamma"
-                />
+                {title || t("resource.auth.login.login")}
               </h1>
             )}
             {subTitle && (
@@ -106,6 +102,8 @@ function Login({
               isForgotPassword,
               onForgotPasswordClick,
               onLoginFormSubmit,
+              isTermsAccepted,
+              setShowConsentTooltip,
             }}
           />
         )}
@@ -124,15 +122,24 @@ function Login({
               onLoginFormSubmit,
               getOtpLoading,
               isTermsAccepted,
+              setShowConsentTooltip,
             }}
           />
         )}
         {!isFormSubmitSuccess && (
           <>
-            <TermPrivacy 
-              onChange={setIsTermsAccepted}
-              checked={isTermsAccepted}
-            />
+            <div className={styles.consentWrapperWithTooltip}>
+              <TermPrivacy
+                onChange={setIsTermsAccepted}
+                checked={isTermsAccepted}
+              />
+              <Tooltip
+                message={t("resource.auth.terms_and_condition")}
+                isVisible={showConsentTooltip}
+                onClose={() => setShowConsentTooltip(false)}
+                position="bottom"
+              />
+            </div>
             <div className={styles.loginBtnGroup}>
               {showLoginToggleButton && (
                 <LoginModeButton {...{ onLoginToggleClick, isOtp }} />
@@ -151,14 +158,14 @@ function Login({
                   application_id={application_id}
                 />
               )}
-              {/* {social?.apple && (
+              {social?.apple && (
                 <AppleLoginButton
                   appleClientId={appleId}
                   onAppleCredential={onAppleCredential}
                   redirectURI={appleRedirectURI}
                   onError={handleGoogleError}
                 />
-              )} */}
+              )}
               {isRegisterEnabled && (
                 <LoginRegisterToggle
                   label={
