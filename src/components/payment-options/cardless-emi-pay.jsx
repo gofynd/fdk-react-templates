@@ -31,6 +31,7 @@ function CardLessEmi({
   loader,
   onPriceDetailsClick,
   mopSelectionLoading,
+  isPaymentDisabled = false,
 }) {
   const isTablet = useViewport(0, 768);
   return (
@@ -79,7 +80,7 @@ function CardLessEmi({
                       null,
                       true
                     )}
-                    disabled={mopSelectionLoading}
+                    disabled={mopSelectionLoading || isPaymentDisabled}
                     onPriceDetailsClick={onPriceDetailsClick}
                     enableLinkPaymentOption={enableLinkPaymentOption}
                     isPaymentLoading={isPaymentLoading}
@@ -96,7 +97,7 @@ function CardLessEmi({
                       proceedToPay("CARDLESS_EMI", selectedPaymentPayload);
                       acceptOrder();
                     }}
-                    disabled={isPaymentLoading}
+                    disabled={isPaymentLoading || isPaymentDisabled}
                   >
                     {!isPaymentLoading ? (
                       <>

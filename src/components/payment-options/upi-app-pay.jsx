@@ -42,6 +42,7 @@ function UpiAppPayment({
   isCouponApplied,
   isCouponValid,
   mopSelectionLoading,
+  isPaymentDisabled = false,
 }) {
   const isTablet = useViewport(0, 768);
 
@@ -193,7 +194,10 @@ function UpiAppPayment({
               <StickyPayNow
                 customClassName={styles.visibleOnTab}
                 disabled={
-                  mopSelectionLoading || !selectedUpiIntentApp || isUPIError
+                  mopSelectionLoading ||
+                  !selectedUpiIntentApp ||
+                  isUPIError ||
+                  isPaymentDisabled
                 }
                 value={priceFormatCurrencySymbol(
                   getCurrencySymbol,
@@ -229,7 +233,8 @@ function UpiAppPayment({
                   disabled={
                     mopSelectionLoading ||
                     !selectedUpiIntentApp ||
-                    isPaymentLoading
+                    isPaymentLoading ||
+                    isPaymentDisabled
                   }
                 >
                   {!isPaymentLoading ? (

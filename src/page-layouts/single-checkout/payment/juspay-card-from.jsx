@@ -20,6 +20,7 @@ const JuspayCardForm = ({
   handleShowFailedMessage,
   cardDetails,
   setIsJuspayCouponApplied,
+  isPaymentDisabled = false,
 }) => {
   const [isJuspayLoaded, setIsJuspayLoaded] = useState(false);
   const juspayFormRef = useRef(null);
@@ -400,7 +401,7 @@ const JuspayCardForm = ({
 
           {isMobile ? (
             <StickyPayNow
-              disabled={!isCardValid()}
+              disabled={!isCardValid() || isPaymentDisabled}
               value={priceFormatCurrencySymbol(
                 getCurrencySymbol,
                 getTotalValue()
@@ -413,7 +414,7 @@ const JuspayCardForm = ({
               type="submit"
               id="common_pay_btn"
               className={styles.saveNewCard}
-              disabled={!isCardValid()}
+              disabled={!isCardValid() || isPaymentDisabled}
             >
               {t("resource.common.pay_caps")}{" "}
               {priceFormatCurrencySymbol(

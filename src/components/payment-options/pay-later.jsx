@@ -33,6 +33,7 @@ function PayLater({
   loader,
   onPriceDetailsClick,
   mopSelectionLoading,
+  isPaymentDisabled = false,
 }) {
   const isTablet = useViewport(0, 768);
 
@@ -91,7 +92,11 @@ function PayLater({
                         true
                       )}
                       onPriceDetailsClick={onPriceDetailsClick}
-                      disabled={mopSelectionLoading || !selectedPayLater.code}
+                      disabled={
+                        mopSelectionLoading ||
+                        !selectedPayLater.code ||
+                        isPaymentDisabled
+                      }
                       enableLinkPaymentOption={enableLinkPaymentOption}
                       isPaymentLoading={isPaymentLoading}
                       loader={loader}
@@ -109,7 +114,11 @@ function PayLater({
                           proceedToPay("PL", selectedPaymentPayload);
                           acceptOrder();
                         }}
-                        disabled={mopSelectionLoading || isPaymentLoading}
+                        disabled={
+                          mopSelectionLoading ||
+                          isPaymentLoading ||
+                          isPaymentDisabled
+                        }
                       >
                         {!isPaymentLoading ? (
                           <>

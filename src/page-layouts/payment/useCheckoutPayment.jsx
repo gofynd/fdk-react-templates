@@ -66,10 +66,34 @@ export function useCheckoutPayment({
     /Instagram/.test(navigator.userAgent);
 
   const isTablet = useViewport(0, 768);
+  const shouldHideCodOption = payment?.shouldHideCodOption === true;
 
   let paymentOptions = PaymentOptionsList ? PaymentOptionsList() : [];
-  let codOption = paymentOptions?.filter((opt) => opt.name === "COD")[0];
+  let codOption = shouldHideCodOption
+    ? undefined
+    : paymentOptions?.filter((opt) => opt.name === "COD")[0];
   paymentOptions = paymentOptions?.filter((opt) => opt.name !== "COD");
+  const getCodChargeFromOption = () => {
+    const rawCodOption = paymentOption?.payment_option?.find(
+      (option) =>
+        option?.name === "COD" ||
+        option?.code === "COD" ||
+        option?.merchant_code === "COD"
+    );
+    const codCharge = [
+      codOption?.list?.[0]?.cod_charges,
+      codOption?.list?.[0]?.codCharges,
+      codOption?.cod_charges,
+      codOption?.codCharges,
+      rawCodOption?.list?.[0]?.cod_charges,
+      rawCodOption?.list?.[0]?.codCharges,
+      rawCodOption?.cod_charges,
+      rawCodOption?.codCharges,
+    ].find((value) => value !== undefined && value !== null);
+    const numericCodCharge = Number(codCharge);
+
+    return Number.isFinite(numericCodCharge) ? numericCodCharge : 0;
+  };
 
   const otherPaymentOptions = useMemo(
     () => (otherOptions ? otherOptions() : []),
@@ -1105,7 +1129,17 @@ export function useCheckoutPayment({
     );
     if (qrPaymentOption) setIsQrMopPresent(true);
 
-    if (getTotalValue?.() === 0) {
+    const isSelectedTabAvailable =
+      selectedTab &&
+      (paymentOptions?.some((option) => option?.name === selectedTab) ||
+        otherPaymentOptions?.some((option) => option?.name === selectedTab) ||
+        codOption?.name === selectedTab);
+
+    if (isSelectedTabAvailable) {
+      return;
+    }
+
+    if (getTotalValue?.() === 0 && !shouldHideCodOption) {
       setSelectedTab("COD");
     } else if (!enableLinkPaymentOption) {
       if (paymentOptions?.length > 0) {
@@ -1120,6 +1154,23 @@ export function useCheckoutPayment({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paymentOption]);
+
+  useEffect(() => {
+    if (!shouldHideCodOption || selectedTab !== "COD") {
+      return;
+    }
+
+    if (paymentOptions?.length > 0) {
+      setSelectedTab(paymentOptions[0].name);
+      setActiveMop(paymentOptions[0].name);
+    } else if (otherPaymentOptions?.length > 0) {
+      setSelectedTab("Other");
+      setActiveMop("Other");
+    } else {
+      setSelectedTab("");
+      setActiveMop(null);
+    }
+  }, [selectedTab, shouldHideCodOption]);
 
   const handleScrollToTop = (index) => {
     const element = document.getElementById(`nav-title-${index}`);
@@ -1160,8 +1211,17 @@ export function useCheckoutPayment({
     }
   };
 
+  const codChargeBreakup = breakUpValues?.find(
+    (value) =>
+      ["cod_charge", "cod_charges"].includes(value?.key) ||
+      ["cod_charge", "cod_charges"].includes(value?.name)
+  );
+  const breakupCodCharges = Number(codChargeBreakup?.value);
+  const paymentOptionCodCharges = getCodChargeFromOption();
   const codCharges =
-    breakUpValues?.filter((value) => value.key === "cod_charge")[0]?.value ?? 0;
+    Number.isFinite(breakupCodCharges) && breakupCodCharges > 0
+      ? breakupCodCharges
+      : paymentOptionCodCharges;
 
   const unsetSelectedSubMop = () => {
     setSelectedOtherPayment({});
@@ -1191,6 +1251,7 @@ export function useCheckoutPayment({
     showCouponValidityModal,
     setShowCouponValidityModal,
     couponValidity,
+    setCouponValidity,
     // card state
     addNewCard,
     getCardBorder,

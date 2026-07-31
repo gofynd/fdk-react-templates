@@ -62,6 +62,7 @@ function CardForm({
   isPaymentLoading = false,
   loader = <div></div>,
   mopSelectionLoading,
+  isPaymentDisabled = false,
 }) {
   const { t } = useGlobalTranslation("translation");
   const isFormatterSet = useRef(false);
@@ -166,6 +167,7 @@ function CardForm({
         cardDetails={cardDetails}
         selectMop={selectMop}
         setIsJuspayCouponApplied={setIsJuspayCouponApplied}
+        isPaymentDisabled={isPaymentDisabled}
       />
     );
   }
@@ -382,7 +384,9 @@ function CardForm({
         {!addNewCard && isTablet ? (
           <StickyPayNow
             customClassName={styles.visibleOnTab}
-            disabled={!isCardValid()}
+            disabled={
+              !isCardValid() || mopSelectionLoading || isPaymentDisabled
+            }
             value={priceFormatCurrencySymbol(
               getCurrencySymbol,
               getTotalValue(),
@@ -401,7 +405,12 @@ function CardForm({
           <button
             className={styles.saveNewCard}
             onClick={() => payUsingCard()}
-            disabled={!isCardValid() || isPaymentLoading || mopSelectionLoading}
+            disabled={
+              !isCardValid() ||
+              isPaymentLoading ||
+              mopSelectionLoading ||
+              isPaymentDisabled
+            }
           >
             {!isPaymentLoading ? (
               <>
