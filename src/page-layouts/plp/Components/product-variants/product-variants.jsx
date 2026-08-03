@@ -4,7 +4,6 @@ import FyImage from "../../../../components/core/fy-image/fy-image";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./product-variants.less";
 import { isRunningOnClient } from "../../../../helper/utils";
-import { useGlobalTranslation } from "fdk-core/utils";
 
 function ProductVariants({
   variants,
@@ -14,9 +13,8 @@ function ProductVariants({
   preventRedirect = false,
   setSlug,
 }) {
-  const { t } = useGlobalTranslation("translation");
   const isProductSet = product.is_set;
-  const getVariantSetText = () => (isProductSet ? t("resource.common.size") : t("resource.common.set"));
+  const getVariantSetText = () => (isProductSet ? "Size" : "Set");
   const getProductLink = (item) => {
     return `/product/${item.slug}`;
   };
@@ -47,8 +45,9 @@ function ProductVariants({
       selectedValue = selectedVariant?.value;
     }
 
-    return `${item.header ? `${item.header}: ` : ""}${selectedValue ? `${selectedValue} (${t("resource.common.selected")})` : ""
-      }`;
+    return `${item.header ? `${item.header}: ` : ""}${
+      selectedValue ? `${selectedValue} (selected)` : ""
+    }`;
   };
 
   const handleLink = (event, itemSlug) => {
@@ -67,13 +66,13 @@ function ProductVariants({
               item?.items.map((variant, index) =>
                 isProductSet !== variant.value ? (
                   <div key={variant.slug + index}>
-                    {t("resource.product.interested_in")} {getVariantSetText()}?
+                    Interested in {getVariantSetText()}?
                     <button
                       type="button"
                       className={styles.uktLinks}
                       onClick={() => getProductLink(variant)}
                     >
-                      {t("resource.facets.pick")} {getVariantSetText()}
+                      Pick {getVariantSetText()}
                     </button>
                   </div>
                 ) : null
@@ -92,8 +91,9 @@ function ProductVariants({
                     {item?.items.map((variant, index) => (
                       <div
                         key={variant.slug + index}
-                        className={`${styles.variantItemImage} ${isVariantSelected(variant) ? styles.selected : ""
-                          } ${!variant.is_available ? styles.unavailable : ""}`}
+                        className={`${styles.variantItemImage} ${
+                          isVariantSelected(variant) ? styles.selected : ""
+                        } ${!variant.is_available ? styles.unavailable : ""}`}
                       >
                         <FDKLink
                           to={getProductLink(variant)}
@@ -109,10 +109,11 @@ function ProductVariants({
                           />
                         </FDKLink>
                         <div
-                          className={`${isVariantSelected(variant)
-                            ? styles.selectedOverlay
-                            : styles.overlay
-                            }`}
+                          className={`${
+                            isVariantSelected(variant)
+                              ? styles.selectedOverlay
+                              : styles.overlay
+                          }`}
                         ></div>
                         <span>
                           <SvgWrapper
@@ -129,8 +130,9 @@ function ProductVariants({
                     {item?.items.map((variant) => (
                       <div
                         key={variant?.slug}
-                        className={`${styles.variantItemColor} ${isVariantSelected(variant) ? styles.selected : ""
-                          }`}
+                        className={`${styles.variantItemColor} ${
+                          isVariantSelected(variant) ? styles.selected : ""
+                        }`}
                       >
                         <FDKLink
                           to={getProductLink(variant)}
@@ -143,15 +145,18 @@ function ProductVariants({
                             style={{
                               background: `#${variant.color}`,
                             }}
-                            className={`${styles.color} ${isVariantSelected(variant) ? styles.selected : ""
-                              } ${!variant.is_available ? styles.unavailable : ""
-                              }`}
+                            className={`${styles.color} ${
+                              isVariantSelected(variant) ? styles.selected : ""
+                            } ${
+                              !variant.is_available ? styles.unavailable : ""
+                            }`}
                           >
                             <div
-                              className={`${isVariantSelected(variant)
-                                ? styles.selectedOverlay
-                                : styles.overlay
-                                }`}
+                              className={`${
+                                isVariantSelected(variant)
+                                  ? styles.selectedOverlay
+                                  : styles.overlay
+                              }`}
                             >
                               <span />
                             </div>
@@ -170,8 +175,9 @@ function ProductVariants({
                     {item?.items.map((variant, index) => (
                       <div
                         key={variant.slug + index}
-                        className={`${styles.variantItemText} b2 ${isVariantSelected(variant) ? styles.selected : ""
-                          } ${!variant.is_available ? styles.unavailable : ""}`}
+                        className={`${styles.variantItemText} b2 ${
+                          isVariantSelected(variant) ? styles.selected : ""
+                        } ${!variant.is_available ? styles.unavailable : ""}`}
                       >
                         {!preventRedirect ? (
                           <FDKLink to={getProductLink(variant)}>

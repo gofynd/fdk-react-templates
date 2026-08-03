@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "../../styles/product-listing.less";
 import InfiniteLoader from "../../components/core/infinite-loader/infinite-loader";
@@ -26,7 +26,6 @@ import TwoGridIcon from "../../assets/images/grid-two.svg";
 import FourGridIcon from "../../assets/images/grid-four.svg";
 import TwoGridMobIcon from "../../assets/images/grid-two-mob.svg";
 import OneGridMobIcon from "../../assets/images/grid-one-mob.svg";
-import { useGlobalTranslation, useGlobalStore, useFPI } from "fdk-core/utils";
 
 const ProductListing = ({
   breadcrumb = [],
@@ -34,7 +33,6 @@ const ProductListing = ({
   productCount = 0,
   title = "",
   description = "",
-  descriptionFontSize,
   isScrollTop = true,
   filterList = [],
   selectedFilters = [],
@@ -51,13 +49,11 @@ const ProductListing = ({
   isProductOpenInNewTab = false,
   isBrand = true,
   isSaleBadge = true,
-  isCustomBadge = true,
   isPrice = true,
   globalConfig = {},
   imgSrcSet,
   isImageFill = false,
   showImageOnHover = false,
-  showMultipleImages = false,
   isResetFilterDisable = false,
   imageBackgroundColor = "",
   imagePlaceholder = "",
@@ -68,11 +64,7 @@ const ProductListing = ({
   listingPrice = "range",
   banner = {},
   showAddToCart = false,
-  showColorVariants = false,
-  imageEffects,
-  actionButtonText,
   stickyFilterTopOffset = 0,
-  filterToggle = false,
   onColumnCountUpdate = () => {},
   onResetFiltersClick = () => {},
   onFilterUpdate = () => {},
@@ -82,18 +74,11 @@ const ProductListing = ({
   onWishlistClick = () => {},
   onViewMoreClick = () => {},
   onLoadMoreProducts = () => {},
-  onProductNavigation = () => {},
-  EmptyStateComponent,
+  EmptyStateComponent = (
+    <EmptyState title="Sorry, we couldn’t find any results" />
+  ),
 }) => {
-  const { t } = useGlobalTranslation("translation");
   const isTablet = useViewport(0, 768);
-  const fpi = useFPI();
-  const { is_serviceable } = useGlobalStore(fpi?.getters?.CUSTOM_VALUE) || {};
-  const [isFilterVisible, setIsFilterVisible] = useState(filterToggle);
-
-  useEffect(() => {
-    setIsFilterVisible(filterToggle);
-  }, [filterToggle]);
   const {
     handleAddToCart,
     isOpen: isAddToCartOpen,
@@ -102,34 +87,14 @@ const ProductListing = ({
     ...restAddToModalProps
   } = addToCartModalProps;
 
-  const addToCartModalTitle = isTablet
-    ? restAddToModalProps?.productData?.product?.name?.length > 30
-      ? `${restAddToModalProps?.productData?.product?.name?.slice(0, 30)}...`
-      : restAddToModalProps?.productData?.product?.name || ""
-    : "";
-
   return (
     <div className={styles.plpWrapper}>
       {isRunningOnClient() && isPageLoading ? (
         <div className={styles.loader}></div>
       ) : productList?.length === 0 && !(isPageLoading || isPageLoading) ? (
-        <div>
-          {EmptyStateComponent ? (
-            EmptyStateComponent
-          ) : (
-            <EmptyState
-              title={t("resource.common.sorry_we_couldnt_find_any_results")}
-            />
-          )}
-        </div>
+        <div>{EmptyStateComponent}</div>
       ) : (
         <>
-          {!title && (
-            <h1 className={styles.visuallyHidden}>
-              {t("resource.common.breadcrumb.products")}
-            </h1>
-          )}
-          {title && <h1 className={styles.visuallyHidden}>{title}</h1>}
           <div className={styles.mobileHeader}>
             <div className={styles.headerLeft}>
               {filterList.length > 0 && (
@@ -138,12 +103,12 @@ const ProductListing = ({
                   onClick={onFilterModalBtnClick}
                 >
                   <FilterIcon />
-                  <span>{t("resource.common.filter")}</span>
+                  <span>Filter</span>
                 </button>
               )}
               <button onClick={onSortModalBtnClick}>
                 <SortIcon />
-                <span>{t("resource.facets.sort_by")}</span>
+                <span>Sort By</span>
               </button>
             </div>
             <div className={styles.headerRight}>
@@ -154,7 +119,7 @@ const ProductListing = ({
                 onClick={() =>
                   onColumnCountUpdate({ screen: "mobile", count: 1 })
                 }
-                title={t("resource.product.mobile_grid_one")}
+                title="Mobile grid one"
               >
                 <OneGridMobIcon />
               </button>
@@ -165,7 +130,7 @@ const ProductListing = ({
                 onClick={() =>
                   onColumnCountUpdate({ screen: "mobile", count: 2 })
                 }
-                title={t("resource.product.mobile_grid_two")}
+                title="Mobile grid two"
               >
                 <TwoGridMobIcon />
               </button>
@@ -176,7 +141,7 @@ const ProductListing = ({
                 onClick={() =>
                   onColumnCountUpdate({ screen: "tablet", count: 2 })
                 }
-                title={t("resource.product.tablet_grid_two")}
+                title="Tablet grid two"
               >
                 <TwoGridIcon />
               </button>
@@ -187,7 +152,7 @@ const ProductListing = ({
                 onClick={() =>
                   onColumnCountUpdate({ screen: "tablet", count: 3 })
                 }
-                title={t("resource.product.tablet_grid_four")}
+                title="Tablet grid four"
               >
                 <FourGridIcon />
               </button>
@@ -199,20 +164,18 @@ const ProductListing = ({
           <div className={styles.contentWrapper}>
             {filterList?.length !== 0 && (
               <StickyColumn
-                className={`${styles.left} ${filterToggle && !isFilterVisible ? styles.hidden : ""}`}
+                className={styles.left}
                 topOffset={stickyFilterTopOffset}
               >
                 <div className={styles.filterHeaderContainer}>
                   <div className={styles.filterHeader}>
-                    <h4 className={styles.title}>
-                      {t("resource.product.filters_caps")}
-                    </h4>
+                    <h4 className={styles.title}>FILTERS</h4>
                     {!isResetFilterDisable && (
                       <button
                         className={styles.resetBtn}
                         onClick={onResetFiltersClick}
                       >
-                        {t("resource.facets.reset_caps")}
+                        RESET
                       </button>
                     )}
                   </div>
@@ -237,26 +200,11 @@ const ProductListing = ({
                   {title && <h2 className={styles.title}>{title}</h2>}
                   {isProductCountDisplayed && (
                     <span className={styles.productCount}>
-                      {`${productCount} ${productCount > 1 ? t("resource.common.items") : t("resource.common.item")}`}
+                      {`${productCount} ${productCount > 1 ? "items" : "item"}`}
                     </span>
                   )}
                 </div>
                 <div className={styles.headerRight}>
-                  {filterToggle && filterList?.length > 0 && (
-                    <div
-                      className={`${styles.filterToggleBtn} `}
-                      onClick={() => setIsFilterVisible(!isFilterVisible)}
-                    >
-                      <div className={styles.filterToggleText}>
-                        {isFilterVisible
-                          ? t("resource.common.hide_filters")
-                          : t("resource.common.show_filters")}
-                      </div>
-                      <div className={`${styles.filterIcon} `}>
-                        <FilterIcon />
-                      </div>
-                    </div>
-                  )}
                   <Sort sortList={sortList} onSortUpdate={onSortUpdate} />
                   <button
                     className={`${styles.colIconBtn} ${
@@ -265,7 +213,7 @@ const ProductListing = ({
                     onClick={() =>
                       onColumnCountUpdate({ screen: "desktop", count: 2 })
                     }
-                    title={t("resource.product.desktop_grid_two")}
+                    title="Desktop grid two"
                   >
                     <TwoGridIcon />
                   </button>
@@ -276,7 +224,7 @@ const ProductListing = ({
                     onClick={() =>
                       onColumnCountUpdate({ screen: "desktop", count: 4 })
                     }
-                    title={t("resource.product.desktop_grid_four")}
+                    title="Desktop grid four"
                   >
                     <FourGridIcon />
                   </button>
@@ -291,7 +239,7 @@ const ProductListing = ({
                     to={banner?.redirectLink}
                   >
                     <FyImage
-                      alt={t("resource.product.desktop_banner_alt")}
+                      alt="desktop banner"
                       src={banner?.desktopBanner}
                       customClass={styles.banner}
                       isFixedAspectRatio={false}
@@ -310,7 +258,7 @@ const ProductListing = ({
                     to={banner?.redirectLink}
                   >
                     <FyImage
-                      alt={t("resource.product.mobile_banner")}
+                      alt="mobile banner"
                       src={banner?.mobileBanner}
                       customClass={styles.banner}
                       isFixedAspectRatio={false}
@@ -343,7 +291,6 @@ const ProductListing = ({
                         columnCount,
                         isBrand,
                         isSaleBadge,
-                        isCustomBadge,
                         isPrice,
                         aspectRatio,
                         isWishlistIcon,
@@ -351,20 +298,13 @@ const ProductListing = ({
                         followedIdList,
                         listingPrice,
                         showAddToCart,
-                        showColorVariants,
-                        showImageOnHover,
-                        showMultipleImages,
-                        imageEffects,
-                        actionButtonText:
-                          actionButtonText ?? t("resource.common.add_to_cart"),
                         onWishlistClick,
                         isImageFill,
+                        showImageOnHover,
                         imageBackgroundColor,
                         imagePlaceholder,
                         handleAddToCart,
                         imgSrcSet,
-                        onProductNavigation,
-                        isServiceable: is_serviceable,
                       }}
                     />
                   </InfiniteLoader>
@@ -376,7 +316,6 @@ const ProductListing = ({
                       columnCount,
                       isBrand,
                       isSaleBadge,
-                      isCustomBadge,
                       isPrice,
                       aspectRatio,
                       isWishlistIcon,
@@ -384,21 +323,14 @@ const ProductListing = ({
                       followedIdList,
                       listingPrice,
                       showAddToCart,
-                      showColorVariants,
-                      showImageOnHover,
-                      showMultipleImages,
-                      imageEffects,
-                      actionButtonText:
-                        actionButtonText ?? t("resource.common.add_to_cart"),
                       onWishlistClick,
                       isImageFill,
+                      showImageOnHover,
                       imageBackgroundColor,
                       isProductLoading,
                       imagePlaceholder,
                       handleAddToCart,
                       imgSrcSet,
-                      onProductNavigation,
-                      isServiceable: is_serviceable,
                     }}
                   />
                 )}
@@ -415,7 +347,7 @@ const ProductListing = ({
                       tabIndex="0"
                       disabled={isProductLoading}
                     >
-                      {t("resource.facets.view_more")}
+                      View More
                     </button>
                   </div>
                 )}
@@ -423,7 +355,6 @@ const ProductListing = ({
               <ListingDescription
                 key={description.length}
                 description={description}
-                descriptionFontSize={descriptionFontSize}
               />
             </div>
           </div>
@@ -432,23 +363,24 @@ const ProductListing = ({
           {isScrollTop && <ScrollTop />}
           {showAddToCart && (
             <>
-              {isAddToCartOpen && (
-                <Modal
-                  isOpen={isAddToCartOpen}
-                  hideHeader={!isTablet}
-                  containerClassName={styles.addToCartContainer}
-                  bodyClassName={styles.addToCartBody}
-                  titleClassName={styles.addToCartTitle}
-                  title={addToCartModalTitle}
-                  closeDialog={restAddToModalProps?.handleClose}
-                >
-                  <AddToCart
-                    {...restAddToModalProps}
-                    globalConfig={globalConfig}
-                    isServiceable={is_serviceable}
-                  />
-                </Modal>
-              )}
+              <Modal
+                isOpen={isAddToCartOpen}
+                hideHeader={!isTablet}
+                containerClassName={styles.addToCartContainer}
+                bodyClassName={styles.addToCartBody}
+                titleClassName={styles.addToCartTitle}
+                title={
+                  isTablet
+                    ? restAddToModalProps?.productData?.product?.name
+                    : ""
+                }
+                closeDialog={restAddToModalProps?.handleClose}
+              >
+                <AddToCart
+                  {...restAddToModalProps}
+                  globalConfig={globalConfig}
+                />
+              </Modal>
               <SizeGuide
                 isOpen={showSizeGuide}
                 onCloseDialog={handleCloseSizeGuide}
@@ -465,9 +397,25 @@ const ProductListing = ({
 export default ProductListing;
 
 function ProductGrid({
+  isBrand = true,
+  isSaleBadge = true,
+  isPrice = true,
+  isWishlistIcon = true,
+  imgSrcSet,
+  aspectRatio,
+  WishlistIconComponent,
+  isProductOpenInNewTab = false,
   columnCount = { desktop: 4, tablet: 3, mobile: 1 },
   productList = [],
-  ...restProps
+  followedIdList = [],
+  listingPrice = "range",
+  isImageFill = false,
+  showImageOnHover = false,
+  showAddToCart = false,
+  imageBackgroundColor = "",
+  imagePlaceholder = "",
+  onWishlistClick = () => {},
+  handleAddToCart = () => {},
 }) {
   return (
     <div
@@ -479,122 +427,39 @@ function ProductGrid({
       }}
     >
       {productList?.length > 0 &&
-        productList.map((product) => (
-          <ProductGridItem
+        productList.map((product, index) => (
+          <FDKLink
+            className={styles["product-wrapper"]}
+            action={product?.action}
             key={product?.uid}
-            product={product}
-            {...restProps}
-          />
+            target={isProductOpenInNewTab ? "_blank" : "_self"}
+            style={{
+              // "--delay": `${(index % 12) * 150}ms`,
+              display: "block",
+            }}
+          >
+            <ProductCard
+              product={product}
+              listingPrice={listingPrice}
+              columnCount={columnCount}
+              aspectRatio={aspectRatio}
+              isBrand={isBrand}
+              isPrice={isPrice}
+              isSaleBadge={isSaleBadge}
+              imgSrcSet={imgSrcSet}
+              isWishlistIcon={isWishlistIcon}
+              WishlistIconComponent={WishlistIconComponent}
+              followedIdList={followedIdList}
+              showAddToCart={showAddToCart}
+              onWishlistClick={onWishlistClick}
+              isImageFill={isImageFill}
+              showImageOnHover={showImageOnHover}
+              imageBackgroundColor={imageBackgroundColor}
+              imagePlaceholder={imagePlaceholder}
+              handleAddToCart={handleAddToCart}
+            />
+          </FDKLink>
         ))}
     </div>
-  );
-}
-
-function ProductGridItem({
-  product,
-  isBrand = true,
-  isSaleBadge = true,
-  isCustomBadge = true,
-  isPrice = true,
-  isWishlistIcon = true,
-  imgSrcSet,
-  aspectRatio,
-  WishlistIconComponent,
-  isProductOpenInNewTab = false,
-  columnCount = { desktop: 4, tablet: 3, mobile: 1 },
-  followedIdList = [],
-  listingPrice = "range",
-  isImageFill = false,
-  showAddToCart = false,
-  showColorVariants = false,
-  showImageOnHover = false,
-  showMultipleImages = false,
-  imageEffects,
-  actionButtonText,
-  imageBackgroundColor = "",
-  imagePlaceholder = "",
-  onWishlistClick = () => {},
-  handleAddToCart = () => {},
-  onProductNavigation = () => {},
-  isServiceable = true,
-}) {
-  const { t } = useGlobalTranslation("translation");
-
-  const getProductLinkProps = useMemo(() => {
-    const isMto = product?.custom_order?.is_custom_order || false;
-    let sizeToSelect;
-    let state = { product };
-    if (!!product?.sizes?.sizes?.length) {
-      let firstAvailableSize = product.sizes.sizes.find(
-        (size) => size.quantity > 0 || isMto
-      );
-      if (firstAvailableSize) sizeToSelect = firstAvailableSize.value;
-    } else if (!!product?.sizes?.length) {
-      sizeToSelect = product.sizes[0];
-      state = {
-        product: {
-          ...product,
-          sizes: {
-            sellable: product.sellable,
-            sizes: product.sizes.map((s) =>
-              typeof s === "string" ? { display: s, value: s } : s
-            ),
-          },
-        },
-      };
-    }
-
-    return {
-      action: {
-        ...product.action,
-        page: {
-          ...product.action.page,
-          query: {
-            ...product.action.page.query,
-            ...(sizeToSelect && { size: sizeToSelect }),
-          },
-        },
-      },
-      state,
-    };
-  }, [product]);
-
-  return (
-    <FDKLink
-      className={styles["product-wrapper"]}
-      {...getProductLinkProps}
-      target={isProductOpenInNewTab ? "_blank" : "_self"}
-      style={{
-        display: "block",
-      }}
-    >
-      <ProductCard
-        product={product}
-        listingPrice={listingPrice}
-        columnCount={columnCount}
-        aspectRatio={aspectRatio}
-        isBrand={isBrand}
-        isPrice={isPrice}
-        isSaleBadge={isSaleBadge}
-        isCustomBadge={isCustomBadge}
-        imgSrcSet={imgSrcSet}
-        isWishlistIcon={isWishlistIcon}
-        WishlistIconComponent={WishlistIconComponent}
-        followedIdList={followedIdList}
-        showAddToCart={showAddToCart}
-        showColorVariants={showColorVariants}
-        showImageOnHover={showImageOnHover}
-        showMultipleImages={showMultipleImages}
-        imageEffects={imageEffects}
-        actionButtonText={actionButtonText ?? t("resource.common.add_to_cart")}
-        onWishlistClick={onWishlistClick}
-        isImageFill={isImageFill}
-        imageBackgroundColor={imageBackgroundColor}
-        imagePlaceholder={imagePlaceholder}
-        handleAddToCart={handleAddToCart}
-        onClick={onProductNavigation}
-        isServiceable={isServiceable}
-      />
-    </FDKLink>
   );
 }

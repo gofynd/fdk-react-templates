@@ -11,7 +11,7 @@
   border-radius: @ImageRadius;
 }
 .originalImg {
-  inset-inline-start: 0;
+  left: 0;
   position: absolute;
   top: 0;
   opacity: 0;
@@ -23,7 +23,7 @@
 .wishlistIcon {
   position: absolute;
   top: 25px;
-  inset-inline-end: 25px;
+  right: 25px;
   z-index: 1;
   cursor: pointer;
 }
@@ -51,9 +51,9 @@
   .expandBtn {
     position: absolute;
     bottom: 10px;
-    inset-inline-end: 10px;
+    right: 10px;
     top: unset;
-    inset-inline-start: unset;
+    left: unset;
     width: 40px;
     height: 40px;
     cursor: pointer;
@@ -83,22 +83,19 @@
   .playerMute {
     position: absolute;
     bottom: 10px;
-    inset-inline-start: 10px;
+    left: 10px;
   }
 
   .playerExpand {
     position: absolute;
     bottom: 10px;
-    inset-inline-end: 10px;
+    right: 10px;
   }
 
   .playerReplay {
     position: absolute;
     top: 50%;
-    inset-inline-start: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);
-    [dir="rtl"] & {
-      transform: translate(50%, -50%);
-    }
   }
 }

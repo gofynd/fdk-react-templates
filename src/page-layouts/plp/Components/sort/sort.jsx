@@ -3,10 +3,8 @@ import OutsideClickHandler from "react-outside-click-handler";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./sort.less";
 import { useLocation } from "react-router-dom";
-import { useGlobalTranslation } from "fdk-core/utils";
 
-function Sort({ sortList = [], onSortUpdate = () => { } }) {
-  const { t } = useGlobalTranslation("translation");
+function Sort({ sortList = [], onSortUpdate = () => {} }) {
   const [sortOpen, setSortOpen] = useState(false);
   const location = useLocation();
 
@@ -36,7 +34,7 @@ function Sort({ sortList = [], onSortUpdate = () => { } }) {
   return (
     <OutsideClickHandler onOutsideClick={closeSortOption}>
       <div className={styles.dropdown}>
-        <span className={styles.sortLabel}>{t("resource.facets.sort_by")}: </span>
+        <span className={styles.sortLabel}>Sort by: </span>
         <div
           className={styles.selectedSortWrapper}
           onClick={() => setSortOpen(!sortOpen)}

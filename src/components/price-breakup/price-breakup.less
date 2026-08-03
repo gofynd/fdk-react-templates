@@ -6,17 +6,11 @@
   padding: 24px 0;
   display: flex;
   flex-direction: column;
-  @media @desktop {
-    border-radius: 8px;
-  }
   @media @mobile {
     padding: 16px 0;
     border-width: 1px 0;
   }
   .priceSummaryHeading {
-    display: flex;
-    gap: 8px;
-    align-items: center;
     font-size: 12px;
     font-weight: 500;
     color: @TextHeading;
@@ -24,22 +18,11 @@
     @media @mobile {
       padding: 0 16px;
     }
-
-    .priceSummaryLabel {
-      flex-shrink: 0;
-    }
-  }
-
-  .priceLoading {
-    width: fit-content;
   }
   .priceSummaryItem {
     display: flex;
     justify-content: space-between;
     padding: 0 24px;
-    @media @tablet-range {
-      padding: 0 16px;
-    }
     margin-top: 16px;
     font-size: 12px;
     font-weight: 500;
@@ -60,12 +43,9 @@
     font-size: 14px;
     font-weight: 700;
     padding: 24px 24px 0;
-    @media @tablet-range {
-      padding: 24px 16px 0;
-    }
     @media @mobile {
-      padding-inline-end: 16px;
-      padding-inline-start: 16px;
+      padding-right: 16px;
+      padding-left: 16px;
     }
   }
   .internationalTaxLabel {
@@ -94,9 +74,7 @@
     box-sizing: border-box;
     padding: 8px 0;
     margin: 16px 24px 0;
-    @media @tablet-range {
-      margin: 16px 16px 0;
-    }
+
     @media @mobile {
       margin: 12px 16px 0;
     }
@@ -118,23 +96,12 @@
     }
 
     .discountPreviewMessage {
-      margin-inline-start: 4px;
+      margin-left: 4px;
       font-weight: 400;
     }
     .discountPreviewAmount {
-      margin-inline-start: 4px;
+      margin-left: 4px;
       font-weight: 600;
-    }
-  }
-  .discountLoading {
-    padding: 16px 24px 0;
-    border-radius: 8px;
-
-    @media @tablet-range {
-      padding: 16px 16px 0;
-    }
-    @media @mobile {
-      padding: 12px 16px 0;
     }
   }
 }

@@ -10,14 +10,9 @@
 
 import React, { useState } from "react";
 import * as styles from "./listing-description.less";
-import { useGlobalTranslation } from "fdk-core/utils";
 
-function ListingDescription({ description = "", descriptionFontSize }) {
-  const { t } = useGlobalTranslation("translation");
+function ListingDescription({ description = "" }) {
   const [isCollapsed, setIsCollapsed] = useState(description?.length > 600);
-  const descriptionStyle = descriptionFontSize
-    ? { "--section-description-size": descriptionFontSize }
-    : undefined;
 
   const toggleCollapsedState = () => {
     setIsCollapsed((prevState) => !prevState);
@@ -27,7 +22,7 @@ function ListingDescription({ description = "", descriptionFontSize }) {
     return null;
   }
   return (
-    <div className={styles.descriptionWrapper} style={descriptionStyle}>
+    <div className={styles.descriptionWrapper}>
       <div className={styles.descriptionContent}>
         {isCollapsed
           ? `${description.substring(0, 600).trim()}...`
@@ -35,9 +30,7 @@ function ListingDescription({ description = "", descriptionFontSize }) {
       </div>
       {description.length > 600 && (
         <button className={styles.actionBtn} onClick={toggleCollapsedState}>
-          {isCollapsed
-            ? t("resource.common.read_more")
-            : t("resource.common.read_less")}
+          {isCollapsed ? "READ MORE" : "READ LESS"}
         </button>
       )}
     </div>

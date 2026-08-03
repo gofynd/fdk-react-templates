@@ -2,9 +2,6 @@
 
 .cartMainContainer {
   background-color: var(--pageBackground);
-  @media @mobile {
-    padding-bottom: 100px; // Space for fixed sticky footer
-  }
 
   .errContainer {
     background-color: @ErrorBackground;
@@ -16,7 +13,7 @@
 
     .errorIcon {
       display: flex;
-      margin-inline-end: 14px;
+      margin-right: 14px;
     }
 
     .errMsg {
@@ -24,7 +21,7 @@
       flex-grow: 1;
       font-weight: 600;
       font-size: 12px;
-      margin-inline-end: 14px;
+      margin-right: 14px;
     }
     @media @tablet {
       border-radius: 0;
@@ -46,9 +43,6 @@
     .cartTitleContainer {
       border: 1px solid @DividerStokes;
       padding: 24px;
-      @media @tablet-range {
-        padding: 16px;
-      }
       margin-top: 16px;
       display: flex;
       justify-content: space-between;
@@ -78,7 +72,7 @@
         .bagCount {
           color: var(--textLabel);
           line-height: 140%;
-          margin-inline-start: 12px;
+          margin-left: 12px;
           font-size: 14px;
           font-weight: 500;
           @media @mobile {
@@ -93,17 +87,10 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    [data-mobile-footer="true"] & {
-      padding-bottom: 56px;
-    }
     .priceSummaryLoginButton {
       border-radius: @ButtonRadius;
       background: var(--buttonPrimary);
       cursor: pointer;
-
-      &[disabled] {
-        cursor: default;
-      }
       text-transform: uppercase;
       color: var(--buttonSecondary);
       width: 100%;
@@ -170,7 +157,7 @@
         padding: 16px;
       }
       svg {
-        margin-inline-end: 12px;
+        margin-right: 12px;
         cursor: pointer;
       }
     }
@@ -178,16 +165,5 @@
 
   .selected {
     display: flex;
-  }
-
-  .priceBreakupCartWrapper {
-    @media @mobile {
-      // Space for sticky footer to prevent "You've saved" message from being hidden on cart page only
-      padding-bottom: 100px;
-    }
-    @media @tablet {
-      // Space for sticky footer to prevent "You've saved" message from being hidden on cart page only
-      padding-bottom: 100px;
-    }
   }
 }

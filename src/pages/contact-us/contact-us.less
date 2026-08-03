@@ -34,12 +34,7 @@
   margin: 0 auto;
   padding: 80px 0px;
   gap: 80px;
-  &.reducedBottomGap {
-    padding-bottom: 61px;
-    @media @tablet {
-      padding-bottom: 0;
-    }
-  }
+
   &.onImageContainer {
     @media @desktop {
       flex-direction: column;
@@ -56,7 +51,7 @@
     flex-direction: column-reverse;
     width: 100%;
     padding: 32px 16px;
-    gap: 24px;
+    gap: 48px;
   }
 }
 
@@ -75,68 +70,13 @@
   }
 }
 
-.customTypography {
-  display: block;
-
-  .contactTitle {
-    font-size: var(--contact-title-size);
-    line-height: calc(var(--contact-title-size) + 4px);
-  }
-}
-
-.customHeadingTypography {
-  .contactTitle {
-    font-weight: var(--section-heading-weight, 700);
-    text-transform: var(--section-heading-text-transform);
-  }
-}
-
-.contactTitle {
-  word-break: break-word;
-}
-
 .flex_item {
   display: flex;
   flex-direction: column;
   gap: 24px;
   width: 50%;
-  &.descriptionMargin {
-    max-width: 464px !important;
-    text-align: center;
-    margin: 0 auto;
-    padding-bottom: 40px;
-    p {
-      margin-top: 0;
-    }
-    @media @tablet {
-      margin: unset;
-      padding: 0 16px;
-      padding-bottom: 32px;
-    }
-  }
-  &.descriptionPaddingTop {
-    @media @desktop {
-      padding-top: 61px;
-    }
-  }
-  .description {
-    color: @TextBody;
-    font-size: var(--section-description-size, 16px);
-    @media @tablet {
-      font-size: var(--section-description-size, 14px);
-      text-align: start;
-    }
-    font-style: normal;
-    font-weight: 400;
-    line-height: calc(var(--section-description-size, 16px) + 4px);
-    letter-spacing: -0.32px;
-    align-self: stretch;
-    margin-top: 12px;
-  }
   @media @tablet {
     width: 100%;
-    flex-direction: column-reverse;
-    gap: 48px;
   }
   .listItems {
     display: flex;
@@ -148,22 +88,9 @@
       align-items: center;
       gap: 16px;
       align-self: stretch;
-
-      svg {
-        color: @TextBody;
-
-        path,
-        g > path,
-        circle,
-        rect {
-          fill: @TextBody;
-        }
-
-        [stroke] {
-          stroke: @TextBody;
-        }
+      svg g > path {
+        fill: @TextHeading;
       }
-
       span {
         display: inline-block;
         word-break: break-word;
@@ -179,14 +106,14 @@
   .form_row {
     width: 100%;
     .lableText {
-      //background-color: @PageBackground;
+      background-color: @PageBackground;
     }
     .inputPlaceholder {
       padding: 16px;
-      //background-color: @ThemeAccentL5;
+      background-color: @ThemeAccentL5;
 
       input::placeholder {
-        color: @TextLabel;
+        color: @TextSecondary;
         opacity: 1;
       }
     }
@@ -194,11 +121,11 @@
       height: 118px;
     }
     .inputPlaceholder::placeholder {
-      color: @TextLabel;
+      color: @TextSecondary;
       opacity: 1;
     }
     .inputPlaceholder:focus::placeholder {
-      color: @TextLabel;
+      color: @TextBody;
     }
   }
 }
@@ -216,7 +143,7 @@
   flex-direction: row-reverse;
 }
 .maxChar {
-  float: inline-end;
+  float: right;
   margin-top: 8px;
   color: @TextLabel;
   font-size: 12px;
@@ -228,20 +155,5 @@
 .iconSpacing {
   @media @mobile {
     gap: 12px;
-  }
-
-  svg {
-    color: @TextBody;
-
-    path,
-    g > path,
-    circle,
-    rect {
-      fill: @TextBody;
-    }
-
-    [stroke] {
-      stroke: @TextBody;
-    }
   }
 }

@@ -1,19 +1,17 @@
 import React, { useState } from "react";
 import * as styles from "./share-cart.less";
 import ShareCartModal from "../share-cart-modal/share-cart-modal";
-import { useGlobalTranslation } from "fdk-core/utils";
 import ShareCartIcon from "../../../../assets/images/share-cart.svg";
 
 function ShareCart({
   showCard = false,
   qrCode = "",
   isShareLoading = false,
-  onCopyToClipboardClick = () => { },
-  onFacebookShareClick = () => { },
-  onTwitterShareClick = () => { },
-  onShareClick = () => { },
+  onCopyToClipboardClick = () => {},
+  onFacebookShareClick = () => {},
+  onTwitterShareClick = () => {},
+  onShareClick = () => {},
 }) {
-  const { t } = useGlobalTranslation("translation");
   const [showShare, setShowShare] = useState(false);
 
   const getCartShareLink = () => {
@@ -30,10 +28,10 @@ function ShareCart({
               <span className={styles.shareCartIcon}>
                 <ShareCartIcon />
               </span>
-              {t("resource.cart.share_shopping_cart_caps")}
+              SHARE SHOPPING CART
             </div>
             <div className={styles.rightPart} onClick={getCartShareLink}>
-              {t("resource.common.share_caps")}
+              SHARE
             </div>
           </div>
         ) : (
@@ -41,12 +39,12 @@ function ShareCart({
             <span className={styles.shareCartIconGreen}>
               <ShareCartIcon />
             </span>
-            <span className={styles.shareBagBtn}>{t("resource.cart.share_bag_caps")}</span>
+            <span className={styles.shareBagBtn}>SHARE BAG</span>
           </div>
         )}
       </div>
       <ShareCartModal
-        title={t("resource.cart.share_shopping_qr")}
+        title="Spread the shopping delight! Scan QR & share these products with your loved ones"
         isOpen={showShare}
         {...{
           isShareLoading,

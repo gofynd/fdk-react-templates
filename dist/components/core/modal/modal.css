@@ -106,7 +106,7 @@ h4,
   letter-spacing: -0.02em;
   color: var(--textHeading, #26201a);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 18px;
 }
 @media only screen and (min-width: 769px) {
   h4,
@@ -115,7 +115,7 @@ h4,
     letter-spacing: -0.02em;
     color: var(--textHeading, #26201a);
     font-size: 20px;
-    line-height: 1.5;
+    line-height: 24px;
   }
 }
 h5,
@@ -182,7 +182,7 @@ h5,
 .modal__caption-medium___GbhtF,
 .modal__captionMedium___zCJpb {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 500;
 }
@@ -195,7 +195,7 @@ h5,
 .modal__caption-semi-bold___feZV5,
 .modal__captionSemiBold___pxAn7 {
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 14px;
   letter-spacing: -0.02em;
   font-weight: 600;
 }
@@ -260,11 +260,11 @@ h5,
 }
 .modal__mr-5___DjKqT,
 .modal__mr5___il5jH {
-  margin-inline-end: 30px !important;
+  margin-right: 30px !important;
 }
 .modal__mr-2___SKD1t,
 .modal__mr2___BSxti {
-  margin-inline-end: 5px !important;
+  margin-right: 5px !important;
 }
 .modal__py-5___OpCsp,
 .modal__py5___hfa2b {
@@ -391,8 +391,8 @@ h5,
   .modal__modalContainer--borders____AGZf {
     border: none;
     border-radius: 0;
-    border-start-start-radius: 8px;
-    border-start-end-radius: 8px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
   }
 }
 .modal__modalHeader___xKo1g {
@@ -415,7 +415,7 @@ h5,
 }
 .modal__modalBody___peHlJ {
   flex: 1;
-  max-height: 95vh;
+  max-height: 90vh;
   overflow-y: auto;
 }
 .modal__rightModal___acoje {
@@ -449,11 +449,6 @@ h5,
     align-items: center;
   }
 }
-@media only screen and (max-width: 480px) {
-  .modal__centerModal___CkbLu {
-    align-items: flex-end;
-  }
-}
 .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 {
   border-radius: 8px;
 }
@@ -463,20 +458,8 @@ h5,
     max-width: 720px;
   }
 }
-@media only screen and (max-width: 480px) {
-  .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 {
-    width: 100%;
-    max-width: 100%;
-    border-radius: 0;
-  }
-}
 .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 .modal__modalHeader___xKo1g {
   border-radius: 8px 8px 0px 0px;
-}
-@media only screen and (max-width: 480px) {
-  .modal__centerModal___CkbLu .modal__modalContainer___BoKU8 .modal__modalHeader___xKo1g {
-    border-radius: 0;
-  }
 }
 .modal__modalTitle___yvZQo {
   font-weight: 600;

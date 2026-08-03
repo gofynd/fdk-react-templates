@@ -3,7 +3,6 @@ import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./single-address-header.less";
 import { getAddressStr } from "../../../helper/utils";
 import { useSearchParams } from "react-router-dom";
-import { useGlobalTranslation } from "fdk-core/utils";
 
 function SinglesAddressHeader({
   allAddresses,
@@ -11,20 +10,15 @@ function SinglesAddressHeader({
   showPayment,
   showShipment,
   backToEdit,
-  acceptOrder,
 }) {
-  const { t } = useGlobalTranslation("translation");
   const [searchParams] = useSearchParams();
   const selectedAddId = searchParams.get("address_id");
 
   const selectedAddress = useMemo(() => {
-    if (allAddresses && Array.isArray(allAddresses) && allAddresses.length > 0) {
-      const item = allAddresses.find((item) => item.id == selectedAddId);
-      if (item) {
-        return { name: item?.name, addressStr: getAddressStr(item, false) };
-      }
+    if (allAddresses?.length) {
+      const item = allAddresses?.find((item) => item.id == selectedAddId);
+      return { name: item?.name, addressStr: getAddressStr(item, false) };
     }
-    return undefined;
   }, [allAddresses, selectedAddId]);
 
   return (
@@ -38,7 +32,7 @@ function SinglesAddressHeader({
               </div>
               <div className={styles.deliverAdd}>
                 <div className={styles.title}>
-                  {t("resource.common.deliver_to")}: {selectedAddress?.name}
+                  Deliver To: {selectedAddress?.name}
                 </div>
                 <div className={styles.address}>
                   {selectedAddress?.addressStr}
@@ -46,7 +40,7 @@ function SinglesAddressHeader({
               </div>
             </div>
             <div className={styles.rightSelected} onClick={backToEdit}>
-              {t("resource.cart.change")}
+              Change
             </div>
           </div>
         </>
@@ -57,12 +51,8 @@ function SinglesAddressHeader({
             onClick={showAddNewAddressModal}
           >
             <div className={styles.buttonWrapper}>
-              <button
-                className={`${styles.commonBtn} ${styles.addBtn}`}
-                disabled={!acceptOrder}
-              >
-                <SvgWrapper svgSrc="addAddress" />{" "}
-                <span>{t("resource.common.address.add_new_address")}</span>
+              <button className={`${styles.commonBtn} ${styles.addBtn}`}>
+                <SvgWrapper svgSrc="addAddress" /> <span>Add New Address</span>
               </button>
             </div>
           </div>
@@ -72,11 +62,9 @@ function SinglesAddressHeader({
             <div className={styles.wrapper}>
               <SvgWrapper svgSrc="one-number"></SvgWrapper>
               <div className={styles.headerWrapper}>
-                <div className={styles.addressHeading}>
-                  {t("resource.checkout.delivery_address")}
-                </div>
+                <div className={styles.addressHeading}>Delivery Address</div>
                 <div className={styles.addressString}>
-                  {t("resource.checkout.select_delivery_address")}
+                  Select delivery address
                 </div>
               </div>
             </div>
@@ -84,10 +72,8 @@ function SinglesAddressHeader({
               <button
                 className={`${styles.commonBtn} ${styles.addBtn}`}
                 onClick={showAddNewAddressModal}
-                disabled={!acceptOrder}
               >
-                <SvgWrapper svgSrc="addAddress" />{" "}
-                <span>{t("resource.common.address.add_new_address")}</span>
+                <SvgWrapper svgSrc="addAddress" /> <span>Add New Address</span>
               </button>
             </div>
           </div>

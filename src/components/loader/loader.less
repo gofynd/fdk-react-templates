@@ -1,5 +1,4 @@
-@import "../../styles/main.less";
-
+/* Absolute Center Spinner */
 .loading {
   position: fixed;
   z-index: 2000;
@@ -8,9 +7,9 @@
   overflow: visible;
   margin: auto;
   top: 0;
-  inset-inline-start: 0;
+  left: 0;
   bottom: 0;
-  inset-inline-end: 0;
+  right: 0;
 }
 
 /* Transparent Overlay */
@@ -19,7 +18,7 @@
   display: block;
   position: fixed;
   top: 0;
-  inset-inline-start: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background: radial-gradient(rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.8));
@@ -143,7 +142,7 @@
 .page-loader-container {
   position: fixed;
   top: 0;
-  inset-inline-start: 0;
+  left: 0;
   width: 100%;
   background: rgba(0, 0, 0, 0.1);
   display: flex;
@@ -154,13 +153,13 @@
 }
 
 .loader {
-  border: 8px solid @ThemeAccentL4; 
-  border-top: 8px solid @ThemeAccentD3; 
+  border: 8px solid #f3f3f3; /* Light grey */
+  border-top: 8px solid #3498db; /* Blue */
   border-radius: 50%;
   width: 50px;
   height: 50px;
   animation: spin 2s linear infinite;
-  margin-inline-start: 10%;
+  margin-left: 10%;
 }
 
 @keyframes spin {
@@ -173,7 +172,7 @@
 }
 
 .page-loader-container p {
-  margin-inline-start: 10px;
+  margin-left: 10px;
   font-weight: bold;
   color: #333; /* Dark grey */
 }

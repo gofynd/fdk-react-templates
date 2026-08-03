@@ -13,18 +13,16 @@
 
 import React, { useState, useEffect } from "react";
 import * as styles from "./sort-modal.less";
-import SvgWrapper from "../core/svgWrapper/SvgWrapper";
-import { useGlobalTranslation } from "fdk-core/utils";
 import Modal from "../core/modal/modal";
+import SvgWrapper from "../core/svgWrapper/SvgWrapper";
 
 function SortModal({
   isOpen = true,
   sortList = [],
-  onCloseModalClick = () => { },
-  onResetBtnClick = () => { },
-  onApplyBtnClick = () => { },
+  onCloseModalClick = () => {},
+  onResetBtnClick = () => {},
+  onApplyBtnClick = () => {},
 }) {
-  const { t } = useGlobalTranslation("translation");
   const [selectedSort, setSelectedSort] = useState(() => {
     let selectedItem = sortList?.find((x) => x.is_selected);
     return selectedItem || sortList?.[0];
@@ -40,51 +38,47 @@ function SortModal({
   };
 
   return (
-    <>
-      {isOpen && 
-        <Modal
-          isOpen={isOpen}
-          modalType="right-modal"
-          closeDialog={onCloseModalClick}
-          title={t("resource.facets.sort_by")}
-        >
-          <div className={styles.contentWrapper}>
-            <div className={styles.modalContent}>
-              <ul className={styles.sortList}>
-                {sortList?.map((item) => (
-                  <li
-                    className={`${styles.sortItem} ${selectedSort?.value === item?.value ? styles.selected : ""}`}
-                    key={item?.value}
-                    onClick={() => handleItemClick(item)}
-                  >
-                    <SvgWrapper
-                      className={styles.radioIcon}
-                      svgSrc={
-                        selectedSort?.value === item?.value
-                          ? "radio-selected"
-                          : "radio"
-                      }
-                    />
-                    {item.display}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className={styles.modalFooter}>
-              <button className={styles.resetBtn} onClick={onResetBtnClick}>
-                {t("resource.facets.cancel_caps")}
-              </button>
-              <button
-                className={styles.applyBtn}
-                onClick={() => onApplyBtnClick(selectedSort)}
+    <Modal
+      isOpen={isOpen}
+      modalType="right-modal"
+      closeDialog={onCloseModalClick}
+      title="Sort"
+    >
+      <div className={styles.contentWrapper}>
+        <div className={styles.modalContent}>
+          <ul className={styles.sortList}>
+            {sortList?.map((item) => (
+              <li
+                className={`${styles.sortItem} ${selectedSort?.value === item?.value ? styles.selected : ""}`}
+                key={item?.value}
+                onClick={() => handleItemClick(item)}
               >
-                {t("resource.facets.apply_caps")}
-              </button>
-            </div>
-          </div>
-        </Modal>
-      }
-    </>
+                <SvgWrapper
+                  className={styles.radioIcon}
+                  svgSrc={
+                    selectedSort?.value === item?.value
+                      ? "radio-selected"
+                      : "radio"
+                  }
+                />
+                {item.display}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className={styles.modalFooter}>
+          <button className={styles.resetBtn} onClick={onResetBtnClick}>
+            CANCEL
+          </button>
+          <button
+            className={styles.applyBtn}
+            onClick={() => onApplyBtnClick(selectedSort)}
+          >
+            APPLY
+          </button>
+        </div>
+      </div>
+    </Modal>
   );
 }
 

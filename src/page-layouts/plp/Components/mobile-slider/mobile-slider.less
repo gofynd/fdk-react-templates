@@ -20,7 +20,7 @@
       }
     }
     .slick-list {
-      padding-inline-start: 0 !important;
+      padding-left: 0 !important;
       @media @tablet {
         min-height: 730px;
       }
@@ -34,7 +34,7 @@
     }
 
     .slick-slide {
-      border-inline-end: 3px solid #fff;
+      border-right: 3px solid #fff;
       @media @mobile {
         border-width: 0;
       }
@@ -82,11 +82,8 @@
   display: block;
   position: absolute;
   top: 50%;
-  inset-inline-start: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
-  [dir="rtl"] & {
-    transform: translate(50%, -50%);
-  }
   pointer-events: none;
 }
 
@@ -102,8 +99,8 @@
 .wishlistIcon {
   position: absolute;
   top: 18px !important;
-  inset-inline-end: 17px !important;
-  inset-inline-start: unset !important;
+  right: 17px !important;
+  left: unset !important;
   bottom: unset !important;
   cursor: pointer;
   width: 22px;
@@ -114,8 +111,8 @@
   position: absolute;
   border-radius: 24px;
   bottom: 24px !important;
-  inset-inline-end: 24px !important;
-  inset-inline-start: unset !important;
+  right: 24px !important;
+  left: unset !important;
   top: unset !important;
   height: fit-content;
   width: fit-content;
@@ -139,7 +136,7 @@
 .autoRotateIcon {
   position: absolute;
   bottom: 8px;
-  inset-inline-end: 8px;
+  right: 8px;
   width: 40px;
   height: 40px;
 }
@@ -166,22 +163,19 @@
   .playerMute {
     position: absolute;
     bottom: 10px;
-    inset-inline-start: 10px;
+    left: 10px;
   }
 
   .playerExpand {
     position: absolute;
     bottom: 10px;
-    inset-inline-end: 10px;
+    right: 10px;
   }
 
   .playerReplay {
     position: absolute;
     top: 50%;
-    inset-inline-start: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);
-    [dir="rtl"] & {
-      transform: translate(50%, -50%);
-    }
   }
 }

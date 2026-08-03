@@ -2,19 +2,17 @@ import React, { useCallback, useState } from "react";
 import * as styles from "./confirm-modal.less";
 import Modal from "../../../../components/core/modal/modal";
 import FyButton from "../../../../components/core/fy-button/fy-button";
-import { useGlobalTranslation } from "fdk-core/utils";
 
 function ConfirmModal({
   isOpen,
   onClose,
-  header,
+  header = "Confirm",
   text = "",
-  leftButton,
-  rightButton,
+  leftButton = "No",
+  rightButton = "Yes",
   onConfirm,
   onCancel,
 }) {
-  const { t } = useGlobalTranslation("translation");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleConfirm = useCallback(async () => {
@@ -32,7 +30,7 @@ function ConfirmModal({
     <Modal
       isOpen={isOpen}
       closeDialog={onClose}
-      title={header || t("resource.common.confirm")}
+      title={header}
       modalType="center-modal"
     >
       <div className={styles.modalContainer}>
@@ -43,7 +41,7 @@ function ConfirmModal({
             className={styles.noButton}
             onClick={onCancel}
           >
-            {leftButton || t("resource.common.no")}
+            {leftButton}
           </FyButton>
           <div className={styles.separator}>|</div>
           <FyButton
@@ -52,7 +50,7 @@ function ConfirmModal({
             onClick={handleConfirm}
             isLoading={isLoading}
           >
-            {rightButton || t("resource.common.yes")}
+            {rightButton}
           </FyButton>
         </div>
       </div>

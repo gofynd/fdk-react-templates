@@ -12,10 +12,8 @@
 import React from "react";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
 import * as styles from "./rbi-guideline.less";
-import { useGlobalTranslation } from "fdk-core/utils";
 
 const RbiSecureGuideline = ({ updateRbiGuidelineCard }) => {
-  const { t } = useGlobalTranslation("translation");
   const securedCardRbiGuidelines = (value) => {
     updateRbiGuidelineCard(value);
   };
@@ -23,36 +21,38 @@ const RbiSecureGuideline = ({ updateRbiGuidelineCard }) => {
   return (
     <div className={styles["secure-card-guideline"]}>
       <p className={styles["card-description"]}>
-        {t("resource.checkout.card_tokenization_benefits")}
+        Tokenization is the safest way to secure the card. It provides the below
+        advantages.
       </p>
       <div className={styles["secure-details"]}>
         <div className="secure-payment">
-          <img src="/public/assets/credit-card.svg" alt={t("resource.checkout.rbi_icon")} />
-          <div className="secure-payment-text">{t("resource.checkout.secured_payment_method")}</div>
+          <img src="/public/assets/credit-card.svg" alt="rbi-icon" />
+          <div className="secure-payment-text">Secured payments method</div>
         </div>
         <div className="quick-payment secure-payment">
           <SvgWrapper svgSrc="creditCard" className={styles.typeIcon} />
           <div className={styles["secure-payment-text"]}>
-            {t("resource.checkout.quick_payment_no_card_details")}
+            Quick payments without entering card details frequently
           </div>
         </div>
       </div>
       <p className={styles["guideline-detail"]}>
-        {t("resource.checkout.rbi_card_data_tokenization_notice")}
+        As stated by RBI, card data will be tokenised, and safeguarded with card
+        networks assuring card details are not being exposed.
       </p>
       <div className={styles["secure-my-card"]}>
         <button
           className={styles["button-text"]}
           onClick={() => securedCardRbiGuidelines(true)}
         >
-          {t("resource.checkout.secure_my_card_yes")}
+          Yes, secure my card
         </button>
       </div>
       <button
         className={styles["may-be-later"]}
         onClick={() => securedCardRbiGuidelines(false)}
       >
-        {t("resource.checkout.maybe_later")}
+        Maybe later
       </button>
     </div>
   );

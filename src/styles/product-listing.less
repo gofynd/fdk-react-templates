@@ -1,18 +1,6 @@
 @import "./main.less";
 
 @lg-min: 1024px;
-.visuallyHidden {
-  position: absolute !important;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  border: 0;
-  white-space: nowrap;
-}
 
 .addToCartContainer {
   @media @desktop {
@@ -48,7 +36,7 @@
       background: transparent;
 
       .customLoader {
-        margin-inline-start: 0;
+        margin-left: 0;
       }
     }
   }
@@ -67,31 +55,9 @@
 
     .left {
       flex: 0 0 259px;
-      margin-inline-end: 16px;
+      margin-right: 16px;
       z-index: 1;
       max-width: 259px;
-      position: sticky;
-      top: 0;
-      align-self: flex-start;
-      max-height: calc(100dvh - 50px);
-      overflow-y: auto;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      opacity: 1;
-      transform: none;
-
-      &.hidden {
-        opacity: 0;
-        transform: translateX(-20px);
-        max-width: 0;
-        flex: 0 0 0;
-        margin-inline-end: 0;
-        overflow: hidden;
-        pointer-events: none;
-        
-        [dir="rtl"] & {
-          transform: translateX(20px);
-        }
-      }
 
       @media @tablet {
         display: none;
@@ -110,7 +76,6 @@
       display: flex;
       flex-direction: column;
       gap: 24px;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
       @media @tablet {
         gap: 16px;
@@ -209,7 +174,7 @@
   .filter__modal {
     position: fixed;
     top: 0;
-    inset-inline-start: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     display: flex;
@@ -267,7 +232,7 @@
             width: 28px;
             height: 28px;
             padding: 4px;
-            margin-inline-end: 8px;
+            margin-right: 8px;
 
             &.selected {
               color: @ButtonPrimary;
@@ -298,14 +263,14 @@
       .leftPane {
         flex: 0 0 122px;
         overflow-y: auto;
-        border-inline-end: 1px solid @DividerStokes;
+        border-right: 1px solid @DividerStokes;
 
         .filter-title {
           padding: 14px 16px;
           border-bottom: 1px solid @DividerStokes;
 
           &.active {
-            border-inline-end: 2px solid @ButtonPrimary;
+            border-right: 2px solid @ButtonPrimary;
           }
         }
       }
@@ -334,12 +299,9 @@
     position: fixed;
     top: calc(var(--headerHeight) + 69px);
     z-index: 1;
-    inset-inline-end: 50%;
+    right: 50%;
     z-index: 1;
     transform: translateX(50%);
-    [dir="rtl"] & {
-      transform: translateX(-50%);
-    }
 
     & > .arrow-top-icon {
       fill: currentColor;
@@ -350,7 +312,7 @@
     @media @desktop {
       justify-content: center;
       top: unset;
-      inset-inline-end: 40px;
+      right: 40px;
       bottom: 40px;
       width: 40px;
       height: 40px;
@@ -410,8 +372,8 @@
   margin-bottom: 24px;
   background-color: @PageBackground;
   z-index: 1;
-  inset-inline-start: 0;
-  inset-inline-end: 0;
+  left: 0;
+  right: 0;
   position: fixed;
   top: var(--headerHeight);
 
@@ -428,9 +390,9 @@
       column-gap: 4px;
       color: @TextHeading;
       &.filterBtn {
-        padding-inline-end: 16px;
-        border-inline-end: 1px solid @DividerStokes;
-        margin-inline-end: 16px;
+        padding-right: 16px;
+        border-right: 1px solid @DividerStokes;
+        margin-right: 16px;
       }
     }
   }
@@ -474,37 +436,7 @@
     }
   }
 }
-.filterToggleBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  font-size: 16px;
-  font-weight: 400;
-  color: @TextHeading;
-  cursor: pointer;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: all 0.2s ease-in-out;
-  user-select: none;
-  
-  &:active {
-    transform: translateY(0);
-  }
-  
-  .filterToggleText {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: all 0.2s ease-in-out;
-  }
-  .filterIcon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
-  }
-}
+
 .colIconBtn {
   padding: 4px;
   border: 1px solid transparent;
@@ -516,7 +448,7 @@
   justify-content: center;
   color: @TextHeading;
   &:not(:last-child) {
-    margin-inline-end: 8px;
+    margin-right: 8px;
   }
   &.active {
     border-color: @DividerStokes;
@@ -550,10 +482,6 @@
   }
   & > * {
     min-width: 0;
-  }
-
-  .product-wrapper {
-    cursor: pointer;
   }
 }
 

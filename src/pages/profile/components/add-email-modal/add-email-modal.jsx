@@ -4,10 +4,8 @@ import Modal from "../../../../components/core/modal/modal";
 import FyInput from "../../../../components/core/fy-input/fy-input";
 import FyButton from "../../../../components/core/fy-button/fy-button";
 import { useForm } from "react-hook-form";
-import { useGlobalTranslation } from "fdk-core/utils";
 
 function AddEmailModal({ isOpen, onClose, onAdd }) {
-  const { t } = useGlobalTranslation("translation");
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -37,7 +35,7 @@ function AddEmailModal({ isOpen, onClose, onAdd }) {
     <Modal
       isOpen={isOpen}
       closeDialog={onClose}
-      title={t("resource.profile.add_email")}
+      title="Add Email"
       headerClassName={styles.modalHeader}
       titleClassName={styles.modalTitle}
     >
@@ -47,16 +45,16 @@ function AddEmailModal({ isOpen, onClose, onAdd }) {
             <div className={styles.formInputContainer}>
               <FyInput
                 type="text"
-                label={t("resource.profile.enter_your_email_address")}
+                label="Enter your email address"
                 labelVariant="floating"
                 error={errors?.email}
                 errorMessage={errors?.email?.message}
                 className={styles.emailInput}
                 {...register("email", {
-                  required: t("resource.profile.please_enter_a_email_address"),
+                  required: "Please enter a email address",
                   pattern: {
                     value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                    message: t("resource.common.invalid_email_address"),
+                    message: "Invalid email address",
                   },
                 })}
               />
@@ -68,7 +66,7 @@ function AddEmailModal({ isOpen, onClose, onAdd }) {
                 className={styles.yesBtn}
                 isLoading={isLoading}
               >
-                {t("resource.facets.add")}
+                Add
               </FyButton>
             </div>
           </form>

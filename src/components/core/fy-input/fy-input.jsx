@@ -25,7 +25,6 @@
 
 import React, { forwardRef, useMemo } from "react";
 import * as styles from "./fy-input.less";
-import { useGlobalTranslation } from "fdk-core/utils";
 
 const FyInput = forwardRef(
   (
@@ -40,7 +39,7 @@ const FyInput = forwardRef(
       showAsterik = true,
       id,
       error = false,
-      errorMessage,
+      errorMessage = "Invalid input",
       multiline = false,
       required,
       startAdornment,
@@ -49,7 +48,6 @@ const FyInput = forwardRef(
     },
     ref
   ) => {
-    const { t } = useGlobalTranslation("translation");
     const customInputClassName = useMemo(
       () =>
         `${styles[inputSize]} ${multiline ? styles.fyTextArea : ""} ${styles[inputVariant]} ${error ? styles.inputError : ""} ${inputClassName ?? ""} `,
@@ -86,21 +84,21 @@ const FyInput = forwardRef(
           <div
             className={`${styles.adornmentContainer} ${props?.disabled ? styles.inputDisable : ""} ${customInputClassName}`}
           >
-            {!!startAdornment && startAdornment}
+            {startAdornment && (
+              <div className={styles.startAdornment}>{startAdornment}</div>
+            )}
             <input
               {...props}
               className={`${styles.fyInput} ${props?.className || ""}`}
               id={id}
               ref={ref}
             />
-            {!!endAdornment && endAdornment}
+            {endAdornment && (
+              <div className={styles.endAdornment}>{endAdornment}</div>
+            )}
           </div>
         )}
-        {error && (
-          <div className={styles.error}>
-            {errorMessage || t("resource.common.invalid_input")}
-          </div>
-        )}
+        {error && <div className={styles.error}>{errorMessage}</div>}
       </div>
     );
   }
