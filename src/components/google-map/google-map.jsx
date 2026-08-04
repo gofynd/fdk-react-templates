@@ -11,13 +11,12 @@
  */
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { LoadScript, GoogleMap, Marker } from "@react-google-maps/api";
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import * as styles from "./google-map.less";
 import Autocomplete from "react-google-autocomplete";
 import SearchIcon from "../../assets/images/search.svg";
 import LocateIcon from "../../assets/images/locate.svg";
-
-const libraries = ["places"];
+import { useGlobalTranslation } from "fdk-core/utils";
 const mapContainerStyle = {
   width: "100%",
   height: "300px",
@@ -38,10 +37,41 @@ const GoogleMapAddress = ({
   addressItem,
   onLoad = () => {},
 }) => {
-  const [isMapLoaded, setIsMapLoaded] = useState(false);
+  const { t } = useGlobalTranslation("translation");
+  const isNewAddress = !addressItem;
+  // Mumbai coordinates as fallback default
+  const MUMBAI_COORDINATES = { lat: 19.0760, lng: 72.8777 };
+  
+  // Get last used location from localStorage
+  const getLastUsedLocation = () => {
+    try {
+      const saved = localStorage.getItem('lastMapLocation');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  };
+  
+  const lastUsedLocation = getLastUsedLocation();
+  // Priority: addressItem geo_location > last used location > country details > Mumbai
+  const defaultCoordinates = {
+    lat: Number(
+      addressItem?.geo_location?.latitude ||
+      lastUsedLocation?.lat ||
+      countryDetails?.latitude ||
+      MUMBAI_COORDINATES.lat
+    ),
+    lng: Number(
+      addressItem?.geo_location?.longitude ||
+      lastUsedLocation?.lng ||
+      countryDetails?.longitude ||
+      MUMBAI_COORDINATES.lng
+    ),
+  };
+  
   const [selectedPlace, setSelectedPlace] = useState({
-    lat: countryDetails?.latitude,
-    lng: countryDetails?.longitude,
+    lat: defaultCoordinates.lat,
+    lng: defaultCoordinates.lng,
   });
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
@@ -49,9 +79,19 @@ const GoogleMapAddress = ({
   const [pincode, setPincode] = useState("");
   const [locality, setLocality] = useState("");
   const [premise, setPremise] = useState("");
-  const [country, setCountry] = useState("India");
+  const [country, setCountry] = useState(
+    countryDetails?.display_name || "India"
+  );
   const inputRef = useRef(null);
   const mapRef = useRef(null);
+  const hasInitialGeocodeRef = useRef(false);
+  const lastGeocodeKeyRef = useRef(null);
+
+  const { isLoaded: isMapLoaded } = useJsApiLoader({
+    googleMapsApiKey: mapApiKey,
+    id: "google-maps-script",
+    libraries: ["places"],
+  });
 
   useEffect(() => {
     if (addressItem?.geo_location) {
@@ -62,25 +102,27 @@ const GoogleMapAddress = ({
       setSelectedPlace(location);
       mapRef?.current?.panTo(location);
     } else {
-      const location = {
-        lat: Number(countryDetails?.latitude),
-        lng: Number(countryDetails?.longitude),
-      };
+      // Use Mumbai coordinates for new addresses, otherwise use countryDetails
+      const location = isNewAddress
+        ? { lat: 19.0760, lng: 72.8777 } // Mumbai coordinates
+        : {
+            lat: Number(countryDetails?.latitude),
+            lng: Number(countryDetails?.longitude),
+          };
       setSelectedPlace(location);
       mapRef?.current?.panTo(location);
     }
-  }, [countryDetails, addressItem]);
+  }, [countryDetails, addressItem, isNewAddress]);
 
   function stateReset() {
     setPincode("");
     setCity("");
-    setCountry("India");
     setLocality("");
     setState("");
   }
 
-  function selectAddress() {
-    onAddressSelect({
+  function selectAddress(payload) {
+    const data = payload || {
       city: city,
       area_code: pincode,
       state: state,
@@ -91,7 +133,8 @@ const GoogleMapAddress = ({
         latitude: selectedPlace?.lat,
         longitude: selectedPlace?.lng,
       },
-    });
+    };
+    onAddressSelect(data);
   }
 
   const handlePlaceSelect = useCallback((place) => {
@@ -100,6 +143,12 @@ const GoogleMapAddress = ({
       const lat = location.lat();
       const lng = location.lng();
       setSelectedPlace({ lat, lng });
+      // Save the selected location for future use
+      try {
+        localStorage.setItem('lastMapLocation', JSON.stringify({ lat, lng }));
+      } catch (error) {
+        console.error('Failed to save location:', error);
+      }
       setAddress(place.formatted_address);
       let prem = place?.address_components?.find((m) =>
         m?.types?.includes("premise")
@@ -121,21 +170,26 @@ const GoogleMapAddress = ({
       const addressComponents = data.results[0].address_components;
       stateReset();
       let subLocalities = [];
+      let localPremise = "";
+      let localCountry = country || "";
+      let localCity = "";
+      let localState = "";
+      let localPincode = "";
       addressComponents.forEach((component) => {
         if (component.types.includes("plus_code")) {
-          setPremise(component.long_name);
+          localPremise = component.long_name;
         } else if (component.types.includes("premise")) {
-          setPremise(component.long_name);
+          localPremise = component.long_name;
         } else if (component.types.includes("street_number")) {
-          setPremise((prev) => (prev += component.long_name));
+          localPremise = `${localPremise}${component.long_name}`;
         } else if (component.types.includes("country")) {
-          setCountry(component.long_name);
+          localCountry = component.long_name;
         } else if (component.types.includes("locality")) {
-          setCity(component.long_name);
+          localCity = component.long_name;
         } else if (component.types.includes("administrative_area_level_1")) {
-          setState(component.long_name);
+          localState = component.long_name;
         } else if (component.types.includes("postal_code")) {
-          setPincode(component.long_name);
+          localPincode = component.long_name;
         } else if (
           component.types.includes("sublocality") ||
           component.types.includes("sublocality_level_1") ||
@@ -143,8 +197,22 @@ const GoogleMapAddress = ({
         ) {
           subLocalities.push(component.long_name);
         }
-
-        setLocality(subLocalities.join(", "));
+      });
+      const localLocality = subLocalities.join(", ");
+      setPremise(localPremise);
+      setCountry(localCountry);
+      setCity(localCity);
+      setState(localState);
+      setPincode(localPincode);
+      setLocality(localLocality);
+      selectAddress({
+        city: localCity,
+        area_code: localPincode,
+        state: localState,
+        area: localLocality,
+        address: localPremise,
+        country: localCountry,
+        geo_location: { latitude: lat, longitude: lng },
       });
     } catch (error) {
       console.error("Error fetching city and state:", error);
@@ -153,6 +221,10 @@ const GoogleMapAddress = ({
 
   const getAddressFromLatLng = async (lat, lng) => {
     try {
+      const key = `${Number(lat).toFixed(6)},${Number(lng).toFixed(6)}`;
+      if (lastGeocodeKeyRef.current === key) {
+        return;
+      }
       const response = await fetch(
         `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${mapApiKey}`
       );
@@ -161,29 +233,35 @@ const GoogleMapAddress = ({
       if (data.results && data.results.length > 0) {
         const place = data.results[0];
         setAddress(place.formatted_address);
-
+        let outLat = lat;
+        let outLng = lng;
         if (place?.geometry) {
           const location = place?.geometry?.location;
-          const lat = location.lat;
-          const lng = location.lng;
-          setSelectedPlace({ lat, lng });
+          outLat = location.lat;
+          outLng = location.lng;
+          setSelectedPlace({ lat: outLat, lng: outLng });
         }
         // Extract city, state, and pincode from the place
+        let localPremise = "";
+        let localCountry = country || "";
+        let localCity = "";
+        let localState = "";
+        let localPincode = "";
         place.address_components.forEach((component) => {
           if (component.types.includes("premise")) {
-            setPremise(component.long_name);
+            localPremise = component.long_name;
           }
           if (component.types.includes("country")) {
-            setCountry(component.long_name);
+            localCountry = component.long_name;
           }
           if (component.types.includes("locality")) {
-            setCity(component.long_name);
+            localCity = component.long_name;
           }
           if (component.types.includes("administrative_area_level_1")) {
-            setState(component.long_name);
+            localState = component.long_name;
           }
           if (component.types.includes("postal_code")) {
-            setPincode(component.long_name);
+            localPincode = component.long_name;
           }
           if (
             component.types.includes("sublocality") ||
@@ -192,9 +270,25 @@ const GoogleMapAddress = ({
           ) {
             subLocalities.push(component.long_name);
           }
-
-          setLocality(subLocalities.join(", "));
         });
+        const localLocality = subLocalities.join(", ");
+        const addressData = {
+          city: localCity,
+          area_code: localPincode,
+          state: localState,
+          area: localLocality,
+          address: localPremise,
+          country: localCountry,
+          geo_location: { latitude: outLat, longitude: outLng },
+        };
+        setPremise(localPremise);
+        setCountry(localCountry);
+        setCity(localCity);
+        setState(localState);
+        setPincode(localPincode);
+        setLocality(localLocality);
+        selectAddress(addressData);
+        lastGeocodeKeyRef.current = key;
       }
     } catch (error) {
       console.error("Error fetching address:", error);
@@ -205,6 +299,12 @@ const GoogleMapAddress = ({
     const lat = event.latLng.lat();
     const lng = event.latLng.lng();
     setSelectedPlace({ lat, lng });
+    // Save the dragged location for future use
+    try {
+      localStorage.setItem('lastMapLocation', JSON.stringify({ lat, lng }));
+    } catch (error) {
+      console.error('Failed to save location:', error);
+    }
     getAddressFromLatLng(lat, lng);
   }, []);
 
@@ -217,6 +317,12 @@ const GoogleMapAddress = ({
             lng: position.coords.longitude,
           };
           setSelectedPlace(pos);
+          // Save user's current location for future use
+          try {
+            localStorage.setItem('lastMapLocation', JSON.stringify(pos));
+          } catch (error) {
+            console.error('Failed to save location:', error);
+          }
           getAddressFromLatLng(pos.lat, pos.lng);
           mapRef?.current?.panTo(pos);
         },
@@ -228,7 +334,7 @@ const GoogleMapAddress = ({
       handleLocationError(false);
     }
   };
-  const handleLocationError = (browserHasGeolocation, pos) => {
+  const handleLocationError = (browserHasGeolocation) => {
     console.error(
       browserHasGeolocation
         ? "Error: The Geolocation service failed."
@@ -238,67 +344,78 @@ const GoogleMapAddress = ({
 
   const onMapLoad = (map) => {
     mapRef.current = map;
-    setIsMapLoaded(true);
     onLoad(map);
   };
+
+  useEffect(() => {
+    // Auto-populate address and notify parent on initial load only for new address; guard double-invoke in StrictMode
+    if (!isMapLoaded) return;
+    if (!isNewAddress) return;
+    if (hasInitialGeocodeRef.current) return;
+    hasInitialGeocodeRef.current = true;
+    if (selectedPlace?.lat && selectedPlace?.lng) {
+      getAddressFromLatLng(selectedPlace.lat, selectedPlace.lng);
+    }
+  }, [isMapLoaded]);
 
   return (
     <div className={styles.mapAddress}>
       <div className={styles.mapWrapper} style={mapContainerStyle}>
-        <LoadScript googleMapsApiKey={mapApiKey} libraries={libraries}>
-          <div
-            ref={inputRef}
-            className={styles.autoCompleteWrap}
-            style={{ display: !isMapLoaded && "none" }}
-          >
-            <SearchIcon className={styles.searchAutoIcon} />
-            <Autocomplete
-              placeholder="Search Google Maps"
-              apiKey={mapApiKey}
-              style={autoCompleteStyles}
-              onPlaceSelected={handlePlaceSelect}
-              options={{
-                types: ["geocode", "establishment"],
-                componentRestrictions: { country: countryDetails?.iso2 },
-              }}
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-            />
-          </div>
-          <div
-            className={styles.mapCompWrap}
-            style={{ display: !isMapLoaded && "none" }}
-          >
-            <GoogleMap
-              mapContainerStyle={mapContainerStyle}
-              center={selectedPlace}
-              zoom={selectedPlace ? 15 : 10}
-              options={{
-                fullscreenControl: false,
-                mapTypeControl: false,
-                streetViewControl: false,
-              }}
-              onLoad={onMapLoad}
+        {isMapLoaded ? (
+          <div>
+            <div
+              ref={inputRef}
+              className={styles.autoCompleteWrap}
+              style={{ display: !isMapLoaded && "none" }}
             >
-              {selectedPlace && (
-                <Marker
-                  position={selectedPlace}
-                  draggable={true}
-                  onDragEnd={handleMarkerDragEnd}
-                />
-              )}
-            </GoogleMap>
-            <button
-              title="Detect My Location"
-              onClick={locateUser}
-              className={styles.locateIconBtn}
+              <SearchIcon className={styles.searchAutoIcon} />
+              <Autocomplete
+                placeholder={t("resource.localization.search_google_maps")}
+                apiKey={mapApiKey}
+                style={autoCompleteStyles}
+                onPlaceSelected={handlePlaceSelect}
+                options={{
+                  types: ["geocode", "establishment"],
+                  componentRestrictions: { country: countryDetails?.iso2 },
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+              />
+            </div>
+            <div
+              className={styles.mapCompWrap}
+              style={{ display: !isMapLoaded && "none" }}
             >
-              <LocateIcon className={styles.locateIcon} />
-            </button>
+              <GoogleMap
+                mapContainerStyle={mapContainerStyle}
+                center={selectedPlace}
+                zoom={selectedPlace ? 15 : 10}
+                options={{
+                  fullscreenControl: false,
+                  mapTypeControl: false,
+                  streetViewControl: false,
+                }}
+                onLoad={onMapLoad}
+              >
+                {selectedPlace && (
+                  <Marker
+                    position={selectedPlace}
+                    draggable={true}
+                    onDragEnd={handleMarkerDragEnd}
+                  />
+                )}
+              </GoogleMap>
+              <button
+                title={t("resource.localization.detect_my_location")}
+                onClick={locateUser}
+                className={styles.locateIconBtn}
+              >
+                <LocateIcon className={styles.locateIcon} />
+              </button>
+            </div>
           </div>
-        </LoadScript>
-        {!isMapLoaded && (
+        ) : (
           <div className={styles.skeleton}>
             <canvas />
           </div>
@@ -307,7 +424,6 @@ const GoogleMapAddress = ({
       {address && (
         <div className={styles.addressSelect}>
           <p>{address}</p>
-          <button onClick={selectAddress}>Use This</button>
         </div>
       )}
     </div>

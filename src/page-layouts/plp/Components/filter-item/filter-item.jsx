@@ -10,6 +10,10 @@ const FilterItem = ({ filter, isMobileView, onFilterUpdate = () => {} }) => {
     setIsActive(!isActive);
   };
 
+  if (!filter?.values || filter?.values.length === 0) {
+    return null;
+  }
+
   return (
     <div className={styles.filter}>
       {filter.values.length > 0 && (

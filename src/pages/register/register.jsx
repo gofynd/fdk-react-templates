@@ -4,14 +4,17 @@ import {
   validateName,
   validateEmailField,
   validatePasswordField,
+  translateDynamicLabel,
 } from "../../helper/utils";
 import * as styles from "./register.less";
 import MobileNumber from "../../page-layouts/auth/mobile-number/mobile-number";
 import VerifyBoth from "../../page-layouts/auth/verify-both/verify-both";
 import LoginRegisterToggle from "../../page-layouts/auth/login-register-toggle/login-register-toggle";
+import { useGlobalTranslation } from "fdk-core/utils";
 import ShowPasswordIcon from "../../assets/images/show-password.svg";
 import HidePasswordIcon from "../../assets/images/hide-password.svg";
 import TermPrivacy from "../../page-layouts/login/component/term-privacy/term-privacy";
+import Tooltip from "../../components/tooltip/tooltip";
 
 function Register({
   isFormSubmitSuccess = false,
@@ -21,11 +24,12 @@ function Register({
   isEmail = true,
   emailLevel = "hard",
   error = null,
-  loginButtonLabel = "GO TO LOGIN",
+  loginButtonLabel,
   onLoginButtonClick = () => {},
   onRegisterFormSubmit = () => {},
   verifyDetailsProp = {},
 }) {
+  const { t } = useGlobalTranslation("translation");
   const firstnameId = useId();
   const lastnameId = useId();
   const emailId = useId();
@@ -34,6 +38,7 @@ function Register({
 
   const [isPasswordShow, setIsPasswordShow] = useState(false);
   const [isConfirmPasswordShow, setIsConfirmPasswordShow] = useState(false);
+  const [showConsentTooltip, setShowConsentTooltip] = useState(false);
 
   const validateEmail = (value) => {
     if ((isEmail && emailLevel === "hard") || value) {
@@ -41,7 +46,6 @@ function Register({
     }
     return true;
   };
-
   const validatePassword = (value) => validatePasswordField(value);
 
   const {
@@ -53,12 +57,14 @@ function Register({
     getValues,
     setError,
     clearErrors,
+    trigger,
   } = useForm({
+    mode: "onTouched",
     defaultValues: {
       firstName: "",
       lastName: "",
       gender: "male",
-      consent: true,
+      consent: false,
       email: "",
       phone: {
         ...mobileInfo,
@@ -68,18 +74,25 @@ function Register({
     },
   });
 
+  const consentAccepted = watch("consent", false);
+  const phoneValue = watch("phone");
+
   const isEmailRequired = useMemo(() => {
     if (emailLevel === "soft") {
       return (
         <>
-          Email <span className={styles.optional}>(optional)</span>
+          {t("resource.common.email")}{" "}
+          <span className={styles.optional}>
+            ({t("resource.common.optional")})
+          </span>
         </>
       );
     }
     if (emailLevel === "hard") {
       return (
         <>
-          Email <span className={styles.required}>*</span>
+          {t("resource.common.email")}{" "}
+          <span className={styles.required}>*</span>
         </>
       );
     }
@@ -116,19 +129,51 @@ function Register({
     }
   }, [error]);
 
+  // Clear the server-side (root) error once the user edits any field,
+  // so a failed signup attempt doesn't permanently block resubmission
+  useEffect(() => {
+    const subscription = watch(() => {
+      if (errors.root) {
+        clearErrors("root");
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, errors.root, clearErrors]);
+
+  const passwordValue = watch("password");
+
+  // Keep password & confirm password in sync: re-validate confirm password
+  // whenever password changes, so a stale mismatch error gets cleared
+  useEffect(() => {
+    if (getValues("confirmPassword") || errors.confirmPassword) {
+      trigger("confirmPassword");
+    }
+  }, [passwordValue, trigger, getValues]);
+
+  const handleRegisterSubmit = (data) => {
+    if (!consentAccepted) {
+      setShowConsentTooltip(true);
+      return;
+    }
+    onRegisterFormSubmit(data);
+  };
+
   return (
     <div className={styles.containerWrapper}>
       {!isFormSubmitSuccess ? (
         <form
           className={styles.registerFormWrapper}
-          onSubmit={handleSubmit(onRegisterFormSubmit)}
+          onSubmit={handleSubmit(handleRegisterSubmit)}
         >
-          <h1 className={styles.title}>Complete Signup</h1>
+          <h1 className={styles.title}>
+            {t("resource.common.complete_signup")}
+          </h1>
           <div
             className={`${styles.registerNameInput} ${errors.firstName ? styles.errorInput : ""}`}
           >
             <label className={styles.inputTitle} htmlFor={firstnameId}>
-              First Name<span className={styles.required}> *</span>
+              {t("resource.common.first_name")}
+              <span className={styles.required}> *</span>
             </label>
             <input
               id={firstnameId}
@@ -136,10 +181,11 @@ function Register({
               maxLength="30"
               {...register("firstName", {
                 validate: (value) =>
-                  validateName(value) || "Please enter a valid first name",
+                  validateName(value) ||
+                  t("resource.common.please_enter_valid_first_name"),
                 maxLength: {
                   value: 30,
-                  message: "Maximum 30 characters allowed",
+                  message: t("resource.common.maximum_30_characters_allowed"),
                 },
               })}
             />
@@ -151,7 +197,8 @@ function Register({
             className={`${styles.registerNameInput} ${errors.lastName ? styles.errorInput : ""}`}
           >
             <label className={styles.inputTitle} htmlFor={lastnameId}>
-              Last Name<span className={styles.required}> *</span>
+              {t("resource.common.last_name")}
+              <span className={styles.required}> *</span>
             </label>
             <input
               id={lastnameId}
@@ -159,10 +206,11 @@ function Register({
               maxLength="30"
               {...register("lastName", {
                 validate: (value) =>
-                  validateName(value) || "Please enter a valid last name",
+                  validateName(value) ||
+                  t("resource.common.please_enter_valid_last_name"),
                 maxLength: {
                   value: 30,
-                  message: "Maximum 30 characters allowed",
+                  message: t("resource.common.maximum_30_characters_allowed"),
                 },
               })}
             />
@@ -172,17 +220,17 @@ function Register({
           </div>
           <div className={styles.genderRadioContainer}>
             <label className={styles.radioContainer}>
-              Male
+              {t("resource.common.male")}
               <input type="radio" value="male" {...register("gender")} />
               <span className={styles.checkmark} />
             </label>
             <label className={styles.radioContainer}>
-              Female
+              {t("resource.common.female")}
               <input type="radio" value="female" {...register("gender")} />
               <span className={styles.checkmark} />
             </label>
             <label className={styles.radioContainer}>
-              Other
+              {t("resource.common.other")}
               <input type="radio" value="unisex" {...register("gender")} />
               <span className={styles.checkmark} />
             </label>
@@ -199,7 +247,8 @@ function Register({
                 type="text"
                 {...register("email", {
                   validate: (value) =>
-                    validateEmail(value) || "Please enter valid email address",
+                    validateEmail(value) ||
+                    t("resource.common.please_enter_valid_email_address"),
                 })}
               />
               {errors.email && (
@@ -216,7 +265,8 @@ function Register({
                   validate: (value) => {
                     if (isMobileRequired === "required" || value?.mobile) {
                       return (
-                        value.isValidNumber || "Please enter valid phone number"
+                        value.isValidNumber ||
+                        t("resource.common.enter_valid_phone_number")
                       );
                     }
                     return true;
@@ -242,7 +292,8 @@ function Register({
             }`}
           >
             <label className={styles.inputTitle} htmlFor={passwordId}>
-              Password<span className={styles.required}> *</span>
+              {t("resource.auth.login.password")}
+              <span className={styles.required}> *</span>
             </label>
             <div className={styles.passwordInputWrapper}>
               <input
@@ -251,7 +302,7 @@ function Register({
                 {...register("password", {
                   validate: (value) =>
                     validatePassword(value) ||
-                    "Password must be at least 8 characters and contain at least 1 letter, 1 number and 1 special character.",
+                    t("resource.auth.password_requirements"),
                 })}
               />
               {watch("password") && (
@@ -259,8 +310,8 @@ function Register({
                   className={styles.passwordToggle}
                   aria-label={
                     !isPasswordShow
-                      ? "Show confirm password"
-                      : "Hide confirm password"
+                      ? t("resource.auth.show_confirm_password")
+                      : t("resource.auth.hide_confirm_password")
                   }
                   onClick={togglePasswordDisplay}
                 >
@@ -282,7 +333,8 @@ function Register({
             }`}
           >
             <label className={styles.inputTitle} htmlFor={confirmPasswordId}>
-              Confirm Password<span className={styles.required}> *</span>
+              {t("resource.auth.confirm_password")}
+              <span className={styles.required}> *</span>
             </label>
             <div className={styles.passwordInputWrapper}>
               <input
@@ -291,11 +343,11 @@ function Register({
                 {...register("confirmPassword", {
                   required: {
                     value: true,
-                    message: "Please enter a valid password",
+                    message: t("resource.auth.please_enter_a_valid_password"),
                   },
                   validate: (value) =>
                     value === getValues("password") ||
-                    "Password does not match",
+                    t("resource.auth.password_does_not_match"),
                 })}
               />
               {watch("confirmPassword") && (
@@ -303,8 +355,8 @@ function Register({
                   className={styles.passwordToggle}
                   aria-label={
                     !isConfirmPasswordShow
-                      ? "Show confirm password"
-                      : "Hide confirm password"
+                      ? t("resource.auth.show_confirm_password")
+                      : t("resource.auth.hide_confirm_password")
                   }
                   onClick={toggleConfirmPasswordDisplay}
                 >
@@ -324,38 +376,50 @@ function Register({
           </div>
           {errors.root && (
             <div className={styles.loginAlert}>
-              <span>{errors.root.message}</span>
+              <span>{translateDynamicLabel(errors.root.message, t)}</span>
             </div>
           )}
 
           {/* Extension slot: above_register_button */}
 
-          <div className={styles.consentWrapper}>
-            <Controller
-              name="consent"
-              control={control}
-              rules={{
-                required:
-                  "To continue, please accept our Terms of Service & Privacy Policy",
-              }}
-              render={({ field, fieldState: { error } }) => (
-                <div className={styles.consentWrapper}>
-                  <TermPrivacy
-                    onChange={field.onChange}
-                    checked={field.value}
-                  />
-                  {error && <p className={styles.errorText}>{error.message}</p>}
-                </div>
-              )}
+          <div className={styles.consentWrapperWithTooltip}>
+            <div className={styles.consentWrapper}>
+              <Controller
+                name="consent"
+                control={control}
+                render={({ field }) => (
+                  <div className={styles.consentWrapper}>
+                    <TermPrivacy
+                      onChange={field.onChange}
+                      checked={field.value}
+                    />
+                  </div>
+                )}
+              />
+            </div>
+            <Tooltip
+              message={t("resource.auth.terms_and_condition")}
+              isVisible={showConsentTooltip}
+              onClose={() => setShowConsentTooltip(false)}
+              position="bottom"
             />
           </div>
 
-          <button className={styles.registerBtn} type="submit">
-            Continue
+          <button
+            className={styles.registerBtn}
+            type="submit"
+            disabled={
+              Object.keys(errors).some((key) => key !== "root") ||
+              (isMobile &&
+                (isMobileRequired === "required" || phoneValue?.mobile) &&
+                !phoneValue?.isValidNumber)
+            }
+          >
+            {t("resource.common.continue")}
           </button>
 
           <LoginRegisterToggle
-            label={loginButtonLabel}
+            label={loginButtonLabel || t("resource.auth.login.go_to_login")}
             onClick={onLoginButtonClick}
           />
         </form>

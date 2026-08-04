@@ -1,7 +1,9 @@
-import React, { useEffect, useId, useLayoutEffect } from "react";
+import React, { useEffect, useId, useLayoutEffect, useRef } from "react";
 import { useForm, Controller } from "react-hook-form";
 import * as styles from "./login-otp.less";
 import MobileNumber from "../../../auth/mobile-number/mobile-number";
+import { useGlobalTranslation } from "fdk-core/utils";
+import ForcedLtr from "../../../../components/forced-ltr/forced-ltr";
 
 function LoginOtp({
   mobileInfo = {
@@ -18,14 +20,22 @@ function LoginOtp({
   onLoginFormSubmit = () => {},
   onOtpSubmit = () => {},
   onResendOtpClick = () => {},
+  onClearOtpError = () => {},
+  getOtpLoading,
+  isTermsAccepted = false,
+  setShowConsentTooltip = () => {},
 }) {
-  const { handleSubmit, control, getValues, reset, setValue } = useForm({
-    mode: "onChange",
-    defaultValues: {
-      phone: mobileInfo,
-    },
-    reValidateMode: "onChange",
-  });
+  const { t } = useGlobalTranslation("translation");
+  const { handleSubmit, control, getValues, reset, setValue, clearErrors, watch } =
+    useForm({
+      mode: "onChange",
+      defaultValues: {
+        phone: mobileInfo,
+      },
+      reValidateMode: "onChange",
+    });
+
+  const phoneValue = watch("phone");
 
   const onChangeButton = () => {
     reset();
@@ -33,17 +43,25 @@ function LoginOtp({
     setSubmittedMobile("");
   };
 
+  const handleOtpFormSubmit = (data) => {
+    if (!isTermsAccepted) {
+      setShowConsentTooltip(true);
+      return;
+    }
+    onLoginFormSubmit(data);
+  };
+
   return (
     <div className={styles.loginOtpWrapper}>
       {!isFormSubmitSuccess ? (
-        <form onSubmit={handleSubmit(onLoginFormSubmit)}>
+        <form onSubmit={handleSubmit(handleOtpFormSubmit)}>
           <Controller
             name="phone"
             control={control}
             rules={{
               validate: (value) => {
                 if (!value.isValidNumber) {
-                  return "Please enter valid phone number";
+                  return t("resource.common.enter_valid_phone_number");
                 }
                 return true;
               },
@@ -57,12 +75,23 @@ function LoginOtp({
                 isFocused={error?.message}
                 onChange={(value) => {
                   setValue("phone", value);
+                  clearErrors("phone");
+                  onClearOtpError();
                 }}
               />
             )}
           />
-          <button className={styles.sendOtpBtn} type="submit">
-            GET OTP
+          {otpError && (
+            <div className={styles.alertError}>
+              <span>{otpError?.message}</span>
+            </div>
+          )}
+          <button
+            className={`btnPrimary ${styles.sendOtpBtn}`}
+            type="submit"
+            disabled={getOtpLoading || !phoneValue?.isValidNumber}
+          >
+            {t("resource.auth.login.get_otp")}
           </button>
         </form>
       ) : (
@@ -74,6 +103,7 @@ function LoginOtp({
           onOtpSubmit={onOtpSubmit}
           onResendOtpClick={onResendOtpClick}
           onChangeButton={onChangeButton}
+          onClearOtpError={onClearOtpError}
         />
       )}
     </div>
@@ -90,8 +120,11 @@ function OtpForm({
   onOtpSubmit = () => {},
   onResendOtpClick = () => {},
   onChangeButton = () => {},
+  onClearOtpError = () => {},
 }) {
+  const { t } = useGlobalTranslation("translation");
   const otpInputId = useId();
+  const isFirstRender = useRef(true);
 
   const {
     handleSubmit,
@@ -112,10 +145,16 @@ function OtpForm({
     }
   }, []);
   useEffect(() => {
-    if (mobileOtp && mobileOtp.length < 4) {
-      clearErrors("root");
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
     }
-  }, [mobileOtp]);
+    if (mobileOtp !== undefined && mobileOtp !== null) {
+      clearErrors("root");
+      clearErrors("mobileOtp");
+      // DO NOT clear root error here - it should persist until submission/resend
+    }
+  }, [mobileOtp, clearErrors]);
 
   useEffect(() => {
     if (error) {
@@ -133,6 +172,9 @@ function OtpForm({
 
   const resendOtp = () => {
     resetField("mobileOtp");
+    // Clear errors when resending OTP
+    clearErrors("root");
+    onClearOtpError();
     onResendOtpClick(mobileInfo);
   };
 
@@ -140,17 +182,25 @@ function OtpForm({
     <>
       <form
         className={styles.loginInputGroup}
-        onSubmit={handleSubmit(onOtpSubmit)}
+        onSubmit={handleSubmit((data) => {
+          // Clear errors when submitting a new attempt
+          clearErrors("root");
+          onClearOtpError();
+          onOtpSubmit(data);
+        })}
       >
-        <h3 className={styles.otpTitle}>Verify Account</h3>
+        <h3 className={styles.otpTitle}>
+          {t("resource.localization.verify_account")}
+        </h3>
         <p className={styles.otpSentMsg}>
-          {`OTP sent to ${submittedMobile}`}
+          {`${t("resource.common.otp_sent_to")}`}{" "}
+          <ForcedLtr text={submittedMobile} />
           <button
             type="button"
             className={styles.changeBtn}
             onClick={onChangeButton}
           >
-            CHANGE
+            {t("resource.common.change_caps")}
           </button>
         </p>
 
@@ -159,7 +209,8 @@ function OtpForm({
             className={`${styles.loginInputTitle} ${errors?.root || errors?.mobileOtp ? styles.error : ""}`}
             htmlFor={otpInputId}
           >
-            Enter OTP <span className={`${styles.formReq}`}>*</span>
+            {t("resource.common.enter_otp")}{" "}
+            <span className={`${styles.formReq}`}>*</span>
           </label>
           <input
             id={otpInputId}
@@ -167,6 +218,7 @@ function OtpForm({
             inputMode="numeric"
             pattern="\d*"
             maxLength={4}
+            dir="ltr"
             onInput={(e) => {
               e.target.value = e.target.value
                 .replace(/[^0-9]/g, "")
@@ -174,7 +226,10 @@ function OtpForm({
             }}
             className={`${styles.otpInput} ${errors?.root || errors?.mobileOtp ? styles.error : ""}`}
             {...register("mobileOtp", {
-              required: { message: "Please enter valid otp", value: true },
+              required: {
+                message: t("resource.common.enter_valid_otp"),
+                value: true,
+              },
               maxLength: 4,
             })}
           />
@@ -185,17 +240,22 @@ function OtpForm({
             </div>
           )}
         </div>
-        <button className={styles.verifyOtpBtn} type="submit">
-          Continue
+        <button className={`btnPrimary ${styles.verifyOtpBtn}`} type="submit">
+          {t("resource.common.continue")}
         </button>
       </form>
-      <button
-        className={styles.resendOtpBtn}
-        onClick={resendOtp}
-        disabled={isResendBtnDisabled}
-      >
-        {`Resend OTP${isResendBtnDisabled ? ` (${otpResendTime}S)` : ""}`}
-      </button>
+      <div className={styles.resendOtpWrapper}>
+        <span className={styles.didntReceiveText}>
+          {t("resource.common.didnt_receive_otp")}
+        </span>
+        <button
+          className={styles.resendOtpBtn}
+          onClick={resendOtp}
+          disabled={isResendBtnDisabled}
+        >
+          {`${t("resource.common.resend_otp")}${isResendBtnDisabled ? ` (${otpResendTime}S)` : ""}`}
+        </button>
+      </div>
     </>
   );
 }

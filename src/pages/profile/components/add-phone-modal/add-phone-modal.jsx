@@ -5,6 +5,7 @@ import Modal from "../../../../components/core/modal/modal";
 import FyButton from "../../../../components/core/fy-button/fy-button";
 import FyInput from "../../../../components/core/fy-input/fy-input";
 import MobileNumber from "../../../../page-layouts/auth/mobile-number/mobile-number";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 function AddPhoneModal({
   sendOtpMobile,
@@ -12,29 +13,36 @@ function AddPhoneModal({
   resendOtp,
   isOpen,
   onClose,
-  countryCode,
+  countryCode = "91",
+  initialPhone = null,
+  initialOtpData = null,
+  allowInitialPhoneEdit = false,
+  onPhoneChange,
 }) {
+  const { t } = useGlobalTranslation("translation");
   const [isLoading, setIsLoading] = useState(false);
   const [isOtpLoading, setIsOtpLoading] = useState(false);
 
-  const [showOtp, setShowOtp] = useState(false);
+  const [showOtp, setShowOtp] = useState(Boolean(initialOtpData));
 
   const [isShowResendOtp, setIsShowResendOtp] = useState(false);
-  const [otpTime, setOtpTime] = useState(0);
-  const [otpData, setOtpData] = useState({});
+  const [otpTime, setOtpTime] = useState(initialOtpData?.resend_timer || 0);
+  const [otpData, setOtpData] = useState(initialOtpData || {});
+  const initialPhoneValue = {
+    mobile: initialPhone?.mobile || "",
+    countryCode: initialPhone?.countryCode || countryCode,
+    isValidNumber: initialPhone?.isValidNumber || Boolean(initialPhone?.mobile),
+  };
 
   const {
     handleSubmit: handleNumberSubmit,
     control: numberControl,
+    getValues: getNumberValues,
     formState: { isValid: isNumberValid },
   } = useForm({
     mode: "onChange",
     defaultValues: {
-      phone: {
-        mobile: "",
-        countryCode,
-        isValidNumber: false,
-      },
+      phone: initialPhoneValue,
     },
   });
 
@@ -66,7 +74,7 @@ function AddPhoneModal({
         setIsLoading(false);
       }
     },
-    []
+    [sendOtpMobile]
   );
 
   const onOtpSubmit = useCallback(
@@ -74,23 +82,75 @@ function AddPhoneModal({
       try {
         setIsOtpLoading(true);
         const { request_id } = otpData;
-        await verifyMobileOtp({ requestId: request_id, otp });
+        await verifyMobileOtp({
+          requestId: request_id,
+          otp,
+          phone: getNumberValues("phone"),
+        });
 
         onClose();
       } catch (error) {
+        resetField("otp");
         throw error;
       } finally {
         setIsOtpLoading(false);
       }
     },
-    [otpData]
+    [getNumberValues, otpData, onClose, resetField, verifyMobileOtp]
   );
 
-  const handleOtpChange = useCallback((event) => {
-    const value = event?.target?.value;
+  const handleOtpChange = useCallback(
+    (event) => {
+      const value = event?.target?.value;
 
-    setOtpValue("otp", value.toString().slice(0, 4));
-  }, []);
+      setOtpValue("otp", value.toString().slice(0, 4));
+    },
+    [setOtpValue]
+  );
+
+  const resetOtpStep = useCallback(() => {
+    resetField("otp");
+    setShowOtp(false);
+    setOtpData({});
+    setOtpTime(0);
+    setIsShowResendOtp(false);
+  }, [resetField]);
+
+  const handlePhoneChange = useCallback(
+    (value, onChange) => {
+      onChange(value);
+      onPhoneChange?.(value);
+
+      if (!allowInitialPhoneEdit || !showOtp) return;
+
+      const normalizePhoneValue = (phoneValue) =>
+        phoneValue?.toString().replace("+", "").trim() || "";
+      const otpMobile = otpData?.mobile || initialPhone?.mobile || "";
+      const otpCountryCode =
+        otpData?.country_code ||
+        otpData?.countryCode ||
+        initialPhone?.countryCode ||
+        countryCode;
+
+      const hasChangedOtpPhone =
+        normalizePhoneValue(value?.mobile) !== normalizePhoneValue(otpMobile) ||
+        normalizePhoneValue(value?.countryCode) !==
+          normalizePhoneValue(otpCountryCode);
+
+      if (hasChangedOtpPhone) {
+        resetOtpStep();
+      }
+    },
+    [
+      allowInitialPhoneEdit,
+      countryCode,
+      initialPhone,
+      otpData,
+      onPhoneChange,
+      resetOtpStep,
+      showOtp,
+    ]
+  );
 
   const handleResendOtp = useCallback(async () => {
     resetField("otp");
@@ -114,7 +174,7 @@ function AddPhoneModal({
     } finally {
       setIsLoading(false);
     }
-  }, [otpData, isShowResendOtp]);
+  }, [otpData, isShowResendOtp, resendOtp, resetField]);
 
   useEffect(() => {
     let interval;
@@ -135,7 +195,11 @@ function AddPhoneModal({
     <Modal
       isOpen={isOpen}
       closeDialog={onClose}
-      title={!showOtp ? "Add Number" : "Verify Number"}
+      title={
+        !showOtp && !allowInitialPhoneEdit
+          ? t("resource.profile.add_number")
+          : t("resource.profile.verify_number")
+      }
       containerClassName={styles.addPhoneContainer}
       bodyClassName={styles.addPhoneBody}
       headerClassName={styles.header}
@@ -152,7 +216,8 @@ function AddPhoneModal({
               control={numberControl}
               rules={{
                 validate: (value) =>
-                  value.isValidNumber || "Please enter valid phone number",
+                  value.isValidNumber ||
+                  t("resource.common.enter_valid_phone_number"),
               }}
               render={({ field, fieldState: { error } }) => (
                 <MobileNumber
@@ -165,10 +230,12 @@ function AddPhoneModal({
                   error={error}
                   isRequired
                   isShowLabel={false}
-                  disable={showOtp && otpTime > 0 && !error}
-                  onChange={(value) => {
-                    field.onChange(value);
-                  }}
+                  disable={
+                    !allowInitialPhoneEdit &&
+                    (Boolean(initialPhone?.mobile) ||
+                      (showOtp && otpTime > 0 && !error))
+                  }
+                  onChange={(value) => handlePhoneChange(value, field.onChange)}
                 />
               )}
             />
@@ -181,11 +248,11 @@ function AddPhoneModal({
             >
               <FyInput
                 id="otp"
-                label="OTP"
+                label={t("resource.auth.login.otp")}
                 labelVariant="floating"
                 type="number"
                 name="otp"
-                placeholder="Enter OTP"
+                placeholder={t("resource.common.enter_otp")}
                 className={styles.addMobileOtp}
                 {...otpRegister("otp")}
                 onChange={handleOtpChange}
@@ -198,8 +265,12 @@ function AddPhoneModal({
                   isLoading={isLoading}
                   className={`${styles.resendOtp} ${isShowResendOtp ? styles.showResendButton : ""}`}
                 >
-                  Resend OTP
-                  {!isShowResendOtp ? ` in ${otpTime}s` : null}
+                  {t("resource.common.resend_otp")}
+                  {!isShowResendOtp
+                    ? t("resource.profile.countdown_in_seconds", {
+                        count: otpTime,
+                      })
+                    : null}
                 </FyButton>
               )}
             </form>
@@ -215,7 +286,7 @@ function AddPhoneModal({
               form="numberForm"
               disabled={!isNumberValid}
             >
-              Send OTP
+              {t("resource.profile.send_otp")}
             </FyButton>
           ) : (
             <FyButton
@@ -226,7 +297,7 @@ function AddPhoneModal({
               form="otpForm"
               disabled={watchOtp("otp")?.length !== 4}
             >
-              Verify
+              {t("resource.facets.verify")}
             </FyButton>
           )}
         </div>

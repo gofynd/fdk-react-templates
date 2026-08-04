@@ -52,7 +52,9 @@
 import React, { useMemo } from "react";
 import SvgWrapper from "../core/svgWrapper/SvgWrapper";
 import * as styles from "./address-item.less";
-import { getAddressStr } from "../../helper/utils";
+import { getAddressStr, translateDynamicLabel } from "../../helper/utils";
+import { useGlobalTranslation } from "fdk-core/utils";
+import ForcedLtr from "../forced-ltr/forced-ltr";
 
 const AddressType = {
   area: "",
@@ -76,17 +78,27 @@ function AddressItem({
   belowNameSlot = <></>,
   belowAddressSlot = <></>,
   containerClassName = "",
+  isDefault = false,
   ...restProps
 }) {
+  const { t } = useGlobalTranslation("translation");
   const getAddress = useMemo(
     () => getAddressStr(addressItem, false),
     [addressItem]
   );
+  const handleAddressClick = () => {
+    const selection = window?.getSelection?.();
+    if (selection && selection.type === "Range" && selection.toString()) {
+      // Skip selecting the address when the user is highlighting text
+      return;
+    }
+    onAddressSelect(addressItem?.id);
+  };
 
   return (
     <div
       className={`${styles.addressContent} ${containerClassName}`}
-      onClick={() => onAddressSelect(addressItem?.id)}
+      onClick={handleAddressClick}
       style={
         selectedAddressId !== addressItem.id
           ? { border: "1px solid var(--dividerStokes)" }
@@ -106,9 +118,14 @@ function AddressItem({
             </>
           )}
           <span className={styles.addressName}>{addressItem.name}</span>
-          {showAddressType && (
+          {isDefault && (
             <span className={styles.addressType}>
-              {addressItem.address_type}
+              {translateDynamicLabel("Default", t)}
+            </span>
+          )}
+          {showAddressType && addressItem.address_type && (
+            <span className={styles.addressType}>
+              {translateDynamicLabel(addressItem.address_type, t)}
             </span>
           )}
         </div>
@@ -117,15 +134,15 @@ function AddressItem({
       <>{belowNameSlot}</>
       <div
         className={styles.addressMid}
-        style={{ marginLeft: showAddressSelectionCheckbox ? "25px" : 0 }}
+        style={{ marginInlineStart: showAddressSelectionCheckbox ? "25px" : 0 }}
       >
         {getAddress}
       </div>
       <div
         className={styles.phEnd}
-        style={{ marginLeft: showAddressSelectionCheckbox ? "25px" : 0 }}
+        style={{ marginInlineStart: showAddressSelectionCheckbox ? "25px" : 0 }}
       >
-        {addressItem.country_phone_code + "-" + addressItem.phone}
+         <ForcedLtr text={addressItem.country_phone_code + "-" + addressItem.phone}/>
       </div>
       <>{belowAddressSlot}</>
     </div>

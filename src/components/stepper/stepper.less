@@ -24,6 +24,32 @@
   &:last-child {
     flex: none;
   }
+  
+  &.clickable {
+    .stepContent {
+      cursor: pointer;
+      transition: opacity 0.2s ease-in-out;
+      
+      &:hover:not(:active) {
+        .stepIndicator.completed {
+          opacity: 0.8;
+        }
+      }
+      
+      &:active {
+        .stepIndicator.completed {
+          opacity: 0.7;
+        }
+      }
+      
+      // Prevent text selection on click
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+    }
+  }
+  
   .stepContent {
     position: relative;
     display: flex;

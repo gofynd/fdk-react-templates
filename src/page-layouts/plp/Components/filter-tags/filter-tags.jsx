@@ -2,12 +2,14 @@ import React, { useMemo, useState } from "react";
 import * as styles from "./filter-tags.less";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import { useViewport } from "../../../../helper/hooks";
+import { useGlobalTranslation } from "fdk-core/utils";
 
 const FilterTags = ({
   selectedFilters,
-  onFilterUpdate = () => {},
-  onResetFiltersClick = () => {},
+  onFilterUpdate = () => { },
+  onResetFiltersClick = () => { },
 }) => {
+  const { t } = useGlobalTranslation("translation");
   const [isViewAll, setIsViewAll] = useState(false);
 
   const isTablet = useViewport(0, 768);
@@ -67,14 +69,14 @@ const FilterTags = ({
             className={`${styles.actionButton} ${styles.clearAll}`}
             onClick={onResetFiltersClick}
           >
-            CLEAR ALL
+            {t("resource.facets.clear_all_caps")}
           </div>
           {showViewAll && (
             <div
               className={`${styles.actionButton} ${styles.viewAll}`}
               onClick={toggleViewAll}
             >
-              {isViewAll ? "VIEW LESS" : "VIEW ALL"}
+              {isViewAll ? t("resource.facets.view_less_caps") : t("resource.facets.view_all")}
             </div>
           )}
         </div>

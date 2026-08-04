@@ -1,0 +1,55 @@
+@import "../../../../styles/main.less";
+
+.container {
+  .option {
+    display: flex;
+    padding: 16px;
+    align-items: center;
+    border-radius: 4px;
+    background: @PageBackground;
+    @media @tablet {
+      border-radius: unset;
+      border-right: unset;
+    }
+    &.disable {
+      pointer-events: none;
+      cursor: not-allowed;
+    }
+
+    @media @mobile-up {
+      border: 1px solid @DividerStokes;
+    }
+
+    .actionContainer {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      cursor: pointer;
+
+      .checbox {
+        height: 20px;
+        width: 20px;
+        accent-color: @ButtonPrimary;
+        cursor: pointer;
+      }
+
+      .label {
+        .title {
+          font-size: 14px;
+          line-height: 140%;
+        }
+
+        .description {
+          font-size: 12px;
+          font-weight: 400;
+          line-height: 140%;
+        }
+      }
+    }
+  }
+
+  .bold {
+    font-weight: 600;
+    color: @TextHeading;
+  }
+}
