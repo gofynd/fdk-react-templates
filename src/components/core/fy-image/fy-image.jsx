@@ -76,37 +76,10 @@ const FyImage = forwardRef(
       globalConfig,
       defer = true,
       overlayCustomClass,
-      onLoad = () => { },
+      onLoad = ()=>{},
     },
     ref
   ) => {
-
-    const defaultSrcBreakpoints = [
-      { breakpoint: { min: 1920 }, width: 1920 },
-      { breakpoint: { min: 1840 }, width: 1840 },
-      { breakpoint: { min: 1760 }, width: 1760 },
-      { breakpoint: { min: 1680 }, width: 1680 },
-      { breakpoint: { min: 1600 }, width: 1600 },
-      { breakpoint: { min: 1520 }, width: 1520 },
-      { breakpoint: { min: 1440 }, width: 1440 },
-      { breakpoint: { min: 1360 }, width: 1360 },
-      { breakpoint: { min: 1280 }, width: 1280 },
-      { breakpoint: { min: 1200 }, width: 1200 },
-      { breakpoint: { min: 1120 }, width: 1120 },
-      { breakpoint: { min: 1040 }, width: 1040 },
-      { breakpoint: { min: 960 }, width: 960 },
-      { breakpoint: { min: 880 }, width: 880 },
-      { breakpoint: { min: 800 }, width: 800 },
-      { breakpoint: { min: 720 }, width: 720 },
-      { breakpoint: { min: 640 }, width: 640 },
-      { breakpoint: { min: 560 }, width: 560 },
-      { breakpoint: { min: 480 }, width: 480 },
-      { breakpoint: { min: 400 }, width: 400 },
-      { breakpoint: { min: 320 }, width: 320 }
-    ]
-
-
-
     const [isError, setIsError] = useState(false);
 
     const bgColor = globalConfig?.img_container_bg || backgroundColor;
@@ -150,7 +123,7 @@ const FyImage = forwardRef(
 
       const key = searchStringInArray(url, IMAGE_SIZES);
 
-      return defaultSrcBreakpoints
+      return sources
         .reduce((srcset, s) => {
           let src = url;
           if (key && s?.width) {
@@ -166,7 +139,7 @@ const FyImage = forwardRef(
       if (!isImageResizable) {
         return [];
       }
-      return defaultSrcBreakpoints?.map((source) => {
+      return sources?.map((source) => {
         source.media = getMedia(source);
         source.srcset = getUrl(source.width, source.url);
         return source;

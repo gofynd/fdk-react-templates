@@ -74,7 +74,12 @@ export default function ChipReviewItem({ item, articles }) {
         </div>
         <div className={styles.bagRight}>
           <div className={styles.bagBrand}>{item.product.brand.name}</div>
-          <div className={styles.bagName}>{item.product.name}</div>
+          <div
+            className={`${styles.bagName} ${styles.productName}`}
+            title={item.product.name}
+          >
+            {item.product.name}
+          </div>
           <div className={styles.soldBy}>
             {t("resource.common.sold_by")}: {item.article.store.name + ","}
             {item.article.seller.name}
