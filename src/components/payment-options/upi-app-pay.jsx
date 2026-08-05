@@ -197,10 +197,7 @@ function UpiAppPayment({
                 }
                 value={priceFormatCurrencySymbol(
                   getCurrencySymbol,
-                  getTotalValue(),
-                  "en-IN",
-                  null,
-                  true
+                  getTotalValue()
                 )}
                 onPriceDetailsClick={onPriceDetailsClick}
                 enableLinkPaymentOption={enableLinkPaymentOption}
@@ -225,6 +222,7 @@ function UpiAppPayment({
                     }
                     selectMop("UPI", "UPI", "UPI");
                     cancelQrPayment();
+                    handleProceedToPayClick();
                   }}
                   disabled={
                     mopSelectionLoading ||
@@ -237,10 +235,7 @@ function UpiAppPayment({
                       {t("resource.common.pay_caps")}{" "}
                       {priceFormatCurrencySymbol(
                         getCurrencySymbol,
-                        getTotalValue(),
-                        "en-IN",
-                        null,
-                        true
+                        getTotalValue()
                       )}
                     </>
                   ) : (

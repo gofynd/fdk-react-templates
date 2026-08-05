@@ -74,10 +74,7 @@ function OtherPay({
               customClassName={styles.visibleOnTab}
               value={priceFormatCurrencySymbol(
                 getCurrencySymbol,
-                getTotalValue(),
-                "en-IN",
-                null,
-                true 
+                getTotalValue()
               )}
               onPriceDetailsClick={onPriceDetailsClick}
               disabled={mopSelectionLoading || !selectedOtherPayment?.code}
@@ -105,10 +102,7 @@ function OtherPay({
                     {t("resource.common.pay_caps")}{" "}
                     {priceFormatCurrencySymbol(
                       getCurrencySymbol,
-                      getTotalValue(),
-                      "en-IN",
-                      null,
-                      true
+                      getTotalValue()
                     )}
                   </>
                 ) : (

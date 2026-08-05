@@ -5,13 +5,18 @@ import {
 } from "../../../helper/utils";
 import * as styles from "./single-shipment-content.less";
 import { FDKLink } from "fdk-core/components";
-import { useGlobalTranslation, useNavigate } from "fdk-core/utils";
+import {
+  useGlobalTranslation,
+  useNavigate,
+  useFPI,
+  useGlobalStore,
+} from "fdk-core/utils";
 import FreeGiftItem from "../../cart/Components/free-gift-item/free-gift-item";
-import ChipImage from "../../cart/Components/chip-item/chip-image";
 import Shimmer from "../../../components/shimmer/shimmer";
 import AppliedCouponIcon from "../../../assets/images/applied-coupon-small.svg";
 import ShippingLogoIcon from "../../../assets/images/shipping-logo.svg";
 import Skeleton from "../../../components/core/skeletons/skeleton";
+import { SELF_PICKUP_SLUG } from "../../../helper/constant";
 
 function SingleShipmentContent({
   shipments,
@@ -32,6 +37,22 @@ function SingleShipmentContent({
 }) {
   const { t } = useGlobalTranslation("translation");
   const navigate = useNavigate();
+  const fpi = useFPI();
+  const hideSingleSize = globalConfig?.hide_single_size || false;
+
+  // Detect self-pickup internally so the delivery date can be hidden without the page having to pass
+  // a flag. Read the self_pickup feature flag from either app_features source; a shipment is self
+  // pickup when its fulfillment option is on the fixed pickup slug.
+  const { app_features: customAppFeatures } =
+    useGlobalStore(fpi?.getters?.CUSTOM_VALUE) || {};
+  const { app_features: configAppFeatures } =
+    useGlobalStore(fpi?.getters?.CONFIGURATION) || {};
+  const isSelfPickupEnabled =
+    customAppFeatures?.self_pickup === true ||
+    configAppFeatures?.self_pickup === true;
+  const isSelfPickupShipment = (item) =>
+    isSelfPickupEnabled && item?.fulfillment_option?.slug === SELF_PICKUP_SLUG;
+
   const getShipmentItems = (shipment) => {
     let grpBySameSellerAndProduct = shipment?.items?.reduce((result, item) => {
       result[
@@ -60,6 +81,14 @@ function SingleShipmentContent({
     return updateArr;
   };
 
+  const isGifUrl = (url = "") => /\.gif(\?|#|$)/i.test(String(url || ""));
+  const getProductImage = (product) => {
+    if (product?.product?.images?.[0]?.url) {
+      return isGifUrl(product.product.images[0].url)
+        ? product.product.images[0].url
+        : product.product.images[0].url.replace("original", "resize-w:110");
+    }
+  };
   const getProductPath = (product) => {
     return "/product/" + product.product.slug;
   };
@@ -190,7 +219,7 @@ function SingleShipmentContent({
                             </button>
                           )}
                         </div>
-                        {item?.promise && (
+                        {!isSelfPickupShipment(item) && item?.promise && (
                           <div className={styles.deliveryDateWrapper}>
                             <div className={styles.shippingLogo}>
                               <ShippingLogoIcon />
@@ -207,6 +236,17 @@ function SingleShipmentContent({
                               )}
                           </div>
                         )}
+                        {/* Self pickup: no delivery date, so drop the shipping logo + date but
+                            still show the fulfillment option name on its own. */}
+                        {isSelfPickupShipment(item) &&
+                          availableFOCount > 1 &&
+                          item?.fulfillment_option?.name && (
+                            <div className={styles.deliveryDateWrapper}>
+                              <div className={styles.foName}>
+                                {item?.fulfillment_option?.name}
+                              </div>
+                            </div>
+                          )}
                       </div>
                       <div>
                         {shipmentItems.map((product, index) => (
@@ -239,10 +279,10 @@ function SingleShipmentContent({
                                     },
                                   }}
                                 >
-                                  <ChipImage
-                                    product={product?.item?.product}
-                                    type={product?.item?.item_type}
-                                    globalConfig={globalConfig}
+                                  <img
+                                    src={getProductImage(product?.item)}
+                                    alt={product?.item?.product?.name}
+                                    className={`${globalConfig?.img_fill ? styles.imgCover : styles.imgContain}`}
                                   />
                                 </FDKLink>
                               </div>
@@ -262,10 +302,12 @@ function SingleShipmentContent({
                                         className={styles.sizeQuantity}
                                         key={article?.article?.size + index}
                                       >
-                                        <div className={styles.size}>
-                                          {t("resource.common.size")}:{" "}
-                                          {article?.article.size}
-                                        </div>
+                                        {!(hideSingleSize && article?.article?.size?.toLowerCase() === "os") && (
+                                          <div className={styles.size}>
+                                            {t("resource.common.size")}:{" "}
+                                            {article?.article.size}
+                                          </div>
+                                        )}
                                         <div className={styles.qty}>
                                           {t("resource.common.qty")}:{" "}
                                           {article?.quantity}

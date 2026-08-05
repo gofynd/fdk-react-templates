@@ -392,9 +392,6 @@ h5,
   height: 40px;
   background-color: #f5f5f5;
 }
-.email__main___ImHru .email__formContainer___ddfJS .email__formItem___QOaCa .email__formInput___SUlgW .email__emailInputContainer___VeRdN input {
-  color: var(--textHeading, #26201a) !important;
-}
 @media only screen and (max-width: 480px) {
   .email__main___ImHru .email__formContainer___ddfJS .email__formItem___QOaCa .email__formInput___SUlgW .email__emailInputContainer___VeRdN {
     flex: 1;
@@ -445,14 +442,9 @@ h5,
   border: none;
   outline: none;
   background: transparent;
-  color: var(--textHeading, #26201a) !important;
-}
-.email__main___ImHru .email__formContainer___ddfJS .email__formItem___QOaCa .email__formInput___SUlgW .email__emailInput___IL5rt input {
-  color: var(--textHeading, #26201a) !important;
 }
 .email__main___ImHru .email__formContainer___ddfJS .email__formItem___QOaCa .email__formInput___SUlgW .email__emailBox___WMQtM {
   width: 270px;
-  color: var(--textHeading, #26201a) !important;
 }
 @media only screen and (max-width: 480px) {
   .email__main___ImHru .email__formContainer___ddfJS .email__formItem___QOaCa .email__formInput___SUlgW .email__emailBox___WMQtM {
@@ -1764,7 +1756,7 @@ h5,
 }
 .fy-input__fyInput___S4Mtu::placeholder {
   color: var(--textLabel, #7d7676);
-  opacity: 1;
+  opacity: 0.3;
 }
 .fy-input__fyInput___S4Mtu::-webkit-outer-spin-button,
 .fy-input__fyInput___S4Mtu::-webkit-inner-spin-button {
@@ -1776,7 +1768,7 @@ h5,
 }
 .fy-input__fyInput___S4Mtu:disabled {
   color: var(--textSecondary, #9c9c9c);
-  border-color: var(--overlaypopupdividerstroke, #e0e0e0);
+  border-color: var(--dividerStokes, #d4d1d1);
   font-weight: 400;
 }
 .fy-input__fyInput___S4Mtu:focus {
@@ -1798,7 +1790,7 @@ h5,
   height: 48px;
 }
 .fy-input__outlined___CEaKm.fy-input__inputDisable___M8Zn2 {
-  border: 1px solid var(--overlaypopupdividerstroke, #e0e0e0);
+  border: 1px solid var(--dividerStokes, #d4d1d1);
   cursor: not-allowed;
   pointer-events: auto;
 }
@@ -3567,34 +3559,11 @@ h5,
   align-items: center;
   justify-content: center;
 }
-.empty-state__emptyContainer___hXYwb .empty-state__emptyStateIconWrapper___e5Enh {
-  flex: 0 0 auto;
-  align-self: center;
-  margin: 0 auto;
-  width: 185px;
-}
-.empty-state__emptyContainer___hXYwb .empty-state__emptyStateIconWrapper___e5Enh svg path[fill="#0B9FA2"],
-.empty-state__emptyContainer___hXYwb .empty-state__emptyStateIconWrapper___e5Enh svg rect[fill="#0B9FA2"],
-.empty-state__emptyContainer___hXYwb .empty-state__emptyStateIconWrapper___e5Enh svg circle[fill="#0B9FA2"],
-.empty-state__emptyContainer___hXYwb .empty-state__emptyStateIconWrapper___e5Enh svg ellipse[fill="#0B9FA2"] {
-  fill: var(--textBody, #3c3131);
-}
-.empty-state__emptyContainer___hXYwb .empty-state__emptyStateIconWrapper___e5Enh svg path[stroke="#0B9FA2"],
-.empty-state__emptyContainer___hXYwb .empty-state__emptyStateIconWrapper___e5Enh svg rect[stroke="#0B9FA2"],
-.empty-state__emptyContainer___hXYwb .empty-state__emptyStateIconWrapper___e5Enh svg circle[stroke="#0B9FA2"],
-.empty-state__emptyContainer___hXYwb .empty-state__emptyStateIconWrapper___e5Enh svg ellipse[stroke="#0B9FA2"] {
-  stroke: var(--textBody, #3c3131);
-}
-.empty-state__emptyContainer___hXYwb .empty-state__emptyContent___rvQSi {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: center;
-}
 .empty-state__emptyContainer___hXYwb .empty-state__description___kUU3P {
   display: flex;
   justify-content: center;
   max-width: 480px;
+  margin-top: 8px;
   text-align: center;
   line-height: 18px;
   letter-spacing: -0.02em;

@@ -39,15 +39,6 @@
       align-items: flex-start;
       justify-content: center;
       flex: 0 0 16px;
-      color: @TextBody;
-
-      svg {
-        fill: currentColor;
-      }
-
-      svg path {
-        fill: currentColor;
-      }
     }
     .commentText {
       display: block;
@@ -110,15 +101,6 @@
         top: 50%;
         inset-inline-start: 10px;
         transform: translateY(-50%);
-        color: @TextBody;
-
-        svg {
-          fill: currentColor;
-        }
-
-        svg path {
-          fill: currentColor;
-        }
       }
       input {
         flex: 1;
@@ -133,7 +115,7 @@
         border-radius: 8px 0 0 8px;
         border: none;
         line-height: 140%;
-        color: @TextHeading;
+        color: @TextLabel;
         &:focus-visible {
           outline: none;
         }
@@ -191,7 +173,7 @@
     border: 1px solid @DividerStokes;
     border-radius: 4px;
     line-height: 140%;
-    color: @TextHeading;
+    color: @TextBody;
     box-sizing: border-box;
     resize: none;
     background-color: @PageBackground;

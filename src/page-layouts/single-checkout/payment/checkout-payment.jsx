@@ -23,6 +23,10 @@ function CheckoutPayment({
   isCouponValid,
   setIsCouponValid,
   inValidCouponData,
+  neftFileUpload = { state: {}, upload: () => {}, reset: () => {} },
+  rtgsFileUpload = { state: {}, upload: () => {}, reset: () => {} },
+  beforePaymentContent = null,
+  paymentContentOverride = null,
 }) {
   const { t } = useGlobalTranslation("translation");
   const [showFailedMessage, setShowFailedMessage] = useState(false);
@@ -122,12 +126,14 @@ function CheckoutPayment({
       >
         {showPayment ? (
           <>
-            <div className={styles.creditNote}>
-              <CreditNote
-                data={payment?.partialPaymentOption}
-                updateStoreCredits={payment?.updateStoreCredits}
-              />
-            </div>
+            {!paymentContentOverride && (
+              <div className={styles.creditNote}>
+                <CreditNote
+                  data={payment?.partialPaymentOption}
+                  updateStoreCredits={payment?.updateStoreCredits}
+                />
+              </div>
+            )}
             <div
               className={`${styles.paymentHeaderSelect} ${customClassName} ${enableLinkPaymentOption ? styles.unsetBorder : ""}`}
             >
@@ -152,19 +158,23 @@ function CheckoutPayment({
               </div>
             )}
             <CheckoutPaymentContent
-              payment={payment}
-              loader={loader}
-              handleShowFailedMessage={handleShowFailedMessage}
-              onPriceDetailsClick={onPriceDetailsClick}
-              breakUpValues={breakUpValues}
-              removeDialogueError={hideFailedMessage}
-              setCancelQrPayment={setCancelQrPayment}
-              juspayErrorMessage={juspayErrorMessage}
-              isCouponApplied={isCouponApplied}
-              isCouponValid={isCouponValid}
-              setIsCouponValid={setIsCouponValid}
-              inValidCouponData={inValidCouponData}
-            ></CheckoutPaymentContent>
+                payment={payment}
+                loader={loader}
+                handleShowFailedMessage={handleShowFailedMessage}
+                onPriceDetailsClick={onPriceDetailsClick}
+                breakUpValues={breakUpValues}
+                removeDialogueError={hideFailedMessage}
+                setCancelQrPayment={setCancelQrPayment}
+                juspayErrorMessage={juspayErrorMessage}
+                isCouponApplied={isCouponApplied}
+                isCouponValid={isCouponValid}
+                setIsCouponValid={setIsCouponValid}
+                inValidCouponData={inValidCouponData}
+                neftFileUpload={neftFileUpload}
+                rtgsFileUpload={rtgsFileUpload}
+                beforePaymentContent={beforePaymentContent}
+                paymentContentOverride={paymentContentOverride}
+              ></CheckoutPaymentContent>
           </>
         ) : (
           <div className={styles.reviewHeaderUnselect}>

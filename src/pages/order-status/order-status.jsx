@@ -69,12 +69,6 @@ function OrderStatus({
     address_type: "Home",
     phone: "1234567890",
   };
-  const imageRadiusStyle =
-    globalConfig?.["item-image-border-radius"] != null
-      ? {
-          "--itemImageRadius": `${globalConfig["item-image-border-radius"]}px`,
-        }
-      : undefined;
 
   return success === "true" ? (
     <div className={styles.orders}>
@@ -217,10 +211,7 @@ function OrderStatus({
                                     paymentInfo?.currency_symbol ||
                                       orderData?.breakup_values?.[0]
                                         ?.currency_symbol,
-                                    paymentInfo?.amount,
-                                    "en-IN",
-                                    null,
-                                    true
+                                    paymentInfo?.amount
                                   )
                                 : null}
                             </span>
@@ -421,6 +412,8 @@ function ProductItem({
   const getEffectivePrice = (item) =>
     numberWithCommas(item?.prices?.price_effective);
 
+  const hide_single_size = globalConfig?.hide_single_size || false;
+
   const { name, brand, size, itemQty, markedPrice, effectivePrice } =
     useMemo(() => {
       if (isBundleItem) {
@@ -489,7 +482,7 @@ function ProductItem({
   return (
     <FDKLink to={orderLink}>
       <div className={styles.shipmentProdItem}>
-        <div className={styles.prodImg} style={imageRadiusStyle}>
+        <div className={styles.prodImg}>
           <BagImage
             bag={product}
             isBundle={isBundleItem}
@@ -503,7 +496,7 @@ function ProductItem({
             <div className={styles.productName}>{name}</div>
             <div className={styles.sizeInfo}>
               <div className={styles.sizeQuantity}>
-                {size && (
+                {size && !(hide_single_size && size.toUpperCase() === "OS") && (
                   <div className={styles.size}>
                     {t("resource.common.size")}: &nbsp;
                     {size}

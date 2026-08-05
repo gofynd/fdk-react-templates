@@ -385,13 +385,6 @@ h5,
   align-items: flex-start;
   justify-content: center;
   flex: 0 0 16px;
-  color: var(--textBody, #3c3131);
-}
-.comment__commentOuterBox___tyEJJ .comment__commentBoxMobile___hjowv .comment__commentIconMobile___gDa17 svg {
-  fill: currentColor;
-}
-.comment__commentOuterBox___tyEJJ .comment__commentBoxMobile___hjowv .comment__commentIconMobile___gDa17 svg path {
-  fill: currentColor;
 }
 .comment__commentOuterBox___tyEJJ .comment__commentBoxMobile___hjowv .comment__commentText___fnpVV {
   display: block;
@@ -456,13 +449,6 @@ h5,
   top: 50%;
   inset-inline-start: 10px;
   transform: translateY(-50%);
-  color: var(--textBody, #3c3131);
-}
-.comment__commentOuterBox___tyEJJ .comment__inputBox___hqxzy .comment__commentBox___oRYzk .comment__commentNoteIcon___et7MS svg {
-  fill: currentColor;
-}
-.comment__commentOuterBox___tyEJJ .comment__inputBox___hqxzy .comment__commentBox___oRYzk .comment__commentNoteIcon___et7MS svg path {
-  fill: currentColor;
 }
 .comment__commentOuterBox___tyEJJ .comment__inputBox___hqxzy .comment__commentBox___oRYzk input {
   flex: 1;
@@ -477,7 +463,7 @@ h5,
   border-radius: 8px 0 0 8px;
   border: none;
   line-height: 140%;
-  color: var(--textHeading, #26201a);
+  color: var(--textLabel, #7d7676);
 }
 .comment__commentOuterBox___tyEJJ .comment__inputBox___hqxzy .comment__commentBox___oRYzk input:focus-visible {
   outline: none;
@@ -533,7 +519,7 @@ h5,
   border: 1px solid var(--dividerStokes, #d4d1d1);
   border-radius: 4px;
   line-height: 140%;
-  color: var(--textHeading, #26201a);
+  color: var(--textBody, #3c3131);
   box-sizing: border-box;
   resize: none;
   background-color: var(--pageBackground, #f8f8f8);

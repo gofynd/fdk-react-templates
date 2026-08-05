@@ -865,7 +865,7 @@ h5,
     padding: 16px;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
-    border-bottom: 1px solid var(--overlaypopupdividerstroke, #e0e0e0);
+    border-bottom: 1px solid var(--dividerStokes, #d4d1d1);
   }
 }
 .reattempt-shipment-modal__modalContainer___MGLqH .reattempt-shipment-modal__topContainer___CBUFk {
@@ -889,7 +889,7 @@ h5,
 @media only screen and (max-width: 480px) {
   .reattempt-shipment-modal__modalContainer___MGLqH .reattempt-shipment-modal__topContainer___CBUFk .reattempt-shipment-modal__inputsContainer___cNCaB {
     border: none;
-    border-bottom: 1px solid var(--overlaypopupdividerstroke, #e0e0e0);
+    border-bottom: 1px solid var(--dividerStokes, #d4d1d1);
     padding: 0;
   }
 }
@@ -983,7 +983,7 @@ h5,
     left: 0;
     right: 0;
     z-index: 0;
-    border-top: 1px solid var(--overlaypopupdividerstroke, #e0e0e0);
+    border-top: 1px solid var(--dividerStokes, #d4d1d1);
     background: var(--Theme-Page-Background, #FFF);
     box-shadow: 0px -4px 12px 0px rgba(0, 0, 0, 0.06);
   }
@@ -1385,7 +1385,7 @@ h5,
 }
 .fy-input__fyInput___S4Mtu::placeholder {
   color: var(--textLabel, #7d7676);
-  opacity: 1;
+  opacity: 0.3;
 }
 .fy-input__fyInput___S4Mtu::-webkit-outer-spin-button,
 .fy-input__fyInput___S4Mtu::-webkit-inner-spin-button {
@@ -1397,7 +1397,7 @@ h5,
 }
 .fy-input__fyInput___S4Mtu:disabled {
   color: var(--textSecondary, #9c9c9c);
-  border-color: var(--overlaypopupdividerstroke, #e0e0e0);
+  border-color: var(--dividerStokes, #d4d1d1);
   font-weight: 400;
 }
 .fy-input__fyInput___S4Mtu:focus {
@@ -1419,7 +1419,7 @@ h5,
   height: 48px;
 }
 .fy-input__outlined___CEaKm.fy-input__inputDisable___M8Zn2 {
-  border: 1px solid var(--overlaypopupdividerstroke, #e0e0e0);
+  border: 1px solid var(--dividerStokes, #d4d1d1);
   cursor: not-allowed;
   pointer-events: auto;
 }
@@ -1842,7 +1842,7 @@ h5,
   height: 48px;
   padding: 16px;
   border-radius: 6px;
-  border: 1px solid var(--overlaypopupdividerstroke, #e0e0e0);
+  border: 1px solid var(--dividerStokes, #d4d1d1);
 }
 .fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__inputWrapper___zh7iz input {
   border: none;
@@ -1903,7 +1903,7 @@ h5,
   width: 100%;
   position: absolute;
   top: 0;
-  border-bottom: 1px solid var(--overlaypopupdividerstroke, #e0e0e0);
+  border-bottom: 1px solid var(--dividerStokes, #d4d1d1);
 }
 .fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__titleContainer___O2vVH .fy-date-picker__titleText___iZItx {
   color: var(--textHeading, #26201a);
@@ -1969,7 +1969,7 @@ h5,
 .fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__calendarPopup___cA9su .fy-date-picker__calendarHeader___R20ub .fy-date-picker__controlContainer___cfI7T .fy-date-picker__monthYearSelect___hHzRC select {
   padding: 6px 10px;
   border-radius: 4px;
-  border: 1px solid var(--overlaypopupdividerstroke, #e0e0e0);
+  border: 1px solid var(--dividerStokes, #d4d1d1);
   background: var(--buttonSecondary, #fff);
   color: var(--textHeading, #26201a);
   font-weight: 600;
@@ -2017,7 +2017,7 @@ h5,
   cursor: pointer;
   font-size: 12px;
   font-weight: 600;
-  border: 1px solid var(--overlaypopupdividerstroke, #e0e0e0);
+  border: 1px solid var(--dividerStokes, #d4d1d1);
   padding: 0;
   box-sizing: border-box;
   min-height: 40px;
@@ -3195,7 +3195,6 @@ h5,
   margin-bottom: 16px;
   margin-top: 16px;
   display: block;
-  color: var(--textHeading, #26201a);
 }
 .address-form__addressFormWrapper___M0Ler .address-form__addressTypeContainer___JzuQf .address-form__addressType___YuGec {
   margin-top: 20px;
@@ -3711,9 +3710,6 @@ h5,
 }
 [dir="rtl"] .google-map__autoCompleteWrap___aXAcB {
   transform: translateX(50%);
-}
-.google-map__autoCompleteWrap___aXAcB input::placeholder {
-  color: var(--textLabel, #7d7676);
 }
 .google-map__searchAutoIcon___pczP8 {
   width: 20px;
@@ -4564,9 +4560,6 @@ h5,
   width: 100%;
   border: none;
 }
-.fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__dropdown___N1atH .fy-dropdown__dropdownButton___SqCaQ .fy-dropdown__text_field___tlM0X::placeholder {
-  color: var(--textLabel, #7d7676);
-}
 .fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__dropdown___N1atH .fy-dropdown__dropdownButton___SqCaQ .fy-dropdown__selectedValue___d2Cjo {
   font-size: 14px;
   line-height: 22px;
@@ -4988,10 +4981,6 @@ h5,
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__dialCodePreview___E0m4Z {
   border-inline: none;
   padding-inline-end: 4px;
-  color: var(--textHeading, #26201a);
-}
-.mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__countryButton___NUFUC {
-  color: var(--textHeading, #26201a);
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG {
   width: 100%;
@@ -4999,7 +4988,6 @@ h5,
   display: flex;
   border-inline-start: none;
   padding-inline-start: 4px;
-  color: var(--textHeading, #26201a);
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG:focus-visible {
   outline: none;
@@ -5370,10 +5358,6 @@ h5,
   flex-direction: column;
   position: relative;
 }
-.form-input-selector__customClass___hEqXl input,
-.form-input-selector__customClass___hEqXl textarea {
-  color: var(--textHeading, #26201a);
-}
 .form-input-selector__customClass___hEqXl.form-input-selector__singleField___uKAb8 {
   flex: 0 0 100%;
 }
@@ -5391,6 +5375,5 @@ h5,
 }
 .form-input-selector__telInput___F4FEd {
   background-color: transparent;
-  color: var(--textHeading, #26201a);
 }
 
