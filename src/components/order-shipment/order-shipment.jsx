@@ -74,8 +74,6 @@ const ShipmentDetails = ({
   bundleGroups,
   bundleGroupArticles,
   aspectRatio,
-  globalConfig,
-  isImageFill,
   naivgateToShipment,
   isAdmin,
   t,
@@ -109,12 +107,6 @@ const ShipmentDetails = ({
     bundleGroupId && bundleGroups && bundleGroups[bundleGroupId]?.length > 0;
 
   const productName = getProductsName({ bag: item?.bags?.[0], isBundleItem });
-  const imageRadiusStyle =
-    globalConfig?.["item-image-border-radius"] != null
-      ? {
-          "--itemImageRadius": `${globalConfig["item-image-border-radius"]}px`,
-        }
-      : undefined;
 
   const reattemptEndDate = item?.ndr_details?.allowed_delivery_window?.end_date
     ? (() => {
@@ -141,12 +133,11 @@ const ShipmentDetails = ({
         key={item.shipment_id}
         onClick={() => naivgateToShipment(item)}
       >
-        <div className={styles.shipmentLeft} style={imageRadiusStyle}>
+        <div className={styles.shipmentLeft}>
           <BagImage
             bag={item?.bags?.[0]}
             isBundle={isBundleItem}
             aspectRatio={aspectRatio}
-            isImageFill={isImageFill}
           />
           {item?.bags?.length > 1 && (
             <div id="total-item">
@@ -156,17 +147,14 @@ const ShipmentDetails = ({
           )}
         </div>
         <div className={styles.shipmentRight}>
-          <div
-            className={`${styles.uktLinks} ${styles.productName}`}
-            title={productName}
-          >
+          <div className={styles.uktLinks}>
             {item?.bags?.length > 1 && customizationOptions.length < 1 ? (
-              <>
+              <div>
                 {productName} +{item.bags.length - 1 + " "}
                 {t("resource.facets.more")}
-              </>
+              </div>
             ) : (
-              productName
+              <div>{productName}</div>
             )}
           </div>
           <div
@@ -316,7 +304,6 @@ function OrderShipment({
   const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
   const locale = language?.locale;
   const [isAdmin, setIsAdmin] = useState(false);
-  // const [selectedShipment, setSelectedShipment] = useState("");
   const navigate = useNavigate();
   // const params = useParams();
   const isMobile = useMobile();
@@ -324,7 +311,6 @@ function OrderShipment({
     () => getProductImgAspectRatio(globalConfig),
     [globalConfig]
   );
-  const isImageFill = globalConfig?.img_fill;
 
   // Safe wrapper for getGroupedShipmentBags with fallback for non-bundle items
   const safeGetGroupedShipmentBags = (bags) => {
@@ -466,8 +452,6 @@ function OrderShipment({
                       bundleGroups={bundleGroups}
                       bundleGroupArticles={bundleGroupArticles}
                       aspectRatio={aspectRatio}
-                      globalConfig={globalConfig}
-                      isImageFill={isImageFill}
                       naivgateToShipment={naivgateToShipment}
                       isAdmin={isAdmin}
                       t={t}
@@ -490,8 +474,6 @@ function OrderShipment({
                     bundleGroups={bundleGroups}
                     bundleGroupArticles={bundleGroupArticles}
                     aspectRatio={aspectRatio}
-                    globalConfig={globalConfig}
-                    isImageFill={isImageFill}
                     naivgateToShipment={naivgateToShipment}
                     isAdmin={isAdmin}
                     t={t}

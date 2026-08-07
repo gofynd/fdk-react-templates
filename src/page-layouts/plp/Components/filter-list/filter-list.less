@@ -14,21 +14,12 @@
       width: 100%;
       border: 1px solid @DividerStokes;
       background-color: transparent;
-      color: @TextLabel;
-
-      &::placeholder {
-        color: @TextLabel;
-      }
     }
     .search-icon {
       width: 18px;
       height: 18px;
       position: absolute;
       inset-inline-start: 12px;
-
-      path {
-        fill: @TextBody;
-      }
     }
   }
   &--items {
@@ -117,17 +108,11 @@
       border-bottom: 1px solid @DividerStokes;
       .search {
         &__input {
-          background-color: @DialogBackground;
           border-radius: 4px;
           padding: 16px;
           width: 264px;
           border: 1px solid @DividerStokes;
           margin-inline-end: 32px;
-          color: @TextLabel;
-
-          &::placeholder {
-            color: @TextLabel;
-          }
         }
       }
       .alphabets {
@@ -149,7 +134,7 @@
         margin-inline-start: auto;
         width: 24px;
         height: 24px;
-        color: @TextBody;
+        fill: @TextHeading;
         cursor: pointer;
       }
     }

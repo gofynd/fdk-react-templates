@@ -393,7 +393,7 @@ h5,
     display: block;
   }
   .faq__faq___h_KWA .faq__heading___otonu .faq__back-head___GOLul svg path {
-    fill: var(--textBody, #3c3131);
+    fill: var(--textHeading, #26201a);
   }
 }
 .faq__faq___h_KWA .faq__heading___otonu .faq__contact-us___zsCoI {
@@ -461,14 +461,14 @@ h5,
   }
 }
 .faq__faq___h_KWA .faq__sidebar___rqICM .faq__arrowRight___r4q9a path {
-  fill: var(--textBody, #3c3131);
+  fill: var(--textHeading, #26201a);
 }
 .faq__faq___h_KWA .faq__sidebar___rqICM .faq__star___oTFkf {
   width: 16px;
 }
 .faq__faq___h_KWA .faq__sidebar___rqICM .faq__star___oTFkf path {
-  stroke: var(--textBody, #3c3131);
-  fill: var(--textBody, #3c3131);
+  stroke: var(--textHeading, #26201a);
+  fill: var(--textHeading, #26201a);
 }
 .faq__faq___h_KWA .faq__sidebar___rqICM ul {
   list-style-type: none;
@@ -484,7 +484,7 @@ h5,
   gap: 8px;
 }
 .faq__faq___h_KWA .faq__sidebar___rqICM div svg > path {
-  fill: var(--textBody, #3c3131);
+  fill: var(--textHeading, #26201a);
 }
 .faq__faq___h_KWA .faq__sidebar___rqICM div li {
   width: 100%;
@@ -508,11 +508,11 @@ h5,
     transition: stroke 1.5s;
   }
   .faq__faq___h_KWA .faq__sidebar___rqICM div.faq__active___XgS9f .faq__star___oTFkf path {
-    stroke: var(--textBody, #3c3131);
-    fill: var(--textBody, #3c3131);
+    stroke: var(--buttonPrimary, #4e3f09);
+    fill: var(--buttonPrimary, #4e3f09);
   }
   .faq__faq___h_KWA .faq__sidebar___rqICM div.faq__active___XgS9f .faq__arrowRight___r4q9a path {
-    fill: var(--textBody, #3c3131);
+    fill: var(--buttonPrimary, #4e3f09);
   }
 }
 .faq__faq___h_KWA .faq__contentContainer___VqsGC {
@@ -555,18 +555,6 @@ h5,
 }
 .faq__faq___h_KWA .faq__faq-item___Vt4s2 .faq__quesContainer___OUTEY svg {
   overflow: visible;
-}
-.faq__faq___h_KWA .faq__faq-item___Vt4s2 .faq__quesContainer___OUTEY svg path[fill]:not([fill="none"]) {
-  fill: var(--textBody, #3c3131);
-}
-.faq__faq___h_KWA .faq__faq-item___Vt4s2 .faq__quesContainer___OUTEY svg path[stroke] {
-  stroke: var(--textBody, #3c3131) !important;
-}
-.faq__faq___h_KWA .faq__faq-item___Vt4s2 .faq__quesContainer___OUTEY .faq__toggleIcon___L8iQs {
-  color: var(--textBody, #3c3131) !important;
-}
-.faq__faq___h_KWA .faq__faq-item___Vt4s2 .faq__quesContainer___OUTEY .faq__toggleIcon___L8iQs path {
-  stroke: var(--textBody, #3c3131) !important;
 }
 .faq__faq___h_KWA .faq__faq-item___Vt4s2 .faq__quesContainer___OUTEY .faq__qa-box___YlhAf {
   width: 100%;

@@ -127,15 +127,11 @@
     display: flex;
     background-color: @PageBackground;
     gap: 24px;
-    min-width: 0;
 
     .orderShipmentsWrapper {
-      flex: 1;
-      min-width: 0;
-      width: auto;
+      width: 100%;
 
       @media @tablet {
-        width: 100%;
         padding: 0 16px;
       }
     }
@@ -162,14 +158,11 @@
       }
     }
     .shipmentDetails {
-      box-sizing: border-box;
-      flex: 0 0 352px;
       padding: 0 24px;
       border-inline-start: 1px solid @DividerStokes;
       min-width: 352px;
 
       @media @tablet {
-        flex-basis: auto;
         width: 100%;
         padding: 0;
         min-width: unset;

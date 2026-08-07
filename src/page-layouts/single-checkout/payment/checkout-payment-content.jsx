@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as styles from "./checkout-payment-content.less";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import Modal from "../../../components/core/modal/modal";
@@ -10,7 +10,6 @@ import {
   translateDynamicLabel,
 } from "../../../helper/utils";
 import Spinner from "../../../components/spinner/spinner";
-import Skeleton from "../../../components/core/skeletons/skeleton";
 import CheckoutPaymentSkeleton from "./checkout-payment-skeleton";
 import QrCodePaymet from "../../../components/payment-options/qr-code-pay";
 import UpiAppPayment from "../../../components/payment-options/upi-app-pay";
@@ -21,6 +20,9 @@ import CodPayment from "../../../components/payment-options/cod-payment";
 import OtherPay from "../../../components/payment-options/other-pay";
 import PayLater from "../../../components/payment-options/pay-later";
 import CardLessEmi from "../../../components/payment-options/cardless-emi-pay";
+import NeftPay from "../../../components/payment-options/neft-pay";
+import RtgsPay from "../../../components/payment-options/rtgs-pay";
+import CreditPayment from "../../../components/b2b-credit-payment/b2b-credit-payment";
 import { useCheckoutPayment } from "../../payment/useCheckoutPayment";
 import { useFPI } from "fdk-core/utils";
 
@@ -36,6 +38,11 @@ function CheckoutPaymentContent({
   juspayErrorMessage,
   isCouponValid,
   inValidCouponData,
+  neftFileUpload = { state: {}, upload: () => {}, reset: () => {} },
+  rtgsFileUpload = { state: {}, upload: () => {}, reset: () => {} },
+  beforePaymentContent = null,
+  paymentContentOverride = null,
+  isSplitPayment = false,
 }) {
   const checkoutPayment = useCheckoutPayment({
     payment,
@@ -70,83 +77,8 @@ function CheckoutPaymentContent({
     isPaymentLoading,
     isUPIError,
     mopSelectionLoading,
-    isPaymentDisabled = false,
-    isPaymentOptionsRefreshing,
-    splitPaymentConfig,
-    onSplitPaymentChange,
-    onSplitPaymentAmountChange,
-    onSplitPaymentAmountBlur,
-    onSplitCodBack,
-    onSplitCodContinue,
+    creditPaymentData,
   } = payment;
-  const shouldDefaultSelectSplitPayment =
-    splitPaymentConfig?.defaultSelected === true;
-  const isResumeSplitPayment =
-    splitPaymentConfig?.isResumeSplitPayment === true ||
-    splitPaymentConfig?.is_resume_split_payment === true;
-  const [isSplitPaymentSelected, setIsSplitPaymentSelected] = useState(
-    shouldDefaultSelectSplitPayment
-  );
-  const [splitPaymentAmount, setSplitPaymentAmount] = useState("");
-  const [splitPaymentAmountError, setSplitPaymentAmountError] = useState("");
-  const [
-    shouldEnableSplitPaymentAfterCouponRemoval,
-    setShouldEnableSplitPaymentAfterCouponRemoval,
-  ] = useState(false);
-  const [isSplitPaymentCouponValidating, setIsSplitPaymentCouponValidating] =
-    useState(false);
-  const [showSplitCreditNoteConfirmation, setShowSplitCreditNoteConfirmation] =
-    useState(false);
-  const [
-    shouldApplyCreditNoteWithSplitPayment,
-    setShouldApplyCreditNoteWithSplitPayment,
-  ] = useState(false);
-  const [isSplitCreditNoteProceeding, setIsSplitCreditNoteProceeding] =
-    useState(false);
-  const splitCreditNoteProceedingRef = useRef(false);
-  const splitCouponMopValidationRef = useRef("");
-  const skipNextSplitCouponMopValidationRef = useRef(false);
-  const isTruthyValue = (value) =>
-    value === true || String(value).toLowerCase() === "true";
-  const getStoreCreditBreakupAmount = () => {
-    const storeCreditBreakup = Array.isArray(breakUpValues)
-      ? breakUpValues.find((item) => item?.key === "store_credit")?.value
-      : breakUpValues?.store_credit;
-    const amount = Number(String(storeCreditBreakup || "").replace(/[^\d.]/g, ""));
-
-    return Number.isFinite(amount) ? amount : 0;
-  };
-  const isCreditNoteAppliedForSplit =
-    isTruthyValue(splitPaymentConfig?.isCreditNoteApplied) ||
-    isTruthyValue(splitPaymentConfig?.is_credit_note_applied) ||
-    getStoreCreditBreakupAmount() > 0 ||
-    partialPaymentOption?.list?.some((option) =>
-      isTruthyValue(option?.balance?.is_applied)
-    );
-
-  useEffect(() => {
-    const isTruthySplitFlag = (value) =>
-      value === true || String(value).toLowerCase() === "true";
-    const isSplitCodPreviewConfig =
-      isTruthySplitFlag(splitPaymentConfig?.is_split_cod_available) &&
-      !isTruthySplitFlag(splitPaymentConfig?.isSplitCodPaymentActive);
-
-    setIsSplitPaymentSelected(() => {
-      const nextValue = shouldDefaultSelectSplitPayment;
-
-      if (!nextValue && !isSplitCodPreviewConfig) {
-        setSplitPaymentAmount("");
-        setSplitPaymentAmountError("");
-      }
-
-      return nextValue;
-    });
-  }, [
-    shouldDefaultSelectSplitPayment,
-    splitPaymentConfig?.enabled,
-    splitPaymentConfig?.is_split_cod_available,
-    splitPaymentConfig?.isSplitCodPaymentActive,
-  ]);
 
   // destructure exactly what the JSX (and the local prop-bundles) needs
   const {
@@ -155,15 +87,13 @@ function CheckoutPaymentContent({
     isTablet,
     isChromeOrSafari,
     // payment data
-    paymentOptions,
+    paymentOptions: rawPaymentOptions,
     otherPaymentOptions,
     codOption,
     // for coupon modal (your return uses these)
     showCouponValidityModal,
     setShowCouponValidityModal,
     couponValidity,
-    setCouponValidity,
-    isCouponValidationLoading,
     // card state
     addNewCard,
     getCardBorder,
@@ -288,654 +218,24 @@ function CheckoutPaymentContent({
     handleProceedToPayClick,
   } = checkoutPayment;
 
+  // Extract special options and filter paymentOptions (matches feat/credit-system pattern)
+  let paymentOptions = rawPaymentOptions;
+  const neftOption = paymentOptions?.filter((opt) => opt.name === "NEFT")[0];
+  const rtgsOption = paymentOptions?.filter((opt) => opt.name === "RTGS")[0];
+  const creditOption = paymentOptions?.filter((opt) => opt.name === "CREDIT")[0];
+  paymentOptions = paymentOptions?.filter(
+    (opt) =>
+      opt.name !== "COD" &&
+      opt.name !== "NEFT" &&
+      opt.name !== "RTGS" &&
+      opt.name !== "CREDIT"
+  );
+
+  const [selectedCreditPayment, setSelectedCreditPayment] = useState({});
+
   const uiProps = { styles, t, SvgWrapper, StickyPayNow, isTablet };
   const fpi = useFPI();
-  const getPayNowValue =
-    typeof payment?.getPayNowValue === "function"
-      ? payment.getPayNowValue
-      : getTotalValue;
-  const isPaymentActionDisabled = Boolean(
-    isPaymentDisabled ||
-      isCouponValidationLoading ||
-      isSplitPaymentCouponValidating
-  );
-  const amountProps = { getCurrencySymbol, getTotalValue: getPayNowValue };
-  const shouldShowFullPaymentSkeleton =
-    isLoading && !isPaymentOptionsRefreshing;
-  const isSplitPaymentEnabled = splitPaymentConfig?.enabled === true;
-  const isSplitPaymentCheckboxDisabled =
-    splitPaymentConfig?.checkboxDisabled === true ||
-    splitPaymentConfig?.disableCheckbox === true ||
-    splitPaymentConfig?.isCheckboxDisabled === true;
-  const isSplitPaymentActionDisabled =
-    isSplitPaymentCheckboxDisabled || isSplitPaymentCouponValidating;
-  const isSplitPaymentLoading = splitPaymentConfig?.isLoading === true;
-  const shouldShowSplitPaymentOptions =
-    isSplitPaymentEnabled && isSplitPaymentSelected;
-  const shouldShowStoreCredit =
-    partialPaymentOption?.list[0]?.balance?.account?.status !== "INACTIVE" &&
-    !shouldShowSplitPaymentOptions &&
-    splitPaymentConfig?.hideStoreCredit !== true;
-  const shouldHidePaymentOptions =
-    !getTotalValue() && !shouldShowSplitPaymentOptions;
-  const splitPaymentCurrencySymbol =
-    splitPaymentConfig?.amountPrefix ||
-    (typeof getCurrencySymbol === "function"
-      ? getCurrencySymbol()
-      : getCurrencySymbol) ||
-    "₹";
-  const splitPaymentCount =
-    splitPaymentConfig?.splitCount || splitPaymentConfig?.availableSplits || 0;
-  const splitPaymentLabel = splitPaymentConfig?.label || "Split Payment";
-  const splitPaymentAvailabilityLabel =
-    splitPaymentConfig?.availabilityLabel ||
-    `${splitPaymentCount} splits available`;
-  const splitPaymentInputLabel =
-    splitPaymentConfig?.inputLabel || "Enter Amount";
-  const splitPaymentInputAssistiveText =
-    splitPaymentConfig?.assistiveText ||
-    "Specify amount that you want to process for the first payment";
-  const splitPaymentInputErrorText =
-    splitPaymentConfig?.errorText ||
-    "Split amount should be less than the total amount";
-  const splitPaymentMinAmountErrorText =
-    splitPaymentConfig?.minAmountErrorText || "Split amount should be at least";
-  const splitPaymentRemainingAmountErrorText =
-    splitPaymentConfig?.remainingAmountErrorText ||
-    "Split amount should not be greater than remaining amount";
-  const shouldAllowFullSplitAmount =
-    splitPaymentConfig?.allowFullAmount === true ||
-    splitPaymentConfig?.allowFullRemainingAmount === true;
-  const isTruthySplitCodFlag = (value) =>
-    value === true || String(value).toLowerCase() === "true";
-  const isSplitCodAvailable = isTruthySplitCodFlag(
-    splitPaymentConfig?.is_split_cod_available ??
-      splitPaymentConfig?.isSplitCodAvailable
-  );
-  const isSplitCodPaymentActive = isTruthySplitCodFlag(
-    splitPaymentConfig?.isSplitCodPaymentActive
-  );
-  const shouldHideSplitPaymentAmountField = isTruthySplitCodFlag(
-    splitPaymentConfig?.hideAmountInput ?? splitPaymentConfig?.hide_amount_input
-  );
-
-  useEffect(() => {
-    const shouldValidateSplitCouponFirst =
-      isTruthySplitCodFlag(splitPaymentConfig?.shouldValidateSplitCouponFirst) ||
-      isTruthySplitCodFlag(splitPaymentConfig?.should_validate_split_coupon_first);
-    const selectedSubMopCode = selectedTabData?.list?.[0]?.code;
-    const preselectTabs = ["NB", "WL", "PL", "CARDLESS_EMI", "Other"];
-
-    if (
-      !isSplitPaymentSelected ||
-      !isCouponApplied ||
-      !shouldValidateSplitCouponFirst ||
-      enableLinkPaymentOption ||
-      !preselectTabs.includes(selectedTab) ||
-      !selectedSubMopCode
-    ) {
-      if (!isSplitPaymentSelected || !shouldValidateSplitCouponFirst) {
-        splitCouponMopValidationRef.current = "";
-      }
-      return;
-    }
-
-    const selectedMop =
-      selectedTab === "Other" ? selectedTabData?.name : selectedTab;
-    const requestKey = `${selectedTab}|${selectedMop}|${selectedSubMopCode}`;
-
-    if (splitCouponMopValidationRef.current === requestKey) {
-      return;
-    }
-
-    const shouldSkipSplitCouponValidation =
-      skipNextSplitCouponMopValidationRef.current;
-
-    skipNextSplitCouponMopValidationRef.current = false;
-    splitCouponMopValidationRef.current = requestKey;
-    selectMop(selectedTab, selectedMop, selectedSubMopCode, {
-      skipSplitCouponValidation: shouldSkipSplitCouponValidation,
-    });
-  }, [
-    enableLinkPaymentOption,
-    isCouponApplied,
-    isSplitPaymentSelected,
-    selectedTab,
-    selectedTabData?.list?.[0]?.code,
-    selectedTabData?.name,
-    splitPaymentConfig?.shouldValidateSplitCouponFirst,
-    splitPaymentConfig?.should_validate_split_coupon_first,
-  ]);
-
-  const formatSplitPaymentAmount = (amount) =>
-    amount
-      ? priceFormatCurrencySymbol(
-          splitPaymentCurrencySymbol,
-          amount,
-          "en-IN",
-          null,
-          true
-        )
-      : "";
-
-  const getNumericAmount = (amount) => {
-    const numericAmount = Number(String(amount || "").replace(/[^\d.]/g, ""));
-
-    return Number.isFinite(numericAmount) ? numericAmount : 0;
-  };
-  const getRoundedCurrencyAmount = (amount) =>
-    Math.round((Number(amount) + Number.EPSILON) * 100) / 100;
-
-  const getBreakupValue = (key) => {
-    if (Array.isArray(breakUpValues)) {
-      return breakUpValues.find(
-        (value) => value?.key === key || value?.name === key
-      )?.value;
-    }
-
-    return breakUpValues?.[key];
-  };
-
-  const getSplitCreditNoteAmount = () => {
-    const appliedCreditNoteOption =
-      partialPaymentOption?.list?.find((option) =>
-        isTruthyValue(option?.balance?.is_applied)
-      ) ||
-      partialPaymentOption?.list?.[0] ||
-      {};
-    const balance = appliedCreditNoteOption?.balance || {};
-    const account = balance?.account || appliedCreditNoteOption?.account || {};
-
-    return (
-      [
-        getBreakupValue("store_credit"),
-        appliedCreditNoteOption?.amount,
-        appliedCreditNoteOption?.value,
-        appliedCreditNoteOption?.applied_amount,
-        appliedCreditNoteOption?.appliedAmount,
-        balance?.amount,
-        balance?.value,
-        balance?.applied_amount,
-        balance?.appliedAmount,
-        balance?.amount_on_hold?.amount,
-        account?.amount_on_hold?.amount,
-        balance?.redeemable_balance?.amount,
-        account?.redeemable_balance?.amount,
-        balance?.available_balance?.amount,
-        account?.available_balance?.amount,
-      ]
-        .map((amount) => getNumericAmount(amount))
-        .find((amount) => amount > 0) || 0
-    );
-  };
-
-  const getFormattedSplitLimitAmount = (amount) =>
-    priceFormatCurrencySymbol(
-      splitPaymentCurrencySymbol,
-      amount,
-      "en-IN",
-      null,
-      true
-    );
-
-  const getMinTransactionAmount = (baseAmount) => {
-    const minTransactionLimit =
-      splitPaymentConfig?.minTransactionLimit ||
-      splitPaymentConfig?.min_transaction_limit ||
-      {};
-    const minTransactionValue = getNumericAmount(
-      splitPaymentConfig?.minTransactionAmount ?? minTransactionLimit?.value
-    );
-    const minTransactionLimitType = String(
-      minTransactionLimit?.limit_type || minTransactionLimit?.limitType || ""
-    )
-      .trim()
-      .toLowerCase();
-    const minTransactionBaseAmount = getNumericAmount(
-      splitPaymentConfig?.minTransactionBaseAmount ??
-        splitPaymentConfig?.min_transaction_base_amount
-    );
-
-    if (!minTransactionValue) {
-      return 0;
-    }
-
-    if (minTransactionLimitType === "percentage") {
-      return (
-        ((minTransactionBaseAmount || getNumericAmount(baseAmount)) *
-          minTransactionValue) /
-        100
-      );
-    }
-
-    return minTransactionValue;
-  };
-
-  const getSplitPaymentAmountError = (amount) => {
-    const hasSplitAmount = String(amount ?? "").trim() !== "";
-    const splitAmount = getNumericAmount(amount);
-    const totalAmount = getNumericAmount(getTotalValue?.());
-    const splitPaymentTotalAmount = getNumericAmount(
-      splitPaymentConfig?.totalAmount ?? splitPaymentConfig?.total_amount
-    );
-    const remainingAmount = getNumericAmount(
-      splitPaymentConfig?.remainingAmount ??
-        splitPaymentConfig?.remaining_amount
-    );
-    const minTransactionAmount = getMinTransactionAmount(
-      splitPaymentTotalAmount || totalAmount
-    );
-
-    if (
-      hasSplitAmount &&
-      minTransactionAmount &&
-      splitAmount < minTransactionAmount
-    ) {
-      return `${splitPaymentMinAmountErrorText} ${getFormattedSplitLimitAmount(
-        minTransactionAmount
-      )}`;
-    }
-
-    if (hasSplitAmount && remainingAmount && splitAmount > remainingAmount) {
-      return `${splitPaymentRemainingAmountErrorText} ${getFormattedSplitLimitAmount(
-        remainingAmount
-      )}`;
-    }
-
-    if (
-      hasSplitAmount &&
-      !isCreditNoteAppliedForSplit &&
-      totalAmount &&
-      (shouldAllowFullSplitAmount
-        ? splitAmount > totalAmount
-        : splitAmount >= totalAmount)
-    ) {
-      return splitPaymentInputErrorText;
-    }
-
-    return "";
-  };
-
-  const getDefaultSplitPaymentAmount = () => {
-    const configuredAmount = splitPaymentConfig?.defaultAmount;
-    const amount = configuredAmount ?? "";
-
-    return amount ? String(amount) : "";
-  };
-
-  const normalizeSplitPaymentAmountInput = (value) => {
-    const sanitizedValue = String(value || "").replace(/[^\d.]/g, "");
-    const decimalPointCount = (sanitizedValue.match(/\./g) || []).length;
-
-    if (decimalPointCount > 1) {
-      return null;
-    }
-
-    const [wholeAmount = "", decimalAmount = ""] = sanitizedValue.split(".");
-
-    if (!sanitizedValue.includes(".")) {
-      return wholeAmount;
-    }
-
-    return `${wholeAmount}.${decimalAmount.slice(0, 2)}`;
-  };
-  const splitPaymentEnteredAmount = getNumericAmount(splitPaymentAmount);
-  const splitPaymentTotalAmount = getNumericAmount(
-    splitPaymentConfig?.totalAmount ?? splitPaymentConfig?.total_amount
-  );
-  const splitPaymentCheckoutTotalAmount =
-    splitPaymentTotalAmount || getNumericAmount(getTotalValue?.());
-  const splitPaymentMinimumTransactionAmount = getMinTransactionAmount(
-    splitPaymentCheckoutTotalAmount
-  );
-  const isSplitPaymentTotalBelowMinTransaction = Boolean(
-    splitPaymentCheckoutTotalAmount &&
-      splitPaymentMinimumTransactionAmount &&
-      splitPaymentCheckoutTotalAmount < splitPaymentMinimumTransactionAmount
-  );
-  const splitPaymentCodBaseAmount =
-    getNumericAmount(
-      splitPaymentConfig?.splitCodTotalAmount ??
-        splitPaymentConfig?.split_cod_total_amount
-    ) ||
-    splitPaymentTotalAmount ||
-    getNumericAmount(getTotalValue?.());
-  const splitPaymentCodPayableAmount = getRoundedCurrencyAmount(
-    getMinTransactionAmount(splitPaymentCodBaseAmount) ||
-      splitPaymentEnteredAmount
-  );
-  const splitPaymentCodDeliveryAmount = getRoundedCurrencyAmount(
-    Math.max(splitPaymentCodBaseAmount - splitPaymentCodPayableAmount, 0)
-  );
-  const hasValidSplitCodAmount = Boolean(
-    isSplitCodAvailable && splitPaymentCodPayableAmount > 0
-  );
-  const shouldShowSplitCodAction = Boolean(
-    isSplitCodAvailable &&
-      !isSplitCodPaymentActive &&
-      !isSplitPaymentTotalBelowMinTransaction
-  );
-  const formattedSplitPaymentCodAmount = hasValidSplitCodAmount
-    ? getFormattedSplitLimitAmount(splitPaymentCodPayableAmount)
-    : "";
-  const formattedSplitPaymentCodDeliveryAmount = hasValidSplitCodAmount
-    ? getFormattedSplitLimitAmount(splitPaymentCodDeliveryAmount)
-    : "";
-
-  const handleSplitPaymentAmountChange = (event) => {
-    const normalizedAmount = normalizeSplitPaymentAmountInput(
-      event.target.value
-    );
-
-    if (normalizedAmount === null) {
-      return;
-    }
-
-    const errorMessage = getSplitPaymentAmountError(normalizedAmount);
-
-    setSplitPaymentAmount(normalizedAmount);
-    setSplitPaymentAmountError(errorMessage);
-    onSplitPaymentAmountChange?.(
-      errorMessage ? "" : formatSplitPaymentAmount(normalizedAmount)
-    );
-  };
-
-  const handleSplitPaymentAmountBlur = () => {
-    if (
-      !isSplitPaymentSelected ||
-      splitPaymentAmountError ||
-      !splitPaymentAmount
-    ) {
-      return;
-    }
-
-    onSplitPaymentAmountBlur?.(formatSplitPaymentAmount(splitPaymentAmount));
-  };
-  const handleSplitCodContinue = () => {
-    const splitCodAmount = String(splitPaymentCodPayableAmount || "");
-    const errorMessage = splitCodAmount
-      ? getSplitPaymentAmountError(splitCodAmount)
-      : "";
-
-    setSplitPaymentAmountError(errorMessage);
-
-    if (!splitPaymentCodPayableAmount) {
-      return;
-    }
-
-    const handleSplitCodContinueAction =
-      onSplitCodContinue || splitPaymentConfig?.onSplitCodContinue;
-
-    if (typeof handleSplitCodContinueAction === "function") {
-      handleSplitCodContinueAction(formatSplitPaymentAmount(splitCodAmount));
-      return;
-    }
-    if (errorMessage) {
-      return;
-    }
-    onSplitPaymentAmountBlur?.(formatSplitPaymentAmount(splitCodAmount));
-  };
-  const handleSplitCodBack = () => {
-    onSplitCodBack?.();
-  };
-  const splitCodAction = {
-    buttonLabel: `Continue To Pay${
-      formattedSplitPaymentCodAmount ? ` ${formattedSplitPaymentCodAmount}` : ""
-    }`,
-    disabled: !hasValidSplitCodAmount,
-    title: hasValidSplitCodAmount
-      ? `Pay ${formattedSplitPaymentCodAmount} now & ${formattedSplitPaymentCodDeliveryAmount} on Delivery`
-      : "",
-    visible: shouldShowSplitCodAction,
-    onContinue: handleSplitCodContinue,
-  };
-
-  const applySplitPaymentSelection = (nextValue, options = {}) => {
-    const nextAmount = nextValue
-      ? splitPaymentAmount || getDefaultSplitPaymentAmount()
-      : "";
-    const errorMessage = nextValue
-      ? getSplitPaymentAmountError(nextAmount)
-      : "";
-    const shouldIncludeCreditNote =
-      nextValue &&
-      (options?.includeCreditNote === true || isCreditNoteAppliedForSplit);
-    const creditNoteAmount = shouldIncludeCreditNote
-      ? getSplitCreditNoteAmount()
-      : 0;
-
-    setIsSplitPaymentSelected(nextValue);
-    setSplitPaymentAmount(nextAmount);
-    setSplitPaymentAmountError(errorMessage);
-    onSplitPaymentChange?.(nextValue, {
-      ...options,
-      amount: nextAmount,
-      splitPaymentAmount: nextAmount,
-      ...(shouldIncludeCreditNote
-        ? {
-            includeCreditNote: true,
-            include_credit_note: true,
-          }
-        : {}),
-      ...(creditNoteAmount
-        ? {
-            creditNoteAmount,
-            credit_note_amount: creditNoteAmount,
-          }
-        : {}),
-    });
-    onSplitPaymentAmountChange?.(
-      errorMessage ? "" : formatSplitPaymentAmount(nextAmount)
-    );
-    if (!nextValue) {
-      setShouldApplyCreditNoteWithSplitPayment(false);
-    }
-  };
-
-  const continueSplitPaymentSelection = async (nextValue, options = {}) => {
-    if (
-      nextValue &&
-      isCouponApplied &&
-      isSplitPaymentTotalBelowMinTransaction
-    ) {
-      const includeCreditNote =
-        options?.includeCreditNote === true || isCreditNoteAppliedForSplit;
-
-      setCouponValidity({
-        title: t(
-          "resource.dynamic_label.payment_mode_is_not_valid_for_applied_coupon"
-        ),
-        message:
-          "Split payment cannot be used with the applied coupon. Do you want to remove the coupon and continue?",
-      });
-      setShouldApplyCreditNoteWithSplitPayment(includeCreditNote);
-      setShouldEnableSplitPaymentAfterCouponRemoval(true);
-      setShowCouponValidityModal(true);
-      return;
-    }
-
-    if (nextValue && isCouponApplied) {
-      const validateAppliedCoupon = splitPaymentConfig?.onAppliedCouponValidate;
-      const includeCreditNote =
-        options?.includeCreditNote === true || isCreditNoteAppliedForSplit;
-
-      if (typeof validateAppliedCoupon === "function") {
-        setIsSplitPaymentCouponValidating(true);
-
-        try {
-          const response = await validateAppliedCoupon();
-          const couponValidity =
-            response?.coupon_validity ||
-            response?.data?.validateCoupon?.coupon_validity ||
-            {};
-          const couponHasCode = Boolean(couponValidity?.code);
-          const isCouponValidForSplit =
-            couponValidity?.valid === true ||
-            (!couponHasCode && couponValidity?.valid !== false);
-
-          if (isCouponValidForSplit) {
-            skipNextSplitCouponMopValidationRef.current = true;
-            applySplitPaymentSelection(true, options);
-            return;
-          }
-
-          setCouponValidity({
-            title:
-              couponValidity?.title ||
-              t(
-                "resource.dynamic_label.payment_mode_is_not_valid_for_applied_coupon"
-              ),
-            message:
-              couponValidity?.display_message_en ||
-              couponValidity?.message ||
-              "Split payment cannot be used with the applied coupon. Do you want to remove the coupon and continue?",
-            valid: couponValidity?.valid,
-          });
-          setShouldApplyCreditNoteWithSplitPayment(includeCreditNote);
-          setShouldEnableSplitPaymentAfterCouponRemoval(true);
-          setShowCouponValidityModal(true);
-          return;
-        } finally {
-          setIsSplitPaymentCouponValidating(false);
-        }
-      }
-
-      setCouponValidity({
-        title: t(
-          "resource.dynamic_label.payment_mode_is_not_valid_for_applied_coupon"
-        ),
-        message:
-          "Split payment cannot be used with the applied coupon. Do you want to remove the coupon and continue?",
-      });
-      setShouldApplyCreditNoteWithSplitPayment(includeCreditNote);
-      setShouldEnableSplitPaymentAfterCouponRemoval(true);
-      setShowCouponValidityModal(true);
-      return;
-    }
-
-    applySplitPaymentSelection(nextValue, options);
-  };
-
-  const handleSplitPaymentChange = async () => {
-    if (
-      isSplitPaymentSelected ||
-      isSplitPaymentCheckboxDisabled ||
-      isSplitPaymentCouponValidating
-    ) {
-      return;
-    }
-
-    if (isCreditNoteAppliedForSplit) {
-      setShowSplitCreditNoteConfirmation(true);
-      return;
-    }
-
-    await continueSplitPaymentSelection(true);
-  };
-
-  const confirmSplitCreditNoteSelection = async () => {
-    if (
-      isSplitPaymentCouponValidating ||
-      isSplitCreditNoteProceeding ||
-      splitCreditNoteProceedingRef.current
-    ) {
-      return;
-    }
-
-    splitCreditNoteProceedingRef.current = true;
-    setIsSplitCreditNoteProceeding(true);
-
-    try {
-      setShowSplitCreditNoteConfirmation(false);
-      setShouldApplyCreditNoteWithSplitPayment(true);
-      await continueSplitPaymentSelection(true, { includeCreditNote: true });
-    } finally {
-      splitCreditNoteProceedingRef.current = false;
-      setIsSplitCreditNoteProceeding(false);
-    }
-  };
-
-  const cancelSplitCreditNoteSelection = () => {
-    if (isSplitCreditNoteProceeding || splitCreditNoteProceedingRef.current) {
-      return;
-    }
-
-    setShowSplitCreditNoteConfirmation(false);
-    setShouldApplyCreditNoteWithSplitPayment(false);
-  };
-
-  const closeCouponValidityModal = () => {
-    if (shouldEnableSplitPaymentAfterCouponRemoval) {
-      setShouldEnableSplitPaymentAfterCouponRemoval(false);
-      setShouldApplyCreditNoteWithSplitPayment(false);
-      setShowCouponValidityModal(false);
-      fpi.custom.setValue("isCouponValid", true);
-      return;
-    }
-
-    if (mop === "CARD" && subMop === "newCARD") {
-      hideNewCard();
-    }
-    setShowCouponValidityModal(false);
-    fpi.custom.setValue("isCouponValid", true);
-    unsetSelectedSubMop();
-  };
-
-  const confirmCouponRemoval = async () => {
-    if (shouldEnableSplitPaymentAfterCouponRemoval) {
-      const removeAppliedCoupon = splitPaymentConfig?.onAppliedCouponRemove;
-      const couponRemovalResult =
-        typeof removeAppliedCoupon === "function"
-          ? await removeAppliedCoupon()
-          : false;
-      const isCouponRemoved = couponRemovalResult !== false;
-      const couponRemovalAmountOptions =
-        couponRemovalResult && typeof couponRemovalResult === "object"
-          ? {
-              paymentOptionsAmount:
-                couponRemovalResult.paymentOptionsAmount ??
-                couponRemovalResult.amount,
-            }
-          : {};
-
-      setShouldEnableSplitPaymentAfterCouponRemoval(false);
-      setShouldApplyCreditNoteWithSplitPayment(false);
-      setShowCouponValidityModal(false);
-      fpi.custom.setValue("isCouponValid", true);
-
-      if (isCouponRemoved) {
-        applySplitPaymentSelection(true, {
-          includeCreditNote: shouldApplyCreditNoteWithSplitPayment,
-          ...couponRemovalAmountOptions,
-        });
-      }
-      return;
-    }
-
-    removeCoupon();
-    setShowCouponValidityModal(false);
-    fpi.custom.setValue("isCouponValid", true);
-    if (!selectedUpiIntentApp && selectedTab === "UPI" && isTablet) {
-      setSelectedUpiIntentApp("gpay");
-    }
-  };
-
-  const cancelCouponRemoval = () => {
-    if (shouldEnableSplitPaymentAfterCouponRemoval) {
-      setShouldEnableSplitPaymentAfterCouponRemoval(false);
-      setShouldApplyCreditNoteWithSplitPayment(false);
-      setShowCouponValidityModal(false);
-      fpi.custom.setValue("isCouponValid", true);
-      return;
-    }
-
-    if (mop === "CARD" && subMop === "newCARD") {
-      hideNewCard();
-    }
-    setShowCouponValidityModal(false);
-    fpi.custom.setValue("isCouponValid", true);
-    unsetSelectedSubMop();
-  };
+  const amountProps = { getCurrencySymbol, getTotalValue };
 
   const paymentFlowProps = {
     selectMop,
@@ -947,7 +247,6 @@ function CheckoutPaymentContent({
     loader,
     onPriceDetailsClick,
     mopSelectionLoading,
-    isPaymentDisabled: isPaymentActionDisabled,
   };
 
   // Card specific (keeps the case block small)
@@ -1101,7 +400,6 @@ function CheckoutPaymentContent({
               setSavedUPISelect={setSavedUPISelect}
               showUpiRedirectionModal={showUpiRedirectionModal}
               cancelUpiAppPayment={cancelUpiAppPayment}
-              isPaymentDisabled={isPaymentActionDisabled}
             />
           </>
         );
@@ -1142,12 +440,6 @@ function CheckoutPaymentContent({
             Spinner={Spinner}
             isCouponValid={isCouponValid}
             mopSelectionLoading={mopSelectionLoading}
-            isPaymentDisabled={
-              isCouponValidationLoading ||
-              isSplitPaymentCouponValidating ||
-              (isResumeSplitPayment ? false : Boolean(isPaymentDisabled))
-            }
-            splitCodAction={splitCodAction}
           />
         );
 
@@ -1193,6 +485,58 @@ function CheckoutPaymentContent({
           />
         );
 
+      case "NEFT":
+        return (
+          <NeftPay
+            {...uiProps}
+            {...amountProps}
+            neftFileUpload={neftFileUpload}
+            proceedToPay={proceedToPay}
+            selectedPaymentPayload={selectedPaymentPayload}
+            enableLinkPaymentOption={enableLinkPaymentOption}
+            isPaymentLoading={isPaymentLoading}
+            loader={loader}
+            onPriceDetailsClick={onPriceDetailsClick}
+          />
+        );
+
+      case "RTGS":
+        return (
+          <RtgsPay
+            {...uiProps}
+            {...amountProps}
+            rtgsFileUpload={rtgsFileUpload}
+            proceedToPay={proceedToPay}
+            selectedPaymentPayload={selectedPaymentPayload}
+            enableLinkPaymentOption={enableLinkPaymentOption}
+            isPaymentLoading={isPaymentLoading}
+            loader={loader}
+            onPriceDetailsClick={onPriceDetailsClick}
+          />
+        );
+
+      case "CREDIT":
+        return (
+          <CreditPayment
+            styles={styles}
+            StickyPayNow={StickyPayNow}
+            isTablet={isTablet}
+            getCurrencySymbol={getCurrencySymbol}
+            getTotalValue={getTotalValue}
+            availableCredit={creditPaymentData?.availableCredit}
+            isActive={creditPaymentData?.isActive}
+            lender={creditPaymentData?.lender}
+            proceedToPay={proceedToPay}
+            acceptOrder={acceptOrder}
+            selectedPaymentPayload={selectedPaymentPayload}
+            enableLinkPaymentOption={enableLinkPaymentOption}
+            isPaymentLoading={isPaymentLoading}
+            onPriceDetailsClick={onPriceDetailsClick}
+            priceFormatCurrencySymbol={priceFormatCurrencySymbol}
+            loader={loader}
+          />
+        );
+
       default: {
         return (
           <div>
@@ -1202,7 +546,7 @@ function CheckoutPaymentContent({
               {t("resource.checkout.choose_an_option")}
             </div>
             <div className={styles.modeOption}>
-              {selectedTabData?.list?.map((op) => (
+              {selectedTabData?.list?.map((op, index) => (
                 <div
                   key={op.display_name}
                   className={`${styles.modeItemWrapper} ${getOPBorder()}`}
@@ -1245,14 +589,9 @@ function CheckoutPaymentContent({
                             customClassName={styles.visibleOnTab}
                             value={priceFormatCurrencySymbol(
                               getCurrencySymbol,
-                              getPayNowValue(),
-                              "en-IN",
-                              null,
-                              true
+                              getTotalValue()
                             )}
-                            disabled={
-                              mopSelectionLoading || isPaymentActionDisabled
-                            }
+                            disabled={mopSelectionLoading}
                             onPriceDetailsClick={onPriceDetailsClick}
                             enableLinkPaymentOption={enableLinkPaymentOption}
                             isPaymentLoading={isPaymentLoading}
@@ -1269,21 +608,14 @@ function CheckoutPaymentContent({
                               proceedToPay("Other", selectedPaymentPayload);
                               acceptOrder();
                             }}
-                            disabled={
-                              mopSelectionLoading ||
-                              isPaymentLoading ||
-                              isPaymentActionDisabled
-                            }
+                            disabled={mopSelectionLoading || isPaymentLoading}
                           >
                             {!isPaymentLoading ? (
                               <>
                                 {t("resource.common.pay_caps")}{" "}
                                 {priceFormatCurrencySymbol(
                                   getCurrencySymbol,
-                                  getPayNowValue(),
-                                  "en-IN",
-                                  null,
-                                  true
+                                  getTotalValue()
                                 )}
                               </>
                             ) : (
@@ -1334,6 +666,27 @@ function CheckoutPaymentContent({
               setvpa("");
               setLastValidatedBin("");
               unsetSelectedSubMop();
+              if (opt.name === "NEFT") {
+                const neftPaymentData = paymentOption?.payment_option?.find(
+                  (option) => option.name === "NEFT"
+                );
+                const neftSubMop = neftPaymentData?.list?.[0];
+                if (neftSubMop) selectMop("NEFT", "NEFT", neftSubMop.code || "");
+              }
+              if (opt.name === "RTGS") {
+                const rtgsPaymentData = paymentOption?.payment_option?.find(
+                  (option) => option.name === "RTGS"
+                );
+                const rtgsSubMop = rtgsPaymentData?.list?.[0];
+                if (rtgsSubMop) selectMop("RTGS", "RTGS", rtgsSubMop.code || "");
+              }
+              if (opt.name === "CREDIT") {
+                const creditOptionData = paymentOption?.payment_option?.find(
+                  (option) => option.name === "CREDIT"
+                );
+                const creditSubMop = creditOptionData?.list?.[0];
+                if (creditSubMop) selectMop("CREDIT", "CREDIT", creditSubMop.code || "");
+              }
             }
           }}
         >
@@ -1343,14 +696,21 @@ function CheckoutPaymentContent({
             &nbsp;
           </div>
           <div className={styles.link}>
-            <div className={`${styles.icon} ${styles.mopIcon}`}>
-              {/* <img src={opt.svg} alt="" /> */}
-              <SvgWrapper svgSrc={opt.svg}></SvgWrapper>
+            <div
+              className={`${styles.icon} ${opt.image_src && opt.name === "CREDIT" ? styles.creditLogoIcon : styles.mopIcon}`}
+            >
+              {opt.image_src && opt.name === "CREDIT" ? (
+                <img src={opt.image_src} alt={opt?.display_name} />
+              ) : (
+                <SvgWrapper svgSrc={opt.svg}></SvgWrapper>
+              )}
             </div>
             <div
               className={`${styles.modeName} ${selectedTab === opt.name ? styles.selectedModeName : ""}`}
             >
-              {translateDynamicLabel(opt?.display_name ?? "", t)}
+              {opt.name === "CREDIT" && creditPaymentData?.lender?.brandName
+                ? creditPaymentData.lender.brandName
+                : translateDynamicLabel(opt?.display_name ?? "", t)}
             </div>
           </div>
           {opt.subMopIcons && (
@@ -1400,6 +760,7 @@ function CheckoutPaymentContent({
       </div>
     );
   };
+
   return (
     <>
       {!enableLinkPaymentOption &&
@@ -1409,7 +770,14 @@ function CheckoutPaymentContent({
             isOpen={showCouponValidityModal || !isCouponValid}
             title={couponValidity.title || inValidCouponData?.title}
             notCloseOnclickOutside={true}
-            closeDialog={closeCouponValidityModal}
+            closeDialog={() => {
+              if (mop === "CARD" && subMop === "newCARD") {
+                hideNewCard();
+              }
+              setShowCouponValidityModal(false);
+              fpi.custom.setValue("isCouponValid", true);
+              unsetSelectedSubMop();
+            }}
           >
             <div className={styles.couponValidity}>
               <p className={styles.message}>
@@ -1418,13 +786,31 @@ function CheckoutPaymentContent({
               <div className={styles.select}>
                 <div
                   className={`${styles.commonBtn} ${styles.yesBtn}`}
-                  onClick={confirmCouponRemoval}
+                  onClick={() => {
+                    removeCoupon();
+                    setShowCouponValidityModal(false);
+                    fpi.custom.setValue("isCouponValid", true);
+                    if (
+                      !selectedUpiIntentApp &&
+                      selectedTab === "UPI" &&
+                      isTablet
+                    ) {
+                      setSelectedUpiIntentApp("gpay");
+                    }
+                  }}
                 >
                   {t("resource.common.yes")}
                 </div>
                 <div
                   className={`${styles.commonBtn} ${styles.noBtn}`}
-                  onClick={cancelCouponRemoval}
+                  onClick={() => {
+                    if (mop === "CARD" && subMop === "newCARD") {
+                      hideNewCard();
+                    }
+                    setShowCouponValidityModal(false);
+                    fpi.custom.setValue("isCouponValid", true);
+                    unsetSelectedSubMop();
+                  }}
                 >
                   {t("resource.common.no")}
                 </div>
@@ -1433,52 +819,23 @@ function CheckoutPaymentContent({
           </Modal>
         )}
 
-      <Modal
-        customClassName={styles.splitCreditNoteConfirmationModal}
-        isOpen={showSplitCreditNoteConfirmation}
-        title="Confirm Split Payment"
-        notCloseOnclickOutside={true}
-        closeDialog={cancelSplitCreditNoteSelection}
-      >
-        <div className={styles.splitCreditNoteConfirmation}>
-          <p className={styles.splitCreditNoteConfirmationMessage}>
-            You have selected Credit Note with Split Payment. If you continue,
-            your Credit Note will be applied to this order and can only be
-            refunded after the order is cancelled.
-          </p>
-          <div className={styles.splitCreditNoteConfirmationActions}>
-            <button
-              className={`${styles.splitCreditNoteConfirmationButton} ${styles.cancelSplitCreditNoteButton}`}
-              onClick={cancelSplitCreditNoteSelection}
-              type="button"
-            >
-              Cancel
-            </button>
-            <button
-              className={`${styles.splitCreditNoteConfirmationButton} ${styles.proceedSplitCreditNoteButton}`}
-              disabled={
-                isSplitPaymentCouponValidating || isSplitCreditNoteProceeding
-              }
-              onClick={confirmSplitCreditNoteSelection}
-              type="button"
-            >
-              Proceed
-            </button>
-          </div>
-        </div>
-      </Modal>
-
-      {shouldShowFullPaymentSkeleton ? (
+      {isLoading ? (
         <div className={styles.container}>
           <CheckoutPaymentSkeleton />
         </div>
       ) : (
         <div
-          className={`${styles.container} ${enableLinkPaymentOption ? styles.unsetBorder : ""}`}
+          className={`${styles.container} ${enableLinkPaymentOption ? styles.unsetBorder : ""} ${isSplitPayment ? styles.split : ""}`}
         >
+          {beforePaymentContent}
           {true ? (
             <>
-              {shouldShowStoreCredit && (
+              {!paymentContentOverride &&
+                partialPaymentOption?.list?.some(
+                  (option) => option?.partial_payment_allowed
+                ) &&
+                partialPaymentOption?.list?.[0]?.balance?.account?.status !==
+                  "INACTIVE" && (
                 <div className={styles.creditNote}>
                   <CreditNote
                     data={partialPaymentOption}
@@ -1493,299 +850,455 @@ function CheckoutPaymentContent({
 
               {creditUpdating ? (
                 <CheckoutPaymentSkeleton />
+              ) : paymentContentOverride ? (
+                paymentContentOverride
               ) : (
-                <>
-                  {isSplitPaymentEnabled && (
-                    <div
-                      className={`${styles.splitPaymentOption} ${isSplitPaymentSelected ? styles.selectedSplitPaymentOption : ""}`}
-                    >
-                      <div className={styles.splitPaymentDetails}>
-                        <div className={styles.splitPaymentHeader}>
-                          <span className={styles.splitPaymentTitleWrapper}>
-                            <span className={styles.splitPaymentTitle}>
-                              {splitPaymentLabel}
-                            </span>
-                            <button
-                              aria-label="Split payment information"
-                              className={styles.splitPaymentInfoButton}
-                              type="button"
-                            >
-                              <SvgWrapper
-                                className={styles.splitPaymentInfoIcon}
-                                svgSrc="info-grey"
-                              />
-                              <span className={styles.splitPaymentInfoTooltip}>
-                                You can check your pending orders in the My
-                                Orders section and complete the payment for the
-                                remaining amount before the order times out.
-                              </span>
-                            </button>
-                          </span>
-                          <span className={styles.splitPaymentBadge}>
-                            <svg
-                              className={styles.splitPaymentBadgeIcon}
-                              aria-hidden="true"
-                              focusable="false"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                d="M9.78 11.16 8.36 12.58 5.79 10l2.57-2.58 1.42 1.42L9.62 9H10c1.1 0 2-.9 2-2V4.41l-1.79 1.8L8.8 4.8 13 .59l4.2 4.2-1.41 1.41L14 4.41V7c0 2.21-1.79 4-4 4h-.38l.16.16Zm4.44 1.68 1.42-1.42L18.21 14l-2.57 2.58-1.42-1.42.16-.16H14c-1.1 0-2 .9-2 2v2.59l1.79-1.8 1.41 1.41-4.2 4.21-4.2-4.2 1.41-1.41L10 19.59V17c0-2.21 1.79-4 4-4h.38l-.16-.16Z"
-                                fill="currentColor"
-                              />
-                            </svg>
-                            {splitPaymentAvailabilityLabel}
-                          </span>
-                          {!isSplitPaymentSelected && (
-                            <button
-                              className={`${styles.splitPaymentAction} ${
-                                isSplitPaymentActionDisabled
-                                  ? styles.disabledSplitPaymentAction
-                                  : ""
-                              }`}
-                              disabled={isSplitPaymentActionDisabled}
-                              type="button"
-                              onClick={handleSplitPaymentChange}
-                            >
-                              Use Split Payment
-                            </button>
-                          )}
-                        </div>
-                        {isSplitPaymentSelected &&
-                          isSplitPaymentLoading &&
-                          !shouldHideSplitPaymentAmountField && (
-                          <div className={styles.splitPaymentAmountField}>
-                            <Skeleton type="text" width={96} height={14} />
-                            <Skeleton
-                              className={styles.splitPaymentInputSkeleton}
-                              type="box"
-                              height={48}
-                            />
-                            <Skeleton type="text" width="70%" height={14} />
+                <div
+                  className={`${styles.paymentOptions} ${!getTotalValue() ? styles.displayNone : ""}`}
+                >
+                  <div className={styles.navigationLink}>
+                    {paymentOptions?.map((opt, index) =>
+                      navigationTitle(opt, index)
+                    )}
+                    {otherPaymentOptions?.length > 0 && (
+                      <div
+                        className={`${styles.linkWrapper} ${selectedTab === "Other" && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === "Other" && isTablet ? styles.headerHightlight : ""}`}
+                      >
+                        <div
+                          className={styles["linkWrapper-row1"]}
+                          onClick={() => {
+                            setTab("Other");
+                            setSelectedTab("Other");
+                            toggleMop("Other");
+                          }}
+                        >
+                          <div
+                            className={`${selectedTab === "Other" ? styles.indicator : ""} ${styles.onDesktopView}`}
+                          >
+                            &nbsp;
                           </div>
-                        )}
-                        {isSplitPaymentSelected &&
-                          !isSplitPaymentLoading &&
-                          !shouldHideSplitPaymentAmountField && (
-                          <div className={styles.splitPaymentAmountField}>
-                            <label className={styles.splitPaymentFieldLabel}>
-                              {splitPaymentInputLabel}
-                            </label>
-                            <div
-                              className={`${styles.splitPaymentInputWrapper} ${
-                                splitPaymentAmountError
-                                  ? styles.splitPaymentInputError
-                                  : ""
-                              }`}
-                            >
-                              <span className={styles.splitPaymentPrefix}>
-                                {splitPaymentCurrencySymbol}
-                              </span>
-                              <input
-                                className={styles.splitPaymentInput}
-                                inputMode="decimal"
-                                onBlur={handleSplitPaymentAmountBlur}
-                                onChange={handleSplitPaymentAmountChange}
-                                type="text"
-                                value={splitPaymentAmount}
-                              />
+                          <div className={styles.link}>
+                            <div className={styles.icon}>
+                              <SvgWrapper svgSrc="payment-other"></SvgWrapper>
                             </div>
-                            <p
-                              className={`${styles.splitPaymentAssistiveText} ${
-                                splitPaymentAmountError
-                                  ? styles.splitPaymentErrorText
-                                  : ""
-                              }`}
+                            <div
+                              className={`${styles.modeName} ${selectedTab === "Other" ? styles.selectedModeName : ""}`}
                             >
-                              {splitPaymentAmountError ||
-                                splitPaymentInputAssistiveText}
-                            </p>
+                              {paymentOptions?.length > 0 &&
+                              otherPaymentOptions?.length > 0
+                                ? t("resource.checkout.more_payment_options")
+                                : t("resource.checkout.pay_online")}
+                            </div>
+                          </div>
+                          <div
+                            className={`${styles.arrowContainer}  ${styles.activeIconColor}`}
+                          >
+                            <SvgWrapper
+                              className={
+                                selectedTab === "Other" && activeMop === "Other"
+                                  ? styles.upsideDown
+                                  : ""
+                              }
+                              svgSrc="accordion-arrow"
+                            />
+                          </div>
+                        </div>
+                        {isTablet && activeMop === "Other" && (
+                          <div className={` ${styles.onMobileView}`}>
+                            {selectedTab === "Other" && navigationTab()}
                           </div>
                         )}
                       </div>
-                    </div>
-                  )}
-
-                  {isSplitCodPaymentActive && (
-                    <div className={styles.splitPaymentBackRow}>
-                      <button
-                        aria-label="Back to split payment"
-                        className={styles.splitPaymentBackButton}
-                        onClick={handleSplitCodBack}
-                        type="button"
-                      >
-                        <span className={styles.splitPaymentBackIcon}>
-                          <SvgWrapper svgSrc="back" />
-                        </span>
-                        <span className={styles.splitPaymentBackText}>
-                          {splitPaymentLabel}
-                        </span>
-                      </button>
-                    </div>
-                  )}
-
-                  {isPaymentOptionsRefreshing ? (
-                    <div
-                      className={`${styles.paymentOptions} ${shouldHidePaymentOptions ? styles.displayNone : ""}`}
-                    >
-                      <CheckoutPaymentSkeleton />
-                    </div>
-                  ) : (
-                    <div
-                      className={`${styles.paymentOptions} ${shouldHidePaymentOptions ? styles.displayNone : ""}`}
-                    >
-                      <div className={styles.navigationLink}>
-                        {paymentOptions?.map((opt, index) =>
-                          navigationTitle(opt, index)
-                        )}
-                        {otherPaymentOptions?.length > 0 && (
+                    )}
+                    {neftOption && (
+                      <div className={styles.neftBorderBottom}>
+                        <div
+                          className={`${styles.linkWrapper} ${selectedTab === neftOption.name && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === neftOption.name && isTablet ? styles.headerHightlight : ""} ${!codOption ? styles.lastChild : ""}`}
+                          key={neftOption?.display_name ?? ""}
+                          id="nav-title-neft"
+                        >
                           <div
-                            className={`${styles.linkWrapper} ${selectedTab === "Other" && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === "Other" && isTablet ? styles.headerHightlight : ""}`}
+                            className={styles["linkWrapper-row1"]}
+                            onClick={() => {
+                              if (isTablet) {
+                                setSelectedTab((prev) =>
+                                  prev === neftOption.name
+                                    ? ""
+                                    : neftOption.name
+                                );
+                                setTab(neftOption.name);
+                              } else {
+                                setSelectedTab(neftOption.name);
+                                setTab(neftOption.name);
+                              }
+                              removeDialogueError();
+                              toggleMop(neftOption.name);
+                              if (selectedTab !== neftOption.name) {
+                                if (isTablet) {
+                                  setSelectedPaymentPayload({});
+                                }
+                                setNameOnCard("");
+                                setCardExpiryDate("");
+                                setCvvNumber("");
+                                hideNewCard();
+                                setvpa("");
+                                setLastValidatedBin("");
+                                unsetSelectedSubMop();
+                                const neftPaymentData =
+                                  paymentOption?.payment_option?.find(
+                                    (option) => option.name === "NEFT"
+                                  );
+                                const neftSubMop = neftPaymentData?.list?.[0];
+                                if (neftSubMop) {
+                                  selectMop(
+                                    neftOption.name,
+                                    neftOption.name,
+                                    neftSubMop.code || ""
+                                  );
+                                }
+                              }
+                            }}
                           >
                             <div
-                              className={styles["linkWrapper-row1"]}
-                              onClick={() => {
-                                setTab("Other");
-                                setSelectedTab("Other");
-                                toggleMop("Other");
-                              }}
+                              className={`${selectedTab === neftOption.name ? styles.indicator : ""} ${styles.onDesktopView}`}
                             >
+                              &nbsp;
+                            </div>
+                            <div className={styles.link}>
                               <div
-                                className={`${selectedTab === "Other" ? styles.indicator : ""} ${styles.onDesktopView}`}
-                              >
-                                &nbsp;
-                              </div>
-                              <div className={styles.link}>
-                                <div className={styles.icon}>
-                                  {/* <img src={opt.svg} alt="" /> */}
-                                  <SvgWrapper svgSrc="payment-other"></SvgWrapper>
-                                </div>
-                                <div
-                                  className={`${styles.modeName} ${selectedTab === "Other" ? styles.selectedModeName : ""}`}
-                                >
-                                  {paymentOptions?.length > 0 &&
-                                  otherPaymentOptions?.length > 0
-                                    ? t(
-                                        "resource.checkout.more_payment_options"
-                                      )
-                                    : t("resource.checkout.pay_online")}
-                                </div>
-                              </div>
-                              <div
-                                className={`${styles.arrowContainer}  ${styles.activeIconColor}`}
+                                className={`${styles.icon} ${styles.flexCenter}`}
                               >
                                 <SvgWrapper
-                                  className={
-                                    selectedTab === "Other" &&
-                                    activeMop === "Other"
-                                      ? styles.upsideDown
-                                      : ""
-                                  }
-                                  svgSrc="accordion-arrow"
+                                  svgSrc={neftOption.svg}
+                                ></SvgWrapper>
+                              </div>
+                              <div>
+                                <div
+                                  className={`${styles.modeName} ${selectedTab === neftOption.name ? styles.selectedModeName : ""}`}
+                                >
+                                  {translateDynamicLabel(
+                                    neftOption?.display_name ?? "",
+                                    t
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                            {neftOption?.image_src && (
+                              <div className={styles["payment-icons"]}>
+                                <img
+                                  src={neftOption?.image_src}
+                                  alt={neftOption?.svg}
                                 />
                               </div>
+                            )}
+                            <div
+                              className={`${styles.arrowContainer} ${styles.activeIconColor}`}
+                            >
+                              <SvgWrapper
+                                className={
+                                  selectedTab === neftOption.name &&
+                                  activeMop === neftOption.name
+                                    ? styles.upsideDown
+                                    : ""
+                                }
+                                svgSrc="accordion-arrow"
+                              />
                             </div>
-                            {isTablet && activeMop === "Other" && (
-                              <div className={` ${styles.onMobileView}`}>
-                                {selectedTab === "Other" && navigationTab()}
+                          </div>
+                          {isTablet && activeMop === neftOption.name && (
+                            <div>
+                              {selectedTab === neftOption.name &&
+                                navigationTab()}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                    {rtgsOption && (
+                      <div className={styles.neftBorderBottom}>
+                        <div
+                          className={`${styles.linkWrapper} ${selectedTab === rtgsOption.name && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === rtgsOption.name && isTablet ? styles.headerHightlight : ""} ${!codOption ? styles.lastChild : ""}`}
+                          key={rtgsOption?.display_name ?? ""}
+                          id="nav-title-rtgs"
+                        >
+                          <div
+                            className={styles["linkWrapper-row1"]}
+                            onClick={() => {
+                              if (isTablet) {
+                                setSelectedTab((prev) =>
+                                  prev === rtgsOption.name
+                                    ? ""
+                                    : rtgsOption.name
+                                );
+                                setTab(rtgsOption.name);
+                              } else {
+                                setSelectedTab(rtgsOption.name);
+                                setTab(rtgsOption.name);
+                              }
+                              removeDialogueError();
+                              toggleMop(rtgsOption.name);
+                              if (selectedTab !== rtgsOption.name) {
+                                if (isTablet) {
+                                  setSelectedPaymentPayload({});
+                                }
+                                setNameOnCard("");
+                                setCardExpiryDate("");
+                                setCvvNumber("");
+                                hideNewCard();
+                                setvpa("");
+                                setLastValidatedBin("");
+                                unsetSelectedSubMop();
+                                const rtgsPaymentData =
+                                  paymentOption?.payment_option?.find(
+                                    (option) => option.name === "RTGS"
+                                  );
+                                const rtgsSubMop = rtgsPaymentData?.list?.[0];
+                                if (rtgsSubMop) {
+                                  selectMop(
+                                    rtgsOption.name,
+                                    rtgsOption.name,
+                                    rtgsSubMop.code || ""
+                                  );
+                                }
+                              }
+                            }}
+                          >
+                            <div
+                              className={`${selectedTab === rtgsOption.name ? styles.indicator : ""} ${styles.onDesktopView}`}
+                            >
+                              &nbsp;
+                            </div>
+                            <div className={styles.link}>
+                              <div
+                                className={`${styles.icon} ${styles.flexCenter}`}
+                              >
+                                <SvgWrapper
+                                  svgSrc={rtgsOption.svg}
+                                ></SvgWrapper>
+                              </div>
+                              <div>
+                                <div
+                                  className={`${styles.modeName} ${selectedTab === rtgsOption.name ? styles.selectedModeName : ""}`}
+                                >
+                                  {translateDynamicLabel(
+                                    rtgsOption?.display_name ?? "",
+                                    t
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                            {rtgsOption?.image_src && (
+                              <div className={styles["payment-icons"]}>
+                                <img
+                                  src={rtgsOption?.image_src}
+                                  alt={rtgsOption?.svg}
+                                />
                               </div>
                             )}
-                          </div>
-                        )}
-                        {codOption && (
-                          <div style={{ display: "flex", flex: "1" }}>
                             <div
-                              className={`${styles.linkWrapper} ${selectedTab === codOption.name && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === codOption.name && isTablet ? styles.headerHightlight : ""}`}
-                              key={codOption?.display_name ?? ""}
-                              onClick={async () => {
-                                if (shouldShowSplitCodAction) {
-                                  removeDialogueError();
-                                  toggleMop(codOption.name);
-                                  await selectMop(
-                                    codOption.name,
-                                    codOption.name,
-                                    codOption.name
-                                  );
-
-                                  return;
-                                }
-
-                                selectMop(
-                                  codOption.name,
-                                  codOption.name,
-                                  codOption.name
-                                );
-                              }}
+                              className={`${styles.arrowContainer} ${styles.activeIconColor}`}
                             >
-                              <div className={styles["linkWrapper-row1"]}>
-                                <div
-                                  className={` ${selectedTab === codOption.name ? styles.indicator : ""} ${styles.onDesktopView}`}
-                                >
-                                  &nbsp;
-                                </div>
-                                <div className={styles.link}>
-                                  <div className={styles.icon}>
-                                    <SvgWrapper
-                                      svgSrc={codOption.svg}
-                                    ></SvgWrapper>
-                                  </div>
-                                  <div>
-                                    <div
-                                      className={`${styles.modeName} ${selectedTab === codOption.name ? styles.selectedModeName : ""}`}
-                                    >
-                                      {translateDynamicLabel(
-                                        codOption?.display_name ?? "",
-                                        t
-                                      )}
-                                    </div>
-                                    {isTablet && codCharges > 0 && (
-                                      <div className={styles.codCharge}>
-                                        +
-                                        {priceFormatCurrencySymbol(
-                                          getCurrencySymbol,
-                                          codCharges,
-                                          "en-IN",
-                                          null,
-                                          true
-                                        )}{" "}
-                                        {t("resource.checkout.extra_charges")}
-                                      </div>
-                                    )}
-                                  </div>
-                                </div>
-                                {codOption?.image_src && (
-                                  <div className={styles["payment-icons"]}>
-                                    <img
-                                      src={codOption?.image_src}
-                                      alt={codOption?.svg}
-                                    />
-                                  </div>
-                                )}
-                                <div
-                                  className={`${styles.arrowContainer} ${styles.activeIconColor} ${styles.codIconContainer}`}
-                                >
-                                  <SvgWrapper svgSrc="accordion-arrow" />
-                                </div>
-                              </div>
-                              {isTablet && (
-                                <div>
-                                  {selectedTab === codOption.name &&
-                                    navigationTab()}
-                                </div>
-                              )}
+                              <SvgWrapper
+                                className={
+                                  selectedTab === rtgsOption.name &&
+                                  activeMop === rtgsOption.name
+                                    ? styles.upsideDown
+                                    : ""
+                                }
+                                svgSrc="accordion-arrow"
+                              />
                             </div>
                           </div>
-                        )}
-                      </div>
-                      {!isTablet && (
-                        <div
-                          className={`${styles.navigationTab} ${styles.onDesktopView}`}
-                        >
-                          {navigationTab()}
+                          {isTablet && activeMop === rtgsOption.name && (
+                            <div>
+                              {selectedTab === rtgsOption.name &&
+                                navigationTab()}
+                            </div>
+                          )}
                         </div>
-                      )}
+                      </div>
+                    )}
+                    {creditOption && (
+                      <div className={styles.neftBorderBottom}>
+                        <div
+                          className={`${styles.linkWrapper} ${selectedTab === creditOption.name && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === creditOption.name && isTablet ? styles.headerHightlight : ""} ${!codOption ? styles.lastChild : ""}`}
+                          key={creditOption?.display_name ?? ""}
+                          id="nav-title-credit"
+                        >
+                          <div
+                            className={styles["linkWrapper-row1"]}
+                            onClick={() => {
+                              if (isTablet) {
+                                setSelectedTab((prev) =>
+                                  prev === creditOption.name
+                                    ? ""
+                                    : creditOption.name
+                                );
+                                setTab(creditOption.name);
+                              } else {
+                                setSelectedTab(creditOption.name);
+                                setTab(creditOption.name);
+                              }
+                              removeDialogueError();
+                              toggleMop(creditOption.name);
+                              if (selectedTab !== creditOption.name) {
+                                if (isTablet) {
+                                  setSelectedPaymentPayload({});
+                                }
+                                setNameOnCard("");
+                                setCardExpiryDate("");
+                                setCvvNumber("");
+                                hideNewCard();
+                                setvpa("");
+                                setLastValidatedBin("");
+                                unsetSelectedSubMop();
+
+                                const creditOptionData =
+                                  paymentOption?.payment_option?.find(
+                                    (option) => option.name === "CREDIT"
+                                  );
+                                const creditSubMop = creditOptionData?.list?.[0];
+                                if (creditSubMop) {
+                                  selectMop(
+                                    creditOption.name,
+                                    creditOption.name,
+                                    creditSubMop.code || ""
+                                  );
+                                }
+                              }
+                            }}
+                          >
+                            <div
+                              className={`${selectedTab === creditOption.name ? styles.indicator : ""} ${styles.onDesktopView}`}
+                            >
+                              &nbsp;
+                            </div>
+                            <div className={styles.link}>
+                              <div
+                                className={`${styles.icon} ${creditOption.image_src ? styles.creditLogoIcon : styles.flexCenter}`}
+                              >
+                                {creditOption.image_src ? (
+                                  <img
+                                    src={creditOption.image_src}
+                                    alt={creditOption?.display_name}
+                                  />
+                                ) : (
+                                  <SvgWrapper svgSrc="credit" />
+                                )}
+                              </div>
+                              <div>
+                                <div
+                                  className={`${styles.modeName} ${selectedTab === creditOption.name ? styles.selectedModeName : ""}`}
+                                >
+                                  {creditPaymentData?.lender?.brandName
+                                    ? creditPaymentData.lender.brandName
+                                    : translateDynamicLabel(
+                                        creditOption?.display_name ?? "",
+                                        t
+                                      )}
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              className={`${styles.arrowContainer} ${styles.activeIconColor}`}
+                            >
+                              <SvgWrapper
+                                className={
+                                  selectedTab === creditOption.name &&
+                                  activeMop === creditOption.name
+                                    ? styles.upsideDown
+                                    : ""
+                                }
+                                svgSrc="accordion-arrow"
+                              />
+                            </div>
+                          </div>
+                          {isTablet && activeMop === creditOption.name && (
+                            <div>
+                              {selectedTab === creditOption.name &&
+                                navigationTab()}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {codOption && (
+                      <div style={{ display: "flex", flex: "1" }}>
+                        <div
+                          className={`${styles.linkWrapper} ${selectedTab === codOption.name && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === codOption.name && isTablet ? styles.headerHightlight : ""}`}
+                          key={codOption?.display_name ?? ""}
+                          onClick={() => {
+                            selectMop(
+                              codOption.name,
+                              codOption.name,
+                              codOption.name
+                            );
+                          }}
+                        >
+                          <div className={styles["linkWrapper-row1"]}>
+                            <div
+                              className={` ${selectedTab === codOption.name ? styles.indicator : ""} ${styles.onDesktopView}`}
+                            >
+                              &nbsp;
+                            </div>
+                            <div className={styles.link}>
+                              <div className={styles.icon}>
+                                <SvgWrapper svgSrc={codOption.svg}></SvgWrapper>
+                              </div>
+                              <div>
+                                <div
+                                  className={`${styles.modeName} ${selectedTab === codOption.name ? styles.selectedModeName : ""}`}
+                                >
+                                  {translateDynamicLabel(
+                                    codOption?.display_name ?? "",
+                                    t
+                                  )}
+                                </div>
+                                {isTablet && codCharges > 0 && (
+                                  <div className={styles.codCharge}>
+                                    +
+                                    {priceFormatCurrencySymbol(
+                                      getCurrencySymbol,
+                                      codCharges
+                                    )}{" "}
+                                    {t("resource.checkout.extra_charges")}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                            {codOption?.image_src && (
+                              <div className={styles["payment-icons"]}>
+                                <img
+                                  src={codOption?.image_src}
+                                  alt={codOption?.svg}
+                                />
+                              </div>
+                            )}
+                            <div
+                              className={`${styles.arrowContainer} ${styles.activeIconColor} ${styles.codIconContainer}`}
+                            >
+                              <SvgWrapper svgSrc="accordion-arrow" />
+                            </div>
+                          </div>
+                          {isTablet && (
+                            <div>
+                              {selectedTab === codOption.name &&
+                                navigationTab()}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  {!isTablet && (
+                    <div
+                      className={`${styles.navigationTab} ${styles.onDesktopView}`}
+                    >
+                      {navigationTab()}
                     </div>
                   )}
-                </>
+                </div>
               )}
             </>
           ) : (

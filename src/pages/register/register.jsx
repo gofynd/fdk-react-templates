@@ -5,8 +5,6 @@ import {
   validateEmailField,
   validatePasswordField,
   translateDynamicLabel,
-  getCustomFontSize,
-  getHeadingTypographyStyles,
 } from "../../helper/utils";
 import * as styles from "./register.less";
 import MobileNumber from "../../page-layouts/auth/mobile-number/mobile-number";
@@ -30,7 +28,7 @@ function Register({
   onLoginButtonClick = () => {},
   onRegisterFormSubmit = () => {},
   verifyDetailsProp = {},
-  pageConfig = {},
+  showReferralCodeField = false,
 }) {
   const { t } = useGlobalTranslation("translation");
   const firstnameId = useId();
@@ -38,11 +36,12 @@ function Register({
   const emailId = useId();
   const passwordId = useId();
   const confirmPasswordId = useId();
+  const referralCodeId = useId();
+  const referralCodeInitialized = useRef(false);
 
   const [isPasswordShow, setIsPasswordShow] = useState(false);
   const [isConfirmPasswordShow, setIsConfirmPasswordShow] = useState(false);
   const [showConsentTooltip, setShowConsentTooltip] = useState(false);
-  const containerRef = useRef(null);
 
   const validateEmail = (value) => {
     if ((isEmail && emailLevel === "hard") || value) {
@@ -61,7 +60,7 @@ function Register({
     getValues,
     setError,
     clearErrors,
-    trigger,
+    setValue,
   } = useForm({
     mode: "onTouched",
     defaultValues: {
@@ -75,10 +74,33 @@ function Register({
       },
       password: "",
       confirmPassword: "",
+      referralCode: "",
     },
   });
 
+  // Auto-fill referral code from localStorage on mount
+
+  useEffect(() => {
+    if (referralCodeInitialized.current) return;
+    referralCodeInitialized.current = true;
+    try {
+      const raw = localStorage.getItem("loyalty_referral_code");
+      if (!raw) return;
+      let code = null;
+      try {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed.code === "string") code = parsed.code;
+      } catch {
+        if (typeof raw === "string" && raw.trim()) code = raw.trim();
+      }
+      if (code) setValue("referralCode", code);
+    } catch {
+      // localStorage unavailable — skip silently
+    }
+  }, [setValue]);
+
   const consentAccepted = watch("consent", false);
+  
   const phoneValue = watch("phone");
 
   const isEmailRequired = useMemo(() => {
@@ -133,27 +155,6 @@ function Register({
     }
   }, [error]);
 
-  // Clear the server-side (root) error once the user edits any field,
-  // so a failed signup attempt doesn't permanently block resubmission
-  useEffect(() => {
-    const subscription = watch(() => {
-      if (errors.root) {
-        clearErrors("root");
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [watch, errors.root, clearErrors]);
-
-  const passwordValue = watch("password");
-
-  // Keep password & confirm password in sync: re-validate confirm password
-  // whenever password changes, so a stale mismatch error gets cleared
-  useEffect(() => {
-    if (getValues("confirmPassword") || errors.confirmPassword) {
-      trigger("confirmPassword");
-    }
-  }, [passwordValue, trigger, getValues]);
-
   const handleRegisterSubmit = (data) => {
     if (!consentAccepted) {
       setShowConsentTooltip(true);
@@ -162,56 +163,16 @@ function Register({
     onRegisterFormSubmit(data);
   };
 
-  const getPageConfigValue = (value) => value?.value ?? value;
-  const registerTitle =
-    getPageConfigValue(pageConfig?.title) ||
-    t("resource.common.complete_signup");
-  const isCustomTypography =
-    getPageConfigValue(pageConfig?.typography_preset) === "custom";
-  const headingFontSize = isCustomTypography
-    ? getCustomFontSize(
-        getPageConfigValue(pageConfig?.heading_font_size) || "32",
-        "heading"
-      )
-    : undefined;
-  const headingTypographyStyles = getHeadingTypographyStyles(pageConfig);
-  const hasCustomFontSize = Boolean(isCustomTypography && headingFontSize);
-  const hasCustomHeadingTypography = Boolean(
-    Object.keys(headingTypographyStyles).length
-  );
-
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    container.style.removeProperty("--register-title-size");
-    container.style.removeProperty("--section-heading-weight");
-    container.style.removeProperty("--section-heading-text-transform");
-
-    if (isCustomTypography && headingFontSize) {
-      container.style.setProperty("--register-title-size", headingFontSize);
-    }
-
-    Object.entries(headingTypographyStyles).forEach(([key, value]) => {
-      container.style.setProperty(key, value);
-    });
-  }, [isCustomTypography, headingFontSize, headingTypographyStyles]);
-
   return (
-    <div
-      ref={containerRef}
-      className={`${styles.containerWrapper} ${
-        hasCustomFontSize ? styles.customTypography : ""
-      } ${
-        hasCustomHeadingTypography ? styles.customHeadingTypography : ""
-      }`}
-    >
+    <div className={styles.containerWrapper}>
       {!isFormSubmitSuccess ? (
         <form
           className={styles.registerFormWrapper}
           onSubmit={handleSubmit(handleRegisterSubmit)}
         >
-          <h1 className={styles.title}>{registerTitle}</h1>
+          <h1 className={styles.title}>
+            {t("resource.common.complete_signup")}
+          </h1>
           <div
             className={`${styles.registerNameInput} ${errors.firstName ? styles.errorInput : ""}`}
           >
@@ -418,6 +379,26 @@ function Register({
               </p>
             )}
           </div>
+
+          {showReferralCodeField && (
+            <div className={styles.registerNameInput}>
+              <label className={styles.inputTitle} htmlFor={referralCodeId}>
+                {t("resource.auth.referral_code_label", { defaultValue: "Referral Code" })}{" "}
+                <span className={styles.optional}>
+                  ({t("resource.common.optional")})
+                </span>
+              </label>
+              <input
+                id={referralCodeId}
+                type="text"
+                autoComplete="off"
+                {...register("referralCode", {
+                  setValueAs: (v) => (typeof v === "string" ? v.trim() : v),
+                })}
+              />
+            </div>
+          )}
+
           {errors.root && (
             <div className={styles.loginAlert}>
               <span>{translateDynamicLabel(errors.root.message, t)}</span>
@@ -453,7 +434,7 @@ function Register({
             className={styles.registerBtn}
             type="submit"
             disabled={
-              Object.keys(errors).some((key) => key !== "root") ||
+              Object.keys(errors).length > 0 ||
               (isMobile &&
                 (isMobileRequired === "required" || phoneValue?.mobile) &&
                 !phoneValue?.isValidNumber)
