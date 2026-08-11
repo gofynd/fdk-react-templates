@@ -123,7 +123,7 @@ const FyImage = forwardRef(
 
       const key = searchStringInArray(url, IMAGE_SIZES);
 
-      return (sources ?? [])
+      return sources
         .reduce((srcset, s) => {
           let src = url;
           if (key && s?.width) {
@@ -139,14 +139,11 @@ const FyImage = forwardRef(
       if (!isImageResizable) {
         return [];
       }
-      // Derived values go on a copy: `sources` is caller-owned (and may be a
-      // shared/frozen constant), so writing media/srcset onto it would leak
-      // state across instances.
-      return (sources ?? []).map((source) => ({
-        ...source,
-        media: getMedia(source),
-        srcset: getUrl(source.width, source.url),
-      }));
+      return sources?.map((source) => {
+        source.media = getMedia(source);
+        source.srcset = getUrl(source.width, source.url);
+        return source;
+      });
     };
 
     const getMedia = (source) => {

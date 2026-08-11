@@ -42,6 +42,7 @@ function UpiAppPayment({
   isCouponApplied,
   isCouponValid,
   mopSelectionLoading,
+  isPaymentDisabled = false,
 }) {
   const isTablet = useViewport(0, 768);
 
@@ -193,11 +194,17 @@ function UpiAppPayment({
               <StickyPayNow
                 customClassName={styles.visibleOnTab}
                 disabled={
-                  mopSelectionLoading || !selectedUpiIntentApp || isUPIError
+                  mopSelectionLoading ||
+                  !selectedUpiIntentApp ||
+                  isUPIError ||
+                  isPaymentDisabled
                 }
                 value={priceFormatCurrencySymbol(
                   getCurrencySymbol,
-                  getTotalValue()
+                  getTotalValue(),
+                  "en-IN",
+                  null,
+                  true
                 )}
                 onPriceDetailsClick={onPriceDetailsClick}
                 enableLinkPaymentOption={enableLinkPaymentOption}
@@ -222,12 +229,12 @@ function UpiAppPayment({
                     }
                     selectMop("UPI", "UPI", "UPI");
                     cancelQrPayment();
-                    handleProceedToPayClick();
                   }}
                   disabled={
                     mopSelectionLoading ||
                     !selectedUpiIntentApp ||
-                    isPaymentLoading
+                    isPaymentLoading ||
+                    isPaymentDisabled
                   }
                 >
                   {!isPaymentLoading ? (
@@ -235,7 +242,10 @@ function UpiAppPayment({
                       {t("resource.common.pay_caps")}{" "}
                       {priceFormatCurrencySymbol(
                         getCurrencySymbol,
-                        getTotalValue()
+                        getTotalValue(),
+                        "en-IN",
+                        null,
+                        true
                       )}
                     </>
                   ) : (

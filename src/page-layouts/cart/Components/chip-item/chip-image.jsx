@@ -8,6 +8,7 @@ export default function ChipImage({ product, type, imageWidth, globalConfig }) {
   const productImages = product?.images
     ?.map((image) => image?.url)
     ?.slice(0, 4);
+  const imageSources = imageWidth ? [{ width: imageWidth }] : undefined;
 
   // if (
   //   (type === "virtual_bundle" || type === "physical_bundle") &&
@@ -35,7 +36,7 @@ export default function ChipImage({ product, type, imageWidth, globalConfig }) {
       customClass={styles.itemImg}
       src={productImages?.[0]}
       alt={product?.name}
-      sources={[{ width: imageWidth }]}
+      sources={imageSources}
       aspectRatio={aspectRatio}
       isImageFill={globalConfig?.img_fill}
     />

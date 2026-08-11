@@ -2,10 +2,15 @@
 
 .bagImg {
   min-width: 80px;
-  border-radius: @ButtonRadius;
+  border-radius: @ItemImageRadius;
   overflow: hidden;
- 
+
+  picture,
+  img {
+    border-radius: inherit;
+  }
 }
+
 .bundleImg {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -14,16 +19,23 @@
   gap: 4px;
   aspect-ratio: var(--aspectRatio);
   border: 1px solid @DividerStokes;
-  border-radius: @ButtonRadius;
+  border-radius: @ItemImageRadius;
 
   .bundleImgItem {
     display: flex;
-    border-radius: calc(@ButtonRadius / 2);
+    border-radius: calc(@ItemImageRadius / 2);
     overflow: hidden;
     position: relative;
 
     .itemImg {
       display: flex;
+      border-radius: inherit;
+      overflow: hidden;
+
+      picture,
+      img {
+        border-radius: inherit;
+      }
     }
 
     .bundleCount {

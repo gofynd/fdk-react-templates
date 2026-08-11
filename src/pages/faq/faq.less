@@ -45,7 +45,7 @@
         @media @mobile {
           display: block;
           path {
-            fill: @TextHeading;
+            fill: @TextBody;
           }
         }
       }
@@ -124,7 +124,7 @@
 
     & .arrowRight {
       path {
-        fill: @TextHeading;
+        fill: @TextBody;
       }
     }
 
@@ -132,8 +132,8 @@
       width: 16px;
 
       & path {
-        stroke: @TextHeading;
-        fill: @TextHeading;
+        stroke: @TextBody;
+        fill: @TextBody;
       }
     }
   }
@@ -152,7 +152,7 @@
     border-bottom: 1px solid @DividerStokes;
     gap: 8px;
     svg > path {
-      fill: @TextHeading;
+      fill: @TextBody;
     }
     & li {
       width: 100%;
@@ -174,14 +174,14 @@
       }
       & .star {
         & path {
-          stroke: @ButtonPrimary;
-          fill: @ButtonPrimary;
+          stroke: @TextBody;
+          fill: @TextBody;
         }
         transition: stroke 1.5s;
       }
       & .arrowRight {
         path {
-          fill: @ButtonPrimary;
+          fill: @TextBody;
         }
       }
     }
@@ -222,6 +222,21 @@
       gap: 40px;
       & svg {
         overflow: visible;
+
+        path[fill]:not([fill="none"]) {
+          fill: @TextBody;
+        }
+
+        path[stroke] {
+          stroke: @TextBody !important;
+        }
+      }
+      .toggleIcon {
+        color: @TextBody !important;
+
+        path {
+          stroke: @TextBody !important;
+        }
       }
       .qa-box {
         width: 100%;

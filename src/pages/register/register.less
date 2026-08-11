@@ -4,6 +4,26 @@
   width: 400px;
   padding: 24px;
 }
+.customTypography {
+  display: block;
+
+  .registerFormWrapper {
+    .title {
+      font-size: var(--register-title-size);
+      line-height: calc(var(--register-title-size) + 4px);
+    }
+  }
+}
+
+.customHeadingTypography {
+  .registerFormWrapper {
+    .title {
+      font-weight: var(--section-heading-weight, 700);
+      text-transform: var(--section-heading-text-transform);
+    }
+  }
+}
+
 .required {
   color: @ErrorText;
 }
@@ -20,6 +40,7 @@
     font-weight: 700;
     line-height: 44.8px;
     margin-bottom: 32px;
+    word-break: break-word;
 
     @media @tablet {
       font-size: 24px;
@@ -149,7 +170,7 @@
     width: 100%;
     margin-top: 32px;
     height: 48px;
-    border-radius: 4px;
+    border-radius: @ButtonRadius;
     background: @ButtonPrimary;
     color: @ButtonSecondary;
     font-size: 16px;
@@ -218,20 +239,6 @@
     margin-top: 8px;
   }
 }
-
-// .optional {
-//   color: @TextLabel;
-//   font-size: 11px;
-//   font-weight: 400;
-// }
-
-// .referralHint {
-//   color: @TextLabel;
-//   font-size: 11px;
-//   font-weight: 400;
-//   line-height: 15.4px;
-//   margin: 6px 0 0 0;
-// }
 
 .passwordToggle {
   height: 24px;
