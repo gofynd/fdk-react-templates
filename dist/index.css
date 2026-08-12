@@ -16290,7 +16290,6 @@ h5,
   border-radius: var(--buttonRadius, 0px);
   text-transform: uppercase;
   color: var(--buttonPrimary, #4e3f09);
-  width: 100%;
   height: 48px;
   border: 1px solid var(--buttonPrimary, #4e3f09);
   line-height: 140%;
@@ -16298,36 +16297,33 @@ h5,
 .sticky-footer__stickyFooter___vhgUO .sticky-footer__stickyFooterActions___Dx3uH {
   display: flex;
   align-items: center;
-  gap: 12px;
-  width: 50%;
+  flex: 1 1 auto;
+  min-width: 0;
+  gap: 8px;
 }
-@media only screen and (max-width: 480px) {
-  .sticky-footer__stickyFooter___vhgUO .sticky-footer__stickyFooterActions___Dx3uH {
-    width: auto;
-  }
+.sticky-footer__stickyFooter___vhgUO .sticky-footer__stickyFooterActions___Dx3uH .sticky-footer__getQuoteBtn___qJNJw,
+.sticky-footer__stickyFooter___vhgUO .sticky-footer__stickyFooterActions___Dx3uH .sticky-footer__cartCheckoutBtn___Mw2z8 {
+  flex: 1 1 0;
+  width: auto;
+  min-width: 0;
+  padding: 0 12px;
+  white-space: nowrap;
 }
 .sticky-footer__priceContainerMobile___HdtKM {
   display: flex;
   flex-direction: column;
-  width: 50%;
-}
-@media only screen and (max-width: 480px) {
-  .sticky-footer__priceContainerMobile___HdtKM {
-    width: auto;
-  }
+  flex: 0 1 auto;
+  min-width: 0;
+  margin-inline-end: 12px;
 }
 .sticky-footer__priceContainerMobile___HdtKM .sticky-footer__totalPrice___eqSFX {
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 4px;
+  white-space: nowrap;
 }
-.sticky-footer__priceContainerMobileCheckoutBtn___xLlp1 {
-  width: 100% !important;
-}
-@media only screen and (max-width: 480px) {
-  .sticky-footer__priceContainerMobileCheckoutBtn___xLlp1 {
-    width: 50% !important;
-  }
+.sticky-footer__priceContainerMobile___HdtKM .sticky-footer__viewPriceBtn___INKkB {
+  white-space: nowrap;
 }
 .sticky-footer__rotate180___erK50 {
   transform: rotate(180deg);
