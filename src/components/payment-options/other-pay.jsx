@@ -22,7 +22,6 @@ function OtherPay({
   loader,
   onPriceDetailsClick,
   mopSelectionLoading,
-  isPaymentDisabled = false,
 }) {
   const isTablet = useViewport(0, 768);
 
@@ -75,17 +74,10 @@ function OtherPay({
               customClassName={styles.visibleOnTab}
               value={priceFormatCurrencySymbol(
                 getCurrencySymbol,
-                getTotalValue(),
-                "en-IN",
-                null,
-                true 
+                getTotalValue()
               )}
               onPriceDetailsClick={onPriceDetailsClick}
-              disabled={
-                mopSelectionLoading ||
-                !selectedOtherPayment?.code ||
-                isPaymentDisabled
-              }
+              disabled={mopSelectionLoading || !selectedOtherPayment?.code}
               enableLinkPaymentOption={enableLinkPaymentOption}
               isPaymentLoading={isPaymentLoading}
               loader={loader}
@@ -103,19 +95,14 @@ function OtherPay({
                   proceedToPay("Other", selectedPaymentPayload);
                   acceptOrder();
                 }}
-                disabled={
-                  mopSelectionLoading || isPaymentLoading || isPaymentDisabled
-                }
+                disabled={mopSelectionLoading || isPaymentLoading}
               >
                 {!isPaymentLoading ? (
                   <>
                     {t("resource.common.pay_caps")}{" "}
                     {priceFormatCurrencySymbol(
                       getCurrencySymbol,
-                      getTotalValue(),
-                      "en-IN",
-                      null,
-                      true
+                      getTotalValue()
                     )}
                   </>
                 ) : (

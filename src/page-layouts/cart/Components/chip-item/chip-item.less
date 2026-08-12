@@ -1,7 +1,7 @@
 @import "../../../../styles/main.less";
 
 .cartItemsListContainer {
-  padding: 24px;
+  padding: 16px;
   border: 1px solid @DividerStokes;
   border-top: 0 solid @DividerStokes;
 
@@ -36,8 +36,8 @@
 
       a {
         img {
-          width: 100%;
-          border-radius: @ItemImageRadius;
+          width: 85%;
+          border-radius: 4px;
         }
       }
     }
@@ -48,7 +48,6 @@
       line-height: 140%;
       box-sizing: border-box;
       width: 100%;
-      min-width: 0;
 
       .removeItemSvgContainer {
         position: absolute;
@@ -68,10 +67,6 @@
         color: @TextBody;
         margin-top: 4px;
         font-size: 14px;
-        padding-inline-end: 32px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
       }
 
       .itemSellerName {
@@ -133,11 +128,6 @@
               align-items: center;
               justify-content: center;
               cursor: pointer;
-              color: @TextBody;
-
-              svg path {
-                fill: @TextBody;
-              }
             }
           }
         }
@@ -226,10 +216,6 @@
     .shippingLogo {
       color: @TextBody;
       display: flex;
-
-      svg path {
-        fill: @TextBody;
-      }
     }
 
     .deliveryDate {
@@ -375,7 +361,7 @@
         img {
           width: 100%;
           height: 100%;
-          border-radius: @ItemImageRadius;
+          border-radius: 4px;
           object-fit: cover;
         }
       }
@@ -393,14 +379,12 @@
             margin-bottom: 8px;
             font-size: 16px;
             font-weight: 600;
-            color: @TextHeading;
           }
 
           .sizeModalName {
             margin-inline-end: 20px;
             font-size: 16px;
             font-weight: 400;
-            color: @TextBody;
           }
         }
 
@@ -408,7 +392,6 @@
           margin-top: 8px;
           font-size: 14px;
           font-weight: 600;
-          color: @TextHeading;
         }
       }
     }
@@ -531,8 +514,8 @@
 
 .itemRemoveIcon,
 .itemRemoveIcon path {
-  color: @TextBody;
-  fill: @TextBody;
+  color: var(--textHeading);
+  fill: var(--textHeading);
 }
 
 .outOfStockChip {
@@ -670,7 +653,7 @@
           width: 100%;
           height: 100%;
           object-fit: contain;
-          border-radius: @ItemImageRadius;
+          border-radius: 4px;
         }
       }
 

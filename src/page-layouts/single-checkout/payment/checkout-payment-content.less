@@ -117,6 +117,16 @@
     border: unset;
     padding-top: 0;
   }
+  &.split {
+    @media @tablet-range {
+      border: none !important;
+      padding: 0px !important;
+    }
+    @media @desktop {
+      border: none !important ;
+      padding: 0px !important;
+    }
+  }
   @media @tablet-range {
     padding: 16px !important;
   }
@@ -141,7 +151,6 @@
   }
 
   .paymentOptions {
-    width: 100%;
     display: flex;
     &.displayNone {
       display: none;
@@ -150,353 +159,6 @@
       cursor: not-allowed;
       pointer-events: none;
       opacity: 0.5;
-    }
-  }
-  .splitPaymentOption {
-    width: 100%;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 24px;
-    padding: 16px;
-    border: 1px solid var(--dividerStokes);
-    border-radius: 4px;
-    background-color: @PageBackground;
-
-    @media @tablet {
-      align-items: stretch;
-      flex-direction: column;
-      gap: 12px;
-    }
-  }
-  .selectedSplitPaymentOption {
-    border-color: var(--dividerStokes);
-  }
-  .splitPaymentAction {
-    min-width: 0;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    cursor: pointer;
-    background: @ButtonSecondary;
-    color: @ButtonPrimary;
-    padding: 10px;
-    border-radius: @ButtonRadius;
-    border: 1px solid @ButtonPrimary;
-  }
-  .disabledSplitPaymentAction {
-    cursor: not-allowed;
-    opacity: 0.2;
-  }
-  .splitPaymentHeader {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 16px;
-
-    @media @mobile {
-      gap: 12px;
-      flex-wrap: wrap;
-
-      .splitPaymentTitleWrapper {
-        flex: 0 1 auto;
-      }
-
-      .splitPaymentTitle {
-        white-space: nowrap;
-      }
-
-      .splitPaymentBadge {
-        margin-inline-start: auto;
-      }
-
-      .splitPaymentAction {
-        width: 100%;
-        flex: 0 0 100%;
-        justify-content: center;
-      }
-    }
-  }
-  .splitPaymentDetails {
-    min-width: 0;
-    display: flex;
-    flex: 1 1 auto;
-    flex-direction: column;
-    gap: 16px;
-
-    @media @tablet {
-      width: 100%;
-    }
-  }
-  .splitPaymentCheckbox {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
-  }
-  .splitPaymentCheckboxVisual {
-    position: relative;
-    width: 20px;
-    height: 20px;
-    flex: 0 0 20px;
-    border: 1px solid var(--primaryColor);
-    border-radius: 4px;
-    background-color: @PageBackground;
-  }
-  .selectedSplitPaymentOption {
-    .splitPaymentAction {
-      cursor: default;
-    }
-
-    .splitPaymentCheckboxVisual {
-      background-color: var(--primaryColor);
-
-      &::after {
-        content: "";
-        position: absolute;
-        inset-inline-start: 6px;
-        top: 3px;
-        width: 6px;
-        height: 10px;
-        border: solid @PageBackground;
-        border-width: 0 2px 2px 0;
-        transform: rotate(45deg);
-      }
-    }
-  }
-  .splitPaymentTitle {
-    color: var(--textHeading);
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 140%;
-  }
-  .splitPaymentTitleWrapper {
-    min-width: 0;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    position: relative;
-  }
-  .splitPaymentInfoButton {
-    position: relative;
-    width: 20px;
-    height: 20px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex: 0 0 20px;
-    padding: 0;
-    border: none;
-    background: transparent;
-    color: var(--textBody);
-    cursor: pointer;
-
-    &:hover,
-    &:focus {
-      .splitPaymentInfoTooltip {
-        display: block;
-      }
-    }
-  }
-  .splitPaymentInfoIcon {
-    width: 18px;
-    height: 18px;
-    display: block;
-  }
-  .splitPaymentInfoTooltip {
-    display: none;
-    position: absolute;
-    z-index: 99;
-    inset-inline-start: 50%;
-    top: calc(100% + 8px);
-    width: 280px;
-    padding: 10px 12px;
-    border: 1px solid @DividerStokes;
-    border-radius: 8px;
-    background: @DialogBackground;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-    color: var(--textBody);
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 140%;
-    transform: translateX(-50%);
-
-    @media @mobile {
-      width: 240px;
-      inset-inline-start: 12px;
-      transform: none;
-    }
-
-    @media @tablet {
-      inset-inline-start: 12px;
-      transform: none;
-    }
-  }
-  .splitPaymentAmountField {
-    position: relative;
-    width: 100%;
-    max-width: 436px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding-inline-start: 32px;
-
-    @media @tablet {
-      max-width: none;
-      padding-inline-start: 0;
-    }
-  }
-  .splitPaymentInputWrapper {
-    position: relative;
-    width: 100%;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    padding: 0 16px;
-    border: 1px solid var(--dividerStokes);
-    border-radius: 4px;
-    background-color: @PageBackground;
-  }
-  .splitPaymentInputSkeleton {
-    width: 100%;
-  }
-  .splitPaymentInputError {
-    border-color: @ErrorText;
-  }
-  .splitPaymentFieldLabel {
-    position: absolute;
-    margin-top: -9px;
-    margin-inline-start: 16px;
-    padding: 0 4px;
-    background-color: @PageBackground;
-    color: var(--textLabel);
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 140%;
-    z-index: 1;
-  }
-  .splitPaymentPrefix {
-    flex: 0 0 auto;
-    color: var(--textBody);
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 140%;
-  }
-  .splitPaymentInput {
-    min-width: 0;
-    flex: 1 1 auto;
-    border: none;
-    outline: none;
-    background: transparent;
-    color: var(--textBody);
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 140%;
-
-    &::placeholder {
-      color: var(--textLabel);
-      opacity: 1;
-    }
-  }
-  .splitPaymentAssistiveText {
-    color: var(--textBody);
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 140%;
-    margin: 0;
-  }
-  .splitPaymentErrorText {
-    color: @ErrorText;
-  }
-  .splitPaymentCodAction {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 4px;
-  }
-  .splitPaymentCodTitle {
-    color: var(--textBody);
-    font-size: 18px;
-    font-weight: 800;
-    line-height: 140%;
-    text-align: center;
-    margin: 0;
-  }
-  .splitPaymentCodButton {
-    width: 100%;
-    min-height: 48px;
-    padding: 14px 16px;
-    border: none;
-    border-radius: @ButtonRadius;
-    background-color: var(--buttonPrimary);
-    color: var(--buttonSecondary);
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 140%;
-    text-transform: uppercase;
-
-    &:disabled {
-      cursor: not-allowed;
-      opacity: 0.2;
-    }
-  }
-  .splitPaymentBadge {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 12px;
-    border-radius: 100px;
-    background-color: #f8f8f8;
-    color: var(--textBody);
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 140%;
-    white-space: nowrap;
-    margin-inline-start: auto;
-    margin-top: 0;
-
-    @media @mobile {
-      font-size: 12px;
-    }
-  }
-  .splitPaymentBadgeIcon {
-    width: 18px;
-    height: 18px;
-    flex: 0 0 18px;
-    color: var(--textBody);
-  }
-  .splitPaymentBackRow {
-    width: 100%;
-    display: flex;
-  }
-  .splitPaymentBackButton {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 0;
-    border: none;
-    background: transparent;
-    color: var(--textHeading);
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 140%;
-    .splitPaymentBackText {
-      margin-top: 3px;
-    }
-  }
-  .splitPaymentBackIcon {
-    width: 20px;
-    height: 20px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    svg {
-      width: 20px;
-      height: 20px;
     }
   }
   .navigationLink {
@@ -515,7 +177,8 @@
       border: none;
     }
 
-    .linkWrapper:last-child {
+    .linkWrapper:last-child,
+    .linkWrapper.lastChild {
       .linkWrapper-row1 {
         border-bottom: 1px solid var(--dividerStokes);
         @media @tablet {
@@ -619,7 +282,7 @@
         .modeName {
           align-self: center;
           margin-inline-start: 16px;
-          color: @TextHeading;
+          color: var(--Text-Body, #4d4d4e);
           font-size: 14px;
           font-weight: 500;
           line-height: 140%;
@@ -817,10 +480,6 @@
           padding: 16px;
           border: 1px solid var(--dividerStokes);
           border-radius: 4px;
-
-          &::placeholder {
-            color: @TextLabel;
-          }
         }
 
         .cvvIcon {
@@ -1097,10 +756,6 @@
             flex-direction: column;
             input {
               width: 100%;
-
-              &::placeholder {
-                color: @TextLabel;
-              }
             }
           }
         }
@@ -1411,16 +1066,9 @@
           height: 100%;
           border: none;
           background: transparent;
-
-          &::placeholder {
-            color: @TextLabel;
-          }
         }
       }
     }
-  }
-
-  .upiBox {
   }
 
   .upiMop {
@@ -1760,7 +1408,6 @@
   .codTitle {
     font-size: 12px;
     font-weight: 400;
-    color: @TextBody;
     margin-bottom: 16px;
   }
 
@@ -1773,6 +1420,423 @@
     border-radius: 4px;
     padding: 8px 0;
     text-align: center;
+  }
+
+  .neftWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .neftSection {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    @media @tablet {
+      gap: 12px;
+    }
+  }
+
+  .neftUploadButtonWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .neftUploadHelperWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .neftSectionTitle {
+    font-size: 16px;
+    font-weight: 600;
+    color: @TextHeading;
+    font-family: var(--font-header, "WorkSans");
+    margin: 0;
+
+    @media @tablet {
+      font-size: 12px;
+      letter-spacing: -0.24px;
+    }
+  }
+
+  .neftBeneficiaryCard {
+    border: 1px solid @DividerStokes;
+    border-radius: 12px;
+    background-color: @ThemeAccentL4;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .neftBeneficiaryRow {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: center;
+    padding-bottom: 12px;
+
+    @media @tablet {
+      padding-bottom: 10px;
+    }
+
+    &:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+  }
+
+  .neftBeneficiaryLabelWrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .neftBeneficiaryLabel {
+    font-size: 14px;
+    font-weight: 500;
+    color: @TextHeading;
+    font-family: var(--font-header, "WorkSans");
+
+    @media @tablet {
+      color: @TextHeading;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: -0.24px;
+    }
+  }
+
+  .neftLabelSeparator {
+    font-weight: 600;
+    color: @TextHeading;
+    font-family: var(--font-header, "WorkSans");
+
+    @media @tablet {
+      font-size: 12px;
+      letter-spacing: -0.24px;
+    }
+  }
+
+  .neftBeneficiaryValue {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    font-family: var(--font-body, "WorkSans");
+    color: @TextBody;
+
+    @media @tablet {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 16.8px;
+    }
+  }
+
+  .neftCopyButton {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    svg {
+      height: 14px;
+      width: 14px;
+    }
+  }
+
+  .neftFieldGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .neftFieldLabel {
+    font-size: 14px;
+    font-weight: 500;
+    color: @TextHeading;
+
+    span {
+      color: @ErrorText;
+    }
+  }
+
+  .neftInput {
+    height: 48px;
+    border: 1px solid @DividerStokes;
+    border-radius: 8px;
+    padding: 0 16px;
+    outline: none;
+    font-size: 14px;
+    font-family: var(--font-body, "WorkSans");
+
+    @media @tablet {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 16.8px;
+    }
+  }
+
+  .neftInputError {
+    border-color: @ErrorText;
+  }
+
+  .neftHelperText {
+    font-size: 12px;
+    font-weight: 400;
+    color: @TextSecondary;
+    margin: 0;
+    font-family: var(--font-body, "WorkSans");
+
+    @media @tablet {
+      line-height: 16.8px;
+    }
+  }
+
+  .neftUploadSection {
+    width: 100%;
+    gap: 0px !important;
+  }
+
+  .neftUploadBox {
+    border: 1px dashed @DividerStokes;
+    border-radius: 12px;
+    padding: 41px 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background-color: @ThemeAccentL5;
+  }
+
+  .neftHiddenInput {
+    display: none;
+  }
+
+  .neftFormBlockInner {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .neftUploadIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .neftUploadButton {
+    width: max-content;
+    align-self: center;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid @ButtonPrimary;
+    color: @ButtonPrimary;
+    background-color: @ThemeAccentL5;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-family: var(--font-header, "WorkSans");
+
+    @media @tablet {
+      text-align: center;
+      font-size: 12px;
+      line-height: 16.8px;
+    }
+  }
+
+  .neftUploadTitle {
+    font-size: 16px;
+    font-weight: 600;
+    color: @TextHeading;
+    margin: 0;
+    font-family: var(--font-header, "WorkSans");
+
+    @media @tablet {
+      color: @ButtonPrimary;
+      letter-spacing: -0.32px;
+    }
+  }
+
+  .neftUploadHelper {
+    font-size: 12px;
+    font-weight: 400;
+    color: @TextSecondary;
+    margin: 0;
+    font-family: var(--font-body, "WorkSans");
+
+    @media @tablet {
+      color: @TextBody;
+      text-align: center;
+      letter-spacing: -0.24px;
+    }
+  }
+
+  .neftSelectedFile {
+    font-size: 12px;
+    font-weight: 500;
+    color: @TextHeading;
+    margin: 0;
+  }
+
+  .neftPlaceOrderBtn {
+    width: 100%;
+    padding: 14px;
+    border-radius: @ButtonRadius;
+    border: none;
+    background-color: @ButtonPrimary;
+    color: @ThemeAccentL5;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .neftPlaceOrderBtn[disabled] {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .neftError {
+    font-size: 12px;
+    color: @ErrorText;
+    margin: 0;
+  }
+
+  .neftUploadBoxDragging {
+    border-color: @ButtonPrimary;
+    background-color: @ThemeAccentL5;
+  }
+
+  .neftProgressContainer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .neftProgressBarContainer {
+    flex: 1;
+    height: 8px;
+    background-color: @DividerStokes;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .neftProgressBar {
+    height: 100%;
+    background-color: @ButtonPrimary;
+    transition: width 0.3s ease;
+    border-radius: 4px;
+  }
+
+  .neftProgressText {
+    font-size: 12px;
+    font-weight: 600;
+    color: @TextHeading;
+    flex-shrink: 0;
+    min-width: 40px;
+    text-align: right;
+  }
+
+  .neftFileCard {
+    margin-top: 10px;
+    border: 1px solid @DividerStokes;
+    border-radius: 8px;
+    padding: 16px;
+    background-color: @ThemeAccentL4;
+  }
+
+  .neftFileCardContent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .neftFileInfo {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    flex: 1;
+  }
+
+  .neftFileIcon {
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+
+  .neftFileDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+  }
+
+  .neftFileName {
+    font-size: 14px;
+    font-weight: 500;
+    color: @TextHeading;
+    word-break: break-word;
+    display: flex;
+    align-items: center;
+  }
+
+  .neftSuccessIndicator {
+    color: @SuccessText;
+    font-weight: 600;
+    margin-left: 4px;
+  }
+
+  .neftFileSize {
+    font-size: 12px;
+    font-weight: 400;
+    color: @TextSecondary;
+    display: block;
+  }
+
+  .neftFileActions {
+    display: flex;
+    align-items: center;
+  }
+
+  .neftFileActionBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    // padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: @DividerStokes;
+    }
+  }
+
+  .neftDeleteIcon {
+    // width: 20px;
+    // height: 20px;
+    color: @ErrorText;
+  }
+
+  .neftUploadError {
+    font-size: 14px;
+    padding-top: 10px;
+    color: @ErrorText;
+  }
+
+  .neftFormBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    @media @tablet {
+      // padding: 24px 16px;
+      padding: 0px;
+    }
   }
 
   .otherOption {
@@ -1835,8 +1899,6 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  .upiTabWrapper {
-  }
   .upiHeader {
     font-weight: 600;
     font-size: 14px;
@@ -2010,54 +2072,6 @@
 .couponValidityModal {
   z-index: 99 !important;
 }
-.splitCreditNoteConfirmationModal {
-  z-index: 99 !important;
-}
-.splitCreditNoteConfirmation {
-  max-width: 450px;
-  padding: 16px;
-}
-.splitCreditNoteConfirmationMessage {
-  margin: 0 0 16px;
-  color: @TextBody;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 19.6px;
-}
-.splitCreditNoteConfirmationActions {
-  display: flex;
-  gap: 16px;
-
-  @media @mobile {
-    gap: 12px;
-  }
-}
-.splitCreditNoteConfirmationButton {
-  width: 100%;
-  padding: 10px 16px;
-  border-radius: @ButtonRadius;
-  cursor: pointer;
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 140%;
-  text-align: center;
-  text-transform: uppercase;
-
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.7;
-  }
-}
-.cancelSplitCreditNoteButton {
-  border: 1px solid var(--buttonPrimary);
-  background-color: var(--buttonSecondary);
-  color: var(--primaryColor);
-}
-.proceedSplitCreditNoteButton {
-  border: 1px solid var(--buttonPrimary);
-  background-color: var(--buttonPrimary);
-  color: var(--buttonSecondary);
-}
 .inCreasedZindex {
   z-index: 1099 !important;
 }
@@ -2226,7 +2240,7 @@
   max-height: unset !important;
   @media @tablet {
     .modeItemName {
-      color: @TextHeading !important;
+      color: @TextBody !important;
       font-size: 12px;
       font-weight: 400 !important;
     }
@@ -2259,12 +2273,6 @@
   }
 }
 .modeItemLogo {
-  @media @desktop {
-    .moreWlIcon {
-      width: 24px;
-      height: 24px;
-    }
-  }
   @media @tablet {
     span {
       border: 1px solid @DividerStokes;
@@ -2349,6 +2357,19 @@
   width: 24px;
   height: 24px;
 }
+.creditLogoIcon {
+  width: 29px;
+  height: 29px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
 .noOptionContainer {
   display: flex;
   padding: 24px;
@@ -2399,4 +2420,102 @@
       margin-top: 12px;
     }
   }
+}
+
+.fileIcon {
+  // margin-right: 12px;
+  color: var(--buttonPrimary);
+}
+
+.fs-12 {
+  font-size: 12px;
+}
+
+.neftUploadingFilesWrapper,
+.neftUploadedFilesWrapper {
+  margin-top: 10px;
+}
+
+.field {
+  @media @desktop {
+    // flex: 0 0 30%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  @media @mobile {
+    width: 100%;
+    padding: 1rem 0;
+    padding-right: 0;
+    padding-bottom: 5px;
+  }
+
+  .field-input-container {
+    flex: 1;
+    padding-right: 10px;
+
+    @media @mobile {
+      margin-bottom: 16px;
+      padding-right: 0;
+    }
+  }
+
+  input {
+    &:disabled {
+      background-color: transparent !important;
+      border: none !important;
+      cursor: not-allowed !important;
+    }
+    @media @mobile {
+      font-size: 14px;
+    }
+  }
+
+  position: relative;
+}
+
+.copyIcon {
+  svg {
+    height: 18px;
+    width: 18px;
+  }
+}
+
+.neftBorderBottom {
+  border-bottom: 1px solid @DividerStokes;
+}
+
+.infoAlert {
+  .flex-align-center();
+  background: @InformationBackground;
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: @InformationText;
+  text-align: right;
+  font-family: var(--font-body, "WorkSans");
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16.8px;
+
+  @media @mobile {
+    text-align: left;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: -0.24px;
+  }
+
+  svg {
+    margin-right: 8px;
+  }
+
+  .infoAlertIcon {
+    .flex-align-center();
+  }
+}
+
+.flexCenter {
+  .flex-align-center();
 }

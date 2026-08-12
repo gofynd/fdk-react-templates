@@ -15,7 +15,7 @@ function EditEmailModal({ isOpen, onClose, onUpdate, currentEmail }) {
     control,
     handleSubmit,
     reset,
-    formState: { errors, isDirty },
+    formState: { errors },
   } = useForm({
     defaultValues: {
       email: currentEmail || "",
@@ -107,7 +107,6 @@ function EditEmailModal({ isOpen, onClose, onUpdate, currentEmail }) {
                 type="submit"
                 className={styles.updateBtn}
                 isLoading={isLoading}
-                disabled={isLoading || !isDirty}
               >
                 {t("resource.facets.update")}
               </FyButton>

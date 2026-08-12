@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useRef } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import * as styles from "./contact-us.less";
 import FyInput from "../../components/core/fy-input/fy-input";
 import { Controller, useForm } from "react-hook-form";
@@ -6,10 +6,6 @@ import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
 import FyButton from "../../components/core/fy-button/fy-button";
 import FyImage from "../../components/core/fy-image/fy-image";
 import { useGlobalTranslation } from "fdk-core/utils";
-import {
-  getCustomFontSize,
-  getHeadingTypographyStyles,
-} from "../../helper/utils";
 
 function ContactSupport({
   contactInfo = "",
@@ -77,7 +73,6 @@ function ContactSupport({
 
   const [focusedInput, setFocusedInput] = useState(null);
   const [text, setText] = useState("");
-  const containerRef = useRef(null);
   const inputFields = [
     {
       type: "text",
@@ -139,57 +134,6 @@ function ContactSupport({
 
   const contact = supportInfo?.contact?.phone?.phone[0];
   const email = supportInfo?.contact?.email?.email[0]?.value;
-  const getPageConfigValue = (value) => value?.value ?? value;
-  const contactTitle =
-    getPageConfigValue(pageConfig?.title) || t("resource.common.contact_us");
-  const isCustomTypography =
-    getPageConfigValue(pageConfig?.typography_preset) === "custom";
-  const headingFontSize = isCustomTypography
-    ? getCustomFontSize(
-        getPageConfigValue(pageConfig?.heading_font_size) || "32",
-        "heading"
-      )
-    : undefined;
-  const descriptionFontSize = isCustomTypography
-    ? getCustomFontSize(
-        getPageConfigValue(pageConfig?.description_font_size) || "14",
-        "description"
-      )
-    : undefined;
-  const headingTypographyStyles = getHeadingTypographyStyles(pageConfig);
-  const hasCustomFontSize = Boolean(isCustomTypography && headingFontSize);
-  const hasCustomHeadingTypography = Boolean(
-    Object.keys(headingTypographyStyles).length
-  );
-
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    container.style.removeProperty("--contact-title-size");
-    container.style.removeProperty("--section-description-size");
-    container.style.removeProperty("--section-heading-weight");
-    container.style.removeProperty("--section-heading-text-transform");
-
-    if (isCustomTypography && headingFontSize) {
-      container.style.setProperty("--contact-title-size", headingFontSize);
-    }
-    if (isCustomTypography && descriptionFontSize) {
-      container.style.setProperty(
-        "--section-description-size",
-        descriptionFontSize
-      );
-    }
-
-    Object.entries(headingTypographyStyles).forEach(([key, value]) => {
-      container.style.setProperty(key, value);
-    });
-  }, [
-    isCustomTypography,
-    headingFontSize,
-    descriptionFontSize,
-    headingTypographyStyles,
-  ]);
 
   const overlayStyles = {
     "--overlay-opacity": `${pageConfig?.opacity}%`,
@@ -244,12 +188,7 @@ function ContactSupport({
   );
 
   return (
-    <div
-      ref={containerRef}
-      className={`basePageContainer margin0auto ${
-        hasCustomFontSize ? styles.customTypography : ""
-      } ${hasCustomHeadingTypography ? styles.customHeadingTypography : ""}`}
-    >
+    <div className={`basePageContainer margin0auto`}>
       <div
         className={`${styles.contactUs_mainContainer} ${
           pageConfig?.align_image === "left" && styles.invert
@@ -266,10 +205,8 @@ function ContactSupport({
         >
           <div className={`${styles.flex_item}`}>
             <div>
-              <h1
-                className={`fontHeader ${styles.contactTitle} ${styles.showDesktop}`}
-              >
-                {contactTitle}
+              <h1 className={`fontHeader ${styles.showDesktop}`}>
+                {t("resource.common.contact_us")}
               </h1>
               {appInfo?.description?.length > 0 &&
                 showDescription &&
@@ -286,7 +223,7 @@ function ContactSupport({
                 {showAddress &&
                   contactInfo?.address?.address_line?.[0]?.length > 0 && (
                     <div className={`${styles.item} fontBody b1`}>
-                      <div className={styles.locationIcon}>
+                      <div>
                         <SvgWrapper svgSrc="location" />
                       </div>
                       <div>
@@ -332,10 +269,8 @@ function ContactSupport({
           </div>
           <div className={styles.flex_item}>
             <div>
-              <h3
-                className={`${styles.contactTitle} ${styles.showMobile} fontHeader`}
-              >
-                {contactTitle}
+              <h3 className={`${styles.showMobile} fontHeader`}>
+                {t("resource.common.contact_us")}
               </h3>
               {appInfo?.description?.length > 0 &&
                 showDescription &&

@@ -337,7 +337,6 @@ h5,
 .shipments-update-item__updateItem___SC6gf {
   display: flex;
   gap: 16px;
-  min-width: 0;
 }
 @media only screen and (max-width: 768px) {
   .shipments-update-item__updateItem___SC6gf {
@@ -350,8 +349,7 @@ h5,
 .shipments-update-item__updateItem___SC6gf .shipments-update-item__bagInfo___RyCGy {
   display: flex;
   flex-direction: column;
-  flex: 1;
-  min-width: 0;
+  width: 100%;
 }
 @media only screen and (max-width: 480px) {
   .shipments-update-item__updateItem___SC6gf .shipments-update-item__bagInfo___RyCGy {
@@ -359,17 +357,8 @@ h5,
     align-items: flex-start;
   }
 }
-.shipments-update-item__updateItem___SC6gf .shipments-update-item__bagInfo___RyCGy .shipments-update-item__itemDetails___e3bNW {
-  min-width: 0;
-  width: 100%;
-}
 .shipments-update-item__updateItem___SC6gf .shipments-update-item__bagInfo___RyCGy .shipments-update-item__brandName___BBTfc {
   margin-bottom: 5px;
-}
-.shipments-update-item__updateItem___SC6gf .shipments-update-item__bagInfo___RyCGy .shipments-update-item__itemName___IZiaF {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 .shipments-update-item__updateItem___SC6gf .shipments-update-item__bagInfo___RyCGy .shipments-update-item__boldxxxs___kNBJL {
   font-weight: 700;
@@ -1212,12 +1201,8 @@ h5,
 }
 .bag__bagImg___F1kfj {
   min-width: 80px;
-  border-radius: var(--itemImageRadius, 11px);
+  border-radius: var(--buttonRadius, 0px);
   overflow: hidden;
-}
-.bag__bagImg___F1kfj picture,
-.bag__bagImg___F1kfj img {
-  border-radius: inherit;
 }
 .bag__bundleImg___TEyPU {
   display: grid;
@@ -1227,22 +1212,16 @@ h5,
   gap: 4px;
   aspect-ratio: var(--aspectRatio);
   border: 1px solid var(--dividerStokes, #d4d1d1);
-  border-radius: var(--itemImageRadius, 11px);
+  border-radius: var(--buttonRadius, 0px);
 }
 .bag__bundleImg___TEyPU .bag__bundleImgItem___slqOT {
   display: flex;
-  border-radius: calc(var(--itemImageRadius, 11px) / 2);
+  border-radius: calc(var(--buttonRadius, 0px) / 2);
   overflow: hidden;
   position: relative;
 }
 .bag__bundleImg___TEyPU .bag__bundleImgItem___slqOT .bag__itemImg___tRLBP {
   display: flex;
-  border-radius: inherit;
-  overflow: hidden;
-}
-.bag__bundleImg___TEyPU .bag__bundleImgItem___slqOT .bag__itemImg___tRLBP picture,
-.bag__bundleImg___TEyPU .bag__bundleImgItem___slqOT .bag__itemImg___tRLBP img {
-  border-radius: inherit;
 }
 .bag__bundleImg___TEyPU .bag__bundleImgItem___slqOT .bag__bundleCount___C799t {
   position: absolute;
@@ -1686,7 +1665,7 @@ h5,
   flex-shrink: 0;
   width: 80px;
   height: 80px;
-  border-radius: var(--itemImageRadius, 11px);
+  border-radius: 4px;
   overflow: hidden;
   background-color: var(--pageBackground, #f8f8f8);
   display: flex;
