@@ -916,6 +916,21 @@ h5,
 .mobile-slider__mobilePdpCarouselBox____wvpZ {
   width: 100%;
 }
+.mobile-slider__mobilePdpCarouselBox____wvpZ .mobile-slider__playerIcon___GufYC,
+.mobile-slider__mobilePdpCarouselBox____wvpZ .mobile-slider__thumbnail___MLzj1,
+.mobile-slider__mobilePdpCarouselBox____wvpZ .mobile-slider__autoRotateIcon___jboI1 {
+  color: var(--textBody, #3c3131);
+}
+.mobile-slider__mobilePdpCarouselBox____wvpZ .mobile-slider__playerIcon___GufYC path[fill]:not([fill="none"]),
+.mobile-slider__mobilePdpCarouselBox____wvpZ .mobile-slider__thumbnail___MLzj1 path[fill]:not([fill="none"]),
+.mobile-slider__mobilePdpCarouselBox____wvpZ .mobile-slider__autoRotateIcon___jboI1 path[fill]:not([fill="none"]) {
+  fill: var(--textBody, #3c3131);
+}
+.mobile-slider__mobilePdpCarouselBox____wvpZ .mobile-slider__playerIcon___GufYC path[stroke],
+.mobile-slider__mobilePdpCarouselBox____wvpZ .mobile-slider__thumbnail___MLzj1 path[stroke],
+.mobile-slider__mobilePdpCarouselBox____wvpZ .mobile-slider__autoRotateIcon___jboI1 path[stroke] {
+  stroke: var(--textBody, #3c3131);
+}
 .mobile-slider__mobilePdpCarouselBox____wvpZ .slick-dots {
   width: 100%;
 }
@@ -1451,6 +1466,7 @@ h5,
   height: 1em;
   border-radius: 50%;
   font-size: 48px;
+  color: var(--textHeading, #211f1f);
   transition: background-color 0.3s ease-in-out;
   display: flex;
   align-items: center;

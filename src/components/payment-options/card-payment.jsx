@@ -39,6 +39,7 @@ function CardPayment({
   selectedPaymentPayload,
   enableLinkPaymentOption,
   isPaymentLoading,
+  isPaymentDisabled = false,
   loader,
   onPriceDetailsClick,
   StickyPayNow,
@@ -140,6 +141,7 @@ function CardPayment({
       selectMop,
       setIsJuspayCouponApplied,
       isPaymentLoading,
+      isPaymentDisabled,
       loader,
     }),
     [
@@ -191,6 +193,7 @@ function CardPayment({
       selectMop,
       setIsJuspayCouponApplied,
       isPaymentLoading,
+      isPaymentDisabled,
       loader,
     ]
   );
@@ -212,7 +215,10 @@ function CardPayment({
 
   const totalPayValue = priceFormatCurrencySymbol(
     getCurrencySymbol,
-    getTotalValue()
+    getTotalValue(),
+    "en-IN",
+    null,
+    true
   );
 
   return (
@@ -359,7 +365,9 @@ function CardPayment({
                               value={totalPayValue}
                               onPriceDetailsClick={onPriceDetailsClick}
                               disabled={
-                                !selectedCard?.card_id || mopSelectionLoading
+                                !selectedCard?.card_id ||
+                                mopSelectionLoading ||
+                                isPaymentDisabled
                               }
                               enableLinkPaymentOption={enableLinkPaymentOption}
                               isPaymentLoading={isPaymentLoading}
@@ -372,7 +380,9 @@ function CardPayment({
                                 className={styles.payBtn}
                                 onClick={payWithSelectedCard}
                                 disabled={
-                                  isPaymentLoading || mopSelectionLoading
+                                  isPaymentLoading ||
+                                  mopSelectionLoading ||
+                                  isPaymentDisabled
                                 }
                               >
                                 {!isPaymentLoading ? (

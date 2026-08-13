@@ -18,6 +18,13 @@
   .descriptionContent {
     .captionNormal();
     color: @TextBody;
+    font-size: var(--section-description-size, 12px);
+    line-height: calc(var(--section-description-size, 12px) + 4px);
+
+    @media @desktop {
+      font-size: var(--section-description-size, 14px);
+      line-height: calc(var(--section-description-size, 14px) + 4px);
+    }
   }
 
   .actionBtn {

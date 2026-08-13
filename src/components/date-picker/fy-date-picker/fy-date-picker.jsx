@@ -178,26 +178,28 @@ const FyDatePicker = React.forwardRef(
       const sep = dateFormat.includes("/") ? "/" : "-";
       const parts = formattedDate.split(sep).map(Number);
 
-      let dateObj;
+      let year, month, day;
 
       switch (dateFormat) {
         case "DD-MM-YYYY":
         case "DD/MM/YYYY":
-          dateObj = new Date(parts[2], parts[1] - 1, parts[0]);
+          [day, month, year] = parts;
           break;
         case "MM-DD-YYYY":
         case "MM/DD/YYYY":
-          dateObj = new Date(parts[2], parts[0] - 1, parts[1]);
+          [month, day, year] = parts;
           break;
         case "YYYY-DD-MM":
         case "YYYY/DD/MM":
-          dateObj = new Date(parts[0], parts[2] - 1, parts[1]);
+          [year, day, month] = parts;
           break;
         default:
-          dateObj = new Date(NaN);
+          return "";
       }
 
-      return !isNaN(dateObj) ? dateObj.toISOString() : "";
+      // Use UTC to avoid timezone shift issues for date-only values
+      const utcDate = new Date(Date.UTC(year, month - 1, day, 0, 0, 0, 0));
+      return !isNaN(utcDate.getTime()) ? utcDate.toISOString() : "";
     };
 
     const getDaysInMonth = (month, year) =>
@@ -290,15 +292,8 @@ const FyDatePicker = React.forwardRef(
         setSelectedDate(formatted);
         setInlineError(""); // Clear any inline error when selecting a valid date
         if (!isMobile) {
-          const parsed = parseDateString(formatted);
-          const now = new Date();
-          parsed.setHours(
-            now.getHours(),
-            now.getMinutes(),
-            now.getSeconds(),
-            now.getMilliseconds()
-          );
-          onChange(parsed.toISOString());
+          // Use UTC midnight to avoid timezone shift issues for date-only values
+          onChange(toUTCISOString(formatted));
           setShowCalendar(false);
         }
         // else: wait for CONFIRM
@@ -339,15 +334,8 @@ const FyDatePicker = React.forwardRef(
 
     const handleConfirm = () => {
       if (selectedDate && isValidDateString(selectedDate)) {
-        const parsed = parseDateString(selectedDate);
-        const now = new Date();
-        parsed.setHours(
-          now.getHours(),
-          now.getMinutes(),
-          now.getSeconds(),
-          now.getMilliseconds()
-        );
-        onChange(parsed.toISOString());
+        // Use UTC midnight to avoid timezone shift issues for date-only values
+        onChange(toUTCISOString(selectedDate));
       }
       setShowCalendar(false);
     };
@@ -360,15 +348,8 @@ const FyDatePicker = React.forwardRef(
         setCurrentYear(year);
         setInlineError(""); // Clear any inline error when selecting a valid date
         if (!isMobile) {
-          const parsed = parseDateString(formatted);
-          const now = new Date();
-          parsed.setHours(
-            now.getHours(),
-            now.getMinutes(),
-            now.getSeconds(),
-            now.getMilliseconds()
-          );
-          onChange(parsed.toISOString());
+          // Use UTC midnight to avoid timezone shift issues for date-only values
+          onChange(toUTCISOString(formatted));
           setShowCalendar(false);
         }
       }
@@ -606,14 +587,8 @@ const FyDatePicker = React.forwardRef(
                     setCurrentYear(parsed.getFullYear());
                     setCurrentMonth(parsed.getMonth());
                     setShowCalendar(false);
-                    const now = new Date();
-                    parsed.setHours(
-                      now.getHours(),
-                      now.getMinutes(),
-                      now.getSeconds(),
-                      now.getMilliseconds()
-                    );
-                    onChange(parsed.toISOString());
+                    // Use UTC midnight to avoid timezone shift issues for date-only values
+                    onChange(toUTCISOString(selectedDate));
                     setInlineError(""); // Clear any existing inline error
                   } else {
                     // Replace alert with inline error

@@ -7,14 +7,14 @@
       cursor: pointer;
       display: flex;
       align-items: center;
-      color: @ButtonLink;
+      color: @TextBody;
       .shareCartIconGreen {
         display: flex;
         align-items: center;
 
         svg {
           path {
-            fill: @ButtonLink;
+            fill: @TextBody;
           }
         }
       }
@@ -38,9 +38,7 @@
       font-size: 12px;
       font-weight: 600;
       background: @PageBackground;
-      @media @desktop {
-        border-radius: 8px;
-      }
+      border-radius: @ButtonRadius;
       @media @mobile {
         border-width: 1px 0;
       }
@@ -60,4 +58,9 @@
       }
     }
   }
+}
+
+.shareCartIcon svg{
+  color: @TextBody;
+  fill: @TextBody;
 }

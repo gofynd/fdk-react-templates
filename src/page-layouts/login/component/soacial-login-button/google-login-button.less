@@ -3,13 +3,23 @@
   margin-top: 12px;
   .google-signin-wrapper {
     width: 100%;
+    border-radius: @ButtonRadius;
+    overflow: hidden;
   }
   :global {
+    .g_id_signin,
+    .g_id_signin > div,
+    .g_id_signin iframe {
+      border-radius: @ButtonRadius !important;
+    }
+    .g_id_signin {
+      overflow: hidden;
+    }
     .g_id_signin > div[role="button"] {
       height: 48px !important;
       padding: 12px !important;
       background: transparent !important;
-      border-radius: 4px !important;
+      border-radius: @ButtonRadius !important;
       border: 1px solid var(--dividerStokes) !important;
       font-size: 14px !important;
       font-style: normal !important;

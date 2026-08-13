@@ -92,7 +92,7 @@
           width: 20px;
           svg {
             path {
-              fill: @SuccessText;
+              fill: @TextBody;
             }
           }
         }
@@ -148,7 +148,7 @@
         grid-template-areas:
           "item_image item_details"
           "item_image free_gift";
-        grid-template-columns: auto 1fr;
+        grid-template-columns: auto minmax(0, 1fr);
         grid-template-rows: auto auto;
 
         @media @mobile {
@@ -172,10 +172,12 @@
         }
         .rightDetails {
           grid-area: item_details;
+          min-width: 0;
 
           .productDetails {
             display: flex;
             flex-direction: column;
+            min-width: 0;
             .brandName {
               font-weight: 600;
               font-size: 14px;
@@ -191,6 +193,9 @@
               color: var(--textBody);
               margin-top: 8px;
               line-height: 140%;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
               @media @mobile {
                 font-size: 12px;
               }

@@ -19,7 +19,8 @@ const JuspayCardForm = ({
   onPriceDetailsClick = () => {},
   handleShowFailedMessage,
   cardDetails,
-  setIsJuspayCouponApplied
+  setIsJuspayCouponApplied,
+  isPaymentDisabled = false,
 }) => {
   const [isJuspayLoaded, setIsJuspayLoaded] = useState(false);
   const juspayFormRef = useRef(null);
@@ -82,7 +83,7 @@ const JuspayCardForm = ({
             gateway_id
           ) {
             handleShowFailedMessage({
-              failed:true,
+              failed: true,
               paymentErrHeading: error_message,
               // paymentErrMsg:  bank_error_message,
             });
@@ -91,15 +92,17 @@ const JuspayCardForm = ({
               error_message,
               bank_error_code,
               bank_error_message,
-              gateway_id
+              gateway_id,
             });
           },
           card_bin_digit_count: 6,
 
           /* Fingerprint will work only if customer_id and client_auth_token are present in set-up as shown below */
           customer: {
-            customer_id: paymentOption?.payment_flows?.juspay?.data?.customer_id,
-            client_auth_token: paymentOption?.payment_flows?.juspay?.data?.client_auth_token,
+            customer_id:
+              paymentOption?.payment_flows?.juspay?.data?.customer_id,
+            client_auth_token:
+              paymentOption?.payment_flows?.juspay?.data?.client_auth_token,
           },
           iframe_elements: {
             card_number: {
@@ -163,22 +166,29 @@ const JuspayCardForm = ({
 
           iframe_element_callback: async function (event) {
             console.log("event", event);
-            if(event?.target_element === "card_number"){
-              if(event?.card_isin && event.card_isin !== lastFetchedCardIsinRef.current){
+            if (event?.target_element === "card_number") {
+              if (
+                event?.card_isin &&
+                event.card_isin !== lastFetchedCardIsinRef.current
+              ) {
                 lastFetchedCardIsinRef.current = event.card_isin;
                 setIsCardBinValidated(async (prev) => {
-                  if(prev === event.card_isin){
+                  if (prev === event.card_isin) {
                     return prev;
                   } else {
-                    const cardDetailsResponse = await cardDetails(event.card_isin);
+                    const cardDetailsResponse = await cardDetails(
+                      event.card_isin
+                    );
                     setIsJuspayCouponApplied((prev) => !prev);
-                    setCardDetailsData(cardDetailsResponse?.data?.payment?.card_details?.data);
+                    setCardDetailsData(
+                      cardDetailsResponse?.data?.payment?.card_details?.data
+                    );
                     return event.card_isin;
                   }
                 });
               }
 
-              if(!event?.card_isin){
+              if (!event?.card_isin) {
                 setCardDetailsData(null);
                 lastFetchedCardIsinRef.current = null;
               }
@@ -282,12 +292,17 @@ const JuspayCardForm = ({
             value={paymentResponse?.data?.order_id}
           />
 
-          <div className={`${styles.cardInputWrapper} ${styles.cardNumberBox} ${styles.juspayCardNumberBox}`}>
+          <div
+            className={`${styles.cardInputWrapper} ${styles.cardNumberBox} ${styles.juspayCardNumberBox}`}
+          >
             <div className={`card_number_div`}></div>
             {cardDetailsData && cardDetailsData.logo && (
               <img
                 src={cardDetailsData.logo}
-                alt={cardDetailsData?.name || t("resource.checkout.card_network_logo")}
+                alt={
+                  cardDetailsData?.name ||
+                  t("resource.checkout.card_network_logo")
+                }
                 className={`${styles.juspayCardNetwork}`}
               />
             )}
@@ -317,7 +332,9 @@ const JuspayCardForm = ({
           {(fieldErrors.card_exp_month ||
             fieldErrors.card_exp_year ||
             fieldErrors.security_code) && (
-            <div className={`${styles.formError} ${!loggedIn ? styles.marginBottom : ""}`}>
+            <div
+              className={`${styles.formError} ${!loggedIn ? styles.marginBottom : ""}`}
+            >
               {fieldErrors.card_exp_month ||
                 fieldErrors.card_exp_year ||
                 fieldErrors.security_code}
@@ -325,9 +342,7 @@ const JuspayCardForm = ({
           )}
 
           {loggedIn && (
-            <div
-              className={`${styles.rbiGuidelines}`}
-            >
+            <div className={`${styles.rbiGuidelines}`}>
               <label htmlFor="terms">
                 <input
                   type="checkbox"
@@ -386,20 +401,29 @@ const JuspayCardForm = ({
 
           {isMobile ? (
             <StickyPayNow
-              disabled={!isCardValid()}
-              value={priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue())}
+              disabled={!isCardValid() || isPaymentDisabled}
+              value={priceFormatCurrencySymbol(
+                getCurrencySymbol,
+                getTotalValue()
+              )}
               onPriceDetailsClick={onPriceDetailsClick}
               isJuspay={true}
-              />
+            />
           ) : (
             <button
               type="submit"
               id="common_pay_btn"
               className={styles.saveNewCard}
-              disabled={!isCardValid()}
+              disabled={!isCardValid() || isPaymentDisabled}
             >
               {t("resource.common.pay_caps")}{" "}
-              {priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue())}
+              {priceFormatCurrencySymbol(
+                getCurrencySymbol,
+                getTotalValue(),
+                "en-IN",
+                null,
+                true
+              )}
             </button>
           )}
         </form>
