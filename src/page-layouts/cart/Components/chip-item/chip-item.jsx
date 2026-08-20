@@ -143,6 +143,12 @@ export default function ChipItem({
   }, [buybox]);
 
   const getMaxQuantity = (item) => {
+    // Made-To-Order items carry no sellable stock, so max_quantity.item comes
+    // back as null/0. Don't cap them on stock — let moq.maximum govern below.
+    if (item?.custom_order?.is_custom_order) {
+      return Number.POSITIVE_INFINITY;
+    }
+
     let maxQuantity = item?.max_quantity?.item || 0;
 
     if (isSellerBuyBoxListing) {
@@ -255,6 +261,16 @@ export default function ChipItem({
 
     if (!filteredItems.length) {
       return false;
+    }
+
+    // Made-To-Order items aren't stock-capped (max_quantity.item is null),
+    // so bound them by moq.maximum instead. No moq.maximum => no upper limit.
+    if (isCustomOrder) {
+      const mtoTotalQuantity = filteredItems.reduce(
+        (sum, item) => sum + item.quantity,
+        0
+      );
+      return moq?.maximum ? mtoTotalQuantity >= moq.maximum : false;
     }
 
     let totalQuantity = 0;
