@@ -33,7 +33,7 @@ function OrderTracking({
   const orderInputPlaceholder =
     inputPlaceholder?.value ||
     inputPlaceholder ||
-    t("resource.order.enter_your_order_number");
+    t("resource.order.enter_order_id");
 
   const trackButtonLabel =
     trackButtonText?.value ||
