@@ -497,9 +497,16 @@
 }
 
 .formFooter {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
   display: flex;
   gap: 8px;
   margin-top: 24px;
+  padding-top: 12px;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background-color: @DialogBackground;
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.06);
 
   button {
     flex: 1;

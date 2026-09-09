@@ -24,6 +24,7 @@
 }
 .cartPincodeContainer {
   border: 1px solid @DividerStokes;
+  border-radius: 8px;
   line-height: 140%;
   padding: 24px;
   @media @tablet-range {
@@ -32,13 +33,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  @media @desktop {
-    border-radius: 8px;
-  }
   @media @mobile {
     padding: 16px;
     margin-top: 18px;
-    border-width: 1px 0;
   }
   .pinCodeDetailsContainer {
     .pincodeHeading {
@@ -111,6 +108,84 @@
     }
     @media @mobile {
       padding: 9px;
+    }
+  }
+
+  &.singleLineAddress {
+    width: 100%;
+    min-width: 0;
+    padding: 16px 24px;
+    gap: 16px;
+
+    .changePinCodeButtonWrapper {
+      flex-shrink: 0;
+    }
+
+    .pinCodeDetailsContainer {
+      flex: 1;
+      min-width: 0;
+
+      .deliveryHeader {
+        display: grid;
+        grid-template-columns: auto auto minmax(0, 1fr);
+        align-items: center;
+        column-gap: 12px;
+        row-gap: 8px;
+        min-width: 0;
+
+        .deliveryVehicleIcon {
+          width: 24px;
+          height: 24px;
+          color: @TextLabel;
+          flex-shrink: 0;
+        }
+
+        .pincodeHeading {
+          white-space: nowrap;
+          color: @TextLabel;
+        }
+
+        .pinCode {
+          width: 100%;
+          min-width: 0;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .addressTagsContainer {
+          grid-column: 1 / -1;
+        }
+      }
+    }
+
+    .changePinCodeButton {
+      min-width: auto;
+      padding: 0;
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      color: @ButtonLink;
+      text-transform: uppercase;
+    }
+
+    @media @tablet {
+      padding: 16px;
+    }
+  }
+
+  &.hideContainerBorder {
+    border: none !important;
+    border-radius: 8px 8px 0 0;
+  }
+
+  &.singleLineAddress.hideContainerBorder {
+    padding: 16px;
+
+    .pinCodeDetailsContainer {
+      .deliveryHeader {
+        column-gap: 8px;
+      }
     }
   }
 }

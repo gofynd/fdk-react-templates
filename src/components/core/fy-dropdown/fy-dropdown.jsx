@@ -40,6 +40,9 @@ const FyDropdown = ({
   showAsterik = true,
   labelClassName,
   containerClassName,
+  dropdownClassName = "",
+  dropdownButtonClassName = "",
+  dropdownIconClassName = "",
   dropdownListClassName,
   dropdownOptionClassName,
   value,
@@ -247,12 +250,12 @@ const FyDropdown = ({
         </label>
       )}
       <div
-        className={`${styles.dropdown} ${error ? styles.dropDownError : ""} ${disabled ? styles.disabled : ""}`}
+        className={`${styles.dropdown} ${dropdownClassName} ${error ? styles.dropDownError : ""} ${disabled ? styles.disabled : ""}`}
         ref={dropdown}
       >
         {disableSearch ? (
           <div
-            className={styles.dropdownButton}
+            className={`${styles.dropdownButton} ${dropdownButtonClassName}`}
             onClick={toggleDropdown}
             ref={dropdownButton}
           >
@@ -263,12 +266,12 @@ const FyDropdown = ({
             </span>
             <SvgWrapper
               svgSrc="arrow-down"
-              className={`${styles.dropdownIcon} ${isOpen ? styles.open : ""}`}
+              className={`${styles.dropdownIcon} ${dropdownIconClassName} ${isOpen ? styles.open : ""}`}
             />
           </div>
         ) : (
           <div
-            className={styles.dropdownButton}
+            className={`${styles.dropdownButton} ${dropdownButtonClassName}`}
             onClick={toggleDropdown}
             ref={dropdownButton}
             tabIndex={!disableSearch ? 0 : null}
@@ -288,7 +291,7 @@ const FyDropdown = ({
             />
             <SvgWrapper
               svgSrc="arrow-down"
-              className={`${styles.dropdownIcon} ${isOpen ? styles.open : ""}`}
+              className={`${styles.dropdownIcon} ${dropdownIconClassName} ${isOpen ? styles.open : ""}`}
             />
           </div>
         )}
