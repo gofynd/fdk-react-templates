@@ -83,15 +83,13 @@ function MemoizedSlide({ blog, index, sliderProps, getBlogTitle }) {
         {blog?.summary && (
           <p className={`${styles.blogItem__content}`}>{blog?.summary}</p>
         )}
-        {!!sliderProps?.btn_text?.trim() && (
-          <FDKLink
-            className={`${styles.blogItem__button} ${styles.btnPrimary}`}
-            title={blog?.title}
-            to={`/blog/${blog?.slug}`}
-          >
-            {translateDynamicLabel(sliderProps?.btn_text, t)}
-          </FDKLink>
-        )}
+        <FDKLink
+          className={`${styles.blogItem__button} ${styles.btnPrimary}`}
+          title={blog?.title}
+          to={`/blog/${blog?.slug}`}
+        >
+          {translateDynamicLabel(sliderProps?.btn_text, t)}
+        </FDKLink>
       </div>
       <FyImage
         customClass={styles.blogItem__image}
@@ -118,7 +116,6 @@ function BlogList({
   isBlogPageLoading,
   ssrSearch,
   ssrFilters,
-  typographyStyle,
 }) {
   const { direction } = useLocaleDirection();
   const { t } = useGlobalTranslation("translation");
@@ -517,10 +514,7 @@ function BlogList({
           ></BlogTabs>
         </div>
       </div>
-      <BlogFooter
-        {...footerProps}
-        typographyStyle={typographyStyle}
-      ></BlogFooter>
+      <BlogFooter {...footerProps}></BlogFooter>
     </div>
   );
 }

@@ -42,6 +42,7 @@ function Checkout({
   isCouponValid,
   setIsCouponValid,
   inValidCouponData,
+  fileUpload = () => {},
 }) {
   const [cancelQrPayment, setCancelQrPayment] = useState(null);
   const [searchParams] = useSearchParams();
@@ -132,9 +133,7 @@ function Checkout({
           totalValue={currencyFormat(
             totalPrice,
             currencySymbol,
-            formatLocale(locale, countryCode, true),
-            null,
-            true
+            formatLocale(locale, countryCode, true)
           )}
           onPriceDetailsClick={onPriceDetailsClick}
           isCartValid={isCartValid}
@@ -155,6 +154,7 @@ function Checkout({
           isCouponValid={isCouponValid}
           setIsCouponValid={setIsCouponValid}
           inValidCouponData={inValidCouponData}
+          fileUpload={fileUpload}
         ></CheckoutPayment>
       </div>
       <div className={styles.rightContainer}>

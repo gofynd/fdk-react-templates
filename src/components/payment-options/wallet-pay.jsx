@@ -29,7 +29,6 @@ function WalletPayment({
   getWalletdBorder,
   selectedPaymentPayload,
   mopSelectionLoading,
-  isPaymentDisabled = false,
 }) {
   const isTablet = useViewport(0, 768);
   const initialVisibleWalletCount = 3;
@@ -46,7 +45,7 @@ function WalletPayment({
       <div
         key={wlt?.code}
         className={`${styles.modeItemWrapper} ${getWalletdBorder(wlt)}`}
-        onClick={() => {
+        onClick={(e) => {
           removeDialogueError();
           selectMop("WL", "WL", wlt?.code);
         }}
@@ -62,10 +61,10 @@ function WalletPayment({
               </div>
             </div>
             <div className={`${styles.walletLeft} ${styles.onMobileView}`}>
-              {(!selectedWallet || selectedWallet?.code !== wlt?.code) && (
+              {(!selectedWallet || selectedWallet.code !== wlt.code) && (
                 <SvgWrapper svgSrc={"radio"}></SvgWrapper>
               )}
-              {selectedWallet?.code === wlt?.code && (
+              {selectedWallet && selectedWallet.code === wlt.code && (
                 <SvgWrapper svgSrc={"radio-selected"}></SvgWrapper>
               )}
             </div>
@@ -78,17 +77,10 @@ function WalletPayment({
               customClassName={styles.visibleOnTab}
               value={priceFormatCurrencySymbol(
                 getCurrencySymbol,
-                getTotalValue(),
-                "en-IN",
-                null,
-                true
+                getTotalValue()
               )}
               onPriceDetailsClick={onPriceDetailsClick}
-              disabled={
-                mopSelectionLoading ||
-                !selectedWallet?.code ||
-                isPaymentDisabled
-              }
+              disabled={mopSelectionLoading || !selectedWallet.code}
               enableLinkPaymentOption={enableLinkPaymentOption}
               isPaymentLoading={isPaymentLoading}
               loader={loader}
@@ -98,8 +90,8 @@ function WalletPayment({
               }}
             />
           ) : (
-            selectedWallet?.code &&
-            selectedWallet?.code === wlt?.code && (
+            selectedWallet.code &&
+            selectedWallet.code === wlt.code && (
               <button
                 className={styles.payBtn}
                 onClick={() => {
@@ -109,19 +101,14 @@ function WalletPayment({
                     acceptOrder();
                   }
                 }}
-                disabled={
-                  mopSelectionLoading || isPaymentLoading || isPaymentDisabled
-                }
+                disabled={mopSelectionLoading || isPaymentLoading}
               >
                 {!isPaymentLoading ? (
                   <>
                     {t("resource.common.pay_caps")}{" "}
                     {priceFormatCurrencySymbol(
                       getCurrencySymbol,
-                      getTotalValue(),
-                      "en-IN",
-                      null,
-                      true
+                      getTotalValue()
                     )}
                   </>
                 ) : (

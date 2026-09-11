@@ -339,7 +339,7 @@ h5,
   align-items: center;
   padding: 12px;
   background-color: transparent;
-  border-radius: var(--buttonRadius, 0px);
+  border-radius: 4px;
   border: 1px solid var(--dividerStokes, #d4d1d1);
   cursor: pointer;
   width: 100%;
@@ -349,9 +349,6 @@ h5,
 }
 .login-register-toggle__loginRegisterToggle___JgREz svg {
   flex: 0 0 24px;
-}
-.login-register-toggle__loginRegisterToggle___JgREz svg path {
-  fill: var(--textBody, #3c3131);
 }
 .login-register-toggle__loginRegisterToggle___JgREz .login-register-toggle__label___hpP0C {
   margin-inline-end: 24px;
