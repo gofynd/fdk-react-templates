@@ -88,6 +88,9 @@
     cursor: pointer;
     display: flex;
     gap: 16px;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
     transition: opacity 0.2s ease;
 
     &:hover {
@@ -96,17 +99,27 @@
 
     .shipmentLeft {
       width: 100px;
-      height: 100px;
+      aspect-ratio: var(--orderImageAspectRatio, 0.8);
       flex-shrink: 0;
-      border-radius: 4px;
+      border-radius: @ItemImageRadius;
       overflow: hidden;
       background: white;
       position: relative;
 
+      .bagImg,
+      picture,
+      img {
+        border-radius: inherit;
+      }
+
+      .bagImg,
+      picture {
+        overflow: hidden;
+      }
+
       img {
         width: 100%;
         height: 100%;
-        object-fit: cover;
       }
 
       #total-item {
@@ -166,6 +179,11 @@
         margin: 0;
         white-space: pre-wrap;
       }
+      .productName {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
       .shipmentStats {
         margin: 0;
         color: @TextLabel;
@@ -212,6 +230,7 @@
   }
 
   .shipmentThird {
+    flex-shrink: 0;
     margin: 0;
     .status {
       border-radius: 4px;

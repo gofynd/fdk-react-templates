@@ -57,6 +57,16 @@
         display: flex;
         flex-direction: column;
         gap: 4px;
+
+        input {
+          color: @TextHeading;
+          -webkit-text-fill-color: @TextHeading;
+
+          &:focus {
+            color: @TextHeading;
+            -webkit-text-fill-color: @TextHeading;
+          }
+        }
       }
 
       .actionContainer {

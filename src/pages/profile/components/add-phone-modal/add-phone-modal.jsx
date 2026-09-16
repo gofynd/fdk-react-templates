@@ -13,30 +13,36 @@ function AddPhoneModal({
   resendOtp,
   isOpen,
   onClose,
-  countryCode,
+  countryCode = "91",
+  initialPhone = null,
+  initialOtpData = null,
+  allowInitialPhoneEdit = false,
+  onPhoneChange,
 }) {
   const { t } = useGlobalTranslation("translation");
   const [isLoading, setIsLoading] = useState(false);
   const [isOtpLoading, setIsOtpLoading] = useState(false);
 
-  const [showOtp, setShowOtp] = useState(false);
+  const [showOtp, setShowOtp] = useState(Boolean(initialOtpData));
 
   const [isShowResendOtp, setIsShowResendOtp] = useState(false);
-  const [otpTime, setOtpTime] = useState(0);
-  const [otpData, setOtpData] = useState({});
+  const [otpTime, setOtpTime] = useState(initialOtpData?.resend_timer || 0);
+  const [otpData, setOtpData] = useState(initialOtpData || {});
+  const initialPhoneValue = {
+    mobile: initialPhone?.mobile || "",
+    countryCode: initialPhone?.countryCode || countryCode,
+    isValidNumber: initialPhone?.isValidNumber || Boolean(initialPhone?.mobile),
+  };
 
   const {
     handleSubmit: handleNumberSubmit,
     control: numberControl,
+    getValues: getNumberValues,
     formState: { isValid: isNumberValid },
   } = useForm({
     mode: "onChange",
     defaultValues: {
-      phone: {
-        mobile: "",
-        countryCode,
-        isValidNumber: false,
-      },
+      phone: initialPhoneValue,
     },
   });
 
@@ -68,7 +74,7 @@ function AddPhoneModal({
         setIsLoading(false);
       }
     },
-    []
+    [sendOtpMobile]
   );
 
   const onOtpSubmit = useCallback(
@@ -76,23 +82,75 @@ function AddPhoneModal({
       try {
         setIsOtpLoading(true);
         const { request_id } = otpData;
-        await verifyMobileOtp({ requestId: request_id, otp });
+        await verifyMobileOtp({
+          requestId: request_id,
+          otp,
+          phone: getNumberValues("phone"),
+        });
 
         onClose();
       } catch (error) {
+        resetField("otp");
         throw error;
       } finally {
         setIsOtpLoading(false);
       }
     },
-    [otpData]
+    [getNumberValues, otpData, onClose, resetField, verifyMobileOtp]
   );
 
-  const handleOtpChange = useCallback((event) => {
-    const value = event?.target?.value;
+  const handleOtpChange = useCallback(
+    (event) => {
+      const value = event?.target?.value;
 
-    setOtpValue("otp", value.toString().slice(0, 4));
-  }, []);
+      setOtpValue("otp", value.toString().slice(0, 4));
+    },
+    [setOtpValue]
+  );
+
+  const resetOtpStep = useCallback(() => {
+    resetField("otp");
+    setShowOtp(false);
+    setOtpData({});
+    setOtpTime(0);
+    setIsShowResendOtp(false);
+  }, [resetField]);
+
+  const handlePhoneChange = useCallback(
+    (value, onChange) => {
+      onChange(value);
+      onPhoneChange?.(value);
+
+      if (!allowInitialPhoneEdit || !showOtp) return;
+
+      const normalizePhoneValue = (phoneValue) =>
+        phoneValue?.toString().replace("+", "").trim() || "";
+      const otpMobile = otpData?.mobile || initialPhone?.mobile || "";
+      const otpCountryCode =
+        otpData?.country_code ||
+        otpData?.countryCode ||
+        initialPhone?.countryCode ||
+        countryCode;
+
+      const hasChangedOtpPhone =
+        normalizePhoneValue(value?.mobile) !== normalizePhoneValue(otpMobile) ||
+        normalizePhoneValue(value?.countryCode) !==
+          normalizePhoneValue(otpCountryCode);
+
+      if (hasChangedOtpPhone) {
+        resetOtpStep();
+      }
+    },
+    [
+      allowInitialPhoneEdit,
+      countryCode,
+      initialPhone,
+      otpData,
+      onPhoneChange,
+      resetOtpStep,
+      showOtp,
+    ]
+  );
 
   const handleResendOtp = useCallback(async () => {
     resetField("otp");
@@ -116,7 +174,7 @@ function AddPhoneModal({
     } finally {
       setIsLoading(false);
     }
-  }, [otpData, isShowResendOtp]);
+  }, [otpData, isShowResendOtp, resendOtp, resetField]);
 
   useEffect(() => {
     let interval;
@@ -137,7 +195,11 @@ function AddPhoneModal({
     <Modal
       isOpen={isOpen}
       closeDialog={onClose}
-      title={!showOtp ? t("resource.profile.add_number") : t("resource.profile.verify_number")}
+      title={
+        !showOtp && !allowInitialPhoneEdit
+          ? t("resource.profile.add_number")
+          : t("resource.profile.verify_number")
+      }
       containerClassName={styles.addPhoneContainer}
       bodyClassName={styles.addPhoneBody}
       headerClassName={styles.header}
@@ -154,7 +216,8 @@ function AddPhoneModal({
               control={numberControl}
               rules={{
                 validate: (value) =>
-                  value.isValidNumber || t("resource.common.enter_valid_phone_number"),
+                  value.isValidNumber ||
+                  t("resource.common.enter_valid_phone_number"),
               }}
               render={({ field, fieldState: { error } }) => (
                 <MobileNumber
@@ -167,10 +230,12 @@ function AddPhoneModal({
                   error={error}
                   isRequired
                   isShowLabel={false}
-                  disable={showOtp && otpTime > 0 && !error}
-                  onChange={(value) => {
-                    field.onChange(value);
-                  }}
+                  disable={
+                    !allowInitialPhoneEdit &&
+                    (Boolean(initialPhone?.mobile) ||
+                      (showOtp && otpTime > 0 && !error))
+                  }
+                  onChange={(value) => handlePhoneChange(value, field.onChange)}
                 />
               )}
             />
@@ -201,7 +266,11 @@ function AddPhoneModal({
                   className={`${styles.resendOtp} ${isShowResendOtp ? styles.showResendButton : ""}`}
                 >
                   {t("resource.common.resend_otp")}
-                  {!isShowResendOtp ? t("resource.profile.countdown_in_seconds", { count: otpTime }) : null}
+                  {!isShowResendOtp
+                    ? t("resource.profile.countdown_in_seconds", {
+                        count: otpTime,
+                      })
+                    : null}
                 </FyButton>
               )}
             </form>

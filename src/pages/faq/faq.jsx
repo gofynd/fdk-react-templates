@@ -141,9 +141,15 @@ function Faq({
                                 )}
                               </div>
                               {item.open ? (
-                                <SvgWrapper svgSrc="minus-circle" />
+                                <SvgWrapper
+                                  className={styles.toggleIcon}
+                                  svgSrc="minus-circle"
+                                />
                               ) : (
-                                <SvgWrapper svgSrc="plus-circle" />
+                                <SvgWrapper
+                                  className={styles.toggleIcon}
+                                  svgSrc="plus-circle"
+                                />
                               )}
                             </div>
                           </li>

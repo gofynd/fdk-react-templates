@@ -75,18 +75,9 @@
           height: 41px;
         }
       }
+
       .continueBtn {
-        display: inline-block;
-        padding-left: 12px;
-        &:nth-child(2) {
-          @media (max-width: 399px) {
-            padding-top: 12px;
-            padding-left: 0;
-          }
-          @media (min-width: 379px) and (max-width: 399px) {
-            padding-left: 12px;
-          }
-        }
+        padding-inline-start: 0;
       }
     }
   }
@@ -194,18 +185,24 @@
               }
               .prodItemData {
                 margin-inline-start: 14px;
+                flex: 1;
                 min-width: 0;
-                width: 100%;
 
                 .productDetails {
+                  min-width: 0;
+
                   .brandName {
                     font-weight: 600;
                     font-size: 14px;
+                    color: @TextHeading;
                   }
                   .productName {
                     font-size: 14px;
+                    color: @TextBody;
                     margin-top: 8px;
-                    word-break: break-word;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
                   }
                   .sizeInfo {
                     font-size: 12px;

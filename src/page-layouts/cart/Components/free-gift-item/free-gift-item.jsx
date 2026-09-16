@@ -7,7 +7,7 @@ import {
   useGlobalTranslation
 } from "fdk-core/utils";
 
-const FreeGiftItem = ({ item, currencySymbol = "₹" }) => {
+const FreeGiftItem = ({ item, currencySymbol = "₹", globalConfig = {} }) => {
   const fpi = useFPI();
   const { t } = useGlobalTranslation("translation");
   const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
@@ -38,7 +38,11 @@ const FreeGiftItem = ({ item, currencySymbol = "₹" }) => {
                   >
                     {freeGiftImage && (
                       <img
-                        className={styles.freeGiftItemImage}
+                        className={`${styles.freeGiftItemImage} ${
+                          globalConfig?.img_fill
+                            ? styles.imageCover
+                            : styles.imageContain
+                        }`}
                         src={freeGiftImage}
                         alt={item_name}
                       />
