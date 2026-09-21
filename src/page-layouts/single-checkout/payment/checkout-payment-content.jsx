@@ -332,9 +332,12 @@ function CheckoutPaymentContent({
     `${splitPaymentCount} splits available`;
   const splitPaymentInputLabel =
     splitPaymentConfig?.inputLabel || "Enter Amount";
+  const isResumeSplitCodSelected =
+    isResumeSplitPayment && selectedTab === "COD";
+  const resumeSplitCodMessage = t("resource.checkout.resume_split_cod_message");
   const splitPaymentInputAssistiveText =
     splitPaymentConfig?.assistiveText ||
-    "Specify amount that you want to process for the first payment";
+    "Specify amount that you want to process for the payment";
   const splitPaymentInputErrorText =
     splitPaymentConfig?.errorText ||
     "Split amount should be less than the total amount";
@@ -1572,7 +1575,7 @@ function CheckoutPaymentContent({
                             </label>
                             <div
                               className={`${styles.splitPaymentInputWrapper} ${
-                                splitPaymentAmountError
+                                !isResumeSplitCodSelected && splitPaymentAmountError
                                   ? styles.splitPaymentInputError
                                   : ""
                               }`}
@@ -1582,22 +1585,35 @@ function CheckoutPaymentContent({
                               </span>
                               <input
                                 className={styles.splitPaymentInput}
+                                disabled={isResumeSplitCodSelected}
                                 inputMode="decimal"
                                 onBlur={handleSplitPaymentAmountBlur}
                                 onChange={handleSplitPaymentAmountChange}
                                 type="text"
-                                value={splitPaymentAmount}
+                                value={
+                                  isResumeSplitCodSelected
+                                    ? (splitPaymentConfig?.remainingAmount ??
+                                      splitPaymentConfig?.remaining_amount ??
+                                      splitPaymentAmount)
+                                    : splitPaymentAmount
+                                }
                               />
                             </div>
                             <p
-                              className={`${styles.splitPaymentAssistiveText} ${
-                                splitPaymentAmountError
-                                  ? styles.splitPaymentErrorText
-                                  : ""
-                              }`}
+                              className={
+                                isResumeSplitCodSelected
+                                  ? styles.codInfo
+                                  : `${styles.splitPaymentAssistiveText} ${
+                                      splitPaymentAmountError
+                                        ? styles.splitPaymentErrorText
+                                        : ""
+                                    }`
+                              }
                             >
-                              {splitPaymentAmountError ||
-                                splitPaymentInputAssistiveText}
+                              {isResumeSplitCodSelected
+                                ? resumeSplitCodMessage
+                                : splitPaymentAmountError ||
+                                  splitPaymentInputAssistiveText}
                             </p>
                           </div>
                         )}
