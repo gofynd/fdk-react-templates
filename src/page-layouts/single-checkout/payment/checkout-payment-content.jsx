@@ -212,6 +212,8 @@ function CheckoutPaymentContent({
     isQrCodeVisible,
     qrCodeImage,
     countdown,
+    setCountdown,
+    initializeOrResetQrPayment,
     setTab,
     mop,
     subMop,
@@ -1095,6 +1097,8 @@ function CheckoutPaymentContent({
               qrCodeImage={qrCodeImage}
               isQrCodeLoading={isQrCodeLoading}
               countdown={countdown}
+              setCountdown={setCountdown}
+              initializeOrResetQrPayment={initializeOrResetQrPayment}
               formatTime={formatTime}
               selectMop={selectMop}
               cancelQrPayment={cancelQrPayment}

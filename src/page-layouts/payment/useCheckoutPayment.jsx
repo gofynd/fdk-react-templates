@@ -988,8 +988,12 @@ export function useCheckoutPayment({
   async function showQrCode() {
     try {
       const res = await proceedToPay("QR");
-      const { data, success } = res?.payload?.data?.checkoutCart || {};
-      if (success && data.base64_encoded_qr) {
+      const paymentResult =
+        res?.payload?.data?.checkoutCart ||
+        res?.payload?.data?.createPaymentOrder ||
+        {};
+      const { data, success } = paymentResult;
+      if (success && data?.base64_encoded_qr) {
         setIsQrCodeVisible(true);
         setQrCodeImage(data.base64_encoded_qr);
         setCountdown(data.timeout);
@@ -1501,6 +1505,8 @@ export function useCheckoutPayment({
     isQrCodeVisible,
     qrCodeImage,
     countdown,
+    setCountdown,
+    initializeOrResetQrPayment,
     setTab,
     mop,
     subMop,
