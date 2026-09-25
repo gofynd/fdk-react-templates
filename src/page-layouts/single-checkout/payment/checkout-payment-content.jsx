@@ -104,6 +104,8 @@ function CheckoutPaymentContent({
   const [isSplitCreditNoteProceeding, setIsSplitCreditNoteProceeding] =
     useState(false);
   const splitCreditNoteProceedingRef = useRef(false);
+  const splitPaymentAmountRef = useRef(null);
+  const [isSplitCodScrollReady, setIsSplitCodScrollReady] = useState(false);
   const splitCouponMopValidationRef = useRef("");
   const skipNextSplitCouponMopValidationRef = useRef(false);
   const isTruthyValue = (value) =>
@@ -314,6 +316,29 @@ function CheckoutPaymentContent({
   const isSplitPaymentLoading = splitPaymentConfig?.isLoading === true;
   const shouldShowSplitPaymentOptions =
     isSplitPaymentEnabled && isSplitPaymentSelected;
+  const shouldScrollBeforeCodModal = isTablet && shouldShowSplitPaymentOptions;
+
+  useEffect(() => {
+    if (!isCodModalOpen || !shouldScrollBeforeCodModal) {
+      setIsSplitCodScrollReady(false);
+      return;
+    }
+
+    const amountField = splitPaymentAmountRef.current;
+    if (amountField) {
+      const headerHeight =
+        document.querySelector(".fdk-theme-header")?.getBoundingClientRect().height ||
+        parseFloat(
+          getComputedStyle(document.documentElement).getPropertyValue("--headerHeight")
+        ) || 0;
+      const previousScrollMargin = amountField.style.scrollMarginTop;
+      amountField.style.scrollMarginTop = `${headerHeight + 16}px`;
+      // Scroll the rendered COD layout before mounting the modal's scroll lock.
+      amountField.scrollIntoView({ behavior: "instant", block: "start" });
+      amountField.style.scrollMarginTop = previousScrollMargin;
+    }
+    setIsSplitCodScrollReady(true);
+  }, [isCodModalOpen, shouldScrollBeforeCodModal, selectedTab, isSplitPaymentLoading]);
   const shouldShowStoreCredit =
     partialPaymentOption?.list[0]?.balance?.account?.status !== "INACTIVE" &&
     !shouldShowSplitPaymentOptions &&
@@ -1142,7 +1167,10 @@ function CheckoutPaymentContent({
             selectedPaymentPayload={selectedPaymentPayload}
             isPaymentLoading={isPaymentLoading}
             loader={loader}
-            isCodModalOpen={isCodModalOpen}
+            isCodModalOpen={
+              isCodModalOpen &&
+              (!shouldScrollBeforeCodModal || isSplitCodScrollReady)
+            }
             setIsCodModalOpen={setIsCodModalOpen}
             setTab={setTab}
             setSelectedTab={setSelectedTab}
@@ -1573,7 +1601,10 @@ function CheckoutPaymentContent({
                         {isSplitPaymentSelected &&
                           !isSplitPaymentLoading &&
                           !shouldHideSplitPaymentAmountField && (
-                          <div className={styles.splitPaymentAmountField}>
+                          <div
+                            ref={splitPaymentAmountRef}
+                            className={styles.splitPaymentAmountField}
+                          >
                             <label className={styles.splitPaymentFieldLabel}>
                               {splitPaymentInputLabel}
                             </label>
