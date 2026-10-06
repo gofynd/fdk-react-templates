@@ -155,6 +155,22 @@ function CheckoutPayment({
       setTimerId(null);
     }
   };
+  const availablePaymentOptions = paymentWithUiConfig?.paymentOption?.payment_option;
+  const shouldHideEmptyPaymentSection =
+    showPayment &&
+    !enableLinkPaymentOption &&
+    !isLoading &&
+    !paymentWithUiConfig?.isPaymentOptionsRefreshing &&
+    !isSplitPaymentActive &&
+    !shouldShowPaymentFailedMessage &&
+    getTotalValue?.() === 0 &&
+    Array.isArray(availablePaymentOptions) &&
+    !availablePaymentOptions.some(
+      (option) => option?.name !== "PP" && option?.list?.length > 0
+    );
+
+  if (shouldHideEmptyPaymentSection) return null;
+
   console.log("firstone connected");
   return (
     <>

@@ -1357,7 +1357,7 @@ export function useCheckoutPayment({
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paymentOption]);
+  }, [paymentOption, selectedTab]);
 
   useEffect(() => {
     if (!shouldHideCodOption || selectedTab !== "COD") {

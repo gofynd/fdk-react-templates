@@ -27,9 +27,10 @@ const FreeGiftItem = ({ item, currencySymbol = "₹", globalConfig = {} }) => {
               {promotion?.applied_free_articles.map((item, itemIndex) => {
                 const { item_images_url, item_name, item_price_details } =
                   item?.free_gift_item_details || {};
-                const freeGiftImage =
-                  item_images_url?.[0]?.replace("original", "resize-w:50") ||
-                  "";
+                const originalImage = item_images_url?.[0] || "";
+                const freeGiftImage = /\.gif(\?|#|$)/i.test(originalImage)
+                  ? originalImage
+                  : originalImage.replace("original", "resize-w:50");
 
                 return (
                   <div
