@@ -20063,12 +20063,12 @@ h5,
 }
 @media only screen and (max-width: 1023px) {
   .product-listing__breadcrumbWrapper___E1Np9 {
-    padding: 67px 40px 24px;
+    padding: 0 40px 24px;
   }
 }
 @media only screen and (max-width: 480px) {
   .product-listing__breadcrumbWrapper___E1Np9 {
-    padding: 67px 16px 24px;
+    padding: 0 16px 24px;
   }
 }
 .product-listing__filterHeaderContainer___sQ_rk {
@@ -20134,8 +20134,8 @@ h5,
   z-index: 1;
   inset-inline-start: 0;
   inset-inline-end: 0;
-  position: fixed;
-  top: var(--headerHeight);
+  position: sticky;
+  top: var(--headerHeight, 0px);
 }
 @media only screen and (min-width: 1024px) {
   .product-listing__mobileHeader___sOlF9 {

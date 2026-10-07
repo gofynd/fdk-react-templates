@@ -379,10 +379,10 @@
 .breadcrumbWrapper {
   padding: 16px 40px 24px;
   @media @tablet {
-    padding: 67px 40px 24px;
+    padding: 0 40px 24px;
   }
   @media @mobile {
-    padding: 67px 16px 24px;
+    padding: 0 16px 24px;
   }
 }
 
@@ -421,8 +421,8 @@
   z-index: 1;
   inset-inline-start: 0;
   inset-inline-end: 0;
-  position: fixed;
-  top: var(--headerHeight);
+  position: sticky;
+  top: var(--headerHeight, 0px);
 
   @media @desktop {
     display: none;
