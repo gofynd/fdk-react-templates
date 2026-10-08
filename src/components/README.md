@@ -13,11 +13,15 @@ This document provides an overview of all the components available in the projec
 * **[Breadcrumb](/src/components/breadcrumb/README.md)**: A breadcrumb navigation component for enhancing user experience.
 * **[ChipReviewItem](/src/components/chip-review-item/README.md)**: Displays individual review items in a chip format.
 * **[FyButton](/src/components/core/fy-button/README.md)**: A customizable button component for various user interactions.
+* **[FyCheckbox](/src/components/core/fy-checkbox/README.md)**: A single, standalone boolean checkbox atom.
 * **[FyDropdown](/src/components/core/fy-dropdown/README.md)**: A dropdown menu component for selection options.
+* **[FyFileUpload](/src/components/core/fy-file-upload/README.md)**: A generic drag-and-drop/click file-picker shell.
 * **[FyHtmlRenderer](/src/components/core/fy-html-renderer/README.md)**: Renders raw HTML content safely.
 * **[FyImage](/src/components/core/fy-image/README.md)**: An image component with support for various display options.
 * **[FyInput](/src/components/core/fy-input/README.md)**: A basic input field component for forms.
 * **[FyInputGroup](/src/components/core/fy-input-group/README.md)**: Groups input fields for collective operations.
+* **[FyProgress](/src/components/core/fy-progress/README.md)**: A linear, determinate progress bar.
+* **[FySwitch](/src/components/core/fy-switch/README.md)**: A boolean toggle switch component.
 * **[HtmlContent](/src/components/core/html-content/README.md)**: Displays HTML content with built-in formatting.
 * **[InfiniteLoader](/src/components/core/infinite-loader/README.md)**: A loader that supports infinite scrolling and data loading.
 * **[Modal](/src/components/core/modal/README.md)**: A modal dialog component for displaying content overlays.

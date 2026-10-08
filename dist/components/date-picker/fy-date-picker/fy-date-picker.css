@@ -385,8 +385,7 @@ h5,
   height: 48px;
   padding: 16px;
   border-radius: 6px;
-  border: 1px solid var(--overlaypopupdividerstroke, #e0e0e0);
-  background: var(--buttonSecondary, #fff);
+  border: 1px solid var(--dividerStokes, #d4d1d1);
 }
 .fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__inputWrapper___zh7iz input {
   border: none;
@@ -447,7 +446,7 @@ h5,
   width: 100%;
   position: absolute;
   top: 0;
-  border-bottom: 1px solid var(--overlaypopupdividerstroke, #e0e0e0);
+  border-bottom: 1px solid var(--dividerStokes, #d4d1d1);
 }
 .fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__titleContainer___O2vVH .fy-date-picker__titleText___iZItx {
   color: var(--textHeading, #26201a);
@@ -513,7 +512,7 @@ h5,
 .fy-date-picker__calendarWrapper___J5Y4d .fy-date-picker__calendarPopup___cA9su .fy-date-picker__calendarHeader___R20ub .fy-date-picker__controlContainer___cfI7T .fy-date-picker__monthYearSelect___hHzRC select {
   padding: 6px 10px;
   border-radius: 4px;
-  border: 1px solid var(--overlaypopupdividerstroke, #e0e0e0);
+  border: 1px solid var(--dividerStokes, #d4d1d1);
   background: var(--buttonSecondary, #fff);
   color: var(--textHeading, #26201a);
   font-weight: 600;
@@ -561,7 +560,7 @@ h5,
   cursor: pointer;
   font-size: 12px;
   font-weight: 600;
-  border: 1px solid var(--overlaypopupdividerstroke, #e0e0e0);
+  border: 1px solid var(--dividerStokes, #d4d1d1);
   padding: 0;
   box-sizing: border-box;
   min-height: 40px;

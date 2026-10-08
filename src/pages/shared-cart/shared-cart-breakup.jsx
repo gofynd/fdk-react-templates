@@ -53,7 +53,7 @@ const SharedCartBreakup = ({ breakup = [] }) => {
               <div className={styles.value}>
                 <span>
                   {currencyFormat(
-                    numberWithCommas(item.value),
+                    item.value,
                     item?.currency_symbol || "₹",
                     formatLocale(locale, countryCode, true)
                   )}
@@ -66,7 +66,7 @@ const SharedCartBreakup = ({ breakup = [] }) => {
               <div>{translateDynamicLabel(item.display, t)}</div>
               <div className={styles.value}>
                 {currencyFormat(
-                  numberWithCommas(item.value),
+                  item.value,
                   item?.currency_symbol || "₹",
                   formatLocale(locale, countryCode, true)
                 )}

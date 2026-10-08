@@ -8,6 +8,7 @@
  * @param {Function} props.changeinit - A function to handle changes in the shipment status.
  * @param {Object} props.invoiceDetails - Contains details about the invoice, including a presigned URL for downloading.
  * @param {Function} props.onAddToCart - A function to handle adding product to cart (for Buy Again functionality).
+ * @param {boolean} props.showCreditNote - Whether to show the Download Credit Note button (default: false).
  *
  * @returns {JSX.Element} A React component that renders the shipment tracking interface.
  *
@@ -29,9 +30,12 @@ function ShipmentTracking({
   shipmentInfo = {},
   changeinit,
   invoiceDetails,
+  customNeedHelpLink,
   availableFOCount,
   bagLength = 0,
   onAddToCart,
+  showCreditNote = false,
+  isSelfPickup = false,
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -39,6 +43,10 @@ function ShipmentTracking({
   const locale = language?.locale;
   const navigate = useNavigate();
   const [showDetailedTracking, setShowDetailedTracking] = useState(false);
+
+  // Return is not applicable to self-pickup orders, so treat can_return as false for them. This
+  // hides the Return action (Cancel, if available, still shows).
+  const canReturn = !!shipmentInfo?.can_return && !isSelfPickup;
   const getTime = (item) => {
     return convertUTCDateToLocalDate(
       item?.created_ts ? item?.created_ts : item?.time,
@@ -49,7 +57,7 @@ function ShipmentTracking({
 
   const getLinks = () => {
     const arrLinks = [];
-    if (shipmentInfo?.can_cancel || shipmentInfo?.can_return) {
+    if (shipmentInfo?.can_cancel || canReturn) {
       arrLinks.push({
         type: "internal",
         text: updateType(),
@@ -62,13 +70,20 @@ function ShipmentTracking({
         link: shipmentInfo?.track_url ? shipmentInfo?.track_url : "",
       });
     }
-    if (shipmentInfo?.need_help_url) {
-      arrLinks.push({
-        type: "internal",
-        text: t("resource.common.need_help"),
-        link: "/contact-us",
-      });
-    }
+    // if (shipmentInfo?.need_help_url) {
+    //   arrLinks.push({
+    //     type: "internal",
+    //     text: t("resource.common.need_help"),
+    //     link: "/faq/" || shipmentInfo?.need_help_url,
+    //   });
+    // }
+    // if (shipmentInfo?.need_help_url) {
+    //   arrLinks.push({
+    //     type: "internal",
+    //     text: t("resource.common.need_help"),
+    //     link: "/contact-us",
+    //   });
+    // }
     // Buy Again button - always visible
     const firstBag = shipmentInfo?.bags?.[0];
     const productSlug = firstBag?.item?.slug_key;
@@ -85,13 +100,27 @@ function ShipmentTracking({
       arrLinks.push({
         text: t("resource.common.download_invoice"),
         link: invoiceDetails?.presigned_url,
+        openInNewTab: true,
       });
     }
+    if (showCreditNote && shipmentInfo?.credit_note?.credit_note_url) {
+      arrLinks.push({
+        text: t("resource.common.download_credit_note"),
+        link: shipmentInfo.credit_note.credit_note_url,
+        openInNewTab: true,
+      });
+    }
+    arrLinks.push({
+      type: "internal",
+      text: t("resource.common.need_help"),
+      newTab: !!customNeedHelpLink?.value,
+      link: customNeedHelpLink?.value || "/faq/",
+    });
     return arrLinks;
   };
 
   const updateType = () => {
-    return shipmentInfo?.can_return ? "RETURN" : "CANCEL";
+    return canReturn ? "RETURN" : "CANCEL";
   };
 
   // const updateTypeText = () => {
@@ -119,8 +148,8 @@ function ShipmentTracking({
         // Find the base bag for bundles, otherwise use first bag
         const selectedBag = isBundleItem
           ? shipmentInfo.bags.find(
-              (bag) => bag?.bundle_details?.is_base === true
-            ) || firstBag
+            (bag) => bag?.bundle_details?.is_base === true
+          ) || firstBag
           : firstBag;
 
         const bagId = selectedBag?.id;
@@ -131,7 +160,7 @@ function ShipmentTracking({
         const finalLink = `/profile/orders/shipment/update/${shipmentInfo?.shipment_id}/${updateType()?.toLowerCase()}`;
         navigate(
           finalLink +
-            (querParams?.toString() ? `?${querParams.toString()}` : "")
+          (querParams?.toString() ? `?${querParams.toString()}` : "")
         );
       } else {
         // Multiple bags OR bundle with allow_partial_return: true - show selection UI
@@ -147,7 +176,11 @@ function ShipmentTracking({
         handleBuyAgain(item.productSlug);
       }
     } else {
-      navigate(item?.link);
+      if (item?.newTab) {
+        window.open(item?.link, "_blank");
+      } else {
+        navigate(item?.link);
+      }
     }
   };
 
@@ -178,9 +211,8 @@ function ShipmentTracking({
         {tracking?.map((item, index) => (
           <div
             key={index}
-            className={`${styles.trackItem} ${item?.is_current || item?.is_passed ? styles.title : ""} ${
-              item?.status === "In Transit" ? styles.detailedTracking : ""
-            }`}
+            className={`${styles.trackItem} ${item?.is_current || item?.is_passed ? styles.title : ""} ${item?.status === "In Transit" ? styles.detailedTracking : ""
+              }`}
           >
             {item?.status === "In Transit" &&
               (item?.is_current?.toString() || item?.is_passed?.toString()) && (
@@ -202,12 +234,12 @@ function ShipmentTracking({
                         (item?.is_current || item?.is_passed) &&
                         showDetailedTracking
                       ) && (
-                        <></>
-                        // <SvgWrapper
-                        //   className={`${styles.dropdownaArow}`}
-                        //   svgSrc="dropdown-arrow"
-                        // />
-                      )}
+                          <></>
+                          // <SvgWrapper
+                          //   className={`${styles.dropdownaArow}`}
+                          //   svgSrc="dropdown-arrow"
+                          // />
+                        )}
                       {(item?.is_current || item?.is_passed) &&
                         showDetailedTracking && (
                           <></>
@@ -253,6 +285,7 @@ function ShipmentTracking({
                   key={index}
                   onClick={() => update(item)}
                   className={`${styles.regularsm}`}
+                  data-testid={`order-${item?.text}`}
                 >
                   {item?.text === "RETURN"
                     ? t("resource.facets.return_caps")
@@ -266,6 +299,11 @@ function ShipmentTracking({
                 key={index}
                 href={`${item?.link}`}
                 className={`${styles.regularsm}`}
+                {...(item?.openInNewTab && {
+                  target: "_blank",
+                  rel: "noopener noreferrer",
+                })}
+                data-testid={`order-${item?.text}`}
               >
                 {item?.text === "RETURN"
                   ? t("resource.facets.return_caps")
