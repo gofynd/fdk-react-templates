@@ -7,7 +7,6 @@ import Loader from "../../../components/loader/loader";
 import { useGlobalTranslation } from "fdk-core/utils";
 import EmptyState from "../components/empty-state/empty-state";
 import AddAddressIcon from "../../../assets/images/add-address.svg";
-import EmptyPhone from "../../../assets/images/empty-phone.png";
 
 function Phone({
   setMobileNumberAsPrimary,
@@ -17,23 +16,15 @@ function Phone({
   verifyMobileOtp,
   resendOtp,
   countryCode = "91",
-  emptyStateIcon = <img src={EmptyPhone} alt="" />,
 }) {
   const { t } = useGlobalTranslation("translation");
   const [showAddModal, setShowAddModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedPhone, setSelectedPhone] = useState({});
-  const [phoneToVerify, setPhoneToVerify] = useState(null);
-  const [verifyOtpData, setVerifyOtpData] = useState(null);
-  const [verifyingPhone, setVerifyingPhone] = useState("");
 
   const handleShowAddModal = useCallback((show) => {
     setShowAddModal(show);
-    if (!show) {
-      setPhoneToVerify(null);
-      setVerifyOtpData(null);
-    }
   }, []);
 
   const handleSetPrimary = useCallback(async (phone) => {
@@ -68,42 +59,6 @@ function Phone({
       setIsLoading(false);
     }
   }, [selectedPhone]);
-
-  const getPhoneOtpPayload = useCallback(
-    (phoneDetails) => {
-      const payloadCountryCode =
-        phoneDetails?.countryCode || phoneDetails?.country_code || countryCode;
-
-      return {
-        mobile: phoneDetails?.mobile || phoneDetails?.phone || "",
-        countryCode: payloadCountryCode?.toString?.().replace("+", "") || "91",
-        isValidNumber: true,
-      };
-    },
-    [countryCode]
-  );
-
-  const handleVerifyPhone = useCallback(
-    async (phoneDetails) => {
-      const phonePayload = getPhoneOtpPayload(phoneDetails);
-
-      if (!phonePayload.mobile) return;
-
-      try {
-        setVerifyingPhone(phonePayload.mobile.toString());
-        const data = await sendOtpMobile(phonePayload);
-
-        setPhoneToVerify(phonePayload);
-        setVerifyOtpData(data);
-        setShowAddModal(true);
-      } catch (error) {
-        throw error;
-      } finally {
-        setVerifyingPhone("");
-      }
-    },
-    [getPhoneOtpPayload, sendOtpMobile]
-  );
 
   if (isLoading) {
     return (
@@ -168,9 +123,7 @@ function Phone({
                             variant="outlined"
                             className={styles.verifyBtn}
                             size="small"
-                            isLoading={verifyingPhone === phone?.toString()}
-                            disabled={!!verifyingPhone}
-                            onClick={() => handleVerifyPhone(phoneDetails)}
+                            isLoading={isLoading}
                           >
                             {t("resource.facets.verify")}
                           </FyButton>
@@ -206,7 +159,6 @@ function Phone({
         )}
         {!phoneNumbers?.length && (
           <EmptyState
-            emptyStateIcon={emptyStateIcon}
             title={t("resource.profile.no_phone_number_added")}
             onBtnClick={() => handleShowAddModal(true)}
             btnTitle={t("resource.profile.add_phone_number_caps")}
@@ -221,8 +173,6 @@ function Phone({
           verifyMobileOtp={verifyMobileOtp}
           isOpen={showAddModal}
           countryCode={countryCode}
-          initialPhone={phoneToVerify}
-          initialOtpData={verifyOtpData}
           onClose={() => handleShowAddModal(false)}
           // countries={countries}
         />

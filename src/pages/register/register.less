@@ -4,26 +4,6 @@
   width: 400px;
   padding: 24px;
 }
-.customTypography {
-  display: block;
-
-  .registerFormWrapper {
-    .title {
-      font-size: var(--register-title-size);
-      line-height: calc(var(--register-title-size) + 4px);
-    }
-  }
-}
-
-.customHeadingTypography {
-  .registerFormWrapper {
-    .title {
-      font-weight: var(--section-heading-weight, 700);
-      text-transform: var(--section-heading-text-transform);
-    }
-  }
-}
-
 .required {
   color: @ErrorText;
 }
@@ -40,7 +20,6 @@
     font-weight: 700;
     line-height: 44.8px;
     margin-bottom: 32px;
-    word-break: break-word;
 
     @media @tablet {
       font-size: 24px;
@@ -170,7 +149,7 @@
     width: 100%;
     margin-top: 32px;
     height: 48px;
-    border-radius: @ButtonRadius;
+    border-radius: 4px;
     background: @ButtonPrimary;
     color: @ButtonSecondary;
     font-size: 16px;

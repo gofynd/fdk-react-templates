@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./delivery-info.less";
 import FyButton from "../../../../components/core/fy-button/fy-button";
@@ -18,7 +18,6 @@ function DeliveryInfo({
   availableFOCount,
   setFoLoading,
   mandatoryPincode,
-  pincodeShakeTrigger = 0,
 }) {
   const { t } = useGlobalTranslation("translation");
   const numberRegex = /^\d*$/;
@@ -48,9 +47,12 @@ function DeliveryInfo({
     }
   };
 
+  const foCount = useMemo(() => {
+    return fulfillmentOptions?.length || 0;
+  }, [fulfillmentOptions]);
+
   return (
     <>
-      {/* Pincode Input Section - Only show when mandatoryPincode is true */}
       {mandatoryPincode && (
         <div className={styles.deliveryInfo}>
           {!isServiceability && (
@@ -58,12 +60,7 @@ function DeliveryInfo({
               <h4 className={`${styles.deliveryLabel} b2`}>
                 {t("resource.common.address.select_delivery_location")}
               </h4>
-              <div
-                key={pincodeShakeTrigger}
-                className={`${styles.delivery} ${
-                  pincodeShakeTrigger ? styles.pincodeShake : ""
-                }`}
-              >
+              <div className={styles.delivery}>
                 <FyInput
                   autoComplete="off"
                   value={pincode}
@@ -92,33 +89,30 @@ function DeliveryInfo({
               </div>
             </>
           )}
-        </div>
-      )}
 
-      {/* Error Message - Always show when there's an error, regardless of mandatoryPincode */}
-      {pincodeErrorMessage && (
-        <div className={`${styles.captionNormal} ${styles.emptyPincode}`}>
-          {pincodeErrorMessage}
-        </div>
-      )}
-
-      {/* Delivery Promise - Always show when conditions are met, regardless of mandatoryPincode */}
-      {!pincodeErrorMessage && availableFOCount === 1 && (
-        <div
-          className={`${styles.deliveryDate} ${styles.dateInfoContainer}`}
-        >
-          {pincodeLoading ? (
-            <Skeleton height={16} width={158} />
-          ) : (
-            tatMessage?.length > 0 && (
-              <>
-                <SvgWrapper
-                  svgSrc="delivery"
-                  className={`${styles.deliveryIcon}`}
-                />
-                <p className={styles.captionNormal}>{tatMessage}</p>
-              </>
-            )
+          {!pincodeErrorMessage && availableFOCount === 1 && (
+            <div
+              className={`${styles.deliveryDate} ${styles.dateInfoContainer}`}
+            >
+              {pincodeLoading ? (
+                <Skeleton height={16} width={158} />
+              ) : (
+                tatMessage?.length > 0 && (
+                  <>
+                    <SvgWrapper
+                      svgSrc="delivery"
+                      className={`${styles.deliveryIcon}`}
+                    />
+                    <p className={styles.captionNormal}>{tatMessage}</p>
+                  </>
+                )
+              )}
+            </div>
+          )}
+          {pincodeErrorMessage && (
+            <div className={`${styles.captionNormal} ${styles.emptyPincode}`}>
+              {pincodeErrorMessage}
+            </div>
           )}
         </div>
       )}

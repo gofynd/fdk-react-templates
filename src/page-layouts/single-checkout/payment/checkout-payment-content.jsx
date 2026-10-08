@@ -1,28 +1,202 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import * as styles from "./checkout-payment-content.less";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
+import { useSearchParams } from "react-router-dom";
+import cardValidator from "card-validator";
 import Modal from "../../../components/core/modal/modal";
+import { useMobile } from "../../../helper/hooks/useMobile";
+import { useViewport } from "../../../helper/hooks";
 // import UktModal from "./ukt-modal";
 import StickyPayNow from "./sticky-pay-now/sticky-pay-now";
 import CreditNote from "./credit-note/credit-note";
+import NoPaymentOptionSvg from "../../../assets/images/no-payment-option.svg";
 import {
   priceFormatCurrencySymbol,
   translateDynamicLabel,
 } from "../../../helper/utils";
+import {
+  useGlobalStore,
+  useGlobalTranslation,
+  useFPI,
+  useNavigate,
+} from "fdk-core/utils";
 import Spinner from "../../../components/spinner/spinner";
-import Skeleton from "../../../components/core/skeletons/skeleton";
+import FyButton from "../../../components/core/fy-button/fy-button";
+import { FDKLink } from "fdk-core/components";
+
+const upiDisplayWrapperStyle = {
+  padding: "24px",
+  maxWidth: "100%",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+};
+
+const upiHeadingStyle = {
+  fontSize: "24px",
+  fontWeight: 700,
+  lineHeight: "140%",
+  textAlign: "center",
+  color: "var(--textHeading)",
+};
+
+const upiVpaStyle = {
+  fontSize: "14px",
+  fontWeight: 400,
+  lineHeight: "140%",
+  textAlign: "center",
+  marginTop: "16px",
+  color: "var(--textBody)",
+};
+
+const upiLabelWrapperStyle = {
+  margin: "16px 0px",
+};
+
+const timeDisplayStyle = {
+  fontSize: "14px",
+  fontWeight: 500,
+  lineHeight: "140%",
+  textAlign: "center",
+  color: "var(--textBody)",
+  marginBottom: "16px",
+};
+
+const timeDisplaySpanStyle = {
+  borderRadius: "40px",
+  border: "0.5px solid var(--successText)",
+  backgroundColor: "var(--successBackground)",
+  padding: "2px 7px",
+  fontSize: "12px",
+  fontWeight: 600,
+  lineHeight: "140%",
+  color: "var(--successText)",
+};
+
+const cancelBtnStyle = {
+  cursor: "pointer",
+  fontSize: "12px",
+  fontWeight: 600,
+  lineHeight: "140%",
+  textTransform: "uppercase",
+  textAlign: "center",
+  color: "var(--buttonLink)",
+};
+
+const UPI_INVALID_VPA_ERROR = "resource.checkout.please_enter_correct_upi_id";
+import CardForm from "./card-form";
+import Shimmer from "../../../components/shimmer/shimmer";
 import CheckoutPaymentSkeleton from "./checkout-payment-skeleton";
-import QrCodePaymet from "../../../components/payment-options/qr-code-pay";
-import UpiAppPayment from "../../../components/payment-options/upi-app-pay";
-import WalletPayment from "../../../components/payment-options/wallet-pay";
-import NetBankingPay from "../../../components/payment-options/net-banking-pay";
-import CardPayment from "../../../components/payment-options/card-payment";
-import CodPayment from "../../../components/payment-options/cod-payment";
-import OtherPay from "../../../components/payment-options/other-pay";
-import PayLater from "../../../components/payment-options/pay-later";
-import CardLessEmi from "../../../components/payment-options/cardless-emi-pay";
-import { useCheckoutPayment } from "../../payment/useCheckoutPayment";
-import { useFPI } from "fdk-core/utils";
+
+export const CREDIT_CARD_MASK = [
+  {
+    mask: "0000 000000 00000",
+    cardtype: "american-express",
+  },
+  {
+    mask: "0000 0000 0000 0000",
+    cardtype: "discover",
+  },
+  {
+    mask: "0000 000000 0000",
+    cardtype: "diners-club",
+  },
+  {
+    mask: "0000 0000 0000 0000",
+    cardtype: "mastercard",
+  },
+
+  {
+    mask: "0000 000000 00000",
+    cardtype: "jcb15",
+  },
+  {
+    mask: "0000 0000 0000 0000",
+    cardtype: "jcb",
+  },
+  {
+    mask: "0000 0000 0000 0000",
+    cardtype: "maestro",
+  },
+  {
+    mask: "0000 0000 0000 0000",
+    cardtype: "visa",
+  },
+  {
+    mask: "0000 0000 0000 0000",
+    cardtype: "unionpay",
+  },
+  {
+    mask: "0000 0000 0000 0000",
+    cardtype: "rupay",
+  },
+  {
+    mask: "0000 0000 0000 0000",
+    cardtype: "Unknown",
+  },
+];
+
+var cardnumber_mask;
+var expirationdate_mask;
+var name;
+var numberValidation;
+
+const APPLE_PAY_EMAIL = "rbl@gofynd.com";
+const RAZORPAY_APPLE_PAY_SCRIPT_URL =
+  "https://checkout.razorpay.com/v1/razorpay.js";
+const RAZORPAY_APPLE_PAY_TAG_NAME = "razorpay-checkout";
+
+const formatApplePayContact = (contact) => {
+  const value = contact?.toString().trim();
+  if (!value) return "";
+  if (value.startsWith("+")) return value;
+
+  const digits = value.replace(/\D/g, "");
+  if (digits.length === 10) return `+91${digits}`;
+  if (digits.length > 10 && digits.length === value.length) return `+${digits}`;
+  return value;
+};
+
+const loadRazorpayApplePayScript = () => {
+  if (customElements.get(RAZORPAY_APPLE_PAY_TAG_NAME)) return Promise.resolve();
+
+  return new Promise((resolve, reject) => {
+    let script = document.querySelector(
+      `script[src="${RAZORPAY_APPLE_PAY_SCRIPT_URL}"]`
+    );
+    const handleLoad = () =>
+      customElements
+        .whenDefined(RAZORPAY_APPLE_PAY_TAG_NAME)
+        .then(resolve)
+        .catch(reject);
+
+    if (script) {
+      handleLoad();
+      return;
+    }
+
+    script = document.createElement("script");
+    script.src = RAZORPAY_APPLE_PAY_SCRIPT_URL;
+    script.onload = handleLoad;
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+};
+
+const isApplePayOption = (option = {}) =>
+  [option.code, option.name, option.display_name, option.merchant_code].some(
+    (value) =>
+      value?.toString().toLowerCase().replace(/[\s_-]/g, "") === "applepay"
+  );
+
+const findApplePayOption = (paymentOptions = []) => {
+  for (const paymentOption of paymentOptions || []) {
+    const option = paymentOption?.list?.find(isApplePayOption);
+    if (option) return { parent: paymentOption, option };
+  }
+  return null;
+};
 
 function CheckoutPaymentContent({
   payment,
@@ -34,32 +208,39 @@ function CheckoutPaymentContent({
   setCancelQrPayment,
   isCouponApplied,
   juspayErrorMessage,
+  setMopPayload,
   isCouponValid,
+  setIsCouponValid,
   inValidCouponData,
 }) {
-  const checkoutPayment = useCheckoutPayment({
-    payment,
-    handleShowFailedMessage,
-    breakUpValues,
-    setCancelQrPayment,
-    isCouponApplied,
-    juspayErrorMessage,
-    styles,
-  });
-
+  const fpi = useFPI();
+  const { language } = useGlobalStore(fpi.getters.i18N_DETAILS);
+  const locale = language?.locale;
+  const { t } = useGlobalTranslation("translation");
   const {
     selectedTab,
     selectedTabData,
     proceedToPay,
     getTotalValue,
+    PaymentOptionsList,
     setSelectedTab,
     getCurrencySymbol,
     loggedIn,
     paymentOption,
+    paymentConfig,
     isLoading,
     isQrCodeLoading,
+    handleIsQrCodeLoading,
+    getUPIIntentApps,
     cardDetails,
+    checkAndUpdatePaymentStatus,
+    cancelPayment,
+    otherOptions,
     setUPIError,
+    isUPIError,
+    Loader,
+    validateCoupon,
+    selectPaymentMode,
     showUpiRedirectionModal,
     validateCardDetails,
     setShowUpiRedirectionModal,
@@ -68,1166 +249,3318 @@ function CheckoutPaymentContent({
     updateStoreCredits,
     creditUpdating,
     isPaymentLoading,
-    isUPIError,
-    mopSelectionLoading,
-    isPaymentDisabled = false,
-    isPaymentOptionsRefreshing,
-    splitPaymentConfig,
-    onSplitPaymentChange,
-    onSplitPaymentAmountChange,
-    onSplitPaymentAmountBlur,
-    onSplitCodBack,
-    onSplitCodContinue,
   } = payment;
-  const shouldDefaultSelectSplitPayment =
-    splitPaymentConfig?.defaultSelected === true;
-  const isResumeSplitPayment =
-    splitPaymentConfig?.isResumeSplitPayment === true ||
-    splitPaymentConfig?.is_resume_split_payment === true;
-  const [isSplitPaymentSelected, setIsSplitPaymentSelected] = useState(
-    shouldDefaultSelectSplitPayment
-  );
-  const [splitPaymentAmount, setSplitPaymentAmount] = useState("");
-  const [splitPaymentAmountError, setSplitPaymentAmountError] = useState("");
-  const [
-    shouldEnableSplitPaymentAfterCouponRemoval,
-    setShouldEnableSplitPaymentAfterCouponRemoval,
-  ] = useState(false);
-  const [isSplitPaymentCouponValidating, setIsSplitPaymentCouponValidating] =
-    useState(false);
-  const [showSplitCreditNoteConfirmation, setShowSplitCreditNoteConfirmation] =
-    useState(false);
-  const [
-    shouldApplyCreditNoteWithSplitPayment,
-    setShouldApplyCreditNoteWithSplitPayment,
-  ] = useState(false);
-  const [isSplitCreditNoteProceeding, setIsSplitCreditNoteProceeding] =
-    useState(false);
-  const splitCreditNoteProceedingRef = useRef(false);
-  const splitPaymentAmountRef = useRef(null);
-  const [isSplitCodScrollReady, setIsSplitCodScrollReady] = useState(false);
-  const splitCouponMopValidationRef = useRef("");
-  const skipNextSplitCouponMopValidationRef = useRef(false);
-  const isTruthyValue = (value) =>
-    value === true || String(value).toLowerCase() === "true";
-  const getStoreCreditBreakupAmount = () => {
-    const storeCreditBreakup = Array.isArray(breakUpValues)
-      ? breakUpValues.find((item) => item?.key === "store_credit")?.value
-      : breakUpValues?.store_credit;
-    const amount = Number(String(storeCreditBreakup || "").replace(/[^\d.]/g, ""));
 
-    return Number.isFinite(amount) ? amount : 0;
+
+  useEffect(() => {
+    if (enableLinkPaymentOption && selectedTab) {
+      setActiveMop(selectedTab);
+    }
+  }, [selectedTab]);
+  const isChromeOrSafari =
+    /Chrome/.test(navigator.userAgent) ||
+    /Safari/.test(navigator.userAgent) ||
+    /Instagram/.test(navigator.userAgent);
+
+  let paymentOptions = PaymentOptionsList();
+  let codOption = paymentOptions?.filter((opt) => opt.name === "COD")[0];
+  paymentOptions = paymentOptions?.filter((opt) => opt.name !== "COD");
+  const applePayPaymentOption = useMemo(
+    () => findApplePayOption(paymentOption?.payment_option),
+    [paymentOption]
+  );
+  const cardOptionIndex = paymentOptions?.findIndex(
+    (option) => option.name === "CARD"
+  );
+  const applePayParentOption = applePayPaymentOption
+    ? {
+        display_name: "Apple Pay",
+        name: "APPLEPAY",
+        svg: "wallet",
+        subMopIcons: applePayPaymentOption?.option?.logo_url?.small
+          ? [applePayPaymentOption.option.logo_url.small]
+          : [],
+      }
+    : null;
+
+  if (applePayParentOption) {
+    paymentOptions =
+      cardOptionIndex >= 0
+        ? [
+            ...paymentOptions.slice(0, cardOptionIndex + 1),
+            applePayParentOption,
+            ...paymentOptions.slice(cardOptionIndex + 1),
+          ]
+        : [applePayParentOption, ...paymentOptions];
+  }
+  const otherPaymentOptions = useMemo(() => otherOptions(), [paymentOption]);
+  let upiSuggestions = paymentOption?.payment_option?.find?.(
+    (ele) => ele.name === "UPI"
+  )?.suggested_list || ["okhdfcbank", "okicici", "oksbi"];
+
+  //card
+  const [addNewCard, setAddNewCard] = useState(false);
+  const [cardExpiryDate, setCardExpiryDate] = useState("");
+  const [cvvNumber, setCvvNumber] = useState("");
+  const [showError, setShowError] = useState(false);
+  const [cardNumberError, setCardNumberError] = useState(false);
+  const [cardExpiryError, setCardExpiryError] = useState(false);
+  const [cardCVVError, setCardCVVError] = useState(false);
+  const [cardNameError, setCardNameError] = useState(false);
+  const [isCardSecure, setIsCardSecure] = useState(true);
+  const [isSavedCardSecure, setIsSavedCardSecure] = useState(null);
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const cart_id = searchParams.get("id");
+  const address_id = searchParams.get("address_id");
+  const billing_address_id = searchParams.get("billing_address_id");
+  const nameRef = useRef(null);
+  const cardNumberRef = useRef(null);
+  const expirationDateRef = useRef(null);
+  const applePayContainerRef = useRef(null);
+  const applePayInitializationRef = useRef(false);
+  const applePayRequestIdRef = useRef(0);
+  const applePayCallbackSubmittedRef = useRef(false);
+  const [applePayOrder, setApplePayOrder] = useState(null);
+  const [isApplePayScriptLoaded, setIsApplePayScriptLoaded] = useState(false);
+  const [applePayStatus, setApplePayStatus] = useState("idle");
+  const [applePayMessage, setApplePayMessage] = useState("");
+  const [filteredUPISuggestions, setFilteredUPISuggestions] = useState([]);
+
+  const [selectedCard, setSelectedCard] = useState(null);
+  const [selectedWallet, setSelectedWallet] = useState({});
+
+  const [vpa, setvpa] = useState("");
+  const [selectedUpiIntentApp, setSelectedUpiIntentApp] = useState("");
+
+  const [selectedNB, setSelectedNB] = useState({});
+  const [selectedPayLater, setSelectedPayLater] = useState({});
+
+  const [selectedCardless, setSelectedCardless] = useState({});
+  const [selectedOtherPayment, setSelectedOtherPayment] = useState({});
+  const [savedUPISelect, setSavedUPISelect] = useState(false);
+  const [showUPILoader, setUPILoader] = useState(false);
+  const [selectedPaymentPayload, setSelectedPaymentPayload] = useState({
+    selectedCard: selectedCard,
+    isCardSecure: isCardSecure,
+    selectedCardless: selectedCardless,
+    selectedPayLater: selectedPayLater,
+    selectedWallet: selectedWallet,
+    selectedNB: selectedNB,
+    vpa: vpa,
+    selectedOtherPayment: selectedOtherPayment,
+    selectedUpiIntentApp: selectedUpiIntentApp,
+  });
+  const [paymentResponse, setPaymentResponse] = useState(null);
+
+  const [showUPIModal, setshowUPIModal] = useState(false);
+  const [showCouponValidityModal, setShowCouponValidityModal] = useState(false);
+  const [couponValidity, setCouponValidity] = useState({});
+  const [countdownSeconds, setcountdownSeconds] = useState(600);
+  const [timer, settimer] = useState(null);
+  const [pollInterval, setpollInterval] = useState(null);
+  const [timeRemaining, setTimeRemaining] = useState(0); // in seconds
+
+  const [openGuidelinesModal, setOpenGuidelinesModal] = useState(false);
+  const [openMoreWalletModal, setOpenMoreWalletModal] = useState(false);
+  const [walletSearchText, setWalletSearchText] = useState("");
+  const [openMoreNbModal, setOpenMoreNbModal] = useState(false);
+  const [nbSearchText, setNbSearchText] = useState("");
+  const [isNavTabOpenMobile, setIsNavTabOpenMobile] = useState(false);
+  const [upiApps, setUpiApps] = useState([]);
+
+  const [isQrCodeVisible, setIsQrCodeVisible] = useState(false);
+  const [qrCodeImage, setQrCodeImage] = useState(null);
+  const [countdown, setCountdown] = useState(null);
+  const [qrPaymentPayload, setQrPaymentPayload] = useState({});
+  const [showUPIAutoComplete, setUPIAutoComplete] = useState(false);
+  const [upiSaveForLaterChecked, setUpiSaveForLaterChecked] = useState(true);
+
+  const intervalRef = useRef(null);
+  const [isQrMopPresent, setIsQrMopPresent] = useState(false);
+
+  const [cardNumber, setCardNumber] = useState("");
+  const [nameOnCard, setNameOnCard] = useState("");
+  const [cardDetailsData, setCardDetailsData] = useState({});
+
+  const [tab, setTab] = useState("");
+  const [mop, setMop] = useState("");
+  const [subMop, setSubMop] = useState("");
+  const [finalMop, setFinalMop] = useState("");
+  const selectedUpiRef = useRef(null);
+  const [savedUpi, setSavedUpi] = useState([]);
+  const [savedCards, setSavedCards] = useState([]);
+  const [isUpiSuffixSelected, setIsUpiSuffixSelected] = useState(false);
+  const [navigationTitleName, setNavigationTitleName] = useState("");
+  const [isCvvNotNeededModal, setIsCvvNotNeededModal] = useState(false);
+
+  const [cvvValues, setCvvValues] = useState({});
+  const [isCvvInfo, setIsCvvInfo] = useState(false);
+  const [isCodModalOpen, setIsCodModalOpen] = useState(false);
+  const [isCardNumberValid, setIsCardNumberValid] = useState(false);
+  const [activeMop, setActiveMop] = useState(null);
+  const [userOrderId, setUserOrderId] = useState(null);
+  const [lastValidatedBin, setLastValidatedBin] = useState("");
+  const [isJuspayCouponApplied, setIsJuspayCouponApplied] = useState(false);
+
+  const disbaleCheckout = useGlobalStore(fpi?.getters?.SHIPMENTS);
+  const isCouponAppliedSuccess =
+    useGlobalStore(fpi?.getters?.CUSTOM_VALUE) ?? {};
+  const lastJuspayInitializationRef = useRef(null);
+
+  const toggleMop = (mop) => {
+    setActiveMop((prev) => (prev === mop ? null : mop));
   };
-  const isCreditNoteAppliedForSplit =
-    isTruthyValue(splitPaymentConfig?.isCreditNoteApplied) ||
-    isTruthyValue(splitPaymentConfig?.is_credit_note_applied) ||
-    getStoreCreditBreakupAmount() > 0 ||
-    partialPaymentOption?.list?.some((option) =>
-      isTruthyValue(option?.balance?.is_applied)
-    );
+  const isTablet = useViewport(0, 768);
+
+  const resetApplePay = () => {
+    applePayRequestIdRef.current += 1;
+    applePayInitializationRef.current = false;
+    applePayCallbackSubmittedRef.current = false;
+    setApplePayOrder(null);
+    setIsApplePayScriptLoaded(false);
+    setApplePayStatus("idle");
+    setApplePayMessage("");
+  };
 
   useEffect(() => {
-    const isTruthySplitFlag = (value) =>
-      value === true || String(value).toLowerCase() === "true";
-    const isSplitCodPreviewConfig =
-      isTruthySplitFlag(splitPaymentConfig?.is_split_cod_available) &&
-      !isTruthySplitFlag(splitPaymentConfig?.isSplitCodPaymentActive);
-
-    setIsSplitPaymentSelected(() => {
-      const nextValue = shouldDefaultSelectSplitPayment;
-
-      if (!nextValue && !isSplitCodPreviewConfig) {
-        setSplitPaymentAmount("");
-        setSplitPaymentAmountError("");
-      }
-
-      return nextValue;
-    });
+    if (selectedTab !== "APPLEPAY" && !isApplePayOption(selectedWallet)) {
+      resetApplePay();
+    }
   }, [
-    shouldDefaultSelectSplitPayment,
-    splitPaymentConfig?.enabled,
-    splitPaymentConfig?.is_split_cod_available,
-    splitPaymentConfig?.isSplitCodPaymentActive,
-  ]);
-
-  // destructure exactly what the JSX (and the local prop-bundles) needs
-  const {
-    // translations & environment
-    t,
-    isTablet,
-    isChromeOrSafari,
-    // payment data
-    paymentOptions,
-    otherPaymentOptions,
-    codOption,
-    // for coupon modal (your return uses these)
-    showCouponValidityModal,
-    setShowCouponValidityModal,
-    couponValidity,
-    setCouponValidity,
-    isCouponValidationLoading,
-    // card state
-    addNewCard,
-    getCardBorder,
-    savedCards,
-    cardExpiryDate,
-    setCardExpiryDate,
-    cvvNumber,
-    setCvvNumber,
-    showError,
-    cardNumberError,
-    cardExpiryError,
-    cardCVVError,
-    cardNameError,
-    isCardSecure,
-    openGuidelinesModal,
-    setOpenGuidelinesModal,
-    CREDIT_CARD_MASK,
-    cardNumber,
-    nameOnCard,
-    setNameOnCard,
-    cardDetailsData,
-    setLastValidatedBin,
-    // refs
-    nameRef,
-    cardNumberRef,
-    selectedUpiRef,
-    // selections
-    selectedCard,
-    selectedWallet,
-    selectedNB,
-    selectedPayLater,
-    selectedCardless,
-    selectedOtherPayment,
-    selectedPaymentPayload,
-    setSelectedPaymentPayload,
-    setSelectedOtherPayment,
-    setSavedUPISelect,
-    // upi/qr
-    setvpa,
-    upiApps,
-    selectedUpiIntentApp,
-    setSelectedUpiIntentApp,
-    showUPIModal,
-    timeRemaining,
-    isQrMopPresent,
-    isQrCodeVisible,
-    qrCodeImage,
-    countdown,
-    setCountdown,
-    initializeOrResetQrPayment,
-    setTab,
-    mop,
-    subMop,
-    activeMop,
-    toggleMop,
-    isCodModalOpen,
-    setIsCodModalOpen,
-    // store / disable / charges
-    disbaleCheckout,
-    codCharges,
-    // search modals lists
-    openMoreWalletModal,
-    setOpenMoreWalletModal,
-    walletSearchText,
-    setWalletSearchText,
-    openMoreNbModal,
-    setOpenMoreNbModal,
-    nbSearchText,
-    setNbSearchText,
-    // cvv helpers
-    cvvValues,
-    isCvvInfo,
-    isCvvNotNeededModal,
-    setIsCvvInfo,
-    setIsCvvNotNeededModal,
-    handleCvvChange,
-    handleCvvInfo,
-    // actions
-    selectMop,
-    removeCoupon,
-    unsetSelectedSubMop,
-    acceptOrder,
-    cancelQrPayment,
-    cancelUpiAppPayment,
-    cancelUPIPayment,
-    // card handlers
-    addNewCardShow,
-    hideNewCard,
-    handleNewCardNumberChange,
-    handleNewCardExpiryChange,
-    keypressCvv,
-    handleNewCardSaveState,
-    handleCardNumberInput,
-    handleCardNumberPaste,
-    handleNameOnCardInput,
-    validateCardNumber,
-    validateNameOnCard,
-    validateCardExpiryDate,
-    validateCvv,
-    handleCvvNumberInput,
-    setCardValidity,
-    resetCardValidationErrors,
-    getTrimmedCardNumber,
-    isCardValid,
-    payUsingCard,
-    // juspay
-    paymentResponse,
-    isJuspayEnabled,
-    setIsJuspayCouponApplied,
-    // upi
-    getSvgNameForApp,
-    upiAppData,
-    formatTime,
-    // borders / list helpers
-    getWalletdBorder,
-    getNBBorder,
-    getNormalisedList,
-    getPayLaterBorder,
-    getCardlessBorder,
-    getOPBorder,
-    handleScrollToTop,
-    vpa,
-    validateCouponOnCreditNoteApplied,
-    handleProceedToPayClick,
-  } = checkoutPayment;
-
-  const uiProps = { styles, t, SvgWrapper, StickyPayNow, isTablet };
-  const fpi = useFPI();
-  const getPayNowValue =
-    typeof payment?.getPayNowValue === "function"
-      ? payment.getPayNowValue
-      : getTotalValue;
-  const isPaymentActionDisabled = Boolean(
-    isPaymentDisabled ||
-      isCouponValidationLoading ||
-      isSplitPaymentCouponValidating
-  );
-  const amountProps = { getCurrencySymbol, getTotalValue: getPayNowValue };
-  const shouldShowFullPaymentSkeleton =
-    isLoading && !isPaymentOptionsRefreshing;
-  const isSplitPaymentEnabled = splitPaymentConfig?.enabled === true;
-  const isSplitPaymentCheckboxDisabled =
-    splitPaymentConfig?.checkboxDisabled === true ||
-    splitPaymentConfig?.disableCheckbox === true ||
-    splitPaymentConfig?.isCheckboxDisabled === true;
-  const isSplitPaymentActionDisabled =
-    isSplitPaymentCheckboxDisabled || isSplitPaymentCouponValidating;
-  const isSplitPaymentLoading = splitPaymentConfig?.isLoading === true;
-  const shouldShowSplitPaymentOptions =
-    isSplitPaymentEnabled && isSplitPaymentSelected;
-  const shouldScrollBeforeCodModal = isTablet && shouldShowSplitPaymentOptions;
-
-  useEffect(() => {
-    if (!isCodModalOpen || !shouldScrollBeforeCodModal) {
-      setIsSplitCodScrollReady(false);
-      return;
-    }
-
-    const amountField = splitPaymentAmountRef.current;
-    if (amountField) {
-      const headerHeight =
-        document.querySelector(".fdk-theme-header")?.getBoundingClientRect().height ||
-        parseFloat(
-          getComputedStyle(document.documentElement).getPropertyValue("--headerHeight")
-        ) || 0;
-      const previousScrollMargin = amountField.style.scrollMarginTop;
-      amountField.style.scrollMarginTop = `${headerHeight + 16}px`;
-      // Scroll the rendered COD layout before mounting the modal's scroll lock.
-      amountField.scrollIntoView({ behavior: "instant", block: "start" });
-      amountField.style.scrollMarginTop = previousScrollMargin;
-    }
-    setIsSplitCodScrollReady(true);
-  }, [isCodModalOpen, shouldScrollBeforeCodModal, selectedTab, isSplitPaymentLoading]);
-  const shouldShowStoreCredit =
-    partialPaymentOption?.list[0]?.balance?.account?.status !== "INACTIVE" &&
-    !shouldShowSplitPaymentOptions &&
-    splitPaymentConfig?.hideStoreCredit !== true;
-  const shouldHidePaymentOptions =
-    !getTotalValue() && !shouldShowSplitPaymentOptions;
-  const splitPaymentCurrencySymbol =
-    splitPaymentConfig?.amountPrefix ||
-    (typeof getCurrencySymbol === "function"
-      ? getCurrencySymbol()
-      : getCurrencySymbol) ||
-    "₹";
-  const splitPaymentCount =
-    splitPaymentConfig?.splitCount || splitPaymentConfig?.availableSplits || 0;
-  const splitPaymentLabel = splitPaymentConfig?.label || "Split Payment";
-  const splitPaymentAvailabilityLabel =
-    splitPaymentConfig?.availabilityLabel ||
-    `${splitPaymentCount} splits available`;
-  const splitPaymentInputLabel =
-    splitPaymentConfig?.inputLabel || "Enter Amount";
-  const isResumeSplitCodSelected =
-    isResumeSplitPayment && selectedTab === "COD";
-  const resumeSplitCodMessage = t("resource.checkout.resume_split_cod_message");
-  const splitPaymentInputAssistiveText =
-    splitPaymentConfig?.assistiveText ||
-    "Specify amount that you want to process for the payment";
-  const splitPaymentInputErrorText =
-    splitPaymentConfig?.errorText ||
-    "Split amount should be less than the total amount";
-  const splitPaymentMinAmountErrorText =
-    splitPaymentConfig?.minAmountErrorText || "Split amount should be at least";
-  const splitPaymentRemainingAmountErrorText =
-    splitPaymentConfig?.remainingAmountErrorText ||
-    "Split amount should not be greater than remaining amount";
-  const shouldAllowFullSplitAmount =
-    splitPaymentConfig?.allowFullAmount === true ||
-    splitPaymentConfig?.allowFullRemainingAmount === true;
-  const isTruthySplitCodFlag = (value) =>
-    value === true || String(value).toLowerCase() === "true";
-  const isSplitCodAvailable = isTruthySplitCodFlag(
-    splitPaymentConfig?.is_split_cod_available ??
-      splitPaymentConfig?.isSplitCodAvailable
-  );
-  const isSplitCodPaymentActive = isTruthySplitCodFlag(
-    splitPaymentConfig?.isSplitCodPaymentActive
-  );
-  const shouldHideSplitPaymentAmountField = isTruthySplitCodFlag(
-    splitPaymentConfig?.hideAmountInput ?? splitPaymentConfig?.hide_amount_input
-  );
-
-  useEffect(() => {
-    const shouldValidateSplitCouponFirst =
-      isTruthySplitCodFlag(splitPaymentConfig?.shouldValidateSplitCouponFirst) ||
-      isTruthySplitCodFlag(splitPaymentConfig?.should_validate_split_coupon_first);
-    const selectedSubMopCode = selectedTabData?.list?.[0]?.code;
-    const preselectTabs = ["NB", "WL", "PL", "CARDLESS_EMI", "Other"];
-
-    if (
-      !isSplitPaymentSelected ||
-      !isCouponApplied ||
-      !shouldValidateSplitCouponFirst ||
-      enableLinkPaymentOption ||
-      !preselectTabs.includes(selectedTab) ||
-      !selectedSubMopCode
-    ) {
-      if (!isSplitPaymentSelected || !shouldValidateSplitCouponFirst) {
-        splitCouponMopValidationRef.current = "";
-      }
-      return;
-    }
-
-    const selectedMop =
-      selectedTab === "Other" ? selectedTabData?.name : selectedTab;
-    const requestKey = `${selectedTab}|${selectedMop}|${selectedSubMopCode}`;
-
-    if (splitCouponMopValidationRef.current === requestKey) {
-      return;
-    }
-
-    const shouldSkipSplitCouponValidation =
-      skipNextSplitCouponMopValidationRef.current;
-
-    skipNextSplitCouponMopValidationRef.current = false;
-    splitCouponMopValidationRef.current = requestKey;
-    selectMop(selectedTab, selectedMop, selectedSubMopCode, {
-      skipSplitCouponValidation: shouldSkipSplitCouponValidation,
-    });
-  }, [
-    enableLinkPaymentOption,
-    isCouponApplied,
-    isSplitPaymentSelected,
     selectedTab,
-    selectedTabData?.list?.[0]?.code,
-    selectedTabData?.name,
-    splitPaymentConfig?.shouldValidateSplitCouponFirst,
-    splitPaymentConfig?.should_validate_split_coupon_first,
+    selectedWallet?.code,
+    selectedWallet?.name,
+    selectedWallet?.display_name,
   ]);
 
-  const formatSplitPaymentAmount = (amount) =>
-    amount
-      ? priceFormatCurrencySymbol(
-          splitPaymentCurrencySymbol,
-          amount,
-          "en-IN",
-          null,
-          true
-        )
-      : "";
+  const initializeApplePay = async ({ force = false } = {}) => {
+    if (applePayInitializationRef.current) return;
+    if (applePayOrder && !force) return;
 
-  const getNumericAmount = (amount) => {
-    const numericAmount = Number(String(amount || "").replace(/[^\d.]/g, ""));
-
-    return Number.isFinite(numericAmount) ? numericAmount : 0;
-  };
-  const getRoundedCurrencyAmount = (amount) =>
-    Math.round((Number(amount) + Number.EPSILON) * 100) / 100;
-
-  const getBreakupValue = (key) => {
-    if (Array.isArray(breakUpValues)) {
-      return breakUpValues.find(
-        (value) => value?.key === key || value?.name === key
-      )?.value;
-    }
-
-    return breakUpValues?.[key];
-  };
-
-  const getSplitCreditNoteAmount = () => {
-    const appliedCreditNoteOption =
-      partialPaymentOption?.list?.find((option) =>
-        isTruthyValue(option?.balance?.is_applied)
-      ) ||
-      partialPaymentOption?.list?.[0] ||
-      {};
-    const balance = appliedCreditNoteOption?.balance || {};
-    const account = balance?.account || appliedCreditNoteOption?.account || {};
-
-    return (
-      [
-        getBreakupValue("store_credit"),
-        appliedCreditNoteOption?.amount,
-        appliedCreditNoteOption?.value,
-        appliedCreditNoteOption?.applied_amount,
-        appliedCreditNoteOption?.appliedAmount,
-        balance?.amount,
-        balance?.value,
-        balance?.applied_amount,
-        balance?.appliedAmount,
-        balance?.amount_on_hold?.amount,
-        account?.amount_on_hold?.amount,
-        balance?.redeemable_balance?.amount,
-        account?.redeemable_balance?.amount,
-        balance?.available_balance?.amount,
-        account?.available_balance?.amount,
-      ]
-        .map((amount) => getNumericAmount(amount))
-        .find((amount) => amount > 0) || 0
-    );
-  };
-
-  const getFormattedSplitLimitAmount = (amount) =>
-    priceFormatCurrencySymbol(
-      splitPaymentCurrencySymbol,
-      amount,
-      "en-IN",
-      null,
-      true
-    );
-
-  const getMinTransactionAmount = (baseAmount) => {
-    const minTransactionLimit =
-      splitPaymentConfig?.minTransactionLimit ||
-      splitPaymentConfig?.min_transaction_limit ||
-      {};
-    const minTransactionValue = getNumericAmount(
-      splitPaymentConfig?.minTransactionAmount ?? minTransactionLimit?.value
-    );
-    const minTransactionLimitType = String(
-      minTransactionLimit?.limit_type || minTransactionLimit?.limitType || ""
-    )
-      .trim()
-      .toLowerCase();
-    const minTransactionBaseAmount = getNumericAmount(
-      splitPaymentConfig?.minTransactionBaseAmount ??
-        splitPaymentConfig?.min_transaction_base_amount
-    );
-
-    if (!minTransactionValue) {
-      return 0;
-    }
-
-    if (minTransactionLimitType === "percentage") {
-      return (
-        ((minTransactionBaseAmount || getNumericAmount(baseAmount)) *
-          minTransactionValue) /
-        100
-      );
-    }
-
-    return minTransactionValue;
-  };
-
-  const getSplitPaymentAmountError = (amount) => {
-    const hasSplitAmount = String(amount ?? "").trim() !== "";
-    const splitAmount = getNumericAmount(amount);
-    const totalAmount = getNumericAmount(getTotalValue?.());
-    const splitPaymentTotalAmount = getNumericAmount(
-      splitPaymentConfig?.totalAmount ?? splitPaymentConfig?.total_amount
-    );
-    const remainingAmount = getNumericAmount(
-      splitPaymentConfig?.remainingAmount ??
-        splitPaymentConfig?.remaining_amount
-    );
-    const minTransactionAmount = getMinTransactionAmount(
-      splitPaymentTotalAmount || totalAmount
-    );
-
-    if (
-      hasSplitAmount &&
-      minTransactionAmount &&
-      splitAmount < minTransactionAmount
-    ) {
-      return `${splitPaymentMinAmountErrorText} ${getFormattedSplitLimitAmount(
-        minTransactionAmount
-      )}`;
-    }
-
-    if (hasSplitAmount && remainingAmount && splitAmount > remainingAmount) {
-      return `${splitPaymentRemainingAmountErrorText} ${getFormattedSplitLimitAmount(
-        remainingAmount
-      )}`;
-    }
-
-    if (
-      hasSplitAmount &&
-      !isCreditNoteAppliedForSplit &&
-      totalAmount &&
-      (shouldAllowFullSplitAmount
-        ? splitAmount > totalAmount
-        : splitAmount >= totalAmount)
-    ) {
-      return splitPaymentInputErrorText;
-    }
-
-    return "";
-  };
-
-  const getDefaultSplitPaymentAmount = () => {
-    const configuredAmount = splitPaymentConfig?.defaultAmount;
-    const amount = configuredAmount ?? "";
-
-    return amount ? String(amount) : "";
-  };
-
-  const normalizeSplitPaymentAmountInput = (value) => {
-    const sanitizedValue = String(value || "").replace(/[^\d.]/g, "");
-    const decimalPointCount = (sanitizedValue.match(/\./g) || []).length;
-
-    if (decimalPointCount > 1) {
-      return null;
-    }
-
-    const [wholeAmount = "", decimalAmount = ""] = sanitizedValue.split(".");
-
-    if (!sanitizedValue.includes(".")) {
-      return wholeAmount;
-    }
-
-    return `${wholeAmount}.${decimalAmount.slice(0, 2)}`;
-  };
-  const splitPaymentEnteredAmount = getNumericAmount(splitPaymentAmount);
-  const splitPaymentTotalAmount = getNumericAmount(
-    splitPaymentConfig?.totalAmount ?? splitPaymentConfig?.total_amount
-  );
-  const splitPaymentCheckoutTotalAmount =
-    splitPaymentTotalAmount || getNumericAmount(getTotalValue?.());
-  const splitPaymentMinimumTransactionAmount = getMinTransactionAmount(
-    splitPaymentCheckoutTotalAmount
-  );
-  const isSplitPaymentTotalBelowMinTransaction = Boolean(
-    splitPaymentCheckoutTotalAmount &&
-      splitPaymentMinimumTransactionAmount &&
-      splitPaymentCheckoutTotalAmount < splitPaymentMinimumTransactionAmount
-  );
-  const splitPaymentCodBaseAmount =
-    getNumericAmount(
-      splitPaymentConfig?.splitCodTotalAmount ??
-        splitPaymentConfig?.split_cod_total_amount
-    ) ||
-    splitPaymentTotalAmount ||
-    getNumericAmount(getTotalValue?.());
-  const splitPaymentCodPayableAmount = getRoundedCurrencyAmount(
-    getMinTransactionAmount(splitPaymentCodBaseAmount) ||
-      splitPaymentEnteredAmount
-  );
-  const splitPaymentCodDeliveryAmount = getRoundedCurrencyAmount(
-    Math.max(splitPaymentCodBaseAmount - splitPaymentCodPayableAmount, 0)
-  );
-  const hasValidSplitCodAmount = Boolean(
-    isSplitCodAvailable && splitPaymentCodPayableAmount > 0
-  );
-  const shouldShowSplitCodAction = Boolean(
-    isSplitCodAvailable &&
-      !isSplitCodPaymentActive &&
-      !isSplitPaymentTotalBelowMinTransaction
-  );
-  const formattedSplitPaymentCodAmount = hasValidSplitCodAmount
-    ? getFormattedSplitLimitAmount(splitPaymentCodPayableAmount)
-    : "";
-  const formattedSplitPaymentCodDeliveryAmount = hasValidSplitCodAmount
-    ? getFormattedSplitLimitAmount(splitPaymentCodDeliveryAmount)
-    : "";
-
-  const handleSplitPaymentAmountChange = (event) => {
-    const normalizedAmount = normalizeSplitPaymentAmountInput(
-      event.target.value
-    );
-
-    if (normalizedAmount === null) {
-      return;
-    }
-
-    const errorMessage = getSplitPaymentAmountError(normalizedAmount);
-
-    setSplitPaymentAmount(normalizedAmount);
-    setSplitPaymentAmountError(errorMessage);
-    onSplitPaymentAmountChange?.(
-      errorMessage ? "" : formatSplitPaymentAmount(normalizedAmount)
-    );
-  };
-
-  const handleSplitPaymentAmountBlur = () => {
-    if (
-      !isSplitPaymentSelected ||
-      splitPaymentAmountError ||
-      !splitPaymentAmount
-    ) {
-      return;
-    }
-
-    onSplitPaymentAmountBlur?.(formatSplitPaymentAmount(splitPaymentAmount));
-  };
-  const handleSplitCodContinue = () => {
-    const splitCodAmount = String(splitPaymentCodPayableAmount || "");
-    const errorMessage = splitCodAmount
-      ? getSplitPaymentAmountError(splitCodAmount)
-      : "";
-
-    setSplitPaymentAmountError(errorMessage);
-
-    if (!splitPaymentCodPayableAmount) {
-      return;
-    }
-
-    const handleSplitCodContinueAction =
-      onSplitCodContinue || splitPaymentConfig?.onSplitCodContinue;
-
-    if (typeof handleSplitCodContinueAction === "function") {
-      handleSplitCodContinueAction(formatSplitPaymentAmount(splitCodAmount));
-      return;
-    }
-    if (errorMessage) {
-      return;
-    }
-    onSplitPaymentAmountBlur?.(formatSplitPaymentAmount(splitCodAmount));
-  };
-  const handleSplitCodBack = () => {
-    onSplitCodBack?.();
-  };
-  const splitCodAction = {
-    buttonLabel: `Continue To Pay${
-      formattedSplitPaymentCodAmount ? ` ${formattedSplitPaymentCodAmount}` : ""
-    }`,
-    disabled: !hasValidSplitCodAmount,
-    title: hasValidSplitCodAmount
-      ? `Pay ${formattedSplitPaymentCodAmount} now & ${formattedSplitPaymentCodDeliveryAmount} on Delivery`
-      : "",
-    visible: shouldShowSplitCodAction,
-    onContinue: handleSplitCodContinue,
-  };
-
-  const applySplitPaymentSelection = (nextValue, options = {}) => {
-    const nextAmount = nextValue
-      ? splitPaymentAmount || getDefaultSplitPaymentAmount()
-      : "";
-    const errorMessage = nextValue
-      ? getSplitPaymentAmountError(nextAmount)
-      : "";
-    const shouldIncludeCreditNote =
-      nextValue &&
-      (options?.includeCreditNote === true || isCreditNoteAppliedForSplit);
-    const creditNoteAmount = shouldIncludeCreditNote
-      ? getSplitCreditNoteAmount()
-      : 0;
-
-    setIsSplitPaymentSelected(nextValue);
-    setSplitPaymentAmount(nextAmount);
-    setSplitPaymentAmountError(errorMessage);
-    onSplitPaymentChange?.(nextValue, {
-      ...options,
-      amount: nextAmount,
-      splitPaymentAmount: nextAmount,
-      ...(shouldIncludeCreditNote
-        ? {
-            includeCreditNote: true,
-            include_credit_note: true,
-          }
-        : {}),
-      ...(creditNoteAmount
-        ? {
-            creditNoteAmount,
-            credit_note_amount: creditNoteAmount,
-          }
-        : {}),
-    });
-    onSplitPaymentAmountChange?.(
-      errorMessage ? "" : formatSplitPaymentAmount(nextAmount)
-    );
-    if (!nextValue) {
-      setShouldApplyCreditNoteWithSplitPayment(false);
-    }
-  };
-
-  const continueSplitPaymentSelection = async (nextValue, options = {}) => {
-    if (
-      nextValue &&
-      isCouponApplied &&
-      isSplitPaymentTotalBelowMinTransaction
-    ) {
-      const includeCreditNote =
-        options?.includeCreditNote === true || isCreditNoteAppliedForSplit;
-
-      setCouponValidity({
-        title: t(
-          "resource.dynamic_label.payment_mode_is_not_valid_for_applied_coupon"
-        ),
-        message:
-          "Split payment cannot be used with the applied coupon. Do you want to remove the coupon and continue?",
-      });
-      setShouldApplyCreditNoteWithSplitPayment(includeCreditNote);
-      setShouldEnableSplitPaymentAfterCouponRemoval(true);
-      setShowCouponValidityModal(true);
-      return;
-    }
-
-    if (nextValue && isCouponApplied) {
-      const validateAppliedCoupon = splitPaymentConfig?.onAppliedCouponValidate;
-      const includeCreditNote =
-        options?.includeCreditNote === true || isCreditNoteAppliedForSplit;
-
-      if (typeof validateAppliedCoupon === "function") {
-        setIsSplitPaymentCouponValidating(true);
-
-        try {
-          const response = await validateAppliedCoupon();
-          const couponValidity =
-            response?.coupon_validity ||
-            response?.data?.validateCoupon?.coupon_validity ||
-            {};
-          const couponHasCode = Boolean(couponValidity?.code);
-          const isCouponValidForSplit =
-            couponValidity?.valid === true ||
-            (!couponHasCode && couponValidity?.valid !== false);
-
-          if (isCouponValidForSplit) {
-            skipNextSplitCouponMopValidationRef.current = true;
-            applySplitPaymentSelection(true, options);
-            return;
-          }
-
-          setCouponValidity({
-            title:
-              couponValidity?.title ||
-              t(
-                "resource.dynamic_label.payment_mode_is_not_valid_for_applied_coupon"
-              ),
-            message:
-              couponValidity?.display_message_en ||
-              couponValidity?.message ||
-              "Split payment cannot be used with the applied coupon. Do you want to remove the coupon and continue?",
-            valid: couponValidity?.valid,
-          });
-          setShouldApplyCreditNoteWithSplitPayment(includeCreditNote);
-          setShouldEnableSplitPaymentAfterCouponRemoval(true);
-          setShowCouponValidityModal(true);
-          return;
-        } finally {
-          setIsSplitPaymentCouponValidating(false);
-        }
-      }
-
-      setCouponValidity({
-        title: t(
-          "resource.dynamic_label.payment_mode_is_not_valid_for_applied_coupon"
-        ),
-        message:
-          "Split payment cannot be used with the applied coupon. Do you want to remove the coupon and continue?",
-      });
-      setShouldApplyCreditNoteWithSplitPayment(includeCreditNote);
-      setShouldEnableSplitPaymentAfterCouponRemoval(true);
-      setShowCouponValidityModal(true);
-      return;
-    }
-
-    applySplitPaymentSelection(nextValue, options);
-  };
-
-  const handleSplitPaymentChange = async () => {
-    if (
-      isSplitPaymentSelected ||
-      isSplitPaymentCheckboxDisabled ||
-      isSplitPaymentCouponValidating
-    ) {
-      return;
-    }
-
-    if (isCreditNoteAppliedForSplit) {
-      setShowSplitCreditNoteConfirmation(true);
-      return;
-    }
-
-    await continueSplitPaymentSelection(true);
-  };
-
-  const confirmSplitCreditNoteSelection = async () => {
-    if (
-      isSplitPaymentCouponValidating ||
-      isSplitCreditNoteProceeding ||
-      splitCreditNoteProceedingRef.current
-    ) {
-      return;
-    }
-
-    splitCreditNoteProceedingRef.current = true;
-    setIsSplitCreditNoteProceeding(true);
+    const requestId = applePayRequestIdRef.current + 1;
+    applePayRequestIdRef.current = requestId;
+    applePayInitializationRef.current = true;
+    applePayCallbackSubmittedRef.current = false;
+    setApplePayOrder(null);
+    setIsApplePayScriptLoaded(false);
+    setApplePayStatus("loading");
+    setApplePayMessage("");
 
     try {
-      setShowSplitCreditNoteConfirmation(false);
-      setShouldApplyCreditNoteWithSplitPayment(true);
-      await continueSplitPaymentSelection(true, { includeCreditNote: true });
+      const checkoutResponse = await proceedToPay("APPLEPAY");
+      if (applePayRequestIdRef.current !== requestId) return;
+
+      const checkoutCart =
+        checkoutResponse?.data?.checkoutCart ||
+        checkoutResponse?.checkoutCart ||
+        checkoutResponse;
+      const orderData = checkoutCart?.data;
+      const razorpayKey = orderData?.key || paymentConfig?.razorpay?.key;
+      const applePayContact = formatApplePayContact(orderData?.contact);
+      if (!checkoutCart?.success || !orderData?.order_id) {
+        throw new Error(
+          checkoutCart?.message || "Unable to start Apple Pay."
+        );
+      }
+
+      const missingConfiguration = [
+        ["key", razorpayKey],
+        ["contact", applePayContact],
+        ["callback_url", orderData.callback_url],
+      ].find(([, value]) => !value)?.[0];
+
+      if (missingConfiguration) {
+        throw new Error(
+          `Apple Pay configuration is missing ${missingConfiguration}.`
+        );
+      }
+
+      await loadRazorpayApplePayScript();
+      if (applePayRequestIdRef.current !== requestId) return;
+
+      setApplePayOrder({
+        ...checkoutCart,
+        data: {
+          ...orderData,
+          key: razorpayKey,
+          contact: applePayContact,
+          email: APPLE_PAY_EMAIL,
+          app: orderData.app || { name: "apple_pay" },
+        },
+      });
+      setIsApplePayScriptLoaded(true);
+    } catch (error) {
+      const errorMessage =
+        error?.message || "Unable to load Apple Pay. Please try again.";
+      setApplePayStatus("error");
+      setApplePayMessage(errorMessage);
+      handleShowFailedMessage({
+        failed: true,
+        paymentErrMsg: errorMessage,
+      });
     } finally {
-      splitCreditNoteProceedingRef.current = false;
-      setIsSplitCreditNoteProceeding(false);
+      applePayInitializationRef.current = false;
     }
   };
 
-  const cancelSplitCreditNoteSelection = () => {
-    if (isSplitCreditNoteProceeding || splitCreditNoteProceedingRef.current) {
-      return;
+  useEffect(() => {
+    const container = applePayContainerRef.current;
+    const orderData = applePayOrder?.data;
+    if (!container || !isApplePayScriptLoaded || !orderData) return;
+
+    const checkoutElement = document.createElement(RAZORPAY_APPLE_PAY_TAG_NAME);
+    checkoutElement.id = "checkout";
+    checkoutElement.setAttribute("key", orderData.key);
+    checkoutElement.setAttribute("order-id", orderData.order_id);
+    checkoutElement.setAttribute("contact", orderData.contact);
+    checkoutElement.setAttribute("email", APPLE_PAY_EMAIL);
+    checkoutElement.setAttribute("method", orderData.method || "card");
+    const appName = orderData.app?.name?.replace("applepay", "apple_pay");
+    checkoutElement.setAttribute("app-name", appName || "apple_pay");
+    checkoutElement.setAttribute("button-label", "pay");
+    checkoutElement.setAttribute("button-theme", "dark");
+    checkoutElement.setAttribute("button-width", "148px");
+    checkoutElement.setAttribute("button-height", "32px");
+
+    const handleSuccess = (event) => {
+      if (applePayCallbackSubmittedRef.current) return;
+
+      const paymentData =
+        event.detail?.paymentData || event.detail?.payment || event.detail;
+      const requiredFields = [
+        "razorpay_payment_id",
+        "razorpay_order_id",
+        "razorpay_signature",
+      ];
+      const hasRequiredPaymentData = requiredFields.every(
+        (field) => paymentData?.[field]
+      );
+
+      if (!hasRequiredPaymentData) {
+        const message =
+          "Apple Pay completed, but payment confirmation data is incomplete.";
+        setApplePayStatus("error");
+        setApplePayMessage(message);
+        handleShowFailedMessage({ failed: true, paymentErrMsg: message });
+        return;
+      }
+
+      applePayCallbackSubmittedRef.current = true;
+      setApplePayStatus("submitting");
+
+      const callbackForm = document.createElement("form");
+      callbackForm.method = "POST";
+      callbackForm.action = orderData.callback_url;
+      callbackForm.style.display = "none";
+      requiredFields.forEach((field) => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = field;
+        input.value = paymentData[field];
+        callbackForm.appendChild(input);
+      });
+      document.body.appendChild(callbackForm);
+      callbackForm.submit();
+    };
+
+    const handleFailure = (event) => {
+      applePayCallbackSubmittedRef.current = false;
+      const error = event.detail?.error || event.detail || {};
+      const errorCode = error?.code || error?.errorCode;
+      const isCancelled = errorCode === "PAYMENT_CANCELLED";
+      const message = isCancelled
+        ? "Apple Pay was cancelled. You can try again or choose another payment method."
+        : error?.description ||
+          error?.message ||
+          event.detail?.description ||
+          event.detail?.message ||
+          "Apple Pay payment failed.";
+      setApplePayStatus(isCancelled ? "cancelled" : "error");
+      setApplePayMessage(message);
+      handleShowFailedMessage({
+        failed: true,
+        paymentErrMsg: message,
+      });
+    };
+
+    if (window.__RZP_APPLE_PAY_DEBUG__) {
+      console.info("Razorpay Apple Pay mounted", {
+        attrs: Object.fromEntries(
+          [...checkoutElement.attributes].map((attr) => [attr.name, attr.value])
+        ),
+      });
     }
 
-    setShowSplitCreditNoteConfirmation(false);
-    setShouldApplyCreditNoteWithSplitPayment(false);
+    checkoutElement.addEventListener("paymentsuccess", handleSuccess);
+    checkoutElement.addEventListener("payment.success", handleSuccess);
+    checkoutElement.addEventListener("paymentfailure", handleFailure);
+    checkoutElement.addEventListener("payment.failure", handleFailure);
+    checkoutElement.addEventListener("error", handleFailure);
+    container.replaceChildren(checkoutElement);
+
+    let attempts = 0;
+    const eligibilityTimer = window.setInterval(() => {
+      attempts += 1;
+      if (checkoutElement.getBoundingClientRect().height > 0) {
+        window.clearInterval(eligibilityTimer);
+        setApplePayStatus("ready");
+      } else if (attempts >= 20) {
+        window.clearInterval(eligibilityTimer);
+        if (window.__RZP_APPLE_PAY_DEBUG__) {
+          console.info("Razorpay Apple Pay unavailable", {
+            attrs: Object.fromEntries(
+              [...checkoutElement.attributes].map((attr) => [
+                attr.name,
+                attr.value,
+              ])
+            ),
+            height: checkoutElement.getBoundingClientRect().height,
+          });
+        }
+        setApplePayStatus("unavailable");
+        setApplePayMessage(
+          "Apple Pay is not available on this device or browser. Please choose another payment method."
+        );
+      }
+    }, 250);
+
+    return () => {
+      window.clearInterval(eligibilityTimer);
+      checkoutElement.removeEventListener("paymentsuccess", handleSuccess);
+      checkoutElement.removeEventListener("payment.success", handleSuccess);
+      checkoutElement.removeEventListener("paymentfailure", handleFailure);
+      checkoutElement.removeEventListener("payment.failure", handleFailure);
+      checkoutElement.removeEventListener("error", handleFailure);
+      checkoutElement.remove();
+    };
+  }, [applePayOrder, isApplePayScriptLoaded]);
+
+  const setCardValidity = async ({ isValid, card_number }) => {
+    setCardNumberError("");
+    setCardNumber(card_number);
+    const value = card_number.replace(/[^0-9]/g, "");
+    setIsCardNumberValid(isValid);
+    if (value.length === 6) {
+      if (value !== lastValidatedBin) {
+        setLastValidatedBin(value);
+        const res = await cardDetails(value);
+        const { data } = res.data.payment.card_details;
+        setCardDetailsData(data);
+      }
+    } else if (value.length < 6) {
+      setCardDetailsData({});
+      setLastValidatedBin("");
+    }
   };
 
-  const closeCouponValidityModal = () => {
-    if (shouldEnableSplitPaymentAfterCouponRemoval) {
-      setShouldEnableSplitPaymentAfterCouponRemoval(false);
-      setShouldApplyCreditNoteWithSplitPayment(false);
-      setShowCouponValidityModal(false);
-      fpi.custom.setValue("isCouponValid", true);
-      return;
-    }
-
-    if (mop === "CARD" && subMop === "newCARD") {
-      hideNewCard();
-    }
-    setShowCouponValidityModal(false);
-    fpi.custom.setValue("isCouponValid", true);
-    unsetSelectedSubMop();
+  const handleCvvInfo = (value) => {
+    setIsCvvInfo(value);
   };
 
-  const confirmCouponRemoval = async () => {
-    if (shouldEnableSplitPaymentAfterCouponRemoval) {
-      const removeAppliedCoupon = splitPaymentConfig?.onAppliedCouponRemove;
-      const couponRemovalResult =
-        typeof removeAppliedCoupon === "function"
-          ? await removeAppliedCoupon()
-          : false;
-      const isCouponRemoved = couponRemovalResult !== false;
-      const couponRemovalAmountOptions =
-        couponRemovalResult && typeof couponRemovalResult === "object"
-          ? {
-              paymentOptionsAmount:
-                couponRemovalResult.paymentOptionsAmount ??
-                couponRemovalResult.amount,
+  const handleCvvChange = (cardId, value) => {
+    setCvvValues((prev) => ({
+      ...prev,
+      [cardId]: value,
+    }));
+  };
+
+  const handleCardNumberInput = async (e) => {
+    setCardNumberError("");
+    let value = e.target.value;
+    value = value.replace(/\s+/g, "");
+    setCardNumber(value);
+    if (value.length === 6) {
+      if (value !== lastValidatedBin) {
+        setLastValidatedBin(value);
+        const res = await cardDetails(value);
+        const { data } = res.data.payment.card_details;
+        setCardDetailsData(data);
+      }
+    } else if (value.length < 6) {
+      setCardDetailsData({});
+      setLastValidatedBin("");
+    }
+  };
+
+  const validateCardNumber = async (e) => {
+    try {
+      const value = e.target.value.replace(/[^0-9]/g, "");
+      if (!isCardNumberValid) {
+        setCardNumberError(t("resource.checkout.invalid_card_number"));
+      }
+      if (value.length >= 6) {
+        const currentBin = value.slice(0, 6);
+        if (currentBin !== lastValidatedBin) {
+          setLastValidatedBin(currentBin);
+          const res = await cardDetails(currentBin);
+          const { data } = res.data.payment.card_details;
+          if (data || cardNumber) {
+            setCardDetailsData(data);
+            if (!data?.is_card_valid) {
+              setCardNumberError(t("resource.checkout.invalid_card_number"));
+            } else if (!cardDetailsData.is_enabled) {
+            } else if (!data?.is_enabled) {
+              setCardNumberError(
+                t("resource.checkout.this_card_network_is_not_supported")
+              );
+            } else {
+              setCardNumberError("");
             }
-          : {};
+          } else {
+            setCardNumberError(t("resource.common.field_required"));
+          }
+        }
+      } else {
+        setCardDetailsData({});
+        setLastValidatedBin("");
+        if (!cardNumber) {
+          setCardNumberError(t("resource.common.field_required"));
+        }
+      }
+    } catch (error) {
+      console.log(error, "cardValidation error");
+    }
+  };
+  const handleCardNumberPaste = async (e) => {
+    setCardNumberError("");
+    let value = e.clipboardData.getData("Text");
+    const currentBin = value.slice(0, 6);
+    setCardNumber(value);
+    value = value.replace(/[^0-9]/g, "");
+    if (value.length >= 6) {
+      if (currentBin !== lastValidatedBin) {
+        setLastValidatedBin(currentBin);
+        const res = await cardDetails(currentBin);
+        const { data } = res.data.payment.card_details;
+        setCardDetailsData(data);
+      }
+    } else {
+      setCardDetailsData({});
+      setLastValidatedBin("");
+    }
+  };
 
-      setShouldEnableSplitPaymentAfterCouponRemoval(false);
-      setShouldApplyCreditNoteWithSplitPayment(false);
-      setShowCouponValidityModal(false);
-      fpi.custom.setValue("isCouponValid", true);
+  useEffect(() => {
+    if (cardDetailsData?.card_brand) selectMop("CARD", "CARD", "newCARD");
+  }, [cardDetailsData?.card_brand]);
 
-      if (isCouponRemoved) {
-        applySplitPaymentSelection(true, {
-          includeCreditNote: shouldApplyCreditNoteWithSplitPayment,
-          ...couponRemovalAmountOptions,
+  useEffect(() => {
+    if (isCouponApplied) {
+      selectMop("CARD", "CARD", "CARD");
+    }
+  }, [isJuspayCouponApplied, isCouponApplied]);
+
+  const resetCardValidationErrors = () => {
+    setCardNumberError("");
+    setCardNameError("");
+    setCardExpiryError("");
+    setCardCVVError("");
+  };
+
+  const handleNameOnCardInput = (e) => {
+    setCardNameError("");
+    setNameOnCard(e.target.value);
+  };
+
+  const validateNameOnCard = () => {
+    if (!nameOnCard.trim()) {
+      setCardNameError(t("resource.common.field_required"));
+    }
+  };
+
+  const validateCardExpiryDate = () => {
+    if (expirationdate_mask?.masked?.isComplete) {
+      var d = new Date();
+      var currentYear = d.getFullYear();
+      var currentMonth = d.getMonth() + 1;
+
+      //get expiry y, m entered
+      var expYear =
+        parseInt(expirationdate_mask?.value.split("/")[1], 10) + 2000;
+      var expMonth = parseInt(expirationdate_mask?.value.split("/")[0], 10);
+
+      if (
+        expYear < currentYear ||
+        (expYear === currentYear && expMonth < currentMonth)
+      ) {
+        //card has expired
+        setCardExpiryError(t("resource.checkout.expiry_date_passed"));
+      }
+    } else {
+      setCardExpiryError(t("resource.checkout.enter_expiry_date"));
+    }
+  };
+
+  const handleCvvNumberInput = (e) => {
+    setCardCVVError("");
+    setCvvNumber(e.target.value.replace(/[^0-9]/g, ""));
+  };
+
+  const validateCvv = () => {
+    if (!cvvNumber) {
+      setCardCVVError(t("resource.checkout.enter_cvv"));
+    } else if (cvvNumber.toString().length !== cardDetailsData.cvv_length) {
+      setCardCVVError(t("resource.checkout.invalid_cvv"));
+    }
+  };
+
+  const upiAppData = {
+    gpay: {
+      displayName: t("resource.checkout.google_pay"),
+    },
+    phonepe: {
+      displayName: t("resource.checkout.phonepe_upi"),
+    },
+    paytm: {
+      displayName: t("resource.checkout.paytm_upi"),
+    },
+    any: {
+      displayName: t("resource.checkout.more_apps"),
+    },
+  };
+
+  // Map API app codes to SVG names
+  const getSvgNameForApp = (appCode) => {
+    const appCodeMap = {
+      "google_pay": "gpay",
+      "gpay": "gpay",
+      "phonepe": "phonepe",
+      "paytm": "paytm",
+    };
+    return appCodeMap[appCode] || appCode;
+  };
+  const prevSelectedTabRef = useRef(selectedTab);
+  const cancelQrPayment = async () => {
+    initializeOrResetQrPayment();
+    if (qrPaymentPayload.merchant_order_id) {
+      try {
+        const res = await cancelPayment({
+          order_id: qrPaymentPayload.merchant_order_id,
+          request_type: "cancel",
+        });
+        const { data, success } = res.data.resendOrCancelPayment;
+        if (success && data.status == "true") {
+          console.log("Payment cancellation successful");
+          setQrPaymentPayload({});
+        }
+      } catch (err) {
+        console.log("Payment cancellation failed");
+      }
+    }
+  };
+  useEffect(() => {
+    cancelQrPayment();
+    setCancelQrPayment({ handleQr: cancelQrPayment });
+    const savedList = paymentOption?.payment_option?.find?.(
+      (ele) => ele.name === selectedTab
+    )?.stored_payment_details;
+    if (selectedTab === "UPI") {
+      setSavedUpi(savedList);
+    } else if (selectedTab === "CARD") {
+      setSavedCards(savedList);
+    }
+    if (selectedTab === "UPI" && !upiApps?.length) {
+      getUPIIntentApps?.()?.then?.((data) => {
+        // Handle case where data might be objects with 'code' property
+        const normalizedData = Array.isArray(data) 
+          ? data.map(item => typeof item === 'object' && item?.code ? item.code : item)
+          : data;
+        setUpiApps(normalizedData);
+      });
+    }
+    if (
+      prevSelectedTabRef.current === "COD" &&
+      selectedTab !== "COD" &&
+      !enableLinkPaymentOption
+    ) {
+      selectPaymentMode({
+        id: cart_id,
+        address_id: address_id,
+        payment_mode: "",
+        aggregator_name: "",
+      }).then(() => console.log("mop selection"));
+    }
+    prevSelectedTabRef.current = selectedTab;
+  }, [selectedTab]);
+
+  useEffect(() => {
+    let timerInterval;
+    if (showUPIModal && timeRemaining !== null && timeRemaining > 0) {
+      timerInterval = setInterval(() => {
+        setTimeRemaining((prev) => {
+          if (prev <= 1) {
+            clearInterval(timerInterval);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    } else if (showUPIModal && timeRemaining === 0) {
+      cancelUPIPayment();
+    }
+    return () => {
+      if (timerInterval) clearInterval(timerInterval);
+    };
+  }, [showUPIModal, timeRemaining]);
+
+  // Format time as MM:SS
+  const formatTime = (totalSeconds) => {
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    const paddedMinutes = String(minutes).padStart(2, "0");
+    const paddedSeconds = String(seconds).padStart(2, "0");
+    return `${paddedMinutes}:${paddedSeconds}`;
+  };
+
+  // showUPIModal: false,
+  // countdownSeconds: 600,
+  // timer: null,
+  // pollInterval: null,
+
+  const initializeOrResetQrPayment = () => {
+    setIsQrCodeVisible(false);
+    handleIsQrCodeLoading(false);
+    stopPolling();
+  };
+
+  const stopPolling = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current); // Clear the interval
+      intervalRef.current = null; // Reset the interval ID
+    }
+  };
+
+  const startPolling = (payload) => {
+    // Initialize the timer only once here
+    setTimeRemaining(600); // 10 minutes in seconds
+    // Start polling every 2 seconds
+    intervalRef.current = setInterval(() => {
+      pollPaymentStatus(payload);
+    }, 2000);
+  };
+
+  useEffect(() => {
+    if (countdown > 0 && isQrCodeVisible) {
+      const countdownInterval = setInterval(() => {
+        setCountdown((prev) => prev - 1);
+      }, 1000);
+
+      // Cleanup countdown interval
+      return () => clearInterval(countdownInterval);
+    } else if (countdown === 0) {
+      initializeOrResetQrPayment();
+    }
+  }, [countdown]);
+
+  useEffect(() => {
+    // Cleanup on unmount
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
+  }, []);
+
+  const paymentModeDetails = (mop, subMop) => {
+    const mopData = paymentOption?.payment_option?.find(
+      (opt) => opt?.name === mop
+    );
+    let subMopData;
+    if (mop === "CARD") {
+      subMopData = mopData?.list?.filter((opt) => opt?.card_id === subMop)[0];
+    } else {
+      subMopData = mopData?.list?.filter((opt) => opt?.code === subMop)[0];
+    }
+    return {
+      mopData,
+      subMopData,
+    };
+  };
+
+  const checkCouponValidity = async (payload) => {
+    if (getTotalValue() === 0) return true;
+    const res = await validateCoupon(payload);
+    const { coupon_validity } = res.data.validateCoupon || {};
+    return coupon_validity;
+  };
+
+  const removeCoupon = async () => {
+    const { mopData, subMopData } = paymentModeDetails(mop, subMop);
+
+    let paymentModePayload;
+    if (mop === "CARD") {
+      if (subMop === "newCARD") {
+        paymentModePayload = {
+          id: cart_id,
+          address_id: address_id,
+          payment_mode: mop,
+          aggregator_name: mopData?.aggregator_name,
+        };
+      } else {
+        paymentModePayload = {
+          id: cart_id,
+          address_id: address_id,
+          payment_mode: mop,
+          aggregator_name: subMopData?.aggregator_name,
+          payment_identifier: subMopData?.card_id,
+        };
+      }
+    } else {
+      paymentModePayload = {
+        id: cart_id,
+        address_id,
+        payment_mode: mop,
+        aggregator_name: subMopData?.aggregator_name,
+        payment_identifier: subMopData?.code ?? "",
+        merchant_code: subMopData?.merchant_code,
+      };
+    }
+    selectPaymentMode(paymentModePayload).then(() => {
+      console.log("Payment mode selected");
+    });
+
+    if (tab === "COD") {
+      setSelectedTab(tab);
+      setIsCodModalOpen(true);
+    } else if (tab === "CARD") {
+      if (subMop !== "newCARD") {
+        setSelectedCard(subMopData);
+      }
+    } else if (tab === "CARDLESS_EMI") {
+      setSelectedCardless(subMopData);
+    } else if (tab === "UPI") {
+      if (mop === "QR") {
+        await showQrCode();
+      } else if (mop === "UPI") {
+        await handleProceedToPayClick();
+      }
+    } else if (tab === "Other") {
+      setSelectedOtherPayment(subMopData);
+    } else if (tab === "WL") {
+      setSelectedWallet(subMopData);
+    } else if (tab === "NB") {
+      setSelectedNB(subMopData);
+    } else if (tab === "PL") {
+      setSelectedPayLater(subMopData);
+    }
+  };
+
+  const selectMop = async (tab, mop, subMop) => {
+    if (!mop) return false;
+    setTab(tab);
+    setMop(mop);
+    setSubMop(subMop);
+    const { mopData, subMopData } = paymentModeDetails(mop, subMop);
+    let payload;
+
+    if (tab === "CARD") {
+      if (subMop === "newCard") {
+        payload = {
+          id: cart_id,
+          addressId: address_id,
+          paymentMode: mop,
+          aggregatorName: mopData?.aggregator_name,
+          cardId: cardDetailsData?.id,
+          iin: cardDetailsData?.card_object,
+          paymentIdentifier: cardDetailsData?.bank_code,
+          merchant_code: cardDetailsData?.bank_code,
+          type: cardDetailsData?.type || "debit",
+          network: cardDetailsData?.card_brand || subMopData?.card_brand,
+        };
+      } else {
+        payload = {
+          id: cart_id,
+          addressId: address_id,
+          paymentMode: mop,
+          aggregatorName:
+            subMopData?.aggregator_name ||
+            mopData?.aggregator_name ||
+            "Razorpay",
+          cardId: cardDetailsData?.id,
+          iin: cardDetailsData?.card_object,
+          paymentIdentifier: cardDetailsData?.bank_code,
+          merchant_code: cardDetailsData?.bank_code,
+          type: cardDetailsData?.type || "debit",
+          network: cardDetailsData?.card_brand || subMopData?.card_brand,
+        };
+      }
+    } else {
+      payload = {
+        id: cart_id,
+        addressId: address_id,
+        paymentMode: mop,
+        aggregatorName: subMopData?.aggregator_name,
+        paymentIdentifier: subMopData?.code ?? "",
+        merchantCode: subMopData?.merchant_code,
+      };
+    }
+    if (!enableLinkPaymentOption) {
+      if (selectedTab === tab) {
+        setMopPayload(payload);
+      } else {
+        setMopPayload(null);
+      }
+    }
+    let isValid = true;
+    if (isCouponApplied && selectedTab === tab) {
+      const { code, title, display_message_en, valid } =
+        !enableLinkPaymentOption && (await checkCouponValidity(payload));
+      isValid = !code || (code && valid);
+
+      if (!isValid) {
+        setCouponValidity({
+          title,
+          message: display_message_en,
+          valid,
+        });
+        setShowCouponValidityModal(true);
+        return false;
+      }
+    }
+
+    let paymentModePayload;
+
+    if (mop === "CARD") {
+      if (subMop === "newCARD") {
+        paymentModePayload = {
+          id: cart_id,
+          address_id: address_id,
+          payment_mode: mop,
+          aggregator_name: mopData?.aggregator_name,
+        };
+      } else {
+        paymentModePayload = {
+          id: cart_id,
+          address_id: address_id,
+          payment_mode: mop,
+          aggregator_name: subMopData?.aggregator_name,
+          payment_identifier: subMopData?.card_id,
+        };
+      }
+    } else {
+      paymentModePayload = {
+        id: cart_id,
+        address_id,
+        payment_mode: mop,
+        aggregator_name: subMopData?.aggregator_name,
+        payment_identifier: subMopData?.code ?? "",
+        merchant_code: subMopData?.merchant_code,
+      };
+    }
+
+    // selectPaymentMode(paymentModePayload).then(() => {
+    //   console.log("Payment mode selected");
+    // });
+
+    // Handle tab-specific UI and logic
+    if (tab === "COD") {
+      selectPaymentMode(paymentModePayload).then(() => {
+        console.log("Payment mode selected");
+      });
+
+      setSelectedTab(tab);
+      setIsCodModalOpen(true);
+    } else if (tab === "CARD") {
+      if (subMop !== "newCARD") {
+        setSelectedCard(subMopData);
+      }
+    } else if (tab === "CARDLESS_EMI") {
+      setSelectedCardless(subMopData);
+    } else if (tab === "UPI") {
+      if (mop === "QR") {
+        await showQrCode();
+      } else if (mop === "UPI") {
+        await handleProceedToPayClick();
+      }
+    } else if (tab === "WL") {
+      setSelectedWallet(subMopData);
+    } else if (tab === "NB") {
+      setSelectedNB(subMopData);
+    } else if (tab === "PL") {
+      setSelectedPayLater(subMopData);
+    } else if (tab === "Other") {
+      setSelectedOtherPayment(subMopData);
+    }
+    return true;
+  };
+
+  useEffect(() => {
+    if (!isCouponAppliedSuccess["isCouponApplied"]) {
+      if (
+        selectedTab === "Other" &&
+        !selectedTabData &&
+        paymentOptions.length === 0
+      ) {
+        selectMop(
+          "Other",
+          otherPaymentOptions[0]?.name,
+          otherPaymentOptions[0]?.list?.[0]?.code ?? ""
+        );
+      }
+      if (
+        selectedTabData?.name !== "CARD" &&
+        selectedTabData?.name !== "UPI" &&
+        paymentOptions[0]?.name === selectedTabData?.name
+      ) {
+        selectMop(
+          selectedTabData?.name,
+          selectedTabData?.name,
+          selectedTabData?.list[0]?.code ?? ""
+        );
+      }
+    }
+  }, [selectedTabData?.list[0]?.code, otherPaymentOptions, selectedTab]);
+
+  async function showQrCode() {
+    try {
+      const res = await proceedToPay("QR");
+      const { data, success } = res?.payload?.data?.checkoutCart || {};
+      if (success && data.base64_encoded_qr) {
+        setIsQrCodeVisible(true);
+        setQrCodeImage(data.base64_encoded_qr);
+        setCountdown(data.timeout);
+        const payload = {
+          aggregator: data?.aggregator,
+          method: data?.method,
+          merchant_order_id: data?.merchant_order_id,
+          virtual_id: data?.virtual_id,
+          amount: data?.amount,
+          contact: data?.contact,
+          currency: data?.currency,
+          customer_id: data?.customer_id,
+          email: data?.email,
+          order_id: data?.order_id,
+          merchant_transaction_id: "",
+          status: "",
+        };
+        setQrPaymentPayload({ ...payload, callback_url: data?.callback_url });
+        startPolling(payload);
+      }
+      if (res?.code || res?.message) {
+        handleShowFailedMessage({
+          failed: true,
+          paymentErrHeading: t("resource.checkout.please_try_again_later"),
+          paymentErrMsg: res.message,
         });
       }
-      return;
+    } catch (err) {
+      handleShowFailedMessage({
+        failed: true,
+        paymentErrHeading: t("resource.checkout.please_try_again_later"),
+        paymentErrMsg: t("resource.checkout.qr_code_generation_failed"),
+      });
     }
+    handleIsQrCodeLoading(false);
+  }
 
-    removeCoupon();
-    setShowCouponValidityModal(false);
-    fpi.custom.setValue("isCouponValid", true);
-    if (!selectedUpiIntentApp && selectedTab === "UPI" && isTablet) {
-      setSelectedUpiIntentApp("gpay");
+  const pollPaymentStatus = async (qrPaymentPayload) => {
+    try {
+      const result = await checkAndUpdatePaymentStatus(qrPaymentPayload);
+      const status = result?.data?.checkAndUpdatePaymentStatus?.status;
+      if (status === "success") {
+        stopPolling();
+        setshowUPIModal(false);
+        const qrParams = {
+          success: "true",
+          order_id: qrPaymentPayload.merchant_order_id,
+          delivery_address_id: address_id,
+          billing_address_id: billing_address_id,
+        };
+        const params = new URLSearchParams();
+        for (const key in qrParams) {
+          if (qrParams.hasOwnProperty(key)) {
+            params.append(key, qrParams[key]);
+          }
+        }
+        const finalUrl = `${window.location.origin}${locale && locale !== "en" ? `/${locale}` : ""}/cart/order-status/?${params.toString()}`;
+        window.location.href = finalUrl;
+      } else if (status === "failed") {
+        setshowUPIModal(false);
+        initializeOrResetQrPayment();
+        handleShowFailedMessage({
+          failed: true,
+        });
+      } else if (result?.errors?.length > 0) {
+        const { message } = result.errors[0];
+        setshowUPIModal(false);
+        initializeOrResetQrPayment();
+        handleShowFailedMessage({
+          failed: true,
+          paymentErrMsg: message,
+        });
+      }
+    } catch (err) {
+      handleShowFailedMessage({
+        failed: true,
+      });
     }
   };
 
-  const cancelCouponRemoval = () => {
-    if (shouldEnableSplitPaymentAfterCouponRemoval) {
-      setShouldEnableSplitPaymentAfterCouponRemoval(false);
-      setShouldApplyCreditNoteWithSplitPayment(false);
-      setShowCouponValidityModal(false);
-      fpi.custom.setValue("isCouponValid", true);
-      return;
-    }
-
-    if (mop === "CARD" && subMop === "newCARD") {
-      hideNewCard();
-    }
-    setShowCouponValidityModal(false);
-    fpi.custom.setValue("isCouponValid", true);
-    unsetSelectedSubMop();
-  };
-
-  const paymentFlowProps = {
-    selectMop,
-    proceedToPay,
-    acceptOrder,
-    selectedPaymentPayload,
-    enableLinkPaymentOption,
-    isPaymentLoading,
-    loader,
-    onPriceDetailsClick,
-    mopSelectionLoading,
-    isPaymentDisabled: isPaymentActionDisabled,
-  };
-
-  // Card specific (keeps the case block small)
-  const cardProps = {
-    // state
-    addNewCard,
-    savedCards,
+  useEffect(() => {
+    setSelectedPaymentPayload({
+      selectedCard: selectedCard,
+      isCardSecure: isCardSecure,
+      selectedCardless: selectedCardless,
+      selectedPayLater: selectedPayLater,
+      selectedWallet: selectedWallet,
+      selectedNB: selectedNB,
+      vpa: savedUPISelect || vpa,
+      selectedOtherPayment: selectedOtherPayment,
+      selectedUpiIntentApp: selectedUpiIntentApp,
+    });
+  }, [
     selectedCard,
-    cvvValues,
-    isCvvInfo,
-    isCvvNotNeededModal,
-
-    // handlers
-    addNewCardShow,
-    hideNewCard,
-    setIsCvvInfo,
-    setIsCvvNotNeededModal,
-    handleCvvChange,
-    handleCvvInfo,
-
-    // helpers
-    getCardBorder,
-    getTrimmedCardNumber,
-
-    // CardForm related
-    cardNumberRef,
-    handleNewCardNumberChange,
-    cardNumberError,
-    CREDIT_CARD_MASK,
-    nameRef,
-    cardNameError,
-    cardExpiryDate,
-    handleNewCardExpiryChange,
-    cardExpiryError,
-    cvvNumber,
-    keypressCvv,
-    setCvvNumber,
-    showError,
-    cardCVVError,
-    loggedIn,
+    selectedCardless,
+    selectedPayLater,
+    selectedWallet,
+    selectedNB,
+    vpa,
     isCardSecure,
-    handleNewCardSaveState,
-    openGuidelinesModal,
-    setOpenGuidelinesModal,
-    payUsingCard,
-    cardNumber,
-    handleCardNumberInput,
-    handleCardNumberPaste,
-    nameOnCard,
-    handleNameOnCardInput,
-    cardDetailsData,
-    validateCardNumber,
-    validateNameOnCard,
-    validateCardExpiryDate,
-    validateCvv,
-    handleCvvNumberInput,
-    isCardValid,
-    validateCardDetails,
-    setCardValidity,
-    resetCardValidationErrors,
-    paymentOption,
-    paymentResponse,
-    isJuspayEnabled,
-    handleShowFailedMessage,
-    cardDetails,
-    setIsJuspayCouponApplied,
+    selectedOtherPayment,
+    selectedUpiIntentApp,
+    savedUPISelect,
+    vpa,
+  ]);
+
+  const handleNewCardNumberChange = (value) => {
+    numberValidation = cardValidator.number(value);
+    if (cardNumberRef.current) {
+      const mask =
+        CREDIT_CARD_MASK.find(
+          (i) => i.cardtype === numberValidation?.card?.type ?? "unknown"
+        )?.mask ?? CREDIT_CARD_MASK[CREDIT_CARD_MASK?.length - 1].mask;
+      cardNumberRef?.current?.maskRef?.masked?.updateOptions({ mask });
+    }
   };
+  const handleNewCardExpiryChange = (value, e) => {
+    setCardExpiryError("");
+    setCardExpiryDate(value);
+    expirationdate_mask = e;
+  };
+
+  const getTrimmedCardNumber = (number) => {
+    // Implement the logic to trim the card number
+    return number?.substring(number.length - 4);
+  };
+
+  const onClickAutoComplete = (selectedValue) => {
+    setvpa(selectedValue);
+    setUPIAutoComplete(false);
+  };
+
+  const handleSavedUPISelect = (value) => {
+    setUpiSaveForLaterChecked(false);
+    setSavedUPISelect(value);
+    setSelectedUpiIntentApp("");
+    selectedUpiRef.current = null;
+    setUPIError(false);
+    setvpa("");
+  };
+  const getCardBorder = (card) => {
+    // Implement the logic to determine the card border class
+
+    if (selectedCard?.card_id === card?.card_id) {
+      return `${styles.selectedBorder}`;
+    }
+    return `${styles.nonSelectedBorder}`;
+  };
+
+  const addNewCardShow = () => {
+    setAddNewCard(true);
+  };
+  const handleUPIChange = (event) => {
+    setUPIError(false);
+    setIsUpiSuffixSelected(false);
+    let value = event.target.value
+      .replace(/[^a-zA-Z0-9._@-]/g, "")
+      .replace(/@{2,}/g, "@")
+      .replace(/^([^@]*)@([^@]*)$/, (_, user, domain) => {
+        return `${user}@${domain.replace(/[^a-zA-Z0-9]/g, "")}`;
+      });
+    // Ensure only one '@' character
+    const atCount = (value.match(/@/g) || []).length;
+    if (atCount > 1) {
+      value = value.slice(0, -1);
+    }
+
+    setvpa(value);
+    setSavedUPISelect("");
+    setSelectedUpiIntentApp("");
+    selectedUpiRef.current = null;
+
+    if (value.includes("@")) {
+      setIsUpiSuffixSelected(true);
+      const [prefix, suffix = ""] = value.split("@");
+
+      // Filter suggestions based on what the user typed after '@'
+      const filtered =
+        suffix.trim() === ""
+          ? upiSuggestions
+          : upiSuggestions.filter((suggestion) =>
+              suggestion.toLowerCase().includes("@" + suffix.toLowerCase())
+            );
+
+      setFilteredUPISuggestions(filtered);
+      setUPIAutoComplete(true);
+    } else {
+      setFilteredUPISuggestions([]);
+      setUPIAutoComplete(false);
+    }
+  };
+  const handleProceedToPayClick = async () => {
+    try {
+      let res = await proceedToPay("UPI", {
+        ...selectedPaymentPayload,
+        selectedUpiIntentApp: selectedUpiRef.current || selectedUpiIntentApp,
+        upiSaveForLaterChecked,
+      });
+      const { order_id } = res?.payload?.data?.checkoutCart || {};
+      setUserOrderId(order_id);
+      if (res?.isUPIError) {
+        setUPIError(true);
+        return;
+      }
+      if (res?.code || res?.message) {
+        handleShowFailedMessage({
+          failed: true,
+          paymentErrMsg: res.message,
+        });
+        return;
+      }
+      if (vpa || savedUPISelect) {
+        const { data, success, order_id } =
+          res?.payload?.data?.checkoutCart || {};
+
+        if (success) {
+          const payload = {
+            aggregator: res.aggregator_name,
+            method: data?.method,
+            merchant_order_id: order_id,
+            // virtual_id: data?.virtual_id,
+            amount: data?.amount,
+            contact: data?.contact,
+            currency: data?.currency,
+            customer_id: data?.customer_id,
+            email: data?.email,
+            order_id: data?.order_id,
+            merchant_transaction_id: "",
+            status: "",
+          };
+          setshowUPIModal(true);
+          startPolling(payload);
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const hideNewCard = () => {
+    setAddNewCard(false);
+  };
+
+  const keypressCvv = (event) => {
+    // Implement the logic to handle the CVV keypress event
+    let re = /^[0-9]+$/;
+    let cvv = re.test(event.key);
+    if (!cvv) {
+      event.preventDefault();
+      return false;
+    }
+    return true;
+  };
+
+  const handleNewCardSaveState = (e) => {
+    // Implement the logic to handle the card save state
+    setIsCardSecure(e?.target.checked);
+  };
+
+  const handleSavedCardState = (e) => {
+    // Implement the logic to handle the saved card state
+    setIsSavedCardSecure(e.target.checked);
+  };
+
+  const isPayByCardCvv = () => {
+    if (!cvvNumber) {
+      setCardCVVError(t("resource.checkout.enter_cvv"));
+      setShowError(true);
+      return false;
+    } else if (cvvNumber.toString().length > 4) {
+      setCardCVVError(t("resource.checkout.invalid_cvv"));
+      setShowError(true);
+      return false;
+    }
+    return true;
+  };
+
+  const checkEmpty = () => {
+    let bEmpty = false;
+    if (!cardNumber?.length) {
+      setCardNumberError(t("resource.common.field_required"));
+      bEmpty = true;
+    }
+    if (!expirationdate_mask?.value) {
+      setCardExpiryError(t("resource.common.field_required"));
+      bEmpty = true;
+    }
+    if (!nameOnCard) {
+      setCardNameError(t("resource.common.field_required"));
+      bEmpty = true;
+    }
+    return bEmpty;
+  };
+  const checkExpiry = () => {
+    var d = new Date();
+    var currentYear = d.getFullYear();
+    var currentMonth = d.getMonth() + 1;
+
+    //get expiry y, m entered
+    var expYear = parseInt(expirationdate_mask?.value.split("/")[1], 10) + 2000;
+    var expMonth = parseInt(expirationdate_mask?.value.split("/")[0], 10);
+
+    if (
+      expYear < currentYear ||
+      (expYear === currentYear && expMonth < currentMonth)
+    ) {
+      //card has expired
+      setCardExpiryError(t("resource.checkout.expiry_date_passed"));
+      return true;
+    } else {
+      //continue
+      setCardExpiryError("");
+      return false;
+    }
+  };
+  const isValidCardDetails = () => {
+    let bIsEmpty = checkEmpty();
+    if (!bIsEmpty) {
+      if (!cardDetailsData.is_enabled) {
+        setCardNumberError(t("resource.checkout.card_network_not_supported"));
+        return false;
+      }
+      if (!cardDetailsData.is_card_valid) {
+        setCardNumberError(t("resource.checkout.invalid_card_number"));
+        return false;
+      }
+      if (numberValidation?.card === null || !numberValidation?.card) {
+        setCardNumberError(t("resource.checkout.invalid_card_number"));
+        return false;
+      }
+      //Only if card number is proper and expiry date is proper
+      if (expirationdate_mask?.masked?.isComplete) {
+        return !checkExpiry();
+      } else {
+        setCardExpiryError(t("resource.checkout.invalid_expiry_time"));
+      }
+      return false;
+    }
+    return false;
+  };
+
+  const isJuspayEnabled = () => {
+    return paymentOption?.payment_option?.find(
+      (opt) =>
+        opt.aggregator_name?.toLowerCase() === "juspay" && opt.name === "CARD"
+    );
+  };
+
+  const handlePayment = async () => {
+    try {
+      const response = await payUsingJuspayCard();
+
+      setPaymentResponse(response);
+    } catch (error) {
+      setPaymentResponse({ error });
+    }
+  };
+
+  useEffect(() => {
+    const initializeJuspay = async () => {
+      if (isJuspayEnabled() && !paymentResponse) {
+        const currentInitKey = `${!!paymentResponse}_${!!juspayErrorMessage}_${paymentOption?.payment_option?.length}`;
+
+        if (lastJuspayInitializationRef.current === currentInitKey) {
+          return; // Already processed this state combination
+        }
+
+        lastJuspayInitializationRef.current = currentInitKey;
+
+        try {
+          await handlePayment();
+        } catch (error) {
+          console.error("Juspay initialization error:", error);
+        }
+      }
+    };
+
+    if (
+      juspayErrorMessage &&
+      !paymentResponse &&
+      paymentOption?.payment_option?.find(
+        (opt) =>
+          opt.aggregator_name?.toLowerCase() === "juspay" && opt.name === "CARD"
+      )
+    ) {
+      const currentErrorKey = `error_${juspayErrorMessage}_${!!paymentResponse}`;
+
+      if (lastJuspayInitializationRef.current !== currentErrorKey) {
+        lastJuspayInitializationRef.current = currentErrorKey;
+        handlePayment();
+      }
+    } else {
+      initializeJuspay();
+    }
+  }, [paymentResponse, juspayErrorMessage, paymentOption]);
+
+  const isCardDetailsValid = () => {
+    //reset error
+    setCardNumberError("");
+    setCardNameError("");
+    setCardExpiryError("");
+    setCardCVVError("");
+
+    const isValidCvv = isPayByCardCvv();
+    const isValidCard = isValidCardDetails();
+    return isValidCvv && isValidCard;
+  };
+  const getCardDetails = () => {
+    let obj = {
+      cvv: cvvNumber,
+      card_number: cardNumber.replace(/[^0-9]/g, ""),
+      name: nameOnCard,
+      exp_month: expirationdate_mask?.value.split("/")[0],
+      exp_year: expirationdate_mask?.value.split("/")[1],
+    };
+    return obj;
+  };
+
+  const isCardValid = () => {
+    return (
+      isCardNumberValid &&
+      nameOnCard &&
+      expirationdate_mask?.value &&
+      cvvNumber &&
+      !cardNumberError &&
+      !cardNameError &&
+      !cardExpiryError &&
+      !cardCVVError
+    );
+  };
+
+  const payUsingJuspayCard = async () => {
+    const newPayload = {
+      ...selectedPaymentPayload,
+    };
+    const res = await proceedToPay("newCARD", newPayload);
+    return res;
+  };
+
+  const payUsingCard = async () => {
+    if (isCardValid()) {
+      let cardData = getCardDetails();
+      const newPayload = {
+        ...selectedPaymentPayload,
+        selectedCardData: cardData,
+      };
+      const res = await proceedToPay("newCARD", newPayload);
+      if (res?.code) {
+        handleShowFailedMessage({
+          failed: true,
+          paymentErrMsg: res.message,
+        });
+      }
+    } else {
+      handleShowFailedMessage({
+        failed: true,
+        paymentErrHeading: t("resource.checkout.card_verification_failed"),
+      });
+    }
+  };
+
+  function getWalletdBorder(wlt) {
+    if (selectedWallet?.code === wlt?.code) {
+      return `${styles.selectedBorder}`;
+    }
+    return `${styles.nonSelectedBorder}`;
+  }
+
+  function getSavedUpiBorder(upi) {
+    if (savedUPISelect === upi) {
+      return `${styles.selectedBorder}`;
+    }
+    return `${styles.nonSelectedBorder}`;
+  }
+
+  function validateVPA() {
+    let validPattern = /^.+@.+$/;
+    return validPattern.test(vpa);
+  }
+  function getNBBorder(nb) {
+    if (nb && selectedNB?.code === nb?.code) {
+      return `${styles.selectedBorder}`;
+    }
+    return `${styles.nonSelectedBorder}`;
+  }
+
+  const getNormalisedList = (selectedTabData) => {
+    let tabData = selectedTabData?.list;
+    return tabData.reduce((acc, tab) => {
+      // if (tab.aggregator_name == "Potlee") {
+      //   let temp = { ...tab };
+      //   temp.isDisabled = true;
+      //   temp.id =
+      //     tab.aggregator_name + tab.code + selectedTabData.payment_mode_id;
+      //   acc.push(temp);
+      //   return acc;
+      // } else if (tab.aggregator_name == "Simpl") {
+      //   let temp = { ...tab };
+      //   temp.isDisabled = { ...tab };
+      //   temp.id =
+      //     tab.aggregator_name + tab.code + selectedTabData.payment_mode_id;
+      //   acc.push(temp);
+      //   return acc;
+      // } else if (tab.aggregator_name == "Rupifi") {
+      //   let temp = { ...tab };
+      //   temp.isDisabled = { ...tab };
+      //   temp.id =
+      //     tab.aggregator_name + tab.code + selectedTabData.payment_mode_id;
+      //   acc.push(temp);
+      //   return acc;
+      // } else {
+      //   acc.push(tab);
+      //   return acc;
+      // }
+      let temp = { ...tab };
+      if (tab?.code) {
+        temp.id = tab.aggregator_name + tab.code;
+      } else {
+        temp.id = tab?.aggregator_name ?? "";
+      }
+      acc.push(temp);
+      return acc;
+    }, []);
+  };
+
+  function cancelUPIPayment() {
+    setshowUPIModal(false);
+    try {
+      stopPolling();
+    } catch (e) {
+      // Optionally log error if needed
+    }
+  }
+
+  function getPayLaterBorder(payLater) {
+    if (selectedPayLater?.code === payLater?.code) {
+      return `${styles.selectedBorder}`;
+    }
+    return `${styles.nonSelectedBorder}`;
+  }
+  function getCardlessBorder(emi) {
+    if (selectedCardless?.code === emi?.code) {
+      return `${styles.selectedBorder}`;
+    }
+    return `${styles.nonSelectedBorder}`;
+  }
+
+  function getOPBorder(op) {
+    if (op && selectedOtherPayment.code === op.code) {
+      return `${styles.selectedBorder}`;
+    }
+    return `${styles.nonSelectedBorder}`;
+  }
+  useEffect(() => {
+    const qrPaymentOption = paymentOption?.payment_option?.find(
+      (opt) => opt.name === "QR"
+    );
+    if (qrPaymentOption) {
+      setIsQrMopPresent(true);
+    }
+    if (getTotalValue?.() === 0) {
+      setSelectedTab("COD");
+    } else if (!enableLinkPaymentOption) {
+      if (paymentOptions?.length > 0) {
+        setSelectedTab(paymentOptions[0].name);
+        setActiveMop(paymentOptions[0].name);
+      } else if (otherPaymentOptions?.length > 0) {
+        setSelectedTab("Other");
+        setActiveMop("Other");
+      } else if (codOption?.name) {
+        selectMop(codOption?.name, codOption?.name, codOption?.name);
+      }
+    }
+  }, [paymentOption]);
+
+  const handleScrollToTop = (index) => {
+    const element = document.getElementById(`nav-title-${index}`);
+    if (element) {
+      const headerOffset = 400; // Desired offset in pixels
+      const elementPosition =
+        element.getBoundingClientRect().top + window.scrollY;
+      const offsetPosition = elementPosition - headerOffset;
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+    }
+  };
+  const acceptOrder = () => {
+    if (disbaleCheckout?.message) {
+      handleShowFailedMessage({
+        failed: true,
+        paymentErrHeading: t("resource.checkout.please_try_again_later"),
+        paymentErrMsg: disbaleCheckout?.message,
+      });
+    }
+  };
+  const cancelUpiAppPayment = async () => {
+    try {
+      stopPolling();
+      const res = await cancelPayment({
+        order_id: userOrderId,
+        request_type: "cancel",
+      });
+      const { data, success } = res?.data?.resendOrCancelPayment;
+      if (success && data.status == "true") {
+        console.log("Payment cancellation successful");
+      }
+    } catch (err) {
+      console.log("Payment cancellation failed");
+    }
+  };
+  const codCharges =
+    breakUpValues?.filter((value) => value.key === "cod_charge")[0]?.value ?? 0;
+
+  const unsetSelectedSubMop = () => {
+    setSelectedOtherPayment({});
+    setSelectedNB("");
+    setSelectedWallet("");
+    setSelectedCardless("");
+    setSelectedPayLater("");
+    setSelectedUpiIntentApp("");
+    setSelectedCard("");
+    setSavedUPISelect("");
+    cancelQrPayment();
+    setSubMop("");
+    setMop("");
+    setCardNumberError("");
+    setCardNumber("");
+  };
+
+  if (!isLoading && paymentOption?.payment_option?.length < 1) {
+    return (
+      <div className={styles.noOptionContainer}>
+        <NoPaymentOptionSvg />
+        <div className={styles.noOptionText}>
+          <h3 className="fontHeader">
+            {t("resource.checkout.no_payment_methods_available_heading")}
+          </h3>
+          <p className="fontBody">
+            {t("resource.checkout.no_payment_methods_available_desc")}
+          </p>
+          <FDKLink to="/contact-us" target="_blank">
+            <FyButton className={styles.contact_us}>
+              {t("resource.common.contact_us")}
+            </FyButton>
+          </FDKLink>
+        </div>
+      </div>
+    );
+  }
 
   const navigationTab = () => {
     switch (selectedTab) {
       case "CARD":
         return (
-          <CardPayment
-            {...uiProps}
-            {...amountProps}
-            {...paymentFlowProps}
-            {...cardProps}
-          />
-        );
+          <div className={styles.cardTab}>
+            {(!addNewCard || isTablet) && (
+              <div className={styles.savedCardWrapper}>
+                {savedCards &&
+                savedCards?.length > 0 &&
+                !enableLinkPaymentOption ? (
+                  <>
+                    <div className={styles.savedCardHeaderWrapper}>
+                      <div className={styles.cardHeader}>
+                        {t("resource.checkout.saved_cards")}
+                      </div>
+                      <button onClick={addNewCardShow}>
+                        {" "}
+                        <span>+</span> {t("resource.checkout.new_card")}
+                      </button>
+                    </div>
+                    <div className={styles.modeOption}>
+                      {savedCards?.map((card, index) => (
+                        <div key={card?.card_id || index}>
+                          <div
+                            className={`${styles.modeItemWrapper} ${getCardBorder(card)}`}
+                          >
+                            <div
+                              onClick={() =>
+                                selectMop("CARD", "CARD", card.card_id)
+                              }
+                            >
+                              <div className={styles.modeItem}>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "12px",
+                                  }}
+                                >
+                                  <div className={styles.modeItemLogo}>
+                                    <img
+                                      src={card?.card_brand_image}
+                                      alt={card.card_brand}
+                                    />
+                                  </div>
+                                  <div>
+                                    <div className={styles.modeItemName}>
+                                      {`${card?.card_issuer} ${card?.card_type} ${t("resource.common.card")}`}
+                                    </div>
+                                    <div className={styles.number}>
+                                      <span>****</span>{" "}
+                                      {getTrimmedCardNumber(card.card_number)}
+                                    </div>
+                                    {selectedCard?.card_id ===
+                                      card?.card_id && (
+                                      <div className={styles.whyCvvContainer}>
+                                        <span className={styles.cvvNotNeeded}>
+                                          {t(
+                                            "resource.checkout.cvv_not_needed"
+                                          )}
+                                        </span>
+                                        <span
+                                          className={styles.why}
+                                          onMouseEnter={() =>
+                                            setIsCvvNotNeededModal(true)
+                                          }
+                                          onMouseLeave={() =>
+                                            setIsCvvNotNeededModal(false)
+                                          }
+                                          onClick={() =>
+                                            setIsCvvNotNeededModal(true)
+                                          }
+                                        >
+                                          {t("resource.common.why")}
+                                        </span>
+                                        {isCvvNotNeededModal && !isTablet && (
+                                          <div>
+                                            <p
+                                              className={
+                                                styles.cvvNotNeededModal
+                                              }
+                                            >
+                                              <SvgWrapper
+                                                svgSrc="paymentTooltipArrow"
+                                                className={styles.upArrowMark}
+                                              />
+                                              {t(
+                                                "resource.checkout.card_saved_rbi"
+                                              )}
+                                            </p>
+                                          </div>
+                                        )}
+                                      </div>
+                                    )}
+                                    {selectedCard?.card_id &&
+                                      selectedCard?.card_id === card?.card_id &&
+                                      !card.cvv_less && (
+                                        <div
+                                          className={styles.savedCardCvvWrapper}
+                                        >
+                                          <input
+                                            value={
+                                              cvvValues[card.card_id] || ""
+                                            }
+                                            onChange={(e) => {
+                                              e.stopPropagation();
+                                              handleCvvChange(
+                                                card.card_id,
+                                                e.target.value
+                                              );
+                                            }}
+                                            onClick={(e) => e.stopPropagation()}
+                                            type="text"
+                                            autoComplete="off"
+                                            maxLength="4"
+                                            placeholder={`${t("resource.checkout.cvv")}*`}
+                                            className={styles.cvv}
+                                          />
+                                          <SvgWrapper
+                                            svgSrc="cvv"
+                                            className={styles.cvvIcon}
+                                            onClick={(e) => setIsCvvInfo(true)}
+                                          />
+                                        </div>
+                                      )}
+                                  </div>
+                                </div>
+                                <div
+                                  className={`${styles.walletLeft} ${styles.onMobileView}`}
+                                >
+                                  {(!selectedCard ||
+                                    selectedCard.card_id !== card.card_id) && (
+                                    <SvgWrapper svgSrc={"radio"}></SvgWrapper>
+                                  )}
+                                  {selectedCard &&
+                                    selectedCard.card_id === card.card_id && (
+                                      <SvgWrapper
+                                        svgSrc={"radio-selected"}
+                                      ></SvgWrapper>
+                                    )}
+                                </div>
+                              </div>
+                            </div>
 
+                            <div className={styles.modePay}>
+                              {!addNewCard && isTablet ? (
+                                <StickyPayNow
+                                  customClassName={styles.visibleOnTab}
+                                  value={priceFormatCurrencySymbol(
+                                    getCurrencySymbol,
+                                    getTotalValue()
+                                  )}
+                                  onPriceDetailsClick={onPriceDetailsClick}
+                                  disabled={!selectedCard?.card_id}
+                                  enableLinkPaymentOption={
+                                    enableLinkPaymentOption
+                                  }
+                                  isPaymentLoading={isPaymentLoading}
+                                  loader={loader}
+                                  proceedToPay={() => {
+                                    proceedToPay("CARD", {
+                                      ...selectedPaymentPayload,
+                                      selectedCardCvv:
+                                        cvvValues[selectedCard?.card_id],
+                                    });
+                                    acceptOrder();
+                                  }}
+                                />
+                              ) : (
+                                selectedCard?.card_id &&
+                                selectedCard?.card_id === card?.card_id && (
+                                  <button
+                                    className={styles.payBtn}
+                                    onClick={() => {
+                                      proceedToPay("CARD", {
+                                        ...selectedPaymentPayload,
+                                        selectedCardCvv:
+                                          cvvValues[selectedCard?.card_id],
+                                      });
+                                      acceptOrder();
+                                    }}
+                                    disabled={isPaymentLoading}
+                                  >
+                                    {!isPaymentLoading ? (
+                                      <>
+                                        {t("resource.common.pay_caps")}{" "}
+                                        {priceFormatCurrencySymbol(
+                                          getCurrencySymbol,
+                                          getTotalValue()
+                                        )}
+                                      </>
+                                    ) : (
+                                      loader
+                                    )}
+                                  </button>
+                                )
+                              )}
+                            </div>
+                          </div>
+                          {isCvvInfo && (
+                            <Modal isOpen={isCvvInfo} hideHeader={true}>
+                              <span
+                                className={styles.crossMobile}
+                                onClick={() => setIsCvvInfo(false)}
+                              >
+                                {" "}
+                                <SvgWrapper svgSrc="closeBold" />{" "}
+                              </span>
+                              <div className={styles.cvvInfo}>
+                                {card?.card_brand &&
+                                  card.card_brand !== "American Express" && (
+                                    <div className={styles.type}>
+                                      <div className={styles.closeWrapper}>
+                                        <p className={styles.title}>
+                                          {t(
+                                            "resource.checkout.what_is_cvv_number"
+                                          )}
+                                        </p>
+                                      </div>
+                                      <p className={styles.desc}>
+                                        {t("resource.checkout.cvv_description")}
+                                      </p>
+                                      <div className={styles.img}>
+                                        <SvgWrapper svgSrc="non-amex-card-cvv" />
+                                      </div>
+                                    </div>
+                                  )}
+                                {cardDetailsData &&
+                                  card?.card_brand &&
+                                  card?.card_brand === "American Express" && (
+                                    <div className={styles.type}>
+                                      <p className={styles.title}>
+                                        {t(
+                                          "resource.checkout.have_american_express_card"
+                                        )}
+                                      </p>
+                                      <p className={styles.desc}>
+                                        {t(
+                                          "resource.checkout.amex_cvv_description"
+                                        )}
+                                      </p>
+                                      <div className={styles.img}>
+                                        <SvgWrapper svgSrc="amex-card-cvv" />
+                                      </div>
+                                    </div>
+                                  )}
+                              </div>
+                            </Modal>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <div className={styles.newCardWrapper}>
+                    <div
+                      className={`${styles.walletHeader} ${styles["view-mobile-up"]} ${styles.cardDetailsHeader}`}
+                    >
+                      {t("resource.checkout.enter_card_details")}
+                    </div>
+                    <CardForm
+                      cardNumberRef={cardNumberRef}
+                      handleNewCardNumberChange={handleNewCardNumberChange}
+                      cardNumberError={cardNumberError}
+                      CREDIT_CARD_MASK={CREDIT_CARD_MASK}
+                      nameRef={nameRef}
+                      cardNameError={cardNameError}
+                      cardExpiryDate={cardExpiryDate}
+                      handleNewCardExpiryChange={handleNewCardExpiryChange}
+                      cardExpiryError={cardExpiryError}
+                      cvvNumber={cvvNumber}
+                      keypressCvv={keypressCvv}
+                      setCvvNumber={setCvvNumber}
+                      showError={showError}
+                      cardCVVError={cardCVVError}
+                      loggedIn={loggedIn}
+                      isCardSecure={isCardSecure}
+                      handleNewCardSaveState={handleNewCardSaveState}
+                      openGuidelinesModal={openGuidelinesModal}
+                      setOpenGuidelinesModal={setOpenGuidelinesModal}
+                      payUsingCard={payUsingCard}
+                      getCurrencySymbol={getCurrencySymbol}
+                      getTotalValue={getTotalValue}
+                      cardNumber={cardNumber}
+                      handleCardNumberInput={handleCardNumberInput}
+                      handleCardNumberPaste={handleCardNumberPaste}
+                      nameOnCard={nameOnCard}
+                      handleNameOnCardInput={handleNameOnCardInput}
+                      cardDetailsData={cardDetailsData}
+                      validateCardNumber={validateCardNumber}
+                      validateNameOnCard={validateNameOnCard}
+                      validateCardExpiryDate={validateCardExpiryDate}
+                      validateCvv={validateCvv}
+                      handleCvvNumberInput={handleCvvNumberInput}
+                      isCardValid={isCardValid}
+                      isTablet={isTablet}
+                      onPriceDetailsClick={onPriceDetailsClick}
+                      isCvvInfo={isCvvInfo}
+                      handleCvvInfo={handleCvvInfo}
+                      validateCardDetails={validateCardDetails}
+                      setCardValidity={setCardValidity}
+                      resetCardValidationErrors={resetCardValidationErrors}
+                      enableLinkPaymentOption={enableLinkPaymentOption}
+                      paymentOption={paymentOption}
+                      paymentResponse={paymentResponse}
+                      isJuspayEnabled={isJuspayEnabled}
+                      handleShowFailedMessage={handleShowFailedMessage}
+                      cardDetails={cardDetails}
+                      selectMop={selectMop}
+                      setIsJuspayCouponApplied={setIsJuspayCouponApplied}
+                      loader={loader}
+                      isPaymentLoading={isPaymentLoading}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+            {addNewCard && !isTablet && (
+              <div className={styles.newCardWrapper}>
+                <div className={styles.addCardHeader}>
+                  <button onClick={hideNewCard}>
+                    <SvgWrapper svgSrc={"back"}></SvgWrapper>
+                  </button>
+                  <div className={styles.newCardHeaderText}>
+                    {t("resource.checkout.add_new_card")}
+                  </div>
+                </div>
+                <CardForm
+                  cardNumberRef={cardNumberRef}
+                  handleNewCardNumberChange={handleNewCardNumberChange}
+                  cardNumberError={cardNumberError}
+                  CREDIT_CARD_MASK={CREDIT_CARD_MASK}
+                  nameRef={nameRef}
+                  cardNameError={cardNameError}
+                  cardExpiryDate={cardExpiryDate}
+                  handleNewCardExpiryChange={handleNewCardExpiryChange}
+                  cardExpiryError={cardExpiryError}
+                  cvvNumber={cvvNumber}
+                  keypressCvv={keypressCvv}
+                  setCvvNumber={setCvvNumber}
+                  showError={showError}
+                  cardCVVError={cardCVVError}
+                  loggedIn={loggedIn}
+                  isCardSecure={isCardSecure}
+                  handleNewCardSaveState={handleNewCardSaveState}
+                  openGuidelinesModal={openGuidelinesModal}
+                  setOpenGuidelinesModal={setOpenGuidelinesModal}
+                  payUsingCard={payUsingCard}
+                  getCurrencySymbol={getCurrencySymbol}
+                  getTotalValue={getTotalValue}
+                  cardNumber={cardNumber}
+                  handleCardNumberInput={handleCardNumberInput}
+                  handleCardNumberPaste={handleCardNumberPaste}
+                  nameOnCard={nameOnCard}
+                  handleNameOnCardInput={handleNameOnCardInput}
+                  cardDetailsData={cardDetailsData}
+                  validateCardNumber={validateCardNumber}
+                  validateNameOnCard={validateNameOnCard}
+                  validateCardExpiryDate={validateCardExpiryDate}
+                  validateCvv={validateCvv}
+                  handleCvvNumberInput={handleCvvNumberInput}
+                  isCardValid={isCardValid}
+                  isCvvInfo={isCvvInfo}
+                  handleCvvInfo={handleCvvInfo}
+                  validateCardDetails={validateCardDetails}
+                  setCardValidity={setCardValidity}
+                  resetCardValidationErrors={resetCardValidationErrors}
+                  enableLinkPaymentOption={enableLinkPaymentOption}
+                  paymentOption={paymentOption}
+                  paymentResponse={paymentResponse}
+                  isJuspayEnabled={isJuspayEnabled}
+                  handleShowFailedMessage={handleShowFailedMessage}
+                  cardDetails={cardDetails}
+                  selectMop={selectMop}
+                  setIsJuspayCouponApplied={setIsJuspayCouponApplied}
+                  isPaymentLoading={isPaymentLoading}
+                  loader={loader}
+                />
+              </div>
+            )}
+            {addNewCard && isTablet && (
+              <Modal
+                isOpen={addNewCard}
+                closeDialog={hideNewCard}
+                title={t("resource.checkout.add_new_card")}
+                headerClassName={styles.newCardModalHeader}
+                customClassName={styles.newCardBodyModal}
+              >
+                <div
+                  className={`${styles.newCardWrapper} ${styles.addNewCardModal}`}
+                >
+                  <CardForm
+                    addNewCard={addNewCard}
+                    cardNumberRef={cardNumberRef}
+                    handleNewCardNumberChange={handleNewCardNumberChange}
+                    cardNumberError={cardNumberError}
+                    CREDIT_CARD_MASK={CREDIT_CARD_MASK}
+                    nameRef={nameRef}
+                    cardNameError={cardNameError}
+                    cardExpiryDate={cardExpiryDate}
+                    handleNewCardExpiryChange={handleNewCardExpiryChange}
+                    cardExpiryError={cardExpiryError}
+                    cvvNumber={cvvNumber}
+                    keypressCvv={keypressCvv}
+                    setCvvNumber={setCvvNumber}
+                    showError={showError}
+                    cardCVVError={cardCVVError}
+                    loggedIn={loggedIn}
+                    isCardSecure={isCardSecure}
+                    handleNewCardSaveState={handleNewCardSaveState}
+                    openGuidelinesModal={openGuidelinesModal}
+                    setOpenGuidelinesModal={setOpenGuidelinesModal}
+                    payUsingCard={payUsingCard}
+                    getCurrencySymbol={getCurrencySymbol}
+                    getTotalValue={getTotalValue}
+                    cardNumber={cardNumber}
+                    handleCardNumberInput={handleCardNumberInput}
+                    handleCardNumberPaste={handleCardNumberPaste}
+                    nameOnCard={nameOnCard}
+                    handleNameOnCardInput={handleNameOnCardInput}
+                    cardDetailsData={cardDetailsData}
+                    validateCardNumber={validateCardNumber}
+                    validateNameOnCard={validateNameOnCard}
+                    validateCardExpiryDate={validateCardExpiryDate}
+                    validateCvv={validateCvv}
+                    handleCvvNumberInput={handleCvvNumberInput}
+                    isCardValid={isCardValid}
+                    isTablet={isTablet}
+                    onPriceDetailsClick={onPriceDetailsClick}
+                    isCvvInfo={isCvvInfo}
+                    handleCvvInfo={handleCvvInfo}
+                    validateCardDetails={validateCardDetails}
+                    setCardValidity={setCardValidity}
+                    resetCardValidationErrors={resetCardValidationErrors}
+                    enableLinkPaymentOption={enableLinkPaymentOption}
+                    paymentOption={paymentOption}
+                    paymentResponse={paymentResponse}
+                    isJuspayEnabled={isJuspayEnabled}
+                    handleShowFailedMessage={handleShowFailedMessage}
+                    cardDetails={cardDetails}
+                    selectMop={selectMop}
+                    setIsJuspayCouponApplied={setIsJuspayCouponApplied}
+                    loader={loader}
+                    isPaymentLoading={isPaymentLoading}
+                  />
+                </div>
+              </Modal>
+            )}
+          </div>
+        );
+      case "APPLEPAY":
+        return (
+          <div className={styles.modePay}>
+            <div
+              className={styles.applePayWrapper}
+              onClick={(event) => event.stopPropagation()}
+            >
+              {(applePayStatus === "loading" ||
+                applePayStatus === "submitting") && <Spinner />}
+              <div ref={applePayContainerRef} />
+              {applePayMessage && applePayStatus !== "ready" && (
+                <p className={styles.applePayMessage}>{applePayMessage}</p>
+              )}
+            </div>
+          </div>
+        );
       case "WL":
-        return (
-          <WalletPayment
-            {...uiProps}
-            {...amountProps}
-            {...paymentFlowProps}
-            selectedTabData={selectedTabData}
-            walletSearchText={walletSearchText}
-            setWalletSearchText={setWalletSearchText}
-            selectedWallet={selectedWallet}
-            removeDialogueError={removeDialogueError}
-            setShowMoreWalletModal={setOpenMoreWalletModal}
-            openMoreWalletModal={openMoreWalletModal}
-            disbaleCheckout={disbaleCheckout}
-            setOpenMoreWalletModal={setOpenMoreWalletModal}
-            translateDynamicLabel={translateDynamicLabel}
-            getWalletdBorder={getWalletdBorder}
-          />
+        const initialVisibleWalletCount = 3;
+        const walletList =
+          selectedTabData?.list?.filter((wlt) => !isApplePayOption(wlt)) ?? [];
+        const topWallets = walletList?.slice(0, initialVisibleWalletCount) ?? [];
+        const restWallets = walletList?.slice(initialVisibleWalletCount) ?? [];
+        const filteredWallets = restWallets?.filter((wlt) =>
+          wlt?.display_name
+            ?.toLowerCase()
+            .includes(walletSearchText?.toLowerCase())
         );
 
+        const WalletItem = ({ wlt, key, openMoreWalletModal = false }) => {
+          const isApplePayWallet = isApplePayOption(wlt);
+          const isSelectedWallet = selectedWallet?.code === wlt?.code;
+          const isApplePayLoading =
+            applePayStatus === "loading" || applePayStatus === "submitting";
+          return (
+            <div
+              key={key}
+              className={`${styles.modeItemWrapper} ${getWalletdBorder(wlt)}`}
+              onClick={async () => {
+                removeDialogueError();
+                const didSelect = await selectMop("WL", "WL", wlt?.code);
+                if (
+                  isApplePayWallet &&
+                  didSelect !== false &&
+                  applePayStatus !== "ready"
+                ) {
+                  initializeApplePay({ force: true });
+                }
+              }}
+            >
+              <label>
+                <div className={styles.modeItem}>
+                  <div className={styles.logoNameContainer}>
+                    <div className={styles.modeItemLogo}>
+                      <img src={wlt?.logo_url?.small} alt={wlt?.display_name} />
+                    </div>
+                    <div className={styles.modeItemName}>
+                      {translateDynamicLabel(wlt?.display_name ?? "", t)}
+                    </div>
+                  </div>
+                  <div
+                    className={`${styles.walletLeft} ${styles.onMobileView}`}
+                  >
+                    {(!selectedWallet || selectedWallet.code !== wlt.code) && (
+                      <SvgWrapper svgSrc={"radio"}></SvgWrapper>
+                    )}
+                    {selectedWallet && selectedWallet.code === wlt.code && (
+                      <SvgWrapper svgSrc={"radio-selected"}></SvgWrapper>
+                    )}
+                  </div>
+                </div>
+              </label>
+
+              <div className={styles.modePay}>
+                {isApplePayWallet && isSelectedWallet ? (
+                  <div
+                    className={styles.applePayWrapper}
+                    onClick={(event) => event.stopPropagation()}
+                  >
+                    {isApplePayLoading && <Spinner />}
+                    <div ref={applePayContainerRef} />
+                    {applePayMessage && applePayStatus !== "ready" && (
+                      <p className={styles.applePayMessage}>{applePayMessage}</p>
+                    )}
+                  </div>
+                ) : !openMoreWalletModal && isTablet && isSelectedWallet ? (
+                  <StickyPayNow
+                    customClassName={styles.visibleOnTab}
+                    value={priceFormatCurrencySymbol(
+                      getCurrencySymbol,
+                      getTotalValue()
+                    )}
+                    onPriceDetailsClick={onPriceDetailsClick}
+                    disabled={!selectedWallet.code}
+                    enableLinkPaymentOption={enableLinkPaymentOption}
+                    isPaymentLoading={isPaymentLoading}
+                    loader={loader}
+                    proceedToPay={() => {
+                      proceedToPay("WL", selectedPaymentPayload);
+                      acceptOrder();
+                    }}
+                  />
+                ) : (
+                  selectedWallet.code &&
+                  selectedWallet.code === wlt.code && (
+                    <button
+                      className={styles.payBtn}
+                      onClick={() => {
+                        proceedToPay("WL", selectedPaymentPayload);
+                        if (disbaleCheckout?.message) {
+                          setOpenMoreWalletModal(false);
+                          acceptOrder();
+                        }
+                      }}
+                      disabled={isPaymentLoading}
+                    >
+                      {!isPaymentLoading ? (
+                        <>
+                          {t("resource.common.pay_caps")}{" "}
+                          {priceFormatCurrencySymbol(
+                            getCurrencySymbol,
+                            getTotalValue()
+                          )}
+                        </>
+                      ) : (
+                        loader
+                      )}
+                    </button>
+                  )
+                )}
+              </div>
+            </div>
+          );
+        };
+        return (
+          <div>
+            <div
+              className={`${styles.walletHeader} ${styles["view-mobile-up"]}`}
+            >
+              {t("resource.checkout.select_wallet")}
+            </div>
+            <div className={styles.modeOption}>
+              {topWallets?.map((wlt, index) => (
+                <WalletItem wlt={wlt} key={index} />
+              ))}
+              {restWallets.length > 0 && (
+                <div
+                  className={`${styles.modeItemWrapper} ${styles.otherBorder}`}
+                  onClick={() => {
+                    removeDialogueError();
+                    setOpenMoreWalletModal(true);
+                  }}
+                >
+                  <div className={styles.modeItem}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                      }}
+                    >
+                      <div className={styles.modeItemLogo}>
+                        <span className={styles.moreWlIcon}>
+                          <SvgWrapper
+                            className={styles.svgColor}
+                            svgSrc="more-wallets"
+                          />
+                        </span>
+                      </div>
+                      <div className={styles.moreModeName}>
+                        {t("resource.checkout.other_wallets")}
+                      </div>
+                    </div>
+                    <span className={styles.moreModeIcon}>
+                      <SvgWrapper svgSrc="accordion-arrow" />
+                    </span>
+                  </div>
+                </div>
+              )}
+              <Modal
+                containerClassName={styles.moreOptionContainer}
+                isOpen={openMoreWalletModal}
+                headerClassName={styles.modalHeader}
+                bodyClassName={`${styles.modalBody} ${styles.bodyContainer}`}
+                closeDialog={() => {
+                  setOpenMoreWalletModal(false);
+                  setWalletSearchText("");
+                }}
+                title={t("resource.checkout.select_wallet")}
+              >
+                <div className={styles.searchBox}>
+                  <SvgWrapper svgSrc="search" className={styles.searchIcon} />
+                  <input
+                    type="text"
+                    defaultValue={walletSearchText}
+                    onChange={(e) => setWalletSearchText(e?.target?.value)}
+                    placeholder={t("resource.checkout.search_for_wallets")}
+                  />
+                </div>
+                {filteredWallets?.length === 0 ? (
+                  <p className={styles.noResultFound}>
+                    {t("resource.common.empty_state")}
+                  </p>
+                ) : (
+                  filteredWallets.map((wlt, index) => (
+                    <WalletItem
+                      openMoreWalletModal={openMoreWalletModal}
+                      wlt={wlt}
+                      key={`mi-${index}`}
+                    />
+                  ))
+                )}
+              </Modal>
+            </div>
+          </div>
+        );
       case "UPI":
-      case "QR":
         return (
-          <>
-            <UpiAppPayment
-              {...uiProps}
-              {...amountProps}
-              {...paymentFlowProps}
-              isChromeOrSafari={isChromeOrSafari}
-              upiApps={upiApps}
-              selectedUpiIntentApp={selectedUpiIntentApp}
-              setSelectedUpiIntentApp={setSelectedUpiIntentApp}
-              selectedUpiRef={selectedUpiRef}
-              setvpa={setvpa}
-              setUPIError={setUPIError}
-              cancelQrPayment={cancelQrPayment}
-              getSvgNameForApp={getSvgNameForApp}
-              upiAppData={upiAppData}
-              selectMop={selectMop}
-              removeDialogueError={removeDialogueError}
-              setShowUpiRedirectionModal={setShowUpiRedirectionModal}
-              showUpiRedirectionModal={showUpiRedirectionModal}
-              cancelUpiAppPayment={cancelUpiAppPayment}
-              timeRemaining={timeRemaining}
-              showUPIModal={showUPIModal}
-              cancelUPIPayment={cancelUPIPayment}
-              isPaymentLoading={isPaymentLoading}
-              isUPIError={isUPIError}
-              acceptOrder={acceptOrder}
-              disbaleCheckout={disbaleCheckout}
-              vpa={vpa}
-              selectedTab={selectedTab}
-              handleProceedToPayClick={handleProceedToPayClick}
-              isCouponApplied={isCouponApplied}
-              isCouponValid={isCouponValid}
-            />
+          <div className={styles.upiMop}>
+            {isTablet && isChromeOrSafari && (
+              <div>
+                {upiApps?.length > 0 &&
+                  upiApps
+                    .filter((app) => ["gpay", "google_pay", "phonepe", "paytm"].includes(app))
+                    .map((app) => {
+                      const svgName = getSvgNameForApp(app);
+                      const displayKey = svgName;
+                      return (
+                        <label
+                          key={app}
+                          onClick={() => {
+                            setSelectedUpiIntentApp(app);
+                            selectedUpiRef.current = null;
+                            setvpa("");
+                            setSavedUPISelect("");
+                            setUPIError(false);
+                            cancelQrPayment();
+                          }}
+                          className={`${styles.upiApp} ${!upiApps?.includes("any") ? styles.notBorderBottom : ""} ${selectedUpiIntentApp === app ? styles.selectedUpiApp : ""}`}
+                        >
+                          <div className={styles.logo}>
+                            <SvgWrapper svgSrc={svgName} />
+                          </div>
+                          <p className={styles.displayName}>
+                            {upiAppData[displayKey]?.displayName}
+                          </p>
+                        {(!selectedUpiIntentApp ||
+                          selectedUpiIntentApp !== app) && (
+                          <SvgWrapper
+                            svgSrc={"radio"}
+                            className={styles.onMobileView}
+                          />
+                        )}
+                        {selectedUpiIntentApp &&
+                          selectedUpiIntentApp === app && (
+                            <SvgWrapper
+                              svgSrc={"radio-selected"}
+                              className={styles.onMobileView}
+                            />
+                          )}
+                        </label>
+                      );
+                    })}
+                {upiApps?.length > 0 && upiApps?.includes("any") && (
+                  <label
+                    key="any"
+                    onClick={() => {
+                      setSelectedUpiIntentApp("any");
+                      selectedUpiRef.current = "any";
+                      selectMop("UPI", "UPI", "UPI");
+                      removeDialogueError();
+                      setShowUpiRedirectionModal(true);
+                    }}
+                    className={styles.moreApps}
+                  >
+                    <div className={styles.logo}>
+                      <SvgWrapper svgSrc="more-upi-apps" />
+                    </div>
+                    <p className={styles.displayName}>
+                      {upiAppData.any?.displayName}
+                    </p>
+                    <div className={styles.rightArrow}>
+                      <SvgWrapper svgSrc="arrow-right" />
+                    </div>
+                  </label>
+                )}
+              </div>
+            )}
+            {!isTablet && upiApps?.length > 0 && (
+              <div>
+                {upiApps
+                  .filter((app) => ["gpay", "google_pay", "phonepe", "paytm"].includes(app))
+                  .map((app) => {
+                    const svgName = getSvgNameForApp(app);
+                    const displayKey = svgName;
+                    return (
+                      <label
+                        key={app}
+                        onClick={() => {
+                          setSelectedUpiIntentApp(app);
+                          selectedUpiRef.current = null;
+                          setvpa("");
+                          setSavedUPISelect("");
+                          setUPIError(false);
+                          cancelQrPayment();
+                        }}
+                        className={`${styles.upiApp} ${!upiApps?.includes("any") ? styles.notBorderBottom : ""} ${selectedUpiIntentApp === app ? styles.selectedUpiApp : ""}`}
+                      >
+                        <div className={styles.logo}>
+                          <SvgWrapper svgSrc={svgName} />
+                        </div>
+                        <p className={styles.displayName}>
+                          {upiAppData[displayKey]?.displayName}
+                        </p>
+                        {(!selectedUpiIntentApp ||
+                          selectedUpiIntentApp !== app) && (
+                          <SvgWrapper
+                            svgSrc={"radio"}
+                            className={styles.onMobileView}
+                          />
+                        )}
+                        {selectedUpiIntentApp &&
+                          selectedUpiIntentApp === app && (
+                            <SvgWrapper
+                              svgSrc={"radio-selected"}
+                              className={styles.onMobileView}
+                            />
+                          )}
+                      </label>
+                    );
+                  })}
+                {upiApps?.length > 0 && upiApps?.includes("any") && (
+                  <label
+                    key="any"
+                    onClick={() => {
+                      setSelectedUpiIntentApp("any");
+                      selectedUpiRef.current = "any";
+                      selectMop("UPI", "UPI", "UPI");
+                      removeDialogueError();
+                      setShowUpiRedirectionModal(true);
+                    }}
+                    className={styles.moreApps}
+                  >
+                    <div className={styles.logo}>
+                      <SvgWrapper svgSrc="more-upi-apps" />
+                    </div>
+                    <p className={styles.displayName}>
+                      {upiAppData.any?.displayName}
+                    </p>
+                    <div className={styles.rightArrow}>
+                      <SvgWrapper svgSrc="arrow-right" />
+                    </div>
+                  </label>
+                )}
+              </div>
+            )}
+            {!isTablet && isQrMopPresent && (
+              <div>
+                <p className={styles.upiSectionTitle}>
+                  {t("resource.checkout.upi_qr_code_caps")}
+                </p>
+                <div className={styles.upiQrCodeSection}>
+                  <div className={styles.upiQrCodeDescription}>
+                    <div>
+                      <p className={styles.scanQrTitle}>
+                        {t("resource.checkout.scan_qr_to_pay")}
+                      </p>
+                      <p className={styles.scanQrDescripton}>
+                        {t("resource.checkout.scan_qr_upi")}
+                      </p>
+                    </div>
+                    <div className={styles.scanQrApps}>
+                      <div className={styles.upiAppLogo}>
+                        <SvgWrapper svgSrc="gpay" />
+                      </div>
+                      <div className={styles.upiAppLogo}>
+                        <SvgWrapper svgSrc="phonepe" />
+                      </div>
+                      <div className={styles.upiAppLogo}>
+                        <SvgWrapper svgSrc="bhim" />
+                      </div>
+                      <div className={styles.upiAppLogo}>
+                        <SvgWrapper svgSrc="amazon-pay" />
+                      </div>
+                      <p className={styles.moreUpiApps}>
+                        {t("resource.checkout.and_more")}
+                      </p>
+                    </div>
+                    {isQrCodeVisible && (
+                      <span className={styles.expiryText}>
+                        {t("resource.checkout.valid_for")}
+                        <span className={styles.countDown}>
+                          {formatTime(countdown)}
+                        </span>
+                        <span className={styles.minutes}>
+                          {t("resource.common.minutes")}
+                        </span>
+                      </span>
+                    )}
+                    {isQrCodeVisible && (
+                      <p
+                        className={styles.cancel}
+                        onClick={() => {
+                          cancelQrPayment();
+                        }}
+                      >
+                        {t("resource.facets.cancel_caps")}
+                      </p>
+                    )}
+                  </div>
+                  <div className={styles.upiQrCode}>
+                    {!isQrCodeVisible && (
+                      <SvgWrapper svgSrc="qr-code" className={styles.blurred} />
+                    )}
+                    {isQrCodeVisible && (
+                      <img
+                        src={qrCodeImage}
+                        className={styles.qrCode}
+                        alt={t("resource.checkout.qr_code_image")}
+                      />
+                    )}
+                    {!isQrCodeVisible && isQrCodeLoading && (
+                      <div className={styles.qrLoader}></div>
+                    )}
+                    {!isQrCodeVisible && !isQrCodeLoading && (
+                      <p
+                        className={styles.showQrButton}
+                        onClick={() => {
+                          if (disbaleCheckout?.message) {
+                            acceptOrder();
+                          } else {
+                            removeDialogueError();
+                          }
+                          selectMop("UPI", "QR", "QR");
+                          setSavedUPISelect(null);
+                        }}
+                      >
+                        {t("resource.checkout.show_qr")}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+            {((isTablet &&
+              isChromeOrSafari &&
+              (upiApps?.length > 0 || upiApps?.includes("any"))) ||
+              (!isTablet && (upiApps?.length > 0 || isQrMopPresent))) && (
+              <div className={styles.upiOrLine}>
+                <span className={styles.upiOrText}>
+                  {t("resource.common.or")}
+                </span>
+              </div>
+            )}
+            {loggedIn && savedUpi?.length > 0 && !enableLinkPaymentOption && (
+              <div>
+                <div>
+                  <div>
+                    {!isTablet && (
+                      <div
+                        className={`${styles.upiHeader} ${styles["view-mobile-up"]}`}
+                      >
+                        {t("resource.checkout.saved_upi_id")}
+                      </div>
+                    )}
+                    <div className={styles.modeOption}>
+                      {savedUpi?.map((item) => (
+                        <div
+                          className={`${styles.modeItemWrapper} ${getSavedUpiBorder(item.vpa)} ${styles.upiMargin}`}
+                          onClick={() => {
+                            removeDialogueError();
+                            handleSavedUPISelect(item.vpa);
+                            cancelQrPayment();
+                          }}
+                          key={item?.vpa}
+                        >
+                          <div className={styles.modeItem} key={item.vpa}>
+                            <div
+                              style={{ display: "flex", alignItems: "center" }}
+                            >
+                              <SvgWrapper svgSrc="bhim" />
+                              <div
+                                style={{
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  gap: "4px",
+                                }}
+                              >
+                                <span className={styles.modeItemName}>
+                                  {item.vpa}
+                                </span>
+                                {savedUPISelect &&
+                                  isUPIError &&
+                                  item.vpa === savedUPISelect && (
+                                    <p className={` ${styles.upiError}`}>
+                                      {t("resource.checkout.invalid_upi_id")}
+                                    </p>
+                                  )}
+                              </div>
+                            </div>
+                            {savedUPISelect === item.vpa ? (
+                              <SvgWrapper
+                                svgSrc="radio-selected"
+                                className={styles.onMobileView}
+                              />
+                            ) : (
+                              <SvgWrapper
+                                svgSrc="radio"
+                                className={styles.onMobileView}
+                              />
+                            )}
+                          </div>
+                          {!isTablet &&
+                            savedUPISelect &&
+                            savedUPISelect === item.vpa && (
+                              <div className={styles.modePay}>
+                                <button
+                                  className={`${styles.commonBtn} ${styles.payBtn}`}
+                                  onClick={() => {
+                                    if (disbaleCheckout?.message) {
+                                      acceptOrder();
+                                    } else {
+                                      removeDialogueError();
+                                    }
+                                    cancelQrPayment();
+                                    selectMop("UPI", "UPI", "UPI");
+                                  }}
+                                  disabled={
+                                    (savedUPISelect && isUPIError) ||
+                                    isPaymentLoading
+                                  }
+                                >
+                                  {!isPaymentLoading ? (
+                                    <>
+                                      {t("resource.common.pay_caps")}{" "}
+                                      {priceFormatCurrencySymbol(
+                                        getCurrencySymbol,
+                                        getTotalValue()
+                                      )}
+                                    </>
+                                  ) : (
+                                    loader
+                                  )}
+                                </button>
+                              </div>
+                            )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div className={styles.upiOrLine}>
+                  <span className={styles.upiOrText}>
+                    {t("resource.common.or")}
+                  </span>
+                </div>
+              </div>
+            )}
+            <div style={{ position: "relative" }}>
+              {!isTablet && (
+                <p className={styles.upiSectionTitle}>
+                  {t("resource.checkout.upi_id_number")}
+                </p>
+              )}
+              <div className={styles.upiIdWrapper}>
+                <input
+                  className={`${vpa && isUPIError ? styles.error : ""} ${vpa ? styles.input : ""} ${styles.upiInput}`}
+                  type="text"
+                  placeholder={t("resource.common.enter_upi_id")}
+                  onFocus={() => {
+                    setUpiSaveForLaterChecked(true);
+                  }}
+                  maxLength="55"
+                  value={vpa}
+                  onChange={handleUPIChange}
+                />
+                {(vpa || (vpa && isUPIError)) && (
+                  <span
+                    className={`${styles.inputName} ${isUPIError ? styles.errorInputName : ""}`}
+                  >
+                    {t("resource.common.enter_upi_id")}
+                    <span className={styles.required}>*</span>
+                  </span>
+                )}
+              </div>
 
-            <QrCodePaymet
-              {...uiProps}
-              isQrMopPresent={isQrMopPresent}
-              isQrCodeVisible={isQrCodeVisible}
-              qrCodeImage={qrCodeImage}
-              isQrCodeLoading={isQrCodeLoading}
-              countdown={countdown}
-              setCountdown={setCountdown}
-              initializeOrResetQrPayment={initializeOrResetQrPayment}
-              formatTime={formatTime}
-              selectMop={selectMop}
-              cancelQrPayment={cancelQrPayment}
-              disbaleCheckout={disbaleCheckout}
-              acceptOrder={acceptOrder}
-              removeDialogueError={removeDialogueError}
-              setSavedUPISelect={setSavedUPISelect}
-              showUpiRedirectionModal={showUpiRedirectionModal}
-              cancelUpiAppPayment={cancelUpiAppPayment}
-              isPaymentDisabled={isPaymentActionDisabled}
-            />
-          </>
+              {isUPIError && vpa ? (
+                <p className={styles.formError}>{t(UPI_INVALID_VPA_ERROR)}</p>
+              ) : null}
+
+              {/* Show suggestions if '@' is present and we have filtered suggestions */}
+              {!isTablet &&
+                showUPIAutoComplete &&
+                filteredUPISuggestions.length > 0 && (
+                  <div className={styles.upiSuggestionsDesktop}>
+                    <ul className={styles.upiAutoCompleteWrapper}>
+                      {filteredUPISuggestions.map((suffix) => (
+                        <li
+                          key={suffix}
+                          className={styles.upiAutoCompleteItem}
+                          onClick={() =>
+                            onClickAutoComplete(
+                              `${vpa.replace(/@.*/, "")}${suffix}`
+                            )
+                          }
+                        >
+                          {`${vpa.replace(/@.*/, "")}${suffix}`}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              {isTablet &&
+                showUPIAutoComplete &&
+                filteredUPISuggestions.length > 0 && (
+                  <div>
+                    <ul className={styles.upiChipsWrapper}>
+                      {filteredUPISuggestions.slice(0, 3).map((suffix) => (
+                        <li
+                          key={suffix}
+                          className={styles.upiChip}
+                          onClick={() =>
+                            onClickAutoComplete(
+                              `${vpa.replace(/@.*/, "")}${suffix}`
+                            )
+                          }
+                        >
+                          {suffix}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              {loggedIn && !enableLinkPaymentOption && (
+                <div>
+                  <label
+                    htmlFor="upiSaveForLater"
+                    // className={
+                    //   !!savedUPISelect
+                    //     ? styles.disabledUPISaveCheck
+                    //     : styles.saveUpi
+                    // }
+                    className={styles.saveUpi}
+                  >
+                    <input
+                      type="checkbox"
+                      name="upiSaveForLater"
+                      id="upiSaveForLater"
+                      checked={upiSaveForLaterChecked}
+                      className={styles.saveForLater}
+                      disabled={!vpa || !!savedUPISelect}
+                      onChange={(e) => {
+                        setUpiSaveForLaterChecked(e.currentTarget.checked);
+                      }}
+                    />
+                    <span
+                      className={`${!vpa || !!savedUPISelect ? styles.disableSaveUpiTitle : styles.saveUpiTitle}`}
+                    >
+                      {t("resource.checkout.save_upi_id")}
+                    </span>
+                  </label>
+                </div>
+              )}
+
+              <div className={styles.upiPay}>
+                {isTablet ? (
+                  <StickyPayNow
+                    customClassName={styles.visibleOnTab}
+                    disabled={
+                      !(
+                        isUpiSuffixSelected ||
+                        !!selectedUpiIntentApp ||
+                        !!savedUPISelect
+                      ) ||
+                      (savedUPISelect && isUPIError)
+                    }
+                    value={priceFormatCurrencySymbol(
+                      getCurrencySymbol,
+                      getTotalValue()
+                    )}
+                    onPriceDetailsClick={onPriceDetailsClick}
+                    enableLinkPaymentOption={enableLinkPaymentOption}
+                    isPaymentLoading={isPaymentLoading}
+                    loader={loader}
+                    proceedToPay={() => {
+                      if (disbaleCheckout?.message) {
+                        acceptOrder();
+                      }
+                      selectMop("UPI", "UPI", "UPI");
+                    }}
+                  />
+                ) : (
+                  (vpa || selectedUpiIntentApp) && (
+                    <button
+                      className={`${styles.commonBtn} ${styles.payBtn}`}
+                      onClick={() => {
+                        if (disbaleCheckout?.message) {
+                          acceptOrder();
+                        } else {
+                          removeDialogueError();
+                        }
+                        selectMop("UPI", "UPI", "UPI");
+                        cancelQrPayment();
+                      }}
+                      disabled={
+                        !(isUpiSuffixSelected || !!selectedUpiIntentApp) ||
+                        isPaymentLoading
+                      }
+                    >
+                      {!isPaymentLoading ? (
+                        <>
+                          {t("resource.common.pay_caps")}{" "}
+                          {priceFormatCurrencySymbol(
+                            getCurrencySymbol,
+                            getTotalValue()
+                          )}
+                        </>
+                      ) : (
+                        loader
+                      )}
+                    </button>
+                  )
+                )}
+              </div>
+            </div>
+          </div>
         );
-
       case "NB":
-        return (
-          <NetBankingPay
-            {...uiProps}
-            {...amountProps}
-            {...paymentFlowProps}
-            selectedTabData={selectedTabData}
-            selectedNB={selectedNB}
-            nbSearchText={nbSearchText}
-            setNbSearchText={setNbSearchText}
-            openMoreNbModal={openMoreNbModal}
-            setOpenMoreNbModal={setOpenMoreNbModal}
-            removeDialogueError={removeDialogueError}
-            disbaleCheckout={disbaleCheckout}
-            translateDynamicLabel={translateDynamicLabel}
-            getNBBorder={getNBBorder}
-          />
+        const initialVisibleBankCount = 4;
+        const topBanks =
+          selectedTabData?.list?.slice(0, initialVisibleBankCount) ?? [];
+        const restBanks =
+          selectedTabData?.list?.slice(initialVisibleBankCount) ?? [];
+        const filteredBanks = restBanks?.filter((nb) =>
+          nb.display_name?.toLowerCase().includes(nbSearchText?.toLowerCase())
         );
 
+        const NbItem = ({ nb, key, openMoreNbModal = false }) => {
+          return (
+            <div
+              key={nb.display_name}
+              className={`${styles.modeItemWrapper} ${getNBBorder(nb)}`}
+              onClick={() => {
+                removeDialogueError();
+                selectMop("NB", "NB", nb.code);
+              }}
+            >
+              <label>
+                <div className={styles.modeItem}>
+                  <div className={styles.logoNameContainer}>
+                    <div className={styles.modeItemLogo}>
+                      <img src={nb.logo_url.small} alt={nb?.display_name} />
+                    </div>
+                    <div className={styles.modeItemName}>
+                      {translateDynamicLabel(nb?.display_name ?? "", t)}
+                    </div>
+                  </div>
+
+                  <div className={`${styles.nbLeft} ${styles.onMobileView}`}>
+                    {(!selectedNB || selectedNB.code !== nb.code) && (
+                      <SvgWrapper svgSrc={"radio"}></SvgWrapper>
+                    )}
+                    {selectedNB && selectedNB.code === nb.code && (
+                      <SvgWrapper svgSrc="radio-selected" />
+                    )}
+                  </div>
+                </div>
+              </label>
+              <div className={styles.modePay}>
+                {!openMoreNbModal && isTablet ? (
+                  <StickyPayNow
+                    customClassName={styles.visibleOnTab}
+                    value={priceFormatCurrencySymbol(
+                      getCurrencySymbol,
+                      getTotalValue()
+                    )}
+                    onPriceDetailsClick={onPriceDetailsClick}
+                    disabled={!selectedNB.code}
+                    enableLinkPaymentOption={enableLinkPaymentOption}
+                    isPaymentLoading={isPaymentLoading}
+                    loader={loader}
+                    proceedToPay={() => {
+                      proceedToPay("NB", selectedPaymentPayload);
+                      acceptOrder();
+                    }}
+                  />
+                ) : (
+                  selectedNB.code &&
+                  selectedNB.code === nb.code && (
+                    <button
+                      className={`${styles.commonBtn} ${styles.payBtn}`}
+                      onClick={() => {
+                        proceedToPay("NB", selectedPaymentPayload);
+                        if (disbaleCheckout?.message) {
+                          setOpenMoreNbModal(false);
+                          acceptOrder();
+                        }
+                      }}
+                      disabled={isPaymentLoading}
+                    >
+                      {!isPaymentLoading ? (
+                        <>
+                          {t("resource.common.pay_caps")}{" "}
+                          {priceFormatCurrencySymbol(
+                            getCurrencySymbol,
+                            getTotalValue()
+                          )}
+                        </>
+                      ) : (
+                        <span>{loader}</span>
+                      )}
+                    </button>
+                  )
+                )}
+              </div>
+            </div>
+          );
+        };
+
+        return (
+          <div>
+            <div className={`${styles.nbHeader} ${styles["view-mobile-up"]}`}>
+              {t("resource.checkout.select_bank")}
+            </div>
+            <div className={styles.modeOption}>
+              {topBanks?.map((nb, index) => (
+                <NbItem nb={nb} key={`nb-${index}`} />
+              ))}
+
+              {selectedTabData?.list?.length > initialVisibleBankCount && (
+                <div
+                  className={`${styles.modeItemWrapper} ${styles.otherBorder}`}
+                  onClick={() => {
+                    removeDialogueError();
+                    setOpenMoreNbModal(true);
+                  }}
+                >
+                  <div className={styles.modeItem}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                      }}
+                    >
+                      <div className={styles.modeItemLogo}>
+                        <span>
+                          <SvgWrapper
+                            svgSrc="other-banks"
+                            className={styles.svgColor}
+                          />
+                        </span>
+                      </div>
+                      <div className={styles.moreModeName}>
+                        {t("resource.checkout.other_banks")}
+                      </div>
+                    </div>
+                    <span className={styles.moreModeIcon}>
+                      <SvgWrapper svgSrc="accordion-arrow" />
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              <Modal
+                containerClassName={styles.moreOptionContainer}
+                isOpen={openMoreNbModal}
+                headerClassName={styles.modalHeader}
+                bodyClassName={`${styles.modalBody} ${styles.bodyContainer}`}
+                closeDialog={() => {
+                  setOpenMoreNbModal(false);
+                  setNbSearchText("");
+                }}
+                title={t("resource.checkout.select_bank")}
+              >
+                <div className={styles.searchBox}>
+                  <SvgWrapper svgSrc="search" className={styles.searchIcon} />
+                  <input
+                    type="text"
+                    defaultValue={nbSearchText}
+                    onChange={(e) => setNbSearchText(e?.target?.value)}
+                    placeholder={t("resource.checkout.search_for_banks")}
+                  />
+                </div>
+                {filteredBanks?.length === 0 ? (
+                  <p className={styles.noResultFound}>
+                    {t("resource.common.empty_state")}
+                  </p>
+                ) : (
+                  filteredBanks?.map((nb, index) => (
+                    <NbItem
+                      nb={nb}
+                      openMoreNbModal={openMoreNbModal}
+                      key={`mi-${index}`}
+                    />
+                  ))
+                )}
+              </Modal>
+            </div>
+          </div>
+        );
       case "COD":
         return (
-          <CodPayment
-            {...uiProps}
-            {...amountProps}
-            codCharges={codCharges}
-            proceedToPay={proceedToPay}
-            selectedPaymentPayload={selectedPaymentPayload}
-            isPaymentLoading={isPaymentLoading}
-            loader={loader}
-            isCodModalOpen={
-              isCodModalOpen &&
-              (!shouldScrollBeforeCodModal || isSplitCodScrollReady)
-            }
-            setIsCodModalOpen={setIsCodModalOpen}
-            setTab={setTab}
-            setSelectedTab={setSelectedTab}
-            Spinner={Spinner}
-            isCouponValid={isCouponValid}
-            mopSelectionLoading={mopSelectionLoading}
-            isPaymentDisabled={
-              isCouponValidationLoading ||
-              isSplitPaymentCouponValidating ||
-              (isResumeSplitPayment ? false : Boolean(isPaymentDisabled))
-            }
-            splitCodAction={splitCodAction}
-          />
+          <div>
+            {!isTablet ? (
+              <div>
+                <div
+                  className={`${styles.codHeader} ${styles["view-mobile-up"]}`}
+                >
+                  {t("resource.checkout.cash_on_delivery")}
+                </div>
+                <p className={styles.codTitle}>
+                  {t("resource.checkout.pay_on_delivery")}
+                </p>
+                {codCharges > 0 && (
+                  <div className={styles.codInfo}>
+                    +{priceFormatCurrencySymbol(getCurrencySymbol, codCharges)}{" "}
+                    {t("resource.checkout.cod_extra_charge")}
+                  </div>
+                )}
+                <div className={styles.codPay}>
+                  <button
+                    className={`${styles.commonBtn} ${styles.payBtn}`}
+                    onClick={() => proceedToPay("COD", selectedPaymentPayload)}
+                    disabled={isPaymentLoading}
+                  >
+                    {!isPaymentLoading
+                      ? t("resource.checkout.place_order")
+                      : loader}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <Spinner />
+            )}
+          </div>
         );
-
       case "PL":
         return (
-          <PayLater
-            {...uiProps}
-            {...amountProps}
-            {...paymentFlowProps}
-            selectedTabData={selectedTabData}
-            selectedPayLater={selectedPayLater}
-            getNormalisedList={getNormalisedList}
-            getPayLaterBorder={getPayLaterBorder}
-            translateDynamicLabel={translateDynamicLabel}
-            removeDialogueError={removeDialogueError}
-          />
-        );
+          <div>
+            <div
+              className={`${styles.payLaterHeader} ${styles["view-mobile-up"]}`}
+            >
+              {t("resource.checkout.select_pay_later_option")}
+            </div>
+            <div className={styles.modeOption}>
+              {getNormalisedList(selectedTabData)?.map(
+                (payLater, index) =>
+                  !payLater.isDisabled && (
+                    <div
+                      key={payLater.id}
+                      className={`${styles.modeItemWrapper} ${getPayLaterBorder(payLater)}`}
+                      onClick={() => {
+                        removeDialogueError();
+                        selectMop("PL", "PL", payLater.code);
+                      }}
+                    >
+                      <label id={payLater.id}>
+                        <div className={styles.modeItem}>
+                          <div
+                            style={{ display: "flex", alignItems: "center" }}
+                          >
+                            <div className={styles.modeItemLogo}>
+                              <img
+                                src={payLater?.logo_url?.small}
+                                alt={payLater?.display_name}
+                              />
+                            </div>
+                            <div className={styles.modeItemName}>
+                              {translateDynamicLabel(
+                                payLater?.display_name ?? "",
+                                t
+                              )}
+                            </div>
+                          </div>
+                          <div className={styles.onMobileView}>
+                            {(!selectedPayLater ||
+                              selectedPayLater.code !== payLater.code) && (
+                              <SvgWrapper svgSrc={"radio"}></SvgWrapper>
+                            )}
+                            {selectedPayLater &&
+                              selectedPayLater.code === payLater.code && (
+                                <SvgWrapper
+                                  svgSrc={"radio-selected"}
+                                ></SvgWrapper>
+                              )}
+                          </div>
+                        </div>
+                      </label>
 
+                      <div className={styles.modePay}>
+                        {isTablet ? (
+                          <StickyPayNow
+                            customClassName={styles.visibleOnTab}
+                            value={priceFormatCurrencySymbol(
+                              getCurrencySymbol,
+                              getTotalValue()
+                            )}
+                            onPriceDetailsClick={onPriceDetailsClick}
+                            disabled={!selectedPayLater.code}
+                            enableLinkPaymentOption={enableLinkPaymentOption}
+                            isPaymentLoading={isPaymentLoading}
+                            loader={loader}
+                            proceedToPay={() => {
+                              proceedToPay("PL", selectedPaymentPayload);
+                              acceptOrder();
+                            }}
+                          />
+                        ) : (
+                          selectedPayLater.code &&
+                          selectedPayLater.code === payLater.code && (
+                            <button
+                              className={`${styles.commonBtn} ${styles.payBtn}`}
+                              onClick={() => {
+                                proceedToPay("PL", selectedPaymentPayload);
+                                acceptOrder();
+                              }}
+                              disabled={isPaymentLoading}
+                            >
+                              {!isPaymentLoading ? (
+                                <>
+                                  {t("resource.common.pay_caps")}{" "}
+                                  {priceFormatCurrencySymbol(
+                                    getCurrencySymbol,
+                                    getTotalValue()
+                                  )}
+                                </>
+                              ) : (
+                                loader
+                              )}
+                            </button>
+                          )
+                        )}
+                      </div>
+                    </div>
+                  )
+              )}
+            </div>
+          </div>
+        );
       case "CARDLESS_EMI":
         return (
-          <CardLessEmi
-            {...uiProps}
-            {...amountProps}
-            {...paymentFlowProps}
-            selectedTabData={selectedTabData}
-            selectedCardless={selectedCardless}
-            getCardlessBorder={getCardlessBorder}
-            translateDynamicLabel={translateDynamicLabel}
-            removeDialogueError={removeDialogueError}
-          />
+          <div>
+            <div
+              className={`${styles.cardlessHeader} ${styles["view-mobile-up"]}`}
+            >
+              {t("resource.checkout.select_emi_option")}
+            </div>
+            <div className={styles.modeOption}>
+              {selectedTabData.list?.map((emi) => (
+                <div
+                  key={emi?.display_name}
+                  className={`${styles.modeItemWrapper} ${getCardlessBorder(emi)}`}
+                  onClick={() => {
+                    removeDialogueError();
+                    selectMop("CARDLESS_EMI", "CARDLESS_EMI", emi.code);
+                  }}
+                >
+                  <label>
+                    <div className={styles.modeItem}>
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <div className={styles.modeItemLogo}>
+                          <img
+                            src={emi?.logo_url?.small}
+                            alt={emi?.display_name}
+                          />
+                        </div>
+                        <div className={styles.modeItemName}>
+                          {translateDynamicLabel(emi?.display_name ?? "", t)}
+                        </div>
+                      </div>
+                      <div className={styles.onMobileView}>
+                        {!selectedCardless ||
+                        selectedCardless.code !== emi.code ? (
+                          <SvgWrapper svgSrc={"radio"}></SvgWrapper>
+                        ) : (
+                          <SvgWrapper svgSrc={"radio-selected"}></SvgWrapper>
+                        )}
+                      </div>
+                    </div>
+                  </label>
+                  {selectedCardless.code === emi.code &&
+                    selectedCardless.code && (
+                      <div className={styles.modePay}>
+                        {isTablet ? (
+                          <StickyPayNow
+                            customClassName={styles.visibleOnTab}
+                            value={priceFormatCurrencySymbol(
+                              getCurrencySymbol,
+                              getTotalValue()
+                            )}
+                            onPriceDetailsClick={onPriceDetailsClick}
+                            enableLinkPaymentOption={enableLinkPaymentOption}
+                            isPaymentLoading={isPaymentLoading}
+                            loader={loader}
+                            proceedToPay={() => {
+                              proceedToPay(
+                                "CARDLESS_EMI",
+                                selectedPaymentPayload
+                              );
+                              acceptOrder();
+                            }}
+                          />
+                        ) : (
+                          <button
+                            className={`${styles.commonBtn} ${styles.payBtn}`}
+                            onClick={() => {
+                              proceedToPay(
+                                "CARDLESS_EMI",
+                                selectedPaymentPayload
+                              );
+                              acceptOrder();
+                            }}
+                            disabled={isPaymentLoading}
+                          >
+                            {!isPaymentLoading ? (
+                              <>
+                                {t("resource.common.pay_caps")}{" "}
+                                {priceFormatCurrencySymbol(
+                                  getCurrencySymbol,
+                                  getTotalValue()
+                                )}
+                              </>
+                            ) : (
+                              loader
+                            )}
+                          </button>
+                        )}
+                      </div>
+                    )}
+                </div>
+              ))}
+            </div>
+          </div>
         );
-
       case "Other":
+        const OtherItem = ({ other, key }) => {
+          return (
+            <div
+              key={key}
+              className={`${styles.modeItemWrapper} ${getOPBorder(other?.list?.[0])}`}
+              onClick={() => {
+                removeDialogueError();
+                if (other?.list?.[0]?.code) {
+                  selectMop("Other", other?.name, other?.list?.[0]?.code);
+                }
+              }}
+            >
+              <label>
+                <div className={styles.modeItem}>
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <div className={styles.modeItemLogo}>
+                      <img
+                        src={other?.list?.[0]?.logo_url?.small}
+                        alt={other?.list?.[0]?.display_name}
+                      />
+                    </div>
+                    <div className={styles.modeItemName}>
+                      {other?.list?.[0]?.display_name ?? ""}
+                    </div>
+                  </div>
+                  <div className={`${styles.otherLeft} ${styles.onMobileView}`}>
+                    {(!selectedOtherPayment ||
+                      selectedOtherPayment?.code !==
+                        other?.list?.[0]?.code) && (
+                      <SvgWrapper svgSrc={"radio"}></SvgWrapper>
+                    )}
+                    {selectedOtherPayment &&
+                      selectedOtherPayment?.code === other?.list?.[0]?.code && (
+                        <SvgWrapper svgSrc="radio-selected" />
+                      )}
+                  </div>
+                  {/* <div className={styles.otherMiddle}>
+                        <img
+                          src={op?.list[0].logo_url?.small}
+                          alt={op.display_name}
+                        />
+                      </div>
+                      <div className={styles.otherRight}>{op.display_name}</div> */}
+                </div>
+              </label>
+              <div className={styles.otherPay}>
+                {isTablet ? (
+                  <StickyPayNow
+                    customClassName={styles.visibleOnTab}
+                    value={priceFormatCurrencySymbol(
+                      getCurrencySymbol,
+                      getTotalValue()
+                    )}
+                    onPriceDetailsClick={onPriceDetailsClick}
+                    disabled={!selectedOtherPayment?.code}
+                    enableLinkPaymentOption={enableLinkPaymentOption}
+                    isPaymentLoading={isPaymentLoading}
+                    loader={loader}
+                    proceedToPay={() => {
+                      proceedToPay("Other", selectedPaymentPayload);
+                      acceptOrder();
+                    }}
+                  />
+                ) : (
+                  selectedOtherPayment?.code &&
+                  selectedOtherPayment.code === other?.list?.[0]?.code && (
+                    <button
+                      className={`${styles.commonBtn} ${styles.payBtn}`}
+                      onClick={() => {
+                        proceedToPay("Other", selectedPaymentPayload);
+                        acceptOrder();
+                      }}
+                      disabled={isPaymentLoading}
+                    >
+                      {!isPaymentLoading ? (
+                        <>
+                          {t("resource.common.pay_caps")}{" "}
+                          {priceFormatCurrencySymbol(
+                            getCurrencySymbol,
+                            getTotalValue()
+                          )}
+                        </>
+                      ) : (
+                        loader
+                      )}
+                    </button>
+                  )
+                )}
+              </div>
+            </div>
+          );
+        };
         return (
-          <OtherPay
-            {...uiProps}
-            {...amountProps}
-            {...paymentFlowProps}
-            otherPaymentOptions={otherPaymentOptions}
-            selectedOtherPayment={selectedOtherPayment}
-            getOPBorder={getOPBorder}
-            removeDialogueError={removeDialogueError}
-          />
+          <div>
+            <div
+              className={`${styles.otherHeader} ${styles["view-mobile-up"]}`}
+            >
+              {t("resource.common.select_payment_option")}
+            </div>
+            <div className={styles.modeOption}>
+              {otherPaymentOptions?.length &&
+                otherPaymentOptions.map((op, index) => (
+                  <OtherItem other={op} key={`other-${index}`} />
+                ))}
+            </div>
+          </div>
         );
-
       default: {
         return (
           <div>
@@ -1237,7 +3570,7 @@ function CheckoutPaymentContent({
               {t("resource.checkout.choose_an_option")}
             </div>
             <div className={styles.modeOption}>
-              {selectedTabData?.list?.map((op) => (
+              {selectedTabData?.list?.map((op, index) => (
                 <div
                   key={op.display_name}
                   className={`${styles.modeItemWrapper} ${getOPBorder()}`}
@@ -1280,14 +3613,8 @@ function CheckoutPaymentContent({
                             customClassName={styles.visibleOnTab}
                             value={priceFormatCurrencySymbol(
                               getCurrencySymbol,
-                              getPayNowValue(),
-                              "en-IN",
-                              null,
-                              true
+                              getTotalValue()
                             )}
-                            disabled={
-                              mopSelectionLoading || isPaymentActionDisabled
-                            }
                             onPriceDetailsClick={onPriceDetailsClick}
                             enableLinkPaymentOption={enableLinkPaymentOption}
                             isPaymentLoading={isPaymentLoading}
@@ -1304,21 +3631,14 @@ function CheckoutPaymentContent({
                               proceedToPay("Other", selectedPaymentPayload);
                               acceptOrder();
                             }}
-                            disabled={
-                              mopSelectionLoading ||
-                              isPaymentLoading ||
-                              isPaymentActionDisabled
-                            }
+                            disabled={isPaymentLoading}
                           >
                             {!isPaymentLoading ? (
                               <>
                                 {t("resource.common.pay_caps")}{" "}
                                 {priceFormatCurrencySymbol(
                                   getCurrencySymbol,
-                                  getPayNowValue(),
-                                  "en-IN",
-                                  null,
-                                  true
+                                  getTotalValue()
                                 )}
                               </>
                             ) : (
@@ -1347,6 +3667,7 @@ function CheckoutPaymentContent({
         <div
           className={styles["linkWrapper-row1"]}
           onClick={() => {
+            const isSelectingPaymentOption = selectedTab !== opt.name;
             if (isTablet) {
               handleScrollToTop(index);
               setSelectedTab((prev) => (prev === opt.name ? "" : opt.name));
@@ -1358,7 +3679,10 @@ function CheckoutPaymentContent({
             removeDialogueError();
             setTab(opt.name);
             toggleMop(opt.name);
-            if (selectedTab !== opt.name) {
+            if (opt.name !== "APPLEPAY" && selectedTab === "APPLEPAY") {
+              resetApplePay();
+            }
+            if (isSelectingPaymentOption) {
               if (isTablet) {
                 setSelectedPaymentPayload({});
               }
@@ -1369,6 +3693,12 @@ function CheckoutPaymentContent({
               setvpa("");
               setLastValidatedBin("");
               unsetSelectedSubMop();
+
+              if (opt.name === "APPLEPAY") {
+                initializeApplePay();
+              }
+            } else if (opt.name === "APPLEPAY" && isTablet) {
+              resetApplePay();
             }
           }}
         >
@@ -1435,8 +3765,49 @@ function CheckoutPaymentContent({
       </div>
     );
   };
+
   return (
     <>
+      {showUPIModal && (
+        // <UktModal
+        //   isOpen={showUPIModal}
+        //   modalClass={styles.upiPoll}
+        //   isCancelable={true}
+        //   showHeader={false}
+        //   title="" // hideHeader is simulated by leaving title empty and customizing CSS if needed
+        // >
+
+        <Modal
+          isOpen={showUPIModal}
+          headerClassName={styles.modalHeader}
+          bodyClassName={styles.modalBody}
+          isCancellable={false}
+          title=""
+          hideHeader={true}
+        >
+          <div style={upiDisplayWrapperStyle}>
+            <div style={upiHeadingStyle}>
+              {t("resource.checkout.complete_your_payment")}
+            </div>
+            <div style={upiVpaStyle}>
+              {t("resource.checkout.sent_to")} {savedUPISelect || vpa}
+            </div>
+            <div style={upiLabelWrapperStyle}>
+              <SvgWrapper svgSrc="upi-payment-popup" />
+            </div>
+            <div style={timeDisplayStyle}>
+              {t("resource.checkout.valid_for")}{" "}
+              <span style={timeDisplaySpanStyle}>
+                {formatTime(timeRemaining)}
+              </span>{" "}
+              {t("resource.common.minutes")}
+            </div>
+            <div style={cancelBtnStyle} onClick={cancelUPIPayment}>
+              {t("resource.checkout.cancel_payment_caps")}
+            </div>
+          </div>
+        </Modal>
+      )}
       {!enableLinkPaymentOption &&
         (!isCouponValid || showCouponValidityModal) && (
           <Modal
@@ -1444,7 +3815,14 @@ function CheckoutPaymentContent({
             isOpen={showCouponValidityModal || !isCouponValid}
             title={couponValidity.title || inValidCouponData?.title}
             notCloseOnclickOutside={true}
-            closeDialog={closeCouponValidityModal}
+            closeDialog={() => {
+              if (mop === "CARD" && subMop === "newCARD") {
+                hideNewCard();
+              }
+              setShowCouponValidityModal(false);
+              setIsCouponValid(true);
+              unsetSelectedSubMop();
+            }}
           >
             <div className={styles.couponValidity}>
               <p className={styles.message}>
@@ -1453,13 +3831,24 @@ function CheckoutPaymentContent({
               <div className={styles.select}>
                 <div
                   className={`${styles.commonBtn} ${styles.yesBtn}`}
-                  onClick={confirmCouponRemoval}
+                  onClick={() => {
+                    removeCoupon();
+                    setShowCouponValidityModal(false);
+                    setIsCouponValid(true);
+                  }}
                 >
                   {t("resource.common.yes")}
                 </div>
                 <div
                   className={`${styles.commonBtn} ${styles.noBtn}`}
-                  onClick={cancelCouponRemoval}
+                  onClick={() => {
+                    if (mop === "CARD" && subMop === "newCARD") {
+                      hideNewCard();
+                    }
+                    setShowCouponValidityModal(false);
+                    setIsCouponValid(true);
+                    unsetSelectedSubMop();
+                  }}
                 >
                   {t("resource.common.no")}
                 </div>
@@ -1467,43 +3856,95 @@ function CheckoutPaymentContent({
             </div>
           </Modal>
         )}
-
-      <Modal
-        customClassName={styles.splitCreditNoteConfirmationModal}
-        isOpen={showSplitCreditNoteConfirmation}
-        title="Confirm Split Payment"
-        notCloseOnclickOutside={true}
-        closeDialog={cancelSplitCreditNoteSelection}
-      >
-        <div className={styles.splitCreditNoteConfirmation}>
-          <p className={styles.splitCreditNoteConfirmationMessage}>
-            You have selected Credit Note with Split Payment. If you continue,
-            your Credit Note will be applied to this order and can only be
-            refunded after the order is cancelled.
-          </p>
-          <div className={styles.splitCreditNoteConfirmationActions}>
-            <button
-              className={`${styles.splitCreditNoteConfirmationButton} ${styles.cancelSplitCreditNoteButton}`}
-              onClick={cancelSplitCreditNoteSelection}
-              type="button"
+      {showUpiRedirectionModal && (
+        <Modal isOpen={showUpiRedirectionModal} hideHeader={true}>
+          <div className={styles.upiRedirectionModal}>
+            <div className={styles.loader}></div>
+            <p className={styles.title}>
+              {t("resource.checkout.finalising_payment")}
+            </p>
+            <p className={styles.message}>
+              {t("resource.checkout.redirecting_upi")}
+            </p>
+            <div
+              style={cancelBtnStyle}
+              onClick={() => {
+                setShowUpiRedirectionModal(false);
+                cancelUpiAppPayment();
+              }}
             >
-              Cancel
-            </button>
+              {t("resource.checkout.cancel_payment_caps")}
+            </div>
+          </div>
+        </Modal>
+      )}
+      {isCodModalOpen && isTablet && (
+        <Modal
+          isOpen={isCodModalOpen}
+          hideHeader={true}
+          closeDialog={() => {
+            setIsCodModalOpen(false);
+            setTab("");
+            setSelectedTab("");
+          }}
+        >
+          <div className={styles.codModal}>
+            <div className={styles.codIconsContainer}>
+              <SvgWrapper svgSrc="cod-icon"></SvgWrapper>
+              <span
+                className={styles.closeCodModal}
+                onClick={() => {
+                  setIsCodModalOpen(false);
+                  setTab("");
+                  setSelectedTab("");
+                }}
+              >
+                <SvgWrapper svgSrc="closeBold"></SvgWrapper>
+              </span>
+            </div>
+            <div>
+              <p className={styles.message}>
+                {t("resource.checkout.confirm_cod")}
+              </p>
+              {codCharges > 0 && (
+                <p className={styles.codCharges}>
+                  +{priceFormatCurrencySymbol(getCurrencySymbol, codCharges)}{" "}
+                  {t("resource.checkout.extra_charges")}
+                </p>
+              )}
+            </div>
             <button
-              className={`${styles.splitCreditNoteConfirmationButton} ${styles.proceedSplitCreditNoteButton}`}
-              disabled={
-                isSplitPaymentCouponValidating || isSplitCreditNoteProceeding
-              }
-              onClick={confirmSplitCreditNoteSelection}
-              type="button"
+              className={`${styles.commonBtn} ${styles.payBtn}`}
+              onClick={() => proceedToPay("COD", selectedPaymentPayload)}
+              disabled={isPaymentLoading}
             >
-              Proceed
+              {!isPaymentLoading ? (
+                <>
+                  {t("resource.checkout.continue_with_cod")}{" "}
+                  {priceFormatCurrencySymbol(
+                    getCurrencySymbol,
+                    getTotalValue()
+                  )}
+                </>
+              ) : (
+                loader
+              )}
             </button>
           </div>
-        </div>
-      </Modal>
-
-      {shouldShowFullPaymentSkeleton ? (
+        </Modal>
+      )}
+      {isCvvNotNeededModal && isTablet && (
+        <Modal
+          isOpen={isCvvNotNeededModal}
+          closeDialog={() => setIsCvvNotNeededModal(false)}
+          title={t("resource.checkout.cvv_not_needed")}
+        >
+          <p className={styles.cvvNotNeededModal}>
+            {t("resource.checkout.card_saved_rbi")}
+          </p>
+        </Modal>
+      )}
+      {isLoading ? (
         <div className={styles.container}>
           <CheckoutPaymentSkeleton />
         </div>
@@ -1513,15 +3954,12 @@ function CheckoutPaymentContent({
         >
           {true ? (
             <>
-              {shouldShowStoreCredit && (
+              {partialPaymentOption?.list[0]?.balance?.account?.status !==
+                "INACTIVE" && (
                 <div className={styles.creditNote}>
                   <CreditNote
                     data={partialPaymentOption}
                     updateStoreCredits={updateStoreCredits}
-                    validateCouponOnCreditNoteApplied={
-                      validateCouponOnCreditNoteApplied
-                    }
-                    isCouponApplied={isCouponApplied}
                   />
                 </div>
               )}
@@ -1529,314 +3967,140 @@ function CheckoutPaymentContent({
               {creditUpdating ? (
                 <CheckoutPaymentSkeleton />
               ) : (
-                <>
-                  {isSplitPaymentEnabled && (
-                    <div
-                      className={`${styles.splitPaymentOption} ${isSplitPaymentSelected ? styles.selectedSplitPaymentOption : ""}`}
-                    >
-                      <div className={styles.splitPaymentDetails}>
-                        <div className={styles.splitPaymentHeader}>
-                          <span className={styles.splitPaymentTitleWrapper}>
-                            <span className={styles.splitPaymentTitle}>
-                              {splitPaymentLabel}
-                            </span>
-                            <button
-                              aria-label="Split payment information"
-                              className={styles.splitPaymentInfoButton}
-                              type="button"
-                            >
-                              <SvgWrapper
-                                className={styles.splitPaymentInfoIcon}
-                                svgSrc="info-grey"
-                              />
-                              <span className={styles.splitPaymentInfoTooltip}>
-                                You can check your pending orders in the My
-                                Orders section and complete the payment for the
-                                remaining amount before the order times out.
-                              </span>
-                            </button>
-                          </span>
-                          <span className={styles.splitPaymentBadge}>
-                            <svg
-                              className={styles.splitPaymentBadgeIcon}
-                              aria-hidden="true"
-                              focusable="false"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                d="M9.78 11.16 8.36 12.58 5.79 10l2.57-2.58 1.42 1.42L9.62 9H10c1.1 0 2-.9 2-2V4.41l-1.79 1.8L8.8 4.8 13 .59l4.2 4.2-1.41 1.41L14 4.41V7c0 2.21-1.79 4-4 4h-.38l.16.16Zm4.44 1.68 1.42-1.42L18.21 14l-2.57 2.58-1.42-1.42.16-.16H14c-1.1 0-2 .9-2 2v2.59l1.79-1.8 1.41 1.41-4.2 4.21-4.2-4.2 1.41-1.41L10 19.59V17c0-2.21 1.79-4 4-4h.38l-.16-.16Z"
-                                fill="currentColor"
-                              />
-                            </svg>
-                            {splitPaymentAvailabilityLabel}
-                          </span>
-                          {!isSplitPaymentSelected && (
-                            <button
-                              className={`${styles.splitPaymentAction} ${
-                                isSplitPaymentActionDisabled
-                                  ? styles.disabledSplitPaymentAction
-                                  : ""
-                              }`}
-                              disabled={isSplitPaymentActionDisabled}
-                              type="button"
-                              onClick={handleSplitPaymentChange}
-                            >
-                              Use Split Payment
-                            </button>
-                          )}
-                        </div>
-                        {isSplitPaymentSelected &&
-                          isSplitPaymentLoading &&
-                          !shouldHideSplitPaymentAmountField && (
-                          <div className={styles.splitPaymentAmountField}>
-                            <Skeleton type="text" width={96} height={14} />
-                            <Skeleton
-                              className={styles.splitPaymentInputSkeleton}
-                              type="box"
-                              height={48}
-                            />
-                            <Skeleton type="text" width="70%" height={14} />
-                          </div>
-                        )}
-                        {isSplitPaymentSelected &&
-                          !isSplitPaymentLoading &&
-                          !shouldHideSplitPaymentAmountField && (
+                <div
+                  className={`${styles.paymentOptions} ${!getTotalValue() ? styles.displayNone : ""}`}
+                >
+                  <div className={styles.navigationLink}>
+                    {paymentOptions?.map((opt, index) =>
+                      navigationTitle(opt, index)
+                    )}
+                    {otherPaymentOptions?.length > 0 && (
+                      <div
+                        className={`${styles.linkWrapper} ${selectedTab === "Other" && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === "Other" && isTablet ? styles.headerHightlight : ""}`}
+                      >
+                        <div
+                          className={styles["linkWrapper-row1"]}
+                          onClick={() => {
+                            setTab("Other");
+                            setSelectedTab("Other");
+                            toggleMop("Other");
+                          }}
+                        >
                           <div
-                            ref={splitPaymentAmountRef}
-                            className={styles.splitPaymentAmountField}
+                            className={`${selectedTab === "Other" ? styles.indicator : ""} ${styles.onDesktopView}`}
                           >
-                            <label className={styles.splitPaymentFieldLabel}>
-                              {splitPaymentInputLabel}
-                            </label>
-                            <div
-                              className={`${styles.splitPaymentInputWrapper} ${
-                                !isResumeSplitCodSelected && splitPaymentAmountError
-                                  ? styles.splitPaymentInputError
-                                  : ""
-                              }`}
-                            >
-                              <span className={styles.splitPaymentPrefix}>
-                                {splitPaymentCurrencySymbol}
-                              </span>
-                              <input
-                                className={styles.splitPaymentInput}
-                                disabled={isResumeSplitCodSelected}
-                                inputMode="decimal"
-                                onBlur={handleSplitPaymentAmountBlur}
-                                onChange={handleSplitPaymentAmountChange}
-                                type="text"
-                                value={
-                                  isResumeSplitCodSelected
-                                    ? (splitPaymentConfig?.remainingAmount ??
-                                      splitPaymentConfig?.remaining_amount ??
-                                      splitPaymentAmount)
-                                    : splitPaymentAmount
-                                }
-                              />
+                            &nbsp;
+                          </div>
+                          <div className={styles.link}>
+                            <div className={styles.icon}>
+                              {/* <img src={opt.svg} alt="" /> */}
+                              <SvgWrapper svgSrc="payment-other"></SvgWrapper>
                             </div>
-                            <p
-                              className={
-                                isResumeSplitCodSelected
-                                  ? styles.codInfo
-                                  : `${styles.splitPaymentAssistiveText} ${
-                                      splitPaymentAmountError
-                                        ? styles.splitPaymentErrorText
-                                        : ""
-                                    }`
-                              }
+                            <div
+                              className={`${styles.modeName} ${selectedTab === "Other" ? styles.selectedModeName : ""}`}
                             >
-                              {isResumeSplitCodSelected
-                                ? resumeSplitCodMessage
-                                : splitPaymentAmountError ||
-                                  splitPaymentInputAssistiveText}
-                            </p>
+                              {paymentOptions?.length > 0 &&
+                              otherPaymentOptions?.length > 0
+                                ? t("resource.checkout.more_payment_options")
+                                : t("resource.checkout.pay_online")}
+                            </div>
+                          </div>
+                          <div
+                            className={`${styles.arrowContainer}  ${styles.activeIconColor}`}
+                          >
+                            <SvgWrapper
+                              className={
+                                selectedTab === "Other" && activeMop === "Other"
+                                  ? styles.upsideDown
+                                  : ""
+                              }
+                              svgSrc="accordion-arrow"
+                            />
+                          </div>
+                        </div>
+                        {isTablet && activeMop === "Other" && (
+                          <div className={` ${styles.onMobileView}`}>
+                            {selectedTab === "Other" && navigationTab()}
                           </div>
                         )}
                       </div>
-                    </div>
-                  )}
-
-                  {isSplitCodPaymentActive && (
-                    <div className={styles.splitPaymentBackRow}>
-                      <button
-                        aria-label="Back to split payment"
-                        className={styles.splitPaymentBackButton}
-                        onClick={handleSplitCodBack}
-                        type="button"
-                      >
-                        <span className={styles.splitPaymentBackIcon}>
-                          <SvgWrapper svgSrc="back" />
-                        </span>
-                        <span className={styles.splitPaymentBackText}>
-                          {splitPaymentLabel}
-                        </span>
-                      </button>
-                    </div>
-                  )}
-
-                  {isPaymentOptionsRefreshing ? (
-                    <div
-                      className={`${styles.paymentOptions} ${shouldHidePaymentOptions ? styles.displayNone : ""}`}
-                    >
-                      <CheckoutPaymentSkeleton />
-                    </div>
-                  ) : (
-                    <div
-                      className={`${styles.paymentOptions} ${shouldHidePaymentOptions ? styles.displayNone : ""}`}
-                    >
-                      <div className={styles.navigationLink}>
-                        {paymentOptions?.map((opt, index) =>
-                          navigationTitle(opt, index)
-                        )}
-                        {otherPaymentOptions?.length > 0 && (
-                          <div
-                            className={`${styles.linkWrapper} ${selectedTab === "Other" && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === "Other" && isTablet ? styles.headerHightlight : ""}`}
-                          >
+                    )}
+                    {codOption && (
+                      <div style={{ display: "flex", flex: "1" }}>
+                        <div
+                          className={`${styles.linkWrapper} ${selectedTab === codOption.name && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === codOption.name && isTablet ? styles.headerHightlight : ""}`}
+                          key={codOption?.display_name ?? ""}
+                          onClick={() => {
+                            selectMop(
+                              codOption.name,
+                              codOption.name,
+                              codOption.name
+                            );
+                          }}
+                        >
+                          <div className={styles["linkWrapper-row1"]}>
                             <div
-                              className={styles["linkWrapper-row1"]}
-                              onClick={() => {
-                                setTab("Other");
-                                setSelectedTab("Other");
-                                toggleMop("Other");
-                              }}
+                              className={` ${selectedTab === codOption.name ? styles.indicator : ""} ${styles.onDesktopView}`}
                             >
-                              <div
-                                className={`${selectedTab === "Other" ? styles.indicator : ""} ${styles.onDesktopView}`}
-                              >
-                                &nbsp;
-                              </div>
-                              <div className={styles.link}>
-                                <div className={styles.icon}>
-                                  {/* <img src={opt.svg} alt="" /> */}
-                                  <SvgWrapper svgSrc="payment-other"></SvgWrapper>
-                                </div>
-                                <div
-                                  className={`${styles.modeName} ${selectedTab === "Other" ? styles.selectedModeName : ""}`}
-                                >
-                                  {paymentOptions?.length > 0 &&
-                                  otherPaymentOptions?.length > 0
-                                    ? t(
-                                        "resource.checkout.more_payment_options"
-                                      )
-                                    : t("resource.checkout.pay_online")}
-                                </div>
-                              </div>
-                              <div
-                                className={`${styles.arrowContainer}  ${styles.activeIconColor}`}
-                              >
-                                <SvgWrapper
-                                  className={
-                                    selectedTab === "Other" &&
-                                    activeMop === "Other"
-                                      ? styles.upsideDown
-                                      : ""
-                                  }
-                                  svgSrc="accordion-arrow"
-                                />
-                              </div>
+                              &nbsp;
                             </div>
-                            {isTablet && activeMop === "Other" && (
-                              <div className={` ${styles.onMobileView}`}>
-                                {selectedTab === "Other" && navigationTab()}
+                            <div className={styles.link}>
+                              <div className={styles.icon}>
+                                <SvgWrapper svgSrc={codOption.svg}></SvgWrapper>
                               </div>
-                            )}
-                          </div>
-                        )}
-                        {codOption && (
-                          <div style={{ display: "flex", flex: "1" }}>
-                            <div
-                              className={`${styles.linkWrapper} ${selectedTab === codOption.name && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === codOption.name && isTablet ? styles.headerHightlight : ""}`}
-                              key={codOption?.display_name ?? ""}
-                              onClick={async () => {
-                                if (shouldShowSplitCodAction) {
-                                  removeDialogueError();
-                                  toggleMop(codOption.name);
-                                  await selectMop(
-                                    codOption.name,
-                                    codOption.name,
-                                    codOption.name
-                                  );
-
-                                  return;
-                                }
-
-                                selectMop(
-                                  codOption.name,
-                                  codOption.name,
-                                  codOption.name
-                                );
-                              }}
-                            >
-                              <div className={styles["linkWrapper-row1"]}>
+                              <div>
                                 <div
-                                  className={` ${selectedTab === codOption.name ? styles.indicator : ""} ${styles.onDesktopView}`}
+                                  className={`${styles.modeName} ${selectedTab === codOption.name ? styles.selectedModeName : ""}`}
                                 >
-                                  &nbsp;
+                                  {translateDynamicLabel(
+                                    codOption?.display_name ?? "",
+                                    t
+                                  )}
                                 </div>
-                                <div className={styles.link}>
-                                  <div className={styles.icon}>
-                                    <SvgWrapper
-                                      svgSrc={codOption.svg}
-                                    ></SvgWrapper>
-                                  </div>
-                                  <div>
-                                    <div
-                                      className={`${styles.modeName} ${selectedTab === codOption.name ? styles.selectedModeName : ""}`}
-                                    >
-                                      {translateDynamicLabel(
-                                        codOption?.display_name ?? "",
-                                        t
-                                      )}
-                                    </div>
-                                    {isTablet && codCharges > 0 && (
-                                      <div className={styles.codCharge}>
-                                        +
-                                        {priceFormatCurrencySymbol(
-                                          getCurrencySymbol,
-                                          codCharges,
-                                          "en-IN",
-                                          null,
-                                          true
-                                        )}{" "}
-                                        {t("resource.checkout.extra_charges")}
-                                      </div>
-                                    )}
-                                  </div>
-                                </div>
-                                {codOption?.image_src && (
-                                  <div className={styles["payment-icons"]}>
-                                    <img
-                                      src={codOption?.image_src}
-                                      alt={codOption?.svg}
-                                    />
+                                {isTablet && codCharges > 0 && (
+                                  <div className={styles.codCharge}>
+                                    +
+                                    {priceFormatCurrencySymbol(
+                                      getCurrencySymbol,
+                                      codCharges
+                                    )}{" "}
+                                    {t("resource.checkout.extra_charges")}
                                   </div>
                                 )}
-                                <div
-                                  className={`${styles.arrowContainer} ${styles.activeIconColor} ${styles.codIconContainer}`}
-                                >
-                                  <SvgWrapper svgSrc="accordion-arrow" />
-                                </div>
                               </div>
-                              {isTablet && (
-                                <div>
-                                  {selectedTab === codOption.name &&
-                                    navigationTab()}
-                                </div>
-                              )}
+                            </div>
+                            {codOption?.image_src && (
+                              <div className={styles["payment-icons"]}>
+                                <img
+                                  src={codOption?.image_src}
+                                  alt={codOption?.svg}
+                                />
+                              </div>
+                            )}
+                            <div
+                              className={`${styles.arrowContainer} ${styles.activeIconColor} ${styles.codIconContainer}`}
+                            >
+                              <SvgWrapper svgSrc="accordion-arrow" />
                             </div>
                           </div>
-                        )}
-                      </div>
-                      {!isTablet && (
-                        <div
-                          className={`${styles.navigationTab} ${styles.onDesktopView}`}
-                        >
-                          {navigationTab()}
+                          {isTablet && (
+                            <div>
+                              {selectedTab === codOption.name &&
+                                navigationTab()}
+                            </div>
+                          )}
                         </div>
-                      )}
+                      </div>
+                    )}
+                  </div>
+                  {!isTablet && (
+                    <div
+                      className={`${styles.navigationTab} ${styles.onDesktopView}`}
+                    >
+                      {navigationTab()}
                     </div>
                   )}
-                </>
+                </div>
               )}
             </>
           ) : (

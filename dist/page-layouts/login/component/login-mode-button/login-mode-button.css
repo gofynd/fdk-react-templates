@@ -339,7 +339,7 @@ h5,
   align-items: center;
   padding: 12px;
   background-color: transparent;
-  border-radius: var(--buttonRadius, 0px);
+  border-radius: 4px;
   border: 1px solid var(--dividerStokes, #d4d1d1);
   cursor: pointer;
   width: 100%;
@@ -352,7 +352,7 @@ h5,
   flex: 0 0 24px;
 }
 .login-mode-button__loginModeBtn___BqUzp svg path {
-  fill: var(--textBody, #3c3131);
+  fill: #000;
 }
 .login-mode-button__loginModeBtn___BqUzp:hover {
   background-color: var(--buttonPrimary, #4e3f09);

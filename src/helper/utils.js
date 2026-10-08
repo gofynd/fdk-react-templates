@@ -1,10 +1,4 @@
-import {
-  DEFAULT_CURRENCY_LOCALE,
-  DEFAULT_UTC_LOCALE,
-  IMAGE_OPTIMIZATION_CONFIG,
-  RESPONSIVE_IMAGE_BREAKPOINTS,
-  TYPOGRAPHY_RULES,
-} from "./constant";
+import { DEFAULT_CURRENCY_LOCALE, DEFAULT_UTC_LOCALE } from "./constant";
 
 export const debounce = (func, wait) => {
   let timeout;
@@ -28,18 +22,6 @@ export function replaceQueryPlaceholders(queryFormat, value1, value2) {
 
 export const singleValuesFilters = {
   sortOn: true,
-};
-
-/**
- * Validates custom badge (teaser_tag) for display.
- * Returns false if badge is empty, whitespace-only, single character, or "."
- * @param {string|null|undefined} teaserTag - The custom badge text
- * @returns {boolean} - True if badge should be rendered
- */
-export const isValidCustomBadge = (teaserTag) => {
-  if (teaserTag == null || typeof teaserTag !== "string") return false;
-  const trimmed = teaserTag.trim();
-  return trimmed.length > 1 && trimmed !== ".";
 };
 
 export function roundToDecimals(number, decimalPlaces = 2) {
@@ -84,8 +66,7 @@ export function convertDate(dateString, locale = "en-US") {
   const date = new Date(dateString);
 
   // Use browser's local timezone with fallback to UTC
-  const browserTimezone =
-    Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+  const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
 
   const options = {
     month: "long",
@@ -103,7 +84,7 @@ export function convertDate(dateString, locale = "en-US") {
 }
 
 export function validateName(name) {
-  const regexp = /^\p{L}+(?:[' -]\p{L}+)*$/u;
+  const regexp = /^[a-zA-Z0-9-_'. ]+$/;
   return regexp.test(String(name).toLowerCase().trim());
 }
 
@@ -150,8 +131,7 @@ export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
       return "Invalid date";
     }
 
-    const browserTimezone =
-      Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+    const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
     // console.log("🌐 Detected browser time zone →", browserTimezone);
 
     const options = {
@@ -171,6 +151,7 @@ export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
     return "Invalid date";
   }
 };
+
 
 export function validateEmailField(value) {
   const emailPattern =
@@ -194,97 +175,14 @@ export function checkIfNumber(value) {
   return numberPattern.test(value);
 }
 
-const IMAGE_VARIANT_PATTERN =
-  /\/(?:original|\d+x\d+|resize-(?:w|h)?:[0-9]+(?:,(?:w|h)*:?[\d]*)?)\//;
-const RESIZABLE_IMAGE_KEYS = [
-  "original",
-  "30x0",
-  "44x0",
-  "66x0",
-  "50x0",
-  "75x0",
-  "60x60",
-  "90x90",
-  "100x0",
-  "130x200",
-  "135x0",
-  "270x0",
-  "360x0",
-  "500x0",
-  "400x0",
-  "540x0",
-  "720x0",
-  "312x480",
-  "resize-(w|h)?:[0-9]+(,)?(w|h)*(:)?[0-9]*",
-];
-
-export const isGifImageUrl = (url = "") =>
-  /\.gif(\?|#|$)/i.test(String(url || ""));
-
-export const replaceImageVariant = (url = "", variant = "original") => {
-  if (!url) return url;
-  const normalizedVariant = String(variant || "original").replace(
-    /^\/|\/$/g,
-    ""
-  );
-  return IMAGE_VARIANT_PATTERN.test(url)
-    ? url.replace(IMAGE_VARIANT_PATTERN, `/${normalizedVariant}/`)
-    : url;
-};
-
-const findImageSizeKey = (url = "") => {
-  for (let j = 0; j < RESIZABLE_IMAGE_KEYS.length; j++) {
-    if (url?.match(new RegExp(`/${RESIZABLE_IMAGE_KEYS[j]}/`))) {
-      return RESIZABLE_IMAGE_KEYS[j];
-    }
-  }
-  return "";
-};
-
-export const getResponsiveImageSources = (
-  sources = RESPONSIVE_IMAGE_BREAKPOINTS
-) => sources?.map((source) => ({ ...source })) || [];
-
-export const getResponsiveImageBaseUrl = (url = "", width = 200) => {
-  if (!url) return url;
-  if (isGifImageUrl(url)) {
-    return replaceImageVariant(url, "original");
-  }
-  const key = findImageSizeKey(url);
-  return key && width ? transformImage(url, key, width) : url;
-};
-
-export const getResponsiveImageSrcSet = (
-  url = "",
-  sources = RESPONSIVE_IMAGE_BREAKPOINTS
-) => {
-  if (!url || isGifImageUrl(url)) {
-    return "";
-  }
-
-  const key = findImageSizeKey(url);
-  if (!key) {
-    return "";
-  }
-
-  return sources
-    .map((source) => `${transformImage(url, key, source.width)} ${source.width}w`)
-    .join(", ");
-};
-
-/**
- * Transform image URL with DPR support for better quality on retina displays
- * @param {string} url - Original image URL
- * @param {string} key - Image size key to replace
- * @param {number} width - Target width in pixels
- * @returns {string} Transformed image URL with DPR parameter
- */
 export const transformImage = (url, key, width) => {
-  // DPR is intentionally fixed at 1 — RESPONSIVE_IMAGE_BREAKPOINTS already bakes
-  // DPR into width values. Auto-detecting window.devicePixelRatio caused SSR/client
-  // URL mismatch (dpr=1 on server, dpr=2 on client) which re-fetched every image on hydration.
-  const dpr = 1;
-
+  const dpr = Math.min(
+    Math.max(
+      Math.round(isRunningOnClient() ? window.devicePixelRatio || 1 : 1),
+      1
+    ),
+    5
+  );
   let updatedUrl = url;
   if (key && width) {
     const str = `/${key}/`;
@@ -292,8 +190,7 @@ export const transformImage = (url, key, width) => {
   }
   try {
     const parsedUrl = new URL(updatedUrl);
-    // Use .set() instead of .append() to replace existing dpr parameter and avoid duplicates
-    parsedUrl.searchParams.set("dpr", dpr);
+    parsedUrl.searchParams.append("dpr", 1);
     return parsedUrl.toString();
   } catch (error) {
     return updatedUrl;
@@ -397,30 +294,13 @@ export const getLocaleFromCurrency = (currencyCode) => {
  * @param {string} currencyCode - Currency code (e.g., 'USD', 'AED', 'INR') - used to override locale if provided
  * @returns {string} Formatted currency string
  */
-export const currencyFormat = (
-  value,
-  currencySymbol,
-  locale = "en-IN",
-  currencyCode = null,
-  forceDecimals = false
-) => {
-  if (value == null || value === "") {
-    return "";
-  }
+export const currencyFormat = (value, currencySymbol, locale = "en-IN", currencyCode = null) => {
+  if (value == null || value === "") return "";
 
   // Convert to number if it's a string
-  let num = typeof value === "string" ? parseFloat(value) : value;
+  const num = typeof value === "string" ? parseFloat(value) : value;
 
-  // Ensure it's a number, not NaN
-  if (Number.isNaN(num)) {
-    return "";
-  }
-
-  // Convert to number explicitly to handle edge cases
-  num = Number(num);
-  if (Number.isNaN(num)) {
-    return "";
-  }
+  if (Number.isNaN(num)) return "";
 
   // If currency code is provided, use it to determine locale
   let finalLocale = locale;
@@ -428,21 +308,18 @@ export const currencyFormat = (
     finalLocale = getLocaleFromCurrency(currencyCode);
   }
 
-  // Ensure locale is valid, fallback to en-IN if not
-  if (!finalLocale || finalLocale === "en" || finalLocale === "") {
-    finalLocale = "en-IN";
-  }
+  // Determine if we should use Indian numbering system
+  const isIndianLocale = finalLocale === "en-IN" || finalLocale?.startsWith("en-IN");
 
   try {
-    // Always force the Latin (latn) numbering system so prices render with
-    // Western digits across all locales (e.g. SAR -> ar-SA), matching the rest
-    // of the storefront. Locale-aware grouping/decimal separators are preserved.
-    const localeString = `${finalLocale}-u-nu-latn`;
+    // Use Intl.NumberFormat for locale-aware formatting
+    const numberingSystem = isIndianLocale ? "latn" : undefined;
+    const localeString = numberingSystem
+      ? `${finalLocale}-u-nu-${numberingSystem}`
+      : finalLocale;
 
-    const hasDecimal = forceDecimals && num % 1 !== 0;
     const formatter = new Intl.NumberFormat(localeString, {
-      minimumFractionDigits: hasDecimal ? 2 : 0,
-      maximumFractionDigits: forceDecimals ? 2 : 20,
+      maximumFractionDigits: 20,
       useGrouping: true,
     });
 
@@ -463,16 +340,12 @@ export const currencyFormat = (
     }
 
     return finalResult;
-  } catch (error) {
+  } catch {
     // Fallback to basic formatting if locale is invalid
     console.warn(
       `Invalid locale "${finalLocale}", falling back to default formatting`
     );
-    const hasDecimal = forceDecimals && num % 1 !== 0;
-    const formattedValue = num.toLocaleString("en-US", {
-      minimumFractionDigits: hasDecimal ? 2 : 0,
-      maximumFractionDigits: forceDecimals ? 2 : 20,
-    });
+    const formattedValue = num.toLocaleString("en-US");
     if (currencySymbol && /^[A-Z]+$/.test(currencySymbol)) {
       return `${currencySymbol} ${formattedValue}`;
     }
@@ -482,6 +355,7 @@ export const currencyFormat = (
     return formattedValue;
   }
 };
+
 
 export const getReviewRatingData = function (customMeta) {
   const data = {};
@@ -587,13 +461,7 @@ export function deepEqual(obj1, obj2) {
  * @param {string} currencyCode - Currency code (e.g., 'USD', 'AED', 'INR') - used to override locale if provided
  * @returns {string} Formatted price string with currency symbol
  */
-export function priceFormatCurrencySymbol(
-  symbol,
-  price = 0,
-  locale = "en-IN",
-  currencyCode = null,
-  forceDecimals = false
-) {
+export function priceFormatCurrencySymbol(symbol, price = 0, locale = "en-IN", currencyCode = null) {
   if (price == null || price === "") return "";
 
   // Convert to number if it's a string
@@ -610,29 +478,31 @@ export function priceFormatCurrencySymbol(
     finalLocale = getLocaleFromCurrency(currencyCode);
   }
 
-  try {
-    // Always force the Latin (latn) numbering system so prices render with
-    // Western digits across all locales (e.g. SAR -> ar-SA), matching the rest
-    // of the storefront. Locale-aware grouping/decimal separators are preserved.
-    const localeString = `${finalLocale}-u-nu-latn`;
+  // Determine if we should use Indian numbering system
+  const isIndianLocale = finalLocale === "en-IN" || finalLocale?.startsWith("en-IN");
 
-    const hasDecimal = forceDecimals && num % 1 !== 0;
+  try {
+    // Use Intl.NumberFormat for locale-aware formatting
+    const numberingSystem = isIndianLocale ? "latn" : undefined;
+    const localeString = numberingSystem
+      ? `${finalLocale}-u-nu-${numberingSystem}`
+      : finalLocale;
+
     const formatter = new Intl.NumberFormat(localeString, {
-      minimumFractionDigits: hasDecimal ? 2 : 0,
+      minimumFractionDigits: 0,
       maximumFractionDigits: 2,
       useGrouping: true,
     });
 
-    const sign = num < 0 ? "- " : "";
-    const formattedPrice = formatter.format(Math.abs(num));
+    const formattedPrice = formatter.format(num);
     const hasAlphabeticCurrency = /^[A-Za-z]+$/.test(symbol);
 
     // Handle currency symbol placement
     let finalResult;
     if (hasAlphabeticCurrency) {
-      finalResult = `${sign}${symbol} ${formattedPrice}`;
+      finalResult = `${symbol} ${formattedPrice}`;
     } else {
-      finalResult = `${sign}${symbol}${formattedPrice}`;
+      finalResult = `${symbol}${formattedPrice}`;
     }
 
     return finalResult;
@@ -641,9 +511,8 @@ export function priceFormatCurrencySymbol(
     console.warn(
       `Invalid locale "${finalLocale}", falling back to default formatting`
     );
-    const hasDecimal = forceDecimals && num % 1 !== 0;
     const formattedPrice = num.toLocaleString("en-US", {
-      minimumFractionDigits: hasDecimal ? 2 : 0,
+      minimumFractionDigits: 0,
       maximumFractionDigits: 2,
     });
     const hasAlphabeticCurrency = /^[A-Za-z]+$/.test(symbol);
@@ -694,9 +563,7 @@ export const formatLocale = (locale, countryCode, isCurrencyLocale = false) => {
   if (locale === "en" || !locale) {
     return DEFAULT_UTC_LOCALE;
   }
-  const finalLocale = locale.includes("-")
-    ? locale
-    : `${locale}${countryCode ? "-" + countryCode : ""}`;
+  const finalLocale = locale.includes("-") ? locale : `${locale}${countryCode ? "-" + countryCode : ""}`;
 
   return isValidLocale(finalLocale) ? finalLocale : DEFAULT_UTC_LOCALE;
 };
@@ -707,7 +574,10 @@ export const translateValidationMessages = (validationObject, t) => {
   Object.keys(updatedValidation).forEach((key) => {
     const rule = updatedValidation[key];
 
-    if (typeof rule === "object" && rule.message) {
+    if (
+      typeof rule === "object" &&
+      rule.message
+    ) {
       rule.message = translateDynamicLabel(rule.message, t);
     } else if (typeof rule === "string") {
       updatedValidation[key] = translateDynamicLabel(rule, t);
@@ -734,9 +604,8 @@ export const getAddressStr = (item, isAddressTypeAvailable) => {
       parts.unshift(item.address_type);
     }
     let addressStr = parts.join(", ");
-    const postalCode = item.area_code || item.pincode;
-    if (postalCode) {
-      addressStr += ` ${postalCode}`;
+    if (item.area_code) {
+      addressStr += ` ${item.area_code}`;
     }
     if (item.country) {
       // Handle country as object or string
@@ -800,83 +669,6 @@ export function translateDynamicLabel(input, t) {
     console.warn("Error in translateDynamicLabel:", error);
     return typeof input === "string" ? input : "";
   }
-}
-
-/**
- * Checks if an error message is a generic JavaScript error that shouldn't be shown to users.
- * These are typically internal errors that should be handled gracefully.
- * Only meaningful API/validation errors should be displayed to users.
- *
- * @param {string|null|undefined} errorMessage - The error message to check
- * @returns {boolean} - True if the error is a generic JS error, false otherwise
- */
-export function isGenericJSError(errorMessage) {
-  // Early return for null, undefined, or non-string types
-  if (!errorMessage || typeof errorMessage !== "string") {
-    return false;
-  }
-
-  const errorLower = errorMessage.toLowerCase();
-
-  // Check for common generic JavaScript error patterns
-  const genericErrorPatterns = [
-    "cannot read properties",
-    "reading 'find'",
-    "reading 'map'",
-    "reading 'length'",
-    "reading 'slice'",
-    "reading 'filter'",
-    "reading 'reduce'",
-    "reading 'forEach'",
-    "reading 'push'",
-    "reading 'pop'",
-    "is not a function",
-    "is not defined",
-    "cannot read",
-    "typeerror",
-    "referenceerror",
-    "syntaxerror",
-    "rangeerror",
-    "undefined is not",
-    "null is not",
-  ];
-
-  // Check if error message contains any generic error patterns
-  const hasGenericPattern = genericErrorPatterns.some((pattern) =>
-    errorLower.includes(pattern)
-  );
-
-  // Also check for the specific pattern: "undefined" + "reading"
-  const hasUndefinedReadingPattern =
-    errorLower.includes("undefined") && errorLower.includes("reading");
-
-  return hasGenericPattern || hasUndefinedReadingPattern;
-}
-
-/**
- * Validates if an error message is valid and should be displayed to users.
- * Filters out generic JavaScript errors and empty/invalid messages.
- *
- * @param {string|null|undefined} errorMessage - The error message to validate
- * @returns {boolean} - True if the error message is valid and should be displayed, false otherwise
- */
-export function isValidErrorMessage(errorMessage) {
-  // Must be a non-empty string
-  if (!errorMessage || typeof errorMessage !== "string") {
-    return false;
-  }
-
-  // Must not be empty after trimming
-  if (errorMessage.trim() === "") {
-    return false;
-  }
-
-  // Must not be a generic JavaScript error
-  if (isGenericJSError(errorMessage)) {
-    return false;
-  }
-
-  return true;
 }
 
 export function getLocaleDirection(fpi) {
@@ -958,19 +750,15 @@ export const getUserPrimaryPhone = (user) => {
     return null;
   }
 
-  const primaryPhone =
-    user.phone_numbers.find((phone) => phone.primary) ||
-    user.phone_numbers.find((phone) => phone.active) ||
-    user.phone_numbers[0];
+  const primaryPhone = user.phone_numbers.find((phone) => phone.primary);
   if (!primaryPhone) return null;
 
   const countryCode = primaryPhone.country_code?.toString() || "91";
   const mobile = primaryPhone.phone || "";
-  if (!mobile) return null;
 
   return {
     mobile,
-    countryCode,
+    countryCode
   };
 };
 
@@ -1046,118 +834,4 @@ export const getConfigFromProps = (props) => {
 
   // Handle direct object props
   return props;
-};
-
-export const formatDeliveryAddress = (d = {}) => {
-  const line1 = [d.address, d.area].filter(Boolean).join(" ").trim();
-  const line2 = d.landmark?.trim() || "";
-  const line3 = [d.city, [d.state, d.area_code || d.pincode].filter(Boolean).join(" ")].filter(Boolean).join(", ").trim();
-  const line4 = d.country?.trim() || "";
-
-  return [line1, line2, line3, line4].filter(Boolean).join(",\n");
-};
-
-export const truncateName = (name,length) => {
-  if (!name) return "";
-  return name.length > length ? name.slice(0, length) + "..." : name;
-};
-
-const getHeadingMinRatio = (max) => {
-  if (max <= 72) return 0.71;
-  if (max <= 120) return 0.55;
-  if (max <= 184) return 0.32;
-  return 0.32;
-};
-
-const getDescriptionMinRatio = (max) => {
-  if (max <= 24) return 0.85;
-  if (max <= 42) return 0.8;
-  return getHeadingMinRatio(max);
-};
-
-const getHeadingCompactMin = (max, min) => {
-  if (max <= 72) {
-    return Math.min(min, Math.max(36, Math.round(max * 0.56)));
-  }
-
-  if (max <= 120) {
-    return Math.min(min, Math.max(40, Math.round(max * 0.4)));
-  }
-
-  return Math.min(min, Math.max(40, Math.round(max * 0.22)));
-};
-
-const getCompactTypographyMin = (max, min, variant) => {
-  if (variant === "heading" || max > 42) {
-    return getHeadingCompactMin(max, min);
-  }
-
-  return min;
-};
-
-export const getClampTypographySize = (value, variant = "heading") => {
-  const normalizedVariant = TYPOGRAPHY_RULES[variant] ? variant : "heading";
-  const rule = TYPOGRAPHY_RULES[normalizedVariant];
-  const parsed = parseFloat(`${value}`.trim());
-  const max =
-    Number.isFinite(parsed) && parsed > 0
-      ? Math.round(parsed)
-      : rule.fallback;
-
-  const minRatio =
-    normalizedVariant === "heading"
-      ? getHeadingMinRatio(max)
-      : getDescriptionMinRatio(max);
-  const minFloor = normalizedVariant === "heading" ? 24 : rule.minFloor;
-  const min = Math.min(
-    max,
-    Math.max(minFloor, Math.round(max * minRatio))
-  );
-  const compactViewport = rule.compactViewport || rule.minViewport;
-  const compactMin = getCompactTypographyMin(
-    max,
-    min,
-    normalizedVariant
-  );
-
-  if (compactViewport < rule.minViewport && compactMin < min) {
-    const compactRange = min - compactMin;
-    const desktopRange = max - min;
-    const compactViewportRange = rule.minViewport - compactViewport;
-    const desktopViewportRange = rule.maxViewport - rule.minViewport;
-
-    return `clamp(${compactMin}px, round(nearest, calc(${compactMin}px + clamp(0px, calc(${compactRange} * ((100vw - ${compactViewport}px) / ${compactViewportRange})), ${compactRange}px) + clamp(0px, calc(${desktopRange} * ((100vw - ${rule.minViewport}px) / ${desktopViewportRange})), ${desktopRange}px)), 1px), ${max}px)`;
-  }
-
-  return `clamp(${min}px, round(nearest, calc(${min}px + (${max} - ${min}) * ((100vw - ${rule.minViewport}px) / ${rule.maxViewport - rule.minViewport})), 1px), ${max}px)`;
-};
-
-export const getCustomFontSize = (value, variant = "heading") => {
-  const parsed = parseFloat(`${value}`.trim());
-  if (!Number.isFinite(parsed) || parsed <= 0) return undefined;
-  if (parsed <= 42) return `${Math.round(parsed)}px`;
-  return getClampTypographySize(parsed, variant);
-};
-
-const HEADING_FONT_WEIGHT_VALUES = ["400", "500", "600", "700", "800"];
-const HEADING_TEXT_TRANSFORM_VALUES = [
-  "uppercase",
-  "lowercase",
-  "capitalize",
-];
-
-const getTypographyConfigValue = (value) => value?.value ?? value;
-
-export const getHeadingTypographyStyles = (config = {}) => {
-  const fontWeight = `${getTypographyConfigValue(config.heading_font_weight) || ""}`;
-  const textTransform = `${getTypographyConfigValue(config.heading_text_transform) || ""}`;
-
-  return {
-    ...(HEADING_FONT_WEIGHT_VALUES.includes(fontWeight) && {
-      "--section-heading-weight": fontWeight,
-    }),
-    ...(HEADING_TEXT_TRANSFORM_VALUES.includes(textTransform) && {
-      "--section-heading-text-transform": textTransform,
-    }),
-  };
 };

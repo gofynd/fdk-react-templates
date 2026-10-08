@@ -17,6 +17,8 @@ import Autocomplete from "react-google-autocomplete";
 import SearchIcon from "../../assets/images/search.svg";
 import LocateIcon from "../../assets/images/locate.svg";
 import { useGlobalTranslation } from "fdk-core/utils";
+
+const libraries = ["places"];
 const mapContainerStyle = {
   width: "100%",
   height: "300px",
@@ -89,8 +91,7 @@ const GoogleMapAddress = ({
 
   const { isLoaded: isMapLoaded } = useJsApiLoader({
     googleMapsApiKey: mapApiKey,
-    id: "google-maps-script",
-    libraries: ["places"],
+    libraries,
   });
 
   useEffect(() => {

@@ -1,38 +1,31 @@
 import React, { useMemo } from "react";
 import * as styles from "./bag.less";
 import FyImage from "../core/fy-image/fy-image";
-import {
-  getResponsiveImageBaseUrl,
-  getResponsiveImageSources,
-  isGifImageUrl,
-} from "../../helper/utils";
 
-export function BagImage({
-  bag,
-  isBundle,
-  width = 200,
-  aspectRatio,
-  isImageFill = false,
-}) {
+const isGifUrl = (url = "") => /\.gif(\?|#|$)/i.test(String(url || ""));
+const toOriginalVariant = (url = "") => {
+  if (!url) return url;
+  if (url.includes("/original/")) return url;
+  return url.replace(/\/\d+x\d+\//, "/original/");
+};
+
+export function BagImage({ bag, isBundle, width = 80, aspectRatio }) {
   const src = isBundle
     ? bag?.bundle_details?.images?.[0]
     : bag?.item?.image?.[0];
   const name = isBundle ? bag?.bundle_details?.name : bag?.item?.name;
-  const gif = isGifImageUrl(src);
-  const finalSrc = getResponsiveImageBaseUrl(src, width);
-  const imageSources = useMemo(
-    () => (gif ? [] : getResponsiveImageSources()),
-    [gif]
-  );
+  // force original for gifs + skip transforms
+  const gif = isGifUrl(src);
+  const finalSrc = gif ? toOriginalVariant(src) : src;
 
   return (
     <FyImage
       customClass={styles.bagImg}
       src={finalSrc}
       alt={name}
-      sources={imageSources}
+      sources={gif ? [] : [{ width }]}
       aspectRatio={aspectRatio}
-      isImageFill={isImageFill}
+      isImageFill
     />
   );
 }
@@ -42,7 +35,6 @@ export function BundleBagImage({
   bundleGroupId,
   bundleGroupArticles,
   aspectRatio,
-  isImageFill = false,
 }) {
   const uniueBagItems = useMemo(
     () => bundleGroupArticles?.[bundleGroupId] || [],
@@ -77,18 +69,18 @@ export function BundleBagImage({
       }}
     >
       {bundleImages.map((image, index) => {
-        const gif = isGifImageUrl(image);
-        const finalSrc = getResponsiveImageBaseUrl(image, 160);
-        const imageSources = gif ? [] : getResponsiveImageSources();
+        // force original for gifs + skip transforms
+        const gif = isGifUrl(image);
+        const finalSrc = gif ? toOriginalVariant(image) : image;
         return (
           <div className={styles.bundleImgItem} key={index}>
             <FyImage
               customClass={styles.itemImg}
               src={finalSrc}
               alt={item?.name}
-              sources={imageSources}
+              sources={gif ? [] : [{ width: 80 }]}
               aspectRatio={aspectRatio}
-              isImageFill={isImageFill}
+              isImageFill
             />
             {index === 3 && uniueBagItems.length > 4 && (
               <div className={`${styles.bundleCount}`}>

@@ -7,7 +7,7 @@ import {
   useGlobalTranslation
 } from "fdk-core/utils";
 
-const FreeGiftItem = ({ item, currencySymbol = "₹", globalConfig = {} }) => {
+const FreeGiftItem = ({ item, currencySymbol = "₹" }) => {
   const fpi = useFPI();
   const { t } = useGlobalTranslation("translation");
   const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
@@ -27,10 +27,9 @@ const FreeGiftItem = ({ item, currencySymbol = "₹", globalConfig = {} }) => {
               {promotion?.applied_free_articles.map((item, itemIndex) => {
                 const { item_images_url, item_name, item_price_details } =
                   item?.free_gift_item_details || {};
-                const originalImage = item_images_url?.[0] || "";
-                const freeGiftImage = /\.gif(\?|#|$)/i.test(originalImage)
-                  ? originalImage
-                  : originalImage.replace("original", "resize-w:50");
+                const freeGiftImage =
+                  item_images_url?.[0]?.replace("original", "resize-w:50") ||
+                  "";
 
                 return (
                   <div
@@ -39,11 +38,7 @@ const FreeGiftItem = ({ item, currencySymbol = "₹", globalConfig = {} }) => {
                   >
                     {freeGiftImage && (
                       <img
-                        className={`${styles.freeGiftItemImage} ${
-                          globalConfig?.img_fill
-                            ? styles.imageCover
-                            : styles.imageContain
-                        }`}
+                        className={styles.freeGiftItemImage}
                         src={freeGiftImage}
                         alt={item_name}
                       />
@@ -65,7 +60,9 @@ const FreeGiftItem = ({ item, currencySymbol = "₹", globalConfig = {} }) => {
                         {item_price_details?.effective?.max && (
                           <span className={styles.freeGiftItemFreeEffective}>
                             {currencyFormat(
-                              item_price_details?.effective?.max,
+                              numberWithCommas(
+                                item_price_details?.effective?.max
+                              ),
                               currencySymbol,
                               formatLocale(locale, countryCode, true)
                             )}

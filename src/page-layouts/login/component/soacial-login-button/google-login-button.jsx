@@ -42,14 +42,8 @@ const GoogleLoginButton = ({
 
     try {
       const buttonEl = container.querySelector('div[role="button"]');
-      const iframeEl = container.querySelector("iframe");
       const svgEl = container.querySelector("svg");
       const spanEl = container.querySelector("span");
-
-      Object.assign(container.style, {
-        borderRadius: "var(--buttonRadius, 0px)",
-        overflow: "hidden",
-      });
 
       if (buttonEl) {
         // Apply button styles
@@ -57,7 +51,7 @@ const GoogleLoginButton = ({
           height: "48px",
           padding: "12px",
           background: "transparent",
-          borderRadius: "var(--buttonRadius, 0px)",
+          borderRadius: "4px",
           border: "1px solid var(--dividerStokes, #dadce0)",
           fontSize: "14px",
           fontStyle: "normal",
@@ -71,12 +65,6 @@ const GoogleLoginButton = ({
           alignItems: "center",
           cursor: "pointer",
           fontFamily: "var(--font-body)",
-        });
-      }
-
-      if (iframeEl) {
-        Object.assign(iframeEl.style, {
-          borderRadius: "var(--buttonRadius, 0px)",
         });
       }
 
@@ -242,9 +230,7 @@ const GoogleLoginButton = ({
       />
 
       {/* Google Sign-In Button */}
-      <div
-        className={`${styles["google-signin-wrapper"]} google-signin-wrapper`}
-      >
+      <div className="google-signin-wrapper">
         <div
           id="google-signin-button"
           className="g_id_signin"
