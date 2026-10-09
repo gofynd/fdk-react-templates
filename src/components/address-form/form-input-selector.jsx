@@ -75,10 +75,15 @@ const FormInputSelector = ({
         );
       }
       case "mobile": {
+        const mobileValue =
+          typeof field?.value === "object"
+            ? field?.value?.mobile || ""
+            : field?.value || "";
+
         return (
           <MobileNumber
             name={key}
-            mobile={field?.value?.mobile}
+            mobile={mobileValue}
             label={translateDynamicLabel(display, t)}
             error={error}
             isRequired={required}

@@ -37,6 +37,7 @@ function Coupon({
   setShowPayment = () => {},
   getTotalValue = () => {},
   isCreditNoteApplied,
+  isDisabled = false,
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -228,7 +229,11 @@ function Coupon({
 
   return (
     <>
-      <div className={styles.couponBoxContainer}>
+      <div
+        className={`${styles.couponBoxContainer} ${
+          isDisabled ? styles.disabledCouponBoxContainer : ""
+        }`}
+      >
         <div className={styles.couponBoxTitle}>
           {title || t("resource.cart.coupons_title")}
         </div>
@@ -245,7 +250,8 @@ function Coupon({
                       couponValue,
                       currencySymbol,
                       formatLocale(locale, countryCode, true),
-                      currencyCode
+                      currencyCode,
+                      true
                     )}
                   />
                 </span>
@@ -276,6 +282,7 @@ function Coupon({
           >
             <SvgWrapper
               svgSrc={hasCancel ? "cross-bold" : "cart-arrow-right"}
+              className={styles.arrowIconSvg}
             />
           </button>
         </div>
@@ -514,7 +521,8 @@ export function CouponSuccessModal({
                   coupon.value,
                   currencySymbol,
                   formatLocale(locale, countryCode, true),
-                  currencyCode
+                  currencyCode,
+                  true
                 )}
               </div>
               <div className={styles.couponValueSubheading}>
@@ -551,4 +559,3 @@ function NoCouponsAvailable() {
 }
 
 export default Coupon;
-

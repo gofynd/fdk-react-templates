@@ -75,6 +75,26 @@
   }
 }
 
+.customTypography {
+  display: block;
+
+  .contactTitle {
+    font-size: var(--contact-title-size);
+    line-height: calc(var(--contact-title-size) + 4px);
+  }
+}
+
+.customHeadingTypography {
+  .contactTitle {
+    font-weight: var(--section-heading-weight, 700);
+    text-transform: var(--section-heading-text-transform);
+  }
+}
+
+.contactTitle {
+  word-break: break-word;
+}
+
 .flex_item {
   display: flex;
   flex-direction: column;
@@ -101,14 +121,14 @@
   }
   .description {
     color: @TextBody;
-    font-size: 16px;
+    font-size: var(--section-description-size, 16px);
     @media @tablet {
-      font-size: 14px;
+      font-size: var(--section-description-size, 14px);
       text-align: start;
     }
     font-style: normal;
     font-weight: 400;
-    line-height: 20px;
+    line-height: calc(var(--section-description-size, 16px) + 4px);
     letter-spacing: -0.32px;
     align-self: stretch;
     margin-top: 12px;
@@ -128,9 +148,22 @@
       align-items: center;
       gap: 16px;
       align-self: stretch;
-      svg g > path {
-        fill: @TextHeading;
+
+      svg {
+        color: @TextBody;
+
+        path,
+        g > path,
+        circle,
+        rect {
+          fill: @TextBody;
+        }
+
+        [stroke] {
+          stroke: @TextBody;
+        }
       }
+
       span {
         display: inline-block;
         word-break: break-word;
@@ -153,7 +186,7 @@
       //background-color: @ThemeAccentL5;
 
       input::placeholder {
-        color: @TextSecondary;
+        color: @TextLabel;
         opacity: 1;
       }
     }
@@ -161,11 +194,11 @@
       height: 118px;
     }
     .inputPlaceholder::placeholder {
-      color: @TextSecondary;
+      color: @TextLabel;
       opacity: 1;
     }
     .inputPlaceholder:focus::placeholder {
-      color: @TextBody;
+      color: @TextLabel;
     }
   }
 }
@@ -195,5 +228,20 @@
 .iconSpacing {
   @media @mobile {
     gap: 12px;
+  }
+
+  svg {
+    color: @TextBody;
+
+    path,
+    g > path,
+    circle,
+    rect {
+      fill: @TextBody;
+    }
+
+    [stroke] {
+      stroke: @TextBody;
+    }
   }
 }

@@ -7,6 +7,7 @@ import AddressForm from "../../../../components/address-form/v2/address-form";
 import { useGlobalTranslation, useGlobalStore, useFPI } from "fdk-core/utils";
 import { translateDynamicLabel } from "../../../../helper/utils";
 import FyButton from "../../../../components/core/fy-button/fy-button";
+import DeliveryVehicleIcon from "../../../../assets/images/truck.svg";
 
 function AddressRight({
   selectedAddressId,
@@ -71,6 +72,10 @@ function DeliveryLocation({
   updateAddress,
   removeAddress,
   acceptOrder,
+  modalOverlayClassName = "",
+  singleLineAddress = false,
+  hideContainerBorder = false,
+  showDeliveryIcon = false,
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -111,9 +116,14 @@ function DeliveryLocation({
     );
   };
   return (
-    <div className={styles.cartPincodeContainer}>
+    <div
+      className={`${styles.cartPincodeContainer} ${singleLineAddress ? styles.singleLineAddress : ""} ${hideContainerBorder ? styles.hideContainerBorder : ""}`}
+    >
       <div className={styles.pinCodeDetailsContainer}>
         <div className={styles.deliveryHeader}>
+          {showDeliveryIcon && (
+            <DeliveryVehicleIcon className={styles.deliveryVehicleIcon} />
+          )}
           <span className={styles.pincodeHeading}>
             {deliveryLocation
               ? `${t("resource.common.deliver_to")}:`
@@ -135,7 +145,7 @@ function DeliveryLocation({
           )}
         </div>
       </div>
-      <div>
+      <div className={styles.changePinCodeButtonWrapper}>
         <button
           className={styles.changePinCodeButton}
           onClick={onChangeButtonClick}
@@ -148,6 +158,7 @@ function DeliveryLocation({
         isOpen={isPincodeModalOpen}
         closeDialog={onCloseModalClick}
         title={`${t("resource.common.delivery")} ${displayName || ""}`}
+        customClassName={modalOverlayClassName}
         containerClassName={styles.pincodeModal}
         bodyClassName={styles.modalBody}
         headerClassName={styles.modalHeader}
@@ -181,7 +192,7 @@ function DeliveryLocation({
         isOpen={isAddressModalOpen}
         closeDialog={onCloseModalClick}
         title={t("resource.common.address.select_delivery_address")}
-        customClassName={styles.deliveryAddressModal}
+        customClassName={`${styles.deliveryAddressModal} ${modalOverlayClassName}`}
         containerClassName={styles.deliverAddressesModalContainer}
         headerClassName={styles.deliveryAddressHeader}
         bodyClassName={styles.deliveryAddressBody}
@@ -269,12 +280,15 @@ function DeliveryLocation({
         closeDialog={onCloseModalClick}
         ignoreClickOutsideForClass="pac"
         hideHeader
-        customClassName={styles.addAddressModalWrapper}
+        customClassName={`${styles.addAddressModalWrapper} ${modalOverlayClassName}`}
         containerClassName={styles.addAddressModalContainer}
         bodyClassName={styles.addAddressModalBody}
       >
         <AddressForm
-          key={formKey || `${addressItem?.id || 'new'}-${countryDetails?.iso2 || 'default'}`}
+          key={
+            formKey ||
+            `${addressItem?.id || "new"}-${countryDetails?.iso2 || "default"}`
+          }
           internationalShipping={isInternationalShippingEnabled}
           addressItem={addressItem}
           formSchema={addressFormSchema}
@@ -291,7 +305,8 @@ function DeliveryLocation({
           countryDetails={countryDetails}
           isGuestUser={isGuestUser}
           onClose={onCloseModalClick}
-          onBack={onBackFromAddAddress}
+          onBack={isGuestUser ? null : onBackFromAddAddress}
+          hideBackButton={isGuestUser}
           onUpdateAddress={addAddress}
           user={userData}
         ></AddressForm>

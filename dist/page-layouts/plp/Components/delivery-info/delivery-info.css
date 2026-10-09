@@ -362,6 +362,33 @@ h5,
   outline: none;
   box-shadow: none;
 }
+.delivery-info__pincodeShake___C6ZJ3 {
+  animation: delivery-info__pincode-shake___EBxVw 450ms ease-in-out !important;
+  will-change: transform;
+}
+@keyframes delivery-info__pincode-shake___EBxVw {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-10px);
+  }
+  40% {
+    transform: translateX(10px);
+  }
+  60% {
+    transform: translateX(-7px);
+  }
+  80% {
+    transform: translateX(7px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .delivery-info__pincodeShake___C6ZJ3 {
+    animation: none;
+  }
+}
 .delivery-info__deliveryInfo___P0sQ_ {
   margin-top: 24px;
 }
@@ -412,10 +439,14 @@ h5,
   height: 11px;
 }
 .delivery-info__deliveryDate___wlRrJ .delivery-info__deliveryIcon___zFZmo /deep/ svg path {
-  fill: var(--successText, #1c958f);
+  fill: var(--textBody, #3c3131);
 }
 .delivery-info__deliveryDate___wlRrJ p {
   margin-inline-start: 4px;
+}
+.delivery-info__deliveryIcon___zFZmo {
+  color: var(--textBody, #3c3131);
+  fill: var(--textBody, #3c3131);
 }
 .delivery-info__error___fwjK5 {
   color: var(--errorText, #ff3333);
@@ -1849,7 +1880,7 @@ h5,
 }
 .fy-input__fyInput___S4Mtu::placeholder {
   color: var(--textLabel, #7d7676);
-  opacity: 0.3;
+  opacity: 1;
 }
 .fy-input__fyInput___S4Mtu::-webkit-outer-spin-button,
 .fy-input__fyInput___S4Mtu::-webkit-inner-spin-button {
@@ -1861,7 +1892,7 @@ h5,
 }
 .fy-input__fyInput___S4Mtu:disabled {
   color: var(--textSecondary, #9c9c9c);
-  border-color: var(--dividerStokes, #d4d1d1);
+  border-color: var(--overlaypopupdividerstroke, #e0e0e0);
   font-weight: 400;
 }
 .fy-input__fyInput___S4Mtu:focus {
@@ -1883,7 +1914,7 @@ h5,
   height: 48px;
 }
 .fy-input__outlined___CEaKm.fy-input__inputDisable___M8Zn2 {
-  border: 1px solid var(--dividerStokes, #d4d1d1);
+  border: 1px solid var(--overlaypopupdividerstroke, #e0e0e0);
   cursor: not-allowed;
   pointer-events: auto;
 }

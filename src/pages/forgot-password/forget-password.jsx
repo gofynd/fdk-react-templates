@@ -1,6 +1,10 @@
-import React, { useId, useEffect, useState } from "react";
+import React, { useId, useEffect, useRef, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { validateEmailField } from "../../helper/utils";
+import {
+  validateEmailField,
+  getCustomFontSize,
+  getHeadingTypographyStyles,
+} from "../../helper/utils";
 import * as styles from "./forget-password.less";
 import { useGlobalTranslation } from "fdk-core/utils";
 import LoginRegisterToggle from "../../page-layouts/auth/login-register-toggle/login-register-toggle";
@@ -21,10 +25,12 @@ function ForgetPassword({
   isResetSuccess,
   handleForgotPasswordSubmit = () => {},
   openForgotPassword = () => {},
+  pageConfig = {},
 }) {
   const { t } = useGlobalTranslation("translation");
   const emailInputId = useId();
   const [showInputNumber, setShowInputNumber] = useState(false);
+  const containerRef = useRef(null);
   const navigate = useNavigate();
   const fpi = useFPI();
   const {
@@ -85,13 +91,56 @@ function ForgetPassword({
     }
   }, [showInputNumber]);
 
+  const getPageConfigValue = (value) => value?.value ?? value;
+  const forgotPasswordTitle =
+    getPageConfigValue(pageConfig?.title) ||
+    t("resource.auth.reset_your_password");
+  const isCustomTypography =
+    getPageConfigValue(pageConfig?.typography_preset) === "custom";
+  const headingFontSize = isCustomTypography
+    ? getCustomFontSize(
+        getPageConfigValue(pageConfig?.heading_font_size) || "32",
+        "heading"
+      )
+    : undefined;
+  const headingTypographyStyles = getHeadingTypographyStyles(pageConfig);
+  const hasCustomFontSize = Boolean(isCustomTypography && headingFontSize);
+  const hasCustomHeadingTypography = Boolean(
+    Object.keys(headingTypographyStyles).length
+  );
+  const wrapperClassName = `${styles.forgetPasswordWrapper} ${
+    hasCustomFontSize ? styles.customTypography : ""
+  } ${
+    hasCustomHeadingTypography ? styles.customHeadingTypography : ""
+  }`;
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    container.style.removeProperty("--forgot-password-title-size");
+    container.style.removeProperty("--section-heading-weight");
+    container.style.removeProperty("--section-heading-text-transform");
+
+    if (isCustomTypography && headingFontSize) {
+      container.style.setProperty(
+        "--forgot-password-title-size",
+        headingFontSize
+      );
+    }
+
+    Object.entries(headingTypographyStyles).forEach(([key, value]) => {
+      container.style.setProperty(key, value);
+    });
+  }, [isCustomTypography, headingFontSize, headingTypographyStyles]);
+
   if (isResetSuccess) {
     return (
-      <div className={styles.forgetPasswordWrapper}>
+      <div ref={containerRef} className={wrapperClassName}>
         <h1
           className={`${styles.forgotPasswordTitle} ${isFormSubmitSuccess ? styles.formSubmitted : ""}`}
         >
-          {t("resource.auth.reset_your_password")}
+          {forgotPasswordTitle}
         </h1>
         <div className={styles.submitWrapper}>
           <p className={styles.submitSuccessMsg}>
@@ -151,11 +200,11 @@ function ForgetPassword({
   };
 
   return (
-    <div className={styles.forgetPasswordWrapper}>
+    <div ref={containerRef} className={wrapperClassName}>
       <h1
         className={`${styles.forgotPasswordTitle} ${isFormSubmitSuccess ? styles.formSubmitted : ""}`}
       >
-        {t("resource.auth.reset_your_password")}
+        {forgotPasswordTitle}
       </h1>
       {!isFormSubmitSuccess ? (
         <div className={styles.forgotPasswordWrapper}>

@@ -40,6 +40,9 @@
   height: 1em;
   border-radius: 50%;
   font-size: 48px;
+  // Explicit color so the currentColor SVG icon never falls back to the
+  // iOS Safari default control tint (system blue) on iPhone.
+  color: var(--textHeading, #211f1f);
   transition: background-color 0.3s ease-in-out;
   display: flex;
   align-items: center;

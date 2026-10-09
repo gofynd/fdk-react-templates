@@ -18,6 +18,7 @@ function DeliveryInfo({
   availableFOCount,
   setFoLoading,
   mandatoryPincode,
+  pincodeShakeTrigger = 0,
 }) {
   const { t } = useGlobalTranslation("translation");
   const numberRegex = /^\d*$/;
@@ -57,7 +58,12 @@ function DeliveryInfo({
               <h4 className={`${styles.deliveryLabel} b2`}>
                 {t("resource.common.address.select_delivery_location")}
               </h4>
-              <div className={styles.delivery}>
+              <div
+                key={pincodeShakeTrigger}
+                className={`${styles.delivery} ${
+                  pincodeShakeTrigger ? styles.pincodeShake : ""
+                }`}
+              >
                 <FyInput
                   autoComplete="off"
                   value={pincode}
