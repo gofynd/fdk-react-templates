@@ -1,0 +1,78 @@
+@import "../../../styles/main.less";
+
+.switchContainer {
+  .flex-align-center();
+  gap: 8px;
+  cursor: pointer;
+  width: fit-content;
+
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+.switchTrack {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  background-color: @DividerStokes;
+  transition: background-color 0.2s ease;
+  flex-shrink: 0;
+
+  &.medium {
+    width: 40px;
+    height: 22px;
+  }
+
+  &.small {
+    width: 32px;
+    height: 18px;
+  }
+
+  &.checked {
+    background-color: @ButtonPrimary;
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+  }
+}
+
+.switchInput {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  margin: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.switchThumb {
+  position: absolute;
+  top: 2px;
+  inset-inline-start: 2px;
+  height: calc(100% - 4px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background-color: @White;
+  transition: inset-inline-start 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+}
+
+.checked .switchThumb {
+  inset-inline-start: calc(100% - 2px);
+  transform: translateX(-100%);
+}
+
+.label {
+  font-size: 14px;
+  color: @TextBody;
+}
