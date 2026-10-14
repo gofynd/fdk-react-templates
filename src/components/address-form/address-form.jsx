@@ -398,7 +398,7 @@ const AddressForm = ({
   // Get currentCountry based on header selection (same logic as useInternational)
   const currentCountry = useMemo(() => {
     return countryCurrencies?.find(
-      (country) => country.iso2 === i18nDetails?.countryCode
+      (country) => country?.iso2 === i18nDetails?.countryCode
     );
   }, [countryCurrencies, i18nDetails?.countryCode]);
 
@@ -454,7 +454,7 @@ const AddressForm = ({
     reset,
     trigger,
     getValues,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm({
     defaultValues: {
       ...addressItem,
@@ -711,7 +711,7 @@ useEffect(() => {
       phone: currentValues.phone || addressItemPhone || data.phone || (!internationalShipping ? userAutofillData?.phone : "") || "",
       email: isNewAddress && !addressItem ? currentValues.email || data.email || userAutofillData?.email || "" : addressItem?.email ? currentValues.email || addressItem?.email : "",
     };
-    reset(mergedData);
+    reset(mergedData, { keepDefaultValues: !isNewAddress });
     updatedFormSchema?.forEach((group) =>
       group?.fields?.forEach(({ type, key }) => {
         if (type === "list") {
@@ -720,6 +720,11 @@ useEffect(() => {
       })
     );
   };
+
+  const footer =
+    typeof customFooter === "function"
+      ? customFooter({ isDirty })
+      : customFooter;
 
   return (
     <div className={styles.addressFormWrapper}>
@@ -786,7 +791,11 @@ useEffect(() => {
               <button
                 type="button"
                 key={type.value}
-                onClick={() => setValue("address_type", type.value)}
+                onClick={() =>
+                  setValue("address_type", type.value, {
+                    shouldDirty: true,
+                  })
+                }
                 className={`${styles.typeBtn} ${watch("address_type") === type.value ? styles.selected : ""}`}
               >
                 {type.icon}
@@ -847,11 +856,11 @@ useEffect(() => {
           </div>
         )}
         <div>
-          {customFooter ? 
-            customFooter : 
+          {footer ||
             <button
               className={`${styles.commonBtn} ${styles.deliverBtn}`}
               type="submit"
+              disabled={!isNewAddress && !isDirty}
             >
               {isNewAddress ? t("resource.common.address.add_address") : t("resource.common.address.update_address")}
           </button>}
