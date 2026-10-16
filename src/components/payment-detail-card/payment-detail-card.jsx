@@ -11,20 +11,38 @@
 
 import React from "react";
 import * as styles from "./payment-detail-card.less";
-import { priceFormatCurrencySymbol, translateDynamicLabel } from "../../helper/utils";
+import {
+  priceFormatCurrencySymbol,
+  translateDynamicLabel,
+} from "../../helper/utils";
 import { useGlobalTranslation } from "fdk-core/utils";
 
-const toTitleCase = (value = "") =>
-  value.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
-
-function PaymentDetailCard({ breakup, paymentDetails }) {
+function PaymentDetailCard({
+  breakup,
+  paymentDetails,
+  remainingAmount,
+  remainingCurrencySymbol,
+  remainingCurrencyCode,
+  isPayRemainingLoading,
+  onPayRemaining,
+}) {
   const { t } = useGlobalTranslation("translation");
   const totalVal = breakup?.find((item) => item.name === "total") || 0;
+  const shouldShowPayRemaining =
+    Number(remainingAmount || 0) > 0 && onPayRemaining;
+  const formattedRemainingAmount = shouldShowPayRemaining
+    ? priceFormatCurrencySymbol(
+        remainingCurrencySymbol || totalVal?.currency_symbol,
+        remainingAmount,
+        undefined,
+        remainingCurrencyCode || totalVal?.currency_code
+      )
+    : "";
 
   return (
     <div className={`${styles.paymentMode}`}>
       <div className={`${styles.header} ${styles.boldsm}`}>
-        {toTitleCase(t("resource.common.payment_mode"))}
+        {t("resource.common.payment_mode")}
       </div>
       <div className={styles.paymentDetails}>
         {paymentDetails?.map((paymentInfo) => (
@@ -46,8 +64,7 @@ function PaymentDetailCard({ breakup, paymentDetails }) {
                     totalVal?.currency_symbol,
                     paymentInfo?.amount,
                     undefined,
-                    totalVal?.currency_code,
-                    true
+                    totalVal?.currency_code
                   )}
                 {!paymentInfo?.amount &&
                   totalVal &&
@@ -55,14 +72,24 @@ function PaymentDetailCard({ breakup, paymentDetails }) {
                     totalVal?.currency_symbol,
                     totalVal?.value,
                     undefined,
-                    totalVal?.currency_code,
-                    true
+                    totalVal?.currency_code
                   )}
               </span>
             </div>
           </div>
         ))}
       </div>
+      {shouldShowPayRemaining && (
+        <button
+          type="button"
+          className={styles.payRemainingButton}
+          onClick={onPayRemaining}
+          disabled={isPayRemainingLoading}
+        >
+          {t("resource.b2b.components.split_payment.pay_remaining")}{" "}
+          {formattedRemainingAmount}
+        </button>
+      )}
     </div>
   );
 }

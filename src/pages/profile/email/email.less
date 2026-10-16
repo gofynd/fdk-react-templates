@@ -12,10 +12,6 @@
     }
   }
 }
-
-.textBodyIcon path {
-  fill: @TextBody;
-}
 .main {
   display: flex;
   flex-direction: column;
@@ -62,10 +58,6 @@
           height: 40px;
           background-color: #f5f5f5;
 
-          input {
-            color: @TextHeading !important;
-          }
-
           @media @mobile {
             flex: 1;
           }
@@ -79,7 +71,7 @@
           width: auto;
           .verified {
             padding: 0 12px;
-            border-radius: @ButtonRadius;
+            border-radius: 4px;
             height: 100%;
             cursor: unset;
           }
@@ -87,14 +79,14 @@
 
           .primary {
             padding: 12px;
-            border-radius: @ButtonRadius;
+            border-radius: 2px;
             margin: 0px 5px;
             height: 100%;
           }
 
           .verifyButton {
             padding: 0 12px;
-            border-radius: @ButtonRadius;
+            border-radius: 4px;
             height: 100%;
             white-space: nowrap;
             cursor:pointer;
@@ -102,7 +94,7 @@
 
           .editButton {
             padding: 0 12px;
-            border-radius: @ButtonRadius;
+            border-radius: 4px;
             height: 100%;
             white-space: nowrap;
           }
@@ -122,17 +114,10 @@
           border: none;
           outline: none;
           background: transparent;
-          color: @TextHeading !important;
-
-          input {
-            color: @TextHeading !important;
-          }
         }
 
         .emailBox {
           width: 270px;
-          color: @TextHeading !important;
-
           @media @mobile {
             width: 100%;
           }

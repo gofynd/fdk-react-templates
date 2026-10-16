@@ -296,30 +296,6 @@ const addressTypes = [
   // Add more address types as needed
 ];
 
-const isFieldValueFilled = (value) => {
-  if (value === null || value === undefined) {
-    return false;
-  }
-
-  if (typeof value === "string") {
-    return !!value.trim();
-  }
-
-  if (typeof value === "object") {
-    if (
-      "mobile" in value ||
-      "countryCode" in value ||
-      "isValidNumber" in value
-    ) {
-      return !!String(value.mobile || "").trim();
-    }
-
-    return Object.keys(value).length > 0;
-  }
-
-  return true;
-};
-
 const AddressForm = ({
   internationalShipping,
   formSchema = defaultFormSchema,
@@ -340,7 +316,6 @@ const AddressForm = ({
   countryDetails,
   onClose = () => {},
   onBack = null,
-  hideBackButton = false,
 }) => {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -356,7 +331,7 @@ const AddressForm = ({
   // Get currentCountry based on header selection (same logic as useInternational)
   const currentCountry = useMemo(() => {
     return countryCurrencies?.find(
-      (country) => country?.iso2 === i18nDetails?.countryCode
+      (country) => country.iso2 === i18nDetails?.countryCode
     );
   }, [countryCurrencies, i18nDetails?.countryCode]);
 
@@ -385,10 +360,8 @@ const AddressForm = ({
     reset,
     trigger,
     getValues,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm({
-    mode: "onChange",
-    reValidateMode: "onChange",
     defaultValues: {
       ...addressItem,
       address_type: addressItem?.address_type
@@ -441,8 +414,6 @@ const AddressForm = ({
   });
   const address_type = watch("address_type");
   const sector = watch("sector");
-  const formValues = watch();
-  const isAddNewAddressForm = isNewAddress || !addressItem?.id;
 
   // Ensure name field validates empty/whitespace when required (for both default and custom schemas)
   const schemaWithNameValidation = useMemo(() => {
@@ -467,31 +438,6 @@ const AddressForm = ({
       }) ?? [],
     })) ?? [];
   }, [formSchema, t]);
-
-  const requiredFields = useMemo(() => {
-    const schemaRequiredFields =
-      schemaWithNameValidation
-        ?.flatMap((group) => group.fields || [])
-        ?.filter(
-          (field) =>
-            (field.required || field.validation?.required) &&
-            field.type !== "hidden"
-        )
-        ?.map((field) => field.key) || [];
-
-    return ["address_type", ...schemaRequiredFields];
-  }, [schemaWithNameValidation]);
-
-  const isSaveContinueDisabled =
-    isAddNewAddressForm &&
-    (requiredFields.some(
-      (fieldKey) => !isFieldValueFilled(formValues?.[fieldKey])
-    ) || !isValid);
-
-  const isOtherAddressTypeMissing =
-    isAddNewAddressForm &&
-    address_type === "Other" &&
-    !isFieldValueFilled(formValues?.otherAddressType);
 
   /**
    * Transforms phone number from addressItem format to form format
@@ -852,11 +798,9 @@ const AddressForm = ({
   return (
     <div className={styles.formWrapper}>
       <div className={styles.formHeader}>
-        {!hideBackButton && (
-          <button className={styles.backIcon} onClick={onBack || onClose}>
-            <BackIcon />
-          </button>
-        )}
+        <button className={styles.backIcon} onClick={onBack || onClose}>
+          <BackIcon />
+        </button>
         <h2 className={styles.formHeaderTitle}>
           {isNewAddress
             ? t("resource.common.address.add_new_address")
@@ -1008,10 +952,7 @@ const AddressForm = ({
             </div>
           )}
           <div className={styles.formFooter}>
-            <FyButton
-              type="submit"
-              disabled={isSaveContinueDisabled || isOtherAddressTypeMissing}
-            >
+            <FyButton type="submit">
               {isNewAddress
                 ? t("resource.common.address.save_continue")
                 : t("resource.common.address.update_address")}
