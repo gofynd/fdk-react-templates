@@ -862,7 +862,12 @@ const AddressForm = ({
             ? t("resource.common.address.add_new_address")
             : t("resource.common.address.edit_address")}
         </h2>
-        <button className={styles.closeIcon} onClick={onClose}>
+        <button
+          type="button"
+          className={styles.closeIcon}
+          onClick={onClose}
+          aria-label={t("resource.common.close")}
+        >
           <CloseIcon />
         </button>
       </div>
