@@ -39,6 +39,7 @@ function BlogPage({
   getBlog,
   isBlogDetailsLoading,
   SocailMedia = () => {},
+  typographyStyle,
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -128,7 +129,8 @@ function BlogPage({
   return (
     <>
       <div
-        className={`${styles.blogContainer} ${!isSidebarDisplayed ? `${styles.blog__contentFull}` : ""}`}
+        className={`${styles.blogContainer} ${!isSidebarDisplayed ? `${styles.blog__contentFull}` : ""} ${typographyStyle ? styles.customTypography : ""}`}
+        style={typographyStyle}
       >
         <div className={`${styles.leftCol} ${styles.blogPost}`}>
           <div className={`${styles.blogPost__header}`}>
@@ -147,7 +149,7 @@ function BlogPage({
                 className={`${styles.breadcrumb__icon}`}
                 svgSrc="breadcrumb-angle"
               />
-              <span className={`${styles.breadcrumb__label}`}>
+              <span className={`${styles.breadcrumb__label} ${styles.breadcrumb__labelActive}`}>
                 {blogDetails?.slug?.replace(/-/g, " ")}
               </span>
             </div>
@@ -211,7 +213,10 @@ function BlogPage({
         </div >
         <BlogTabs className={`${styles.rightCol}`} {...sliderProps}></BlogTabs>
       </div >
-      <BlogFooter {...footerProps}></BlogFooter>
+      <BlogFooter
+        {...footerProps}
+        typographyStyle={typographyStyle}
+      ></BlogFooter>
     </>
   );
 }
