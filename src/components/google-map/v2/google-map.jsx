@@ -277,6 +277,7 @@ const GoogleMapAddress = ({
             {t("resource.common.address.select_delivery_location")}
           </h2>
           <button
+            type="button"
             className={styles.closeIcon}
             onClick={onClose}
             aria-label={t("resource.common.close")}

@@ -418,7 +418,7 @@ const AddressForm = ({
     const isMapAvailable = isMap && !!mapApiKey;
 
     // Show map view by default when:
-    // 1. Adding new address (no addressItem) - map should open first if available
+    // 1. Adding a new address, including a prefilled location draft
     // 2. Editing an address that doesn't have geo_location (user can add it)
     // Don't show map view when:
     // - Map is not available
@@ -426,7 +426,7 @@ const AddressForm = ({
     if (!isMapAvailable) {
       return false;
     }
-    if (!addressItem) {
+    if (isNewAddress || !addressItem) {
       return true; // New address - show map first if available
     }
     // If editing and address has geo_location, show form (not map)

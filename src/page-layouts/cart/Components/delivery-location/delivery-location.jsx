@@ -276,6 +276,7 @@ function DeliveryLocation({
       <Modal
         title={t("resource.common.address.add_new_address")}
         isOpen={isAddAddressModalOpen}
+        notCloseOnclickOutside={showGoogleMap && !!mapApiKey}
         modalType="center-modal"
         closeDialog={onCloseModalClick}
         ignoreClickOutsideForClass="pac"
