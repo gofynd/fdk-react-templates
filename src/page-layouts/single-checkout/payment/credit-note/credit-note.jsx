@@ -1,45 +1,17 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useMemo } from "react";
 import * as styles from "./credit-note.less";
 import { priceFormatCurrencySymbol } from "../../../../helper/utils";
 
-const CreditNote = ({
-  data = {},
-  updateStoreCredits = () => {},
-  validateCouponOnCreditNoteApplied,
-  isCouponApplied,
-}) => {
-  const isStoreCreditUpdatingRef = useRef(false);
+const CreditNote = ({ data = {}, updateStoreCredits = () => {} }) => {
   const show = useMemo(
     () => data && data?.list?.some((option) => option.partial_payment_allowed),
     [data]
   );
 
-  const handleChange = async (option) => {
-    const shouldApplyStoreCredit = !option?.balance?.is_applied;
-    isStoreCreditUpdatingRef.current = true;
-    try {
-      const updatedData = await updateStoreCredits(shouldApplyStoreCredit);
-      if (
-        shouldApplyStoreCredit &&
-        updatedData &&
-        typeof validateCouponOnCreditNoteApplied === "function"
-      ) {
-        validateCouponOnCreditNoteApplied("CREDITNOTE", "CREDITNOTE");
-      }
-    } finally {
-      isStoreCreditUpdatingRef.current = false;
-    }
+  const handleChange = (option) => {
+    updateStoreCredits(!option?.balance?.is_applied);
   };
-  useEffect(() => {
-    if (
-      !isStoreCreditUpdatingRef.current &&
-      data?.list?.[0]?.balance?.is_applied &&
-      isCouponApplied &&
-      typeof validateCouponOnCreditNoteApplied === "function"
-    ) {
-      validateCouponOnCreditNoteApplied("CREDITNOTE", "CREDITNOTE");
-    }
-  }, [data?.list?.[0]?.balance?.is_applied]);
+
   return (
     <>
       {show && (

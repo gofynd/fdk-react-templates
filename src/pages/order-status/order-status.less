@@ -185,24 +185,18 @@
               }
               .prodItemData {
                 margin-inline-start: 14px;
-                flex: 1;
                 min-width: 0;
+                width: 100%;
 
                 .productDetails {
-                  min-width: 0;
-
                   .brandName {
                     font-weight: 600;
                     font-size: 14px;
-                    color: @TextHeading;
                   }
                   .productName {
                     font-size: 14px;
-                    color: @TextBody;
                     margin-top: 8px;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
+                    word-break: break-word;
                   }
                   .sizeInfo {
                     font-size: 12px;

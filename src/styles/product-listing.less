@@ -22,16 +22,8 @@
       overflow-y: hidden;
     }
   }
-  .addToCartHeader {
-    > div:first-child {
-      flex: 1;
-      min-width: 0;
-    }
-  }
   .addToCartTitle {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    .text-line-clamp();
   }
 }
 .productListingPage {
@@ -85,7 +77,7 @@
       overflow-y: auto;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       opacity: 1;
-      transform: none;
+      transform: translateX(0);
 
       &.hidden {
         opacity: 0;
@@ -95,7 +87,7 @@
         margin-inline-end: 0;
         overflow: hidden;
         pointer-events: none;
-
+        
         [dir="rtl"] & {
           transform: translateX(20px);
         }
@@ -118,7 +110,6 @@
       display: flex;
       flex-direction: column;
       gap: 24px;
-      min-width: 0;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
       @media @tablet {
@@ -379,10 +370,10 @@
 .breadcrumbWrapper {
   padding: 16px 40px 24px;
   @media @tablet {
-    padding: 0 40px 24px;
+    padding: 67px 40px 24px;
   }
   @media @mobile {
-    padding: 0 16px 24px;
+    padding: 67px 16px 24px;
   }
 }
 
@@ -421,8 +412,8 @@
   z-index: 1;
   inset-inline-start: 0;
   inset-inline-end: 0;
-  position: sticky;
-  top: var(--headerHeight, 0px);
+  position: fixed;
+  top: var(--headerHeight);
 
   @media @desktop {
     display: none;
@@ -436,14 +427,6 @@
       align-items: center;
       column-gap: 4px;
       color: @TextHeading;
-
-      svg,
-      svg * {
-        color: @TextBody;
-        fill: @TextBody;
-        stroke: @TextBody;
-      }
-
       &.filterBtn {
         padding-inline-end: 16px;
         border-inline-end: 1px solid @DividerStokes;
@@ -454,7 +437,6 @@
   .headerRight {
     display: flex;
     align-items: center;
-
   }
 }
 
@@ -462,8 +444,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-width: 0;
-  max-width: 100%;
   padding: 0 4px;
 
   @media @desktop {
@@ -471,19 +451,14 @@
   }
   .headerLeft {
     display: flex;
-    flex: 1;
     align-items: baseline;
     column-gap: 4px;
-    min-width: 0;
     max-width: 100%;
     @media @desktop {
       column-gap: 8px;
     }
     .title {
-      min-width: 0;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      .text-line-clamp(2);
       .h4();
     }
     .productCount {
@@ -494,10 +469,6 @@
   .headerRight {
     display: flex;
     align-items: center;
-    svg {
-      color: @TextBody;
-      fill: @TextBody;
-    }
     @media @tablet {
       display: none;
     }
@@ -516,11 +487,11 @@
   border-radius: 4px;
   transition: all 0.2s ease-in-out;
   user-select: none;
-
+  
   &:active {
     transform: translateY(0);
   }
-
+  
   .filterToggleText {
     display: flex;
     justify-content: center;
@@ -531,16 +502,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
-    svg,
-    svg * {
-      color: @TextBody;
-      fill: @TextBody;
-      stroke: @TextBody;
-    }
+    
   }
 }
-.headerRight .colIconBtn {
+.colIconBtn {
   padding: 4px;
   border: 1px solid transparent;
   border-radius: 2px;
@@ -549,13 +514,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: @TextBody;
-  svg,
-  svg * {
-    color: @TextBody !important;
-    fill: @TextBody !important;
-    stroke: @TextBody !important;
-  }
+  color: @TextHeading;
   &:not(:last-child) {
     margin-inline-end: 8px;
   }

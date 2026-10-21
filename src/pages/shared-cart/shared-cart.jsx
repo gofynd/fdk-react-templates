@@ -11,7 +11,6 @@ const SharedCart = ({
   onMergeBagClick = () => {},
   onAddToBagClick = () => {},
   onReplaceBagClick = () => {},
-  globalConfig = {},
 }) => {
   const { t } = useGlobalTranslation("translation");
   const getPieces = useMemo(() => {
@@ -24,12 +23,11 @@ const SharedCart = ({
   }, [sharedCartData]);
 
   const itemCountLabel = useMemo(() => {
-    const bagItemsLength = bagItems?.length || 0;
     let itmStrng =
-      bagItemsLength > 1
+      bagItems.length > 1
         ? t("resource.common.item_simple_text_plural")
         : t("resource.common.item_simple_text");
-    return `(${bagItemsLength} ${itmStrng} | ${getPieces} ${t("resource.common.qty")})`;
+    return `(${bagItems.length} ${itmStrng} | ${getPieces} ${t("resource.common.qty")})`;
   }, [bagItems, getPieces]);
 
   const sharedCartCouponProps = useMemo(() => {
@@ -56,10 +54,7 @@ const SharedCart = ({
           <span className={styles.subTitle}>{itemCountLabel}</span>
         </div>
         <div className={styles.sharedCart}>
-          <SharedCartItems
-            bagItems={bagItems}
-            globalConfig={globalConfig}
-          />
+          <SharedCartItems bagItems={bagItems} />
           <div className={styles.breakUpContainer}>
             <SharedCartBreakupContainer
               sharedCartData={sharedCartData}

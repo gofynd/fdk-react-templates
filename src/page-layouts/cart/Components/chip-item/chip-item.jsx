@@ -10,7 +10,6 @@ import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import QuantityControl from "../../../../components/quantity-control/quantity-control";
 import Modal from "../../../../components/core/modal/modal";
 import { useMobile } from "../../../../helper/hooks";
-import Skeleton from "../../../../components/core/skeletons/skeleton";
 import FreeGiftItem from "../free-gift-item/free-gift-item";
 import RadioIcon from "../../../../assets/images/radio";
 import Accordion from "../../../../components/accordion/accordion";
@@ -21,20 +20,6 @@ import {
   useNavigate,
 } from "fdk-core/utils";
 import ChipImage from "./chip-image";
-import { transformDisplayToAccordionContent } from "../../../../helper/customization-display";
-
-const GET_PRODUCT_SIZES = `query ProductSizes($slug: String!) {
-  product(slug: $slug) {
-    sizes {
-      size_details {
-        display
-        is_available
-        quantity
-        value
-      }
-    }
-  }
-}`;
 
 export default function ChipItem({
   isCartUpdating,
@@ -71,14 +56,11 @@ export default function ChipItem({
   const navigate = useNavigate();
   const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
   const locale = language?.locale;
-  const { limited_stock_quantity: limitedStockQuantity = 11 } =
-    globalConfig || {};
+  const { limited_stock_quantity: limitedStockQuantity = 11 } = globalConfig || {};
   const isMobile = useMobile();
   const [showQuantityError, setShowQuantityError] = useState(false);
   const [showFOModal, setShowFOModal] = useState(false);
   const [sizeModalErr, setSizeModalErr] = useState(null);
-  const [fetchedSizes, setFetchedSizes] = useState(null);
-  const [isSizesLoading, setIsSizesLoading] = useState(false);
   const [activePromoIndex, setActivePromoIndex] = useState(null);
   const [clickedPromoIndex, setClickedPromoIndex] = useState(null);
   const [fulfillmentOptions, setFulfillmentOptions] = useState([]);
@@ -94,37 +76,85 @@ export default function ChipItem({
   const couponText = singleItemDetails?.coupon_message || "";
   const moq = singleItemDetails?.moq;
   const incrementDecrementUnit = moq?.increment_unit ?? 1;
-
-  // Use the actual backend item_index from the article, not the UI loop index
-  // This is critical for cart updates to work correctly, especially with customized items
-  const actualItemIndex = singleItemDetails?.article?.item_index ?? itemIndex;
-
-  const rawCustomizationOptions =
+  const customizationOptions =
     singleItemDetails?.article?._custom_json?._display || [];
-  const accordionContent = transformDisplayToAccordionContent(
-    rawCustomizationOptions
-  );
+
+  // Transform customization options into accordion format
+  const transformedCustomizationContent = customizationOptions
+    .map((option) => {
+      const items = [];
+
+      // Handle productCanvas type (nested value object)
+      if (option.type === "productCanvas" && option.value) {
+        const canvasData = option.value;
+
+        if (canvasData.text) {
+          items.push({
+            key: option.key || "Text",
+            value: canvasData.text,
+          });
+        }
+
+        if (canvasData.price || option.price) {
+          items.push({
+            key: "Price",
+            value: `${canvasData.price || option.price}`,
+          });
+        }
+
+        if (canvasData.previewImage) {
+          items.push({
+            key: "Preview",
+            value: canvasData.previewImage,
+            type: "image",
+            alt: option.key || "Customization preview",
+            dimensions: canvasData.textBounds
+              ? {
+                  width: canvasData.textBounds.width,
+                  height: canvasData.textBounds.height,
+                }
+              : undefined,
+          });
+        }
+      }
+      // Handle simple string type
+      else if (option.type === "string" && option.value) {
+        items.push({
+          key: option.alt || option.key,
+          value: option.value,
+        });
+      }
+      // Handle other types with direct text/price/previewImage properties
+      else {
+        if (option.text) {
+          items.push({ key: "Text", value: option.text });
+        }
+
+        if (option.price) {
+          items.push({ key: "Price", value: option.price });
+        }
+
+        if (option.previewImage) {
+          items.push({
+            key: "Preview",
+            value: option.previewImage,
+            type: "image",
+            alt: "Customization preview",
+          });
+        }
+      }
+
+      return items;
+    })
+    .flat();
 
   const [items, setItems] = useState([
     {
       title: "Customization",
-      content: accordionContent,
+      content: transformedCustomizationContent,
       open: false,
     },
   ]);
-
-  // Sync accordion content when singleItemDetails changes (e.g. after cart refresh following a size update)
-  useEffect(() => {
-    setItems((prev) => [
-      {
-        title: "Customization",
-        content: transformDisplayToAccordionContent(
-          singleItemDetails?.article?._custom_json?._display || []
-        ),
-        open: prev[0]?.open ?? false,
-      },
-    ]);
-  }, [singleItemDetails?.article?._custom_json]);
 
   const isSellerBuyBoxListing = useMemo(() => {
     return (
@@ -143,12 +173,6 @@ export default function ChipItem({
   }, [buybox]);
 
   const getMaxQuantity = (item) => {
-    // Made-To-Order items carry no sellable stock, so max_quantity.item comes
-    // back as null/0. Don't cap them on stock — let moq.maximum govern below.
-    if (item?.custom_order?.is_custom_order) {
-      return Number.POSITIVE_INFINITY;
-    }
-
     let maxQuantity = item?.max_quantity?.item || 0;
 
     if (isSellerBuyBoxListing) {
@@ -204,10 +228,6 @@ export default function ChipItem({
       operation === "remove_item" ||
       isSizeUpdate
     ) {
-      if (isSizeUpdate) {
-        setSizeModalErr(null);
-      }
-
       const cartUpdateResponse = await onUpdateCartItems(
         event,
         itemDetails,
@@ -216,18 +236,17 @@ export default function ChipItem({
         itemIndex,
         operation === "edit_item" ? "update_item" : operation,
         false,
-        isSizeUpdate
+        true
       );
 
       if (isSizeUpdate) {
         if (cartUpdateResponse?.success) {
           setCurrentSizeModalSize(null);
           setSizeModal(null);
-          setFetchedSizes(null);
+          setSizeModalErr(null);
         } else {
-          setSizeModalErr(
-            cartUpdateResponse?.message || t("resource.cart.size_update_failed")
-          );
+          setSizeModal(currentSizeModalSize);
+          setSizeModalErr(t("resource.cart.size_is_out_of_stock"));
         }
       }
     }
@@ -261,16 +280,6 @@ export default function ChipItem({
 
     if (!filteredItems.length) {
       return false;
-    }
-
-    // Made-To-Order items aren't stock-capped (max_quantity.item is null),
-    // so bound them by moq.maximum instead. No moq.maximum => no upper limit.
-    if (isCustomOrder) {
-      const mtoTotalQuantity = filteredItems.reduce(
-        (sum, item) => sum + item.quantity,
-        0
-      );
-      return moq?.maximum ? mtoTotalQuantity >= moq.maximum : false;
     }
 
     let totalQuantity = 0;
@@ -351,7 +360,7 @@ export default function ChipItem({
       singleItemDetails,
       currentSize,
       singleItemDetails?.quantity,
-      actualItemIndex,
+      itemIndex,
       "update_item",
       false,
       false,
@@ -408,7 +417,7 @@ export default function ChipItem({
                     singleItemDetails,
                     currentSize,
                     0,
-                    actualItemIndex,
+                    itemIndex,
                     "remove_item"
                   )
                 }
@@ -460,7 +469,7 @@ export default function ChipItem({
                 onRemoveIconClick({
                   item: singleItemDetails,
                   size: currentSize,
-                  index: actualItemIndex,
+                  index: itemIndex,
                 })
               }
             >
@@ -476,9 +485,10 @@ export default function ChipItem({
               className={`${styles.itemName} ${
                 isOutOfStock ? styles.outOfStock : ""
               } `}
-              title={singleItemDetails?.product?.name}
             >
-              {singleItemDetails?.product?.name}
+              {singleItemDetails?.product?.name?.length > 24
+                ? `${singleItemDetails.product.name.slice(0, 24)}...`
+                : singleItemDetails?.product?.name}{" "}
             </div>
             {isSoldBy && !isOutOfStock && (
               <div className={styles.itemSellerName}>
@@ -489,26 +499,9 @@ export default function ChipItem({
               <div className={styles.itemSizeQuantitySubContainer}>
                 <button
                   className={styles.sizeContainer}
-                  onClick={async (e) => {
+                  onClick={(e) => {
                     e.stopPropagation();
-                    if (isCartUpdating) return;
-                    setFetchedSizes(null);
                     setSizeModal(singleItem);
-                    const slug = singleItemDetails?.product?.slug;
-                    if (slug) {
-                      setIsSizesLoading(true);
-                      try {
-                        const res = await fpi.executeGQL(
-                          GET_PRODUCT_SIZES,
-                          { slug },
-                          { skipStoreUpdate: true }
-                        );
-                        const sizes = res?.data?.product?.sizes?.size_details;
-                        setFetchedSizes(sizes?.length ? sizes : null);
-                      } finally {
-                        setIsSizesLoading(false);
-                      }
-                    }
                   }}
                 >
                   <div className={styles.sizeName}>
@@ -531,7 +524,7 @@ export default function ChipItem({
                         singleItemDetails,
                         currentSize,
                         -incrementDecrementUnit,
-                        actualItemIndex,
+                        itemIndex,
                         "update_item"
                       )
                     }
@@ -541,7 +534,7 @@ export default function ChipItem({
                         singleItemDetails,
                         currentSize,
                         incrementDecrementUnit,
-                        actualItemIndex,
+                        itemIndex,
                         "update_item"
                       )
                     }
@@ -551,7 +544,7 @@ export default function ChipItem({
                         singleItemDetails,
                         currentSize,
                         currentNum,
-                        actualItemIndex,
+                        itemIndex,
                         "edit_item"
                       )
                     }
@@ -595,41 +588,124 @@ export default function ChipItem({
                   </div>
                 )}
             </div>
-            <div className={styles.itemTotalContainer}>
-              <div className={styles.itemPrice}>
-                <span
-                  className={`${styles.effectivePrice} ${
-                    isOutOfStock ? styles.outOfStock : ""
-                  }`}
-                >
-                  {currencyFormat(
-                    singleItemDetails?.price?.converted?.effective ??
-                      singleItemDetails?.price?.base?.effective,
-                    singleItemDetails?.price?.converted?.currency_symbol ??
-                      singleItemDetails?.price?.base?.currency_symbol,
-                    formatLocale(locale, countryCode, true),
-                    singleItemDetails?.price?.converted?.currency_code ??
-                      singleItemDetails?.price?.base?.currency_code
-                  )}
-                </span>
-                {singleItemDetails?.price?.converted?.effective <
-                  singleItemDetails?.price?.converted?.marked && (
-                  <span className={styles.markedPrice}>
+        <div className={styles.itemTotalContainer}>
+              {singleItemDetails?.quantity > 1 ? (
+                <div className={styles.priceBreakdownContainer}>
+                  {/* Unit Price Section */}
+                  <div className={styles.priceSection}>
+                    <div className={styles.priceLabel}>
+                      Unit Price:
+                    </div>
+                    <div className={styles.itemPrice}>
+                      <span
+                        className={`${styles.effectivePrice} ${
+                          isOutOfStock ? styles.outOfStock : ""
+                        }`}
+                      >
+                        {currencyFormat(
+                          singleItemDetails?.price_per_unit?.converted?.effective ??
+                            singleItemDetails?.price_per_unit?.base?.effective,
+                          singleItemDetails?.price_per_unit?.converted?.currency_symbol ??
+                            singleItemDetails?.price_per_unit?.base?.currency_symbol,
+                          formatLocale(locale, countryCode, true)
+                        )}
+                      </span>
+                      {singleItemDetails?.price_per_unit?.converted?.effective <
+                        singleItemDetails?.price_per_unit?.converted?.marked && (
+                        <span className={styles.markedPrice}>
+                          {currencyFormat(
+                            singleItemDetails?.price_per_unit?.converted?.marked ??
+                              singleItemDetails?.price_per_unit?.base?.marked,
+                            singleItemDetails?.price_per_unit?.converted?.currency_symbol ??
+                              singleItemDetails?.price_per_unit?.base?.currency_symbol,
+                            formatLocale(locale, countryCode, true)
+                          )}
+                        </span>
+                      )}
+                      {singleItemDetails?.price_per_unit?.converted?.effective <
+                        singleItemDetails?.price_per_unit?.converted?.marked &&
+                        singleItemDetails?.discount && (
+                        <span className={styles.discount}>
+                          {singleItemDetails?.discount}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  {/* Total Price Section */}
+                  <div className={styles.priceSection}>
+                    <div className={styles.priceLabel}>
+                      {t("resource.cart.total_price") || "Total Price"}:
+                    </div>
+                    <div className={styles.itemPrice}>
+                      <span
+                        className={`${styles.effectivePrice} ${
+                          isOutOfStock ? styles.outOfStock : ""
+                        }`}
+                      >
+                        {currencyFormat(
+                          singleItemDetails?.price?.converted?.effective ??
+                            singleItemDetails?.price?.base?.effective,
+                          singleItemDetails?.price?.converted?.currency_symbol ??
+                            singleItemDetails?.price?.base?.currency_symbol,
+                          formatLocale(locale, countryCode, true)
+                        )}
+                      </span>
+                      {singleItemDetails?.price?.converted?.effective <
+                        singleItemDetails?.price?.converted?.marked && (
+                        <span className={styles.markedPrice}>
+                          {currencyFormat(
+                            singleItemDetails?.price?.converted?.marked ??
+                              singleItemDetails?.price?.base?.marked,
+                            singleItemDetails?.price?.converted?.currency_symbol ??
+                              singleItemDetails?.price?.base?.currency_symbol,
+                            formatLocale(locale, countryCode, true)
+                          )}
+                        </span>
+                      )}
+                      {singleItemDetails?.price?.converted?.effective <
+                        singleItemDetails?.price?.converted?.marked &&
+                        singleItemDetails?.discount && (
+                        <span className={styles.discount}>
+                          {singleItemDetails?.discount}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className={styles.itemPrice}>
+                  <span
+                    className={`${styles.effectivePrice} ${
+                      isOutOfStock ? styles.outOfStock : ""
+                    }`}
+                  >
                     {currencyFormat(
-                      singleItemDetails?.price?.converted?.marked ??
-                        singleItemDetails?.price?.base?.marked,
+                      singleItemDetails?.price?.converted?.effective ??
+                        singleItemDetails?.price?.base?.effective,
                       singleItemDetails?.price?.converted?.currency_symbol ??
                         singleItemDetails?.price?.base?.currency_symbol,
-                      formatLocale(locale, countryCode, true),
-                      singleItemDetails?.price?.converted?.currency_code ??
-                        singleItemDetails?.price?.base?.currency_code
+                      formatLocale(locale, countryCode, true)
                     )}
                   </span>
-                )}
-                <span className={styles.discount}>
-                  {singleItemDetails?.discount}
-                </span>
-              </div>
+                  {singleItemDetails?.price?.converted?.effective <
+                    singleItemDetails?.price?.converted?.marked && (
+                    <span className={styles.markedPrice}>
+                      {currencyFormat(
+                        singleItemDetails?.price?.converted?.marked ??
+                          singleItemDetails?.price?.base?.marked,
+                        singleItemDetails?.price?.converted?.currency_symbol ??
+                          singleItemDetails?.price?.base?.currency_symbol,
+                        formatLocale(locale, countryCode, true)
+                      )}
+                    </span>
+                  )}
+                  {singleItemDetails?.discount && (
+                    <span className={styles.discount}>
+                      {singleItemDetails?.discount}
+                    </span>
+                  )}
+                </div>
+              )}
               {isDeliveryPromise &&
                 !isOutOfStock &&
                 isServiceable &&
@@ -673,7 +749,7 @@ export default function ChipItem({
                   <SvgWrapper svgSrc="applied-promo" className={styles.ml6} />
                 </div>
               )}
-            {accordionContent.length > 0 && (
+            {customizationOptions.length > 0 && (
               <div className={styles.productCustomizationContainer}>
                 <Accordion items={items} onItemClick={handleItemClick} />
               </div>
@@ -681,7 +757,6 @@ export default function ChipItem({
           </div>
           <FreeGiftItem
             item={singleItemDetails}
-            globalConfig={globalConfig}
             currencySymbol={
               singleItemDetails?.price?.converted?.currency_symbol ??
               singleItemDetails?.price?.base?.currency_symbol
@@ -781,14 +856,13 @@ export default function ChipItem({
 
       <Modal
         isOpen={
-          !!(sizeModal && cartItems[sizeModal] && sizeModal === singleItem)
+          sizeModal && cartItems[sizeModal] !== null && sizeModal === singleItem
         }
         closeDialog={(e) => {
           e.stopPropagation();
           setSizeModal(null);
           setCurrentSizeModalSize(null);
           setSizeModalErr(null);
-          setFetchedSizes(null);
         }}
         isCancellable={false}
         headerClassName={styles.sizeModalHeader}
@@ -810,7 +884,6 @@ export default function ChipItem({
                     sizeModalItemValue?.product?.name ||
                     t("resource.common.product_image")
                   }
-                  className={`${globalConfig?.img_fill ? styles.imgCover : styles.imgContain}`}
                 />
               </div>
               <div className={styles.sizeModalContent}>
@@ -841,112 +914,82 @@ export default function ChipItem({
         }
       >
         <div className={styles.sizeModalBody}>
-          {isSizesLoading ? (
-            <>
-              <Skeleton height={16} width={80} borderRadius={4} />
-              <div className={styles.sizeHorizontalList}>
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Skeleton
-                    key={i}
-                    type="rectangle"
-                    height={50}
-                    width={50}
-                    borderRadius={4}
-                  />
-                ))}
-              </div>
-            </>
-          ) : (
-            <>
-              <div className={styles.sizeSelectHeading}>
-                {(
-                  fetchedSizes ??
-                  sizeModalItemValue?.availability?.available_sizes
-                )?.length > 0
-                  ? t("resource.common.select_size")
-                  : t("resource.cart.product_not_available")}
-              </div>
-              <div className={styles.sizeHorizontalList}>
-                {(
-                  fetchedSizes ??
-                  sizeModalItemValue?.availability?.available_sizes
-                )?.length > 0 &&
-                  (
-                    fetchedSizes ??
-                    sizeModalItemValue?.availability?.available_sizes
-                  )?.map((singleSize) => {
-                    const isUnavailable = fetchedSizes
-                      ? singleSize?.quantity === 0 && !isCustomOrder
-                      : !singleSize?.is_available;
-                    const isEarlierSelectedSize =
-                      !currentSizeModalSize &&
-                      sizeModalItemValue?.article?.size === singleSize?.value;
-                    const isCurrentSelectedSize =
-                      currentSizeModalSize?.split("_")[1] === singleSize?.value;
-                    return (
+          <div className={styles.sizeSelectHeading}>
+            {sizeModalItemValue?.availability?.available_sizes?.length > 0
+              ? t("resource.common.select_size")
+              : t("resource.cart.product_not_available")}
+          </div>
+          <div className={styles.sizeHorizontalList}>
+            {sizeModalItemValue?.availability?.available_sizes?.length > 0 &&
+              sizeModalItemValue?.availability?.available_sizes?.map(
+                (singleSize) => {
+                  const isEarlierSelectedSize =
+                    !currentSizeModalSize &&
+                    sizeModal?.split("_")[1] === singleSize?.value;
+                  const isCurrentSelectedSize =
+                    currentSizeModalSize?.split("_")[1] === singleSize?.value;
+                  return (
+                    <div
+                      key={singleSize?.display}
+                      className={`${styles.singleSize}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                    >
                       <div
-                        key={singleSize?.display}
-                        className={`${styles.singleSize}`}
+                        className={`${styles.singleSizeDetails} ${
+                          (isEarlierSelectedSize || isCurrentSelectedSize) &&
+                          styles.singleSizeSelected
+                        }
+                          ${
+                            !singleSize?.is_available &&
+                            styles.sigleSizeDisabled
+                          }
+                          `}
                         onClick={(e) => {
                           e.stopPropagation();
+                          if (!singleSize?.is_available) return;
+
+                          const originalSize = sizeModal?.split("_")[1];
+                          const isOriginalSize =
+                            singleSize?.value === originalSize;
+
+                          if (isOriginalSize) {
+                            // Reset to null when original size is re-selected
+                            setSizeModalErr(null);
+                            setCurrentSizeModalSize(null);
+                          } else if (singleSize?.value) {
+                            // Set new size when a different size is selected
+                            setSizeModalErr(null);
+                            const newSizeModalValue = `${
+                              sizeModal?.split("_")[0]
+                            }_${singleSize?.value}_${sizeModal?.split("_")[2]}`;
+                            setCurrentSizeModalSize(newSizeModalValue);
+                          }
                         }}
                       >
-                        <div
-                          className={`${styles.singleSizeDetails} ${
-                            isEarlierSelectedSize || isCurrentSelectedSize
-                              ? styles.singleSizeSelected
-                              : ""
-                          } ${isUnavailable ? styles.sigleSizeDisabled : ""}`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            if (isUnavailable) return;
-
-                            const isOriginalSize =
-                              singleSize?.value ===
-                              sizeModalItemValue?.article?.size;
-
-                            if (isOriginalSize) {
-                              setSizeModalErr(null);
-                              setCurrentSizeModalSize(null);
-                            } else if (singleSize?.value) {
-                              setSizeModalErr(null);
-                              const parts = (sizeModal ?? "").split("_");
-                              parts[1] = singleSize?.value;
-                              const newSizeModalValue = parts.join("_");
-                              setCurrentSizeModalSize(newSizeModalValue);
-                            }
-                          }}
-                        >
-                          {singleSize?.display}
-                          {isUnavailable && (
-                            <svg>
-                              <line x1="0" y1="100%" x2="100%" y2="0" />
-                            </svg>
-                          )}
-                        </div>
+                        {singleSize?.display}
+                        {!singleSize?.is_available && (
+                          <svg>
+                            <line x1="0" y1="100%" x2="100%" y2="0" />
+                          </svg>
+                        )}
                       </div>
-                    );
-                  })}
-              </div>
-            </>
-          )}
+                    </div>
+                  );
+                }
+              )}
+          </div>
         </div>
         <div className={styles.sizeModalErrCls}>{sizeModalErr}</div>
         <button
-          className={`${styles.sizeModalFooter} ${(!currentSizeModalSize || currentSizeModalSize === sizeModal || sizeModalErr || isCartUpdating) && styles.disableBtn}`}
+          className={`${styles.sizeModalFooter} ${(!currentSizeModalSize || currentSizeModalSize === sizeModal || sizeModalErr) && styles.disableBtn}`}
           disabled={
             !currentSizeModalSize ||
             currentSizeModalSize === sizeModal ||
-            sizeModalErr ||
-            isCartUpdating
+            sizeModalErr
           }
           onClick={(e) => {
-            // Safety check: prevent update if cart is currently updating
-            if (isCartUpdating) {
-              console.log("Size update blocked: cart is updating");
-              return;
-            }
-
             // Safety check: prevent update if no size change
             if (
               !currentSizeModalSize ||
@@ -956,30 +999,15 @@ export default function ChipItem({
               return;
             }
 
-            // First, try to get the item from the current cartItems (handles frozen state)
-            let matchedItem = cartItems[sizeModal];
-
-            // If not found in cartItems (shouldn't happen but defensive), search in live array
-            if (!matchedItem) {
-              for (let j = 0; j < cartItemsWithActualIndex.length; j += 1) {
-                if (
-                  `${cartItemsWithActualIndex[j]?.key}_${cartItemsWithActualIndex[j]?.article?.store?.uid}_${cartItemsWithActualIndex[j]?.article?.item_index}` ===
-                  sizeModal
-                ) {
-                  matchedItem = cartItemsWithActualIndex[j];
-                  break;
-                }
+            let itemIndex;
+            for (let j = 0; j < cartItemsWithActualIndex.length; j += 1) {
+              if (
+                `${cartItemsWithActualIndex[j]?.key}_${cartItemsWithActualIndex[j]?.article?.store?.uid}_${cartItemsWithActualIndex[j]?.article?.item_index}` ===
+                sizeModal
+              ) {
+                itemIndex = j;
+                break;
               }
-            }
-
-            // Safety check: ensure we found the item
-            if (!matchedItem) {
-              console.error("Failed to find cart item for size update", {
-                sizeModal,
-                cartItemsKeys: Object.keys(cartItems),
-                liveItemsCount: cartItemsWithActualIndex.length,
-              });
-              return;
             }
 
             const newSize = currentSizeModalSize.split("_")[1];
@@ -990,13 +1018,12 @@ export default function ChipItem({
               return;
             }
 
-            // Use the actual article.item_index from the matched item, not the array index
             cartUpdateHandler(
               e,
               sizeModalItemValue,
               newSize,
-              matchedItem?.quantity || 0,
-              matchedItem?.article?.item_index,
+              cartItemsWithActualIndex[itemIndex]?.quantity || 0,
+              itemIndex,
               "update_item",
               true
             );

@@ -61,8 +61,6 @@ function CardForm({
   setIsJuspayCouponApplied,
   isPaymentLoading = false,
   loader = <div></div>,
-  mopSelectionLoading,
-  isPaymentDisabled = false,
 }) {
   const { t } = useGlobalTranslation("translation");
   const isFormatterSet = useRef(false);
@@ -167,7 +165,6 @@ function CardForm({
         cardDetails={cardDetails}
         selectMop={selectMop}
         setIsJuspayCouponApplied={setIsJuspayCouponApplied}
-        isPaymentDisabled={isPaymentDisabled}
       />
     );
   }
@@ -204,10 +201,7 @@ function CardForm({
           {cardDetailsData && cardDetailsData.logo && (
             <img
               src={cardDetailsData.logo}
-              alt={
-                cardDetailsData?.name ||
-                t("resource.checkout.card_network_logo")
-              }
+              alt={cardDetailsData?.name || t("resource.checkout.card_network_logo")}
               className={`${styles.cardNetwork} ${cardNumberError ? styles.iconPositionOnError : ""}`}
             />
           )}
@@ -384,38 +378,27 @@ function CardForm({
         {!addNewCard && isTablet ? (
           <StickyPayNow
             customClassName={styles.visibleOnTab}
-            disabled={
-              !isCardValid() || mopSelectionLoading || isPaymentDisabled
-            }
+            disabled={!isCardValid()}
             value={priceFormatCurrencySymbol(
               getCurrencySymbol,
-              getTotalValue(),
-              "en-IN",
-              null,
-              true
+              getTotalValue()
             )}
             enableLinkPaymentOption={enableLinkPaymentOption}
             onPriceDetailsClick={onPriceDetailsClick}
             proceedToPay={() => payUsingCard()}
             loader={loader}
             isPaymentLoading={isPaymentLoading}
-            mopSelectionLoading={mopSelectionLoading}
           />
         ) : (
           <button
             className={styles.saveNewCard}
             onClick={() => payUsingCard()}
-            disabled={
-              !isCardValid() ||
-              isPaymentLoading ||
-              mopSelectionLoading ||
-              isPaymentDisabled
-            }
+            disabled={!isCardValid() || isPaymentLoading}
           >
             {!isPaymentLoading ? (
               <>
                 {t("resource.common.pay_caps")}{" "}
-                {priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue(), "en-IN", null, true)}
+                {priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue())}
               </>
             ) : (
               loader

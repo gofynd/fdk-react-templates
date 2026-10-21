@@ -45,7 +45,6 @@
   }
   .leftCol {
     width: 100%;
-    min-width: 0;
     @media @tablet {
       max-width: 800px;
     }
@@ -81,8 +80,6 @@
   }
   &__header {
     margin-bottom: 20px;
-    max-width: 100%;
-    min-width: 0;
   }
   &__breadcrumb {
     padding-top: 2px;
@@ -92,12 +89,9 @@
   &__heading {
     margin-top: 10px;
     margin-bottom: 10px;
-    font-size: var(--section-heading-size, 38px);
-    line-height: calc(var(--section-heading-size, 38px) + 6px);
+    font-size: 38px;
+    line-height: 44px;
     font-weight: 700;
-    max-width: 100%;
-    overflow-wrap: anywhere;
-    word-break: break-word;
     @media @mobile {
       font-size: 28px;
       line-height: 130%;
@@ -170,23 +164,9 @@
     }
   }
 }
-.customTypography {
-  .blogPost__heading {
-    font-size: var(--section-heading-size, 38px);
-    font-weight: var(--section-heading-weight, 700);
-    text-transform: var(--section-heading-text-transform);
-    line-height: calc(var(--section-heading-size, 38px) + 6px);
-  }
-}
 .breadcrumb {
-  font-family: var(--fontBody);
-  color: @TextBody;
+  color: @TextSecondary;
   margin-bottom: 40px;
-
-  a {
-    color: @TextBody;
-  }
-
   &__icon {
     width: 4px;
     height: 7px;
@@ -198,12 +178,6 @@
     font-weight: 400;
     line-height: 15px;
     text-transform: capitalize;
-    color: @TextBody;
-  }
-
-  &__labelActive {
-    font-family: var(--fontHeader);
-    color: @TextHeading;
   }
 
   &__link {
@@ -219,16 +193,6 @@
     line-height: 20px;
   }
 }
-.author {
-  &__label {
-    color: @TextHeading;
-  }
-}
-.publishDate {
-  &__label {
-    color: @TextBody;
-  }
-}
 .social {
   gap: 0.5rem;
   flex-wrap: wrap;
@@ -241,7 +205,6 @@
     font-size: 14px;
     font-weight: 400;
     line-height: 20px;
-    color: @TextHeading;
   }
   &__icon {
     border-radius: 100%;

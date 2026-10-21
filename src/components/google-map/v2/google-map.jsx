@@ -25,6 +25,8 @@ import Shimmer from "../../shimmer/shimmer";
 import { getAddressFromComponents } from "../../../helper/utils";
 import { useStateRef } from "../../../helper/hooks";
 
+const libraries = ["places"];
+
 const GoogleMapAddress = ({
   className,
   mapApiKey,
@@ -77,8 +79,7 @@ const GoogleMapAddress = ({
 
   const { isLoaded: isMapLoaded } = useJsApiLoader({
     googleMapsApiKey: mapApiKey,
-    id: "google-maps-script",
-    libraries: ["places"],
+    libraries,
   });
 
   const getGeocodeByAddress = async (address) => {
@@ -277,7 +278,6 @@ const GoogleMapAddress = ({
             {t("resource.common.address.select_delivery_location")}
           </h2>
           <button
-            type="button"
             className={styles.closeIcon}
             onClick={onClose}
             aria-label={t("resource.common.close")}
