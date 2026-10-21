@@ -185,16 +185,11 @@ function ShipmentUpdateItem({
               globalConfig={globalConfig}
             />
             <div className={`${styles.bagInfo}`}>
-              <div className={styles.itemDetails}>
+              <div>
                 <div className={`${styles.brandName} ${styles.boldxxxs}`}>
                   {brand}
                 </div>
-                <div
-                  className={`${styles.itemName} ${styles.lightxxxs}`}
-                  title={name}
-                >
-                  {name}
-                </div>
+                <div className={`${styles.lightxxxs}`}>{name}</div>
               </div>
               <div className={`${styles.sizeQuantityContainer}`}>
                 {size && (

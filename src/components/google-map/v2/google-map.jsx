@@ -24,7 +24,6 @@ import { useGlobalTranslation } from "fdk-core/utils";
 import Shimmer from "../../shimmer/shimmer";
 import { getAddressFromComponents } from "../../../helper/utils";
 import { useStateRef } from "../../../helper/hooks";
-import { getGoogleMapFormFields } from "../../../helper/address-form-location";
 
 const GoogleMapAddress = ({
   className,
@@ -55,12 +54,6 @@ const GoogleMapAddress = ({
   const [currentLocation, setCurrentLocation, currentLocationRef] =
     useStateRef(addressItem);
   const mapRef = useRef(null);
-  const selectedPlaceRef = useRef(null);
-  const geocodeRequestRef = useRef(0);
-  const [isResolvingAddress, setIsResolvingAddress] = useState(false);
-  useEffect(() => () => {
-    geocodeRequestRef.current += 1;
-  }, []);
   
   // Priority: addressItem geo_location > last used location > country details > Mumbai
   const lastUsedLocation = getLastUsedLocation();
@@ -157,7 +150,6 @@ const GoogleMapAddress = ({
 
     navigator.geolocation.getCurrentPosition(
       async (position) => {
-        selectedPlaceRef.current = null;
         const userLocation = {
           lat: position.coords.latitude,
           lng: position.coords.longitude,
@@ -185,13 +177,6 @@ const GoogleMapAddress = ({
             lat: location.lat(),
             lng: location.lng(),
           };
-          selectedPlaceRef.current = {
-            ...selectedLocation,
-            ...getGoogleMapFormFields(place.address_components),
-            pending: true,
-          };
-          geocodeRequestRef.current += 1;
-          setIsResolvingAddress(true);
           // Save the searched location for future use
           try {
             localStorage.setItem('lastMapLocation', JSON.stringify(selectedLocation));
@@ -227,9 +212,7 @@ const GoogleMapAddress = ({
           if (
             mapCenterRef.current.lat !== lat ||
             mapCenterRef.current.lng !== lng ||
-            selectedPlaceRef.current?.pending ||
-            !currentLocationRef.current ||
-            (!addressItem?.id && !currentLocationRef.current?.map_address_fields)
+            !currentLocationRef.current
           ) {
             mapCenterRef.current = { lat, lng };
             // Save the selected location for future use
@@ -239,29 +222,19 @@ const GoogleMapAddress = ({
               console.error('Failed to save location:', error);
             }
             const geocoder = new window.google.maps.Geocoder();
-            const request = ++geocodeRequestRef.current;
-            const selection = selectedPlaceRef.current;
-            if (selection) selection.pending = false;
-            setIsResolvingAddress(true);
             geocoder.geocode({ location: { lat, lng } }, (results, status) => {
-              if (request !== geocodeRequestRef.current) return;
-              setIsResolvingAddress(false);
               if (status === "OK" && results[0]) {
                 const address = getAddressFromComponents(
                   results[0].address_components
                 );
                 setCurrentLocation({
                   ...address,
-                  map_address_fields: getGoogleMapFormFields(
-                    results[0].address_components, { lat, lng }, selection
-                  ),
                   geo_location: {
-                    latitude: lat,
-                    longitude: lng,
+                    latitude: mapCenterRef.current.lat,
+                    longitude: mapCenterRef.current.lng,
                   },
                 });
               } else {
-                setCurrentLocation(null);
                 console.error("Geocoder failed:", status);
               }
             });
@@ -304,7 +277,6 @@ const GoogleMapAddress = ({
             {t("resource.common.address.select_delivery_location")}
           </h2>
           <button
-            type="button"
             className={styles.closeIcon}
             onClick={onClose}
             aria-label={t("resource.common.close")}
@@ -380,7 +352,7 @@ const GoogleMapAddress = ({
         )}
         <FyButton
           onClick={() => onAddressSelect(currentLocation)}
-          disabled={isMapCountryError || isResolvingAddress || !currentLocation}
+          disabled={isMapCountryError}
         >
           CONFIRM
         </FyButton>
