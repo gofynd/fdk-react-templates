@@ -61,6 +61,51 @@ export const getInitialAddressFormFields = (
     ? getMapAddressFormFields(address, countryIso)
     : address;
 
+export const getAddressMapPoint = (address) => {
+  const { latitude, longitude } = address?.geo_location || {};
+  const isNumber = (value) =>
+    (typeof value === "number" || typeof value === "string") &&
+    String(value).trim() !== "" &&
+    Number.isFinite(Number(value));
+  if (!isNumber(latitude) || !isNumber(longitude)) return null;
+  const lat = Number(latitude),
+    lng = Number(longitude);
+  return Math.abs(lat) <= 90 && Math.abs(lng) <= 180 ? { lat, lng } : null;
+};
+
+export const hasPrefilledAddressLocation = (address) =>
+  Boolean(
+    (address?.delivery_address_draft || getAddressMapPoint(address)) &&
+      (address?.address || address?.area || address?.landmark || address?.city)
+  );
+
+export const shouldOpenAddressMap = (
+  mapAvailable,
+  address,
+  isNewAddress,
+  startWithAddressForm = false
+) => {
+  if (!mapAvailable) return false;
+  // A location chosen in the header/cart is already selected. Collect the
+  // remaining delivery details first; Change can reopen its map explicitly.
+  if (startWithAddressForm && hasPrefilledAddressLocation(address))
+    return false;
+  if (!isNewAddress && getAddressMapPoint(address)) return false;
+  return true;
+};
+
+export const resolveAddressMapCenter = (address, lastUsed, country) =>
+  getAddressMapPoint(address) ||
+  getAddressMapPoint({
+    geo_location: { latitude: lastUsed?.lat, longitude: lastUsed?.lng },
+  }) ||
+  getAddressMapPoint({
+    geo_location: {
+      latitude: country?.latitude,
+      longitude: country?.longitude,
+    },
+  }) || { lat: 19.076, lng: 72.8777 };
+
 export const mergeMapAddressFormFields = (current, address, countryIso) => {
   const fields = getMapAddressFormFields(address, countryIso);
   return {

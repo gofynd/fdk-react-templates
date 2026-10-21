@@ -24,7 +24,12 @@ import { useGlobalTranslation } from "fdk-core/utils";
 import Shimmer from "../../shimmer/shimmer";
 import { getAddressFromComponents } from "../../../helper/utils";
 import { useStateRef } from "../../../helper/hooks";
-import { getGoogleMapFormFields } from "../../../helper/address-form-location";
+import {
+  getGoogleMapFormFields,
+  getAddressMapPoint,
+  hasPrefilledAddressLocation,
+  resolveAddressMapCenter,
+} from "../../../helper/address-form-location";
 
 const GoogleMapAddress = ({
   className,
@@ -38,8 +43,6 @@ const GoogleMapAddress = ({
 }) => {
   const { t } = useGlobalTranslation("translation");
   const isNewAddress = !addressItem;
-  // Mumbai coordinates as fallback default
-  const MUMBAI_COORDINATES = { lat: 19.0760, lng: 72.8777 };
   
   // Get last used location from localStorage
   const getLastUsedLocation = () => {
@@ -63,24 +66,9 @@ const GoogleMapAddress = ({
   }, []);
   
   // Priority: addressItem geo_location > last used location > country details > Mumbai
-  const lastUsedLocation = getLastUsedLocation();
-  const defaultLat = Number(
-    addressItem?.geo_location?.latitude ||
-    lastUsedLocation?.lat ||
-    countryDetails?.latitude ||
-    MUMBAI_COORDINATES.lat
+  const mapCenterRef = useRef(
+    resolveAddressMapCenter(addressItem, getLastUsedLocation(), countryDetails)
   );
-  const defaultLng = Number(
-    addressItem?.geo_location?.longitude ||
-    lastUsedLocation?.lng ||
-    countryDetails?.longitude ||
-    MUMBAI_COORDINATES.lng
-  );
-  
-  const mapCenterRef = useRef({
-    lat: defaultLat,
-    lng: defaultLng,
-  });
 
   const { isLoaded: isMapLoaded } = useJsApiLoader({
     googleMapsApiKey: mapApiKey,
@@ -113,36 +101,27 @@ const GoogleMapAddress = ({
     setCurrentLocation(address);
     
     // Priority: address geo_location > last used location > country details > Mumbai
-    const lastUsedLoc = getLastUsedLocation();
-    const newLat = Number(
-      address?.geo_location?.latitude ||
-      lastUsedLoc?.lat ||
-      countryDetails?.latitude ||
-      MUMBAI_COORDINATES.lat
+    mapCenterRef.current = resolveAddressMapCenter(
+      address,
+      getLastUsedLocation(),
+      countryDetails
     );
-    const newLng = Number(
-      address?.geo_location?.longitude ||
-      lastUsedLoc?.lng ||
-      countryDetails?.longitude ||
-      MUMBAI_COORDINATES.lng
-    );
-    
-    mapCenterRef.current = {
-      lat: newLat,
-      lng: newLng,
-    };
     mapRef?.current?.panTo(mapCenterRef.current);
   };
 
   useEffect(() => {
-    if (!addressItem?.geo_location && addressItem?.area_code) {
+    let active = true;
+    if (!getAddressMapPoint(addressItem) && addressItem?.area_code) {
       getGeocodeByAddress(addressItem).then((location) => {
-        if (location) {
+        if (active && location) {
           updateMapLocation({ ...addressItem, geo_location: location });
         }
       });
     }
     updateMapLocation(addressItem);
+    return () => {
+      active = false;
+    };
   }, [
     countryDetails?.latitude,
     countryDetails?.longitude,
@@ -225,11 +204,13 @@ const GoogleMapAddress = ({
           const lng = newCenter.lng();
           setIsLocationError(false);
           if (
-            mapCenterRef.current.lat !== lat ||
-            mapCenterRef.current.lng !== lng ||
+            Math.abs(mapCenterRef.current.lat - lat) > 0.0000001 ||
+            Math.abs(mapCenterRef.current.lng - lng) > 0.0000001 ||
             selectedPlaceRef.current?.pending ||
             !currentLocationRef.current ||
-            (!addressItem?.id && !currentLocationRef.current?.map_address_fields)
+            (!addressItem?.id &&
+              !currentLocationRef.current?.map_address_fields &&
+              !hasPrefilledAddressLocation(currentLocationRef.current))
           ) {
             mapCenterRef.current = { lat, lng };
             // Save the selected location for future use

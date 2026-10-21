@@ -90,6 +90,7 @@ function SingleAddress({
             internationalShipping={isInternationalShippingEnabled}
             formSchema={defaultFormSchema}
             isNewAddress={isNewAddress}
+            startWithAddressForm
             addressItem={addressItem}
             onUpdateAddress={updateAddress}
             onAddAddress={addAddress}

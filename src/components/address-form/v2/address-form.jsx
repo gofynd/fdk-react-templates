@@ -66,6 +66,8 @@ import {
   getInitialAddressFormFields,
   mergeMapAddressFormFields,
   getAddressFormFieldErrors,
+  shouldOpenAddressMap,
+  getAddressMapPoint,
 } from "../../../helper/address-form-location";
 import { useAddressAutofill } from "../../../helper/hooks";
 import CloseIcon from "../../../assets/images/close.svg";
@@ -346,6 +348,7 @@ const AddressForm = ({
   onClose = () => {},
   onBack = null,
   hideBackButton = false,
+  startWithAddressForm = false,
 }) => {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -433,31 +436,14 @@ const AddressForm = ({
     selectedCountry || currentCountry
   );
   const isMapAvailable = isMap && !!mapApiKey;
-  const [isMapView, setIsMapView] = useState(() => {
-    const isMapAvailable = isMap && !!mapApiKey;
-
-    // Show map view by default when:
-    // 1. Adding a new address, including a prefilled location draft
-    // 2. Editing an address that doesn't have geo_location (user can add it)
-    // Don't show map view when:
-    // - Map is not available
-    // - Editing an address that already has geo_location (show form instead)
-    if (!isMapAvailable) {
-      return false;
-    }
-    if (isNewAddress || !addressItem) {
-      return true; // New address - show map first if available
-    }
-    // If editing and address has geo_location, show form (not map)
-    if (
-      addressItem?.geo_location?.latitude &&
-      addressItem?.geo_location?.longitude
-    ) {
-      return false;
-    }
-    // If editing and address doesn't have geo_location, show map so user can add it
-    return true;
-  });
+  const [isMapView, setIsMapView] = useState(() =>
+    shouldOpenAddressMap(
+      isMapAvailable,
+      addressItem,
+      isNewAddress,
+      startWithAddressForm
+    )
+  );
   const address_type = watch("address_type");
   const sector = watch("sector");
   const formValues = watch();
@@ -596,6 +582,12 @@ const AddressForm = ({
         country: countryValue,
         email: addressItem?.email || "",
       });
+      if (
+        isNewAddress &&
+        startWithAddressForm &&
+        !shouldOpenAddressMap(isMapAvailable, addressItem, true, true)
+      )
+        setMapSelectionRevision((revision) => revision + 1);
     } else {
       setValue("is_default_address", true);
       setValue("address_type", "Home");
@@ -845,8 +837,7 @@ const AddressForm = ({
     // Use current form values if geo_location exists (user has selected from map)
     // Otherwise use original addressItem to show country defaults
     const mapAddressItem =
-      currentFormValues?.geo_location?.latitude &&
-      currentFormValues?.geo_location?.longitude
+      getAddressMapPoint(currentFormValues)
         ? currentFormValues
         : addressItem;
 
