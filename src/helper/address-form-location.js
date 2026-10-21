@@ -54,7 +54,10 @@ export const getInitialAddressFormFields = (
   isNewAddress,
   countryIso
 ) =>
-  isNewAddress && !address?.id && address?.geo_location
+  isNewAddress &&
+  !address?.id &&
+  !address?.delivery_address_draft &&
+  address?.geo_location
     ? getMapAddressFormFields(address, countryIso)
     : address;
 
