@@ -2,8 +2,6 @@ import React, { useEffect, useId, useLayoutEffect, useRef } from "react";
 import { useForm, Controller } from "react-hook-form";
 import * as styles from "./login-otp.less";
 import MobileNumber from "../../../auth/mobile-number/mobile-number";
-import TermPrivacy from "../term-privacy/term-privacy";
-import Tooltip from "../../../../components/tooltip/tooltip";
 import { useGlobalTranslation } from "fdk-core/utils";
 import ForcedLtr from "../../../../components/forced-ltr/forced-ltr";
 
@@ -25,12 +23,10 @@ function LoginOtp({
   onClearOtpError = () => {},
   getOtpLoading,
   isTermsAccepted = false,
-  setIsTermsAccepted = () => {},
-  showConsentTooltip = false,
   setShowConsentTooltip = () => {},
 }) {
   const { t } = useGlobalTranslation("translation");
-  const { handleSubmit, control, getValues, reset, setValue, clearErrors } =
+  const { handleSubmit, control, getValues, reset, setValue, clearErrors, watch } =
     useForm({
       mode: "onChange",
       defaultValues: {
@@ -38,6 +34,8 @@ function LoginOtp({
       },
       reValidateMode: "onChange",
     });
+
+  const phoneValue = watch("phone");
 
   const onChangeButton = () => {
     reset();
@@ -78,26 +76,20 @@ function LoginOtp({
                 onChange={(value) => {
                   setValue("phone", value);
                   clearErrors("phone");
+                  onClearOtpError();
                 }}
               />
             )}
           />
-          <div className={styles.consentWrapperWithTooltip}>
-            <TermPrivacy
-              onChange={setIsTermsAccepted}
-              checked={isTermsAccepted}
-            />
-            <Tooltip
-              message={t("resource.auth.terms_and_condition")}
-              isVisible={showConsentTooltip}
-              onClose={() => setShowConsentTooltip(false)}
-              position="bottom"
-            />
-          </div>
+          {otpError && (
+            <div className={styles.alertError}>
+              <span>{otpError?.message}</span>
+            </div>
+          )}
           <button
             className={`btnPrimary ${styles.sendOtpBtn}`}
             type="submit"
-            disabled={getOtpLoading}
+            disabled={getOtpLoading || !phoneValue?.isValidNumber}
           >
             {t("resource.auth.login.get_otp")}
           </button>

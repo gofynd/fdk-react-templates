@@ -14,7 +14,6 @@ const StickyPayNow = ({
   isJuspay = false,
   isPaymentLoading = false,
   loader,
-  paymentButton,
 }) => {
   const { t } = useGlobalTranslation("translation");
   return (
@@ -39,17 +38,16 @@ const StickyPayNow = ({
               </div>
             </div>
           )}
-          {paymentButton != null ? (
-            paymentButton
-          ) : !isJuspay ? (
+          {!isJuspay ? (
             <button
               className={`${styles.cartCheckoutBtn} ${styles.checkoutButton} ${enableLinkPaymentOption ? styles.linkPayBtn : ""}`}
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
+                if (disabled || isPaymentLoading) return;
                 proceedToPay();
               }}
-              disabled={isPaymentLoading}
+              disabled={disabled || isPaymentLoading}
             >
               {!isPaymentLoading ? (
                 <>{btnTitle || t("resource.cart.pay_now")}</>

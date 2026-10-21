@@ -21,6 +21,9 @@ function StickyFooter({
   onCheckoutClick = () => {},
   onPriceDetailsClick = () => {},
   order = {},
+  showQuotation = false,
+  isMerchantKycApproved = false,
+  onGetQuoteClick = () => {},
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -60,7 +63,7 @@ function StickyFooter({
                 </span>
                 <span className={styles.nccTotalPrice}>
                   {currencyFormat(
-                    numberWithCommas(totalPrice),
+                    totalPrice,
                     currencySymbol,
                     formatLocale(locale, countryCode, true)
                   )}
@@ -83,7 +86,7 @@ function StickyFooter({
             className={`${styles.width40} ${styles.secondaryCheckoutBtn}`}
             onClick={onLoginClick}
           >
-           CHECKOUT
+            {t("resource.auth.login.login_caps")}
           </button>
 
           {isAnonymous && (
@@ -94,7 +97,7 @@ function StickyFooter({
               }
               onClick={onCheckoutClick}
             >
-              CHECKOUT
+              {t("resource.section.cart.continue_as_guest")}
             </button>
           )}
         </div>
@@ -106,7 +109,7 @@ function StickyFooter({
           <div className={styles.priceContainerMobile}>
             <div className={styles.totalPrice}>
               {currencyFormat(
-                numberWithCommas(totalPrice),
+                totalPrice,
                 currencySymbol,
                 formatLocale(locale, countryCode, true)
               )}
@@ -118,23 +121,39 @@ function StickyFooter({
               {t("resource.cart.view_price_details")}
             </div>
           </div>
-          <button
-            className={`${styles.cartCheckoutBtn} ${styles.priceContainerMobileCheckoutBtn} ${styles.checkoutButton}`}
-            disabled={
-              !isValid || isOutOfStock || isNotServicable || !order?.enabled
-            }
-            onClick={onCheckoutClick}
-          >
-            {t("resource.section.cart.checkout_button_caps")}
-            <SvgWrapper
-              svgSrc="angle-right"
-              className={
-                isRunningOnClient() && document.dir === "rtl"
-                  ? styles.rotate180
-                  : ""
+          <div className={styles.stickyFooterActions}>
+            {showQuotation && isMerchantKycApproved && (
+              <button
+                className={`${styles.getQuoteBtn} ${styles.checkoutButton}`}
+                onClick={onGetQuoteClick}
+                title={t("resource.b2b.cart_landing.get_quote")}
+              >
+                <span className={styles.actionLabel}>
+                  {t("resource.b2b.cart_landing.get_quote")}
+                </span>
+              </button>
+            )}
+            <button
+              className={`${styles.cartCheckoutBtn} ${styles.priceContainerMobileCheckoutBtn} ${styles.checkoutButton}`}
+              disabled={
+                !isValid || isOutOfStock || isNotServicable || !order?.enabled
               }
-            />
-          </button>
+              onClick={onCheckoutClick}
+              title={t("resource.section.cart.checkout_button_caps")}
+            >
+              <span className={styles.actionLabel}>
+                {t("resource.section.cart.checkout_button_caps")}
+              </span>
+              <SvgWrapper
+                svgSrc="angle-right"
+                className={`${styles.actionIcon} ${
+                  isRunningOnClient() && document.dir === "rtl"
+                    ? styles.rotate180
+                    : ""
+                }`}
+              />
+            </button>
+          </div>
         </div>
       )}
     </div>
