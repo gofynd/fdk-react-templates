@@ -90,7 +90,6 @@ function SinglePageShipment({
                   opacity: isPaymentLoading ? 0.5 : 1,
                   pointerEvents: isPaymentLoading ? "none" : "auto",
                 }}
-                data-testid="proceed-pay-button"
               >
                 {getTotalValue?.() === 0 && !isCreditNoteApplied
                   ? "Place Order "

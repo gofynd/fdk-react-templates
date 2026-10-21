@@ -1,7 +1,13 @@
 import React from "react";
 import * as styles from "./shipment-free-gift-item.less";
-import { priceFormatCurrencySymbol } from "../../helper/utils";
+import {
+  getResponsiveImageBaseUrl,
+  getResponsiveImageSrcSet,
+  priceFormatCurrencySymbol,
+} from "../../helper/utils";
 import { useGlobalTranslation } from "fdk-core/utils";
+const DEFAULT_FREE_GIFT_IMAGE =
+  "https://cdn.fynd.com/v2/falling-surf-7c8bb8/fyndnp/wrkr/common/default_item_image.jpg";
 
 const ShipmentFreeGiftItem = ({ freeGiftBags = [], currencySymbol = "₹", hasRadioButton = false }) => {
   const { t } = useGlobalTranslation("translation");
@@ -38,7 +44,11 @@ const ShipmentFreeGiftItem = ({ freeGiftBags = [], currencySymbol = "₹", hasRa
         {groupedGiftArray.map((group, index) => {
           const bag = group.bag;
           const itemName = bag?.item?.name || "";
-          const itemImage = bag?.item?.image?.[0] || "https://cdn.fynd.com/v2/falling-surf-7c8bb8/fyndnp/wrkr/common/default_item_image.jpg";
+          const itemImageUrl = bag?.item?.image?.[0] || "";
+          const itemImage = itemImageUrl
+            ? getResponsiveImageBaseUrl(itemImageUrl, 140)
+            : DEFAULT_FREE_GIFT_IMAGE;
+          const itemImageSrcSet = getResponsiveImageSrcSet(itemImageUrl);
           const itemSize = bag?.item?.size || "";
           const totalQuantity = group.totalQuantity;
           const priceMarked = bag?.prices?.price_marked || 0;
@@ -49,10 +59,14 @@ const ShipmentFreeGiftItem = ({ freeGiftBags = [], currencySymbol = "₹", hasRa
                 <img
                   className={styles.freeGiftImage}
                   src={itemImage}
+                  srcSet={itemImageSrcSet}
+                  sizes="(max-width: 768px) 60px, 80px"
                   alt={itemName}
                   loading="lazy"
                   onError={(e) => {
-                    e.target.src = "https://cdn.fynd.com/v2/falling-surf-7c8bb8/fyndnp/wrkr/common/default_item_image.jpg";
+                    e.currentTarget.removeAttribute("srcset");
+                    e.currentTarget.removeAttribute("sizes");
+                    e.currentTarget.src = DEFAULT_FREE_GIFT_IMAGE;
                   }}
                 />
               </div>

@@ -405,6 +405,9 @@ h5,
 .gst-card__gstContainer___LJVYg .gst-card__inputBox___mMywn input:focus-visible {
   outline: none;
 }
+.gst-card__gstContainer___LJVYg .gst-card__inputBox___mMywn input::placeholder {
+  color: var(--textLabel, #7d7676);
+}
 .gst-card__gstContainer___LJVYg .gst-card__inputBox___mMywn .gst-card__errorBox___F_YRZ {
   border: var(--errorText, #ff3333);
 }
@@ -412,6 +415,13 @@ h5,
   position: absolute;
   inset-inline-end: 12px;
   cursor: pointer;
+  color: var(--textBody, #3c3131);
+}
+.gst-card__gstContainer___LJVYg .gst-card__inputBox___mMywn .gst-card__crossBtn___ERJyk svg {
+  fill: currentColor;
+}
+.gst-card__gstContainer___LJVYg .gst-card__inputBox___mMywn .gst-card__crossBtn___ERJyk svg path {
+  fill: currentColor;
 }
 .gst-card__colorErrorNormal___qjGLA {
   color: var(--errorText, #ff3333);

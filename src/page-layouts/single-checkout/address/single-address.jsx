@@ -79,6 +79,7 @@ function SingleAddress({
           title={modalTitle}
           hideHeader
           isOpen={openModal}
+          notCloseOnclickOutside={showGoogleMap && !!mapApiKey}
           modalType="center-modal"
           closeDialog={handleModalClose}
           containerClassName={styles.addressModalContainer}
