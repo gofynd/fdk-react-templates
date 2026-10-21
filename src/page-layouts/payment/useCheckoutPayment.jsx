@@ -31,6 +31,7 @@ export function useCheckoutPayment({
   isCouponApplied,
   juspayErrorMessage,
   styles,
+  isSplitPayment = false,
 }) {
   const fpi = useFPI();
   const { language } = useGlobalStore(fpi.getters.i18N_DETAILS);
@@ -197,6 +198,17 @@ export function useCheckoutPayment({
       setActiveMop(selectedTab);
     }
   }, [enableLinkPaymentOption, selectedTab]);
+
+  // Split payment sets selectedTab from outside this hook, so the accordion is
+  // never told to open. Open it once for the tab that was selected for the user;
+  // after that the user's own toggling is left alone.
+  const autoOpenedMopRef = useRef("");
+  useEffect(() => {
+    if (!isSplitPayment || !selectedTab) return;
+    if (autoOpenedMopRef.current === selectedTab) return;
+    autoOpenedMopRef.current = selectedTab;
+    setActiveMop(selectedTab);
+  }, [isSplitPayment, selectedTab]);
 
   const toggleMop = (m) => {
     setActiveMop((prev) => (prev === m ? null : m));
@@ -733,7 +745,18 @@ export function useCheckoutPayment({
     }
   };
 
+  // Tabs whose sub-option is picked for the user only when there is exactly one
+  // to pick from. With several, only the parent tab is selected and the user
+  // chooses. CARD / UPI / QR / COD are deliberately absent: selecting one starts
+  // a flow (QR, payment, modal) or needs input (CVV), so it must stay manual.
   const PRESELECT_TABS = ["NB", "WL", "PL", "CARDLESS_EMI", "Other"];
+  // Offline modes always carry a single entry and have always been preselected.
+  const ALWAYS_PRESELECT_TABS = ["NEFT", "RTGS", "CREDIT"];
+  const soleSubMop = (tabData) =>
+    tabData?.list?.length === 1 && tabData.list[0]?.code
+      ? tabData.list[0]
+      : null;
+
   useEffect(() => {
     if (
       !isCouponAppliedSuccess["isCouponApplied"] &&
@@ -742,7 +765,8 @@ export function useCheckoutPayment({
       if (
         selectedTab === "Other" &&
         !selectedTabData &&
-        paymentOptions.length === 0
+        paymentOptions.length === 0 &&
+        otherPaymentOptions.length === 1
       ) {
         selectMop(
           "Other",
@@ -753,27 +777,36 @@ export function useCheckoutPayment({
       if (
         selectedTabData?.name !== "CARD" &&
         selectedTabData?.name !== "UPI" &&
-        paymentOptions[0]?.name === selectedTabData?.name
+        paymentOptions[0]?.name === selectedTabData?.name &&
+        (ALWAYS_PRESELECT_TABS.includes(selectedTabData?.name) ||
+          selectedTabData?.list?.length === 1)
       ) {
         selectMop(
           selectedTabData?.name,
           selectedTabData?.name,
-          selectedTabData?.list[0]?.code ?? ""
+          selectedTabData?.list?.[0]?.code ?? ""
         );
       }
     }
   }, [selectedTabData?.list?.[0]?.code, otherPaymentOptions, selectedTab]);
 
   useEffect(() => {
-    if (
-      PRESELECT_TABS.includes(selectedTab) &&
-      selectedTabData?.list?.[0]?.code
-    ) {
-      selectMop(
-        selectedTab,
-        selectedTab === "Other" ? selectedTabData?.name : selectedTab,
-        selectedTabData.list[0].code
-      );
+    if (!PRESELECT_TABS.includes(selectedTab)) return;
+    if (selectedTab === "Other") {
+      // "Other" lists one row per option; pick it only when there is one row.
+      // When there are no other tabs, the effect above has already done this.
+      const only =
+        paymentOptions.length > 0 && otherPaymentOptions.length === 1
+          ? otherPaymentOptions[0]
+          : null;
+      if (only?.list?.[0]?.code) {
+        selectMop("Other", only.name, only.list[0].code);
+      }
+      return;
+    }
+    const only = soleSubMop(selectedTabData);
+    if (only) {
+      selectMop(selectedTab, selectedTab, only.code);
     }
   }, [selectedTab]);
 

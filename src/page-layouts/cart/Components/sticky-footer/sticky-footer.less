@@ -217,6 +217,13 @@
       min-width: 96px;
       padding: 0 12px;
     }
+
+    // Checkout on its own (no Get Quote) matches the Proceed to Pay button width.
+    .cartCheckoutBtn:only-child {
+      flex: 0 0 calc((100vw - 32px) * 0.606);
+      max-width: 100%;
+      margin-inline-start: auto;
+    }
   }
   .actionLabel {
     overflow: hidden;

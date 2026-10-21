@@ -238,6 +238,10 @@
 
             @media @tablet {
               font-size: 12px;
+              flex-shrink: 0;
+              white-space: nowrap;
+              justify-content: flex-start;
+              gap: 6px;
             }
 
             .scaleIcon {
@@ -495,6 +499,13 @@
   &.withQuantityWrapper {
     justify-content: flex-start;
     gap: 16px;
+
+    // Dropdown + quantity fill the row on small screens, so let the size guide
+    // drop to its own line instead of being squeezed into a wrapped label.
+    @media @tablet {
+      flex-wrap: wrap;
+      gap: 12px 16px;
+    }
   }
 
   .sizeWrapper {

@@ -565,6 +565,10 @@ h5,
 @media only screen and (max-width: 768px) {
   .add-to-cart__productDescContainer___w6xlt .add-to-cart__right___AYndS .add-to-cart__productInfo___AyYit .add-to-cart__product__size--guide___FQfx8 {
     font-size: 12px;
+    flex-shrink: 0;
+    white-space: nowrap;
+    justify-content: flex-start;
+    gap: 6px;
   }
 }
 .add-to-cart__productDescContainer___w6xlt .add-to-cart__right___AYndS .add-to-cart__productInfo___AyYit .add-to-cart__product__size--guide___FQfx8 .add-to-cart__scaleIcon___fF2Ht {
@@ -787,6 +791,12 @@ h5,
 .add-to-cart__sizeCartContainer___ILhna.add-to-cart__withQuantityWrapper___BJxau {
   justify-content: flex-start;
   gap: 16px;
+}
+@media only screen and (max-width: 768px) {
+  .add-to-cart__sizeCartContainer___ILhna.add-to-cart__withQuantityWrapper___BJxau {
+    flex-wrap: wrap;
+    gap: 12px 16px;
+  }
 }
 .add-to-cart__sizeCartContainer___ILhna .add-to-cart__sizeWrapper___u9nro {
   position: relative;

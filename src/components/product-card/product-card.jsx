@@ -316,6 +316,31 @@ const ProductCard = ({
   const loggedIn = useGlobalStore(fpi.getters.LOGGED_IN);
   const { merchant_data } = useGlobalStore(fpi?.getters?.CUSTOM_VALUE);
 
+  // `logged_in` stays null until the user fetch returns, so a logged-in user
+  // briefly looks like a guest and would flash the guest price/login CTA. Guests
+  // never leave null, so settle on a stored user id, else a short grace period.
+  const [authSettled, setAuthSettled] = useState(false);
+  useEffect(() => {
+    if (loggedIn !== null && loggedIn !== undefined) {
+      setAuthSettled(true);
+      return undefined;
+    }
+    let hasStoredUser = false;
+    try {
+      hasStoredUser = !!JSON.parse(
+        window.localStorage.getItem("userIdentity") || "{}"
+      )?.userID;
+    } catch (e) {
+      hasStoredUser = false;
+    }
+    if (!hasStoredUser) {
+      setAuthSettled(true);
+      return undefined;
+    }
+    const timer = setTimeout(() => setAuthSettled(true), 2000);
+    return () => clearTimeout(timer);
+  }, [loggedIn]);
+
   const keyName = "kyc_status";
   const isKycKeyPresent = merchant_data?.[keyName] !== undefined;
 
@@ -780,7 +805,7 @@ const ProductCard = ({
           </h5>
           {isPrice && (
             <>
-              {(!isRunningOnClient() || isPriceLoading) ? (
+              {(!isRunningOnClient() || isPriceLoading || !authSettled) ? (
                 <div className={styles.priceShimmer}>
                   <div className={styles.shimmerLine} />
                 </div>
@@ -945,7 +970,7 @@ const ProductCard = ({
           ((!loggedIn && show_discount_guest) ||
             (loggedIn && isMerchantKycApproved()) ||
             (loggedIn && !isMerchantKycApproved() && show_discount_non_kyc)) &&
-          ((!isRunningOnClient() || isPriceLoading) ? (
+          ((!isRunningOnClient() || isPriceLoading || !authSettled) ? (
             <div className={styles.addToCartShimmer} />
           ) : (
             <FyButton

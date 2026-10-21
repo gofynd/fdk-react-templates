@@ -52,6 +52,7 @@ function CheckoutPaymentContent({
     isCouponApplied,
     juspayErrorMessage,
     styles,
+    isSplitPayment,
   });
 
   const {
