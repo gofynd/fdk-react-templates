@@ -69,6 +69,7 @@ function OrderStatus({
     address_type: "Home",
     phone: "1234567890",
   };
+
   return success === "true" ? (
     <div className={styles.orders}>
       {orderData?.order_id ? (
@@ -210,10 +211,7 @@ function OrderStatus({
                                     paymentInfo?.currency_symbol ||
                                       orderData?.breakup_values?.[0]
                                         ?.currency_symbol,
-                                    paymentInfo?.amount,
-                                    "en-IN",
-                                    null,
-                                    true
+                                    paymentInfo?.amount
                                   )
                                 : null}
                             </span>
@@ -385,12 +383,6 @@ function ProductItem({
   const { t } = useGlobalTranslation("translation");
   const bundleGroupId = product?.bundle_details?.bundle_group_id;
   const aspectRatio = getProductImgAspectRatio(globalConfig);
-  const imageRadiusStyle =
-    globalConfig?.["item-image-border-radius"] != null
-      ? {
-          "--itemImageRadius": `${globalConfig["item-image-border-radius"]}px`,
-        }
-      : undefined;
   const isBundleItem =
     product?.bundle_details?.bundle_group_id &&
     bundleGroups &&
@@ -419,6 +411,8 @@ function ProductItem({
   const getMarkedPrice = (item) => numberWithCommas(item?.prices?.price_marked);
   const getEffectivePrice = (item) =>
     numberWithCommas(item?.prices?.price_effective);
+
+  const hide_single_size = globalConfig?.hide_single_size || false;
 
   const { name, brand, size, itemQty, markedPrice, effectivePrice } =
     useMemo(() => {
@@ -488,13 +482,7 @@ function ProductItem({
   return (
     <FDKLink to={orderLink}>
       <div className={styles.shipmentProdItem}>
-        <div
-          className={styles.prodImg}
-          style={{
-            ...imageRadiusStyle,
-            "--orderImageFit": globalConfig?.img_fill ? "cover" : "contain",
-          }}
-        >
+        <div className={styles.prodImg}>
           <BagImage
             bag={product}
             isBundle={isBundleItem}
@@ -505,12 +493,10 @@ function ProductItem({
         <div className={styles.prodItemData}>
           <div className={styles.productDetails}>
             {brand && <div className={styles.brandName}>{brand}</div>}
-            <div className={styles.productName} title={name}>
-              {name}
-            </div>
+            <div className={styles.productName}>{name}</div>
             <div className={styles.sizeInfo}>
               <div className={styles.sizeQuantity}>
-                {size && (
+                {size && !(hide_single_size && size.toUpperCase() === "OS") && (
                   <div className={styles.size}>
                     {t("resource.common.size")}: &nbsp;
                     {size}
