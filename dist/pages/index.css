@@ -24838,6 +24838,17 @@ h5,
   height: 48px;
   cursor: pointer;
 }
+.image-gallery__carouselArrow___SrqVJ > rect:first-of-type {
+  fill: var(--dialogBackground, #fff);
+}
+.image-gallery__carouselArrow___SrqVJ > path {
+  fill: none;
+  stroke: var(--textBody, #3c3131);
+}
+.image-gallery__carouselArrow___SrqVJ > rect:last-of-type {
+  fill: none;
+  stroke: var(--dividerStokes, #d4d1d1);
+}
 [dir="rtl"] .image-gallery__carouselArrow___SrqVJ {
   transform: rotate(180deg);
 }
@@ -45315,7 +45326,12 @@ h5,
 @media only screen and (max-width: 768px) {
   .email__main___ImHru .email__formContainer___ddfJS {
     width: 100%;
-    padding: 16px;
+    padding: 16px 0;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .email__main___ImHru .email__formContainer___ddfJS {
+    padding-bottom: 0;
   }
 }
 .email__main___ImHru .email__formContainer___ddfJS .email__submitBtn___lPBbx {
@@ -47024,7 +47040,12 @@ h5,
 @media only screen and (max-width: 768px) {
   .phone__main___1a6F8 .phone__formContainer___WhQxn {
     width: 100%;
-    padding: 16px;
+    padding: 16px 0;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .phone__main___1a6F8 .phone__formContainer___WhQxn {
+    padding-bottom: 0;
   }
 }
 .phone__main___1a6F8 .phone__formContainer___WhQxn .phone__customInput___K4VFG {

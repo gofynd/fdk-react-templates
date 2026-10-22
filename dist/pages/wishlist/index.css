@@ -5214,6 +5214,17 @@ h5,
   height: 48px;
   cursor: pointer;
 }
+.image-gallery__carouselArrow___SrqVJ > rect:first-of-type {
+  fill: var(--dialogBackground, #fff);
+}
+.image-gallery__carouselArrow___SrqVJ > path {
+  fill: none;
+  stroke: var(--textBody, #3c3131);
+}
+.image-gallery__carouselArrow___SrqVJ > rect:last-of-type {
+  fill: none;
+  stroke: var(--dividerStokes, #d4d1d1);
+}
 [dir="rtl"] .image-gallery__carouselArrow___SrqVJ {
   transform: rotate(180deg);
 }

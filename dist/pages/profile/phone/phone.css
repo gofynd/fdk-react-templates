@@ -397,7 +397,12 @@ h5,
 @media only screen and (max-width: 768px) {
   .phone__main___1a6F8 .phone__formContainer___WhQxn {
     width: 100%;
-    padding: 16px;
+    padding: 16px 0;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .phone__main___1a6F8 .phone__formContainer___WhQxn {
+    padding-bottom: 0;
   }
 }
 .phone__main___1a6F8 .phone__formContainer___WhQxn .phone__customInput___K4VFG {

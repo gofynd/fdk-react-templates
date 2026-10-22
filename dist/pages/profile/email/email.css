@@ -380,7 +380,12 @@ h5,
 @media only screen and (max-width: 768px) {
   .email__main___ImHru .email__formContainer___ddfJS {
     width: 100%;
-    padding: 16px;
+    padding: 16px 0;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .email__main___ImHru .email__formContainer___ddfJS {
+    padding-bottom: 0;
   }
 }
 .email__main___ImHru .email__formContainer___ddfJS .email__submitBtn___lPBbx {
