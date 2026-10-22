@@ -69,13 +69,6 @@ function OrderStatus({
     address_type: "Home",
     phone: "1234567890",
   };
-  const imageRadiusStyle =
-    globalConfig?.["item-image-border-radius"] != null
-      ? {
-          "--itemImageRadius": `${globalConfig["item-image-border-radius"]}px`,
-        }
-      : undefined;
-
   return success === "true" ? (
     <div className={styles.orders}>
       {orderData?.order_id ? (
@@ -392,6 +385,12 @@ function ProductItem({
   const { t } = useGlobalTranslation("translation");
   const bundleGroupId = product?.bundle_details?.bundle_group_id;
   const aspectRatio = getProductImgAspectRatio(globalConfig);
+  const imageRadiusStyle =
+    globalConfig?.["item-image-border-radius"] != null
+      ? {
+          "--itemImageRadius": `${globalConfig["item-image-border-radius"]}px`,
+        }
+      : undefined;
   const isBundleItem =
     product?.bundle_details?.bundle_group_id &&
     bundleGroups &&
@@ -489,7 +488,13 @@ function ProductItem({
   return (
     <FDKLink to={orderLink}>
       <div className={styles.shipmentProdItem}>
-        <div className={styles.prodImg} style={imageRadiusStyle}>
+        <div
+          className={styles.prodImg}
+          style={{
+            ...imageRadiusStyle,
+            "--orderImageFit": globalConfig?.img_fill ? "cover" : "contain",
+          }}
+        >
           <BagImage
             bag={product}
             isBundle={isBundleItem}

@@ -540,6 +540,19 @@ h5,
 .order-status__orders___N_SnV .order-status__orderDetail___wNvPW .order-status__leftOrderDetails___BkJQP .order-status__shipmentList___nyy9y .order-status__shipmentItem___OtZTB .order-status__shipmentItemItemsData___YXKTD .order-status__shipmentProdItem___Spy9G .order-status__prodImg___LZvE9 {
   flex: 0 0 110px;
 }
+.order-status__orders___N_SnV .order-status__orderDetail___wNvPW .order-status__leftOrderDetails___BkJQP .order-status__shipmentList___nyy9y .order-status__shipmentItem___OtZTB .order-status__shipmentItemItemsData___YXKTD .order-status__shipmentProdItem___Spy9G .order-status__prodImg___LZvE9 picture {
+  display: block;
+  position: relative;
+  aspect-ratio: var(--aspect-ratio-desktop, 0.8);
+  overflow: hidden;
+}
+.order-status__orders___N_SnV .order-status__orderDetail___wNvPW .order-status__leftOrderDetails___BkJQP .order-status__shipmentList___nyy9y .order-status__shipmentItem___OtZTB .order-status__shipmentItemItemsData___YXKTD .order-status__shipmentProdItem___Spy9G .order-status__prodImg___LZvE9 img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: var(--orderImageFit, contain);
+}
 .order-status__orders___N_SnV .order-status__orderDetail___wNvPW .order-status__leftOrderDetails___BkJQP .order-status__shipmentList___nyy9y .order-status__shipmentItem___OtZTB .order-status__shipmentItemItemsData___YXKTD .order-status__shipmentProdItem___Spy9G .order-status__prodItemData___zBCLZ {
   margin-inline-start: 14px;
   flex: 1;
