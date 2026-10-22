@@ -24,6 +24,12 @@ import { useGlobalTranslation } from "fdk-core/utils";
 import Shimmer from "../../shimmer/shimmer";
 import { getAddressFromComponents } from "../../../helper/utils";
 import { useStateRef } from "../../../helper/hooks";
+import {
+  getGoogleMapFormFields,
+  getAddressMapPoint,
+  hasPrefilledAddressLocation,
+  resolveAddressMapCenter,
+} from "../../../helper/address-form-location";
 
 const GoogleMapAddress = ({
   className,
@@ -37,8 +43,6 @@ const GoogleMapAddress = ({
 }) => {
   const { t } = useGlobalTranslation("translation");
   const isNewAddress = !addressItem;
-  // Mumbai coordinates as fallback default
-  const MUMBAI_COORDINATES = { lat: 19.0760, lng: 72.8777 };
   
   // Get last used location from localStorage
   const getLastUsedLocation = () => {
@@ -54,26 +58,17 @@ const GoogleMapAddress = ({
   const [currentLocation, setCurrentLocation, currentLocationRef] =
     useStateRef(addressItem);
   const mapRef = useRef(null);
+  const selectedPlaceRef = useRef(null);
+  const geocodeRequestRef = useRef(0);
+  const [isResolvingAddress, setIsResolvingAddress] = useState(false);
+  useEffect(() => () => {
+    geocodeRequestRef.current += 1;
+  }, []);
   
   // Priority: addressItem geo_location > last used location > country details > Mumbai
-  const lastUsedLocation = getLastUsedLocation();
-  const defaultLat = Number(
-    addressItem?.geo_location?.latitude ||
-    lastUsedLocation?.lat ||
-    countryDetails?.latitude ||
-    MUMBAI_COORDINATES.lat
+  const mapCenterRef = useRef(
+    resolveAddressMapCenter(addressItem, getLastUsedLocation(), countryDetails)
   );
-  const defaultLng = Number(
-    addressItem?.geo_location?.longitude ||
-    lastUsedLocation?.lng ||
-    countryDetails?.longitude ||
-    MUMBAI_COORDINATES.lng
-  );
-  
-  const mapCenterRef = useRef({
-    lat: defaultLat,
-    lng: defaultLng,
-  });
 
   const { isLoaded: isMapLoaded } = useJsApiLoader({
     googleMapsApiKey: mapApiKey,
@@ -106,36 +101,27 @@ const GoogleMapAddress = ({
     setCurrentLocation(address);
     
     // Priority: address geo_location > last used location > country details > Mumbai
-    const lastUsedLoc = getLastUsedLocation();
-    const newLat = Number(
-      address?.geo_location?.latitude ||
-      lastUsedLoc?.lat ||
-      countryDetails?.latitude ||
-      MUMBAI_COORDINATES.lat
+    mapCenterRef.current = resolveAddressMapCenter(
+      address,
+      getLastUsedLocation(),
+      countryDetails
     );
-    const newLng = Number(
-      address?.geo_location?.longitude ||
-      lastUsedLoc?.lng ||
-      countryDetails?.longitude ||
-      MUMBAI_COORDINATES.lng
-    );
-    
-    mapCenterRef.current = {
-      lat: newLat,
-      lng: newLng,
-    };
     mapRef?.current?.panTo(mapCenterRef.current);
   };
 
   useEffect(() => {
-    if (!addressItem?.geo_location && addressItem?.area_code) {
+    let active = true;
+    if (!getAddressMapPoint(addressItem) && addressItem?.area_code) {
       getGeocodeByAddress(addressItem).then((location) => {
-        if (location) {
+        if (active && location) {
           updateMapLocation({ ...addressItem, geo_location: location });
         }
       });
     }
     updateMapLocation(addressItem);
+    return () => {
+      active = false;
+    };
   }, [
     countryDetails?.latitude,
     countryDetails?.longitude,
@@ -150,6 +136,7 @@ const GoogleMapAddress = ({
 
     navigator.geolocation.getCurrentPosition(
       async (position) => {
+        selectedPlaceRef.current = null;
         const userLocation = {
           lat: position.coords.latitude,
           lng: position.coords.longitude,
@@ -177,6 +164,13 @@ const GoogleMapAddress = ({
             lat: location.lat(),
             lng: location.lng(),
           };
+          selectedPlaceRef.current = {
+            ...selectedLocation,
+            ...getGoogleMapFormFields(place.address_components),
+            pending: true,
+          };
+          geocodeRequestRef.current += 1;
+          setIsResolvingAddress(true);
           // Save the searched location for future use
           try {
             localStorage.setItem('lastMapLocation', JSON.stringify(selectedLocation));
@@ -210,9 +204,13 @@ const GoogleMapAddress = ({
           const lng = newCenter.lng();
           setIsLocationError(false);
           if (
-            mapCenterRef.current.lat !== lat ||
-            mapCenterRef.current.lng !== lng ||
-            !currentLocationRef.current
+            Math.abs(mapCenterRef.current.lat - lat) > 0.0000001 ||
+            Math.abs(mapCenterRef.current.lng - lng) > 0.0000001 ||
+            selectedPlaceRef.current?.pending ||
+            !currentLocationRef.current ||
+            (!addressItem?.id &&
+              !currentLocationRef.current?.map_address_fields &&
+              !hasPrefilledAddressLocation(currentLocationRef.current))
           ) {
             mapCenterRef.current = { lat, lng };
             // Save the selected location for future use
@@ -222,19 +220,29 @@ const GoogleMapAddress = ({
               console.error('Failed to save location:', error);
             }
             const geocoder = new window.google.maps.Geocoder();
-            geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+            const request = ++geocodeRequestRef.current;
+            const selection = selectedPlaceRef.current;
+            if (selection) selection.pending = false;
+            setIsResolvingAddress(true);
+            geocoder.geocode({ location: { lat, lng }, ...(countryDetails?.iso2 === "IN" && { language: "en" }) }, (results, status) => {
+              if (request !== geocodeRequestRef.current) return;
+              setIsResolvingAddress(false);
               if (status === "OK" && results[0]) {
                 const address = getAddressFromComponents(
                   results[0].address_components
                 );
                 setCurrentLocation({
                   ...address,
+                  map_address_fields: getGoogleMapFormFields(
+                    results[0].address_components, { lat, lng }, selection
+                  ),
                   geo_location: {
-                    latitude: mapCenterRef.current.lat,
-                    longitude: mapCenterRef.current.lng,
+                    latitude: lat,
+                    longitude: lng,
                   },
                 });
               } else {
+                setCurrentLocation(null);
                 console.error("Geocoder failed:", status);
               }
             });
@@ -242,7 +250,7 @@ const GoogleMapAddress = ({
         }
       },
     }),
-    []
+    [countryDetails?.iso2]
   );
 
   const isMapCountryError = useMemo(() => {
@@ -277,6 +285,7 @@ const GoogleMapAddress = ({
             {t("resource.common.address.select_delivery_location")}
           </h2>
           <button
+            type="button"
             className={styles.closeIcon}
             onClick={onClose}
             aria-label={t("resource.common.close")}
@@ -352,7 +361,7 @@ const GoogleMapAddress = ({
         )}
         <FyButton
           onClick={() => onAddressSelect(currentLocation)}
-          disabled={isMapCountryError}
+          disabled={isMapCountryError || isResolvingAddress || !currentLocation}
         >
           CONFIRM
         </FyButton>
