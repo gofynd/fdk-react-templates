@@ -40,6 +40,7 @@ export default function ChipItem({
   isCartUpdating,
   singleItemDetails,
   onUpdateCartItems,
+  onValidateCartQuantity = () => true,
   currentSize,
   isDeliveryPromise = true,
   imageWidth,
@@ -181,6 +182,10 @@ export default function ChipItem({
       totalQuantity = quantity;
     }
 
+    if (!isSizeUpdate && !onValidateCartQuantity(itemDetails, totalQuantity)) {
+      return { success: false };
+    }
+
     if (!itemDetails?.custom_order?.is_custom_order && !isSizeUpdate) {
       if (totalQuantity > maxCartQuantity) {
         totalQuantity = maxCartQuantity;
@@ -230,6 +235,7 @@ export default function ChipItem({
           );
         }
       }
+      return cartUpdateResponse;
     }
   };
 
@@ -525,6 +531,7 @@ export default function ChipItem({
                   <QuantityControl
                     isCartUpdating={isCartUpdating}
                     count={singleItemDetails?.quantity || 0}
+                    onValidateQuantity={(quantity) => onValidateCartQuantity(singleItemDetails, quantity)}
                     onDecrementClick={(e) =>
                       cartUpdateHandler(
                         e,
