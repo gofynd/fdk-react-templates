@@ -44,6 +44,7 @@ const StickyPayNow = ({
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
+                if (disabled || isPaymentLoading) return;
                 proceedToPay();
               }}
               disabled={disabled || isPaymentLoading}

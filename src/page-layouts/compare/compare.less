@@ -110,10 +110,6 @@
                 align-items: center;
                 justify-content: center;
 
-                svg path {
-                  fill: @TextBody;
-                }
-
                 @media @mobile {
                   width: 40px;
                   height: 40px;
@@ -280,10 +276,6 @@
                 height: 24px;
                 fill: @TextBody;
 
-                path {
-                  fill: @TextBody;
-                }
-
                 @media @tablet {
                   width: 20px;
                   height: 20px;
@@ -364,10 +356,6 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-
-                svg path {
-                  fill: @TextBody;
-                }
 
                 @media @mobile {
                   width: 40px;
@@ -492,10 +480,6 @@
   background: var(--Accent-0, #e7dbc2) !important;
   padding: 16px 24px !important;
 
-  > div:last-child svg path {
-    fill: @TextBody;
-  }
-
   .productModalTitle {
     color: var(--Text-Headings, #261a1a);
     font-size: 20px;
@@ -552,10 +536,6 @@
         align-items: center;
         width: 100%;
 
-        svg path {
-          fill: @TextBody;
-        }
-
         input {
           color: var(--header-color-navlink-text-icons, #261a1a);
           font-size: 14px;
@@ -567,7 +547,7 @@
           background-color: transparent;
 
           &::placeholder {
-            color: @TextLabel;
+            color: var(--Text-Secondary-Text, #9c9c9c);
             font-size: 12px;
             font-weight: 400;
             letter-spacing: -0.24px;
@@ -578,10 +558,6 @@
 
     .cancelIcon {
       cursor: pointer;
-
-      path {
-        fill: @TextBody;
-      }
     }
 
     .productListContainer {
@@ -636,6 +612,6 @@
 
   button {
     width: 100% !important;
-    border-radius: @ButtonRadius;
+    border-radius: 4px;
   }
 }
