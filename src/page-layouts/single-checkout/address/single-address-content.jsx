@@ -66,9 +66,7 @@ function DeliverBtn({
               selectAddress();
             }}
           >
-            {isAddressSelecting
-              ? t("resource.common.loading", { defaultValue: "Loading..." })
-              : t("resource.checkout.deliver_to_this_address")}
+            {t("resource.checkout.deliver_to_this_address")}
           </button>
         </div>
       )}
