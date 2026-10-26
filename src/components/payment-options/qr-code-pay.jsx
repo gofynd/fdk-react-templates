@@ -18,7 +18,6 @@ function QrCodePaymet({
   initializeOrResetQrPayment,
   t,
   styles,
-  isPaymentDisabled = false,
 }) {
   useEffect(() => {
     if (countdown > 0 && isQrCodeVisible) {
@@ -107,10 +106,6 @@ function QrCodePaymet({
                 <p
                   className={styles.showQrButton}
                   onClick={() => {
-                    if (isPaymentDisabled) {
-                      return;
-                    }
-
                     if (disbaleCheckout?.message) {
                       acceptOrder();
                     } else {

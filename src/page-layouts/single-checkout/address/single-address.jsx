@@ -79,7 +79,6 @@ function SingleAddress({
           title={modalTitle}
           hideHeader
           isOpen={openModal}
-          notCloseOnclickOutside={showGoogleMap && !!mapApiKey}
           modalType="center-modal"
           closeDialog={handleModalClose}
           containerClassName={styles.addressModalContainer}
@@ -90,7 +89,6 @@ function SingleAddress({
             internationalShipping={isInternationalShippingEnabled}
             formSchema={defaultFormSchema}
             isNewAddress={isNewAddress}
-            startWithAddressForm
             addressItem={addressItem}
             onUpdateAddress={updateAddress}
             onAddAddress={addAddress}
