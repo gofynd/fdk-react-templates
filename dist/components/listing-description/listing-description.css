@@ -357,10 +357,18 @@ h5,
   letter-spacing: -0.02em;
   font-weight: 400;
   color: var(--textBody, #3c3131);
+  font-size: var(--section-description-size, 12px);
+  line-height: calc(var(--section-description-size, 12px) + 4px);
 }
 @media only screen and (max-width: 480px) {
   .listing-description__descriptionWrapper___tzE5e .listing-description__descriptionContent___nGHJ_ {
     font-size: 11px;
+  }
+}
+@media only screen and (min-width: 769px) {
+  .listing-description__descriptionWrapper___tzE5e .listing-description__descriptionContent___nGHJ_ {
+    font-size: var(--section-description-size, 14px);
+    line-height: calc(var(--section-description-size, 14px) + 4px);
   }
 }
 .listing-description__descriptionWrapper___tzE5e .listing-description__actionBtn___Xw4a9 {

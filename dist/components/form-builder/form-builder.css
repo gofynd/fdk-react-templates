@@ -803,7 +803,7 @@ h5,
 }
 .fy-input__fyInput___S4Mtu::placeholder {
   color: var(--textLabel, #7d7676);
-  opacity: 0.3;
+  opacity: 1;
 }
 .fy-input__fyInput___S4Mtu::-webkit-outer-spin-button,
 .fy-input__fyInput___S4Mtu::-webkit-inner-spin-button {
@@ -815,7 +815,7 @@ h5,
 }
 .fy-input__fyInput___S4Mtu:disabled {
   color: var(--textSecondary, #9c9c9c);
-  border-color: var(--dividerStokes, #d4d1d1);
+  border-color: var(--overlaypopupdividerstroke, #e0e0e0);
   font-weight: 400;
 }
 .fy-input__fyInput___S4Mtu:focus {
@@ -837,7 +837,7 @@ h5,
   height: 48px;
 }
 .fy-input__outlined___CEaKm.fy-input__inputDisable___M8Zn2 {
-  border: 1px solid var(--dividerStokes, #d4d1d1);
+  border: 1px solid var(--overlaypopupdividerstroke, #e0e0e0);
   cursor: not-allowed;
   pointer-events: auto;
 }
@@ -1641,6 +1641,9 @@ h5,
   width: 100%;
   border: none;
 }
+.fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__dropdown___N1atH .fy-dropdown__dropdownButton___SqCaQ .fy-dropdown__text_field___tlM0X::placeholder {
+  color: var(--textLabel, #7d7676);
+}
 .fy-dropdown__dropdownContainer___fhUVa .fy-dropdown__dropdown___N1atH .fy-dropdown__dropdownButton___SqCaQ .fy-dropdown__selectedValue___d2Cjo {
   font-size: 14px;
   line-height: 22px;
@@ -2062,6 +2065,10 @@ h5,
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__dialCodePreview___E0m4Z {
   border-inline: none;
   padding-inline-end: 4px;
+  color: var(--textHeading, #26201a);
+}
+.mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__countryButton___NUFUC {
+  color: var(--textHeading, #26201a);
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG {
   width: 100%;
@@ -2069,6 +2076,7 @@ h5,
   display: flex;
   border-inline-start: none;
   padding-inline-start: 4px;
+  color: var(--textHeading, #26201a);
 }
 .mobile-number__mobileInputWrapper___Na12n .mobile-number__mobileInputContainer___deIgv .mobile-number__mobileNumberInput___iRnFG:focus-visible {
   outline: none;
