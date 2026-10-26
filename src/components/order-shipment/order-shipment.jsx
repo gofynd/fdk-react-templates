@@ -16,6 +16,7 @@ import * as styles from "./order-shipment.less";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
 import { convertUTCDateToLocalDate, formatLocale } from "../../helper/utils";
 import Accordion from "../accordion/accordion";
+import { transformDisplayToAccordionContent } from "../../helper/customization-display";
 import {
   useNavigate,
   useGlobalStore,
@@ -39,6 +40,15 @@ const getBagsWithCustomization = (bags = []) => {
   );
 };
 
+const getTransformedCustomizationOptions = (shipments = []) => {
+  const raw = shipments
+    .flatMap((shipment) =>
+      shipment.bags?.map((bag) => bag.meta?._custom_json?._display || []).flat()
+    )
+    .filter(Boolean);
+  return transformDisplayToAccordionContent(raw);
+};
+
 function getProductsName({ bag, isBundleItem }) {
   if (isBundleItem) {
     return bag?.bundle_details?.name;
@@ -59,20 +69,13 @@ function getTotalPieces(pieces, t) {
     : `${total} ${t("resource.common.multiple_piece")}`;
 }
 
-const getCustomizationOptions = (orderInfo) => {
-  if (!orderInfo?.shipments) return [];
-  return orderInfo.shipments
-    .flatMap((shipment) =>
-      shipment.bags?.map((bag) => bag.meta?._custom_json?._display || []).flat()
-    )
-    .filter(Boolean);
-};
-
 const ShipmentDetails = ({
   item,
   bundleGroups,
   bundleGroupArticles,
   aspectRatio,
+  globalConfig,
+  isImageFill,
   naivgateToShipment,
   isAdmin,
   t,
@@ -85,9 +88,7 @@ const ShipmentDetails = ({
   formatUTCToDateString,
 }) => {
   const [openAccordions, setOpenAccordions] = useState({});
-  const customizationOptions = getCustomizationOptions({
-    shipments: [item],
-  });
+  const customizationOptions = getTransformedCustomizationOptions([item]);
   const shipmentItems = [
     {
       title: "Customization",
@@ -108,6 +109,14 @@ const ShipmentDetails = ({
     bundleGroupId && bundleGroups && bundleGroups[bundleGroupId]?.length > 0;
 
   const productName = getProductsName({ bag: item?.bags?.[0], isBundleItem });
+  const imageRadiusStyle = {
+    "--orderImageAspectRatio": aspectRatio,
+    ...(globalConfig?.["item-image-border-radius"] != null
+      ? {
+          "--itemImageRadius": `${globalConfig["item-image-border-radius"]}px`,
+        }
+      : {}),
+  };
 
   const reattemptEndDate = item?.ndr_details?.allowed_delivery_window?.end_date
     ? (() => {
@@ -134,11 +143,12 @@ const ShipmentDetails = ({
         key={item.shipment_id}
         onClick={() => naivgateToShipment(item)}
       >
-        <div className={styles.shipmentLeft}>
+        <div className={styles.shipmentLeft} style={imageRadiusStyle}>
           <BagImage
             bag={item?.bags?.[0]}
             isBundle={isBundleItem}
             aspectRatio={aspectRatio}
+            isImageFill={isImageFill}
           />
           {item?.bags?.length > 1 && (
             <div id="total-item">
@@ -148,14 +158,17 @@ const ShipmentDetails = ({
           )}
         </div>
         <div className={styles.shipmentRight}>
-          <div className={styles.uktLinks}>
+          <div
+            className={`${styles.uktLinks} ${styles.productName}`}
+            title={productName}
+          >
             {item?.bags?.length > 1 && customizationOptions.length < 1 ? (
-              <div>
+              <>
                 {productName} +{item.bags.length - 1 + " "}
                 {t("resource.facets.more")}
-              </div>
+              </>
             ) : (
-              <div>{productName}</div>
+              productName
             )}
           </div>
           <div
@@ -313,6 +326,7 @@ function OrderShipment({
     () => getProductImgAspectRatio(globalConfig),
     [globalConfig]
   );
+  const isImageFill = globalConfig?.img_fill;
 
   // Safe wrapper for getGroupedShipmentBags with fallback for non-bundle items
   const safeGetGroupedShipmentBags = (bags) => {
@@ -454,6 +468,8 @@ function OrderShipment({
                       bundleGroups={bundleGroups}
                       bundleGroupArticles={bundleGroupArticles}
                       aspectRatio={aspectRatio}
+                      globalConfig={globalConfig}
+                      isImageFill={isImageFill}
                       naivgateToShipment={naivgateToShipment}
                       isAdmin={isAdmin}
                       t={t}
@@ -476,6 +492,8 @@ function OrderShipment({
                     bundleGroups={bundleGroups}
                     bundleGroupArticles={bundleGroupArticles}
                     aspectRatio={aspectRatio}
+                    globalConfig={globalConfig}
+                    isImageFill={isImageFill}
                     naivgateToShipment={naivgateToShipment}
                     isAdmin={isAdmin}
                     t={t}

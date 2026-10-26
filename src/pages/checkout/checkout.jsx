@@ -39,7 +39,6 @@ function Checkout({
   isGuestUser = false,
   isCartValid = true,
   redirectPaymentOptions,
-  setMopPayload,
   isCouponValid,
   setIsCouponValid,
   inValidCouponData,
@@ -58,7 +57,7 @@ function Checkout({
     // Check for breakup_values.display (checkout structure) or display (cart structure)
     // Also handle case where breakupValues might be the entire cartShipmentDetails object
     let display = null;
-    
+
     if (breakupValues?.breakup_values?.display) {
       display = breakupValues.breakup_values.display;
     } else if (breakupValues?.display) {
@@ -67,11 +66,11 @@ function Checkout({
       // If breakupValues is directly an array
       display = breakupValues;
     }
-    
+
     if (!display || !Array.isArray(display)) {
       return 0;
     }
-    
+
     // Use "total" key which represents the final payable amount after all discounts
     // This is the amount the user will actually pay
     const total = display.find((val) => val.key === "total");
@@ -133,7 +132,9 @@ function Checkout({
           totalValue={currencyFormat(
             totalPrice,
             currencySymbol,
-            formatLocale(locale, countryCode, true)
+            formatLocale(locale, countryCode, true),
+            null,
+            true
           )}
           onPriceDetailsClick={onPriceDetailsClick}
           isCartValid={isCartValid}
@@ -151,7 +152,6 @@ function Checkout({
           onFailedGetCartShipmentDetails={onFailedGetCartShipmentDetails}
           isCouponApplied={successCoupon?.is_applied}
           redirectPaymentOptions={redirectPaymentOptions}
-          setMopPayload={setMopPayload}
           isCouponValid={isCouponValid}
           setIsCouponValid={setIsCouponValid}
           inValidCouponData={inValidCouponData}

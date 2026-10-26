@@ -32,6 +32,8 @@ function PayLater({
   isPaymentLoading,
   loader,
   onPriceDetailsClick,
+  mopSelectionLoading,
+  isPaymentDisabled = false,
 }) {
   const isTablet = useViewport(0, 768);
 
@@ -84,10 +86,17 @@ function PayLater({
                       customClassName={styles.visibleOnTab}
                       value={priceFormatCurrencySymbol(
                         getCurrencySymbol,
-                        getTotalValue()
+                        getTotalValue(),
+                        "en-IN",
+                        null,
+                        true
                       )}
                       onPriceDetailsClick={onPriceDetailsClick}
-                      disabled={!selectedPayLater.code}
+                      disabled={
+                        mopSelectionLoading ||
+                        !selectedPayLater.code ||
+                        isPaymentDisabled
+                      }
                       enableLinkPaymentOption={enableLinkPaymentOption}
                       isPaymentLoading={isPaymentLoading}
                       loader={loader}
@@ -105,14 +114,21 @@ function PayLater({
                           proceedToPay("PL", selectedPaymentPayload);
                           acceptOrder();
                         }}
-                        disabled={isPaymentLoading}
+                        disabled={
+                          mopSelectionLoading ||
+                          isPaymentLoading ||
+                          isPaymentDisabled
+                        }
                       >
                         {!isPaymentLoading ? (
                           <>
                             {t("resource.common.pay_caps")}{" "}
                             {priceFormatCurrencySymbol(
                               getCurrencySymbol,
-                              getTotalValue()
+                              getTotalValue(),
+                              "en-IN",
+                              null,
+                              true
                             )}
                           </>
                         ) : (

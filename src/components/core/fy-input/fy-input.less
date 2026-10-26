@@ -26,7 +26,6 @@
 }
 
 .floating {
-  background: @PageBackground !important;
   position: absolute;
   transform: translateY(-50%) scale(0.9);
   z-index: 1;
@@ -46,21 +45,15 @@
   transition: 0.1s ease-out;
   box-sizing: border-box;
   width: 100%;
-  background-color: @PageBackground;
+  background-color: transparent;
   font-weight: 500;
-
-  &[type="email"],
-  &[type="tel"] {
-    background-color: @PageBackground;
-    color: @TextHeading;
-  }
   // To be removed once viewport meta is updated
   @media @mobile {
     font-size: 1rem;
   }
   &::placeholder {
     color: @TextLabel;
-    opacity: 0.3;
+    opacity: 1;
   }
 
   &::-webkit-outer-spin-button,
@@ -140,6 +133,5 @@
 
   input {
     flex: 1;
-    background-color: @PageBackground;
   }
 }

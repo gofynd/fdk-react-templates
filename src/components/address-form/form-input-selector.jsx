@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 import FyInput from "../core/fy-input/fy-input";
 import FyInputGroup from "../core/fy-input-group/fy-input-group";
@@ -7,6 +7,16 @@ import MobileNumber from "../../page-layouts/auth/mobile-number/mobile-number";
 import * as styles from "./form-input-selector.less";
 import { translateDynamicLabel, translateValidationMessages } from "../../helper/utils";
 import { useGlobalTranslation } from "fdk-core/utils";
+
+const MapFieldVisibility = ({ error, children }) => {
+  const [needsCorrection, setNeedsCorrection] = useState(false);
+  useEffect(() => {
+    if (error) setNeedsCorrection(true);
+  }, [error]);
+  // Keep a revealed field editable while the customer finishes typing, even
+  // if their first valid character already satisfies the validation pattern.
+  return error || needsCorrection ? children : null;
+};
 
 const FormInputSelector = ({
   formData,
@@ -75,10 +85,15 @@ const FormInputSelector = ({
         );
       }
       case "mobile": {
+        const mobileValue =
+          typeof field?.value === "object"
+            ? field?.value?.mobile || ""
+            : field?.value || "";
+
         return (
           <MobileNumber
             name={key}
-            mobile={field?.value?.mobile}
+            mobile={mobileValue}
             label={translateDynamicLabel(display, t)}
             error={error}
             isRequired={required}
@@ -135,6 +150,12 @@ const FormInputSelector = ({
       control={control}
       rules={translateValidationMessages(formData.validation, t)}
       render={({ field, fieldState: { error } }) => {
+        if (formData.hideWhenValid)
+          return (
+            <MapFieldVisibility error={error}>
+              {getInput({ field, error })}
+            </MapFieldVisibility>
+          );
         return getInput({ field, error });
       }}
     />

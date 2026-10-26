@@ -357,6 +357,22 @@ h5,
   justify-content: space-between;
   gap: 16px;
 }
+.location-modal__locationModalContainer___ZUzWs .location-modal__locationModalHeader____lLeW .location-modal__closeButton___yqJvd {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.location-modal__locationModalContainer___ZUzWs .location-modal__locationModalHeader____lLeW .location-modal__closeButton___yqJvd svg {
+  width: 24px;
+  height: 24px;
+}
 .location-modal__locationModalContainer___ZUzWs .location-modal__locationModalHeader____lLeW .location-modal__modalTitle___T5Ln_ {
   font-size: 20px;
   font-weight: 600;
@@ -1266,7 +1282,6 @@ h5,
   color: var(--errorText, #ff3333);
 }
 .fy-input__floating___jgtoq {
-  background: var(--pageBackground, #f8f8f8) !important;
   position: absolute;
   transform: translateY(-50%) scale(0.9);
   z-index: 1;
@@ -1285,13 +1300,8 @@ h5,
   transition: 0.1s ease-out;
   box-sizing: border-box;
   width: 100%;
-  background-color: var(--pageBackground, #f8f8f8);
+  background-color: transparent;
   font-weight: 500;
-}
-.fy-input__fyInput___S4Mtu[type="email"],
-.fy-input__fyInput___S4Mtu[type="tel"] {
-  background-color: var(--pageBackground, #f8f8f8);
-  color: var(--textHeading, #26201a);
 }
 @media only screen and (max-width: 480px) {
   .fy-input__fyInput___S4Mtu {
@@ -1300,7 +1310,7 @@ h5,
 }
 .fy-input__fyInput___S4Mtu::placeholder {
   color: var(--textLabel, #7d7676);
-  opacity: 0.3;
+  opacity: 1;
 }
 .fy-input__fyInput___S4Mtu::-webkit-outer-spin-button,
 .fy-input__fyInput___S4Mtu::-webkit-inner-spin-button {
@@ -1368,7 +1378,6 @@ h5,
 }
 .fy-input__adornmentContainer___MtgI6 input {
   flex: 1;
-  background-color: var(--pageBackground, #f8f8f8);
 }
 
 /**color by character**/

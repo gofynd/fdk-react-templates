@@ -62,7 +62,9 @@ function StickyFooter({
                   {currencyFormat(
                     totalPrice,
                     currencySymbol,
-                    formatLocale(locale, countryCode, true)
+                    formatLocale(locale, countryCode, true),
+                    null,
+                    true
                   )}
                 </span>
               </div>
@@ -90,9 +92,7 @@ function StickyFooter({
             <button
               className={`${styles.cartCheckoutBtn} ${styles.cartCheckoutBtn3}`}
               disabled={
-                isOutOfStock ||
-                isNotServicable ||
-                !order?.enabled 
+                !isValid || isOutOfStock || isNotServicable || !order?.enabled
               }
               onClick={onCheckoutClick}
             >
@@ -110,7 +110,9 @@ function StickyFooter({
               {currencyFormat(
                 totalPrice,
                 currencySymbol,
-                formatLocale(locale, countryCode, true)
+                formatLocale(locale, countryCode, true),
+                null,
+                true
               )}
             </div>
             <div
@@ -123,10 +125,7 @@ function StickyFooter({
           <button
             className={`${styles.cartCheckoutBtn} ${styles.priceContainerMobileCheckoutBtn} ${styles.checkoutButton}`}
             disabled={
-              isOutOfStock ||
-              isNotServicable ||
-              !order?.enabled 
-  
+              !isValid || isOutOfStock || isNotServicable || !order?.enabled
             }
             onClick={onCheckoutClick}
           >

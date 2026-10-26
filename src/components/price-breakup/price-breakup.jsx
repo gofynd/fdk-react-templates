@@ -131,7 +131,6 @@ function PriceBreakup({
         <>
           {priceBreakupLoaderWidth.map((width, index) => (
             <div
-              key={index}
               className={`${
                 index !== priceBreakupLoaderWidth.length - 1
                   ? styles.priceSummaryItem
@@ -172,7 +171,8 @@ function PriceBreakup({
                       item?.currency_symbol,
                       item?.value,
                       undefined,
-                      item?.currency_code
+                      item?.currency_code,
+                      true
                     )}
                   </div>
                 </>
@@ -184,7 +184,8 @@ function PriceBreakup({
                       item?.currency_symbol,
                       item?.value,
                       undefined,
-                      item?.currency_code
+                      item?.currency_code,
+                      true
                     )}
                   </div>
                 </>
@@ -200,11 +201,11 @@ function PriceBreakup({
         </div>
       )}
 
-      {isLoading ? (
-        <Skeleton height={38} className={styles.discountLoading} />
-      ) : (
-        <>
-          {showTotalDiscount && totalDiscount > 0 && (
+      {showTotalDiscount &&
+        (isLoading ? (
+          <Skeleton height={38} className={styles.discountLoading} />
+        ) : (
+          totalDiscount > 0 && (
             <div className={styles.discountPreviewContiner}>
               <span className={styles.icon}>{greetingIcon}</span>
               <span className={styles.discountPreviewMessage}>
@@ -214,17 +215,17 @@ function PriceBreakup({
               <span className={styles.discountPreviewAmount}>
                 <ForcedLtr
                   text={priceFormatCurrencySymbol(
-                    currencySymbol,
+                    breakUpValues?.[0]?.currency_symbol || currencySymbol,
                     totalDiscount,
                     undefined,
-                    breakUpValues?.[0]?.currency_code
+                    breakUpValues?.[0]?.currency_code,
+                    true
                   )}
                 />
               </span>
             </div>
-          )}
-        </>
-      )}
+          )
+        ))}
     </div>
   );
 }

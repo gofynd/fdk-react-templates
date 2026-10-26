@@ -13,8 +13,11 @@ import * as styles from "./shipment-breakup.less";
 import { priceFormatCurrencySymbol } from "../../helper/utils";
 import { useGlobalTranslation } from "fdk-core/utils";
 
+const toTitleCase = (value = "") =>
+  value.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
+
 function ShipmentBreakup({
-  title = "BILLING",
+  title = "Billing",
   breakup,
   isHorizontalLine = false,
   customClass = "",
@@ -39,7 +42,9 @@ function ShipmentBreakup({
 className={`${styles.billing} ${styles.lightsm} ${customClass} ${
     isAddPadding ? styles.shipmentBreakupContainerPadding : styles.noPadding
   }`}    >
-      <h6 className={`${styles.title} ${styles.boldsm}`}>{title}</h6>
+      <h6 className={`${styles.title} ${styles.boldsm}`}>
+        {toTitleCase(title)}
+      </h6>
       <>
         {breakupValues?.map((item, index) => {
           const isLast = index === breakupValues.length - 1;

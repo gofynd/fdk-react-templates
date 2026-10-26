@@ -19,8 +19,34 @@ function CodPayment({
   SvgWrapper,
   getTotalValue,
   Spinner,
+  isCouponValid,
+  mopSelectionLoading,
+  isPaymentDisabled = false,
+  splitCodAction,
 }) {
   const isTablet = useViewport(0, 768);
+  const shouldShowSplitCodAction = splitCodAction?.visible === true;
+  const renderSplitCodAction = () => (
+    <div className={styles.splitPaymentCodAction}>
+      {splitCodAction?.title && (
+        <p className={styles.splitPaymentCodTitle}>{splitCodAction.title}</p>
+      )}
+      <button
+        className={styles.splitPaymentCodButton}
+        disabled={
+          splitCodAction?.disabled ||
+          mopSelectionLoading ||
+          isPaymentLoading ||
+          isPaymentDisabled
+        }
+        onClick={splitCodAction?.onContinue}
+        type="button"
+      >
+        {splitCodAction?.buttonLabel || "Continue To Pay"}
+      </button>
+    </div>
+  );
+
   return (
     <div>
       {!isTablet ? (
@@ -37,15 +63,24 @@ function CodPayment({
               {t("resource.checkout.cod_extra_charge")}
             </div>
           )}
-          <div className={styles.codPay}>
-            <button
-              className={`${styles.commonBtn} ${styles.payBtn}`}
-              onClick={() => proceedToPay("COD", selectedPaymentPayload)}
-              disabled={isPaymentLoading}
-            >
-              {!isPaymentLoading ? t("resource.checkout.place_order") : loader}
-            </button>
-          </div>
+          {shouldShowSplitCodAction ? (
+            renderSplitCodAction()
+          ) : (
+            <div className={styles.codPay}>
+              <button
+                className={`${styles.commonBtn} ${styles.payBtn}`}
+                onClick={() => proceedToPay("COD", selectedPaymentPayload)}
+                disabled={
+                  mopSelectionLoading ||
+                  isPaymentLoading ||
+                  !isCouponValid ||
+                  isPaymentDisabled
+                }
+              >
+                {!isPaymentLoading ? t("resource.checkout.place_order") : loader}
+              </button>
+            </div>
+          )}
         </div>
       ) : (
         <Spinner />
@@ -80,23 +115,32 @@ function CodPayment({
                 </p>
               )}
             </div>
-            <button
-              className={`${styles.commonBtn} ${styles.payBtn}`}
-              onClick={() => proceedToPay("COD", selectedPaymentPayload)}
-              disabled={isPaymentLoading}
-            >
-              {!isPaymentLoading ? (
-                <>
-                  {t("resource.checkout.continue_with_cod")}{" "}
-                  {priceFormatCurrencySymbol(
-                    getCurrencySymbol,
-                    getTotalValue()
-                  )}
-                </>
-              ) : (
-                loader
-              )}
-            </button>
+            {shouldShowSplitCodAction ? (
+              renderSplitCodAction()
+            ) : (
+              <button
+                className={`${styles.commonBtn} ${styles.payBtn}`}
+                onClick={() => proceedToPay("COD", selectedPaymentPayload)}
+                disabled={
+                  mopSelectionLoading || isPaymentLoading || isPaymentDisabled
+                }
+              >
+                {!isPaymentLoading ? (
+                  <>
+                    {t("resource.checkout.continue_with_cod")}{" "}
+                    {priceFormatCurrencySymbol(
+                      getCurrencySymbol,
+                      getTotalValue(),
+                      "en-IN",
+                      null,
+                      true
+                    )}
+                  </>
+                ) : (
+                  loader
+                )}
+              </button>
+            )}
           </div>
         </Modal>
       )}

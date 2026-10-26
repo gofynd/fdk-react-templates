@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Modal from "../core/modal/modal";
 import { formatTime } from "../../helper/utils";
 import { useViewport } from "../../helper/hooks";
@@ -37,6 +37,12 @@ function UpiAppPayment({
   disbaleCheckout,
   vpa,
   timeRemaining,
+  selectedTab,
+  handleProceedToPayClick,
+  isCouponApplied,
+  isCouponValid,
+  mopSelectionLoading,
+  isPaymentDisabled = false,
 }) {
   const isTablet = useViewport(0, 768);
 
@@ -99,7 +105,16 @@ function UpiAppPayment({
     textAlign: "center",
     color: "var(--buttonLink)",
   };
-
+  useEffect(() => {
+    if (!selectedUpiIntentApp && selectedTab === "UPI" && isTablet) {
+      selectMop("UPI", "UPI", "UPI");
+      setSelectedUpiIntentApp("gpay");
+      selectedUpiRef.current = null;
+      setvpa("");
+      setUPIError(false);
+      cancelQrPayment();
+    }
+  }, [selectedTab, isTablet]);
   return (
     <>
       <div className={styles.upiMop}>
@@ -123,6 +138,7 @@ function UpiAppPayment({
                         setvpa("");
                         setUPIError(false);
                         cancelQrPayment();
+                        selectMop("UPI", "UPI", app);
                       }}
                       className={`${styles.upiApp} ${!upiApps?.includes("any") ? styles.notBorderBottom : ""} ${selectedUpiIntentApp === app ? styles.selectedUpiApp : ""}`}
                     >
@@ -154,9 +170,8 @@ function UpiAppPayment({
                 onClick={() => {
                   setSelectedUpiIntentApp("any");
                   selectedUpiRef.current = "any";
-                  selectMop("UPI", "UPI", "UPI");
+                  selectMop("UPI", "UPI", "any");
                   removeDialogueError();
-                  setShowUpiRedirectionModal(true);
                 }}
                 className={styles.moreApps}
               >
@@ -178,10 +193,18 @@ function UpiAppPayment({
             {isTablet ? (
               <StickyPayNow
                 customClassName={styles.visibleOnTab}
-                disabled={!selectedUpiIntentApp || isUPIError}
+                disabled={
+                  mopSelectionLoading ||
+                  !selectedUpiIntentApp ||
+                  isUPIError ||
+                  isPaymentDisabled
+                }
                 value={priceFormatCurrencySymbol(
                   getCurrencySymbol,
-                  getTotalValue()
+                  getTotalValue(),
+                  "en-IN",
+                  null,
+                  true
                 )}
                 onPriceDetailsClick={onPriceDetailsClick}
                 enableLinkPaymentOption={enableLinkPaymentOption}
@@ -191,7 +214,7 @@ function UpiAppPayment({
                   if (disbaleCheckout?.message) {
                     acceptOrder();
                   }
-                  selectMop("UPI", "UPI", "UPI");
+                  handleProceedToPayClick();
                 }}
               />
             ) : (
@@ -207,14 +230,22 @@ function UpiAppPayment({
                     selectMop("UPI", "UPI", "UPI");
                     cancelQrPayment();
                   }}
-                  disabled={!selectedUpiIntentApp || isPaymentLoading}
+                  disabled={
+                    mopSelectionLoading ||
+                    !selectedUpiIntentApp ||
+                    isPaymentLoading ||
+                    isPaymentDisabled
+                  }
                 >
                   {!isPaymentLoading ? (
                     <>
                       {t("resource.common.pay_caps")}{" "}
                       {priceFormatCurrencySymbol(
                         getCurrencySymbol,
-                        getTotalValue()
+                        getTotalValue(),
+                        "en-IN",
+                        null,
+                        true
                       )}
                     </>
                   ) : (
