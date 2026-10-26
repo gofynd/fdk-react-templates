@@ -60,7 +60,6 @@ function Comment({ comment = "", onCommentChange = () => { } }) {
               value={comment}
               placeholder={t("resource.cart.placeholder_specific_comment")}
               onChange={(e) => onCommentChange(e.target.value)}
-              maxLength={500}
             />
             <div
               className={styles.commentLength}
@@ -87,7 +86,6 @@ function Comment({ comment = "", onCommentChange = () => { } }) {
               className={styles.modalTextarea}
               value={comment}
               onChange={(e) => onCommentChange(e.target.value)}
-              maxLength={500}
             />
             <div className={styles.modalErrorWrapper}>
               {isCommentError && (

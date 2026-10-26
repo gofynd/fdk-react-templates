@@ -1405,36 +1405,6 @@ h5,
   border: none;
   background: transparent;
 }
-.checkout-payment-content__container___HusGh .checkout-payment-content__applePayWrapper___t9YWX {
-  min-height: 32px;
-  display: flex;
-  align-items: center;
-}
-@media only screen and (min-width: 769px) {
-  .checkout-payment-content__container___HusGh .checkout-payment-content__applePayModeItemWrapper___qPWIz {
-    padding: 18px 20px;
-  }
-}
-.checkout-payment-content__container___HusGh .checkout-payment-content__applePayModePay___eStO3 {
-  margin-top: 16px;
-}
-@media only screen and (min-width: 769px) {
-  .checkout-payment-content__container___HusGh .checkout-payment-content__applePayModePay___eStO3 {
-    padding-inline-start: 50px;
-  }
-}
-@media only screen and (max-width: 768px) {
-  .checkout-payment-content__container___HusGh .checkout-payment-content__applePayModePay___eStO3 {
-    margin-top: 12px;
-    padding-inline-start: 46px;
-  }
-}
-.checkout-payment-content__container___HusGh .checkout-payment-content__applePayLoader___N8c9D {
-  display: flex;
-  align-items: center;
-  min-height: 32px;
-  margin-bottom: 12px;
-}
 .checkout-payment-content__container___HusGh .checkout-payment-content__upiMop___LVvVY {
   padding-bottom: 24px;
 }
@@ -2229,42 +2199,6 @@ h5,
     display: block !important;
   }
 }
-.checkout-payment-content__applePayStickyFooter___C1XCW {
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-}
-.checkout-payment-content__applePayStickyButton___swgbP {
-  position: relative;
-  width: 60.6%;
-  min-width: 0;
-  height: 48px;
-}
-.checkout-payment-content__applePayStickyComponent___JC5DT {
-  width: 100%;
-}
-.checkout-payment-content__applePayStickyComponent___JC5DT[inert] {
-  pointer-events: none;
-}
-.checkout-payment-content__applePayStickyLoader___UOdbN,
-.checkout-payment-content__applePayRetryButton___pHSmX {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--pageBackground, #f8f8f8);
-}
-.checkout-payment-content__applePayStickyLoader___UOdbN {
-  pointer-events: none;
-}
-.checkout-payment-content__applePayRetryButton___pHSmX {
-  border: 1px solid var(--buttonPrimary, #4e3f09);
-  border-radius: 4px;
-  color: var(--buttonPrimary, #4e3f09);
-  font-size: 14px;
-  cursor: pointer;
-}
 @media only screen and (max-width: 768px) {
   .checkout-payment-content__onDesktopView___JFn5k {
     display: none;
@@ -2335,6 +2269,72 @@ h5,
 }
 .checkout-payment-content__noOptionContainer___uCGHg .checkout-payment-content__noOptionText___zceGG .checkout-payment-content__contact_us___KWS91 {
   margin-top: 12px;
+}
+.checkout-payment-content__applePayWrapper___t9YWX {
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+}
+@media only screen and (min-width: 769px) {
+  .checkout-payment-content__applePayModeItemWrapper___qPWIz {
+    padding: 18px 20px;
+  }
+}
+.checkout-payment-content__applePayModePay___eStO3 {
+  margin-top: 16px;
+}
+@media only screen and (min-width: 769px) {
+  .checkout-payment-content__applePayModePay___eStO3 {
+    padding-inline-start: 50px;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__applePayModePay___eStO3 {
+    margin-top: 12px;
+    padding-inline-start: 46px;
+  }
+}
+.checkout-payment-content__applePayLoader___N8c9D {
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+  margin-bottom: 12px;
+}
+.checkout-payment-content__applePayStickyFooter___C1XCW {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.checkout-payment-content__applePayStickyButton___swgbP {
+  position: relative;
+  width: 60.6%;
+  min-width: 0;
+  height: 48px;
+}
+.checkout-payment-content__applePayStickyComponent___JC5DT {
+  width: 100%;
+}
+.checkout-payment-content__applePayStickyComponent___JC5DT[inert] {
+  pointer-events: none;
+}
+.checkout-payment-content__applePayStickyLoader___UOdbN,
+.checkout-payment-content__applePayRetryButton___pHSmX {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--pageBackground, #f8f8f8);
+}
+.checkout-payment-content__applePayStickyLoader___UOdbN {
+  pointer-events: none;
+}
+.checkout-payment-content__applePayRetryButton___pHSmX {
+  border: 1px solid var(--buttonPrimary, #4e3f09);
+  border-radius: 4px;
+  color: var(--buttonPrimary, #4e3f09);
+  font-size: 14px;
+  cursor: pointer;
 }
 
 /**color by character**/

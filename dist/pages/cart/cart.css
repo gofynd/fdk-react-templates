@@ -454,6 +454,9 @@ h5,
   justify-content: center;
   align-items: center;
 }
+.cart__cartMainContainer___LF2fx .cart__cartItemPriceSummaryDetails___pew0G .cart__priceSummaryLoginButton___inxqy[disabled] {
+  cursor: default;
+}
 .cart__cartMainContainer___LF2fx .cart__cartItemPriceSummaryDetails___pew0G .cart__priceSummaryGuestButton___tm4c3 {
   cursor: pointer;
   background: var(--buttonPrimary);
@@ -5569,6 +5572,7 @@ h5,
   color: var(--errorText, #ff3333);
 }
 .fy-input__floating___jgtoq {
+  background: var(--pageBackground, #f8f8f8) !important;
   position: absolute;
   transform: translateY(-50%) scale(0.9);
   z-index: 1;
@@ -5587,8 +5591,13 @@ h5,
   transition: 0.1s ease-out;
   box-sizing: border-box;
   width: 100%;
-  background-color: transparent;
+  background-color: var(--pageBackground, #f8f8f8);
   font-weight: 500;
+}
+.fy-input__fyInput___S4Mtu[type="email"],
+.fy-input__fyInput___S4Mtu[type="tel"] {
+  background-color: var(--pageBackground, #f8f8f8);
+  color: var(--textHeading, #26201a);
 }
 @media only screen and (max-width: 480px) {
   .fy-input__fyInput___S4Mtu {
@@ -5665,6 +5674,7 @@ h5,
 }
 .fy-input__adornmentContainer___MtgI6 input {
   flex: 1;
+  background-color: var(--pageBackground, #f8f8f8);
 }
 
 /**color by character**/
@@ -8062,7 +8072,7 @@ h5,
   line-height: 140%;
   margin: 0;
   text-transform: uppercase;
-  background-color: var(--overlaypopupdividershighlighter, #edece9);
+  background: var(--textLabel, #7d7676);
 }
 .coupon__couponListTitleWrapper___NDeTO .coupon__couponCard___tFTDw {
   padding: 16px 24px;
@@ -10530,6 +10540,70 @@ h5,
     flex-direction: column;
     align-items: flex-start;
   }
+}
+.chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__priceBreakdownContainer___jUqQh {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 24px;
+  align-items: center;
+  justify-content: space-between;
+}
+@media only screen and (max-width: 480px) {
+  .chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__priceBreakdownContainer___jUqQh {
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__priceBreakdownContainer___jUqQh {
+    gap: 16px;
+  }
+}
+.chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__priceBreakdownContainer___jUqQh .chip-item__priceSection___t0dvH {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 0 1 auto;
+}
+@media only screen and (max-width: 480px) {
+  .chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__priceBreakdownContainer___jUqQh .chip-item__priceSection___t0dvH {
+    flex: 1 1 100%;
+  }
+}
+.chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__priceBreakdownContainer___jUqQh .chip-item__priceSection___t0dvH .chip-item__priceLabel___h_n4R {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--textLabel, #7d7676);
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+.chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__priceBreakdownContainer___jUqQh .chip-item__priceSection___t0dvH .chip-item__itemPrice___bEt2X {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__priceBreakdownContainer___jUqQh .chip-item__priceSection___t0dvH .chip-item__itemPrice___bEt2X .chip-item__effectivePrice___P4Bo9 {
+  color: var(--textHeading, #26201a);
+  font-size: 16px;
+  font-weight: 600;
+  margin-inline-end: 0;
+}
+.chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__priceBreakdownContainer___jUqQh .chip-item__priceSection___t0dvH .chip-item__itemPrice___bEt2X .chip-item__markedPrice___oRR8f {
+  font-size: 12px;
+  text-decoration: line-through;
+  color: var(--textLabel, #7d7676);
+  margin-inline-end: 0;
+}
+.chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__priceBreakdownContainer___jUqQh .chip-item__priceSection___t0dvH .chip-item__itemPrice___bEt2X .chip-item__discount___yyr69 {
+  font-size: 12px;
+  font-weight: 500;
+  margin-inline-end: 0;
+  color: var(--saleDiscountText, #1c958f);
 }
 .chip-item__cartItemsListContainer___ud9jU .chip-item__eachItemContainer___rROgS .chip-item__eachItemDetailsContainer___RLC12 .chip-item__itemTotalContainer___E0DQq .chip-item__itemPrice___bEt2X {
   display: flex;

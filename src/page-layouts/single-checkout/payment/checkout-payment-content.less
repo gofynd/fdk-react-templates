@@ -1063,38 +1063,6 @@
   .upiBox {
   }
 
-  .applePayWrapper {
-    min-height: 32px;
-    display: flex;
-    align-items: center;
-  }
-
-  .applePayModeItemWrapper {
-    @media @desktop {
-      padding: 18px 20px;
-    }
-  }
-
-  .applePayModePay {
-    margin-top: 16px;
-
-    @media @desktop {
-      padding-inline-start: 50px;
-    }
-
-    @media @tablet {
-      margin-top: 12px;
-      padding-inline-start: 46px;
-    }
-  }
-
-  .applePayLoader {
-    display: flex;
-    align-items: center;
-    min-height: 32px;
-    margin-bottom: 12px;
-  }
-
   .upiMop {
     padding-bottom: 24px;
     @media @tablet {
@@ -1955,43 +1923,6 @@
     display: block !important;
   }
 }
-.applePayStickyFooter {
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-}
-.applePayStickyButton {
-  position: relative;
-  width: 60.6%;
-  min-width: 0;
-  height: 48px;
-}
-.applePayStickyComponent {
-  width: 100%;
-
-  &[inert] {
-    pointer-events: none;
-  }
-}
-.applePayStickyLoader,
-.applePayRetryButton {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: @PageBackground;
-}
-.applePayStickyLoader {
-  pointer-events: none;
-}
-.applePayRetryButton {
-  border: 1px solid @ButtonPrimary;
-  border-radius: 4px;
-  color: @ButtonPrimary;
-  font-size: 14px;
-  cursor: pointer;
-}
 .onDesktopView {
   @media @tablet {
     display: none;
@@ -2057,3 +1988,39 @@
     }
   }
 }
+
+
+.applePayWrapper {
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+}
+.applePayModeItemWrapper {
+  @media @desktop {
+    padding: 18px 20px;
+  }
+}
+.applePayModePay {
+  margin-top: 16px;
+
+  @media @desktop {
+    padding-inline-start: 50px;
+  }
+
+  @media @tablet {
+    margin-top: 12px;
+    padding-inline-start: 46px;
+  }
+}
+.applePayLoader {
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+  margin-bottom: 12px;
+}
+.applePayStickyFooter { padding-bottom: env(safe-area-inset-bottom, 0px); }
+.applePayStickyButton { position: relative; width: 60.6%; min-width: 0; height: 48px; }
+.applePayStickyComponent { width: 100%; &[inert] { pointer-events: none; } }
+.applePayStickyLoader, .applePayRetryButton { position: absolute; inset: 0; width: 100%; height: 48px; display: flex; align-items: center; justify-content: center; background: @PageBackground; }
+.applePayStickyLoader { pointer-events: none; }
+.applePayRetryButton { border: 1px solid @ButtonPrimary; border-radius: 4px; color: @ButtonPrimary; font-size: 14px; cursor: pointer; }

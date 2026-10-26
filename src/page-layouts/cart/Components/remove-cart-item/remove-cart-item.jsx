@@ -12,7 +12,7 @@ function RemoveCartItem({
   onRemoveButtonClick = () => {},
   onWishlistButtonClick = () => {},
   onCloseDialogClick = () => {},
-  globalConfig,
+  globalConfig
 }) {
   const { t } = useGlobalTranslation("translation");
 
@@ -28,6 +28,7 @@ function RemoveCartItem({
         : cartItem.product.images[0].url.replace("original", "resize-w:250");
     }
   }, [cartItem]);
+
   const brandName = truncateName(cartItem?.product?.brand?.name || "", 40);
   const productName = truncateName(cartItem?.product?.name || "", 40);
 
@@ -45,29 +46,35 @@ function RemoveCartItem({
         <div className={styles.itemDetails}>
           {getProductImage && (
             <div className={styles.itemImg}>
-              <img
-                src={getProductImage}
-                alt={cartItem?.product?.name}
-                className={`${globalConfig?.img_fill ? styles.imgCover : styles.imgContain}`}
-              />{" "}
+              <img src={getProductImage} alt={cartItem?.product?.name} 
+              className={`${globalConfig?.img_fill ? styles.imgCover : styles.imgContain}`} />
             </div>
           )}
           <div>
-            <div className={styles.itemBrand}>{brandName} </div>
+            <div className={styles.itemBrand}>
+             {brandName}
+            </div>
             <div className={styles.itemName}>{productName}</div>
           </div>
         </div>
       </div>
       <div className={styles.removeModalFooter}>
-        <div className={styles.removeBtn} onClick={onRemoveButtonClick}>
+        <button
+          type="button"
+          className={styles.removeBtn}
+          onClick={onRemoveButtonClick}
+          disabled={isRemoving}
+        >
           {isRemoving ? "Removing..." : t("resource.facets.remove_caps")}
-        </div>
-        <div
+        </button>
+
+        <button
+          type="button"
           className={`${styles.wishlistBtn} ${isMovingToWishlist ? styles.disabled : ""}`}
           onClick={onWishlistButtonClick}
         >
           {t("resource.cart.move_to_wishlist")}
-        </div>
+        </button>
       </div>
     </Modal>
   );

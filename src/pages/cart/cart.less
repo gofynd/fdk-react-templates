@@ -97,6 +97,10 @@
       border-radius: @ButtonRadius;
       background: var(--buttonPrimary);
       cursor: pointer;
+
+      &[disabled] {
+        cursor: default;
+      }
       text-transform: uppercase;
       color: var(--buttonSecondary);
       width: 100%;

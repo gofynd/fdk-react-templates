@@ -167,7 +167,6 @@ const Accordion = ({ items, onItemClick }) => {
                                       val[0] &&
                                       typeof val[0] === "object" &&
                                       "imageUrl" in val[0];
-                                    
                                     return (
                                       <li
                                         key={child.key || j}

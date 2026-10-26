@@ -90,7 +90,9 @@ function StickyFooter({
             <button
               className={`${styles.cartCheckoutBtn} ${styles.cartCheckoutBtn3}`}
               disabled={
-                !isValid || isOutOfStock || isNotServicable || !order?.enabled
+                isOutOfStock ||
+                isNotServicable ||
+                !order?.enabled 
               }
               onClick={onCheckoutClick}
             >
@@ -121,7 +123,10 @@ function StickyFooter({
           <button
             className={`${styles.cartCheckoutBtn} ${styles.priceContainerMobileCheckoutBtn} ${styles.checkoutButton}`}
             disabled={
-              !isValid || isOutOfStock || isNotServicable || !order?.enabled
+              isOutOfStock ||
+              isNotServicable ||
+              !order?.enabled 
+  
             }
             onClick={onCheckoutClick}
           >

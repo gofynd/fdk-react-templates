@@ -1169,45 +1169,54 @@ h5,
   margin-inline-start: 6px;
   cursor: pointer;
 }
-.single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__imgCover___Enz0o {
-  object-fit: cover;
-}
-.single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__imgContain___WVXG8 {
-  object-fit: contain;
-}
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__proceedBtnWrapper___r54yh .single-shipment-content__viewPriceDetails___by8fc {
   display: none;
 }
 .single-shipment-content__parent___NFi_h {
   border: 1px solid var(--dividerStokes);
-  padding: 24px;
   border-top: none;
+  padding: 24px;
 }
 @media only screen and (min-width: 769px) {
   .single-shipment-content__parent___NFi_h {
+    max-height: 75vh;
+    overflow-y: auto;
+    position: relative;
     border-radius: 0px 0px 8px 8px;
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f1f1f1;
   }
-}
-@media only screen and (min-width: 769px) and (max-width: 1024px) {
-  .single-shipment-content__parent___NFi_h {
-    padding: 16px;
+  .single-shipment-content__parent___NFi_h::-webkit-scrollbar {
+    width: 8px;
+  }
+  .single-shipment-content__parent___NFi_h::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+  .single-shipment-content__parent___NFi_h::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+  }
+  .single-shipment-content__parent___NFi_h::-webkit-scrollbar-thumb:hover {
+    background: #555;
   }
 }
 @media only screen and (max-width: 480px) {
   .single-shipment-content__parent___NFi_h {
-    border-radius: 0px;
-    border-width: 0 0;
+    border-width: 0;
     padding: 0;
     margin-top: 12px;
+    overflow: visible;
   }
 }
-.single-shipment-content__parent___NFi_h .single-shipment-content__shimmer___kqGfq {
-  height: 250px;
+.single-shipment-content__scrollArea___tzWmh {
+  overflow: visible;
 }
-@media only screen and (max-width: 768px) {
-  .single-shipment-content__parent___NFi_h .single-shipment-content__shimmer___kqGfq {
-    height: 200px;
-  }
+.single-shipment-content__imgCover___Enz0o {
+  object-fit: cover;
+}
+.single-shipment-content__imgContain___WVXG8 {
+  object-fit: contain;
 }
 @media only screen and (max-width: 480px) {
   .single-shipment-content__proceedBtnWrapper___r54yh {
@@ -1215,6 +1224,8 @@ h5,
   }
 }
 .single-shipment-content__proceedBtnWrapper___r54yh .single-shipment-content__proceedBtn___csoKN {
+  position: sticky;
+  bottom: 0;
   cursor: pointer;
   font-weight: 600;
   font-size: 14px;
@@ -5438,6 +5449,7 @@ h5,
   color: var(--errorText, #ff3333);
 }
 .fy-input__floating___jgtoq {
+  background: var(--pageBackground, #f8f8f8) !important;
   position: absolute;
   transform: translateY(-50%) scale(0.9);
   z-index: 1;
@@ -5456,8 +5468,13 @@ h5,
   transition: 0.1s ease-out;
   box-sizing: border-box;
   width: 100%;
-  background-color: transparent;
+  background-color: var(--pageBackground, #f8f8f8);
   font-weight: 500;
+}
+.fy-input__fyInput___S4Mtu[type="email"],
+.fy-input__fyInput___S4Mtu[type="tel"] {
+  background-color: var(--pageBackground, #f8f8f8);
+  color: var(--textHeading, #26201a);
 }
 @media only screen and (max-width: 480px) {
   .fy-input__fyInput___S4Mtu {
@@ -5534,6 +5551,7 @@ h5,
 }
 .fy-input__adornmentContainer___MtgI6 input {
   flex: 1;
+  background-color: var(--pageBackground, #f8f8f8);
 }
 
 /**color by character**/
@@ -11044,36 +11062,6 @@ h5,
   border: none;
   background: transparent;
 }
-.checkout-payment-content__container___HusGh .checkout-payment-content__applePayWrapper___t9YWX {
-  min-height: 32px;
-  display: flex;
-  align-items: center;
-}
-@media only screen and (min-width: 769px) {
-  .checkout-payment-content__container___HusGh .checkout-payment-content__applePayModeItemWrapper___qPWIz {
-    padding: 18px 20px;
-  }
-}
-.checkout-payment-content__container___HusGh .checkout-payment-content__applePayModePay___eStO3 {
-  margin-top: 16px;
-}
-@media only screen and (min-width: 769px) {
-  .checkout-payment-content__container___HusGh .checkout-payment-content__applePayModePay___eStO3 {
-    padding-inline-start: 50px;
-  }
-}
-@media only screen and (max-width: 768px) {
-  .checkout-payment-content__container___HusGh .checkout-payment-content__applePayModePay___eStO3 {
-    margin-top: 12px;
-    padding-inline-start: 46px;
-  }
-}
-.checkout-payment-content__container___HusGh .checkout-payment-content__applePayLoader___N8c9D {
-  display: flex;
-  align-items: center;
-  min-height: 32px;
-  margin-bottom: 12px;
-}
 .checkout-payment-content__container___HusGh .checkout-payment-content__upiMop___LVvVY {
   padding-bottom: 24px;
 }
@@ -11868,42 +11856,6 @@ h5,
     display: block !important;
   }
 }
-.checkout-payment-content__applePayStickyFooter___C1XCW {
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-}
-.checkout-payment-content__applePayStickyButton___swgbP {
-  position: relative;
-  width: 60.6%;
-  min-width: 0;
-  height: 48px;
-}
-.checkout-payment-content__applePayStickyComponent___JC5DT {
-  width: 100%;
-}
-.checkout-payment-content__applePayStickyComponent___JC5DT[inert] {
-  pointer-events: none;
-}
-.checkout-payment-content__applePayStickyLoader___UOdbN,
-.checkout-payment-content__applePayRetryButton___pHSmX {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--pageBackground, #f8f8f8);
-}
-.checkout-payment-content__applePayStickyLoader___UOdbN {
-  pointer-events: none;
-}
-.checkout-payment-content__applePayRetryButton___pHSmX {
-  border: 1px solid var(--buttonPrimary, #4e3f09);
-  border-radius: 4px;
-  color: var(--buttonPrimary, #4e3f09);
-  font-size: 14px;
-  cursor: pointer;
-}
 @media only screen and (max-width: 768px) {
   .checkout-payment-content__onDesktopView___JFn5k {
     display: none;
@@ -11974,6 +11926,72 @@ h5,
 }
 .checkout-payment-content__noOptionContainer___uCGHg .checkout-payment-content__noOptionText___zceGG .checkout-payment-content__contact_us___KWS91 {
   margin-top: 12px;
+}
+.checkout-payment-content__applePayWrapper___t9YWX {
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+}
+@media only screen and (min-width: 769px) {
+  .checkout-payment-content__applePayModeItemWrapper___qPWIz {
+    padding: 18px 20px;
+  }
+}
+.checkout-payment-content__applePayModePay___eStO3 {
+  margin-top: 16px;
+}
+@media only screen and (min-width: 769px) {
+  .checkout-payment-content__applePayModePay___eStO3 {
+    padding-inline-start: 50px;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .checkout-payment-content__applePayModePay___eStO3 {
+    margin-top: 12px;
+    padding-inline-start: 46px;
+  }
+}
+.checkout-payment-content__applePayLoader___N8c9D {
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+  margin-bottom: 12px;
+}
+.checkout-payment-content__applePayStickyFooter___C1XCW {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.checkout-payment-content__applePayStickyButton___swgbP {
+  position: relative;
+  width: 60.6%;
+  min-width: 0;
+  height: 48px;
+}
+.checkout-payment-content__applePayStickyComponent___JC5DT {
+  width: 100%;
+}
+.checkout-payment-content__applePayStickyComponent___JC5DT[inert] {
+  pointer-events: none;
+}
+.checkout-payment-content__applePayStickyLoader___UOdbN,
+.checkout-payment-content__applePayRetryButton___pHSmX {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--pageBackground, #f8f8f8);
+}
+.checkout-payment-content__applePayStickyLoader___UOdbN {
+  pointer-events: none;
+}
+.checkout-payment-content__applePayRetryButton___pHSmX {
+  border: 1px solid var(--buttonPrimary, #4e3f09);
+  border-radius: 4px;
+  color: var(--buttonPrimary, #4e3f09);
+  font-size: 14px;
+  cursor: pointer;
 }
 
 /**color by character**/
@@ -15703,7 +15721,7 @@ h5,
   line-height: 140%;
   margin: 0;
   text-transform: uppercase;
-  background-color: var(--overlaypopupdividershighlighter, #edece9);
+  background: var(--textLabel, #7d7676);
 }
 .coupon__couponListTitleWrapper___NDeTO .coupon__couponCard___tFTDw {
   padding: 16px 24px;

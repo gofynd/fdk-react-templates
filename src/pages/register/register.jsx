@@ -58,7 +58,6 @@ function Register({
     setError,
     clearErrors,
   } = useForm({
-    mode: "onTouched",
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -74,7 +73,6 @@ function Register({
   });
 
   const consentAccepted = watch("consent", false);
-  const phoneValue = watch("phone");
 
   const isEmailRequired = useMemo(() => {
     if (emailLevel === "soft") {
@@ -383,16 +381,7 @@ function Register({
             />
           </div>
 
-          <button
-            className={styles.registerBtn}
-            type="submit"
-            disabled={
-              Object.keys(errors).length > 0 ||
-              (isMobile &&
-                (isMobileRequired === "required" || phoneValue?.mobile) &&
-                !phoneValue?.isValidNumber)
-            }
-          >
+          <button className={styles.registerBtn} type="submit">
             {t("resource.common.continue")}
           </button>
 

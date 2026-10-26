@@ -92,6 +92,8 @@ function OrderTrackingDetails({
     setShow(false);
   };
 
+  console.log(globalConfig, 'on order tracking details page');
+
   return (
     <div
       className={`basePageContainer margin0auto ${styles.orderTrackingDetails}`}

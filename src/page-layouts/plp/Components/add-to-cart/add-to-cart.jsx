@@ -371,6 +371,7 @@ const AddToCart = ({
               </div>
             </div>
           </div>
+          
           {/* ---------- Buy Now and Add To Cart ---------- */}
           <div className={styles.actionButtons}>
             {!disable_cart && sizes?.sellable && (
