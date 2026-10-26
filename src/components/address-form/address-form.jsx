@@ -62,11 +62,6 @@ import OfficeIcon from "../../assets/images/office-type.svg";
 import FriendsFamilyIcon from "../../assets/images/friends-family.svg";
 import OtherIcon from "../../assets/images/other-type.svg";
 import { isRunningOnClient } from "../../helper/utils";
-import {
-  getInitialAddressFormFields,
-  mergeMapAddressFormFields,
-  getAddressFormFieldErrors,
-} from "../../helper/address-form-location";
 import { useAddressAutofill } from "../../helper/hooks";
 
 const defaultFormSchema = [
@@ -390,7 +385,6 @@ const AddressForm = ({
 }) => {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
-  const platformData = useGlobalStore(fpi.getters.PLATFORM_DATA);
   const isOtherAddressType = !["Home", "Work", "Friends & Family"].includes(
     addressItem?.address_type
   );
@@ -403,7 +397,7 @@ const AddressForm = ({
   // Get currentCountry based on header selection (same logic as useInternational)
   const currentCountry = useMemo(() => {
     return countryCurrencies?.find(
-      (country) => country?.iso2 === i18nDetails?.countryCode
+      (country) => country.iso2 === i18nDetails?.countryCode
     );
   }, [countryCurrencies, i18nDetails?.countryCode]);
 
@@ -423,38 +417,6 @@ const AddressForm = ({
     return userAutofillData;
   }, [userAutofillData, internationalShipping]);
 
-  const isEmailRequired =
-    platformData?.required_fields?.email?.is_required &&
-    platformData?.required_fields?.email?.level === "hard";
-
-  const updatedFormSchema = useMemo(() => {
-    return formSchema?.map((group) => ({
-      ...group,
-      fields: group?.fields?.map((field) => {
-        if (field.key === "email") {
-          return {
-            ...field,
-            required: isEmailRequired,
-            validation: {
-              ...field.validation,
-              ...(isEmailRequired && {
-                required: "Email is required",
-              }),
-            },
-          };
-        }
-
-        return field;
-      }),
-    }));
-  }, [formSchema, isEmailRequired]);
-
-  const formAddressItem = getInitialAddressFormFields(
-    addressItem,
-    isNewAddress && showGoogleMap && !!mapApiKey,
-    countryDetails?.iso2
-  );
-
   const {
     control,
     register,
@@ -465,10 +427,10 @@ const AddressForm = ({
     reset,
     trigger,
     getValues,
-    formState: { errors, isDirty },
+    formState: { errors },
   } = useForm({
     defaultValues: {
-      ...formAddressItem,
+      ...addressItem,
       address_type: addressItem?.address_type
         ? isOtherAddressType
           ? "Other"
@@ -476,23 +438,13 @@ const AddressForm = ({
         : "Home",
       otherAddressType:
         addressItem && isOtherAddressType ? addressItem?.address_type : "",
-      geo_location: formAddressItem?.geo_location || {
-        latitude: "",
-        longitude: "",
-      },
+      geo_location: { latitude: "", longitude: "" },
       country: selectedCountry || t("resource.localization.india"),
       // Auto-fill user data using memoized utility function (excluding phone if international)
       ...autofillDataForForm,
-      email: addressItem ? addressItem?.email || "" : isNewAddress ? autofillDataForForm?.email || "" : "",
       // area_code: addressItem?.area_code || defaultPincode || "",
     },
   });
-  const [mapSelectionRevision, setMapSelectionRevision] = useState(0);
-  useEffect(() => {
-    if (mapSelectionRevision > 0) void trigger();
-  }, [mapSelectionRevision, trigger]);
-
-
   const formContainerRef = useRef(null);
   const [currBgColor, setCurrBgColor] = useState("#fff");
   const [showOtherText, setShowOtherText] = useState(false);
@@ -557,7 +509,7 @@ useEffect(() => {
       phone: _,
       country_phone_code: __,
       ...addressItemWithoutPhone
-    } = formAddressItem;
+    } = addressItem;
 
     reset({
       ...addressItemWithoutPhone,
@@ -578,7 +530,6 @@ useEffect(() => {
       }),
       // ✅ FIXED: Use ternary to avoid creating new values on every render
       country: addressItem?.country || selectedCountry,
-      email: addressItem?.email || "",
     });
   } else {
     setValue("is_default_address", true);
@@ -595,7 +546,7 @@ useEffect(() => {
         isValidNumber: true,
       });
     }
-    if (isNewAddress && userAutofillData.email) {
+    if (userAutofillData.email) {
       setValue("email", userAutofillData.email);
     }
   }
@@ -653,42 +604,21 @@ useEffect(() => {
     );
   };
 
-  const onSubmit = async (data) => {
+  const onSubmit = (data) => {
     let payload = { ...data };
     if (payload.address_type === "Other") {
       payload.address_type = payload?.otherAddressType || "Other";
     }
     delete payload?.otherAddressType;
-    // Convert country object to a stable identifier if it's an object.
-    // Prefer backend identifiers (uid/id/iso2) — display_name/name are
-    // locale-sensitive labels and only safe as a last-resort fallback.
+    // Convert country object to string (uid/id/iso2) if it's an object
+    // Handles: API country objects (with id), countryCurrencies objects (with uid/iso2), and string values
     if (payload.country && typeof payload.country === "object" && payload.country !== null) {
-      payload.country = payload.country.uid || payload.country.id || payload.country.iso2 || payload.country.display_name || payload.country.name || String(payload.country);
+      payload.country = payload.country.uid || payload.country.id || payload.country.iso2 || String(payload.country);
     }
     if (isNewAddress) {
-      const result = await Promise.resolve(onAddAddress(removeNullValues(payload)));
-      if (result && !result?.success && result?.errors) {
-        const fieldErrors = getAddressFormFieldErrors(result.errors);
-        if (fieldErrors && typeof fieldErrors === "object") {
-          for (const [field, messages] of Object.entries(fieldErrors)) {
-            if (Array.isArray(messages) && messages[0]) {
-              setError(field === "pincode" ? "area_code" : field, { type: "manual", message: messages[0] });
-            }
-          }
-        }
-      }
+      onAddAddress(removeNullValues(payload));
     } else {
-      const result = await Promise.resolve(onUpdateAddress(removeNullValues(payload)));
-      if (result && !result?.success && result?.errors) {
-        const fieldErrors = getAddressFormFieldErrors(result.errors);
-        if (fieldErrors && typeof fieldErrors === "object") {
-          for (const [field, messages] of Object.entries(fieldErrors)) {
-            if (Array.isArray(messages) && messages[0]) {
-              setError(field === "pincode" ? "area_code" : field, { type: "manual", message: messages[0] });
-            }
-          }
-        }
-      }
+      onUpdateAddress(removeNullValues(payload));
     }
   };
 
@@ -701,7 +631,7 @@ useEffect(() => {
     
     setValue("country", event);
     setTimeout(() => {
-      updatedFormSchema?.forEach((group) =>
+      formSchema?.forEach((group) =>
         group?.fields?.forEach(({ key }) => {
           // Don't clear user auto-filled fields when country changes
           if (key !== "name" && key !== "phone" && key !== "email") {
@@ -723,26 +653,23 @@ useEffect(() => {
     
     // Merge Google Maps data with existing form values, preserving contact info
     const mergedData = {
-      ...mergeMapAddressFormFields(currentValues, data, countryDetails?.iso2),
+      ...currentValues,
+      ...data,
       // Preserve name, phone, and email - prioritize current form, then addressItem, then data
       name: currentValues.name || addressItem?.name || data.name || userAutofillData?.name || "",
       // Don't use userAutofillData phone if international shipping is enabled
       phone: currentValues.phone || addressItemPhone || data.phone || (!internationalShipping ? userAutofillData?.phone : "") || "",
-      email:
-        currentValues.email ??
-        addressItem?.email ??
-        (isNewAddress ? userAutofillData?.email : "") ??
-        "",
+      email: currentValues.email || addressItem?.email || data.email || userAutofillData?.email || "",
     };
-    reset(mergedData, { keepDefaultValues: true });
-    // Validate after the form fields have mounted; reset alone leaves isValid stale.
-    setMapSelectionRevision((revision) => revision + 1);
+    reset(mergedData);
+    formSchema?.forEach((group) =>
+      group?.fields?.forEach(({ type, key }) => {
+        if (type === "list") {
+          setValue(key, "");
+        }
+      })
+    );
   };
-
-  const footer =
-    typeof customFooter === "function"
-      ? customFooter({ isDirty })
-      : customFooter;
 
   return (
     <div className={styles.addressFormWrapper}>
@@ -783,7 +710,7 @@ useEffect(() => {
             />
           </div>
         )}
-        {updatedFormSchema?.map((group, index) => (
+        {formSchema?.map((group, index) => (
           <div key={index} className={styles.formGroup}>
             <div ref={formContainerRef} className={styles.formContainer}>
               {group?.fields?.map((field) => (
@@ -809,13 +736,7 @@ useEffect(() => {
               <button
                 type="button"
                 key={type.value}
-                onClick={() => {
-                  setValue("address_type", type.value, {
-                    shouldDirty: true,
-                    shouldValidate: true,
-                  });
-                  void trigger();
-                }}
+                onClick={() => setValue("address_type", type.value)}
                 className={`${styles.typeBtn} ${watch("address_type") === type.value ? styles.selected : ""}`}
               >
                 {type.icon}
@@ -842,8 +763,7 @@ useEffect(() => {
             <input
               {...register("otherAddressType", {
                 validate: (value) => {
-                  if (getValues("address_type") !== "Other") return true;
-                  if (!value?.trim()) {
+                  if (!value.trim()) {
                     return `${t("resource.common.address.address_type")} ${t("resource.common.address.is_required")}`;
                   }
                   if (value.length < 1 || value.length > 30) {
@@ -877,11 +797,11 @@ useEffect(() => {
           </div>
         )}
         <div>
-          {footer ||
+          {customFooter ? 
+            customFooter : 
             <button
               className={`${styles.commonBtn} ${styles.deliverBtn}`}
               type="submit"
-              disabled={!isNewAddress && !isDirty}
             >
               {isNewAddress ? t("resource.common.address.add_address") : t("resource.common.address.update_address")}
           </button>}

@@ -76,16 +76,10 @@ function LoginOtp({
                 onChange={(value) => {
                   setValue("phone", value);
                   clearErrors("phone");
-                  onClearOtpError();
                 }}
               />
             )}
           />
-          {otpError && (
-            <div className={styles.alertError}>
-              <span>{otpError?.message}</span>
-            </div>
-          )}
           <button
             className={`btnPrimary ${styles.sendOtpBtn}`}
             type="submit"

@@ -387,14 +387,6 @@ h5,
   flex-direction: column;
   gap: 4px;
 }
-.profile-details__profileDetailsContainer___J7jB7 .profile-details__formContainer___OK2Sx .profile-details__form____WyPW .profile-details__inputContainer___Lxr2C input {
-  color: var(--textHeading, #26201a);
-  -webkit-text-fill-color: var(--textHeading, #26201a);
-}
-.profile-details__profileDetailsContainer___J7jB7 .profile-details__formContainer___OK2Sx .profile-details__form____WyPW .profile-details__inputContainer___Lxr2C input:focus {
-  color: var(--textHeading, #26201a);
-  -webkit-text-fill-color: var(--textHeading, #26201a);
-}
 .profile-details__profileDetailsContainer___J7jB7 .profile-details__formContainer___OK2Sx .profile-details__form____WyPW .profile-details__actionContainer___O6lGI .profile-details__submitBtn___sbeLM {
   border-radius: var(--buttonRadius, 0px);
   margin-top: 4px;
@@ -788,7 +780,7 @@ h5,
 }
 .fy-input__fyInput___S4Mtu::placeholder {
   color: var(--textLabel, #7d7676);
-  opacity: 1;
+  opacity: 0.3;
 }
 .fy-input__fyInput___S4Mtu::-webkit-outer-spin-button,
 .fy-input__fyInput___S4Mtu::-webkit-inner-spin-button {

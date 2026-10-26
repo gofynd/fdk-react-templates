@@ -48,22 +48,6 @@ const AddToCart = ({
 }) => {
   const fpi = useFPI();
   const [foLoading, setFoLoading] = useState(false);
-  const [isLoadingCart, setIsLoadingCart] = useState(false);
-  const canValidateInlineMandatoryPincode =
-    pageConfig?.mandatory_pincode &&
-    !deliverInfoProps?.isServiceability &&
-    !deliverInfoProps?.isCrossBorderOrder;
-  const isCheckoutDisabledByServiceability =
-    !isServiceable && !canValidateInlineMandatoryPincode;
-
-  const handleCheckout = async (event, isBuyNow) => {
-    setIsLoadingCart(true);
-    try {
-      await addProductForCheckout(event, selectedSize, isBuyNow);
-    } finally {
-      setIsLoadingCart(false);
-    }
-  };
   const { language, countryCode } =
     useGlobalStore(fpi.getters.i18N_DETAILS) || {};
   const locale = language?.locale ? language?.locale : "en";
@@ -76,9 +60,6 @@ const AddToCart = ({
     show_price,
     show_quantity_control,
     hide_brand_name,
-    is_limited_stock,
-    limited_stock_label = t("resource.common.limited_stock_label"),
-    limited_stock_quantity = 11,
   } = globalConfig;
 
   const { media, name, short_description, variants, sizes, brand } = product;
@@ -152,6 +133,11 @@ const AddToCart = ({
       ?.filter((size) => size?.quantity === 0 && !isMto)
       ?.map((size) => size?.value);
   }, [sizes?.sizes]);
+
+  const mobileTruncatedTitle = useMemo(() => {
+    if (!name) return "";
+    return name.length > 30 ? `${name.slice(0, 30)}...` : name;
+  }, [name]);
 
   return (
     <div className={styles.productDescContainer}>
@@ -424,11 +410,11 @@ const AddToCart = ({
                       <FyButton
                         variant="outlined"
                         size="medium"
-                        onClick={(event) => handleCheckout(event, false)}
-                        startIcon={<CartIcon className={styles.cartIcon} />}
-                        disabled={
-                          isLoadingCart || isCheckoutDisabledByServiceability
+                        onClick={(event) =>
+                          addProductForCheckout(event, selectedSize, false)
                         }
+                        startIcon={<CartIcon className={styles.cartIcon} />}
+                        disabled={!isServiceable}
                       >
                         {t("resource.cart.add_to_cart_caps")}
                       </FyButton>
@@ -440,11 +426,11 @@ const AddToCart = ({
                     className={styles.buyNow}
                     variant="contained"
                     size="medium"
-                    onClick={(event) => handleCheckout(event, true)}
-                    startIcon={<BuyNowIcon className={styles.cartIcon} />}
-                    disabled={
-                      isLoadingCart || isCheckoutDisabledByServiceability
+                    onClick={(event) =>
+                      addProductForCheckout(event, selectedSize, true)
                     }
+                    startIcon={<BuyNowIcon className={styles.cartIcon} />}
+                    disabled={!isServiceable}
                   >
                     {t("resource.common.buy_now_caps")}
                   </FyButton>
@@ -457,25 +443,6 @@ const AddToCart = ({
               </FyButton>
             )}
           </div>
-          {is_limited_stock &&
-            limited_stock_label &&
-            productPrice?.quantity !== 0 &&
-            productPrice?.quantity <= limited_stock_quantity && (
-              <p className={styles.limitedQuantity}>
-                {(() => {
-                  const fallback = t("resource.common.limited_stock_label");
-                  let label;
-                  if (limited_stock_label?.startsWith("t:")) {
-                    const key = limited_stock_label.slice(2);
-                    const translated = t(key);
-                    label = translated === key ? fallback : translated;
-                  } else {
-                    label = limited_stock_label;
-                  }
-                  return label.replace(/\{\{qty\}\}/g, productPrice?.quantity);
-                })()}
-              </p>
-            )}
         </div>
       </div>
     </div>

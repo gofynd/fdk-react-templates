@@ -38,7 +38,6 @@ function Compare({
   getAttribute = () => {},
   checkHtml = () => {},
   handleAddToCart,
-  listingPrice = "range",
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -248,7 +247,6 @@ function Compare({
               }}
               isLoading={false}
               globalConfig={globalConfig}
-              listingPrice={listingPrice}
             />
           ))}
         </div>
@@ -384,7 +382,6 @@ function Compare({
                                   customeProductDescContainerClass={
                                     styles.customeProductDescContainerClass
                                   }
-                                  listingPrice={listingPrice}
                                 />
                               </FDKLink>
                             </div>

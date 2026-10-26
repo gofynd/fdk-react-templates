@@ -69,6 +69,7 @@ function OrderStatus({
     address_type: "Home",
     phone: "1234567890",
   };
+
   return success === "true" ? (
     <div className={styles.orders}>
       {orderData?.order_id ? (
@@ -210,10 +211,7 @@ function OrderStatus({
                                     paymentInfo?.currency_symbol ||
                                       orderData?.breakup_values?.[0]
                                         ?.currency_symbol,
-                                    paymentInfo?.amount,
-                                    "en-IN",
-                                    null,
-                                    true
+                                    paymentInfo?.amount
                                   )
                                 : null}
                             </span>
@@ -385,12 +383,6 @@ function ProductItem({
   const { t } = useGlobalTranslation("translation");
   const bundleGroupId = product?.bundle_details?.bundle_group_id;
   const aspectRatio = getProductImgAspectRatio(globalConfig);
-  const imageRadiusStyle =
-    globalConfig?.["item-image-border-radius"] != null
-      ? {
-          "--itemImageRadius": `${globalConfig["item-image-border-radius"]}px`,
-        }
-      : undefined;
   const isBundleItem =
     product?.bundle_details?.bundle_group_id &&
     bundleGroups &&
@@ -488,10 +480,7 @@ function ProductItem({
   return (
     <FDKLink to={orderLink}>
       <div className={styles.shipmentProdItem}>
-        <div
-          className={styles.prodImg}
-          style={imageRadiusStyle}
-        >
+        <div className={styles.prodImg}>
           <BagImage
             bag={product}
             isBundle={isBundleItem}
@@ -502,9 +491,7 @@ function ProductItem({
         <div className={styles.prodItemData}>
           <div className={styles.productDetails}>
             {brand && <div className={styles.brandName}>{brand}</div>}
-            <div className={styles.productName} title={name}>
-              {name}
-            </div>
+            <div className={styles.productName}>{name}</div>
             <div className={styles.sizeInfo}>
               <div className={styles.sizeQuantity}>
                 {size && (

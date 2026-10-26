@@ -21,7 +21,7 @@ function ShipmentAddress({ address }) {
   return (
     <div className={`${styles.address}`}>
       <div className={`${styles.title} ${styles.boldsm}`}>
-        {t("resource.common.address.address")}
+        {t("resource.common.address.address_caps")}
       </div>
       <div className={styles.lightsm}>
         {`${address?.name || ""}: ${address?.country_phone_code || ""} ${address?.phone || ""}`}
