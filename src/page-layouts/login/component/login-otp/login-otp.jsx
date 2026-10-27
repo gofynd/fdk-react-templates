@@ -26,7 +26,7 @@ function LoginOtp({
   setShowConsentTooltip = () => {},
 }) {
   const { t } = useGlobalTranslation("translation");
-  const { handleSubmit, control, getValues, reset, setValue, clearErrors } =
+  const { handleSubmit, control, getValues, reset, setValue, clearErrors, watch } =
     useForm({
       mode: "onChange",
       defaultValues: {
@@ -34,6 +34,8 @@ function LoginOtp({
       },
       reValidateMode: "onChange",
     });
+
+  const phoneValue = watch("phone");
 
   const onChangeButton = () => {
     reset();
@@ -81,7 +83,7 @@ function LoginOtp({
           <button
             className={`btnPrimary ${styles.sendOtpBtn}`}
             type="submit"
-            disabled={getOtpLoading}
+            disabled={getOtpLoading || !phoneValue?.isValidNumber}
           >
             {t("resource.auth.login.get_otp")}
           </button>

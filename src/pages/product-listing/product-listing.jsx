@@ -99,6 +99,12 @@ const ProductListing = ({
     ...restAddToModalProps
   } = addToCartModalProps;
 
+  const addToCartModalTitle = isTablet
+    ? restAddToModalProps?.productData?.product?.name?.length > 30
+      ? `${restAddToModalProps?.productData?.product?.name?.slice(0, 30)}...`
+      : restAddToModalProps?.productData?.product?.name || ""
+    : "";
+
   return (
     <div className={styles.plpWrapper}>
       {isRunningOnClient() && isPageLoading ? (
@@ -425,11 +431,7 @@ const ProductListing = ({
                   containerClassName={styles.addToCartContainer}
                   bodyClassName={styles.addToCartBody}
                   titleClassName={styles.addToCartTitle}
-                  title={
-                    isTablet
-                      ? restAddToModalProps?.productData?.product?.name
-                      : ""
-                  }
+                  title={addToCartModalTitle}
                   closeDialog={restAddToModalProps?.handleClose}
                 >
                   <AddToCart
@@ -522,7 +524,12 @@ function ProductGridItem({
       state = {
         product: {
           ...product,
-          sizes: { sellable: product.sellable, sizes: product.sizes },
+          sizes: {
+            sellable: product.sellable,
+            sizes: product.sizes.map((s) =>
+              typeof s === "string" ? { display: s, value: s } : s
+            ),
+          },
         },
       };
     }

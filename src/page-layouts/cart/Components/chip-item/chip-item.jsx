@@ -4,7 +4,6 @@ import * as styles from "./chip-item.less";
 import {
   currencyFormat,
   formatLocale,
-  numberWithCommas,
   translateDynamicLabel,
 } from "../../../../helper/utils";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
@@ -21,6 +20,7 @@ import {
   useNavigate,
 } from "fdk-core/utils";
 import ChipImage from "./chip-image";
+import { transformDisplayToAccordionContent } from "../../../../helper/customization-display";
 
 export default function ChipItem({
   isCartUpdating,
@@ -57,7 +57,8 @@ export default function ChipItem({
   const navigate = useNavigate();
   const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
   const locale = language?.locale;
-  const { limited_stock_quantity: limitedStockQuantity = 11 } = globalConfig || {};
+  const { limited_stock_quantity: limitedStockQuantity = 11 } =
+    globalConfig || {};
   const isMobile = useMobile();
   const [showQuantityError, setShowQuantityError] = useState(false);
   const [showFOModal, setShowFOModal] = useState(false);
@@ -77,85 +78,37 @@ export default function ChipItem({
   const couponText = singleItemDetails?.coupon_message || "";
   const moq = singleItemDetails?.moq;
   const incrementDecrementUnit = moq?.increment_unit ?? 1;
-  const customizationOptions =
+  
+  // Use the actual backend item_index from the article, not the UI loop index
+  // This is critical for cart updates to work correctly, especially with customized items
+  const actualItemIndex = singleItemDetails?.article?.item_index ?? itemIndex;
+  
+  const rawCustomizationOptions =
     singleItemDetails?.article?._custom_json?._display || [];
-
-  // Transform customization options into accordion format
-  const transformedCustomizationContent = customizationOptions
-    .map((option) => {
-      const items = [];
-
-      // Handle productCanvas type (nested value object)
-      if (option.type === "productCanvas" && option.value) {
-        const canvasData = option.value;
-
-        if (canvasData.text) {
-          items.push({
-            key: option.key || "Text",
-            value: canvasData.text,
-          });
-        }
-
-        if (canvasData.price || option.price) {
-          items.push({
-            key: "Price",
-            value: `${canvasData.price || option.price}`,
-          });
-        }
-
-        if (canvasData.previewImage) {
-          items.push({
-            key: "Preview",
-            value: canvasData.previewImage,
-            type: "image",
-            alt: option.key || "Customization preview",
-            dimensions: canvasData.textBounds
-              ? {
-                  width: canvasData.textBounds.width,
-                  height: canvasData.textBounds.height,
-                }
-              : undefined,
-          });
-        }
-      }
-      // Handle simple string type
-      else if (option.type === "string" && option.value) {
-        items.push({
-          key: option.alt || option.key,
-          value: option.value,
-        });
-      }
-      // Handle other types with direct text/price/previewImage properties
-      else {
-        if (option.text) {
-          items.push({ key: "Text", value: option.text });
-        }
-
-        if (option.price) {
-          items.push({ key: "Price", value: option.price });
-        }
-
-        if (option.previewImage) {
-          items.push({
-            key: "Preview",
-            value: option.previewImage,
-            type: "image",
-            alt: "Customization preview",
-          });
-        }
-      }
-
-      return items;
-    })
-    .flat();
+  const accordionContent = transformDisplayToAccordionContent(
+    rawCustomizationOptions
+  );
 
   const [items, setItems] = useState([
     {
       title: "Customization",
-      content: transformedCustomizationContent,
+      content: accordionContent,
       open: false,
     },
   ]);
+
+  // Sync accordion content when singleItemDetails changes (e.g. after cart refresh following a size update)
+  useEffect(() => {
+    setItems((prev) => [
+      {
+        title: "Customization",
+        content: transformDisplayToAccordionContent(
+          singleItemDetails?.article?._custom_json?._display || []
+        ),
+        open: prev[0]?.open ?? false,
+      },
+    ]);
+  }, [singleItemDetails?.article?._custom_json]);
 
   const isSellerBuyBoxListing = useMemo(() => {
     return (
@@ -229,6 +182,17 @@ export default function ChipItem({
       operation === "remove_item" ||
       isSizeUpdate
     ) {
+      // Capture sizeModal before closing it, so we can restore on failure
+      const sizeModalBeforeUpdate = isSizeUpdate ? sizeModal : null;
+
+      // Optimistically close the size modal before the API call + fetchCartDetails,
+      // preventing a re-indexed item from accidentally re-opening the modal
+      if (isSizeUpdate) {
+        setCurrentSizeModalSize(null);
+        setSizeModal(null);
+        setSizeModalErr(null);
+      }
+
       const cartUpdateResponse = await onUpdateCartItems(
         event,
         itemDetails,
@@ -237,16 +201,13 @@ export default function ChipItem({
         itemIndex,
         operation === "edit_item" ? "update_item" : operation,
         false,
-        true
+        isSizeUpdate
       );
 
       if (isSizeUpdate) {
-        if (cartUpdateResponse?.success) {
-          setCurrentSizeModalSize(null);
-          setSizeModal(null);
-          setSizeModalErr(null);
-        } else {
-          setSizeModal(currentSizeModalSize);
+        if (!cartUpdateResponse?.success) {
+          // Restore modal on failure so user can retry
+          setSizeModal(sizeModalBeforeUpdate);
           setSizeModalErr(t("resource.cart.size_is_out_of_stock"));
         }
       }
@@ -361,7 +322,7 @@ export default function ChipItem({
       singleItemDetails,
       currentSize,
       singleItemDetails?.quantity,
-      itemIndex,
+      actualItemIndex,
       "update_item",
       false,
       false,
@@ -418,7 +379,7 @@ export default function ChipItem({
                     singleItemDetails,
                     currentSize,
                     0,
-                    itemIndex,
+                    actualItemIndex,
                     "remove_item"
                   )
                 }
@@ -470,7 +431,7 @@ export default function ChipItem({
                 onRemoveIconClick({
                   item: singleItemDetails,
                   size: currentSize,
-                  index: itemIndex,
+                  index: actualItemIndex,
                 })
               }
             >
@@ -502,6 +463,11 @@ export default function ChipItem({
                   className={styles.sizeContainer}
                   onClick={(e) => {
                     e.stopPropagation();
+                    // Don't allow size change while cart is updating
+                    if (isCartUpdating) {
+                      console.log("Size change blocked: cart is updating");
+                      return;
+                    }
                     setSizeModal(singleItem);
                   }}
                 >
@@ -525,7 +491,7 @@ export default function ChipItem({
                         singleItemDetails,
                         currentSize,
                         -incrementDecrementUnit,
-                        itemIndex,
+                        actualItemIndex,
                         "update_item"
                       )
                     }
@@ -535,7 +501,7 @@ export default function ChipItem({
                         singleItemDetails,
                         currentSize,
                         incrementDecrementUnit,
-                        itemIndex,
+                        actualItemIndex,
                         "update_item"
                       )
                     }
@@ -545,7 +511,7 @@ export default function ChipItem({
                         singleItemDetails,
                         currentSize,
                         currentNum,
-                        itemIndex,
+                        actualItemIndex,
                         "edit_item"
                       )
                     }
@@ -667,7 +633,7 @@ export default function ChipItem({
                   <SvgWrapper svgSrc="applied-promo" className={styles.ml6} />
                 </div>
               )}
-            {customizationOptions.length > 0 && (
+            {accordionContent.length > 0 && (
               <div className={styles.productCustomizationContainer}>
                 <Accordion items={items} onItemClick={handleItemClick} />
               </div>
@@ -774,7 +740,7 @@ export default function ChipItem({
 
       <Modal
         isOpen={
-          sizeModal && cartItems[sizeModal] !== null && sizeModal === singleItem
+          !!(sizeModal && cartItems[sizeModal] && sizeModal === singleItem)
         }
         closeDialog={(e) => {
           e.stopPropagation();
@@ -802,6 +768,7 @@ export default function ChipItem({
                     sizeModalItemValue?.product?.name ||
                     t("resource.common.product_image")
                   }
+                  className={`${globalConfig?.img_fill ? styles.imgCover : styles.imgContain}`}
                 />
               </div>
               <div className={styles.sizeModalContent}>
@@ -815,11 +782,8 @@ export default function ChipItem({
                 </div>
                 <div className={styles.sizeDiscount}>
                   {currencyFormat(
-                    numberWithCommas(
-                      sizeModalItemValue?.article?.price?.converted
-                        ?.effective ??
-                        sizeModalItemValue?.article?.price?.base?.effective
-                    ),
+                    sizeModalItemValue?.article?.price?.converted?.effective ??
+                      sizeModalItemValue?.article?.price?.base?.effective,
                     sizeModalItemValue?.article?.price?.converted
                       ?.currency_symbol ??
                       sizeModalItemValue?.article?.price?.base?.currency_symbol,
@@ -846,7 +810,7 @@ export default function ChipItem({
                 (singleSize) => {
                   const isEarlierSelectedSize =
                     !currentSizeModalSize &&
-                    sizeModal?.split("_")[1] === singleSize?.value;
+                    sizeModalItemValue?.article?.size === singleSize?.value;
                   const isCurrentSelectedSize =
                     currentSizeModalSize?.split("_")[1] === singleSize?.value;
                   return (
@@ -871,20 +835,20 @@ export default function ChipItem({
                           e.stopPropagation();
                           if (!singleSize?.is_available) return;
 
-                          const originalSize = sizeModal?.split("_")[1];
                           const isOriginalSize =
-                            singleSize?.value === originalSize;
+                            singleSize?.value === sizeModalItemValue?.article?.size;
 
                           if (isOriginalSize) {
                             // Reset to null when original size is re-selected
                             setSizeModalErr(null);
                             setCurrentSizeModalSize(null);
                           } else if (singleSize?.value) {
-                            // Set new size when a different size is selected
+                            // Set new size: replace only the size part (index 1) in the key,
+                            // preserving fulfillmentSlug, storeUid, and itemIndex parts
                             setSizeModalErr(null);
-                            const newSizeModalValue = `${
-                              sizeModal?.split("_")[0]
-                            }_${singleSize?.value}_${sizeModal?.split("_")[2]}`;
+                            const parts = (sizeModal ?? "").split("_");
+                            parts[1] = singleSize?.value;
+                            const newSizeModalValue = parts.join("_");
                             setCurrentSizeModalSize(newSizeModalValue);
                           }
                         }}
@@ -904,13 +868,20 @@ export default function ChipItem({
         </div>
         <div className={styles.sizeModalErrCls}>{sizeModalErr}</div>
         <button
-          className={`${styles.sizeModalFooter} ${(!currentSizeModalSize || currentSizeModalSize === sizeModal || sizeModalErr) && styles.disableBtn}`}
+          className={`${styles.sizeModalFooter} ${(!currentSizeModalSize || currentSizeModalSize === sizeModal || sizeModalErr || isCartUpdating) && styles.disableBtn}`}
           disabled={
             !currentSizeModalSize ||
             currentSizeModalSize === sizeModal ||
-            sizeModalErr
+            sizeModalErr ||
+            isCartUpdating
           }
           onClick={(e) => {
+            // Safety check: prevent update if cart is currently updating
+            if (isCartUpdating) {
+              console.log("Size update blocked: cart is updating");
+              return;
+            }
+            
             // Safety check: prevent update if no size change
             if (
               !currentSizeModalSize ||
@@ -920,15 +891,30 @@ export default function ChipItem({
               return;
             }
 
-            let itemIndex;
-            for (let j = 0; j < cartItemsWithActualIndex.length; j += 1) {
-              if (
-                `${cartItemsWithActualIndex[j]?.key}_${cartItemsWithActualIndex[j]?.article?.store?.uid}_${cartItemsWithActualIndex[j]?.article?.item_index}` ===
-                sizeModal
-              ) {
-                itemIndex = j;
-                break;
+            // First, try to get the item from the current cartItems (handles frozen state)
+            let matchedItem = cartItems[sizeModal];
+            
+            // If not found in cartItems (shouldn't happen but defensive), search in live array
+            if (!matchedItem) {
+              for (let j = 0; j < cartItemsWithActualIndex.length; j += 1) {
+                if (
+                  `${cartItemsWithActualIndex[j]?.key}_${cartItemsWithActualIndex[j]?.article?.store?.uid}_${cartItemsWithActualIndex[j]?.article?.item_index}` ===
+                  sizeModal
+                ) {
+                  matchedItem = cartItemsWithActualIndex[j];
+                  break;
+                }
               }
+            }
+
+            // Safety check: ensure we found the item
+            if (!matchedItem) {
+              console.error("Failed to find cart item for size update", {
+                sizeModal,
+                cartItemsKeys: Object.keys(cartItems),
+                liveItemsCount: cartItemsWithActualIndex.length
+              });
+              return;
             }
 
             const newSize = currentSizeModalSize.split("_")[1];
@@ -939,12 +925,13 @@ export default function ChipItem({
               return;
             }
 
+            // Use the actual article.item_index from the matched item, not the array index
             cartUpdateHandler(
               e,
               sizeModalItemValue,
               newSize,
-              cartItemsWithActualIndex[itemIndex]?.quantity || 0,
-              itemIndex,
+              matchedItem?.quantity || 0,
+              matchedItem?.article?.item_index,
               "update_item",
               true
             );

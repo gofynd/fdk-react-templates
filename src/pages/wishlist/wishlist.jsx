@@ -17,6 +17,7 @@ const Wishlist = ({
   totalCount = 0,
   isBrand = true,
   isSaleBadge = true,
+  isCustomBadge = true,
   isPrice = true,
   imgSrcSet,
   aspectRatio,
@@ -88,6 +89,7 @@ const Wishlist = ({
                 product,
                 isBrand,
                 isSaleBadge,
+                isCustomBadge,
                 isPrice,
                 imgSrcSet,
                 aspectRatio,
@@ -145,6 +147,7 @@ const WishlistProductCard = ({
   index,
   isBrand = true,
   isSaleBadge = true,
+  isCustomBadge = true,
   isPrice = true,
   imgSrcSet,
   aspectRatio,
@@ -199,6 +202,7 @@ const WishlistProductCard = ({
         isBrand={isBrand}
         isPrice={isPrice}
         isSaleBadge={isSaleBadge}
+        isCustomBadge={isCustomBadge}
         isWishlistIcon={false}
         isRemoveIcon={true}
         RemoveIconComponent={RemoveIconComponent}
