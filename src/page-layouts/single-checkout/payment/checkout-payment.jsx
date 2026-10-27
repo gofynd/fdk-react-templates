@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import CheckoutPaymentContent from "./checkout-payment-content";
 import * as styles from "./checkout-payment.less";
@@ -23,7 +23,10 @@ function CheckoutPayment({
   isCouponValid,
   setIsCouponValid,
   inValidCouponData,
-  splitPaymentConfig,
+  neftFileUpload = { state: {}, upload: () => {}, reset: () => {} },
+  rtgsFileUpload = { state: {}, upload: () => {}, reset: () => {} },
+  beforePaymentContent = null,
+  paymentContentOverride = null,
 }) {
   const { t } = useGlobalTranslation("translation");
   const [showFailedMessage, setShowFailedMessage] = useState(false);
@@ -31,17 +34,6 @@ function CheckoutPayment({
   const [paymentErrMsg, setPaymentErrMsg] = useState("");
   const [juspayErrorMessage, setJuspayErrorMessage] = useState(false);
   const [timerId, setTimerId] = useState(null);
-  const paymentWithUiConfig = useMemo(() => {
-    if (!splitPaymentConfig) return payment;
-
-    return {
-      ...payment,
-      splitPaymentConfig: {
-        ...(payment?.splitPaymentConfig || {}),
-        ...splitPaymentConfig,
-      },
-    };
-  }, [payment, splitPaymentConfig]);
   const {
     errorMessage,
     setErrorMessage,
@@ -49,53 +41,15 @@ function CheckoutPayment({
     getTotalValue,
     isCreditNoteApplied,
     isLoading,
-  } = paymentWithUiConfig;
+  } = payment;
   const isMobile = useMobile();
-  const isSplitPaymentActive =
-    paymentWithUiConfig?.splitPaymentConfig?.enabled === true &&
-    paymentWithUiConfig?.splitPaymentConfig?.defaultSelected === true;
-  const shouldDisablePayment =
-    getTotalValue?.() === 0 &&
-    !isCreditNoteApplied &&
-    !isLoading &&
-    !isSplitPaymentActive;
-  const hasStoreCreditOption =
-    paymentWithUiConfig?.paymentOption?.payment_option?.some(
-      (option) =>
-        option?.name === "CREDITNOTE" &&
-        option?.list?.some((item) => item?.partial_payment_allowed)
-    ) ?? false;
-  const shouldShowStoreCredit =
-    (enableLinkPaymentOption ||
-      (paymentWithUiConfig?.arePaymentOptionsReady !== false &&
-        hasStoreCreditOption)) &&
-    !isSplitPaymentActive &&
-    paymentWithUiConfig?.splitPaymentConfig?.hideStoreCredit !== true;
-  const shouldHidePaymentContent =
-    paymentWithUiConfig?.hidePaymentContentOnError === true;
-  const translatedPleaseTryAgainLater = t(
-    "resource.checkout.please_try_again_later"
-  );
-  const pleaseTryAgainLaterText =
-    translatedPleaseTryAgainLater === "resource.checkout.please_try_again_later"
-      ? "Please try again later"
-      : translatedPleaseTryAgainLater;
-  const shouldShowPaymentFailedMessage =
-    showFailedMessage ||
-    (shouldHidePaymentContent && String(errorMessage || "").trim().length > 0);
-  const visiblePaymentErrHeading = showFailedMessage
-    ? paymentErrHeading
-    : pleaseTryAgainLaterText;
-  const visiblePaymentErrMsg = showFailedMessage
-    ? paymentErrMsg
-    : errorMessage;
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     if (errorMessage?.length > 0) {
       handleShowFailedMessage({
         failed: true,
-        paymentErrHeading: pleaseTryAgainLaterText,
+        paymentErrHeading: t("resource.checkout.please_try_again_later"),
         paymentErrMsg: errorMessage,
       });
       onFailedGetCartShipmentDetails();
@@ -164,35 +118,19 @@ function CheckoutPayment({
       setTimerId(null);
     }
   };
-  const availablePaymentOptions = paymentWithUiConfig?.paymentOption?.payment_option;
-  const shouldHideEmptyPaymentSection =
-    showPayment &&
-    !enableLinkPaymentOption &&
-    !isLoading &&
-    !paymentWithUiConfig?.isPaymentOptionsRefreshing &&
-    !isSplitPaymentActive &&
-    !shouldShowPaymentFailedMessage &&
-    getTotalValue?.() === 0 &&
-    Array.isArray(availablePaymentOptions) &&
-    !availablePaymentOptions.some(
-      (option) => option?.name !== "PP" && option?.list?.length > 0
-    );
-
-  if (shouldHideEmptyPaymentSection) return null;
-
   console.log("firstone connected");
   return (
     <>
       <div
-        className={`${styles.paymentContainer} ${!showPayment ? styles.hidePayment : ""} ${enableLinkPaymentOption ? styles.unsetMarginTop : ""} ${shouldDisablePayment ? styles.disabledPayment : ""}`}
+        className={`${styles.paymentContainer} ${!showPayment ? styles.hidePayment : ""} ${enableLinkPaymentOption ? styles.unsetMarginTop : ""} ${getTotalValue?.() === 0 && !isCreditNoteApplied && !isLoading ? styles.disabledPayment : ""}`}
       >
         {showPayment ? (
           <>
-            {shouldShowStoreCredit && (
+            {!paymentContentOverride && (
               <div className={styles.creditNote}>
                 <CreditNote
-                  data={paymentWithUiConfig?.partialPaymentOption}
-                  updateStoreCredits={paymentWithUiConfig?.updateStoreCredits}
+                  data={payment?.partialPaymentOption}
+                  updateStoreCredits={payment?.updateStoreCredits}
                 />
               </div>
             )}
@@ -210,18 +148,17 @@ function CheckoutPayment({
                 {t("resource.checkout.select_payment_method")}
               </div>
             </div>
-            {shouldShowPaymentFailedMessage && (
+            {showFailedMessage && (
               <div className={styles.paymentFailedHeader}>
                 <div className={styles.redSplit}></div>
                 <CheckoutPaymentFailure
-                  paymentErrHeading={visiblePaymentErrHeading}
-                  paymentErrMsg={visiblePaymentErrMsg}
+                  paymentErrHeading={paymentErrHeading}
+                  paymentErrMsg={paymentErrMsg}
                 ></CheckoutPaymentFailure>
               </div>
             )}
-            {!shouldHidePaymentContent && (
-              <CheckoutPaymentContent
-                payment={paymentWithUiConfig}
+            <CheckoutPaymentContent
+                payment={payment}
                 loader={loader}
                 handleShowFailedMessage={handleShowFailedMessage}
                 onPriceDetailsClick={onPriceDetailsClick}
@@ -233,8 +170,11 @@ function CheckoutPayment({
                 isCouponValid={isCouponValid}
                 setIsCouponValid={setIsCouponValid}
                 inValidCouponData={inValidCouponData}
+                neftFileUpload={neftFileUpload}
+                rtgsFileUpload={rtgsFileUpload}
+                beforePaymentContent={beforePaymentContent}
+                paymentContentOverride={paymentContentOverride}
               ></CheckoutPaymentContent>
-            )}
           </>
         ) : (
           <div className={styles.reviewHeaderUnselect}>
