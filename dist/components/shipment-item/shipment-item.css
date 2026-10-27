@@ -334,6 +334,9 @@ h5,
     display: none !important;
   }
 }
+.shipment-item__bagItem___YVBW1 {
+  min-width: 0;
+}
 .shipment-item__bagItem___YVBW1 input {
   display: none;
 }
@@ -346,13 +349,17 @@ h5,
 .shipment-item__bagItem___YVBW1 .shipment-item__bagImg___BQldP {
   flex: 0 0 80px;
   cursor: pointer;
+  display: block;
+  min-width: 0;
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__label___SjeMm {
   display: flex;
   gap: 16px;
+  min-width: 0;
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G {
   flex: 1;
+  min-width: 0;
 }
 .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__regularxxs___nZRqX {
   font-weight: 400;
@@ -391,6 +398,9 @@ h5,
   font-size: 16px;
   font-weight: 600;
   line-height: 140%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 @media only screen and (max-width: 480px) {
   .shipment-item__bagItem___YVBW1 .shipment-item__bagInfo___j7W8G .shipment-item__brand___wCMcA {
@@ -837,8 +847,12 @@ h5,
 }
 .bag__bagImg___F1kfj {
   min-width: 80px;
-  border-radius: var(--buttonRadius, 0px);
+  border-radius: var(--itemImageRadius, 11px);
   overflow: hidden;
+}
+.bag__bagImg___F1kfj picture,
+.bag__bagImg___F1kfj img {
+  border-radius: inherit;
 }
 .bag__bundleImg___TEyPU {
   display: grid;
@@ -848,16 +862,22 @@ h5,
   gap: 4px;
   aspect-ratio: var(--aspectRatio);
   border: 1px solid var(--dividerStokes, #d4d1d1);
-  border-radius: var(--buttonRadius, 0px);
+  border-radius: var(--itemImageRadius, 11px);
 }
 .bag__bundleImg___TEyPU .bag__bundleImgItem___slqOT {
   display: flex;
-  border-radius: calc(var(--buttonRadius, 0px) / 2);
+  border-radius: calc(var(--itemImageRadius, 11px) / 2);
   overflow: hidden;
   position: relative;
 }
 .bag__bundleImg___TEyPU .bag__bundleImgItem___slqOT .bag__itemImg___tRLBP {
   display: flex;
+  border-radius: inherit;
+  overflow: hidden;
+}
+.bag__bundleImg___TEyPU .bag__bundleImgItem___slqOT .bag__itemImg___tRLBP picture,
+.bag__bundleImg___TEyPU .bag__bundleImgItem___slqOT .bag__itemImg___tRLBP img {
+  border-radius: inherit;
 }
 .bag__bundleImg___TEyPU .bag__bundleImgItem___slqOT .bag__bundleCount___C799t {
   position: absolute;
@@ -1781,7 +1801,7 @@ h5,
   flex-shrink: 0;
   width: 80px;
   height: 80px;
-  border-radius: 4px;
+  border-radius: var(--itemImageRadius, 11px);
   overflow: hidden;
   background-color: var(--pageBackground, #f8f8f8);
   display: flex;

@@ -417,6 +417,30 @@ h5,
   -moz-user-select: text !important;
   touch-action: unset !important;
 }
+.lightbox-image__lbContainer___xMHUl .lightbox-image__lbButtonClose___sJigM,
+.lightbox-image__lbContainer___xMHUl .lightbox-image__lbArrow___hltkB,
+.lightbox-image__lbContainer___xMHUl .lightbox-image__playerIcon___PrWcF,
+.lightbox-image__lbContainer___xMHUl .lightbox-image__videoPlayIcon___D_Ok4,
+.lightbox-image__lbContainer___xMHUl .lightbox-image__modelIcon___wwBB0 {
+  color: var(--textBody, #3c3131);
+}
+.lightbox-image__lbContainer___xMHUl .lightbox-image__lbButtonClose___sJigM path[fill]:not([fill="none"]),
+.lightbox-image__lbContainer___xMHUl .lightbox-image__lbArrow___hltkB path[fill]:not([fill="none"]),
+.lightbox-image__lbContainer___xMHUl .lightbox-image__playerIcon___PrWcF path[fill]:not([fill="none"]),
+.lightbox-image__lbContainer___xMHUl .lightbox-image__videoPlayIcon___D_Ok4 path[fill]:not([fill="none"]),
+.lightbox-image__lbContainer___xMHUl .lightbox-image__modelIcon___wwBB0 path[fill]:not([fill="none"]) {
+  fill: var(--textBody, #3c3131);
+}
+.lightbox-image__lbContainer___xMHUl .lightbox-image__lbButtonClose___sJigM path[stroke],
+.lightbox-image__lbContainer___xMHUl .lightbox-image__lbArrow___hltkB path[stroke],
+.lightbox-image__lbContainer___xMHUl .lightbox-image__playerIcon___PrWcF path[stroke],
+.lightbox-image__lbContainer___xMHUl .lightbox-image__videoPlayIcon___D_Ok4 path[stroke],
+.lightbox-image__lbContainer___xMHUl .lightbox-image__modelIcon___wwBB0 path[stroke] {
+  stroke: var(--textBody, #3c3131);
+}
+.lightbox-image__lbContainer___xMHUl .lightbox-image__closeIcon___O38_B path:nth-child(2) {
+  fill: var(--textBody, #3c3131) !important;
+}
 @media only screen and (min-width: 769px) {
   .lightbox-image__lbContainer___xMHUl {
     background-color: rgba(20, 19, 14, 0.6);
