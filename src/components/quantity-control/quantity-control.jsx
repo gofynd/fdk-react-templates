@@ -24,7 +24,6 @@ function QuantityControl({
   onDecrementClick = () => {},
   onIncrementClick = () => {},
   onQtyChange = () => {},
-  onValidateQuantity = () => true,
   maxCartQuantity = 0,
   minCartQuantity = 0,
   containerClassName = "",
@@ -53,12 +52,11 @@ function QuantityControl({
     if (evt.target?.value === "") {
       setQuantity("");
     } else {
-      const nextQuantity = Number(evt.target?.value);
-      setQuantity(onValidateQuantity(nextQuantity) ? nextQuantity : count);
+      setQuantity(Number(evt.target?.value));
     }
   };
 
-  const onQtyLostFocus = async (evt) => {
+  const onQtyLostFocus = (evt) => {
     const currentQty = Number(quantity);
 
     if (!currentQty) {
@@ -69,12 +67,7 @@ function QuantityControl({
       } else if (currentQty < minCartQuantity) {
         setQuantity(minCartQuantity);
       }
-      try {
-        const response = await onQtyChange(evt, currentQty);
-        if (response?.success === false) setQuantity(count);
-      } catch (error) {
-        setQuantity(count);
-      }
+      onQtyChange(evt, currentQty);
     }
   };
 

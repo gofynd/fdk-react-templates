@@ -71,14 +71,14 @@
           padding: 16px;
 
           .productScrollContent {
-            max-height: calc(60vh - 32px);
+            max-height: calc(70vh - 32px);
           }
         }
         @media @mobile {
           padding: 16px;
 
           .productScrollContent {
-            max-height: calc(60vh - 32px);
+            max-height: calc(70vh - 32px);
           }
         }
 
@@ -132,6 +132,7 @@
 
           @media @tablet {
             margin-bottom: 8px;
+            font-size: 16px;
           }
         }
 
@@ -197,8 +198,8 @@
             letter-spacing: -0.32px;
 
             @media @tablet {
-              font-size: 14px;
-              letter-spacing: -0.28px;
+              font-size: 20px;
+              letter-spacing: -0.4px;
             }
           }
 
@@ -210,6 +211,10 @@
             line-height: normal;
             letter-spacing: -0.24px;
             text-decoration: line-through;
+
+            @media @tablet {
+              font-size: 14px;
+            }
           }
 
           &--discount {
@@ -220,6 +225,10 @@
             font-weight: 400;
             line-height: normal;
             letter-spacing: -0.24px;
+
+            @media @tablet {
+              font-size: 14px;
+            }
           }
         }
 
@@ -238,6 +247,10 @@
 
             @media @tablet {
               font-size: 12px;
+              flex-shrink: 0;
+              white-space: nowrap;
+              justify-content: flex-start;
+              gap: 6px;
             }
 
             .scaleIcon {
@@ -289,6 +302,36 @@
 
           @media @tablet {
             display: none;
+          }
+        }
+
+        .badge_section {
+          margin-bottom: 5px;
+
+          .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background-color: @SuccessText;
+            color: @White;
+            font-size: 12px;
+            font-weight: 400;
+            line-height: normal;
+            letter-spacing: -0.24px;
+
+            .info_icon {
+              display: flex;
+              align-items: center;
+              width: 12px;
+              height: 12px;
+
+              /deep/ svg {
+                width: 100%;
+                height: 100%;
+              }
+            }
           }
         }
 
@@ -372,12 +415,50 @@
           width: 13px;
         }
 
+        .fillSecondary {
+          fill: @ButtonSecondary;
+        }
+
         @media @tablet {
           padding: 16px 16px 32px;
         }
 
         .buyNow {
           border: 0.8px solid @ButtonPrimary;
+        }
+
+        .viewCart {
+          border: 1px solid @ButtonPrimary;
+          background-color: @ButtonSecondary;
+          color: @ButtonPrimary;
+
+          svg {
+            fill: @ButtonPrimary;
+            path {
+              fill: @ButtonPrimary;
+            }
+          }
+        }
+
+        .buttonSecondary {
+          background-color: @ButtonSecondary;
+          color: @ButtonPrimary;
+          border: 1px solid @ButtonPrimary;
+
+          svg {
+            fill: @ButtonPrimary !important;
+          }
+        }
+
+        .fullWidthButton {
+          flex: 1;
+          width: 100%;
+          background-color: @ButtonPrimary;
+          color: @ButtonSecondary;
+
+          svg {
+            fill: @ButtonSecondary !important;
+          }
         }
 
         button {
@@ -422,6 +503,18 @@
 
   @media @tablet {
     margin-top: 16px;
+  }
+
+  &.withQuantityWrapper {
+    justify-content: flex-start;
+    gap: 16px;
+
+    // Dropdown + quantity fill the row on small screens, so let the size guide
+    // drop to its own line instead of being squeezed into a wrapped label.
+    @media @tablet {
+      flex-wrap: wrap;
+      gap: 12px 16px;
+    }
   }
 
   .sizeWrapper {
@@ -512,6 +605,15 @@
   }
 }
 
+.sizeRowContainer {
+  width: 100%;
+  margin-bottom: 8px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
 .short-description {
   margin: 24px 0;
 }
@@ -531,6 +633,11 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
+  }
+
+  .quantityControl {
+    margin-top: 16px;
+    width: min-content;
   }
 
   & > div {
@@ -589,12 +696,12 @@
   }
 }
 
-.dropdownContainer > div {
+.dropdownContainer > div,
+.dropdown {
   border-radius: @ButtonRadius !important;
 }
 
 .dropdown {
-  border-radius: min(8px, @ButtonRadius) !important;
   background-color: @DialogBackground !important;
 }
 
@@ -611,4 +718,287 @@
 .disabledOption {
   text-decoration-line: line-through;
   color: @TextDisabled;
+}
+
+.childDetailsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+  width: 100%;
+
+  .childDetailBox {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    padding: 6px 12px;
+    border: 1px solid @DividerStokes;
+    border-radius: 24px;
+    font-size: 12px;
+
+    .childSize {
+      color: @TextHeading;
+      font-family: var(--font-header, "WorkSans");
+      text-align: center;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 900;
+      line-height: normal;
+      letter-spacing: -0.24px;
+    }
+
+    .childSeparator {
+      color: @TextBody;
+    }
+
+    .childQuantity {
+      color: @TextBody;
+      font-family: var(--font-body, "WorkSans");
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+      letter-spacing: -0.24px;
+    }
+  }
+}
+
+.priceShimmer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 20px;
+
+  .shimmerLine {
+    height: 22.5px;
+    width: 30%;
+    min-width: 80px;
+    background: linear-gradient(90deg, #f8f8f8 25%, #f0f0f0 50%, #f8f8f8 75%);
+    background-size: 200% 100%;
+    border-radius: 4px;
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+}
+
+// ---------- Mobile bottom bar (quantity controller + Buy now / price) ----------
+.limitedQuantityInline {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 140%;
+  color: @ErrorText;
+  margin: 0 0 12px;
+}
+
+// Room for the floating "View cart" pill, so it never hides the last line of content.
+.scrollWithViewCart {
+  padding-bottom: 56px;
+}
+
+.mobileBottomBar {
+  display: none;
+
+  @media @tablet {
+    position: sticky;
+    bottom: 0;
+    z-index: 9;
+    display: flex;
+    // Top-aligned so a quantity error line under the controller cannot move the left half.
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    box-sizing: border-box;
+    padding: 12px 16px 24px;
+    background-color: @DialogBackground;
+    border-top: 1px solid @DividerStokes;
+  }
+
+  // The pill floats just above the bar, over the scrolled content.
+  .viewCartSlot {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 12px;
+    pointer-events: none;
+  }
+
+  .mobileBarLeft {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    // Same height as the controller (medium = 42px), so both halves line up.
+    min-height: 42px;
+
+    // With "Buy now" both halves are equal.
+    &.mobileBarLeftButton + .mobileBarRight {
+      flex: 1 1 0;
+    }
+  }
+
+  .mobileBuyNow {
+    width: 100%;
+    height: 42px;
+    padding: 0 12px;
+    font-size: 12px;
+    border: 0.8px solid @ButtonPrimary;
+  }
+
+  .mobileBarRight {
+    flex: 0 0 auto;
+    width: 52%;
+    max-width: 220px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  // The shared controller keeps its own look; it only has to fill its half of the bar.
+  .barQtyContainer {
+    width: 100%;
+  }
+
+  .barPrice {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .barPriceRow {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 2px 6px;
+  }
+
+  .barPriceEffective {
+    color: @TextHeading;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -0.32px;
+  }
+
+  .barPriceMarked {
+    color: @TextLabel;
+    font-size: 12px;
+    text-decoration: line-through;
+  }
+
+  .barPriceDiscount {
+    color: @ThemeAccentD2;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .barTaxLabel {
+    color: @TextSecondary;
+    font-size: 11px;
+    line-height: normal;
+  }
+}
+
+// ---------- Mobile size cards, Add to cart button, Buy now ----------
+.mobileSizeSection {
+  margin-top: 16px;
+
+  .mobileSizeHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .mobileSizeTitle {
+    margin: 0;
+    color: @TextHeading;
+    font-size: 14px;
+    font-weight: 600;
+  }
+}
+
+.mobileBottomBar {
+  // Same look as the PDP sticky bar's "Add to cart" button.
+  .mobileAddToCart {
+    width: 100%;
+    height: 42px;
+    padding: 0 16px;
+    border: none;
+    border-radius: 8px;
+    background: @ButtonPrimary;
+    color: @ThemeAccentL5;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .barError {
+    margin: 4px 0 0;
+    color: @ErrorText;
+    font-size: 11px;
+    line-height: normal;
+  }
+
+  // Once in the cart the counter is filled like the PDP sticky bar's controller. The shared
+  // controller has deeper selectors of its own, so these use !important on element selectors
+  // and leave its markup and behaviour alone.
+  .qtyWrap {
+    > div:first-child {
+      padding: 0 12px;
+      border: none !important;
+      border-radius: 8px !important;
+      background: @ButtonPrimary !important;
+    }
+
+    button {
+      background: rgba(255, 255, 255, 0.2) !important;
+    }
+
+    button svg path {
+      fill: #fff !important;
+    }
+
+    input {
+      color: #fff !important;
+      caret-color: #fff !important;
+      font-weight: 600;
+
+      &::placeholder {
+        color: #fff !important;
+      }
+    }
+
+    div[class*="quantityControl"] {
+      min-width: 0;
+    }
+  }
+
+  // Buy now is the secondary action: outlined, same height as the primary one.
+  .mobileBuyNow {
+    background-color: @ButtonSecondary;
+    color: @ButtonPrimary;
+    border: 1px solid @ButtonPrimary;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+  }
 }
