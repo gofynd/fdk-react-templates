@@ -3,6 +3,7 @@ import { useForm, Controller } from "react-hook-form";
 import {
   checkIfNumber,
   translateDynamicLabel,
+  validatePhone,
   validatePasswordField,
 } from "../../../../helper/utils";
 import * as styles from "./login-password.less";
@@ -73,7 +74,12 @@ function loginPassword({
 
   useEffect(() => {
     if (checkIfNumber(watch("username"))) {
-      setValue("phone.mobile", watch("username"));
+      const mobile = watch("username");
+      setValue("phone", {
+        ...getValues("phone"),
+        mobile,
+        isValidNumber: validatePhone(mobile),
+      });
       setShowInputNumber(true);
     }
   }, [watch("username")]);
