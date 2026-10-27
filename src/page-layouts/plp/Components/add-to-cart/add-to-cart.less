@@ -913,13 +913,15 @@
 
 // ---------- Mobile size cards, Add to cart button, Buy now ----------
 .mobileSizeSection {
-  margin-top: 16px;
+  margin-top: 24px;
 
   .mobileSizeHeader {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
+    // The cards' own 8px top padding (room for the quantity badge) adds to this.
+    margin-bottom: 8px;
   }
 
   .mobileSizeTitle {
@@ -998,6 +1000,12 @@
 
     div[class*="quantityControl"] {
       min-width: 0;
+    }
+
+    // No divider lines either side of the number: container > row > number box.
+    > div:first-child > div > div {
+      border-left: none !important;
+      border-right: none !important;
     }
   }
 

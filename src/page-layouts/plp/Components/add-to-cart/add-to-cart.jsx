@@ -907,7 +907,10 @@ const AddToCart = ({
             )}
 
             {/* ---------- Size Container ---------- */}
-            {isSizeSelectionBlock && (
+            {/* On mobile the cards replace this block's contents; skip the empty wrapper, which
+                would only add margin. */}
+            {isSizeSelectionBlock &&
+              !(showMobileSizeCards && !(showQuantityController && !isMobileLayout)) && (
               <div className={styles.sizeSelection}>
                 {(isChildDetailsAvailable || !isSizeCollapsed) && !showMobileSizeCards && (
                   <div className={styles.sizeHeaderContainer}>

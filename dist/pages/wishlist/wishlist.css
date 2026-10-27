@@ -4921,13 +4921,14 @@ h5,
   line-height: normal;
 }
 .add-to-cart__mobileSizeSection___Cf2BO {
-  margin-top: 16px;
+  margin-top: 24px;
 }
 .add-to-cart__mobileSizeSection___Cf2BO .add-to-cart__mobileSizeHeader___vu5Ql {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  margin-bottom: 8px;
 }
 .add-to-cart__mobileSizeSection___Cf2BO .add-to-cart__mobileSizeTitle___MSOyM {
   margin: 0;
@@ -4985,6 +4986,10 @@ h5,
 }
 .add-to-cart__mobileBottomBar___voXF8 .add-to-cart__qtyWrap___hw54G div[class*="quantityControl"] {
   min-width: 0;
+}
+.add-to-cart__mobileBottomBar___voXF8 .add-to-cart__qtyWrap___hw54G > div:first-child > div > div {
+  border-left: none !important;
+  border-right: none !important;
 }
 .add-to-cart__mobileBottomBar___voXF8 .add-to-cart__mobileBuyNow___ReMa5 {
   background-color: var(--buttonSecondary, #fff);
