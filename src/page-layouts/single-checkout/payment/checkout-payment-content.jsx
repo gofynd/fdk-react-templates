@@ -1916,6 +1916,7 @@ function CheckoutPaymentContent({
     } else if (tab === "Other") {
       setSelectedOtherPayment(subMopData);
     }
+    return true;
   };
 
   useEffect(() => {
@@ -2669,9 +2670,8 @@ function CheckoutPaymentContent({
                     </div>
                     <div className={styles.modeOption}>
                       {savedCards?.map((card, index) => (
-                        <div>
+                        <div key={card?.card_id || index}>
                           <div
-                            key={index}
                             className={`${styles.modeItemWrapper} ${getCardBorder(card)}`}
                           >
                             <div
@@ -3158,14 +3158,13 @@ function CheckoutPaymentContent({
         );
 
         const WalletItem = ({ wlt, key, openMoreWalletModal = false }) => {
-          const isSelectedWallet = selectedWallet?.code === wlt?.code;
           return (
             <div
               key={key}
               className={`${styles.modeItemWrapper} ${getWalletdBorder(wlt)}`}
-              onClick={async () => {
+              onClick={(e) => {
                 removeDialogueError();
-                await selectMop("WL", "WL", wlt?.code);
+                selectMop("WL", "WL", wlt?.code);
               }}
             >
               <label>
@@ -3192,7 +3191,7 @@ function CheckoutPaymentContent({
               </label>
 
               <div className={styles.modePay}>
-                {!openMoreWalletModal && isTablet && isSelectedWallet ? (
+                {!openMoreWalletModal && isTablet ? (
                   <StickyPayNow
                     customClassName={styles.visibleOnTab}
                     value={priceFormatCurrencySymbol(
@@ -4457,6 +4456,7 @@ function CheckoutPaymentContent({
         <div
           className={styles["linkWrapper-row1"]}
           onClick={() => {
+            const isSelectingPaymentOption = selectedTab !== opt.name;
             if (isTablet) {
               handleScrollToTop(index);
               setSelectedTab((prev) => (prev === opt.name ? "" : opt.name));
@@ -4468,7 +4468,7 @@ function CheckoutPaymentContent({
             removeDialogueError();
             setTab(opt.name);
             toggleMop(opt.name);
-            if (selectedTab !== opt.name) {
+            if (isSelectingPaymentOption) {
               if (isTablet) {
                 setSelectedPaymentPayload({});
               }
