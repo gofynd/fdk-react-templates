@@ -13,6 +13,17 @@ The `AddToCart` component handles the display of product details, including imag
 - **Product Availability**: Displays availability based on stock and custom order conditions.
 
 
+## Mobile bottom bar (viewport up to 768px)
+
+When `showQuantityController` is on, the cart is enabled (`disable_cart` off) and the product is sellable, the popup on mobile moves the quantity controller out of the page body into a sticky bottom bar:
+
+- **Left:** the `Buy now` button when `showBuyNowButton` is true and `button_options` includes `buynow`. Otherwise the price (effective, marked, discount and `tax_label`), shown only when `show_price` is on. The price row in the body is hidden while the bar shows it.
+- **Right:** the quantity controller, with the same cart rules as desktop (pincode checks, min/max, increment unit, add on first increment).
+- **Floating "View cart" pill:** shown just above the bar when the cart has items and the theme's bottom navigation is **not** on screen. With the navigation on, the pill is hidden (the navigation has the cart icon) and the bar is lifted above the navigation.
+- The "limited stock" line moves into the page body.
+
+The bottom navigation is detected through the `data-mobile-footer="true"` attribute the theme sets on `<body>`. Without the quantity controller, with the cart disabled, or for a product that is not sellable, the original buttons are kept. Desktop is unchanged.
+
 ## Usage
 To use the `AddToCart` component, you need to import it into your React application and provide the required props.
 
