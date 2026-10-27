@@ -13,7 +13,7 @@
  * @param {string} [labelClassName] - Optional custom CSS class(es) to apply to the label element.
  * @param {string} [containerClassName] - Optional custom CSS class(es) to apply to the dropdown container element.
  * @param {object} [value] - The currently selected option, should be an object with `key` and `display` properties.
- * @param {function} onChange - Callback function triggered when an option is selected. Receives the selected option's `option[dataKey]` value (a primitive, e.g. a string - NOT the full option object) as its only argument.
+ * @param {function} onChange - Callback function triggered when an option is selected. Receives the selected option object as an argument.
  *
  * @returns {JSX.Element} A customizable dropdown menu with label, error message, and various styling options.
  */

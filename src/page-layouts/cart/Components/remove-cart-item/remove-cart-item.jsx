@@ -2,7 +2,6 @@ import React, { useMemo } from "react";
 import * as styles from "./remove-cart-item.less";
 import Modal from "../../../../components/core/modal/modal";
 import { useGlobalTranslation } from "fdk-core/utils";
-import { truncateName } from "../../../../helper/utils";
 
 function RemoveCartItem({
   isOpen = false,
@@ -12,7 +11,6 @@ function RemoveCartItem({
   onRemoveButtonClick = () => {},
   onWishlistButtonClick = () => {},
   onCloseDialogClick = () => {},
-  globalConfig,
 }) {
   const { t } = useGlobalTranslation("translation");
 
@@ -28,8 +26,6 @@ function RemoveCartItem({
         : cartItem.product.images[0].url.replace("original", "resize-w:250");
     }
   }, [cartItem]);
-  const brandName = truncateName(cartItem?.product?.brand?.name || "", 40);
-  const productName = truncateName(cartItem?.product?.name || "", 40);
 
   return (
     <Modal
@@ -45,16 +41,14 @@ function RemoveCartItem({
         <div className={styles.itemDetails}>
           {getProductImage && (
             <div className={styles.itemImg}>
-              <img
-                src={getProductImage}
-                alt={cartItem?.product?.name}
-                className={`${globalConfig?.img_fill ? styles.imgCover : styles.imgContain}`}
-              />{" "}
+              <img src={getProductImage} alt={cartItem?.product?.name} />
             </div>
           )}
           <div>
-            <div className={styles.itemBrand}>{brandName} </div>
-            <div className={styles.itemName}>{productName}</div>
+            <div className={styles.itemBrand}>
+              {cartItem?.product?.brand?.name}
+            </div>
+            <div className={styles.itemName}>{cartItem?.product?.name}</div>
           </div>
         </div>
       </div>
@@ -64,8 +58,7 @@ function RemoveCartItem({
         </div>
         <div
           className={`${styles.wishlistBtn} ${isMovingToWishlist ? styles.disabled : ""}`}
-          onClick={onWishlistButtonClick}
-          data-testid="move-to-wishlist-button"
+          onClick={ onWishlistButtonClick}
         >
           {t("resource.cart.move_to_wishlist")}
         </div>

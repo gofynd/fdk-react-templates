@@ -4,7 +4,7 @@ import { useNavigate, useGlobalTranslation } from "fdk-core/utils";
 import FyInput from "../../components/core/fy-input/fy-input";
 import FyButton from "../../components/core/fy-button/fy-button";
 
-function OrderTracking({ instMob, title, orderIdPlaceholder, trackOrderBtnText, whereIsOrderIdText }) {
+function OrderTracking({ instMob }) {
   const { t } = useGlobalTranslation("translation");
   const [showDetails, setShowDetails] = useState(false);
 
@@ -23,13 +23,13 @@ function OrderTracking({ instMob, title, orderIdPlaceholder, trackOrderBtnText, 
   return (
     <div className="basePageContainer margin0auto">
       <div className={`${styles.trackOrderCntr}`}>
-        <h2 className={`${styles.orderTitle}`}>{title}</h2>
+        <h2 className={`${styles.orderTitle}`}>{t("resource.order.where_is_order_id")}?</h2>
         <div className={`${styles.trackOrder}`}>
           <FyInput
-            label={isFocussed || orderId ? orderIdPlaceholder : ""}
+            label={isFocussed || orderId ? t("resource.order.enter_order_id")  : ""}
             labelVariant="floating"
             value={orderId}
-            placeholder={!isFocussed ? orderIdPlaceholder : ""}
+            placeholder={!isFocussed ? t("resource.order.enter_order_id") : ""}
             maxLength="20"
             error={showError}
             errorMessage={t("resource.order.invalid_order_id")}
@@ -44,20 +44,20 @@ function OrderTracking({ instMob, title, orderIdPlaceholder, trackOrderBtnText, 
             size="medium"
             onClick={trackOrder}
           >
-            {trackOrderBtnText}
+            {t("resource.order.track_order_caps")}
           </FyButton>
           <FyButton
             className={styles.btn}
             variant="text"
             onClick={() => setShowDetails(!showDetails)}
           >
-           {whereIsOrderIdText}
+           {t("resource.order.where_is_order_id")}?
           </FyButton>
           {showDetails && (
             <div>
               <img
                 src={instMob}
-                alt={whereIsOrderIdText}
+                alt={`${t("resource.order.where_is_order_id")}?`}
                 className={`${styles.demoImg}`}
               />
             </div>

@@ -26,7 +26,6 @@
 import React, { useState, useMemo, forwardRef } from "react";
 import * as styles from "./fy-image.less";
 import { transformImage } from "../../../helper/utils";
-import { RESPONSIVE_IMAGE_BREAKPOINTS } from "../../../helper/constant";
 
 const IMAGE_SIZES = [
   "original",
@@ -70,8 +69,13 @@ const FyImage = forwardRef(
       mobileAspectRatio,
       showOverlay = false,
       overlayColor = "#ffffff",
-      // Use optimized breakpoints from config by default
-      sources = RESPONSIVE_IMAGE_BREAKPOINTS,
+      sources = [
+        { breakpoint: { min: 780 }, width: 1280 },
+        { breakpoint: { min: 600 }, width: 1100 },
+        { breakpoint: { min: 480 }, width: 1200 },
+        { breakpoint: { min: 361 }, width: 900 },
+        { breakpoint: { max: 360 }, width: 640 },
+      ],
       customClass,
       globalConfig,
       defer = true,
@@ -123,7 +127,7 @@ const FyImage = forwardRef(
 
       const key = searchStringInArray(url, IMAGE_SIZES);
 
-      return (sources ?? [])
+      return sources
         .reduce((srcset, s) => {
           let src = url;
           if (key && s?.width) {
@@ -139,14 +143,11 @@ const FyImage = forwardRef(
       if (!isImageResizable) {
         return [];
       }
-      // Derived values go on a copy: `sources` is caller-owned (and may be a
-      // shared/frozen constant), so writing media/srcset onto it would leak
-      // state across instances.
-      return (sources ?? []).map((source) => ({
-        ...source,
-        media: getMedia(source),
-        srcset: getUrl(source.width, source.url),
-      }));
+      return sources?.map((source) => {
+        source.media = getMedia(source);
+        source.srcset = getUrl(source.width, source.url);
+        return source;
+      });
     };
 
     const getMedia = (source) => {
@@ -190,7 +191,7 @@ const FyImage = forwardRef(
 
     return (
       <div
-        className={`${styles.imageWrapper} ${isImageFill ? styles.fill : styles.contain}
+        className={`${styles.imageWrapper} ${isImageFill ? styles.fill : ""}
       ${isFixedAspectRatio ? styles.fixedAspRatio : ""} ${customClass}`}
         style={dynamicStyles}
       >
