@@ -169,6 +169,7 @@ const loadRazorpayApplePayScript = ({ requireWebComponent = false } = {}) => {
     return Promise.reject(new Error("Razorpay can only be loaded in a browser."));
   }
 
+
   const hasRazorpayApplePayScript = () =>
     [...document.scripts].some((script) =>
       /checkout\.razorpay\.com\/v1\/razorpay\.js/.test(script.src || "")
@@ -227,6 +228,7 @@ const loadRazorpayApplePayScript = ({ requireWebComponent = false } = {}) => {
       resolve(ApplePayRazorpay);
       return true;
     };
+
 
     if (finishWhenReady()) {
       return;
@@ -387,6 +389,7 @@ const createApplePayCheckoutOrder = async ({ proceedToPay, fallbackKey }) => {
   const checkoutCart = getApplePayCheckoutCart(checkoutResponse);
   const orderData = normalizeApplePayOrderData(checkoutCart, fallbackKey);
 
+
   if (!checkoutCart?.success || !orderData?.order_id) {
     const error = new Error(
       checkoutCart?.message || "Unable to start Apple Pay."
@@ -456,6 +459,7 @@ function CheckoutPaymentContent({
     creditUpdating,
     isPaymentLoading,
   } = payment;
+
 
   useEffect(() => {
     if (enableLinkPaymentOption && selectedTab) {
@@ -670,6 +674,7 @@ function CheckoutPaymentContent({
   };
   const isApplePaySubmitting = applePayStatus === "submitting";
 
+
   const resetApplePay = () => {
     applePayRequestIdRef.current += 1;
     applePayInitializationRef.current = false;
@@ -709,6 +714,7 @@ function CheckoutPaymentContent({
     );
     const matchesPreparedOrder =
       paymentData?.razorpay_order_id === callbackOrderData?.order_id;
+
 
     if (
       !hasRequiredPaymentData ||
@@ -760,6 +766,7 @@ function CheckoutPaymentContent({
     const message = isCancelled
       ? "Apple Pay was cancelled. You can try again or choose another payment method."
       : error?.description || error?.message || "Apple Pay payment failed.";
+
 
     handleShowFailedMessage({
       failed: true,
@@ -912,6 +919,7 @@ function CheckoutPaymentContent({
     razorpay.on("payment.success", handleSuccess);
     razorpay.on("payment.failure", handleFailure);
     razorpay.on("payment.error", handleFailure);
+
 
     return razorpay;
   };
@@ -1780,7 +1788,7 @@ function CheckoutPaymentContent({
   };
 
   const selectMop = async (tab, mop, subMop) => {
-    if (!mop) return;
+    if (!mop) return false;
     setTab(tab);
     setMop(mop);
     setSubMop(subMop);
@@ -1848,7 +1856,7 @@ function CheckoutPaymentContent({
           valid,
         });
         setShowCouponValidityModal(true);
-        return;
+        return false;
       }
     }
 
@@ -1915,6 +1923,7 @@ function CheckoutPaymentContent({
     } else if (tab === "Other") {
       setSelectedOtherPayment(subMopData);
     }
+    return true;
   };
 
   useEffect(() => {
@@ -2668,9 +2677,8 @@ function CheckoutPaymentContent({
                     </div>
                     <div className={styles.modeOption}>
                       {savedCards?.map((card, index) => (
-                        <div>
+                        <div key={card?.card_id || index}>
                           <div
-                            key={index}
                             className={`${styles.modeItemWrapper} ${getCardBorder(card)}`}
                           >
                             <div
@@ -3157,13 +3165,14 @@ function CheckoutPaymentContent({
         );
 
         const WalletItem = ({ wlt, key, openMoreWalletModal = false }) => {
+          const isSelectedWallet = selectedWallet?.code === wlt?.code;
           return (
             <div
               key={key}
               className={`${styles.modeItemWrapper} ${getWalletdBorder(wlt)}`}
-              onClick={(e) => {
+              onClick={async () => {
                 removeDialogueError();
-                selectMop("WL", "WL", wlt?.code);
+                await selectMop("WL", "WL", wlt?.code);
               }}
             >
               <label>
@@ -3190,7 +3199,7 @@ function CheckoutPaymentContent({
               </label>
 
               <div className={styles.modePay}>
-                {!openMoreWalletModal && isTablet ? (
+                {!openMoreWalletModal && isTablet && isSelectedWallet ? (
                   <StickyPayNow
                     customClassName={styles.visibleOnTab}
                     value={priceFormatCurrencySymbol(
@@ -4455,6 +4464,7 @@ function CheckoutPaymentContent({
         <div
           className={styles["linkWrapper-row1"]}
           onClick={() => {
+            const isSelectingPaymentOption = selectedTab !== opt.name;
             if (isTablet) {
               handleScrollToTop(index);
               setSelectedTab((prev) => (prev === opt.name ? "" : opt.name));
@@ -4466,7 +4476,7 @@ function CheckoutPaymentContent({
             removeDialogueError();
             setTab(opt.name);
             toggleMop(opt.name);
-            if (selectedTab !== opt.name) {
+            if (isSelectingPaymentOption) {
               if (isTablet) {
                 setSelectedPaymentPayload({});
               }
