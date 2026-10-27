@@ -29,6 +29,37 @@
     }
   }
 }
+
+.pincodeShake {
+  animation: pincode-shake 450ms ease-in-out !important;
+  will-change: transform;
+}
+
+@keyframes pincode-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-10px);
+  }
+  40% {
+    transform: translateX(10px);
+  }
+  60% {
+    transform: translateX(-7px);
+  }
+  80% {
+    transform: translateX(7px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pincodeShake {
+    animation: none;
+  }
+}
+
 .deliveryInfo {
   margin-top: 24px;
 
@@ -76,13 +107,18 @@
 
     /deep/ svg {
       path {
-        fill: @SuccessText;
+        fill: @TextBody;
       }
     }
   }
   p {
     margin-inline-start: 4px;
   }
+}
+
+.deliveryIcon {
+  color: @TextBody;
+  fill: @TextBody;
 }
 .error {
   color: @ErrorText;

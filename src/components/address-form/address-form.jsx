@@ -62,6 +62,11 @@ import OfficeIcon from "../../assets/images/office-type.svg";
 import FriendsFamilyIcon from "../../assets/images/friends-family.svg";
 import OtherIcon from "../../assets/images/other-type.svg";
 import { isRunningOnClient } from "../../helper/utils";
+import {
+  getInitialAddressFormFields,
+  mergeMapAddressFormFields,
+  getAddressFormFieldErrors,
+} from "../../helper/address-form-location";
 import { useAddressAutofill } from "../../helper/hooks";
 
 const defaultFormSchema = [
@@ -398,7 +403,7 @@ const AddressForm = ({
   // Get currentCountry based on header selection (same logic as useInternational)
   const currentCountry = useMemo(() => {
     return countryCurrencies?.find(
-      (country) => country.iso2 === i18nDetails?.countryCode
+      (country) => country?.iso2 === i18nDetails?.countryCode
     );
   }, [countryCurrencies, i18nDetails?.countryCode]);
 
@@ -444,6 +449,12 @@ const AddressForm = ({
     }));
   }, [formSchema, isEmailRequired]);
 
+  const formAddressItem = getInitialAddressFormFields(
+    addressItem,
+    isNewAddress && showGoogleMap && !!mapApiKey,
+    countryDetails?.iso2
+  );
+
   const {
     control,
     register,
@@ -454,10 +465,10 @@ const AddressForm = ({
     reset,
     trigger,
     getValues,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm({
     defaultValues: {
-      ...addressItem,
+      ...formAddressItem,
       address_type: addressItem?.address_type
         ? isOtherAddressType
           ? "Other"
@@ -465,7 +476,10 @@ const AddressForm = ({
         : "Home",
       otherAddressType:
         addressItem && isOtherAddressType ? addressItem?.address_type : "",
-      geo_location: { latitude: "", longitude: "" },
+      geo_location: formAddressItem?.geo_location || {
+        latitude: "",
+        longitude: "",
+      },
       country: selectedCountry || t("resource.localization.india"),
       // Auto-fill user data using memoized utility function (excluding phone if international)
       ...autofillDataForForm,
@@ -473,6 +487,12 @@ const AddressForm = ({
       // area_code: addressItem?.area_code || defaultPincode || "",
     },
   });
+  const [mapSelectionRevision, setMapSelectionRevision] = useState(0);
+  useEffect(() => {
+    if (mapSelectionRevision > 0) void trigger();
+  }, [mapSelectionRevision, trigger]);
+
+
   const formContainerRef = useRef(null);
   const [currBgColor, setCurrBgColor] = useState("#fff");
   const [showOtherText, setShowOtherText] = useState(false);
@@ -537,7 +557,7 @@ useEffect(() => {
       phone: _,
       country_phone_code: __,
       ...addressItemWithoutPhone
-    } = addressItem;
+    } = formAddressItem;
 
     reset({
       ...addressItemWithoutPhone,
@@ -648,11 +668,11 @@ useEffect(() => {
     if (isNewAddress) {
       const result = await Promise.resolve(onAddAddress(removeNullValues(payload)));
       if (result && !result?.success && result?.errors) {
-        const fieldErrors = result?.errors?.[0]?.extensions?.details?.field_errors;
+        const fieldErrors = getAddressFormFieldErrors(result.errors);
         if (fieldErrors && typeof fieldErrors === "object") {
           for (const [field, messages] of Object.entries(fieldErrors)) {
             if (Array.isArray(messages) && messages[0]) {
-              setError(field, { type: "manual", message: messages[0] });
+              setError(field === "pincode" ? "area_code" : field, { type: "manual", message: messages[0] });
             }
           }
         }
@@ -660,11 +680,11 @@ useEffect(() => {
     } else {
       const result = await Promise.resolve(onUpdateAddress(removeNullValues(payload)));
       if (result && !result?.success && result?.errors) {
-        const fieldErrors = result?.errors?.[0]?.extensions?.details?.field_errors;
+        const fieldErrors = getAddressFormFieldErrors(result.errors);
         if (fieldErrors && typeof fieldErrors === "object") {
           for (const [field, messages] of Object.entries(fieldErrors)) {
             if (Array.isArray(messages) && messages[0]) {
-              setError(field, { type: "manual", message: messages[0] });
+              setError(field === "pincode" ? "area_code" : field, { type: "manual", message: messages[0] });
             }
           }
         }
@@ -703,23 +723,26 @@ useEffect(() => {
     
     // Merge Google Maps data with existing form values, preserving contact info
     const mergedData = {
-      ...currentValues,
-      ...data,
+      ...mergeMapAddressFormFields(currentValues, data, countryDetails?.iso2),
       // Preserve name, phone, and email - prioritize current form, then addressItem, then data
       name: currentValues.name || addressItem?.name || data.name || userAutofillData?.name || "",
       // Don't use userAutofillData phone if international shipping is enabled
       phone: currentValues.phone || addressItemPhone || data.phone || (!internationalShipping ? userAutofillData?.phone : "") || "",
-      email: isNewAddress && !addressItem ? currentValues.email || data.email || userAutofillData?.email || "" : addressItem?.email ? currentValues.email || addressItem?.email : "",
+      email:
+        currentValues.email ??
+        addressItem?.email ??
+        (isNewAddress ? userAutofillData?.email : "") ??
+        "",
     };
-    reset(mergedData);
-    updatedFormSchema?.forEach((group) =>
-      group?.fields?.forEach(({ type, key }) => {
-        if (type === "list") {
-          setValue(key, "");
-        }
-      })
-    );
+    reset(mergedData, { keepDefaultValues: true });
+    // Validate after the form fields have mounted; reset alone leaves isValid stale.
+    setMapSelectionRevision((revision) => revision + 1);
   };
+
+  const footer =
+    typeof customFooter === "function"
+      ? customFooter({ isDirty })
+      : customFooter;
 
   return (
     <div className={styles.addressFormWrapper}>
@@ -786,7 +809,13 @@ useEffect(() => {
               <button
                 type="button"
                 key={type.value}
-                onClick={() => setValue("address_type", type.value)}
+                onClick={() => {
+                  setValue("address_type", type.value, {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                  });
+                  void trigger();
+                }}
                 className={`${styles.typeBtn} ${watch("address_type") === type.value ? styles.selected : ""}`}
               >
                 {type.icon}
@@ -813,7 +842,8 @@ useEffect(() => {
             <input
               {...register("otherAddressType", {
                 validate: (value) => {
-                  if (!value.trim()) {
+                  if (getValues("address_type") !== "Other") return true;
+                  if (!value?.trim()) {
                     return `${t("resource.common.address.address_type")} ${t("resource.common.address.is_required")}`;
                   }
                   if (value.length < 1 || value.length > 30) {
@@ -847,11 +877,11 @@ useEffect(() => {
           </div>
         )}
         <div>
-          {customFooter ? 
-            customFooter : 
+          {footer ||
             <button
               className={`${styles.commonBtn} ${styles.deliverBtn}`}
               type="submit"
+              disabled={!isNewAddress && !isDirty}
             >
               {isNewAddress ? t("resource.common.address.add_address") : t("resource.common.address.update_address")}
           </button>}

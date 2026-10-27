@@ -336,7 +336,7 @@ h5,
 }
 .shipment-tracking__title___BMsCR {
   font-weight: bold;
-  color: #41434c;
+  color: var(--textHeading, #26201a);
   opacity: 1 !important;
 }
 .shipment-tracking__shipmentTracking___vw2lr {
@@ -453,7 +453,7 @@ h5,
 }
 .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__title___BMsCR {
   font-weight: bold;
-  color: #41434c;
+  color: var(--textHeading, #26201a);
   opacity: 1 !important;
 }
 .shipment-tracking__shipmentTracking___vw2lr .shipment-tracking__detailedTracking___ff1aw {
