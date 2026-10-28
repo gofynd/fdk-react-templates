@@ -16,6 +16,7 @@
  * @param {string} [props.inputLabel="label"] - The label displayed above the input field.
  * @param {string[]} [props.excludeDates=[]] - Array of date strings (in `dateFormat`) that should be disabled (unselectable).
  * @param {boolean} [props.enableMonthYearSelection=false] - Enables month and year dropdown selectors when true.
+ * @param {string} [props.modalTitle] - Custom title for the calendar modal (mobile view). Defaults to reattempt date translation.
  *
  * @returns {JSX.Element} The rendered date picker component.
  */
@@ -50,6 +51,7 @@ const FyDatePicker = React.forwardRef(
       errorMessage = "",
       handleShowCalendarPopup = () => {},
       enableMonthYearSelection = false,
+      modalTitle,
     },
     ref
   ) => {
@@ -479,7 +481,7 @@ const FyDatePicker = React.forwardRef(
               {calendarDays}
             </div>
             <div className={styles.confirmButton}>
-              <button onClick={handleConfirm}>Confirm</button>
+              <button onClick={handleConfirm}>CONFIRM</button>
             </div>
           </div>
         );
@@ -494,7 +496,7 @@ const FyDatePicker = React.forwardRef(
               isOpen={showCalendar}
               closeDialog={() => setShowCalendar(false)}
               headerClassName={styles.popupTitle}
-              title="Select Date"
+              title={modalTitle ?? t("resource.profile.select_reattempt_date")}
             >
               <ChildCalender />
             </Modal>

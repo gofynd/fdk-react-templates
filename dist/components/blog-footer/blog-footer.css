@@ -413,14 +413,14 @@ h5,
     line-height: 16px;
   }
 }
+.blog-footer__footer__cta___TQO4_:disabled {
+  border-color: var(--buttonPrimaryL3, #b8b29d);
+  background-color: var(--buttonPrimaryL3, #b8b29d);
+}
 @media only screen and (min-width: 769px) {
   .blog-footer__footer__cta___TQO4_:hover {
     border-color: var(--buttonPrimaryL1, #71653a);
     background-color: var(--buttonPrimaryL1, #71653a);
-  }
-  .blog-footer__footer__cta___TQO4_:disabled {
-    border-color: var(--buttonPrimaryL3, #b8b29d);
-    background-color: var(--buttonPrimaryL3, #b8b29d);
   }
 }
 .blog-footer__footer__cta___TQO4_:active,

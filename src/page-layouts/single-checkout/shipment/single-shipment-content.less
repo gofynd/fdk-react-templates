@@ -145,28 +145,11 @@
       .itemWrapper {
         column-gap: 14px;
         display: grid;
-        align-items: start;
         grid-template-areas:
           "item_image item_details"
           "item_image free_gift";
         grid-template-columns: auto 1fr;
         grid-template-rows: auto auto;
-
-        &.itemWrapperNoGift {
-          display: flex;
-          align-items: flex-start;
-          gap: 14px;
-
-          .leftImg {
-            flex: 0 0 100px;
-            align-self: flex-start;
-          }
-
-          .rightDetails {
-            flex: 1 1 auto;
-            align-self: flex-start;
-          }
-        }
 
         @media @mobile {
           grid-template-areas:
@@ -200,10 +183,6 @@
               @media @mobile {
                 font-size: 12px;
               }
-
-              &:empty {
-                display: none;
-              }
             }
             .productName {
               font-weight: 400;
@@ -214,9 +193,6 @@
               @media @mobile {
                 font-size: 12px;
               }
-            }
-            .brandName:empty + .productName {
-              margin-top: 0;
             }
             .sizeInfo {
               display: flex;

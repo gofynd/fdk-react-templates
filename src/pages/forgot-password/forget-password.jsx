@@ -258,6 +258,7 @@ function ForgetPassword({
                 setIsFormSubmitSuccess={setIsFormSubmitSuccess}
                 setShowInputNumber={setShowInputNumber}
                 reset={reset}
+                isNewPassword={true}
               />
             </>
           )}

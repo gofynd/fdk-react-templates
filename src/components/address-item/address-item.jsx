@@ -86,11 +86,19 @@ function AddressItem({
     () => getAddressStr(addressItem, false),
     [addressItem]
   );
+  const handleAddressClick = () => {
+    const selection = window?.getSelection?.();
+    if (selection && selection.type === "Range" && selection.toString()) {
+      // Skip selecting the address when the user is highlighting text
+      return;
+    }
+    onAddressSelect(addressItem?.id);
+  };
 
   return (
     <div
       className={`${styles.addressContent} ${containerClassName}`}
-      onClick={() => onAddressSelect(addressItem?.id)}
+      onClick={handleAddressClick}
       style={
         selectedAddressId !== addressItem.id
           ? { border: "1px solid var(--dividerStokes)" }

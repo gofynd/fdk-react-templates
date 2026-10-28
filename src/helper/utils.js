@@ -65,6 +65,10 @@ export function isRunningOnClient() {
 export function convertDate(dateString, locale = "en-US") {
   const date = new Date(dateString);
 
+  // Use browser's local timezone with fallback to UTC
+  const browserTimezone =
+    Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+
   const options = {
     month: "long",
     day: "numeric",
@@ -72,54 +76,17 @@ export function convertDate(dateString, locale = "en-US") {
     hour: "numeric",
     minute: "numeric",
     hour12: true,
-    timeZone: "UTC",
+    timeZone: browserTimezone,
   };
 
   const formatter = new Intl.DateTimeFormat(locale, options);
   const formattedDate = formatter.format(date);
-
   return formattedDate;
 }
 
 export function validateName(name) {
   const regexp = /^[a-zA-Z0-9-_'. ]+$/;
   return regexp.test(String(name).toLowerCase().trim());
-}
-// Convert ISO date string to DD-MM-YYYY format
-export function convertISOToDDMMYYYY(isoString) {
-  if (!isoString) return "";
-
-  // Extract date part from ISO string (YYYY-MM-DD) to avoid timezone issues
-  // For DOB, we only care about the date, not the time
-  const datePart = isoString.split("T")[0];
-  if (!datePart) return "";
-
-  const parts = datePart.split("-");
-  if (parts.length !== 3) {
-    // Fallback to Date object parsing if format is unexpected
-    const date = new Date(isoString);
-    if (isNaN(date.getTime())) return "";
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-    return `${day}-${month}-${year}`;
-  }
-
-  // Convert from YYYY-MM-DD to DD-MM-YYYY
-  const [year, month, day] = parts;
-  return `${day}-${month}-${year}`;
-}
-
-// Convert DD-MM-YYYY format to ISO string
-export function convertDDMMYYYYToISO(dateString) {
-  if (!dateString) return "";
-  const parts = dateString.split("-").map(Number);
-  if (parts.length !== 3) return "";
-  // Assuming DD-MM-YYYY format
-  // Use Date.UTC to create date in UTC timezone to avoid timezone shift issues
-  const dateObj = new Date(Date.UTC(parts[2], parts[1] - 1, parts[0]));
-  if (isNaN(dateObj.getTime())) return "";
-  return dateObj.toISOString();
 }
 
 export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
@@ -165,7 +132,8 @@ export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
       return "Invalid date";
     }
 
-    const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const browserTimezone =
+      Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
     // console.log("🌐 Detected browser time zone →", browserTimezone);
 
     const options = {
@@ -185,7 +153,6 @@ export const convertUTCDateToLocalDate = (date, format, locale = "en-US") => {
     return "Invalid date";
   }
 };
-
 
 export function validateEmailField(value) {
   const emailPattern =
@@ -295,26 +262,122 @@ export const getProductImgAspectRatio = function (
   return defaultAspectRatio;
 };
 
-export const currencyFormat = (value, currencySymbol, locale = "en-IN") => {
-  const formattingLocale = `${locale}-u-nu-latn`;
+/**
+ * Map currency code to appropriate locale for number formatting
+ * @param {string} currencyCode - Currency code (e.g., 'USD', 'AED', 'INR')
+ * @returns {string} Locale string appropriate for the currency
+ */
+export const getLocaleFromCurrency = (currencyCode) => {
+  if (!currencyCode) return "en-US";
 
-  if (value != null) {
-    const formattedValue = value.toLocaleString(formattingLocale);
+  // Normalize currency code to uppercase for case-insensitive matching
+  const normalizedCode = currencyCode.toUpperCase();
 
+  const currencyLocaleMap = {
+    USD: "en-US", // United States
+    AED: "en-AE", // United Arab Emirates
+    SAR: "ar-SA", // Saudi Arabia
+    GBP: "en-GB", // United Kingdom
+    EUR: "en-US", // Europe (using en-US as standard international format)
+    INR: "en-IN", // India
+    // Add more currency mappings as needed
+  };
+
+  return currencyLocaleMap[normalizedCode] || "en-US"; // Default to en-US for unknown currencies
+};
+
+/**
+ * Format currency value with locale-aware number formatting
+ * Uses native Intl.NumberFormat for optimal performance
+ * @param {number|string} value - The numeric value to format
+ * @param {string} currencySymbol - Currency symbol (e.g., '₹', 'AED', 'USD')
+ * @param {string} locale - Locale string (e.g., 'en-IN' for India, 'en-AE' for UAE)
+ * @param {string} currencyCode - Currency code (e.g., 'USD', 'AED', 'INR') - used to override locale if provided
+ * @returns {string} Formatted currency string
+ */
+export const currencyFormat = (
+  value,
+  currencySymbol,
+  locale = "en-IN",
+  currencyCode = null
+) => {
+  if (value == null || value === "") {
+    return "";
+  }
+
+  // Convert to number if it's a string
+  let num = typeof value === "string" ? parseFloat(value) : value;
+
+  // Ensure it's a number, not NaN
+  if (Number.isNaN(num)) {
+    return "";
+  }
+
+  // Convert to number explicitly to handle edge cases
+  num = Number(num);
+  if (Number.isNaN(num)) {
+    return "";
+  }
+
+  // If currency code is provided, use it to determine locale
+  let finalLocale = locale;
+  if (currencyCode) {
+    finalLocale = getLocaleFromCurrency(currencyCode);
+  }
+
+  // Ensure locale is valid, fallback to en-IN if not
+  if (!finalLocale || finalLocale === "en" || finalLocale === "") {
+    finalLocale = "en-IN";
+  }
+
+  // Determine if we should use Indian numbering system
+  const isIndianLocale =
+    finalLocale === "en-IN" || finalLocale?.startsWith("en-IN");
+
+  try {
+    // Use Intl.NumberFormat for locale-aware formatting
+    const numberingSystem = isIndianLocale ? "latn" : undefined;
+    const localeString = numberingSystem
+      ? `${finalLocale}-u-nu-${numberingSystem}`
+      : finalLocale;
+
+    const formatter = new Intl.NumberFormat(localeString, {
+      maximumFractionDigits: 20,
+      useGrouping: true,
+    });
+
+    const formattedValue = formatter.format(num);
+
+    // Handle currency symbol placement
+    let finalResult;
+    if (currencySymbol) {
+      // For alphabetic currency codes (like AED, USD), add space
+      if (/^[A-Z]+$/.test(currencySymbol)) {
+        finalResult = `${currencySymbol} ${formattedValue}`;
+      } else {
+        // For symbol currencies (like ₹), no space
+        finalResult = `${currencySymbol}${formattedValue}`;
+      }
+    } else {
+      finalResult = formattedValue;
+    }
+
+    return finalResult;
+  } catch (error) {
+    // Fallback to basic formatting if locale is invalid
+    console.warn(
+      `Invalid locale "${finalLocale}", falling back to default formatting`
+    );
+    const formattedValue = num.toLocaleString("en-US");
     if (currencySymbol && /^[A-Z]+$/.test(currencySymbol)) {
       return `${currencySymbol} ${formattedValue}`;
     }
-
     if (currencySymbol) {
       return `${currencySymbol}${formattedValue}`;
     }
-
     return formattedValue;
   }
-
-  return "";
 };
-
 
 export const getReviewRatingData = function (customMeta) {
   const data = {};
@@ -411,37 +474,81 @@ export function deepEqual(obj1, obj2) {
   return true;
 }
 
-export function priceFormatCurrencySymbol(symbol, price = 0) {
-  const hasAlphabeticCurrency = /^[A-Za-z]+$/.test(symbol);
-  let sanitizedPrice = price;
-  if (typeof price !== "string") {
-    let num = price;
+/**
+ * Format price with currency symbol using locale-aware number formatting
+ * Uses native Intl.NumberFormat for optimal performance
+ * @param {string} symbol - Currency symbol (e.g., '₹', 'AED', 'USD')
+ * @param {number|string} price - The price value to format
+ * @param {string} locale - Locale string (e.g., 'en-IN' for India, 'en-AE' for UAE)
+ * @param {string} currencyCode - Currency code (e.g., 'USD', 'AED', 'INR') - used to override locale if provided
+ * @returns {string} Formatted price string with currency symbol
+ */
+export function priceFormatCurrencySymbol(
+  symbol,
+  price = 0,
+  locale = "en-IN",
+  currencyCode = null
+) {
+  if (price == null || price === "") return "";
 
-    if (!isNaN(price)) num = roundToDecimals(price);
-    if (num?.toString()[0] === "-") {
-      num = num?.toString()?.substring(1);
-    }
+  // Convert to number if it's a string
+  let num = typeof price === "string" ? parseFloat(price) : price;
 
-    if (num) {
-      sanitizedPrice =
-        num?.toString()?.split(".")?.[0].length > 3
-          ? `${num
-              ?.toString()
-              ?.substring(0, num?.toString()?.split(".")?.[0]?.length - 3)
-              ?.replace(/\B(?=(\d{2})+(?!\d))/g, ",")},${num
-              ?.toString()
-              ?.substring(num?.toString()?.split?.(".")?.[0]?.length - 3)}`
-          : num?.toString();
-    } else {
-      sanitizedPrice = 0;
-    }
+  if (Number.isNaN(num)) return "";
+
+  // Round to 2 decimal places
+  num = roundToDecimals(num, 2);
+
+  // If currency code is provided, use it to determine locale
+  let finalLocale = locale;
+  if (currencyCode) {
+    finalLocale = getLocaleFromCurrency(currencyCode);
   }
 
-  return `${price.toString()[0] === "-" ? "-" : ""}${
-    hasAlphabeticCurrency
-      ? `${symbol} ${sanitizedPrice}`
-      : `${symbol}${sanitizedPrice}`
-  }`;
+  // Determine if we should use Indian numbering system
+  const isIndianLocale =
+    finalLocale === "en-IN" || finalLocale?.startsWith("en-IN");
+
+  try {
+    // Use Intl.NumberFormat for locale-aware formatting
+    const numberingSystem = isIndianLocale ? "latn" : undefined;
+    const localeString = numberingSystem
+      ? `${finalLocale}-u-nu-${numberingSystem}`
+      : finalLocale;
+
+    const formatter = new Intl.NumberFormat(localeString, {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+      useGrouping: true,
+    });
+
+    const formattedPrice = formatter.format(num);
+    const hasAlphabeticCurrency = /^[A-Za-z]+$/.test(symbol);
+
+    // Handle currency symbol placement
+    let finalResult;
+    if (hasAlphabeticCurrency) {
+      finalResult = `${symbol} ${formattedPrice}`;
+    } else {
+      finalResult = `${symbol}${formattedPrice}`;
+    }
+
+    return finalResult;
+  } catch {
+    // Fallback to basic formatting if locale is invalid
+    console.warn(
+      `Invalid locale "${finalLocale}", falling back to default formatting`
+    );
+    const formattedPrice = num.toLocaleString("en-US", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+    });
+    const hasAlphabeticCurrency = /^[A-Za-z]+$/.test(symbol);
+    if (hasAlphabeticCurrency) {
+      return `${symbol} ${formattedPrice}`;
+    }
+    return `${symbol}${formattedPrice}`;
+  }
 }
 
 export function isNumberKey(e) {
@@ -484,7 +591,9 @@ export const formatLocale = (locale, countryCode, isCurrencyLocale = false) => {
   if (locale === "en" || !locale) {
     return DEFAULT_UTC_LOCALE;
   }
-  const finalLocale = locale.includes("-") ? locale : `${locale}${countryCode ? "-" + countryCode : ""}`;
+  const finalLocale = locale.includes("-")
+    ? locale
+    : `${locale}${countryCode ? "-" + countryCode : ""}`;
 
   return isValidLocale(finalLocale) ? finalLocale : DEFAULT_UTC_LOCALE;
 };
@@ -495,10 +604,7 @@ export const translateValidationMessages = (validationObject, t) => {
   Object.keys(updatedValidation).forEach((key) => {
     const rule = updatedValidation[key];
 
-    if (
-      typeof rule === "object" &&
-      rule.message
-    ) {
+    if (typeof rule === "object" && rule.message) {
       rule.message = translateDynamicLabel(rule.message, t);
     } else if (typeof rule === "string") {
       updatedValidation[key] = translateDynamicLabel(rule, t);
@@ -529,7 +635,17 @@ export const getAddressStr = (item, isAddressTypeAvailable) => {
       addressStr += ` ${item.area_code}`;
     }
     if (item.country) {
-      addressStr += `, ${item.country}`;
+      // Handle country as object or string
+      const countryStr =
+        typeof item.country === "object"
+          ? item.country.display_name ||
+            item.country.name ||
+            item.country.uid ||
+            ""
+          : item.country;
+      if (countryStr) {
+        addressStr += `, ${countryStr}`;
+      }
     }
     return addressStr;
   } catch (error) {
@@ -547,22 +663,116 @@ export function isEmptyOrNull(obj) {
 }
 
 export function translateDynamicLabel(input, t) {
-  // Handle null, undefined, or empty input
-  if (!input || typeof input !== 'string') {
-    return input || '';
+  // Early return for null, undefined, or non-string types
+  if (input == null || typeof input !== "string") {
+    return "";
   }
 
-  const safeInput = input
-    .toLowerCase()
-    .replace(/\//g, '_') // replace slashes with underscores
-    .replace(/[^a-z0-9_\s]/g, '') // remove special characters except underscores and spaces
-    .trim()
-    .replace(/\s+/g, '_'); // replace spaces with underscores
+  // Handle empty string
+  const trimmedInput = input.trim();
+  if (trimmedInput === "") {
+    return "";
+  }
 
-  const translationKey = `resource.dynamic_label.${safeInput}`;
-  const translated = t(translationKey);
+  try {
+    const safeInput = trimmedInput
+      .toLowerCase()
+      .replace(/\//g, "_") // replace slashes with underscores
+      .replace(/[^a-z0-9_\s]/g, "") // remove special characters except underscores and spaces
+      .trim()
+      .replace(/\s+/g, "_"); // replace spaces with underscores
 
-  return translated.split('.').pop() === safeInput ? input : translated;
+    if (!safeInput) {
+      return trimmedInput;
+    }
+
+    const translationKey = `resource.dynamic_label.${safeInput}`;
+    const translated = t(translationKey);
+
+    return translated.split(".").pop() === safeInput
+      ? trimmedInput
+      : translated;
+  } catch (error) {
+    console.warn("Error in translateDynamicLabel:", error);
+    return typeof input === "string" ? input : "";
+  }
+}
+
+/**
+ * Checks if an error message is a generic JavaScript error that shouldn't be shown to users.
+ * These are typically internal errors that should be handled gracefully.
+ * Only meaningful API/validation errors should be displayed to users.
+ *
+ * @param {string|null|undefined} errorMessage - The error message to check
+ * @returns {boolean} - True if the error is a generic JS error, false otherwise
+ */
+export function isGenericJSError(errorMessage) {
+  // Early return for null, undefined, or non-string types
+  if (!errorMessage || typeof errorMessage !== "string") {
+    return false;
+  }
+
+  const errorLower = errorMessage.toLowerCase();
+
+  // Check for common generic JavaScript error patterns
+  const genericErrorPatterns = [
+    "cannot read properties",
+    "reading 'find'",
+    "reading 'map'",
+    "reading 'length'",
+    "reading 'slice'",
+    "reading 'filter'",
+    "reading 'reduce'",
+    "reading 'forEach'",
+    "reading 'push'",
+    "reading 'pop'",
+    "is not a function",
+    "is not defined",
+    "cannot read",
+    "typeerror",
+    "referenceerror",
+    "syntaxerror",
+    "rangeerror",
+    "undefined is not",
+    "null is not",
+  ];
+
+  // Check if error message contains any generic error patterns
+  const hasGenericPattern = genericErrorPatterns.some((pattern) =>
+    errorLower.includes(pattern)
+  );
+
+  // Also check for the specific pattern: "undefined" + "reading"
+  const hasUndefinedReadingPattern =
+    errorLower.includes("undefined") && errorLower.includes("reading");
+
+  return hasGenericPattern || hasUndefinedReadingPattern;
+}
+
+/**
+ * Validates if an error message is valid and should be displayed to users.
+ * Filters out generic JavaScript errors and empty/invalid messages.
+ *
+ * @param {string|null|undefined} errorMessage - The error message to validate
+ * @returns {boolean} - True if the error message is valid and should be displayed, false otherwise
+ */
+export function isValidErrorMessage(errorMessage) {
+  // Must be a non-empty string
+  if (!errorMessage || typeof errorMessage !== "string") {
+    return false;
+  }
+
+  // Must not be empty after trimming
+  if (errorMessage.trim() === "") {
+    return false;
+  }
+
+  // Must not be a generic JavaScript error
+  if (isGenericJSError(errorMessage)) {
+    return false;
+  }
+
+  return true;
 }
 
 export function getLocaleDirection(fpi) {
@@ -652,7 +862,7 @@ export const getUserPrimaryPhone = (user) => {
 
   return {
     mobile,
-    countryCode
+    countryCode,
   };
 };
 
@@ -686,4 +896,55 @@ export const getUserAutofillData = (user, isGuestUser = false) => {
     phone: getUserPrimaryPhone(user),
     email: getUserPrimaryEmail(user),
   };
+};
+
+export const getConfigFromProps = (props) => {
+  if (!props || typeof props !== "object") {
+    return {};
+  }
+
+  // Handle array of prop objects with type and value
+  if (Array.isArray(props)) {
+    const config = {};
+    props.forEach((prop) => {
+      if (
+        prop &&
+        typeof prop === "object" &&
+        prop.id &&
+        prop.value !== undefined
+      ) {
+        config[prop.id] = prop.value;
+      }
+    });
+    return config;
+  }
+
+  // Handle object with nested props structure (like blogConfig)
+  if (props && typeof props === "object") {
+    const config = {};
+    Object.keys(props).forEach((key) => {
+      const prop = props[key];
+      if (prop && typeof prop === "object" && prop.value !== undefined) {
+        config[key] = prop.value;
+      } else if (prop && typeof prop === "object" && prop.type !== undefined) {
+        // Handle case where prop has type but no value
+        config[key] = prop.value || prop;
+      } else if (prop !== undefined) {
+        config[key] = prop;
+      }
+    });
+    return config;
+  }
+
+  // Handle direct object props
+  return props;
+};
+
+export const formatDeliveryAddress = (d = {}) => {
+  const line1 = [d.address, d.area].filter(Boolean).join(" ").trim();
+  const line2 = d.landmark?.trim() || "";
+  const line3 = [d.city, [d.state, d.pincode].filter(Boolean).join(" ")].filter(Boolean).join(", ").trim();
+  const line4 = d.country?.trim() || "";
+
+  return [line1, line2, line3, line4].filter(Boolean).join(",\n");
 };

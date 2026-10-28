@@ -403,6 +403,7 @@ h5,
   font-size: 14px;
   font-weight: 600;
   line-height: 140%;
+  color: var(--textHeading, #26201a);
 }
 .single-page-shipment__addressSelectedHeaderContainer___SVaIw .single-page-shipment__address___pgW0L {
   font-size: 12px;
@@ -484,10 +485,11 @@ h5,
   font-size: 14px;
   font-weight: 600;
   line-height: 140%;
+  color: var(--textHeading, #26201a);
 }
 .single-page-shipment__reviewHeaderSelect___bNgMy .single-page-shipment__headerContainer___Umy4m .single-page-shipment__shipment___xocKT {
   font-size: 12px;
-  color: var(--textHeading);
+  color: var(--textBody, #3c3131);
   font-weight: 400;
   line-height: 140%;
 }
@@ -532,6 +534,9 @@ h5,
   cursor: pointer;
   line-height: 140%;
   margin-left: 24px;
+}
+.single-page-shipment__payBtn___GiWGG.single-page-shipment__commonBtn___rL68_ {
+  min-width: 119.6px;
 }
 .single-page-shipment__payBtn___GiWGG:hover {
   background-color: var(--buttonPrimaryL1, #71653a);
@@ -1029,23 +1034,9 @@ h5,
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__itemWrapper___Sz3u9 {
   column-gap: 14px;
   display: grid;
-  align-items: start;
   grid-template-areas: "item_image item_details" "item_image free_gift";
   grid-template-columns: auto 1fr;
   grid-template-rows: auto auto;
-}
-.single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__itemWrapper___Sz3u9.single-shipment-content__itemWrapperNoGift___GRxZ4 {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-}
-.single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__itemWrapper___Sz3u9.single-shipment-content__itemWrapperNoGift___GRxZ4 .single-shipment-content__leftImg___jDUbI {
-  flex: 0 0 100px;
-  align-self: flex-start;
-}
-.single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__itemWrapper___Sz3u9.single-shipment-content__itemWrapperNoGift___GRxZ4 .single-shipment-content__rightDetails___Ll92n {
-  flex: 1 1 auto;
-  align-self: flex-start;
 }
 @media only screen and (max-width: 480px) {
   .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__itemWrapper___Sz3u9 {
@@ -1081,9 +1072,6 @@ h5,
     font-size: 12px;
   }
 }
-.single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__itemWrapper___Sz3u9 .single-shipment-content__rightDetails___Ll92n .single-shipment-content__productDetails___BshGD .single-shipment-content__brandName___ACaJm:empty {
-  display: none;
-}
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__itemWrapper___Sz3u9 .single-shipment-content__rightDetails___Ll92n .single-shipment-content__productDetails___BshGD .single-shipment-content__productName___Qcftm {
   font-weight: 400;
   font-size: 14px;
@@ -1095,9 +1083,6 @@ h5,
   .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__itemWrapper___Sz3u9 .single-shipment-content__rightDetails___Ll92n .single-shipment-content__productDetails___BshGD .single-shipment-content__productName___Qcftm {
     font-size: 12px;
   }
-}
-.single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__itemWrapper___Sz3u9 .single-shipment-content__rightDetails___Ll92n .single-shipment-content__productDetails___BshGD .single-shipment-content__brandName___ACaJm:empty + .single-shipment-content__productName___Qcftm {
-  margin-top: 0;
 }
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__itemWrapper___Sz3u9 .single-shipment-content__rightDetails___Ll92n .single-shipment-content__productDetails___BshGD .single-shipment-content__sizeInfo___IV1tR {
   display: flex;
@@ -2744,6 +2729,13 @@ h5,
 @media only screen and (max-width: 480px) {
   .sticky-pay-now__stickyBtnContainer___L7zbD {
     display: block;
+    z-index: 30;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .sticky-pay-now__stickyBtnContainer___L7zbD {
+    display: block;
+    z-index: 30;
   }
 }
 .sticky-pay-now__stickyBtnContainer1___YFwCC {
@@ -2810,6 +2802,9 @@ h5,
 }
 .sticky-pay-now__checkoutButton___mtO42 {
   gap: 12px;
+}
+.sticky-pay-now__checkoutButton___mtO42.sticky-pay-now__linkPayBtn___CY0FQ {
+  width: 100%;
 }
 .sticky-pay-now__buttonWidth___nKraw {
   width: 100%;

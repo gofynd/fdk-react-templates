@@ -47,6 +47,8 @@ function Compare({
   handleAddToCart,
 }) {
   const { t } = useGlobalTranslation("translation");
+  const fpi = useFPI();
+  const { is_serviceable } = useGlobalStore(fpi?.getters?.CUSTOM_VALUE) || {};
   const navigate = useNavigate();
   const [showProductModal, setShowProductModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -214,9 +216,9 @@ function Compare({
       !hasProductIdsInUrl() &&
       !isLoading;
 
-    if (shouldRedirect) {
-      navigate("/products");
-    }
+    // if (shouldRedirect) {
+    //   navigate("/products");
+    // }
   }, [products, location.search, isLoading, navigate]);
 
   const renderSearchShimmer = () => {
@@ -383,6 +385,7 @@ function Compare({
                                     styles.customImageContainer
                                   }
                                   handleAddToCart={handleAddToCart}
+                                  isServiceable={is_serviceable}
                                   customeProductDescContainerClass={
                                     styles.customeProductDescContainerClass
                                   }

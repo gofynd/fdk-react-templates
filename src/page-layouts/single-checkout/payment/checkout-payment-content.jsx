@@ -169,7 +169,6 @@ const loadRazorpayApplePayScript = ({ requireWebComponent = false } = {}) => {
     return Promise.reject(new Error("Razorpay can only be loaded in a browser."));
   }
 
-
   const hasRazorpayApplePayScript = () =>
     [...document.scripts].some((script) =>
       /checkout\.razorpay\.com\/v1\/razorpay\.js/.test(script.src || "")
@@ -279,19 +278,6 @@ const setApplePayDebugState = (state = {}) => {
   };
 };
 
-const getApplePayOrderDebugData = (orderData = {}, checkoutCart = {}) => ({
-  success: Boolean(checkoutCart?.success),
-  order_id: orderData?.order_id,
-  amount: orderData?.amount,
-  currency: orderData?.currency,
-  method: orderData?.method || RAZORPAY_APPLE_PAY_METHOD,
-  app: orderData?.app || RAZORPAY_APPLE_PAY_APP,
-  has_key: Boolean(orderData?.key),
-  has_contact: Boolean(orderData?.contact),
-  has_email: Boolean(orderData?.email),
-  has_callback_url: Boolean(orderData?.callback_url),
-});
-
 const isApplePayOption = (option = {}) =>
   [option.code, option.name, option.display_name, option.merchant_code].some(
     (value) =>
@@ -400,12 +386,6 @@ const createApplePayCheckoutOrder = async ({ proceedToPay, fallbackKey }) => {
   });
   const checkoutCart = getApplePayCheckoutCart(checkoutResponse);
   const orderData = normalizeApplePayOrderData(checkoutCart, fallbackKey);
-  const debugOrderData = {
-    ...getApplePayOrderDebugData(orderData, checkoutCart),
-    server_response_has_email: Boolean(checkoutCart?.data?.email?.trim?.()),
-    payment_email_source: "configured_apple_pay_email",
-  };
-
 
   if (!checkoutCart?.success || !orderData?.order_id) {
     const error = new Error(
@@ -445,15 +425,15 @@ function CheckoutPaymentContent({
   const {
     selectedTab,
     selectedTabData,
+    paymentConfig,
+    currencyCode,
     proceedToPay,
     getTotalValue,
-    currencyCode,
     PaymentOptionsList,
     setSelectedTab,
     getCurrencySymbol,
     loggedIn,
     paymentOption,
-    paymentConfig,
     isLoading,
     isQrCodeLoading,
     handleIsQrCodeLoading,
@@ -495,6 +475,7 @@ function CheckoutPaymentContent({
     () => findApplePayOption(paymentOption?.payment_option),
     [paymentOption]
   );
+  const otherPaymentOptions = useMemo(() => otherOptions(), [paymentOption]);
   let upiSuggestions = paymentOption?.payment_option?.find?.(
     (ele) => ele.name === "UPI"
   )?.suggested_list || ["okhdfcbank", "okicici", "oksbi"];
@@ -667,7 +648,6 @@ function CheckoutPaymentContent({
         : [applePayParentOption, ...paymentOptions];
   }
 
-  const otherPaymentOptions = useMemo(() => otherOptions(), [paymentOption]);
   const applePayAmount = getTotalValue?.();
   const applePayRazorpayKey = getApplePayRazorpayKeyFromConfig({
     applePayPaymentOption,
@@ -731,7 +711,6 @@ function CheckoutPaymentContent({
     const matchesPreparedOrder =
       paymentData?.razorpay_order_id === callbackOrderData?.order_id;
 
-
     if (
       !hasRequiredPaymentData ||
       !callbackOrderData?.callback_url ||
@@ -782,7 +761,6 @@ function CheckoutPaymentContent({
     const message = isCancelled
       ? "Apple Pay was cancelled. You can try again or choose another payment method."
       : error?.description || error?.message || "Apple Pay payment failed.";
-
 
     handleShowFailedMessage({
       failed: true,
@@ -902,7 +880,6 @@ function CheckoutPaymentContent({
       },
       handler: (response) => handleSuccess(response),
     };
-
     setApplePayDebugState({
       has_contact: Boolean(razorpayOptions.prefill.contact),
       has_prefill_contact: Boolean(razorpayOptions.prefill.contact),
@@ -936,7 +913,6 @@ function CheckoutPaymentContent({
     razorpay.on("payment.success", handleSuccess);
     razorpay.on("payment.failure", handleFailure);
     razorpay.on("payment.error", handleFailure);
-
 
     return razorpay;
   };
@@ -1805,7 +1781,7 @@ function CheckoutPaymentContent({
   };
 
   const selectMop = async (tab, mop, subMop) => {
-    if (!mop) return false;
+    if (!mop) return;
     setTab(tab);
     setMop(mop);
     setSubMop(subMop);
@@ -1873,7 +1849,7 @@ function CheckoutPaymentContent({
           valid,
         });
         setShowCouponValidityModal(true);
-        return false;
+        return;
       }
     }
 
@@ -1940,7 +1916,6 @@ function CheckoutPaymentContent({
     } else if (tab === "Other") {
       setSelectedOtherPayment(subMopData);
     }
-    return true;
   };
 
   useEffect(() => {
@@ -2694,8 +2669,9 @@ function CheckoutPaymentContent({
                     </div>
                     <div className={styles.modeOption}>
                       {savedCards?.map((card, index) => (
-                        <div key={card?.card_id || index}>
+                        <div>
                           <div
+                            key={index}
                             className={`${styles.modeItemWrapper} ${getCardBorder(card)}`}
                           >
                             <div
@@ -3182,14 +3158,13 @@ function CheckoutPaymentContent({
         );
 
         const WalletItem = ({ wlt, key, openMoreWalletModal = false }) => {
-          const isSelectedWallet = selectedWallet?.code === wlt?.code;
           return (
             <div
               key={key}
               className={`${styles.modeItemWrapper} ${getWalletdBorder(wlt)}`}
-              onClick={async () => {
+              onClick={(e) => {
                 removeDialogueError();
-                await selectMop("WL", "WL", wlt?.code);
+                selectMop("WL", "WL", wlt?.code);
               }}
             >
               <label>
@@ -3216,7 +3191,7 @@ function CheckoutPaymentContent({
               </label>
 
               <div className={styles.modePay}>
-                {!openMoreWalletModal && isTablet && isSelectedWallet ? (
+                {!openMoreWalletModal && isTablet ? (
                   <StickyPayNow
                     customClassName={styles.visibleOnTab}
                     value={priceFormatCurrencySymbol(
@@ -4481,7 +4456,6 @@ function CheckoutPaymentContent({
         <div
           className={styles["linkWrapper-row1"]}
           onClick={() => {
-            const isSelectingPaymentOption = selectedTab !== opt.name;
             if (isTablet) {
               handleScrollToTop(index);
               setSelectedTab((prev) => (prev === opt.name ? "" : opt.name));
@@ -4493,7 +4467,7 @@ function CheckoutPaymentContent({
             removeDialogueError();
             setTab(opt.name);
             toggleMop(opt.name);
-            if (isSelectingPaymentOption) {
+            if (selectedTab !== opt.name) {
               if (isTablet) {
                 setSelectedPaymentPayload({});
               }
@@ -4515,13 +4489,7 @@ function CheckoutPaymentContent({
           <div className={styles.link}>
             <div className={`${styles.icon} ${styles.mopIcon}`}>
               {isApplePayNavigationOption && applePayLogoUrl ? (
-                <img
-                  src={applePayLogoUrl}
-                  alt=""
-                  width={24}
-                  height={24}
-                  style={{ objectFit: "contain" }}
-                />
+                <img src={applePayLogoUrl} alt="Apple Pay" width={24} height={24} style={{ objectFit: "contain" }} />
               ) : (
                 <SvgWrapper svgSrc={opt.svg}></SvgWrapper>
               )}
@@ -4564,20 +4532,12 @@ function CheckoutPaymentContent({
           )}
           {isTablet && isApplePayNavigationOption ? (
             <div className={`${styles.arrowContainer} ${styles.activeIconColor}`}>
-              <SvgWrapper
-                svgSrc={selectedTab === opt.name ? "radio-selected" : "radio"}
-              />
+              <SvgWrapper svgSrc={selectedTab === opt.name ? "radio-selected" : "radio"} />
             </div>
           ) : (
-            <div
-              className={`${styles.arrowContainer} ${styles.activeIconColor} `}
-            >
+            <div className={`${styles.arrowContainer} ${styles.activeIconColor} `}>
               <SvgWrapper
-                className={
-                  selectedTab === opt.name && activeMop === opt.name
-                    ? styles.upsideDown
-                    : ""
-                }
+                className={selectedTab === opt.name && activeMop === opt.name ? styles.upsideDown : ""}
                 svgSrc="accordion-arrow"
               />
             </div>

@@ -63,12 +63,12 @@ const ProductCard = ({
   isPrice = true,
   isSaleBadge = true,
   isWishlistIcon = true,
+  isCustomBadge = true,
   isImageFill = false,
   showImageOnHover = false,
   customImageContainerClass = "",
   imageBackgroundColor = "",
   customeProductDescContainerClass = "",
-
   imagePlaceholder = "",
   columnCount = { desktop: 4, tablet: 3, mobile: 1 },
   WishlistIconComponent = () => <SvgWrapper svgSrc="wishlist-plp" />,
@@ -87,6 +87,7 @@ const ProductCard = ({
   showColorVariants = false,
   isSlider = false,
   onClick = () => {},
+  isServiceable = true,
 }) => {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -284,7 +285,7 @@ const ProductCard = ({
       } ${styles.animate} ${gridClass} ${isSlider ? styles.sliderCard : ""}`}
       onClick={onClick}
     >
-      <div className={`${styles.imageContainer} ${customImageContainerClass}`}>
+      <div className={`${styles.imageContainer} ${customImageContainerClass} ${!product.sellable ? styles.outOfStockContainer : ""}`}>
         {!isMobile && showImageOnHover && imageData.hoverUrl && (
           <FyImage
             src={imageData.hoverUrl}
@@ -333,7 +334,7 @@ const ProductCard = ({
               {t("resource.common.out_of_stock")}
             </span>
           </div>
-        ) : product.teaser_tag && showBadge ? (
+        ) : isCustomBadge && product.teaser_tag && showBadge ? (
           <div className={styles.badge}>
             <span className={`${styles.text} ${styles.captionNormal}`}>
               {isMobileView

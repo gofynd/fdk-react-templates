@@ -22,9 +22,8 @@ function LoginOtp({
   onResendOtpClick = () => {},
   onClearOtpError = () => {},
   getOtpLoading,
-    isTermsAccepted = false,
-
-
+  isTermsAccepted = false,
+  setShowConsentTooltip = () => {},
 }) {
   const { t } = useGlobalTranslation("translation");
   const { handleSubmit, control, getValues, reset, setValue, clearErrors } =
@@ -42,10 +41,18 @@ function LoginOtp({
     setSubmittedMobile("");
   };
 
+  const handleOtpFormSubmit = (data) => {
+    if (!isTermsAccepted) {
+      setShowConsentTooltip(true);
+      return;
+    }
+    onLoginFormSubmit(data);
+  };
+
   return (
     <div className={styles.loginOtpWrapper}>
       {!isFormSubmitSuccess ? (
-        <form onSubmit={handleSubmit(onLoginFormSubmit)}>
+        <form onSubmit={handleSubmit(handleOtpFormSubmit)}>
           <Controller
             name="phone"
             control={control}
@@ -74,9 +81,7 @@ function LoginOtp({
           <button
             className={`btnPrimary ${styles.sendOtpBtn}`}
             type="submit"
-            // disabled={getOtpLoading}
-                        disabled={getOtpLoading || !isTermsAccepted}
-
+            disabled={getOtpLoading}
           >
             {t("resource.auth.login.get_otp")}
           </button>
@@ -139,9 +144,9 @@ function OtpForm({
     if (mobileOtp !== undefined && mobileOtp !== null) {
       clearErrors("root");
       clearErrors("mobileOtp");
-      onClearOtpError();
+      // DO NOT clear root error here - it should persist until submission/resend
     }
-  }, [mobileOtp, clearErrors, onClearOtpError]);
+  }, [mobileOtp, clearErrors]);
 
   useEffect(() => {
     if (error) {
@@ -159,6 +164,9 @@ function OtpForm({
 
   const resendOtp = () => {
     resetField("mobileOtp");
+    // Clear errors when resending OTP
+    clearErrors("root");
+    onClearOtpError();
     onResendOtpClick(mobileInfo);
   };
 
@@ -166,7 +174,12 @@ function OtpForm({
     <>
       <form
         className={styles.loginInputGroup}
-        onSubmit={handleSubmit(onOtpSubmit)}
+        onSubmit={handleSubmit((data) => {
+          // Clear errors when submitting a new attempt
+          clearErrors("root");
+          onClearOtpError();
+          onOtpSubmit(data);
+        })}
       >
         <h3 className={styles.otpTitle}>
           {t("resource.localization.verify_account")}
@@ -225,7 +238,7 @@ function OtpForm({
       </form>
       <div className={styles.resendOtpWrapper}>
         <span className={styles.didntReceiveText}>
-           Didn’t receive an OTP? 
+          {t("resource.common.didnt_receive_otp")}
         </span>
         <button
           className={styles.resendOtpBtn}

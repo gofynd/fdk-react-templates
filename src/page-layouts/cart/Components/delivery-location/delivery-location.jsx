@@ -8,6 +8,29 @@ import { useGlobalTranslation, useGlobalStore, useFPI } from "fdk-core/utils";
 import { translateDynamicLabel } from "../../../../helper/utils";
 import FyButton from "../../../../components/core/fy-button/fy-button";
 
+function AddressRight({
+  selectedAddressId,
+  addressItem,
+  updateAddress,
+  removeAddress,
+}) {
+  const { t } = useGlobalTranslation("translation");
+  return (
+    <div className={styles.buttonsContainer}>
+      <span className={styles.edit} onClick={() => updateAddress(addressItem)}>
+        {t("resource.common.edit_lower")}
+      </span>
+      <span className={styles.buttonDivider}>|</span>
+      <span
+        className={styles.remove}
+        onClick={() => removeAddress(addressItem?.id)}
+      >
+        {t("resource.facets.remove")}
+      </span>
+    </div>
+  );
+}
+
 function DeliveryLocation({
   pincode = "",
   deliveryLocation,
@@ -41,8 +64,13 @@ function DeliveryLocation({
   getFilteredCountries = () => {},
   selectedCountry,
   countryDetails,
+  formKey,
   isGuestUser = false,
   user,
+  isNewAddress,
+  updateAddress,
+  removeAddress,
+  acceptOrder,
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -85,14 +113,13 @@ function DeliveryLocation({
   return (
     <div className={styles.cartPincodeContainer}>
       <div className={styles.pinCodeDetailsContainer}>
-                <div className={styles.deliveryHeader}>
-
-        <span className={styles.pincodeHeading}>
-          {deliveryLocation
-            ? `${t("resource.common.deliver_to")}:`
-            : t("resource.cart.check_delivery_time_services")}
-        </span>
-        {deliveryLocation && (
+        <div className={styles.deliveryHeader}>
+          <span className={styles.pincodeHeading}>
+            {deliveryLocation
+              ? `${t("resource.common.deliver_to")}:`
+              : t("resource.cart.check_delivery_time_services")}
+          </span>
+          {deliveryLocation && (
             <span className={styles.pinCode}>{deliveryLocation}</span>
           )}
           {addressTags && addressTags.length > 0 && (
@@ -112,8 +139,9 @@ function DeliveryLocation({
         <button
           className={styles.changePinCodeButton}
           onClick={onChangeButtonClick}
+          disabled={!acceptOrder}
         >
-          {deliveryLocation ? "Change Address" : "Change Pincode"}
+          {deliveryLocation ? t("resource.cart.change") : computedBtnLabel}
         </button>
       </div>
       <Modal
@@ -178,7 +206,19 @@ function DeliveryLocation({
                   showAddressSelectionCheckbox={true}
                   selectedAddressId={selectedAddressId}
                   isDefault={true}
-                  belowAddressSlot={<AddrErrorDiv id={item?.id} />}
+                  belowAddressSlot={
+                    <>
+                      <AddrErrorDiv id={item?.id} />
+                      <div className={styles.addressActions}>
+                        <AddressRight
+                          selectedAddressId={selectedAddressId}
+                          addressItem={item}
+                          updateAddress={updateAddress}
+                          removeAddress={removeAddress}
+                        />
+                      </div>
+                    </>
+                  }
                 ></AddressItem>
               ))}
               {otherAddresses.map((item, index) => (
@@ -189,7 +229,19 @@ function DeliveryLocation({
                   onAddressSelect={setSelectedAddressId}
                   showAddressSelectionCheckbox={true}
                   selectedAddressId={selectedAddressId}
-                  belowAddressSlot={<AddrErrorDiv id={item?.id} />}
+                  belowAddressSlot={
+                    <>
+                      <AddrErrorDiv id={item?.id} />
+                      <div className={styles.addressActions}>
+                        <AddressRight
+                          selectedAddressId={selectedAddressId}
+                          addressItem={item}
+                          updateAddress={updateAddress}
+                          removeAddress={removeAddress}
+                        />
+                      </div>
+                    </>
+                  }
                 ></AddressItem>
               ))}
             </div>
@@ -213,17 +265,20 @@ function DeliveryLocation({
       <Modal
         title={t("resource.common.address.add_new_address")}
         isOpen={isAddAddressModalOpen}
+        modalType="center-modal"
         closeDialog={onCloseModalClick}
         ignoreClickOutsideForClass="pac"
         hideHeader
+        customClassName={styles.addAddressModalWrapper}
         containerClassName={styles.addAddressModalContainer}
         bodyClassName={styles.addAddressModalBody}
       >
         <AddressForm
+          key={formKey || `${addressItem?.id || 'new'}-${countryDetails?.iso2 || 'default'}`}
           internationalShipping={isInternationalShippingEnabled}
           addressItem={addressItem}
           formSchema={addressFormSchema}
-          isNewAddress={true}
+          isNewAddress={isNewAddress}
           onAddAddress={addAddress}
           isMap={showGoogleMap}
           mapApiKey={mapApiKey}
@@ -232,7 +287,7 @@ function DeliveryLocation({
           setI18nDetails={onCountryChange}
           handleCountrySearch={handleCountrySearch}
           getFilteredCountries={getFilteredCountries}
-          selectedCountry={selectedCountry?.display_name ?? ""}
+          selectedCountry={selectedCountry}
           countryDetails={countryDetails}
           isGuestUser={isGuestUser}
           onClose={onCloseModalClick}

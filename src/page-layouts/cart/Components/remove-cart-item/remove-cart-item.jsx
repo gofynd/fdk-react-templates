@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import * as styles from "./remove-cart-item.less";
 import Modal from "../../../../components/core/modal/modal";
 import { useGlobalTranslation } from "fdk-core/utils";
@@ -6,47 +6,31 @@ import { useGlobalTranslation } from "fdk-core/utils";
 function RemoveCartItem({
   isOpen = false,
   cartItem = null,
-  onRemoveButtonClick = () => { },
-  onWishlistButtonClick = () => { },
-  onCloseDialogClick = () => { },
+  isRemoving = false,
+  isMovingToWishlist = false,
+  onRemoveButtonClick = () => {},
+  onWishlistButtonClick = () => {},
+  onCloseDialogClick = () => {},
 }) {
   const { t } = useGlobalTranslation("translation");
-  const [isImageReady, setIsImageReady] = useState(false);
+
+  const isGifUrl = (url = "") => /\.gif(\?|#|$)/i.test(String(url || ""));
+
   const getProductImage = useMemo(() => {
     if (
       cartItem?.product?.images?.length > 0 &&
       cartItem?.product?.images?.[0]?.url
     ) {
-      return cartItem.product.images[0].url.replace("original", "resize-w:250");
+      return isGifUrl(cartItem.product.images[0].url)
+        ? cartItem.product.images[0].url
+        : cartItem.product.images[0].url.replace("original", "resize-w:250");
     }
   }, [cartItem]);
-
-  useEffect(() => {
-    setIsImageReady(false);
-
-    if (!isOpen) return;
-    if (!getProductImage) {
-      setIsImageReady(true);
-      return;
-    }
-
-    const img = new Image();
-    img.src = getProductImage;
-
-    const markReady = () => setIsImageReady(true);
-    img.addEventListener("load", markReady);
-    img.addEventListener("error", markReady);
-
-    return () => {
-      img.removeEventListener("load", markReady);
-      img.removeEventListener("error", markReady);
-    };
-  }, [isOpen, getProductImage]);
 
   return (
     <Modal
       title={t("resource.cart.remove_item")}
-      isOpen={isOpen && isImageReady}
+      isOpen={isOpen}
       closeDialog={onCloseDialogClick}
       headerClassName={styles.header}
       subTitleClassName={styles.subTitle}
@@ -70,9 +54,12 @@ function RemoveCartItem({
       </div>
       <div className={styles.removeModalFooter}>
         <div className={styles.removeBtn} onClick={onRemoveButtonClick}>
-          {t("resource.facets.remove_caps")}
+          {isRemoving ? "Removing..." : t("resource.facets.remove_caps")}
         </div>
-        <div className={styles.wishlistBtn} onClick={onWishlistButtonClick}>
+        <div
+          className={`${styles.wishlistBtn} ${isMovingToWishlist ? styles.disabled : ""}`}
+          onClick={ onWishlistButtonClick}
+        >
           {t("resource.cart.move_to_wishlist")}
         </div>
       </div>

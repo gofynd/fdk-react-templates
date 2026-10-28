@@ -1,0 +1,38 @@
+@import "../../../../styles/main.less";
+
+.apple-login-container {
+  margin-top: 12px;
+  .apple-login-button {
+    height: 48px;
+    padding: 12px;
+    background: transparent;
+    border-radius: 4px;
+    border: 1px solid var(--dividerStokes, #dadce0);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 19.6px;
+    text-transform: uppercase;
+    color: var(--textHeading, #3c4043);
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-family: var(--font-body);
+    svg {
+      flex: 0 0 24px;
+      fill: black;
+    }
+    span {
+      margin-inline-end: 24px;
+      color: var(--textHeading, #3c4043);
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 19.6px;
+      text-transform: uppercase;
+      width: 100%;
+    }
+  }
+}

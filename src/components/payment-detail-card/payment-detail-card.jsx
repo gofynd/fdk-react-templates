@@ -37,12 +37,19 @@ function PaymentDetailCard({ breakup, paymentDetails }) {
             <div className={`${styles.wrapperflex}`}>
               <span className={`${styles.values} ${styles.lightsm}`}>
                 {!!paymentInfo?.amount &&
-                  priceFormatCurrencySymbol(totalVal?.currency_symbol, paymentInfo?.amount)}
+                  priceFormatCurrencySymbol(
+                    totalVal?.currency_symbol,
+                    paymentInfo?.amount,
+                    undefined,
+                    totalVal?.currency_code
+                  )}
                 {!paymentInfo?.amount &&
                   totalVal &&
                   priceFormatCurrencySymbol(
                     totalVal?.currency_symbol,
-                    totalVal?.value
+                    totalVal?.value,
+                    undefined,
+                    totalVal?.currency_code
                   )}
               </span>
             </div>

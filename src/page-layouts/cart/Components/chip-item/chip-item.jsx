@@ -49,12 +49,15 @@ export default function ChipItem({
   getFulfillmentOptions,
   pincode,
   getDeliveryPromise,
+  isLimitedStock,
+  limitedStockLabel,
 }) {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
   const navigate = useNavigate();
   const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
   const locale = language?.locale;
+  const { limited_stock_quantity: limitedStockQuantity = 11 } = globalConfig || {};
   const isMobile = useMobile();
   const [showQuantityError, setShowQuantityError] = useState(false);
   const [showFOModal, setShowFOModal] = useState(false);
@@ -77,8 +80,81 @@ export default function ChipItem({
   const customizationOptions =
     singleItemDetails?.article?._custom_json?._display || [];
 
+  // Transform customization options into accordion format
+  const transformedCustomizationContent = customizationOptions
+    .map((option) => {
+      const items = [];
+
+      // Handle productCanvas type (nested value object)
+      if (option.type === "productCanvas" && option.value) {
+        const canvasData = option.value;
+
+        if (canvasData.text) {
+          items.push({
+            key: option.key || "Text",
+            value: canvasData.text,
+          });
+        }
+
+        if (canvasData.price || option.price) {
+          items.push({
+            key: "Price",
+            value: `${canvasData.price || option.price}`,
+          });
+        }
+
+        if (canvasData.previewImage) {
+          items.push({
+            key: "Preview",
+            value: canvasData.previewImage,
+            type: "image",
+            alt: option.key || "Customization preview",
+            dimensions: canvasData.textBounds
+              ? {
+                  width: canvasData.textBounds.width,
+                  height: canvasData.textBounds.height,
+                }
+              : undefined,
+          });
+        }
+      }
+      // Handle simple string type
+      else if (option.type === "string" && option.value) {
+        items.push({
+          key: option.alt || option.key,
+          value: option.value,
+        });
+      }
+      // Handle other types with direct text/price/previewImage properties
+      else {
+        if (option.text) {
+          items.push({ key: "Text", value: option.text });
+        }
+
+        if (option.price) {
+          items.push({ key: "Price", value: option.price });
+        }
+
+        if (option.previewImage) {
+          items.push({
+            key: "Preview",
+            value: option.previewImage,
+            type: "image",
+            alt: "Customization preview",
+          });
+        }
+      }
+
+      return items;
+    })
+    .flat();
+
   const [items, setItems] = useState([
-    { title: "Customization", content: customizationOptions, open: false },
+    {
+      title: "Customization",
+      content: transformedCustomizationContent,
+      open: false,
+    },
   ]);
 
   const isSellerBuyBoxListing = useMemo(() => {
@@ -411,7 +487,9 @@ export default function ChipItem({
                 isOutOfStock ? styles.outOfStock : ""
               } `}
             >
-              {singleItemDetails?.product?.name}
+              {singleItemDetails?.product?.name?.length > 24
+                ? `${singleItemDetails.product.name.slice(0, 24)}...`
+                : singleItemDetails?.product?.name}{" "}
             </div>
             {isSoldBy && !isOutOfStock && (
               <div className={styles.itemSellerName}>
@@ -496,149 +574,56 @@ export default function ChipItem({
                   </div>
                 )}
 
-              {getMaxQuantity(singleItemDetails) > 0 &&
-                getMaxQuantity(singleItemDetails) < 11 &&
+              {isLimitedStock &&
+                getMaxQuantity(singleItemDetails) > 0 &&
+                getMaxQuantity(singleItemDetails) <= limitedStockQuantity &&
                 !isOutOfStock &&
                 isServiceable &&
                 !isCustomOrder &&
                 !buybox?.is_seller_buybox_enabled && (
                   <div className={styles.limitedQtyBox}>
-                    {t("resource.common.hurry_only_left", {
-                      quantity: getMaxQuantity(singleItemDetails),
-                    })}
+                    {limitedStockLabel.replace(
+                      /\{\{qty\}\}/g,
+                      getMaxQuantity(singleItemDetails)
+                    )}
                   </div>
                 )}
             </div>
             <div className={styles.itemTotalContainer}>
-              {singleItemDetails?.quantity > 1 ? (
-                <div className={styles.priceBreakdownContainer}>
-                  {/* Unit Price Section */}
-                  <div className={styles.priceSection}>
-                    <div className={styles.priceLabel}>
-                      Unit Price:
-                    </div>
-                    <div className={styles.itemPrice}>
-                      <span
-                        className={`${styles.effectivePrice} ${
-                          isOutOfStock ? styles.outOfStock : ""
-                        }`}
-                      >
-                        {currencyFormat(
-                          numberWithCommas(
-                            singleItemDetails?.price_per_unit?.converted?.effective ??
-                              singleItemDetails?.price_per_unit?.base?.effective
-                          ),
-                          singleItemDetails?.price_per_unit?.converted?.currency_symbol ??
-                            singleItemDetails?.price_per_unit?.base?.currency_symbol,
-                          formatLocale(locale, countryCode, true)
-                        )}
-                      </span>
-                      {singleItemDetails?.price_per_unit?.converted?.effective <
-                        singleItemDetails?.price_per_unit?.converted?.marked && (
-                        <span className={styles.markedPrice}>
-                          {currencyFormat(
-                            numberWithCommas(
-                              singleItemDetails?.price_per_unit?.converted?.marked ??
-                                singleItemDetails?.price_per_unit?.base?.marked
-                            ),
-                            singleItemDetails?.price_per_unit?.converted?.currency_symbol ??
-                              singleItemDetails?.price_per_unit?.base?.currency_symbol,
-                            formatLocale(locale, countryCode, true)
-                          )}
-                        </span>
-                      )}
-                      {singleItemDetails?.price_per_unit?.converted?.effective <
-                        singleItemDetails?.price_per_unit?.converted?.marked &&
-                        singleItemDetails?.discount && (
-                        <span className={styles.discount}>
-                          {singleItemDetails?.discount}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                  {/* Total Price Section */}
-                  <div className={styles.priceSection}>
-                    <div className={styles.priceLabel}>
-                      {t("resource.cart.total_price") || "Total Price"}:
-                    </div>
-                    <div className={styles.itemPrice}>
-                      <span
-                        className={`${styles.effectivePrice} ${
-                          isOutOfStock ? styles.outOfStock : ""
-                        }`}
-                      >
-                        {currencyFormat(
-                          numberWithCommas(
-                            singleItemDetails?.price?.converted?.effective ??
-                              singleItemDetails?.price?.base?.effective
-                          ),
-                          singleItemDetails?.price?.converted?.currency_symbol ??
-                            singleItemDetails?.price?.base?.currency_symbol,
-                          formatLocale(locale, countryCode, true)
-                        )}
-                      </span>
-                      {singleItemDetails?.price?.converted?.effective <
-                        singleItemDetails?.price?.converted?.marked && (
-                        <span className={styles.markedPrice}>
-                          {currencyFormat(
-                            numberWithCommas(
-                              singleItemDetails?.price?.converted?.marked ??
-                                singleItemDetails?.price?.base?.marked
-                            ),
-                            singleItemDetails?.price?.converted?.currency_symbol ??
-                              singleItemDetails?.price?.base?.currency_symbol,
-                            formatLocale(locale, countryCode, true)
-                          )}
-                        </span>
-                      )}
-                      {singleItemDetails?.price?.converted?.effective <
-                        singleItemDetails?.price?.converted?.marked &&
-                        singleItemDetails?.discount && (
-                        <span className={styles.discount}>
-                          {singleItemDetails?.discount}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className={styles.itemPrice}>
-                  <span
-                    className={`${styles.effectivePrice} ${
-                      isOutOfStock ? styles.outOfStock : ""
-                    }`}
-                  >
+              <div className={styles.itemPrice}>
+                <span
+                  className={`${styles.effectivePrice} ${
+                    isOutOfStock ? styles.outOfStock : ""
+                  }`}
+                >
+                  {currencyFormat(
+                    singleItemDetails?.price?.converted?.effective ??
+                      singleItemDetails?.price?.base?.effective,
+                    singleItemDetails?.price?.converted?.currency_symbol ??
+                      singleItemDetails?.price?.base?.currency_symbol,
+                    formatLocale(locale, countryCode, true),
+                    singleItemDetails?.price?.converted?.currency_code ??
+                      singleItemDetails?.price?.base?.currency_code
+                  )}
+                </span>
+                {singleItemDetails?.price?.converted?.effective <
+                  singleItemDetails?.price?.converted?.marked && (
+                  <span className={styles.markedPrice}>
                     {currencyFormat(
-                      numberWithCommas(
-                        singleItemDetails?.price?.converted?.effective ??
-                          singleItemDetails?.price?.base?.effective
-                      ),
+                      singleItemDetails?.price?.converted?.marked ??
+                        singleItemDetails?.price?.base?.marked,
                       singleItemDetails?.price?.converted?.currency_symbol ??
                         singleItemDetails?.price?.base?.currency_symbol,
-                      formatLocale(locale, countryCode, true)
+                      formatLocale(locale, countryCode, true),
+                      singleItemDetails?.price?.converted?.currency_code ??
+                        singleItemDetails?.price?.base?.currency_code
                     )}
                   </span>
-                  {singleItemDetails?.price?.converted?.effective <
-                    singleItemDetails?.price?.converted?.marked && (
-                    <span className={styles.markedPrice}>
-                      {currencyFormat(
-                        numberWithCommas(
-                          singleItemDetails?.price?.converted?.marked ??
-                            singleItemDetails?.price?.base?.marked
-                        ),
-                        singleItemDetails?.price?.converted?.currency_symbol ??
-                          singleItemDetails?.price?.base?.currency_symbol,
-                        formatLocale(locale, countryCode, true)
-                      )}
-                    </span>
-                  )}
-                  {singleItemDetails?.discount && (
-                    <span className={styles.discount}>
-                      {singleItemDetails?.discount}
-                    </span>
-                  )}
-                </div>
-              )}
+                )}
+                <span className={styles.discount}>
+                  {singleItemDetails?.discount}
+                </span>
+              </div>
               {isDeliveryPromise &&
                 !isOutOfStock &&
                 isServiceable &&
@@ -813,6 +798,10 @@ export default function ChipItem({
                         )
                       : undefined
                   }
+                  alt={
+                    sizeModalItemValue?.product?.name ||
+                    t("resource.common.product_image")
+                  }
                 />
               </div>
               <div className={styles.sizeModalContent}>
@@ -833,8 +822,11 @@ export default function ChipItem({
                     ),
                     sizeModalItemValue?.article?.price?.converted
                       ?.currency_symbol ??
-                      sizeModalItemValue?.article?.price?.base?.effective,
-                    formatLocale(locale, countryCode, true)
+                      sizeModalItemValue?.article?.price?.base?.currency_symbol,
+                    formatLocale(locale, countryCode, true),
+                    sizeModalItemValue?.article?.price?.converted
+                      ?.currency_code ??
+                      sizeModalItemValue?.article?.price?.base?.currency_code
                   )}
                 </div>
               </div>
@@ -911,7 +903,7 @@ export default function ChipItem({
           </div>
         </div>
         <div className={styles.sizeModalErrCls}>{sizeModalErr}</div>
-       <button
+        <button
           className={`${styles.sizeModalFooter} ${(!currentSizeModalSize || currentSizeModalSize === sizeModal || sizeModalErr) && styles.disableBtn}`}
           disabled={
             !currentSizeModalSize ||
