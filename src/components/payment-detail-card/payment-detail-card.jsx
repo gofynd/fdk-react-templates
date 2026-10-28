@@ -14,18 +14,13 @@ import * as styles from "./payment-detail-card.less";
 import { priceFormatCurrencySymbol, translateDynamicLabel } from "../../helper/utils";
 import { useGlobalTranslation } from "fdk-core/utils";
 
-const toTitleCase = (value = "") =>
-  value.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
-
 function PaymentDetailCard({ breakup, paymentDetails }) {
   const { t } = useGlobalTranslation("translation");
   const totalVal = breakup?.find((item) => item.name === "total") || 0;
 
   return (
     <div className={`${styles.paymentMode}`}>
-      <div className={`${styles.header} ${styles.boldsm}`}>
-        {toTitleCase(t("resource.common.payment_mode"))}
-      </div>
+      <div className={`${styles.header} ${styles.boldsm}`}>{t("resource.common.payment_mode")}</div>
       <div className={styles.paymentDetails}>
         {paymentDetails?.map((paymentInfo) => (
           <div key={paymentInfo?.display_name} className={`${styles.info}`}>
@@ -42,21 +37,12 @@ function PaymentDetailCard({ breakup, paymentDetails }) {
             <div className={`${styles.wrapperflex}`}>
               <span className={`${styles.values} ${styles.lightsm}`}>
                 {!!paymentInfo?.amount &&
-                  priceFormatCurrencySymbol(
-                    totalVal?.currency_symbol,
-                    paymentInfo?.amount,
-                    undefined,
-                    totalVal?.currency_code,
-                    true
-                  )}
+                  priceFormatCurrencySymbol(totalVal?.currency_symbol, paymentInfo?.amount)}
                 {!paymentInfo?.amount &&
                   totalVal &&
                   priceFormatCurrencySymbol(
                     totalVal?.currency_symbol,
-                    totalVal?.value,
-                    undefined,
-                    totalVal?.currency_code,
-                    true
+                    totalVal?.value
                   )}
               </span>
             </div>

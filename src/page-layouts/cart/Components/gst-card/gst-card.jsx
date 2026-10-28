@@ -69,7 +69,7 @@ function GstCard({
             <span className={styles.colorSuccessNormal}>
               {t("resource.cart.gstin_applied_success", {
                 gst_credit: currencyFormat(
-                  gstCharges,
+                  numberWithCommas(gstCharges),
                   currencySymbol,
                   formatLocale(locale, countryCode, true)
                 )
@@ -83,7 +83,7 @@ function GstCard({
             <span className={styles.statusInfo}>
               {t("resource.cart.enter_gst_number", {
                 gst_credit: currencyFormat(
-                  gstCharges,
+                  numberWithCommas(gstCharges),
                   currencySymbol,
                   formatLocale(locale, countryCode, true)
                 )

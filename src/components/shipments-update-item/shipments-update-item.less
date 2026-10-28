@@ -4,7 +4,6 @@
 .updateItem {
   display: flex;
   gap: 16px;
-  min-width: 0;
 
   @media @tablet {
     padding: 0 16px;
@@ -16,23 +15,13 @@
   .bagInfo {
     display: flex;
     flex-direction: column;
-    flex: 1;
-    min-width: 0;
+    width: 100%;
     @media @mobile {
       flex-direction: column;
       align-items: flex-start;
     }
-    .itemDetails {
-      min-width: 0;
-      width: 100%;
-    }
     .brandName {
       margin-bottom: 5px;
-    }
-    .itemName {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
     }
     .boldxxxs {
       font-weight: 700;
@@ -59,9 +48,6 @@
       padding: 5px 0;
       box-sizing: border-box;
       // margin-top: 20px;
-      .addPaddingToContainer {
-        margin-bottom: 6px;
-      }
       .sizeContainer {
         height: @SizeQuantityHeight;
         background: white;
@@ -89,6 +75,8 @@
       }
     }
     .priceContainer {
+      // margin-top: 20px;
+      margin-bottom: 10px;
       font-weight: 600;
       color: @TextHeading;
       font-size: 14px;
@@ -119,7 +107,6 @@
     .maxAvail {
       color: @ErrorText;
       margin-block-start: 4px;
-      margin-bottom: 2px !important;
     }
     .regularxxxs {
       font-weight: 400;

@@ -18,18 +18,13 @@ import SearchIcon from "../../../assets/images/search.svg";
 import LocateIcon from "../../../assets/images/locate.svg";
 import LocationPinIcon from "../../../assets/images/location-pin.svg";
 import MarkerIcon from "../../../assets/images/marker.svg";
-import CloseIcon from "../../../assets/images/close.svg";
 import FyButton from "../../core/fy-button/fy-button";
 import { useGlobalTranslation } from "fdk-core/utils";
 import Shimmer from "../../shimmer/shimmer";
 import { getAddressFromComponents } from "../../../helper/utils";
 import { useStateRef } from "../../../helper/hooks";
-import {
-  getGoogleMapFormFields,
-  getAddressMapPoint,
-  hasPrefilledAddressLocation,
-  resolveAddressMapCenter,
-} from "../../../helper/address-form-location";
+
+const libraries = ["places"];
 
 const GoogleMapAddress = ({
   className,
@@ -38,12 +33,8 @@ const GoogleMapAddress = ({
   countryDetails,
   addressItem,
   onLoad = () => {},
-  onClose,
-  showHeader = true,
 }) => {
   const { t } = useGlobalTranslation("translation");
-  const isNewAddress = !addressItem;
-  const addressPoint = getAddressMapPoint(addressItem);
   
   // Get last used location from localStorage
   const getLastUsedLocation = () => {
@@ -59,48 +50,40 @@ const GoogleMapAddress = ({
   const [currentLocation, setCurrentLocation, currentLocationRef] =
     useStateRef(addressItem);
   const mapRef = useRef(null);
-  const selectedPlaceRef = useRef(null);
-  const geocodeRequestRef = useRef(0);
-  const isResolvingPostcodeRef = useRef(false);
-  const [isResolvingAddress, setIsResolvingAddress] = useState(false);
-  useEffect(() => () => {
-    geocodeRequestRef.current += 1;
-  }, []);
   
-  // Priority: addressItem geo_location > last used location > country details > Mumbai
-  const mapCenterRef = useRef(
-    resolveAddressMapCenter(addressItem, getLastUsedLocation(), countryDetails)
-  );
+  // Priority: addressItem geo_location > last used location > country details
+  const lastUsedLocation = getLastUsedLocation();
+  const mapCenterRef = useRef({
+    lat: Number(
+      currentLocation?.geo_location?.latitude || 
+      lastUsedLocation?.lat || 
+      countryDetails?.latitude || 
+      0
+    ),
+    lng: Number(
+      currentLocation?.geo_location?.longitude || 
+      lastUsedLocation?.lng || 
+      countryDetails?.longitude || 
+      0
+    ),
+  });
 
   const { isLoaded: isMapLoaded } = useJsApiLoader({
     googleMapsApiKey: mapApiKey,
-    id: "google-maps-script",
-    libraries: ["places"],
+    libraries,
   });
 
   const getGeocodeByAddress = async (address) => {
-    const postcode = address?.area_code || address?.pincode;
-    if (!postcode || !mapApiKey) {
+    if (!address.area_code || !mapApiKey) {
       return;
     }
     try {
-      const params = new URLSearchParams({
-        address: String(postcode),
-        key: mapApiKey,
-      });
-      const countryIso = address?.country_iso_code || countryDetails?.iso2;
-      if (countryIso) params.set("components", `country:${countryIso}`);
       const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?${params}`
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${address.area_code}&key=${mapApiKey}`
       );
       const data = await response.json();
-      const location = data.results?.[0]?.geometry?.location;
-      if (
-        location &&
-        getAddressMapPoint({
-          geo_location: { latitude: location.lat, longitude: location.lng },
-        })
-      ) {
+      if (data.results.length > 0) {
+        const location = data.results[0].geometry.location;
         return {
           latitude: location.lat,
           longitude: location.lng,
@@ -114,49 +97,40 @@ const GoogleMapAddress = ({
   const updateMapLocation = (address) => {
     setCurrentLocation(address);
     
-    // Priority: address geo_location > last used location > country details > Mumbai
-    mapCenterRef.current = resolveAddressMapCenter(
-      address,
-      getLastUsedLocation(),
-      countryDetails
-    );
+    // Priority: address geo_location > last used location > country details
+    const lastUsedLoc = getLastUsedLocation();
+    mapCenterRef.current = {
+      lat: Number(
+        address?.geo_location?.latitude || 
+        lastUsedLoc?.lat || 
+        countryDetails?.latitude || 
+        0
+      ),
+      lng: Number(
+        address?.geo_location?.longitude || 
+        lastUsedLoc?.lng || 
+        countryDetails?.longitude || 
+        0
+      ),
+    };
     mapRef?.current?.panTo(mapCenterRef.current);
   };
 
   useEffect(() => {
-    const request = ++geocodeRequestRef.current;
-    const resolvePostcode =
-      !addressPoint &&
-      !!(addressItem?.area_code || addressItem?.pincode) &&
-      !!mapApiKey;
-    isResolvingPostcodeRef.current = resolvePostcode;
-    setIsResolvingAddress(resolvePostcode);
-    updateMapLocation(addressItem);
-    if (resolvePostcode) {
+    if (!addressItem?.geo_location && addressItem?.area_code) {
       getGeocodeByAddress(addressItem).then((location) => {
-        if (request !== geocodeRequestRef.current) return;
-        isResolvingPostcodeRef.current = false;
-        setIsResolvingAddress(false);
         if (location) {
           updateMapLocation({ ...addressItem, geo_location: location });
         }
       });
     }
-    return () => {
-      geocodeRequestRef.current += 1;
-      isResolvingPostcodeRef.current = false;
-    };
+    updateMapLocation(addressItem);
   }, [
-    mapApiKey,
-    countryDetails?.iso2,
     countryDetails?.latitude,
     countryDetails?.longitude,
-    addressItem?.country_iso_code,
     addressItem?.area_code,
-    addressItem?.pincode,
-    addressPoint?.lat,
-    addressPoint?.lng,
-    isNewAddress,
+    addressItem?.geo_location?.latitude,
+    addressItem?.geo_location?.longitude,
   ]);
 
   const locateUser = () => {
@@ -164,11 +138,6 @@ const GoogleMapAddress = ({
 
     navigator.geolocation.getCurrentPosition(
       async (position) => {
-        geocodeRequestRef.current += 1;
-        isResolvingPostcodeRef.current = false;
-        selectedPlaceRef.current = null;
-        setCurrentLocation(null);
-        setIsResolvingAddress(true);
         const userLocation = {
           lat: position.coords.latitude,
           lng: position.coords.longitude,
@@ -196,14 +165,6 @@ const GoogleMapAddress = ({
             lat: location.lat(),
             lng: location.lng(),
           };
-          selectedPlaceRef.current = {
-            ...selectedLocation,
-            ...getGoogleMapFormFields(place.address_components),
-            pending: true,
-          };
-          geocodeRequestRef.current += 1;
-          isResolvingPostcodeRef.current = false;
-          setIsResolvingAddress(true);
           // Save the searched location for future use
           try {
             localStorage.setItem('lastMapLocation', JSON.stringify(selectedLocation));
@@ -228,32 +189,18 @@ const GoogleMapAddress = ({
       options: { disableDefaultUI: true, gestureHandling: "greedy" },
       onLoad: (map) => {
         mapRef.current = map;
-        // Pincode geocoding may finish before the Maps script loads.
-        map.panTo(mapCenterRef.current);
         onLoad(map);
       },
-      onDragStart: () => {
-        geocodeRequestRef.current += 1;
-        isResolvingPostcodeRef.current = false;
-        selectedPlaceRef.current = null;
-        setCurrentLocation(null);
-        setIsResolvingAddress(true);
-      },
       onIdle: () => {
-        if (isResolvingPostcodeRef.current) return;
         if (mapRef.current) {
           const newCenter = mapRef.current.getCenter();
           const lat = newCenter.lat();
           const lng = newCenter.lng();
           setIsLocationError(false);
           if (
-            Math.abs(mapCenterRef.current.lat - lat) > 0.0000001 ||
-            Math.abs(mapCenterRef.current.lng - lng) > 0.0000001 ||
-            selectedPlaceRef.current?.pending ||
-            !currentLocationRef.current ||
-            (!addressItem?.id &&
-              !currentLocationRef.current?.map_address_fields &&
-              !hasPrefilledAddressLocation(currentLocationRef.current))
+            mapCenterRef.current.lat !== lat ||
+            mapCenterRef.current.lng !== lng ||
+            !currentLocationRef.current
           ) {
             mapCenterRef.current = { lat, lng };
             // Save the selected location for future use
@@ -263,29 +210,19 @@ const GoogleMapAddress = ({
               console.error('Failed to save location:', error);
             }
             const geocoder = new window.google.maps.Geocoder();
-            const request = ++geocodeRequestRef.current;
-            const selection = selectedPlaceRef.current;
-            if (selection) selection.pending = false;
-            setIsResolvingAddress(true);
-            geocoder.geocode({ location: { lat, lng }, ...(countryDetails?.iso2 === "IN" && { language: "en" }) }, (results, status) => {
-              if (request !== geocodeRequestRef.current) return;
-              setIsResolvingAddress(false);
+            geocoder.geocode({ location: { lat, lng } }, (results, status) => {
               if (status === "OK" && results[0]) {
                 const address = getAddressFromComponents(
                   results[0].address_components
                 );
                 setCurrentLocation({
                   ...address,
-                  map_address_fields: getGoogleMapFormFields(
-                    results[0].address_components, { lat, lng }, selection
-                  ),
                   geo_location: {
-                    latitude: lat,
-                    longitude: lng,
+                    latitude: mapCenterRef.current.lat,
+                    longitude: mapCenterRef.current.lng,
                   },
                 });
               } else {
-                setCurrentLocation(null);
                 console.error("Geocoder failed:", status);
               }
             });
@@ -293,7 +230,7 @@ const GoogleMapAddress = ({
         }
       },
     }),
-    [countryDetails?.iso2]
+    []
   );
 
   const isMapCountryError = useMemo(() => {
@@ -322,21 +259,6 @@ const GoogleMapAddress = ({
 
   return (
     <div className={`${styles.mapWrapper} ${className}`}>
-      {showHeader && onClose && (
-        <div className={styles.mapHeader}>
-          <h2 className={styles.mapHeaderTitle}>
-            {t("resource.common.address.select_delivery_location")}
-          </h2>
-          <button
-            type="button"
-            className={styles.closeIcon}
-            onClick={onClose}
-            aria-label={t("resource.common.close")}
-          >
-            <CloseIcon />
-          </button>
-        </div>
-      )}
       <div className={styles.mapContainer}>
         {isMapLoaded ? (
           <>
@@ -373,7 +295,7 @@ const GoogleMapAddress = ({
             </FyButton>
             {isLocationError && (
               <p className={styles.errorText}>
-                We can’t access your location. Please allow access in browser
+                Location access is blocked. Please enable location permissions in your browser settings to use this feature.
               </p>
             )}
             {isMapCountryError && (
@@ -404,11 +326,7 @@ const GoogleMapAddress = ({
         )}
         <FyButton
           onClick={() => onAddressSelect(currentLocation)}
-          disabled={
-            isMapCountryError ||
-            isResolvingAddress ||
-            !getAddressMapPoint(currentLocation)
-          }
+          disabled={isMapCountryError}
         >
           CONFIRM
         </FyButton>

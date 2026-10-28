@@ -17,7 +17,8 @@ import Autocomplete from "react-google-autocomplete";
 import SearchIcon from "../../assets/images/search.svg";
 import LocateIcon from "../../assets/images/locate.svg";
 import { useGlobalTranslation } from "fdk-core/utils";
-import { getGoogleMapFormFields } from "../../helper/address-form-location";
+
+const libraries = ["places"];
 const mapContainerStyle = {
   width: "100%",
   height: "300px",
@@ -39,9 +40,6 @@ const GoogleMapAddress = ({
   onLoad = () => {},
 }) => {
   const { t } = useGlobalTranslation("translation");
-  const isNewAddress = !addressItem;
-  // Mumbai coordinates as fallback default
-  const MUMBAI_COORDINATES = { lat: 19.0760, lng: 72.8777 };
   
   // Get last used location from localStorage
   const getLastUsedLocation = () => {
@@ -53,26 +51,21 @@ const GoogleMapAddress = ({
     }
   };
   
+  // Priority: addressItem geo_location > last used location > country details
   const lastUsedLocation = getLastUsedLocation();
-  // Priority: addressItem geo_location > last used location > country details > Mumbai
-  const defaultCoordinates = {
+  const [selectedPlace, setSelectedPlace] = useState({
     lat: Number(
       addressItem?.geo_location?.latitude ||
       lastUsedLocation?.lat ||
       countryDetails?.latitude ||
-      MUMBAI_COORDINATES.lat
+      0
     ),
     lng: Number(
       addressItem?.geo_location?.longitude ||
       lastUsedLocation?.lng ||
       countryDetails?.longitude ||
-      MUMBAI_COORDINATES.lng
+      0
     ),
-  };
-  
-  const [selectedPlace, setSelectedPlace] = useState({
-    lat: defaultCoordinates.lat,
-    lng: defaultCoordinates.lng,
   });
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
@@ -87,17 +80,11 @@ const GoogleMapAddress = ({
   const mapRef = useRef(null);
   const hasInitialGeocodeRef = useRef(false);
   const lastGeocodeKeyRef = useRef(null);
-  const selectedPlaceRef = useRef(null);
-  const mapAddressFieldsRef = useRef(null);
-  const geocodeRequestRef = useRef(0);
-  useEffect(() => () => {
-    geocodeRequestRef.current += 1;
-  }, [mapApiKey, countryDetails?.iso2]);
+  const isNewAddress = !addressItem;
 
   const { isLoaded: isMapLoaded } = useJsApiLoader({
     googleMapsApiKey: mapApiKey,
-    id: "google-maps-script",
-    libraries: ["places"],
+    libraries,
   });
 
   useEffect(() => {
@@ -109,17 +96,14 @@ const GoogleMapAddress = ({
       setSelectedPlace(location);
       mapRef?.current?.panTo(location);
     } else {
-      // Use Mumbai coordinates for new addresses, otherwise use countryDetails
-      const location = isNewAddress
-        ? { lat: 19.0760, lng: 72.8777 } // Mumbai coordinates
-        : {
-            lat: Number(countryDetails?.latitude),
-            lng: Number(countryDetails?.longitude),
-          };
+      const location = {
+        lat: Number(countryDetails?.latitude),
+        lng: Number(countryDetails?.longitude),
+      };
       setSelectedPlace(location);
       mapRef?.current?.panTo(location);
     }
-  }, [countryDetails, addressItem, isNewAddress]);
+  }, [countryDetails, addressItem]);
 
   function stateReset() {
     setPincode("");
@@ -141,10 +125,7 @@ const GoogleMapAddress = ({
         longitude: selectedPlace?.lng,
       },
     };
-    onAddressSelect({
-      ...data,
-      map_address_fields: data.map_address_fields || mapAddressFieldsRef.current,
-    });
+    onAddressSelect(data);
   }
 
   const handlePlaceSelect = useCallback((place) => {
@@ -153,9 +134,6 @@ const GoogleMapAddress = ({
       const lat = location.lat();
       const lng = location.lng();
       setSelectedPlace({ lat, lng });
-      selectedPlaceRef.current = {
-        lat, lng, ...getGoogleMapFormFields(place.address_components),
-      };
       // Save the selected location for future use
       try {
         localStorage.setItem('lastMapLocation', JSON.stringify({ lat, lng }));
@@ -172,20 +150,15 @@ const GoogleMapAddress = ({
     } else {
       console.error("No geometry available for selected place");
     }
-  }, [mapApiKey, countryDetails?.iso2]);
+  }, []);
 
   const getCityAndState = async (lat, lng) => {
-    const request = ++geocodeRequestRef.current;
     try {
       const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}${countryDetails?.iso2 === "IN" ? "&language=en" : ""}&key=${mapApiKey}`
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${mapApiKey}`
       );
       const data = await response.json();
-      if (request !== geocodeRequestRef.current) return;
       const addressComponents = data.results[0].address_components;
-      mapAddressFieldsRef.current = getGoogleMapFormFields(
-        addressComponents, { lat, lng }, selectedPlaceRef.current
-      );
       stateReset();
       let subLocalities = [];
       let localPremise = "";
@@ -243,18 +216,13 @@ const GoogleMapAddress = ({
       if (lastGeocodeKeyRef.current === key) {
         return;
       }
-      const request = ++geocodeRequestRef.current;
       const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}${countryDetails?.iso2 === "IN" ? "&language=en" : ""}&key=${mapApiKey}`
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${mapApiKey}`
       );
       const data = await response.json();
-      if (request !== geocodeRequestRef.current) return;
       let subLocalities = [];
       if (data.results && data.results.length > 0) {
         const place = data.results[0];
-        mapAddressFieldsRef.current = getGoogleMapFormFields(
-          place.address_components, { lat, lng }, selectedPlaceRef.current
-        );
         setAddress(place.formatted_address);
         let outLat = lat;
         let outLng = lng;
@@ -295,7 +263,13 @@ const GoogleMapAddress = ({
           }
         });
         const localLocality = subLocalities.join(", ");
-        const addressData = {
+        setPremise(localPremise);
+        setCountry(localCountry);
+        setCity(localCity);
+        setState(localState);
+        setPincode(localPincode);
+        setLocality(localLocality);
+        selectAddress({
           city: localCity,
           area_code: localPincode,
           state: localState,
@@ -303,14 +277,7 @@ const GoogleMapAddress = ({
           address: localPremise,
           country: localCountry,
           geo_location: { latitude: outLat, longitude: outLng },
-        };
-        setPremise(localPremise);
-        setCountry(localCountry);
-        setCity(localCity);
-        setState(localState);
-        setPincode(localPincode);
-        setLocality(localLocality);
-        selectAddress(addressData);
+        });
         lastGeocodeKeyRef.current = key;
       }
     } catch (error) {
@@ -335,7 +302,6 @@ const GoogleMapAddress = ({
     if (navigator?.geolocation) {
       navigator?.geolocation?.getCurrentPosition(
         (position) => {
-          selectedPlaceRef.current = null;
           const pos = {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
@@ -361,8 +327,8 @@ const GoogleMapAddress = ({
   const handleLocationError = (browserHasGeolocation) => {
     console.error(
       browserHasGeolocation
-        ? "Error: The Geolocation service failed."
-        : "Error: Your browser doesn't support geolocation."
+        ? "Location access is blocked. Please enable location permissions in your browser settings."
+        : "Your browser doesn't support geolocation."
     );
   };
 

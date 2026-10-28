@@ -3,7 +3,6 @@ import { useForm, Controller } from "react-hook-form";
 import {
   checkIfNumber,
   translateDynamicLabel,
-  validatePhone,
   validatePasswordField,
 } from "../../../../helper/utils";
 import * as styles from "./login-password.less";
@@ -17,8 +16,6 @@ function loginPassword({
   isForgotPassword = true,
   onForgotPasswordClick = () => {},
   onLoginFormSubmit = () => {},
-  isTermsAccepted = false,
-  setShowConsentTooltip = () => {},
 }) {
   const { t } = useGlobalTranslation("translation");
   const usernameInputId = useId();
@@ -74,12 +71,7 @@ function loginPassword({
 
   useEffect(() => {
     if (checkIfNumber(watch("username"))) {
-      const mobile = watch("username");
-      setValue("phone", {
-        ...getValues("phone"),
-        mobile,
-        isValidNumber: validatePhone(mobile),
-      });
+      setValue("phone.mobile", watch("username"));
       setShowInputNumber(true);
     }
   }, [watch("username")]);
@@ -91,10 +83,6 @@ function loginPassword({
   }, [watch("password"), watch("username"), watch("phone")]);
 
   const handleFormSubmit = ({ username, phone, password }) => {
-    if (!isTermsAccepted) {
-      setShowConsentTooltip(true);
-      return;
-    }
     const data = {
       username: showInputNumber
         ? `${phone.countryCode}${phone.mobile}`
@@ -227,11 +215,7 @@ function loginPassword({
         )}
       </div>
 
-      <button
-        className={styles.loginButton}
-        type="submit"
-        disabled={showInputNumber && !watch("phone")?.isValidNumber}
-      >
+      <button className={styles.loginButton} type="submit">
         {translateDynamicLabel(loginButtonText, t) ||
           t("resource.auth.login.login_caps")}
       </button>

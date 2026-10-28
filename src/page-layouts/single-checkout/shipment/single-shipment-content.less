@@ -92,7 +92,7 @@
           width: 20px;
           svg {
             path {
-              fill: @TextBody;
+              fill: @SuccessText;
             }
           }
         }
@@ -145,11 +145,28 @@
       .itemWrapper {
         column-gap: 14px;
         display: grid;
+        align-items: start;
         grid-template-areas:
           "item_image item_details"
           "item_image free_gift";
-        grid-template-columns: auto minmax(0, 1fr);
+        grid-template-columns: auto 1fr;
         grid-template-rows: auto auto;
+
+        &.itemWrapperNoGift {
+          display: flex;
+          align-items: flex-start;
+          gap: 14px;
+
+          .leftImg {
+            flex: 0 0 100px;
+            align-self: flex-start;
+          }
+
+          .rightDetails {
+            flex: 1 1 auto;
+            align-self: flex-start;
+          }
+        }
 
         @media @mobile {
           grid-template-areas:
@@ -166,18 +183,15 @@
           img {
             max-width: 100px;
             max-height: 150px;
-            height: 120px;
             cursor: pointer;
           }
         }
         .rightDetails {
           grid-area: item_details;
-          min-width: 0;
 
           .productDetails {
             display: flex;
             flex-direction: column;
-            min-width: 0;
             .brandName {
               font-weight: 600;
               font-size: 14px;
@@ -186,6 +200,10 @@
               @media @mobile {
                 font-size: 12px;
               }
+
+              &:empty {
+                display: none;
+              }
             }
             .productName {
               font-weight: 400;
@@ -193,12 +211,12 @@
               color: var(--textBody);
               margin-top: 8px;
               line-height: 140%;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              white-space: nowrap;
               @media @mobile {
                 font-size: 12px;
               }
+            }
+            .brandName:empty + .productName {
+              margin-top: 0;
             }
             .sizeInfo {
               display: flex;
@@ -289,14 +307,6 @@
         }
       }
     }
-  }
-
-  .imgCover {
-    object-fit: cover;
-  }
-
-  .imgContain {
-    object-fit: contain;
   }
 
   .proceedBtnWrapper {

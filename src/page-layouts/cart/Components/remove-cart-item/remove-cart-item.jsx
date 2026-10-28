@@ -1,40 +1,52 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import * as styles from "./remove-cart-item.less";
 import Modal from "../../../../components/core/modal/modal";
 import { useGlobalTranslation } from "fdk-core/utils";
-import { truncateName } from "../../../../helper/utils";
 
 function RemoveCartItem({
   isOpen = false,
   cartItem = null,
-  isRemoving = false,
-  isMovingToWishlist = false,
-  onRemoveButtonClick = () => {},
-  onWishlistButtonClick = () => {},
-  onCloseDialogClick = () => {},
-  globalConfig,
+  onRemoveButtonClick = () => { },
+  onWishlistButtonClick = () => { },
+  onCloseDialogClick = () => { },
 }) {
   const { t } = useGlobalTranslation("translation");
-
-  const isGifUrl = (url = "") => /\.gif(\?|#|$)/i.test(String(url || ""));
-
+  const [isImageReady, setIsImageReady] = useState(false);
   const getProductImage = useMemo(() => {
     if (
       cartItem?.product?.images?.length > 0 &&
       cartItem?.product?.images?.[0]?.url
     ) {
-      return isGifUrl(cartItem.product.images[0].url)
-        ? cartItem.product.images[0].url
-        : cartItem.product.images[0].url.replace("original", "resize-w:250");
+      return cartItem.product.images[0].url.replace("original", "resize-w:250");
     }
   }, [cartItem]);
-  const brandName = truncateName(cartItem?.product?.brand?.name || "", 40);
-  const productName = truncateName(cartItem?.product?.name || "", 40);
+
+  useEffect(() => {
+    setIsImageReady(false);
+
+    if (!isOpen) return;
+    if (!getProductImage) {
+      setIsImageReady(true);
+      return;
+    }
+
+    const img = new Image();
+    img.src = getProductImage;
+
+    const markReady = () => setIsImageReady(true);
+    img.addEventListener("load", markReady);
+    img.addEventListener("error", markReady);
+
+    return () => {
+      img.removeEventListener("load", markReady);
+      img.removeEventListener("error", markReady);
+    };
+  }, [isOpen, getProductImage]);
 
   return (
     <Modal
       title={t("resource.cart.remove_item")}
-      isOpen={isOpen}
+      isOpen={isOpen && isImageReady}
       closeDialog={onCloseDialogClick}
       headerClassName={styles.header}
       subTitleClassName={styles.subTitle}
@@ -45,27 +57,22 @@ function RemoveCartItem({
         <div className={styles.itemDetails}>
           {getProductImage && (
             <div className={styles.itemImg}>
-              <img
-                src={getProductImage}
-                alt={cartItem?.product?.name}
-                className={`${globalConfig?.img_fill ? styles.imgCover : styles.imgContain}`}
-              />{" "}
+              <img src={getProductImage} alt={cartItem?.product?.name} />
             </div>
           )}
           <div>
-            <div className={styles.itemBrand}>{brandName} </div>
-            <div className={styles.itemName}>{productName}</div>
+            <div className={styles.itemBrand}>
+              {cartItem?.product?.brand?.name}
+            </div>
+            <div className={styles.itemName}>{cartItem?.product?.name}</div>
           </div>
         </div>
       </div>
       <div className={styles.removeModalFooter}>
         <div className={styles.removeBtn} onClick={onRemoveButtonClick}>
-          {isRemoving ? "Removing..." : t("resource.facets.remove_caps")}
+          {t("resource.facets.remove_caps")}
         </div>
-        <div
-          className={`${styles.wishlistBtn} ${isMovingToWishlist ? styles.disabled : ""}`}
-          onClick={onWishlistButtonClick}
-        >
+        <div className={styles.wishlistBtn} onClick={onWishlistButtonClick}>
           {t("resource.cart.move_to_wishlist")}
         </div>
       </div>
