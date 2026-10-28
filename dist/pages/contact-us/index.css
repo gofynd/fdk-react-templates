@@ -490,8 +490,12 @@ h5,
 .contact-us__flex_item___zn3y0 .contact-us__form_row___pPufV {
   width: 100%;
 }
+.contact-us__flex_item___zn3y0 .contact-us__form_row___pPufV .contact-us__lableText___fZHMc {
+  background-color: var(--pageBackground, #f8f8f8);
+}
 .contact-us__flex_item___zn3y0 .contact-us__form_row___pPufV .contact-us__inputPlaceholder___ZxiQM {
   padding: 16px;
+  background-color: var(--themeAccentL5, #fff);
 }
 .contact-us__flex_item___zn3y0 .contact-us__form_row___pPufV .contact-us__inputPlaceholder___ZxiQM input::placeholder {
   color: var(--textSecondary, #9c9c9c);
@@ -897,7 +901,7 @@ h5,
   position: absolute;
   transform: translateY(-50%) scale(0.9);
   z-index: 1;
-  background: var(--pageBackground, #f8f8f8);
+  background: #ffffff;
   padding: 0 0.3rem;
   margin: 0 0.5rem;
   font-size: 0.8rem;

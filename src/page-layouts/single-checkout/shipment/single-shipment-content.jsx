@@ -102,8 +102,8 @@ function SingleShipmentContent({
         <div className={styles.parent}>
           {Array(3)
             .fill()
-            .map((_, index) => (
-              <div key={`skeleton-${index}`} className={styles.reviewContentContainer}>
+            .map((_) => (
+              <div className={styles.reviewContentContainer}>
                 <div className={styles.shipmentWrapper}>
                   <div className={styles.shipmentHeading}>
                     <div className={styles.headerLeft}>

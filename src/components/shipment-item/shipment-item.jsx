@@ -18,13 +18,10 @@ import React, { useMemo } from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./shipment-item.less";
 import SvgWrapper from "../../components/core/svgWrapper/SvgWrapper";
-import {
-  numberWithCommas,
-  priceFormatCurrencySymbol,
-} from "../../helper/utils";
+import { priceFormatCurrencySymbol } from "../../helper/utils";
 import { useGlobalTranslation } from "fdk-core/utils";
 import ScheduleIcon from "../../assets/images/schedule.svg";
-import { BagImage, BundleBagImage } from "../../components/bag/bag";
+import { BagImage } from "../../components/bag/bag";
 import { getProductImgAspectRatio } from "../../helper/utils";
 
 function ShipmentItem({
@@ -38,9 +35,6 @@ function ShipmentItem({
   globalConfig,
 }) {
   const { t } = useGlobalTranslation("translation");
-  const getPriceValue = (item) => {
-    return numberWithCommas(item);
-  };
   const getPriceCurrencyFormat = (symbol, price) => {
     return priceFormatCurrencySymbol(symbol, price);
   };
@@ -204,7 +198,7 @@ function ShipmentItem({
                 <span className={`${styles.effectivePrice}`}>
                   {getPriceCurrencyFormat(
                     bag?.prices?.currency_symbol,
-                    getPriceValue(price)
+                    price
                   )}
                 </span>
               </div>

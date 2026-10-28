@@ -305,8 +305,8 @@ export const currencyFormat = (
     return "";
   }
 
-  // Convert to number if it's a string
-  let num = typeof value === "string" ? parseFloat(value) : value;
+  // Convert to number if it's a string (strip commas first to handle pre-formatted strings like "3,599")
+  let num = typeof value === "string" ? parseFloat(value.replace(/,/g, "")) : value;
 
   // Ensure it's a number, not NaN
   if (Number.isNaN(num)) {
@@ -491,8 +491,8 @@ export function priceFormatCurrencySymbol(
 ) {
   if (price == null || price === "") return "";
 
-  // Convert to number if it's a string
-  let num = typeof price === "string" ? parseFloat(price) : price;
+  // Convert to number if it's a string (strip commas first to handle pre-formatted strings like "3,599")
+  let num = typeof price === "string" ? parseFloat(price.replace(/,/g, "")) : price;
 
   if (Number.isNaN(num)) return "";
 
@@ -696,83 +696,6 @@ export function translateDynamicLabel(input, t) {
     console.warn("Error in translateDynamicLabel:", error);
     return typeof input === "string" ? input : "";
   }
-}
-
-/**
- * Checks if an error message is a generic JavaScript error that shouldn't be shown to users.
- * These are typically internal errors that should be handled gracefully.
- * Only meaningful API/validation errors should be displayed to users.
- *
- * @param {string|null|undefined} errorMessage - The error message to check
- * @returns {boolean} - True if the error is a generic JS error, false otherwise
- */
-export function isGenericJSError(errorMessage) {
-  // Early return for null, undefined, or non-string types
-  if (!errorMessage || typeof errorMessage !== "string") {
-    return false;
-  }
-
-  const errorLower = errorMessage.toLowerCase();
-
-  // Check for common generic JavaScript error patterns
-  const genericErrorPatterns = [
-    "cannot read properties",
-    "reading 'find'",
-    "reading 'map'",
-    "reading 'length'",
-    "reading 'slice'",
-    "reading 'filter'",
-    "reading 'reduce'",
-    "reading 'forEach'",
-    "reading 'push'",
-    "reading 'pop'",
-    "is not a function",
-    "is not defined",
-    "cannot read",
-    "typeerror",
-    "referenceerror",
-    "syntaxerror",
-    "rangeerror",
-    "undefined is not",
-    "null is not",
-  ];
-
-  // Check if error message contains any generic error patterns
-  const hasGenericPattern = genericErrorPatterns.some((pattern) =>
-    errorLower.includes(pattern)
-  );
-
-  // Also check for the specific pattern: "undefined" + "reading"
-  const hasUndefinedReadingPattern =
-    errorLower.includes("undefined") && errorLower.includes("reading");
-
-  return hasGenericPattern || hasUndefinedReadingPattern;
-}
-
-/**
- * Validates if an error message is valid and should be displayed to users.
- * Filters out generic JavaScript errors and empty/invalid messages.
- *
- * @param {string|null|undefined} errorMessage - The error message to validate
- * @returns {boolean} - True if the error message is valid and should be displayed, false otherwise
- */
-export function isValidErrorMessage(errorMessage) {
-  // Must be a non-empty string
-  if (!errorMessage || typeof errorMessage !== "string") {
-    return false;
-  }
-
-  // Must not be empty after trimming
-  if (errorMessage.trim() === "") {
-    return false;
-  }
-
-  // Must not be a generic JavaScript error
-  if (isGenericJSError(errorMessage)) {
-    return false;
-  }
-
-  return true;
 }
 
 export function getLocaleDirection(fpi) {

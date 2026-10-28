@@ -8,7 +8,6 @@ import {
   useGlobalStore,
 } from "fdk-core/utils";
 import Skeleton from "../../../components/core/skeletons/skeleton";
-import { isValidErrorMessage } from "../../../helper/utils";
 
 function AddressRight({
   selectedAddressId,
@@ -73,13 +72,6 @@ function DeliverBtn({
 function InvalidAddress({ errorMessage }) {
   const { t } = useGlobalTranslation("translation");
   const navigate = useNavigate();
-
-  // Don't display generic JavaScript errors or invalid messages to users
-  // Use utility function to validate error message
-  if (!isValidErrorMessage(errorMessage)) {
-    return null;
-  }
-
   return (
     <div className={styles.invalidAddError}>
       <div className={styles.invalidAddErrorLeft}>

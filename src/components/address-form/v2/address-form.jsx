@@ -378,27 +378,11 @@ const AddressForm = ({
   const isMapAvailable = isMap && !!mapApiKey;
   const [isMapView, setIsMapView] = useState(() => {
     const isMapAvailable = isMap && !!mapApiKey;
-    
-    // Show map view by default when:
-    // 1. Adding new address (no addressItem) - map should open first if available
-    // 2. Editing an address that doesn't have geo_location (user can add it)
-    // Don't show map view when:
-    // - Map is not available
-    // - Editing an address that already has geo_location (show form instead)
-    if (!isMapAvailable) {
-      return false;
-    }
-    if (!addressItem) {
-      return true; // New address - show map first if available
-    }
-    // If editing and address has geo_location, show form (not map)
+    if (!isMapAvailable || !addressItem) return isMapAvailable;
     if (
       addressItem?.geo_location?.latitude &&
       addressItem?.geo_location?.longitude 
-    ) {
-      return false;
-    }
-    // If editing and address doesn't have geo_location, show map so user can add it
+    ) { return false; }
     return true;
   });
   const address_type = watch("address_type");

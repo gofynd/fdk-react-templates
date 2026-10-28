@@ -7720,7 +7720,7 @@ h5,
   position: absolute;
   transform: translateY(-50%) scale(0.9);
   z-index: 1;
-  background: var(--pageBackground, #f8f8f8);
+  background: #ffffff;
   padding: 0 0.3rem;
   margin: 0 0.5rem;
   font-size: 0.8rem;
@@ -29556,7 +29556,6 @@ h5,
   border: 1px solid var(--dividerStokes, #d4d1d1);
   min-width: 100px;
   vertical-align: middle;
-  color: var(--textBody, #3c3131);
 }
 @media only screen and (max-width: 480px) {
   .size-guide__sizeTable___z4s0f .size-guide__sizeRow___wxDRV .size-guide__sizeCell___dnrbd {
@@ -37580,7 +37579,6 @@ h5,
   font-size: 14px;
   font-weight: 600;
   line-height: 140%;
-  color: var(--textHeading, #26201a);
 }
 .single-page-shipment__addressSelectedHeaderContainer___SVaIw .single-page-shipment__address___pgW0L {
   font-size: 12px;
@@ -37662,11 +37660,10 @@ h5,
   font-size: 14px;
   font-weight: 600;
   line-height: 140%;
-  color: var(--textHeading, #26201a);
 }
 .single-page-shipment__reviewHeaderSelect___bNgMy .single-page-shipment__headerContainer___Umy4m .single-page-shipment__shipment___xocKT {
   font-size: 12px;
-  color: var(--textBody, #3c3131);
+  color: var(--textHeading);
   font-weight: 400;
   line-height: 140%;
 }
@@ -39976,7 +39973,6 @@ h5,
   font-size: 14px;
   font-weight: 600;
   line-height: 140%;
-  color: var(--textHeading, #26201a);
 }
 .single-address-header__addressSelectedHeaderContainer___iphxk .single-address-header__address___JPCSq {
   font-size: 12px;
@@ -49347,8 +49343,12 @@ h5,
 .contact-us__flex_item___zn3y0 .contact-us__form_row___pPufV {
   width: 100%;
 }
+.contact-us__flex_item___zn3y0 .contact-us__form_row___pPufV .contact-us__lableText___fZHMc {
+  background-color: var(--pageBackground, #f8f8f8);
+}
 .contact-us__flex_item___zn3y0 .contact-us__form_row___pPufV .contact-us__inputPlaceholder___ZxiQM {
   padding: 16px;
+  background-color: var(--themeAccentL5, #fff);
 }
 .contact-us__flex_item___zn3y0 .contact-us__form_row___pPufV .contact-us__inputPlaceholder___ZxiQM input::placeholder {
   color: var(--textSecondary, #9c9c9c);

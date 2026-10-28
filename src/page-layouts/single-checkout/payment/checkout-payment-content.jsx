@@ -278,6 +278,19 @@ const setApplePayDebugState = (state = {}) => {
   };
 };
 
+const getApplePayOrderDebugData = (orderData = {}, checkoutCart = {}) => ({
+  success: Boolean(checkoutCart?.success),
+  order_id: orderData?.order_id,
+  amount: orderData?.amount,
+  currency: orderData?.currency,
+  method: orderData?.method || RAZORPAY_APPLE_PAY_METHOD,
+  app: orderData?.app || RAZORPAY_APPLE_PAY_APP,
+  has_key: Boolean(orderData?.key),
+  has_contact: Boolean(orderData?.contact),
+  has_email: Boolean(orderData?.email),
+  has_callback_url: Boolean(orderData?.callback_url),
+});
+
 const isApplePayOption = (option = {}) =>
   [option.code, option.name, option.display_name, option.merchant_code].some(
     (value) =>
@@ -380,13 +393,11 @@ const normalizeApplePayOrderData = (checkoutCart = {}, fallbackKey = "") => {
 };
 
 const createApplePayCheckoutOrder = async ({ proceedToPay, fallbackKey }) => {
-
   const checkoutResponse = await proceedToPay("APPLEPAY", {
     silent: true,
   });
   const checkoutCart = getApplePayCheckoutCart(checkoutResponse);
   const orderData = normalizeApplePayOrderData(checkoutCart, fallbackKey);
-
   if (!checkoutCart?.success || !orderData?.order_id) {
     const error = new Error(
       checkoutCart?.message || "Unable to start Apple Pay."
@@ -425,15 +436,15 @@ function CheckoutPaymentContent({
   const {
     selectedTab,
     selectedTabData,
-    paymentConfig,
-    currencyCode,
     proceedToPay,
     getTotalValue,
+    currencyCode,
     PaymentOptionsList,
     setSelectedTab,
     getCurrencySymbol,
     loggedIn,
     paymentOption,
+    paymentConfig,
     isLoading,
     isQrCodeLoading,
     handleIsQrCodeLoading,
@@ -457,7 +468,6 @@ function CheckoutPaymentContent({
     isPaymentLoading,
   } = payment;
 
-
   useEffect(() => {
     if (enableLinkPaymentOption && selectedTab) {
       setActiveMop(selectedTab);
@@ -475,7 +485,6 @@ function CheckoutPaymentContent({
     () => findApplePayOption(paymentOption?.payment_option),
     [paymentOption]
   );
-  const otherPaymentOptions = useMemo(() => otherOptions(), [paymentOption]);
   let upiSuggestions = paymentOption?.payment_option?.find?.(
     (ele) => ele.name === "UPI"
   )?.suggested_list || ["okhdfcbank", "okicici", "oksbi"];
@@ -590,6 +599,7 @@ function CheckoutPaymentContent({
   const [isCodModalOpen, setIsCodModalOpen] = useState(false);
   const [isCardNumberValid, setIsCardNumberValid] = useState(false);
   const [activeMop, setActiveMop] = useState(null);
+  const applePayRenderLogKeyRef = useRef("");
   const [userOrderId, setUserOrderId] = useState(null);
   const [lastValidatedBin, setLastValidatedBin] = useState("");
   const [isJuspayCouponApplied, setIsJuspayCouponApplied] = useState(false);
@@ -648,6 +658,7 @@ function CheckoutPaymentContent({
         : [applePayParentOption, ...paymentOptions];
   }
 
+  const otherPaymentOptions = useMemo(() => otherOptions(), [paymentOption]);
   const applePayAmount = getTotalValue?.();
   const applePayRazorpayKey = getApplePayRazorpayKeyFromConfig({
     applePayPaymentOption,
@@ -670,6 +681,20 @@ function CheckoutPaymentContent({
     checkoutError: disbaleCheckout?.message,
   };
   const isApplePaySubmitting = applePayStatus === "submitting";
+
+  useEffect(() => {
+    if (!shouldShowApplePayOption) return;
+
+    const renderLogKey = [
+      isTablet ? "mobile-tablet" : "desktop",
+      selectedTab,
+      activeMop,
+      applePayStatus,
+    ].join(":");
+    if (applePayRenderLogKeyRef.current === renderLogKey) return;
+
+    applePayRenderLogKeyRef.current = renderLogKey;
+  }, [shouldShowApplePayOption, isTablet, selectedTab, activeMop, applePayStatus]);
 
   const resetApplePay = () => {
     applePayRequestIdRef.current += 1;
@@ -880,6 +905,7 @@ function CheckoutPaymentContent({
       },
       handler: (response) => handleSuccess(response),
     };
+
     setApplePayDebugState({
       has_contact: Boolean(razorpayOptions.prefill.contact),
       has_prefill_contact: Boolean(razorpayOptions.prefill.contact),
@@ -1216,6 +1242,8 @@ function CheckoutPaymentContent({
         create_payment_request: null,
         web_component_input: input,
       });
+      if (window.__RZP_APPLE_PAY_DEBUG__) {
+      }
       // The trusted click continues to Razorpay's own button handler.
     };
 
@@ -1781,7 +1809,7 @@ function CheckoutPaymentContent({
   };
 
   const selectMop = async (tab, mop, subMop) => {
-    if (!mop) return;
+    if (!mop) return false;
     setTab(tab);
     setMop(mop);
     setSubMop(subMop);
@@ -1849,7 +1877,7 @@ function CheckoutPaymentContent({
           valid,
         });
         setShowCouponValidityModal(true);
-        return;
+        return false;
       }
     }
 
@@ -1916,6 +1944,7 @@ function CheckoutPaymentContent({
     } else if (tab === "Other") {
       setSelectedOtherPayment(subMopData);
     }
+    return true;
   };
 
   useEffect(() => {
@@ -2669,9 +2698,8 @@ function CheckoutPaymentContent({
                     </div>
                     <div className={styles.modeOption}>
                       {savedCards?.map((card, index) => (
-                        <div>
+                        <div key={card?.card_id || index}>
                           <div
-                            key={index}
                             className={`${styles.modeItemWrapper} ${getCardBorder(card)}`}
                           >
                             <div
@@ -3158,13 +3186,14 @@ function CheckoutPaymentContent({
         );
 
         const WalletItem = ({ wlt, key, openMoreWalletModal = false }) => {
+          const isSelectedWallet = selectedWallet?.code === wlt?.code;
           return (
             <div
               key={key}
               className={`${styles.modeItemWrapper} ${getWalletdBorder(wlt)}`}
-              onClick={(e) => {
+              onClick={async () => {
                 removeDialogueError();
-                selectMop("WL", "WL", wlt?.code);
+                await selectMop("WL", "WL", wlt?.code);
               }}
             >
               <label>
@@ -3191,7 +3220,7 @@ function CheckoutPaymentContent({
               </label>
 
               <div className={styles.modePay}>
-                {!openMoreWalletModal && isTablet ? (
+                {!openMoreWalletModal && isTablet && isSelectedWallet ? (
                   <StickyPayNow
                     customClassName={styles.visibleOnTab}
                     value={priceFormatCurrencySymbol(
@@ -4456,6 +4485,7 @@ function CheckoutPaymentContent({
         <div
           className={styles["linkWrapper-row1"]}
           onClick={() => {
+            const isSelectingPaymentOption = selectedTab !== opt.name;
             if (isTablet) {
               handleScrollToTop(index);
               setSelectedTab((prev) => (prev === opt.name ? "" : opt.name));
@@ -4467,7 +4497,7 @@ function CheckoutPaymentContent({
             removeDialogueError();
             setTab(opt.name);
             toggleMop(opt.name);
-            if (selectedTab !== opt.name) {
+            if (isSelectingPaymentOption) {
               if (isTablet) {
                 setSelectedPaymentPayload({});
               }
@@ -4489,7 +4519,13 @@ function CheckoutPaymentContent({
           <div className={styles.link}>
             <div className={`${styles.icon} ${styles.mopIcon}`}>
               {isApplePayNavigationOption && applePayLogoUrl ? (
-                <img src={applePayLogoUrl} alt="Apple Pay" width={24} height={24} style={{ objectFit: "contain" }} />
+                <img
+                  src={applePayLogoUrl}
+                  alt=""
+                  width={24}
+                  height={24}
+                  style={{ objectFit: "contain" }}
+                />
               ) : (
                 <SvgWrapper svgSrc={opt.svg}></SvgWrapper>
               )}
@@ -4532,12 +4568,20 @@ function CheckoutPaymentContent({
           )}
           {isTablet && isApplePayNavigationOption ? (
             <div className={`${styles.arrowContainer} ${styles.activeIconColor}`}>
-              <SvgWrapper svgSrc={selectedTab === opt.name ? "radio-selected" : "radio"} />
+              <SvgWrapper
+                svgSrc={selectedTab === opt.name ? "radio-selected" : "radio"}
+              />
             </div>
           ) : (
-            <div className={`${styles.arrowContainer} ${styles.activeIconColor} `}>
+            <div
+              className={`${styles.arrowContainer} ${styles.activeIconColor} `}
+            >
               <SvgWrapper
-                className={selectedTab === opt.name && activeMop === opt.name ? styles.upsideDown : ""}
+                className={
+                  selectedTab === opt.name && activeMop === opt.name
+                    ? styles.upsideDown
+                    : ""
+                }
                 svgSrc="accordion-arrow"
               />
             </div>
