@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import * as styles from "./email.less";
 import AddEmailModal from "../components/add-email-modal/add-email-modal";
+import EditEmailModal from "../components/edit-email-modal/edit-email-modal";
 import FyButton from "../../../components/core/fy-button/fy-button";
 import FyInput from "../../../components/core/fy-input/fy-input";
 import Loader from "../../../components/loader/loader";
@@ -13,12 +14,15 @@ function Email({
   setEmailAsPrimary,
   addEmail,
   deleteEmail,
+  updateEmail,
   emails,
 }) {
   const { t } = useGlobalTranslation("translation");
   const [showAddModal, setShowAddModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [selectedEmail, setSelectedEmail] = useState({});
+  const [editEmailValue, setEditEmailValue] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -58,6 +62,31 @@ function Email({
       throw error;
     }
   }, []);
+
+  const handleShowEditModal = useCallback((email) => {
+    setEditEmailValue(email);
+    setShowEditModal(true);
+  }, []);
+
+  const handleCloseEditModal = useCallback(() => {
+    setShowEditModal(false);
+    setEditEmailValue("");
+  }, []);
+
+  const handleUpdateEmail = useCallback(
+    async (newEmail) => {
+      if (typeof updateEmail !== "function") {
+        return;
+      }
+      try {
+        await updateEmail(newEmail);
+        handleCloseEditModal();
+      } catch (error) {
+        throw error;
+      }
+    },
+    [updateEmail, handleCloseEditModal]
+  );
 
   const handleDelete = useCallback(async () => {
     try {
@@ -140,6 +169,16 @@ function Email({
                           {t("resource.facets.verify")}
                         </FyButton>
                       )}
+                      {!verified && (
+                        <FyButton
+                          variant="outlined"
+                          className={styles.editButton}
+                          onClick={() => handleShowEditModal(email)}
+                          size="small"
+                        >
+                          {t("resource.facets.edit")}
+                        </FyButton>
+                      )}
 
                       {/* {!primary && verified && (
                           <FyButton
@@ -182,6 +221,14 @@ function Email({
           isOpen={showAddModal}
           onClose={() => handleShowAddModal(false)}
           onAdd={handleAddEmail}
+        />
+      )}
+      {showEditModal && (
+        <EditEmailModal
+          isOpen={showEditModal}
+          onClose={handleCloseEditModal}
+          onUpdate={handleUpdateEmail}
+          currentEmail={editEmailValue}
         />
       )}
       {/* {showDeleteModal && (

@@ -1,0 +1,125 @@
+@import "../../styles/main.less";
+
+.floatingViewCart {
+  display: none;
+
+  @media @tablet {
+    display: flex;
+    align-items: center;
+    position: fixed;
+    left: 50%;
+    bottom: 88px;
+    transform: translateX(-50%);
+    z-index: 31;
+    padding: 6px 8px 6px 6px;
+    border: none;
+    border-radius: 28px;
+    background: @ButtonPrimary;
+    color: @ThemeAccentL5;
+    font-family: inherit;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+
+    &:disabled {
+      opacity: 0.6;
+    }
+  }
+
+  .expand {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+    gap: 10px;
+    margin-left: 10px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  // Intro: rise as a circle, then expand to the right.
+  &.intro {
+    animation: floatingViewCartRise 0.35s ease-out both;
+
+    .expand {
+      animation: floatingViewCartExpand 0.4s ease-out 0.4s both;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &.intro,
+    &.intro .expand {
+      animation: none;
+    }
+  }
+
+  .thumbs {
+    display: flex;
+    align-items: center;
+    padding-left: 8px;
+  }
+
+  .thumb {
+    position: relative;
+    flex: 0 0 auto;
+    width: 36px;
+    height: 36px;
+    margin-left: -8px;
+    box-sizing: border-box;
+    border: 2px solid @ButtonPrimary;
+    border-radius: 50%;
+    object-fit: cover;
+    background: @ThemeAccentL5;
+  }
+
+  .text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.2;
+  }
+
+  .label {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .count {
+    font-size: 11px;
+    opacity: 0.85;
+  }
+
+  .arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    font-size: 20px;
+    line-height: 1;
+  }
+}
+
+@keyframes floatingViewCartRise {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 120px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@keyframes floatingViewCartExpand {
+  from {
+    max-width: 0;
+    margin-left: 0;
+    opacity: 0;
+  }
+  to {
+    max-width: 240px;
+    margin-left: 10px;
+    opacity: 1;
+  }
+}

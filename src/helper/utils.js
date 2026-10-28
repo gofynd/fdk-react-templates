@@ -10,6 +10,27 @@ export const debounce = (func, wait) => {
   };
 };
 
+export const formatDate = (isoString, dateOnly = false) => {
+  const date = new Date(isoString);
+
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = date.toLocaleString("en-US", { month: "short" });
+  const year = date.getFullYear();
+
+  let hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const ampm = hours >= 12 ? "PM" : "AM";
+
+  hours %= 12;
+  hours = hours || 12; // 0 becomes 12
+
+  if (dateOnly) {
+    return `${day} ${month}, ${year}`;
+  }
+
+  return `${day} ${month}, ${year}, ${hours}:${minutes} ${ampm}`;
+};
+
 export const getGlobalConfigValue = (globalConfig, id) =>
   globalConfig?.props?.[id] ?? "";
 
@@ -196,18 +217,20 @@ export function checkIfNumber(value) {
  * @returns {string} Transformed image URL with DPR parameter
  */
 export const transformImage = (url, key, width) => {
-  // Detect device pixel ratio (DPR) for retina displays
-  const deviceDPR = isRunningOnClient() ? window.devicePixelRatio || 1 : 1;
-  // Cap DPR using config value to balance quality and performance
-  const dpr = Math.min(
-    Math.max(Math.round(deviceDPR), 1),
-    IMAGE_OPTIMIZATION_CONFIG.MAX_DPR
-  );
-  
+  // DPR is intentionally fixed at 1 — RESPONSIVE_IMAGE_BREAKPOINTS already bakes
+  // DPR into width values. Auto-detecting window.devicePixelRatio caused SSR/client
+  // URL mismatch (dpr=1 on server, dpr=2 on client) which re-fetched every image on hydration.
+  const dpr = 1;
+
   let updatedUrl = url;
   if (key && width) {
     const str = `/${key}/`;
-    updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
+    // updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
+    if (url.includes("/b2b-commerce/")) {
+      updatedUrl = url.replace(new RegExp(str), `/t.resize(w:${width})/`);
+    } else {
+      updatedUrl = url.replace(new RegExp(str), `/resize-w:${width}/`);
+    }
   }
   try {
     const parsedUrl = new URL(updatedUrl);
@@ -322,12 +345,13 @@ export const currencyFormat = (
   locale = "en-IN",
   currencyCode = null
 ) => {
-  if (value == null || value === "") {
-    return "";
-  }
+  if (value == null || value === "") return "";
 
-  // Convert to number if it's a string
-  let num = typeof value === "string" ? parseFloat(value) : value;
+  // Convert to number if it's a string (strip commas so "1,039.5" parses as 1039.5, not 1)
+  let num =
+    typeof value === "string"
+      ? parseFloat(String(value).replace(/,/g, ""))
+      : value;
 
   // Ensure it's a number, not NaN
   if (Number.isNaN(num)) {
@@ -512,8 +536,11 @@ export function priceFormatCurrencySymbol(
 ) {
   if (price == null || price === "") return "";
 
-  // Convert to number if it's a string
-  let num = typeof price === "string" ? parseFloat(price) : price;
+  // Convert to number if it's a string (strip commas so "1,039.5" parses as 1039.5, not 1)
+  let num =
+    typeof price === "string"
+      ? parseFloat(String(price).replace(/,/g, ""))
+      : price;
 
   if (Number.isNaN(num)) return "";
 
@@ -653,8 +680,9 @@ export const getAddressStr = (item, isAddressTypeAvailable) => {
       parts.unshift(item.address_type);
     }
     let addressStr = parts.join(", ");
-    if (item.area_code) {
-      addressStr += ` ${item.area_code}`;
+    const postalCode = item.area_code || item.pincode;
+    if (postalCode) {
+      addressStr += ` ${postalCode}`;
     }
     if (item.country) {
       // Handle country as object or string
@@ -876,11 +904,15 @@ export const getUserPrimaryPhone = (user) => {
     return null;
   }
 
-  const primaryPhone = user.phone_numbers.find((phone) => phone.primary);
+  const primaryPhone =
+    user.phone_numbers.find((phone) => phone.primary) ||
+    user.phone_numbers.find((phone) => phone.active) ||
+    user.phone_numbers[0];
   if (!primaryPhone) return null;
 
   const countryCode = primaryPhone.country_code?.toString() || "91";
   const mobile = primaryPhone.phone || "";
+  if (!mobile) return null;
 
   return {
     mobile,
@@ -965,7 +997,7 @@ export const getConfigFromProps = (props) => {
 export const formatDeliveryAddress = (d = {}) => {
   const line1 = [d.address, d.area].filter(Boolean).join(" ").trim();
   const line2 = d.landmark?.trim() || "";
-  const line3 = [d.city, [d.state, d.pincode].filter(Boolean).join(" ")].filter(Boolean).join(", ").trim();
+  const line3 = [d.city, [d.state, d.area_code || d.pincode].filter(Boolean).join(" ")].filter(Boolean).join(", ").trim();
   const line4 = d.country?.trim() || "";
 
   return [line1, line2, line3, line4].filter(Boolean).join(",\n");
