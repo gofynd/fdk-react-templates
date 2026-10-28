@@ -7,11 +7,6 @@ export const SINGLE_FILTER_VALUES = {
   page_no: true,
 };
 
-// Fulfillment option slug used to identify a self-pickup line/shipment. Fixed across the storefront
-// (not merchant-editable). Self-pickup has no delivery date, so the delivery promise is hidden for
-// items/shipments on this slug.
-export const SELF_PICKUP_SLUG = "pickup";
-
 export const ALL_PROFILE_MENU = [
   {
     key: "orders",
@@ -66,11 +61,6 @@ export const DATE_FILTERS = [
     is_selected: false,
   },
   {
-    display: "Last 90 days",
-    value: 90,
-    is_selected: true,
-  },
-  {
     display: "Last 6 months",
     value: 180,
     is_selected: false,
@@ -83,7 +73,7 @@ export const DATE_FILTERS = [
   {
     display: "Last 24 months",
     value: 730,
-    is_selected: false,
+    is_selected: true,
   },
 ];
 
@@ -120,3 +110,19 @@ export const RESPONSIVE_IMAGE_BREAKPOINTS = [
   // Mobile small (<360px): 540px image (320 * 1.69 = 540)
   { breakpoint: { max: 359 }, width: 540 },
 ];
+
+export const TYPOGRAPHY_RULES = {
+  heading: {
+    fallback: 72,
+    compactViewport: 320,
+    minViewport: 430,
+    maxViewport: 1440,
+  },
+  description: {
+    fallback: 16,
+    minFloor: 14,
+    compactViewport: 320,
+    minViewport: 430,
+    maxViewport: 1440,
+  },
+};

@@ -364,9 +364,11 @@ h5,
   width: 100%;
   max-height: 180px;
   cursor: pointer;
+  border-radius: var(--itemImageRadius, 11px);
 }
 .chip-review-item__bag___EdkMm .chip-review-item__itemContainer___yE5kO .chip-review-item__bagRight___ALFog {
   flex: 1;
+  min-width: 0;
   padding-inline-start: 12px;
   color: #41434c;
 }
@@ -382,6 +384,11 @@ h5,
   text-transform: capitalize;
   font-weight: 300;
   font-size: 14px;
+}
+.chip-review-item__bag___EdkMm .chip-review-item__itemContainer___yE5kO .chip-review-item__bagRight___ALFog .chip-review-item__productName___SsObd {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .chip-review-item__bag___EdkMm .chip-review-item__itemContainer___yE5kO .chip-review-item__bagRight___ALFog .chip-review-item__soldBy___JoZJy {
   color: #ccc;
