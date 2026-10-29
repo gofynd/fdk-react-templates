@@ -62,14 +62,6 @@ import OfficeIcon from "../../../assets/images/office-type.svg";
 import FriendsFamilyIcon from "../../../assets/images/friends-family.svg";
 import OtherIcon from "../../../assets/images/other-type.svg";
 import { isRunningOnClient } from "../../../helper/utils";
-import {
-  getInitialAddressFormFields,
-  mergeMapAddressFormFields,
-  getAddressFormFieldErrors,
-  getAddressCountryDraft,
-  shouldOpenAddressMap,
-  getAddressMapPoint,
-} from "../../../helper/address-form-location";
 import { useAddressAutofill } from "../../../helper/hooks";
 import CloseIcon from "../../../assets/images/close.svg";
 import BackIcon from "../../../assets/images/back.svg";
@@ -304,30 +296,6 @@ const addressTypes = [
   // Add more address types as needed
 ];
 
-const isFieldValueFilled = (value) => {
-  if (value === null || value === undefined) {
-    return false;
-  }
-
-  if (typeof value === "string") {
-    return !!value.trim();
-  }
-
-  if (typeof value === "object") {
-    if (
-      "mobile" in value ||
-      "countryCode" in value ||
-      "isValidNumber" in value
-    ) {
-      return !!String(value.mobile || "").trim();
-    }
-
-    return Object.keys(value).length > 0;
-  }
-
-  return true;
-};
-
 const AddressForm = ({
   internationalShipping,
   formSchema = defaultFormSchema,
@@ -348,8 +316,6 @@ const AddressForm = ({
   countryDetails,
   onClose = () => {},
   onBack = null,
-  hideBackButton = false,
-  startWithAddressForm = false,
 }) => {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
@@ -365,7 +331,7 @@ const AddressForm = ({
   // Get currentCountry based on header selection (same logic as useInternational)
   const currentCountry = useMemo(() => {
     return countryCurrencies?.find(
-      (country) => country?.iso2 === i18nDetails?.countryCode
+      (country) => country.iso2 === i18nDetails?.countryCode
     );
   }, [countryCurrencies, i18nDetails?.countryCode]);
 
@@ -384,12 +350,6 @@ const AddressForm = ({
     return userAutofillData;
   }, [userAutofillData, internationalShipping]);
 
-  const formAddressItem = getInitialAddressFormFields(
-    addressItem,
-    isNewAddress && isMap && !!mapApiKey,
-    countryDetails?.iso2
-  );
-
   const {
     control,
     register,
@@ -400,12 +360,10 @@ const AddressForm = ({
     reset,
     trigger,
     getValues,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm({
-    mode: "onChange",
-    reValidateMode: "onChange",
     defaultValues: {
-      ...formAddressItem,
+      ...addressItem,
       address_type: addressItem?.address_type
         ? isOtherAddressType
           ? "Other"
@@ -413,10 +371,7 @@ const AddressForm = ({
         : "Home",
       otherAddressType:
         addressItem && isOtherAddressType ? addressItem?.address_type : "",
-      geo_location: formAddressItem?.geo_location || {
-        latitude: "",
-        longitude: "",
-      },
+      geo_location: { latitude: "", longitude: "" },
       country: selectedCountry || t("resource.localization.india"),
       // Auto-fill user data using memoized utility function (excluding phone if international)
       ...autofillDataForForm,
@@ -424,11 +379,6 @@ const AddressForm = ({
       // area_code: addressItem?.area_code || defaultPincode || "",
     },
   });
-  const [mapSelectionRevision, setMapSelectionRevision] = useState(0);
-  useEffect(() => {
-    if (mapSelectionRevision > 0) void trigger();
-  }, [mapSelectionRevision, trigger]);
-
   const formContainerRef = useRef(null);
   const [currBgColor, setCurrBgColor] = useState("#fff");
   const [showOtherText, setShowOtherText] = useState(false);
@@ -437,18 +387,33 @@ const AddressForm = ({
     selectedCountry || currentCountry
   );
   const isMapAvailable = isMap && !!mapApiKey;
-  const [isMapView, setIsMapView] = useState(() =>
-    shouldOpenAddressMap(
-      isMapAvailable,
-      addressItem,
-      isNewAddress,
-      startWithAddressForm
-    )
-  );
+  const [isMapView, setIsMapView] = useState(() => {
+    const isMapAvailable = isMap && !!mapApiKey;
+
+    // Show map view by default when:
+    // 1. Adding new address (no addressItem) - map should open first if available
+    // 2. Editing an address that doesn't have geo_location (user can add it)
+    // Don't show map view when:
+    // - Map is not available
+    // - Editing an address that already has geo_location (show form instead)
+    if (!isMapAvailable) {
+      return false;
+    }
+    if (!addressItem) {
+      return true; // New address - show map first if available
+    }
+    // If editing and address has geo_location, show form (not map)
+    if (
+      addressItem?.geo_location?.latitude &&
+      addressItem?.geo_location?.longitude
+    ) {
+      return false;
+    }
+    // If editing and address doesn't have geo_location, show map so user can add it
+    return true;
+  });
   const address_type = watch("address_type");
   const sector = watch("sector");
-  const formValues = watch();
-  const isAddNewAddressForm = isNewAddress || !addressItem?.id;
 
   // Ensure name field validates empty/whitespace when required (for both default and custom schemas)
   const schemaWithNameValidation = useMemo(() => {
@@ -473,31 +438,6 @@ const AddressForm = ({
       }) ?? [],
     })) ?? [];
   }, [formSchema, t]);
-
-  const requiredFields = useMemo(() => {
-    const schemaRequiredFields =
-      schemaWithNameValidation
-        ?.flatMap((group) => group.fields || [])
-        ?.filter(
-          (field) =>
-            (field.required || field.validation?.required) &&
-            field.type !== "hidden"
-        )
-        ?.map((field) => field.key) || [];
-
-    return ["address_type", ...schemaRequiredFields];
-  }, [schemaWithNameValidation]);
-
-  const isSaveContinueDisabled =
-    isAddNewAddressForm &&
-    (requiredFields.some(
-      (fieldKey) => !isFieldValueFilled(formValues?.[fieldKey])
-    ) || !isValid);
-
-  const isOtherAddressTypeMissing =
-    isAddNewAddressForm &&
-    address_type === "Other" &&
-    !isFieldValueFilled(formValues?.otherAddressType);
 
   /**
    * Transforms phone number from addressItem format to form format
@@ -549,7 +489,7 @@ const AddressForm = ({
     if (addressItem) {
       const transformedPhone = transformPhoneForForm(
         addressItem.phone,
-        addressItem.country_phone_code || addressItem.country_code || countryDetails?.phone_code
+        addressItem.country_phone_code
       );
 
       // Destructure to exclude phone and country_phone_code from addressItem spread
@@ -558,7 +498,7 @@ const AddressForm = ({
         phone: _phone, // eslint-disable-line no-unused-vars
         country_phone_code: _countryPhoneCode, // eslint-disable-line no-unused-vars
         ...addressItemWithoutPhone
-      } = formAddressItem;
+      } = addressItem;
 
       const countryValue = addressItem?.country || selectedCountry;
 
@@ -583,12 +523,6 @@ const AddressForm = ({
         country: countryValue,
         email: addressItem?.email || "",
       });
-      if (
-        isNewAddress &&
-        startWithAddressForm &&
-        !shouldOpenAddressMap(isMapAvailable, addressItem, true, true)
-      )
-        setMapSelectionRevision((revision) => revision + 1);
     } else {
       setValue("is_default_address", true);
       setValue("address_type", "Home");
@@ -697,11 +631,11 @@ const AddressForm = ({
     if (isNewAddress) {
       const result = await Promise.resolve(onAddAddress(removeNullValues(payload)));
       if (result && !result?.success && result?.errors) {
-        const fieldErrors = getAddressFormFieldErrors(result.errors);
+        const fieldErrors = result?.errors?.[0]?.extensions?.details?.field_errors;
         if (fieldErrors && typeof fieldErrors === "object") {
           for (const [field, messages] of Object.entries(fieldErrors)) {
             if (Array.isArray(messages) && messages[0]) {
-              setError(field === "pincode" ? "area_code" : field, { type: "manual", message: messages[0] });
+              setError(field, { type: "manual", message: messages[0] });
             }
           }
         }
@@ -709,11 +643,11 @@ const AddressForm = ({
     } else {
       const result = await Promise.resolve(onUpdateAddress(removeNullValues(payload)));
       if (result && !result?.success && result?.errors) {
-        const fieldErrors = getAddressFormFieldErrors(result.errors);
+        const fieldErrors = result?.errors?.[0]?.extensions?.details?.field_errors;
         if (fieldErrors && typeof fieldErrors === "object") {
           for (const [field, messages] of Object.entries(fieldErrors)) {
             if (Array.isArray(messages) && messages[0]) {
-              setError(field === "pincode" ? "area_code" : field, { type: "manual", message: messages[0] });
+              setError(field, { type: "manual", message: messages[0] });
             }
           }
         }
@@ -721,15 +655,10 @@ const AddressForm = ({
     }
   };
 
-  const countryChangeRevision = useRef(0);
-  const handleCountryChange = async (event) => {
-    const revision = ++countryChangeRevision.current;
+  const handleCountryChange = (event) => {
     // Find the country object from countryCurrencies
     const selectedCountryObj = countryCurrencies?.find(
-      (country) =>
-        country.name === event ||
-        country.display_name === event ||
-        country.iso2 === event,
+      (country) => country.name === event || country.display_name === event
     );
 
     // Update local state immediately to preserve selection
@@ -743,23 +672,20 @@ const AddressForm = ({
     // Only update header country when adding a new address
     // When editing, don't change the header country - it should remain as user's preference
     if (isNewAddress) {
-      const draft = getAddressCountryDraft(
-        getValues(),
-        selectedCountryObj || event,
-      );
-      let applied = false;
-      try {
-        applied = await setI18nDetails?.(event, draft);
-      } catch (error) {
-        applied = false;
-      }
-      if (revision !== countryChangeRevision.current) return;
-      if (applied === false) {
-        setLocalSelectedCountry(selectedCountry || currentCountry);
-        return;
-      }
-      reset(draft, { keepDefaultValues: true });
+      setI18nDetails(event);
     }
+
+    setValue("country", event);
+    setTimeout(() => {
+      schemaWithNameValidation?.forEach((group) =>
+        group?.fields?.forEach(({ key }) => {
+          // Don't clear user auto-filled fields when country changes
+          if (key !== "name" && key !== "phone" && key !== "email") {
+            setValue(key, "");
+          }
+        })
+      );
+    }, 0);
   };
 
   // Update localSelectedCountry when selectedCountry prop changes (from parent)
@@ -786,22 +712,13 @@ const AddressForm = ({
     const currentValues = getValues();
     // Get contact info from addressItem if available (for edit scenario)
     const addressItemPhone = addressItem?.phone
-      ? transformPhoneForForm(
-          addressItem.phone,
-          addressItem.country_phone_code ||
-            addressItem.country_code ||
-            countryDetails?.phone_code,
-        )
+      ? transformPhoneForForm(addressItem.phone, addressItem.country_phone_code)
       : null;
 
     // Merge Google Maps data with existing form values, preserving contact info and address type
     const mergedData = {
-      ...mergeMapAddressFormFields(
-        currentValues,
-        data,
-        countryDetails?.iso2,
-        countryDetails?.fields?.address,
-      ),
+      ...currentValues,
+      ...data,
       // Preserve name, phone, and email - prioritize current form, then addressItem, then userAutofillData
       name:
         currentValues.name ||
@@ -817,10 +734,11 @@ const AddressForm = ({
         (!internationalShipping ? userAutofillData?.phone : "") ||
         "",
       email:
-        currentValues.email ??
-        addressItem?.email ??
-        (isNewAddress ? userAutofillData?.email : "") ??
-        "",
+        isNewAddress && !addressItem
+          ? currentValues.email || data.email || userAutofillData?.email || ""
+          : addressItem?.email
+            ? currentValues.email || addressItem?.email
+            : "",
       // Preserve address type selection
       address_type: currentValues.address_type || "Home",
       otherAddressType: currentValues.otherAddressType || "",
@@ -829,9 +747,14 @@ const AddressForm = ({
           ? currentValues.is_default_address
           : true,
     };
-    reset(mergedData, { keepDefaultValues: true });
-    // Validate after the form fields have mounted; reset alone leaves isValid stale.
-    setMapSelectionRevision((revision) => revision + 1);
+    reset(mergedData);
+    schemaWithNameValidation?.forEach((group) =>
+      group?.fields?.forEach(({ type, key }) => {
+        if (type === "list") {
+          setValue(key, "");
+        }
+      })
+    );
     setIsMapView(false);
   };
 
@@ -853,11 +776,11 @@ const AddressForm = ({
 
   if (isMapView) {
     const currentFormValues = getValues();
-    // A pincode can locate the map even before coordinates are available.
+    // Use current form values if geo_location exists (user has selected from map)
+    // Otherwise use original addressItem to show country defaults
     const mapAddressItem =
-      getAddressMapPoint(currentFormValues) ||
-      currentFormValues.area_code ||
-      currentFormValues.pincode
+      currentFormValues?.geo_location?.latitude &&
+      currentFormValues?.geo_location?.longitude
         ? currentFormValues
         : addressItem;
 
@@ -875,22 +798,15 @@ const AddressForm = ({
   return (
     <div className={styles.formWrapper}>
       <div className={styles.formHeader}>
-        {!hideBackButton && (
-          <button className={styles.backIcon} onClick={onBack || onClose}>
-            <BackIcon />
-          </button>
-        )}
+        <button className={styles.backIcon} onClick={onBack || onClose}>
+          <BackIcon />
+        </button>
         <h2 className={styles.formHeaderTitle}>
           {isNewAddress
             ? t("resource.common.address.add_new_address")
             : t("resource.common.address.edit_address")}
         </h2>
-        <button
-          type="button"
-          className={styles.closeIcon}
-          onClick={onClose}
-          aria-label={t("resource.common.close")}
-        >
+        <button className={styles.closeIcon} onClick={onClose}>
           <CloseIcon />
         </button>
       </div>
@@ -971,13 +887,7 @@ const AddressForm = ({
                 <button
                   type="button"
                   key={type.value}
-                  onClick={() => {
-                    setValue("address_type", type.value, {
-                      shouldDirty: true,
-                      shouldValidate: true,
-                    });
-                    void trigger();
-                  }}
+                  onClick={() => setValue("address_type", type.value)}
                   className={`${styles.typeBtn} ${watch("address_type") === type.value ? styles.selected : ""}`}
                 >
                   {type.icon}
@@ -1007,8 +917,7 @@ const AddressForm = ({
               <input
                 {...register("otherAddressType", {
                   validate: (value) => {
-                    if (getValues("address_type") !== "Other") return true;
-                    if (!value?.trim()) {
+                    if (!value.trim()) {
                       return `${t("resource.common.address.address_type")} ${t("resource.common.address.is_required")}`;
                     }
                     if (value.length < 1 || value.length > 30) {
@@ -1043,10 +952,7 @@ const AddressForm = ({
             </div>
           )}
           <div className={styles.formFooter}>
-            <FyButton
-              type="submit"
-              disabled={isSaveContinueDisabled || isOtherAddressTypeMissing}
-            >
+            <FyButton type="submit">
               {isNewAddress
                 ? t("resource.common.address.save_continue")
                 : t("resource.common.address.update_address")}
