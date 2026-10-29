@@ -9,15 +9,23 @@
  * @returns {JSX.Element} A JSX element representing the review item.
  */
 
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./chip-review-item.less";
-import { currencyFormat, formatLocale, numberWithCommas } from "../../helper/utils";
+import {
+  currencyFormat,
+  formatLocale,
+  getResponsiveImageBaseUrl,
+  getResponsiveImageSrcSet,
+  numberWithCommas,
+} from "../../helper/utils";
 import {
   useGlobalStore,
   useFPI,
   useGlobalTranslation
 } from "fdk-core/utils";
+import Accordion from "../accordion/accordion";
+import { transformDisplayToAccordionContent } from "../../helper/customization-display";
 
 export default function ChipReviewItem({ item, articles }) {
   const { t } = useGlobalTranslation("translation");
@@ -27,13 +35,14 @@ export default function ChipReviewItem({ item, articles }) {
   const getProductPath = useMemo(() => `/product/${item.product.slug}`, [item]);
 
   const getProductImage = useMemo(() => {
-    if (item?.product?.images?.length && item?.product?.images?.[0]?.url) {
-      return item.product.images[0].url.replace(
-        "original",
-        "resize-h:170,w:110"
-      );
-    }
+    const imageUrl = item?.product?.images?.[0]?.url;
+    return imageUrl ? getResponsiveImageBaseUrl(imageUrl, 250) : "";
   }, [item]);
+
+  const getProductImageSrcSet = useMemo(
+    () => getResponsiveImageSrcSet(item?.product?.images?.[0]?.url),
+    [item]
+  );
 
   const isOutofStock = useMemo(() => {
     let outOfStockArticles = articles.filter((article) => {
@@ -67,19 +76,30 @@ export default function ChipReviewItem({ item, articles }) {
       <div className={styles.itemContainer}>
         <div className={styles.bagLeft}>
           <FDKLink to={getProductPath}>
-            <img src={getProductImage} alt={item.product.name} />
+            <img
+              src={getProductImage}
+              srcSet={getProductImageSrcSet}
+              sizes="125px"
+              alt={item.product.name}
+              loading="lazy"
+            />
           </FDKLink>
         </div>
         <div className={styles.bagRight}>
           <div className={styles.bagBrand}>{item.product.brand.name}</div>
-          <div className={styles.bagName}>{item.product.name}</div>
+          <div
+            className={`${styles.bagName} ${styles.productName}`}
+            title={item.product.name}
+          >
+            {item.product.name}
+          </div>
           <div className={styles.soldBy}>
             {t("resource.common.sold_by")}: {item.article.store.name + ","}
             {item.article.seller.name}
           </div>
 
           <div className={styles.chipMetaDesktop}>
-            <ChipMeta item={item} />
+            <ChipMeta item={item} articles={articles} />
           </div>
 
           {/* Extension Slot : above_shipment_item_price */}
@@ -95,18 +115,31 @@ export default function ChipReviewItem({ item, articles }) {
           {/* Extension Slot : below_shipment_item_price */}
         </div>
         <div className={styles.chipMetaMobile}>
-          <ChipMeta item={item} />
+          <ChipMeta item={item} articles={articles} />
         </div>
       </div>
     </div>
   );
 }
 
-const ChipMeta = ({ item }) => {
+const ChipMeta = ({ item, articles = [] }) => {
   const { t } = useGlobalTranslation("translation");
   const fpi = useFPI();
   const { language, countryCode } = useGlobalStore(fpi.getters.i18N_DETAILS);
   const locale = language?.locale;
+  const totalPieces = articles.length > 0
+    ? articles.reduce((sum, a) => sum + (a?.quantity || 0), 0)
+    : item?.quantity || 0;
+
+  const rawCustomizationOptions =
+    item?.article?._custom_json?._display || [];
+  const accordionContent = transformDisplayToAccordionContent(
+    rawCustomizationOptions
+  );
+  const [accordionItems, setAccordionItems] = useState([
+    { title: t("resource.cart.customization") || "Customization", content: accordionContent, open: false },
+  ]);
+
   return (
     <div className={styles.bagItem}>
       <div className={styles.chip}>
@@ -162,7 +195,7 @@ const ChipMeta = ({ item }) => {
         <div className={styles.rightItems}>
           <div className={styles.quantity}>
             <span>
-              {`${item?.quantity} ${item.quantity > 1 ? t("resource.common.multiple_piece") : t("resource.common.single_piece")}`}
+              {`${totalPieces} ${totalPieces > 1 ? t("resource.common.multiple_piece") : t("resource.common.single_piece")}`}
             </span>
           </div>
         </div>
@@ -179,6 +212,18 @@ const ChipMeta = ({ item }) => {
         <div className={styles.offersContainer}>
           <span className={styles.offerApplied}>{item.bulk_message}</span>
         </div>
+      )}
+      {accordionContent.length > 0 && (
+        <Accordion
+          items={accordionItems}
+          onItemClick={(index) =>
+            setAccordionItems((prev) =>
+              prev.map((acc, i) =>
+                i === index ? { ...acc, open: !acc.open } : acc
+              )
+            )
+          }
+        />
       )}
     </div>
   );

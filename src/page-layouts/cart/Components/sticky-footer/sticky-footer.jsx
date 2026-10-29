@@ -62,7 +62,9 @@ function StickyFooter({
                   {currencyFormat(
                     totalPrice,
                     currencySymbol,
-                    formatLocale(locale, countryCode, true)
+                    formatLocale(locale, countryCode, true),
+                    null,
+                    true
                   )}
                 </span>
               </div>
@@ -108,7 +110,9 @@ function StickyFooter({
               {currencyFormat(
                 totalPrice,
                 currencySymbol,
-                formatLocale(locale, countryCode, true)
+                formatLocale(locale, countryCode, true),
+                null,
+                true
               )}
             </div>
             <div

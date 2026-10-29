@@ -37,7 +37,7 @@
       a {
         img {
           width: 100%;
-          border-radius: 4px;
+          border-radius: @ItemImageRadius;
         }
       }
     }
@@ -48,6 +48,7 @@
       line-height: 140%;
       box-sizing: border-box;
       width: 100%;
+      min-width: 0;
 
       .removeItemSvgContainer {
         position: absolute;
@@ -67,6 +68,10 @@
         color: @TextBody;
         margin-top: 4px;
         font-size: 14px;
+        padding-inline-end: 32px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       .itemSellerName {
@@ -128,6 +133,11 @@
               align-items: center;
               justify-content: center;
               cursor: pointer;
+              color: @TextBody;
+
+              svg path {
+                fill: @TextBody;
+              }
             }
           }
         }
@@ -216,6 +226,10 @@
     .shippingLogo {
       color: @TextBody;
       display: flex;
+
+      svg path {
+        fill: @TextBody;
+      }
     }
 
     .deliveryDate {
@@ -355,11 +369,14 @@
       gap: 16px;
 
       .sizeModalImage {
-        flex: 0 0 18%;
+        flex: 0 0 90px;
+        .aspect-ratio(0.8);
 
         img {
           width: 100%;
-          border-radius: 4px;
+          height: 100%;
+          border-radius: @ItemImageRadius;
+          object-fit: cover;
         }
       }
 
@@ -376,12 +393,14 @@
             margin-bottom: 8px;
             font-size: 16px;
             font-weight: 600;
+            color: @TextHeading;
           }
 
           .sizeModalName {
             margin-inline-end: 20px;
             font-size: 16px;
             font-weight: 400;
+            color: @TextBody;
           }
         }
 
@@ -389,6 +408,7 @@
           margin-top: 8px;
           font-size: 14px;
           font-weight: 600;
+          color: @TextHeading;
         }
       }
     }
@@ -434,14 +454,18 @@
         }
 
         .singleSizeSelected {
+          border-radius: @ButtonRadius;
           color: var(--buttonPrimary);
           border-color: var(--buttonPrimary);
         }
 
         .sigleSizeDisabled {
           position: relative;
-          color: var(--ButtonPrimaryL3);
-          border-color: var(--ButtonPrimaryL3);
+          color: @TextDisabled;
+          border-color: @DividerStokes;
+          opacity: 0.6;
+          cursor: not-allowed;
+          pointer-events: none;
         }
 
         svg {
@@ -494,14 +518,22 @@
   }
 }
 
+.imgCover {
+  object-fit: cover;
+}
+
+.imgContain {
+  object-fit: contain;
+}
+
 .selected {
   display: flex;
 }
 
 .itemRemoveIcon,
 .itemRemoveIcon path {
-  color: var(--textHeading);
-  fill: var(--textHeading);
+  color: @TextBody;
+  fill: @TextBody;
 }
 
 .outOfStockChip {
@@ -639,7 +671,7 @@
           width: 100%;
           height: 100%;
           object-fit: contain;
-          border-radius: 4px;
+          border-radius: @ItemImageRadius;
         }
       }
 

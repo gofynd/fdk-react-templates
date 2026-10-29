@@ -27,6 +27,7 @@ function SingleAddress({
   const {
     allAddresses = [],
     isAddressLoading = false,
+    isAddressSelecting = false,
     editAddress,
     removeAddress,
     addressLoader,
@@ -39,6 +40,7 @@ function SingleAddress({
     setOpenModal,
     openModal,
     resetAddressState,
+    handleModalClose,
     updateAddress,
     addAddress,
     modalTitle,
@@ -78,8 +80,9 @@ function SingleAddress({
           title={modalTitle}
           hideHeader
           isOpen={openModal}
+          notCloseOnclickOutside={showGoogleMap && !!mapApiKey}
           modalType="center-modal"
-          closeDialog={resetAddressState}
+          closeDialog={handleModalClose}
           containerClassName={styles.addressModalContainer}
           bodyClassName={styles.addressModalBody}
         >
@@ -88,6 +91,7 @@ function SingleAddress({
             internationalShipping={isInternationalShippingEnabled}
             formSchema={defaultFormSchema}
             isNewAddress={isNewAddress}
+            startWithAddressForm
             addressItem={addressItem}
             onUpdateAddress={updateAddress}
             onAddAddress={addAddress}
@@ -102,7 +106,7 @@ function SingleAddress({
             countryDetails={countryDetails}
             isGuestUser={isGuestUser}
             user={userDetails}
-            onClose={resetAddressState}
+            onClose={handleModalClose}
           />
         </Modal>
         {showShipment || showPayment ? null : (
@@ -120,6 +124,7 @@ function SingleAddress({
             getDefaultAddress={getDefaultAddress}
             loader={loader}
             isApiLoading={isApiLoading}
+            isAddressSelecting={isAddressSelecting}
             showPaymentOptions={showPaymentOptions}
             getTotalValue={getTotalValue}
             isCreditNoteApplied={isCreditNoteApplied}

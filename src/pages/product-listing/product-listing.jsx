@@ -34,6 +34,7 @@ const ProductListing = ({
   productCount = 0,
   title = "",
   description = "",
+  descriptionFontSize,
   isScrollTop = true,
   filterList = [],
   selectedFilters = [],
@@ -56,6 +57,7 @@ const ProductListing = ({
   imgSrcSet,
   isImageFill = false,
   showImageOnHover = false,
+  showMultipleImages = false,
   isResetFilterDisable = false,
   imageBackgroundColor = "",
   imagePlaceholder = "",
@@ -67,6 +69,7 @@ const ProductListing = ({
   banner = {},
   showAddToCart = false,
   showColorVariants = false,
+  imageEffects,
   actionButtonText,
   stickyFilterTopOffset = 0,
   filterToggle = false,
@@ -98,6 +101,10 @@ const ProductListing = ({
     handleCloseSizeGuide,
     ...restAddToModalProps
   } = addToCartModalProps;
+
+  const addToCartModalTitle = isTablet
+    ? restAddToModalProps?.productData?.product?.name || ""
+    : "";
 
   return (
     <div className={styles.plpWrapper}>
@@ -225,7 +232,11 @@ const ProductListing = ({
             <div className={styles.right}>
               <div className={styles.rightHeader}>
                 <div className={styles.headerLeft}>
-                  {title && <h2 className={styles.title}>{title}</h2>}
+                  {title && (
+                    <h2 className={styles.title} title={title}>
+                      {title}
+                    </h2>
+                  )}
                   {isProductCountDisplayed && (
                     <span className={styles.productCount}>
                       {`${productCount} ${productCount > 1 ? t("resource.common.items") : t("resource.common.item")}`}
@@ -343,11 +354,13 @@ const ProductListing = ({
                         listingPrice,
                         showAddToCart,
                         showColorVariants,
+                        showImageOnHover,
+                        showMultipleImages,
+                        imageEffects,
                         actionButtonText:
                           actionButtonText ?? t("resource.common.add_to_cart"),
                         onWishlistClick,
                         isImageFill,
-                        showImageOnHover,
                         imageBackgroundColor,
                         imagePlaceholder,
                         handleAddToCart,
@@ -374,11 +387,13 @@ const ProductListing = ({
                       listingPrice,
                       showAddToCart,
                       showColorVariants,
+                      showImageOnHover,
+                      showMultipleImages,
+                      imageEffects,
                       actionButtonText:
                         actionButtonText ?? t("resource.common.add_to_cart"),
                       onWishlistClick,
                       isImageFill,
-                      showImageOnHover,
                       imageBackgroundColor,
                       isProductLoading,
                       imagePlaceholder,
@@ -410,6 +425,7 @@ const ProductListing = ({
               <ListingDescription
                 key={description.length}
                 description={description}
+                descriptionFontSize={descriptionFontSize}
               />
             </div>
           </div>
@@ -424,12 +440,9 @@ const ProductListing = ({
                   hideHeader={!isTablet}
                   containerClassName={styles.addToCartContainer}
                   bodyClassName={styles.addToCartBody}
+                  headerClassName={styles.addToCartHeader}
                   titleClassName={styles.addToCartTitle}
-                  title={
-                    isTablet
-                      ? restAddToModalProps?.productData?.product?.name
-                      : ""
-                  }
+                  title={addToCartModalTitle}
                   closeDialog={restAddToModalProps?.handleClose}
                 >
                   <AddToCart
@@ -495,9 +508,11 @@ function ProductGridItem({
   followedIdList = [],
   listingPrice = "range",
   isImageFill = false,
-  showImageOnHover = false,
   showAddToCart = false,
   showColorVariants = false,
+  showImageOnHover = false,
+  showMultipleImages = false,
+  imageEffects,
   actionButtonText,
   imageBackgroundColor = "",
   imagePlaceholder = "",
@@ -522,7 +537,12 @@ function ProductGridItem({
       state = {
         product: {
           ...product,
-          sizes: { sellable: product.sellable, sizes: product.sizes },
+          sizes: {
+            sellable: product.sellable,
+            sizes: product.sizes.map((s) =>
+              typeof s === "string" ? { display: s, value: s } : s
+            ),
+          },
         },
       };
     }
@@ -566,10 +586,12 @@ function ProductGridItem({
         followedIdList={followedIdList}
         showAddToCart={showAddToCart}
         showColorVariants={showColorVariants}
+        showImageOnHover={showImageOnHover}
+        showMultipleImages={showMultipleImages}
+        imageEffects={imageEffects}
         actionButtonText={actionButtonText ?? t("resource.common.add_to_cart")}
         onWishlistClick={onWishlistClick}
         isImageFill={isImageFill}
-        showImageOnHover={showImageOnHover}
         imageBackgroundColor={imageBackgroundColor}
         imagePlaceholder={imagePlaceholder}
         handleAddToCart={handleAddToCart}

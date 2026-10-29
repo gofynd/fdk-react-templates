@@ -7,6 +7,7 @@ import * as styles from "./single-shipment-content.less";
 import { FDKLink } from "fdk-core/components";
 import { useGlobalTranslation, useNavigate } from "fdk-core/utils";
 import FreeGiftItem from "../../cart/Components/free-gift-item/free-gift-item";
+import ChipImage from "../../cart/Components/chip-item/chip-image";
 import Shimmer from "../../../components/shimmer/shimmer";
 import AppliedCouponIcon from "../../../assets/images/applied-coupon-small.svg";
 import ShippingLogoIcon from "../../../assets/images/shipping-logo.svg";
@@ -27,6 +28,7 @@ function SingleShipmentContent({
   redirectPaymentOptions,
   isPaymentLoading = false,
   isCreditNoteApplied,
+  globalConfig,
 }) {
   const { t } = useGlobalTranslation("translation");
   const navigate = useNavigate();
@@ -58,14 +60,6 @@ function SingleShipmentContent({
     return updateArr;
   };
 
-  const isGifUrl = (url = "") => /\.gif(\?|#|$)/i.test(String(url || ""));
-  const getProductImage = (product) => {
-    if (product?.product?.images?.[0]?.url) {
-      return isGifUrl(product.product.images[0].url)
-        ? product.product.images[0].url
-        : product.product.images[0].url.replace("original", "resize-w:110");
-    }
-  };
   const getProductPath = (product) => {
     return "/product/" + product.product.slug;
   };
@@ -102,8 +96,11 @@ function SingleShipmentContent({
         <div className={styles.parent}>
           {Array(3)
             .fill()
-            .map((_) => (
-              <div className={styles.reviewContentContainer}>
+            .map((_, index) => (
+              <div
+                key={`skeleton-${index}`}
+                className={styles.reviewContentContainer}
+              >
                 <div className={styles.shipmentWrapper}>
                   <div className={styles.shipmentHeading}>
                     <div className={styles.headerLeft}>
@@ -242,9 +239,10 @@ function SingleShipmentContent({
                                     },
                                   }}
                                 >
-                                  <img
-                                    src={getProductImage(product?.item)}
-                                    alt={product?.item?.product?.name}
+                                  <ChipImage
+                                    product={product?.item?.product}
+                                    type={product?.item?.item_type}
+                                    globalConfig={globalConfig}
                                   />
                                 </FDKLink>
                               </div>
@@ -254,7 +252,10 @@ function SingleShipmentContent({
                                     <div className={styles.brandName}>
                                       {product?.item?.product?.brand?.name}
                                     </div>
-                                    <div className={styles.productName}>
+                                    <div
+                                      className={styles.productName}
+                                      title={product?.item?.product?.name}
+                                    >
                                       {product?.item?.product?.name}
                                     </div>
                                   </div>
@@ -321,7 +322,14 @@ function SingleShipmentContent({
                                 </div>
                               </div>
                               <FreeGiftItem
-                                item={product?.item}
+                                item={
+                                  product?.articles?.find((article) =>
+                                    article?.promotions_applied?.some(
+                                      (p) =>
+                                        p?.promotion_type === "free_gift_items"
+                                    )
+                                  ) ?? product?.item
+                                }
                                 currencySymbol={
                                   product?.item?.price?.converted
                                     ?.currency_symbol ??

@@ -17,11 +17,13 @@ const Wishlist = ({
   totalCount = 0,
   isBrand = true,
   isSaleBadge = true,
+  isCustomBadge = true,
   isPrice = true,
   imgSrcSet,
   aspectRatio,
   isProductOpenInNewTab = false,
   showImageOnHover = false,
+  showMultipleImages = false,
   listingPrice = "range",
   RemoveIconComponent,
   isImageFill,
@@ -35,6 +37,7 @@ const Wishlist = ({
   addToCartModalProps = {},
   showAddToCart = false,
   actionButtonText,
+  imageEffects,
   globalConfig = {},
   showHeader = true,
 }) => {
@@ -88,11 +91,13 @@ const Wishlist = ({
                 product,
                 isBrand,
                 isSaleBadge,
+                isCustomBadge,
                 isPrice,
                 imgSrcSet,
                 aspectRatio,
                 isProductOpenInNewTab,
                 showImageOnHover,
+                showMultipleImages,
                 listingPrice,
                 RemoveIconComponent,
                 isImageFill,
@@ -101,6 +106,7 @@ const Wishlist = ({
                 imagePlaceholder,
                 actionButtonText,
                 showAddToCart,
+                imageEffects,
                 onRemoveClick,
                 handleAddToCart,
                 isServiceable: is_serviceable,
@@ -145,11 +151,13 @@ const WishlistProductCard = ({
   index,
   isBrand = true,
   isSaleBadge = true,
+  isCustomBadge = true,
   isPrice = true,
   imgSrcSet,
   aspectRatio,
   isProductOpenInNewTab = false,
   showImageOnHover = false,
+  showMultipleImages = false,
   listingPrice = "range",
   RemoveIconComponent,
   isImageFill,
@@ -158,6 +166,7 @@ const WishlistProductCard = ({
   imagePlaceholder,
   actionButtonText,
   showAddToCart,
+  imageEffects,
   onRemoveClick = () => {},
   handleAddToCart,
   isServiceable = true,
@@ -199,6 +208,7 @@ const WishlistProductCard = ({
         isBrand={isBrand}
         isPrice={isPrice}
         isSaleBadge={isSaleBadge}
+        isCustomBadge={isCustomBadge}
         isWishlistIcon={false}
         isRemoveIcon={true}
         RemoveIconComponent={RemoveIconComponent}
@@ -206,10 +216,13 @@ const WishlistProductCard = ({
         followedIdList={followedIdList}
         isImageFill={isImageFill}
         imageBackgroundColor={imageBackgroundColor}
-        showImageOnHover={showImageOnHover}
+        customImageContainerClass={styles.wishlistImageContainer}
         imagePlaceholder={imagePlaceholder}
         columnCount={{ desktop: 4, tablet: 3, mobile: 2 }}
         showAddToCart={showAddToCart}
+        showImageOnHover={showImageOnHover}
+        showMultipleImages={showMultipleImages}
+        imageEffects={imageEffects}
         actionButtonText={actionButtonText ?? t("resource.common.add_to_cart")}
         handleAddToCart={handleAddToCart}
         isServiceable={isServiceable}

@@ -18,6 +18,20 @@ The `AddressForm` component is designed for adding or updating an address. It pr
 
 ## Default Form Schema
 
+For dependent dropdowns, a schema field can optionally provide
+`optionDependencies` (an array of form field names) and
+`onLoadOptions(formMethods)`. Both address form versions call this callback on
+mount and when those values change, including edit defaults, `reset()` and map
+prefills. The consumer fetches the options; this callback should preserve current
+values. Keep selection changes and descendant resets in the field's `onChange`.
+Schemas without these properties keep their existing behavior.
+
+For new-address country changes, `setI18nDetails(country, draft)` receives a draft
+containing the current contact and address-type fields. Return `false` (or a
+promise resolving to `false`) if the new country's schema could not be loaded;
+the current form values will be kept. Existing callbacks returning nothing remain
+supported.
+
 The `formSchema` prop defines the structure and validation rules for the form fields. Below is the default schema used by the `AddressForm` component:
 
 ```jsx

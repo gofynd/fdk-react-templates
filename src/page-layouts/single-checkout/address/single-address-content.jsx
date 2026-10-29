@@ -6,8 +6,10 @@ import {
   useNavigate,
   useGlobalTranslation,
   useGlobalStore,
+  useFPI,
 } from "fdk-core/utils";
 import Skeleton from "../../../components/core/skeletons/skeleton";
+import { isValidErrorMessage } from "../../../helper/utils";
 
 function AddressRight({
   selectedAddressId,
@@ -43,8 +45,10 @@ function DeliverBtn({
   getTotalValue,
   showPaymentOptions,
   isCreditNoteApplied,
+  isAddressSelecting = false,
 }) {
   const { t } = useGlobalTranslation("translation");
+  const fpi = useFPI();
   const { app_features } = useGlobalStore(fpi.getters.CONFIGURATION) || {};
   const { order = {} } = app_features || {};
   return (
@@ -53,7 +57,8 @@ function DeliverBtn({
         <div className={styles.actionContainer}>
           <button
             className={styles.deliverToThis}
-            disabled={!order?.enabled}
+            disabled={!order?.enabled || isAddressSelecting}
+            aria-busy={isAddressSelecting}
             onClick={() => {
               if (getTotalValue?.() === 0 && !isCreditNoteApplied) {
                 showPaymentOptions();
@@ -72,6 +77,13 @@ function DeliverBtn({
 function InvalidAddress({ errorMessage }) {
   const { t } = useGlobalTranslation("translation");
   const navigate = useNavigate();
+
+  // Don't display generic JavaScript errors or invalid messages to users
+  // Use utility function to validate error message
+  if (!isValidErrorMessage(errorMessage)) {
+    return null;
+  }
+
   return (
     <div className={styles.invalidAddError}>
       <div className={styles.invalidAddErrorLeft}>
@@ -114,6 +126,7 @@ function SingleAddressContent({
   showPaymentOptions,
   getTotalValue,
   isCreditNoteApplied,
+  isAddressSelecting = false,
 }) {
   const { t } = useGlobalTranslation("translation");
   const [showAllOtherAddresses, setShowAllOtherAddresses] = useState(false);
@@ -171,6 +184,7 @@ function SingleAddressContent({
                           getTotalValue={getTotalValue}
                           showPaymentOptions={showPaymentOptions}
                           isCreditNoteApplied={isCreditNoteApplied}
+                          isAddressSelecting={isAddressSelecting}
                         />
                       </>
                     }
@@ -217,6 +231,7 @@ function SingleAddressContent({
                           getTotalValue={getTotalValue}
                           showPaymentOptions={showPaymentOptions}
                           isCreditNoteApplied={isCreditNoteApplied}
+                          isAddressSelecting={isAddressSelecting}
                         />
                       </>
                     }
