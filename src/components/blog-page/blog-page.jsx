@@ -60,7 +60,13 @@ function BlogPage({
   const containerRef = useRef(null);
 
   useEffect(() => {
-    if (isRunningOnClient()) {
+    const blogContent = blogDetails?.content?.[0]?.value;
+    // Load Instagram's third-party script only for posts that embed Instagram.
+    if (
+      isRunningOnClient() &&
+      typeof blogContent === "string" &&
+      /instagram/i.test(blogContent)
+    ) {
       setTimeout(() => {
         if (window.instgrm) {
           window.instgrm.Embeds.process(); // Process all embeds

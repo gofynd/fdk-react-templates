@@ -8,3 +8,6 @@ jest.config.js
 azure-pipelines.yml
 tsconfig.json
 .vscode/
+
+# Never publish CI credentials
+github_app_jwt.txt
