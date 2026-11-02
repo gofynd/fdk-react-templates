@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import * as styles from "./checkout-payment-content.less";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
 import Modal from "../../../components/core/modal/modal";
@@ -10,7 +11,6 @@ import {
   translateDynamicLabel,
 } from "../../../helper/utils";
 import Spinner from "../../../components/spinner/spinner";
-import Skeleton from "../../../components/core/skeletons/skeleton";
 import CheckoutPaymentSkeleton from "./checkout-payment-skeleton";
 import QrCodePaymet from "../../../components/payment-options/qr-code-pay";
 import UpiAppPayment from "../../../components/payment-options/upi-app-pay";
@@ -22,7 +22,269 @@ import OtherPay from "../../../components/payment-options/other-pay";
 import PayLater from "../../../components/payment-options/pay-later";
 import CardLessEmi from "../../../components/payment-options/cardless-emi-pay";
 import { useCheckoutPayment } from "../../payment/useCheckoutPayment";
-import { useFPI } from "fdk-core/utils";
+import { useFPI, useGlobalStore } from "fdk-core/utils";
+
+const APPLE_PAY_EMAIL = "rbl@gofynd.com";
+const RAZORPAY_APPLE_PAY_TAG_NAME = "razorpay-checkout";
+const RAZORPAY_APPLE_PAY_METHOD = "card";
+const RAZORPAY_APPLE_PAY_APP = { name: "apple_pay" };
+const RAZORPAY_APPLE_PAY_LOAD_TIMEOUT = 10000;
+
+const formatApplePayContact = (contact) => {
+  const value = contact?.toString().trim();
+  if (!value) return "";
+  if (value.startsWith("+")) return value;
+
+  const digits = value.replace(/\D/g, "");
+  if (digits.length === 10) return `+91${digits}`;
+  if (digits.length > 10 && digits.length === value.length) return `+${digits}`;
+  return value;
+};
+
+const isRazorpayApplePayConstructor = (Razorpay) =>
+  typeof Razorpay === "function" &&
+  typeof Razorpay.prototype?.canMakePayment === "function" &&
+  typeof Razorpay.prototype?.createPayment === "function";
+
+const loadRazorpayApplePayScript = ({ requireWebComponent = false } = {}) => {
+  if (typeof window === "undefined") {
+    return Promise.reject(new Error("Razorpay can only be loaded in a browser."));
+  }
+
+  const hasRazorpayApplePayScript = () =>
+    [...document.scripts].some((script) =>
+      /checkout\.razorpay\.com\/v1\/razorpay\.js/.test(script.src || "")
+    );
+  const isRazorpayApplePayComponentReady = () =>
+    Boolean(window.customElements?.get(RAZORPAY_APPLE_PAY_TAG_NAME));
+  const loadPromiseKey = requireWebComponent
+    ? "__rzpApplePayComponentLoadPromise"
+    : "__rzpApplePayLoadPromise";
+  const getRazorpayConstructor = () => {
+    if (isRazorpayApplePayConstructor(window.__rzpApplePay)) {
+      return window.__rzpApplePay;
+    }
+    if (isRazorpayApplePayConstructor(window.Razorpay)) {
+      window.__rzpApplePay = window.Razorpay;
+      return window.__rzpApplePay;
+    }
+    return requireWebComponent && typeof window.Razorpay === "function"
+      ? window.Razorpay
+      : null;
+  };
+  const isRazorpayReady = () =>
+    typeof getRazorpayConstructor() === "function" &&
+    hasRazorpayApplePayScript() &&
+    (!requireWebComponent || isRazorpayApplePayComponentReady());
+
+  if (isRazorpayReady()) {
+    const ApplePayRazorpay = getRazorpayConstructor();
+    return Promise.resolve(ApplePayRazorpay);
+  }
+  if (window[loadPromiseKey]) {
+    return window[loadPromiseKey];
+  }
+
+  window[loadPromiseKey] = new Promise((resolve, reject) => {
+    let interval;
+    const timeout = window.setTimeout(() => {
+      if (interval) {
+        window.clearInterval(interval);
+      }
+      window[loadPromiseKey] = null;
+      const error = new Error(
+        requireWebComponent
+          ? "Razorpay Apple Pay web component is not available."
+          : "Razorpay Apple Pay headless SDK is not available."
+      );
+      reject(error);
+    }, RAZORPAY_APPLE_PAY_LOAD_TIMEOUT);
+
+    const finishWhenReady = () => {
+      if (!isRazorpayReady()) return false;
+
+      const ApplePayRazorpay = getRazorpayConstructor();
+      window.clearTimeout(timeout);
+      window[loadPromiseKey] = null;
+      resolve(ApplePayRazorpay);
+      return true;
+    };
+
+    if (finishWhenReady()) {
+      return;
+    }
+
+    interval = window.setInterval(() => {
+      if (finishWhenReady()) {
+        window.clearInterval(interval);
+      }
+    }, 100);
+  });
+
+  return window[loadPromiseKey];
+};
+
+const getApplePayEmail = () => APPLE_PAY_EMAIL;
+
+const getApplePayAmountInSubunits = (amount) => {
+  const numericAmount = Number(amount);
+  if (!Number.isFinite(numericAmount) || numericAmount <= 0) return 0;
+  return Math.round(numericAmount * 100);
+};
+
+const isApplePayAvailable = (eligibility) => eligibility?.available === true;
+
+const getApplePayPaymentData = (response = {}) =>
+  response?.paymentData ||
+  response?.detail?.paymentData ||
+  response?.detail?.payment ||
+  response?.payment ||
+  response;
+
+const parseConfigData = (data) => {
+  if (!data) return {};
+  if (typeof data === "object") return data;
+  try {
+    return JSON.parse(data);
+  } catch {
+    return {};
+  }
+};
+
+const setApplePayDebugState = (state = {}) => {
+  if (typeof window === "undefined") return;
+  window.__RZP_APPLE_PAY_STATE__ = {
+    ...(window.__RZP_APPLE_PAY_STATE__ || {}),
+    ...state,
+    updated_at: new Date().toISOString(),
+  };
+};
+
+const isApplePayOption = (option = {}) =>
+  [option.code, option.name, option.display_name, option.merchant_code].some(
+    (value) =>
+      value?.toString().toLowerCase().replace(/[\s_-]/g, "") === "applepay"
+  );
+
+const findApplePayOption = (paymentOptions = []) => {
+  for (const paymentOption of paymentOptions || []) {
+    const option = paymentOption?.list?.find(isApplePayOption);
+    if (option) return { parent: paymentOption, option };
+  }
+  return null;
+};
+
+const getApplePayOptionKey = (applePayPaymentOption) =>
+  [
+    applePayPaymentOption?.parent?.name,
+    applePayPaymentOption?.option?.aggregator_name,
+    applePayPaymentOption?.option?.merchant_code,
+    applePayPaymentOption?.option?.code,
+  ]
+    .filter(Boolean)
+    .join(":");
+
+const getApplePayEligibilityKey = ({
+  applePayPaymentOption,
+  cartId,
+  addressId,
+  billingAddressId,
+  amount,
+  currencyCode,
+  razorpayKey,
+}) =>
+  [
+    cartId,
+    getApplePayOptionKey(applePayPaymentOption),
+    addressId,
+    billingAddressId || addressId,
+    amount,
+    currencyCode || "INR",
+    razorpayKey,
+  ]
+    .filter(Boolean)
+    .join(":");
+
+const getApplePayRazorpayKeyFromConfig = ({
+  applePayPaymentOption,
+  paymentOption,
+  paymentConfig,
+}) => {
+  const applePayAggregator =
+    applePayPaymentOption?.option?.aggregator_name ||
+    applePayPaymentOption?.parent?.aggregator_name ||
+    "razorpay";
+  const normalizedAggregator = applePayAggregator?.toLowerCase();
+  const flowData = parseConfigData(
+    paymentOption?.payment_flows?.[normalizedAggregator]?.data ||
+      paymentOption?.payment_flows?.razorpay?.data
+  );
+  const aggregatorData = parseConfigData(
+    paymentOption?.aggregator_details?.find(
+      (item) =>
+        item?.aggregator_key?.toLowerCase() === normalizedAggregator ||
+        item?.aggregator_key?.toLowerCase() === "razorpay"
+    )?.data
+  );
+  const candidates = [
+    paymentConfig?.razorpay?.key,
+    paymentConfig?.Razorpay?.key,
+    flowData?.key,
+    flowData?.merchant_key,
+    aggregatorData?.key,
+    aggregatorData?.merchant_key,
+    paymentConfig?.razorpay?.merchant_key,
+    paymentConfig?.Razorpay?.merchant_key,
+  ].filter(Boolean);
+
+  return (
+    candidates.find((key) => /^rzp_(test|live)_/i.test(key)) || candidates[0]
+  );
+};
+
+const getApplePayCheckoutCart = (checkoutResponse) =>
+  checkoutResponse?.payload?.data?.checkoutCart ||
+  checkoutResponse?.data?.checkoutCart ||
+  checkoutResponse?.checkoutCart ||
+  checkoutResponse;
+
+const normalizeApplePayOrderData = (checkoutCart = {}, fallbackKey = "") => {
+  const orderData = checkoutCart?.data || {};
+  const contact = formatApplePayContact(orderData?.contact);
+  return {
+    ...orderData,
+    key: orderData?.key || fallbackKey,
+    callback_url: orderData?.callback_url || checkoutCart?.callback_url,
+    contact,
+    email: getApplePayEmail(orderData?.email),
+    app: RAZORPAY_APPLE_PAY_APP,
+  };
+};
+
+const createApplePayCheckoutOrder = async ({ proceedToPay, fallbackKey }) => {
+
+  const checkoutResponse = await proceedToPay("APPLEPAY", {
+    silent: true,
+  });
+  const checkoutCart = getApplePayCheckoutCart(checkoutResponse);
+  const orderData = normalizeApplePayOrderData(checkoutCart, fallbackKey);
+
+  if (!checkoutCart?.success || !orderData?.order_id) {
+    const error = new Error(
+      checkoutCart?.message || "Unable to start Apple Pay."
+    );
+    throw error;
+  }
+
+  return {
+    checkoutCart: {
+      ...checkoutCart,
+      data: orderData,
+    },
+    orderData,
+  };
+};
+
 
 function CheckoutPaymentContent({
   payment,
@@ -70,85 +332,7 @@ function CheckoutPaymentContent({
     isPaymentLoading,
     isUPIError,
     mopSelectionLoading,
-    isPaymentDisabled = false,
-    isPaymentOptionsRefreshing,
-    splitPaymentConfig,
-    onSplitPaymentChange,
-    onSplitPaymentAmountChange,
-    onSplitPaymentAmountBlur,
-    onSplitCodBack,
-    onSplitCodContinue,
   } = payment;
-  const shouldDefaultSelectSplitPayment =
-    splitPaymentConfig?.defaultSelected === true;
-  const isResumeSplitPayment =
-    splitPaymentConfig?.isResumeSplitPayment === true ||
-    splitPaymentConfig?.is_resume_split_payment === true;
-  const [isSplitPaymentSelected, setIsSplitPaymentSelected] = useState(
-    shouldDefaultSelectSplitPayment
-  );
-  const [splitPaymentAmount, setSplitPaymentAmount] = useState("");
-  const [splitPaymentAmountError, setSplitPaymentAmountError] = useState("");
-  const [
-    shouldEnableSplitPaymentAfterCouponRemoval,
-    setShouldEnableSplitPaymentAfterCouponRemoval,
-  ] = useState(false);
-  const [isSplitPaymentCouponValidating, setIsSplitPaymentCouponValidating] =
-    useState(false);
-  const [showSplitCreditNoteConfirmation, setShowSplitCreditNoteConfirmation] =
-    useState(false);
-  const [
-    shouldApplyCreditNoteWithSplitPayment,
-    setShouldApplyCreditNoteWithSplitPayment,
-  ] = useState(false);
-  const [isSplitCreditNoteProceeding, setIsSplitCreditNoteProceeding] =
-    useState(false);
-  const splitCreditNoteProceedingRef = useRef(false);
-  const splitPaymentAmountRef = useRef(null);
-  const [isSplitCodScrollReady, setIsSplitCodScrollReady] = useState(false);
-  const splitCouponMopValidationRef = useRef("");
-  const skipNextSplitCouponMopValidationRef = useRef(false);
-  const isTruthyValue = (value) =>
-    value === true || String(value).toLowerCase() === "true";
-  const getStoreCreditBreakupAmount = () => {
-    const storeCreditBreakup = Array.isArray(breakUpValues)
-      ? breakUpValues.find((item) => item?.key === "store_credit")?.value
-      : breakUpValues?.store_credit;
-    const amount = Number(String(storeCreditBreakup || "").replace(/[^\d.]/g, ""));
-
-    return Number.isFinite(amount) ? amount : 0;
-  };
-  const isCreditNoteAppliedForSplit =
-    isTruthyValue(splitPaymentConfig?.isCreditNoteApplied) ||
-    isTruthyValue(splitPaymentConfig?.is_credit_note_applied) ||
-    getStoreCreditBreakupAmount() > 0 ||
-    partialPaymentOption?.list?.some((option) =>
-      isTruthyValue(option?.balance?.is_applied)
-    );
-
-  useEffect(() => {
-    const isTruthySplitFlag = (value) =>
-      value === true || String(value).toLowerCase() === "true";
-    const isSplitCodPreviewConfig =
-      isTruthySplitFlag(splitPaymentConfig?.is_split_cod_available) &&
-      !isTruthySplitFlag(splitPaymentConfig?.isSplitCodPaymentActive);
-
-    setIsSplitPaymentSelected(() => {
-      const nextValue = shouldDefaultSelectSplitPayment;
-
-      if (!nextValue && !isSplitCodPreviewConfig) {
-        setSplitPaymentAmount("");
-        setSplitPaymentAmountError("");
-      }
-
-      return nextValue;
-    });
-  }, [
-    shouldDefaultSelectSplitPayment,
-    splitPaymentConfig?.enabled,
-    splitPaymentConfig?.is_split_cod_available,
-    splitPaymentConfig?.isSplitCodPaymentActive,
-  ]);
 
   // destructure exactly what the JSX (and the local prop-bundles) needs
   const {
@@ -157,15 +341,13 @@ function CheckoutPaymentContent({
     isTablet,
     isChromeOrSafari,
     // payment data
-    paymentOptions,
+    paymentOptions: basePaymentOptions,
     otherPaymentOptions,
     codOption,
     // for coupon modal (your return uses these)
     showCouponValidityModal,
     setShowCouponValidityModal,
     couponValidity,
-    setCouponValidity,
-    isCouponValidationLoading,
     // card state
     addNewCard,
     getCardBorder,
@@ -214,8 +396,6 @@ function CheckoutPaymentContent({
     isQrCodeVisible,
     qrCodeImage,
     countdown,
-    setCountdown,
-    initializeOrResetQrPayment,
     setTab,
     mop,
     subMop,
@@ -292,688 +472,807 @@ function CheckoutPaymentContent({
     handleProceedToPayClick,
   } = checkoutPayment;
 
-  const uiProps = { styles, t, SvgWrapper, StickyPayNow, isTablet };
+  const [searchParams] = useSearchParams();
+  const cart_id = searchParams.get("id");
+  const address_id = searchParams.get("address_id");
+  const billing_address_id = searchParams.get("billing_address_id");
   const fpi = useFPI();
-  const getPayNowValue =
-    typeof payment?.getPayNowValue === "function"
-      ? payment.getPayNowValue
-      : getTotalValue;
-  const isPaymentActionDisabled = Boolean(
-    isPaymentDisabled ||
-      isCouponValidationLoading ||
-      isSplitPaymentCouponValidating
+  const paymentConfig = useGlobalStore(fpi?.getters?.AGGREGATORS_CONFIG);
+  const cartData = useGlobalStore(fpi?.getters?.CART_ITEMS);
+  const currencyCode = cartData?.currency?.code || "INR";
+  let paymentOptions = basePaymentOptions;
+  const applePayPaymentOption = useMemo(
+    () => findApplePayOption(paymentOption?.payment_option),
+    [paymentOption]
   );
-  const amountProps = { getCurrencySymbol, getTotalValue: getPayNowValue };
-  const shouldShowFullPaymentSkeleton =
-    isLoading && !isPaymentOptionsRefreshing;
-  const isSplitPaymentEnabled = splitPaymentConfig?.enabled === true;
-  const isSplitPaymentCheckboxDisabled =
-    splitPaymentConfig?.checkboxDisabled === true ||
-    splitPaymentConfig?.disableCheckbox === true ||
-    splitPaymentConfig?.isCheckboxDisabled === true;
-  const isSplitPaymentActionDisabled =
-    isSplitPaymentCheckboxDisabled || isSplitPaymentCouponValidating;
-  const isSplitPaymentLoading = splitPaymentConfig?.isLoading === true;
-  const shouldShowSplitPaymentOptions =
-    isSplitPaymentEnabled && isSplitPaymentSelected;
-  const shouldScrollBeforeCodModal = isTablet && shouldShowSplitPaymentOptions;
+
+  const applePayContainerRef = useRef(null);
+  const applePayComponentRef = useRef(null);
+  const applePayAttemptedOrdersRef = useRef(new Set());
+  const applePayInitializationRef = useRef(false);
+  const applePayRequestIdRef = useRef(0);
+  const applePayCallbackSubmittedRef = useRef(false);
+  const applePayPaymentInFlightRef = useRef(false);
+  const applePayContextRef = useRef(null);
+  const applePayOrderRef = useRef(null);
+  const applePayRazorpayRef = useRef(null);
+  const applePayEligibilityKeyRef = useRef("");
+  const [applePayOrder, setApplePayOrder] = useState(null);
+  const [isApplePayScriptLoaded, setIsApplePayScriptLoaded] = useState(false);
+  const [applePayStatus, setApplePayStatus] = useState("idle");
+  const [applePayMobileEligibility, setApplePayMobileEligibility] =
+    useState("idle");
+  const [isApplePayViewportReady, setIsApplePayViewportReady] = useState(false);
 
   useEffect(() => {
-    if (!isCodModalOpen || !shouldScrollBeforeCodModal) {
-      setIsSplitCodScrollReady(false);
-      return;
-    }
-
-    const amountField = splitPaymentAmountRef.current;
-    if (amountField) {
-      const headerHeight =
-        document.querySelector(".fdk-theme-header")?.getBoundingClientRect().height ||
-        parseFloat(
-          getComputedStyle(document.documentElement).getPropertyValue("--headerHeight")
-        ) || 0;
-      const previousScrollMargin = amountField.style.scrollMarginTop;
-      amountField.style.scrollMarginTop = `${headerHeight + 16}px`;
-      // Scroll the rendered COD layout before mounting the modal's scroll lock.
-      amountField.scrollIntoView({ behavior: "instant", block: "start" });
-      amountField.style.scrollMarginTop = previousScrollMargin;
-    }
-    setIsSplitCodScrollReady(true);
-  }, [isCodModalOpen, shouldScrollBeforeCodModal, selectedTab, isSplitPaymentLoading]);
-  const hasStoreCreditOption =
-    paymentOption?.payment_option?.some(
-      (option) =>
-        option?.name === "CREDITNOTE" &&
-        option?.list?.some((item) => item?.partial_payment_allowed)
-    ) ?? false;
-  const shouldShowStoreCredit =
-    (enableLinkPaymentOption ||
-      (payment?.arePaymentOptionsReady !== false && hasStoreCreditOption)) &&
-    partialPaymentOption?.list[0]?.balance?.account?.status !== "INACTIVE" &&
-    !shouldShowSplitPaymentOptions &&
-    splitPaymentConfig?.hideStoreCredit !== true;
-  const shouldHidePaymentOptions =
-    !getTotalValue() && !shouldShowSplitPaymentOptions;
-  const splitPaymentCurrencySymbol =
-    splitPaymentConfig?.amountPrefix ||
-    (typeof getCurrencySymbol === "function"
-      ? getCurrencySymbol()
-      : getCurrencySymbol) ||
-    "₹";
-  const splitPaymentCount =
-    splitPaymentConfig?.splitCount || splitPaymentConfig?.availableSplits || 0;
-  const splitPaymentLabel = splitPaymentConfig?.label || "Split Payment";
-  const splitPaymentAvailabilityLabel =
-    splitPaymentConfig?.availabilityLabel ||
-    `${splitPaymentCount} splits available`;
-  const splitPaymentInputLabel =
-    splitPaymentConfig?.inputLabel || "Enter Amount";
-  const isResumeSplitCodSelected =
-    isResumeSplitPayment && selectedTab === "COD";
-  const resumeSplitCodMessage = t("resource.checkout.resume_split_cod_message");
-  const splitPaymentInputAssistiveText =
-    splitPaymentConfig?.assistiveText ||
-    "Specify amount that you want to process for the payment";
-  const splitPaymentInputErrorText =
-    splitPaymentConfig?.errorText ||
-    "Split amount should be less than the total amount";
-  const splitPaymentMinAmountErrorText =
-    splitPaymentConfig?.minAmountErrorText || "Split amount should be at least";
-  const splitPaymentRemainingAmountErrorText =
-    splitPaymentConfig?.remainingAmountErrorText ||
-    "Split amount should not be greater than remaining amount";
-  const shouldAllowFullSplitAmount =
-    splitPaymentConfig?.allowFullAmount === true ||
-    splitPaymentConfig?.allowFullRemainingAmount === true;
-  const isTruthySplitCodFlag = (value) =>
-    value === true || String(value).toLowerCase() === "true";
-  const isSplitCodAvailable = isTruthySplitCodFlag(
-    splitPaymentConfig?.is_split_cod_available ??
-      splitPaymentConfig?.isSplitCodAvailable
+    setIsApplePayViewportReady(true);
+  }, []);
+  const shouldShowApplePayOption =
+    Boolean(applePayPaymentOption) &&
+    !enableLinkPaymentOption &&
+    (!isTablet || applePayMobileEligibility === "available") &&
+    applePayStatus !== "unavailable";
+  const applePayLogoUrl = applePayPaymentOption?.option?.logo_url?.small;
+  if (applePayLogoUrl) {
+    paymentOptions = paymentOptions?.map((option) =>
+      option?.name === "WL"
+        ? {
+            ...option,
+            subMopIcons: option?.subMopIcons?.filter(
+              (icon) => icon !== applePayLogoUrl
+            ),
+          }
+        : option
+    );
+  }
+  const cardOptionIndex = paymentOptions?.findIndex(
+    (option) => option.name === "CARD"
   );
-  const isSplitCodPaymentActive = isTruthySplitCodFlag(
-    splitPaymentConfig?.isSplitCodPaymentActive
-  );
-  const shouldHideSplitPaymentAmountField = isTruthySplitCodFlag(
-    splitPaymentConfig?.hideAmountInput ?? splitPaymentConfig?.hide_amount_input
-  );
+  const applePayParentOption =
+    shouldShowApplePayOption
+      ? {
+          display_name: "Apple Pay",
+          name: "APPLEPAY",
+          svg: "wallet",
+          subMopIcons: applePayLogoUrl ? [applePayLogoUrl] : [],
+        }
+      : null;
 
-  useEffect(() => {
-    const shouldValidateSplitCouponFirst =
-      isTruthySplitCodFlag(splitPaymentConfig?.shouldValidateSplitCouponFirst) ||
-      isTruthySplitCodFlag(splitPaymentConfig?.should_validate_split_coupon_first);
-    const selectedSubMopCode = selectedTabData?.list?.[0]?.code;
-    const preselectTabs = ["NB", "WL", "PL", "CARDLESS_EMI", "Other"];
+  if (applePayParentOption) {
+    paymentOptions =
+      cardOptionIndex >= 0
+        ? [
+            ...paymentOptions.slice(0, cardOptionIndex + 1),
+            applePayParentOption,
+            ...paymentOptions.slice(cardOptionIndex + 1),
+          ]
+        : [applePayParentOption, ...paymentOptions];
+  }
 
-    if (
-      !isSplitPaymentSelected ||
-      !isCouponApplied ||
-      !shouldValidateSplitCouponFirst ||
-      enableLinkPaymentOption ||
-      !preselectTabs.includes(selectedTab) ||
-      !selectedSubMopCode
-    ) {
-      if (!isSplitPaymentSelected || !shouldValidateSplitCouponFirst) {
-        splitCouponMopValidationRef.current = "";
-      }
-      return;
-    }
+  const applePayAmount = getTotalValue?.();
+  const applePayRazorpayKey = getApplePayRazorpayKeyFromConfig({
+    applePayPaymentOption,
+    paymentOption,
+    paymentConfig,
+  });
+  const applePayEligibilityKey = getApplePayEligibilityKey({
+    applePayPaymentOption,
+    cartId: cart_id,
+    addressId: address_id,
+    billingAddressId: billing_address_id,
+    amount: applePayAmount,
+    currencyCode,
+    razorpayKey: applePayRazorpayKey,
+  });
+  applePayContextRef.current = {
+    key: applePayEligibilityKey,
+    isTablet,
+    isPaymentLoading,
+    checkoutError: disbaleCheckout?.message,
+  };
+  const isApplePaySubmitting = applePayStatus === "submitting";
 
-    const selectedMop =
-      selectedTab === "Other" ? selectedTabData?.name : selectedTab;
-    const requestKey = `${selectedTab}|${selectedMop}|${selectedSubMopCode}`;
-
-    if (splitCouponMopValidationRef.current === requestKey) {
-      return;
-    }
-
-    const shouldSkipSplitCouponValidation =
-      skipNextSplitCouponMopValidationRef.current;
-
-    skipNextSplitCouponMopValidationRef.current = false;
-    splitCouponMopValidationRef.current = requestKey;
-    selectMop(selectedTab, selectedMop, selectedSubMopCode, {
-      skipSplitCouponValidation: shouldSkipSplitCouponValidation,
+  const resetApplePay = () => {
+    applePayRequestIdRef.current += 1;
+    applePayInitializationRef.current = false;
+    applePayCallbackSubmittedRef.current = false;
+    applePayPaymentInFlightRef.current = false;
+    applePayOrderRef.current = null;
+    applePayRazorpayRef.current = null;
+    applePayEligibilityKeyRef.current = "";
+    setApplePayOrder(null);
+    setIsApplePayScriptLoaded(false);
+    setApplePayStatus("idle");
+    setApplePayMobileEligibility("idle");
+    setApplePayDebugState({
+      status: "idle",
+      available: false,
+      eligibility: null,
+      can_make_payment_request: null,
+      can_make_payment_response: null,
+      create_payment_request: null,
     });
-  }, [
-    enableLinkPaymentOption,
-    isCouponApplied,
-    isSplitPaymentSelected,
-    selectedTab,
-    selectedTabData?.list?.[0]?.code,
-    selectedTabData?.name,
-    splitPaymentConfig?.shouldValidateSplitCouponFirst,
-    splitPaymentConfig?.should_validate_split_coupon_first,
-  ]);
-
-  const formatSplitPaymentAmount = (amount) =>
-    amount
-      ? priceFormatCurrencySymbol(
-          splitPaymentCurrencySymbol,
-          amount,
-          "en-IN",
-          null,
-          true
-        )
-      : "";
-
-  const getNumericAmount = (amount) => {
-    const numericAmount = Number(String(amount || "").replace(/[^\d.]/g, ""));
-
-    return Number.isFinite(numericAmount) ? numericAmount : 0;
   };
-  const getRoundedCurrencyAmount = (amount) =>
-    Math.round((Number(amount) + Number.EPSILON) * 100) / 100;
 
-  const getBreakupValue = (key) => {
-    if (Array.isArray(breakUpValues)) {
-      return breakUpValues.find(
-        (value) => value?.key === key || value?.name === key
-      )?.value;
+  const submitApplePayCallback = (response, orderData) => {
+    if (applePayCallbackSubmittedRef.current) {
+      return;
     }
 
-    return breakUpValues?.[key];
-  };
-
-  const getSplitCreditNoteAmount = () => {
-    const appliedCreditNoteOption =
-      partialPaymentOption?.list?.find((option) =>
-        isTruthyValue(option?.balance?.is_applied)
-      ) ||
-      partialPaymentOption?.list?.[0] ||
-      {};
-    const balance = appliedCreditNoteOption?.balance || {};
-    const account = balance?.account || appliedCreditNoteOption?.account || {};
-
-    return (
-      [
-        getBreakupValue("store_credit"),
-        appliedCreditNoteOption?.amount,
-        appliedCreditNoteOption?.value,
-        appliedCreditNoteOption?.applied_amount,
-        appliedCreditNoteOption?.appliedAmount,
-        balance?.amount,
-        balance?.value,
-        balance?.applied_amount,
-        balance?.appliedAmount,
-        balance?.amount_on_hold?.amount,
-        account?.amount_on_hold?.amount,
-        balance?.redeemable_balance?.amount,
-        account?.redeemable_balance?.amount,
-        balance?.available_balance?.amount,
-        account?.available_balance?.amount,
-      ]
-        .map((amount) => getNumericAmount(amount))
-        .find((amount) => amount > 0) || 0
+    const paymentData = getApplePayPaymentData(response);
+    const callbackOrderData = orderData || applePayOrderRef.current?.data;
+    const requiredFields = [
+      "razorpay_payment_id",
+      "razorpay_order_id",
+      "razorpay_signature",
+    ];
+    const hasRequiredPaymentData = requiredFields.every(
+      (field) => paymentData?.[field]
     );
-  };
+    const matchesPreparedOrder =
+      paymentData?.razorpay_order_id === callbackOrderData?.order_id;
 
-  const getFormattedSplitLimitAmount = (amount) =>
-    priceFormatCurrencySymbol(
-      splitPaymentCurrencySymbol,
-      amount,
-      "en-IN",
-      null,
-      true
-    );
-
-  const getMinTransactionAmount = (baseAmount) => {
-    const minTransactionLimit =
-      splitPaymentConfig?.minTransactionLimit ||
-      splitPaymentConfig?.min_transaction_limit ||
-      {};
-    const minTransactionValue = getNumericAmount(
-      splitPaymentConfig?.minTransactionAmount ?? minTransactionLimit?.value
-    );
-    const minTransactionLimitType = String(
-      minTransactionLimit?.limit_type || minTransactionLimit?.limitType || ""
-    )
-      .trim()
-      .toLowerCase();
-    const minTransactionBaseAmount = getNumericAmount(
-      splitPaymentConfig?.minTransactionBaseAmount ??
-        splitPaymentConfig?.min_transaction_base_amount
-    );
-
-    if (!minTransactionValue) {
-      return 0;
+    if (
+      !hasRequiredPaymentData ||
+      !callbackOrderData?.callback_url ||
+      !matchesPreparedOrder
+    ) {
+      handleShowFailedMessage({
+        failed: true,
+        paymentErrMsg:
+          "Apple Pay completed, but payment confirmation data is incomplete.",
+      });
+      applePayPaymentInFlightRef.current = false;
+      setApplePayStatus("ready");
+      return;
     }
 
-    if (minTransactionLimitType === "percentage") {
-      return (
-        ((minTransactionBaseAmount || getNumericAmount(baseAmount)) *
-          minTransactionValue) /
-        100
+    applePayCallbackSubmittedRef.current = true;
+    setApplePayStatus("submitting");
+
+    const callbackForm = document.createElement("form");
+    callbackForm.method = "POST";
+    callbackForm.action = callbackOrderData.callback_url;
+    callbackForm.style.display = "none";
+    requiredFields.forEach((field) => {
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = field;
+      input.value = paymentData[field];
+      callbackForm.appendChild(input);
+    });
+    document.body.appendChild(callbackForm);
+    callbackForm.submit();
+  };
+
+  const handleApplePayFailure = (response = {}) => {
+    if (applePayCallbackSubmittedRef.current) {
+      return;
+    }
+    applePayCallbackSubmittedRef.current = false;
+    applePayPaymentInFlightRef.current = false;
+    setApplePayStatus("ready");
+
+    const error = response?.error || response;
+    const errorCode = error?.code || error?.reason || error?.errorCode;
+    const isCancelled =
+      errorCode === "PAYMENT_CANCELLED" ||
+      errorCode === "payment_cancelled" ||
+      error?.reason === "payment_cancelled";
+    const message = isCancelled
+      ? "Apple Pay was cancelled. You can try again or choose another payment method."
+      : error?.description || error?.message || "Apple Pay payment failed.";
+
+    handleShowFailedMessage({
+      failed: true,
+      paymentErrMsg: message,
+    });
+  };
+
+  const createApplePayOrderData = async (requestId) => {
+    const { checkoutCart, orderData } = await createApplePayCheckoutOrder({
+      proceedToPay,
+      fallbackKey: applePayRazorpayKey,
+    });
+
+    if (applePayRequestIdRef.current !== requestId) return null;
+
+    if (!checkoutCart?.success || !orderData?.order_id) {
+      const error = new Error(
+        checkoutCart?.message || "Unable to start Apple Pay."
       );
+      throw error;
     }
 
-    return minTransactionValue;
+    const missingConfiguration = [
+      ["key", orderData.key],
+      ["order_id", orderData.order_id],
+      ["callback_url", orderData.callback_url],
+    ].find(([, value]) => !value)?.[0];
+
+    if (missingConfiguration) {
+      const error = new Error(
+        `Apple Pay configuration is missing ${missingConfiguration}.`
+      );
+      throw error;
+    }
+
+    const normalizedOrder = {
+      ...checkoutCart,
+      data: orderData,
+    };
+    applePayOrderRef.current = normalizedOrder;
+    setApplePayOrder(normalizedOrder);
+    setApplePayDebugState({
+      order_created: true,
+      has_order_id: Boolean(orderData.order_id),
+      has_callback_url: Boolean(orderData.callback_url),
+      key_source: "checkout_order",
+    });
+
+    return orderData;
   };
 
-  const getSplitPaymentAmountError = (amount) => {
-    const hasSplitAmount = String(amount ?? "").trim() !== "";
-    const splitAmount = getNumericAmount(amount);
-    const totalAmount = getNumericAmount(getTotalValue?.());
-    const splitPaymentTotalAmount = getNumericAmount(
-      splitPaymentConfig?.totalAmount ?? splitPaymentConfig?.total_amount
-    );
-    const remainingAmount = getNumericAmount(
-      splitPaymentConfig?.remainingAmount ??
-        splitPaymentConfig?.remaining_amount
-    );
-    const minTransactionAmount = getMinTransactionAmount(
-      splitPaymentTotalAmount || totalAmount
-    );
-
-    if (
-      hasSplitAmount &&
-      minTransactionAmount &&
-      splitAmount < minTransactionAmount
-    ) {
-      return `${splitPaymentMinAmountErrorText} ${getFormattedSplitLimitAmount(
-        minTransactionAmount
-      )}`;
-    }
-
-    if (hasSplitAmount && remainingAmount && splitAmount > remainingAmount) {
-      return `${splitPaymentRemainingAmountErrorText} ${getFormattedSplitLimitAmount(
-        remainingAmount
-      )}`;
-    }
-
-    if (
-      hasSplitAmount &&
-      !isCreditNoteAppliedForSplit &&
-      totalAmount &&
-      (shouldAllowFullSplitAmount
-        ? splitAmount > totalAmount
-        : splitAmount >= totalAmount)
-    ) {
-      return splitPaymentInputErrorText;
-    }
-
-    return "";
-  };
-
-  const getDefaultSplitPaymentAmount = () => {
-    const configuredAmount = splitPaymentConfig?.defaultAmount;
-    const amount = configuredAmount ?? "";
-
-    return amount ? String(amount) : "";
-  };
-
-  const normalizeSplitPaymentAmountInput = (value) => {
-    const sanitizedValue = String(value || "").replace(/[^\d.]/g, "");
-    const decimalPointCount = (sanitizedValue.match(/\./g) || []).length;
-
-    if (decimalPointCount > 1) {
+  const createApplePayRazorpayInstance = (Razorpay, orderData) => {
+    const contact = formatApplePayContact(orderData.contact);
+    if (!contact) {
+      setApplePayStatus("waiting_for_contact");
+      setApplePayMobileEligibility("waiting_for_contact");
+      setApplePayDebugState({
+        status: "waiting_for_contact",
+        has_contact: false,
+        has_prefill_contact: false,
+        available: false,
+        can_make_payment_request: null,
+        can_make_payment_response: null,
+      });
       return null;
     }
 
-    const [wholeAmount = "", decimalAmount = ""] = sanitizedValue.split(".");
-
-    if (!sanitizedValue.includes(".")) {
-      return wholeAmount;
-    }
-
-    return `${wholeAmount}.${decimalAmount.slice(0, 2)}`;
-  };
-  const splitPaymentEnteredAmount = getNumericAmount(splitPaymentAmount);
-  const splitPaymentTotalAmount = getNumericAmount(
-    splitPaymentConfig?.totalAmount ?? splitPaymentConfig?.total_amount
-  );
-  const splitPaymentCheckoutTotalAmount =
-    splitPaymentTotalAmount || getNumericAmount(getTotalValue?.());
-  const splitPaymentMinimumTransactionAmount = getMinTransactionAmount(
-    splitPaymentCheckoutTotalAmount
-  );
-  const isSplitPaymentTotalBelowMinTransaction = Boolean(
-    splitPaymentCheckoutTotalAmount &&
-      splitPaymentMinimumTransactionAmount &&
-      splitPaymentCheckoutTotalAmount < splitPaymentMinimumTransactionAmount
-  );
-  const splitPaymentCodBaseAmount =
-    getNumericAmount(
-      splitPaymentConfig?.splitCodTotalAmount ??
-        splitPaymentConfig?.split_cod_total_amount
-    ) ||
-    splitPaymentTotalAmount ||
-    getNumericAmount(getTotalValue?.());
-  const splitPaymentCodPayableAmount = getRoundedCurrencyAmount(
-    getMinTransactionAmount(splitPaymentCodBaseAmount) ||
-      splitPaymentEnteredAmount
-  );
-  const splitPaymentCodDeliveryAmount = getRoundedCurrencyAmount(
-    Math.max(splitPaymentCodBaseAmount - splitPaymentCodPayableAmount, 0)
-  );
-  const hasValidSplitCodAmount = Boolean(
-    isSplitCodAvailable && splitPaymentCodPayableAmount > 0
-  );
-  const shouldShowSplitCodAction = Boolean(
-    isSplitCodAvailable &&
-      !isSplitCodPaymentActive &&
-      !isSplitPaymentTotalBelowMinTransaction
-  );
-  const formattedSplitPaymentCodAmount = hasValidSplitCodAmount
-    ? getFormattedSplitLimitAmount(splitPaymentCodPayableAmount)
-    : "";
-  const formattedSplitPaymentCodDeliveryAmount = hasValidSplitCodAmount
-    ? getFormattedSplitLimitAmount(splitPaymentCodDeliveryAmount)
-    : "";
-
-  const handleSplitPaymentAmountChange = (event) => {
-    const normalizedAmount = normalizeSplitPaymentAmountInput(
-      event.target.value
+    const amount = Number(
+      orderData.amount || getApplePayAmountInSubunits(applePayAmount)
     );
-
-    if (normalizedAmount === null) {
-      return;
+    const currency = (orderData.currency || currencyCode || "INR")
+      .toString()
+      .trim()
+      .toUpperCase();
+    if (!Number.isSafeInteger(amount) || amount <= 0) {
+      throw new Error("Apple Pay requires a positive amount in currency subunits.");
     }
-
-    const errorMessage = getSplitPaymentAmountError(normalizedAmount);
-
-    setSplitPaymentAmount(normalizedAmount);
-    setSplitPaymentAmountError(errorMessage);
-    onSplitPaymentAmountChange?.(
-      errorMessage ? "" : formatSplitPaymentAmount(normalizedAmount)
-    );
-  };
-
-  const handleSplitPaymentAmountBlur = () => {
+    if (!/^[A-Z]{3}$/.test(currency)) {
+      throw new Error("Apple Pay currency is invalid.");
+    }
     if (
-      !isSplitPaymentSelected ||
-      splitPaymentAmountError ||
-      !splitPaymentAmount
+      amount !== getApplePayAmountInSubunits(applePayAmount) ||
+      currency !== (currencyCode || "INR").toString().trim().toUpperCase()
     ) {
-      return;
+      throw new Error("Checkout total or currency has changed. Please try again.");
     }
 
-    onSplitPaymentAmountBlur?.(formatSplitPaymentAmount(splitPaymentAmount));
-  };
-  const handleSplitCodContinue = () => {
-    const splitCodAmount = String(splitPaymentCodPayableAmount || "");
-    const errorMessage = splitCodAmount
-      ? getSplitPaymentAmountError(splitCodAmount)
-      : "";
-
-    setSplitPaymentAmountError(errorMessage);
-
-    if (!splitPaymentCodPayableAmount) {
-      return;
-    }
-
-    const handleSplitCodContinueAction =
-      onSplitCodContinue || splitPaymentConfig?.onSplitCodContinue;
-
-    if (typeof handleSplitCodContinueAction === "function") {
-      handleSplitCodContinueAction(formatSplitPaymentAmount(splitCodAmount));
-      return;
-    }
-    if (errorMessage) {
-      return;
-    }
-    onSplitPaymentAmountBlur?.(formatSplitPaymentAmount(splitCodAmount));
-  };
-  const handleSplitCodBack = () => {
-    onSplitCodBack?.();
-  };
-  const splitCodAction = {
-    buttonLabel: `Continue To Pay${
-      formattedSplitPaymentCodAmount ? ` ${formattedSplitPaymentCodAmount}` : ""
-    }`,
-    disabled: !hasValidSplitCodAmount,
-    title: hasValidSplitCodAmount
-      ? `Pay ${formattedSplitPaymentCodAmount} now & ${formattedSplitPaymentCodDeliveryAmount} on Delivery`
-      : "",
-    visible: shouldShowSplitCodAction,
-    onContinue: handleSplitCodContinue,
-  };
-
-  const applySplitPaymentSelection = (nextValue, options = {}) => {
-    const nextAmount = nextValue
-      ? splitPaymentAmount || getDefaultSplitPaymentAmount()
-      : "";
-    const errorMessage = nextValue
-      ? getSplitPaymentAmountError(nextAmount)
-      : "";
-    const shouldIncludeCreditNote =
-      nextValue &&
-      (options?.includeCreditNote === true || isCreditNoteAppliedForSplit);
-    const creditNoteAmount = shouldIncludeCreditNote
-      ? getSplitCreditNoteAmount()
-      : 0;
-
-    setIsSplitPaymentSelected(nextValue);
-    setSplitPaymentAmount(nextAmount);
-    setSplitPaymentAmountError(errorMessage);
-    onSplitPaymentChange?.(nextValue, {
-      ...options,
-      amount: nextAmount,
-      splitPaymentAmount: nextAmount,
-      ...(shouldIncludeCreditNote
-        ? {
-            includeCreditNote: true,
-            include_credit_note: true,
-          }
-        : {}),
-      ...(creditNoteAmount
-        ? {
-            creditNoteAmount,
-            credit_note_amount: creditNoteAmount,
-          }
-        : {}),
-    });
-    onSplitPaymentAmountChange?.(
-      errorMessage ? "" : formatSplitPaymentAmount(nextAmount)
-    );
-    if (!nextValue) {
-      setShouldApplyCreditNoteWithSplitPayment(false);
-    }
-  };
-
-  const continueSplitPaymentSelection = async (nextValue, options = {}) => {
-    if (
-      nextValue &&
-      isCouponApplied &&
-      isSplitPaymentTotalBelowMinTransaction
-    ) {
-      const includeCreditNote =
-        options?.includeCreditNote === true || isCreditNoteAppliedForSplit;
-
-      setCouponValidity({
-        title: t(
-          "resource.dynamic_label.payment_mode_is_not_valid_for_applied_coupon"
-        ),
-        message:
-          "Split payment cannot be used with the applied coupon. Do you want to remove the coupon and continue?",
-      });
-      setShouldApplyCreditNoteWithSplitPayment(includeCreditNote);
-      setShouldEnableSplitPaymentAfterCouponRemoval(true);
-      setShowCouponValidityModal(true);
-      return;
-    }
-
-    if (nextValue && isCouponApplied) {
-      const validateAppliedCoupon = splitPaymentConfig?.onAppliedCouponValidate;
-      const includeCreditNote =
-        options?.includeCreditNote === true || isCreditNoteAppliedForSplit;
-
-      if (typeof validateAppliedCoupon === "function") {
-        setIsSplitPaymentCouponValidating(true);
-
+    const email = getApplePayEmail(orderData.email);
+    const razorpayOptions = {
+      key: orderData.key,
+      order_id: orderData.order_id,
+      amount,
+      currency,
+      prefill: { contact, email },
+      email,
+      on_payment_initiate_create_order: async () => {
         try {
-          const response = await validateAppliedCoupon();
-          const couponValidity =
-            response?.coupon_validity ||
-            response?.data?.validateCoupon?.coupon_validity ||
-            {};
-          const couponHasCode = Boolean(couponValidity?.code);
-          const isCouponValidForSplit =
-            couponValidity?.valid === true ||
-            (!couponHasCode && couponValidity?.valid !== false);
-
-          if (isCouponValidForSplit) {
-            skipNextSplitCouponMopValidationRef.current = true;
-            applySplitPaymentSelection(true, options);
-            return;
+          if (
+            applePayContextRef.current?.key !== applePayEligibilityKey ||
+            !applePayContextRef.current?.isTablet ||
+            applePayRazorpayRef.current !== razorpay
+          ) {
+            throw new Error("Checkout has changed. Please try Apple Pay again.");
           }
-
-          setCouponValidity({
-            title:
-              couponValidity?.title ||
-              t(
-                "resource.dynamic_label.payment_mode_is_not_valid_for_applied_coupon"
-              ),
-            message:
-              couponValidity?.display_message_en ||
-              couponValidity?.message ||
-              "Split payment cannot be used with the applied coupon. Do you want to remove the coupon and continue?",
-            valid: couponValidity?.valid,
+          // The headless SDK invokes this hook even for a prepared order.
+          razorpay.set("order_id", orderData.order_id);
+          setApplePayDebugState({
+            payment_order_attached: true,
+            payment_order_id: orderData.order_id,
           });
-          setShouldApplyCreditNoteWithSplitPayment(includeCreditNote);
-          setShouldEnableSplitPaymentAfterCouponRemoval(true);
-          setShowCouponValidityModal(true);
-          return;
-        } finally {
-          setIsSplitPaymentCouponValidating(false);
+        } catch (error) {
+          if (applePayRazorpayRef.current === razorpay) {
+            handleApplePayFailure(error);
+          }
+          throw error;
         }
+      },
+      handler: (response) => handleSuccess(response),
+    };
+
+    setApplePayDebugState({
+      has_contact: Boolean(razorpayOptions.prefill.contact),
+      has_prefill_contact: Boolean(razorpayOptions.prefill.contact),
+      prefill_contact_type: typeof razorpayOptions.prefill.contact,
+      has_prefill_email: Boolean(razorpayOptions.prefill.email),
+      prefill_email_type: typeof razorpayOptions.prefill.email,
+    });
+
+    const razorpay = new Razorpay(razorpayOptions);
+
+    if (
+      typeof razorpay?.canMakePayment !== "function" ||
+      typeof razorpay?.createPayment !== "function" ||
+      typeof razorpay?.set !== "function" ||
+      typeof razorpay?.on !== "function"
+    ) {
+      throw new Error("Razorpay Apple Pay SDK does not expose the required methods.");
+    }
+    const handleSuccess = (response) => {
+      if (applePayRazorpayRef.current !== razorpay) {
+        return;
       }
+      submitApplePayCallback(response, orderData);
+    };
+    const handleFailure = (response) => {
+      if (applePayRazorpayRef.current !== razorpay) {
+        return;
+      }
+      handleApplePayFailure(response);
+    };
+    razorpay.on("payment.success", handleSuccess);
+    razorpay.on("payment.failure", handleFailure);
+    razorpay.on("payment.error", handleFailure);
 
-      setCouponValidity({
-        title: t(
-          "resource.dynamic_label.payment_mode_is_not_valid_for_applied_coupon"
-        ),
-        message:
-          "Split payment cannot be used with the applied coupon. Do you want to remove the coupon and continue?",
-      });
-      setShouldApplyCreditNoteWithSplitPayment(includeCreditNote);
-      setShouldEnableSplitPaymentAfterCouponRemoval(true);
-      setShowCouponValidityModal(true);
-      return;
-    }
-
-    applySplitPaymentSelection(nextValue, options);
+    return razorpay;
   };
 
-  const handleSplitPaymentChange = async () => {
+  const checkMobileApplePayEligibility = async ({ force = false } = {}) => {
+    if (applePayPaymentInFlightRef.current) return;
+    if (applePayInitializationRef.current) return;
     if (
-      isSplitPaymentSelected ||
-      isSplitPaymentCheckboxDisabled ||
-      isSplitPaymentCouponValidating
+      applePayMobileEligibility === "available" &&
+      applePayEligibilityKeyRef.current === applePayEligibilityKey &&
+      !force
     ) {
       return;
     }
 
-    if (isCreditNoteAppliedForSplit) {
-      setShowSplitCreditNoteConfirmation(true);
-      return;
-    }
-
-    await continueSplitPaymentSelection(true);
-  };
-
-  const confirmSplitCreditNoteSelection = async () => {
-    if (
-      isSplitPaymentCouponValidating ||
-      isSplitCreditNoteProceeding ||
-      splitCreditNoteProceedingRef.current
-    ) {
-      return;
-    }
-
-    splitCreditNoteProceedingRef.current = true;
-    setIsSplitCreditNoteProceeding(true);
+    const requestId = applePayRequestIdRef.current + 1;
+    applePayRequestIdRef.current = requestId;
+    applePayInitializationRef.current = true;
+    applePayCallbackSubmittedRef.current = false;
+    applePayOrderRef.current = null;
+    applePayRazorpayRef.current = null;
+    applePayEligibilityKeyRef.current = "";
+    setApplePayOrder(null);
+    setIsApplePayScriptLoaded(false);
+    setApplePayStatus("checking");
+    setApplePayMobileEligibility("checking");
+    setApplePayDebugState({
+      status: "checking",
+      mobile_tablet_gate: true,
+      using_web_component: true,
+      web_component_visible: false,
+      web_component_error: null,
+      has_backend_option: Boolean(applePayPaymentOption),
+      has_amount: Boolean(applePayAmount),
+      currency: currencyCode || "INR",
+      create_payment_request: null,
+      can_make_payment_request: null,
+      can_make_payment_response: null,
+    });
 
     try {
-      setShowSplitCreditNoteConfirmation(false);
-      setShouldApplyCreditNoteWithSplitPayment(true);
-      await continueSplitPaymentSelection(true, { includeCreditNote: true });
-    } finally {
-      splitCreditNoteProceedingRef.current = false;
-      setIsSplitCreditNoteProceeding(false);
-    }
-  };
+      const orderData = await createApplePayOrderData(requestId);
+      if (applePayRequestIdRef.current !== requestId) return;
 
-  const cancelSplitCreditNoteSelection = () => {
-    if (isSplitCreditNoteProceeding || splitCreditNoteProceedingRef.current) {
-      return;
-    }
-
-    setShowSplitCreditNoteConfirmation(false);
-    setShouldApplyCreditNoteWithSplitPayment(false);
-  };
-
-  const closeCouponValidityModal = () => {
-    if (shouldEnableSplitPaymentAfterCouponRemoval) {
-      setShouldEnableSplitPaymentAfterCouponRemoval(false);
-      setShouldApplyCreditNoteWithSplitPayment(false);
-      setShowCouponValidityModal(false);
-      fpi.custom.setValue("isCouponValid", true);
-      return;
-    }
-
-    if (mop === "CARD" && subMop === "newCARD") {
-      hideNewCard();
-    }
-    setShowCouponValidityModal(false);
-    fpi.custom.setValue("isCouponValid", true);
-    unsetSelectedSubMop();
-  };
-
-  const confirmCouponRemoval = async () => {
-    if (shouldEnableSplitPaymentAfterCouponRemoval) {
-      const removeAppliedCoupon = splitPaymentConfig?.onAppliedCouponRemove;
-      const couponRemovalResult =
-        typeof removeAppliedCoupon === "function"
-          ? await removeAppliedCoupon()
-          : false;
-      const isCouponRemoved = couponRemovalResult !== false;
-      const couponRemovalAmountOptions =
-        couponRemovalResult && typeof couponRemovalResult === "object"
-          ? {
-              paymentOptionsAmount:
-                couponRemovalResult.paymentOptionsAmount ??
-                couponRemovalResult.amount,
-            }
-          : {};
-
-      setShouldEnableSplitPaymentAfterCouponRemoval(false);
-      setShouldApplyCreditNoteWithSplitPayment(false);
-      setShowCouponValidityModal(false);
-      fpi.custom.setValue("isCouponValid", true);
-
-      if (isCouponRemoved) {
-        applySplitPaymentSelection(true, {
-          includeCreditNote: shouldApplyCreditNoteWithSplitPayment,
-          ...couponRemovalAmountOptions,
-        });
+      if (applePayAttemptedOrdersRef.current.has(orderData.order_id)) {
+        throw new Error(
+          "A fresh Apple Pay order is required. Please refresh checkout before trying again."
+        );
       }
-      return;
-    }
 
-    removeCoupon();
-    setShowCouponValidityModal(false);
-    fpi.custom.setValue("isCouponValid", true);
-    if (!selectedUpiIntentApp && selectedTab === "UPI" && isTablet) {
-      setSelectedUpiIntentApp("gpay");
+      const Razorpay = await loadRazorpayApplePayScript({
+        requireWebComponent: true,
+      });
+      if (applePayRequestIdRef.current !== requestId) return;
+
+      if (typeof Razorpay !== "function") {
+        throw new Error("Razorpay Apple Pay SDK is unavailable.");
+      }
+
+      const razorpay = createApplePayRazorpayInstance(Razorpay, orderData);
+      if (!razorpay) return;
+
+      if (typeof razorpay?.canMakePayment !== "function") {
+        throw new Error("Razorpay Apple Pay SDK is unavailable.");
+      }
+
+      const canMakePaymentPayload = {
+        method: RAZORPAY_APPLE_PAY_METHOD,
+        app: RAZORPAY_APPLE_PAY_APP,
+      };
+      setApplePayDebugState({
+        can_make_payment_request: canMakePaymentPayload,
+      });
+
+      let eligibility;
+      try {
+        eligibility = await razorpay.canMakePayment(canMakePaymentPayload);
+      } catch (error) {
+        if (applePayRequestIdRef.current !== requestId) return;
+        setApplePayDebugState({
+          can_make_payment_error:
+            error?.message || error?.description || error?.toString?.(),
+        });
+        throw error;
+      }
+      if (applePayRequestIdRef.current !== requestId) return;
+
+      const available = isApplePayAvailable(eligibility);
+      setApplePayDebugState({
+        status: available ? "ready" : "unavailable",
+        mobile_tablet_gate: true,
+        using_web_component: true,
+        web_component_visible: false,
+        web_component_error: null,
+        can_make_payment_request: canMakePaymentPayload,
+        can_make_payment_response: eligibility,
+        eligibility,
+        available,
+      });
+
+      if (!available) {
+        applePayRazorpayRef.current = null;
+        applePayOrderRef.current = null;
+        applePayEligibilityKeyRef.current = "";
+        setApplePayOrder(null);
+        setIsApplePayScriptLoaded(false);
+        setApplePayStatus("unavailable");
+        setApplePayMobileEligibility("unavailable");
+        if (selectedTab === "APPLEPAY") {
+          setSelectedTab("");
+          setTab("");
+          toggleMop(activeMop);
+        }
+        return;
+      }
+
+      applePayEligibilityKeyRef.current = applePayEligibilityKey;
+      applePayRazorpayRef.current = razorpay;
+      setIsApplePayScriptLoaded(true);
+      setApplePayStatus("ready");
+      setApplePayMobileEligibility("available");
+    } catch (error) {
+      if (applePayRequestIdRef.current !== requestId) return;
+      applePayRazorpayRef.current = null;
+      applePayOrderRef.current = null;
+      applePayEligibilityKeyRef.current = "";
+      setApplePayOrder(null);
+      setIsApplePayScriptLoaded(false);
+      setApplePayStatus("error");
+      setApplePayMobileEligibility("error");
+      setApplePayDebugState({
+        status: "error",
+        mobile_tablet_gate: true,
+        error: error?.message || String(error),
+      });
+      if (selectedTab === "APPLEPAY") {
+        setSelectedTab("");
+        setTab("");
+        toggleMop(activeMop);
+      }
+    } finally {
+      if (applePayRequestIdRef.current === requestId) {
+        applePayInitializationRef.current = false;
+      }
     }
   };
 
-  const cancelCouponRemoval = () => {
-    if (shouldEnableSplitPaymentAfterCouponRemoval) {
-      setShouldEnableSplitPaymentAfterCouponRemoval(false);
-      setShouldApplyCreditNoteWithSplitPayment(false);
-      setShowCouponValidityModal(false);
-      fpi.custom.setValue("isCouponValid", true);
+  const initializeApplePay = async ({ force = false } = {}) => {
+    if (applePayPaymentInFlightRef.current) return;
+    if (applePayInitializationRef.current) return;
+    if (
+      applePayOrderRef.current &&
+      (applePayStatus === "ready" || applePayStatus === "mounting") &&
+      applePayEligibilityKeyRef.current === applePayEligibilityKey &&
+      !force
+    ) {
       return;
     }
 
-    if (mop === "CARD" && subMop === "newCARD") {
-      hideNewCard();
+    const requestId = applePayRequestIdRef.current + 1;
+    applePayRequestIdRef.current = requestId;
+    applePayInitializationRef.current = true;
+    applePayCallbackSubmittedRef.current = false;
+    applePayOrderRef.current = null;
+    applePayRazorpayRef.current = null;
+    setApplePayOrder(null);
+    setIsApplePayScriptLoaded(false);
+    setApplePayStatus("loading");
+    setApplePayDebugState({
+      status: "loading",
+      has_backend_option: Boolean(applePayPaymentOption),
+      has_amount: Boolean(applePayAmount),
+      currency: currencyCode || "INR",
+    });
+
+    try {
+      const orderData = await createApplePayOrderData(requestId);
+      if (applePayRequestIdRef.current !== requestId) return;
+
+      setApplePayDebugState({
+        has_config_key: Boolean(orderData.key),
+        has_order_id: Boolean(orderData.order_id),
+        amount: orderData.amount || getApplePayAmountInSubunits(applePayAmount),
+        using_web_component: true,
+      });
+
+      await loadRazorpayApplePayScript({ requireWebComponent: true });
+      if (applePayRequestIdRef.current !== requestId) return;
+
+      applePayEligibilityKeyRef.current = applePayEligibilityKey;
+      setIsApplePayScriptLoaded(true);
+      setApplePayStatus("mounting");
+    } catch (error) {
+      if (applePayRequestIdRef.current !== requestId) return;
+      applePayRazorpayRef.current = null;
+      applePayOrderRef.current = null;
+      applePayEligibilityKeyRef.current = "";
+      setApplePayOrder(null);
+      setIsApplePayScriptLoaded(false);
+      setApplePayStatus("error");
+      setApplePayDebugState({
+        status: "error",
+        error: error?.message || String(error),
+      });
+    } finally {
+      if (applePayRequestIdRef.current === requestId) {
+        applePayInitializationRef.current = false;
+      }
     }
-    setShowCouponValidityModal(false);
-    fpi.custom.setValue("isCouponValid", true);
-    unsetSelectedSubMop();
   };
+
+  useEffect(() => {
+    const container = applePayContainerRef.current;
+    const orderData = applePayOrder?.data;
+    if (
+      selectedTab !== "APPLEPAY" ||
+      !container ||
+      !isApplePayScriptLoaded ||
+      !orderData
+    ) {
+      return undefined;
+    }
+
+    const checkoutElement = document.createElement(
+      RAZORPAY_APPLE_PAY_TAG_NAME
+    );
+    const componentContextKey = applePayEligibilityKey;
+    const isCurrentComponent = () =>
+      applePayComponentRef.current === checkoutElement &&
+      applePayContextRef.current?.key === componentContextKey &&
+      applePayContextRef.current?.isTablet === isTablet &&
+      applePayOrderRef.current?.data === orderData;
+    let eligibilityTimer;
+    let receivedTerminalEvent = false;
+    const stopReadinessTimer = () => window.clearInterval(eligibilityTimer);
+    checkoutElement.id = "checkout";
+    checkoutElement.setAttribute("key", orderData.key);
+    checkoutElement.setAttribute("order-id", orderData.order_id);
+    checkoutElement.setAttribute("contact", orderData.contact);
+    checkoutElement.setAttribute("email", orderData.email || APPLE_PAY_EMAIL);
+    checkoutElement.setAttribute(
+      "method",
+      orderData.method || RAZORPAY_APPLE_PAY_METHOD
+    );
+    checkoutElement.setAttribute(
+      "app-name",
+      orderData.app?.name?.replace("applepay", "apple_pay") ||
+        RAZORPAY_APPLE_PAY_APP.name
+    );
+    checkoutElement.setAttribute("button-label", "pay");
+    checkoutElement.setAttribute("button-theme", "dark");
+    checkoutElement.setAttribute("button-width", isTablet ? "100%" : "148px");
+    checkoutElement.setAttribute("button-height", isTablet ? "48px" : "32px");
+    if (isTablet) {
+      checkoutElement.style.display = "block";
+      checkoutElement.style.width = "100%";
+    }
+
+    const handleClick = (event) => {
+      const isPaymentButtonClick = event
+        .composedPath()
+        .some((element) => element?.tagName === "APPLE-PAY-BUTTON");
+      if (!isPaymentButtonClick) return;
+
+      if (
+        !isCurrentComponent() ||
+        applePayPaymentInFlightRef.current ||
+        applePayCallbackSubmittedRef.current ||
+        applePayContextRef.current?.isPaymentLoading
+      ) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        return;
+      }
+      if (applePayContextRef.current?.checkoutError) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        handleShowFailedMessage({
+          failed: true,
+          paymentErrHeading: t("resource.checkout.please_try_again_later"),
+          paymentErrMsg: applePayContextRef.current.checkoutError,
+        });
+        return;
+      }
+
+      removeDialogueError();
+      stopReadinessTimer();
+      applePayPaymentInFlightRef.current = true;
+      applePayAttemptedOrdersRef.current.add(orderData.order_id);
+      setApplePayStatus("submitting");
+      const input = {
+        method: checkoutElement.getAttribute("method"),
+        app: { name: checkoutElement.getAttribute("app-name") },
+        order_id: checkoutElement.getAttribute("order-id"),
+        has_contact: Boolean(checkoutElement.getAttribute("contact")),
+        has_email: Boolean(checkoutElement.getAttribute("email")),
+      };
+      setApplePayDebugState({
+        status: "submitting",
+        using_web_component: true,
+        create_payment_request: null,
+        web_component_input: input,
+      });
+      // The trusted click continues to Razorpay's own button handler.
+    };
+
+    const handleSuccess = (event) => {
+      if (!isCurrentComponent()) return;
+      receivedTerminalEvent = true;
+      stopReadinessTimer();
+      submitApplePayCallback(event, orderData);
+    };
+
+    const handleFailure = (event) => {
+      if (!isCurrentComponent() || applePayCallbackSubmittedRef.current) return;
+      receivedTerminalEvent = true;
+      stopReadinessTimer();
+      const error = event?.detail?.error || event?.detail || event || {};
+      const errorText = [
+        error?.code,
+        error?.reason,
+        error?.description,
+        error?.message,
+        error?.errorCode,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+      const isUnavailable =
+        errorText.includes("not available") ||
+        errorText.includes("unsupported") ||
+        errorText.includes("cannot make payment") ||
+        errorText.includes("can not make payment");
+
+      if (isUnavailable) {
+        applePayPaymentInFlightRef.current = false;
+        setApplePayStatus("unavailable");
+        if (isTablet) setApplePayMobileEligibility("unavailable");
+        setApplePayDebugState({
+          status: "unavailable",
+          web_component_error: errorText,
+        });
+        if (selectedTab === "APPLEPAY") {
+          setSelectedTab("");
+          setTab("");
+          toggleMop(activeMop);
+        }
+        return;
+      }
+
+      const wasSubmitting = applePayPaymentInFlightRef.current;
+      handleApplePayFailure(error);
+      if (isTablet) {
+        setApplePayStatus("error");
+        if (wasSubmitting) {
+          checkMobileApplePayEligibility({ force: true });
+        }
+      }
+    };
+
+    checkoutElement.addEventListener("paymentsuccess", handleSuccess);
+    checkoutElement.addEventListener("payment.success", handleSuccess);
+    checkoutElement.addEventListener("paymentfailure", handleFailure);
+    checkoutElement.addEventListener("payment.failure", handleFailure);
+    checkoutElement.addEventListener("error", handleFailure);
+    checkoutElement.addEventListener("click", handleClick, true);
+    applePayComponentRef.current = checkoutElement;
+    if (isTablet) setApplePayStatus("mounting");
+    container.replaceChildren(checkoutElement);
+
+    let attempts = 0;
+    eligibilityTimer = window.setInterval(() => {
+      if (
+        !isCurrentComponent() ||
+        receivedTerminalEvent ||
+        applePayPaymentInFlightRef.current
+      ) {
+        stopReadinessTimer();
+        return;
+      }
+      attempts += 1;
+      if (checkoutElement.getBoundingClientRect().height > 0) {
+        window.clearInterval(eligibilityTimer);
+        setApplePayStatus("ready");
+        setApplePayDebugState({
+          status: "ready",
+          web_component_visible: true,
+        });
+        return;
+      }
+
+      if (attempts >= 150) {
+        window.clearInterval(eligibilityTimer);
+        setApplePayStatus("unavailable");
+        setApplePayDebugState({
+          status: "unavailable",
+          web_component_visible: false,
+        });
+        if (selectedTab === "APPLEPAY") {
+          setSelectedTab("");
+          setTab("");
+          toggleMop(activeMop);
+        }
+      }
+    }, 100);
+
+    return () => {
+      stopReadinessTimer();
+      checkoutElement.removeEventListener("paymentsuccess", handleSuccess);
+      checkoutElement.removeEventListener("payment.success", handleSuccess);
+      checkoutElement.removeEventListener("paymentfailure", handleFailure);
+      checkoutElement.removeEventListener("payment.failure", handleFailure);
+      checkoutElement.removeEventListener("error", handleFailure);
+      checkoutElement.removeEventListener("click", handleClick, true);
+      if (applePayComponentRef.current === checkoutElement) {
+        applePayComponentRef.current = null;
+      }
+      if (container.contains(checkoutElement)) {
+        container.replaceChildren();
+      }
+    };
+  }, [
+    applePayOrder,
+    isApplePayScriptLoaded,
+    isTablet,
+    selectedTab,
+    applePayEligibilityKey,
+  ]);
+
+  useEffect(() => {
+    if (!isApplePayViewportReady || isApplePaySubmitting) return;
+
+    if (!applePayPaymentOption || enableLinkPaymentOption || !applePayAmount) {
+      resetApplePay();
+      return;
+    }
+
+    if (isTablet) {
+      checkMobileApplePayEligibility();
+    } else {
+      initializeApplePay();
+    }
+
+    return () => {
+      // Invalidated requests cannot publish an order or unlock a newer request.
+      applePayRequestIdRef.current += 1;
+      applePayInitializationRef.current = false;
+    };
+  }, [
+    applePayEligibilityKey,
+    enableLinkPaymentOption,
+    isTablet,
+    isApplePayViewportReady,
+    isApplePaySubmitting,
+  ]);
+
+  const uiProps = { styles, t, SvgWrapper, StickyPayNow, isTablet };
+  const amountProps = { getCurrencySymbol, getTotalValue };
 
   const paymentFlowProps = {
     selectMop,
@@ -985,7 +1284,6 @@ function CheckoutPaymentContent({
     loader,
     onPriceDetailsClick,
     mopSelectionLoading,
-    isPaymentDisabled: isPaymentActionDisabled,
   };
 
   // Card specific (keeps the case block small)
@@ -1054,8 +1352,59 @@ function CheckoutPaymentContent({
     setIsJuspayCouponApplied,
   };
 
+  const renderApplePayStickyPayNow = () => (
+    <StickyPayNow
+      customClassName={`${styles.visibleOnTab} ${styles.applePayStickyFooter}`}
+      value={priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue())}
+      onPriceDetailsClick={onPriceDetailsClick}
+      enableLinkPaymentOption={enableLinkPaymentOption}
+      isPaymentLoading={isPaymentLoading || applePayStatus === "submitting"}
+      loader={loader}
+      paymentButton={
+        <div className={styles.applePayStickyButton} aria-busy={applePayStatus !== "ready"}>
+          <div
+            ref={applePayContainerRef}
+            className={styles.applePayStickyComponent}
+            inert={applePayStatus === "submitting" || applePayStatus === "error" || isPaymentLoading ? "" : undefined}
+          />
+          {applePayStatus === "error" ? (
+            <button type="button" className={styles.applePayRetryButton} onClick={() => checkMobileApplePayEligibility({ force: true })}>
+              Retry Apple Pay
+            </button>
+          ) : applePayStatus !== "ready" ? (
+            <div className={styles.applePayStickyLoader} role="status" aria-label="Loading Apple Pay">{loader}</div>
+          ) : null}
+        </div>
+      }
+    />
+  );
+
   const navigationTab = () => {
     switch (selectedTab) {
+      case "APPLEPAY": {
+        if (isTablet) return null;
+        const applePayLogo = applePayPaymentOption?.option?.logo_url?.small;
+        const isApplePayLoading = ["waiting_for_sdk", "checking", "loading", "mounting"].includes(applePayStatus);
+        return (
+          <div className={styles.modeOption}>
+            <div className={`${styles.modeItemWrapper} ${styles.selectedBorder} ${styles.applePayModeItemWrapper}`} onClick={removeDialogueError}>
+              <label>
+                <div className={styles.modeItem}>
+                  <div className={styles.logoNameContainer}>
+                    <div className={styles.modeItemLogo}>{applePayLogo ? <img src={applePayLogo} alt="Apple Pay" /> : <SvgWrapper svgSrc="wallet" />}</div>
+                    <div className={styles.modeItemName}>Apple Pay</div>
+                  </div>
+                  <div className={`${styles.walletLeft} ${styles.onMobileView}`}><SvgWrapper svgSrc="radio-selected" /></div>
+                </div>
+              </label>
+              <div className={`${styles.modePay} ${styles.applePayModePay}`}>
+                {isApplePayLoading && <div className={styles.applePayLoader}>{loader}</div>}
+                <div ref={applePayContainerRef} className={styles.applePayWrapper} />
+              </div>
+            </div>
+          </div>
+        );
+      }
       case "CARD":
         return (
           <CardPayment
@@ -1072,7 +1421,7 @@ function CheckoutPaymentContent({
             {...uiProps}
             {...amountProps}
             {...paymentFlowProps}
-            selectedTabData={selectedTabData}
+            selectedTabData={{ ...selectedTabData, list: selectedTabData?.list?.filter((option) => !isApplePayOption(option)) }}
             walletSearchText={walletSearchText}
             setWalletSearchText={setWalletSearchText}
             selectedWallet={selectedWallet}
@@ -1130,8 +1479,6 @@ function CheckoutPaymentContent({
               qrCodeImage={qrCodeImage}
               isQrCodeLoading={isQrCodeLoading}
               countdown={countdown}
-              setCountdown={setCountdown}
-              initializeOrResetQrPayment={initializeOrResetQrPayment}
               formatTime={formatTime}
               selectMop={selectMop}
               cancelQrPayment={cancelQrPayment}
@@ -1141,7 +1488,6 @@ function CheckoutPaymentContent({
               setSavedUPISelect={setSavedUPISelect}
               showUpiRedirectionModal={showUpiRedirectionModal}
               cancelUpiAppPayment={cancelUpiAppPayment}
-              isPaymentDisabled={isPaymentActionDisabled}
             />
           </>
         );
@@ -1175,22 +1521,13 @@ function CheckoutPaymentContent({
             selectedPaymentPayload={selectedPaymentPayload}
             isPaymentLoading={isPaymentLoading}
             loader={loader}
-            isCodModalOpen={
-              isCodModalOpen &&
-              (!shouldScrollBeforeCodModal || isSplitCodScrollReady)
-            }
+            isCodModalOpen={isCodModalOpen}
             setIsCodModalOpen={setIsCodModalOpen}
             setTab={setTab}
             setSelectedTab={setSelectedTab}
             Spinner={Spinner}
             isCouponValid={isCouponValid}
             mopSelectionLoading={mopSelectionLoading}
-            isPaymentDisabled={
-              isCouponValidationLoading ||
-              isSplitPaymentCouponValidating ||
-              (isResumeSplitPayment ? false : Boolean(isPaymentDisabled))
-            }
-            splitCodAction={splitCodAction}
           />
         );
 
@@ -1245,7 +1582,7 @@ function CheckoutPaymentContent({
               {t("resource.checkout.choose_an_option")}
             </div>
             <div className={styles.modeOption}>
-              {selectedTabData?.list?.map((op) => (
+              {selectedTabData?.list?.map((op, index) => (
                 <div
                   key={op.display_name}
                   className={`${styles.modeItemWrapper} ${getOPBorder()}`}
@@ -1288,14 +1625,12 @@ function CheckoutPaymentContent({
                             customClassName={styles.visibleOnTab}
                             value={priceFormatCurrencySymbol(
                               getCurrencySymbol,
-                              getPayNowValue(),
+                              getTotalValue(),
                               "en-IN",
                               null,
                               true
                             )}
-                            disabled={
-                              mopSelectionLoading || isPaymentActionDisabled
-                            }
+                            disabled={mopSelectionLoading}
                             onPriceDetailsClick={onPriceDetailsClick}
                             enableLinkPaymentOption={enableLinkPaymentOption}
                             isPaymentLoading={isPaymentLoading}
@@ -1312,18 +1647,14 @@ function CheckoutPaymentContent({
                               proceedToPay("Other", selectedPaymentPayload);
                               acceptOrder();
                             }}
-                            disabled={
-                              mopSelectionLoading ||
-                              isPaymentLoading ||
-                              isPaymentActionDisabled
-                            }
+                            disabled={mopSelectionLoading || isPaymentLoading}
                           >
                             {!isPaymentLoading ? (
                               <>
                                 {t("resource.common.pay_caps")}{" "}
                                 {priceFormatCurrencySymbol(
                                   getCurrencySymbol,
-                                  getPayNowValue(),
+                                  getTotalValue(),
                                   "en-IN",
                                   null,
                                   true
@@ -1355,18 +1686,17 @@ function CheckoutPaymentContent({
         <div
           className={styles["linkWrapper-row1"]}
           onClick={() => {
-            if (
-              isTablet &&
-              (selectedTab !== opt.name || activeMop !== opt.name)
-            ) {
+            if (isTablet) {
               handleScrollToTop(index);
+              setSelectedTab((prev) => (prev === opt.name ? "" : opt.name));
+              setTab(opt.name);
+            } else {
+              setSelectedTab(opt.name);
+              setTab(opt.name);
             }
-            // Collapsing a mobile accordion must not clear the payment method:
-            // the default-selection effect would immediately choose another one.
-            setSelectedTab(opt.name);
             removeDialogueError();
             setTab(opt.name);
-            toggleMop(opt.name, !isTablet || selectedTab !== opt.name);
+            toggleMop(opt.name);
             if (selectedTab !== opt.name) {
               if (isTablet) {
                 setSelectedPaymentPayload({});
@@ -1453,7 +1783,14 @@ function CheckoutPaymentContent({
             isOpen={showCouponValidityModal || !isCouponValid}
             title={couponValidity.title || inValidCouponData?.title}
             notCloseOnclickOutside={true}
-            closeDialog={closeCouponValidityModal}
+            closeDialog={() => {
+              if (mop === "CARD" && subMop === "newCARD") {
+                hideNewCard();
+              }
+              setShowCouponValidityModal(false);
+              fpi.custom.setValue("isCouponValid", true);
+              unsetSelectedSubMop();
+            }}
           >
             <div className={styles.couponValidity}>
               <p className={styles.message}>
@@ -1462,13 +1799,31 @@ function CheckoutPaymentContent({
               <div className={styles.select}>
                 <div
                   className={`${styles.commonBtn} ${styles.yesBtn}`}
-                  onClick={confirmCouponRemoval}
+                  onClick={() => {
+                    removeCoupon();
+                    setShowCouponValidityModal(false);
+                    fpi.custom.setValue("isCouponValid", true);
+                    if (
+                      !selectedUpiIntentApp &&
+                      selectedTab === "UPI" &&
+                      isTablet
+                    ) {
+                      setSelectedUpiIntentApp("gpay");
+                    }
+                  }}
                 >
                   {t("resource.common.yes")}
                 </div>
                 <div
                   className={`${styles.commonBtn} ${styles.noBtn}`}
-                  onClick={cancelCouponRemoval}
+                  onClick={() => {
+                    if (mop === "CARD" && subMop === "newCARD") {
+                      hideNewCard();
+                    }
+                    setShowCouponValidityModal(false);
+                    fpi.custom.setValue("isCouponValid", true);
+                    unsetSelectedSubMop();
+                  }}
                 >
                   {t("resource.common.no")}
                 </div>
@@ -1477,42 +1832,7 @@ function CheckoutPaymentContent({
           </Modal>
         )}
 
-      <Modal
-        customClassName={styles.splitCreditNoteConfirmationModal}
-        isOpen={showSplitCreditNoteConfirmation}
-        title="Confirm Split Payment"
-        notCloseOnclickOutside={true}
-        closeDialog={cancelSplitCreditNoteSelection}
-      >
-        <div className={styles.splitCreditNoteConfirmation}>
-          <p className={styles.splitCreditNoteConfirmationMessage}>
-            You have selected Credit Note with Split Payment. If you continue,
-            your Credit Note will be applied to this order and can only be
-            refunded after the order is cancelled.
-          </p>
-          <div className={styles.splitCreditNoteConfirmationActions}>
-            <button
-              className={`${styles.splitCreditNoteConfirmationButton} ${styles.cancelSplitCreditNoteButton}`}
-              onClick={cancelSplitCreditNoteSelection}
-              type="button"
-            >
-              Cancel
-            </button>
-            <button
-              className={`${styles.splitCreditNoteConfirmationButton} ${styles.proceedSplitCreditNoteButton}`}
-              disabled={
-                isSplitPaymentCouponValidating || isSplitCreditNoteProceeding
-              }
-              onClick={confirmSplitCreditNoteSelection}
-              type="button"
-            >
-              Proceed
-            </button>
-          </div>
-        </div>
-      </Modal>
-
-      {shouldShowFullPaymentSkeleton ? (
+      {isLoading ? (
         <div className={styles.container}>
           <CheckoutPaymentSkeleton />
         </div>
@@ -1522,7 +1842,8 @@ function CheckoutPaymentContent({
         >
           {true ? (
             <>
-              {shouldShowStoreCredit && (
+              {partialPaymentOption?.list[0]?.balance?.account?.status !==
+                "INACTIVE" && (
                 <div className={styles.creditNote}>
                   <CreditNote
                     data={partialPaymentOption}
@@ -1538,312 +1859,143 @@ function CheckoutPaymentContent({
               {creditUpdating ? (
                 <CheckoutPaymentSkeleton />
               ) : (
-                <>
-                  {isSplitPaymentEnabled && (
-                    <div
-                      className={`${styles.splitPaymentOption} ${isSplitPaymentSelected ? styles.selectedSplitPaymentOption : ""}`}
-                    >
-                      <div className={styles.splitPaymentDetails}>
-                        <div className={styles.splitPaymentHeader}>
-                          <span className={styles.splitPaymentTitleWrapper}>
-                            <span className={styles.splitPaymentTitle}>
-                              {splitPaymentLabel}
-                            </span>
-                            <button
-                              aria-label="Split payment information"
-                              className={styles.splitPaymentInfoButton}
-                              type="button"
-                            >
-                              <SvgWrapper
-                                className={styles.splitPaymentInfoIcon}
-                                svgSrc="info-grey"
-                              />
-                              <span className={styles.splitPaymentInfoTooltip}>
-                                You can check your pending orders in the My
-                                Orders section and complete the payment for the
-                                remaining amount before the order times out.
-                              </span>
-                            </button>
-                          </span>
-                          <span className={styles.splitPaymentBadge}>
-                            <svg
-                              className={styles.splitPaymentBadgeIcon}
-                              aria-hidden="true"
-                              focusable="false"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                d="M9.78 11.16 8.36 12.58 5.79 10l2.57-2.58 1.42 1.42L9.62 9H10c1.1 0 2-.9 2-2V4.41l-1.79 1.8L8.8 4.8 13 .59l4.2 4.2-1.41 1.41L14 4.41V7c0 2.21-1.79 4-4 4h-.38l.16.16Zm4.44 1.68 1.42-1.42L18.21 14l-2.57 2.58-1.42-1.42.16-.16H14c-1.1 0-2 .9-2 2v2.59l1.79-1.8 1.41 1.41-4.2 4.21-4.2-4.2 1.41-1.41L10 19.59V17c0-2.21 1.79-4 4-4h.38l-.16-.16Z"
-                                fill="currentColor"
-                              />
-                            </svg>
-                            {splitPaymentAvailabilityLabel}
-                          </span>
-                          {!isSplitPaymentSelected && (
-                            <button
-                              className={`${styles.splitPaymentAction} ${
-                                isSplitPaymentActionDisabled
-                                  ? styles.disabledSplitPaymentAction
-                                  : ""
-                              }`}
-                              disabled={isSplitPaymentActionDisabled}
-                              type="button"
-                              onClick={handleSplitPaymentChange}
-                            >
-                              Use Split Payment
-                            </button>
-                          )}
-                        </div>
-                        {isSplitPaymentSelected &&
-                          isSplitPaymentLoading &&
-                          !shouldHideSplitPaymentAmountField && (
-                          <div className={styles.splitPaymentAmountField}>
-                            <Skeleton type="text" width={96} height={14} />
-                            <Skeleton
-                              className={styles.splitPaymentInputSkeleton}
-                              type="box"
-                              height={48}
-                            />
-                            <Skeleton type="text" width="70%" height={14} />
-                          </div>
-                        )}
-                        {isSplitPaymentSelected &&
-                          !isSplitPaymentLoading &&
-                          !shouldHideSplitPaymentAmountField && (
+                <div
+                  className={`${styles.paymentOptions} ${!getTotalValue() ? styles.displayNone : ""}`}
+                >
+                  <div className={styles.navigationLink}>
+                    {paymentOptions?.map((opt, index) =>
+                      navigationTitle(opt, index)
+                    )}
+                    {otherPaymentOptions?.length > 0 && (
+                      <div
+                        className={`${styles.linkWrapper} ${selectedTab === "Other" && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === "Other" && isTablet ? styles.headerHightlight : ""}`}
+                      >
+                        <div
+                          className={styles["linkWrapper-row1"]}
+                          onClick={() => {
+                            setTab("Other");
+                            setSelectedTab("Other");
+                            toggleMop("Other");
+                          }}
+                        >
                           <div
-                            ref={splitPaymentAmountRef}
-                            className={styles.splitPaymentAmountField}
+                            className={`${selectedTab === "Other" ? styles.indicator : ""} ${styles.onDesktopView}`}
                           >
-                            <label className={styles.splitPaymentFieldLabel}>
-                              {splitPaymentInputLabel}
-                            </label>
-                            <div
-                              className={`${styles.splitPaymentInputWrapper} ${
-                                !isResumeSplitCodSelected && splitPaymentAmountError
-                                  ? styles.splitPaymentInputError
-                                  : ""
-                              }`}
-                            >
-                              <span className={styles.splitPaymentPrefix}>
-                                {splitPaymentCurrencySymbol}
-                              </span>
-                              <input
-                                className={styles.splitPaymentInput}
-                                disabled={isResumeSplitCodSelected}
-                                inputMode="decimal"
-                                onBlur={handleSplitPaymentAmountBlur}
-                                onChange={handleSplitPaymentAmountChange}
-                                type="text"
-                                value={
-                                  isResumeSplitCodSelected
-                                    ? (splitPaymentConfig?.remainingAmount ??
-                                      splitPaymentConfig?.remaining_amount ??
-                                      splitPaymentAmount)
-                                    : splitPaymentAmount
-                                }
-                              />
+                            &nbsp;
+                          </div>
+                          <div className={styles.link}>
+                            <div className={styles.icon}>
+                              {/* <img src={opt.svg} alt="" /> */}
+                              <SvgWrapper svgSrc="payment-other"></SvgWrapper>
                             </div>
-                            <p
-                              className={
-                                isResumeSplitCodSelected
-                                  ? styles.codInfo
-                                  : `${styles.splitPaymentAssistiveText} ${
-                                      splitPaymentAmountError
-                                        ? styles.splitPaymentErrorText
-                                        : ""
-                                    }`
-                              }
+                            <div
+                              className={`${styles.modeName} ${selectedTab === "Other" ? styles.selectedModeName : ""}`}
                             >
-                              {isResumeSplitCodSelected
-                                ? resumeSplitCodMessage
-                                : splitPaymentAmountError ||
-                                  splitPaymentInputAssistiveText}
-                            </p>
+                              {paymentOptions?.length > 0 &&
+                              otherPaymentOptions?.length > 0
+                                ? t("resource.checkout.more_payment_options")
+                                : t("resource.checkout.pay_online")}
+                            </div>
+                          </div>
+                          <div
+                            className={`${styles.arrowContainer}  ${styles.activeIconColor}`}
+                          >
+                            <SvgWrapper
+                              className={
+                                selectedTab === "Other" && activeMop === "Other"
+                                  ? styles.upsideDown
+                                  : ""
+                              }
+                              svgSrc="accordion-arrow"
+                            />
+                          </div>
+                        </div>
+                        {isTablet && activeMop === "Other" && (
+                          <div className={` ${styles.onMobileView}`}>
+                            {selectedTab === "Other" && navigationTab()}
                           </div>
                         )}
                       </div>
-                    </div>
-                  )}
-
-                  {isSplitCodPaymentActive && (
-                    <div className={styles.splitPaymentBackRow}>
-                      <button
-                        aria-label="Back to split payment"
-                        className={styles.splitPaymentBackButton}
-                        onClick={handleSplitCodBack}
-                        type="button"
-                      >
-                        <span className={styles.splitPaymentBackIcon}>
-                          <SvgWrapper svgSrc="back" />
-                        </span>
-                        <span className={styles.splitPaymentBackText}>
-                          {splitPaymentLabel}
-                        </span>
-                      </button>
-                    </div>
-                  )}
-
-                  {isPaymentOptionsRefreshing ? (
-                    <div
-                      className={`${styles.paymentOptions} ${shouldHidePaymentOptions ? styles.displayNone : ""}`}
-                    >
-                      <CheckoutPaymentSkeleton />
-                    </div>
-                  ) : (
-                    <div
-                      className={`${styles.paymentOptions} ${shouldHidePaymentOptions ? styles.displayNone : ""}`}
-                    >
-                      <div className={styles.navigationLink}>
-                        {paymentOptions?.map((opt, index) =>
-                          navigationTitle(opt, index)
-                        )}
-                        {otherPaymentOptions?.length > 0 && (
-                          <div
-                            className={`${styles.linkWrapper} ${selectedTab === "Other" && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === "Other" && isTablet ? styles.headerHightlight : ""}`}
-                          >
+                    )}
+                    {codOption && (
+                      <div style={{ display: "flex", flex: "1" }}>
+                        <div
+                          className={`${styles.linkWrapper} ${selectedTab === codOption.name && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === codOption.name && isTablet ? styles.headerHightlight : ""}`}
+                          key={codOption?.display_name ?? ""}
+                          onClick={() => {
+                            selectMop(
+                              codOption.name,
+                              codOption.name,
+                              codOption.name
+                            );
+                          }}
+                        >
+                          <div className={styles["linkWrapper-row1"]}>
                             <div
-                              className={styles["linkWrapper-row1"]}
-                              onClick={() => {
-                                setTab("Other");
-                                setSelectedTab("Other");
-                                toggleMop(
-                                  "Other",
-                                  !isTablet || selectedTab !== "Other"
-                                );
-                              }}
+                              className={` ${selectedTab === codOption.name ? styles.indicator : ""} ${styles.onDesktopView}`}
                             >
-                              <div
-                                className={`${selectedTab === "Other" ? styles.indicator : ""} ${styles.onDesktopView}`}
-                              >
-                                &nbsp;
-                              </div>
-                              <div className={styles.link}>
-                                <div className={styles.icon}>
-                                  {/* <img src={opt.svg} alt="" /> */}
-                                  <SvgWrapper svgSrc="payment-other"></SvgWrapper>
-                                </div>
-                                <div
-                                  className={`${styles.modeName} ${selectedTab === "Other" ? styles.selectedModeName : ""}`}
-                                >
-                                  {paymentOptions?.length > 0 &&
-                                  otherPaymentOptions?.length > 0
-                                    ? t(
-                                        "resource.checkout.more_payment_options"
-                                      )
-                                    : t("resource.checkout.pay_online")}
-                                </div>
-                              </div>
-                              <div
-                                className={`${styles.arrowContainer}  ${styles.activeIconColor}`}
-                              >
-                                <SvgWrapper
-                                  className={
-                                    selectedTab === "Other" &&
-                                    activeMop === "Other"
-                                      ? styles.upsideDown
-                                      : ""
-                                  }
-                                  svgSrc="accordion-arrow"
-                                />
-                              </div>
+                              &nbsp;
                             </div>
-                            {isTablet && activeMop === "Other" && (
-                              <div className={` ${styles.onMobileView}`}>
-                                {selectedTab === "Other" && navigationTab()}
+                            <div className={styles.link}>
+                              <div className={styles.icon}>
+                                <SvgWrapper svgSrc={codOption.svg}></SvgWrapper>
                               </div>
-                            )}
-                          </div>
-                        )}
-                        {codOption && (
-                          <div style={{ display: "flex", flex: "1" }}>
-                            <div
-                              className={`${styles.linkWrapper} ${selectedTab === codOption.name && !isTablet ? styles.selectedNavigationTab : styles.linkWrapper} ${selectedTab === codOption.name && isTablet ? styles.headerHightlight : ""}`}
-                              key={codOption?.display_name ?? ""}
-                              onClick={async () => {
-                                if (shouldShowSplitCodAction) {
-                                  removeDialogueError();
-                                  toggleMop(codOption.name);
-                                  await selectMop(
-                                    codOption.name,
-                                    codOption.name,
-                                    codOption.name
-                                  );
-
-                                  return;
-                                }
-
-                                selectMop(
-                                  codOption.name,
-                                  codOption.name,
-                                  codOption.name
-                                );
-                              }}
-                            >
-                              <div className={styles["linkWrapper-row1"]}>
+                              <div>
                                 <div
-                                  className={` ${selectedTab === codOption.name ? styles.indicator : ""} ${styles.onDesktopView}`}
+                                  className={`${styles.modeName} ${selectedTab === codOption.name ? styles.selectedModeName : ""}`}
                                 >
-                                  &nbsp;
+                                  {translateDynamicLabel(
+                                    codOption?.display_name ?? "",
+                                    t
+                                  )}
                                 </div>
-                                <div className={styles.link}>
-                                  <div className={styles.icon}>
-                                    <SvgWrapper
-                                      svgSrc={codOption.svg}
-                                    ></SvgWrapper>
-                                  </div>
-                                  <div>
-                                    <div
-                                      className={`${styles.modeName} ${selectedTab === codOption.name ? styles.selectedModeName : ""}`}
-                                    >
-                                      {translateDynamicLabel(
-                                        codOption?.display_name ?? "",
-                                        t
-                                      )}
-                                    </div>
-                                    {isTablet && codCharges > 0 && (
-                                      <div className={styles.codCharge}>
-                                        +
-                                        {priceFormatCurrencySymbol(
-                                          getCurrencySymbol,
-                                          codCharges,
-                                          "en-IN",
-                                          null,
-                                          true
-                                        )}{" "}
-                                        {t("resource.checkout.extra_charges")}
-                                      </div>
-                                    )}
-                                  </div>
-                                </div>
-                                {codOption?.image_src && (
-                                  <div className={styles["payment-icons"]}>
-                                    <img
-                                      src={codOption?.image_src}
-                                      alt={codOption?.svg}
-                                    />
+                                {isTablet && codCharges > 0 && (
+                                  <div className={styles.codCharge}>
+                                    +
+                                    {priceFormatCurrencySymbol(
+                                      getCurrencySymbol,
+                                      codCharges,
+                                      "en-IN",
+                                      null,
+                                      true
+                                    )}{" "}
+                                    {t("resource.checkout.extra_charges")}
                                   </div>
                                 )}
                               </div>
-                              {isTablet && (
-                                <div>
-                                  {selectedTab === codOption.name &&
-                                    navigationTab()}
-                                </div>
-                              )}
+                            </div>
+                            {codOption?.image_src && (
+                              <div className={styles["payment-icons"]}>
+                                <img
+                                  src={codOption?.image_src}
+                                  alt={codOption?.svg}
+                                />
+                              </div>
+                            )}
+                            <div
+                              className={`${styles.arrowContainer} ${styles.activeIconColor} ${styles.codIconContainer}`}
+                            >
+                              <SvgWrapper svgSrc="accordion-arrow" />
                             </div>
                           </div>
-                        )}
-                      </div>
-                      {!isTablet && (
-                        <div
-                          className={`${styles.navigationTab} ${styles.onDesktopView}`}
-                        >
-                          {navigationTab()}
+                          {isTablet && (
+                            <div>
+                              {selectedTab === codOption.name &&
+                                navigationTab()}
+                            </div>
+                          )}
                         </div>
-                      )}
+                      </div>
+                    )}
+                  </div>
+                  {!isTablet && (
+                    <div
+                      className={`${styles.navigationTab} ${styles.onDesktopView}`}
+                    >
+                      {navigationTab()}
                     </div>
                   )}
-                </>
+                </div>
               )}
             </>
           ) : (
@@ -1853,6 +2005,7 @@ function CheckoutPaymentContent({
           )}
         </div>
       )}
+      {isTablet && selectedTab === "APPLEPAY" && renderApplePayStickyPayNow()}
     </>
   );
 }

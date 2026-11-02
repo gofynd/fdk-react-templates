@@ -407,7 +407,7 @@ h5,
 }
 .single-page-shipment__addressSelectedHeaderContainer___SVaIw .single-page-shipment__address___pgW0L {
   font-size: 12px;
-  color: var(--textHeading, #26201a);
+  color: #1f1f1f;
   font-weight: 400;
   line-height: 140%;
 }
@@ -489,7 +489,7 @@ h5,
 }
 .single-page-shipment__reviewHeaderSelect___bNgMy .single-page-shipment__headerContainer___Umy4m .single-page-shipment__shipment___xocKT {
   font-size: 12px;
-  color: var(--textHeading, #26201a);
+  color: var(--textBody, #3c3131);
   font-weight: 400;
   line-height: 140%;
 }
@@ -985,7 +985,7 @@ h5,
   width: 20px;
 }
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF .single-shipment-content__deliveryDateWrapper___1R8Nn .single-shipment-content__shippingLogo____xKH7 svg path {
-  fill: var(--textBody, #3c3131);
+  fill: var(--successText, #1c958f);
 }
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__shipmentHeading___Jn_LF .single-shipment-content__deliveryDateWrapper___1R8Nn .single-shipment-content__foName___vTtLP {
   color: var(--textLabel, #7d7676);
@@ -1035,7 +1035,7 @@ h5,
   column-gap: 14px;
   display: grid;
   grid-template-areas: "item_image item_details" "item_image free_gift";
-  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-columns: auto 1fr;
   grid-template-rows: auto auto;
 }
 @media only screen and (max-width: 480px) {
@@ -1057,12 +1057,10 @@ h5,
 }
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__itemWrapper___Sz3u9 .single-shipment-content__rightDetails___Ll92n {
   grid-area: item_details;
-  min-width: 0;
 }
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__itemWrapper___Sz3u9 .single-shipment-content__rightDetails___Ll92n .single-shipment-content__productDetails___BshGD {
   display: flex;
   flex-direction: column;
-  min-width: 0;
 }
 .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__itemWrapper___Sz3u9 .single-shipment-content__rightDetails___Ll92n .single-shipment-content__productDetails___BshGD .single-shipment-content__brandName___ACaJm {
   font-weight: 600;
@@ -1081,9 +1079,6 @@ h5,
   color: var(--textBody);
   margin-top: 8px;
   line-height: 140%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 @media only screen and (max-width: 480px) {
   .single-shipment-content__reviewContentContainer___xogoD .single-shipment-content__shipmentWrapper___vvFUN .single-shipment-content__item___EOvzd .single-shipment-content__itemWrapper___Sz3u9 .single-shipment-content__rightDetails___Ll92n .single-shipment-content__productDetails___BshGD .single-shipment-content__productName___Qcftm {
@@ -1637,16 +1632,9 @@ h5,
 }
 .free-gift-item__freeArticleContainer___wFbcr .free-gift-item__freeGiftItemImage___sEzSU {
   flex: 0 0 36px;
-  width: 36px;
-  height: 36px;
-  border-radius: calc(var(--itemImageRadius, 11px) / 2);
+  border-radius: 4px;
+  height: auto;
   min-width: 0;
-}
-.free-gift-item__freeArticleContainer___wFbcr .free-gift-item__imageCover___kL4Va {
-  object-fit: cover;
-}
-.free-gift-item__freeArticleContainer___wFbcr .free-gift-item__imageContain___hKKSA {
-  object-fit: contain;
 }
 .free-gift-item__freeArticleContainer___wFbcr .free-gift-item__freeGiftItemDetails___WWh4P {
   min-width: 0;
@@ -2072,7 +2060,7 @@ h5,
 }
 .chip-image__itemImg___iI27G {
   width: 100%;
-  border-radius: var(--itemImageRadius, 11px);
+  border-radius: var(--buttonRadius, 0px);
   overflow: hidden;
 }
 .chip-image__bundleChipImages___aq4HR {
@@ -2082,10 +2070,10 @@ h5,
   padding: 4px;
   gap: 4px;
   border: 1px solid var(--dividerStokes, #d4d1d1);
-  border-radius: var(--itemImageRadius, 11px);
+  border-radius: var(--buttonRadius, 0px);
 }
 .chip-image__bundleChipImages___aq4HR .chip-image__itemImg___iI27G {
-  border-radius: calc(var(--itemImageRadius, 11px) / 2);
+  border-radius: calc(var(--buttonRadius, 0px) / 2);
   display: flex;
 }
 

@@ -20,7 +20,6 @@ const JuspayCardForm = ({
   handleShowFailedMessage,
   cardDetails,
   setIsJuspayCouponApplied,
-  isPaymentDisabled = false,
 }) => {
   const [isJuspayLoaded, setIsJuspayLoaded] = useState(false);
   const juspayFormRef = useRef(null);
@@ -72,8 +71,8 @@ const JuspayCardForm = ({
       try {
         juspayFormRef.current = window.Juspay.Setup({
           payment_form: "#payment_form",
-          success_handler: function () {
-            // Success is handled by the payment status flow.
+          success_handler: function (status) {
+            console.log("Payment success:", status);
           },
           error_handler: function (
             error_code,
@@ -165,6 +164,7 @@ const JuspayCardForm = ({
           },
 
           iframe_element_callback: async function (event) {
+            console.log("event", event);
             if (event?.target_element === "card_number") {
               if (
                 event?.card_isin &&
@@ -400,7 +400,7 @@ const JuspayCardForm = ({
 
           {isMobile ? (
             <StickyPayNow
-              disabled={!isCardValid() || isPaymentDisabled}
+              disabled={!isCardValid()}
               value={priceFormatCurrencySymbol(
                 getCurrencySymbol,
                 getTotalValue()
@@ -413,7 +413,7 @@ const JuspayCardForm = ({
               type="submit"
               id="common_pay_btn"
               className={styles.saveNewCard}
-              disabled={!isCardValid() || isPaymentDisabled}
+              disabled={!isCardValid()}
             >
               {t("resource.common.pay_caps")}{" "}
               {priceFormatCurrencySymbol(

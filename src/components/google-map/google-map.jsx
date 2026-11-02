@@ -17,7 +17,6 @@ import Autocomplete from "react-google-autocomplete";
 import SearchIcon from "../../assets/images/search.svg";
 import LocateIcon from "../../assets/images/locate.svg";
 import { useGlobalTranslation } from "fdk-core/utils";
-import { getGoogleMapFormFields } from "../../helper/address-form-location";
 const mapContainerStyle = {
   width: "100%",
   height: "300px",
@@ -87,12 +86,6 @@ const GoogleMapAddress = ({
   const mapRef = useRef(null);
   const hasInitialGeocodeRef = useRef(false);
   const lastGeocodeKeyRef = useRef(null);
-  const selectedPlaceRef = useRef(null);
-  const mapAddressFieldsRef = useRef(null);
-  const geocodeRequestRef = useRef(0);
-  useEffect(() => () => {
-    geocodeRequestRef.current += 1;
-  }, [mapApiKey, countryDetails?.iso2]);
 
   const { isLoaded: isMapLoaded } = useJsApiLoader({
     googleMapsApiKey: mapApiKey,
@@ -141,10 +134,7 @@ const GoogleMapAddress = ({
         longitude: selectedPlace?.lng,
       },
     };
-    onAddressSelect({
-      ...data,
-      map_address_fields: data.map_address_fields || mapAddressFieldsRef.current,
-    });
+    onAddressSelect(data);
   }
 
   const handlePlaceSelect = useCallback((place) => {
@@ -153,9 +143,6 @@ const GoogleMapAddress = ({
       const lat = location.lat();
       const lng = location.lng();
       setSelectedPlace({ lat, lng });
-      selectedPlaceRef.current = {
-        lat, lng, ...getGoogleMapFormFields(place.address_components),
-      };
       // Save the selected location for future use
       try {
         localStorage.setItem('lastMapLocation', JSON.stringify({ lat, lng }));
@@ -172,20 +159,15 @@ const GoogleMapAddress = ({
     } else {
       console.error("No geometry available for selected place");
     }
-  }, [mapApiKey, countryDetails?.iso2]);
+  }, []);
 
   const getCityAndState = async (lat, lng) => {
-    const request = ++geocodeRequestRef.current;
     try {
       const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}${countryDetails?.iso2 === "IN" ? "&language=en" : ""}&key=${mapApiKey}`
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${mapApiKey}`
       );
       const data = await response.json();
-      if (request !== geocodeRequestRef.current) return;
       const addressComponents = data.results[0].address_components;
-      mapAddressFieldsRef.current = getGoogleMapFormFields(
-        addressComponents, { lat, lng }, selectedPlaceRef.current
-      );
       stateReset();
       let subLocalities = [];
       let localPremise = "";
@@ -243,18 +225,13 @@ const GoogleMapAddress = ({
       if (lastGeocodeKeyRef.current === key) {
         return;
       }
-      const request = ++geocodeRequestRef.current;
       const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}${countryDetails?.iso2 === "IN" ? "&language=en" : ""}&key=${mapApiKey}`
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${mapApiKey}`
       );
       const data = await response.json();
-      if (request !== geocodeRequestRef.current) return;
       let subLocalities = [];
       if (data.results && data.results.length > 0) {
         const place = data.results[0];
-        mapAddressFieldsRef.current = getGoogleMapFormFields(
-          place.address_components, { lat, lng }, selectedPlaceRef.current
-        );
         setAddress(place.formatted_address);
         let outLat = lat;
         let outLng = lng;
@@ -335,7 +312,6 @@ const GoogleMapAddress = ({
     if (navigator?.geolocation) {
       navigator?.geolocation?.getCurrentPosition(
         (position) => {
-          selectedPlaceRef.current = null;
           const pos = {
             lat: position.coords.latitude,
             lng: position.coords.longitude,

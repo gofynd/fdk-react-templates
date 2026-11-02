@@ -1,10 +1,7 @@
 import React, { useState, useMemo, createRef } from "react";
 import FyImage from "../../../../components/core/fy-image/fy-image";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
-import {
-  getProductImgAspectRatio,
-  isYouTubeUrl,
-} from "../../../../helper/utils";
+import { getProductImgAspectRatio } from "../../../../helper/utils";
 import Viewer3D from "../viewer-3d/viewer-3d";
 import * as styles from "./mobile-slider.less";
 import { useGlobalTranslation } from "fdk-core/utils";
@@ -86,7 +83,7 @@ function MobileSlider({
   }
 
   function getImageURL(src) {
-    return `https://img.youtube.com/vi/${src?.substr((src?.lastIndexOf("/") ?? "") + 1)}/0.jpg`;
+    return `http://img.youtube.com/vi/${src?.substr((src?.lastIndexOf("/") ?? "") + 1)}/0.jpg`;
   }
 
   return (
@@ -116,7 +113,7 @@ function MobileSlider({
                 )}
                 {media.type === "video" && (
                   <div className={styles.videoContainer}>
-                    {isYouTubeUrl(media?.url) && (
+                    {media?.url.includes("youtube") && (
                       <img
                         src={getImageURL(media.url)}
                         alt={media.alt}
@@ -124,7 +121,7 @@ function MobileSlider({
                       />
                     )}
                     <div className={styles.videoPlayerWrapper}>
-                      {!isYouTubeUrl(media?.url) && (
+                      {!media?.url.includes("youtube") && (
                         <div>
                           <video
                             ref={videoRef}
@@ -164,7 +161,7 @@ function MobileSlider({
                         </div>
                       )}
 
-                      {isYouTubeUrl(media.url) && (
+                      {media.url.includes("youtube") && (
                         <SvgWrapper
                           svgSrc="play-button"
                           className={styles.thumbnail}

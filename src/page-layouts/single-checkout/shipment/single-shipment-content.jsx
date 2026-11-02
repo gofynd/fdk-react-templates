@@ -252,10 +252,7 @@ function SingleShipmentContent({
                                     <div className={styles.brandName}>
                                       {product?.item?.product?.brand?.name}
                                     </div>
-                                    <div
-                                      className={styles.productName}
-                                      title={product?.item?.product?.name}
-                                    >
+                                    <div className={styles.productName}>
                                       {product?.item?.product?.name}
                                     </div>
                                   </div>

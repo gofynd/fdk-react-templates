@@ -216,7 +216,6 @@ const WishlistProductCard = ({
         followedIdList={followedIdList}
         isImageFill={isImageFill}
         imageBackgroundColor={imageBackgroundColor}
-        customImageContainerClass={styles.wishlistImageContainer}
         imagePlaceholder={imagePlaceholder}
         columnCount={{ desktop: 4, tablet: 3, mobile: 2 }}
         showAddToCart={showAddToCart}

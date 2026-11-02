@@ -277,13 +277,7 @@ const ProductCard = ({
     );
 
     if (!variants?.items?.length) {
-      return {
-        items: [],
-        count: 0,
-        defaultVariant: null,
-        hasVariants: false,
-        displayType: null,
-      };
+      return { items: [], count: 0, defaultVariant: null, hasVariants: false };
     }
 
     const defaultVariant = variants.items.find(
@@ -295,7 +289,6 @@ const ProductCard = ({
       count: variants.items.length,
       defaultVariant,
       hasVariants: true,
-      displayType: variants.display_type,
     };
   }, [product.variants, product.slug]);
 
@@ -715,46 +708,13 @@ const ProductCard = ({
             </div>
           )}
 
-          {/* OPTIMIZED VARIANTS SECTION (color dots / image thumbnails) */}
+          {/* OPTIMIZED COLOR VARIANTS SECTION */}
           {colorVariants.hasVariants && showColorVariants && (
             <div className={styles.productVariants}>
               <div className={styles.colorVariants}>
                 {orderedVariants.slice(0, 4).map((variant) => {
                   const isSelected = currentShade?.uid === variant.uid;
-                  const variantLabel =
-                    variant.color_name || variant.name || "variant";
-                  const variantImage =
-                    colorVariants.displayType === "image"
-                      ? variant.medias?.find(
-                          (media) => media.type === "image"
-                        )?.url
-                      : null;
 
-                  // Image-based variant swatch (PDP-style logic, circular card UI)
-                  if (variantImage) {
-                    return (
-                      <div
-                        key={variant.uid}
-                        className={`${styles.imageDot} ${isSelected ? styles.currentColor : ""}`}
-                        title={variantLabel}
-                        onClick={(e) => handleVariantClick(e, variant)}
-                        role="button"
-                        tabIndex={0}
-                        aria-label={`Select ${variantLabel}`}
-                      >
-                        <FyImage
-                          src={variantImage}
-                          alt={variantLabel}
-                          aspectRatio={1}
-                          isImageFill
-                          isFixedAspectRatio
-                          customClass={styles.imageDotImg}
-                        />
-                      </div>
-                    );
-                  }
-
-                  // Color-dot swatch (also fallback for image variants missing media)
                   return (
                     <div
                       key={variant.uid}

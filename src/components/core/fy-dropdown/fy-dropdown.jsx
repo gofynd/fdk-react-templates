@@ -40,9 +40,6 @@ const FyDropdown = ({
   showAsterik = true,
   labelClassName,
   containerClassName,
-  dropdownClassName = "",
-  dropdownButtonClassName = "",
-  dropdownIconClassName = "",
   dropdownListClassName,
   dropdownOptionClassName,
   value,
@@ -185,8 +182,7 @@ const FyDropdown = ({
       const disabled = disabledOptions?.includes(option?.[dataKey]);
       const className = `${styles.dropdownOption} ${option?.[dataKey] === selectedValue?.[dataKey] ? styles.selected : ""} ${disabled ? `${styles.disabled} ${disabledOptionClassName}` : ""} ${dropdownOptionClassName}`;
       listItem.className = className;
-      // Option labels are plain text; never parse them as HTML.
-      listItem.textContent = option.display ?? "";
+      listItem.innerHTML = option.display;
       if (!disabled) {
         listItem.addEventListener("click", (event) => {
           event?.stopPropagation();
@@ -251,12 +247,12 @@ const FyDropdown = ({
         </label>
       )}
       <div
-        className={`${styles.dropdown} ${dropdownClassName} ${error ? styles.dropDownError : ""} ${disabled ? styles.disabled : ""}`}
+        className={`${styles.dropdown} ${error ? styles.dropDownError : ""} ${disabled ? styles.disabled : ""}`}
         ref={dropdown}
       >
         {disableSearch ? (
           <div
-            className={`${styles.dropdownButton} ${dropdownButtonClassName}`}
+            className={styles.dropdownButton}
             onClick={toggleDropdown}
             ref={dropdownButton}
           >
@@ -267,12 +263,12 @@ const FyDropdown = ({
             </span>
             <SvgWrapper
               svgSrc="arrow-down"
-              className={`${styles.dropdownIcon} ${dropdownIconClassName} ${isOpen ? styles.open : ""}`}
+              className={`${styles.dropdownIcon} ${isOpen ? styles.open : ""}`}
             />
           </div>
         ) : (
           <div
-            className={`${styles.dropdownButton} ${dropdownButtonClassName}`}
+            className={styles.dropdownButton}
             onClick={toggleDropdown}
             ref={dropdownButton}
             tabIndex={!disableSearch ? 0 : null}
@@ -292,7 +288,7 @@ const FyDropdown = ({
             />
             <SvgWrapper
               svgSrc="arrow-down"
-              className={`${styles.dropdownIcon} ${dropdownIconClassName} ${isOpen ? styles.open : ""}`}
+              className={`${styles.dropdownIcon} ${isOpen ? styles.open : ""}`}
             />
           </div>
         )}

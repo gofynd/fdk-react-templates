@@ -88,9 +88,6 @@
     cursor: pointer;
     display: flex;
     gap: 16px;
-    min-width: 0;
-    width: 100%;
-    box-sizing: border-box;
     transition: opacity 0.2s ease;
 
     &:hover {
@@ -99,9 +96,9 @@
 
     .shipmentLeft {
       width: 100px;
-      aspect-ratio: var(--orderImageAspectRatio, 0.8);
+      height: 100px;
       flex-shrink: 0;
-      border-radius: @ItemImageRadius;
+      border-radius: @ButtonRadius;
       overflow: hidden;
       background: white;
       position: relative;
@@ -179,11 +176,6 @@
         margin: 0;
         white-space: pre-wrap;
       }
-      .productName {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
       .shipmentStats {
         margin: 0;
         color: @TextLabel;
@@ -230,7 +222,6 @@
   }
 
   .shipmentThird {
-    flex-shrink: 0;
     margin: 0;
     .status {
       border-radius: 4px;

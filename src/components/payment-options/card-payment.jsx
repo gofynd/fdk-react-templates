@@ -39,7 +39,6 @@ function CardPayment({
   selectedPaymentPayload,
   enableLinkPaymentOption,
   isPaymentLoading,
-  isPaymentDisabled = false,
   loader,
   onPriceDetailsClick,
   StickyPayNow,
@@ -141,7 +140,6 @@ function CardPayment({
       selectMop,
       setIsJuspayCouponApplied,
       isPaymentLoading,
-      isPaymentDisabled,
       loader,
     }),
     [
@@ -193,7 +191,6 @@ function CardPayment({
       selectMop,
       setIsJuspayCouponApplied,
       isPaymentLoading,
-      isPaymentDisabled,
       loader,
     ]
   );
@@ -365,9 +362,7 @@ function CardPayment({
                               value={totalPayValue}
                               onPriceDetailsClick={onPriceDetailsClick}
                               disabled={
-                                !selectedCard?.card_id ||
-                                mopSelectionLoading ||
-                                isPaymentDisabled
+                                !selectedCard?.card_id || mopSelectionLoading
                               }
                               enableLinkPaymentOption={enableLinkPaymentOption}
                               isPaymentLoading={isPaymentLoading}
@@ -380,9 +375,7 @@ function CardPayment({
                                 className={styles.payBtn}
                                 onClick={payWithSelectedCard}
                                 disabled={
-                                  isPaymentLoading ||
-                                  mopSelectionLoading ||
-                                  isPaymentDisabled
+                                  isPaymentLoading || mopSelectionLoading
                                 }
                               >
                                 {!isPaymentLoading ? (

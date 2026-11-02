@@ -108,6 +108,7 @@ function ShipmentTracking({
 
   const handleBuyAgain = async (productSlug) => {
     if (onAddToCart) {
+      console.log("handleBuyAgain called", { productSlug });
       // Use provided handler (typically opens add-to-cart modal)
       onAddToCart(productSlug);
     }

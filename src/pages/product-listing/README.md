@@ -87,7 +87,7 @@ const App = () => {
           },
           domain: "http://127.0.0.1:5001",
           authorizationHeader:
-            "Bearer <APPLICATION_TOKEN>",
+            "Bearer NjY4NzY1ZTFjOTg0MDE2ZDc4MjIyYTIxOm1pcHNleFVFWA==",
           getters: {},
           custom: {},
           theme: {},

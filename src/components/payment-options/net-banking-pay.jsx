@@ -37,7 +37,6 @@ function NetBankingPay({
   // payload
   selectedPaymentPayload,
   mopSelectionLoading,
-  isPaymentDisabled = false,
 }) {
   const isTablet = useViewport(0, 768);
 
@@ -93,9 +92,7 @@ function NetBankingPay({
                 true
               )}
               onPriceDetailsClick={onPriceDetailsClick}
-              disabled={
-                mopSelectionLoading || !selectedNB?.code || isPaymentDisabled
-              }
+              disabled={mopSelectionLoading || !selectedNB?.code}
               enableLinkPaymentOption={enableLinkPaymentOption}
               isPaymentLoading={isPaymentLoading}
               loader={loader}
@@ -115,9 +112,7 @@ function NetBankingPay({
                     acceptOrder();
                   }
                 }}
-                disabled={
-                  mopSelectionLoading || isPaymentLoading || isPaymentDisabled
-                }
+                disabled={mopSelectionLoading || isPaymentLoading}
               >
                 {!isPaymentLoading ? (
                   <>
