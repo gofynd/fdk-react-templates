@@ -106,13 +106,93 @@ export const resolveAddressMapCenter = (address, lastUsed, country) =>
     },
   }) || { lat: 19.076, lng: 72.8777 };
 
-export const mergeMapAddressFormFields = (current, address, countryIso) => {
+export const getAddressCountryDraft = (current, country) => {
+  const draft = {};
+  [
+    "name",
+    "phone",
+    "email",
+    "address_type",
+    "otherAddressType",
+    "is_default_address",
+  ].forEach((key) => {
+    if (current?.[key] !== undefined) draft[key] = current[key];
+  });
+  draft.country =
+    typeof country === "object"
+      ? country.name || country.display_name || country.iso2
+      : country;
+  if (country?.iso2) draft.country_iso_code = country.iso2;
+  return draft;
+};
+
+export const mergeMapAddressFormFields = (
+  current,
+  address,
+  countryIso,
+  addressFields = []
+) => {
   const fields = getMapAddressFormFields(address, countryIso);
+  const previousPoint = getAddressMapPoint(current);
+  const nextPoint = getAddressMapPoint(address);
+  const moved =
+    nextPoint &&
+    (!previousPoint ||
+      previousPoint.lat !== nextPoint.lat ||
+      previousPoint.lng !== nextPoint.lng);
+  const fieldKey = (slug) => (slug === "pincode" ? "area_code" : slug);
+  const fieldValue = (value) =>
+    String(
+      value && typeof value === "object"
+        ? (value.display_name ?? value.display ?? value.name ?? value.key ?? "")
+        : (value ?? "")
+    ).trim();
+  const parents = new Map();
+  addressFields.forEach((field) => {
+    if (field.prev) parents.set(field.slug, field.prev);
+    if (field.next) parents.set(field.next, field.slug);
+  });
+  const cleared = {};
+  const locationFields = new Set([
+    "pincode",
+    "city",
+    "state",
+    "sector",
+    ...parents.keys(),
+  ]);
+  locationFields.delete("country");
+  // A changed map parent can invalidate an Area even when the map returns no
+  // coordinates. Preserve explicit map values and unchanged edit selections.
+  addressFields.forEach((field) => {
+    const key = fieldKey(field.slug);
+    if (fieldValue(fields?.[key])) return;
+    if (moved && locationFields.has(field.slug)) {
+      cleared[key] = "";
+      return;
+    }
+    if (!parents.has(field.slug)) return;
+    let parent = parents.get(field.slug);
+    const visited = new Set([field.slug]);
+    let parentChanged = false;
+    while (parent && !visited.has(parent)) {
+      visited.add(parent);
+      const parentKey = fieldKey(parent);
+      if (
+        parentKey in (fields || {}) &&
+        fieldValue(fields[parentKey]) !== fieldValue(current?.[parentKey])
+      )
+        parentChanged = true;
+      parent = parents.get(parent);
+    }
+    if (moved || parentChanged) cleared[key] = "";
+  });
   return {
     ...current,
     ...fields,
-    ...("area_code" in (fields || {}) && "pincode" in current
-      ? { pincode: fields.area_code }
+    ...cleared,
+    ...(("area_code" in (fields || {}) || "area_code" in cleared) &&
+    "pincode" in current
+      ? { pincode: cleared.area_code ?? fields.area_code }
       : {}),
     ...((address?.country_iso_code || countryIso)?.toUpperCase() === "IN"
       ? { address: fields.address || current.address || "" }

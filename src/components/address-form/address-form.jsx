@@ -66,6 +66,7 @@ import {
   getInitialAddressFormFields,
   mergeMapAddressFormFields,
   getAddressFormFieldErrors,
+  getAddressCountryDraft,
 } from "../../helper/address-form-location";
 import { useAddressAutofill } from "../../helper/hooks";
 
@@ -548,7 +549,7 @@ useEffect(() => {
   if (addressItem) {
     const transformedPhone = transformPhoneForForm(
       addressItem.phone,
-      addressItem.country_phone_code
+      addressItem.country_phone_code || addressItem.country_code || countryDetails?.phone_code
     );
 
     // Destructure to exclude phone from addressItem spread, then add transformed phone if available
@@ -692,24 +693,28 @@ useEffect(() => {
     }
   };
 
-  const handleCountryChange = (event) => {
+  const countryChangeRevision = useRef(0);
+  const handleCountryChange = async (event) => {
+    const revision = ++countryChangeRevision.current;
     // Only update header country when adding a new address
     // When editing, don't change the header country - it should remain as user's preference
     if (isNewAddress) {
-      setI18nDetails(event);
-    }
-    
-    setValue("country", event);
-    setTimeout(() => {
-      updatedFormSchema?.forEach((group) =>
-        group?.fields?.forEach(({ key }) => {
-          // Don't clear user auto-filled fields when country changes
-          if (key !== "name" && key !== "phone" && key !== "email") {
-            setValue(key, "");
-          }
-        })
+      const country = countryCurrencies?.find(
+        (item) =>
+          item.name === event ||
+          item.display_name === event ||
+          item.iso2 === event,
       );
-    }, 0);
+      const draft = getAddressCountryDraft(getValues(), country || event);
+      let applied = false;
+      try {
+        applied = await setI18nDetails?.(event, draft);
+      } catch (error) {
+        applied = false;
+      }
+      if (revision !== countryChangeRevision.current) return;
+      if (applied !== false) reset(draft, { keepDefaultValues: true });
+    }
   };
 
   const selectAddress = (data) => {
@@ -717,17 +722,37 @@ useEffect(() => {
     // Get current form values to preserve name, phone, and email
     const currentValues = getValues();
     // Get contact info from addressItem if available (for edit scenario)
-    const addressItemPhone = addressItem?.phone 
-      ? transformPhoneForForm(addressItem.phone, addressItem.country_phone_code)
+    const addressItemPhone = addressItem?.phone
+      ? transformPhoneForForm(
+          addressItem.phone,
+          addressItem.country_phone_code ||
+            addressItem.country_code ||
+            countryDetails?.phone_code,
+        )
       : null;
-    
+
     // Merge Google Maps data with existing form values, preserving contact info
     const mergedData = {
-      ...mergeMapAddressFormFields(currentValues, data, countryDetails?.iso2),
+      ...mergeMapAddressFormFields(
+        currentValues,
+        data,
+        countryDetails?.iso2,
+        countryDetails?.fields?.address,
+      ),
       // Preserve name, phone, and email - prioritize current form, then addressItem, then data
-      name: currentValues.name || addressItem?.name || data.name || userAutofillData?.name || "",
+      name:
+        currentValues.name ||
+        addressItem?.name ||
+        data.name ||
+        userAutofillData?.name ||
+        "",
       // Don't use userAutofillData phone if international shipping is enabled
-      phone: currentValues.phone || addressItemPhone || data.phone || (!internationalShipping ? userAutofillData?.phone : "") || "",
+      phone:
+        currentValues.phone ||
+        addressItemPhone ||
+        data.phone ||
+        (!internationalShipping ? userAutofillData?.phone : "") ||
+        "",
       email:
         currentValues.email ??
         addressItem?.email ??

@@ -66,6 +66,7 @@ import {
   getInitialAddressFormFields,
   mergeMapAddressFormFields,
   getAddressFormFieldErrors,
+  getAddressCountryDraft,
   shouldOpenAddressMap,
   getAddressMapPoint,
 } from "../../../helper/address-form-location";
@@ -548,7 +549,7 @@ const AddressForm = ({
     if (addressItem) {
       const transformedPhone = transformPhoneForForm(
         addressItem.phone,
-        addressItem.country_phone_code
+        addressItem.country_phone_code || addressItem.country_code || countryDetails?.phone_code
       );
 
       // Destructure to exclude phone and country_phone_code from addressItem spread
@@ -720,10 +721,15 @@ const AddressForm = ({
     }
   };
 
-  const handleCountryChange = (event) => {
+  const countryChangeRevision = useRef(0);
+  const handleCountryChange = async (event) => {
+    const revision = ++countryChangeRevision.current;
     // Find the country object from countryCurrencies
     const selectedCountryObj = countryCurrencies?.find(
-      (country) => country.name === event || country.display_name === event
+      (country) =>
+        country.name === event ||
+        country.display_name === event ||
+        country.iso2 === event,
     );
 
     // Update local state immediately to preserve selection
@@ -737,20 +743,23 @@ const AddressForm = ({
     // Only update header country when adding a new address
     // When editing, don't change the header country - it should remain as user's preference
     if (isNewAddress) {
-      setI18nDetails(event);
-    }
-
-    setValue("country", event);
-    setTimeout(() => {
-      schemaWithNameValidation?.forEach((group) =>
-        group?.fields?.forEach(({ key }) => {
-          // Don't clear user auto-filled fields when country changes
-          if (key !== "name" && key !== "phone" && key !== "email") {
-            setValue(key, "");
-          }
-        })
+      const draft = getAddressCountryDraft(
+        getValues(),
+        selectedCountryObj || event,
       );
-    }, 0);
+      let applied = false;
+      try {
+        applied = await setI18nDetails?.(event, draft);
+      } catch (error) {
+        applied = false;
+      }
+      if (revision !== countryChangeRevision.current) return;
+      if (applied === false) {
+        setLocalSelectedCountry(selectedCountry || currentCountry);
+        return;
+      }
+      reset(draft, { keepDefaultValues: true });
+    }
   };
 
   // Update localSelectedCountry when selectedCountry prop changes (from parent)
@@ -777,12 +786,22 @@ const AddressForm = ({
     const currentValues = getValues();
     // Get contact info from addressItem if available (for edit scenario)
     const addressItemPhone = addressItem?.phone
-      ? transformPhoneForForm(addressItem.phone, addressItem.country_phone_code)
+      ? transformPhoneForForm(
+          addressItem.phone,
+          addressItem.country_phone_code ||
+            addressItem.country_code ||
+            countryDetails?.phone_code,
+        )
       : null;
 
     // Merge Google Maps data with existing form values, preserving contact info and address type
     const mergedData = {
-      ...mergeMapAddressFormFields(currentValues, data, countryDetails?.iso2),
+      ...mergeMapAddressFormFields(
+        currentValues,
+        data,
+        countryDetails?.iso2,
+        countryDetails?.fields?.address,
+      ),
       // Preserve name, phone, and email - prioritize current form, then addressItem, then userAutofillData
       name:
         currentValues.name ||

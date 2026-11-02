@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { Controller } from "react-hook-form";
+import React, { useEffect, useState, useRef } from "react";
+import { Controller, useWatch } from "react-hook-form";
 import FyInput from "../core/fy-input/fy-input";
 import FyInputGroup from "../core/fy-input-group/fy-input-group";
 import FyDropdown from "../core/fy-dropdown/fy-dropdown";
 import MobileNumber from "../../page-layouts/auth/mobile-number/mobile-number";
 import * as styles from "./form-input-selector.less";
-import { translateDynamicLabel, translateValidationMessages } from "../../helper/utils";
+import {
+  translateDynamicLabel,
+  translateValidationMessages,
+} from "../../helper/utils";
 import { useGlobalTranslation } from "fdk-core/utils";
 
 const MapFieldVisibility = ({ error, children }) => {
@@ -45,6 +48,21 @@ const FormInputSelector = ({
     onChange = () => {},
     countryIso = "",
   } = formData;
+  const formMethodsRef = useRef(formMethods);
+  formMethodsRef.current = formMethods;
+  const optionDependencyValues = useWatch({
+    control,
+    name: formData.optionDependencies || [],
+    disabled: !formData.onLoadOptions,
+  });
+  const optionDependenciesKey = JSON.stringify(optionDependencyValues);
+
+  useEffect(() => {
+    // reset(), edit defaults and map prefills do not fire an input's onChange.
+    // Load their options separately so existing child selections are preserved.
+    formData.onLoadOptions?.(formMethodsRef.current);
+  }, [formData.onLoadOptions, optionDependenciesKey]);
+
   const getInput = ({ error, field }) => {
     switch (type) {
       case "checkbox":
