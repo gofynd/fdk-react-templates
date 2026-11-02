@@ -60,6 +60,7 @@ function MobileNumber({
   const { t } = useGlobalTranslation("translation");
   const inputId = useId();
   const phoneInputRef = useRef(null);
+  const labelText = (label || t("resource.common.mobile")).replace(/\s*\*+\s*$/, "");
 
   const phoneUtil = PhoneNumberUtil.getInstance();
 
@@ -133,7 +134,7 @@ function MobileNumber({
             color: "var(--textLabel , #7d7676)",
           }}
         >
-          {label || t("resource.common.mobile")}
+          {labelText}
           {isRequired === "optional" ? (
             !showAsOptional ? (
               ""

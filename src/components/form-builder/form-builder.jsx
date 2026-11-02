@@ -140,6 +140,7 @@ const FormInputSelector = ({ formData, control }) => {
             mobile={field?.value?.mobile}
             label={display}
             error={error}
+            showAsOptional={false}
             isRequired={required ? "required" : "optional"}
             onChange={field?.onChange}
             height="40px"
