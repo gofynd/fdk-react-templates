@@ -420,7 +420,11 @@ const AddressForm = ({
       country: selectedCountry || t("resource.localization.india"),
       // Auto-fill user data using memoized utility function (excluding phone if international)
       ...autofillDataForForm,
-      email: addressItem ? addressItem?.email || "" : isNewAddress ? autofillDataForForm?.email || "" : "",
+      // A new address may open on a location draft, which never carries the
+      // customer's email; fall back to their profile email as for an empty form.
+      email:
+        addressItem?.email ||
+        (isNewAddress ? autofillDataForForm?.email || "" : ""),
       // area_code: addressItem?.area_code || defaultPincode || "",
     },
   });
@@ -581,7 +585,9 @@ const AddressForm = ({
         }),
         // ✅ FIXED: Use ternary to avoid creating new values on every render
         country: countryValue,
-        email: addressItem?.email || "",
+        email:
+          addressItem?.email ||
+          (isNewAddress ? userAutofillData?.email || "" : ""),
       });
       if (
         isNewAddress &&
