@@ -138,9 +138,9 @@ const FormInputSelector = ({ formData, control }) => {
         return (
           <MobileNumber
             mobile={field?.value?.mobile}
-            label={`${display}${required ? " *" : ""}`}
+            label={display}
             error={error}
-            isRequired={required}
+            isRequired={required ? "required" : "optional"}
             onChange={field?.onChange}
             height="40px"
             labelClassName={styles.mobileLabel}

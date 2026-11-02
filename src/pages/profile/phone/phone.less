@@ -17,6 +17,10 @@
 .phoneInputContainer {
   width: 350px !important;
 
+  input {
+    color: @TextHeading !important;
+  }
+
   @media @mobile {
     width: unset !important;
     flex: 1;
@@ -62,8 +66,13 @@
 
     @media @tablet {
       width: 100%;
-      padding: 16px;
+      padding: 16px 0;
     }
+
+    @media @mobile {
+      padding-bottom: 0;
+    }
+
     .customInput {
       display: flex;
       .form-item {
@@ -92,21 +101,21 @@
     .actionContainer {
       .verified {
         padding: 0 12px;
-        border-radius: 4px;
+        border-radius: @ButtonRadius;
         height: 100%;
         cursor: unset;
       }
 
       .primary {
         padding: 12px;
-        border-radius: 2px;
+        border-radius: @ButtonRadius;
         margin: 0px 5px;
         height: auto;
       }
 
       .verifyBtn {
         padding: 0 12px;
-        border-radius: 4px;
+        border-radius: @ButtonRadius;
         height: 100%;
         white-space: nowrap;
       }

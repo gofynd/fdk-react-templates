@@ -1,9 +1,34 @@
 import React, { useRef, useEffect, useId } from "react";
-import { PhoneInput } from "react-international-phone";
+import {
+  PhoneInput,
+  buildCountryData,
+  defaultCountries,
+  parseCountry,
+} from "react-international-phone";
 import "react-international-phone/style.css";
 import * as styles from "./mobile-number.less";
 import { PhoneNumberUtil, PhoneNumberType } from "google-libphonenumber";
 import { useGlobalTranslation } from "fdk-core/utils";
+
+// react-international-phone's Argentina masks expose only 10 digit slots, but an Argentine mobile
+// in international format is 11 digits (9 + 2-4 digit area code + 6-8 digit subscriber). The mask
+// silently drops the 11th digit, so isPhoneValid below can never be satisfied and no Argentine
+// customer can save an address. Widen the "9" (mobile) variant to 11 slots and leave the
+// landline variants untouched.
+const AR_MOBILE_MASK = "(.) .... ......";
+const phoneCountries = defaultCountries.map((entry) => {
+  const country = parseCountry(entry);
+  if (country.iso2 !== "ar") return entry;
+  return buildCountryData({
+    ...country,
+    // v4.5 stores `format` as a single string, v4.8+ as a per-prefix map; both accept the map,
+    // so normalise to a map to keep the existing landline masks byte-identical.
+    format:
+      typeof country.format === "string"
+        ? { default: country.format, "/^9/": AR_MOBILE_MASK }
+        : { ...country.format, "/^9/": AR_MOBILE_MASK },
+  });
+});
 
 function MobileNumber({
   name = "",
@@ -178,6 +203,7 @@ function MobileNumber({
         disableDialCodePrefill={true}
         disableDialCodeAndPrefix={true}
         showDisabledDialCodeAndPrefix={true}
+        countries={phoneCountries}
         {...rest}
       />
       {error && <span className={styles.errorText}>{error.message}</span>}

@@ -341,14 +341,14 @@ h5,
   cursor: pointer;
   display: flex;
   align-items: center;
-  color: var(--buttonLink, #b1655b);
+  color: var(--textBody, #3c3131);
 }
 .share-cart__cartSharePopup___ISttH .share-cart__cartShare___mjVv6 .share-cart__nccCartShare___BZZPK .share-cart__shareCartIconGreen___KIWWa {
   display: flex;
   align-items: center;
 }
 .share-cart__cartSharePopup___ISttH .share-cart__cartShare___mjVv6 .share-cart__nccCartShare___BZZPK .share-cart__shareCartIconGreen___KIWWa svg path {
-  fill: var(--buttonLink, #b1655b);
+  fill: var(--textBody, #3c3131);
 }
 .share-cart__cartSharePopup___ISttH .share-cart__cartShare___mjVv6 .share-cart__nccCartShare___BZZPK .share-cart__shareBagBtn___T6B6i {
   font-size: 12px;
@@ -366,15 +366,11 @@ h5,
   font-size: 12px;
   font-weight: 600;
   background: var(--pageBackground, #f8f8f8);
+  border-radius: var(--buttonRadius, 0px);
 }
 @media only screen and (min-width: 769px) and (max-width: 1024px) {
   .share-cart__cartSharePopup___ISttH .share-cart__cartShare___mjVv6 .share-cart__shareCartBox___Wlycv {
     padding: 16px;
-  }
-}
-@media only screen and (min-width: 769px) {
-  .share-cart__cartSharePopup___ISttH .share-cart__cartShare___mjVv6 .share-cart__shareCartBox___Wlycv {
-    border-radius: 8px;
   }
 }
 @media only screen and (max-width: 480px) {
@@ -394,6 +390,10 @@ h5,
 .share-cart__cartSharePopup___ISttH .share-cart__cartShare___mjVv6 .share-cart__shareCartBox___Wlycv .share-cart__rightPart___al1Ie {
   color: var(--textHeading, #26201a);
   cursor: pointer;
+}
+.share-cart__shareCartIcon___sGoST svg {
+  color: var(--textBody, #3c3131);
+  fill: var(--textBody, #3c3131);
 }
 
 /**color by character**/

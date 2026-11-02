@@ -34,6 +34,7 @@ const ProductListing = ({
   productCount = 0,
   title = "",
   description = "",
+  descriptionFontSize,
   isScrollTop = true,
   filterList = [],
   selectedFilters = [],
@@ -102,9 +103,7 @@ const ProductListing = ({
   } = addToCartModalProps;
 
   const addToCartModalTitle = isTablet
-    ? restAddToModalProps?.productData?.product?.name?.length > 30
-      ? `${restAddToModalProps?.productData?.product?.name?.slice(0, 30)}...`
-      : restAddToModalProps?.productData?.product?.name || ""
+    ? restAddToModalProps?.productData?.product?.name || ""
     : "";
 
   return (
@@ -233,7 +232,11 @@ const ProductListing = ({
             <div className={styles.right}>
               <div className={styles.rightHeader}>
                 <div className={styles.headerLeft}>
-                  {title && <h2 className={styles.title}>{title}</h2>}
+                  {title && (
+                    <h2 className={styles.title} title={title}>
+                      {title}
+                    </h2>
+                  )}
                   {isProductCountDisplayed && (
                     <span className={styles.productCount}>
                       {`${productCount} ${productCount > 1 ? t("resource.common.items") : t("resource.common.item")}`}
@@ -422,6 +425,7 @@ const ProductListing = ({
               <ListingDescription
                 key={description.length}
                 description={description}
+                descriptionFontSize={descriptionFontSize}
               />
             </div>
           </div>
@@ -436,6 +440,7 @@ const ProductListing = ({
                   hideHeader={!isTablet}
                   containerClassName={styles.addToCartContainer}
                   bodyClassName={styles.addToCartBody}
+                  headerClassName={styles.addToCartHeader}
                   titleClassName={styles.addToCartTitle}
                   title={addToCartModalTitle}
                   closeDialog={restAddToModalProps?.handleClose}

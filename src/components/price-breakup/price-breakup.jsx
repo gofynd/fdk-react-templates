@@ -215,7 +215,7 @@ function PriceBreakup({
               <span className={styles.discountPreviewAmount}>
                 <ForcedLtr
                   text={priceFormatCurrencySymbol(
-                    currencySymbol,
+                    breakUpValues?.[0]?.currency_symbol || currencySymbol,
                     totalDiscount,
                     undefined,
                     breakUpValues?.[0]?.currency_code,

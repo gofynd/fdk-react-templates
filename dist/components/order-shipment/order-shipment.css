@@ -418,6 +418,9 @@ h5,
   cursor: pointer;
   display: flex;
   gap: 16px;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
   transition: opacity 0.2s ease;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3:hover {
@@ -425,9 +428,9 @@ h5,
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentLeft___o0Q0q {
   width: 100px;
-  height: 100px;
+  aspect-ratio: var(--orderImageAspectRatio, 0.8);
   flex-shrink: 0;
-  border-radius: var(--buttonRadius, 0px);
+  border-radius: var(--itemImageRadius, 11px);
   overflow: hidden;
   background: white;
   position: relative;
@@ -504,6 +507,11 @@ h5,
   margin: 0;
   white-space: pre-wrap;
 }
+.order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__productName___i_PUa {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .order-shipment__orderItem____zenT .order-shipment__shipmentData___sofy3 .order-shipment__shipmentRight___DpAWq .order-shipment__shipmentStats___i5laS {
   margin: 0;
   color: var(--textLabel, #7d7676);
@@ -545,6 +553,7 @@ h5,
   margin: 8px 0px;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentThird___ETcwO {
+  flex-shrink: 0;
   margin: 0;
 }
 .order-shipment__orderItem____zenT .order-shipment__shipmentThird___ETcwO .order-shipment__status___ws6ge {
@@ -1447,7 +1456,7 @@ h5,
 }
 .bag__bagImg___F1kfj {
   min-width: 80px;
-  border-radius: var(--buttonRadius, 0px);
+  border-radius: var(--itemImageRadius, 11px);
   overflow: hidden;
 }
 .bag__bagImg___F1kfj picture,
@@ -1462,11 +1471,11 @@ h5,
   gap: 4px;
   aspect-ratio: var(--aspectRatio);
   border: 1px solid var(--dividerStokes, #d4d1d1);
-  border-radius: var(--buttonRadius, 0px);
+  border-radius: var(--itemImageRadius, 11px);
 }
 .bag__bundleImg___TEyPU .bag__bundleImgItem___slqOT {
   display: flex;
-  border-radius: calc(var(--buttonRadius, 0px) / 2);
+  border-radius: calc(var(--itemImageRadius, 11px) / 2);
   overflow: hidden;
   position: relative;
 }

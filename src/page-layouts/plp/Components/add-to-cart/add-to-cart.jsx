@@ -49,6 +49,12 @@ const AddToCart = ({
   const fpi = useFPI();
   const [foLoading, setFoLoading] = useState(false);
   const [isLoadingCart, setIsLoadingCart] = useState(false);
+  const canValidateInlineMandatoryPincode =
+    pageConfig?.mandatory_pincode &&
+    !deliverInfoProps?.isServiceability &&
+    !deliverInfoProps?.isCrossBorderOrder;
+  const isCheckoutDisabledByServiceability =
+    !isServiceable && !canValidateInlineMandatoryPincode;
 
   const handleCheckout = async (event, isBuyNow) => {
     setIsLoadingCart(true);
@@ -146,11 +152,6 @@ const AddToCart = ({
       ?.filter((size) => size?.quantity === 0 && !isMto)
       ?.map((size) => size?.value);
   }, [sizes?.sizes]);
-
-  const mobileTruncatedTitle = useMemo(() => {
-    if (!name) return "";
-    return name.length > 30 ? `${name.slice(0, 30)}...` : name;
-  }, [name]);
 
   return (
     <div className={styles.productDescContainer}>
@@ -425,7 +426,9 @@ const AddToCart = ({
                         size="medium"
                         onClick={(event) => handleCheckout(event, false)}
                         startIcon={<CartIcon className={styles.cartIcon} />}
-                        disabled={isLoadingCart || !isServiceable}
+                        disabled={
+                          isLoadingCart || isCheckoutDisabledByServiceability
+                        }
                       >
                         {t("resource.cart.add_to_cart_caps")}
                       </FyButton>
@@ -439,7 +442,9 @@ const AddToCart = ({
                     size="medium"
                     onClick={(event) => handleCheckout(event, true)}
                     startIcon={<BuyNowIcon className={styles.cartIcon} />}
-                    disabled={isLoadingCart || !isServiceable}
+                    disabled={
+                      isLoadingCart || isCheckoutDisabledByServiceability
+                    }
                   >
                     {t("resource.common.buy_now_caps")}
                   </FyButton>

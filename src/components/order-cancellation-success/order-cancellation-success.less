@@ -1,0 +1,80 @@
+@import "../../styles/main.less";
+
+.cancellationSuccess {
+  width: 100%;
+  max-width: 1140px;
+  min-height: 321px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  margin: 40px auto 0;
+  padding: 40px 24px;
+  border-radius: 8px;
+  background: @ThemePageBackground;
+  color: @TextHeading;
+  font-family: var(--font-body);
+  text-align: center;
+
+  @media @mobile {
+    min-height: auto;
+    margin-top: 24px;
+    padding: 32px 16px 24px;
+  }
+}
+
+.iconWrapper {
+  width: 64px;
+  height: 64px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 64px;
+  color: #5f6368;
+
+  svg {
+    width: 64px;
+    height: 64px;
+  }
+}
+
+.textBlock {
+  width: 340px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.title {
+  width: 100%;
+  margin: 0;
+  color: @TextHeading;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.message {
+  width: 298px;
+  max-width: 100%;
+  margin: 0;
+  color: @TextBody;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.continueButton {
+  width: 199px;
+  max-width: 100%;
+  font-weight: 600;
+  text-transform: uppercase;
+  white-space: nowrap;
+
+  span {
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+}
