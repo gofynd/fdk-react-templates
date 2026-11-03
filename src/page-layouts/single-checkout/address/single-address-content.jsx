@@ -6,7 +6,6 @@ import {
   useNavigate,
   useGlobalTranslation,
   useGlobalStore,
-  useFPI,
 } from "fdk-core/utils";
 import Skeleton from "../../../components/core/skeletons/skeleton";
 import { isValidErrorMessage } from "../../../helper/utils";
@@ -45,10 +44,8 @@ function DeliverBtn({
   getTotalValue,
   showPaymentOptions,
   isCreditNoteApplied,
-  isAddressSelecting = false,
 }) {
   const { t } = useGlobalTranslation("translation");
-  const fpi = useFPI();
   const { app_features } = useGlobalStore(fpi.getters.CONFIGURATION) || {};
   const { order = {} } = app_features || {};
   return (
@@ -57,8 +54,7 @@ function DeliverBtn({
         <div className={styles.actionContainer}>
           <button
             className={styles.deliverToThis}
-            disabled={!order?.enabled || isAddressSelecting}
-            aria-busy={isAddressSelecting}
+            disabled={!order?.enabled}
             onClick={() => {
               if (getTotalValue?.() === 0 && !isCreditNoteApplied) {
                 showPaymentOptions();
@@ -126,7 +122,6 @@ function SingleAddressContent({
   showPaymentOptions,
   getTotalValue,
   isCreditNoteApplied,
-  isAddressSelecting = false,
 }) {
   const { t } = useGlobalTranslation("translation");
   const [showAllOtherAddresses, setShowAllOtherAddresses] = useState(false);
@@ -184,7 +179,6 @@ function SingleAddressContent({
                           getTotalValue={getTotalValue}
                           showPaymentOptions={showPaymentOptions}
                           isCreditNoteApplied={isCreditNoteApplied}
-                          isAddressSelecting={isAddressSelecting}
                         />
                       </>
                     }
@@ -231,7 +225,6 @@ function SingleAddressContent({
                           getTotalValue={getTotalValue}
                           showPaymentOptions={showPaymentOptions}
                           isCreditNoteApplied={isCreditNoteApplied}
-                          isAddressSelecting={isAddressSelecting}
                         />
                       </>
                     }

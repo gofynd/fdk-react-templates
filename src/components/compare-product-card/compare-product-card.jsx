@@ -15,12 +15,6 @@ const CompareProductCard = ({
   const locale = "en";
   const countryCode = "IN";
   const isMobile = useMobile(480);
-  const imageRadiusStyle =
-    globalConfig?.["item-image-border-radius"] != null
-      ? {
-          "--itemImageRadius": `${globalConfig["item-image-border-radius"]}px`,
-        }
-      : undefined;
 
   const getScreenSize = () => {
     const width = typeof window !== "undefined" ? window.innerWidth : 1200;
@@ -90,7 +84,7 @@ const CompareProductCard = ({
 
   if (isLoading || isEmpty) {
     return (
-      <div className={styles.shimmerWrapper} style={imageRadiusStyle}>
+      <div className={styles.shimmerWrapper}>
         <div className={styles.cardContainer}>
           <div className={styles.cardImageContainer}>
             <Shimmer className={styles.imageShimmer} />
@@ -107,7 +101,7 @@ const CompareProductCard = ({
   }
 
   return (
-    <div className={styles.cardContainer} style={imageRadiusStyle}>
+    <div className={styles.cardContainer}>
       <div className={styles.cardImageContainer}>
         <img
           src={productItem?.media?.[0]?.url}
@@ -122,7 +116,7 @@ const CompareProductCard = ({
         <div className={styles.cardDetailContainer}>
           <FDKLink
             to={`/product/${productItem?.slug}`}
-            target="_blank"
+            target="_blank" rel="noopener noreferrer"
             style={{
               display: "block",
               width: "100%",

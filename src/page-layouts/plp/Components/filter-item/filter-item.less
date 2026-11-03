@@ -10,10 +10,6 @@
     margin-bottom: 16px;
     cursor: pointer;
     line-height: 1.5;
-    svg{
-      color: @TextBody;
-      fill: @TextBody;
-    }
     .name {
       color: @TextHeading;
       line-height: inherit;
@@ -21,12 +17,8 @@
     .arrow-icon {
       width: 24px;
       height: 24px;
-      color: @TextBody;
-      fill: @TextBody;
+      fill: @TextHeading;
       transition: all 0.25s ease;
-      path {
-        stroke: @TextBody;
-      }
       &.isOpen {
         transform: scale(1, -1);
       }

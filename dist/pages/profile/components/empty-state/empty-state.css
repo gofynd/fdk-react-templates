@@ -1331,34 +1331,11 @@ h5,
   align-items: center;
   justify-content: center;
 }
-.empty-state__emptyContainer___hXYwb .empty-state__emptyStateIconWrapper___e5Enh {
-  flex: 0 0 auto;
-  align-self: center;
-  margin: 0 auto;
-  width: 185px;
-}
-.empty-state__emptyContainer___hXYwb .empty-state__emptyStateIconWrapper___e5Enh svg path[fill="#0B9FA2"],
-.empty-state__emptyContainer___hXYwb .empty-state__emptyStateIconWrapper___e5Enh svg rect[fill="#0B9FA2"],
-.empty-state__emptyContainer___hXYwb .empty-state__emptyStateIconWrapper___e5Enh svg circle[fill="#0B9FA2"],
-.empty-state__emptyContainer___hXYwb .empty-state__emptyStateIconWrapper___e5Enh svg ellipse[fill="#0B9FA2"] {
-  fill: var(--textBody, #3c3131);
-}
-.empty-state__emptyContainer___hXYwb .empty-state__emptyStateIconWrapper___e5Enh svg path[stroke="#0B9FA2"],
-.empty-state__emptyContainer___hXYwb .empty-state__emptyStateIconWrapper___e5Enh svg rect[stroke="#0B9FA2"],
-.empty-state__emptyContainer___hXYwb .empty-state__emptyStateIconWrapper___e5Enh svg circle[stroke="#0B9FA2"],
-.empty-state__emptyContainer___hXYwb .empty-state__emptyStateIconWrapper___e5Enh svg ellipse[stroke="#0B9FA2"] {
-  stroke: var(--textBody, #3c3131);
-}
-.empty-state__emptyContainer___hXYwb .empty-state__emptyContent___rvQSi {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: center;
-}
 .empty-state__emptyContainer___hXYwb .empty-state__description___kUU3P {
   display: flex;
   justify-content: center;
   max-width: 480px;
+  margin-top: 8px;
   text-align: center;
   line-height: 18px;
   letter-spacing: -0.02em;
