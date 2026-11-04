@@ -11,7 +11,6 @@
  */
 
 import React, { forwardRef } from "react";
-import { sanitizeHTML } from "../../../helper/sanitize-html";
 
 const HTMLContent = forwardRef(({ content }, ref) => {
   return (
@@ -21,7 +20,7 @@ const HTMLContent = forwardRef(({ content }, ref) => {
         data-testid="html-content"
         ref={ref}
         suppressHydrationWarning
-        dangerouslySetInnerHTML={{ __html: sanitizeHTML(content) }}
+        dangerouslySetInnerHTML={{ __html: content }}
       />
     </>
   );

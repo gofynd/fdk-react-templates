@@ -11,6 +11,7 @@ const SharedCart = ({
   onMergeBagClick = () => {},
   onAddToBagClick = () => {},
   onReplaceBagClick = () => {},
+  globalConfig = {},
 }) => {
   const { t } = useGlobalTranslation("translation");
   const getPieces = useMemo(() => {
@@ -55,7 +56,10 @@ const SharedCart = ({
           <span className={styles.subTitle}>{itemCountLabel}</span>
         </div>
         <div className={styles.sharedCart}>
-          <SharedCartItems bagItems={bagItems} />
+          <SharedCartItems
+            bagItems={bagItems}
+            globalConfig={globalConfig}
+          />
           <div className={styles.breakUpContainer}>
             <SharedCartBreakupContainer
               sharedCartData={sharedCartData}

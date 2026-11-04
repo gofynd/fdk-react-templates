@@ -78,6 +78,15 @@
     width: 40px;
     height: 40px;
     cursor: pointer;
+    color: @TextBody;
+
+    path[fill]:not([fill="none"]) {
+      fill: @TextBody;
+    }
+
+    path[stroke] {
+      stroke: @TextBody;
+    }
   }
 
   .playerMute {

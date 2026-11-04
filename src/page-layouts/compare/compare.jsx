@@ -11,7 +11,6 @@ import Modal from "../../components/core/modal/modal";
 import CompareProductCard from "../../components/compare-product-card/compare-product-card";
 import { useGlobalStore, useFPI } from "fdk-core/utils";
 import { useNavigate } from "react-router-dom";
-import { sanitizeHTML } from "../../helper/sanitize-html";
 
 function Compare({
   isLoading = false,
@@ -363,7 +362,7 @@ function Compare({
                               <FDKLink
                                 className={styles.productLinkWrapper}
                                 to={`/product/${item?.slug}`}
-                                target="_blank" rel="noopener noreferrer"
+                                target="_blank"
                                 style={{
                                   display: "block",
                                   width: "100%",
@@ -417,11 +416,9 @@ function Compare({
                                             <span
                                               className={styles.attr}
                                               dangerouslySetInnerHTML={{
-                                                __html: sanitizeHTML(
-                                                  getAttribute(
-                                                    cProduct,
-                                                    attribute
-                                                  )
+                                                __html: getAttribute(
+                                                  cProduct,
+                                                  attribute
                                                 ),
                                               }}
                                             />
