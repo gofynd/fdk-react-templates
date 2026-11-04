@@ -18,7 +18,7 @@ function DeliveryInfo({
   availableFOCount,
   setFoLoading,
   mandatoryPincode,
-  pincodeShakeTrigger = 0,
+  labelClassName = "",
 }) {
   const { t } = useGlobalTranslation("translation");
   const numberRegex = /^\d*$/;
@@ -55,15 +55,10 @@ function DeliveryInfo({
         <div className={styles.deliveryInfo}>
           {!isServiceability && (
             <>
-              <h4 className={`${styles.deliveryLabel} b2`}>
+              <h4 className={`${styles.deliveryLabel} b2 ${labelClassName}`}>
                 {t("resource.common.address.select_delivery_location")}
               </h4>
-              <div
-                key={pincodeShakeTrigger}
-                className={`${styles.delivery} ${
-                  pincodeShakeTrigger ? styles.pincodeShake : ""
-                }`}
-              >
+              <div className={styles.delivery}>
                 <FyInput
                   autoComplete="off"
                   value={pincode}

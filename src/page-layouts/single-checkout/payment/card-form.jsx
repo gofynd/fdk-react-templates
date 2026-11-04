@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { IMaskInput } from "react-imask";
+import { IMaskInput, IMask } from "react-imask";
 import * as styles from "./checkout-payment-content.less";
 import Modal from "../../../components/core/modal/modal";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
@@ -62,7 +62,6 @@ function CardForm({
   isPaymentLoading = false,
   loader = <div></div>,
   mopSelectionLoading,
-  isPaymentDisabled = false,
 }) {
   const { t } = useGlobalTranslation("translation");
   const isFormatterSet = useRef(false);
@@ -167,7 +166,6 @@ function CardForm({
         cardDetails={cardDetails}
         selectMop={selectMop}
         setIsJuspayCouponApplied={setIsJuspayCouponApplied}
-        isPaymentDisabled={isPaymentDisabled}
       />
     );
   }
@@ -192,6 +190,7 @@ function CardForm({
             value={cardNumber}
             dir="ltr"
             autoComplete="cc-number"
+            data-testid="card-number-input"
           />
           {(cardNumber || cardNumberError) && (
             <span
@@ -226,6 +225,7 @@ function CardForm({
             value={nameOnCard}
             onChange={handleNameOnCardInput}
             onBlur={validateNameOnCard}
+            data-testid="card-name-input"
           />
           {(nameOnCard || cardNameError) && (
             <span
@@ -268,6 +268,7 @@ function CardForm({
               placeholder={`${t("resource.checkout.expiry_date")}*`}
               className={`${cardExpiryError ? styles.error : ""} ${styles.cardExpiry}`}
               onBlur={validateCardExpiryDate}
+              data-testid="card-expiry-date"
             />
             {(cardExpiryDate || cardExpiryError) && (
               <span
@@ -291,6 +292,7 @@ function CardForm({
               className={`${cardCVVError ? styles.error : ""} ${styles.cardCvv}`}
               onChange={handleCvvNumberInput}
               onBlur={validateCvv}
+              data-testid="card-cvv"
             />
             <div
               className={`${styles.cvvContainer} ${styles.cvv} ${cardCVVError || cardExpiryError ? styles.iconPositionOnError : ""}`}
@@ -384,15 +386,10 @@ function CardForm({
         {!addNewCard && isTablet ? (
           <StickyPayNow
             customClassName={styles.visibleOnTab}
-            disabled={
-              !isCardValid() || mopSelectionLoading || isPaymentDisabled
-            }
+            disabled={!isCardValid()}
             value={priceFormatCurrencySymbol(
               getCurrencySymbol,
-              getTotalValue(),
-              "en-IN",
-              null,
-              true
+              getTotalValue()
             )}
             enableLinkPaymentOption={enableLinkPaymentOption}
             onPriceDetailsClick={onPriceDetailsClick}
@@ -405,17 +402,13 @@ function CardForm({
           <button
             className={styles.saveNewCard}
             onClick={() => payUsingCard()}
-            disabled={
-              !isCardValid() ||
-              isPaymentLoading ||
-              mopSelectionLoading ||
-              isPaymentDisabled
-            }
+            disabled={!isCardValid() || isPaymentLoading || mopSelectionLoading}
+            data-testid="card-payment-button"
           >
             {!isPaymentLoading ? (
               <>
                 {t("resource.common.pay_caps")}{" "}
-                {priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue(), "en-IN", null, true)}
+                {priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue())}
               </>
             ) : (
               loader

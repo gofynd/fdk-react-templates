@@ -171,8 +171,7 @@ function PriceBreakup({
                       item?.currency_symbol,
                       item?.value,
                       undefined,
-                      item?.currency_code,
-                      true
+                      item?.currency_code
                     )}
                   </div>
                 </>
@@ -184,8 +183,7 @@ function PriceBreakup({
                       item?.currency_symbol,
                       item?.value,
                       undefined,
-                      item?.currency_code,
-                      true
+                      item?.currency_code
                     )}
                   </div>
                 </>
@@ -201,11 +199,11 @@ function PriceBreakup({
         </div>
       )}
 
-      {showTotalDiscount &&
-        (isLoading ? (
-          <Skeleton height={38} className={styles.discountLoading} />
-        ) : (
-          totalDiscount > 0 && (
+      {isLoading ? (
+        <Skeleton height={38} className={styles.discountLoading} />
+      ) : (
+        <>
+          {showTotalDiscount && totalDiscount > 0 && (
             <div className={styles.discountPreviewContiner}>
               <span className={styles.icon}>{greetingIcon}</span>
               <span className={styles.discountPreviewMessage}>
@@ -215,17 +213,17 @@ function PriceBreakup({
               <span className={styles.discountPreviewAmount}>
                 <ForcedLtr
                   text={priceFormatCurrencySymbol(
-                    breakUpValues?.[0]?.currency_symbol || currencySymbol,
+                    currencySymbol,
                     totalDiscount,
                     undefined,
-                    breakUpValues?.[0]?.currency_code,
-                    true
+                    breakUpValues?.[0]?.currency_code
                   )}
                 />
               </span>
             </div>
-          )
-        ))}
+          )}
+        </>
+      )}
     </div>
   );
 }
