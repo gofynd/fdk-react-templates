@@ -6,6 +6,7 @@ import {
   useNavigate,
   useGlobalTranslation,
   useGlobalStore,
+  useFPI,
 } from "fdk-core/utils";
 import Skeleton from "../../../components/core/skeletons/skeleton";
 import { isValidErrorMessage } from "../../../helper/utils";
@@ -44,17 +45,23 @@ function DeliverBtn({
   getTotalValue,
   showPaymentOptions,
   isCreditNoteApplied,
+  isAddressSelecting = false,
 }) {
   const { t } = useGlobalTranslation("translation");
+  const fpi = useFPI();
   const { app_features } = useGlobalStore(fpi.getters.CONFIGURATION) || {};
+  const cartItems = useGlobalStore(fpi.getters.CART_ITEMS) || {};
   const { order = {} } = app_features || {};
+  const hasCartItems = cartItems?.items?.length > 0;
+  
   return (
     <>
       {selectedAddressId === id && (
         <div className={styles.actionContainer}>
           <button
             className={styles.deliverToThis}
-            disabled={!order?.enabled}
+            disabled={!order?.enabled || isAddressSelecting || !hasCartItems}
+            aria-busy={isAddressSelecting}
             onClick={() => {
               if (getTotalValue?.() === 0 && !isCreditNoteApplied) {
                 showPaymentOptions();
@@ -122,6 +129,7 @@ function SingleAddressContent({
   showPaymentOptions,
   getTotalValue,
   isCreditNoteApplied,
+  isAddressSelecting = false,
 }) {
   const { t } = useGlobalTranslation("translation");
   const [showAllOtherAddresses, setShowAllOtherAddresses] = useState(false);
@@ -179,6 +187,7 @@ function SingleAddressContent({
                           getTotalValue={getTotalValue}
                           showPaymentOptions={showPaymentOptions}
                           isCreditNoteApplied={isCreditNoteApplied}
+                          isAddressSelecting={isAddressSelecting}
                         />
                       </>
                     }
@@ -225,6 +234,7 @@ function SingleAddressContent({
                           getTotalValue={getTotalValue}
                           showPaymentOptions={showPaymentOptions}
                           isCreditNoteApplied={isCreditNoteApplied}
+                          isAddressSelecting={isAddressSelecting}
                         />
                       </>
                     }

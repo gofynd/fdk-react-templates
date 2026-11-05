@@ -4,7 +4,10 @@ import Viewer3D from "../viewer-3d/viewer-3d";
 import FyImage from "../../../../components/core/fy-image/fy-image";
 import SvgWrapper from "../../../../components/core/svgWrapper/SvgWrapper";
 import * as styles from "./pic-zoom.less";
-import { getProductImgAspectRatio } from "../../../../helper/utils";
+import {
+  getProductImgAspectRatio,
+  isYouTubeUrl,
+} from "../../../../helper/utils";
 import { useGlobalTranslation } from "fdk-core/utils";
 
 function PicZoom({
@@ -127,7 +130,7 @@ function PicZoom({
       )}
       {type === "video" && (
         <div className={styles.videoContainer}>
-          {!getOriginalImage().includes("youtube") ? (
+          {!isYouTubeUrl(getOriginalImage()) ? (
             <div className={styles.videoPlayerWrapper}>
               <video
                 id="html-video-player"

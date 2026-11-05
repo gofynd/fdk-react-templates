@@ -5,6 +5,7 @@ import * as styles from "./lightbox-image.less";
 import {
   getProductImgAspectRatio,
   isRunningOnClient,
+  isYouTubeUrl,
 } from "../../../../helper/utils";
 import Viewer3D from "../viewer-3d/viewer-3d";
 import { useGlobalTranslation } from "fdk-core/utils";
@@ -126,7 +127,7 @@ function LightboxImage({
   };
 
   const getImageURL = (src) =>
-    `http://img.youtube.com/vi/${src?.substr((src?.lastIndexOf("/") ?? "") + 1)}/0.jpg`;
+    `https://img.youtube.com/vi/${src?.substr((src?.lastIndexOf("/") ?? "") + 1)}/0.jpg`;
 
   const showImage = (index) => {
     setLightBoxOn(true);
@@ -186,7 +187,7 @@ function LightboxImage({
               )}
               {images[select]?.type === "video" && (
                 <div className={styles.videoContainer}>
-                  {images[select].url.includes("youtube") ? (
+                  {isYouTubeUrl(images[select].url) ? (
                     <iframe
                       title={t("resource.common.social_accounts.youtube")}
                       key={images[select]?.url}
@@ -309,7 +310,7 @@ function LightboxImage({
                         )}
                         {image?.type === "video" && (
                           <div className={styles.videoThumbnailContainer}>
-                            {image?.url?.includes("youtube") ? (
+                            {isYouTubeUrl(image?.url) ? (
                               <img
                                 alt={image?.alt}
                                 src={getImageURL(image?.url)}

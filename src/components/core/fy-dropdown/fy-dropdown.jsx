@@ -13,7 +13,7 @@
  * @param {string} [labelClassName] - Optional custom CSS class(es) to apply to the label element.
  * @param {string} [containerClassName] - Optional custom CSS class(es) to apply to the dropdown container element.
  * @param {object} [value] - The currently selected option, should be an object with `key` and `display` properties.
- * @param {function} onChange - Callback function triggered when an option is selected. Receives the selected option's `option[dataKey]` value (a primitive, e.g. a string - NOT the full option object) as its only argument.
+ * @param {function} onChange - Callback function triggered when an option is selected. Receives the selected option object as an argument.
  *
  * @returns {JSX.Element} A customizable dropdown menu with label, error message, and various styling options.
  */
@@ -40,6 +40,9 @@ const FyDropdown = ({
   showAsterik = true,
   labelClassName,
   containerClassName,
+  dropdownClassName = "",
+  dropdownButtonClassName = "",
+  dropdownIconClassName = "",
   dropdownListClassName,
   dropdownOptionClassName,
   value,
@@ -182,7 +185,8 @@ const FyDropdown = ({
       const disabled = disabledOptions?.includes(option?.[dataKey]);
       const className = `${styles.dropdownOption} ${option?.[dataKey] === selectedValue?.[dataKey] ? styles.selected : ""} ${disabled ? `${styles.disabled} ${disabledOptionClassName}` : ""} ${dropdownOptionClassName}`;
       listItem.className = className;
-      listItem.innerHTML = option.display;
+      // Option labels are plain text; never parse them as HTML.
+      listItem.textContent = option.display ?? "";
       if (!disabled) {
         listItem.addEventListener("click", (event) => {
           event?.stopPropagation();
@@ -247,12 +251,12 @@ const FyDropdown = ({
         </label>
       )}
       <div
-        className={`${styles.dropdown} ${error ? styles.dropDownError : ""} ${disabled ? styles.disabled : ""}`}
+        className={`${styles.dropdown} ${dropdownClassName} ${error ? styles.dropDownError : ""} ${disabled ? styles.disabled : ""}`}
         ref={dropdown}
       >
         {disableSearch ? (
           <div
-            className={styles.dropdownButton}
+            className={`${styles.dropdownButton} ${dropdownButtonClassName}`}
             onClick={toggleDropdown}
             ref={dropdownButton}
           >
@@ -263,12 +267,12 @@ const FyDropdown = ({
             </span>
             <SvgWrapper
               svgSrc="arrow-down"
-              className={`${styles.dropdownIcon} ${isOpen ? styles.open : ""}`}
+              className={`${styles.dropdownIcon} ${dropdownIconClassName} ${isOpen ? styles.open : ""}`}
             />
           </div>
         ) : (
           <div
-            className={styles.dropdownButton}
+            className={`${styles.dropdownButton} ${dropdownButtonClassName}`}
             onClick={toggleDropdown}
             ref={dropdownButton}
             tabIndex={!disableSearch ? 0 : null}
@@ -288,7 +292,7 @@ const FyDropdown = ({
             />
             <SvgWrapper
               svgSrc="arrow-down"
-              className={`${styles.dropdownIcon} ${isOpen ? styles.open : ""}`}
+              className={`${styles.dropdownIcon} ${dropdownIconClassName} ${isOpen ? styles.open : ""}`}
             />
           </div>
         )}

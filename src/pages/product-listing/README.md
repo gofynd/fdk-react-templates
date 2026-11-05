@@ -87,7 +87,7 @@ const App = () => {
           },
           domain: "http://127.0.0.1:5001",
           authorizationHeader:
-            "Bearer NjY4NzY1ZTFjOTg0MDE2ZDc4MjIyYTIxOm1pcHNleFVFWA==",
+            "Bearer <APPLICATION_TOKEN>",
           getters: {},
           custom: {},
           theme: {},
@@ -368,7 +368,6 @@ export default App;
 - **isHdimgUsed**: A boolean indicating whether to use high-definition images. Defaults to false.
 - **isImageFill**: A boolean indicating whether to fill the image container. Defaults to false.
 - **showAddToCart**: A boolean indicating whether to show add to cart. Defaults to false.
-- **showImageOnHover**: A boolean indicating whether to show the image on hover. Defaults to false.
 - **isResetFilterDisable**: A boolean indicating whether the reset filter option should be disabled. Defaults to false.
 - **imageBackgroundColor**: A string representing the background color of the product image. Defaults to an empty string.
 - **imagePlaceholder**: A string for the placeholder image URL when the actual image is not available. Defaults to an empty string.
