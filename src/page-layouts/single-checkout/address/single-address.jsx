@@ -56,6 +56,7 @@ function SingleAddress({
     selectedCountry,
     countryDetails,
     formKey,
+    isAddressDeliverable,
   } = address;
 
   function backToEdit() {
@@ -128,6 +129,7 @@ function SingleAddress({
             showPaymentOptions={showPaymentOptions}
             getTotalValue={getTotalValue}
             isCreditNoteApplied={isCreditNoteApplied}
+            isAddressDeliverable={isAddressDeliverable}
           ></SingleAddressContent>
         )}
       </div>
