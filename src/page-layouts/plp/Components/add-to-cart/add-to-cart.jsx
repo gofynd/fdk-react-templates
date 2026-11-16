@@ -153,6 +153,24 @@ const AddToCart = ({
       ?.map((size) => size?.value);
   }, [sizes?.sizes]);
 
+  const showLimitedStockMessage =
+    is_limited_stock &&
+    limited_stock_label &&
+    productPrice?.quantity !== 0 &&
+    productPrice?.quantity <= limited_stock_quantity;
+  const limitedStockMessage = (() => {
+    const fallback = t("resource.common.limited_stock_label");
+    let label;
+    if (limited_stock_label?.startsWith("t:")) {
+      const key = limited_stock_label.slice(2);
+      const translated = t(key);
+      label = translated === key ? fallback : translated;
+    } else {
+      label = limited_stock_label;
+    }
+    return label.replace(/\{\{qty\}\}/g, productPrice?.quantity);
+  })();
+
   return (
     <div className={styles.productDescContainer}>
       <div className={styles.left}>
@@ -385,6 +403,11 @@ const AddToCart = ({
               </div>
             </div>
           </div>
+          {showLimitedStockMessage && (
+            <p className={`${styles.limitedQuantity} ${styles.mobileLimitedQuantity}`}>
+              {limitedStockMessage}
+            </p>
+          )}
           {/* ---------- Buy Now and Add To Cart ---------- */}
           <div className={styles.actionButtons}>
             {!disable_cart && sizes?.sellable && (
@@ -457,25 +480,11 @@ const AddToCart = ({
               </FyButton>
             )}
           </div>
-          {is_limited_stock &&
-            limited_stock_label &&
-            productPrice?.quantity !== 0 &&
-            productPrice?.quantity <= limited_stock_quantity && (
-              <p className={styles.limitedQuantity}>
-                {(() => {
-                  const fallback = t("resource.common.limited_stock_label");
-                  let label;
-                  if (limited_stock_label?.startsWith("t:")) {
-                    const key = limited_stock_label.slice(2);
-                    const translated = t(key);
-                    label = translated === key ? fallback : translated;
-                  } else {
-                    label = limited_stock_label;
-                  }
-                  return label.replace(/\{\{qty\}\}/g, productPrice?.quantity);
-                })()}
-              </p>
-            )}
+          {showLimitedStockMessage && (
+            <p className={`${styles.limitedQuantity} ${styles.desktopLimitedQuantity}`}>
+              {limitedStockMessage}
+            </p>
+          )}
         </div>
       </div>
     </div>

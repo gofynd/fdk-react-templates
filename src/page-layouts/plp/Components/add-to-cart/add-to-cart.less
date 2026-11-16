@@ -46,6 +46,21 @@
       padding: 24px;
     }
 
+    .mobileLimitedQuantity {
+      display: none;
+    }
+
+    @media @tablet {
+      .mobileLimitedQuantity {
+        display: block;
+        padding: 0 16px;
+      }
+
+      .desktopLimitedQuantity {
+        display: none;
+      }
+    }
+
     .preview {
       display: none;
       position: absolute;
