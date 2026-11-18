@@ -314,7 +314,10 @@ const ProductCard = ({
   const isMobile = useMobile();
 
   const loggedIn = useGlobalStore(fpi.getters.LOGGED_IN);
-  const { merchant_data } = useGlobalStore(fpi?.getters?.CUSTOM_VALUE);
+  const { merchant_data, app_features } =
+    useGlobalStore(fpi?.getters?.CUSTOM_VALUE) || {};
+  // `allow_non_kyc_journey`: any logged-in user may add to cart, even without KYC approval.
+  const allowNonKycJourney = app_features?.allow_non_kyc_journey === true;
 
   // `logged_in` stays null until the user fetch returns, so a logged-in user
   // briefly looks like a guest and would flash the guest price/login CTA. Guests
@@ -968,7 +971,7 @@ const ProductCard = ({
 
         {showAddToCart &&
           ((!loggedIn && show_discount_guest) ||
-            (loggedIn && isMerchantKycApproved()) ||
+            (loggedIn && (allowNonKycJourney || isMerchantKycApproved())) ||
             (loggedIn && !isMerchantKycApproved() && show_discount_non_kyc)) &&
           ((!isRunningOnClient() || isPriceLoading || !authSettled) ? (
             <div className={styles.addToCartShimmer} />
