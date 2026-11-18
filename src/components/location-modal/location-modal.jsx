@@ -21,6 +21,7 @@ import { useForm } from "react-hook-form";
 import FyInput from "../core/fy-input/fy-input";
 import FyButton from "../core/fy-button/fy-button";
 import { useGlobalTranslation } from "fdk-core/utils";
+import CloseIcon from "../../assets/images/close.svg";
 
 function LocationModal({
   isOpen = true,
@@ -81,6 +82,14 @@ function LocationModal({
         <h3 className={styles.modalTitle}>
           {t("resource.localization.check_pincode_availability")}
         </h3>
+        <button
+          type="button"
+          className={styles.closeButton}
+          onClick={onClose}
+          aria-label={t("resource.common.close")}
+        >
+          <CloseIcon />
+        </button>
       </div>
       <p className={styles.locationSubtext}>
         {t("resource.localization.choose_address_for_availability")}

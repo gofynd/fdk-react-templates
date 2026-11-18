@@ -368,7 +368,7 @@ h5,
   gap: 16px;
 }
 .remove-cart-item__removeModalBody___uY7E6 .remove-cart-item__itemDetails___pRWW2 .remove-cart-item__itemImg___is4Fz {
-  border-radius: 4px;
+  border-radius: var(--itemImageRadius, 11px);
   flex: 0 0 100px;
   width: 100px;
   height: 133px;
@@ -434,7 +434,7 @@ h5,
   line-height: 140%;
   text-transform: uppercase;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: var(--buttonRadius, 0px);
 }
 @media only screen and (max-width: 768px) {
   .remove-cart-item__removeModalFooter___wF0NY .remove-cart-item__removeBtn___w3ksf,
