@@ -23211,6 +23211,18 @@ h5,
   color: var(--errorText, #ff3333);
   padding: 24px;
 }
+.add-to-cart__productDescContainer___w6xlt .add-to-cart__right___AYndS .add-to-cart__mobileLimitedQuantity___YPl77 {
+  display: none;
+}
+@media only screen and (max-width: 768px) {
+  .add-to-cart__productDescContainer___w6xlt .add-to-cart__right___AYndS .add-to-cart__mobileLimitedQuantity___YPl77 {
+    display: block;
+    padding: 0 16px;
+  }
+  .add-to-cart__productDescContainer___w6xlt .add-to-cart__right___AYndS .add-to-cart__desktopLimitedQuantity___hg_zz {
+    display: none;
+  }
+}
 .add-to-cart__productDescContainer___w6xlt .add-to-cart__right___AYndS .add-to-cart__preview___OZEtX {
   display: none;
   position: absolute;

@@ -452,7 +452,6 @@ const AddressForm = ({
   const address_type = watch("address_type");
   const sector = watch("sector");
   const formValues = watch();
-  const isAddNewAddressForm = isNewAddress || !addressItem?.id;
 
   // Ensure name field validates empty/whitespace when required (for both default and custom schemas)
   const schemaWithNameValidation = useMemo(() => {
@@ -492,14 +491,15 @@ const AddressForm = ({
     return ["address_type", ...schemaRequiredFields];
   }, [schemaWithNameValidation]);
 
+  // Applies to Update Address too: an edited address with an empty or invalid
+  // mandatory field must not be submittable. Edit forms validate once on load
+  // (see the addressItem effect) so the reason is shown, not just a grey button.
   const isSaveContinueDisabled =
-    isAddNewAddressForm &&
-    (requiredFields.some(
+    requiredFields.some(
       (fieldKey) => !isFieldValueFilled(formValues?.[fieldKey])
-    ) || !isValid);
+    ) || !isValid;
 
   const isOtherAddressTypeMissing =
-    isAddNewAddressForm &&
     address_type === "Other" &&
     !isFieldValueFilled(formValues?.otherAddressType);
 
@@ -594,6 +594,10 @@ const AddressForm = ({
         startWithAddressForm &&
         !shouldOpenAddressMap(isMapAvailable, addressItem, true, true)
       )
+        setMapSelectionRevision((revision) => revision + 1);
+      // A saved address may fail rules added after it was saved; validate it
+      // on load so the field explains why Update Address is disabled.
+      if (!isNewAddress && addressItem?.id)
         setMapSelectionRevision((revision) => revision + 1);
     } else {
       setValue("is_default_address", true);
