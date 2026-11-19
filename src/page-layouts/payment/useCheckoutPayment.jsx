@@ -1300,6 +1300,15 @@ export function useCheckoutPayment({
       const res = await proceedToPay("UPI", {
         ...selectedPaymentPayload,
         selectedUpiIntentApp: selectedUpiRef.current || selectedUpiIntentApp,
+        // Payment links create their order without checkoutCart, so no
+        // order.checkedout event fires; the theme reports the link order id
+        // here instead. Storefront checkout never calls it.
+        onUpiOrderCreated: (orderId) => {
+          if (!isUpiCheckoutInProgressRef.current || !orderId) return;
+          isUpiCheckoutInProgressRef.current = false;
+          setUserOrderId(orderId);
+          settleUpiCheckoutPending();
+        },
       });
 
       const checkoutCart =

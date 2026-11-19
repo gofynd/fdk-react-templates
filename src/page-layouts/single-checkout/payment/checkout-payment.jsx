@@ -94,7 +94,10 @@ function CheckoutPayment({
     if (!paymentCancellationConfirmed || isShipmentLoading) return;
 
     setPaymentCancellationConfirmed(false);
-    showPaymentOptions?.(getTotalValue?.() || undefined, isSplitPaymentActive, {
+    // The payment-link page passes showPaymentOptions={true} (a flag, not a
+    // fetcher) and keeps its link options in state, so only call a function.
+    if (typeof showPaymentOptions !== "function") return;
+    showPaymentOptions(getTotalValue?.() || undefined, isSplitPaymentActive, {
       forceRefresh: true,
       keepSplitPaymentVisible: true,
     });
