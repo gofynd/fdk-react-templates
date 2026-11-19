@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { IMaskInput } from "react-imask";
+import { IMaskInput, IMask } from "react-imask";
 import * as styles from "./checkout-payment-content.less";
 import Modal from "../../../components/core/modal/modal";
 import SvgWrapper from "../../../components/core/svgWrapper/SvgWrapper";
@@ -62,7 +62,6 @@ function CardForm({
   isPaymentLoading = false,
   loader = <div></div>,
   mopSelectionLoading,
-  isPaymentDisabled = false,
 }) {
   const { t } = useGlobalTranslation("translation");
   const isFormatterSet = useRef(false);
@@ -167,7 +166,6 @@ function CardForm({
         cardDetails={cardDetails}
         selectMop={selectMop}
         setIsJuspayCouponApplied={setIsJuspayCouponApplied}
-        isPaymentDisabled={isPaymentDisabled}
       />
     );
   }
@@ -192,6 +190,7 @@ function CardForm({
             value={cardNumber}
             dir="ltr"
             autoComplete="cc-number"
+            data-testid="card-number-input"
           />
           {(cardNumber || cardNumberError) && (
             <span
@@ -223,10 +222,10 @@ function CardForm({
             className={`${cardNameError ? styles.error : ""} ${styles.cardName}`}
             ref={nameRef}
             contentEditable="true"
-            autoComplete="cc-name"
             value={nameOnCard}
             onChange={handleNameOnCardInput}
             onBlur={validateNameOnCard}
+            data-testid="card-name-input"
           />
           {(nameOnCard || cardNameError) && (
             <span
@@ -269,6 +268,7 @@ function CardForm({
               placeholder={`${t("resource.checkout.expiry_date")}*`}
               className={`${cardExpiryError ? styles.error : ""} ${styles.cardExpiry}`}
               onBlur={validateCardExpiryDate}
+              data-testid="card-expiry-date"
             />
             {(cardExpiryDate || cardExpiryError) && (
               <span
@@ -286,16 +286,13 @@ function CardForm({
             <input
               value={cvvNumber}
               type="password"
-              // Marks this as the card CVV, so the browser does not treat the
-              // card form as a login form and offer to save the CVV as a
-              // password (with the expiry date as the "username").
-              autoComplete="cc-csc"
               onKeyPress={keypressCvv}
               maxLength="4"
               placeholder={`${t("resource.checkout.cvv")}*`}
               className={`${cardCVVError ? styles.error : ""} ${styles.cardCvv}`}
               onChange={handleCvvNumberInput}
               onBlur={validateCvv}
+              data-testid="card-cvv"
             />
             <div
               className={`${styles.cvvContainer} ${styles.cvv} ${cardCVVError || cardExpiryError ? styles.iconPositionOnError : ""}`}
@@ -389,15 +386,10 @@ function CardForm({
         {!addNewCard && isTablet ? (
           <StickyPayNow
             customClassName={styles.visibleOnTab}
-            disabled={
-              !isCardValid() || mopSelectionLoading || isPaymentDisabled
-            }
+            disabled={!isCardValid()}
             value={priceFormatCurrencySymbol(
               getCurrencySymbol,
-              getTotalValue(),
-              "en-IN",
-              null,
-              true
+              getTotalValue()
             )}
             enableLinkPaymentOption={enableLinkPaymentOption}
             onPriceDetailsClick={onPriceDetailsClick}
@@ -410,17 +402,13 @@ function CardForm({
           <button
             className={styles.saveNewCard}
             onClick={() => payUsingCard()}
-            disabled={
-              !isCardValid() ||
-              isPaymentLoading ||
-              mopSelectionLoading ||
-              isPaymentDisabled
-            }
+            disabled={!isCardValid() || isPaymentLoading || mopSelectionLoading}
+            data-testid="card-payment-button"
           >
             {!isPaymentLoading ? (
               <>
                 {t("resource.common.pay_caps")}{" "}
-                {priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue(), "en-IN", null, true)}
+                {priceFormatCurrencySymbol(getCurrencySymbol, getTotalValue())}
               </>
             ) : (
               loader

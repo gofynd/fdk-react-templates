@@ -33,8 +33,6 @@ const AppleLoginButton = ({
   const [ready, setReady] = useState(false);
   const [err, setErr] = useState(null);
   const mounted = useRef(true);
-  // state/nonce of the current sign-in attempt, checked against Apple's response.
-  const authParamsRef = useRef({ state: null, nonce: null });
   const fpi = useFPI();
   const i18nDetails = useGlobalStore(fpi?.getters?.i18N_DETAILS) || {};
   const locale = i18nDetails?.language?.locale || "en-US";
@@ -47,7 +45,6 @@ const AppleLoginButton = ({
 
         const state = randomString();
         const nonce = randomString();
-        authParamsRef.current = { state, nonce };
 
         window.AppleID.auth.init({
           clientId: appleClientId,
@@ -79,14 +76,7 @@ const AppleLoginButton = ({
     if (!ready || disabled) return;
     try {
       const response = await window.AppleID.auth.signIn();
-      const returnedState = response?.authorization?.state;
-      // Reject a response that does not belong to this sign-in attempt.
-      if (returnedState && returnedState !== authParamsRef.current.state) {
-        throw new Error("Apple sign-in could not be verified. Please try again.");
-      }
-      await onAppleCredential?.(response, {
-        nonce: authParamsRef.current.nonce,
-      });
+      await onAppleCredential?.(response);
     } catch (e) {
       console.warn("Apple sign-in cancelled/failed:", e);
       setErr(e?.message || "Apple sign-in was cancelled");

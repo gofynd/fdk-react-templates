@@ -6,7 +6,6 @@ import {
   useNavigate,
   useGlobalTranslation,
   useGlobalStore,
-  useFPI,
 } from "fdk-core/utils";
 import Skeleton from "../../../components/core/skeletons/skeleton";
 import { isValidErrorMessage } from "../../../helper/utils";
@@ -45,29 +44,17 @@ function DeliverBtn({
   getTotalValue,
   showPaymentOptions,
   isCreditNoteApplied,
-  isAddressSelecting = false,
-  isDeliveryBlocked = false,
 }) {
   const { t } = useGlobalTranslation("translation");
-  const fpi = useFPI();
   const { app_features } = useGlobalStore(fpi.getters.CONFIGURATION) || {};
-  const cartItems = useGlobalStore(fpi.getters.CART_ITEMS) || {};
   const { order = {} } = app_features || {};
-  const hasCartItems = cartItems?.items?.length > 0;
-
   return (
     <>
       {selectedAddressId === id && (
         <div className={styles.actionContainer}>
           <button
             className={styles.deliverToThis}
-            disabled={
-              !order?.enabled ||
-              isAddressSelecting ||
-              !hasCartItems ||
-              isDeliveryBlocked
-            }
-            aria-busy={isAddressSelecting}
+            disabled={!order?.enabled}
             onClick={() => {
               if (getTotalValue?.() === 0 && !isCreditNoteApplied) {
                 showPaymentOptions();
@@ -135,18 +122,12 @@ function SingleAddressContent({
   showPaymentOptions,
   getTotalValue,
   isCreditNoteApplied,
-  isAddressSelecting = false,
-  // Optional: the theme decides whether an address can be delivered to (for
-  // example, it belongs to the current shipping country). Absent = all can.
-  isAddressDeliverable,
 }) {
   const { t } = useGlobalTranslation("translation");
   const [showAllOtherAddresses, setShowAllOtherAddresses] = useState(false);
   function selectAdd(id) {
     setSelectedAddressId(id);
   }
-  const isDeliveryBlocked = (item) =>
-    typeof isAddressDeliverable === "function" && !isAddressDeliverable(item);
 
   const displayedOtherAddresses = useMemo(() => {
     if (showAllOtherAddresses || getOtherAddress.length <= 3) {
@@ -198,8 +179,6 @@ function SingleAddressContent({
                           getTotalValue={getTotalValue}
                           showPaymentOptions={showPaymentOptions}
                           isCreditNoteApplied={isCreditNoteApplied}
-                          isAddressSelecting={isAddressSelecting}
-                          isDeliveryBlocked={isDeliveryBlocked(item)}
                         />
                       </>
                     }
@@ -246,8 +225,6 @@ function SingleAddressContent({
                           getTotalValue={getTotalValue}
                           showPaymentOptions={showPaymentOptions}
                           isCreditNoteApplied={isCreditNoteApplied}
-                          isAddressSelecting={isAddressSelecting}
-                          isDeliveryBlocked={isDeliveryBlocked(item)}
                         />
                       </>
                     }
