@@ -468,9 +468,12 @@ const AddressForm = ({
     getValues,
     formState: { errors, isDirty, isValid },
   } = useForm({
-    // Update Address is disabled while the form is invalid, so an edit must
-    // explain itself as the customer types. Adding keeps validate-on-submit.
-    mode: isNewAddress ? "onSubmit" : "onChange",
+    // Save/Update stay disabled while the form is invalid, so the form must
+    // explain itself before submit: validate each field as the customer types.
+    // (onTouched/onBlur cannot work here — FormInputSelector never calls
+    // field.onBlur — and onSubmit would leave errors stuck behind a disabled
+    // button.) Untouched fields stay quiet until edited.
+    mode: "onChange",
     defaultValues: {
       ...formAddressItem,
       address_type: addressItem?.address_type
