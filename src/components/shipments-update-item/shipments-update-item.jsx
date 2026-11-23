@@ -32,10 +32,11 @@ function ShipmentUpdateItem({
   globalConfig,
   allBags,
   updatedQuantity = () => {},
+  allowQuantityChange = true,
 }) {
   const { t } = useGlobalTranslation("translation");
   const [showQuantityError, setShowQuantityError] = useState(false);
-  const [showQuantity, setshowQuantity] = useState(true);
+  const [showQuantity, setshowQuantity] = useState(allowQuantityChange);
   const [currQuantity, setcurrQuantity] = useState(quantity);
 
   const priceFormatCurrencySymbol = (symbol, price) => {

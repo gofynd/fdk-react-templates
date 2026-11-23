@@ -223,7 +223,6 @@ function CardForm({
             className={`${cardNameError ? styles.error : ""} ${styles.cardName}`}
             ref={nameRef}
             contentEditable="true"
-            autoComplete="cc-name"
             value={nameOnCard}
             onChange={handleNameOnCardInput}
             onBlur={validateNameOnCard}
@@ -286,10 +285,6 @@ function CardForm({
             <input
               value={cvvNumber}
               type="password"
-              // Marks this as the card CVV, so the browser does not treat the
-              // card form as a login form and offer to save the CVV as a
-              // password (with the expiry date as the "username").
-              autoComplete="cc-csc"
               onKeyPress={keypressCvv}
               maxLength="4"
               placeholder={`${t("resource.checkout.cvv")}*`}

@@ -323,12 +323,6 @@ const FyDatePicker = React.forwardRef(
       }
     };
 
-    // Enter on a focused select would submit an enclosing form (e.g. Profile
-    // Details) instead of choosing the month/year.
-    const preventFormSubmitOnEnter = (e) => {
-      if (e.key === "Enter") e.preventDefault();
-    };
-
     const handleNextMonth = () => {
       if (currentMonth === 11) {
         setCurrentMonth(0);
@@ -430,10 +424,8 @@ const FyDatePicker = React.forwardRef(
         );
       }
 
-      // Rendered as an element, not a component defined here: a new component
-      // type on every render remounted the month/year selects after each
-      // change, dropping the customer's selection and focus.
-      const calendarContent = (
+      const ChildCalender = () => {
+        return (
           <div className={styles.calendarPopup}>
             <div className={styles.calendarHeader}>
               <div className={styles.controlContainer}>
@@ -446,7 +438,6 @@ const FyDatePicker = React.forwardRef(
                       aria-label="Select month"
                       value={currentMonth}
                       onChange={handleMonthSelect}
-                      onKeyDown={preventFormSubmitOnEnter}
                     >
                       {monthsOfYear.map((month, index) => (
                         <option key={month} value={index}>
@@ -458,7 +449,6 @@ const FyDatePicker = React.forwardRef(
                       aria-label="Select year"
                       value={currentYear}
                       onChange={handleYearSelect}
-                      onKeyDown={preventFormSubmitOnEnter}
                     >
                       {buildYearOptions().map((yearOption) => (
                         <option key={yearOption} value={yearOption}>
@@ -492,18 +482,16 @@ const FyDatePicker = React.forwardRef(
               {calendarDays}
             </div>
             <div className={styles.confirmButton}>
-              {/* type="button": inside a form this must not submit the form */}
-              <button type="button" onClick={handleConfirm}>
-                CONFIRM
-              </button>
+              <button onClick={handleConfirm}>CONFIRM</button>
             </div>
           </div>
-      );
+        );
+      };
 
       return (
         <>
           {!isMobile ? (
-            calendarContent
+            <ChildCalender />
           ) : (
             <Modal
               isOpen={showCalendar}
@@ -511,7 +499,7 @@ const FyDatePicker = React.forwardRef(
               headerClassName={styles.popupTitle}
               title={modalTitle ?? t("resource.profile.select_reattempt_date")}
             >
-              {calendarContent}
+              <ChildCalender />
             </Modal>
           )}
         </>

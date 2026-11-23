@@ -20,9 +20,6 @@ function UpiAppPayment({
   showUpiRedirectionModal,
   setShowUpiRedirectionModal,
   cancelUpiAppPayment,
-  // Defaults to enabled so callers that do not track checkout progress keep
-  // the previous always-clickable behaviour.
-  canCancelUpiAppPayment = true,
   t,
   SvgWrapper,
   styles,
@@ -100,11 +97,6 @@ function UpiAppPayment({
   };
 
   const cancelBtnStyle = {
-    appearance: "none",
-    background: "none",
-    border: 0,
-    padding: 0,
-    fontFamily: "inherit",
     cursor: "pointer",
     fontSize: "12px",
     fontWeight: 600,
@@ -112,11 +104,6 @@ function UpiAppPayment({
     textTransform: "uppercase",
     textAlign: "center",
     color: "var(--buttonLink)",
-  };
-  const disabledCancelBtnStyle = {
-    ...cancelBtnStyle,
-    cursor: "not-allowed",
-    opacity: 0.5,
   };
   useEffect(() => {
     if (!selectedUpiIntentApp && selectedTab === "UPI" && isTablet) {
@@ -320,21 +307,15 @@ function UpiAppPayment({
             <p className={styles.message}>
               {t("resource.checkout.redirecting_upi")}
             </p>
-            <button
-              type="button"
-              style={
-                canCancelUpiAppPayment
-                  ? cancelBtnStyle
-                  : disabledCancelBtnStyle
-              }
-              disabled={!canCancelUpiAppPayment}
+            <div
+              style={cancelBtnStyle}
               onClick={() => {
                 setShowUpiRedirectionModal(false);
                 cancelUpiAppPayment();
               }}
             >
               {t("resource.checkout.cancel_payment_caps")}
-            </button>
+            </div>
           </div>
         </Modal>
       )}

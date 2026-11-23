@@ -30,7 +30,6 @@ import React, {
 import * as styles from "./fy-dropdown.less";
 import SvgWrapper from "../svgWrapper/SvgWrapper";
 import { isRunningOnClient } from "../../../helper/utils";
-import { useGlobalTranslation } from "fdk-core/utils";
 
 const FyDropdown = ({
   options = [],
@@ -56,7 +55,6 @@ const FyDropdown = ({
   onChange = () => {},
   disableSearch = false,
 }) => {
-  const { t } = useGlobalTranslation("translation");
   const id = useId();
   const [selectedValue, setSelectedValue] = useState();
   const [isOpen, setIsOpen] = useState(false);
@@ -203,13 +201,6 @@ const FyDropdown = ({
       }
       listElement.appendChild(listItem);
     });
-
-    if (!filteredOptions.length) {
-      const emptyState = document.createElement("li");
-      emptyState.className = styles.dropdownOption;
-      emptyState.textContent = t("resource.common.no_options");
-      listElement.appendChild(emptyState);
-    }
 
     listElement.className = `${styles.dropdownList}  ${isOpen ? styles.open : ""} ${dropdownListClassName}`;
     listElement.style.pointerEvents = 'auto';

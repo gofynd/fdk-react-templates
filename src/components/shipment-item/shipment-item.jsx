@@ -33,6 +33,8 @@ function ShipmentItem({
   freeGiftGroups,
   initial,
   selectId,
+  selectedIds = [],
+  multiSelect = false,
   onChangeValue,
   type,
   shipmentDetails,
@@ -62,7 +64,28 @@ function ShipmentItem({
   const hasFreeGifts = freeGiftBags.length > 0;
   
   // Check if radio button is shown (for proper alignment of free gifts)
-  const hasRadioButton = !initial && type === "my-orders" && (bag.can_cancel || bag.can_return);
+  const canCancelShipment =
+    shipmentDetails?.can_cancel === true ||
+    shipmentDetails?.can_cancel === "true";
+  const isPlacedShipment =
+    String(shipmentDetails?.shipment_status?.title || "").toLowerCase() ===
+      "placed" ||
+    String(shipmentDetails?.shipment_status?.value || "").toLowerCase() ===
+      "placed";
+  const isEligibleForBulkCancel =
+    multiSelect &&
+    canCancelShipment &&
+    isPlacedShipment &&
+    (bag?.can_cancel === true || bag?.can_cancel === "true");
+  const hasRadioButton =
+    !initial &&
+    type === "my-orders" &&
+    (multiSelect
+      ? isEligibleForBulkCancel
+      : bag.can_cancel || bag.can_return);
+  const isSelected = selectedIds.some(
+    (selectedId) => String(selectedId) === String(bag.id)
+  );
 
   const { name, size, quantity, price } = useMemo(() => {
     if (isBundleItem) {
@@ -107,25 +130,37 @@ function ShipmentItem({
   return (
     <div className={`${styles.bagItem}`}>
       <div className={`${styles.label}`}>
-        {!initial &&
-          type === "my-orders" &&
-          (bag.can_cancel || bag.can_return) && (
+        {hasRadioButton && (
             <div className={`${styles.radiobtn}`}>
-              <input
-                type="radio"
-                value={bag.id}
-                onChange={() => onChange(bag.id)}
-                name="reasoncheckbox"
-                id={bag.id}
-              />
-              {selectId !== bag.id && (
+              {multiSelect ? (
+                <input
+                  type="checkbox"
+                  className={styles.multiSelectCheckbox}
+                  value={bag.id}
+                  checked={isSelected}
+                  onChange={() => onChange(bag.id)}
+                  name="cancelBagIds"
+                  id={`cancel-bag-${bag.id}`}
+                  aria-label={`Select ${name} for cancellation`}
+                />
+              ) : (
+                <input
+                  type="radio"
+                  value={bag.id}
+                  checked={String(selectId) === String(bag.id)}
+                  onChange={() => onChange(bag.id)}
+                  name="reasoncheckbox"
+                  id={bag.id}
+                />
+              )}
+              {!multiSelect && selectId !== bag.id && (
                 <SvgWrapper
                   className={styles.regularRadio}
                   svgSrc="regular"
                   onClick={() => onChange(bag.id)}
                 />
               )}
-              {selectId === bag.id && (
+              {!multiSelect && selectId === bag.id && (
                 <SvgWrapper
                   className={styles.returnRadioSelected}
                   svgSrc="returnRadioSelected"

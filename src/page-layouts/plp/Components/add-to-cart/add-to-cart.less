@@ -46,21 +46,6 @@
       padding: 24px;
     }
 
-    .mobileLimitedQuantity {
-      display: none;
-    }
-
-    @media @tablet {
-      .mobileLimitedQuantity {
-        display: block;
-        padding: 0 16px;
-      }
-
-      .desktopLimitedQuantity {
-        display: none;
-      }
-    }
-
     .preview {
       display: none;
       position: absolute;
@@ -293,30 +278,6 @@
 
           span {
             cursor: pointer;
-          }
-        }
-
-        // Empty mount point for extensions. Zero footprint while empty;
-        // injected content lives inside .productScrollContent, so tall
-        // content scrolls the right pane and never pushes the action buttons.
-        .customExtension {
-          display: block;
-          width: 100%;
-          max-width: 100%;
-          min-width: 0;
-          box-sizing: border-box;
-          overflow-wrap: anywhere;
-
-          img,
-          video,
-          iframe,
-          canvas {
-            max-width: 100%;
-          }
-
-          img,
-          video {
-            height: auto;
           }
         }
 
