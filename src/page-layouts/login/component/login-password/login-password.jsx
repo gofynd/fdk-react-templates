@@ -3,6 +3,7 @@ import { useForm, Controller } from "react-hook-form";
 import {
   checkIfNumber,
   translateDynamicLabel,
+  validatePhone,
   validatePasswordField,
 } from "../../../../helper/utils";
 import * as styles from "./login-password.less";
@@ -50,6 +51,7 @@ function loginPassword({
     setFocus,
     formState: { errors, isValid },
   } = useForm({
+    mode: "onChange",
     defaultValues: {
       username: "",
       phone: {
@@ -73,7 +75,12 @@ function loginPassword({
 
   useEffect(() => {
     if (checkIfNumber(watch("username"))) {
-      setValue("phone.mobile", watch("username"));
+      const mobile = watch("username");
+      setValue("phone", {
+        ...getValues("phone"),
+        mobile,
+        isValidNumber: validatePhone(mobile),
+      });
       setShowInputNumber(true);
     }
   }, [watch("username")]);
@@ -224,7 +231,7 @@ function loginPassword({
       <button
         className={styles.loginButton}
         type="submit"
-        disabled={showInputNumber && !watch("phone")?.isValidNumber}
+        disabled={!isValid}
       >
         {translateDynamicLabel(loginButtonText, t) ||
           t("resource.auth.login.login_caps")}

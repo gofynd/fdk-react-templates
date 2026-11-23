@@ -385,9 +385,16 @@ h5,
 }
 .free-gift-item__freeArticleContainer___wFbcr .free-gift-item__freeGiftItemImage___sEzSU {
   flex: 0 0 36px;
-  border-radius: 4px;
-  height: auto;
+  width: 36px;
+  height: 36px;
+  border-radius: calc(var(--itemImageRadius, 11px) / 2);
   min-width: 0;
+}
+.free-gift-item__freeArticleContainer___wFbcr .free-gift-item__imageCover___kL4Va {
+  object-fit: cover;
+}
+.free-gift-item__freeArticleContainer___wFbcr .free-gift-item__imageContain___hKKSA {
+  object-fit: contain;
 }
 .free-gift-item__freeArticleContainer___wFbcr .free-gift-item__freeGiftItemDetails___WWh4P {
   min-width: 0;

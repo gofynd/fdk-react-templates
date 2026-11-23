@@ -12,7 +12,13 @@
 import React, { useMemo, useState } from "react";
 import { FDKLink } from "fdk-core/components";
 import * as styles from "./chip-review-item.less";
-import { currencyFormat, formatLocale, numberWithCommas } from "../../helper/utils";
+import {
+  currencyFormat,
+  formatLocale,
+  getResponsiveImageBaseUrl,
+  getResponsiveImageSrcSet,
+  numberWithCommas,
+} from "../../helper/utils";
 import {
   useGlobalStore,
   useFPI,
@@ -29,13 +35,14 @@ export default function ChipReviewItem({ item, articles }) {
   const getProductPath = useMemo(() => `/product/${item.product.slug}`, [item]);
 
   const getProductImage = useMemo(() => {
-    if (item?.product?.images?.length && item?.product?.images?.[0]?.url) {
-      return item.product.images[0].url.replace(
-        "original",
-        "resize-h:180,w:125"
-      );
-    }
+    const imageUrl = item?.product?.images?.[0]?.url;
+    return imageUrl ? getResponsiveImageBaseUrl(imageUrl, 250) : "";
   }, [item]);
+
+  const getProductImageSrcSet = useMemo(
+    () => getResponsiveImageSrcSet(item?.product?.images?.[0]?.url),
+    [item]
+  );
 
   const isOutofStock = useMemo(() => {
     let outOfStockArticles = articles.filter((article) => {
@@ -69,12 +76,23 @@ export default function ChipReviewItem({ item, articles }) {
       <div className={styles.itemContainer}>
         <div className={styles.bagLeft}>
           <FDKLink to={getProductPath}>
-            <img src={getProductImage} alt={item.product.name} />
+            <img
+              src={getProductImage}
+              srcSet={getProductImageSrcSet}
+              sizes="125px"
+              alt={item.product.name}
+              loading="lazy"
+            />
           </FDKLink>
         </div>
         <div className={styles.bagRight}>
           <div className={styles.bagBrand}>{item.product.brand.name}</div>
-          <div className={styles.bagName}>{item.product.name}</div>
+          <div
+            className={`${styles.bagName} ${styles.productName}`}
+            title={item.product.name}
+          >
+            {item.product.name}
+          </div>
           <div className={styles.soldBy}>
             {t("resource.common.sold_by")}: {item.article.store.name + ","}
             {item.article.seller.name}

@@ -5,6 +5,7 @@ import FyImage from "../../../../components/core/fy-image/fy-image";
 import {
   getProductImgAspectRatio,
   isRunningOnClient,
+  isYouTubeUrl,
 } from "../../../../helper/utils";
 import * as styles from "./image-gallery.less";
 import LightboxImage from "../lightbox-image/lightbox-image";
@@ -60,7 +61,7 @@ function ImageGallery({
   };
 
   const getImageURL = (srcUrl) =>
-    `http://img.youtube.com/vi/${srcUrl?.substr(srcUrl?.lastIndexOf("/") + 1)}/0.jpg`;
+    `https://img.youtube.com/vi/${srcUrl?.substr(srcUrl?.lastIndexOf("/") + 1)}/0.jpg`;
 
   const prevSlide = () => {
     if (currentImageIndex === 0) {
@@ -185,7 +186,7 @@ function ImageGallery({
                     )}
                     {item.type === "video" && (
                       <div className={styles.videoThumbnailContainer}>
-                        {item.url.includes("youtube") ? (
+                        {isYouTubeUrl(item.url) ? (
                           <img
                             className={`${styles["imageGallery__list--item"]} ${styles.videoThumbnail}`}
                             src={getImageURL(item.url)}

@@ -178,26 +178,28 @@ const FyDatePicker = React.forwardRef(
       const sep = dateFormat.includes("/") ? "/" : "-";
       const parts = formattedDate.split(sep).map(Number);
 
-      let dateObj;
+      let year, month, day;
 
       switch (dateFormat) {
         case "DD-MM-YYYY":
         case "DD/MM/YYYY":
-          dateObj = new Date(parts[2], parts[1] - 1, parts[0]);
+          [day, month, year] = parts;
           break;
         case "MM-DD-YYYY":
         case "MM/DD/YYYY":
-          dateObj = new Date(parts[2], parts[0] - 1, parts[1]);
+          [month, day, year] = parts;
           break;
         case "YYYY-DD-MM":
         case "YYYY/DD/MM":
-          dateObj = new Date(parts[0], parts[2] - 1, parts[1]);
+          [year, day, month] = parts;
           break;
         default:
-          dateObj = new Date(NaN);
+          return "";
       }
 
-      return !isNaN(dateObj) ? dateObj.toISOString() : "";
+      // Use UTC to avoid timezone shift issues for date-only values
+      const utcDate = new Date(Date.UTC(year, month - 1, day, 0, 0, 0, 0));
+      return !isNaN(utcDate.getTime()) ? utcDate.toISOString() : "";
     };
 
     const getDaysInMonth = (month, year) =>
@@ -290,15 +292,8 @@ const FyDatePicker = React.forwardRef(
         setSelectedDate(formatted);
         setInlineError(""); // Clear any inline error when selecting a valid date
         if (!isMobile) {
-          const parsed = parseDateString(formatted);
-          const now = new Date();
-          parsed.setHours(
-            now.getHours(),
-            now.getMinutes(),
-            now.getSeconds(),
-            now.getMilliseconds()
-          );
-          onChange(parsed.toISOString());
+          // Use UTC midnight to avoid timezone shift issues for date-only values
+          onChange(toUTCISOString(formatted));
           setShowCalendar(false);
         }
         // else: wait for CONFIRM
@@ -328,6 +323,12 @@ const FyDatePicker = React.forwardRef(
       }
     };
 
+    // Enter on a focused select would submit an enclosing form (e.g. Profile
+    // Details) instead of choosing the month/year.
+    const preventFormSubmitOnEnter = (e) => {
+      if (e.key === "Enter") e.preventDefault();
+    };
+
     const handleNextMonth = () => {
       if (currentMonth === 11) {
         setCurrentMonth(0);
@@ -339,15 +340,8 @@ const FyDatePicker = React.forwardRef(
 
     const handleConfirm = () => {
       if (selectedDate && isValidDateString(selectedDate)) {
-        const parsed = parseDateString(selectedDate);
-        const now = new Date();
-        parsed.setHours(
-          now.getHours(),
-          now.getMinutes(),
-          now.getSeconds(),
-          now.getMilliseconds()
-        );
-        onChange(parsed.toISOString());
+        // Use UTC midnight to avoid timezone shift issues for date-only values
+        onChange(toUTCISOString(selectedDate));
       }
       setShowCalendar(false);
     };
@@ -360,15 +354,8 @@ const FyDatePicker = React.forwardRef(
         setCurrentYear(year);
         setInlineError(""); // Clear any inline error when selecting a valid date
         if (!isMobile) {
-          const parsed = parseDateString(formatted);
-          const now = new Date();
-          parsed.setHours(
-            now.getHours(),
-            now.getMinutes(),
-            now.getSeconds(),
-            now.getMilliseconds()
-          );
-          onChange(parsed.toISOString());
+          // Use UTC midnight to avoid timezone shift issues for date-only values
+          onChange(toUTCISOString(formatted));
           setShowCalendar(false);
         }
       }
@@ -443,8 +430,10 @@ const FyDatePicker = React.forwardRef(
         );
       }
 
-      const ChildCalender = () => {
-        return (
+      // Rendered as an element, not a component defined here: a new component
+      // type on every render remounted the month/year selects after each
+      // change, dropping the customer's selection and focus.
+      const calendarContent = (
           <div className={styles.calendarPopup}>
             <div className={styles.calendarHeader}>
               <div className={styles.controlContainer}>
@@ -457,6 +446,7 @@ const FyDatePicker = React.forwardRef(
                       aria-label="Select month"
                       value={currentMonth}
                       onChange={handleMonthSelect}
+                      onKeyDown={preventFormSubmitOnEnter}
                     >
                       {monthsOfYear.map((month, index) => (
                         <option key={month} value={index}>
@@ -468,6 +458,7 @@ const FyDatePicker = React.forwardRef(
                       aria-label="Select year"
                       value={currentYear}
                       onChange={handleYearSelect}
+                      onKeyDown={preventFormSubmitOnEnter}
                     >
                       {buildYearOptions().map((yearOption) => (
                         <option key={yearOption} value={yearOption}>
@@ -501,16 +492,18 @@ const FyDatePicker = React.forwardRef(
               {calendarDays}
             </div>
             <div className={styles.confirmButton}>
-              <button onClick={handleConfirm}>CONFIRM</button>
+              {/* type="button": inside a form this must not submit the form */}
+              <button type="button" onClick={handleConfirm}>
+                CONFIRM
+              </button>
             </div>
           </div>
-        );
-      };
+      );
 
       return (
         <>
           {!isMobile ? (
-            <ChildCalender />
+            calendarContent
           ) : (
             <Modal
               isOpen={showCalendar}
@@ -518,7 +511,7 @@ const FyDatePicker = React.forwardRef(
               headerClassName={styles.popupTitle}
               title={modalTitle ?? t("resource.profile.select_reattempt_date")}
             >
-              <ChildCalender />
+              {calendarContent}
             </Modal>
           )}
         </>
@@ -606,14 +599,8 @@ const FyDatePicker = React.forwardRef(
                     setCurrentYear(parsed.getFullYear());
                     setCurrentMonth(parsed.getMonth());
                     setShowCalendar(false);
-                    const now = new Date();
-                    parsed.setHours(
-                      now.getHours(),
-                      now.getMinutes(),
-                      now.getSeconds(),
-                      now.getMilliseconds()
-                    );
-                    onChange(parsed.toISOString());
+                    // Use UTC midnight to avoid timezone shift issues for date-only values
+                    onChange(toUTCISOString(selectedDate));
                     setInlineError(""); // Clear any existing inline error
                   } else {
                     // Replace alert with inline error

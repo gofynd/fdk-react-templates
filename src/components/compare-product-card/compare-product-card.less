@@ -18,7 +18,8 @@
   .cardImageContainer {
     width: 107px;
     gap: 4px;
-    border-radius: 12px;
+    border-radius: @ItemImageRadius;
+    overflow: hidden;
 
     @media @mobile {
       width: 76px !important;
@@ -29,7 +30,7 @@
       width: 107px;
       height: 100%;
       object-fit: cover;
-      border-radius: 12px;
+      border-radius: inherit;
 
       @media @mobile {
         width: 76px;
@@ -139,7 +140,7 @@
     height: 48px;
     width: 153px;
     padding: 12px;
-    border-radius: 4px;
+    border-radius: @ButtonRadius;
     border: 0.8px solid
       var(--overlay-popup-dividers-dividers-and-strokes, #d4d1d1);
     background: @ButtonSecondary;
@@ -180,7 +181,7 @@
   .imageShimmer {
     width: 110px !important;
     height: 100% !important;
-    border-radius: 12px;
+    border-radius: @ItemImageRadius;
 
     @media @mobile {
       width: 76px !important;
