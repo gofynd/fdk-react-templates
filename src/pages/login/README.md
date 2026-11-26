@@ -98,6 +98,7 @@ export default App;
 - **onRegisterButtonClick**: Callback function for handling the register button click.
 - **onLoginFormSubmit**: Callback function for submitting the login form (both password and OTP).
 - **mobileInfo**: Information about the user's mobile number.
+- **countryIso** (string, optional): ISO-2 code (e.g. `"in"`, `"ca"`) of the storefront's selected country; forwarded to `LoginOtp` to pre-select the phone field's country.
 - **submittedMobile**: Boolean to indicate if the mobile number was submitted for OTP.
 - **otpResendTime**: Time remaining before the OTP can be resent.
 - **otpError**: Error message for OTP submission.

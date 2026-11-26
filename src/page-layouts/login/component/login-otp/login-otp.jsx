@@ -24,6 +24,7 @@ function LoginOtp({
   getOtpLoading,
   isTermsAccepted = false,
   setShowConsentTooltip = () => {},
+  countryIso,
 }) {
   const { t } = useGlobalTranslation("translation");
   const { handleSubmit, control, getValues, reset, setValue, clearErrors, watch } =
@@ -36,9 +37,26 @@ function LoginOtp({
     });
 
   const phoneValue = watch("phone");
+  // Becomes true once the customer types a number or picks a country themselves;
+  // from then on the storefront's country must no longer override their input.
+  const hasUserEditedPhone = useRef(false);
+
+  // defaultValues are only read on mount. If the storefront country (and so
+  // mobileInfo.countryCode) resolves or changes later, carry it into the form
+  // as long as the customer hasn't started editing the phone field.
+  useEffect(() => {
+    if (hasUserEditedPhone.current || getValues("phone")?.mobile) return;
+    if (
+      mobileInfo?.countryCode &&
+      mobileInfo.countryCode !== getValues("phone")?.countryCode
+    ) {
+      reset({ phone: mobileInfo });
+    }
+  }, [mobileInfo?.countryCode]);
 
   const onChangeButton = () => {
-    reset();
+    hasUserEditedPhone.current = false;
+    reset({ phone: mobileInfo });
     setIsFormSubmitSuccess(false);
     setSubmittedMobile("");
   };
@@ -73,7 +91,15 @@ function LoginOtp({
                 countryCode={field.value.countryCode}
                 error={error}
                 isFocused={error?.message}
+                countryIso={hasUserEditedPhone.current ? undefined : countryIso}
                 onChange={(value) => {
+                  if (
+                    value?.mobile ||
+                    (value?.countryCode &&
+                      value.countryCode !== mobileInfo?.countryCode)
+                  ) {
+                    hasUserEditedPhone.current = true;
+                  }
                   setValue("phone", value);
                   clearErrors("phone");
                   onClearOtpError();

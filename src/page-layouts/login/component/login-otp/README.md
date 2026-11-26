@@ -59,7 +59,8 @@ export default App;
 ```
 
 ### Props
-- **mobileInfo** (object, optional): An object containing the initial phone number information (country code, mobile number, and validity status).
+- **mobileInfo** (object, optional): An object containing the initial phone number information (country code, mobile number, and validity status). If `mobileInfo.countryCode` changes before the customer edits the phone field, the field follows it.
+- **countryIso** (string, optional): ISO-2 code of the storefront's selected country. Used to pre-select the correct flag when several countries share a dial code (e.g. `+1` US/CA). Ignored once the customer types a number or picks a country.
 - **submittedMobile** (string, optional): The mobile number submitted to receive the OTP.
 - **otpResendTime** (number, optional): The time remaining before the OTP can be resent (in seconds).
 - **otpError** (string, optional): An error message related to OTP submission, if any.
