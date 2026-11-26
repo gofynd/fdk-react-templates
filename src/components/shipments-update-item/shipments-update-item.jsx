@@ -32,11 +32,10 @@ function ShipmentUpdateItem({
   globalConfig,
   allBags,
   updatedQuantity = () => {},
-  allowQuantityChange = true,
 }) {
   const { t } = useGlobalTranslation("translation");
   const [showQuantityError, setShowQuantityError] = useState(false);
-  const [showQuantity, setshowQuantity] = useState(allowQuantityChange);
+  const [showQuantity, setshowQuantity] = useState(true);
   const [currQuantity, setcurrQuantity] = useState(quantity);
 
   const priceFormatCurrencySymbol = (symbol, price) => {
@@ -186,16 +185,11 @@ function ShipmentUpdateItem({
               globalConfig={globalConfig}
             />
             <div className={`${styles.bagInfo}`}>
-              <div className={styles.itemDetails}>
+              <div>
                 <div className={`${styles.brandName} ${styles.boldxxxs}`}>
                   {brand}
                 </div>
-                <div
-                  className={`${styles.itemName} ${styles.lightxxxs}`}
-                  title={name}
-                >
-                  {name}
-                </div>
+                <div className={`${styles.lightxxxs}`}>{name}</div>
               </div>
               <div className={`${styles.sizeQuantityContainer}`}>
                 {size && (

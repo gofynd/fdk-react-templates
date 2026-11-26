@@ -386,13 +386,6 @@ h5,
 [dir="rtl"] .coupon__couponBoxContainer___yJTiZ .coupon__couponApplyBox___HJFgo .coupon__arrowIcon___yL8Tb {
   transform: rotate(180deg);
 }
-.coupon__couponBoxContainer___yJTiZ .coupon__arrowIconSvg___po_x4 {
-  color: var(--textBody, #3c3131) !important;
-  fill: var(--textBody, #3c3131) !important;
-}
-.coupon__couponBoxContainer___yJTiZ .coupon__arrowIconSvg___po_x4 path {
-  fill: var(--textBody, #3c3131) !important;
-}
 .coupon__couponBoxContainer___yJTiZ .coupon__couponIcon___klJuN {
   width: 40px;
 }
@@ -419,19 +412,6 @@ h5,
   font-size: 12px;
   font-weight: 500;
   margin-top: 4px;
-}
-.coupon__disabledCouponBoxContainer___HNfil {
-  opacity: 0.5;
-  pointer-events: none;
-}
-.coupon__modalHeader___a8t1e [class*="crossIcon"] {
-  color: var(--textBody, #3c3131);
-}
-.coupon__modalHeader___a8t1e [class*="crossIcon"] svg {
-  fill: currentColor;
-}
-.coupon__modalHeader___a8t1e [class*="crossIcon"] svg path {
-  fill: currentColor;
 }
 @media only screen and (max-width: 480px) {
   .coupon__modalHeader___a8t1e {
@@ -478,7 +458,7 @@ h5,
   border: 1px solid var(--dividerStokes, #d4d1d1);
   border-radius: 4px;
   background: var(--dialogBackground, #fff);
-  color: var(--textHeading, #26201a);
+  color: var(--textBody, #3c3131);
   font-size: 12px;
   font-weight: 400;
   padding: 16px;
@@ -738,13 +718,6 @@ h5,
   align-items: center;
   justify-content: center;
   z-index: 3;
-  color: var(--textBody, #3c3131);
-}
-.coupon__couponSuccessModalContent___TUDzT .coupon__close-icon___w35na svg {
-  fill: currentColor;
-}
-.coupon__couponSuccessModalContent___TUDzT .coupon__close-icon___w35na svg path {
-  fill: currentColor;
 }
 .coupon__couponSuccessModalContent___TUDzT .coupon__couponSuccessGif___cMoJ1 {
   position: absolute;

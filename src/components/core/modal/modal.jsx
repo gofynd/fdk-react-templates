@@ -11,7 +11,6 @@
  * @param {boolean} childHandleFocus - If true, the modal does not automatically handle focus when opened.
  * @param {string} modalType - Type of modal. Can be "right-modal" or "center-modal" for positioning.
  * @param {Function} closeDialog - Callback function to close the modal.
- * @param {boolean} closeOnMobileNavigation - Close before mobile footer navigation; returning false from closeDialog cancels navigation.
  * @param {React.ReactNode} children - The content to be displayed inside the modal.
  * @param {string} title - The title of the modal, displayed in the header.
  * @param {string} titleClassName - Additional class name(s) for the modal title.
@@ -38,7 +37,6 @@ function Modal({
   hideHeader = false,
   modalType = "",
   closeDialog = () => {},
-  closeOnMobileNavigation = false,
   children,
   title,
   titleClassName,
@@ -56,19 +54,6 @@ function Modal({
   const modalContainerRef = useRef(null);
 
   const isMobile = useMobile();
-
-  useEffect(() => {
-    if (!isOpen || !closeOnMobileNavigation || !isRunningOnClient()) return;
-
-    const handleMobileNavigation = (event) => {
-      if (closeDialog() === false) event.preventDefault();
-    };
-
-    window.addEventListener("fynd:mobile-navigation", handleMobileNavigation);
-    return () => {
-      window.removeEventListener("fynd:mobile-navigation", handleMobileNavigation);
-    };
-  }, [isOpen, closeOnMobileNavigation, closeDialog]);
 
   useEffect(() => {
     if (isOpen && !childHandleFocus && modalRef.current) {
@@ -163,6 +148,7 @@ function Modal({
           // initial={{ opacity: 0 }}
           // animate={{ opacity: 1 }}
           // exit={{ opacity: 0 }}
+          data-modal-overlay="true"
           className={`${styles.modal} ${modalType === "right-modal" ? styles.rightModal : ""} ${modalType === "center-modal" ? styles.centerModal : ""} ${customClassName ?? ""}`}
           ref={modalRef}
           // tabIndex="0"

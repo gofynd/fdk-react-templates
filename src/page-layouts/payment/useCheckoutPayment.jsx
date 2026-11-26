@@ -23,35 +23,15 @@ export const CREDIT_CARD_MASK = [
   { mask: "0000 0000 0000 0000", cardtype: "Unknown" },
 ];
 
-const isTruthyValue = (value) =>
-  value === true || String(value).toLowerCase() === "true";
-
-const isCouponValidityValid = (couponValidity = {}) => {
-  const couponHasCode = Boolean(couponValidity?.code);
-  return (
-    couponValidity?.valid === true ||
-    (!couponHasCode && couponValidity?.valid !== false)
-  );
-};
-
-const isSplitCouponValidationEnabled = (splitPaymentConfig = {}) =>
-  isTruthyValue(splitPaymentConfig?.shouldValidateSplitCouponFirst) ||
-  isTruthyValue(splitPaymentConfig?.should_validate_split_coupon_first) ||
-  isTruthyValue(splitPaymentConfig?.defaultSelected) ||
-  isTruthyValue(splitPaymentConfig?.isSplitCodPaymentActive) ||
-  isTruthyValue(splitPaymentConfig?.is_split_cod_payment_active) ||
-  isTruthyValue(splitPaymentConfig?.isResumeSplitPayment) ||
-  isTruthyValue(splitPaymentConfig?.is_resume_split_payment);
-
 export function useCheckoutPayment({
   payment,
-  onPaymentCancellationConfirmed,
   handleShowFailedMessage,
   breakUpValues,
   setCancelQrPayment,
   isCouponApplied,
   juspayErrorMessage,
   styles,
+  isSplitPayment = false,
 }) {
   const fpi = useFPI();
   const { language } = useGlobalStore(fpi.getters.i18N_DETAILS);
@@ -78,7 +58,7 @@ export function useCheckoutPayment({
     enableLinkPaymentOption,
     setIsPaymentLoading,
     setShowUpiRedirectionModal,
-    showSnackbar,
+    getPaymentSuccessRedirectUrl,
   } = payment;
 
   // env / derived
@@ -88,34 +68,10 @@ export function useCheckoutPayment({
     /Instagram/.test(navigator.userAgent);
 
   const isTablet = useViewport(0, 768);
-  const shouldHideCodOption = payment?.shouldHideCodOption === true;
 
   let paymentOptions = PaymentOptionsList ? PaymentOptionsList() : [];
-  let codOption = shouldHideCodOption
-    ? undefined
-    : paymentOptions?.filter((opt) => opt.name === "COD")[0];
+  let codOption = paymentOptions?.filter((opt) => opt.name === "COD")[0];
   paymentOptions = paymentOptions?.filter((opt) => opt.name !== "COD");
-  const getCodChargeFromOption = () => {
-    const rawCodOption = paymentOption?.payment_option?.find(
-      (option) =>
-        option?.name === "COD" ||
-        option?.code === "COD" ||
-        option?.merchant_code === "COD"
-    );
-    const codCharge = [
-      codOption?.list?.[0]?.cod_charges,
-      codOption?.list?.[0]?.codCharges,
-      codOption?.cod_charges,
-      codOption?.codCharges,
-      rawCodOption?.list?.[0]?.cod_charges,
-      rawCodOption?.list?.[0]?.codCharges,
-      rawCodOption?.cod_charges,
-      rawCodOption?.codCharges,
-    ].find((value) => value !== undefined && value !== null);
-    const numericCodCharge = Number(codCharge);
-
-    return Number.isFinite(numericCodCharge) ? numericCodCharge : 0;
-  };
 
   const otherPaymentOptions = useMemo(
     () => (otherOptions ? otherOptions() : []),
@@ -188,8 +144,6 @@ export function useCheckoutPayment({
   const [showUPIModal, setshowUPIModal] = useState(false);
   const [showCouponValidityModal, setShowCouponValidityModal] = useState(false);
   const [couponValidity, setCouponValidity] = useState({});
-  const [isCouponValidationLoading, setIsCouponValidationLoading] =
-    useState(false);
   const [timeRemaining, setTimeRemaining] = useState(0);
 
   const [openGuidelinesModal, setOpenGuidelinesModal] = useState(false);
@@ -227,62 +181,8 @@ export function useCheckoutPayment({
   const [isCardNumberValid, setIsCardNumberValid] = useState(false);
   const [activeMop, setActiveMop] = useState(null);
   const [userOrderId, setUserOrderId] = useState(null);
-  // True from "Pay Now" until checkoutCart has answered (order id received or
-  // the request settled); the UPI-app "Cancel payment" button stays disabled
-  // meanwhile so a cancel can never fire without an order id.
-  const [isUpiCheckoutPending, setIsUpiCheckoutPending] = useState(false);
-  const isUpiCheckoutInProgressRef = useRef(false);
-  const upiCollectOrderIdRef = useRef("");
-  const upiCheckoutPendingTimerRef = useRef(null);
-  const settleUpiCheckoutPending = () => {
-    if (upiCheckoutPendingTimerRef.current) {
-      clearTimeout(upiCheckoutPendingTimerRef.current);
-      upiCheckoutPendingTimerRef.current = null;
-    }
-    setIsUpiCheckoutPending(false);
-  };
   const [lastValidatedBin, setLastValidatedBin] = useState("");
   const [isJuspayCouponApplied, setIsJuspayCouponApplied] = useState(false);
-  const couponValidationRequestRef = useRef(0);
-  const couponValidationCacheRef = useRef({});
-  const couponValidationLoadingCountRef = useRef(0);
-
-  useEffect(() => {
-    const eventApi =
-      typeof window !== "undefined" ? window.FPI?.event : undefined;
-    if (typeof eventApi?.on !== "function") return undefined;
-
-    const handleOrderCheckedOut = (eventData = {}) => {
-      if (!isUpiCheckoutInProgressRef.current || !eventData?.order_id) {
-        return;
-      }
-
-      isUpiCheckoutInProgressRef.current = false;
-      // For UPI-intent (gateway) payments checkoutPayment resolves without the
-      // checkoutCart response, so this event is the only source of order_id.
-      setUserOrderId(eventData.order_id);
-      settleUpiCheckoutPending();
-    };
-
-    const eventId = eventApi.on("order.checkedout", handleOrderCheckedOut);
-
-    return () => {
-      if (upiCheckoutPendingTimerRef.current) {
-        clearTimeout(upiCheckoutPendingTimerRef.current);
-      }
-      try {
-        if (typeof eventApi.off === "function") {
-          eventApi.off("order.checkedout", {
-            name: handleOrderCheckedOut,
-            eventId,
-          });
-        }
-      } catch {
-        // The handler is gated by isUpiCheckoutInProgressRef, so a listener
-        // that could not be removed is inert.
-      }
-    };
-  }, []);
 
   const disbaleCheckout = useGlobalStore(fpi?.getters?.SHIPMENTS);
   const isCouponAppliedSuccess =
@@ -299,8 +199,19 @@ export function useCheckoutPayment({
     }
   }, [enableLinkPaymentOption, selectedTab]);
 
-  const toggleMop = (m, forceOpen = false) => {
-    setActiveMop((prev) => (forceOpen || prev !== m ? m : null));
+  // Split payment sets selectedTab from outside this hook, so the accordion is
+  // never told to open. Open it once for the tab that was selected for the user;
+  // after that the user's own toggling is left alone.
+  const autoOpenedMopRef = useRef("");
+  useEffect(() => {
+    if (!isSplitPayment || !selectedTab) return;
+    if (autoOpenedMopRef.current === selectedTab) return;
+    autoOpenedMopRef.current = selectedTab;
+    setActiveMop(selectedTab);
+  }, [isSplitPayment, selectedTab]);
+
+  const toggleMop = (m) => {
+    setActiveMop((prev) => (prev === m ? null : m));
   };
 
   const setCardValidity = async ({ isValid, card_number }) => {
@@ -559,11 +470,6 @@ export function useCheckoutPayment({
       selectedTab !== "COD" &&
       !enableLinkPaymentOption
     ) {
-      if (payment?.shouldSkipNextCodReset?.()) {
-        prevSelectedTabRef.current = selectedTab;
-        return;
-      }
-
       selectPaymentMode({
         id: cart_id,
         address_id: address_id,
@@ -618,71 +524,11 @@ export function useCheckoutPayment({
     return { mopData, subMopData };
   };
 
-  const startCouponValidationLoading = () => {
-    couponValidationLoadingCountRef.current += 1;
-    setIsCouponValidationLoading(true);
-  };
-
-  const stopCouponValidationLoading = () => {
-    couponValidationLoadingCountRef.current = Math.max(
-      couponValidationLoadingCountRef.current - 1,
-      0
-    );
-
-    if (couponValidationLoadingCountRef.current === 0) {
-      setIsCouponValidationLoading(false);
-    }
-  };
-
   const checkCouponValidity = async (payload) => {
     if (getTotalValue() === 0) return true;
-    startCouponValidationLoading();
-
-    try {
-      const payloadKey = JSON.stringify(payload || {});
-      const cachedValidation = couponValidationCacheRef.current[payloadKey];
-
-      if (cachedValidation) {
-        if (cachedValidation.promise) {
-          return await cachedValidation.promise;
-        }
-
-        if (
-          cachedValidation.completedAt &&
-          Date.now() - cachedValidation.completedAt < 2000
-        ) {
-          return cachedValidation.result;
-        }
-      }
-
-      const validationPromise = validateCoupon(payload)
-        .then((res) => {
-          const { coupon_validity } = res.data.validateCoupon || {};
-
-          couponValidationCacheRef.current[payloadKey] = {
-            completedAt: Date.now(),
-            promise: null,
-            result: coupon_validity,
-          };
-
-          return coupon_validity;
-        })
-        .catch((error) => {
-          delete couponValidationCacheRef.current[payloadKey];
-
-          throw error;
-        });
-
-      couponValidationCacheRef.current[payloadKey] = {
-        completedAt: 0,
-        promise: validationPromise,
-        result: null,
-      };
-
-      return await validationPromise;
-    } finally {
-      stopCouponValidationLoading();
-    }
+    const res = await validateCoupon(payload);
+    const { coupon_validity } = res.data.validateCoupon || {};
+    return coupon_validity;
   };
 
   const removeCoupon = async () => {
@@ -742,10 +588,8 @@ export function useCheckoutPayment({
     }
   };
 
-  const selectMop = async (tabIn, mopIn, subMopIn, options = {}) => {
+  const selectMop = async (tabIn, mopIn, subMopIn) => {
     if (!mopIn) return;
-    couponValidationRequestRef.current += 1;
-    const currentCouponValidationRequest = couponValidationRequestRef.current;
     setTab(tabIn);
     setMop(mopIn);
     setSubMop(subMopIn);
@@ -797,84 +641,18 @@ export function useCheckoutPayment({
     if (!enableLinkPaymentOption) {
       fpi.custom.setValue("validateCouponPayload", payload);
     }
-    const validateAppliedCoupon = () => {
-      if (!isCouponApplied || enableLinkPaymentOption) {
-        return Promise.resolve();
+    let isValid = true;
+    if (isCouponApplied && (selectedTab === tabIn || tabIn === "COD")) {
+      const { code, title, display_message_en, valid } =
+        !enableLinkPaymentOption && (await checkCouponValidity(payload));
+      isValid = !code || (code && valid);
+
+      if (!isValid) {
+        setCouponValidity({ title, message: display_message_en, valid });
+        setShowCouponValidityModal(true);
+        return;
       }
-
-      const splitPaymentConfig = payment?.splitPaymentConfig || {};
-      const isSplitPaymentActive =
-        isSplitCouponValidationEnabled(splitPaymentConfig);
-      const splitCouponValidationPayload =
-        splitPaymentConfig?.splitCouponValidationPayload ||
-        splitPaymentConfig?.split_coupon_validation_payload ||
-        splitPaymentConfig?.couponValidationPayload ||
-        splitPaymentConfig?.coupon_validation_payload ||
-        (isSplitPaymentActive
-          ? {
-              addressId: address_id,
-              aggregatorName: "split",
-              buyNow: searchParams.get("buy_now") === "true",
-              id: cart_id,
-              merchantCode: "split",
-              paymentIdentifier: "split",
-              paymentMode: "split",
-            }
-          : null);
-      const shouldValidateSplitCouponFirst =
-        splitCouponValidationPayload &&
-        isSplitPaymentActive &&
-        !options?.skipSplitCouponValidation;
-
-      const runSelectedMopCouponValidation = () =>
-        checkCouponValidity(payload).then((couponValidity = {}) => {
-          if (
-            couponValidationRequestRef.current !== currentCouponValidationRequest
-          ) {
-            return;
-          }
-
-          const { code, title, display_message_en, valid } =
-            couponValidity || {};
-
-          if (!isCouponValidityValid(couponValidity)) {
-            setCouponValidity({ title, message: display_message_en, valid });
-            setShowCouponValidityModal(true);
-          }
-        });
-
-      const validationPromise = shouldValidateSplitCouponFirst
-        ? checkCouponValidity(splitCouponValidationPayload).then(
-            (splitCouponValidity = {}) => {
-              if (
-                couponValidationRequestRef.current !==
-                currentCouponValidationRequest
-              ) {
-                return;
-              }
-
-              const { title, display_message_en, valid } =
-                splitCouponValidity || {};
-
-              if (!isCouponValidityValid(splitCouponValidity)) {
-                setCouponValidity({
-                  title,
-                  message: display_message_en,
-                  valid,
-                });
-                setShowCouponValidityModal(true);
-                return;
-              }
-
-              return runSelectedMopCouponValidation();
-            }
-          )
-        : runSelectedMopCouponValidation();
-
-      return validationPromise.catch((error) => {
-        console.error("Coupon validation failed", error);
-      });
-    };
+    }
 
     let paymentModePayload;
     if (mopIn === "CARD") {
@@ -910,64 +688,38 @@ export function useCheckoutPayment({
       );
       setSelectedTab(tabIn);
       setIsCodModalOpen(true);
+    } else if (tabIn === "NEFT") {
+      selectPaymentMode(paymentModePayload).then(() =>
+        console.log("Payment mode selected")
+      );
+      setSelectedTab(tabIn);
+    } else if (tabIn === "RTGS") {
+      selectPaymentMode(paymentModePayload).then(() =>
+        console.log("Payment mode selected")
+      );
+      setSelectedTab(tabIn);
+    } else if (tabIn === "CREDIT") {
+      selectPaymentMode(paymentModePayload).then(() => {
+        console.log("Payment mode selected");
+      });
+      setSelectedTab(tabIn);
     } else if (tabIn === "CARD") {
-      if (subMopIn !== "newCARD") {
-        setSelectedCard(subMopData);
-        setSelectedPaymentPayload((currentPayload) => ({
-          ...currentPayload,
-          selectedCard: subMopData,
-        }));
-      }
+      if (subMopIn !== "newCARD") setSelectedCard(subMopData);
     } else if (tabIn === "CARDLESS_EMI") {
       setSelectedCardless(subMopData);
-      setSelectedPaymentPayload((currentPayload) => ({
-        ...currentPayload,
-        selectedCardless: subMopData,
-      }));
     } else if (tabIn === "UPI") {
       if (mopIn === "QR") await showQrCode();
       else if (mopIn === "UPI" && subMopIn === "any")
         await handleProceedToPayClick();
     } else if (tabIn === "WL") {
       setSelectedWallet(subMopData);
-      setSelectedPaymentPayload((currentPayload) => ({
-        ...currentPayload,
-        selectedWallet: subMopData,
-      }));
     } else if (tabIn === "NB") {
       setSelectedNB(subMopData);
-      setSelectedPaymentPayload((currentPayload) => ({
-        ...currentPayload,
-        selectedNB: subMopData,
-      }));
     } else if (tabIn === "PL") {
       setSelectedPayLater(subMopData);
-      setSelectedPaymentPayload((currentPayload) => ({
-        ...currentPayload,
-        selectedPayLater: subMopData,
-      }));
     } else if (tabIn === "Other") {
       setSelectedOtherPayment(subMopData);
-      setSelectedPaymentPayload((currentPayload) => ({
-        ...currentPayload,
-        selectedOtherPayment: subMopData,
-      }));
     }
-
-    const shouldValidateAppliedCoupon =
-      isCouponApplied && !enableLinkPaymentOption;
-
-    if (shouldValidateAppliedCoupon) {
-      startCouponValidationLoading();
-    }
-
-    setTimeout(() => {
-      Promise.resolve(validateAppliedCoupon()).finally(() => {
-        if (shouldValidateAppliedCoupon) {
-          stopCouponValidationLoading();
-        }
-      });
-    }, 0);
   };
 
   const validateCouponOnCreditNoteApplied = async (mopName, mopCode) => {
@@ -993,60 +745,94 @@ export function useCheckoutPayment({
     }
   };
 
+  // Tabs whose sub-option is picked for the user only when there is exactly one
+  // to pick from. With several, only the parent tab is selected and the user
+  // chooses. CARD / UPI / QR / COD are deliberately absent: selecting one starts
+  // a flow (QR, payment, modal) or needs input (CVV), so it must stay manual.
   const PRESELECT_TABS = ["NB", "WL", "PL", "CARDLESS_EMI", "Other"];
+  // Offline modes always carry a single entry and have always been preselected.
+  const ALWAYS_PRESELECT_TABS = ["NEFT", "RTGS", "CREDIT"];
+  const soleSubMop = (tabData) =>
+    tabData?.list?.length === 1 && tabData.list[0]?.code
+      ? tabData.list[0]
+      : null;
+
+  // The payment options can arrive after the tab is set (e.g. split payment sets it
+  // externally), so the sole option is derived from the data and watched, not just the tab.
+  const soleOptionCode =
+    selectedTab === "Other"
+      ? paymentOptions.length > 0 && otherPaymentOptions.length === 1
+        ? (otherPaymentOptions[0]?.list?.[0]?.code ?? "")
+        : ""
+      : (soleSubMop(selectedTabData)?.code ?? "");
+
+  // One effect decides the single mode to preselect, so two branches can never both call
+  // selectMop (and its API) from the same render.
   useEffect(() => {
+    let target = null;
+    let skipIfSelected = false;
+
     if (
-      !isCouponApplied &&
       !isCouponAppliedSuccess["isCouponApplied"] &&
       !enableLinkPaymentOption
     ) {
       if (
         selectedTab === "Other" &&
         !selectedTabData &&
-        paymentOptions.length === 0
+        paymentOptions.length === 0 &&
+        otherPaymentOptions.length === 1
       ) {
-        selectMop(
-          "Other",
-          otherPaymentOptions[0]?.name,
-          otherPaymentOptions[0]?.list?.[0]?.code ?? ""
-        );
-      }
-      if (
+        target = {
+          tab: "Other",
+          mop: otherPaymentOptions[0]?.name,
+          subMop: otherPaymentOptions[0]?.list?.[0]?.code ?? "",
+        };
+      } else if (
         selectedTabData?.name !== "CARD" &&
         selectedTabData?.name !== "UPI" &&
-        paymentOptions[0]?.name === selectedTabData?.name
+        paymentOptions[0]?.name === selectedTabData?.name &&
+        (ALWAYS_PRESELECT_TABS.includes(selectedTabData?.name) ||
+          selectedTabData?.list?.length === 1)
       ) {
-        selectMop(
-          selectedTabData?.name,
-          selectedTabData?.name,
-          selectedTabData?.list[0]?.code ?? ""
-        );
+        target = {
+          tab: selectedTabData?.name,
+          mop: selectedTabData?.name,
+          subMop: selectedTabData?.list?.[0]?.code ?? "",
+        };
       }
     }
-  }, [selectedTabData?.list?.[0]?.code, otherPaymentOptions, selectedTab]);
 
-  useEffect(() => {
+    // Otherwise pick the sole sub-option of the selected tab (it may have just loaded).
     if (
+      !target &&
       PRESELECT_TABS.includes(selectedTab) &&
-      selectedTabData?.list?.[0]?.code
+      soleOptionCode
     ) {
-      selectMop(
-        selectedTab,
-        selectedTab === "Other" ? selectedTabData?.name : selectedTab,
-        selectedTabData.list[0].code
-      );
+      target = {
+        tab: selectedTab,
+        mop:
+          selectedTab === "Other" ? otherPaymentOptions[0]?.name : selectedTab,
+        subMop: soleOptionCode,
+      };
+      skipIfSelected = true;
     }
-  }, [selectedTab]);
+
+    if (!target) return;
+    // Already selected; avoid a redundant selectMop (and its API call) on re-runs.
+    if (skipIfSelected && tab === target.tab && subMop === target.subMop) return;
+    selectMop(target.tab, target.mop, target.subMop);
+  }, [
+    selectedTabData?.list?.[0]?.code,
+    otherPaymentOptions,
+    selectedTab,
+    soleOptionCode,
+  ]);
 
   async function showQrCode() {
     try {
       const res = await proceedToPay("QR");
-      const paymentResult =
-        res?.payload?.data?.checkoutCart ||
-        res?.payload?.data?.createPaymentOrder ||
-        {};
-      const { data, success } = paymentResult;
-      if (success && data?.base64_encoded_qr) {
+      const { data, success } = res?.payload?.data?.checkoutCart || {};
+      if (success && data.base64_encoded_qr) {
         setIsQrCodeVisible(true);
         setQrCodeImage(data.base64_encoded_qr);
         setCountdown(data.timeout);
@@ -1106,9 +892,17 @@ export function useCheckoutPayment({
         const params = new URLSearchParams();
         for (const key in qrParams) params.append(key, qrParams[key]);
 
-        const finalUrl = `${window.location.origin}${
+        const defaultUrl = `${window.location.origin}${
           locale && locale !== "en" ? `/${locale}` : ""
         }/cart/order-status/?${params.toString()}`;
+        const finalUrl =
+          getPaymentSuccessRedirectUrl?.({
+            defaultUrl,
+            locale,
+            params,
+            qrPayload,
+            qrParams,
+          }) || defaultUrl;
 
         window.location.href = finalUrl;
       } else if (status === "failed") {
@@ -1282,48 +1076,14 @@ export function useCheckoutPayment({
 
   const handleProceedToPayClick = async () => {
     try {
-      setUserOrderId(null);
-      upiCollectOrderIdRef.current = "";
-      isUpiCheckoutInProgressRef.current = true;
-      setIsUpiCheckoutPending(true);
-      // Safety net: split legs (createPaymentOrder) emit no order.checkedout
-      // and a gateway hand-off may never resolve, so never trap the shopper
-      // behind a permanently disabled Cancel button.
-      if (upiCheckoutPendingTimerRef.current) {
-        clearTimeout(upiCheckoutPendingTimerRef.current);
-      }
-      upiCheckoutPendingTimerRef.current = setTimeout(() => {
-        upiCheckoutPendingTimerRef.current = null;
-        setIsUpiCheckoutPending(false);
-      }, 15000);
       setShowUpiRedirectionModal(true);
-      const res = await proceedToPay("UPI", {
+      let res = await proceedToPay("UPI", {
         ...selectedPaymentPayload,
         selectedUpiIntentApp: selectedUpiRef.current || selectedUpiIntentApp,
-        // Payment links create their order without checkoutCart, so no
-        // order.checkedout event fires; the theme reports the link order id
-        // here instead. Storefront checkout never calls it.
-        onUpiOrderCreated: (orderId) => {
-          if (!isUpiCheckoutInProgressRef.current || !orderId) return;
-          isUpiCheckoutInProgressRef.current = false;
-          setUserOrderId(orderId);
-          settleUpiCheckoutPending();
-        },
       });
 
-      const checkoutCart =
-        res?.payload?.data?.checkoutCart ||
-        res?.data?.checkoutCart ||
-        res?.payload?.checkoutCart ||
-        res?.checkoutCart ||
-        {};
-      const order_id = checkoutCart?.order_id || checkoutCart?.cart?.order_id;
-      // Only overwrite when the response carries an id: gateway (UPI-intent)
-      // checkouts resolve with no checkoutCart, and the id already came from
-      // the order.checkedout event.
-      if (order_id) setUserOrderId(order_id);
-      isUpiCheckoutInProgressRef.current = false;
-      settleUpiCheckoutPending();
+      const { order_id } = res?.payload?.data?.checkoutCart || {};
+      setUserOrderId(order_id);
 
       if (res?.isUPIError) {
         setUPIError(true);
@@ -1355,17 +1115,12 @@ export function useCheckoutPayment({
             merchant_transaction_id: "",
             status: "",
           };
-          upiCollectOrderIdRef.current = oid || "";
           setshowUPIModal(true);
           startPolling(payload);
         }
       }
     } catch (err) {
-      isUpiCheckoutInProgressRef.current = false;
-      settleUpiCheckoutPending();
       console.log(err);
-      setShowUpiRedirectionModal(false);
-      handleShowFailedMessage({ failed: true });
     }
   };
 
@@ -1373,18 +1128,6 @@ export function useCheckoutPayment({
     setshowUPIModal(false);
     stopPolling();
     setIsPaymentLoading(false);
-
-    // Revoke the pending UPI collect request (same as QR cancel) so it cannot
-    // still be approved and placed as an order after the shopper cancelled.
-    const collectOrderId = upiCollectOrderIdRef.current;
-    upiCollectOrderIdRef.current = "";
-    if (collectOrderId) {
-      Promise.resolve(
-        cancelPayment?.({ order_id: collectOrderId, request_type: "cancel" })
-      ).catch(() => {
-        console.log("Payment cancellation failed");
-      });
-    }
   }
 
   const getCardBorder = (card) => {
@@ -1437,50 +1180,30 @@ export function useCheckoutPayment({
     );
     if (qrPaymentOption) setIsQrMopPresent(true);
 
-    const isSelectedTabAvailable =
-      selectedTab &&
-      (paymentOptions?.some((option) => option?.name === selectedTab) ||
-        // "Other" is a navigation group, not an API payment-method name.
-        (selectedTab === "Other" && otherPaymentOptions?.length > 0) ||
-        otherPaymentOptions?.some((option) => option?.name === selectedTab) ||
-        codOption?.name === selectedTab);
-
-    if (isSelectedTabAvailable) {
-      return;
-    }
-
-    if (getTotalValue?.() === 0 && !shouldHideCodOption) {
+    if (getTotalValue?.() === 0) {
       setSelectedTab("COD");
     } else if (!enableLinkPaymentOption) {
+      const selectedTabExists =
+        selectedTab &&
+        (paymentOptions?.some((opt) => opt.name === selectedTab) ||
+          (selectedTab === "Other" && otherPaymentOptions?.length > 0) ||
+          otherPaymentOptions?.some((opt) => opt.name === selectedTab) ||
+          codOption?.name === selectedTab);
+
       if (paymentOptions?.length > 0) {
-        setSelectedTab(paymentOptions[0].name);
-        setActiveMop(paymentOptions[0].name);
-      } else if (otherPaymentOptions?.length > 0) {
+        if (!selectedTabExists) {
+          setSelectedTab(paymentOptions[0].name);
+          setActiveMop(paymentOptions[0].name);
+        }
+      } else if (otherPaymentOptions?.length > 0 && !selectedTabExists) {
         setSelectedTab("Other");
         setActiveMop("Other");
-      } else if (codOption?.name) {
+      } else if (codOption?.name && !selectedTabExists) {
         selectMop(codOption?.name, codOption?.name, codOption?.name);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paymentOption, selectedTab]);
-
-  useEffect(() => {
-    if (!shouldHideCodOption || selectedTab !== "COD") {
-      return;
-    }
-
-    if (paymentOptions?.length > 0) {
-      setSelectedTab(paymentOptions[0].name);
-      setActiveMop(paymentOptions[0].name);
-    } else if (otherPaymentOptions?.length > 0) {
-      setSelectedTab("Other");
-      setActiveMop("Other");
-    } else {
-      setSelectedTab("");
-      setActiveMop(null);
-    }
-  }, [selectedTab, shouldHideCodOption]);
 
   const handleScrollToTop = (index) => {
     const element = document.getElementById(`nav-title-${index}`);
@@ -1504,67 +1227,25 @@ export function useCheckoutPayment({
   };
 
   const cancelUpiAppPayment = async () => {
-    if (!userOrderId) {
-      // Nothing was created to cancel (checkoutCart never returned an id):
-      // just release the pay button.
-      stopPolling();
-      setIsPaymentLoading(false);
-      return;
-    }
     try {
       stopPolling();
       const res = await cancelPayment({
         order_id: userOrderId,
         request_type: "cancel",
       });
-      const { data, success } = res?.data?.resendOrCancelPayment || {};
-      if (
-        success === true &&
-        data?.status === "true" &&
-        data?.is_payment_done === false
-      ) {
-        const cancelledKey =
-          "resource.dynamic_label.your_payment_has_been_cancelled_try_again_or_complete_the_payment_later";
-        const translatedCancelled = t(cancelledKey);
-        const cancellationMessage =
-          data?.message ||
-          (translatedCancelled && translatedCancelled !== cancelledKey
-            ? translatedCancelled
-            : "Your payment has been cancelled. Try again or complete the payment later");
-        showSnackbar?.(cancellationMessage, "success");
-        const splitPaymentConfig = payment?.splitPaymentConfig || {};
-        const isSplitPaymentResume =
-          isTruthyValue(splitPaymentConfig.isResumeSplitPayment) ||
-          isTruthyValue(splitPaymentConfig.is_resume_split_payment);
-        if (!isSplitPaymentResume) {
-          onPaymentCancellationConfirmed?.();
-        }
-      } else if (data?.is_payment_done !== true) {
-        // Cancel was rejected (e.g. GraphQL error) and the payment is not
-        // complete: tell the shopper instead of silently closing the modal.
-        showSnackbar?.(t("resource.common.error_message"), "error");
+      const { data, success } = res?.data?.resendOrCancelPayment;
+      if (success && data.status == "true") {
+        console.log("Payment cancellation successful");
       }
-      // is_payment_done === true: the payment already went through; the
-      // gateway's own redirect lands on order-status, so show no error.
     } catch (err) {
       console.log("Payment cancellation failed");
-      showSnackbar?.(t("resource.common.error_message"), "error");
     } finally {
       setIsPaymentLoading(false);
     }
   };
 
-  const codChargeBreakup = breakUpValues?.find(
-    (value) =>
-      ["cod_charge", "cod_charges"].includes(value?.key) ||
-      ["cod_charge", "cod_charges"].includes(value?.name)
-  );
-  const breakupCodCharges = Number(codChargeBreakup?.value);
-  const paymentOptionCodCharges = getCodChargeFromOption();
   const codCharges =
-    Number.isFinite(breakupCodCharges) && breakupCodCharges > 0
-      ? breakupCodCharges
-      : paymentOptionCodCharges;
+    breakUpValues?.filter((value) => value.key === "cod_charge")[0]?.value ?? 0;
 
   const unsetSelectedSubMop = () => {
     setSelectedOtherPayment({});
@@ -1586,8 +1267,6 @@ export function useCheckoutPayment({
     t,
     isTablet,
     isChromeOrSafari,
-    userOrderId,
-    isUpiCheckoutPending,
     // payment data
     paymentOptions,
     otherPaymentOptions,
@@ -1596,8 +1275,6 @@ export function useCheckoutPayment({
     showCouponValidityModal,
     setShowCouponValidityModal,
     couponValidity,
-    setCouponValidity,
-    isCouponValidationLoading,
     // card state
     addNewCard,
     getCardBorder,

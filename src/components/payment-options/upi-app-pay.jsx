@@ -20,9 +20,6 @@ function UpiAppPayment({
   showUpiRedirectionModal,
   setShowUpiRedirectionModal,
   cancelUpiAppPayment,
-  // Defaults to enabled so callers that do not track checkout progress keep
-  // the previous always-clickable behaviour.
-  canCancelUpiAppPayment = true,
   t,
   SvgWrapper,
   styles,
@@ -45,7 +42,6 @@ function UpiAppPayment({
   isCouponApplied,
   isCouponValid,
   mopSelectionLoading,
-  isPaymentDisabled = false,
 }) {
   const isTablet = useViewport(0, 768);
 
@@ -100,11 +96,6 @@ function UpiAppPayment({
   };
 
   const cancelBtnStyle = {
-    appearance: "none",
-    background: "none",
-    border: 0,
-    padding: 0,
-    fontFamily: "inherit",
     cursor: "pointer",
     fontSize: "12px",
     fontWeight: 600,
@@ -112,11 +103,6 @@ function UpiAppPayment({
     textTransform: "uppercase",
     textAlign: "center",
     color: "var(--buttonLink)",
-  };
-  const disabledCancelBtnStyle = {
-    ...cancelBtnStyle,
-    cursor: "not-allowed",
-    opacity: 0.5,
   };
   useEffect(() => {
     if (!selectedUpiIntentApp && selectedTab === "UPI" && isTablet) {
@@ -207,17 +193,11 @@ function UpiAppPayment({
               <StickyPayNow
                 customClassName={styles.visibleOnTab}
                 disabled={
-                  mopSelectionLoading ||
-                  !selectedUpiIntentApp ||
-                  isUPIError ||
-                  isPaymentDisabled
+                  mopSelectionLoading || !selectedUpiIntentApp || isUPIError
                 }
                 value={priceFormatCurrencySymbol(
                   getCurrencySymbol,
-                  getTotalValue(),
-                  "en-IN",
-                  null,
-                  true
+                  getTotalValue()
                 )}
                 onPriceDetailsClick={onPriceDetailsClick}
                 enableLinkPaymentOption={enableLinkPaymentOption}
@@ -242,12 +222,12 @@ function UpiAppPayment({
                     }
                     selectMop("UPI", "UPI", "UPI");
                     cancelQrPayment();
+                    handleProceedToPayClick();
                   }}
                   disabled={
                     mopSelectionLoading ||
                     !selectedUpiIntentApp ||
-                    isPaymentLoading ||
-                    isPaymentDisabled
+                    isPaymentLoading
                   }
                 >
                   {!isPaymentLoading ? (
@@ -255,10 +235,7 @@ function UpiAppPayment({
                       {t("resource.common.pay_caps")}{" "}
                       {priceFormatCurrencySymbol(
                         getCurrencySymbol,
-                        getTotalValue(),
-                        "en-IN",
-                        null,
-                        true
+                        getTotalValue()
                       )}
                     </>
                   ) : (
@@ -320,21 +297,15 @@ function UpiAppPayment({
             <p className={styles.message}>
               {t("resource.checkout.redirecting_upi")}
             </p>
-            <button
-              type="button"
-              style={
-                canCancelUpiAppPayment
-                  ? cancelBtnStyle
-                  : disabledCancelBtnStyle
-              }
-              disabled={!canCancelUpiAppPayment}
+            <div
+              style={cancelBtnStyle}
               onClick={() => {
                 setShowUpiRedirectionModal(false);
                 cancelUpiAppPayment();
               }}
             >
               {t("resource.checkout.cancel_payment_caps")}
-            </button>
+            </div>
           </div>
         </Modal>
       )}

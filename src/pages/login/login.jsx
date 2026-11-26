@@ -26,7 +26,6 @@ function Login({
   onLoginFormSubmit = () => {},
 
   mobileInfo,
-  countryIso,
   submittedMobile,
   setSubmittedMobile,
   otpResendTime,
@@ -112,7 +111,6 @@ function Login({
           <LoginOtp
             {...{
               mobileInfo,
-              countryIso,
               submittedMobile,
               setSubmittedMobile,
               otpResendTime,

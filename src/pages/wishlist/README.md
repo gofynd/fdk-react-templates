@@ -117,6 +117,7 @@ export default App;
 - **isHdimgUsed**: A boolean indicating whether to use high-definition images for the products. Defaults to false.
 - **aspectRatio**: A string to define the aspect ratio of the product images.
 - **isProductOpenInNewTab**: A boolean indicating whether the product link should open in a new tab. Defaults to false.
+- **showImageOnHover**: A boolean indicating whether to show images on hover. Defaults to false.
 - **listingPrice**: A string to define how the listing price is displayed. Defaults to "range".
 - **WishlistIconComponent**: A component to customize the wishlist icon displayed on the product card.
 - **isImageFill**: A boolean indicating whether the product image should fill its container.

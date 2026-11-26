@@ -1,8 +1,6 @@
 @import "../../styles/main.less";
 
 .bagItem {
-  min-width: 0;
-
   input {
     display: none;
   }
@@ -15,30 +13,18 @@
     }
   }
 
-  .multiSelectCheckbox {
-    display: block;
-    width: 18px;
-    height: 18px;
-    margin: 3px 0 0;
-    accent-color: @ButtonPrimary;
-  }
-
   .bagImg {
     flex: 0 0 80px;
     cursor: pointer;
-    display: block;
-    min-width: 0;
   }
 
   .label {
     display: flex;
     gap: 16px;
-    min-width: 0;
   }
 
   .bagInfo {
     flex: 1;
-    min-width: 0;
     .regularxxs {
       font-weight: 400;
       font-size: 13px;
@@ -69,9 +55,6 @@
       font-size: 16px;
       font-weight: 600;
       line-height: 140%;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
       @media @mobile {
         font-size: 14px;
       }
@@ -197,3 +180,4 @@
     fill: @ButtonPrimary;
   }
 }
+
