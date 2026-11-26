@@ -26,6 +26,7 @@ import { useFPI } from "fdk-core/utils";
 
 function CheckoutPaymentContent({
   payment,
+  onPaymentCancellationConfirmed,
   loader,
   handleShowFailedMessage,
   onPriceDetailsClick = () => {},
@@ -39,6 +40,7 @@ function CheckoutPaymentContent({
 }) {
   const checkoutPayment = useCheckoutPayment({
     payment,
+    onPaymentCancellationConfirmed,
     handleShowFailedMessage,
     breakUpValues,
     setCancelQrPayment,
@@ -156,6 +158,7 @@ function CheckoutPaymentContent({
     t,
     isTablet,
     isChromeOrSafari,
+    isUpiCheckoutPending,
     // payment data
     paymentOptions,
     otherPaymentOptions,
@@ -1109,6 +1112,7 @@ function CheckoutPaymentContent({
               setShowUpiRedirectionModal={setShowUpiRedirectionModal}
               showUpiRedirectionModal={showUpiRedirectionModal}
               cancelUpiAppPayment={cancelUpiAppPayment}
+              canCancelUpiAppPayment={!isUpiCheckoutPending}
               timeRemaining={timeRemaining}
               showUPIModal={showUPIModal}
               cancelUPIPayment={cancelUPIPayment}

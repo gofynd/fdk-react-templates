@@ -13,6 +13,7 @@ function CheckoutPayment({
   payment,
   showPayment,
   showPaymentOptions,
+  isShipmentLoading = false,
   breakUpValues,
   onPriceDetailsClick,
   setCancelQrPayment = () => {},
@@ -31,6 +32,8 @@ function CheckoutPayment({
   const [paymentErrMsg, setPaymentErrMsg] = useState("");
   const [juspayErrorMessage, setJuspayErrorMessage] = useState(false);
   const [timerId, setTimerId] = useState(null);
+  const [paymentCancellationConfirmed, setPaymentCancellationConfirmed] =
+    useState(false);
   const paymentWithUiConfig = useMemo(() => {
     if (!splitPaymentConfig) return payment;
 
@@ -83,6 +86,32 @@ function CheckoutPayment({
   const shouldShowPaymentFailedMessage =
     showFailedMessage ||
     (shouldHidePaymentContent && String(errorMessage || "").trim().length > 0);
+
+  // After a confirmed in-page payment cancellation, refetch payment options so
+  // the shopper can retry with fresh routes. Waits while shipments are loading
+  // because the theme's showPaymentOptions skips requests during that window.
+  useEffect(() => {
+    if (!paymentCancellationConfirmed || isShipmentLoading) return;
+
+    setPaymentCancellationConfirmed(false);
+    // The payment-link page passes showPaymentOptions={true} (a flag, not a
+    // fetcher) and keeps its link options in state, so only call a function.
+    if (typeof showPaymentOptions !== "function") return;
+    showPaymentOptions(getTotalValue?.() || undefined, isSplitPaymentActive, {
+      forceRefresh: true,
+      keepSplitPaymentVisible: true,
+    });
+  }, [
+    getTotalValue,
+    isShipmentLoading,
+    isSplitPaymentActive,
+    paymentCancellationConfirmed,
+    showPaymentOptions,
+  ]);
+
+  const handlePaymentCancellationConfirmed = () => {
+    setPaymentCancellationConfirmed(true);
+  };
   const visiblePaymentErrHeading = showFailedMessage
     ? paymentErrHeading
     : pleaseTryAgainLaterText;
@@ -221,6 +250,9 @@ function CheckoutPayment({
             {!shouldHidePaymentContent && (
               <CheckoutPaymentContent
                 payment={paymentWithUiConfig}
+                onPaymentCancellationConfirmed={
+                  handlePaymentCancellationConfirmed
+                }
                 loader={loader}
                 handleShowFailedMessage={handleShowFailedMessage}
                 onPriceDetailsClick={onPriceDetailsClick}

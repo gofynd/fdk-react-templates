@@ -3587,6 +3587,18 @@ h5,
   color: var(--errorText, #ff3333);
   padding: 24px;
 }
+.add-to-cart__productDescContainer___w6xlt .add-to-cart__right___AYndS .add-to-cart__mobileLimitedQuantity___YPl77 {
+  display: none;
+}
+@media only screen and (max-width: 768px) {
+  .add-to-cart__productDescContainer___w6xlt .add-to-cart__right___AYndS .add-to-cart__mobileLimitedQuantity___YPl77 {
+    display: block;
+    padding: 0 16px;
+  }
+  .add-to-cart__productDescContainer___w6xlt .add-to-cart__right___AYndS .add-to-cart__desktopLimitedQuantity___hg_zz {
+    display: none;
+  }
+}
 .add-to-cart__productDescContainer___w6xlt .add-to-cart__right___AYndS .add-to-cart__preview___OZEtX {
   display: none;
   position: absolute;
@@ -3806,6 +3818,24 @@ h5,
 }
 .add-to-cart__productDescContainer___w6xlt .add-to-cart__right___AYndS .add-to-cart__productInfo___AyYit .add-to-cart__product___Hqonr .add-to-cart__viewMore___WNyrJ span {
   cursor: pointer;
+}
+.add-to-cart__productDescContainer___w6xlt .add-to-cart__right___AYndS .add-to-cart__productInfo___AyYit .add-to-cart__product___Hqonr .add-to-cart__customExtension___RbiB6 {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow-wrap: anywhere;
+}
+.add-to-cart__productDescContainer___w6xlt .add-to-cart__right___AYndS .add-to-cart__productInfo___AyYit .add-to-cart__product___Hqonr .add-to-cart__customExtension___RbiB6 img,
+.add-to-cart__productDescContainer___w6xlt .add-to-cart__right___AYndS .add-to-cart__productInfo___AyYit .add-to-cart__product___Hqonr .add-to-cart__customExtension___RbiB6 video,
+.add-to-cart__productDescContainer___w6xlt .add-to-cart__right___AYndS .add-to-cart__productInfo___AyYit .add-to-cart__product___Hqonr .add-to-cart__customExtension___RbiB6 iframe,
+.add-to-cart__productDescContainer___w6xlt .add-to-cart__right___AYndS .add-to-cart__productInfo___AyYit .add-to-cart__product___Hqonr .add-to-cart__customExtension___RbiB6 canvas {
+  max-width: 100%;
+}
+.add-to-cart__productDescContainer___w6xlt .add-to-cart__right___AYndS .add-to-cart__productInfo___AyYit .add-to-cart__product___Hqonr .add-to-cart__customExtension___RbiB6 img,
+.add-to-cart__productDescContainer___w6xlt .add-to-cart__right___AYndS .add-to-cart__productInfo___AyYit .add-to-cart__product___Hqonr .add-to-cart__customExtension___RbiB6 video {
+  height: auto;
 }
 .add-to-cart__productDescContainer___w6xlt .add-to-cart__right___AYndS .add-to-cart__productInfo___AyYit .add-to-cart__product___Hqonr .add-to-cart__crossIcon___YraSI {
   position: absolute;

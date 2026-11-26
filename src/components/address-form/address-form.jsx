@@ -466,8 +466,14 @@ const AddressForm = ({
     reset,
     trigger,
     getValues,
-    formState: { errors, isDirty },
+    formState: { errors, isDirty, isValid },
   } = useForm({
+    // Save/Update stay disabled while the form is invalid, so the form must
+    // explain itself before submit: validate each field as the customer types.
+    // (onTouched/onBlur cannot work here — FormInputSelector never calls
+    // field.onBlur — and onSubmit would leave errors stuck behind a disabled
+    // button.) Untouched fields stay quiet until edited.
+    mode: "onChange",
     defaultValues: {
       ...formAddressItem,
       address_type: addressItem?.address_type
@@ -581,6 +587,10 @@ useEffect(() => {
       country: addressItem?.country || selectedCountry,
       email: addressItem?.email || "",
     });
+    // A saved address may fail rules added after it was saved; validate it
+    // on load so the field explains why Update Address is disabled.
+    if (!isNewAddress && addressItem?.id)
+      setMapSelectionRevision((revision) => revision + 1);
   } else {
     setValue("is_default_address", true);
     setValue("address_type", "Home");
@@ -766,7 +776,7 @@ useEffect(() => {
 
   const footer =
     typeof customFooter === "function"
-      ? customFooter({ isDirty })
+      ? customFooter({ isDirty, isValid })
       : customFooter;
 
   return (
@@ -906,7 +916,7 @@ useEffect(() => {
             <button
               className={`${styles.commonBtn} ${styles.deliverBtn}`}
               type="submit"
-              disabled={!isNewAddress && !isDirty}
+              disabled={!isNewAddress && (!isDirty || !isValid)}
             >
               {isNewAddress ? t("resource.common.address.add_address") : t("resource.common.address.update_address")}
           </button>}

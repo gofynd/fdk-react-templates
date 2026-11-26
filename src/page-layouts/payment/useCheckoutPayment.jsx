@@ -45,6 +45,7 @@ const isSplitCouponValidationEnabled = (splitPaymentConfig = {}) =>
 
 export function useCheckoutPayment({
   payment,
+  onPaymentCancellationConfirmed,
   handleShowFailedMessage,
   breakUpValues,
   setCancelQrPayment,
@@ -77,6 +78,7 @@ export function useCheckoutPayment({
     enableLinkPaymentOption,
     setIsPaymentLoading,
     setShowUpiRedirectionModal,
+    showSnackbar,
   } = payment;
 
   // env / derived
@@ -225,11 +227,62 @@ export function useCheckoutPayment({
   const [isCardNumberValid, setIsCardNumberValid] = useState(false);
   const [activeMop, setActiveMop] = useState(null);
   const [userOrderId, setUserOrderId] = useState(null);
+  // True from "Pay Now" until checkoutCart has answered (order id received or
+  // the request settled); the UPI-app "Cancel payment" button stays disabled
+  // meanwhile so a cancel can never fire without an order id.
+  const [isUpiCheckoutPending, setIsUpiCheckoutPending] = useState(false);
+  const isUpiCheckoutInProgressRef = useRef(false);
+  const upiCollectOrderIdRef = useRef("");
+  const upiCheckoutPendingTimerRef = useRef(null);
+  const settleUpiCheckoutPending = () => {
+    if (upiCheckoutPendingTimerRef.current) {
+      clearTimeout(upiCheckoutPendingTimerRef.current);
+      upiCheckoutPendingTimerRef.current = null;
+    }
+    setIsUpiCheckoutPending(false);
+  };
   const [lastValidatedBin, setLastValidatedBin] = useState("");
   const [isJuspayCouponApplied, setIsJuspayCouponApplied] = useState(false);
   const couponValidationRequestRef = useRef(0);
   const couponValidationCacheRef = useRef({});
   const couponValidationLoadingCountRef = useRef(0);
+
+  useEffect(() => {
+    const eventApi =
+      typeof window !== "undefined" ? window.FPI?.event : undefined;
+    if (typeof eventApi?.on !== "function") return undefined;
+
+    const handleOrderCheckedOut = (eventData = {}) => {
+      if (!isUpiCheckoutInProgressRef.current || !eventData?.order_id) {
+        return;
+      }
+
+      isUpiCheckoutInProgressRef.current = false;
+      // For UPI-intent (gateway) payments checkoutPayment resolves without the
+      // checkoutCart response, so this event is the only source of order_id.
+      setUserOrderId(eventData.order_id);
+      settleUpiCheckoutPending();
+    };
+
+    const eventId = eventApi.on("order.checkedout", handleOrderCheckedOut);
+
+    return () => {
+      if (upiCheckoutPendingTimerRef.current) {
+        clearTimeout(upiCheckoutPendingTimerRef.current);
+      }
+      try {
+        if (typeof eventApi.off === "function") {
+          eventApi.off("order.checkedout", {
+            name: handleOrderCheckedOut,
+            eventId,
+          });
+        }
+      } catch {
+        // The handler is gated by isUpiCheckoutInProgressRef, so a listener
+        // that could not be removed is inert.
+      }
+    };
+  }, []);
 
   const disbaleCheckout = useGlobalStore(fpi?.getters?.SHIPMENTS);
   const isCouponAppliedSuccess =
@@ -1229,14 +1282,48 @@ export function useCheckoutPayment({
 
   const handleProceedToPayClick = async () => {
     try {
+      setUserOrderId(null);
+      upiCollectOrderIdRef.current = "";
+      isUpiCheckoutInProgressRef.current = true;
+      setIsUpiCheckoutPending(true);
+      // Safety net: split legs (createPaymentOrder) emit no order.checkedout
+      // and a gateway hand-off may never resolve, so never trap the shopper
+      // behind a permanently disabled Cancel button.
+      if (upiCheckoutPendingTimerRef.current) {
+        clearTimeout(upiCheckoutPendingTimerRef.current);
+      }
+      upiCheckoutPendingTimerRef.current = setTimeout(() => {
+        upiCheckoutPendingTimerRef.current = null;
+        setIsUpiCheckoutPending(false);
+      }, 15000);
       setShowUpiRedirectionModal(true);
-      let res = await proceedToPay("UPI", {
+      const res = await proceedToPay("UPI", {
         ...selectedPaymentPayload,
         selectedUpiIntentApp: selectedUpiRef.current || selectedUpiIntentApp,
+        // Payment links create their order without checkoutCart, so no
+        // order.checkedout event fires; the theme reports the link order id
+        // here instead. Storefront checkout never calls it.
+        onUpiOrderCreated: (orderId) => {
+          if (!isUpiCheckoutInProgressRef.current || !orderId) return;
+          isUpiCheckoutInProgressRef.current = false;
+          setUserOrderId(orderId);
+          settleUpiCheckoutPending();
+        },
       });
 
-      const { order_id } = res?.payload?.data?.checkoutCart || {};
-      setUserOrderId(order_id);
+      const checkoutCart =
+        res?.payload?.data?.checkoutCart ||
+        res?.data?.checkoutCart ||
+        res?.payload?.checkoutCart ||
+        res?.checkoutCart ||
+        {};
+      const order_id = checkoutCart?.order_id || checkoutCart?.cart?.order_id;
+      // Only overwrite when the response carries an id: gateway (UPI-intent)
+      // checkouts resolve with no checkoutCart, and the id already came from
+      // the order.checkedout event.
+      if (order_id) setUserOrderId(order_id);
+      isUpiCheckoutInProgressRef.current = false;
+      settleUpiCheckoutPending();
 
       if (res?.isUPIError) {
         setUPIError(true);
@@ -1268,12 +1355,17 @@ export function useCheckoutPayment({
             merchant_transaction_id: "",
             status: "",
           };
+          upiCollectOrderIdRef.current = oid || "";
           setshowUPIModal(true);
           startPolling(payload);
         }
       }
     } catch (err) {
+      isUpiCheckoutInProgressRef.current = false;
+      settleUpiCheckoutPending();
       console.log(err);
+      setShowUpiRedirectionModal(false);
+      handleShowFailedMessage({ failed: true });
     }
   };
 
@@ -1281,6 +1373,18 @@ export function useCheckoutPayment({
     setshowUPIModal(false);
     stopPolling();
     setIsPaymentLoading(false);
+
+    // Revoke the pending UPI collect request (same as QR cancel) so it cannot
+    // still be approved and placed as an order after the shopper cancelled.
+    const collectOrderId = upiCollectOrderIdRef.current;
+    upiCollectOrderIdRef.current = "";
+    if (collectOrderId) {
+      Promise.resolve(
+        cancelPayment?.({ order_id: collectOrderId, request_type: "cancel" })
+      ).catch(() => {
+        console.log("Payment cancellation failed");
+      });
+    }
   }
 
   const getCardBorder = (card) => {
@@ -1400,18 +1504,51 @@ export function useCheckoutPayment({
   };
 
   const cancelUpiAppPayment = async () => {
+    if (!userOrderId) {
+      // Nothing was created to cancel (checkoutCart never returned an id):
+      // just release the pay button.
+      stopPolling();
+      setIsPaymentLoading(false);
+      return;
+    }
     try {
       stopPolling();
       const res = await cancelPayment({
         order_id: userOrderId,
         request_type: "cancel",
       });
-      const { data, success } = res?.data?.resendOrCancelPayment;
-      if (success && data.status == "true") {
-        console.log("Payment cancellation successful");
+      const { data, success } = res?.data?.resendOrCancelPayment || {};
+      if (
+        success === true &&
+        data?.status === "true" &&
+        data?.is_payment_done === false
+      ) {
+        const cancelledKey =
+          "resource.dynamic_label.your_payment_has_been_cancelled_try_again_or_complete_the_payment_later";
+        const translatedCancelled = t(cancelledKey);
+        const cancellationMessage =
+          data?.message ||
+          (translatedCancelled && translatedCancelled !== cancelledKey
+            ? translatedCancelled
+            : "Your payment has been cancelled. Try again or complete the payment later");
+        showSnackbar?.(cancellationMessage, "success");
+        const splitPaymentConfig = payment?.splitPaymentConfig || {};
+        const isSplitPaymentResume =
+          isTruthyValue(splitPaymentConfig.isResumeSplitPayment) ||
+          isTruthyValue(splitPaymentConfig.is_resume_split_payment);
+        if (!isSplitPaymentResume) {
+          onPaymentCancellationConfirmed?.();
+        }
+      } else if (data?.is_payment_done !== true) {
+        // Cancel was rejected (e.g. GraphQL error) and the payment is not
+        // complete: tell the shopper instead of silently closing the modal.
+        showSnackbar?.(t("resource.common.error_message"), "error");
       }
+      // is_payment_done === true: the payment already went through; the
+      // gateway's own redirect lands on order-status, so show no error.
     } catch (err) {
       console.log("Payment cancellation failed");
+      showSnackbar?.(t("resource.common.error_message"), "error");
     } finally {
       setIsPaymentLoading(false);
     }
@@ -1449,6 +1586,8 @@ export function useCheckoutPayment({
     t,
     isTablet,
     isChromeOrSafari,
+    userOrderId,
+    isUpiCheckoutPending,
     // payment data
     paymentOptions,
     otherPaymentOptions,
